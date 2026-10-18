@@ -1,0 +1,87 @@
+<!--{
+  "title": "Calcul des pénalités de retard de paiement et de l'indemnité de 40 €",
+  "description": "Calculez les pénalités de retard dues sur une facture impayée entre professionnels, avec l'indemnité forfaitaire de 40 € pour frais de recouvrement. Formule détaillée, gratuit et instantané.",
+  "path": "penalites-de-retard/",
+  "nav": "penalites",
+  "app": "Calculateur de pénalités de retard",
+  "scripts": ["penalites.js"],
+  "priority": 0.8,
+  "faq": [
+    ["Comment calculer les pénalités de retard ?", "Pénalités = montant TTC de la facture × taux annuel des pénalités × nombre de jours de retard ÷ 365. Le retard se compte à partir du lendemain de la date d'échéance."],
+    ["Quel taux de pénalités appliquer ?", "Celui prévu dans vos conditions générales de vente, qui ne peut pas être inférieur à trois fois le taux d'intérêt légal. À défaut de taux prévu, c'est le taux de refinancement de la Banque centrale européenne majoré de 10 points qui s'applique (article L441-10 du Code de commerce)."],
+    ["L'indemnité de 40 € est-elle due à chaque facture ?", "Oui. Entre professionnels, l'indemnité forfaitaire pour frais de recouvrement de 40 € est due pour chaque facture payée en retard (article D441-5 du Code de commerce). Si vos frais réels sont supérieurs, vous pouvez demander une indemnisation complémentaire sur justificatifs."],
+    ["Les pénalités s'appliquent-elles aux particuliers ?", "Non, ces règles concernent les relations entre professionnels. Avec un client particulier, seuls les intérêts prévus au contrat ou, à défaut, les intérêts au taux légal après mise en demeure peuvent être réclamés."]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    <div class="breadcrumb"><a href="{{base}}">Accueil</a> › Pénalités de retard</div>
+    <span class="pill">Gratuit · entre professionnels</span>
+    <h1>Calcul des pénalités de retard</h1>
+    <p class="lead">Combien votre client vous doit-il vraiment ? Indiquez le montant, l'échéance et le taux prévu : l'outil calcule les pénalités, l'indemnité forfaitaire de 40 € et le total à réclamer.</p>
+    <ul class="trust"><li>Formule légale détaillée</li><li>3 façons de fixer le taux</li><li>Indemnité de 40 € incluse</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="pen-form" onsubmit="return false">
+      <h2>La facture en retard</h2>
+      <div class="fields">
+        <div class="field full"><label for="p-amount">Montant TTC de la facture</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="p-amount" name="amount" value="1 800" data-save><span>€</span></div></div>
+        <div class="field"><label for="p-due">Date d'échéance</label>
+          <input type="date" id="p-due" name="due" data-save></div>
+        <div class="field"><label for="p-paid">Date de paiement</label>
+          <input type="date" id="p-paid" name="paid">
+          <span class="hint">Par défaut : aujourd'hui.</span></div>
+      </div>
+      <h3>Taux des pénalités</h3>
+      <div class="fields">
+        <div class="field full"><label for="p-method">Comment est fixé le taux ?</label>
+          <select id="p-method" name="method" data-save>
+            <option value="cgv">Taux prévu dans mes conditions de vente</option>
+            <option value="legal">Trois fois le taux d'intérêt légal</option>
+            <option value="bce">Taux de la BCE majoré de 10 points (à défaut de taux prévu)</option>
+          </select></div>
+        <div class="field full" data-method="cgv"><label for="p-rate">Taux annuel prévu</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="p-rate" name="rate" placeholder="Ex. : 12" data-save><span>%</span></div></div>
+        <div class="field full" data-method="legal" hidden><label for="p-legal">Taux d'intérêt légal en vigueur (créanciers professionnels)</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="p-legal" name="legal" placeholder="Taux du semestre" data-save><span>%</span></div>
+          <span class="hint">Fixé chaque semestre par arrêté, publié sur service-public.fr et banque-france.fr.</span></div>
+        <div class="field full" data-method="bce" hidden><label for="p-bce">Taux de refinancement de la BCE</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="p-bce" name="bce" placeholder="Taux au 1er janvier ou au 1er juillet" data-save><span>%</span></div>
+          <span class="hint">Retenez le taux en vigueur au 1er janvier ou au 1er juillet du semestre concerné (publié par la Banque de France).</span></div>
+        <label class="check full"><input type="checkbox" id="p-fee" name="fee" checked data-save>
+          <span>Ajouter l'indemnité forfaitaire de 40 € (client professionnel)</span></label>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="result-hero">
+        <div class="label">Total à réclamer</div>
+        <div class="big" id="p-total">–</div>
+        <div class="sub" id="p-sub">–</div>
+      </div>
+      <ul class="result-list card" style="padding: 6px 18px; margin-top: 16px;">
+        <li><span>Montant de la facture</span><b id="p-r-amount">–</b></li>
+        <li><span>Jours de retard</span><b id="p-r-days">–</b></li>
+        <li><span>Taux annuel appliqué</span><b id="p-r-rate">–</b></li>
+        <li><span>Pénalités de retard</span><b id="p-r-pen">–</b></li>
+        <li><span>Indemnité forfaitaire</span><b id="p-r-fee">–</b></li>
+      </ul>
+      <p class="formula" id="p-formula" style="margin-top: 16px;">–</p>
+      <p class="small muted">Pour réclamer ces sommes, utilisez la relance ferme ou la mise en demeure de notre <a href="{{base}}relance-facture-impayee/">générateur de relances</a>.</p>
+    </div>
+  </div>
+</section>
+
+{{kit_cta}}
+
+<section class="section prose">
+  <h2>Pénalités de retard : ce que dit la loi</h2>
+  <p>Entre professionnels, l'article L441-10 du Code de commerce prévoit que tout retard de paiement entraîne de plein droit des pénalités, sans qu'un rappel soit nécessaire. Le taux est celui fixé dans vos conditions générales de vente, sans pouvoir être inférieur à trois fois le taux d'intérêt légal ; à défaut, c'est le taux de refinancement de la BCE majoré de 10 points.</p>
+  <p>S'y ajoute une indemnité forfaitaire de 40 € pour frais de recouvrement, due pour chaque facture payée en retard. Ces deux éléments doivent figurer sur vos factures : le <a href="{{base}}generateur-facture/">générateur de facture</a> les ajoute automatiquement.</p>
+  <div class="formula">Pénalités = montant TTC × taux annuel × jours de retard ÷ 365</div>
+  <p class="small muted">Informations données à titre indicatif. En cas de litige important, rapprochez-vous d'un avocat ou d'un commissaire de justice.</p>
+</section>

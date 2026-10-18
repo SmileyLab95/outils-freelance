@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<style>
+  html, body { margin: 0; }
+  body { width: 1200px; height: 630px; overflow: hidden; position: relative; background: #100e2b; color: #fff;
+         font-family: Inter, sans-serif; }
+  .blob { position: absolute; border-radius: 50%; }
+  .b1 { width: 900px; height: 900px; right: -320px; top: -420px; background: radial-gradient(circle, #6d5dfc 0%, rgba(109,93,252,0) 68%); }
+  .b2 { width: 700px; height: 700px; left: -320px; bottom: -420px; background: radial-gradient(circle, #c026d3 0%, rgba(192,38,211,0) 66%); opacity: .55; }
+  .wrap { position: absolute; left: 80px; top: 80px; right: 80px; }
+  .logo { display: flex; align-items: center; gap: 14px; font-size: 30px; font-weight: 600; }
+  .logo b { color: #a5b4fc; }
+  h1 { font-family: "Inter Display", Inter, sans-serif; font-size: 76px; line-height: 1.02; letter-spacing: -0.035em; font-weight: 900; margin: 48px 0 26px; max-width: 900px; }
+  p { font-size: 28px; color: #d6d3ff; margin: 0; max-width: 900px; line-height: 1.4; }
+  .chips { position: absolute; left: 80px; bottom: 70px; display: flex; gap: 12px; }
+  .chips span { padding: 10px 18px; border-radius: 999px; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.22); font-size: 21px; font-weight: 600; }
+</style>
+</head>
+<body>
+  <div class="blob b1"></div><div class="blob b2"></div>
+  <div class="wrap">
+    <div class="logo">
+      <svg width="48" height="48" viewBox="0 0 32 32"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4f46e5"/><stop offset="1" stop-color="#7c3aed"/></linearGradient></defs><rect width="32" height="32" rx="9" fill="url(#g)"/><path d="M10 9h12v3.2h-8.4v3.3h7.4v3.2h-7.4V23H10z" fill="#fff"/></svg>
+      <span>Outils <b>Freelance</b></span>
+    </div>
+    <h1>Les outils gratuits des freelances qui veulent être payés</h1>
+    <p>Facture et devis en PDF, calculateur de TJM, relances d'impayés, pénalités de retard.</p>
+  </div>
+  <div class="chips"><span>100 % gratuit</span><span>Sans inscription</span><span>Données sur votre appareil</span></div>
+</body>
+</html>
