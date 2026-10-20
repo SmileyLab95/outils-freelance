@@ -1,5 +1,9 @@
 # 1. Vision et stratégie
 
+> Depuis le 20/10/2026, la vision s'élargit : le site devient la **plateforme de l'entrepreneur avec un compte**.
+> Le cap et les étapes sont dans le [plan de développement](07-plan-de-developpement.md) ; cette page décrit la stratégie
+> du site public, qui reste le moteur d'acquisition.
+
 ## Le projet en une phrase
 
 Le site de référence, gratuit, où un indépendant trouve **tout ce dont il a besoin pour démarrer, facturer, fixer ses prix, se faire payer et gérer ses impôts**, adapté à **son pays** et à **son statut** — financé par des produits numériques, l'affiliation et, plus tard, la publicité.

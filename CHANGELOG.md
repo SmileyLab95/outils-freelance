@@ -1,5 +1,13 @@
 # Journal des modifications
 
+## 2026-10-20 — Plan de développement de la plateforme
+
+- Nouveau cap : passer du site d'outils gratuits à la plateforme de l'entrepreneur avec un compte
+  ([documentation/07-plan-de-developpement.md](documentation/07-plan-de-developpement.md)).
+- Feuille de route réorganisée en 6 étapes (E1 à E6) avec « Où en est-on ? », tâches d'Ismail, critères de passage,
+  bilans mensuels ; l'historique du site d'outils est conservé.
+- Journal des décisions ; `CLAUDE.md` impose de lire et de mettre à jour la feuille de route à chaque session.
+
 ## 2026-10-20 — Facturer un client étranger
 
 - Assistant (France) : TVA applicable selon le pays du client (France, UE, hors UE), entreprise ou particulier, et la

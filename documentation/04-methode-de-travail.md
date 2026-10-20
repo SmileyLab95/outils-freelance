@@ -2,6 +2,13 @@
 
 Le site doit être **exact**, **cohérent** et **toujours à jour**. Chaque outil suit le même circuit, du chiffre officiel à la mise en ligne.
 
+## Le rituel de chaque session
+
+1. Lire « Où en est-on ? » dans la [feuille de route](05-feuille-de-route.md) et le [plan de développement](07-plan-de-developpement.md).
+2. Travailler sur l'étape en cours (ou sur la demande d'Ismail), selon le circuit ci-dessous.
+3. Vérifier (tests, captures), publier, puis cocher la feuille de route et mettre à jour « Où en est-on ? ».
+4. Noter toute décision dans le [journal des décisions](08-journal-des-decisions.md) et chaque évolution dans le journal des modifications.
+
 ## Le circuit d'un nouvel outil
 
 | Étape | Ce qu'on fait | Résultat |

@@ -1,8 +1,194 @@
 # 5. Feuille de route
 
-Les phases s'enchaînent dans cet ordre ; une phase n'est terminée que lorsque toutes ses pages respectent la [définition de « terminé »](04-methode-de-travail.md#définition-de--terminé-).
+Le cap est fixé par le [plan de développement](07-plan-de-developpement.md) : passer du site d'outils gratuits à la
+**plateforme de l'entrepreneur avec un compte**. Cette page détaille les tâches, étape par étape.
 
-## Phase 0 — Socle multi-pays
+**Règles** : on travaille sur l'étape en cours ; une étape n'est terminée que si son critère de passage est atteint ;
+chaque session commence par la lecture de « Où en est-on ? » et se termine par sa mise à jour. Les tâches marquées
+**[Ismail]** ne peuvent être faites que par Ismail (comptes, contrats, paiements, décisions).
+
+## Où en est-on ?
+
+*Mis à jour le 20/10/2026.*
+
+- **Étape en cours : E1 — Fondations commerciales** (novembre – décembre 2026).
+- **Fait** : le site d'outils (étape 0) est terminé : 81 pages, 4 pays, tests automatiques, publication continue.
+- **Prochaines actions de Claude** : proposer des noms de marque et vérifier les domaines ; préparer le Pack Contrats
+  & CGV ; préparer le calendrier fiscal 2027 en PDF (produit gratuit) ; ajouter la liste d'attente « Espace
+  entrepreneur » sur le site ; lancer l'étude concurrentielle.
+- **En attente d'Ismail** : choisir la marque et acheter le domaine ; mettre en vente le kit US sur Gumroad et envoyer
+  le lien ; ouvrir un compte d'emailing (Brevo ou équivalent) ; réfléchir au statut juridique avec un comptable.
+
+## Vue d'ensemble
+
+| Étape | Période visée | État |
+|---|---|---|
+| E0 — Site d'outils gratuits (4 pays) | juillet – octobre 2026 | **Terminée** (historique en bas de page) |
+| E1 — Fondations commerciales | novembre – décembre 2026 | **En cours** |
+| E2 — Comptes et MVP « Espace entrepreneur » | janvier – avril 2027 | À venir |
+| E3 — Facturation électronique et encaissement | mai – août 2027 (prêt avant le 1er septembre 2027) | À venir |
+| E4 — Gestion financière | septembre 2027 – mars 2028 | À venir |
+| E5 — Écosystème (experts, partenaires, académie) | 2028 | À venir |
+| E6 — Échelle (pays, IA, API, équipe) | 2029 et après | À venir |
+
+## E1 — Fondations commerciales (novembre – décembre 2026)
+
+Objectif : un site mesuré, sous sa propre marque, qui commence à rapporter, et une plateforme prête à être construite.
+
+### 1.1 Marque et domaine
+
+- [ ] Proposer 10 noms de marque utilisables en français et en anglais, vérifier les domaines disponibles (.com, .fr)
+- [ ] **[Ismail]** Choisir la marque et acheter le domaine
+- [ ] Basculer le site sur le domaine (`config/site.json`), redirections depuis GitHub Pages, nouvelle propriété
+      Search Console, envoi du plan du site
+- [ ] Logo et images de partage à la nouvelle marque
+
+### 1.2 Mesure d'audience
+
+- [ ] Choisir une mesure d'audience sans cookie (pas de bandeau de consentement), l'installer sur toutes les pages
+- [ ] Tableau de bord mensuel : visites par pays et par outil, pages d'entrée, clics vers les produits
+- [ ] Premier bilan mensuel ajouté à cette page (section « Bilans »)
+
+### 1.3 Produits et boutique
+
+- [ ] **[Ismail]** Mettre en vente le kit US (*Freelance Pro Kit*) sur Gumroad et envoyer le lien
+- [ ] Afficher l'offre US sur `/us/` et `/ca/` (bouton d'en-tête et encarts)
+- [ ] Kit FR : note sur la mention de TVA à partir de 2027 (art. L. 233-3 du CIBS), régénérer les fichiers
+- [ ] Pack Contrats & CGV (France) : contrat long, CGV, accord de confidentialité, avenant, bon de commande,
+      procès-verbal de livraison, cession de droits détaillée
+- [ ] *Contract Pack* en anglais (US, UK, Canada)
+- [ ] Kit Facturation électronique 2027 (checklist, modèles aux nouvelles mentions, guide pas à pas)
+- [ ] Produit gratuit : calendrier fiscal 2027 imprimable (PDF) par pays
+- [ ] **[Ismail]** Ouvrir un compte d'emailing ; Claude prépare le formulaire d'inscription et les emails de bienvenue
+- [ ] Encarts produits contextuels sur les pages d'outils (le bon produit au bon endroit)
+- [ ] Page « Ressources » par pays (produits gratuits et payants)
+
+### 1.4 Qualité et veille
+
+- [ ] Finitions SEO : raccourcir les titres de plus de 60 caractères et les descriptions de plus de 160 caractères
+      (environ 70 pages, audit du 20/10/2026)
+- [ ] Veille de décembre 2026 : barèmes 2027 des 4 pays, PASS 2027, taux d'intérêt légal du 1er semestre 2027,
+      numéro définitif de la mention de franchise (L. 233-3 du CIBS), calendriers 2027-2028 (`scripts/calendriers.py`)
+- [ ] Guide du recouvrement judiciaire (injonction de payer, procédure simplifiée) une fois les règles 2026 vérifiées
+- [ ] Guides : assurance de l'indépendant, compte bancaire professionnel
+
+### 1.5 Préparer la plateforme
+
+- [ ] Étude concurrentielle par pays (fonctions, prix, avis) → grille d'offres et de prix
+- [ ] Liste d'attente « Espace entrepreneur » sur le site, avec un court questionnaire sur les besoins
+- [ ] Spécification du MVP : parcours, écrans, modèle de données, critères d'acceptation (`documentation/09-specification-espace.md`)
+- [ ] Choix techniques consignés dans le journal des décisions (socle, hébergement UE, framework, paiements)
+- [ ] **[Ismail]** Choisir la structure juridique pour encaisser des abonnements (avec un expert-comptable)
+- [ ] **[Ismail]** Budget de départ validé
+
+**Critère de passage vers E2** : domaine en ligne, mesure d'audience en place, au moins 2 produits vendus, liste
+d'attente ou trafic en croissance, structure juridique choisie.
+
+## E2 — Comptes et MVP « Espace entrepreneur » (janvier – avril 2027)
+
+Objectif : un compte gratuit qui rend service dès le premier jour.
+
+### 2.1 Socle
+
+- [ ] **[Ismail]** Créer les comptes du socle et de l'hébergement (Claude prépare la configuration)
+- [ ] Environnements de test et de production, déploiement automatique, tests à chaque modification
+- [ ] Authentification : email avec lien de connexion, connexion Google, double authentification
+- [ ] Modèle de données : utilisateur, entreprise, clients, devis, factures, lignes, paiements, échéances, documents
+- [ ] Sécurité : données cloisonnées par utilisateur dans la base, sauvegardes quotidiennes, journal d'audit, limites de requêtes
+- [ ] Juridique : CGU, CGV, politique de confidentialité, registre des traitements, contrats de sous-traitance
+- [ ] **[Ismail]** Relecture des CGU et CGV par un avocat ; assurance responsabilité civile professionnelle
+
+### 2.2 Fonctions
+
+- [ ] Profil entreprise : pays, statut, régime de TVA, coordonnées ; SIREN complété automatiquement (API Recherche d'entreprises)
+- [ ] Clients : fiche, SIREN ou numéro de TVA vérifié (VIES pour l'UE), historique
+- [ ] Devis et factures dans le cloud (reprise des générateurs actuels) : numérotation continue, PDF, duplication, avoirs
+- [ ] Devis accepté en ligne par le client (lien sécurisé)
+- [ ] Tableau de bord : chiffre d'affaires encaissé, plafonds de la micro-entreprise, cotisations et impôt à provisionner, seuil de TVA
+- [ ] Livre des recettes tenu automatiquement (micro-entrepreneurs)
+- [ ] Rappels d'échéances par email (à partir des calendriers fiscaux existants)
+- [ ] Import des données déjà enregistrées dans le navigateur
+- [ ] Export complet (PDF, CSV, JSON) et suppression du compte
+
+### 2.3 Lancement
+
+- [ ] Bêta privée avec la liste d'attente, corrections, puis ouverture à tous (gratuit)
+- [ ] Pages publiques : présentation de l'Espace, appels à créer un compte depuis les outils
+
+**Critère de passage vers E3** : environ 300 comptes, 40 % ont créé au moins une facture, aucun incident de sécurité.
+
+## E3 — Facturation électronique et encaissement (mai – août 2027)
+
+Objectif : être prêt pour l'**obligation d'émettre des factures électroniques au 1er septembre 2027** (PME et
+micro-entreprises), et lancer l'offre Pro.
+
+- [ ] Factures au format Factur-X (PDF + données structurées), validées par des outils de contrôle
+- [ ] **[Ismail]** Partenariat avec une ou plusieurs plateformes agréées (Claude compare les offres et leurs API)
+- [ ] Connexion à la plateforme agréée : émission, réception, statuts de traitement, e-reporting
+- [ ] Réception des factures fournisseurs dans l'Espace
+- [ ] Liens de paiement (carte, virement, prélèvement) et rapprochement des paiements
+- [ ] Relances automatiques (séquences existantes) et pénalités de retard calculées
+- [ ] Offre Pro : abonnement par Stripe, essai gratuit, factures d'abonnement
+- [ ] **[Ismail]** Compte Stripe au nom de l'entreprise
+- [ ] Campagne « Prêt pour le 1er septembre 2027 » : pages, emails, guide
+- [ ] Plan B si aucun partenariat n'est signé en juin 2027 : export Factur-X à déposer sur la plateforme de l'utilisateur
+
+**Critère** : émission électronique testée de bout en bout avant le 1er septembre 2027 ; premiers abonnés Pro.
+
+## E4 — Gestion financière (septembre 2027 – mars 2028)
+
+- [ ] Dépenses et justificatifs (photo, PDF), lecture automatique des montants
+- [ ] **[Ismail]** Contrat avec un agrégateur bancaire agréé
+- [ ] Banque connectée : catégorisation, rapprochement avec les factures
+- [ ] Trésorerie et prévisions ; provisions pour impôts et cotisations
+- [ ] Déclarations préparées : montant Urssaf, TVA, récapitulatif pour la 2042-C-PRO
+- [ ] Exports comptables (fichier des écritures comptables pour le régime réel, CSV) et accès invité pour le comptable
+- [ ] Application mobile installable (photo des reçus, notifications)
+- [ ] Offre Business
+- [ ] Modules pays : États-Unis (Schedule C, acomptes trimestriels, suivi des 1099, carnet de kilométrage),
+      Royaume-Uni (préparation de *Making Tax Digital*, reconnaissance par HMRC à étudier), Canada (TPS/TVH, TVQ, acomptes)
+
+**Critère** : abonnements en croissance, rétention mesurée chaque mois.
+
+## E5 — Écosystème (2028)
+
+- [ ] Vérifier les règles de déontologie (experts-comptables, avocats) sur la mise en relation et sa rémunération
+- [ ] Place de marché d'experts : comptables, avocats, assureurs partenaires ; accès au dossier avec l'accord de l'utilisateur
+- [ ] Offres partenaires intégrées : banque, assurance, création d'entreprise, domiciliation ([affiliation](06-affiliation.md))
+- [ ] Académie : guides, vidéos, formations gratuites et payantes, webinaires
+- [ ] Communauté : questions-réponses, entraide, annuaire des freelances
+- [ ] Assistant de création d'entreprise (démarches pas à pas, guichet unique)
+- [ ] Boutique intégrée (remplace Gumroad)
+- [ ] Publicité discrète sur les pages publiques uniquement (après environ 10 000 visites par mois), avec consentement conforme
+
+**Critère** : revenus des abonnements et des partenaires supérieurs aux coûts.
+
+## E6 — Échelle (2029 et après)
+
+- [ ] Application complète aux États-Unis, au Royaume-Uni et au Canada ; nouveaux pays (Belgique, Suisse…)
+- [ ] Assistant IA appuyé sur les règles sourcées (questions, catégorisation, rédaction de relances), avec garde-fous
+- [ ] API publique et intégrations ; marque blanche pour des banques ou des réseaux d'accompagnement
+- [ ] Équipe (support, développement, juridique) et financement
+- [ ] Certification de sécurité si les partenaires l'exigent
+
+## Rendez-vous réguliers
+
+| Quand | Quoi |
+|---|---|
+| Chaque session | Lire « Où en est-on ? », travailler sur l'étape en cours, cocher, mettre à jour la section |
+| Chaque mois | Bilan chiffré (Search Console, audience, ventes, comptes) dans « Bilans » |
+| Juin et décembre | Veille réglementaire des 4 pays (voir [méthode](04-methode-de-travail.md#calendrier-de-mise-à-jour-des-chiffres)) |
+| Fin d'étape | Point de décision dans le [journal des décisions](08-journal-des-decisions.md) |
+
+## Bilans
+
+| Mois | Pages indexées | Visites | Ventes | Comptes | Commentaire |
+|---|---|---|---|---|---|
+| Octobre 2026 | 81 pages publiées (indexation à suivre) | non mesuré | Kit FR en vente | — | Fin de l'étape 0 |
+
+## Historique — E0 : le site d'outils gratuits (terminée en octobre 2026)
+
+### Phase 0 — Socle multi-pays
 
 - [x] Site français en ligne : 8 outils, 11 pages, tests navigateur
 - [x] Google Search Console vérifiée, plan du site envoyé
@@ -16,7 +202,7 @@ Les phases s'enchaînent dans cet ordre ; une phase n'est terminée que lorsque 
 - [x] Moteurs de calcul séparés et tests unitaires (barème progressif, impôts US) — à étendre aux outils français
 - [x] Bloc « Sources et date de vérification » sur les pages de calcul
 
-## Phase 1 — États-Unis (`/us/`)
+### Phase 1 — États-Unis (`/us/`)
 
 - [x] *Freelance invoice generator* (avec *estimate*)
 - [x] *Hourly rate calculator* (avec équivalent journalier et annuel)
@@ -28,7 +214,7 @@ Les phases s'enchaînent dans cet ordre ; une phase n'est terminée que lorsque 
 - [x] Guides : 1099-NEC et W-9 (vérificateur), *Freelance Isn't Free Act* et lois locales (vérificateur)
 - [x] *Privacy policy* et *legal notice*
 
-## Phase 2 — Royaume-Uni (`/uk/`)
+### Phase 2 — Royaume-Uni (`/uk/`)
 
 - [x] *Invoice generator* (sole trader, limited company, VAT)
 - [x] *Day rate calculator*
@@ -39,7 +225,7 @@ Les phases s'enchaînent dans cet ordre ; une phase n'est terminée que lorsque 
 - [x] *Sole trader vs limited company calculator*
 - [x] Guide *Making Tax Digital* (avec vérificateur)
 
-## Phase 3 — Canada (`/ca/` et `/ca/fr/`)
+### Phase 3 — Canada (`/ca/` et `/ca/fr/`)
 
 - [x] Générateur de facture avec numéro de TPS/TVH et taxes par province
 - [x] Calculateur TPS/TVH/TVQ/TVP par province
@@ -48,7 +234,7 @@ Les phases s'enchaînent dans cet ordre ; une phase n'est terminée que lorsque 
 - [x] Calculateur de taux horaire
 - [x] Relances de paiement, intérêts de retard et modèles d'emails (anglais et français)
 
-## Phase 4 — France, aller plus loin
+### Phase 4 — France, aller plus loin
 
 - [x] Comparateur de statuts : micro-entreprise, entreprise au réel (EI / EURL à l'IR), SASU (salaire / dividendes), EURL à l'IS (cotisations TNS sur les dividendes au-delà de 10 % du capital)
 - [x] Rubrique facturation électronique : calendrier, obligations, plateformes agréées, nouvelles mentions, checklist
@@ -59,32 +245,10 @@ Les phases s'enchaînent dans cet ordre ; une phase n'est terminée que lorsque 
 - [x] Calcul de date d'échéance (30 jours, 45 jours fin de mois — deux méthodes —, 60 jours)
 - [x] Générateur de contrat de prestation (FR, US, UK, Canada anglais et français)
 
-## Phase 7 — Finitions SEO (à planifier)
-
-- [ ] Raccourcir les titres de plus de 60 caractères et les descriptions de plus de 160 caractères (audit du 20/10/2026 : environ 70 pages concernées, sans erreur JSON-LD ni hreflang)
-- [ ] Revérifier en décembre 2026 : mention de franchise de TVA (L. 233-3 du CIBS), barèmes 2027, calendriers 2027-2028
-
-## Phase 5 — Revenus (reportée à la fin, sur décision du 20/10/2026 : d'abord terminer le site, puis Gumroad, puis l'affiliation)
-
-- [ ] Inscription aux programmes d'affiliation prioritaires (voir [06-affiliation.md](06-affiliation.md))
-- [ ] Encarts « Outils recommandés » avec mention de transparence
-- [ ] Mise en vente du kit US sur Gumroad, offre affichée sur `/us/` et `/ca/`
-- [ ] Gamme de produits : pack contrats et CGV, kit facturation électronique, kits UK et Canada
-- [ ] Produit gratuit sur Gumroad pour constituer la liste d'emails
-- [ ] Nom de domaine, puis AdSense avec consentement (après environ 10 000 visites par mois)
-
-## Phase 6 — Outils universels et contenus
+### Phase 6 — Outils universels et contenus
 
 - [x] Calendrier fiscal par pays avec export .ics
 - [x] Indemnités kilométriques des 4 pays
 - [x] Épargne retraite des indépendants (PER, SEP-IRA / Solo 401(k), pension UK, REER)
 - [x] Facturer un client étranger (assistant TVA + option du générateur de facture)
-- [ ] Guides de fond : recouvrement judiciaire (injonction de payer, procédure simplifiée : règles 2026 à vérifier), assurance, compte pro
-
-## Points de contrôle
-
-| Date | Question | Décision possible |
-|---|---|---|
-| +3 mois après la phase 1 | Combien de pages indexées et d'impressions par pays ? | Renforcer le pays qui démarre le mieux |
-| +6 mois | Clics, ventes, premières commissions ? | Continuer, réorienter ou ajouter un pays |
-| +12 mois | Revenu mensuel et tendance | Acheter des contenus ou des outils supplémentaires, publicité |
+- [ ] Guides de fond : recouvrement judiciaire, assurance, compte pro → reportés dans E1 (1.4)
