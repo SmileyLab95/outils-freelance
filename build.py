@@ -451,7 +451,7 @@ def render(layout, sections, section, page_id, rules, kit_cta):
         "description": esc(meta["description"]),
         "canonical": url,
         "robots": "noindex" if meta.get("noindex") else "index, follow",
-        "og_image": f"{SITE_URL}/assets/img/og.png",
+        "og_image": f"{SITE_URL}/assets/img/" + (f"og-{loc['key']}.png" if (ROOT / "src" / "assets" / "img" / f"og-{loc['key']}.png").exists() else "og.png"),
         "gsv": SITE.get("google_site_verification", ""),
         "css": asset_url("style.css"),
         "alternates": alternates(sections, section, page_id),

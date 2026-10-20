@@ -43,6 +43,7 @@ data/
   calendars/<pays>.json échéances fiscales datées (générées par scripts/calendriers.py)
 scripts/
   calendriers.py       génère data/calendars/ (règles de dates, jours fériés, reports)
+  og-images.mjs        génère les images de partage par section (src/assets/img/og-<section>.png)
 src/
   layout.html          gabarit commun à toutes les pages
   assets/

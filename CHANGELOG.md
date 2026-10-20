@@ -1,5 +1,10 @@
 # Journal des modifications
 
+## 2026-10-20 — Images de partage par pays
+
+- Une image de partage (1200 × 630) par section, dans sa langue : `og-fr`, `og-us`, `og-uk`, `og-ca`, `og-ca-fr`,
+  et une image générale pour l'accueil mondial ; générées par `scripts/og-images.mjs`.
+
 ## 2026-10-20 — Épargne retraite des indépendants (4 pays)
 
 - France : simulateur PER (plafond TNS de l'art. 154 bis ou plafond général pour les micro-entrepreneurs, économie
