@@ -1,5 +1,14 @@
 # Journal des modifications
 
+## 2026-10-20 — Facturer un client étranger
+
+- Assistant (France) : TVA applicable selon le pays du client (France, UE, hors UE), entreprise ou particulier, et la
+  nature du service (immatériel, numérique, autre) ; mentions à copier (autoliquidation, hors champ), numéro de TVA
+  intracommunautaire même en franchise, VIES, DES, guichet OSS au-delà de 10 000 €.
+- Générateur de facture : option « client de l'UE » (autoliquidation) ou « hors de l'UE » (hors champ), sans TVA.
+- Les mentions citent la directive 2006/112/CE (art. 44, 59 et 196), valable avant et après le transfert de la TVA
+  dans le CIBS.
+
 ## 2026-10-20 — Correction : mention de franchise de TVA
 
 - L'ordonnance n° 2026-671 du 27 juillet 2026 a reporté au 1er janvier 2027 le transfert de la TVA dans le CIBS

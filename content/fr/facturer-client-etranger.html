@@ -1,0 +1,97 @@
+<!--{
+  "id": "international",
+  "slug": "facturer-client-etranger/",
+  "title": "Facturer un client étranger : TVA, autoliquidation et mentions (guide 2026)",
+  "description": "Client dans l'Union européenne ou hors UE, entreprise ou particulier : quelle TVA appliquer, quelles mentions mettre sur la facture (autoliquidation), numéro de TVA intracommunautaire et DES, même en micro-entreprise. Assistant gratuit.",
+  "menu": "Facturer un client étranger",
+  "icon": "🌍",
+  "blurb": "TVA, autoliquidation et mentions selon le pays et le type de client.",
+  "app": "Assistant facturation internationale",
+  "scripts": ["tools/fr-international.js"],
+  "rules": "fr",
+  "sources": ["mention_franchise_tva", "tva_franchise_seuils"],
+  "priority": 0.85,
+  "faq": [
+    ["Un auto-entrepreneur peut-il facturer un client étranger ?", "Oui, sans formalité particulière. Pour un client professionnel de l'Union européenne, il doit obtenir un numéro de TVA intracommunautaire auprès de son service des impôts des entreprises, même en franchise en base, et facturer hors taxes avec la mention « Autoliquidation »."],
+    ["Faut-il facturer la TVA à un client européen ?", "Pas s'il s'agit d'une entreprise : le service est imposable dans son pays et c'est lui qui autoliquide la TVA. Pour un particulier européen, la TVA française s'applique en principe (ou la franchise), sauf pour les services numériques au-delà de 10 000 € de ventes par an dans l'UE."],
+    ["Qu'est-ce que la DES ?", "La déclaration européenne de services : chaque mois où vous avez facturé un service à une entreprise d'un autre pays de l'UE, vous déclarez son numéro de TVA et le montant hors taxes sur douane.gouv.fr, au plus tard le 10e jour ouvrable du mois suivant. Elle permet aux administrations de vérifier l'autoliquidation."],
+    ["Et quand j'achète un service à une entreprise étrangère ?", "C'est l'inverse : en tant qu'entreprise, vous devez autoliquider la TVA sur les services achetés à un prestataire de l'UE (logiciels, publicité, hébergement…), même en franchise en base. En franchise, vous la déclarez et la payez sans pouvoir la déduire : intégrez-la dans vos coûts et demandez à votre service des impôts quelle déclaration déposer."],
+    ["Puis-je rédiger ma facture en anglais ?", "Oui. La facture peut être rédigée dans une autre langue et dans une autre devise ; l'administration peut demander une traduction. Une facture bilingue français-anglais évite toute difficulté."]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Gratuit · règles de TVA 2026</span>
+    <h1>Facturer un client étranger</h1>
+    <p class="lead">Indiquez où est votre client, s'il s'agit d'une entreprise ou d'un particulier, et ce que vous lui vendez : vous saurez s'il faut facturer la TVA, quelles mentions ajouter et quelles démarches faire.</p>
+    <ul class="trust"><li>Union européenne et reste du monde</li><li>Micro-entreprise comprise</li><li>Mentions prêtes à copier</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="intl-form" onsubmit="return false">
+      <h2>Votre facture</h2>
+      <div class="fields">
+        <div class="field full"><label for="i-regime">Votre régime de TVA</label>
+          <select id="i-regime" name="regime" data-save>
+            <option value="franchise">Franchise en base (micro-entreprise sans TVA)</option>
+            <option value="vat">Je facture la TVA</option>
+          </select></div>
+        <div class="field full"><label for="i-country">Votre client est établi</label>
+          <select id="i-country" name="country" data-save>
+            <option value="eu">Dans un autre pays de l'Union européenne</option>
+            <option value="world">Hors de l'Union européenne (Royaume-Uni, Suisse, États-Unis…)</option>
+            <option value="fr">En France</option>
+          </select></div>
+        <div class="field full" id="i-client-field"><label for="i-client">Votre client est</label>
+          <select id="i-client" name="client" data-save>
+            <option value="pro">Une entreprise</option>
+            <option value="private">Un particulier</option>
+          </select></div>
+        <div class="field full" id="i-service-field"><label for="i-service">Vous vendez</label>
+          <select id="i-service" name="service" data-save>
+            <option value="intangible">Du conseil, de l'informatique, de la création, de la rédaction ou de la publicité</option>
+            <option value="digital">Un service numérique automatisé (logiciel en ligne, contenu téléchargeable)</option>
+            <option value="other">Une autre prestation (formation, coaching, services sur place)</option>
+          </select></div>
+        <div class="field full" id="i-oss-field"><label for="i-oss">Vos ventes numériques à des particuliers de l'UE (hors France)</label>
+          <select id="i-oss" name="oss" data-save>
+            <option value="under">10 000 € par an ou moins</option>
+            <option value="over">Plus de 10 000 € par an</option>
+          </select></div>
+      </div>
+      <p class="small muted" style="margin: 14px 0 0;">Ventes de biens, événements et prestations liées à un immeuble suivent d'autres règles.</p>
+    </form>
+
+    <div class="results">
+      <div class="result-hero">
+        <div class="label">TVA sur votre facture</div>
+        <div class="big" id="i-verdict" style="font-size: clamp(1.7rem, 3.6vw, 2.3rem);">–</div>
+        <div class="sub" id="i-why">–</div>
+      </div>
+      <div class="card" style="margin-top: 16px; padding: 18px;">
+        <h3 style="font-size: 1rem; margin-bottom: 8px;">À écrire sur la facture</h3>
+        <ul id="i-mentions" style="margin: 0; padding-left: 18px;"></ul>
+        <p class="small" style="margin: 10px 0 0;">Le <a href="{{link:invoice}}">générateur de facture</a> ajoute ces mentions : choisissez « entreprise de l'UE » ou « hors de l'UE ».</p>
+      </div>
+      <div class="card" id="i-obligations-card" style="margin-top: 16px; padding: 18px;">
+        <h3 style="font-size: 1rem; margin-bottom: 8px;">Vos démarches</h3>
+        <ul id="i-obligations" style="margin: 0; padding-left: 18px;"></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>La règle en une phrase</h2>
+  <p>Pour un service, la TVA est due <strong>dans le pays du client quand c'est une entreprise</strong>, et <strong>dans votre pays quand c'est un particulier</strong>, avec des exceptions pour les services numériques et les services immatériels rendus hors de l'Union européenne.</p>
+  <h2>Les points à ne pas oublier</h2>
+  <ul>
+    <li><strong>Le chiffre d'affaires réalisé à l'étranger compte</strong> pour vos cotisations Urssaf et vos plafonds de micro-entreprise : déclarez-le comme le reste. Le <a href="{{link:tax}}">simulateur auto-entrepreneur</a> vous aide à l'anticiper.</li>
+    <li><strong>Les délais de paiement</strong> se négocient : précisez la devise, le délai et les frais bancaires dans votre <a href="{{link:contract}}">contrat</a> ou vos conditions générales.</li>
+    <li><strong>Vos propres achats à l'étranger</strong> (logiciels, publicité) peuvent vous obliger à autoliquider la TVA, même en franchise.</li>
+  </ul>
+  <p class="small muted">Les mentions citent la directive 2006/112/CE, autorisée sur les factures et inchangée par le transfert de la TVA dans le CIBS au 1er janvier 2027. Information à titre indicatif : pour une situation particulière, interrogez votre service des impôts des entreprises.</p>
+</section>

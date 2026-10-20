@@ -69,6 +69,10 @@ const tests = {
     await page.uncheck("#f-franchise");
     const ttc = await page.textContent("#f-preview");
     check(/2\s?701,80\s?€/.test(ttc), "facture : TVA 20 % appliquée (2 701,80 € TTC)");
+    await page.selectOption("#f-vat-place", "eu");
+    const eu = await page.textContent("#f-preview");
+    check(eu.includes("Autoliquidation : TVA due par le preneur") && eu.includes("N° de TVA intracommunautaire du client") && !/2\s?701,80/.test(eu), "facture : client de l'UE → autoliquidation, sans TVA");
+    await page.selectOption("#f-vat-place", "fr");
     await page.check("#f-debits");
     check((await page.textContent("#f-preview")).includes("d'après les débits"), "facture : option pour le paiement de la TVA d'après les débits");
     await page.uncheck("#f-debits");
@@ -814,6 +818,30 @@ const tests = {
   },
   async "ca/fr/calculateur-reer/"(page) {
     check((await page.textContent("#v-refund")).replace(/\s/g, "") === "3612$" && (await page.textContent("#v-deadline")).trim() === "1er mars 2027", "REER : Québec 80 000 $, 10 000 $ → 3 612 $ ; date limite 1er mars 2027");
+  },
+  async "fr/facturer-client-etranger/"(page) {
+    const res = async () => [await page.textContent("#i-verdict"), await page.textContent("#i-mentions"), await page.textContent("#i-obligations")];
+    let [v, m, o] = await res();
+    check(v.includes("Autoliquidation") && m.includes("art. 196") && o.includes("DES") && o.includes("numéro de TVA intracommunautaire"), "client étranger : entreprise de l'UE → autoliquidation, DES, numéro de TVA (franchise)");
+    await page.selectOption("#i-country", "world");
+    [v, m] = await res();
+    check(v.includes("Pas de TVA") && m.includes("art. 44"), "client étranger : entreprise hors UE → hors champ (art. 44)");
+    await page.selectOption("#i-client", "private");
+    [v, m] = await res();
+    check(m.includes("art. 59"), "client étranger : particulier hors UE, service immatériel → art. 59");
+    await page.selectOption("#i-country", "eu");
+    await page.selectOption("#i-service", "digital");
+    await page.selectOption("#i-oss", "over");
+    [v] = await res();
+    check(v.includes("OSS"), "client étranger : services numériques > 10 000 € → guichet OSS");
+    await page.selectOption("#i-country", "fr");
+    [v, m] = await res();
+    check(v.includes("franchise") && m.includes("TVA non applicable, art."), "client étranger : client en France, franchise");
+    // Remise à zéro dans l'ordre où les champs redeviennent visibles.
+    await page.selectOption("#i-country", "eu");
+    await page.selectOption("#i-oss", "under");
+    await page.selectOption("#i-service", "intangible");
+    await page.selectOption("#i-client", "pro");
   },
   async "fr/confidentialite/"() {},
   async "fr/mentions-legales/"() {},

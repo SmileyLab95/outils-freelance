@@ -109,6 +109,13 @@
 
       <h3>TVA et conditions</h3>
       <div class="fields">
+        <div class="field full"><label for="f-vat-place">Votre client</label>
+          <select id="f-vat-place" name="vatPlace" data-save>
+            <option value="fr">Est en France (ou c'est un particulier)</option>
+            <option value="eu">Est une entreprise d'un autre pays de l'UE (autoliquidation)</option>
+            <option value="world">Est une entreprise hors de l'Union européenne</option>
+          </select>
+          <span class="hint">Particuliers à l'étranger, services numériques : voir <a href="{{link:international}}">facturer un client étranger</a>.</span></div>
         <label class="check full"><input type="checkbox" id="f-franchise" name="franchise" checked data-save>
           <span>Franchise en base de TVA (« TVA non applicable, art. 293 B du CGI », puis « art. L. 233-3 du CIBS » sur les factures datées de 2027)</span></label>
         <div class="field" id="f-vat-rate-field" hidden><label for="f-vat-rate">Taux de TVA</label>

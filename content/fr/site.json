@@ -11,6 +11,7 @@
         "invoice",
         "salestax",
         "invoice-rules",
+        "international",
         "einvoicing",
         "duedate"
       ]

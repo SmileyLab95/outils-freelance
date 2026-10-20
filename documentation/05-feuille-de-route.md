@@ -73,7 +73,8 @@ Les phases s'enchaînent dans cet ordre ; une phase n'est terminée que lorsque 
 - [x] Calendrier fiscal par pays avec export .ics
 - [x] Indemnités kilométriques des 4 pays
 - [x] Épargne retraite des indépendants (PER, SEP-IRA / Solo 401(k), pension UK, REER)
-- [ ] Guides de fond : facturer un client étranger, recouvrement, assurance, compte pro
+- [x] Facturer un client étranger (assistant TVA + option du générateur de facture)
+- [ ] Guides de fond : recouvrement judiciaire (injonction de payer, procédure simplifiée : règles 2026 à vérifier), assurance, compte pro
 
 ## Points de contrôle
 

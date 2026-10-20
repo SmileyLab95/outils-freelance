@@ -116,11 +116,14 @@
       return { desc: l.desc, qty: qty, price: price, total: total };
     });
     var franchise = $("f-franchise").checked;
-    var rate = franchise ? 0 : OF.num($("f-vat-rate").value);
+    // Client professionnel à l'étranger : pas de TVA française (autoliquidation dans l'UE, hors champ ailleurs).
+    var place = $("f-vat-place").value;
+    var rate = franchise || place !== "fr" ? 0 : OF.num($("f-vat-rate").value);
     var vat = Math.round(ht * rate) / 100;
     var ttc = ht + vat;
     var paid = OF.num($("f-paid").value);
-    return { rows: rows, ht: ht, rate: rate, vat: vat, ttc: ttc, paid: isFinite(paid) ? paid : 0, franchise: franchise };
+    return { rows: rows, ht: ht, rate: rate, vat: vat, ttc: ttc, paid: isFinite(paid) ? paid : 0, franchise: franchise,
+             place: place, noVat: franchise || place !== "fr" };
   }
 
   // ----- Mention de franchise de TVA : 293 B du CGI, puis CIBS pour les factures datées à partir du 1er janvier 2027.
@@ -151,8 +154,8 @@
     var due = OF.addDays(date, Math.max(0, parseInt($("f-terms").value, 10) || 0));
     var validUntil = OF.addDays(date, Math.max(1, parseInt($("f-validity").value, 10) || 30));
     var pro = $("f-client-pro").checked;
-    $("f-vat-rate-field").hidden = t.franchise;
-    $("f-debits-field").hidden = t.franchise;
+    $("f-vat-rate-field").hidden = t.noVat;
+    $("f-debits-field").hidden = t.noVat;
     form.querySelectorAll("[data-pro]").forEach(function (el) { el.hidden = !pro; });
     $("f-logo-remove").hidden = !state.logo;
 
@@ -175,6 +178,7 @@
       '</div><div><div class="p-label">' + (isInvoice ? "Facturé à" : "Client") + "</div><strong>" +
       orHint(val("f-client-name"), "Nom du client") + "</strong><br>" + orHint($("f-client-address").value, "Adresse du client") +
       clientIds(pro).map(function (l) { return "<br>" + esc(l); }).join("") +
+      (t.place === "eu" && !val("f-client-vat") ? '<br><span class="p-empty">N° de TVA intracommunautaire du client</span>' : "") +
       (val("f-client-delivery") ? '<div class="p-delivery"><span>Adresse de livraison</span><br>' + multiline(val("f-client-delivery")) + "</div>" : "") +
       "</div></div>";
 
@@ -202,9 +206,10 @@
     html += "</tbody></table>";
 
     var tot = [["Total HT", OF.eur(t.ht)]];
-    if (t.franchise) tot.push(["TVA", "non applicable"]);
+    if (t.place === "eu") tot.push(["TVA", "autoliquidation"]);
+    else if (t.noVat) tot.push(["TVA", "non applicable"]);
     else tot.push(["TVA (" + OF.fmt(t.rate) + " %)", OF.eur(t.vat)]);
-    tot.push([t.franchise ? "Total à payer" : "Total TTC", OF.eur(t.ttc), true]);
+    tot.push([t.noVat ? "Total à payer" : "Total TTC", OF.eur(t.ttc), true]);
     if (isInvoice && t.paid > 0) {
       tot.push(["Acompte déjà versé", "− " + OF.eur(t.paid)]);
       tot.push(["Net à payer", OF.eur(t.ttc - t.paid), true]);
@@ -218,7 +223,9 @@
     }).join("") + "</div>";
 
     var mentions = [];
-    if (t.franchise) mentions.push(franchiseMention(date));
+    if (t.place === "eu") mentions.push("Autoliquidation : TVA due par le preneur (art. 196 de la directive 2006/112/CE).");
+    else if (t.place === "world") mentions.push("TVA non applicable : prestation de services dont le lieu est hors de France (art. 44 de la directive 2006/112/CE).");
+    else if (t.franchise) mentions.push(franchiseMention(date));
     else if ($("f-debits").checked) mentions.push("Option pour le paiement de la taxe d'après les débits.");
     if (isInvoice) {
       if (val("f-me-iban")) {
