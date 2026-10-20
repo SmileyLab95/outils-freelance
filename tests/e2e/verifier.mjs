@@ -843,6 +843,43 @@ const tests = {
     await page.selectOption("#i-service", "intangible");
     await page.selectOption("#i-client", "pro");
   },
+  async "fr/compte-bancaire-professionnel/"(page) {
+    await page.goto(BASE + "fr/compte-bancaire-professionnel/?today=2026-10-20", { waitUntil: "networkidle" });
+    const res = async () => [await page.textContent("#b-answer"), await page.textContent("#b-sub"), await page.textContent("#b-steps")];
+    let [a, sub, steps] = await res();
+    check(a.includes("à surveiller") && sub.includes("en 2025") && (await page.textContent(".b-y2")) === "2024", "compte bancaire : 14 000 € en 2025 seulement → à surveiller (années affichées)");
+    check(steps.includes("Préparez") && !steps.includes("Ouvrez un compte"), "compte bancaire : « à surveiller » → étapes de préparation, pas d'obligation");
+    await page.fill("#b-prev2", "12 000");
+    [a, sub, steps] = await res();
+    check(a.includes("obligatoire") && sub.includes("en 2024 et en 2025") && /«\s?EI\s?»/.test(steps) && steps.includes("droit au compte"), "compte bancaire : deux années au-dessus de 10 000 € → obligatoire, intitulé EI, droit au compte");
+    await page.fill("#b-prev2", "8 000");
+    await page.fill("#b-current", "11 000");
+    [a] = await res();
+    check(a.includes("fin 2026"), "compte bancaire : 2025 et estimation 2026 au-dessus → obligatoire fin 2026");
+    await page.fill("#b-prev", "10 000");
+    [a, , steps] = await res();
+    check(a === "Pas obligatoire" && steps.includes("Conseillé"), "compte bancaire : 10 000 € tout juste → pas obligatoire, conseillé");
+    await page.selectOption("#b-status", "ei");
+    [a] = await res();
+    check(a.includes("Pas d'obligation") && !(await page.isVisible("#b-prev")) && !(await page.isVisible("#b-notice")), "compte bancaire : entreprise individuelle au réel → pas d'obligation générale, champs masqués");
+    await page.selectOption("#b-status", "societe");
+    [a] = await res();
+    check(a.includes("à son nom"), "compte bancaire : société → compte à son nom");
+    await page.reload({ waitUntil: "networkidle" });
+    [a] = await res();
+    check(a.includes("à son nom") && !(await page.isVisible("#b-prev")), "compte bancaire : statut retrouvé après rechargement");
+    await page.selectOption("#b-status", "micro");
+    await page.fill("#b-prev2", "12 000");
+    await page.fill("#b-prev", "14k");
+    [a] = await res();
+    const error = await page.textContent("#b-error");
+    check(await page.isVisible("#b-error") && error.includes("2025") && a === "Pas obligatoire" && (await page.getAttribute("#b-prev", "aria-invalid")) === "true", "compte bancaire : montant illisible signalé, pas ignoré en silence");
+    // Retour aux valeurs par défaut (enregistrées dans le navigateur) avant les captures.
+    await page.fill("#b-prev2", "8 000");
+    await page.fill("#b-prev", "14 000");
+    await page.fill("#b-current", "");
+    check(!(await page.isVisible("#b-error")), "compte bancaire : message d'erreur retiré une fois le montant corrigé");
+  },
   async "fr/espace/"(page) {
     // Parcours complet de l'Espace (critères A2 à A11 de documentation/09-specification-espace.md).
     const fs = await import("fs");

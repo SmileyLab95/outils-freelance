@@ -1,0 +1,93 @@
+<!--{
+  "id": "bank",
+  "slug": "compte-bancaire-professionnel/",
+  "title": "Compte bancaire pro : est-il obligatoire ? (micro, EI)",
+  "description": "Micro-entrepreneur, EI ou société : savez-vous si un compte bancaire dédié est obligatoire ? Seuil de 10 000 €, mention « EI », refus de la banque. Gratuit.",
+  "menu": "Compte bancaire professionnel",
+  "icon": "🏦",
+  "blurb": "Compte dédié obligatoire ou non : la règle des 10 000 € vérifiée en 3 questions.",
+  "app": "Vérificateur de compte bancaire dédié",
+  "scripts": ["engines/compte-fr.js", "tools/fr-compte.js"],
+  "rules": "fr",
+  "sources": ["compte_dedie_micro", "compte_dedie_urssaf", "compte_intitule_ei", "compte_commercant", "droit_au_compte_pro"],
+  "priority": 0.8,
+  "faq": [
+    ["Un auto-entrepreneur doit-il avoir un compte bancaire professionnel ?", "Pas forcément professionnel, mais dédié : dès que son chiffre d'affaires dépasse 10 000 € pendant deux années civiles consécutives, toutes les opérations de son activité doivent passer par un compte réservé à celle-ci (article L613-10 du Code de la sécurité sociale). Selon l'Urssaf, ce compte peut être un compte personnel, s'il ne sert qu'à l'activité."],
+    ["Faut-il un compte dédié en dessous de 10 000 € ?", "Non, ce n'est pas obligatoire tant que le chiffre d'affaires ne dépasse pas 10 000 € deux années de suite. L'Urssaf le conseille quand même : vos encaissements sont plus simples à suivre, à déclarer et à justifier en cas de contrôle."],
+    ["Quel intitulé donner au compte ?", "Votre nom suivi de « EI » ou de « entrepreneur individuel ». Depuis le 15 mai 2022, chaque compte bancaire dédié à l'activité d'un entrepreneur individuel, micro-entrepreneur compris, doit porter cette mention dans son intitulé (article R526-27 du Code de commerce)."],
+    ["Quelles opérations doivent passer par ce compte ?", "L'ensemble des opérations financières de l'activité : les paiements de vos clients et les dépenses de l'activité. Évitez d'y mêler des dépenses personnelles ; pour vous rémunérer, faites un virement vers votre compte personnel."],
+    ["La banque refuse d'ouvrir mon compte : que faire ?", "Demandez une lettre de refus, puis saisissez la Banque de France au titre du droit au compte. Elle désigne une banque, qui doit ouvrir un compte professionnel avec les services de base dans les trois jours suivant la remise d'un dossier complet. La procédure est gratuite."]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Gratuit · règles vérifiées en 2026</span>
+    <h1>Compte bancaire professionnel : est-il obligatoire ?</h1>
+    <p class="lead">Indiquez votre statut et votre chiffre d'affaires : vous saurez si un compte réservé à votre activité est obligatoire, depuis quand, et comment l'ouvrir.</p>
+    <ul class="trust"><li>Seuil de 10 000 € sur deux ans</li><li>Mention « EI » sur le compte</li><li>Si la banque refuse</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="bank-form" onsubmit="return false">
+      <h2>Votre situation</h2>
+      <div class="fields">
+        <div class="field full"><label for="b-status">Votre statut</label>
+          <select id="b-status" name="status" data-save>
+            <option value="micro">Micro-entreprise (auto-entrepreneur)</option>
+            <option value="ei">Entreprise individuelle au régime réel</option>
+            <option value="societe">Société (EURL, SASU, SARL, SAS…)</option>
+          </select></div>
+        <div class="field full" data-micro><label for="b-prev2">Chiffre d'affaires <span class="b-y2">2024</span></label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="b-prev2" name="prev2" value="8 000" data-save><span>€</span></div></div>
+        <div class="field full" data-micro><label for="b-prev">Chiffre d'affaires <span class="b-y1">2025</span></label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="b-prev" name="prev" value="14 000" data-save><span>€</span></div></div>
+        <div class="field full" data-micro><label for="b-current">Estimation pour <span class="b-y0">2026</span> (facultatif)</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="b-current" name="current" value="" placeholder="Laisser vide si vous ne savez pas" data-save><span>€</span></div>
+          <span class="hint">Chiffre d'affaires encaissé sur l'année civile, comme pour vos déclarations Urssaf. Années sans activité : 0.</span></div>
+      </div>
+      <p class="notice warn" id="b-error" role="alert" hidden style="margin-top: 14px;"></p>
+    </form>
+
+    <div class="results">
+      <div class="result-hero" id="b-hero">
+        <div class="label">Compte réservé à l'activité</div>
+        <div class="big" id="b-answer" style="font-size: clamp(1.7rem, 4vw, 2.3rem);">–</div>
+        <div class="sub" id="b-sub">–</div>
+      </div>
+      <ul class="checklist card" id="b-steps" style="padding: 10px 18px; margin-top: 16px;"></ul>
+      <p class="notice" id="b-notice" style="margin-top: 16px;">Le texte ne précise ni le délai pour ouvrir le compte une fois la condition remplie, ni s'il faut ramener à l'année une première année d'activité incomplète, ni ce qui se passe si votre chiffre d'affaires repasse ensuite sous 10 000 € : dans le doute, ouvrez-le sans attendre et gardez-le. Votre Urssaf peut vous répondre pour votre cas.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>Qui doit avoir un compte réservé à son activité ?</h2>
+  <table>
+    <thead><tr><th>Statut</th><th>Règle</th></tr></thead>
+    <tbody>
+      <tr><td>Micro-entrepreneur</td><td>Compte réservé à l'ensemble des opérations de l'activité, obligatoire quand le chiffre d'affaires dépasse <span class="nowrap">10 000 €</span> pendant deux années civiles consécutives. Conseillé avant.<br><span class="small muted">Code de la sécurité sociale, <span class="nowrap">art. L613-10</span></span></td></tr>
+      <tr><td>Entrepreneur individuel au réel</td><td>Pas d'obligation générale de compte dédié. Un commerçant doit toutefois avoir un compte bancaire. Séparer ses comptes reste vivement conseillé.<br><span class="small muted">Code de commerce, <span class="nowrap">art. L123-24</span></span></td></tr>
+      <tr><td>Société commerciale (EURL, SASU, SARL, SAS)</td><td>La société est une personne distincte de vous : elle a son propre compte bancaire, à son nom.<br><span class="small muted">Code de commerce, <span class="nowrap">art. L123-24</span></span></td></tr>
+    </tbody>
+  </table>
+
+  <h2>Compte dédié ou compte professionnel ?</h2>
+  <p>Pour un micro-entrepreneur, la loi demande un compte <strong>réservé à l'activité</strong>, pas un « compte professionnel » au sens commercial : selon l'Urssaf, un compte personnel convient s'il ne sert qu'à l'activité. Vérifiez cependant auprès de votre banque que ses conditions permettent cet usage et l'intitulé ci-dessous.</p>
+  <ul>
+    <li><strong>Intitulé :</strong> votre nom suivi de « EI » ou de « entrepreneur individuel » (article R526-27 du Code de commerce, depuis le 15 mai 2022).</li>
+    <li><strong>Usage :</strong> les paiements de vos clients et les dépenses de l'activité, rien d'autre. Pour vous rémunérer, un virement vers votre compte personnel.</li>
+    <li><strong>Sur vos factures :</strong> l'IBAN de ce compte, que le <a href="{{link:invoice}}">générateur de facture</a> et l'<a href="{{link:espace}}">Espace entrepreneur</a> reprennent automatiquement.</li>
+  </ul>
+
+  <h2 id="droit-au-compte">Si une banque refuse : le droit au compte</h2>
+  <ol>
+    <li>Demandez à la banque une <strong>lettre de refus</strong>. Sans réponse dans les 15 jours, son silence vaut refus : gardez la preuve de votre demande (accusé de réception d'un recommandé, par exemple).</li>
+    <li>Déposez une demande de droit au compte auprès de la <strong>Banque de France</strong> (en ligne, au guichet ou par courrier) avec votre pièce d'identité, un justificatif de domicile et un justificatif d'activité.</li>
+    <li>La Banque de France <strong>désigne une banque</strong>. Celle-ci ouvre un compte professionnel avec les services bancaires de base (sans chéquier ni découvert) dans les trois jours suivant la remise d'un dossier complet.</li>
+  </ol>
+  <p>La procédure est gratuite. Pour une société en cours de création, elle n'est possible qu'après l'immatriculation.</p>
+  <p class="small muted">Informations générales, à jour des textes vérifiés le 20/10/2026 ; elles ne remplacent pas l'avis de votre Urssaf, de votre banque ou d'un expert-comptable pour votre situation.</p>
+</section>

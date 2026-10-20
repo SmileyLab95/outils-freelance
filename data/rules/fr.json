@@ -566,7 +566,7 @@
         "Taux des pénalités de retard",
         "Mention de l'indemnité forfaitaire de 40 EUR pour frais de recouvrement (clients professionnels)",
         "Le cas échéant : « TVA non applicable, art. 293 B du CGI » (franchise en base), « Autoliquidation », mention d'exonération avec l'article du CGI",
-        "Le cas échéant : assurance professionnelle obligatoire (assureur, couverture géographique), notamment pour les artisans du bâtiment (décennale)",
+        "Le cas échéant, sur les devis et les factures : artisans et micro-entrepreneurs dont l'activité exige une assurance, l'assurance professionnelle souscrite, les coordonnées de l'assureur et la couverture géographique (Code de l'artisanat, art. L132-1) ; travaux soumis à l'assurance décennale : attestation d'assurance jointe au devis et à la facture (Code des assurances, art. L243-2)",
         "À partir de la réforme : SIREN du client, adresse de livraison si différente, nature de l'opération (biens / services / mixte), option pour la TVA sur les débits"
       ],
       "unit": "list",
@@ -574,7 +574,7 @@
       "source": "https://entreprendre.service-public.fr/vosdroits/F31808",
       "source_title": "Facturation : quelles sont les mentions obligatoires ? - entreprendre.service-public.fr (art. L441-9 C. com., art. 242 nonies A ann. II CGI)",
       "confidence": "medium",
-      "note": "Liste établie à partir des textes connus, non relue en ligne pendant cette session. Mention EI obligatoire depuis le 15/05/2022 (loi n° 2022-172). Voir facturation_electronique_nouvelles_mentions pour la date d'effet des nouvelles mentions."
+      "note": "Liste établie à partir des textes connus, non relue en ligne pendant cette session. Mention EI obligatoire depuis le 15/05/2022 (loi n° 2022-172). Voir facturation_electronique_nouvelles_mentions pour la date d'effet des nouvelles mentions. Mention de l'assurance corrigée le 20/10/2026 : art. 22-2 de la loi n° 96-603 repris à l'art. L132-1 du Code de l'artisanat depuis le 01/07/2023, qui exclut les constructeurs soumis à la décennale (attestation jointe, art. L243-2 du Code des assurances)."
     },
     "sanctions_mentions_facture": {
       "value": {
@@ -819,6 +819,58 @@
       "source_title": "Code général des impôts, art. 50-0 (BIC) et 102 ter (BNC) - Légifrance",
       "confidence": "medium",
       "note": "Livre-journal présentant le détail des recettes professionnelles, tenu au jour le jour. Liste des mentions recoupée sur plusieurs guides professionnels (L'Expert-Comptable.com, Le Coin des Entrepreneurs) ; texte officiel à relire lors de la veille de décembre."
+    },
+    "compte_dedie_micro": {
+      "value": {
+        "seuil_ca": 10000,
+        "annees_consecutives": 2
+      },
+      "unit": "EUR",
+      "label": "Micro-entrepreneur : compte bancaire dédié obligatoire au-delà de 10 000 € de chiffre d'affaires annuel pendant deux années civiles consécutives",
+      "source": "https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000038586837",
+      "source_title": "Code de la sécurité sociale, art. L613-10 - Légifrance",
+      "confidence": "high",
+      "note": "En vigueur depuis le 24/05/2019 (loi PACTE). Le compte est réservé à l'ensemble des opérations financières de l'activité, dans un établissement mentionné à l'art. L123-24 du Code de commerce. Recoupé avec autoentrepreneur.urssaf.fr et economie.gouv.fr le 20/10/2026."
+    },
+    "compte_dedie_urssaf": {
+      "value": {
+        "compte_personnel_accepte": true
+      },
+      "label": "Le compte dédié peut être un compte personnel ou professionnel, réservé à l'activité ; conseillé même sous le seuil",
+      "source": "https://www.autoentrepreneur.urssaf.fr/portail/accueil/sinformer-sur-le-statut/lessentiel-du-statut.html",
+      "source_title": "L'essentiel du statut - Autoentrepreneur.urssaf.fr",
+      "confidence": "high",
+      "note": "Relevé le 20/10/2026 (extraits de la page officielle)."
+    },
+    "compte_intitule_ei": {
+      "value": {
+        "mention": "EI",
+        "depuis": "2022-05-15"
+      },
+      "label": "Entrepreneur individuel : l'intitulé de chaque compte bancaire dédié à l'activité contient sa dénomination (nom suivi de « EI » ou « entrepreneur individuel »)",
+      "source": "https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000045697814",
+      "source_title": "Code de commerce, art. R526-27 - Légifrance",
+      "confidence": "high",
+      "note": "Créé par le décret n° 2022-725 du 28/04/2022, en vigueur depuis le 15/05/2022 ; s'applique aussi aux micro-entrepreneurs (Urssaf)."
+    },
+    "compte_commercant": {
+      "value": true,
+      "label": "Tout commerçant (personne physique ou société commerciale) doit se faire ouvrir un compte dans un établissement de crédit",
+      "source": "https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000006219343",
+      "source_title": "Code de commerce, art. L123-24 - Légifrance",
+      "confidence": "high",
+      "note": "Obligation d'avoir un compte, pas nécessairement réservé à l'activité pour une personne physique."
+    },
+    "droit_au_compte_pro": {
+      "value": {
+        "silence_vaut_refus_jours": 15,
+        "ouverture_jours": 3
+      },
+      "label": "Droit au compte professionnel : après un refus, la Banque de France désigne une banque qui ouvre un compte avec les services de base",
+      "source": "https://www.banque-france.fr/fr/a-votre-service/entreprises/interdit-bancaire-droit-compte-professionnel",
+      "source_title": "Interdit bancaire et droit au compte professionnel - Banque de France",
+      "confidence": "high",
+      "note": "Sans réponse de la banque sous 15 jours, le silence vaut refus ; la banque désignée ouvre le compte dans les 3 jours suivant la remise d'un dossier complet ; services de base sans chéquier ni découvert ; procédure gratuite. Relevé le 20/10/2026 (extraits de la page officielle)."
     }
   },
   "open_questions": [
@@ -834,6 +886,7 @@
     "Taxe pour frais de chambre consulaire (CMA 0,48 % / 0,22 %, CCI 0,015 % / 0,044 %) : valeurs citées de mémoire, à vérifier sur autoentrepreneur.urssaf.fr.",
     "Facturation électronique : nombre exact de plateformes agréées sur la liste impots.gouv.fr ; URL exacte de la page de la liste ; montants des amendes après les LF 2025 et 2026 (amende pour défaut de plateforme, hausse éventuelle des 15 EUR par facture) ; date d'effet des 4 nouvelles mentions (01/09/2026 pour toutes les entreprises, ou date d'émission de chaque entreprise ?).",
     "Smic 2026 : confirmer 12,02 EUR / h au 01/01/2026 et l'absence de revalorisation en cours d'année.",
-    "Taux de versement libératoire de 1 % (vente) et 1,7 % (BIC services) : à relire sur une page officielle 2026 (seul le 2,2 % a été vu)."
+    "Taux de versement libératoire de 1 % (vente) et 1,7 % (BIC services) : à relire sur une page officielle 2026 (seul le 2,2 % a été vu).",
+    "Compte dédié du micro-entrepreneur (CSS, art. L613-10) : le texte ne fixe ni délai d'ouverture après le second dépassement, ni prorata la première année, ni sortie de l'obligation quand le chiffre d'affaires repasse sous 10 000 € ; le guide le signale sans interpréter."
   ]
 }

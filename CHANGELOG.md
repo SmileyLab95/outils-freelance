@@ -1,5 +1,19 @@
 # Journal des modifications
 
+## 2026-10-20 — Guide « Compte bancaire professionnel » (France)
+
+- Nouvelle page `/fr/compte-bancaire-professionnel/` (menu « Statut et revenus ») : vérificateur du compte dédié
+  obligatoire pour les micro-entrepreneurs (plus de 10 000 € de chiffre d'affaires deux années civiles consécutives,
+  avec l'estimation de l'année en cours), cas de l'entreprise individuelle au réel et des sociétés, intitulé « EI »,
+  droit au compte auprès de la Banque de France, questions que le texte laisse ouvertes.
+- Règles sourcées dans `data/rules/fr.json` (CSS art. L613-10, Code de commerce art. R526-27 et L123-24, Urssaf,
+  Banque de France) ; moteur `engines/compte-fr.js` et 8 tests unitaires (dont la cohérence entre la page et les
+  règles) ; parcours navigateur ; spécification `documentation/15-guides-gestion.md`.
+- Règles : la mention de l'assurance sur les devis et factures est corrigée dans la liste des mentions obligatoires
+  (artisans et micro-entrepreneurs : Code de l'artisanat, art. L132-1, qui a repris en 2023 l'article 22-2 de la loi
+  n° 96-603 ; travaux soumis à la décennale : attestation jointe, Code des assurances, art. L243-2). Spécification du
+  guide « Assurance de l'indépendant » (`documentation/15-guides-gestion.md`, § 2).
+
 ## 2026-10-20 — Recouvrement judiciaire : étude préalable
 
 - `documentation/14-etude-recouvrement.md` : nouvelle procédure de recouvrement des créances commerciales incontestées

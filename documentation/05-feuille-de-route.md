@@ -44,8 +44,15 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   procédure sans juge pour les factures impayées **entre commerçants** (loi n° 2026-307), qui ne concerne pas la
   plupart des indépendants. Guide en attente de la lecture complète de deux textes (décret d'application, décret
   n° 2026-683), impossible depuis l'environnement de travail.
-- **Prochaines actions de Claude** : guides (assurance, compte bancaire) ; guide du recouvrement dès que les textes
-  sont lisibles ; veille réglementaire de décembre (dont la version de
+- **Guide « Compte bancaire professionnel » publié (20/10/2026)** : vérificateur de la règle des 10 000 € sur deux
+  années civiles (micro-entreprise), cas de l'entreprise individuelle au réel et des sociétés, mention « EI », droit
+  au compte auprès de la Banque de France ; règles sourcées (Légifrance, Urssaf, Banque de France), moteur testé.
+- **Assurance (20/10/2026)** : règles vérifiées et guide spécifié ([15](15-guides-gestion.md) § 2) ; la mention de
+  l'assurance sur les devis et factures relève désormais de l'article L132-1 du Code de l'artisanat (et, pour la
+  décennale, d'une attestation jointe) : liste des mentions corrigée.
+- **Prochaines actions de Claude** : guide « Assurance de l'indépendant » et point « assurance » dans la liste des
+  mentions obligatoires ; typographie française automatique (espaces
+  insécables) ; guide du recouvrement dès que les textes sont lisibles ; veille réglementaire de décembre (dont la version de
   Factur-X et l'annexe A de XP Z12-012 pour le BT-32 en franchise). Les étapes C3 (serveur) et C4 (interface des
   comptes) attendent le choix de l'hébergeur.
 - **En attente d'Ismail** (pas urgent) : structure juridique avec un comptable ; choix de l'hébergeur et budget pour
@@ -105,7 +112,11 @@ Objectif : un site mesuré, sous sa propre marque, qui commence à rapporter, et
       numéro définitif de la mention de franchise (L. 233-3 du CIBS), calendriers 2027-2028 (`scripts/calendriers.py`)
 - [ ] Guide du recouvrement judiciaire (injonction de payer, procédure simplifiée) une fois les règles 2026 vérifiées :
       étude et plan prêts ([14](14-etude-recouvrement.md)) ; deux textes de 2026 à lire en entier avant publication
-- [ ] Guides : assurance de l'indépendant, compte bancaire professionnel
+- [x] Guide « Compte bancaire professionnel » avec vérificateur (règle des 10 000 € sur deux ans, mention « EI »,
+      droit au compte) : spécification [15](15-guides-gestion.md) § 1
+- [ ] Guide « Assurance de l'indépendant » (spécification [15](15-guides-gestion.md) § 2, règles à vérifier)
+- [ ] Typographie française automatique dans le générateur : espaces insécables avant « ; : ! ? », dans les montants
+      (« 10 000 € ») et les références d'articles, pour éviter les coupures de ligne sur mobile
 
 ### 1.5 Préparer la plateforme
 
