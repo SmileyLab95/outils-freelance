@@ -1,0 +1,103 @@
+<!--{
+  "id": "rate",
+  "slug": "hourly-rate-calculator/",
+  "title": "Freelance Hourly Rate Calculator (After Taxes, 2026)",
+  "description": "What should you charge per hour as a freelancer? Start from the take-home pay you want: the calculator adds 2026 self-employment and income taxes, expenses and unbillable time.",
+  "menu": "Hourly rate calculator",
+  "icon": "💵",
+  "blurb": "The rate to charge to take home the income you want, taxes included.",
+  "app": "Freelance Hourly Rate Calculator",
+  "scripts": ["engines/brackets.js", "engines/tax-us.js", "tools/us-rate.js"],
+  "rules": "us",
+  "sources": ["se_tax_total_rate", "federal_brackets_single", "standard_deduction_2026", "qbi_deduction_rate"],
+  "priority": 0.95,
+  "faq": [
+    ["How do I calculate my freelance hourly rate?", "Start from the yearly take-home pay you want, add the taxes you will owe on your profit (self-employment tax and income tax), add your business expenses, then divide by the hours you can actually bill in a year. This calculator does each step for you with 2026 tax rules."],
+    ["How many billable hours does a freelancer have per year?", "Fewer than you think. With 4 weeks off, 10 holidays and 40 working hours a week, you work about 1,840 hours, but marketing, admin, invoicing and learning usually take 25 to 40% of that time. Most freelancers bill 1,000 to 1,400 hours a year."],
+    ["Why is a freelance rate so much higher than an employee's hourly wage?", "Because the rate has to pay for things an employer normally covers: the employer half of Social Security and Medicare, health insurance, retirement, paid time off, equipment, software, and the hours spent finding clients. A common rule of thumb is to charge at least 1.5 to 2 times the hourly wage of an equivalent salaried job."],
+    ["Should I charge by the hour or by the project?", "Hourly works well when the scope is unclear. For well-defined work, a project price based on your hourly rate times the estimated hours, plus a buffer of 15 to 25%, rewards you for working efficiently."]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · taxes included</span>
+    <h1>Freelance hourly rate calculator</h1>
+    <p class="lead">Tell us what you want to take home after taxes. We add self-employment tax, income tax, expenses and unbillable time, and give you the hourly and daily rate to charge.</p>
+    <ul class="trust"><li>2026 federal taxes built in</li><li>Real billable hours</li><li>Hourly, daily and monthly targets</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="us-rate-form" onsubmit="return false">
+      <h3>Your goal</h3>
+      <div class="fields">
+        <div class="field full"><label for="h-take">Take-home pay you want per year (after taxes)</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="h-take" name="take" value="70,000" data-save><span>$</span></div></div>
+        <div class="field full"><label for="h-costs">Business expenses per year</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="h-costs" name="costs" value="6,000" data-save><span>$</span></div>
+          <span class="hint">Software, equipment, health insurance, coworking, accountant, marketing…</span></div>
+        <div class="field"><label for="h-status">Filing status</label>
+          <select id="h-status" name="status" data-save>
+            <option value="single">Single</option>
+            <option value="married_filing_jointly">Married filing jointly</option>
+            <option value="married_filing_separately">Married filing separately</option>
+            <option value="head_of_household">Head of household</option>
+          </select></div>
+        <div class="field"><label for="h-state">State income tax</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="h-state" name="state" placeholder="0" data-save><span>%</span></div></div>
+      </div>
+      <h3>Your time</h3>
+      <div class="fields">
+        <div class="field"><label for="h-weeks">Weeks off per year</label>
+          <input type="number" id="h-weeks" name="weeks" value="4" min="0" max="26" data-save>
+          <span class="hint">Vacation and sick days.</span></div>
+        <div class="field"><label for="h-holidays">Holidays (days)</label>
+          <input type="number" id="h-holidays" name="holidays" value="10" min="0" max="30" data-save></div>
+        <div class="field"><label for="h-hours">Hours worked per week</label>
+          <input type="number" id="h-hours" name="hours" value="40" min="1" max="80" data-save></div>
+        <div class="field"><label for="h-unbilled">Unbillable time</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="h-unbilled" name="unbilled" value="30" data-save><span>%</span></div>
+          <span class="hint">Marketing, admin, invoicing, learning.</span></div>
+        <div class="field full"><label for="h-buffer">Safety margin</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="h-buffer" name="buffer" value="15" data-save><span>%</span></div>
+          <span class="hint">For slow months, late payers and unexpected costs.</span></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="result-hero">
+        <div class="label">Recommended hourly rate</div>
+        <div class="big" id="h-rate">–</div>
+        <div class="sub" id="h-sub">–</div>
+      </div>
+      <ul class="result-list card" style="padding: 6px 18px;">
+        <li><span>Day rate (8 hours)</span><b id="h-day">–</b></li>
+        <li><span>Revenue needed per year</span><b id="h-revenue">–</b></li>
+        <li><span>Revenue needed per month</span><b id="h-month">–</b></li>
+        <li><span>Taxes on your profit</span><b id="h-taxes">–</b></li>
+        <li><span>Business expenses</span><b id="h-r-costs">–</b></li>
+        <li><span>Billable hours per year</span><b id="h-billable">–</b></li>
+      </ul>
+      <div class="card" style="margin-top: 16px; padding: 18px;">
+        <h3 style="font-size: 1rem; margin-bottom: 8px;">What if I charge…</h3>
+        <div class="fields">
+          <div class="field"><label for="h-try">Hourly rate</label>
+            <div class="input-suffix"><input type="text" inputmode="decimal" id="h-try" value="100" form="us-rate-form" name="try" data-save><span>$</span></div></div>
+          <div class="field"><label for="h-try-hours">Billable hours per week</label>
+            <input type="number" id="h-try-hours" value="25" min="1" max="80" form="us-rate-form" name="tryHours" data-save></div>
+        </div>
+        <p class="notice ok" id="h-try-result" style="margin: 12px 0 0;">–</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>The math behind your rate</h2>
+  <div class="formula">Hourly rate = (profit needed + expenses) ÷ billable hours × (1 + safety margin)</div>
+  <p>The profit needed is the amount that leaves you your target after self-employment tax (15.3% on 92.35% of profit), federal income tax at 2026 rates, and your state estimate. It is found exactly, not with a flat percentage, so the rate stays right at any income level.</p>
+  <p>Billable hours are your working weeks times your weekly hours, minus the share of time you spend on unbillable work. For most freelancers, that share is the biggest blind spot.</p>
+  <p>Want to check the taxes behind the number? Open the <a href="{{link:tax}}">self-employment tax calculator</a>.</p>
+</section>

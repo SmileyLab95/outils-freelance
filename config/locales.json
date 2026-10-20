@@ -1,12 +1,57 @@
 [
-  {"key": "fr", "dir": "fr", "path": "fr/", "lang": "fr-FR", "country": "FR", "currency": "EUR",
-   "name": "France", "language": "Français", "live": true},
-  {"key": "us", "dir": "us", "path": "us/", "lang": "en-US", "country": "US", "currency": "USD",
-   "name": "United States", "language": "English", "live": false},
-  {"key": "uk", "dir": "uk", "path": "uk/", "lang": "en-GB", "country": "UK", "currency": "GBP",
-   "name": "United Kingdom", "language": "English", "live": false},
-  {"key": "ca", "dir": "ca", "path": "ca/", "lang": "en-CA", "country": "CA", "currency": "CAD",
-   "name": "Canada", "language": "English", "live": false},
-  {"key": "ca-fr", "dir": "ca-fr", "path": "ca/fr/", "lang": "fr-CA", "country": "CA", "currency": "CAD",
-   "name": "Canada", "language": "Français", "live": false}
+  {
+    "key": "fr",
+    "dir": "fr",
+    "path": "fr/",
+    "lang": "fr-FR",
+    "country": "FR",
+    "currency": "EUR",
+    "name": "France",
+    "language": "Français",
+    "live": true
+  },
+  {
+    "key": "us",
+    "dir": "us",
+    "path": "us/",
+    "lang": "en-US",
+    "country": "US",
+    "currency": "USD",
+    "name": "United States",
+    "language": "English",
+    "live": true
+  },
+  {
+    "key": "uk",
+    "dir": "uk",
+    "path": "uk/",
+    "lang": "en-GB",
+    "country": "UK",
+    "currency": "GBP",
+    "name": "United Kingdom",
+    "language": "English",
+    "live": false
+  },
+  {
+    "key": "ca",
+    "dir": "ca",
+    "path": "ca/",
+    "lang": "en-CA",
+    "country": "CA",
+    "currency": "CAD",
+    "name": "Canada",
+    "language": "English",
+    "live": false
+  },
+  {
+    "key": "ca-fr",
+    "dir": "ca-fr",
+    "path": "ca/fr/",
+    "lang": "fr-CA",
+    "country": "CA",
+    "currency": "CAD",
+    "name": "Canada",
+    "language": "Français",
+    "live": false
+  }
 ]

@@ -7,26 +7,26 @@ Les phases s'enchaînent dans cet ordre ; une phase n'est terminée que lorsque 
 - [x] Site français en ligne : 8 outils, 11 pages, tests navigateur
 - [x] Google Search Console vérifiée, plan du site envoyé
 - [x] Plan, besoins, architecture, méthode (ce dossier)
-- [ ] Recherche des règles officielles 2026 : France, États-Unis, Royaume-Uni, Canada
-- [ ] Générateur multi-sections (`config/locales.json`, `content/<section>/`, `hreflang`)
-- [ ] Section France déplacée sous `/fr/`, redirection des anciennes adresses
-- [ ] Accueil mondial avec choix du pays, page 404 bilingue
-- [ ] Menu par catégories (menus déroulants, panneau mobile), sélecteur de pays
-- [ ] Saisie et affichage des nombres selon la langue (`1 234,50 €` / `$1,234.50`)
-- [ ] Moteurs de calcul séparés et tests unitaires
-- [ ] Bloc « Sources et date de vérification » sur les pages de calcul
+- [x] Recherche des règles officielles 2026 : France, États-Unis, Royaume-Uni, Canada (points à revérifier listés dans chaque fiche pays)
+- [x] Générateur multi-sections (`config/locales.json`, `content/<section>/`, `hreflang`)
+- [x] Section France déplacée sous `/fr/`, redirection des anciennes adresses
+- [x] Accueil mondial avec choix du pays, page 404 bilingue
+- [x] Menu par catégories (menus déroulants, panneau mobile), sélecteur de pays
+- [x] Saisie et affichage des nombres selon la langue (`1 234,50 €` / `$1,234.50`)
+- [x] Moteurs de calcul séparés et tests unitaires (barème progressif, impôts US) — à étendre aux outils français
+- [x] Bloc « Sources et date de vérification » sur les pages de calcul
 
 ## Phase 1 — États-Unis (`/us/`)
 
-- [ ] *Freelance invoice generator* (avec *estimate*)
-- [ ] *Hourly rate calculator* (avec équivalent journalier et annuel)
-- [ ] *Self-employment tax calculator* (SE tax + impôt fédéral + QBI)
-- [ ] *Quarterly estimated tax calculator* (échéances, règle de sécurité)
-- [ ] *How much to set aside for taxes* (par facture)
-- [ ] *Late fee calculator* + *payment reminder emails*
-- [ ] *Freelance email templates*
+- [x] *Freelance invoice generator* (avec *estimate*)
+- [x] *Hourly rate calculator* (avec équivalent journalier et annuel)
+- [x] *Self-employment tax calculator* (SE tax + impôt fédéral + QBI)
+- [x] *Quarterly estimated tax calculator* (échéances, règle de sécurité, export agenda)
+- [x] *How much to set aside for taxes* (intégré au calculateur d'impôts) — page dédiée à créer
+- [x] *Late fee calculator* + *payment reminder emails*
+- [x] *Freelance email templates*
 - [ ] Guides : 1099-NEC et W-9, *Freelance Isn't Free Act*
-- [ ] *Privacy policy* et *legal notice*
+- [x] *Privacy policy* et *legal notice*
 
 ## Phase 2 — Royaume-Uni (`/uk/`)
 

@@ -1,5 +1,16 @@
 # Journal des modifications
 
+## 2026-10-20 — Section États-Unis (`/us/`)
+
+- 8 outils : *self-employment tax calculator* (SE tax, impôt fédéral 2026, déduction QBI, impôt d'État estimé),
+  *quarterly tax calculator* (règle de sécurité 90 % / 100 % / 110 %, échéancier, export agenda .ics),
+  *hourly rate calculator* (calcul inverse depuis le revenu net visé), *invoice generator* (facture et *estimate*,
+  format Letter), *payment reminder emails* (4 niveaux, lois de protection des freelances), *late fee calculator*,
+  *email templates*, pages légales.
+- Moteurs de calcul testés unitairement : `engines/brackets.js`, `engines/tax-us.js`.
+- Outils génériques réutilisables par pays : `tools/invoice.js`, `tools/reminder.js`.
+- Correctifs : onglets de relance qui perdaient un clic après une saisie, largeur de l'aperçu de facture sur mobile.
+
 ## 2026-10-20 — Socle multi-pays
 
 - Nouvelle architecture : sections par pays et langue (`config/locales.json`, `content/<section>/`), pages reliées

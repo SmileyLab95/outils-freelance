@@ -89,6 +89,8 @@ Chaque page est un fichier `content/<section>/<nom>.html` qui commence par ses m
 | `faq` | Questions affichées en bas de page et déclarées à Google (FAQPage). |
 | `noindex` | Page exclue de Google et du plan du site. |
 
+Outils génériques pilotés par la page : `tools/invoice.js` (profil JSON `#invoice-profile` : libellés, conditions de paiement, mentions) et `tools/reminder.js` (données JSON `#reminder-data` : étapes, modèles, lois citées). Un nouveau pays les réutilise en fournissant seulement ses textes.
+
 Remplacements disponibles dans le contenu : `{{base}}` (racine du site), `{{home}}` (accueil de la section), `{{kit_cta}}` (encart de l'offre de la section), `{{tools_grid}}` (grille des outils, générée depuis les métadonnées), `{{link:<id>}}` (adresse de la page `<id>` de la même section).
 
 ## Le fichier `site.json` d'une section
@@ -113,7 +115,7 @@ Le menu, le pied de page et la grille d'accueil sont construits à partir de `na
 {
   "country": "US", "tax_year": "2026", "currency": "USD", "verified_on": "2026-10-20",
   "values": {
-    "ss_wage_base": {
+    "social_security_wage_base_2026": {
       "value": 184500, "unit": "USD", "label": "Social Security wage base",
       "source": "https://www.ssa.gov/…", "source_title": "…",
       "confidence": "high", "note": "…"
@@ -123,7 +125,7 @@ Le menu, le pied de page et la grille d'accueil sont construits à partir de `na
 }
 ```
 
-- Le générateur injecte les valeurs (sans les sources) dans les pages qui en ont besoin : `window.OF_RULES.ss_wage_base`.
+- Le générateur injecte les valeurs (sans les sources) dans les pages qui en ont besoin : `window.OF_RULES.social_security_wage_base_2026`.
 - Les pages affichent la source et la date de vérification des chiffres qu'elles utilisent.
 - Une valeur de confiance `low` n'est jamais utilisée dans un calcul sans avertissement visible.
 
@@ -137,9 +139,9 @@ Le menu, le pied de page et la grille d'accueil sont construits à partir de `na
 |---|---|
 | `brackets.js` | Impôt selon un barème progressif, taux marginal et moyen |
 | `tax-us.js` | *Self-employment tax*, impôt fédéral, déduction QBI, acomptes trimestriels |
-| `tax-uk.js` | *Income tax* (Angleterre, Écosse), *Class 4 NI*, *payments on account* |
-| `tax-ca.js` | Impôt fédéral et provincial, RPC/RRQ, acomptes provisionnels |
-| `salestax.js` | TVA, *VAT*, TPS/TVH/TVQ/TVP : HT ↔ TTC |
+| `tax-uk.js` (à venir) | *Income tax* (Angleterre, Écosse), *Class 4 NI*, *payments on account* |
+| `tax-ca.js` (à venir) | Impôt fédéral et provincial, RPC/RRQ, acomptes provisionnels |
+| `salestax.js` (à venir) | TVA, *VAT*, TPS/TVH/TVQ/TVP : HT ↔ TTC |
 
 ## Interface et design
 

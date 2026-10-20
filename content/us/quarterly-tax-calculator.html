@@ -1,0 +1,102 @@
+<!--{
+  "id": "estimated-tax",
+  "slug": "quarterly-tax-calculator/",
+  "title": "Quarterly Estimated Tax Calculator 2026 for Freelancers",
+  "description": "How much should you pay each quarter? Calculate your 2026 estimated tax payments with the IRS safe harbor rules (90% / 100% / 110%), due dates and a calendar reminder. Free.",
+  "menu": "Quarterly tax calculator",
+  "icon": "📅",
+  "blurb": "Your 2026 estimated payments, safe harbor minimum and due dates.",
+  "app": "Quarterly Estimated Tax Calculator",
+  "scripts": ["engines/brackets.js", "engines/tax-us.js", "tools/us-estimated.js"],
+  "rules": "us",
+  "sources": ["estimated_tax_due_dates_2026", "estimated_tax_threshold", "estimated_tax_safe_harbor_current_year_rate", "estimated_tax_safe_harbor_prior_year_rate_high_agi", "estimated_tax_q4_skip_rule", "se_tax_total_rate", "federal_brackets_single"],
+  "priority": 0.95,
+  "faq": [
+    ["When are quarterly estimated taxes due for 2026?", "April 15, 2026, June 15, 2026, September 15, 2026 and January 15, 2027. You can skip the January payment if you file your 2026 return by February 1, 2027 and pay all the tax due with it."],
+    ["Who has to pay estimated taxes?", "Generally anyone who expects to owe at least $1,000 in federal tax for the year after subtracting withholding and refundable credits. That includes most freelancers, independent contractors and sole proprietors."],
+    ["What is the safe harbor rule?", "You avoid the underpayment penalty if your withholding plus timely estimated payments cover at least the smaller of: 90% of this year's tax, or 100% of last year's tax. If last year's adjusted gross income was over $150,000 ($75,000 if married filing separately), the prior-year figure becomes 110%."],
+    ["What happens if I pay less than required?", "The IRS charges an underpayment penalty, calculated like interest on the amount that was short and for how long. Paying on time, even partially, reduces it. You still owe the full tax when you file."],
+    ["How do I pay quarterly taxes?", "Online with IRS Direct Pay or your IRS Online Account, through EFTPS, by debit or credit card, or by mailing a check with a Form 1040-ES voucher. Your state may have its own estimated tax payments."]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · 2026 tax year</span>
+    <h1>Quarterly estimated tax calculator</h1>
+    <p class="lead">Find the smallest quarterly payment that keeps you clear of IRS penalties, or the amount that covers everything you will owe. Then add the due dates to your calendar.</p>
+    <ul class="trust"><li>IRS safe harbor rules</li><li>2026 due dates</li><li>Calendar reminder (.ics)</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="us-est-form" onsubmit="return false">
+      <h3>This year (2026)</h3>
+      <div class="fields">
+        <div class="field full"><label for="e-profit">Expected net profit from self-employment</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="e-profit" name="profit" value="80,000" data-save><span>$</span></div></div>
+        <div class="field full"><label for="e-status">Filing status</label>
+          <select id="e-status" name="status" data-save>
+            <option value="single">Single</option>
+            <option value="married_filing_jointly">Married filing jointly</option>
+            <option value="married_filing_separately">Married filing separately</option>
+            <option value="head_of_household">Head of household</option>
+          </select></div>
+        <div class="field"><label for="e-wages">W-2 wages (optional)</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="e-wages" name="wages" placeholder="0" data-save><span>$</span></div></div>
+        <div class="field"><label for="e-withheld">Federal tax withheld (optional)</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="e-withheld" name="withheld" placeholder="0" data-save><span>$</span></div></div>
+      </div>
+      <h3>Last year (2025 return)</h3>
+      <div class="fields">
+        <div class="field"><label for="e-prior-tax">Total tax on your 2025 return</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="e-prior-tax" name="priorTax" placeholder="Optional" data-save><span>$</span></div>
+          <span class="hint">Form 1040, line 24. Leave empty if you did not file.</span></div>
+        <div class="field"><label for="e-prior-agi">2025 adjusted gross income</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="e-prior-agi" name="priorAgi" placeholder="Optional" data-save><span>$</span></div>
+          <span class="hint">Form 1040, line 11.</span></div>
+      </div>
+      <h3>Already paid</h3>
+      <div class="fields">
+        <div class="field full"><label for="e-paid">Estimated payments already made for 2026</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="e-paid" name="paid" placeholder="0" data-save><span>$</span></div></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="result-hero">
+        <div class="label">Minimum payment per quarter</div>
+        <div class="big" id="q-per">–</div>
+        <div class="sub" id="q-sub">–</div>
+      </div>
+      <ul class="result-list card" style="padding: 6px 18px;">
+        <li><span>Estimated 2026 federal tax</span><b id="q-current">–</b></li>
+        <li><span>Safe harbor: 90% of 2026 tax</span><b id="q-rule-current">–</b></li>
+        <li><span id="q-rule-prior-label">Safe harbor: 100% of 2025 tax</span><b id="q-rule-prior">–</b></li>
+        <li><span>Required this year (after withholding)</span><b id="q-required">–</b></li>
+        <li><span>To cover all 2026 tax instead</span><b id="q-full">–</b></li>
+      </ul>
+      <div class="card" style="margin-top: 16px; padding: 6px 18px;">
+        <table class="mini-table">
+          <caption>2026 payment schedule</caption>
+          <thead><tr><th>Due date</th><th>Minimum</th><th>Covers all tax</th></tr></thead>
+          <tbody id="q-schedule"></tbody>
+        </table>
+      </div>
+      <button type="button" class="btn btn-ghost btn-block" id="q-ics" style="margin-top: 14px;">Add due dates to my calendar (.ics)</button>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>How the minimum is calculated</h2>
+  <p>The IRS does not penalize you if, by each due date, your withholding and estimated payments add up to a quarter of the <strong>required annual payment</strong>. That amount is the smaller of:</p>
+  <ul>
+    <li>90% of the tax you will owe for 2026, or</li>
+    <li>100% of the total tax on your 2025 return (110% if your 2025 adjusted gross income was over $150,000), provided you filed a 2025 return covering 12 months.</li>
+  </ul>
+  <p>Paying the prior-year amount is the safest choice when your income grows: you know the number in advance and avoid penalties, even if you owe more when you file. If your income drops, 90% of this year's tax may be lower.</p>
+  <p>This year's tax is estimated with our <a href="{{link:tax}}">self-employment tax calculator</a>: self-employment tax plus federal income tax, after the standard and QBI deductions.</p>
+  <p class="small muted">Estimate for information only. Farmers, fishermen and people with uneven income (annualized installment method) follow different rules.</p>
+</section>

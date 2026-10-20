@@ -1,0 +1,125 @@
+<!--{
+  "id": "tax",
+  "slug": "self-employment-tax-calculator/",
+  "title": "Self-Employment Tax Calculator 2026 (SE Tax + Income Tax)",
+  "description": "Estimate your 2026 self-employment tax, federal income tax and take-home pay as a freelancer or 1099 contractor, with the QBI deduction and quarterly payments. Free, no sign-up.",
+  "menu": "Self-employment tax calculator",
+  "icon": "🧾",
+  "blurb": "SE tax, federal income tax and take-home pay for 2026, in seconds.",
+  "app": "Self-Employment Tax Calculator",
+  "scripts": ["engines/brackets.js", "engines/tax-us.js", "tools/us-tax.js"],
+  "rules": "us",
+  "sources": ["se_tax_total_rate", "social_security_wage_base_2026", "additional_medicare_tax_thresholds", "federal_brackets_single", "qbi_deduction_rate", "estimated_tax_due_dates_2026", "states_no_individual_income_tax"],
+  "priority": 1.0,
+  "faq": [
+    ["How much is self-employment tax in 2026?", "15.3% of your net earnings from self-employment: 12.4% for Social Security and 2.9% for Medicare. Net earnings are 92.35% of your net profit. The Social Security part stops at the 2026 wage base of $184,500 (including any W-2 wages); the Medicare part has no limit, and an extra 0.9% Additional Medicare Tax applies above $200,000 ($250,000 for married couples filing jointly)."],
+    ["Do freelancers pay both self-employment tax and income tax?", "Yes. Self-employment tax replaces the Social Security and Medicare taxes an employer would withhold, and federal income tax is due on top of it. Half of your self-employment tax is deductible when computing your income tax, which this calculator applies automatically."],
+    ["What is the QBI deduction?", "The qualified business income deduction (Section 199A) lets most sole proprietors deduct up to 20% of their business profit, limited to 20% of taxable income. It was made permanent in 2025. Above $201,750 of taxable income ($403,500 married filing jointly) it phases out for service businesses such as consulting, law, accounting and health, and for businesses without employees."],
+    ["How much should I set aside for taxes as a freelancer?", "Use the percentage shown by the calculator: it is your total tax divided by your profit. Many freelancers land between 20% and 35% depending on income, filing status and state. Put that share of every payment into a separate savings account so the money is there when quarterly payments are due."],
+    ["Do I need to pay quarterly estimated taxes?", "If you expect to owe at least $1,000 in federal tax for the year after withholding, yes. Payments for 2026 are due April 15, June 15 and September 15, 2026, and January 15, 2027. Our <a href=\"{{link:estimated-tax}}\">quarterly tax calculator</a> shows the minimum that avoids an underpayment penalty."],
+    ["Does this calculator include state taxes?", "Only as a rough estimate: enter your state's approximate income tax rate. Alaska, Florida, Nevada, New Hampshire, South Dakota, Tennessee, Texas, Washington and Wyoming have no individual income tax on wages and business income. Local taxes, tax credits, retirement contributions and the self-employed health insurance deduction are not included."]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · 2026 tax year</span>
+    <h1>Self-employment tax calculator</h1>
+    <p class="lead">Enter your net profit and filing status: see your self-employment tax, federal income tax, what you take home, and how much to set aside from every payment.</p>
+    <ul class="trust"><li>2026 IRS brackets and SSA wage base</li><li>QBI deduction included</li><li>Quarterly payment estimate</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="us-tax-form" onsubmit="return false">
+      <h2>Your 2026 income</h2>
+      <div class="fields">
+        <div class="field full"><label for="t-profit">Net profit from self-employment</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="t-profit" name="profit" value="80,000" data-save><span>$</span></div>
+          <span class="hint">What you earned minus business expenses for the year (Schedule C, line 31).</span></div>
+        <div class="field full"><label for="t-status">Filing status</label>
+          <select id="t-status" name="status" data-save>
+            <option value="single">Single</option>
+            <option value="married_filing_jointly">Married filing jointly</option>
+            <option value="married_filing_separately">Married filing separately</option>
+            <option value="head_of_household">Head of household</option>
+          </select></div>
+        <div class="field"><label for="t-wages">W-2 wages (optional)</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="t-wages" name="wages" placeholder="0" data-save><span>$</span></div>
+          <span class="hint">If you also have a job (household total if filing jointly).</span></div>
+        <div class="field"><label for="t-withheld">Federal tax withheld (optional)</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="t-withheld" name="withheld" placeholder="0" data-save><span>$</span></div>
+          <span class="hint">From your paychecks this year.</span></div>
+        <div class="field full"><label for="t-state">State income tax rate (estimate)</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="t-state" name="state" placeholder="0" data-save><span>%</span></div>
+          <span class="hint">0 in AK, FL, NV, NH, SD, TN, TX, WA and WY. Elsewhere, use your state's approximate rate.</span></div>
+        <label class="check full"><input type="checkbox" id="t-sstb" name="sstb" data-save>
+          <span>My business is a specified service (consulting, law, accounting, health, financial services, performing arts…)</span></label>
+      </div>
+      <p class="small muted" style="margin: 14px 0 0;">The service-business box only matters if your taxable income is above $201,750 ($403,500 married filing jointly).</p>
+    </form>
+
+    <div class="results">
+      <div class="result-hero">
+        <div class="label">Estimated total tax for 2026</div>
+        <div class="big" id="r-total">–</div>
+        <div class="sub" id="r-sub">–</div>
+      </div>
+      <div class="card split-card">
+        <div class="split-bar" id="r-bar" aria-hidden="true"></div>
+        <ul class="split-legend" id="r-legend"></ul>
+      </div>
+      <ul class="result-list card" style="padding: 6px 18px;">
+        <li><span>Net profit</span><b id="r-profit">–</b></li>
+        <li><span>Self-employment tax (15.3%)</span><b id="r-se">–</b></li>
+        <li><span id="r-income-label">Federal income tax</span><b id="r-income">–</b></li>
+        <li id="r-addmed-row" hidden><span>Additional Medicare Tax (0.9%)</span><b id="r-addmed">–</b></li>
+        <li><span>State income tax (estimate)</span><b id="r-state">–</b></li>
+        <li><span><strong>Take-home pay</strong></span><b id="r-take">–</b></li>
+      </ul>
+      <div class="card" style="margin-top: 16px; padding: 18px;">
+        <h3 style="font-size: 1rem; margin-bottom: 8px;">Quarterly estimated payments</h3>
+        <p id="r-quarterly" style="margin: 0;">–</p>
+        <p class="small muted" style="margin: 8px 0 0;">Want to pay the legal minimum? Use the <a href="{{link:estimated-tax}}">quarterly tax calculator</a> with last year's tax.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <details class="card details-card" id="r-details">
+    <summary><b>See the full calculation</b></summary>
+    <ul class="result-list" id="r-steps"></ul>
+  </details>
+</section>
+
+<section class="section prose">
+  <h2>How self-employment tax is calculated</h2>
+  <p>As a freelancer, independent contractor or sole proprietor, you pay both halves of Social Security and Medicare yourself. The IRS applies the rate to 92.35% of your net profit, which mirrors the employer half being deductible for a business.</p>
+  <div class="formula">SE tax = net profit × 92.35% × 15.3%　(12.4% Social Security up to $184,500 + 2.9% Medicare)</div>
+  <p>Then federal income tax is calculated on your adjusted gross income, after the deduction for half of your self-employment tax, the standard deduction and the qualified business income (QBI) deduction.</p>
+  <h2>2026 federal tax brackets (single)</h2>
+  <div class="table-scroll">
+  <table>
+    <thead><tr><th>Rate</th><th>Taxable income</th></tr></thead>
+    <tbody>
+      <tr><td>10%</td><td>$0 to $12,400</td></tr>
+      <tr><td>12%</td><td>$12,400 to $50,400</td></tr>
+      <tr><td>22%</td><td>$50,400 to $105,700</td></tr>
+      <tr><td>24%</td><td>$105,700 to $201,775</td></tr>
+      <tr><td>32%</td><td>$201,775 to $256,225</td></tr>
+      <tr><td>35%</td><td>$256,225 to $640,600</td></tr>
+      <tr><td>37%</td><td>Over $640,600</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>The 2026 standard deduction is $16,100 for single filers, $32,200 for married couples filing jointly and $24,150 for heads of household.</p>
+  <h2>What this calculator does not include</h2>
+  <ul>
+    <li>Tax credits (child tax credit, education credits…) and itemized deductions.</li>
+    <li>Retirement contributions (SEP-IRA, Solo 401(k)) and the self-employed health insurance deduction, which can lower your income tax.</li>
+    <li>Exact state and local income taxes: the state line is a flat-rate estimate.</li>
+  </ul>
+  <p class="small muted">Estimate for information only, based on 2026 IRS and SSA figures. For your actual return, use IRS forms (Schedule SE, Form 1040-ES) or a tax professional.</p>
+</section>

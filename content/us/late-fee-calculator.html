@@ -1,0 +1,98 @@
+<!--{
+  "id": "latefee",
+  "slug": "late-fee-calculator/",
+  "title": "Late Fee Calculator for Invoices (Interest & Flat Fees)",
+  "description": "Calculate the late fee on an overdue invoice: monthly interest such as 1.5% per month, an annual rate or a flat fee. Includes a contract clause to copy. Free tool for freelancers.",
+  "menu": "Late fee calculator",
+  "icon": "⏱️",
+  "blurb": "Interest or flat fee on an overdue invoice, plus a clause for your contracts.",
+  "app": "Invoice Late Fee Calculator",
+  "scripts": ["tools/us-latefee.js"],
+  "rules": "us",
+  "sources": ["late_fees_federal_rule", "freelance_law_new_york_state", "freelance_law_illinois"],
+  "priority": 0.8,
+  "faq": [
+    ["Can a freelancer charge a late fee?", "Yes, if your client agreed to it before the work started, usually in your contract, proposal or terms printed on the invoice. No federal law sets a late fee on invoices between businesses, so a fee you add after the fact is hard to enforce."],
+    ["What is a normal late fee on an invoice?", "1% to 1.5% per month on the overdue balance (12% to 18% a year) is common, or a flat fee such as $25 to $50 for small invoices. Some states cap interest rates or late charges, so keep the rate reasonable and add “or the maximum rate permitted by law, if lower” to your terms."],
+    ["How do I calculate 1.5% per month interest?", "Multiply the overdue amount by 1.5% for each full month late, or by 18% ÷ 365 for each day late if your terms say interest accrues daily. On a $2,000 invoice paid 45 days late: 2,000 × 18% × 45 ÷ 365 = $44.38."],
+    ["Should I always charge the late fee?", "Charging it consistently makes your terms credible, but waiving it once for a good client who pays right away can be a smart gesture. Mention the fee in your reminders before the invoice is due so it never comes as a surprise."]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · for overdue invoices</span>
+    <h1>Invoice late fee calculator</h1>
+    <p class="lead">How much does your client owe you now? Enter the invoice, its due date and your late payment terms: the tool calculates the fee and the new total, and gives you a clause for your next contract.</p>
+    <ul class="trust"><li>Monthly, yearly or flat fee</li><li>Grace period</li><li>Contract clause included</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="us-late-form" onsubmit="return false">
+      <h3>The invoice</h3>
+      <div class="fields">
+        <div class="field full"><label for="l-amount">Overdue amount</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="l-amount" name="amount" value="2,000" data-save><span>$</span></div></div>
+        <div class="field"><label for="l-due">Due date</label>
+          <input type="date" id="l-due" name="due" data-save></div>
+        <div class="field"><label for="l-paid">Payment date</label>
+          <input type="date" id="l-paid" name="paid">
+          <span class="hint">Leave empty for today.</span></div>
+      </div>
+      <h3>Your late payment terms</h3>
+      <div class="fields">
+        <div class="field full"><label for="l-method">Fee type</label>
+          <select id="l-method" name="method" data-save>
+            <option value="monthly">Interest per month (for example 1.5%)</option>
+            <option value="annual">Interest per year (for example 18%)</option>
+            <option value="flat">Flat fee</option>
+          </select></div>
+        <div class="field" data-method="monthly"><label for="l-monthly">Monthly rate</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="l-monthly" name="monthly" value="1.5" data-save><span>%</span></div></div>
+        <div class="field" data-method="annual" hidden><label for="l-annual">Annual rate</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="l-annual" name="annual" value="18" data-save><span>%</span></div></div>
+        <div class="field" data-method="flat" hidden><label for="l-flat">Flat fee</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="l-flat" name="flat" value="35" data-save><span>$</span></div></div>
+        <div class="field" data-method="monthly annual"><label for="l-accrual">Interest accrues</label>
+          <select id="l-accrual" name="accrual" data-save>
+            <option value="daily">Daily (pro rata)</option>
+            <option value="month">Per started month</option>
+          </select></div>
+        <div class="field full"><label for="l-grace">Grace period after the due date</label>
+          <div class="input-suffix"><input type="number" id="l-grace" name="grace" value="0" min="0" max="60" data-save><span>days</span></div></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="result-hero">
+        <div class="label">Late fee</div>
+        <div class="big" id="l-fee">–</div>
+        <div class="sub" id="l-sub">–</div>
+      </div>
+      <ul class="result-list card" style="padding: 6px 18px;">
+        <li><span>Invoice amount</span><b id="l-r-amount">–</b></li>
+        <li><span>Days late</span><b id="l-r-days">–</b></li>
+        <li><span>Late fee</span><b id="l-r-fee">–</b></li>
+        <li><span><strong>Total due now</strong></span><b id="l-r-total">–</b></li>
+      </ul>
+      <p class="formula" id="l-formula" style="margin-top: 16px;">–</p>
+      <div class="output" style="margin-top: 16px;">
+        <div class="output-head"><b>Clause for your contracts and invoices</b><button type="button" class="btn btn-ghost btn-sm" data-copy="#l-clause">Copy</button></div>
+        <div class="output-body" id="l-clause">–</div>
+      </div>
+      <p class="small muted" style="margin-top: 12px;">To ask for the money, use the <a href="{{link:reminder}}">payment reminder generator</a>.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>Late fees: what you need to know</h2>
+  <ul>
+    <li><strong>Agree on it first.</strong> A late fee is enforceable when the client accepted it before the work: put it in your contract or proposal, and repeat it on every invoice.</li>
+    <li><strong>Stay reasonable.</strong> States regulate interest rates and penalties differently. Adding “or the maximum rate permitted by law, if lower” keeps your clause safe.</li>
+    <li><strong>Know your protections.</strong> In New York (city and state), Illinois, California and several cities, freelancer protection laws require written contracts above a threshold and payment within 30 days of completing the work when no date was agreed.</li>
+  </ul>
+  <p class="small muted">Information only, not legal advice. For large amounts, talk to a lawyer or consider small claims court.</p>
+</section>

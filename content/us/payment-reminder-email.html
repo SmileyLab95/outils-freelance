@@ -1,0 +1,147 @@
+<!--{
+  "id": "reminder",
+  "slug": "payment-reminder-email/",
+  "title": "Payment Reminder Email Generator for Overdue Invoices",
+  "description": "Write the right payment reminder for an overdue invoice in 30 seconds: friendly reminder, second notice, firm reminder or final notice before collection. Free templates for freelancers.",
+  "menu": "Payment reminder emails",
+  "icon": "📩",
+  "blurb": "The right email for a late invoice, from friendly nudge to final notice.",
+  "app": "Payment Reminder Email Generator",
+  "scripts": ["tools/reminder.js"],
+  "rules": "us",
+  "sources": ["freelance_law_nyc", "freelance_law_new_york_state", "freelance_law_illinois", "freelance_law_california_state"],
+  "priority": 0.9,
+  "faq": [
+    ["When should I send a payment reminder?", "A friendly reminder a few days before or right after the due date, a second reminder about a week later, a firm reminder after three weeks, and a final notice after about 45 days. Most late invoices are paid after the first or second reminder."],
+    ["How do I politely ask a client for payment?", "Keep it short and factual: the invoice number, the amount, the due date, the invoice attached, and a simple question about when payment will be made. Assume good faith in the first reminders; invoices often get lost or stuck in approval."],
+    ["What should a final notice say?", "That the invoice is still unpaid despite previous reminders, the amount owed, a clear deadline (7 to 10 days), and what you will do next, such as filing in small claims court or using a collection agency. Only state actions you are ready to take."],
+    ["What laws protect freelancers from late payment?", "New York City and New York State (Freelance Isn't Free Acts), Illinois (Freelance Worker Protection Act) and California (SB 988) require written contracts above a threshold and payment by the agreed date, or within 30 days of completing the work if no date was set. Several cities have similar rules."]
+  ]
+}-->
+<script type="application/json" id="reminder-data">
+{
+  "deadline_days": 10,
+  "stages": [
+    {"key": "friendly", "label": "Friendly reminder", "from": -9999},
+    {"key": "second", "label": "Second reminder", "from": 8},
+    {"key": "firm", "label": "Firm reminder", "from": 21},
+    {"key": "final", "label": "Final notice", "from": 45}
+  ],
+  "placeholders": {
+    "contact": "[Name]", "me": "[Your name]", "number": "[invoice number]", "amount": "[amount]",
+    "due_phrase": "[was due on date]", "days": "[number of]"
+  },
+  "phrases": {
+    "upcoming": "is due on {due}",
+    "today": "is due today, {due}",
+    "late": "was due on {due} ({days} days ago)",
+    "late_fee": "As stated in our agreement, overdue balances are subject to a late fee of {fee}. ",
+    "law": "As a reminder, the {law} requires payment by the date agreed in our contract, or within 30 days of completing the work if no date was set. ",
+    "payment": "\nYou can pay here: {payment}\n"
+  },
+  "laws": {
+    "nyc": "NYC Freelance Isn't Free Act",
+    "nys": "New York State Freelance Isn't Free Act",
+    "il": "Illinois Freelance Worker Protection Act",
+    "ca": "California Freelance Worker Protection Act (SB 988)"
+  },
+  "strings": {
+    "no_date": "Add the invoice due date to get the right reminder.",
+    "status_upcoming": "Due in {days} days: a friendly reminder is enough.",
+    "status_late": "{days} days late: we suggest the “{stage}”.",
+    "subject_prefix": "Subject: "
+  },
+  "templates": {
+    "friendly": {
+      "subject": "Friendly reminder: invoice {number}",
+      "body": "Hi {contact},\n\nI hope you're doing well. Just a quick reminder that invoice {number} for {amount} {due_phrase}.\n\nIf it's already on its way, please ignore this note. Otherwise, you'll find the invoice attached, and I'm happy to resend it or answer any question.\n{payment_line}\nThanks again for your business!\n\n{me}"
+    },
+    "second": {
+      "subject": "Following up on invoice {number}",
+      "body": "Hi {contact},\n\nI'm following up on invoice {number} for {amount}, which {due_phrase}. I haven't received payment yet, so I wanted to make sure it didn't get lost.\n\nCould you let me know when I can expect payment? If there's an issue with the invoice, or if it should go to someone else on your team, just tell me and I'll take care of it.\n{payment_line}\nBest regards,\n\n{me}"
+    },
+    "firm": {
+      "subject": "Overdue: invoice {number} ({amount})",
+      "body": "Hi {contact},\n\nInvoice {number} for {amount} {due_phrase}, and my previous reminders have gone unanswered.\n\nPlease arrange payment within the next 7 days. {late_fee_line}{law_line}\n\nIf something is preventing payment, please reply today so we can find a solution, such as a payment plan.\n{payment_line}\nRegards,\n\n{me}"
+    },
+    "final": {
+      "subject": "Final notice: invoice {number} ({amount})",
+      "body": "Dear {contact},\n\nDespite my previous reminders, invoice {number} for {amount}, which {due_phrase}, remains unpaid.\n\nThis is my final notice. If full payment is not received by {deadline}, I will take further steps to recover the amount, including [filing a claim in small claims court / using a collection agency]. {late_fee_line}{law_line}\n\nI would still prefer to settle this directly. Please pay the invoice or contact me before {deadline}.\n{payment_line}\nSincerely,\n\n{me}"
+    }
+  }
+}
+</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · ready to send</span>
+    <h1>Payment reminder email generator</h1>
+    <p class="lead">Enter the invoice and its due date: the tool picks the right tone for how late it is and writes the email. Copy it or open it in your mail app.</p>
+    <ul class="trust"><li>4 levels, from friendly to final notice</li><li>Freelancer protection laws</li><li>Opens in your email app</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="reminder-form" onsubmit="return false">
+      <h3>The invoice</h3>
+      <div class="fields">
+        <div class="field"><label for="rm-number">Invoice number</label>
+          <input type="text" id="rm-number" name="number" placeholder="2026-014" data-save></div>
+        <div class="field"><label for="rm-amount">Amount due</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="rm-amount" name="amount" placeholder="2,000" data-save><span>$</span></div></div>
+        <div class="field full"><label for="rm-due">Due date</label>
+          <input type="date" id="rm-due" name="due" data-save></div>
+      </div>
+      <h3>Your client</h3>
+      <div class="fields">
+        <div class="field"><label for="rm-contact">Contact's first name</label>
+          <input type="text" id="rm-contact" name="contact" placeholder="Julie" data-save></div>
+        <div class="field"><label for="rm-email">Client's email</label>
+          <input type="email" id="rm-email" name="email" placeholder="julie@client.com" data-save></div>
+        <div class="field full"><label for="rm-location">Where is your client based?</label>
+          <select id="rm-location" name="location" data-save>
+            <option value="">Elsewhere / not sure</option>
+            <option value="nyc">New York City</option>
+            <option value="nys">New York State (outside NYC)</option>
+            <option value="il">Illinois</option>
+            <option value="ca">California</option>
+          </select>
+          <span class="hint">Adds the freelancer protection law that applies, if any.</span></div>
+      </div>
+      <h3>You</h3>
+      <div class="fields">
+        <div class="field"><label for="rm-me">Your name</label>
+          <input type="text" id="rm-me" name="me" placeholder="Alex Morgan" data-save></div>
+        <div class="field"><label for="rm-fee">Late fee in your terms (optional)</label>
+          <input type="text" id="rm-fee" name="fee" placeholder="1.5% per month" data-save></div>
+        <div class="field full"><label for="rm-payment">Payment link or instructions (optional)</label>
+          <input type="text" id="rm-payment" name="payment" placeholder="https://… or ACH / Zelle details" data-save></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <p class="notice" id="rm-status">–</p>
+      <div class="tabs" id="rm-tabs" role="tablist" style="margin-top: 14px;"></div>
+      <div class="output">
+        <div class="output-head"><span class="dots">● ● ●</span>
+          <span style="display: flex; gap: 8px;"><a class="btn btn-ghost btn-sm" id="rm-mail" href="#">Open in email</a>
+          <button type="button" class="btn btn-primary btn-sm" id="rm-copy">Copy</button></span></div>
+        <div class="output-subject"><b>Subject:</b> <span id="rm-subject">–</span></div>
+        <div class="output-body" id="rm-body">–</div>
+      </div>
+      <p class="small muted" style="margin-top: 10px;">Highlighted fields still need your details. Calculate what you can add with the <a href="{{link:latefee}}">late fee calculator</a>.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>A simple follow-up schedule that works</h2>
+  <ol>
+    <li><strong>Before or on the due date:</strong> a friendly reminder with the invoice attached.</li>
+    <li><strong>About a week late:</strong> a second reminder asking when payment will be made.</li>
+    <li><strong>Three weeks late:</strong> a firm reminder with a 7-day deadline, your late fee and, where it applies, the freelancer protection law.</li>
+    <li><strong>After 45 days:</strong> a final notice with a deadline and the next step (small claims court or a collection agency).</li>
+  </ol>
+  <p>Between emails, a phone call often works faster. And to avoid the problem next time, ask for a deposit and put your payment terms in writing.</p>
+</section>

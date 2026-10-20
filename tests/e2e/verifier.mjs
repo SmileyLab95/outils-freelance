@@ -27,7 +27,7 @@ const failures = [];
 const check = (cond, message) => { if (!cond) failures.push(message); console.log(`${cond ? "✓" : "✗"} ${message}`); };
 
 // La copie est asynchrone : on attend la confirmation sur le bouton.
-const copied = (page, sel) => page.waitForFunction((s) => document.querySelector(s).textContent.includes("Copié"), sel, { timeout: 3000 }).then(() => true, () => false);
+const copied = (page, sel) => page.waitForFunction((s) => /Copi(é|ed)/.test(document.querySelector(s).textContent), sel, { timeout: 3000 }).then(() => true, () => false);
 
 async function open(page, url) {
   const errors = [];
@@ -197,6 +197,119 @@ const tests = {
     check(await copied(page, '[data-copy="#tpl-1"]'), "modèles : bouton Copier");
     check((await page.evaluate(() => navigator.clipboard.readText())).length > 100, "modèles : texte dans le presse-papiers");
   },
+  async "us/"(page) {
+    const links = await page.$$eval("a[href]", (as) => as.map((a) => a.getAttribute("href")));
+    for (const href of [...new Set(links.filter((h) => h.startsWith("/outils-freelance/")))]) {
+      const res = await page.request.get(`http://127.0.0.1:${port}${href}`);
+      check(res.status() === 200, `US : lien interne ${href} (${res.status()})`);
+    }
+    check((await page.getAttribute("html", "lang")) === "en-US", "US : langue en-US");
+    check((await page.$$('link[hreflang="fr-FR"], link[hreflang="en-US"]')).length === 2, "US : hreflang vers la France");
+  },
+  async "us/self-employment-tax-calculator/"(page) {
+    // 80 000 $, célibataire : SE tax 11 303,64 ; impôt 5 343,83 ; total 16 647,47 (voir tests unitaires)
+    check((await page.textContent("#r-total")).trim() === "$16,647", `SE tax : total 16 647 $ (obtenu : ${await page.textContent("#r-total")})`);
+    check((await page.textContent("#r-se")).trim() === "$11,304", "SE tax : 11 304 $");
+    check((await page.textContent("#r-income")).trim() === "$5,344", "SE tax : impôt fédéral 5 344 $");
+    check((await page.textContent("#r-sub")).includes("20.8%") && (await page.textContent("#r-sub")).includes("21%"), "SE tax : taux effectif 20,8 %, mettre de côté 21 %");
+    check((await page.textContent("#r-quarterly")).includes("$4,162"), "SE tax : acompte trimestriel ≈ 4 162 $");
+    check((await page.textContent("#r-quarterly")).includes("and Jan 15, 2027"), "SE tax : liste des échéances bien formée");
+    await page.fill("#t-state", "5");
+    check((await page.textContent("#r-state")).trim() === "$3,717", "SE tax : impôt d'État 5 % × (80 000 − 5 651,82) = 3 717 $");
+    await page.fill("#t-state", "");
+    await page.fill("#t-profit", "60000");
+    await page.selectOption("#t-status", "married_filing_jointly");
+    check((await page.textContent("#r-income")).trim() === "$1,885", "SE tax : couple, 60 000 $ → impôt fédéral 1 885 $");
+    await page.click("#r-details summary");
+    check((await page.$$("#r-steps li")).length >= 9, "SE tax : détail du calcul affiché");
+    check((await page.$$(".sources li")).length >= 4, "SE tax : sources officielles affichées");
+    await page.fill("#t-profit", "80,000");
+    await page.selectOption("#t-status", "single");
+  },
+  async "us/quarterly-tax-calculator/"(page) {
+    check((await page.textContent("#q-per")).trim() === "$3,746", `acomptes : 90 % × 16 647,47 ÷ 4 = 3 746 $ (obtenu : ${await page.textContent("#q-per")})`);
+    await page.fill("#e-prior-tax", "12000");
+    await page.fill("#e-prior-agi", "60000");
+    check((await page.textContent("#q-per")).trim() === "$3,000", "acomptes : 100 % de l'impôt 2025 ÷ 4 = 3 000 $");
+    await page.fill("#e-prior-agi", "200000");
+    check((await page.textContent("#q-per")).trim() === "$3,300", "acomptes : 110 % au-delà de 150 000 $ d'AGI = 3 300 $");
+    check((await page.$$("#q-schedule tr")).length === 4, "acomptes : 4 échéances");
+    const [download] = await Promise.all([page.waitForEvent("download"), page.click("#q-ics")]);
+    const ics = await (await import("fs")).promises.readFile(await download.path(), "utf8");
+    check(download.suggestedFilename() === "estimated-tax-2026.ics" && (ics.match(/BEGIN:VEVENT/g) || []).length === 4 && ics.includes("DTSTART;VALUE=DATE:20260415"), "acomptes : export agenda .ics avec 4 échéances");
+  },
+  async "us/hourly-rate-calculator/"(page) {
+    // 52 − 4 semaines − 10 jours fériés = 46 semaines × 40 h × 70 % = 1 288 h facturables
+    check((await page.textContent("#h-billable")).includes("1,288"), "taux horaire : 1 288 heures facturables");
+    const ok = await page.evaluate(() => {
+      const profit = OFE.taxUS.profitForTakeHome(70000, { status: "single", stateRate: 0 }, OF_RULES);
+      const back = OFE.taxUS.estimate({ profit, status: "single" }, OF_RULES).takeHome;
+      const rate = (profit + 6000) / 1288 * 1.15;
+      return Math.abs(back - 70000) < 1 && document.getElementById("h-rate").textContent.trim() === OF.money(rate, 0);
+    });
+    check(ok, "taux horaire : bénéfice inverse cohérent et taux = (bénéfice + frais) ÷ heures × 1,15");
+    check((await page.textContent("#h-try-result")).includes("take-home"), "taux horaire : simulation « et si je facture… »");
+  },
+  async "us/late-fee-calculator/"(page) {
+    check((await page.textContent("#l-fee")).trim() === "$44.38", `pénalités US : 2 000 × 18 % × 45 ÷ 365 = 44,38 $ (obtenu : ${await page.textContent("#l-fee")})`);
+    await page.selectOption("#l-accrual", "month");
+    check((await page.textContent("#l-fee")).trim() === "$60.00", "pénalités US : 1,5 % × 2 mois commencés = 60 $");
+    await page.selectOption("#l-method", "flat");
+    check((await page.textContent("#l-fee")).trim() === "$35.00", "pénalités US : forfait 35 $");
+    await page.fill("#l-grace", "50");
+    check((await page.textContent("#l-fee")).trim() === "$0.00", "pénalités US : délai de grâce de 50 jours → 0 $");
+    check((await page.textContent("#l-clause")).includes("late fee"), "pénalités US : clause à copier");
+    await page.fill("#l-grace", "0");
+    await page.selectOption("#l-method", "monthly");
+    await page.selectOption("#l-accrual", "daily");
+  },
+  async "us/payment-reminder-email/"(page) {
+    const due = new Date(Date.now() - 25 * 86400000).toISOString().slice(0, 10);
+    await page.fill("#rm-due", due);
+    await page.fill("#rm-number", "2026-014");
+    await page.fill("#rm-amount", "2000");
+    await page.fill("#rm-contact", "Julie");
+    await page.selectOption("#rm-location", "nyc");
+    check((await page.getAttribute('[data-stage="2"]', "aria-selected")) === "true", "relance US : 25 jours → relance ferme");
+    const body = await page.textContent("#rm-body");
+    check(body.includes("Hi Julie") && body.includes("$2,000.00") && body.includes("NYC Freelance Isn't Free Act"), "relance US : message personnalisé et loi de New York");
+    await page.click('[data-stage="3"]');
+    check((await page.textContent("#rm-subject")).includes("Final notice"), "relance US : avis final");
+    check((await page.getAttribute("#rm-mail", "href")).startsWith("mailto:"), "relance US : lien vers la messagerie");
+    await page.click("#rm-copy");
+    check(await copied(page, "#rm-copy"), "relance US : bouton Copy");
+  },
+  async "us/invoice-generator/"(page) {
+    await page.fill("#iv-me-name", "Alex Morgan Design LLC");
+    await page.fill("#iv-client-name", "Northwind Inc.");
+    await page.fill("#l-desc-0", "Website design");
+    await page.fill("#l-qty-0", "1");
+    await page.fill("#l-price-0", "1,800");
+    await page.click("#iv-add-line");
+    await page.fill("#l-desc-1", "Copywriting (hours)");
+    await page.fill("#l-qty-1", "3");
+    await page.fill("#l-price-1", "150.50");
+    let text = await page.textContent("#iv-preview");
+    check(text.includes("$2,251.50") && text.includes("Net 30"), "facture US : sous-total 2 251,50 $ et conditions Net 30");
+    await page.fill("#iv-tax-rate", "8.25");
+    text = await page.textContent("#iv-preview");
+    check(text.includes("$185.75") && text.includes("$2,437.25"), "facture US : taxe 8,25 % = 185,75 $, total 2 437,25 $");
+    await page.click('[data-doctype="estimate"]');
+    text = await page.textContent("#iv-preview");
+    check(text.includes("ESTIMATE") && text.includes("Deposit due on acceptance (30%)"), "devis US : titre et acompte de 30 %");
+    await page.click('[data-doctype="invoice"]');
+    await page.reload({ waitUntil: "networkidle" });
+    check((await page.inputValue("#iv-client-name")) === "Northwind Inc." && (await page.inputValue("#l-desc-1")) === "Copywriting (hours)", "facture US : saisie mémorisée");
+    await page.emulateMedia({ media: "print" });
+    await page.screenshot({ path: path.join(shots, "us-facture-impression.png"), fullPage: true });
+    await page.emulateMedia({ media: "screen" });
+  },
+  async "us/freelance-email-templates/"(page) {
+    await page.click('[data-copy="#tpl-1"]');
+    check(await copied(page, '[data-copy="#tpl-1"]'), "modèles US : bouton Copy");
+  },
+  async "us/legal-notice/"() {},
+  async "us/privacy-policy/"() {},
   async "fr/confidentialite/"() {},
   async "fr/mentions-legales/"() {},
 };
@@ -213,6 +326,7 @@ for (const [url, run] of Object.entries(tests)) {
       await page.screenshot({ path: path.join(shots, "menu-mobile.png") });
       await page.click(".menu-toggle");
     }
+    await page.evaluate(() => window.scrollTo(0, 0));
     await page.screenshot({ path: path.join(shots, `${url.replace(/\/$/, "").replace(/\//g, "_") || "accueil"}-${label}.png`), fullPage: true });
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1);
     if (label === "bureau") {

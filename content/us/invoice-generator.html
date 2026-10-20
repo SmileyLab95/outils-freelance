@@ -1,0 +1,162 @@
+<!--{
+  "id": "invoice",
+  "slug": "invoice-generator/",
+  "title": "Free Invoice Generator for Freelancers (PDF, No Sign-Up)",
+  "description": "Create a professional invoice or estimate in 2 minutes: your logo, payment terms like Net 30, sales tax, discounts, late fee terms. Download as PDF. Free, no account, no watermark.",
+  "menu": "Invoice generator",
+  "icon": "🧾",
+  "blurb": "A clean invoice or estimate in PDF, with Net 30 terms and your logo.",
+  "app": "Freelance Invoice Generator",
+  "scripts": ["tools/invoice.js"],
+  "priority": 1.0,
+  "faq": [
+    ["Is this invoice generator really free?", "Yes. No account, no watermark, no limit. Create as many invoices and estimates as you need and download them as PDF."],
+    ["What should a freelance invoice include?", "Your name or business name and contact details, the client's name and address, a unique invoice number, the invoice date, the due date or payment terms (for example Net 30), a description of the work with quantities and rates, the total, and how to pay you. Adding your late fee terms helps you get paid on time."],
+    ["What does Net 30 mean on an invoice?", "The client has 30 days from the invoice date to pay. Net 15 means 15 days; “due on receipt” means immediately. Shorter terms usually mean faster payment, so pick the shortest your clients will accept."],
+    ["Do I need to charge sales tax as a freelancer?", "Most states do not tax professional services, but some do, and digital products are often taxable. Check your state's rules; if you need to charge it, enter the rate and the tool adds it to the invoice."],
+    ["How do I save the invoice as a PDF?", "Click “Download PDF”, then choose “Save as PDF” as the printer in the window that opens. Your details are remembered on this device so your next invoice takes seconds."]
+  ]
+}-->
+<style media="print">@page { size: letter; margin: 0.5in; }</style>
+<script type="application/json" id="invoice-profile">
+{
+  "storage": "invoice",
+  "date_format": {"month": "short", "day": "numeric", "year": "numeric"},
+  "item_placeholder": "e.g. Website design (5 pages)",
+  "terms": [
+    {"value": 0, "label": "Due on receipt"}, {"value": 7, "label": "Net 7"}, {"value": 15, "label": "Net 15"},
+    {"value": 30, "label": "Net 30"}, {"value": 45, "label": "Net 45"}, {"value": 60, "label": "Net 60"}
+  ],
+  "mentions": [],
+  "labels": {
+    "invoice": "INVOICE", "estimate": "ESTIMATE", "number": "No.",
+    "invoice_number": "Invoice number", "estimate_number": "Estimate number",
+    "invoice_file": "Invoice", "estimate_file": "Estimate",
+    "from": "From", "bill_to": "Bill to", "prepared_for": "Prepared for",
+    "your_name": "Your name or business", "your_details": "Address, email, phone",
+    "client_name": "Client name", "client_details": "Client address",
+    "tax_id": "Tax ID:", "client_tax_id": "Tax ID:",
+    "invoice_date": "Invoice date", "estimate_date": "Date", "terms": "Terms", "days": "days", "due": "Due date",
+    "po": "PO number", "valid": "Valid until",
+    "item": "Description", "qty": "Qty / hours", "rate": "Rate", "amount": "Amount", "remove": "Remove line",
+    "empty_lines": "Add your items in the form",
+    "subtotal": "Subtotal", "discount": "Discount", "tax": "Sales tax", "total": "Total", "paid": "Amount paid",
+    "balance": "Balance due", "deposit": "Deposit due on acceptance",
+    "payment": "How to pay", "late_prefix": "Late payments:",
+    "estimate_terms": "This estimate is valid until {date}. Work outside the scope described above will be quoted separately.",
+    "accept_title": "Accepted by", "accept": "Client signature, name and date.",
+    "logo_too_big": "This logo is too large (600 KB maximum).",
+    "reset_confirm": "Clear everything you entered?"
+  }
+}
+</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · no sign-up · no watermark</span>
+    <h1>Free invoice generator</h1>
+    <p class="lead">Fill in the form and watch your invoice take shape. Download it as a PDF and send it. Your details are remembered on this device for next time.</p>
+    <ul class="trust"><li>Invoice and estimate</li><li>Net 30, sales tax, discounts</li><li>US Letter PDF</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout wide-left">
+    <form class="card form-card" id="invoice-form" autocomplete="off" onsubmit="return false">
+      <div class="segmented" role="group" aria-label="Document type">
+        <button type="button" data-doctype="invoice" aria-pressed="true">Invoice</button>
+        <button type="button" data-doctype="estimate" aria-pressed="false">Estimate</button>
+      </div>
+
+      <h3>You</h3>
+      <div class="fields">
+        <div class="field full"><label for="iv-me-name">Name or business name</label>
+          <input type="text" id="iv-me-name" name="meName" placeholder="Alex Morgan Design LLC" data-save></div>
+        <div class="field full"><label for="iv-me-address">Address</label>
+          <textarea id="iv-me-address" name="meAddress" rows="2" placeholder="123 Main Street&#10;Austin, TX 78701" data-save></textarea></div>
+        <div class="field"><label for="iv-me-email">Email</label>
+          <input type="email" id="iv-me-email" name="meEmail" placeholder="alex@example.com" data-save></div>
+        <div class="field"><label for="iv-me-phone">Phone</label>
+          <input type="tel" id="iv-me-phone" name="mePhone" placeholder="(512) 555-0123" data-save></div>
+        <div class="field full"><label for="iv-me-taxid">EIN or tax ID (optional)</label>
+          <input type="text" id="iv-me-taxid" name="meTaxId" placeholder="12-3456789" data-save>
+          <span class="hint">Not required on invoices. Never put your Social Security number on an invoice: send a W-9 instead.</span></div>
+        <div class="field full"><label for="iv-logo">Logo (optional)</label>
+          <input type="file" id="iv-logo" accept="image/png,image/jpeg,image/svg+xml,image/webp">
+          <span class="hint">It stays on your device. <button type="button" class="btn btn-ghost btn-sm" id="iv-logo-remove" hidden>Remove logo</button></span></div>
+      </div>
+
+      <h3>Your client</h3>
+      <div class="fields">
+        <div class="field full"><label for="iv-client-name">Client name</label>
+          <input type="text" id="iv-client-name" name="clientName" placeholder="Northwind Inc." data-save></div>
+        <div class="field full"><label for="iv-client-address">Address</label>
+          <textarea id="iv-client-address" name="clientAddress" rows="2" placeholder="500 Market Street&#10;San Francisco, CA 94105" data-save></textarea></div>
+        <div class="field full"><label for="iv-client-email">Client email (optional)</label>
+          <input type="email" id="iv-client-email" name="clientEmail" placeholder="ap@northwind.com" data-save></div>
+      </div>
+
+      <h3>Details</h3>
+      <div class="fields">
+        <div class="field"><label for="iv-number" id="iv-number-label">Invoice number</label>
+          <input type="text" id="iv-number" name="number"></div>
+        <div class="field"><label for="iv-date">Date</label>
+          <input type="date" id="iv-date" name="date"></div>
+        <div class="field" data-only="invoice"><label for="iv-terms">Payment terms</label>
+          <select id="iv-terms" name="terms" data-save>
+            <option value="0">Due on receipt</option><option value="7">Net 7</option><option value="15">Net 15</option>
+            <option value="30" selected>Net 30</option><option value="45">Net 45</option><option value="60">Net 60</option>
+          </select></div>
+        <div class="field" data-only="invoice"><label for="iv-po">PO number (optional)</label>
+          <input type="text" id="iv-po" name="po"></div>
+        <div class="field" data-only="estimate"><label for="iv-validity">Valid for (days)</label>
+          <input type="number" id="iv-validity" name="validity" min="1" value="30" data-save></div>
+        <div class="field" data-only="estimate"><label for="iv-deposit-pct">Deposit (%)</label>
+          <input type="number" id="iv-deposit-pct" name="depositPct" min="0" max="100" value="30" data-save></div>
+      </div>
+
+      <h3>Items</h3>
+      <div id="iv-lines"></div>
+      <button type="button" class="btn btn-ghost btn-sm" id="iv-add-line">+ Add a line</button>
+
+      <h3>Totals and payment</h3>
+      <div class="fields">
+        <div class="field"><label for="iv-discount">Discount (%)</label>
+          <input type="text" inputmode="decimal" id="iv-discount" name="discount" placeholder="0"></div>
+        <div class="field"><label for="iv-tax-rate">Sales tax (%)</label>
+          <input type="text" inputmode="decimal" id="iv-tax-rate" name="taxRate" placeholder="0" data-save></div>
+        <div class="field" data-only="invoice"><label for="iv-paid">Amount already paid</label>
+          <input type="text" inputmode="decimal" id="iv-paid" name="paid" placeholder="0"></div>
+        <div class="field" data-only="invoice"><label for="iv-late">Late fee terms (optional)</label>
+          <input type="text" id="iv-late" name="late" placeholder="1.5% per month on overdue balances" data-save></div>
+        <div class="field full" data-only="invoice"><label for="iv-payment">How to pay (optional)</label>
+          <textarea id="iv-payment" name="payment" rows="3" placeholder="ACH: Bank name, routing number, account number&#10;Or pay online: https://…" data-save></textarea></div>
+        <div class="field full"><label for="iv-notes">Note at the bottom (optional)</label>
+          <textarea id="iv-notes" name="notes" rows="2" placeholder="Thank you for your business!" data-save></textarea></div>
+      </div>
+      <input type="hidden" id="iv-tax-label" value="Sales tax">
+    </form>
+
+    <div class="results">
+      <div class="preview-actions">
+        <button type="button" class="btn btn-primary" id="iv-print">Download PDF</button>
+        <button type="button" class="btn btn-ghost" id="iv-next">Next invoice (No. +1)</button>
+      </div>
+      <p class="small muted print-hint">In the window that opens, choose “Save as PDF” as the printer.</p>
+      <div class="paper-wrap"><article class="paper" id="iv-preview" aria-label="Document preview"></article></div>
+      <button type="button" class="btn btn-ghost btn-sm" id="iv-reset">Clear everything</button>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>How to get paid faster</h2>
+  <ul>
+    <li><strong>Invoice right away</strong>, the day the work is delivered or the milestone is reached.</li>
+    <li><strong>Use short terms</strong>: Net 15 or due on receipt for small clients, Net 30 at most for companies.</li>
+    <li><strong>Make paying easy</strong>: include a payment link or your ACH details on every invoice.</li>
+    <li><strong>Ask for a deposit</strong> on estimates (30 to 50%) before you start.</li>
+    <li><strong>State your late fee</strong> in your contract and on the invoice, and follow up with our <a href="{{link:reminder}}">payment reminder generator</a>.</li>
+  </ul>
+  <p>New client asking for your Social Security number? Send a completed Form W-9 instead. Clients who pay you $2,000 or more in 2026 may send you a Form 1099-NEC early in 2027.</p>
+</section>

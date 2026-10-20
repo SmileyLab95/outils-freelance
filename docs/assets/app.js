@@ -101,16 +101,21 @@
     /** Mémorise les champs [data-save] d'un formulaire et les restaure au chargement. */
     persistForm: function (form, key) {
       var saved = OF.load(key, {});
-      form.querySelectorAll("[data-save]").forEach(function (el) {
+      // form.elements inclut les champs placés hors du formulaire mais rattachés par l'attribut form="…".
+      var fields = function () {
+        return Array.prototype.filter.call(form.elements, function (el) { return el.hasAttribute("data-save"); });
+      };
+      fields().forEach(function (el) {
         var name = el.name || el.id;
         if (saved[name] === undefined) return;
         if (el.type === "checkbox") el.checked = !!saved[name];
         else if (el.type === "radio") el.checked = el.value === saved[name];
         else el.value = saved[name];
       });
-      form.addEventListener("input", function () {
+      document.addEventListener("input", function (event) {
+        if (event.target !== form && event.target.form !== form) return;
         var data = {};
-        form.querySelectorAll("[data-save]").forEach(function (el) {
+        fields().forEach(function (el) {
           if (el.type === "radio") { if (el.checked) data[el.name] = el.value; return; }
           data[el.name || el.id] = el.type === "checkbox" ? el.checked : el.value;
         });

@@ -10,7 +10,7 @@ méthode de travail, feuille de route, affiliation et fiches pays.
 
 ```bash
 python3 build.py                                  # génère le site dans docs/
-node --test tests/unit                            # tests des moteurs de calcul
+node --test tests/unit/*.test.mjs                          # tests des moteurs de calcul
 node tests/e2e/verifier.mjs /tmp/captures         # tests navigateur + captures d'écran
 ```
 
