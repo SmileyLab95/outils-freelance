@@ -230,3 +230,12 @@ Point à surveiller : une source non officielle affirme que l'art. 293 B du CGI 
 - Urssaf : échéances reportées au jour ouvré suivant (fiche « Déclarer et payer mes cotisations »), changement de périodicité avant le 31 janvier, option pour le versement libératoire avant le 30 septembre.
 - CFE : 15 décembre, adhésion au prélèvement à l'échéance jusqu'au 30 novembre (impots.gouv.fr).
 - **À revérifier au printemps 2027** : dates limites de la déclaration de revenus 2026 par département (marquées « date estimée ») et date exacte de la CA12 (2e jour ouvré après le 1er mai : 4 mai 2027, estimée).
+
+## Mention de franchise de TVA (mise à jour du 20/10/2026)
+
+- L'ordonnance n° 2025-1247 prévoyait le transfert de la TVA dans le CIBS au 1er septembre 2026 (franchise : art. L. 223-3).
+- L'ordonnance n° 2026-671 du 27 juillet 2026 (JO du 28 juillet) l'a **reporté au 1er janvier 2027** et a renuméroté
+  les articles : la franchise devient l'art. **L. 233-3** du CIBS (Legifiscal, Bpifrance Création).
+- Jusqu'au 31 décembre 2026 : « TVA non applicable, art. 293 B du CGI ». Ensuite : « art. L. 233-3 du CIBS »,
+  l'ancienne mention restant tolérée (jusqu'au 30 juin 2028 selon les résumés de l'ordonnance).
+- **À vérifier en décembre 2026** sur Légifrance : numéro définitif et durée de la tolérance.

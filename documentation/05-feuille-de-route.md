@@ -52,7 +52,7 @@ Les phases s'enchaînent dans cet ordre ; une phase n'est terminée que lorsque 
 
 - [x] Comparateur de statuts : micro-entreprise, entreprise au réel (EI / EURL à l'IR), SASU (salaire / dividendes), EURL à l'IS (cotisations TNS sur les dividendes au-delà de 10 % du capital)
 - [x] Rubrique facturation électronique : calendrier, obligations, plateformes agréées, nouvelles mentions, checklist
-- [x] Mention de franchise de TVA mise à jour (art. L. 223-3 du CIBS)
+- [x] Mention de franchise de TVA : art. 293 B du CGI jusqu'au 31/12/2026, art. L. 233-3 du CIBS ensuite (report par l'ordonnance n° 2026-671) — numéro à revérifier sur Légifrance en décembre 2026
 - [x] Générateur de facture : nouvelles mentions de la réforme (SIREN du client, nature de l'opération…)
 - [x] Indemnités kilométriques (barème officiel)
 - [x] Calendrier fiscal et social avec export agenda

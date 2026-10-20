@@ -1,5 +1,15 @@
 # Journal des modifications
 
+## 2026-10-20 — Correction : mention de franchise de TVA
+
+- L'ordonnance n° 2026-671 du 27 juillet 2026 a reporté au 1er janvier 2027 le transfert de la TVA dans le CIBS
+  (prévu au 1er septembre 2026) et renuméroté les articles. Jusqu'au 31 décembre 2026, la mention reste
+  « TVA non applicable, art. 293 B du CGI ».
+- Le générateur de facture choisit la mention selon la date de la facture : « art. 293 B du CGI » en 2026,
+  « art. L. 233-3 du CIBS (ex-art. 293 B du CGI) » à partir du 1er janvier 2027 (règles `mention_franchise_tva`
+  et `mention_franchise_tva_2027`, sources affichées sur la page).
+- Pages corrigées : accueil, générateur de facture, mentions obligatoires, calcul de TVA, simulateur, contrat.
+
 ## 2026-10-20 — Images de partage par pays
 
 - Une image de partage (1200 × 630) par section, dans sa langue : `og-fr`, `og-us`, `og-uk`, `og-ca`, `og-ca-fr`,

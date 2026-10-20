@@ -40,6 +40,7 @@ async function open(page, url) {
 
 const tests = {
   async "fr/generateur-facture/"(page) {
+    await page.fill("#f-date", "2026-11-15");
     await page.fill("#f-me-name", "Camille Martin EI");
     await page.fill("#f-me-siret", "123 456 789 00012");
     await page.fill("#f-me-iban", "FR76 1234");
@@ -53,7 +54,10 @@ const tests = {
     await page.fill("#l-price-1", "150,50");
     const text = await page.textContent("#f-preview");
     check(/2\s?251,50\s?€/.test(text), "facture : total HT calculé (1 800 + 3 × 150,50 = 2 251,50 €)");
-    check(text.includes("TVA non applicable, art. L. 223-3 du CIBS"), "facture : mention de franchise de TVA (CIBS)");
+    check(text.includes("TVA non applicable, art. 293 B du CGI."), "facture : mention de franchise de TVA (art. 293 B du CGI en 2026)");
+    await page.fill("#f-date", "2027-01-15");
+    check((await page.textContent("#f-preview")).includes("TVA non applicable, art. L. 233-3 du CIBS (ex-art. 293 B du CGI)."), "facture : mention CIBS pour une facture datée de 2027");
+    await page.fill("#f-date", "2026-11-15");
     check(text.includes("40 €"), "facture : indemnité forfaitaire de 40 € (client professionnel)");
     check(text.includes("IBAN FR76 1234"), "facture : IBAN dans les conditions de paiement");
     await page.fill("#f-client-id", "812 345 678");

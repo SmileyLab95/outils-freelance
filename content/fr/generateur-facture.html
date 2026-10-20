@@ -8,12 +8,14 @@
   "blurb": "Facture ou devis conforme en PDF, mentions obligatoires ajoutées automatiquement.",
   "app": "Générateur de facture et de devis",
   "scripts": ["tools/facture.js"],
+  "rules": "fr",
+  "sources": ["mention_franchise_tva", "mention_franchise_tva_2027", "penalites_retard_regle", "facturation_electronique_nouvelles_mentions"],
   "priority": 1.0,
   "faq": [
     ["Le générateur de facture est-il vraiment gratuit ?", "Oui, entièrement. Il n'y a ni inscription ni filigrane. Vous pouvez créer autant de factures et de devis que vous le souhaitez."],
     ["Mes informations sont-elles envoyées quelque part ?", "Non. Tout se passe dans votre navigateur : vos informations sont seulement mémorisées sur votre appareil pour pré-remplir la prochaine facture. Rien n'est envoyé sur un serveur."],
     ["Comment enregistrer ma facture en PDF ?", "Cliquez sur « Télécharger en PDF », puis choisissez « Enregistrer au format PDF » comme imprimante dans la fenêtre qui s'ouvre."],
-    ["Quelles mentions sont obligatoires sur une facture d'auto-entrepreneur ?", "Notamment : numéro unique, date, identité et SIRET du vendeur avec la mention « EI », identité du client, désignation, prix HT, mention « TVA non applicable, art. L. 223-3 du CIBS » en franchise, date d'échéance, pénalités de retard et indemnité de 40 € entre professionnels. Le générateur les ajoute pour vous. Voir notre <a href=\"{{link:invoice-rules}}\">checklist complète</a>."],
+    ["Quelles mentions sont obligatoires sur une facture d'auto-entrepreneur ?", "Notamment : numéro unique, date, identité et SIRET du vendeur avec la mention « EI », identité du client, désignation, prix HT, mention « TVA non applicable, art. 293 B du CGI » en franchise (« art. L. 233-3 du CIBS » à partir de 2027), date d'échéance, pénalités de retard et indemnité de 40 € entre professionnels. Le générateur les ajoute pour vous. Voir notre <a href=\"{{link:invoice-rules}}\">checklist complète</a>."],
     ["Dois-je utiliser la facturation électronique ?", "Depuis le 1er septembre 2026, toutes les entreprises doivent pouvoir recevoir des factures électroniques. L'émission devient obligatoire le 1er septembre 2027 pour les PME et micro-entreprises. Ce générateur produit un PDF : il reste valable pour vos clients particuliers et étrangers, et pour vos clients professionnels jusqu'à votre date d'émission obligatoire. Il ajoute déjà les nouvelles mentions de la réforme. Voir <a href=\"{{link:einvoicing}}\">ce qui change pour vous</a>."],
     ["Quelles sont les nouvelles mentions de la réforme ?", "Le SIREN du client, l'adresse de livraison si elle diffère de celle du client, la nature de l'opération (biens, services ou mixte) et, le cas échéant, l'option pour le paiement de la TVA d'après les débits. Le générateur les ajoute quand vous les renseignez."]
   ]
@@ -108,7 +110,7 @@
       <h3>TVA et conditions</h3>
       <div class="fields">
         <label class="check full"><input type="checkbox" id="f-franchise" name="franchise" checked data-save>
-          <span>Franchise en base de TVA (« TVA non applicable, art. L. 223-3 du CIBS »)</span></label>
+          <span>Franchise en base de TVA (« TVA non applicable, art. 293 B du CGI », puis « art. L. 233-3 du CIBS » sur les factures datées de 2027)</span></label>
         <div class="field" id="f-vat-rate-field" hidden><label for="f-vat-rate">Taux de TVA</label>
           <select id="f-vat-rate" name="vatRate" data-save>
             <option value="20">20 %</option><option value="10">10 %</option><option value="5.5">5,5 %</option><option value="2.1">2,1 %</option>

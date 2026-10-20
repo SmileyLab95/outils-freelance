@@ -104,7 +104,7 @@
     else if (ca > s.plafond) { msg = "Vous dépassez le plafond de la micro-entreprise (" + OF.eur(s.plafond, 0) + "). Si cela se produit deux années de suite, vous passez au régime réel au 1er janvier suivant : parlez-en à un expert-comptable."; level = "warn"; }
     else if (ca > s.tvaMaj) { msg = "Au-delà de " + OF.eur(s.tvaMaj, 0) + ", vous devez facturer la TVA dès le jour du dépassement. Pensez à adapter vos prix et vos factures."; level = "warn"; }
     else if (ca > s.tva) { msg = "Vous dépassez le seuil de franchise de TVA (" + OF.eur(s.tva, 0) + ") : vous garderez la franchise cette année, mais facturerez la TVA à partir du 1er janvier suivant."; level = "warn"; }
-    else { msg = "Vous restez sous le plafond et sous le seuil de TVA : vos factures portent la mention « TVA non applicable, art. L. 223-3 du CIBS »."; }
+    else { msg = "Vous restez sous le plafond et sous le seuil de TVA : vos factures portent la mention « TVA non applicable, art. 293 B du CGI »."; }
     notice.textContent = msg;
     notice.className = "notice" + (level ? " " + level : "");
   }

@@ -123,6 +123,14 @@
     return { rows: rows, ht: ht, rate: rate, vat: vat, ttc: ttc, paid: isFinite(paid) ? paid : 0, franchise: franchise };
   }
 
+  // ----- Mention de franchise de TVA : 293 B du CGI, puis CIBS pour les factures datées à partir du 1er janvier 2027.
+  var R = window.OF_RULES || {};
+  function franchiseMention(date) {
+    var next = R.mention_franchise_tva_2027;
+    if (next && date >= next.from) return next.text + " (ex-art. 293 B du CGI).";
+    return (R.mention_franchise_tva || "TVA non applicable, art. 293 B du CGI") + ".";
+  }
+
   // ----- Aperçu ----------------------------------------------------------------
   var NATURES = { services: "Prestation de services", biens: "Livraison de biens", mixte: "Biens et services" };
 
@@ -210,7 +218,7 @@
     }).join("") + "</div>";
 
     var mentions = [];
-    if (t.franchise) mentions.push("TVA non applicable, art. L. 223-3 du CIBS (ex-art. 293 B du CGI).");
+    if (t.franchise) mentions.push(franchiseMention(date));
     else if ($("f-debits").checked) mentions.push("Option pour le paiement de la taxe d'après les débits.");
     if (isInvoice) {
       if (val("f-me-iban")) {
