@@ -36,3 +36,14 @@ test("SASU : tout en dividendes ou tout en salaire", () => {
   const net = 55000 / 1.82;
   near(sal.available, net - (net * 0.9 - 11600) * 0.11, "salaire net après impôt");
 });
+
+test("EURL à l'IS : tout en dividendes (capital de 1 000 €) ou tout en rémunération", () => {
+  const div = st.eurlIS({ revenue: 60000, expenses: 5000, salaryShare: 0, tnsRate: 0.45, capital: 1000 }, R);
+  near(div.is, 9500, "IS 15 % puis 25 %");
+  // 45 500 € de dividendes : 100 € au PFU (31,4 %), 45 400 € aux cotisations TNS (45 %) et à l'impôt (12,8 %)
+  near(div.dividendSocial, 45400 * 0.45, "cotisations TNS au-delà de 10 % du capital");
+  near(div.available, 45500 - 20430 - (100 * 0.314 + 45400 * 0.128), "revenu disponible");
+  const sal = st.eurlIS({ revenue: 60000, expenses: 5000, salaryShare: 1, tnsRate: 0.45, capital: 1000 }, R);
+  const net = 55000 / 1.45;
+  near(sal.available, net - (1977.69 + (net * 0.9 - 29579) * 0.3), "rémunération nette après impôt (abattement de 10 %)");
+});

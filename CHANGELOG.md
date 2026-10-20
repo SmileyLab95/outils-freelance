@@ -1,5 +1,11 @@
 # Journal des modifications
 
+## 2026-10-20 — Comparateur de statuts : EURL à l'IS
+
+- Quatrième statut : rémunération du gérant TNS (abattement de 10 % à l'impôt), IS, dividendes au PFU jusqu'à 10 %
+  du capital et des comptes courants, cotisations TNS et part impôt du PFU au-delà (`eurlIS`, testé).
+- Champ « capital et comptes courants », comparaison en grille 2 × 2.
+
 ## 2026-10-20 — États-Unis : trois nouveaux guides interactifs
 
 - *How much to set aside for taxes* : part de chaque paiement à mettre de côté (moteur `tax-us.js`), répartition

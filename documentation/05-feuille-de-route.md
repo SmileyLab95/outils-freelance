@@ -50,7 +50,7 @@ Les phases s'enchaînent dans cet ordre ; une phase n'est terminée que lorsque 
 
 ## Phase 4 — France, aller plus loin
 
-- [x] Comparateur de statuts : micro-entreprise, entreprise au réel (EI / EURL à l'IR), SASU (salaire / dividendes) — EURL à l'IS à ajouter
+- [x] Comparateur de statuts : micro-entreprise, entreprise au réel (EI / EURL à l'IR), SASU (salaire / dividendes), EURL à l'IS (cotisations TNS sur les dividendes au-delà de 10 % du capital)
 - [x] Rubrique facturation électronique : calendrier, obligations, plateformes agréées, nouvelles mentions, checklist
 - [x] Mention de franchise de TVA mise à jour (art. L. 223-3 du CIBS)
 - [x] Générateur de facture : nouvelles mentions de la réforme (SIREN du client, nature de l'opération…)

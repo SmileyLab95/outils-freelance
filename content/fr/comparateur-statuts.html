@@ -1,20 +1,20 @@
 <!--{
   "id": "structure",
   "slug": "comparateur-statuts/",
-  "title": "Comparateur de statuts : micro-entreprise, entreprise au réel ou SASU ?",
-  "description": "Comparez ce qu'il vous reste selon votre statut : micro-entreprise, entreprise individuelle au réel ou EURL à l'IR, SASU en salaire ou en dividendes. Cotisations, IS, impôt et dividendes 2026. Gratuit.",
+  "title": "Comparateur de statuts : micro-entreprise, entreprise au réel, EURL ou SASU ?",
+  "description": "Comparez ce qu'il vous reste selon votre statut : micro-entreprise, entreprise individuelle au réel, EURL à l'IS ou SASU, en rémunération ou en dividendes. Cotisations, IS, impôt et dividendes 2026. Gratuit.",
   "menu": "Comparateur de statuts",
   "icon": "⚖️",
-  "blurb": "Micro, réel ou SASU : ce qu'il vous reste dans chaque cas.",
+  "blurb": "Micro, réel, EURL ou SASU : ce qu'il vous reste dans chaque cas.",
   "app": "Comparateur de statuts d'indépendant",
   "scripts": ["engines/brackets.js", "engines/statuts-fr.js", "tools/fr-statuts.js"],
   "rules": "fr",
-  "sources": ["micro_activities", "ir_bareme_revenus_2025", "is_taux_reduit", "pfu_total_dividendes_2026", "tns_gerant_majoritaire_taux_global_approx", "sasu_president_taux_global_approx"],
+  "sources": ["micro_activities", "ir_bareme_revenus_2025", "is_taux_reduit", "pfu_total_dividendes_2026", "pfu_part_impot", "tns_gerant_majoritaire_taux_global_approx", "sasu_president_taux_global_approx"],
   "priority": 0.95,
   "faq": [
     ["Quel statut choisir pour se lancer en freelance ?", "La micro-entreprise est la plus simple et souvent la plus avantageuse quand vos dépenses sont faibles et votre chiffre d'affaires sous les plafonds (83 600 € pour les services). Le régime réel devient intéressant quand vos dépenses dépassent l'abattement forfaitaire (34 % en libéral). La société (SASU, EURL) se justifie surtout avec un bénéfice élevé, un besoin de protéger son patrimoine ou des associés."],
     ["SASU : salaire ou dividendes ?", "Les dividendes supportent l'impôt sur les sociétés (15 % puis 25 %) puis le prélèvement forfaitaire unique de 31,4 %, mais n'ouvrent aucun droit à la retraite ni aux indemnités journalières. Le salaire coûte plus cher en charges mais protège. Beaucoup de présidents combinent un salaire modeste et des dividendes."],
-    ["Pourquoi l'EURL à l'IS n'est-elle pas dans le comparateur ?", "En EURL, les dividendes qui dépassent 10 % du capital et des comptes courants supportent des cotisations sociales de travailleur non salarié, ce qui rapproche souvent le résultat de celui de l'entreprise au réel présentée ici. Pour ce cas, un simulateur détaillé ou un expert-comptable est préférable."],
+    ["EURL à l'IS ou SASU : laquelle choisir ?", "En EURL, le gérant associé unique est travailleur non salarié : ses cotisations coûtent moins cher que celles du président de SASU, mais les dividendes qui dépassent 10 % du capital et des comptes courants supportent ces cotisations. En SASU, les charges sur la rémunération sont plus élevées, mais les dividendes ne supportent que le prélèvement forfaitaire unique de 31,4 %. L'EURL convient souvent à une rémunération régulière, la SASU à une stratégie de dividendes."],
     ["Les résultats sont-ils exacts ?", "Les règles de la micro-entreprise, de l'impôt sur le revenu, de l'impôt sur les sociétés et des dividendes sont exactes pour 2026. Les cotisations du régime réel et de la SASU sont estimées avec des taux moyens, modifiables en bas du formulaire : elles dépendent de nombreux paramètres. Utilisez le résultat comme ordre de grandeur, puis confirmez avec le simulateur de l'Urssaf ou un expert-comptable."]
   ]
 }-->
@@ -23,8 +23,8 @@
     {{breadcrumb}}
     <span class="pill">Gratuit · règles 2026</span>
     <h1>Comparateur de statuts</h1>
-    <p class="lead">Micro-entreprise, entreprise au réel ou SASU ? Indiquez votre chiffre d'affaires et vos dépenses : voyez ce qu'il vous reste dans chaque cas, après cotisations et impôts.</p>
-    <ul class="trust"><li>Micro-entreprise aux taux officiels</li><li>SASU en salaire ou dividendes</li><li>Hypothèses visibles et modifiables</li></ul>
+    <p class="lead">Micro-entreprise, entreprise au réel, EURL ou SASU ? Indiquez votre chiffre d'affaires et vos dépenses : voyez ce qu'il vous reste dans chaque cas, après cotisations et impôts.</p>
+    <ul class="trust"><li>Micro-entreprise aux taux officiels</li><li>EURL et SASU, rémunération ou dividendes</li><li>Hypothèses visibles et modifiables</li></ul>
   </div>
 </section>
 
@@ -46,7 +46,7 @@
             <option value="artisan">Activité artisanale (BIC)</option>
             <option value="vente">Vente de marchandises (BIC)</option>
           </select></div>
-        <div class="field full"><label for="c-share">SASU : part du bénéfice versée en salaire</label>
+        <div class="field full"><label for="c-share">EURL et SASU : part du bénéfice versée en rémunération</label>
           <div class="input-suffix"><input type="number" id="c-share" name="share" value="50" min="0" max="100" step="5" data-save><span>%</span></div>
           <span class="hint">Le reste est distribué en dividendes après l'impôt sur les sociétés.</span></div>
       </div>
@@ -57,7 +57,9 @@
             <div class="input-suffix"><input type="text" inputmode="decimal" id="c-tns" name="tns" value="45" data-save><span>%</span></div></div>
           <div class="field"><label for="c-coef">SASU : coût total d'un euro de salaire net</label>
             <input type="text" inputmode="decimal" id="c-coef" name="coef" value="1,82" data-save></div>
-          <div class="field full"><label for="c-company">SASU : frais propres à la société par an</label>
+          <div class="field"><label for="c-capital">EURL : capital et comptes courants</label>
+            <div class="input-suffix"><input type="text" inputmode="decimal" id="c-capital" name="capital" value="1 000" data-save><span>€</span></div></div>
+          <div class="field"><label for="c-company">Société : frais propres par an</label>
             <div class="input-suffix"><input type="text" inputmode="decimal" id="c-company" name="company" value="1 500" data-save><span>€</span></div>
             <span class="hint">Expert-comptable, banque, formalités.</span></div>
         </div>
@@ -70,7 +72,7 @@
         <div class="big" id="c-best">–</div>
         <div class="sub" id="c-sub">–</div>
       </div>
-      <div class="compare compare-3 card">
+      <div class="compare card">
         <div class="compare-col" id="c-micro">
           <h3>Micro-entreprise</h3>
           <ul class="result-list">
@@ -85,6 +87,14 @@
             <li><span>Cotisations</span><b id="c-r-social">–</b></li>
             <li><span>Impôt</span><b id="c-r-tax">–</b></li>
             <li><span><strong>Il vous reste</strong></span><b id="c-r-net">–</b></li>
+          </ul>
+        </div>
+        <div class="compare-col" id="c-eurl">
+          <h3>EURL à l'IS</h3>
+          <ul class="result-list">
+            <li><span>Cotisations TNS</span><b id="c-e-social">–</b></li>
+            <li><span>IS, impôt et PFU</span><b id="c-e-tax">–</b></li>
+            <li><span><strong>Il vous reste</strong></span><b id="c-e-net">–</b></li>
           </ul>
         </div>
         <div class="compare-col" id="c-sasu">
@@ -106,6 +116,7 @@
   <ul>
     <li><strong>Micro-entreprise :</strong> cotisations au taux officiel sur le chiffre d'affaires, impôt sur le revenu après l'abattement forfaitaire. Vos dépenses réelles ne sont pas déductibles, mais elles réduisent ce qu'il vous reste.</li>
     <li><strong>Entreprise au réel</strong> (entreprise individuelle ou EURL à l'impôt sur le revenu) : cotisations de travailleur non salarié et impôt sur le bénéfice réel, après déduction des dépenses.</li>
+    <li><strong>EURL à l'IS :</strong> la rémunération du gérant supporte les cotisations de travailleur non salarié et l'impôt sur le revenu (après l'abattement de 10 %) ; le reste du bénéfice supporte l'impôt sur les sociétés, puis les dividendes : prélèvement forfaitaire unique jusqu'à 10 % du capital et des comptes courants, cotisations TNS au-delà.</li>
     <li><strong>SASU :</strong> le salaire du président supporte des charges élevées mais ouvre des droits (retraite, indemnités journalières) ; les dividendes supportent l'impôt sur les sociétés puis le prélèvement forfaitaire unique de 31,4 %, sans droits sociaux.</li>
   </ul>
   <p>Le revenu disponible est calculé pour une personne seule (une part), sans décote ni réduction d'impôt. Ce qu'il vous reste ne dit pas tout : la protection sociale, la simplicité de gestion et la protection de votre patrimoine comptent aussi.</p>
