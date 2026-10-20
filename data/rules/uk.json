@@ -1214,6 +1214,23 @@
       "source_title": "GOV.UK - Simplified expenses: vehicles",
       "confidence": "high",
       "note": "20p per mile, unchanged."
+    },
+    "pension_annual_allowance": {
+      "value": {
+        "annual_allowance": 60000,
+        "mpaa": 10000,
+        "taper_threshold_income": 200000,
+        "taper_adjusted_income": 260000,
+        "taper_minimum": 10000,
+        "relief_minimum_gross": 3600,
+        "relief_at_source_rate": 0.2
+      },
+      "unit": "GBP",
+      "label": "Pension annual allowance and tax relief limits 2026/27",
+      "source": "https://www.gov.uk/tax-on-your-private-pension/annual-allowance",
+      "source_title": "Tax on your private pension contributions: Annual allowance - GOV.UK",
+      "confidence": "high",
+      "note": "Relief limited to the higher of relevant UK earnings and £3,600 gross. Unused allowance can be carried forward from the 3 previous tax years. Relief at source: the provider adds 20%; higher and additional rate relief is claimed through Self Assessment."
     }
   },
   "open_questions": [

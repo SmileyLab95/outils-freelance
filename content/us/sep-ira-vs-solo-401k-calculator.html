@@ -1,0 +1,101 @@
+<!--{
+  "id": "retirement",
+  "slug": "sep-ira-vs-solo-401k-calculator/",
+  "title": "SEP-IRA vs Solo 401(k) Calculator 2026: How Much Can You Contribute?",
+  "description": "Compare the maximum 2026 SEP-IRA and solo 401(k) contributions for your self-employment income, with catch-up contributions, and see how much federal and state tax each one saves. Free calculator.",
+  "menu": "SEP-IRA vs Solo 401(k)",
+  "icon": "🌱",
+  "blurb": "Your 2026 maximum in each plan, and the tax it saves.",
+  "app": "SEP-IRA vs Solo 401(k) Calculator",
+  "scripts": ["engines/brackets.js", "engines/tax-us.js", "tools/us-retirement.js"],
+  "rules": "us",
+  "sources": ["retirement_limits_2026", "sep_self_employed_rate", "se_tax_total_rate", "federal_brackets_single"],
+  "priority": 0.85,
+  "faq": [
+    ["What's the difference between a SEP-IRA and a solo 401(k)?", "Both let a self-employed person contribute as the “employer”: up to 20% of net earnings from self-employment. A solo 401(k) also allows “employee” deferrals of up to $24,500 in 2026, plus catch-up contributions from age 50, so it lets you save much more at low and middle incomes. A SEP-IRA is simpler to open and run."],
+    ["How much can I put in a SEP-IRA in 2026?", "20% of your net earnings from self-employment (net profit minus half of your self-employment tax), up to $72,000. With $100,000 of net profit, that's about $18,587."],
+    ["How much can I put in a solo 401(k) in 2026?", "Up to $24,500 as employee deferrals, plus 20% of net earnings as employer contributions, with a combined limit of $72,000. Catch-up contributions add $8,000 from age 50, or $11,250 between ages 60 and 63."],
+    ["Do retirement contributions reduce self-employment tax?", "No. They reduce your income tax (and usually state income tax), but self-employment tax is calculated before them. They also reduce the qualified business income deduction, which the calculator takes into account."],
+    ["What are the deadlines?", "A SEP-IRA can be opened and funded until your tax filing deadline, including extensions. For a solo 401(k), employer contributions can be made until the filing deadline; employee deferrals must be elected by year-end, and since 2023 a sole proprietor can open a new plan and make deferrals for the prior year until the original filing deadline."]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · 2026 IRS limits</span>
+    <h1>SEP-IRA vs solo 401(k) calculator</h1>
+    <p class="lead">Enter your net self-employment profit and your age: see the most you can put in each plan for 2026, and how much tax each contribution saves.</p>
+    <ul class="trust"><li>2026 limits (Notice 2025-67)</li><li>Catch-up from age 50 and 60-63</li><li>Federal and state tax saved</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="retire-form" onsubmit="return false">
+      <h2>Your 2026 business</h2>
+      <div class="fields">
+        <div class="field full"><label for="u-profit">Net profit from self-employment</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="u-profit" name="profit" value="100,000" data-save><span>$</span></div>
+          <span class="hint">Schedule C net profit, before retirement contributions.</span></div>
+        <div class="field"><label for="u-age">Your age at the end of 2026</label>
+          <select id="u-age" name="age" data-save>
+            <option value="under50">Under 50</option>
+            <option value="50">50 to 59, or 64 and over</option>
+            <option value="60">60 to 63</option>
+          </select></div>
+        <div class="field"><label for="u-status">Filing status</label>
+          <select id="u-status" name="status" data-save>
+            <option value="single">Single</option>
+            <option value="married_filing_jointly">Married filing jointly</option>
+            <option value="married_filing_separately">Married filing separately</option>
+            <option value="head_of_household">Head of household</option>
+          </select></div>
+        <div class="field full"><label for="u-state">State income tax rate</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="u-state" name="state" placeholder="0" data-save><span>%</span></div></div>
+        <div class="field full"><label for="u-amount">What you plan to contribute (optional)</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="u-amount" name="amount" placeholder="10,000" data-save><span>$</span></div></div>
+      </div>
+      <ul class="result-list" style="margin-top: 6px;">
+        <li><span>Tax saved on this amount</span><b id="u-amount-tax">–</b></li>
+        <li><span>What it really costs you</span><b id="u-amount-cost">–</b></li>
+      </ul>
+      <p class="small muted" id="u-amount-note" hidden style="margin: 8px 0 0;">Above your solo 401(k) maximum: the calculation uses the maximum.</p>
+    </form>
+
+    <div class="results">
+      <div class="result-hero">
+        <div class="label">You can save up to</div>
+        <div class="big" id="u-best">–</div>
+        <div class="sub" id="u-sub">–</div>
+      </div>
+      <div class="compare card">
+        <div class="compare-col" id="u-sep">
+          <h3>SEP-IRA</h3>
+          <ul class="result-list">
+            <li><span>Maximum</span><b id="u-sep-max">–</b></li>
+            <li><span>Tax saved</span><b id="u-sep-tax">–</b></li>
+          </ul>
+        </div>
+        <div class="compare-col" id="u-solo">
+          <h3>Solo 401(k)</h3>
+          <ul class="result-list">
+            <li><span>Maximum</span><b id="u-solo-max">–</b></li>
+            <li><span>Employee + employer</span><b id="u-solo-split">–</b></li>
+            <li><span>Tax saved</span><b id="u-solo-tax">–</b></li>
+          </ul>
+        </div>
+      </div>
+      <p class="small muted" style="margin: 12px 2px 0;">Assumes no 401(k) deferrals at another job this year: the $24,500 employee limit is shared across all your plans.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>Which plan should you choose?</h2>
+  <ul>
+    <li><strong>Solo 401(k)</strong> if you want to save as much as possible on a moderate income, want Roth contributions, or are 50 or older. It needs a bit more paperwork (Form 5500-EZ once assets exceed $250,000).</li>
+    <li><strong>SEP-IRA</strong> if you want the simplest setup, decide late (you can open it until your filing deadline), or plan to hire employees later and cover them.</li>
+  </ul>
+  <p>Contributions lower your income tax, so your quarterly payments can be lower too: check with the <a href="{{link:estimated-tax}}">quarterly tax calculator</a> and <a href="{{link:set-aside}}">how much to set aside</a>.</p>
+  <p class="small muted">Estimate for a sole proprietor or single-member LLC with no employees. Not investment or tax advice.</p>
+</section>

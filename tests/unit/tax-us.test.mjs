@@ -81,3 +81,13 @@ test("bénéfice nécessaire pour un revenu net visé (inverse)", () => {
   const p = tax.profitForTakeHome(80000 - 16647.46528, { status: "single" }, R);
   assert.ok(Math.abs(p - 80000) < 0.05, `bénéfice retrouvé : ${p}`);
 });
+
+test("cotisation retraite de 10 000 $ (SEP-IRA) : AGI et QBI réduits, SE tax inchangée", () => {
+  const base = tax.estimate({ profit: 80000, status: "single" }, R);
+  const r = tax.estimate({ profit: 80000, status: "single", retirement: 10000 }, R);
+  assert.equal(r.se.total, base.se.total);
+  // AGI 64 348,18 ; QBI = 20 % × 48 248,18 = 9 649,64 ; imposable 38 598,54 → 1 240 + 12 % × 26 198,54
+  near(r.taxable, 38598.54, "revenu imposable");
+  near(r.incomeTax, 1240 + 0.12 * 26198.54, "impôt fédéral");
+  near(base.total - r.total, 960, "économie : 10 000 × 12 % × 80 % (effet QBI)");
+});

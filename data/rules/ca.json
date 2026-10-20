@@ -693,6 +693,19 @@
       "source_title": "Income Tax Act, section 146 (RRSP) - Justice Laws Website",
       "confidence": "high",
       "note": "60th day of 2027 = March 1, 2027 (a Monday)."
+    },
+    "rrsp_limits_2026": {
+      "value": {
+        "dollar_limit": 33810,
+        "rate": 0.18,
+        "deadline": "2027-03-01"
+      },
+      "unit": "CAD",
+      "label": "RRSP dollar limit for 2026 and earned income rate",
+      "source": "https://www.canada.ca/en/revenue-agency/services/tax/registered-plans-administrators/pspa/mp-rrsp-dpsp-tfsa-limits-ympe.html",
+      "source_title": "CRA - MP, DB, RRSP, DPSP, ALDA, TFSA limits, YMPE and the YAMPE",
+      "confidence": "high",
+      "note": "Room for 2026 = lesser of 18% of 2025 earned income and $33,810, minus any pension adjustment, plus unused room. 2027 limit: $35,390."
     }
   },
   "provinces": {

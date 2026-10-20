@@ -1,0 +1,101 @@
+<!--{
+  "id": "retirement",
+  "slug": "rrsp-calculator/",
+  "title": "RRSP Calculator for the Self-Employed (2026): Contribution Room and Tax Refund",
+  "description": "Work out your 2026 RRSP contribution room and the tax refund your contribution brings as a self-employed Canadian, for every province, including Quebec. Free calculator.",
+  "menu": "RRSP calculator",
+  "icon": "🌱",
+  "blurb": "Your 2026 RRSP room and the tax refund from your contribution.",
+  "app": "RRSP Calculator for the Self-Employed",
+  "scripts": [
+    "engines/brackets.js",
+    "engines/tax-ca.js",
+    "tools/ca-rrsp.js"
+  ],
+  "rules": "ca",
+  "sources": [
+    "rrsp_limits_2026",
+    "rrsp_deadline_2026",
+    "federal_income_tax_brackets"
+  ],
+  "priority": 0.85,
+  "faq": [
+    [
+      "How much can I contribute to my RRSP in 2026?",
+      "18% of your 2025 earned income, up to $33,810, plus any unused room from previous years. For a self-employed person, earned income is mainly your net business income. Your exact room is on your 2025 notice of assessment and in CRA My Account."
+    ],
+    [
+      "What's the deadline for 2026 RRSP contributions?",
+      "March 1, 2027. Contributions made in the first 60 days of 2027 can be deducted on your 2026 return or carried forward to a later year."
+    ],
+    [
+      "How big is the tax refund?",
+      "Your contribution times your combined marginal tax rate (federal and provincial). Self-employed people often see it as a lower balance owing rather than a refund, since tax is paid by instalments or in April. RRSP contributions don't reduce CPP or QPP contributions."
+    ],
+    [
+      "Is an RRSP better than a TFSA?",
+      "An RRSP gives a deduction now and is taxed on withdrawal; a TFSA gives no deduction but tax-free withdrawals. An RRSP usually wins when your tax rate today is higher than it will be in retirement."
+    ],
+    [
+      "Should I deduct my contribution this year?",
+      "Not necessarily: you can contribute now and carry the deduction forward to a year when your income, and your tax rate, is higher."
+    ]
+  ]
+}-->
+<script type="application/json" id="rrsp-data">{"names": "name_en", "default_province": "ON", "percent": "%", "date_format": {"month": "long", "day": "numeric", "year": "numeric"}, "sub": "less tax for {amount} contributed: it really costs you {cost}.", "sub_empty": "Enter your planned contribution.", "over": "Your contribution is above your estimated room ({room}). Excess contributions over $2,000 are taxed at 1% per month.", "info": "The refund shown is the reduction of your federal and provincial income tax. Check your exact room on your notice of assessment."}</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · 2026 limits</span>
+    <h1>RRSP calculator for the self-employed</h1>
+    <p class="lead">Enter your province, your self-employment income and your contribution: see your 2026 RRSP room, the tax it saves and what it really costs.</p>
+    <ul class="trust"><li>$33,810 limit for 2026</li><li>All provinces, Quebec included</li><li>Deadline March 1, 2027</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="rrsp-form" onsubmit="return false">
+      <h2>Your 2026 figures</h2>
+      <div class="fields">
+        <div class="field full"><label for="v-province">Province or territory</label>
+          <select id="v-province" name="province" data-save></select></div>
+        <div class="field full"><label for="v-income">Net self-employment income for 2026</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="v-income" name="income" value="80,000" data-save><span>$</span></div></div>
+        <div class="field"><label for="v-last">Earned income in 2025</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="v-last" name="last" placeholder="same as 2026" data-save><span>$</span></div>
+          <span class="hint">Used for your 2026 room (18%).</span></div>
+        <div class="field"><label for="v-unused">Unused room from past years</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="v-unused" name="unused" placeholder="0" data-save><span>$</span></div>
+          <span class="hint">On your notice of assessment.</span></div>
+        <div class="field full"><label for="v-amount">RRSP contribution</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="v-amount" name="amount" value="10,000" data-save><span>$</span></div></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="result-hero">
+        <div class="label">Tax saved</div>
+        <div class="big" id="v-refund">–</div>
+        <div class="sub" id="v-sub">–</div>
+      </div>
+      <ul class="result-list card" style="padding: 6px 18px;">
+        <li><span>Estimated 2026 RRSP room</span><b id="v-room">–</b></li>
+        <li><span>Deducted this year</span><b id="v-deducted">–</b></li>
+        <li><span>Combined marginal rate</span><b id="v-rate">–</b></li>
+        <li><span>Contribution deadline</span><b id="v-deadline">–</b></li>
+      </ul>
+      <p class="notice" id="v-notice" style="margin-top: 16px;">–</p>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>RRSP tips for freelancers</h2>
+  <ul>
+    <li><strong>Contribute as you earn:</strong> a monthly contribution is easier than a lump sum in February.</li>
+    <li><strong>Lower your instalments:</strong> an RRSP deduction reduces the tax you owe, so it can reduce your quarterly instalments too. See your numbers with the <a href="{{link:tax}}">self-employed tax calculator</a>.</li>
+    <li><strong>Mark the deadline:</strong> the <a href="{{link:calendar}}">tax calendar</a> includes the March 1, 2027 RRSP deadline.</li>
+  </ul>
+  <p class="small muted">Estimate without other income, pension adjustment or other deductions and credits. Not financial advice.</p>
+</section>

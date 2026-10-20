@@ -781,6 +781,36 @@ const tests = {
     await page.fill("#l-value", "1,200");
     await page.fill("#l-prior", "");
   },
+  async "fr/simulateur-per-independant/"(page) {
+    // Micro BNC, 60 000 € : 39 600 € imposables, plafond 4 710 €, 4 000 € versés à 30 %
+    check((await page.textContent("#p-saving")).replace(/\s/g, "") === "1200€" && (await page.textContent("#p-ceiling")).replace(/\s/g, "") === "4710€", "PER : micro BNC 60 000 €, 4 000 € versés → 1 200 € d'impôt en moins, plafond 4 710 €");
+    await page.selectOption("#p-regime", "real");
+    check((await page.textContent("#p-ceiling")).replace(/\s/g, "") === "7791€", "PER : réel, bénéfice de 60 000 € → plafond TNS 7 791 €");
+    await page.selectOption("#p-regime", "micro");
+    await page.check("#p-vl");
+    check((await page.textContent("#p-saving")).replace(/\s/g, "") === "0€", "PER : versement libératoire → pas d'économie sur l'activité");
+    await page.uncheck("#p-vl");
+  },
+  async "us/sep-ira-vs-solo-401k-calculator/"(page) {
+    check((await page.textContent("#u-sep-max")).trim() === "$18,587" && (await page.textContent("#u-solo-max")).trim() === "$43,087", "retirement: $100k profit → SEP $18,587, solo 401(k) $43,087");
+    check((await page.textContent("#u-solo-tax")).trim() === "$5,243", "retirement: tax saved at the solo 401(k) maximum (engine)");
+    await page.selectOption("#u-age", "60");
+    check((await page.textContent("#u-solo-max")).trim() === "$54,337", "retirement: ages 60-63 catch-up $11,250");
+    await page.selectOption("#u-age", "under50");
+  },
+  async "uk/pension-tax-relief-calculator/"(page) {
+    check((await page.textContent("#p-gross")).trim() === "£10,000" && (await page.textContent("#p-extra")).trim() === "£1,946", "pension: £8,000 net → £10,000 gross, £1,946 higher-rate relief at £60k");
+    check((await page.textContent("#p-cost")).trim() === "£6,054", "pension: real cost £6,054");
+  },
+  async "ca/rrsp-calculator/"(page) {
+    check((await page.textContent("#v-room")).trim() === "$14,400" && (await page.textContent("#v-refund")).trim() === "$3,115", "RRSP: Ontario $80k → room $14,400, $10,000 saves $3,115");
+    await page.fill("#v-amount", "20,000");
+    check((await page.getAttribute("#v-notice", "class")).includes("warn"), "RRSP: warning above room");
+    await page.fill("#v-amount", "10,000");
+  },
+  async "ca/fr/calculateur-reer/"(page) {
+    check((await page.textContent("#v-refund")).replace(/\s/g, "") === "3612$" && (await page.textContent("#v-deadline")).trim() === "1er mars 2027", "REER : Québec 80 000 $, 10 000 $ → 3 612 $ ; date limite 1er mars 2027");
+  },
   async "fr/confidentialite/"() {},
   async "fr/mentions-legales/"() {},
 };

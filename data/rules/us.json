@@ -710,6 +710,32 @@
       "source_title": "NY State Senate - General Obligations Law section 5-501",
       "confidence": "low",
       "note": "From statute knowledge; not verified online in this session. Corporations generally cannot raise civil usury as a defense. Confirm before publishing any cap in a calculator."
+    },
+    "retirement_limits_2026": {
+      "value": {
+        "deferral": 24500,
+        "catch_up_50": 8000,
+        "catch_up_60_63": 11250,
+        "annual_additions": 72000,
+        "compensation_limit": 360000,
+        "ira": 7500,
+        "ira_catch_up": 1100
+      },
+      "unit": "USD",
+      "label": "2026 retirement plan limits (401(k) deferral, catch-up, section 415(c), compensation limit, IRA)",
+      "source": "https://www.irs.gov/retirement-plans/cola-increases-for-dollar-limitations-on-benefits-and-contributions",
+      "source_title": "IRS - COLA increases for dollar limitations on benefits and contributions (Notice 2025-67)",
+      "confidence": "high",
+      "note": "Notice 2025-67 (November 13, 2025). Catch-up for ages 60 to 63: $11,250."
+    },
+    "sep_self_employed_rate": {
+      "value": 0.2,
+      "unit": "rate",
+      "label": "SEP-IRA and solo 401(k) employer contribution for a self-employed person: 20% of net earnings (net profit minus half of SE tax)",
+      "source": "https://www.irs.gov/publications/p560",
+      "source_title": "IRS - Publication 560, Retirement Plans for Small Business",
+      "confidence": "high",
+      "note": "The 25% plan rate becomes 20% for the self-employed because the contribution itself reduces compensation (25% / 125%)."
     }
   },
   "open_questions": [

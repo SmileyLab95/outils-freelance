@@ -1,5 +1,16 @@
 # Journal des modifications
 
+## 2026-10-20 — Épargne retraite des indépendants (4 pays)
+
+- France : simulateur PER (plafond TNS de l'art. 154 bis ou plafond général pour les micro-entrepreneurs, économie
+  d'impôt, effort réel, alerte versement libératoire) ; moteur `engines/per-fr.js` testé.
+- États-Unis : SEP-IRA vs solo 401(k) (limites 2026 de la Notice 2025-67, rattrapage à 50 ans et entre 60 et 63 ans,
+  impôt fédéral et d'État économisé) ; `tax-us.js` accepte désormais une déduction retraite (AGI et QBI).
+- Royaume-Uni : pension tax relief (relief at source de 20 %, complément via Self Assessment, allocation annuelle,
+  limite des revenus, effet sur le personal allowance).
+- Canada (anglais et français) : droits REER 2026 (18 %, 33 810 $), économie d'impôt par province ; `tax-ca.js`
+  accepte une déduction du revenu net.
+
 ## 2026-10-20 — Comparateur de statuts : EURL à l'IS
 
 - Quatrième statut : rémunération du gérant TNS (abattement de 10 % à l'impôt), IS, dividendes au PFU jusqu'à 10 %

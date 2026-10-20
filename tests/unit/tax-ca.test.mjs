@@ -69,3 +69,10 @@ test("revenu visé : calcul inverse", () => {
   const p = ca.profitForTakeHome(target, { province: "ON" }, R, P);
   assert.ok(Math.abs(p - 80000) < 0.05, `bénéfice : ${p}`);
 });
+
+test("REER de 5 000 $ en Alberta : économie au taux marginal 14 % + 8 %, RPC inchangé", () => {
+  const base = ca.estimate({ profit: 50000, province: "AB" }, R, P);
+  const r = ca.estimate({ profit: 50000, province: "AB", deduction: 5000 }, R, P);
+  assert.equal(r.pensions.total, base.pensions.total);
+  near(base.total - r.total, 5000 * (0.14 + 0.08), "économie d'impôt");
+});

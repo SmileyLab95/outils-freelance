@@ -72,7 +72,7 @@ Les phases s'enchaînent dans cet ordre ; une phase n'est terminée que lorsque 
 
 - [x] Calendrier fiscal par pays avec export .ics
 - [x] Indemnités kilométriques des 4 pays
-- [ ] Épargne retraite des indépendants (PER, SEP-IRA / Solo 401(k), SIPP, REER)
+- [x] Épargne retraite des indépendants (PER, SEP-IRA / Solo 401(k), pension UK, REER)
 - [ ] Guides de fond : facturer un client étranger, recouvrement, assurance, compte pro
 
 ## Points de contrôle

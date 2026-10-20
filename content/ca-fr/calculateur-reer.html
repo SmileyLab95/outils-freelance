@@ -1,0 +1,101 @@
+<!--{
+  "id": "retirement",
+  "slug": "calculateur-reer/",
+  "title": "Calculateur REER du travailleur autonome (2026) : droits de cotisation et remboursement d'impôt",
+  "description": "Calculez vos droits de cotisation REER 2026 et l'impôt économisé par votre cotisation de travailleur autonome, au Québec et dans toutes les provinces. Gratuit.",
+  "menu": "Calculateur REER",
+  "icon": "🌱",
+  "blurb": "Vos droits REER 2026 et l'impôt économisé par votre cotisation.",
+  "app": "Calculateur REER du travailleur autonome",
+  "scripts": [
+    "engines/brackets.js",
+    "engines/tax-ca.js",
+    "tools/ca-rrsp.js"
+  ],
+  "rules": "ca",
+  "sources": [
+    "rrsp_limits_2026",
+    "rrsp_deadline_2026",
+    "federal_income_tax_brackets"
+  ],
+  "priority": 0.85,
+  "faq": [
+    [
+      "Combien puis-je cotiser à mon REER en 2026 ?",
+      "18 % de votre revenu gagné de 2025, jusqu'à 33 810 $, plus vos droits inutilisés des années précédentes. Pour un travailleur autonome, le revenu gagné correspond surtout au revenu net d'entreprise. Le montant exact figure sur votre avis de cotisation 2025 et dans Mon dossier de l'ARC."
+    ],
+    [
+      "Quelle est la date limite pour cotiser au titre de 2026 ?",
+      "Le 1er mars 2027. Les cotisations versées dans les 60 premiers jours de 2027 peuvent être déduites en 2026 ou reportées à une année suivante."
+    ],
+    [
+      "Quel remboursement vais-je obtenir ?",
+      "Votre cotisation multipliée par votre taux marginal combiné (fédéral et provincial). Un travailleur autonome le voit souvent comme un solde à payer plus faible plutôt que comme un remboursement. Le REER ne réduit pas les cotisations au RRQ ou au RPC."
+    ],
+    [
+      "REER ou CELI ?",
+      "Le REER donne une déduction aujourd'hui et est imposé au retrait ; le CELI ne donne pas de déduction mais ses retraits sont libres d'impôt. Le REER est généralement gagnant quand votre taux d'imposition actuel est plus élevé qu'il ne le sera à la retraite."
+    ],
+    [
+      "Dois-je déduire ma cotisation cette année ?",
+      "Pas forcément : vous pouvez cotiser maintenant et reporter la déduction à une année où votre revenu, donc votre taux d'imposition, sera plus élevé."
+    ]
+  ]
+}-->
+<script type="application/json" id="rrsp-data">{"names": "name_fr", "default_province": "QC", "percent": " %", "date_format": {"day": "numeric", "month": "long", "year": "numeric"}, "sub": "d'impôt en moins pour {amount} cotisés : votre cotisation vous coûte réellement {cost}.", "sub_empty": "Indiquez la cotisation envisagée.", "over": "Votre cotisation dépasse vos droits estimés ({room}). L'excédent au-delà de 2 000 $ est imposé à 1 % par mois.", "info": "L'économie indiquée est la baisse de votre impôt fédéral et provincial. Vérifiez vos droits exacts sur votre avis de cotisation."}</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Gratuit · plafonds 2026</span>
+    <h1>Calculateur REER du travailleur autonome</h1>
+    <p class="lead">Indiquez votre province, votre revenu de travailleur autonome et votre cotisation : voyez vos droits REER 2026, l'impôt économisé et ce que la cotisation vous coûte vraiment.</p>
+    <ul class="trust"><li>Plafond de 33 810 $ en 2026</li><li>Québec et toutes les provinces</li><li>Date limite le 1er mars 2027</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="rrsp-form" onsubmit="return false">
+      <h2>Vos chiffres de 2026</h2>
+      <div class="fields">
+        <div class="field full"><label for="v-province">Province ou territoire</label>
+          <select id="v-province" name="province" data-save></select></div>
+        <div class="field full"><label for="v-income">Revenu net de travailleur autonome en 2026</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="v-income" name="income" value="80 000" data-save><span>$</span></div></div>
+        <div class="field"><label for="v-last">Revenu gagné en 2025</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="v-last" name="last" placeholder="comme en 2026" data-save><span>$</span></div>
+          <span class="hint">Sert au calcul des droits 2026 (18 %).</span></div>
+        <div class="field"><label for="v-unused">Droits inutilisés des années passées</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="v-unused" name="unused" placeholder="0" data-save><span>$</span></div>
+          <span class="hint">Sur votre avis de cotisation.</span></div>
+        <div class="field full"><label for="v-amount">Cotisation au REER</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="v-amount" name="amount" value="10 000" data-save><span>$</span></div></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="result-hero">
+        <div class="label">Impôt économisé</div>
+        <div class="big" id="v-refund">–</div>
+        <div class="sub" id="v-sub">–</div>
+      </div>
+      <ul class="result-list card" style="padding: 6px 18px;">
+        <li><span>Droits de cotisation 2026 estimés</span><b id="v-room">–</b></li>
+        <li><span>Déduit cette année</span><b id="v-deducted">–</b></li>
+        <li><span>Taux marginal combiné</span><b id="v-rate">–</b></li>
+        <li><span>Date limite de cotisation</span><b id="v-deadline">–</b></li>
+      </ul>
+      <p class="notice" id="v-notice" style="margin-top: 16px;">–</p>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>Conseils REER pour les travailleurs autonomes</h2>
+  <ul>
+    <li><strong>Cotisez au fil de l'année :</strong> un versement mensuel est plus facile qu'un gros montant en février.</li>
+    <li><strong>Réduisez vos acomptes :</strong> la déduction REER diminue votre impôt, donc vos acomptes provisionnels. Voyez vos chiffres avec le <a href="{{link:tax}}">calculateur d'impôt du travailleur autonome</a>.</li>
+    <li><strong>Notez la date limite :</strong> le <a href="{{link:calendar}}">calendrier fiscal</a> rappelle l'échéance du 1er mars 2027.</li>
+  </ul>
+  <p class="small muted">Estimation sans autres revenus, facteur d'équivalence, autres déductions ni crédits. Ne constitue pas un conseil financier.</p>
+</section>

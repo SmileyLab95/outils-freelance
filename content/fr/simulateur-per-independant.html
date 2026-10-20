@@ -1,0 +1,91 @@
+<!--{
+  "id": "retirement",
+  "slug": "simulateur-per-independant/",
+  "title": "Simulateur PER indépendant 2026 : plafond de déduction et économie d'impôt",
+  "description": "Micro-entrepreneur ou indépendant au réel : calculez votre plafond de déduction PER 2026 (plafond TNS ou plafond général), l'impôt économisé et l'effort réel de votre versement. Gratuit.",
+  "menu": "Simulateur PER",
+  "icon": "🌱",
+  "blurb": "Votre plafond PER 2026 et l'impôt économisé par votre versement.",
+  "app": "Simulateur PER pour indépendants",
+  "scripts": ["engines/brackets.js", "engines/per-fr.js", "tools/fr-per.js"],
+  "rules": "fr",
+  "sources": ["per_plafond_tns", "per_plafond_general", "pass_2026", "pass_2025", "ir_bareme_revenus_2025", "micro_activities"],
+  "priority": 0.85,
+  "faq": [
+    ["Quel est le plafond PER d'un indépendant en 2026 ?", "Au régime réel, le plafond « TNS » vaut 10 % du bénéfice dans la limite de 8 PASS, plus 15 % de la part du bénéfice comprise entre 1 et 8 PASS, avec un minimum de 4 806 € et un maximum de 88 911 € en 2026. Pour 60 000 € de bénéfice, il atteint 7 791 €."],
+    ["Un micro-entrepreneur peut-il déduire ses versements PER ?", "Oui, mais avec le plafond général des particuliers : 10 % de ses revenus professionnels de l'année précédente, après l'abattement forfaitaire, au minimum 4 710 € et au maximum 37 680 € pour les versements de 2026. S'il a opté pour le versement libératoire, son activité n'est pas soumise au barème : la déduction ne joue que sur ses autres revenus."],
+    ["Combien me fait économiser un versement sur un PER ?", "Votre versement multiplié par votre taux marginal d'imposition : à 30 %, 1 000 € versés réduisent votre impôt de 300 €. À 11 %, l'avantage est faible, car l'épargne sera imposée à la sortie, souvent au même taux."],
+    ["Où trouver mon plafond exact ?", "Sur votre avis d'impôt, à la rubrique « Plafond épargne retraite », qui ajoute les plafonds non utilisés des années précédentes. Le simulateur estime le plafond de l'année ; les reports peuvent l'augmenter."],
+    ["L'argent est-il bloqué jusqu'à la retraite ?", "En principe oui, sauf cas de déblocage anticipé : achat de la résidence principale, invalidité, décès du conjoint, surendettement, fin des droits au chômage ou liquidation judiciaire de votre entreprise."]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Gratuit · plafonds 2026</span>
+    <h1>Simulateur PER pour indépendants</h1>
+    <p class="lead">Indiquez votre régime, votre revenu et le montant que vous envisagez de verser : voyez votre plafond de déduction, l'impôt économisé et ce que le versement vous coûte vraiment.</p>
+    <ul class="trust"><li>Plafond TNS et plafond général</li><li>Micro-entreprise et réel</li><li>Barème de l'impôt 2026</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="per-form" onsubmit="return false">
+      <h2>Votre situation</h2>
+      <div class="fields">
+        <div class="field full"><label for="p-regime">Régime</label>
+          <select id="p-regime" name="regime" data-save>
+            <option value="micro">Micro-entreprise</option>
+            <option value="real">Entreprise individuelle au réel ou EURL à l'IR</option>
+          </select></div>
+        <div class="field full" id="p-activity-field"><label for="p-activity">Activité</label>
+          <select id="p-activity" name="activity" data-save>
+            <option value="liberal_bnc">Profession libérale (BNC)</option>
+            <option value="services_bic">Prestations de services commerciales (BIC)</option>
+            <option value="vente">Vente de marchandises (BIC)</option>
+          </select></div>
+        <div class="field full"><label for="p-revenue" id="p-revenue-label">Chiffre d'affaires annuel</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="p-revenue" name="revenue" value="60 000" data-save><span>€</span></div></div>
+        <div class="field"><label for="p-parts">Foyer fiscal</label>
+          <select id="p-parts" name="parts" data-save>
+            <option value="1">Personne seule</option>
+            <option value="2">Couple marié ou pacsé</option>
+          </select></div>
+        <div class="field"><label for="p-other">Autres revenus imposables du foyer</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="p-other" name="other" placeholder="0" data-save><span>€</span></div></div>
+        <div class="field full"><label for="p-amount">Versement envisagé sur le PER</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="p-amount" name="amount" value="4 000" data-save><span>€</span></div></div>
+        <label class="check full" id="p-vl-field"><input type="checkbox" id="p-vl" name="vl" data-save><span>J'ai opté pour le versement libératoire de l'impôt</span></label>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="result-hero">
+        <div class="label">Impôt économisé</div>
+        <div class="big" id="p-saving">–</div>
+        <div class="sub" id="p-sub">–</div>
+      </div>
+      <ul class="result-list card" style="padding: 6px 18px;">
+        <li><span id="p-ceiling-label">Plafond de déduction</span><b id="p-ceiling">–</b></li>
+        <li><span>Versement déductible</span><b id="p-deducted">–</b></li>
+        <li><span>Taux marginal d'imposition</span><b id="p-tmi">–</b></li>
+        <li><span>Revenu imposable du foyer</span><b id="p-taxable">–</b></li>
+        <li><span>Impôt sans versement</span><b id="p-before">–</b></li>
+        <li><span>Impôt après versement</span><b id="p-after">–</b></li>
+      </ul>
+      <p class="notice" id="p-notice" style="margin-top: 16px;">–</p>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>Le PER, utile pour un indépendant ?</h2>
+  <ul>
+    <li><strong>Oui, si votre taux marginal est de 30 % ou plus :</strong> vous déduisez aujourd'hui à 30 %, et vous serez souvent imposé moins fort à la retraite.</li>
+    <li><strong>Avec prudence en micro-entreprise :</strong> le plafond est plus bas, et l'abattement forfaitaire réduit déjà votre revenu imposable. Comparez avec le <a href="{{link:tax}}">simulateur auto-entrepreneur</a>.</li>
+    <li><strong>Pour compléter une retraite faible :</strong> les cotisations retraite d'un micro-entrepreneur sont calculées sur un revenu forfaitaire ; un PER compense en partie.</li>
+  </ul>
+  <p>Votre statut change aussi votre retraite : voyez l'ensemble avec le <a href="{{link:structure}}">comparateur de statuts</a>.</p>
+  <p class="small muted">Estimation pour l'impôt sur le revenu, sans décote ni plafonnement des effets du quotient familial, hors plafonds reportés des années précédentes. Information à titre indicatif.</p>
+</section>

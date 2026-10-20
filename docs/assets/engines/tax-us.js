@@ -70,7 +70,8 @@
 
   /**
    * Estimation complète.
-   * @param {object} input { profit, status, wages, sstb, stateRate, withheld }
+   * @param {object} input { profit, status, wages, sstb, stateRate, withheld, retirement }
+   *   retirement : cotisations retraite du travailleur indépendant (SEP-IRA, solo 401(k)), déduites de l'AGI et du QBI.
    */
   function estimate(input, rules) {
     var status = STATUSES.indexOf(input.status) >= 0 ? input.status : "single";
@@ -78,16 +79,17 @@
     var wages = Math.max(0, input.wages || 0);
     var se = selfEmployment(profit, wages, rules);
     var addMedicare = additionalMedicare(se.earnings, wages, status, rules);
-    var agi = profit + wages - se.deduction;
+    var retirement = Math.max(0, input.retirement || 0);
+    var agi = profit + wages - se.deduction - retirement;
     var standard = rules.standard_deduction_2026[status];
     var taxableBeforeQbi = Math.max(0, agi - standard);
-    var qbiAmount = profit - se.deduction;
+    var qbiAmount = profit - se.deduction - retirement;
     var qbiDeduction = qbi(qbiAmount, taxableBeforeQbi, status, !!input.sstb, rules);
     var taxable = Math.max(0, taxableBeforeQbi - qbiDeduction);
     var income = B.progressive(taxable, brackets(rules, status));
     var federal = income.tax + se.total + addMedicare;
     // Impôt d'État : estimation à un taux unique sur le revenu de l'activité après la moitié de la SE tax.
-    var state = Math.max(0, profit - se.deduction) * Math.max(0, input.stateRate || 0);
+    var state = Math.max(0, profit - se.deduction - retirement) * Math.max(0, input.stateRate || 0);
     var total = federal + state;
     return {
       status: status, profit: profit, wages: wages,

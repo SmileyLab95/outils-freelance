@@ -56,7 +56,8 @@
 
   /**
    * Estimation complète.
-   * @param {object} input { profit, province }  (code de province : ON, QC, BC, AB, SK, MB, NS, NB, NL, PE, YT, NT, NU)
+   * @param {object} input { profit, province, deduction }  (code de province : ON, QC, BC, AB, SK, MB, NS, NB, NL, PE, YT, NT, NU)
+   *   deduction : déductions du revenu net (cotisations REER), sans effet sur le RPC/RRQ.
    * @param {object} rules valeurs de data/rules/ca.json, plus « provinces »
    */
   function estimate(input, rules, provinces) {
@@ -66,7 +67,7 @@
     var profit = Math.max(0, input.profit || 0);
     var pen = pensions(profit, quebec, rules);
     var parental = quebec ? qpip(profit, rules) : 0;
-    var netIncome = Math.max(0, profit - pen.deduction);
+    var netIncome = Math.max(0, profit - pen.deduction - Math.max(0, input.deduction || 0));
     var taxable = netIncome;
 
     var fedBrackets = B.progressive(taxable, rules.federal_income_tax_brackets);
