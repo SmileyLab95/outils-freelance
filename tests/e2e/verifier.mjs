@@ -431,6 +431,133 @@ const tests = {
   },
   async "uk/legal-notice/"() {},
   async "uk/privacy-policy/"() {},
+  async "ca/"(page) {
+    const links = await page.$$eval("a[href]", (as) => as.map((a) => a.getAttribute("href")));
+    for (const href of [...new Set(links.filter((h) => h.startsWith("/outils-freelance/")))]) {
+      const res = await page.request.get(`http://127.0.0.1:${port}${href}`);
+      check(res.status() === 200, `CA : lien interne ${href} (${res.status()})`);
+    }
+    check((await page.$$('link[rel="alternate"][hreflang]')).length === 6, "CA : hreflang vers les 5 sections + x-default");
+  },
+  async "ca/self-employed-tax-calculator/"(page) {
+    // Ontario, 80 000 $ : RPC 8 892,90 + fédéral 8 698,44 + Ontario 3 785,12 + contribution santé 750 (voir tests unitaires)
+    check((await page.textContent("#r-total")).trim() === "$22,126", `CA : Ontario 80 000 $ → 22 126 $ (obtenu : ${await page.textContent("#r-total")})`);
+    check((await page.textContent("#r-federal")).trim() === "$8,698" && (await page.textContent("#r-provincial")).trim() === "$4,535", "CA : fédéral 8 698 $, Ontario 4 535 $");
+    await page.selectOption("#t-province", "QC");
+    await page.fill("#t-profit", "60,000");
+    check((await page.textContent("#r-total")).trim() === "$16,663" && await page.isVisible("#r-qpip-row"), "CA : Québec 60 000 $ → 16 663 $, RQAP affiché");
+    check((await page.textContent("#r-inst")).includes("Revenu Québec"), "CA : acomptes ARC et Revenu Québec");
+    await page.selectOption("#t-province", "AB");
+    await page.fill("#t-profit", "50,000");
+    check((await page.textContent("#r-total")).trim() === "$11,191", "CA : Alberta 50 000 $ → 11 191 $");
+    await page.selectOption("#t-province", "ON");
+    await page.fill("#t-profit", "80,000");
+  },
+  async "ca/gst-hst-calculator/"(page) {
+    check((await page.textContent("#st-hero")).trim() === "$1,130.00", "TVH : Ontario 13 % par défaut");
+    await page.selectOption("#st-region", "QC");
+    check((await page.textContent("#st-hero")).trim() === "$1,149.75" && (await page.$$("#st-list li")).length === 4, "TPS + TVQ : 1 000 $ → 1 149,75 $, deux lignes de taxe");
+    await page.click('[data-dir="gross"]');
+    await page.fill("#st-amount", "1,149.75");
+    check((await page.textContent("#st-hero")).trim() === "$1,000.00", "TPS + TVQ : retrait des taxes");
+    check((await page.$$("#st-table tr")).length === 13, "taxes : tableau des 13 provinces et territoires");
+    await page.click('[data-dir="net"]');
+    await page.fill("#st-amount", "1,000");
+    await page.selectOption("#st-region", "ON");
+  },
+  async "ca/hourly-rate-calculator/"(page) {
+    check((await page.textContent("#h-billable")).includes("1,288"), "CA taux horaire : 1 288 heures facturables");
+    const ok = await page.evaluate(() => {
+      const P = OF_RULES._meta.provinces;
+      const profit = OFE.taxCA.profitForTakeHome(60000, { province: "ON" }, OF_RULES, P);
+      const back = OFE.taxCA.estimate({ profit, province: "ON" }, OF_RULES, P).takeHome;
+      return Math.abs(back - 60000) < 1 && document.getElementById("h-rate").textContent.trim() === OF.money((profit + 5000) / 1288 * 1.15, 0);
+    });
+    check(ok, "CA taux horaire : calcul inverse cohérent");
+  },
+  async "ca/invoice-generator/"(page) {
+    await page.fill("#iv-me-name", "Alex Morgan Design");
+    await page.fill("#l-desc-0", "Website design");
+    await page.fill("#l-qty-0", "1");
+    await page.fill("#l-price-0", "1,800");
+    await page.click("#iv-add-line");
+    await page.fill("#l-desc-1", "Copywriting (hours)");
+    await page.fill("#l-qty-1", "3");
+    await page.fill("#l-price-1", "150.50");
+    let text = await page.textContent("#iv-preview");
+    check(text.includes("HST (13%)") && text.includes("$292.70") && text.includes("$2,544.20"), "facture CA : TVH Ontario 13 % = 292,70 $");
+    await page.selectOption("#iv-tax-rate", "QC");
+    text = await page.textContent("#iv-preview");
+    check(text.includes("GST (5%)") && text.includes("$112.58") && text.includes("QST (9.975%)") && text.includes("$224.59") && text.includes("$2,588.67"), "facture CA : TPS + TVQ sur deux lignes");
+    await page.selectOption("#iv-tax-rate", "none");
+    check(!(await page.textContent("#iv-preview")).includes("GST ("), "facture CA : petit fournisseur sans taxe");
+    await page.selectOption("#iv-tax-rate", "ON");
+  },
+  async "ca/late-fee-calculator/"(page) {
+    check((await page.textContent("#l-fee")).trim() === "$44.38", "intérêts CA : 2 000 $ × 18 % × 45 ÷ 365");
+    check((await page.textContent("#l-clause")).includes("per year"), "intérêts CA : clause avec taux annuel (Loi sur l'intérêt)");
+  },
+  async "ca/payment-reminder-email/"(page) {
+    const due = new Date(Date.now() - 50 * 86400000).toISOString().slice(0, 10);
+    await page.fill("#rm-due", due);
+    await page.fill("#rm-amount", "2000");
+    check((await page.getAttribute('[data-stage="3"]', "aria-selected")) === "true" && (await page.textContent("#rm-subject")).includes("Demand for payment"), "relance CA : lettre de mise en demeure après 50 jours");
+  },
+  async "ca/freelance-email-templates/"() {},
+  async "ca/legal-notice/"() {},
+  async "ca/privacy-policy/"() {},
+  async "ca/fr/"(page) {
+    const links = await page.$$eval("a[href]", (as) => as.map((a) => a.getAttribute("href")));
+    for (const href of [...new Set(links.filter((h) => h.startsWith("/outils-freelance/")))]) {
+      const res = await page.request.get(`http://127.0.0.1:${port}${href}`);
+      check(res.status() === 200, `CA-FR : lien interne ${href} (${res.status()})`);
+    }
+    check((await page.getAttribute("html", "lang")) === "fr-CA", "CA-FR : langue fr-CA");
+  },
+  async "ca/fr/calculateur-impot-travailleur-autonome/"(page) {
+    const total = (await page.textContent("#r-total")).replace(/\s/g, "");
+    check(total === "16663$", `CA-FR : Québec 60 000 $ → 16 663 $ (obtenu : ${total})`);
+    check((await page.textContent("#r-pension-label")).includes("RRQ"), "CA-FR : libellé RRQ");
+  },
+  async "ca/fr/calcul-tps-tvq/"(page) {
+    check((await page.textContent("#st-hero")).replace(/\s/g, "") === "114,98$", "TPS/TVQ : 100 $ → 114,98 $");
+    const list = (await page.textContent("#st-list")).replace(/\s/g, "");
+    check(list.includes("TPS(5%)5,00$") && list.includes("TVQ(9,975%)9,98$"), "TPS/TVQ : 5,00 $ de TPS et 9,98 $ de TVQ");
+  },
+  async "ca/fr/calculateur-taux-horaire/"(page) {
+    check((await page.textContent("#h-billable")).replace(/\s/g, "").includes("1299heures"), "CA-FR taux horaire : 1 299 heures facturables");
+  },
+  async "ca/fr/generateur-facture/"(page) {
+    await page.fill("#l-desc-0", "Conception du site Web");
+    await page.fill("#l-qty-0", "1");
+    await page.fill("#l-price-0", "1 800");
+    await page.click("#iv-add-line");
+    await page.fill("#l-desc-1", "Rédaction (heures)");
+    await page.fill("#l-qty-1", "3");
+    await page.fill("#l-price-1", "150,50");
+    const text = (await page.textContent("#iv-preview")).replace(/\s/g, "");
+    check(text.includes("TPS(5%)112,58$") && text.includes("TVQ(9,975%)224,59$") && text.includes("2588,67$"), "facture CA-FR : TPS et TVQ, total 2 588,67 $");
+    await page.click('[data-doctype="estimate"]');
+    check((await page.textContent("#iv-preview")).includes("SOUMISSION"), "soumission CA-FR : titre");
+    await page.click('[data-doctype="invoice"]');
+  },
+  async "ca/fr/relance-de-paiement/"(page) {
+    const due = new Date(Date.now() - 50 * 86400000).toISOString().slice(0, 10);
+    await page.fill("#rm-due", due);
+    check((await page.getAttribute('[data-stage="3"]', "aria-selected")) === "true" && (await page.textContent("#rm-body")).includes("MISE EN DEMEURE"), "relance CA-FR : mise en demeure après 50 jours");
+    await page.click("#rm-copy");
+    check(await copied(page, "#rm-copy"), "relance CA-FR : bouton Copier");
+  },
+  async "ca/fr/calculateur-interets-retard/"(page) {
+    check((await page.textContent("#l-fee")).replace(/\s/g, "") === "44,38$", "intérêts CA-FR : 44,38 $");
+    check((await page.textContent("#l-clause")).includes("par année"), "intérêts CA-FR : clause avec taux annuel");
+  },
+  async "ca/fr/modeles-de-courriels/"(page) {
+    await page.click('[data-copy="#tpl-1"]');
+    check(await copied(page, '[data-copy="#tpl-1"]'), "modèles CA-FR : bouton Copier");
+  },
+  async "ca/fr/mentions-legales/"() {},
+  async "ca/fr/confidentialite/"() {},
   async "fr/confidentialite/"() {},
   async "fr/mentions-legales/"() {},
 };

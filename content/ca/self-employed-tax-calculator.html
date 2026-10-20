@@ -1,0 +1,129 @@
+<!--{
+  "id": "tax",
+  "slug": "self-employed-tax-calculator/",
+  "title": "Self-Employed Tax Calculator Canada 2026 (CPP + Income Tax)",
+  "description": "Estimate your 2026 income tax and CPP (or QPP and QPIP in Québec) as a self-employed Canadian, for every province and territory, plus your quarterly instalments. Free, no sign-up.",
+  "menu": "Self-employed tax calculator",
+  "icon": "🧾",
+  "blurb": "Income tax and CPP/QPP for 2026, in every province and territory.",
+  "app": "Canada Self-Employed Tax Calculator",
+  "scripts": ["engines/brackets.js", "engines/tax-ca.js", "tools/ca-tax.js"],
+  "rules": "ca",
+  "sources": ["cpp_rate_self_employed", "cpp2_rate_self_employed", "qpp_rate_self_employed", "qpip_rate_self_employed", "federal_income_tax_brackets", "federal_bpa_reduction_rule", "quebec_abatement", "ontario_health_premium", "instalment_threshold"],
+  "priority": 1.0,
+  "faq": [
+    ["How much tax does a self-employed person pay in Canada?", "Federal and provincial income tax on your net self-employment income, plus both halves of the Canada Pension Plan: 11.9% of earnings between $3,500 and $74,600 in 2026, and 8% CPP2 between $74,600 and $85,000. In Québec, the QPP rate is 12.6% and you also pay the QPIP premium (0.764%)."],
+    ["Is CPP deductible for the self-employed?", "Partly. The “employer” half of your contributions, the enhanced part of the “employee” half and all CPP2 contributions are deducted from your income; the base part of the employee half gives you a non-refundable tax credit. The calculator applies both."],
+    ["What are the 2026 federal tax brackets?", "14% up to $58,523, 20.5% up to $117,045, 26% up to $181,440, 29% up to $258,482 and 33% above. The basic personal amount is $16,452, reduced gradually to $14,829 for net income between $181,440 and $258,482."],
+    ["Do I have to pay tax instalments?", "If your net tax owing is more than $3,000 in 2026 and in either 2025 or 2024 ($1,800 in Québec), the CRA asks for quarterly instalments, due March 15, June 15, September 15 and December 15. Self-employed people must file by June 15, 2027, but any balance is due by April 30, 2027."],
+    ["What does this calculator leave out?", "Other income (salary, investments), RRSP contributions, deductions other than CPP/QPP, tax credits beyond the basic personal amount and CPP/QPP, low-income tax reductions, optional EI special benefits, and in Québec the health services fund contribution and RAMQ prescription drug insurance premium."]
+  ]
+}-->
+<script type="application/json" id="ca-tax-data">
+{
+  "names": "name_en", "default_province": "ON", "percent": "%", "per_month": "/mo",
+  "date_format": {"month": "short", "day": "numeric", "year": "numeric"},
+  "pension_cpp": "CPP + CPP2 (both halves)", "pension_qpp": "QPP + QPP2 (both halves)",
+  "federal": "Federal income tax", "federal_qc": "Federal tax (after the 16.5% Québec abatement)",
+  "provincial": "{province} income tax",
+  "sub": "That's {rate} of your profit. Set aside about {aside} of every payment you receive.",
+  "sub_empty": "Enter your net self-employment income.",
+  "bar": {"net": "Take-home", "pension": "CPP", "pension_qc": "QPP + QPIP", "tax": "Income tax"},
+  "inst_required": "About {amount} per quarter to the CRA (income tax and CPP), due {dates}.",
+  "inst_required_qc": "About {federal} per quarter to the CRA (federal tax) and {quebec} to Revenu Québec (Québec tax, QPP and QPIP), due {dates}.",
+  "inst_not": "Your tax owing is under {threshold}: instalments are generally not required.",
+  "steps": {
+    "profit": "Net self-employment income", "pension_deduction": "Deductible part of CPP", "pension_deduction_qc": "Deductible part of QPP",
+    "net_income": "Net income", "federal_brackets": "Federal tax on net income", "federal_credits": "Basic personal amount and CPP/QPP credits",
+    "abatement": "Québec abatement (16.5%)", "federal": "Federal income tax",
+    "provincial_brackets": "{province} tax on net income", "provincial_credits": "Provincial credits",
+    "surtax": "Ontario surtax", "health": "Ontario Health Premium", "provincial": "{province} income tax"
+  }
+}
+</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · 2026 tax year</span>
+    <h1>Self-employed tax calculator</h1>
+    <p class="lead">Enter your net self-employment income and your province: see your income tax, CPP (or QPP and QPIP), what you take home, and your quarterly instalments.</p>
+    <ul class="trust"><li>All provinces and territories</li><li>CPP, CPP2, QPP and QPIP</li><li>Instalment estimate</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="ca-tax-form" onsubmit="return false">
+      <h2>Your 2026 income</h2>
+      <div class="fields">
+        <div class="field full"><label for="t-profit">Net self-employment income</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="t-profit" name="profit" value="80,000" data-save><span>$</span></div>
+          <span class="hint">Your business income minus expenses (form T2125, line 9946).</span></div>
+        <div class="field full"><label for="t-province">Province or territory of residence on December 31</label>
+          <select id="t-province" name="province" data-save></select></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="result-hero">
+        <div class="label">Estimated tax and CPP for 2026</div>
+        <div class="big" id="r-total">–</div>
+        <div class="sub" id="r-sub">–</div>
+      </div>
+      <div class="card split-card">
+        <div class="split-bar" id="r-bar" aria-hidden="true"></div>
+        <ul class="split-legend" id="r-legend"></ul>
+      </div>
+      <ul class="result-list card" style="padding: 6px 18px;">
+        <li><span>Net income</span><b id="r-profit">–</b></li>
+        <li><span id="r-pension-label">CPP + CPP2</span><b id="r-pension">–</b></li>
+        <li id="r-qpip-row" hidden><span>QPIP premium</span><b id="r-qpip">–</b></li>
+        <li><span id="r-federal-label">Federal income tax</span><b id="r-federal">–</b></li>
+        <li><span id="r-provincial-label">Provincial income tax</span><b id="r-provincial">–</b></li>
+        <li><span><strong>Take-home</strong></span><b id="r-take">–</b></li>
+      </ul>
+      <div class="card" style="margin-top: 16px; padding: 18px;">
+        <h3 style="font-size: 1rem; margin-bottom: 8px;">Quarterly instalments</h3>
+        <p id="r-inst" style="margin: 0;">–</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <details class="card details-card">
+    <summary><b>See the full calculation</b></summary>
+    <ul class="result-list" id="r-steps"></ul>
+  </details>
+</section>
+
+<section class="section prose">
+  <h2>How self-employed Canadians are taxed</h2>
+  <p>Your net business income is added to your other income and taxed at federal and provincial rates. On top, you pay both the employee and employer shares of CPP (QPP in Québec), because no employer pays them for you.</p>
+  <h2>2026 CPP and QPP for the self-employed</h2>
+  <div class="table-scroll">
+  <table>
+    <thead><tr><th>Plan</th><th>Rate</th><th>On earnings</th><th>Maximum</th></tr></thead>
+    <tbody>
+      <tr><td>CPP</td><td>11.9%</td><td>$3,500 to $74,600</td><td>$8,460.90</td></tr>
+      <tr><td>CPP2</td><td>8%</td><td>$74,600 to $85,000</td><td>$832</td></tr>
+      <tr><td>QPP (Québec)</td><td>12.6%</td><td>$3,500 to $74,600</td><td>$8,958.60</td></tr>
+      <tr><td>QPIP (Québec)</td><td>0.764%</td><td>up to $103,000</td><td>$786.92</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <h2>2026 federal tax brackets</h2>
+  <div class="table-scroll">
+  <table>
+    <thead><tr><th>Rate</th><th>Taxable income</th></tr></thead>
+    <tbody>
+      <tr><td>14%</td><td>Up to $58,523</td></tr>
+      <tr><td>20.5%</td><td>$58,523 to $117,045</td></tr>
+      <tr><td>26%</td><td>$117,045 to $181,440</td></tr>
+      <tr><td>29%</td><td>$181,440 to $258,482</td></tr>
+      <tr><td>33%</td><td>Over $258,482</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="small muted">Estimate for information only, based on 2026 CRA, Revenu Québec and provincial figures. Your actual tax depends on your full return.</p>
+</section>

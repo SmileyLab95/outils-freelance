@@ -1,0 +1,131 @@
+<!--{
+  "id": "reminder",
+  "slug": "relance-de-paiement/",
+  "title": "Relance de paiement d'une facture en souffrance : modèles et mise en demeure",
+  "description": "Rédigez la bonne relance pour une facture impayée en 30 secondes : rappel amical, deuxième rappel, relance ferme ou mise en demeure avant les petites créances. Modèles gratuits pour travailleurs autonomes.",
+  "menu": "Relance de paiement",
+  "icon": "📩",
+  "blurb": "Le bon courriel pour une facture en retard, du rappel amical à la mise en demeure.",
+  "app": "Générateur de relances de paiement",
+  "scripts": ["tools/reminder.js"],
+  "priority": 0.9,
+  "faq": [
+    ["Quand relancer un client qui ne paie pas ?", "Un rappel amical le jour de l'échéance ou juste après, un deuxième rappel une semaine plus tard, une relance ferme après trois semaines et une mise en demeure après environ 45 jours. La plupart des factures sont payées après le premier ou le deuxième rappel."],
+    ["Qu'est-ce qu'une mise en demeure ?", "Une lettre officielle qui réclame le paiement dans un délai précis (souvent 10 jours) et annonce la suite : une demande aux petites créances, par exemple. Au Québec, elle est en principe nécessaire avant d'intenter un recours. Envoyez-la par un moyen qui permet de prouver sa réception (courrier recommandé, huissier ou courriel avec accusé de réception)."],
+    ["Puis-je réclamer des intérêts de retard ?", "Oui si votre contrat ou votre soumission les prévoyait, avec un taux annuel. À défaut, au Québec, l'intérêt au taux légal peut être réclamé à partir de la mise en demeure. Calculez le montant avec notre <a href=\"{{link:latefee}}\">calculateur d'intérêts de retard</a>."],
+    ["Où réclamer une facture impayée ?", "Au Québec, à la Division des petites créances de la Cour du Québec, pour les réclamations jusqu'à 15 000 $. Les autres provinces ont leur propre cour des petites créances."]
+  ]
+}-->
+<script type="application/json" id="reminder-data">
+{
+  "deadline_days": 10,
+  "stages": [
+    {"key": "friendly", "label": "Rappel amical", "from": -9999},
+    {"key": "second", "label": "Deuxième rappel", "from": 8},
+    {"key": "firm", "label": "Relance ferme", "from": 21},
+    {"key": "demand", "label": "Mise en demeure", "from": 45}
+  ],
+  "placeholders": {
+    "contact": "[Prénom]", "me": "[Votre nom]", "number": "[numéro de facture]", "amount": "[montant]",
+    "due_phrase": "[était payable le date]", "days": "[nombre de]"
+  },
+  "phrases": {
+    "upcoming": "est payable le {due}",
+    "today": "est payable aujourd'hui, le {due}",
+    "late": "était payable le {due} (il y a {days} jours)",
+    "late_fee": "Comme prévu à notre entente, des intérêts de {fee} s'appliquent aux soldes en souffrance. ",
+    "law": "",
+    "payment": "\nVous pouvez payer par : {payment}\n"
+  },
+  "laws": {},
+  "strings": {
+    "no_date": "Ajoutez la date d'échéance de la facture pour obtenir la bonne relance.",
+    "status_upcoming": "Échéance dans {days} jours : un rappel amical suffit.",
+    "status_late": "{days} jours de retard : nous suggérons « {stage} ».",
+    "subject_prefix": "Objet : "
+  },
+  "templates": {
+    "friendly": {
+      "subject": "Petit rappel : facture {number}",
+      "body": "Bonjour {contact},\n\nJ'espère que vous allez bien. Un petit rappel : la facture {number} de {amount} {due_phrase}.\n\nSi le paiement est déjà en route, ne tenez pas compte de ce message. Sinon, vous trouverez la facture en pièce jointe, et je reste disponible pour toute question.\n{payment_line}\nMerci encore de votre confiance !\n\n{me}"
+    },
+    "second": {
+      "subject": "Suivi de la facture {number}",
+      "body": "Bonjour {contact},\n\nJe fais un suivi concernant la facture {number} de {amount}, qui {due_phrase}. Je n'ai pas encore reçu le paiement et je voulais m'assurer qu'elle ne s'était pas égarée.\n\nPourriez-vous m'indiquer quand je peux m'attendre au paiement ? S'il y a un problème avec la facture, ou si elle doit être envoyée à une autre personne, dites-le-moi et je m'en occupe.\n{payment_line}\nCordialement,\n\n{me}"
+    },
+    "firm": {
+      "subject": "Facture {number} en souffrance ({amount})",
+      "body": "Bonjour {contact},\n\nLa facture {number} de {amount} {due_phrase}, et mes rappels précédents sont restés sans réponse.\n\nJe vous demande de régler ce montant d'ici 7 jours. {late_fee_line}\n\nSi une difficulté empêche le paiement, écrivez-moi dès aujourd'hui pour que nous trouvions une solution, par exemple un paiement en plusieurs versements.\n{payment_line}\nCordialement,\n\n{me}"
+    },
+    "demand": {
+      "subject": "Mise en demeure : facture {number} ({amount})",
+      "body": "{contact},\n\nMISE EN DEMEURE\n\nMalgré mes rappels, la facture {number} de {amount}, qui {due_phrase}, demeure impayée. {late_fee_line}\n\nPar la présente, je vous mets en demeure de me payer la somme due au plus tard le {deadline}. À défaut de paiement à cette date, j'intenterai sans autre avis un recours devant la Division des petites créances de la Cour du Québec [ou le tribunal compétent] afin de récupérer la somme due, avec les intérêts et les frais.\n\nJe préfère régler cette situation à l'amiable : je vous invite à payer la facture ou à me contacter avant le {deadline}.\n{payment_line}\n{me}\n[Votre adresse]"
+    }
+  }
+}
+</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Gratuit · prêt à envoyer</span>
+    <h1>Relance de paiement</h1>
+    <p class="lead">Indiquez la facture et sa date d'échéance : l'outil choisit le ton adapté au retard et rédige le courriel, jusqu'à la mise en demeure. Copiez-le ou ouvrez-le dans votre messagerie.</p>
+    <ul class="trust"><li>4 niveaux, jusqu'à la mise en demeure</li><li>Intérêts prévus à l'entente</li><li>Ouverture dans votre messagerie</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="reminder-form" onsubmit="return false">
+      <h3>La facture</h3>
+      <div class="fields">
+        <div class="field"><label for="rm-number">Numéro de facture</label>
+          <input type="text" id="rm-number" name="number" placeholder="2026-014" data-save></div>
+        <div class="field"><label for="rm-amount">Montant dû</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="rm-amount" name="amount" placeholder="2 000" data-save><span>$</span></div></div>
+        <div class="field full"><label for="rm-due">Date d'échéance</label>
+          <input type="date" id="rm-due" name="due" data-save></div>
+      </div>
+      <h3>Votre client</h3>
+      <div class="fields">
+        <div class="field"><label for="rm-contact">Prénom de votre contact</label>
+          <input type="text" id="rm-contact" name="contact" placeholder="Julie" data-save></div>
+        <div class="field"><label for="rm-email">Courriel du client</label>
+          <input type="email" id="rm-email" name="email" placeholder="julie@client.ca" data-save></div>
+      </div>
+      <input type="hidden" id="rm-location" name="location" value="">
+      <h3>Vous</h3>
+      <div class="fields">
+        <div class="field"><label for="rm-me">Votre nom</label>
+          <input type="text" id="rm-me" name="me" placeholder="Camille Tremblay" data-save></div>
+        <div class="field"><label for="rm-fee">Intérêts prévus (facultatif)</label>
+          <input type="text" id="rm-fee" name="fee" placeholder="1,5 % par mois (18 % par année)" data-save></div>
+        <div class="field full"><label for="rm-payment">Modalités de paiement (facultatif)</label>
+          <input type="text" id="rm-payment" name="payment" placeholder="virement Interac à camille@exemple.ca" data-save></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <p class="notice" id="rm-status">–</p>
+      <div class="tabs" id="rm-tabs" role="tablist" style="margin-top: 14px;"></div>
+      <div class="output">
+        <div class="output-head"><span class="dots">● ● ●</span>
+          <span style="display: flex; gap: 8px;"><a class="btn btn-ghost btn-sm" id="rm-mail" href="#">Ouvrir dans ma messagerie</a>
+          <button type="button" class="btn btn-primary btn-sm" id="rm-copy">Copier</button></span></div>
+        <div class="output-subject"><b>Objet :</b> <span id="rm-subject">–</span></div>
+        <div class="output-body" id="rm-body">–</div>
+      </div>
+      <p class="small muted" style="margin-top: 10px;">Les champs surlignés restent à compléter. Calculez les intérêts avec le <a href="{{link:latefee}}">calculateur d'intérêts de retard</a>.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>Un calendrier de relance simple</h2>
+  <ol>
+    <li><strong>À l'échéance :</strong> un rappel amical avec la facture en pièce jointe.</li>
+    <li><strong>Une semaine plus tard :</strong> un deuxième rappel qui demande une date de paiement. Un appel aide souvent.</li>
+    <li><strong>Trois semaines de retard :</strong> une relance ferme avec un délai de 7 jours.</li>
+    <li><strong>Après environ 45 jours :</strong> une mise en demeure, puis les petites créances si nécessaire.</li>
+  </ol>
+</section>

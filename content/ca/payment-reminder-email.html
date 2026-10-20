@@ -1,0 +1,131 @@
+<!--{
+  "id": "reminder",
+  "slug": "payment-reminder-email/",
+  "title": "Payment Reminder Email Generator Canada (Overdue Invoices)",
+  "description": "Write the right payment reminder for an overdue invoice in 30 seconds: friendly reminder, second reminder, firm reminder or demand letter before small claims court. Free templates for Canadian freelancers.",
+  "menu": "Payment reminder emails",
+  "icon": "📩",
+  "blurb": "The right email for a late invoice, from friendly nudge to demand letter.",
+  "app": "Payment Reminder Email Generator",
+  "scripts": ["tools/reminder.js"],
+  "priority": 0.9,
+  "faq": [
+    ["When should I send a payment reminder?", "A friendly reminder on or just after the due date, a second reminder about a week later, a firm reminder after three weeks, and a demand letter after about 45 days. Most late invoices are paid after the first or second reminder."],
+    ["What is a demand letter?", "A formal letter stating the amount owed, a final deadline (often 10 days) and what you will do next, usually a claim in small claims court. In Québec, it is called a “mise en demeure” and is generally expected before going to court."],
+    ["Can I add interest to a late invoice?", "Only if your client agreed to it, typically in your contract or quote, and the rate must be expressed as an annual rate under the Interest Act. Work out the amount with our <a href=\"{{link:latefee}}\">late payment interest calculator</a>."],
+    ["Where do I sue for an unpaid invoice?", "Each province has a small claims court with its own limit, such as the Small Claims Court in Ontario, the Civil Resolution Tribunal in British Columbia, and the small claims division of the Court of Québec."]
+  ]
+}-->
+<script type="application/json" id="reminder-data">
+{
+  "deadline_days": 10,
+  "stages": [
+    {"key": "friendly", "label": "Friendly reminder", "from": -9999},
+    {"key": "second", "label": "Second reminder", "from": 8},
+    {"key": "firm", "label": "Firm reminder", "from": 21},
+    {"key": "demand", "label": "Demand letter", "from": 45}
+  ],
+  "placeholders": {
+    "contact": "[Name]", "me": "[Your name]", "number": "[invoice number]", "amount": "[amount]",
+    "due_phrase": "[was due on date]", "days": "[number of]"
+  },
+  "phrases": {
+    "upcoming": "is due on {due}",
+    "today": "is due today, {due}",
+    "late": "was due on {due} ({days} days ago)",
+    "late_fee": "As set out in our agreement, interest of {fee} applies to overdue balances. ",
+    "law": "",
+    "payment": "\nYou can pay by: {payment}\n"
+  },
+  "laws": {},
+  "strings": {
+    "no_date": "Add the invoice due date to get the right reminder.",
+    "status_upcoming": "Due in {days} days: a friendly reminder is enough.",
+    "status_late": "{days} days late: we suggest the “{stage}”.",
+    "subject_prefix": "Subject: "
+  },
+  "templates": {
+    "friendly": {
+      "subject": "Friendly reminder: invoice {number}",
+      "body": "Hi {contact},\n\nI hope you're doing well. Just a quick reminder that invoice {number} for {amount} {due_phrase}.\n\nIf it's already on its way, please disregard this note. Otherwise, you'll find the invoice attached, and I'm happy to answer any question.\n{payment_line}\nThanks again for your business!\n\n{me}"
+    },
+    "second": {
+      "subject": "Following up on invoice {number}",
+      "body": "Hi {contact},\n\nI'm following up on invoice {number} for {amount}, which {due_phrase}. I haven't received payment yet, so I wanted to make sure it didn't get lost.\n\nCould you let me know when I can expect payment? If there's an issue with the invoice, or if it should go to someone else, just tell me and I'll take care of it.\n{payment_line}\nBest regards,\n\n{me}"
+    },
+    "firm": {
+      "subject": "Overdue: invoice {number} ({amount})",
+      "body": "Hi {contact},\n\nInvoice {number} for {amount} {due_phrase}, and my previous reminders have gone unanswered.\n\nPlease arrange payment within the next 7 days. {late_fee_line}\n\nIf something is preventing payment, please reply today so we can find a solution, such as a payment plan.\n{payment_line}\nRegards,\n\n{me}"
+    },
+    "demand": {
+      "subject": "Demand for payment: invoice {number} ({amount})",
+      "body": "Dear {contact},\n\nDEMAND FOR PAYMENT\n\nDespite my previous reminders, invoice {number} for {amount}, which {due_phrase}, remains unpaid. {late_fee_line}\n\nI hereby demand payment in full by {deadline}. If payment is not received by that date, I will file a claim in small claims court to recover the amount owed, together with interest and costs, without further notice.\n\nI would still prefer to settle this directly. Please pay the invoice or contact me before {deadline}.\n{payment_line}\nSincerely,\n\n{me}\n[Your address]"
+    }
+  }
+}
+</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · ready to send</span>
+    <h1>Payment reminder email generator</h1>
+    <p class="lead">Enter the invoice and its due date: the tool picks the right tone for how late it is and writes the email. Copy it or open it in your mail app.</p>
+    <ul class="trust"><li>4 levels, up to a demand letter</li><li>Interest clause wording</li><li>Opens in your email app</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="reminder-form" onsubmit="return false">
+      <h3>The invoice</h3>
+      <div class="fields">
+        <div class="field"><label for="rm-number">Invoice number</label>
+          <input type="text" id="rm-number" name="number" placeholder="2026-014" data-save></div>
+        <div class="field"><label for="rm-amount">Amount due</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="rm-amount" name="amount" placeholder="2,000" data-save><span>$</span></div></div>
+        <div class="field full"><label for="rm-due">Due date</label>
+          <input type="date" id="rm-due" name="due" data-save></div>
+      </div>
+      <h3>Your client</h3>
+      <div class="fields">
+        <div class="field"><label for="rm-contact">Contact's first name</label>
+          <input type="text" id="rm-contact" name="contact" placeholder="Julie" data-save></div>
+        <div class="field"><label for="rm-email">Client's email</label>
+          <input type="email" id="rm-email" name="email" placeholder="julie@client.ca" data-save></div>
+<input type="hidden" id="rm-location" name="location" value="">
+      </div>
+      <h3>You</h3>
+      <div class="fields">
+        <div class="field"><label for="rm-me">Your name</label>
+          <input type="text" id="rm-me" name="me" placeholder="Alex Morgan" data-save></div>
+        <div class="field"><label for="rm-fee">Late fee in your terms (optional)</label>
+          <input type="text" id="rm-fee" name="fee" placeholder="1.5% per month (18% per year)" data-save></div>
+        <div class="field full"><label for="rm-payment">Payment link or instructions (optional)</label>
+          <input type="text" id="rm-payment" name="payment" placeholder="Interac e-Transfer to you@example.com" data-save></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <p class="notice" id="rm-status">–</p>
+      <div class="tabs" id="rm-tabs" role="tablist" style="margin-top: 14px;"></div>
+      <div class="output">
+        <div class="output-head"><span class="dots">● ● ●</span>
+          <span style="display: flex; gap: 8px;"><a class="btn btn-ghost btn-sm" id="rm-mail" href="#">Open in email</a>
+          <button type="button" class="btn btn-primary btn-sm" id="rm-copy">Copy</button></span></div>
+        <div class="output-subject"><b>Subject:</b> <span id="rm-subject">–</span></div>
+        <div class="output-body" id="rm-body">–</div>
+      </div>
+      <p class="small muted" style="margin-top: 10px;">Highlighted fields still need your details. Calculate what you can add with the <a href="{{link:latefee}}">late fee calculator</a>.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>A simple follow-up schedule</h2>
+  <ol>
+    <li><strong>On the due date:</strong> a friendly reminder with the invoice attached.</li>
+    <li><strong>A week later:</strong> a second reminder asking when payment will be made. A phone call helps.</li>
+    <li><strong>Three weeks late:</strong> a firm reminder with a 7-day deadline and your interest clause.</li>
+    <li><strong>After about 45 days:</strong> a demand letter with a final deadline, then small claims court if needed.</li>
+  </ol>
+</section>

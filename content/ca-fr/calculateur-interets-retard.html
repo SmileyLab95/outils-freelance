@@ -1,0 +1,116 @@
+<!--{
+  "id": "latefee",
+  "slug": "calculateur-interets-retard/",
+  "title": "Calcul des intérêts de retard sur une facture (Québec et Canada)",
+  "description": "Calculez les intérêts de retard sur une facture impayée : taux mensuel, taux annuel ou frais fixes, avec une clause à copier dans vos contrats, conforme à la Loi sur l'intérêt. Outil gratuit.",
+  "menu": "Intérêts de retard",
+  "icon": "⏱️",
+  "blurb": "Les intérêts sur une facture en souffrance et une clause pour vos contrats.",
+  "app": "Calculateur d'intérêts de retard",
+  "scripts": ["tools/latefee.js"],
+  "rules": "ca",
+  "sources": ["interest_act_s4", "late_payment_interest_practice", "criminal_interest_rate"],
+  "priority": 0.8,
+  "faq": [
+    ["Un travailleur autonome peut-il facturer des intérêts de retard ?", "Oui, si le client les a acceptés avant le travail, en général dans le contrat ou la soumission. Contrairement à la France ou au Royaume-Uni, aucune loi n'ajoute automatiquement des intérêts ou une indemnité aux factures entre entreprises."],
+    ["Pourquoi le taux doit-il être annuel ?", "Selon l'article 4 de la Loi sur l'intérêt (fédérale), si un contrat prévoit un taux par mois sans indiquer le taux annuel équivalent, seul un intérêt de 5 % par année peut être réclamé. Écrivez « 1,5 % par mois (18 % par année) » : la clause proposée ici le fait pour vous."],
+    ["Quel taux d'intérêt est raisonnable ?", "Entre 1 % et 2 % par mois (12 % à 24 % par année) est courant entre entreprises. Le Code criminel plafonne l'intérêt à un taux annuel de 35 %, et les règles de protection du consommateur s'ajoutent si votre client est un particulier."],
+    ["Et si rien n'était prévu au contrat ?", "Au Québec, vous pouvez réclamer l'intérêt au taux légal à partir de la mise en demeure. Prévoyez donc toujours une clause d'intérêts dans vos soumissions et vos contrats."]
+  ]
+}-->
+<script type="application/json" id="latefee-data">
+{
+  "date_format": {"day": "numeric", "month": "long", "year": "numeric"},
+  "day": "jour", "days": "jours", "month": "mois", "months": "mois",
+  "after_grace": " ({n} après le délai de grâce)",
+  "accrual_daily": "calculés chaque jour", "accrual_month": "pour chaque mois commencé",
+  "start_grace": "{grace} jours après ",
+  "formula_flat": "Frais fixes de {fee} dès que la facture a plus de {grace} jours de retard",
+  "formula_daily": "{amount} × {annual} % × {days} jours ÷ 365 = {result}",
+  "formula_month": "{amount} × {monthly} % × {months} = {result}",
+  "formula_generic": "Intérêts = montant dû × taux × durée du retard",
+  "clause_flat": "Les factures sont payables dans les [30] jours suivant leur date. Des frais de retard de {fee} s'ajoutent à toute facture impayée {grace} jours après son échéance.",
+  "clause_interest": "Les factures sont payables dans les [30] jours suivant leur date. Tout solde en souffrance porte intérêt au taux de {monthly} % par mois ({annual} % par année), {accrual}, à compter de {start}la date d'échéance jusqu'au paiement complet.",
+  "sub_no_due": "Indiquez la date d'échéance de la facture.",
+  "sub_not_late": "Pas de retard au {date} : aucuns frais pour l'instant.",
+  "sub_late": "Échéance le {due}, {days} jours de retard au {date}. Total dû : {total}."
+}
+</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Gratuit · factures en souffrance</span>
+    <h1>Calculateur d'intérêts de retard</h1>
+    <p class="lead">Combien votre client vous doit-il maintenant ? Indiquez la facture, son échéance et vos conditions : l'outil calcule les intérêts et le nouveau total, et vous propose une clause conforme pour vos prochains contrats.</p>
+    <ul class="trust"><li>Taux mensuel, annuel ou frais fixes</li><li>Délai de grâce</li><li>Clause conforme à la Loi sur l'intérêt</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="late-form" onsubmit="return false">
+      <h3>La facture</h3>
+      <div class="fields">
+        <div class="field full"><label for="l-amount">Montant en souffrance</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="l-amount" name="amount" value="2 000" data-save><span>$</span></div></div>
+        <div class="field"><label for="l-due">Date d'échéance</label>
+          <input type="date" id="l-due" name="due" data-save></div>
+        <div class="field"><label for="l-paid">Date de paiement</label>
+          <input type="date" id="l-paid" name="paid">
+          <span class="hint">Vide : aujourd'hui.</span></div>
+      </div>
+      <h3>Vos conditions</h3>
+      <div class="fields">
+        <div class="field full"><label for="l-method">Type de frais</label>
+          <select id="l-method" name="method" data-save>
+            <option value="monthly">Intérêts par mois (ex. : 1,5 %)</option>
+            <option value="annual">Intérêts par année (ex. : 18 %)</option>
+            <option value="flat">Frais fixes</option>
+          </select></div>
+        <div class="field" data-method="monthly"><label for="l-monthly">Taux mensuel</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="l-monthly" name="monthly" value="1,5" data-save><span>%</span></div></div>
+        <div class="field" data-method="annual" hidden><label for="l-annual">Taux annuel</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="l-annual" name="annual" value="18" data-save><span>%</span></div></div>
+        <div class="field" data-method="flat" hidden><label for="l-flat">Frais fixes</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="l-flat" name="flat" value="35" data-save><span>$</span></div></div>
+        <div class="field" data-method="monthly annual"><label for="l-accrual">Calcul des intérêts</label>
+          <select id="l-accrual" name="accrual" data-save>
+            <option value="daily">Au jour près</option>
+            <option value="month">Par mois commencé</option>
+          </select></div>
+        <div class="field full"><label for="l-grace">Délai de grâce après l'échéance</label>
+          <div class="input-suffix"><input type="number" id="l-grace" name="grace" value="0" min="0" max="60" data-save><span>jours</span></div></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="result-hero">
+        <div class="label">Intérêts de retard</div>
+        <div class="big" id="l-fee">–</div>
+        <div class="sub" id="l-sub">–</div>
+      </div>
+      <ul class="result-list card" style="padding: 6px 18px;">
+        <li><span>Montant de la facture</span><b id="l-r-amount">–</b></li>
+        <li><span>Jours de retard</span><b id="l-r-days">–</b></li>
+        <li><span>Intérêts ou frais</span><b id="l-r-fee">–</b></li>
+        <li><span><strong>Total dû</strong></span><b id="l-r-total">–</b></li>
+      </ul>
+      <p class="formula" id="l-formula" style="margin-top: 16px;">–</p>
+      <div class="output" style="margin-top: 16px;">
+        <div class="output-head"><b>Clause pour vos contrats et factures</b><button type="button" class="btn btn-ghost btn-sm" data-copy="#l-clause">Copier</button></div>
+        <div class="output-body" id="l-clause">–</div>
+      </div>
+      <p class="small muted" style="margin-top: 12px;">Pour réclamer le paiement, utilisez le <a href="{{link:reminder}}">générateur de relances</a>.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>Intérêts de retard : l'essentiel</h2>
+  <ul>
+    <li><strong>Prévoyez-les d'avance</strong> dans la soumission ou le contrat, et rappelez-les sur chaque facture.</li>
+    <li><strong>Indiquez un taux annuel</strong> : sans lui, la Loi sur l'intérêt limite l'intérêt à 5 % par année.</li>
+    <li><strong>Restez raisonnable</strong> : le Code criminel plafonne l'intérêt à 35 % par année.</li>
+  </ul>
+  <p class="small muted">Information à titre indicatif, pas un avis juridique.</p>
+</section>

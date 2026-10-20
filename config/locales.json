@@ -41,7 +41,7 @@
     "currency": "CAD",
     "name": "Canada",
     "language": "English",
-    "live": false
+    "live": true
   },
   {
     "key": "ca-fr",
@@ -52,6 +52,6 @@
     "currency": "CAD",
     "name": "Canada",
     "language": "Français",
-    "live": false
+    "live": true
   }
 ]

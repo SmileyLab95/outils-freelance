@@ -126,14 +126,25 @@
     });
     var discountPct = Math.min(100, Math.max(0, OF.num(val("iv-discount")) || 0));
     var discount = Math.round(subtotal * discountPct) / 100;
+    // Taxes : soit une liste d'options du profil (plusieurs composantes, ex. TPS + TVQ), soit un taux saisi.
     // Taux vide ou « none » : pas de ligne de taxe. Un taux de 0 % s'affiche si le profil le demande (TVA à taux zéro).
     var rawRate = val("iv-tax-rate");
-    var taxRate = Math.max(0, OF.num(rawRate) || 0);
-    var showTax = rawRate !== "" && rawRate !== "none" && isFinite(OF.num(rawRate)) && (taxRate > 0 || !!P.show_zero_tax);
-    var tax = Math.round((subtotal - discount) * taxRate) / 100;
+    var components;
+    if (P.tax_options) {
+      var option = P.tax_options.filter(function (o) { return o.key === rawRate; })[0];
+      components = option ? option.components : [];
+    } else {
+      var single = Math.max(0, OF.num(rawRate) || 0);
+      var shown = rawRate !== "" && rawRate !== "none" && isFinite(OF.num(rawRate)) && (single > 0 || !!P.show_zero_tax);
+      components = shown ? [{ label: val("iv-tax-label") || L.tax, rate: single }] : [];
+    }
+    var taxes = components.map(function (c) {
+      return { label: c.label, rate: c.rate, amount: Math.round((subtotal - discount) * c.rate) / 100 };
+    });
+    var tax = taxes.reduce(function (sum, t) { return sum + t.amount; }, 0);
     var total = subtotal - discount + tax;
     var paid = state.type === "invoice" ? Math.max(0, OF.num(val("iv-paid")) || 0) : 0;
-    return { rows: rows, subtotal: subtotal, discountPct: discountPct, discount: discount, taxRate: taxRate, tax: tax, showTax: showTax, total: total, paid: paid };
+    return { rows: rows, subtotal: subtotal, discountPct: discountPct, discount: discount, taxes: taxes, tax: tax, total: total, paid: paid };
   }
 
   // ----- Aperçu ----------------------------------------------------------------
@@ -189,8 +200,8 @@
     html += "</tbody></table>";
 
     var tot = [[L.subtotal, OF.money(t.subtotal)]];
-    if (t.discount > 0) tot.push([L.discount + " (" + OF.fmt(t.discountPct) + "%)", "− " + OF.money(t.discount)]);
-    if (t.showTax) tot.push([(val("iv-tax-label") || L.tax) + " (" + OF.fmt(t.taxRate) + "%)", OF.money(t.tax)]);
+    if (t.discount > 0) tot.push([L.discount + " (" + OF.fmt(t.discountPct) + L.percent + ")", "− " + OF.money(t.discount)]);
+    t.taxes.forEach(function (x) { tot.push([x.label + " (" + OF.rate(x.rate) + L.percent + ")", OF.money(x.amount)]); });
     tot.push([L.total, OF.money(t.total), !t.paid]);
     if (t.paid > 0) {
       tot.push([L.paid, "− " + OF.money(t.paid)]);
@@ -198,7 +209,7 @@
     }
     if (!isInvoice) {
       var pct = Math.min(100, Math.max(0, OF.num(val("iv-deposit-pct")) || 0));
-      if (pct > 0) tot.push([L.deposit + " (" + OF.fmt(pct) + "%)", OF.money(t.total * pct / 100)]);
+      if (pct > 0) tot.push([L.deposit + " (" + OF.fmt(pct) + L.percent + ")", OF.money(t.total * pct / 100)]);
     }
     html += '<div class="p-totals">' + tot.map(function (r) {
       return '<div class="' + (r[2] ? "p-grand" : "") + '"><span>' + esc(r[0]) + "</span><b>" + esc(r[1]) + "</b></div>";
@@ -246,6 +257,24 @@
     [K, K + "-type", K + "-lines", K + "-numbers", K + "-logo"].forEach(function (k) { OF.save(k, null); });
     window.location.reload();
   });
+
+  // ----- Taxes par province (Canada) --------------------------------------------
+  if (P.tax_from_rules && window.OF_RULES) {
+    var PR = window.OF_RULES._meta.provinces, N = P.tax_names;
+    P.tax_options = Object.keys(PR).sort(function (a, b) {
+      return PR[a][P.names].localeCompare(PR[b][P.names], OF.locale);
+    }).map(function (code) {
+      var t = PR[code].sales_tax, parts = t.type.split("+");
+      var components = t.type === "HST" ? [{ label: N.HST, rate: t.rate * 100 }]
+        : [{ label: N.GST, rate: t.gst * 100 }].concat(parts[1] ? [{ label: N[parts[1]], rate: t.provincial * 100 }] : []);
+      return { key: code, label: PR[code][P.names], components: components };
+    });
+    $("iv-tax-rate").innerHTML = '<option value="none">' + esc(L.no_tax) + "</option>" + P.tax_options.map(function (o) {
+      return '<option value="' + o.key + '"' + (o.key === P.default_tax ? " selected" : "") + ">" + esc(o.label + " · " + o.components.map(function (c) {
+        return c.label + " " + OF.rate(c.rate) + L.percent;
+      }).join(" + ")) + "</option>";
+    }).join("");
+  }
 
   // ----- Initialisation --------------------------------------------------------
   OF.persistForm(form, K);

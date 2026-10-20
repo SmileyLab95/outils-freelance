@@ -14,13 +14,28 @@
   var $ = function (id) { return document.getElementById(id); };
   var set = function (id, text) { $(id).textContent = text; };
   var coef = new Intl.NumberFormat(OF.locale, { maximumFractionDigits: 5 });
-  var pct = function (rate) { return OF.fmt(Math.round(rate * 100000) / 1000) + L.percent; };
+  var pct = function (rate) { return OF.rate(Math.round(rate * 100000) / 1000) + L.percent; };
   var fill = function (text, vars) { return text.replace(/\{(\w+)\}/g, function (m, k) { return vars[k] != null ? vars[k] : m; }); };
+
+  // Canada : une option par province ou territoire, taux lus dans les règles (data/rules/ca.json).
+  if (D.from_rules === "provinces" && window.OF_RULES) {
+    var P = window.OF_RULES._meta.provinces, N = D.tax_names;
+    D.options = Object.keys(P).sort(function (a, b) {
+      return P[a][D.names].localeCompare(P[b][D.names], OF.locale);
+    }).map(function (code) {
+      var t = P[code].sales_tax, parts = t.type.split("+");
+      var components = t.type === "HST" ? [{ label: N.HST, rate: t.rate }]
+        : [{ label: N.GST, rate: t.gst }].concat(parts[1] ? [{ label: N[parts[1]], rate: t.provincial }] : []);
+      var detail = components.map(function (c) { return c.label + " " + pct(c.rate); }).join(" + ");
+      return { key: code, label: P[code][D.names] + " · " + detail, short: P[code][D.names], components: components,
+               note: D.notes && D.notes[code] };
+    });
+  }
 
   // Contrôles de choix du taux : boutons (« chips ») ou liste déroulante.
   if (D.mode === "select") {
     $("st-choices").innerHTML = '<select id="st-region" name="region" data-save>' + D.options.map(function (o) {
-      return '<option value="' + o.key + '">' + o.label + "</option>";
+      return '<option value="' + o.key + '"' + (o.key === D.default ? " selected" : "") + ">" + o.label + "</option>";
     }).join("") + "</select>";
   } else {
     $("st-choices").innerHTML = '<div class="rate-chips" role="radiogroup" aria-label="' + L.rate + '">' +

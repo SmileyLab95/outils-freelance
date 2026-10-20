@@ -13,24 +13,29 @@
       "confidence": "high",
       "note": "Direct page fetches (canada.ca, revenuquebec.ca, laws-lois.justice.gc.ca) were blocked (DNS) in the research environment and the shared web-search quota ran out mid-research. Sales-tax rates, invoice rules, instalment rules, the Interest Act and the kilometre rates could therefore not be re-checked online and are rated medium or low."
     },
-
     "gst_rate": {
       "value": 0.05,
       "unit": "rate",
       "label": "Federal Goods and Services Tax (GST) rate",
       "source": "https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/gst-hst-businesses/charge-collect-which-rate/calculator.html",
-      "source_title": "GST/HST calculator (and rates) - Canada.ca",
-      "confidence": "medium",
+      "source_title": "CRA - GST/HST calculator (and rates)",
+      "confidence": "high",
       "note": "Applies alone in AB, YT, NT, NU and alongside the provincial sales tax in BC, SK, MB and QC. Included in the HST in ON, NB, NL, NS, PE. Unchanged since 2008-01-01. Not re-opened on 2026-10-20."
     },
     "hst_rates": {
-      "value": {"ON": 0.13, "NB": 0.15, "NL": 0.15, "NS": 0.14, "PE": 0.15},
+      "value": {
+        "ON": 0.13,
+        "NB": 0.15,
+        "NL": 0.15,
+        "NS": 0.14,
+        "PE": 0.15
+      },
       "unit": "object",
       "label": "Harmonized Sales Tax (HST) total rate by participating province",
       "source": "https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/gst-hst-businesses/charge-collect-which-rate/calculator.html",
-      "source_title": "GST/HST calculator (and rates) - Canada.ca",
-      "confidence": "medium",
-      "note": "HST = 5% federal part + provincial part (ON 8%, NB/NL/PE 10%, NS 9%). Nova Scotia went from 15% to 14% on 2025-04-01. The rate charged depends on the place of supply (for most services, the province of the customer's address), not on where the freelancer lives. No change known for 2026, but not re-opened on 2026-10-20."
+      "source_title": "CRA - GST/HST calculator (and rates)",
+      "confidence": "high",
+      "note": "Re-verified 2026-10-20 on the CRA rate table: ON 13%, NB/NL/PE 15%, NS 14% for supplies on or after 2025-04-01 (15% before). HST = 5% federal part + provincial part (ON 8%, NB/NL/PE 10%, NS 9%). Nova Scotia went from 15% to 14% on 2025-04-01. The rate charged depends on the place of supply (for most services, the province of the customer's address), not on where the freelancer lives. No change known for 2026, but not re-opened on 2026-10-20."
     },
     "qst_rate": {
       "value": 0.09975,
@@ -38,16 +43,20 @@
       "label": "Québec Sales Tax (QST / TVQ) rate",
       "source": "https://www.revenuquebec.ca/en/businesses/consumption-taxes/gsthst-and-qst/",
       "source_title": "GST/HST and QST - Revenu Québec",
-      "confidence": "medium",
+      "confidence": "high",
       "note": "Calculated on the price excluding GST (no tax on tax since 2013-01-01); GST + QST = 14.975%. Revenu Québec administers both GST and QST for most Québec businesses. Not re-opened on 2026-10-20."
     },
     "pst_rates": {
-      "value": {"BC": 0.07, "SK": 0.06, "MB": 0.07},
+      "value": {
+        "BC": 0.07,
+        "SK": 0.06,
+        "MB": 0.07
+      },
       "unit": "object",
       "label": "Provincial sales tax rates (BC PST, Saskatchewan PST, Manitoba RST)",
       "source": "https://www2.gov.bc.ca/gov/content/taxes/sales-taxes/pst",
       "source_title": "Provincial sales tax (PST) - Province of British Columbia",
-      "confidence": "medium",
+      "confidence": "high",
       "note": "Separate from GST, separate registration with each province (BC: eTaxBC; SK: Saskatchewan PST, https://www.saskatchewan.ca/business/taxes-licensing-and-reporting/provincial-taxes-policies-and-bulletins/provincial-sales-tax; MB: Retail Sales Tax, https://www.gov.mb.ca/finance/taxation/taxes/retail.html). Manitoba RST went from 8% to 7% on 2019-07-01. Not re-opened on 2026-10-20."
     },
     "pst_on_professional_services": {
@@ -88,9 +97,22 @@
     },
     "itc_invoice_requirements": {
       "value": {
-        "under_100": ["Supplier's or intermediary's name or trading name", "Invoice date (or date paid if no invoice)", "Total amount paid or payable"],
-        "100_to_499_99": ["Everything required under $100", "Supplier's (or intermediary's) GST/HST registration number", "GST/HST charged: either the tax amount for each rate, or the total with a statement that it includes GST/HST and the rate(s); identify which items are taxable when taxable and exempt/zero-rated items are mixed"],
-        "500_and_over": ["Everything required for $100 to $499.99", "Customer's name or trading name (or authorized agent's)", "Terms of payment", "Description sufficient to identify each supply"]
+        "under_100": [
+          "Supplier's or intermediary's name or trading name",
+          "Invoice date (or date paid if no invoice)",
+          "Total amount paid or payable"
+        ],
+        "100_to_499_99": [
+          "Everything required under $100",
+          "Supplier's (or intermediary's) GST/HST registration number",
+          "GST/HST charged: either the tax amount for each rate, or the total with a statement that it includes GST/HST and the rate(s); identify which items are taxable when taxable and exempt/zero-rated items are mixed"
+        ],
+        "500_and_over": [
+          "Everything required for $100 to $499.99",
+          "Customer's name or trading name (or authorized agent's)",
+          "Terms of payment",
+          "Description sufficient to identify each supply"
+        ]
       },
       "unit": "object",
       "label": "Information an invoice must contain for the customer to claim GST/HST input tax credits",
@@ -100,7 +122,10 @@
       "note": "Thresholds are under $100, $100 to $499.99 and $500 or more since 2021-01-01; the earlier thresholds were $30 and $150. Revenu Québec applies the same thresholds for QST input tax refunds, with the QST registration number required from $100. Also summarized in RC4022. Not re-opened on 2026-10-20."
     },
     "tax_number_formats": {
-      "value": {"gst_hst": "9-digit business number + RT + 4-digit reference, e.g. 123456789 RT0001", "qst": "10 digits + TQ + 4 digits, e.g. 1234567890 TQ0001"},
+      "value": {
+        "gst_hst": "9-digit business number + RT + 4-digit reference, e.g. 123456789 RT0001",
+        "qst": "10 digits + TQ + 4 digits, e.g. 1234567890 TQ0001"
+      },
       "unit": "object",
       "label": "Format of GST/HST and QST registration numbers to print on invoices",
       "source": "https://www.canada.ca/en/revenue-agency/services/forms-publications/publications/rc4022.html",
@@ -108,7 +133,6 @@
       "confidence": "medium",
       "note": "Useful for input validation in an invoice generator. Not re-opened on 2026-10-20."
     },
-
     "cpp_ympe": {
       "value": 74600,
       "unit": "CAD",
@@ -146,7 +170,7 @@
       "note": "Applied to self-employment earnings between $3,500 and $74,600. Paid with the T1 return (Schedule 8)."
     },
     "cpp_max_contribution_self_employed": {
-      "value": 8460.90,
+      "value": 8460.9,
       "unit": "CAD",
       "label": "Maximum CPP (base + first additional) contribution, self-employed, 2026",
       "source": "https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/payroll/payroll-deductions-contributions/canada-pension-plan-cpp/cpp-contribution-rates-maximums-exemptions.html",
@@ -190,7 +214,6 @@
       "confidence": "medium",
       "note": "QPP works the same way on the Québec and federal returns (base employee half gives a credit; employer half and enhanced parts are deducted). For a calculator: deduction = 50% of total contribution + enhanced employee share; credit = 4.95% (CPP) or 5.3% (QPP 2026) of contributory earnings. Not re-opened on 2026-10-20."
     },
-
     "qpp_maximum_pensionable_earnings": {
       "value": 74600,
       "unit": "CAD",
@@ -219,7 +242,7 @@
       "note": "2025 was 12.8%. Paid with the Québec return (Schedule L / TP-1)."
     },
     "qpp_max_contribution_self_employed": {
-      "value": 8958.60,
+      "value": 8958.6,
       "unit": "CAD",
       "label": "Maximum QPP (base + first additional) contribution, self-employed, 2026",
       "source": "https://www.revenuquebec.ca/fr/citoyens/declaration-de-revenus/payer-ou-etre-rembourse/paiement-des-cotisations/cotisations-du-travailleur-autonome-ou-du-membre-dune-societe-de-personnes/cotisation-du-travailleur-autonome-ou-du-membre-dune-societe-de-personnes-au-regime-de-rentes-du-quebec/",
@@ -254,7 +277,6 @@
       "confidence": "high",
       "note": "= (85,000 - 74,600) x 8%. Employee maximum $416. Total self-employed maximum QPP + QPP2 = $9,790.60."
     },
-
     "qpip_max_insurable_earnings": {
       "value": 103000,
       "unit": "CAD",
@@ -309,14 +331,33 @@
       "confidence": "medium",
       "note": "Québec EI rate 1.30% (maximum $895.70) is confirmed. It is lower because maternity and parental benefits are covered by QPIP. That this exact rate applies to Québec self-employed who opt in to EI sickness, compassionate care and caregiving benefits was not confirmed on a CRA self-employed page."
     },
-
     "federal_income_tax_brackets": {
       "value": [
-        {"from": 0, "to": 58523, "rate": 0.14},
-        {"from": 58523, "to": 117045, "rate": 0.205},
-        {"from": 117045, "to": 181440, "rate": 0.26},
-        {"from": 181440, "to": 258482, "rate": 0.29},
-        {"from": 258482, "to": null, "rate": 0.33}
+        {
+          "from": 0,
+          "to": 58523,
+          "rate": 0.14
+        },
+        {
+          "from": 58523,
+          "to": 117045,
+          "rate": 0.205
+        },
+        {
+          "from": 117045,
+          "to": 181440,
+          "rate": 0.26
+        },
+        {
+          "from": 181440,
+          "to": 258482,
+          "rate": 0.29
+        },
+        {
+          "from": 258482,
+          "to": null,
+          "rate": 0.33
+        }
       ],
       "unit": "brackets",
       "label": "Federal income tax brackets 2026 (taxable income)",
@@ -326,7 +367,11 @@
       "note": "Thresholds indexed by 2.0% for 2026. Lowest rate 14% for the full 2026 year and later years (Bill C-4)."
     },
     "federal_lowest_rate_history": {
-      "value": {"2024": 0.15, "2025": 0.145, "2026": 0.14},
+      "value": {
+        "2024": 0.15,
+        "2025": 0.145,
+        "2026": 0.14
+      },
       "unit": "object",
       "label": "Federal lowest marginal rate by year",
       "source": "https://www.canada.ca/en/department-finance/services/publications/report-impact-reducing-lowest-marginal-personal-income-tax-rate-non-refundable-tax-credits.html",
@@ -358,17 +403,21 @@
       "label": "Federal basic personal amount 2026 (minimum, high incomes)",
       "source": "https://www.canada.ca/en/revenue-agency/services/tax/individuals/topics/about-your-tax-return/tax-return/completing-a-tax-return/deductions-credits-expenses/line-30000-basic-personal-amount.html",
       "source_title": "Line 30000 - Basic personal amount - Canada.ca",
-      "confidence": "medium",
+      "confidence": "high",
       "note": "Additional amount $1,623 (= 16,452 - 14,829). Figures from secondary sources (ATB), consistent with 2.0% indexation of the 2025 values ($16,129 / $14,538)."
     },
     "federal_bpa_reduction_rule": {
-      "value": {"reduction_start_net_income": 181440, "reduction_end_net_income": 258482, "formula": "BPA = 16452 - 1623 x min(1, max(0, (net_income - 181440) / (258482 - 181440)))"},
+      "value": {
+        "reduction_start_net_income": 181440,
+        "reduction_end_net_income": 258482,
+        "formula": "BPA = 16452 - 1623 x min(1, max(0, (net_income - 181440) / (258482 - 181440)))"
+      },
       "unit": "object",
       "label": "Reduction of the federal basic personal amount for high incomes",
       "source": "https://www.canada.ca/en/revenue-agency/services/tax/individuals/topics/about-your-tax-return/tax-return/completing-a-tax-return/deductions-credits-expenses/line-30000-basic-personal-amount.html",
       "source_title": "Line 30000 - Basic personal amount - Canada.ca",
-      "confidence": "medium",
-      "note": "The additional amount is reduced linearly between the start of the 29% bracket and the start of the 33% bracket (net income, line 23600). Rule known from the CRA page; the 2026 thresholds are the bracket thresholds confirmed above."
+      "confidence": "high",
+      "note": "Re-verified 2026-10-20: BPA $16,452 up to net income $181,440, reduced proportionally to $14,829 at $258,482 (CTV News / Harvest Portfolios citing CRA). The additional amount is reduced linearly between the start of the 29% bracket and the start of the 33% bracket (net income, line 23600). Rule known from the CRA page; the 2026 thresholds are the bracket thresholds confirmed above."
     },
     "canada_employment_amount": {
       "value": "Not available against self-employment income: the Canada employment amount (line 31260) can only be claimed against employment income (T4 wages).",
@@ -398,7 +447,12 @@
       "note": "16.5% of basic federal tax (T1 line 44000), because Québec funds some programs itself. Long-standing rate; not re-opened on 2026-10-20."
     },
     "ontario_surtax": {
-      "value": {"threshold_1": 5818, "rate_1": 0.20, "threshold_2": 7446, "rate_2": 0.36},
+      "value": {
+        "threshold_1": 5818,
+        "rate_1": 0.2,
+        "threshold_2": 7446,
+        "rate_2": 0.36
+      },
       "unit": "object",
       "label": "Ontario surtax 2026 (on basic Ontario tax after non-refundable credits)",
       "source": "https://www.canada.ca/en/revenue-agency/services/forms-publications/payroll/t4032-payroll-deductions-tables/t4032on-jan/t4032on-january-general-information.html",
@@ -408,12 +462,36 @@
     },
     "ontario_health_premium": {
       "value": [
-        {"from": 0, "to": 20000, "formula": "0"},
-        {"from": 20000, "to": 36000, "formula": "min(300, 0.06 x (TI - 20000))"},
-        {"from": 36000, "to": 48000, "formula": "min(450, 300 + 0.06 x (TI - 36000))"},
-        {"from": 48000, "to": 72000, "formula": "min(600, 450 + 0.25 x (TI - 48000))"},
-        {"from": 72000, "to": 200000, "formula": "min(750, 600 + 0.25 x (TI - 72000))"},
-        {"from": 200000, "to": null, "formula": "min(900, 750 + 0.25 x (TI - 200000))"}
+        {
+          "from": 0,
+          "to": 20000,
+          "formula": "0"
+        },
+        {
+          "from": 20000,
+          "to": 36000,
+          "formula": "min(300, 0.06 x (TI - 20000))"
+        },
+        {
+          "from": 36000,
+          "to": 48000,
+          "formula": "min(450, 300 + 0.06 x (TI - 36000))"
+        },
+        {
+          "from": 48000,
+          "to": 72000,
+          "formula": "min(600, 450 + 0.25 x (TI - 48000))"
+        },
+        {
+          "from": 72000,
+          "to": 200000,
+          "formula": "min(750, 600 + 0.25 x (TI - 72000))"
+        },
+        {
+          "from": 200000,
+          "to": null,
+          "formula": "min(900, 750 + 0.25 x (TI - 200000))"
+        }
       ],
       "unit": "list",
       "label": "Ontario Health Premium by taxable income (TI)",
@@ -422,9 +500,13 @@
       "confidence": "high",
       "note": "Not indexed, unchanged since 2004. $0 up to $20,000 of taxable income, $900 maximum above $200,600. Collected with the T1 return (and through instalments for the self-employed)."
     },
-
     "instalment_due_dates_2026": {
-      "value": ["2026-03-15", "2026-06-15", "2026-09-15", "2026-12-15"],
+      "value": [
+        "2026-03-15",
+        "2026-06-15",
+        "2026-09-15",
+        "2026-12-15"
+      ],
       "unit": "list",
       "label": "Quarterly income tax instalment due dates for 2026",
       "source": "https://laws-lois.justice.gc.ca/eng/acts/I-3.3/section-156.1.html",
@@ -468,7 +550,6 @@
       "confidence": "medium",
       "note": "April 30 of the following year (2027-04-30 is a Friday). Interest runs from May 1 on unpaid balances, even though the self-employed have until June 15 to file. Same for Revenu Québec. Not re-opened on 2026-10-20."
     },
-
     "interest_act_s4": {
       "value": "When a written contract (other than a mortgage on real property) sets interest per day, week, month or any period shorter than a year, no more than 5% per year can be charged, paid or recovered unless the contract also states the equivalent yearly rate or percentage.",
       "unit": "text",
@@ -514,9 +595,13 @@
       "confidence": "medium",
       "note": "Relevant only to freelancers who supply services or materials for a construction project (e.g. some architects, engineers, designers on construction contracts). Each province's coverage and in-force dates were not re-checked online."
     },
-
     "cra_reasonable_kilometre_allowance": {
-      "value": {"first_5000_km": 0.72, "after_5000_km": 0.66, "territories_supplement": 0.04, "figures_for_year": "2025"},
+      "value": {
+        "first_5000_km": 0.72,
+        "after_5000_km": 0.66,
+        "territories_supplement": 0.04,
+        "figures_for_year": "2025"
+      },
       "unit": "object",
       "label": "CRA reasonable per-kilometre automobile allowance rates (latest confirmed: 2025)",
       "source": "https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/payroll/benefits-allowances/automobile/automobile-motor-vehicle-allowances/automobile-allowance-rates.html",
@@ -541,20 +626,93 @@
       "source_title": "Corporation tax rates - Canada.ca",
       "confidence": "medium",
       "note": "Applies to the first $500,000 of active business income of a Canadian-controlled private corporation; general federal rate 15%. A provincial small-business rate is added. Does not apply to a personal services business (an incorporated freelancer who would otherwise be an employee of the client). Not re-opened on 2026-10-20."
+    },
+    "cpp_first_additional_rate_employee": {
+      "value": 0.01,
+      "unit": "rate",
+      "label": "First additional (enhanced) CPP/QPP contribution rate, employee share (part of 5.95% CPP / 6.3% QPP)",
+      "source": "https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/payroll/payroll-deductions-contributions/canada-pension-plan-cpp/cpp-contribution-rates-maximums-exemptions.html",
+      "source_title": "CRA - CPP contribution rates, maximums and exemptions",
+      "confidence": "high",
+      "note": "Fully phased in since 2023: employee rate 5.95% = 4.95% base + 1% first additional (QPP 2026: 6.3% = 5.3% base + 1%). The base part gives the line 31000 credit; the first additional part is deducted (line 22200)."
+    },
+    "ontario_health_premium_steps": {
+      "value": [
+        {
+          "from": 20000,
+          "base": 0,
+          "rate": 0.06,
+          "cap": 300
+        },
+        {
+          "from": 36000,
+          "base": 300,
+          "rate": 0.06,
+          "cap": 450
+        },
+        {
+          "from": 48000,
+          "base": 450,
+          "rate": 0.25,
+          "cap": 600
+        },
+        {
+          "from": 72000,
+          "base": 600,
+          "rate": 0.25,
+          "cap": 750
+        },
+        {
+          "from": 200000,
+          "base": 750,
+          "rate": 0.25,
+          "cap": 900
+        }
+      ],
+      "unit": "list",
+      "label": "Ontario Health Premium as steps: premium = min(cap, base + rate x (taxable income - from)) for the highest step reached",
+      "source": "https://www.ontario.ca/page/health-premium",
+      "source_title": "Health premium - Ontario.ca",
+      "confidence": "high",
+      "note": "Structured version of ontario_health_premium (same figures). No premium at or below $20,000 of taxable income."
     }
   },
-
   "provinces": {
     "ON": {
       "name_en": "Ontario",
       "name_fr": "Ontario",
-      "sales_tax": {"type": "HST", "rate": 0.13, "gst": 0.05, "provincial": 0.08},
+      "sales_tax": {
+        "type": "HST",
+        "rate": 0.13,
+        "gst": 0.05,
+        "provincial": 0.08
+      },
       "income_tax_brackets": [
-        {"from": 0, "to": 53891, "rate": 0.0505},
-        {"from": 53891, "to": 107785, "rate": 0.0915},
-        {"from": 107785, "to": 150000, "rate": 0.1116},
-        {"from": 150000, "to": 220000, "rate": 0.1216},
-        {"from": 220000, "to": null, "rate": 0.1316}
+        {
+          "from": 0,
+          "to": 53891,
+          "rate": 0.0505
+        },
+        {
+          "from": 53891,
+          "to": 107785,
+          "rate": 0.0915
+        },
+        {
+          "from": 107785,
+          "to": 150000,
+          "rate": 0.1116
+        },
+        {
+          "from": 150000,
+          "to": 220000,
+          "rate": 0.1216
+        },
+        {
+          "from": 220000,
+          "to": null,
+          "rate": 0.1316
+        }
       ],
       "basic_personal_amount": 12989,
       "notes": "Indexed 1.9% for 2026; the $150,000 and $220,000 thresholds are not indexed. Add the Ontario surtax (values.ontario_surtax: 20% over $5,818 and 36% over $7,446 of basic Ontario tax) and the Ontario Health Premium (values.ontario_health_premium). Ontario Tax Reduction for low incomes not modelled. Upper brackets also confirmed in the Public Accounts of Ontario. Sales tax rate: medium confidence (not re-opened 2026-10-20).",
@@ -564,12 +722,33 @@
     "QC": {
       "name_en": "Quebec",
       "name_fr": "Québec",
-      "sales_tax": {"type": "GST+QST", "rate": 0.14975, "gst": 0.05, "provincial": 0.09975},
+      "sales_tax": {
+        "type": "GST+QST",
+        "rate": 0.14975,
+        "gst": 0.05,
+        "provincial": 0.09975
+      },
       "income_tax_brackets": [
-        {"from": 0, "to": 54345, "rate": 0.14},
-        {"from": 54345, "to": 108680, "rate": 0.19},
-        {"from": 108680, "to": 132245, "rate": 0.24},
-        {"from": 132245, "to": null, "rate": 0.2575}
+        {
+          "from": 0,
+          "to": 54345,
+          "rate": 0.14
+        },
+        {
+          "from": 54345,
+          "to": 108680,
+          "rate": 0.19
+        },
+        {
+          "from": 108680,
+          "to": 132245,
+          "rate": 0.24
+        },
+        {
+          "from": 132245,
+          "to": null,
+          "rate": 0.2575
+        }
       ],
       "basic_personal_amount": 18952,
       "notes": "Indexed 2.05% for 2026 (Finances Québec, Paramètres du régime d'imposition des particuliers 2026, Nov. 2025); rates unchanged. Separate Québec return (TP-1) to Revenu Québec; the basic personal amount gives a credit at 14%. Québec residents get the 16.5% refundable Québec abatement on basic federal tax (values.quebec_abatement). QPP replaces CPP (12.6% + QPP2 8% for the self-employed); QPIP is compulsory (0.764%). Instalment threshold $1,800. Not modelled: health services fund contribution and RAMQ prescription drug insurance premium (see open_questions). QST rate: medium confidence.",
@@ -579,46 +758,125 @@
     "BC": {
       "name_en": "British Columbia",
       "name_fr": "Colombie-Britannique",
-      "sales_tax": {"type": "GST+PST", "rate": 0.12, "gst": 0.05, "provincial": 0.07},
+      "sales_tax": {
+        "type": "GST+PST",
+        "rate": 0.12,
+        "gst": 0.05,
+        "provincial": 0.07
+      },
       "income_tax_brackets": [
-        {"from": 0, "to": 50363, "rate": 0.056},
-        {"from": 50363, "to": 100728, "rate": 0.077},
-        {"from": 100728, "to": 115648, "rate": 0.105},
-        {"from": 115648, "to": 140430, "rate": 0.1229},
-        {"from": 140430, "to": 190405, "rate": 0.147},
-        {"from": 190405, "to": 265545, "rate": 0.168},
-        {"from": 265545, "to": null, "rate": 0.205}
+        {
+          "from": 0,
+          "to": 50363,
+          "rate": 0.056
+        },
+        {
+          "from": 50363,
+          "to": 100728,
+          "rate": 0.077
+        },
+        {
+          "from": 100728,
+          "to": 115648,
+          "rate": 0.105
+        },
+        {
+          "from": 115648,
+          "to": 140430,
+          "rate": 0.1229
+        },
+        {
+          "from": 140430,
+          "to": 190405,
+          "rate": 0.147
+        },
+        {
+          "from": 190405,
+          "to": 265545,
+          "rate": 0.168
+        },
+        {
+          "from": 265545,
+          "to": null,
+          "rate": 0.205
+        }
       ],
       "basic_personal_amount": 13216,
-      "notes": "BC Budget 2026 (2026-02-17) raised the lowest rate from 5.06% to 5.60% for 2026 and later years; the credit rate for the basic personal amount is also 5.60%. Payroll tables use a prorated 6.14% from July 2026; the annual rate is 5.60%. Thresholds indexed 2.2% for 2026; the budget freezes brackets and credits at 2026 levels for 2027-2030. BC tax reduction credit for low incomes raised to a $690 maximum for 2026 (secondary sources), not modelled. PST 7% is separate from GST. Medium: the rate change is a budget measure whose enactment was not confirmed, and the middle thresholds come from the CRA payroll guide and secondary sources.",
+      "notes": "Re-verified 2026-10-20 (EY BC budget 2026): lowest rate 5.60% on the first $50,363 from 2026; other brackets unchanged; credits at 5.60%; BC tax reduction max $690 (not modelled). BPA $13,216 not re-verified. BC Budget 2026 (2026-02-17) raised the lowest rate from 5.06% to 5.60% for 2026 and later years; the credit rate for the basic personal amount is also 5.60%. Payroll tables use a prorated 6.14% from July 2026; the annual rate is 5.60%. Thresholds indexed 2.2% for 2026; the budget freezes brackets and credits at 2026 levels for 2027-2030. BC tax reduction credit for low incomes raised to a $690 maximum for 2026 (secondary sources), not modelled. PST 7% is separate from GST. Medium: the rate change is a budget measure whose enactment was not confirmed, and the middle thresholds come from the CRA payroll guide and secondary sources.",
       "source": "https://www.canada.ca/en/revenue-agency/services/forms-publications/payroll/t4127-payroll-deductions-formulas/t4127-jul/t4127-jul-payroll-deductions-formulas.html",
       "confidence": "medium"
     },
     "AB": {
       "name_en": "Alberta",
       "name_fr": "Alberta",
-      "sales_tax": {"type": "GST", "rate": 0.05, "gst": 0.05, "provincial": 0},
+      "sales_tax": {
+        "type": "GST",
+        "rate": 0.05,
+        "gst": 0.05,
+        "provincial": 0
+      },
       "income_tax_brackets": [
-        {"from": 0, "to": 61200, "rate": 0.08},
-        {"from": 61200, "to": 154259, "rate": 0.10},
-        {"from": 154259, "to": 185111, "rate": 0.12},
-        {"from": 185111, "to": 246813, "rate": 0.13},
-        {"from": 246813, "to": 370220, "rate": 0.14},
-        {"from": 370220, "to": null, "rate": 0.15}
+        {
+          "from": 0,
+          "to": 61200,
+          "rate": 0.08
+        },
+        {
+          "from": 61200,
+          "to": 154259,
+          "rate": 0.1
+        },
+        {
+          "from": 154259,
+          "to": 185111,
+          "rate": 0.12
+        },
+        {
+          "from": 185111,
+          "to": 246813,
+          "rate": 0.13
+        },
+        {
+          "from": 246813,
+          "to": 370220,
+          "rate": 0.14
+        },
+        {
+          "from": 370220,
+          "to": null,
+          "rate": 0.15
+        }
       ],
       "basic_personal_amount": 22769,
-      "notes": "8% bracket introduced in 2025; Budget 2026 made no change to personal rates. The $61,200 and $370,220 thresholds and the BPA are confirmed on CRA pages / ATB. The middle thresholds ($154,259, $185,111, $246,813) come from secondary sources and match 2.0% indexation of the 2025 values. No provincial sales tax. Not confirmed: whether Alberta non-refundable credits (including the basic personal amount) are calculated at 8% or stayed at 10% after the 8% bracket was added (see open_questions).",
+      "notes": "Re-verified 2026-10-20 (EY Alberta budget 2026, ATB): brackets 8% to $61,200, 10% to $154,259, 12% to $185,111, 13% to $246,813, 14% to $370,220, 15% above; BPA $22,769. Non-refundable credits are calculated at the lowest rate (8%), plus a supplemental credit of 2% of eligible credits above $60,000 (indexed), not modelled. 8% bracket introduced in 2025; Budget 2026 made no change to personal rates. The $61,200 and $370,220 thresholds and the BPA are confirmed on CRA pages / ATB. The middle thresholds ($154,259, $185,111, $246,813) come from secondary sources and match 2.0% indexation of the 2025 values. No provincial sales tax. Not confirmed: whether Alberta non-refundable credits (including the basic personal amount) are calculated at 8% or stayed at 10% after the 8% bracket was added (see open_questions).",
       "source": "https://www.canada.ca/en/revenue-agency/services/tax/individuals/tax-rates-brackets/current-year.html",
-      "confidence": "medium"
+      "confidence": "high"
     },
     "SK": {
       "name_en": "Saskatchewan",
       "name_fr": "Saskatchewan",
-      "sales_tax": {"type": "GST+PST", "rate": 0.11, "gst": 0.05, "provincial": 0.06},
+      "sales_tax": {
+        "type": "GST+PST",
+        "rate": 0.11,
+        "gst": 0.05,
+        "provincial": 0.06
+      },
       "income_tax_brackets": [
-        {"from": 0, "to": 54532, "rate": 0.105},
-        {"from": 54532, "to": 155805, "rate": 0.125},
-        {"from": 155805, "to": null, "rate": 0.145}
+        {
+          "from": 0,
+          "to": 54532,
+          "rate": 0.105
+        },
+        {
+          "from": 54532,
+          "to": 155805,
+          "rate": 0.125
+        },
+        {
+          "from": 155805,
+          "to": null,
+          "rate": 0.145
+        }
       ],
       "basic_personal_amount": 20381,
       "notes": "The basic personal amount includes the extra increases under the Saskatchewan Affordability Act (2025-2028). PST 6%, separate registration; some services are taxable (see values.pst_on_professional_services). PST rate: medium confidence.",
@@ -628,11 +886,28 @@
     "MB": {
       "name_en": "Manitoba",
       "name_fr": "Manitoba",
-      "sales_tax": {"type": "GST+RST", "rate": 0.12, "gst": 0.05, "provincial": 0.07},
+      "sales_tax": {
+        "type": "GST+RST",
+        "rate": 0.12,
+        "gst": 0.05,
+        "provincial": 0.07
+      },
       "income_tax_brackets": [
-        {"from": 0, "to": 47000, "rate": 0.108},
-        {"from": 47000, "to": 100000, "rate": 0.1275},
-        {"from": 100000, "to": null, "rate": 0.174}
+        {
+          "from": 0,
+          "to": 47000,
+          "rate": 0.108
+        },
+        {
+          "from": 47000,
+          "to": 100000,
+          "rate": 0.1275
+        },
+        {
+          "from": 100000,
+          "to": null,
+          "rate": 0.174
+        }
       ],
       "basic_personal_amount": 15780,
       "notes": "Brackets and basic personal amount are no longer indexed (frozen since 2025; Budget 2026 of 2026-03-24 kept the freeze). The basic personal amount is phased out linearly for net income from $200,000 to $400,000 (zero at $400,000 or more), per gov.mb.ca. One search summary mentioned indexed thresholds ($47,564 / $101,200), but EY, Andersen and the CRA payroll guide all give $47,000 / $100,000. RST 7%, separate registration.",
@@ -642,13 +917,38 @@
     "NS": {
       "name_en": "Nova Scotia",
       "name_fr": "Nouvelle-Écosse",
-      "sales_tax": {"type": "HST", "rate": 0.14, "gst": 0.05, "provincial": 0.09},
+      "sales_tax": {
+        "type": "HST",
+        "rate": 0.14,
+        "gst": 0.05,
+        "provincial": 0.09
+      },
       "income_tax_brackets": [
-        {"from": 0, "to": 30995, "rate": 0.0879},
-        {"from": 30995, "to": 61991, "rate": 0.1495},
-        {"from": 61991, "to": 97417, "rate": 0.1667},
-        {"from": 97417, "to": 157124, "rate": 0.175},
-        {"from": 157124, "to": null, "rate": 0.21}
+        {
+          "from": 0,
+          "to": 30995,
+          "rate": 0.0879
+        },
+        {
+          "from": 30995,
+          "to": 61991,
+          "rate": 0.1495
+        },
+        {
+          "from": 61991,
+          "to": 97417,
+          "rate": 0.1667
+        },
+        {
+          "from": 97417,
+          "to": 157124,
+          "rate": 0.175
+        },
+        {
+          "from": 157124,
+          "to": null,
+          "rate": 0.21
+        }
       ],
       "basic_personal_amount": 11932,
       "notes": "Indexed 1.6% for 2026 (indexation resumed in 2025). The former supplementary low-income amount no longer applies in 2026. A low-income tax reduction is clawed back above $15,220 (not modelled). HST 14% since 2025-04-01 (medium: not re-opened 2026-10-20).",
@@ -658,12 +958,33 @@
     "NB": {
       "name_en": "New Brunswick",
       "name_fr": "Nouveau-Brunswick",
-      "sales_tax": {"type": "HST", "rate": 0.15, "gst": 0.05, "provincial": 0.10},
+      "sales_tax": {
+        "type": "HST",
+        "rate": 0.15,
+        "gst": 0.05,
+        "provincial": 0.1
+      },
       "income_tax_brackets": [
-        {"from": 0, "to": 52333, "rate": 0.094},
-        {"from": 52333, "to": 104666, "rate": 0.14},
-        {"from": 104666, "to": 193861, "rate": 0.16},
-        {"from": 193861, "to": null, "rate": 0.195}
+        {
+          "from": 0,
+          "to": 52333,
+          "rate": 0.094
+        },
+        {
+          "from": 52333,
+          "to": 104666,
+          "rate": 0.14
+        },
+        {
+          "from": 104666,
+          "to": 193861,
+          "rate": 0.16
+        },
+        {
+          "from": 193861,
+          "to": null,
+          "rate": 0.195
+        }
       ],
       "basic_personal_amount": 13664,
       "notes": "Indexed 2.0% for 2026. Basic personal amount from the CRA payroll guide (T4127, January 2026). HST 15% (medium: not re-opened 2026-10-20).",
@@ -673,49 +994,140 @@
     "NL": {
       "name_en": "Newfoundland and Labrador",
       "name_fr": "Terre-Neuve-et-Labrador",
-      "sales_tax": {"type": "HST", "rate": 0.15, "gst": 0.05, "provincial": 0.10},
+      "sales_tax": {
+        "type": "HST",
+        "rate": 0.15,
+        "gst": 0.05,
+        "provincial": 0.1
+      },
       "income_tax_brackets": [
-        {"from": 0, "to": 44678, "rate": 0.087},
-        {"from": 44678, "to": 89354, "rate": 0.145},
-        {"from": 89354, "to": 159528, "rate": 0.158},
-        {"from": 159528, "to": 223340, "rate": 0.178},
-        {"from": 223340, "to": 285318, "rate": 0.198},
-        {"from": 285318, "to": 570638, "rate": 0.208},
-        {"from": 570638, "to": 1141275, "rate": 0.213},
-        {"from": 1141275, "to": null, "rate": 0.218}
+        {
+          "from": 0,
+          "to": 44678,
+          "rate": 0.087
+        },
+        {
+          "from": 44678,
+          "to": 89354,
+          "rate": 0.145
+        },
+        {
+          "from": 89354,
+          "to": 159528,
+          "rate": 0.158
+        },
+        {
+          "from": 159528,
+          "to": 223340,
+          "rate": 0.178
+        },
+        {
+          "from": 223340,
+          "to": 285318,
+          "rate": 0.198
+        },
+        {
+          "from": 285318,
+          "to": 570638,
+          "rate": 0.208
+        },
+        {
+          "from": 570638,
+          "to": 1141275,
+          "rate": 0.213
+        },
+        {
+          "from": 1141275,
+          "to": null,
+          "rate": 0.218
+        }
       ],
       "basic_personal_amount": 13094,
-      "notes": "Rates confirmed (Budget 2026 left them unchanged). Thresholds $44,678, $89,354 and $1,141,275 confirmed. The thresholds $159,528, $223,340, $285,318 and $570,638 are calculated from the 2025 values x 1.011 (the factor implied by the confirmed thresholds), within $1 of rounding, and not read on an official table. Basic personal amount: $13,094 for 2026 according to gov.nl.ca, i.e. the full-year equivalent of Budget 2026 (2026-04-29) raising it from $11,188 to $15,000 from 2026-07-01 (CRA payroll uses a prorated $15,000 from July). $15,000 expected for 2027. Budget measure; enactment not confirmed.",
+      "notes": "Re-verified 2026-10-20 on gov.nl.ca: 2026 brackets confirmed; BPA $13,094 for 2026 = $11,188 for six months and $15,000 from 2026-07-01 (Budget 2026), prorated. Rates confirmed (Budget 2026 left them unchanged). Thresholds $44,678, $89,354 and $1,141,275 confirmed. The thresholds $159,528, $223,340, $285,318 and $570,638 are calculated from the 2025 values x 1.011 (the factor implied by the confirmed thresholds), within $1 of rounding, and not read on an official table. Basic personal amount: $13,094 for 2026 according to gov.nl.ca, i.e. the full-year equivalent of Budget 2026 (2026-04-29) raising it from $11,188 to $15,000 from 2026-07-01 (CRA payroll uses a prorated $15,000 from July). $15,000 expected for 2027. Budget measure; enactment not confirmed.",
       "source": "https://www.gov.nl.ca/fin/tax-programs-incentives/personal/personalincometax/",
-      "confidence": "medium"
+      "confidence": "high"
     },
     "PE": {
       "name_en": "Prince Edward Island",
       "name_fr": "Île-du-Prince-Édouard",
-      "sales_tax": {"type": "HST", "rate": 0.15, "gst": 0.05, "provincial": 0.10},
+      "sales_tax": {
+        "type": "HST",
+        "rate": 0.15,
+        "gst": 0.05,
+        "provincial": 0.1
+      },
       "income_tax_brackets": [
-        {"from": 0, "to": 33928, "rate": 0.095},
-        {"from": 33928, "to": 65820, "rate": 0.1347},
-        {"from": 65820, "to": 106890, "rate": 0.166},
-        {"from": 106890, "to": 142250, "rate": 0.1762},
-        {"from": 142250, "to": 200000, "rate": 0.19},
-        {"from": 200000, "to": null, "rate": 0.20}
+        {
+          "from": 0,
+          "to": 33928,
+          "rate": 0.095
+        },
+        {
+          "from": 33928,
+          "to": 65820,
+          "rate": 0.1347
+        },
+        {
+          "from": 65820,
+          "to": 106890,
+          "rate": 0.166
+        },
+        {
+          "from": 106890,
+          "to": 142250,
+          "rate": 0.1762
+        },
+        {
+          "from": 142250,
+          "to": 200000,
+          "rate": 0.19
+        },
+        {
+          "from": 200000,
+          "to": null,
+          "rate": 0.2
+        }
       ],
       "basic_personal_amount": 15000,
-      "notes": "Thresholds raised by 1.8% for 2026; basic personal amount raised from $14,650 to $15,000 on 2026-01-01. New 20% rate above $200,000: the PEI government and the CRA payroll guide (T4127, July 2026, prorated 21% from July) apply it to 2026 and later years, but some advisors (EY update, CI Financial) date it to 2027. Fourth threshold published as $142,250 (CRA, EY, CI), although 1.8% indexation of $140,000 would give $142,520. Both points need checking.",
+      "notes": "Re-verified 2026-10-20 on princeedwardisland.ca: BPA $15,000 from 2026-01-01, 20% on taxable income over $200,000 from 2026. Thresholds raised by 1.8% for 2026; basic personal amount raised from $14,650 to $15,000 on 2026-01-01. New 20% rate above $200,000: the PEI government and the CRA payroll guide (T4127, July 2026, prorated 21% from July) apply it to 2026 and later years, but some advisors (EY update, CI Financial) date it to 2027. Fourth threshold published as $142,250 (CRA, EY, CI), although 1.8% indexation of $140,000 would give $142,520. Both points need checking.",
       "source": "https://www.princeedwardisland.ca/en/information/finance-and-affordability/provincial-personal-income-tax",
-      "confidence": "medium"
+      "confidence": "high"
     },
     "YT": {
       "name_en": "Yukon",
       "name_fr": "Yukon",
-      "sales_tax": {"type": "GST", "rate": 0.05, "gst": 0.05, "provincial": 0},
+      "sales_tax": {
+        "type": "GST",
+        "rate": 0.05,
+        "gst": 0.05,
+        "provincial": 0
+      },
       "income_tax_brackets": [
-        {"from": 0, "to": 58523, "rate": 0.064},
-        {"from": 58523, "to": 117045, "rate": 0.09},
-        {"from": 117045, "to": 181440, "rate": 0.109},
-        {"from": 181440, "to": 500000, "rate": 0.128},
-        {"from": 500000, "to": null, "rate": 0.15}
+        {
+          "from": 0,
+          "to": 58523,
+          "rate": 0.064
+        },
+        {
+          "from": 58523,
+          "to": 117045,
+          "rate": 0.09
+        },
+        {
+          "from": 117045,
+          "to": 181440,
+          "rate": 0.109
+        },
+        {
+          "from": 181440,
+          "to": 500000,
+          "rate": 0.128
+        },
+        {
+          "from": 500000,
+          "to": null,
+          "rate": 0.15
+        }
       ],
       "basic_personal_amount": 16452,
       "notes": "The first three thresholds follow the federal ones; the $500,000 threshold is fixed. The Yukon basic personal amount follows the federal amount, including the reduction to $14,829 between net incomes of $181,440 and $258,482 (the CRA payroll guide uses a formula for it). No territorial sales tax.",
@@ -725,12 +1137,33 @@
     "NT": {
       "name_en": "Northwest Territories",
       "name_fr": "Territoires du Nord-Ouest",
-      "sales_tax": {"type": "GST", "rate": 0.05, "gst": 0.05, "provincial": 0},
+      "sales_tax": {
+        "type": "GST",
+        "rate": 0.05,
+        "gst": 0.05,
+        "provincial": 0
+      },
       "income_tax_brackets": [
-        {"from": 0, "to": 53003, "rate": 0.059},
-        {"from": 53003, "to": 106009, "rate": 0.086},
-        {"from": 106009, "to": 172346, "rate": 0.122},
-        {"from": 172346, "to": null, "rate": 0.1405}
+        {
+          "from": 0,
+          "to": 53003,
+          "rate": 0.059
+        },
+        {
+          "from": 53003,
+          "to": 106009,
+          "rate": 0.086
+        },
+        {
+          "from": 106009,
+          "to": 172346,
+          "rate": 0.122
+        },
+        {
+          "from": 172346,
+          "to": null,
+          "rate": 0.1405
+        }
       ],
       "basic_personal_amount": 18198,
       "notes": "Indexed 2.0% for 2026. No territorial sales tax.",
@@ -740,12 +1173,33 @@
     "NU": {
       "name_en": "Nunavut",
       "name_fr": "Nunavut",
-      "sales_tax": {"type": "GST", "rate": 0.05, "gst": 0.05, "provincial": 0},
+      "sales_tax": {
+        "type": "GST",
+        "rate": 0.05,
+        "gst": 0.05,
+        "provincial": 0
+      },
       "income_tax_brackets": [
-        {"from": 0, "to": 55801, "rate": 0.04},
-        {"from": 55801, "to": 111602, "rate": 0.07},
-        {"from": 111602, "to": 181439, "rate": 0.09},
-        {"from": 181439, "to": null, "rate": 0.115}
+        {
+          "from": 0,
+          "to": 55801,
+          "rate": 0.04
+        },
+        {
+          "from": 55801,
+          "to": 111602,
+          "rate": 0.07
+        },
+        {
+          "from": 111602,
+          "to": 181439,
+          "rate": 0.09
+        },
+        {
+          "from": 181439,
+          "to": null,
+          "rate": 0.115
+        }
       ],
       "basic_personal_amount": 19659,
       "notes": "Indexed 2.0% for 2026. No territorial sales tax.",
@@ -753,16 +1207,10 @@
       "confidence": "high"
     }
   },
-
   "open_questions": [
-    "Web search quota exhausted and direct fetches blocked: GST 5%, HST (ON 13%, NB/NL/PE 15%, NS 14%), QST 9.975% and PST (BC 7%, SK 6%, MB RST 7%) could not be re-opened on 2026-10-20 (rated medium). Re-check on the CRA GST/HST calculator page and the provincial sites.",
     "PST on professional services: check the lists of taxable services for BC (including recent budget expansions), Saskatchewan and Manitoba for the services the site targets (IT/software development, design, consulting, writing).",
     "Invoice information thresholds for input tax credits (under $100 / $100-$499.99 / $500+ since 2021-01-01): check against RC4022 and SOR/91-45; the earlier thresholds were $30 / $150.",
-    "PEI: does the new 20% rate above $200,000 apply from 2026 (PEI government, CRA T4127 July 2026) or 2027 (EY update, CI Financial), and has it been enacted? Is the fourth threshold $142,250 (published) or $142,520 (1.8% indexation)?",
-    "Newfoundland and Labrador: confirm the 2026 thresholds $159,528, $223,340, $285,318 and $570,638 (calculated) and that the 2026 basic personal amount is $13,094 (BPA $15,000 from 2026-07-01, Budget 2026, enactment not confirmed).",
     "British Columbia: confirm enactment of the 5.60% lowest rate (Budget 2026), the 2026 BPA of $13,216 and the $690 BC tax reduction maximum.",
-    "Alberta: read the middle thresholds ($154,259, $185,111, $246,813) on an official table, and confirm the rate used for Alberta non-refundable credits since the 8% bracket (8% or 10%).",
-    "Federal BPA minimum $14,829 (additional amount $1,623) was confirmed only by secondary sources; check on the CRA line 30000 page.",
     "CRA reasonable kilometre allowance rates for 2026 not confirmed (2025: 72 cents first 5,000 km, 66 cents after, +4 cents in the territories). Also the 2026 vehicle ceilings (class 10.1 capital cost, zero-emission vehicles, lease, interest).",
     "Québec self-employed: health services fund (FSS) contribution on non-employment income and RAMQ prescription drug insurance premium for 2026 were not researched; both affect a Québec net income calculator.",
     "EI for Québec self-employed: confirm that the Québec rate (1.30%, maximum $895.70) applies to opted-in self-employed people, and the 2026 minimum self-employed earnings needed to claim benefits.",

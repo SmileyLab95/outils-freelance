@@ -15,6 +15,7 @@
   var money2 = new Intl.NumberFormat(LOCALE, { style: "currency", currency: CURRENCY });
   var money0 = new Intl.NumberFormat(LOCALE, { style: "currency", currency: CURRENCY, maximumFractionDigits: 0 });
   var number = new Intl.NumberFormat(LOCALE, { maximumFractionDigits: 2 });
+  var rateFormat = new Intl.NumberFormat(LOCALE, { maximumFractionDigits: 3 });
 
   var OF = {
     locale: LOCALE,
@@ -32,6 +33,8 @@
       return (decimals === 0 ? money0 : money2).format(n);
     },
     fmt: function (n) { return isFinite(n) ? number.format(n) : "–"; },
+    /** Taux en pourcentage, jusqu'à 3 décimales (9,975 pour la TVQ). */
+    rate: function (n) { return isFinite(n) ? rateFormat.format(n) : "–"; },
 
     /**
      * Lit un nombre saisi (« 1 234,5 », « 1,234.50 », « $1,800 », « 26 % »). Renvoie NaN si vide ou invalide.

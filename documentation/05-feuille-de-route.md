@@ -30,23 +30,23 @@ Les phases s'enchaînent dans cet ordre ; une phase n'est terminée que lorsque 
 
 ## Phase 2 — Royaume-Uni (`/uk/`)
 
-- [ ] *Invoice generator* (sole trader, limited company, VAT)
-- [ ] *Day rate calculator*
-- [ ] *Self-employed tax calculator* (income tax Angleterre/Écosse + Class 4 NI + payments on account)
-- [ ] *VAT calculator* + seuil d'immatriculation
-- [ ] *Late payment interest calculator* (Late Payment Act, indemnité fixe)
-- [ ] *Payment reminder letters* (jusqu'à la *letter before action*)
-- [ ] *Sole trader vs limited company calculator*
-- [ ] Guide *Making Tax Digital*
+- [x] *Invoice generator* (sole trader, limited company, VAT)
+- [x] *Day rate calculator*
+- [x] *Self-employed tax calculator* (income tax Angleterre/Écosse + Class 4 NI + payments on account)
+- [x] *VAT calculator* + seuil d'immatriculation
+- [x] *Late payment interest calculator* (Late Payment Act, indemnité fixe)
+- [x] *Payment reminder letters* (jusqu'à la *letter before action*)
+- [x] *Sole trader vs limited company calculator*
+- [x] Guide *Making Tax Digital* (avec vérificateur)
 
 ## Phase 3 — Canada (`/ca/` et `/ca/fr/`)
 
-- [ ] Générateur de facture avec numéro de TPS/TVH et taxes par province
-- [ ] Calculateur TPS/TVH/TVQ/TVP par province
-- [ ] Calculateur d'impôt du travailleur autonome (fédéral + provincial + RPC/RRQ)
-- [ ] Calculateur d'acomptes provisionnels
-- [ ] Calculateur de taux horaire
-- [ ] Relances de paiement et modèles d'emails (anglais et français)
+- [x] Générateur de facture avec numéro de TPS/TVH et taxes par province
+- [x] Calculateur TPS/TVH/TVQ/TVP par province
+- [x] Calculateur d'impôt du travailleur autonome (fédéral + provincial + RPC/RRQ)
+- [x] Calculateur d'acomptes provisionnels (intégré au calculateur d'impôt)
+- [x] Calculateur de taux horaire
+- [x] Relances de paiement, intérêts de retard et modèles d'emails (anglais et français)
 
 ## Phase 4 — France, aller plus loin
 
@@ -58,7 +58,7 @@ Les phases s'enchaînent dans cet ordre ; une phase n'est terminée que lorsque 
 - [ ] Calcul de date d'échéance
 - [ ] Générateur de contrat de prestation
 
-## Phase 5 — Revenus
+## Phase 5 — Revenus (reportée à la fin, sur décision du 20/10/2026 : d'abord terminer le site, puis Gumroad, puis l'affiliation)
 
 - [ ] Inscription aux programmes d'affiliation prioritaires (voir [06-affiliation.md](06-affiliation.md))
 - [ ] Encarts « Outils recommandés » avec mention de transparence

@@ -1,0 +1,102 @@
+<!--{
+  "id": "salestax",
+  "slug": "gst-hst-calculator/",
+  "title": "GST/HST Calculator 2026: Add or Remove Sales Tax by Province",
+  "description": "Add or remove GST, HST, QST or PST for any Canadian province or territory: Ontario 13%, Québec 5% + 9.975%, BC 5% + 7%, Atlantic HST and more. Free, with the formula.",
+  "menu": "GST/HST calculator",
+  "icon": "🧮",
+  "blurb": "Add or remove GST, HST, QST or PST for any province.",
+  "app": "Canada GST/HST Calculator",
+  "scripts": ["engines/salestax.js", "tools/salestax.js"],
+  "rules": "ca",
+  "sources": ["hst_rates", "qst_rate", "pst_rates", "small_supplier_threshold", "pst_on_professional_services"],
+  "priority": 0.95,
+  "faq": [
+    ["What are the sales tax rates in Canada in 2026?", "GST is 5% everywhere. Ontario charges 13% HST; New Brunswick, Newfoundland and Labrador and Prince Edward Island 15% HST; Nova Scotia 14% HST since April 1, 2025. Québec adds 9.975% QST, British Columbia 7% PST, Saskatchewan 6% PST and Manitoba 7% RST to the GST. Alberta and the territories charge GST only."],
+    ["How do I calculate HST from a total?", "Divide the total by 1 plus the rate. In Ontario: total ÷ 1.13 gives the price before tax, and the difference is the HST. For example, $113 ÷ 1.13 = $100, so the HST is $13."],
+    ["Do I have to charge GST/HST as a freelancer?", "Only once you are registered. Registration is mandatory when your taxable revenue goes over $30,000 in a single quarter or over four consecutive quarters (the small supplier threshold). You can register voluntarily below it to claim input tax credits."],
+    ["Which province's rate do I charge?", "For most services sold to Canadian clients, the rate of the province where your client is located (place of supply), not where you live. Services to clients outside Canada are generally zero-rated."],
+    ["Do freelancers charge PST?", "In British Columbia, Saskatchewan and Manitoba, PST or RST applies to goods and to a list of specific services, but most professional services such as consulting, design, writing or coaching are not taxable. Check your province's list for your service."]
+  ]
+}-->
+<script type="application/json" id="salestax-data">
+{
+  "storage": "salestax",
+  "mode": "select",
+  "from_rules": "provinces",
+  "default": "ON",
+  "names": "name_en",
+  "tax_names": {"GST": "GST", "HST": "HST", "QST": "QST", "PST": "PST", "RST": "RST"},
+  "notes": {
+    "BC": "PST applies to goods and to some services (for example software, telecommunications, legal services). Most professional services are exempt.",
+    "SK": "PST applies to goods and to a list of services. Check whether yours is on it.",
+    "MB": "RST applies to goods and to a list of services. Most professional services are exempt.",
+    "QC": "QST is charged on the price before GST. Register with Revenu Québec for both."
+  },
+  "options": [],
+  "labels": {
+    "percent": "%", "rate": "Province", "other": "Other",
+    "amount_net": "Price before tax", "amount_gross": "Price including tax",
+    "result_gross": "Price including tax", "result_net": "Price before tax",
+    "of_which": "Sales tax at {rate}: {tax}", "enter_amount": "Enter an amount.",
+    "net": "Before tax", "gross": "Total with tax", "net_short": "before-tax", "gross_short": "tax-included",
+    "table": "The same {kind} amount in every province",
+    "formula_generic": "Total = price × (1 + tax rate)"
+  }
+}
+</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · 2026 rates</span>
+    <h1>GST/HST calculator</h1>
+    <p class="lead">Pick a province or territory and enter an amount: see the GST, HST, QST or PST, the total, and the same amount in every province.</p>
+    <ul class="trust"><li>All 13 provinces and territories</li><li>Add or remove tax</li><li>Rounded to the cent</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="salestax-form" onsubmit="return false">
+      <h2>Your amount</h2>
+      <div class="segmented" role="group" aria-label="Direction" style="margin-bottom: 16px;">
+        <button type="button" data-dir="net" aria-pressed="true">Add tax</button>
+        <button type="button" data-dir="gross" aria-pressed="false">Remove tax</button>
+      </div>
+      <input type="hidden" id="st-dir" name="dir" value="net" data-save>
+      <div class="fields">
+        <div class="field full"><label for="st-amount" id="st-amount-label">Price before tax</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="st-amount" name="amount" value="1,000" data-save><span>$</span></div></div>
+        <div class="field full"><label for="st-region">Province or territory of your client</label><div id="st-choices"></div></div>
+      </div>
+      <p class="notice" id="st-note" hidden style="margin: 14px 0 0;"></p>
+    </form>
+
+    <div class="results">
+      <div class="result-hero">
+        <div class="label" id="st-hero-label">Price including tax</div>
+        <div class="big" id="st-hero">–</div>
+        <div class="sub" id="st-hero-sub">–</div>
+      </div>
+      <ul class="result-list card" style="padding: 6px 18px;" id="st-list"></ul>
+      <p class="formula" id="st-formula" style="margin-top: 16px;">–</p>
+      <div class="card" style="padding: 6px 18px; margin-top: 16px;">
+        <table class="mini-table">
+          <caption id="st-caption">The same amount in every province</caption>
+          <thead><tr><th>Province</th><th>Before tax</th><th>Tax</th><th>Total</th></tr></thead>
+          <tbody id="st-table"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>GST/HST for freelancers</h2>
+  <ul>
+    <li><strong>Small supplier:</strong> you don't have to register while your taxable revenue stays at or below $30,000 over four consecutive calendar quarters.</li>
+    <li><strong>Charge the client's province:</strong> for most services, the rate depends on where your client is, not where you are.</li>
+    <li><strong>On your invoices:</strong> once registered, show your GST/HST number (and your QST number in Québec) and the tax amounts. Our <a href="{{link:invoice}}">invoice generator</a> adds the right lines for each province.</li>
+  </ul>
+  <p class="small muted">Information only. Check the CRA, Revenu Québec or your provincial tax site for your specific goods or services.</p>
+</section>

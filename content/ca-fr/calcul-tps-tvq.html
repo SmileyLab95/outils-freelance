@@ -1,0 +1,101 @@
+<!--{
+  "id": "salestax",
+  "slug": "calcul-tps-tvq/",
+  "title": "Calcul TPS TVQ 2026 : calculateur de taxes du Québec et TVH",
+  "description": "Calculez la TPS (5 %) et la TVQ (9,975 %) d'un montant, ajoutez ou retirez les taxes, ou calculez la TVH et la TVP des autres provinces. Gratuit, avec la formule détaillée.",
+  "menu": "Calcul TPS et TVQ",
+  "icon": "🧮",
+  "blurb": "Ajoutez ou retirez la TPS et la TVQ, ou la TVH d'une autre province.",
+  "app": "Calculateur de TPS et TVQ",
+  "scripts": ["engines/salestax.js", "tools/salestax.js"],
+  "rules": "ca",
+  "sources": ["qst_rate", "hst_rates", "pst_rates", "small_supplier_threshold"],
+  "priority": 1.0,
+  "faq": [
+    ["Comment calculer la TPS et la TVQ ?", "Multipliez le prix avant taxes par 5 % pour la TPS et par 9,975 % pour la TVQ, puis additionnez. Sur 100 $ : 5,00 $ de TPS + 9,98 $ de TVQ = 114,98 $. La TVQ se calcule sur le prix avant taxes, pas sur le prix avec la TPS."],
+    ["Comment retirer les taxes d'un montant ?", "Divisez le montant taxes incluses par 1,14975. Par exemple, 114,98 $ ÷ 1,14975 = 100 $ avant taxes ; la différence correspond à la TPS et à la TVQ."],
+    ["Un travailleur autonome doit-il facturer la TPS et la TVQ ?", "Seulement s'il est inscrit. L'inscription est obligatoire quand vos fournitures taxables dépassent 30 000 $ sur quatre trimestres civils consécutifs (seuil du petit fournisseur), ou dans un seul trimestre. Vous pouvez vous inscrire volontairement avant pour récupérer les taxes payées sur vos dépenses."],
+    ["Quelle taxe facturer à un client d'une autre province ?", "Pour la plupart des services, celle de la province du client : TVH de 13 % en Ontario, 15 % au Nouveau-Brunswick, à Terre-Neuve-et-Labrador et à l'Île-du-Prince-Édouard, 14 % en Nouvelle-Écosse, et TPS de 5 % seulement ailleurs (la TVP de la Colombie-Britannique, de la Saskatchewan et du Manitoba vise surtout les biens)."]
+  ]
+}-->
+<script type="application/json" id="salestax-data">
+{
+  "storage": "salestax",
+  "mode": "select",
+  "from_rules": "provinces",
+  "default": "QC",
+  "names": "name_fr",
+  "tax_names": {"GST": "TPS", "HST": "TVH", "QST": "TVQ", "PST": "TVP", "RST": "TVD"},
+  "notes": {
+    "QC": "La TVQ se calcule sur le prix avant taxes. L'inscription se fait auprès de Revenu Québec pour la TPS et la TVQ.",
+    "BC": "La TVP s'applique aux biens et à certains services (logiciels, télécommunications, services juridiques). La plupart des services professionnels en sont exemptés.",
+    "SK": "La TVP s'applique aux biens et à une liste de services : vérifiez si le vôtre y figure.",
+    "MB": "La taxe de vente au détail (TVD) vise les biens et une liste de services. La plupart des services professionnels en sont exemptés."
+  },
+  "options": [],
+  "labels": {
+    "percent": " %", "rate": "Province", "other": "Autre",
+    "amount_net": "Montant avant taxes", "amount_gross": "Montant taxes incluses",
+    "result_gross": "Total taxes incluses", "result_net": "Montant avant taxes",
+    "of_which": "Taxes de {rate} : {tax}", "enter_amount": "Saisissez un montant.",
+    "net": "Avant taxes", "gross": "Total taxes incluses", "net_short": "avant taxes", "gross_short": "taxes incluses",
+    "table": "Le même montant {kind} dans chaque province",
+    "formula_generic": "Total = montant × (1 + taux de taxe)"
+  }
+}
+</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Gratuit · taux 2026</span>
+    <h1>Calcul TPS et TVQ</h1>
+    <p class="lead">Saisissez un montant : la TPS, la TVQ et le total s'affichent aussitôt. Choisissez une autre province pour la TVH ou la TVP.</p>
+    <ul class="trust"><li>TPS 5 % + TVQ 9,975 %</li><li>Ajouter ou retirer les taxes</li><li>Toutes les provinces</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="salestax-form" onsubmit="return false">
+      <h2>Votre montant</h2>
+      <div class="segmented" role="group" aria-label="Sens du calcul" style="margin-bottom: 16px;">
+        <button type="button" data-dir="net" aria-pressed="true">Ajouter les taxes</button>
+        <button type="button" data-dir="gross" aria-pressed="false">Retirer les taxes</button>
+      </div>
+      <input type="hidden" id="st-dir" name="dir" value="net" data-save>
+      <div class="fields">
+        <div class="field full"><label for="st-amount" id="st-amount-label">Montant avant taxes</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="st-amount" name="amount" value="100" data-save><span>$</span></div></div>
+        <div class="field full"><label for="st-region">Province ou territoire du client</label><div id="st-choices"></div></div>
+      </div>
+      <p class="notice" id="st-note" hidden style="margin: 14px 0 0;"></p>
+    </form>
+
+    <div class="results">
+      <div class="result-hero">
+        <div class="label" id="st-hero-label">Total taxes incluses</div>
+        <div class="big" id="st-hero">–</div>
+        <div class="sub" id="st-hero-sub">–</div>
+      </div>
+      <ul class="result-list card" style="padding: 6px 18px;" id="st-list"></ul>
+      <p class="formula" id="st-formula" style="margin-top: 16px;">–</p>
+      <div class="card" style="padding: 6px 18px; margin-top: 16px;">
+        <table class="mini-table">
+          <caption id="st-caption">Le même montant dans chaque province</caption>
+          <thead><tr><th>Province</th><th>Avant taxes</th><th>Taxes</th><th>Total</th></tr></thead>
+          <tbody id="st-table"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>TPS et TVQ pour les travailleurs autonomes</h2>
+  <ul>
+    <li><strong>Petit fournisseur :</strong> pas d'inscription obligatoire tant que vos fournitures taxables ne dépassent pas 30 000 $ sur quatre trimestres consécutifs.</li>
+    <li><strong>Sur vos factures :</strong> une fois inscrit, indiquez vos numéros de TPS et de TVQ ainsi que le montant de chaque taxe. Notre <a href="{{link:invoice}}">générateur de facture</a> ajoute les bonnes lignes selon la province du client.</li>
+    <li><strong>Remises :</strong> vous versez à Revenu Québec la TPS et la TVQ perçues, moins celles payées sur vos dépenses d'entreprise (crédits et remboursements de taxe sur les intrants).</li>
+  </ul>
+  <p class="small muted">Information à titre indicatif. Vérifiez le traitement de vos biens ou services auprès de Revenu Québec ou de l'ARC.</p>
+</section>

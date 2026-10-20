@@ -1,0 +1,116 @@
+<!--{
+  "id": "tax",
+  "slug": "calculateur-impot-travailleur-autonome/",
+  "title": "Calcul de l'impôt d'un travailleur autonome 2026 (Québec et Canada)",
+  "description": "Estimez votre impôt fédéral et provincial 2026, votre RRQ (ou RPC) et votre RQAP de travailleur autonome, au Québec et dans toutes les provinces, avec vos acomptes provisionnels. Gratuit.",
+  "menu": "Impôt du travailleur autonome",
+  "icon": "🧾",
+  "blurb": "Impôt fédéral et provincial, RRQ et RQAP pour 2026.",
+  "app": "Calculateur d'impôt du travailleur autonome",
+  "scripts": ["engines/brackets.js", "engines/tax-ca.js", "tools/ca-tax.js"],
+  "rules": "ca",
+  "sources": ["qpp_rate_self_employed", "qpip_rate_self_employed", "cpp_rate_self_employed", "federal_income_tax_brackets", "quebec_abatement", "instalment_threshold_quebec"],
+  "priority": 1.0,
+  "faq": [
+    ["Combien d'impôt paie un travailleur autonome au Québec ?", "De l'impôt fédéral et de l'impôt du Québec sur votre revenu net d'entreprise, plus les deux parts du Régime de rentes du Québec : 12,6 % des gains entre 3 500 $ et 74 600 $ en 2026, et 8 % de RRQ2 entre 74 600 $ et 85 000 $. S'ajoute la cotisation au RQAP (0,764 %). Les résidents du Québec bénéficient d'un abattement de 16,5 % de l'impôt fédéral de base."],
+    ["Le RRQ est-il déductible pour un travailleur autonome ?", "En partie : la part « employeur », la partie bonifiée de la part « employé » et tout le RRQ2 sont déduits du revenu ; la part de base de la part « employé » donne droit à un crédit d'impôt non remboursable. Le calculateur applique les deux."],
+    ["Quels sont les paliers d'imposition du Québec en 2026 ?", "14 % jusqu'à 54 345 $, 19 % jusqu'à 108 680 $, 24 % jusqu'à 132 245 $ et 25,75 % au-delà. Le montant personnel de base est de 18 952 $."],
+    ["Dois-je payer des acomptes provisionnels ?", "Au Québec, si votre impôt net à payer dépasse 1 800 $ pour l'année et pour l'une des deux années précédentes, Revenu Québec et l'ARC vous demandent des acomptes trimestriels, au plus tard le 15 mars, le 15 juin, le 15 septembre et le 15 décembre. Ailleurs au Canada, le seuil est de 3 000 $."],
+    ["Qu'est-ce que le calculateur ne prend pas en compte ?", "Vos autres revenus (salaire, placements), les cotisations au REER, les crédits autres que le montant personnel de base et le RRQ/RPC, les réductions pour faible revenu, l'assurance-emploi facultative et, au Québec, la cotisation au Fonds des services de santé et la prime d'assurance médicaments de la RAMQ."]
+  ]
+}-->
+<script type="application/json" id="ca-tax-data">
+{
+  "names": "name_fr", "default_province": "QC", "percent": " %", "per_month": "/mois",
+  "date_format": {"day": "numeric", "month": "long", "year": "numeric"},
+  "pension_cpp": "RPC + RPC2 (les deux parts)", "pension_qpp": "RRQ + RRQ2 (les deux parts)",
+  "federal": "Impôt fédéral", "federal_qc": "Impôt fédéral (après l'abattement du Québec de 16,5 %)",
+  "provincial": "Impôt – {province}",
+  "sub": "Soit {rate} de votre revenu. Mettez de côté environ {aside} de chaque paiement reçu.",
+  "sub_empty": "Indiquez votre revenu net de travailleur autonome.",
+  "bar": {"net": "Revenu net", "pension": "RPC", "pension_qc": "RRQ + RQAP", "tax": "Impôt"},
+  "inst_required": "Environ {amount} par trimestre à l'ARC (impôt et RPC), au plus tard le {dates}.",
+  "inst_required_qc": "Environ {federal} par trimestre à l'ARC (impôt fédéral) et {quebec} à Revenu Québec (impôt du Québec, RRQ et RQAP), au plus tard le {dates}.",
+  "inst_not": "Votre impôt à payer est inférieur à {threshold} : en général, pas d'acomptes provisionnels.",
+  "steps": {
+    "profit": "Revenu net d'entreprise", "pension_deduction": "Partie déductible du RPC", "pension_deduction_qc": "Partie déductible du RRQ",
+    "net_income": "Revenu net", "federal_brackets": "Impôt fédéral selon les paliers", "federal_credits": "Montant personnel de base et crédit RPC/RRQ",
+    "abatement": "Abattement du Québec (16,5 %)", "federal": "Impôt fédéral",
+    "provincial_brackets": "Impôt – {province}, selon les paliers", "provincial_credits": "Crédits provinciaux",
+    "surtax": "Surtaxe de l'Ontario", "health": "Contribution-santé de l'Ontario", "provincial": "Impôt – {province}"
+  }
+}
+</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Gratuit · année d'imposition 2026</span>
+    <h1>Impôt du travailleur autonome</h1>
+    <p class="lead">Indiquez votre revenu net d'entreprise et votre province : voyez votre impôt fédéral et provincial, votre RRQ (ou RPC) et votre RQAP, ce qu'il vous reste, et vos acomptes provisionnels.</p>
+    <ul class="trust"><li>Québec et toutes les provinces</li><li>RRQ, RRQ2, RQAP, RPC</li><li>Acomptes provisionnels</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="ca-tax-form" onsubmit="return false">
+      <h2>Votre revenu 2026</h2>
+      <div class="fields">
+        <div class="field full"><label for="t-profit">Revenu net de travailleur autonome</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="t-profit" name="profit" value="60 000" data-save><span>$</span></div>
+          <span class="hint">Vos revenus d'entreprise moins vos dépenses (formulaire TP-80 au Québec, T2125 au fédéral).</span></div>
+        <div class="field full"><label for="t-province">Province ou territoire de résidence au 31 décembre</label>
+          <select id="t-province" name="province" data-save></select></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="result-hero">
+        <div class="label">Impôt et cotisations estimés pour 2026</div>
+        <div class="big" id="r-total">–</div>
+        <div class="sub" id="r-sub">–</div>
+      </div>
+      <div class="card split-card">
+        <div class="split-bar" id="r-bar" aria-hidden="true"></div>
+        <ul class="split-legend" id="r-legend"></ul>
+      </div>
+      <ul class="result-list card" style="padding: 6px 18px;">
+        <li><span>Revenu net d'entreprise</span><b id="r-profit">–</b></li>
+        <li><span id="r-pension-label">RRQ + RRQ2</span><b id="r-pension">–</b></li>
+        <li id="r-qpip-row" hidden><span>Cotisation au RQAP</span><b id="r-qpip">–</b></li>
+        <li><span id="r-federal-label">Impôt fédéral</span><b id="r-federal">–</b></li>
+        <li><span id="r-provincial-label">Impôt provincial</span><b id="r-provincial">–</b></li>
+        <li><span><strong>Ce qu'il vous reste</strong></span><b id="r-take">–</b></li>
+      </ul>
+      <div class="card" style="margin-top: 16px; padding: 18px;">
+        <h3 style="font-size: 1rem; margin-bottom: 8px;">Acomptes provisionnels</h3>
+        <p id="r-inst" style="margin: 0;">–</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <details class="card details-card">
+    <summary><b>Voir le calcul détaillé</b></summary>
+    <ul class="result-list" id="r-steps"></ul>
+  </details>
+</section>
+
+<section class="section prose">
+  <h2>Comment le travailleur autonome est imposé</h2>
+  <p>Votre revenu net d'entreprise s'ajoute à vos autres revenus et il est imposé au fédéral et au provincial. Vous payez aussi les deux parts du régime de retraite (RRQ au Québec, RPC ailleurs), puisqu'aucun employeur ne paie la sienne pour vous.</p>
+  <h2>RRQ, RPC et RQAP en 2026</h2>
+  <div class="table-scroll">
+  <table>
+    <thead><tr><th>Régime</th><th>Taux</th><th>Sur les gains</th><th>Maximum</th></tr></thead>
+    <tbody>
+      <tr><td>RRQ</td><td>12,6 %</td><td>de 3 500 $ à 74 600 $</td><td>8 958,60 $</td></tr>
+      <tr><td>RRQ2</td><td>8 %</td><td>de 74 600 $ à 85 000 $</td><td>832 $</td></tr>
+      <tr><td>RQAP</td><td>0,764 %</td><td>jusqu'à 103 000 $</td><td>786,92 $</td></tr>
+      <tr><td>RPC (hors Québec)</td><td>11,9 %</td><td>de 3 500 $ à 74 600 $</td><td>8 460,90 $</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="small muted">Estimation à titre indicatif, fondée sur les paramètres 2026 de l'ARC, de Revenu Québec, de Retraite Québec et des provinces.</p>
+</section>

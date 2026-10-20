@@ -1,0 +1,86 @@
+<!--{
+  "id": "rate",
+  "slug": "hourly-rate-calculator/",
+  "title": "Freelance Hourly Rate Calculator Canada (After Tax, 2026)",
+  "description": "What hourly rate should you charge as a self-employed Canadian? Start from the take-home pay you want: the calculator adds 2026 income tax and CPP for your province, expenses and unbillable time.",
+  "menu": "Hourly rate calculator",
+  "icon": "💵",
+  "blurb": "The rate to charge for the take-home pay you want, taxes and CPP included.",
+  "app": "Canada Freelance Hourly Rate Calculator",
+  "scripts": ["engines/brackets.js", "engines/tax-ca.js", "tools/ca-rate.js"],
+  "rules": "ca",
+  "sources": ["cpp_rate_self_employed", "federal_income_tax_brackets", "qpp_rate_self_employed"],
+  "priority": 0.9,
+  "faq": [
+    ["How do I set my freelance rate in Canada?", "Start from the yearly take-home pay you want, add the income tax and CPP (or QPP) you will pay on your profit and your business expenses, then divide by the hours you can actually bill. The calculator does each step with 2026 rates for your province."],
+    ["How many hours can a freelancer bill in a year?", "With 4 weeks off, 10 statutory holidays and 40-hour weeks, you work about 1,840 hours, but finding clients, admin and training usually take 25 to 40% of that. Most freelancers bill between 1,000 and 1,400 hours a year."],
+    ["Should I charge GST/HST on top of my rate?", "Your rate is before tax. If you are registered for GST/HST, add the tax for your client's province on your invoice. Below $30,000 of taxable revenue you can stay unregistered as a small supplier."]
+  ]
+}-->
+<script type="application/json" id="ca-rate-data">
+{
+  "names": "name_en", "default_province": "ON", "percent": "%",
+  "sub": "Minimum {minimum}/hour to reach your goal, plus your {buffer} safety margin.",
+  "sub_empty": "Add working hours to see your rate.",
+  "billable": "{hours} hours ({week}/week)"
+}
+</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · taxes and CPP included</span>
+    <h1>Freelance hourly rate calculator</h1>
+    <p class="lead">Tell us what you want to take home. We add income tax, CPP or QPP for your province, expenses and unbillable time, and give you the hourly and daily rate to charge.</p>
+    <ul class="trust"><li>2026 federal and provincial tax</li><li>CPP, QPP and QPIP</li><li>Real billable hours</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="ca-rate-form" onsubmit="return false">
+      <h3>Your goal</h3>
+      <div class="fields">
+        <div class="field full"><label for="h-take">Take-home pay you want per year (after tax and CPP)</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="h-take" name="take" value="60,000" data-save><span>$</span></div></div>
+        <div class="field"><label for="h-costs">Business expenses per year</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="h-costs" name="costs" value="5,000" data-save><span>$</span></div></div>
+        <div class="field"><label for="h-province">Province or territory</label>
+          <select id="h-province" name="province" data-save></select></div>
+      </div>
+      <h3>Your time</h3>
+      <div class="fields">
+        <div class="field"><label for="h-weeks">Weeks off per year</label>
+          <input type="number" id="h-weeks" name="weeks" value="4" min="0" max="26" data-save></div>
+        <div class="field"><label for="h-holidays">Statutory holidays (days)</label>
+          <input type="number" id="h-holidays" name="holidays" value="10" min="0" max="20" data-save></div>
+        <div class="field"><label for="h-hours">Hours worked per week</label>
+          <input type="number" id="h-hours" name="hours" value="40" min="1" max="80" data-save></div>
+        <div class="field"><label for="h-unbilled">Unbillable time</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="h-unbilled" name="unbilled" value="30" data-save><span>%</span></div></div>
+        <div class="field full"><label for="h-buffer">Safety margin</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="h-buffer" name="buffer" value="15" data-save><span>%</span></div></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="result-hero">
+        <div class="label">Recommended hourly rate</div>
+        <div class="big" id="h-rate">–</div>
+        <div class="sub" id="h-sub">–</div>
+      </div>
+      <ul class="result-list card" style="padding: 6px 18px;">
+        <li><span>Day rate (7.5 hours)</span><b id="h-day">–</b></li>
+        <li><span>Revenue needed per year</span><b id="h-revenue">–</b></li>
+        <li><span>Revenue needed per month</span><b id="h-month">–</b></li>
+        <li><span>Income tax and CPP/QPP</span><b id="h-taxes">–</b></li>
+        <li><span>Billable hours per year</span><b id="h-billable">–</b></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>The math behind your rate</h2>
+  <div class="formula">Hourly rate = (profit needed + expenses) ÷ billable hours × (1 + safety margin)</div>
+  <p>The profit needed is found exactly with 2026 federal and provincial tax and both halves of CPP (QPP and QPIP in Québec), so the rate stays right in every bracket. Check the detail with the <a href="{{link:tax}}">self-employed tax calculator</a>.</p>
+</section>

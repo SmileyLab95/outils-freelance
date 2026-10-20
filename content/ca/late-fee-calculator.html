@@ -1,0 +1,116 @@
+<!--{
+  "id": "latefee",
+  "slug": "late-fee-calculator/",
+  "title": "Late Payment Interest Calculator Canada (Invoices)",
+  "description": "Calculate the late fee on an overdue invoice: monthly interest such as 1.5% per month, an annual rate or a flat fee. Includes a contract clause to copy. Free tool for freelancers.",
+  "menu": "Late fee calculator",
+  "icon": "⏱️",
+  "blurb": "Interest or flat fee on an overdue invoice, plus a clause for your contracts.",
+  "app": "Invoice Late Fee Calculator",
+  "scripts": ["tools/latefee.js"],
+  "rules": "ca",
+  "sources": ["interest_act_s4", "late_payment_interest_practice", "criminal_interest_rate"],
+  "priority": 0.8,
+  "faq": [
+    ["Can I charge interest on a late invoice in Canada?", "Yes, if your client agreed to it before the work, usually in your contract or quote. Unlike the UK or France, no law adds automatic interest or a fixed fee to late business invoices, so the clause is what makes it enforceable."],
+    ["Why must the interest rate be stated per year?", "Under section 4 of the federal Interest Act, if a contract states interest per month (or any period shorter than a year) without also stating the equivalent annual rate, you can only collect 5% a year. Write “1.5% per month (18% per year)”: the clause generated here does it for you."],
+    ["What is a reasonable late fee?", "1% to 2% per month (12% to 24% per year) is common in business contracts. The Criminal Code caps interest at a 35% annual percentage rate, and some provinces add consumer protection rules if your client is an individual."],
+    ["How do I collect an unpaid invoice?", "Send reminders with a firm deadline, then a demand letter. For smaller amounts, each province has a small claims court (Small Claims Court in Ontario, Civil Resolution Tribunal in BC, Court of Québec small claims division)."]
+  ]
+}-->
+<script type="application/json" id="latefee-data">
+{
+  "date_format": {"month": "long", "day": "numeric", "year": "numeric"},
+  "day": "day", "days": "days", "month": "month", "months": "months",
+  "after_grace": " ({n} after grace period)",
+  "accrual_daily": "calculated daily", "accrual_month": "for each month or part of a month",
+  "start_grace": "{grace} days after ",
+  "formula_flat": "Flat fee of {fee} once the invoice is more than {grace} days overdue",
+  "formula_daily": "{amount} × {annual}% × {days} days ÷ 365 = {result}",
+  "formula_month": "{amount} × {monthly}% × {months} = {result}",
+  "formula_generic": "Late fee = overdue amount × rate × time late",
+  "clause_flat": "Payment is due within [30] days of the invoice date. A late fee of {fee} will be added to any invoice not paid within {grace} days after its due date.",
+  "clause_interest": "Payment is due within [30] days of the invoice date. Overdue balances accrue interest at {monthly}% per month ({annual}% per year), or the maximum rate permitted by law if lower, {accrual} from {start}the due date until paid in full.",
+  "sub_no_due": "Enter the invoice due date.",
+  "sub_not_late": "Not overdue on {date}: no late fee yet.",
+  "sub_late": "Due {due}, {days} days late on {date}. Total due: {total}."
+}
+</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · for overdue invoices</span>
+    <h1>Invoice late fee calculator</h1>
+    <p class="lead">How much does your client owe you now? Enter the invoice, its due date and your late payment terms: the tool calculates the fee and the new total, and gives you a clause for your next contract.</p>
+    <ul class="trust"><li>Monthly, yearly or flat fee</li><li>Grace period</li><li>Contract clause included</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="late-form" onsubmit="return false">
+      <h3>The invoice</h3>
+      <div class="fields">
+        <div class="field full"><label for="l-amount">Overdue amount</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="l-amount" name="amount" value="2,000" data-save><span>$</span></div></div>
+        <div class="field"><label for="l-due">Due date</label>
+          <input type="date" id="l-due" name="due" data-save></div>
+        <div class="field"><label for="l-paid">Payment date</label>
+          <input type="date" id="l-paid" name="paid">
+          <span class="hint">Leave empty for today.</span></div>
+      </div>
+      <h3>Your late payment terms</h3>
+      <div class="fields">
+        <div class="field full"><label for="l-method">Fee type</label>
+          <select id="l-method" name="method" data-save>
+            <option value="monthly">Interest per month (for example 1.5%)</option>
+            <option value="annual">Interest per year (for example 18%)</option>
+            <option value="flat">Flat fee</option>
+          </select></div>
+        <div class="field" data-method="monthly"><label for="l-monthly">Monthly rate</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="l-monthly" name="monthly" value="1.5" data-save><span>%</span></div></div>
+        <div class="field" data-method="annual" hidden><label for="l-annual">Annual rate</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="l-annual" name="annual" value="18" data-save><span>%</span></div></div>
+        <div class="field" data-method="flat" hidden><label for="l-flat">Flat fee</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="l-flat" name="flat" value="35" data-save><span>$</span></div></div>
+        <div class="field" data-method="monthly annual"><label for="l-accrual">Interest accrues</label>
+          <select id="l-accrual" name="accrual" data-save>
+            <option value="daily">Daily (pro rata)</option>
+            <option value="month">Per started month</option>
+          </select></div>
+        <div class="field full"><label for="l-grace">Grace period after the due date</label>
+          <div class="input-suffix"><input type="number" id="l-grace" name="grace" value="0" min="0" max="60" data-save><span>days</span></div></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="result-hero">
+        <div class="label">Late fee</div>
+        <div class="big" id="l-fee">–</div>
+        <div class="sub" id="l-sub">–</div>
+      </div>
+      <ul class="result-list card" style="padding: 6px 18px;">
+        <li><span>Invoice amount</span><b id="l-r-amount">–</b></li>
+        <li><span>Days late</span><b id="l-r-days">–</b></li>
+        <li><span>Late fee</span><b id="l-r-fee">–</b></li>
+        <li><span><strong>Total due now</strong></span><b id="l-r-total">–</b></li>
+      </ul>
+      <p class="formula" id="l-formula" style="margin-top: 16px;">–</p>
+      <div class="output" style="margin-top: 16px;">
+        <div class="output-head"><b>Clause for your contracts and invoices</b><button type="button" class="btn btn-ghost btn-sm" data-copy="#l-clause">Copy</button></div>
+        <div class="output-body" id="l-clause">–</div>
+      </div>
+      <p class="small muted" style="margin-top: 12px;">To ask for the money, use the <a href="{{link:reminder}}">payment reminder generator</a>.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>Late payment interest: what you need to know</h2>
+  <ul>
+    <li><strong>Agree on it first.</strong> Put the rate in your contract or quote and repeat it on every invoice.</li>
+    <li><strong>State an annual rate.</strong> The Interest Act limits interest to 5% a year if a monthly rate is given without its annual equivalent.</li>
+    <li><strong>Stay reasonable.</strong> The Criminal Code caps interest at 35% a year; 1% to 2% per month is common between businesses.</li>
+  </ul>
+  <p class="small muted">Information only, not legal advice. For large amounts, talk to a lawyer or a paralegal.</p>
+</section>
