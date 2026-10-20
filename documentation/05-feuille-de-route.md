@@ -38,13 +38,15 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   budget de départ de 20 à 30 € HT par mois ; prix relevés par recherche web, à vérifier sur les grilles officielles.
   Point nouveau : les clés d'accès et les emails de connexion dépendent du nom de domaine, qui doit donc être choisi
   **avant l'étape C4** (le déménagement du site peut rester à la fin).
-- **Prochaines actions de Claude** : vérifier les prix des concurrents sur leurs pages officielles ; guides
-  (recouvrement judiciaire, assurance, compte bancaire) ; veille réglementaire de décembre (dont la version de
+- **Prix des concurrents revérifiés sur leurs sites officiels (20/10/2026)** : premières formules payantes à 9 à
+  10 € HT par mois en France ; proposition pour l'offre « Pro » : 4 à 6 € HT par mois ([11](11-etude-concurrentielle.md)).
+- **Prochaines actions de Claude** : guides (recouvrement judiciaire, assurance, compte bancaire) ; veille réglementaire de décembre (dont la version de
   Factur-X et l'annexe A de XP Z12-012 pour le BT-32 en franchise). Les étapes C3 (serveur) et C4 (interface des
   comptes) attendent le choix de l'hébergeur.
 - **En attente d'Ismail** (pas urgent) : structure juridique avec un comptable ; choix de l'hébergeur et budget pour
   les comptes en ligne (comparatif [13](13-comparatif-hebergeurs.md), § 6) ; nom de domaine à choisir avant l'étape C4
-  ([13](13-comparatif-hebergeurs.md), § 5) ; prix de l'offre « Pro » ; à la fin, Gumroad.
+  ([13](13-comparatif-hebergeurs.md), § 5) ; prix de l'offre « Pro » (proposition : 4 à 6 € HT par mois) ; à la fin,
+  Gumroad.
 
 ## Vue d'ensemble
 
@@ -101,7 +103,7 @@ Objectif : un site mesuré, sous sa propre marque, qui commence à rapporter, et
 
 ### 1.5 Préparer la plateforme
 
-- [x] Étude concurrentielle par pays, première version ([11](11-etude-concurrentielle.md)) : prix à vérifier sur les pages officielles
+- [x] Étude concurrentielle par pays, première version ([11](11-etude-concurrentielle.md)) ; prix revérifiés sur les sites officiels le 20/10/2026
 - [ ] Grille d'offres et de prix à partir de l'étude (fonctions gratuites et « Pro »)
 - [ ] Liste d'attente « Espace entrepreneur » sur le site, avec un court questionnaire sur les besoins
 - [x] Spécification du MVP : parcours, écrans, modèle de données, critères d'acceptation (`documentation/09-specification-espace.md`)

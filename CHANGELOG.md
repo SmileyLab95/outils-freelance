@@ -1,5 +1,12 @@
 # Journal des modifications
 
+## 2026-10-20 — Étude concurrentielle : prix revérifiés sur les sites officiels
+
+- `documentation/11-etude-concurrentielle.md` : prix d'Indy, Abby, Tiime, Henrri, Freebe, Wave, FreshBooks et FreeAgent
+  relevés sur leurs sites officiels, avec les écarts entre pages et les promotions ; constat précisé (facturation
+  gratuite chez quatre acteurs français, premières formules payantes à 9 à 10 € HT par mois) ; proposition pour
+  l'offre « Pro » (4 à 6 € HT par mois), à décider par Ismail.
+
 ## 2026-10-20 — Comparatif des hébergeurs (étape C1)
 
 - `documentation/13-comparatif-hebergeurs.md` : besoins de l'hébergement des comptes (API, PostgreSQL, emails,

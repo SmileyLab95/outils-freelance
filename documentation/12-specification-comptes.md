@@ -28,9 +28,10 @@ Les coûts cités sont des **ordres de grandeur relevés dans des comparatifs**,
 | Export comptable (fichier pour l'expert-comptable) | CSV des recettes | Oui | Oui |
 
 Le prix de l'offre « Pro » est une **décision d'Ismail** (en attente). Repères de l'étude concurrentielle : la
-facturation de base est gratuite chez les grands acteurs français ; leurs offres payantes se situent autour de 9 à
-20 € HT par mois et incluent la comptabilité. Une offre « Pro » centrée sur l'automatisation devrait rester **en
-dessous** de ces prix.
+facturation de base est gratuite chez les grands acteurs français ; leurs premières formules payantes sont à 9 à
+10 € HT par mois avec un engagement annuel (relevé du 20/10/2026 sur leurs sites) et incluent la comptabilité. Une
+offre « Pro » centrée sur l'automatisation devrait rester **en dessous** de ces prix (proposition de Claude : 4 à
+6 € HT par mois ; hébergement estimé à 20 à 30 € HT par mois au départ, [13](13-comparatif-hebergeurs.md)).
 
 ## 3. Données et synchronisation
 
