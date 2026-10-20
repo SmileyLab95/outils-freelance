@@ -144,6 +144,14 @@ Le menu, le pied de page et la grille d'accueil sont construits à partir de `na
 - Report des dates : Urssaf au jour ouvré suivant (jours fériés français dans le script) ; IRS déjà reporté ;
   HMRC et ARC à la date nominale (l'ARC accepte le jour ouvrable suivant, indiqué sur la page).
 
+## Le générateur de contrat (`tools/contract.js`)
+
+- Le texte du contrat est dans la page (`#contract-data`) : préambule, articles, clôture, signatures.
+- `{champ}` insère la valeur d'un champ du formulaire (ou un repère « à compléter », imprimé comme une ligne vide) ;
+  `[[champ|texte]]` n'apparaît que si le champ est rempli ; `when` affiche un article ou un paragraphe selon les choix.
+- Valeurs calculées : `total`, `deposit_amount`, dates longues, `has_deposit`, `has_end`, `has_deliverables`.
+- `option_text` remplace le libellé d'une option dans le texte (ex. « au Québec », « en Ontario »).
+
 ## Les moteurs de calcul (`src/assets/engines/`)
 
 - Fonctions **pures** : elles reçoivent des nombres et des règles, renvoient des nombres. Aucun accès à la page.

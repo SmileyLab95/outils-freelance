@@ -1,0 +1,152 @@
+<!--{
+  "id": "contract",
+  "slug": "contrat-de-service/",
+  "title": "Modèle de contrat de service pour travailleur autonome (gratuit, PDF et Word)",
+  "description": "Générez votre contrat de service de travailleur autonome : mission, prix et taxes, acompte, intérêts de retard, cession de droits d'auteur, résiliation selon le Code civil du Québec ou la province choisie. PDF ou Word. Gratuit.",
+  "menu": "Contrat de service",
+  "icon": "📝",
+  "blurb": "Un contrat de service clair en 5 minutes, en PDF ou en Word.",
+  "app": "Générateur de contrat de service",
+  "scripts": [
+    "tools/contract.js"
+  ],
+  "rules": "ca",
+  "sources": [
+    "interest_act_s4",
+    "late_payment_interest_practice"
+  ],
+  "priority": 0.95,
+  "faq": [
+    [
+      "Un contrat écrit est-il obligatoire pour un travailleur autonome ?",
+      "Non, mais c'est la meilleure façon de s'entendre sur la mission, le paiement et la propriété du travail avant qu'un problème survienne. Il documente aussi votre statut de travailleur autonome, que l'ARC et Revenu Québec peuvent examiner."
+    ],
+    [
+      "Mon client peut-il mettre fin au contrat quand il veut ?",
+      "Au Québec, oui : l'article 2125 du Code civil permet au client de résilier un contrat de service à tout moment, en payant les services rendus et les frais engagés. Le prestataire, lui, ne peut résilier que pour un motif sérieux. Le modèle applique ces règles quand vous choisissez le droit du Québec."
+    ],
+    [
+      "À qui appartient le travail réalisé ?",
+      "Au travailleur autonome, premier titulaire du droit d'auteur, tant qu'il ne l'a pas cédé par écrit. Les droits moraux ne se cèdent pas, mais on peut y renoncer. Le modèle cède les droits et prévoit la renonciation une fois le paiement complet reçu."
+    ],
+    [
+      "Puis-je facturer des intérêts de retard ?",
+      "Oui, s'ils sont prévus au contrat ou sur vos factures. La Loi sur l'intérêt exige d'indiquer un taux annuel : « 2 % par mois » seul ne suffit pas. Calculez-les avec le <a href=\"{{link:latefee}}\">calculateur d'intérêts de retard</a>."
+    ],
+    [
+      "Ce modèle remplace-t-il un avocat ?",
+      "Non. Il couvre les besoins courants d'une mission entre entreprises. Pour un enjeu important, des renseignements personnels sensibles ou un logiciel complexe, faites relire le contrat par un avocat ou un notaire."
+    ]
+  ]
+}-->
+<script type="application/json" id="contract-data">{"doc_title": "CONTRAT DE SERVICE", "file": "Contrat de service", "article": "Article {n} – {title}", "reset_confirm": "Effacer toutes les informations saisies ?", "hints": {"p_name": "nom du prestataire", "c_name": "nom du client", "scope": "description de la mission", "deliverables": "livrables", "start": "date de début", "end": "date de fin", "price": "montant", "qty": "volume estimé", "total": "total", "deposit": "acompte", "deposit_amount": "montant de l'acompte", "terms": "30", "notice": "15", "revisions": "2", "today": "date", "late_rate": "taux", "law": "province"}, "preamble": ["Entre :", "{p_name}[[p_status|, {p_status}]][[p_address|, dont l'adresse est : {p_address}]][[p_id|, numéro d'entreprise {p_id}]][[p_email|, joignable à l'adresse {p_email}]], ci-après « le Prestataire »,", "Et :", "{c_name}[[c_status|, {c_status}]][[c_address|, dont le siège est situé : {c_address}]][[c_id|, numéro d'entreprise {c_id}]][[c_rep|, représentée par {c_rep}]], ci-après « le Client »,", "ensemble désignés « les Parties ». Les Parties conviennent de ce qui suit."], "clauses": [{"title": "Objet", "paras": ["Le présent contrat définit les conditions dans lesquelles le Prestataire réalise pour le Client la mission décrite ci-dessous (la « Mission ») :", "{scope}"]}, {"title": "Livrables et calendrier", "paras": [{"when": {"has_deliverables": ["on"]}, "text": "Le Prestataire remettra au Client les livrables suivants : {deliverables}"}, "La Mission débute le {start}.", {"when": {"has_end": ["on"]}, "text": "Elle doit être achevée au plus tard le {end}, sous réserve que le Client fournisse en temps utile les éléments nécessaires à sa réalisation."}, {"when": {"has_end": ["off"]}, "text": "Elle se poursuit jusqu'à la remise des livrables ou la fin du contrat."}]}, {"title": "Prix", "paras": [{"when": {"price_type": ["fixed"]}, "text": "En contrepartie de la Mission, le Client verse au Prestataire un prix forfaitaire de {price}."}, {"when": {"price_type": ["daily"]}, "text": "La Mission est facturée au temps passé, au tarif de {price} par jour de travail. Le volume est estimé à {qty} jours, soit {total}. Tout dépassement de ce volume est soumis à l'accord écrit préalable du Client."}, {"when": {"price_type": ["hourly"]}, "text": "La Mission est facturée au temps passé, au tarif de {price} par heure de travail. Le volume est estimé à {qty} heures, soit {total}. Tout dépassement de ce volume est soumis à l'accord écrit préalable du Client."}, "Ces montants excluent la TPS/TVH et, le cas échéant, la TVQ ou la TVP, qui s'ajoutent aux taux applicables.", "Les frais de déplacement et les achats engagés pour le compte du Client sont refacturés au coût réel, sur justificatifs et après son accord préalable."]}, {"title": "Facturation et paiement", "paras": [{"when": {"has_deposit": ["on"]}, "text": "Un acompte de {deposit} % du prix, soit {deposit_amount}, est facturé à la signature du contrat ; la Mission débute à sa réception."}, {"when": {"price_type": ["fixed"]}, "text": "Le solde est facturé à la remise des livrables."}, {"when": {"price_type": ["daily", "hourly"]}, "text": "Le temps passé est facturé à la fin de chaque mois, avec un relevé des travaux réalisés."}, "Les factures sont payables dans un délai de {terms} jours à compter de leur date.", "Toute somme impayée à l'échéance porte intérêt au taux annuel de {late_rate} %, de la date d'échéance jusqu'au paiement complet. Le Prestataire peut suspendre la Mission jusqu'au paiement des factures échues."]}, {"title": "Modifications", "paras": ["[[revisions|Le prix comprend {revisions} série(s) de modifications par livrable. ]]Toute demande qui modifie le périmètre de la Mission, ou toute modification supplémentaire, fait l'objet d'un devis complémentaire accepté par écrit avant sa réalisation."]}, {"title": "Obligations des Parties", "paras": ["Le Prestataire réalise la Mission avec soin, conformément aux règles de l'art, et informe le Client de toute difficulté susceptible d'en affecter le déroulement. Il est tenu d'une obligation de moyens.", "Le Client fournit au Prestataire, dans des délais compatibles avec le calendrier, les informations, documents et accès nécessaires, désigne un interlocuteur et valide les livrables dans un délai raisonnable. Un retard du Client décale d'autant le calendrier."]}, {"title": "Indépendance du Prestataire", "paras": ["Le Prestataire exécute la Mission en travailleur autonome. Il choisit librement les moyens d'exécution, ses outils et ses horaires, et il n'existe entre les Parties aucun lien de subordination. Il reste libre de travailler pour d'autres clients et demeure seul responsable de ses impôts, de ses cotisations au RRQ ou au RPC et de son inscription aux fichiers de la TPS/TVH et de la TVQ.", {"when": {"subcontract": ["on"]}, "text": "Le Prestataire peut confier une partie de la Mission à des sous-traitants, en restant responsable de leur travail à l'égard du Client."}, {"when": {"subcontract": ["off"]}, "text": "Le Prestataire réalise la Mission personnellement et ne peut la sous-traiter sans l'accord écrit du Client."}]}, {"title": "Propriété intellectuelle", "paras": [{"when": {"ip": ["on"]}, "text": "Sous réserve du paiement intégral du prix, le Prestataire cède au Client, à titre exclusif, tous ses droits d'auteur sur les livrables finaux réalisés pour lui, pour le monde entier et pour toute la durée de ces droits, et renonce en sa faveur à l'exercice de ses droits moraux sur ces livrables. Le prix de cette cession est compris dans le prix de la Mission."}, {"when": {"ip": ["on"]}, "text": "Jusqu'au paiement intégral, le Client ne peut pas exploiter les livrables. Le Prestataire conserve la propriété de ses outils, méthodes, savoir-faire et éléments préexistants ; s'ils sont intégrés aux livrables, il concède au Client un droit d'utilisation non exclusif, limité à l'exploitation des livrables, pour la même durée et le même territoire."}, {"when": {"ip": ["off"]}, "text": "Le Prestataire reste titulaire des droits d'auteur sur les livrables. Après paiement intégral du prix, il accorde au Client une licence non exclusive d'utilisation des livrables pour ses besoins propres, pour le monde entier et pour toute la durée des droits. Toute autre utilisation fait l'objet d'un accord écrit."}, {"when": {"portfolio": ["on"]}, "text": "Sauf demande contraire écrite du Client, le Prestataire peut mentionner le nom du Client et présenter les livrables dans ses références commerciales et son portfolio."}]}, {"title": "Confidentialité", "when": {"conf": ["on"]}, "paras": ["Chaque Partie garde confidentielles les informations non publiques reçues de l'autre Partie à l'occasion du contrat, ne les utilise que pour son exécution et ne les communique qu'aux personnes qui ont besoin de les connaître. Cette obligation s'applique pendant la durée du contrat et pendant deux ans après sa fin. Elle ne concerne pas les informations publiques ou dont la communication est exigée par la loi."]}, {"title": "Responsabilité", "when": {"liability": ["on"]}, "paras": ["La responsabilité du Prestataire est limitée aux dommages directs et, tous dommages confondus, au montant effectivement payé par le Client au titre du contrat, sauf faute lourde ou intentionnelle.", "Le Prestataire n'est pas responsable d'un retard ou d'un défaut d'exécution causé par le Client, notamment par la remise tardive ou incomplète des éléments nécessaires."]}, {"title": "Non-sollicitation", "when": {"nonsolicit": ["on"]}, "paras": ["Pendant la durée du contrat et les douze mois qui suivent sa fin, chaque Partie s'interdit de solliciter, en vue de l'embaucher ou de le faire travailler directement, tout salarié ou sous-traitant de l'autre Partie ayant participé à la Mission, sauf accord écrit de celle-ci."]}, {"title": "Durée et résiliation", "paras": ["Le contrat prend effet à sa signature et prend fin à l'achèvement de la Mission et au paiement complet du prix.", {"when": {"law": ["QC"]}, "text": "Conformément aux articles 2125 à 2129 du Code civil du Québec, le Client peut résilier le contrat à tout moment par avis écrit ; il paie alors les services rendus et les frais engagés jusqu'à la résiliation, et l'acompte versé s'impute sur ces sommes. Le Prestataire ne peut résilier le contrat que pour un motif sérieux et jamais à contretemps ; il donne alors, dans la mesure du possible, un préavis écrit de {notice} jours."}, {"when": {"law": ["ON", "NB", "MB", "AB", "BC", "SK", "NS", "NL", "PE", "YT", "NT", "NU"]}, "text": "Chaque Partie peut mettre fin au contrat par avis écrit moyennant un préavis de {notice} jours. Le Client paie alors les services rendus et les frais engagés jusqu'à la date de fin du contrat ; l'acompte versé s'impute sur ces sommes."}, "En cas de manquement grave d'une Partie à ses obligations, l'autre Partie peut résilier le contrat 15 jours après une mise en demeure écrite restée sans effet, sans préjudice de ses autres recours."]}, {"title": "Force majeure", "paras": ["Aucune Partie n'est responsable d'un manquement causé par une force majeure, c'est-à-dire un événement imprévisible et irrésistible. Si l'empêchement dure plus de 30 jours, chaque Partie peut résilier le contrat par écrit."]}, {"title": "Droit applicable et litiges", "paras": ["Le présent contrat est régi par les lois en vigueur {law}. En cas de différend, les Parties recherchent d'abord une solution amiable. À défaut d'entente dans un délai de 30 jours, le différend est soumis aux tribunaux compétents {law}."]}, {"title": "Dispositions générales", "paras": ["Le contrat exprime l'intégralité de l'accord des Parties sur son objet et remplace tout échange antérieur. Toute modification fait l'objet d'un avenant écrit signé par les deux Parties. Si une clause est déclarée nulle, les autres restent applicables. Le contrat peut être signé électroniquement."]}], "closing": ["Signé par les Parties aux dates indiquées ci-dessous."], "signatures": [{"title": "Le Prestataire", "name": "{p_name}"}, {"title": "Le Client", "name": "{c_name}[[c_rep|, représenté par {c_rep}]]"}], "sign_note": "Nom, signature et date", "option_text": {"law": {"QC": "au Québec", "ON": "en Ontario", "NB": "au Nouveau-Brunswick", "MB": "au Manitoba", "AB": "en Alberta", "BC": "en Colombie-Britannique", "SK": "en Saskatchewan", "NS": "en Nouvelle-Écosse", "NL": "à Terre-Neuve-et-Labrador", "PE": "à l'Île-du-Prince-Édouard", "YT": "au Yukon", "NT": "dans les Territoires du Nord-Ouest", "NU": "au Nunavut"}}}</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Gratuit · PDF et Word</span>
+    <h1>Contrat de service du travailleur autonome</h1>
+    <p class="lead">Décrivez la mission, le prix et les clauses qui comptent pour vous : le contrat se rédige en direct, avec les règles de votre province. Téléchargez-le en PDF pour le signer, ou en Word pour l'adapter.</p>
+    <ul class="trust"><li>Code civil du Québec et autres provinces</li><li>Conforme à la Loi sur l'intérêt</li><li>Vos données restent sur votre appareil</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout wide-left">
+    <form class="card form-card" id="contract-form" autocomplete="off" onsubmit="return false">
+      <h3>Vous (le prestataire)</h3>
+      <div class="fields">
+        <div class="field full"><label for="k-p-name">Nom ou raison sociale</label>
+          <input type="text" id="k-p-name" name="p_name" placeholder="Camille Tremblay Design" value="" data-save></div>
+        <div class="field full"><label for="k-p-status">Forme juridique (facultatif)</label>
+          <input type="text" id="k-p-status" name="p_status" placeholder="travailleuse autonome" value="" data-save></div>
+        <div class="field full"><label for="k-p-address">Adresse</label>
+          <input type="text" id="k-p-address" name="p_address" placeholder="1234, rue Saint-Denis, Montréal (Québec) H2X 3K8" value="" data-save></div>
+        <div class="field"><label for="k-p-id">Numéro d'entreprise (facultatif)</label>
+          <input type="text" id="k-p-id" name="p_id" placeholder="NEQ ou numéro d'entreprise" value="" data-save></div>
+        <div class="field"><label for="k-p-email">Courriel</label>
+          <input type="text" id="k-p-email" name="p_email" placeholder="bonjour@exemple.ca" value="" data-save></div>
+      </div>
+      <h3>Votre client</h3>
+      <div class="fields">
+        <div class="field full"><label for="k-c-name">Nom ou raison sociale</label>
+          <input type="text" id="k-c-name" name="c_name" placeholder="Studio Boréal inc." value="" data-save></div>
+        <div class="field full"><label for="k-c-status">Forme juridique (facultatif)</label>
+          <input type="text" id="k-c-status" name="c_status" placeholder="société par actions" value="" data-save></div>
+        <div class="field full"><label for="k-c-address">Adresse du siège</label>
+          <input type="text" id="k-c-address" name="c_address" placeholder="500, boulevard René-Lévesque Ouest, Montréal (Québec) H2Z 1W7" value="" data-save></div>
+        <div class="field"><label for="k-c-id">Numéro d'entreprise (facultatif)</label>
+          <input type="text" id="k-c-id" name="c_id" placeholder="" value="" data-save></div>
+        <div class="field"><label for="k-c-rep">Représenté par</label>
+          <input type="text" id="k-c-rep" name="c_rep" placeholder="Léa Gagnon, présidente" value="" data-save></div>
+      </div>
+      <h3>La mission</h3>
+      <div class="fields">
+        <div class="field full"><label for="k-title">Intitulé</label>
+          <input type="text" id="k-title" name="title" placeholder="Refonte du site internet" value="" data-save></div>
+        <div class="field full"><label for="k-scope">Description de la mission</label>
+          <textarea id="k-scope" name="scope" rows="3" placeholder="Conception et développement d'un site vitrine de 5 pages, responsive, avec formulaire de contact…" data-save></textarea></div>
+        <div class="field full"><label for="k-deliverables">Livrables (facultatif)</label>
+          <textarea id="k-deliverables" name="deliverables" rows="3" placeholder="Maquettes, site en ligne, accès administrateur, guide d'utilisation" data-save></textarea></div>
+        <div class="field"><label for="k-start">Date de début</label>
+          <input type="date" id="k-start" name="start" data-save></div>
+        <div class="field"><label for="k-end">Date de fin (facultatif)</label>
+          <input type="date" id="k-end" name="end" data-save></div>
+      </div>
+      <h3>Prix et paiement</h3>
+      <div class="fields">
+        <div class="field full"><label for="k-price-type">Mode de facturation</label>
+          <select id="k-price-type" name="price_type" data-save><option value="fixed" selected>Forfait</option><option value="daily">Tarif journalier</option><option value="hourly">Taux horaire</option></select></div>
+        <div class="field"><label for="k-price">Montant (forfait, tarif journalier ou taux horaire)</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="k-price" name="price" placeholder="4 500" value="" data-save><span>$</span></div></div>
+        <div class="field"><label for="k-qty">Jours ou heures estimés</label>
+          <input type="text" inputmode="decimal" id="k-qty" name="qty" placeholder="10" value="" data-save>
+          <span class="hint">Pour une facturation au temps passé.</span></div>
+        <div class="field"><label for="k-deposit">Acompte à la signature</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="k-deposit" name="deposit" placeholder="" value="30" data-save><span>%</span></div></div>
+        <div class="field"><label for="k-terms">Délai de paiement</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="k-terms" name="terms" placeholder="" value="30" data-save><span>jours</span></div></div>
+        <div class="field"><label for="k-late-rate">Intérêts de retard</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="k-late-rate" name="late_rate" placeholder="" value="12" data-save><span>%/an</span></div>
+          <span class="hint">Taux annuel obligatoire (Loi sur l'intérêt).</span></div>
+        <div class="field"><label for="k-revisions">Séries de modifications incluses</label>
+          <input type="text" inputmode="decimal" id="k-revisions" name="revisions" placeholder="" value="2" data-save></div>
+        <div class="field"><label for="k-notice">Préavis de résiliation</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="k-notice" name="notice" placeholder="" value="15" data-save><span>jours</span></div></div>
+        <div class="field full"><label for="k-law">Droit applicable</label>
+          <select id="k-law" name="law" data-save><option value="QC" selected>Québec</option><option value="ON">Ontario</option><option value="NB">Nouveau-Brunswick</option><option value="MB">Manitoba</option><option value="AB">Alberta</option><option value="BC">Colombie-Britannique</option><option value="SK">Saskatchewan</option><option value="NS">Nouvelle-Écosse</option><option value="NL">Terre-Neuve-et-Labrador</option><option value="PE">Île-du-Prince-Édouard</option><option value="YT">Yukon</option><option value="NT">Territoires du Nord-Ouest</option><option value="NU">Nunavut</option></select></div>
+      </div>
+      <h3>Clauses</h3>
+      <div class="fields">
+        <label class="check full"><input type="checkbox" id="k-ip" name="ip" checked data-save><span>Céder les droits d'auteur au client après paiement complet</span></label>
+        <label class="check full"><input type="checkbox" id="k-portfolio" name="portfolio" checked data-save><span>Pouvoir montrer le travail dans mon portfolio</span></label>
+        <label class="check full"><input type="checkbox" id="k-conf" name="conf" checked data-save><span>Confidentialité</span></label>
+        <label class="check full"><input type="checkbox" id="k-liability" name="liability" checked data-save><span>Limiter ma responsabilité au montant payé</span></label>
+        <label class="check full"><input type="checkbox" id="k-subcontract" name="subcontract" data-save><span>Pouvoir sous-traiter une partie de la mission</span></label>
+        <label class="check full"><input type="checkbox" id="k-nonsolicit" name="nonsolicit" data-save><span>Non-sollicitation des équipes (12 mois)</span></label>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="preview-actions">
+        <button type="button" class="btn btn-primary" id="k-print">Télécharger en PDF</button>
+        <button type="button" class="btn btn-ghost" id="k-word">Télécharger en Word</button>
+        <button type="button" class="btn btn-ghost" id="k-copy">Copier le texte</button>
+      </div>
+      <p class="small muted print-hint">PDF : choisissez « Enregistrer au format PDF » dans la fenêtre d'impression. Word : le fichier s'ouvre dans Word, LibreOffice ou Google Docs pour être modifié.</p>
+      <div class="paper-wrap"><article class="paper" id="k-preview" aria-label="Aperçu du contrat"></article></div>
+      <button type="button" class="btn btn-ghost btn-sm" id="k-reset">Tout effacer</button>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>Les clauses essentielles d'un contrat de service</h2>
+  <ul>
+    <li><strong>La mission et les livrables :</strong> plus ils sont précis, moins il y a de discussions sur ce qui est inclus.</li>
+    <li><strong>Le prix, les taxes, l'acompte et le délai de paiement :</strong> précisez que les taxes s'ajoutent, demandez un acompte et indiquez un taux d'intérêt annuel. En cas de retard, envoyez une <a href="{{link:reminder}}">relance de paiement</a>.</li>
+    <li><strong>Les droits d'auteur :</strong> cédez-les, avec la renonciation aux droits moraux, seulement après le paiement complet.</li>
+    <li><strong>La résiliation :</strong> au Québec, le client peut résilier à tout moment ; le contrat prévoit le paiement du travail déjà fait.</li>
+  </ul>
+  <p>Une fois le contrat signé, facturez avec le <a href="{{link:invoice}}">générateur de facture</a>.</p>
+  <p class="small muted">Modèle fourni à titre indicatif, pour des missions entre entreprises. Il ne constitue pas un avis juridique.</p>
+</section>

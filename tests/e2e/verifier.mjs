@@ -690,6 +690,65 @@ const tests = {
     await page.goto(BASE + "ca/fr/calendrier-fiscal/?today=2026-10-20", { waitUntil: "networkidle" });
     check((await page.textContent("#cal-next")).trim() === "15 décembre 2026", "calendrier CA-FR : acompte provisionnel du 15 décembre 2026");
   },
+  async "fr/contrat-de-prestation/"(page) {
+    await page.fill("#k-p-name", "Camille Martin EI");
+    await page.fill("#k-c-name", "Studio Nova");
+    await page.fill("#k-scope", "Refonte du site vitrine");
+    await page.fill("#k-price", "4500");
+    let text = (await page.textContent("#k-preview")).replace(/\s/g, " ");
+    check(/prix forfaitaire de 4\s?500,00\s?€/.test(text) && text.includes("TVA non applicable"), "contrat FR : forfait de 4 500 € en franchise de TVA");
+    check(/acompte de 30 % du prix, soit 1\s?350,00\s?€/.test(text), "contrat FR : acompte de 30 % = 1 350 €");
+    check(text.includes("Article 1 – Objet") && text.includes("cède au Client, à titre exclusif"), "contrat FR : articles numérotés et cession de droits");
+    await page.selectOption("#k-price-type", "daily");
+    await page.fill("#k-price", "500");
+    await page.fill("#k-qty", "10");
+    text = (await page.textContent("#k-preview")).replace(/\s/g, " ");
+    check(/estimé à 10 jours, soit 5\s?000,00\s?€/.test(text), "contrat FR : TJM 500 € × 10 jours = 5 000 €");
+    await page.uncheck("#k-ip");
+    await page.check("#k-nonsolicit");
+    text = await page.textContent("#k-preview");
+    check(text.includes("reste titulaire des droits") && text.includes("Non-sollicitation"), "contrat FR : licence au lieu de cession, clause de non-sollicitation");
+    const [download] = await Promise.all([page.waitForEvent("download"), page.click("#k-word")]);
+    const doc = (await import("fs")).readFileSync(await download.path(), "utf8");
+    check(download.suggestedFilename() === "Contrat de prestation.doc" && doc.includes("CONTRAT DE PRESTATION DE SERVICES"), "contrat FR : téléchargement Word");
+    await page.reload({ waitUntil: "networkidle" });
+    check((await page.inputValue("#k-c-name")) === "Studio Nova" && !(await page.isChecked("#k-ip")), "contrat FR : saisie mémorisée");
+    await page.click("#k-copy");
+    check(await copied(page, "#k-copy"), "contrat FR : bouton Copier");
+    await page.selectOption("#k-price-type", "fixed");
+    await page.check("#k-ip");
+    await page.uncheck("#k-nonsolicit");
+  },
+  async "us/freelance-contract/"(page) {
+    await page.fill("#k-price", "4,500");
+    const text = await page.textContent("#k-preview");
+    check(text.includes("INDEPENDENT CONTRACTOR AGREEMENT") && text.includes("fixed fee of $4,500.00") && text.includes("$1,350.00"), "US contract: fixed fee and 30% deposit");
+    check(text.includes("Freelance Isn't Free Act") && text.includes("State of New York") && text.includes("1.5% per month"), "US contract: freelance law clause, governing law, late fee");
+  },
+  async "uk/freelance-contract/"(page) {
+    await page.selectOption("#k-vat", "vat");
+    await page.selectOption("#k-law", "SC");
+    const text = await page.textContent("#k-preview");
+    check(text.includes("exclusive of VAT") && text.includes("law of Scotland") && text.includes("Late Payment of Commercial Debts"), "UK contract: VAT, Scottish law, Late Payment Act");
+    await page.selectOption("#k-vat", "novat");
+    await page.selectOption("#k-law", "EW");
+  },
+  async "ca/freelance-contract/"(page) {
+    let text = await page.textContent("#k-preview");
+    check(text.includes("laws in force in Ontario") && text.includes("12% per year") && text.includes("moral rights"), "CA contract: Ontario law, yearly interest, moral rights waiver");
+    await page.selectOption("#k-law", "QC");
+    text = await page.textContent("#k-preview");
+    check(text.includes("Civil Code of Québec"), "CA contract: Quebec termination rules");
+    await page.selectOption("#k-law", "ON");
+  },
+  async "ca/fr/contrat-de-service/"(page) {
+    let text = await page.textContent("#k-preview");
+    check(text.includes("articles 2125 à 2129") && text.includes("lois en vigueur au Québec"), "contrat CA-FR : Code civil du Québec par défaut");
+    await page.selectOption("#k-law", "ON");
+    text = await page.textContent("#k-preview");
+    check(text.includes("lois en vigueur en Ontario") && !text.includes("articles 2125"), "contrat CA-FR : droit de l'Ontario");
+    await page.selectOption("#k-law", "QC");
+  },
   async "fr/confidentialite/"() {},
   async "fr/mentions-legales/"() {},
 };

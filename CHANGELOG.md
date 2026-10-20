@@ -1,5 +1,17 @@
 # Journal des modifications
 
+## 2026-10-20 — Générateur de contrat de prestation (5 versions)
+
+- France : contrat de prestation de services (cession de droits d'auteur conforme à l'article L131-3 du CPI,
+  indépendance du prestataire, pénalités de retard et indemnité de 40 €, résiliation, force majeure).
+- États-Unis : *independent contractor agreement* (cession à paiement complet, clause *Freelance Isn't Free Act*,
+  droit de l'État choisi).
+- Royaume-Uni : *contract for services* (TVA, Late Payment Act, substitution, droit anglais, écossais ou nord-irlandais).
+- Canada (anglais et français) : taxes en sus, intérêts au taux annuel (Loi sur l'intérêt), renonciation aux droits
+  moraux, résiliation selon les articles 2125 à 2129 du Code civil du Québec ou préavis dans les autres provinces.
+- Outil commun `tools/contract.js` : texte des clauses dans la page, conditions selon le formulaire, export PDF,
+  Word (.doc) et copie, saisie mémorisée sur l'appareil.
+
 ## 2026-10-20 — Calendriers fiscaux des 4 pays
 
 - France : déclarations Urssaf mensuelles ou trimestrielles (reportées au jour ouvré suivant), CFE, TVA (réel simplifié

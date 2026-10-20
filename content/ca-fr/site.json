@@ -36,6 +36,7 @@
     {
       "label": "Modèles",
       "items": [
+        "contract",
         "templates"
       ]
     }

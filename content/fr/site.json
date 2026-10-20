@@ -33,8 +33,9 @@
       ]
     },
     {
-      "label": "Trouver des clients",
+      "label": "Clients et contrats",
       "items": [
+        "contract",
         "templates"
       ]
     }

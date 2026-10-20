@@ -57,7 +57,7 @@ Les phases s'enchaînent dans cet ordre ; une phase n'est terminée que lorsque 
 - [x] Indemnités kilométriques (barème officiel)
 - [x] Calendrier fiscal et social avec export agenda
 - [x] Calcul de date d'échéance (30 jours, 45 jours fin de mois — deux méthodes —, 60 jours)
-- [ ] Générateur de contrat de prestation
+- [x] Générateur de contrat de prestation (FR, US, UK, Canada anglais et français)
 
 ## Phase 5 — Revenus (reportée à la fin, sur décision du 20/10/2026 : d'abord terminer le site, puis Gumroad, puis l'affiliation)
 

@@ -1,0 +1,153 @@
+<!--{
+  "id": "contract",
+  "slug": "freelance-contract/",
+  "title": "Free Freelance Contract Template UK (Contract for Services, PDF and Word)",
+  "description": "Create a UK freelance contract for services: scope, fees, VAT, deposit, late payment interest, IP assignment, confidentiality and termination, under English, Scottish or Northern Irish law. PDF or Word. Free.",
+  "menu": "Freelance contract",
+  "icon": "📝",
+  "blurb": "A contract for services in minutes, as PDF or Word.",
+  "app": "Freelance Contract Generator (UK)",
+  "scripts": [
+    "tools/contract.js"
+  ],
+  "rules": "uk",
+  "sources": [
+    "late_payment_statutory_interest_margin",
+    "late_payment_fixed_compensation",
+    "ir35_summary"
+  ],
+  "priority": 0.95,
+  "faq": [
+    [
+      "Do I need a written contract as a freelancer?",
+      "It isn't required by law, but it's the best way to agree scope, payment and ownership before problems arise. It also documents that you work as a self-employed contractor, which matters for employment status and, if you work through a limited company, for IR35."
+    ],
+    [
+      "Does a contract decide my IR35 status?",
+      "No. HMRC and the courts look at how the work is really done: control, a genuine right of substitution and whether there's an obligation to offer and accept work. The contract should reflect reality. If you work through your own limited company for a medium or large client, the client decides your status and must give you a status determination statement."
+    ],
+    [
+      "Who owns the work: me or my client?",
+      "As a contractor, you own the copyright in what you create unless you assign it in writing. This template assigns it once you're paid in full, which also gives you leverage if a client doesn't pay."
+    ],
+    [
+      "Can I charge interest on late payments?",
+      "Yes. Under the Late Payment of Commercial Debts (Interest) Act 1998, you can claim 8% a year above the Bank of England base rate, plus fixed compensation of £40 to £100 per invoice. Work it out with the <a href=\"{{link:latefee}}\">late payment interest calculator</a>."
+    ],
+    [
+      "Is this contract legally binding?",
+      "Yes, once both parties sign it, including with an electronic signature. It is a general template for business-to-business projects, not legal advice: for a large project, work abroad or sensitive data, have a lawyer review it."
+    ]
+  ]
+}-->
+<script type="application/json" id="contract-data">{"doc_title": "CONTRACT FOR SERVICES", "file": "Freelance contract", "article": "{n}. {title}", "reset_confirm": "Clear everything you entered?", "hints": {"p_name": "contractor name", "c_name": "client name", "scope": "description of the services", "deliverables": "deliverables", "start": "start date", "end": "end date", "price": "amount", "qty": "estimate", "total": "total", "deposit": "deposit", "deposit_amount": "deposit amount", "terms": "30", "notice": "14", "revisions": "2", "late_rate": "rate", "law": "governing law", "today": "date"}, "preamble": ["This contract is made on {today} between:", "{p_name}[[p_status|, {p_status}]][[p_address|, of {p_address}]][[p_id|, company number {p_id}]][[p_email|, {p_email}]] (the “Contractor”), and", "{c_name}[[c_status|, {c_status}]][[c_address|, of {c_address}]][[c_id|, {c_id}]][[c_rep|, represented by {c_rep}]] (the “Client”).", "The parties agree as follows."], "clauses": [{"title": "Services", "paras": ["Contractor will provide the following services to Client (the “Services”):", "{scope}"]}, {"title": "Deliverables and schedule", "paras": [{"when": {"has_deliverables": ["on"]}, "text": "Contractor will deliver: {deliverables}"}, "The Services will begin on {start}.", {"when": {"has_end": ["on"]}, "text": "Contractor will complete the Services by {end}, provided Client supplies the materials and approvals Contractor needs on time."}, {"when": {"has_end": ["off"]}, "text": "The Services will continue until the deliverables are completed or this contract ends."}]}, {"title": "Fees", "paras": [{"when": {"price_type": ["fixed"]}, "text": "Client will pay Contractor a fixed fee of {price} for the Services."}, {"when": {"price_type": ["daily"]}, "text": "Client will pay Contractor {price} per day of work. The parties estimate {qty} days, for a total of {total}. Contractor will not exceed this estimate without Client's written approval."}, {"when": {"price_type": ["hourly"]}, "text": "Client will pay Contractor {price} per hour of work. The parties estimate {qty} hours, for a total of {total}. Contractor will not exceed this estimate without Client's written approval."}, {"when": {"vat": ["vat"]}, "text": "Fees are exclusive of VAT, which will be added at the applicable rate."}, {"when": {"vat": ["novat"]}, "text": "Contractor is not registered for VAT, so no VAT is charged."}, "Expenses approved in advance by Client are reimbursed at cost, with receipts."]}, {"title": "Invoicing and payment", "paras": [{"when": {"has_deposit": ["on"]}, "text": "Client will pay a deposit of {deposit}% ({deposit_amount}) on signing; work begins when the deposit is received."}, {"when": {"price_type": ["fixed"]}, "text": "Contractor will invoice the balance on delivery."}, {"when": {"price_type": ["daily", "hourly"]}, "text": "Contractor will invoice at the end of each month for the time worked, with a summary of the Services performed."}, "Invoices are due within {terms} days of the invoice date.", "If Client pays late, Contractor may claim statutory interest at 8% a year above the Bank of England base rate and fixed compensation under the Late Payment of Commercial Debts (Interest) Act 1998, and may pause the Services until overdue invoices are paid."]}, {"title": "Changes and revisions", "paras": ["[[revisions|The fees include {revisions} round(s) of revisions per deliverable. ]]Any change to the scope, and any additional revisions, will be quoted separately and agreed in writing before the work starts."]}, {"title": "Client responsibilities", "paras": ["Client will provide the information, materials, access and feedback Contractor needs in time to meet the schedule, and will name a contact person. Delays caused by Client extend the schedule accordingly."]}, {"title": "Status", "paras": ["Contractor is self-employed and is not an employee or worker of Client. Contractor decides how, where and when the Services are performed, uses its own equipment, may work for others, and is responsible for its own tax and National Insurance. Client is not obliged to offer, and Contractor is not obliged to accept, further work.", {"when": {"subcontract": ["on"]}, "text": "Contractor may send a suitably qualified substitute or use subcontractors, and remains responsible for their work."}, {"when": {"subcontract": ["off"]}, "text": "Contractor will perform the Services personally unless Client agrees in writing to a substitute."}]}, {"title": "Intellectual property", "paras": [{"when": {"ip": ["on"]}, "text": "Upon receipt of full payment, Contractor assigns to Client, with full title guarantee, all intellectual property rights in the final deliverables created specifically for Client under this contract. Until full payment, Client may use the deliverables for review only."}, {"when": {"ip": ["on"]}, "text": "Contractor keeps ownership of its pre-existing materials, tools, templates and know-how. Where they are included in the deliverables, Contractor grants Client a non-exclusive, perpetual, worldwide licence to use them as part of the deliverables."}, {"when": {"ip": ["off"]}, "text": "Contractor retains all intellectual property rights in the deliverables. Upon full payment, Contractor grants Client a non-exclusive, perpetual, worldwide licence to use the deliverables for its own business purposes. Any other use requires Contractor's written consent."}, {"when": {"portfolio": ["on"]}, "text": "Unless Client objects in writing, Contractor may mention Client's name and show the deliverables in its portfolio and marketing."}]}, {"title": "Confidentiality", "when": {"conf": ["on"]}, "paras": ["Each party will keep confidential the non-public information it receives from the other, use it only to perform this contract and disclose it only to people who need to know it. This obligation lasts during this contract and for two years after it ends. It does not apply to information that is public, already known to the receiving party or required to be disclosed by law."]}, {"title": "Limitation of liability", "when": {"liability": ["on"]}, "paras": ["Nothing in this contract limits liability for death or personal injury caused by negligence, or for fraud. Subject to that, Contractor's total liability under this contract is limited to the fees actually paid by Client under it, and neither party is liable for indirect or consequential loss, including loss of profits."]}, {"title": "Non-solicitation", "when": {"nonsolicit": ["on"]}, "paras": ["During this contract and for 12 months after it ends, neither party will solicit for employment or engagement any employee or contractor of the other party who worked on the Services, without that party's written consent."]}, {"title": "Term and termination", "paras": ["This contract starts on signing and ends when the Services are completed and paid for.", {"when": {"law": ["ON", "BC", "AB", "MB", "SK", "NS", "NB", "NL", "PE", "YT", "NT", "NU", "EW", "SC", "NI"]}, "text": "Either party may terminate this contract with {notice} days' written notice. Either party may terminate it immediately in writing if the other materially breaches it and does not remedy the breach within 14 days of written notice. On termination, Client will pay for the Services performed and expenses incurred up to the termination date; any deposit is credited against these amounts."}]}, {"title": "Governing law and disputes", "paras": ["This contract is governed by the law of {law}. The parties will first try in good faith to resolve any dispute informally; if they cannot within 30 days, the courts of {law} have exclusive jurisdiction."]}, {"title": "General", "paras": ["This contract is the entire agreement between the parties on its subject and replaces any prior discussions. Any change must be in writing and signed by both parties. If any provision is found unenforceable, the rest remains in effect. Notices may be sent by email to the addresses above. This contract may be signed electronically and in counterparts. No one other than the parties has any right to enforce it under the Contracts (Rights of Third Parties) Act 1999."]}], "closing": ["Signed by the parties on the dates below."], "signatures": [{"title": "Contractor", "name": "{p_name}"}, {"title": "Client", "name": "{c_name}[[c_rep|, by {c_rep}]]"}], "sign_note": "Signature, name and date"}</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · PDF and Word</span>
+    <h1>Freelance contract generator</h1>
+    <p class="lead">Describe the project, your fees and the clauses you want: your contract for services writes itself as you type. Download it as a PDF to sign, or as Word to edit.</p>
+    <ul class="trust"><li>English, Scottish or Northern Irish law</li><li>Late Payment Act interest</li><li>Your data stays on your device</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout wide-left">
+    <form class="card form-card" id="contract-form" autocomplete="off" onsubmit="return false">
+      <h3>You (the contractor)</h3>
+      <div class="fields">
+        <div class="field full"><label for="k-p-name">Name or business name</label>
+          <input type="text" id="k-p-name" name="p_name" placeholder="Alex Morgan Design Ltd" value="" data-save></div>
+        <div class="field full"><label for="k-p-status">Legal form (optional)</label>
+          <input type="text" id="k-p-status" name="p_status" placeholder="a sole trader" value="" data-save></div>
+        <div class="field full"><label for="k-p-address">Address</label>
+          <input type="text" id="k-p-address" name="p_address" placeholder="12 High Street, Manchester M1 1AA" value="" data-save></div>
+        <div class="field"><label for="k-p-id">Company number (optional)</label>
+          <input type="text" id="k-p-id" name="p_id" placeholder="" value="" data-save></div>
+        <div class="field"><label for="k-p-email">Email</label>
+          <input type="text" id="k-p-email" name="p_email" placeholder="hello@example.com" value="" data-save></div>
+      </div>
+      <h3>Your client</h3>
+      <div class="fields">
+        <div class="field full"><label for="k-c-name">Name or business name</label>
+          <input type="text" id="k-c-name" name="c_name" placeholder="Northwind Studio" value="" data-save></div>
+        <div class="field full"><label for="k-c-status">Legal form (optional)</label>
+          <input type="text" id="k-c-status" name="c_status" placeholder="a private limited company" value="" data-save></div>
+        <div class="field full"><label for="k-c-address">Address</label>
+          <input type="text" id="k-c-address" name="c_address" placeholder="1 King Street, London EC2V 8AU" value="" data-save></div>
+        <div class="field"><label for="k-c-id">Company or tax number (optional)</label>
+          <input type="text" id="k-c-id" name="c_id" placeholder="" value="" data-save></div>
+        <div class="field"><label for="k-c-rep">Signing on behalf of the client</label>
+          <input type="text" id="k-c-rep" name="c_rep" placeholder="Jordan Lee, CEO" value="" data-save></div>
+      </div>
+      <h3>The project</h3>
+      <div class="fields">
+        <div class="field full"><label for="k-title">Project title</label>
+          <input type="text" id="k-title" name="title" placeholder="Website redesign" value="" data-save></div>
+        <div class="field full"><label for="k-scope">Description of the services</label>
+          <textarea id="k-scope" name="scope" rows="3" placeholder="Design and build a 5-page responsive website with a contact form…" data-save></textarea></div>
+        <div class="field full"><label for="k-deliverables">Deliverables (optional)</label>
+          <textarea id="k-deliverables" name="deliverables" rows="3" placeholder="Design mockups, live website, admin access, user guide" data-save></textarea></div>
+        <div class="field"><label for="k-start">Start date</label>
+          <input type="date" id="k-start" name="start" data-save></div>
+        <div class="field"><label for="k-end">End date (optional)</label>
+          <input type="date" id="k-end" name="end" data-save></div>
+      </div>
+      <h3>Fees and payment</h3>
+      <div class="fields">
+        <div class="field full"><label for="k-price-type">Pricing</label>
+          <select id="k-price-type" name="price_type" data-save><option value="fixed" selected>Fixed fee</option><option value="daily">Day rate</option><option value="hourly">Hourly rate</option></select></div>
+        <div class="field"><label for="k-price">Amount (fixed fee, day rate or hourly rate)</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="k-price" name="price" placeholder="4,500" value="" data-save><span>£</span></div></div>
+        <div class="field"><label for="k-qty">Estimated days or hours</label>
+          <input type="text" inputmode="decimal" id="k-qty" name="qty" placeholder="10" value="" data-save>
+          <span class="hint">For day or hourly rates.</span></div>
+        <div class="field full"><label for="k-vat">VAT</label>
+          <select id="k-vat" name="vat" data-save><option value="novat" selected>Not VAT registered</option><option value="vat">VAT registered (fees exclude VAT)</option></select></div>
+        <div class="field"><label for="k-deposit">Deposit on signing</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="k-deposit" name="deposit" placeholder="" value="30" data-save><span>%</span></div></div>
+        <div class="field"><label for="k-terms">Payment terms</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="k-terms" name="terms" placeholder="" value="30" data-save><span>days</span></div></div>
+        <div class="field"><label for="k-revisions">Rounds of revisions included</label>
+          <input type="text" inputmode="decimal" id="k-revisions" name="revisions" placeholder="" value="2" data-save></div>
+        <div class="field"><label for="k-notice">Termination notice</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="k-notice" name="notice" placeholder="" value="14" data-save><span>days</span></div></div>
+        <div class="field"><label for="k-law">Governing law</label>
+          <select id="k-law" name="law" data-save><option value="EW" selected>England and Wales</option><option value="SC">Scotland</option><option value="NI">Northern Ireland</option></select></div>
+      </div>
+      <h3>Clauses</h3>
+      <div class="fields">
+        <label class="check full"><input type="checkbox" id="k-ip" name="ip" checked data-save><span>Assign the copyright to the client once paid in full</span></label>
+        <label class="check full"><input type="checkbox" id="k-portfolio" name="portfolio" checked data-save><span>Show the work in my portfolio</span></label>
+        <label class="check full"><input type="checkbox" id="k-conf" name="conf" checked data-save><span>Confidentiality</span></label>
+        <label class="check full"><input type="checkbox" id="k-liability" name="liability" checked data-save><span>Limit my liability to the fees paid</span></label>
+        <label class="check full"><input type="checkbox" id="k-subcontract" name="subcontract" data-save><span>Allow a substitute or subcontractors</span></label>
+        <label class="check full"><input type="checkbox" id="k-nonsolicit" name="nonsolicit" data-save><span>Non-solicitation of staff (12 months)</span></label>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="preview-actions">
+        <button type="button" class="btn btn-primary" id="k-print">Download PDF</button>
+        <button type="button" class="btn btn-ghost" id="k-word">Download Word</button>
+        <button type="button" class="btn btn-ghost" id="k-copy">Copy text</button>
+      </div>
+      <p class="small muted print-hint">PDF: choose “Save as PDF” in the print window. Word: the file opens in Word, LibreOffice or Google Docs for editing.</p>
+      <div class="paper-wrap"><article class="paper" id="k-preview" aria-label="Contract preview"></article></div>
+      <button type="button" class="btn btn-ghost btn-sm" id="k-reset">Clear everything</button>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>What every freelance contract should cover</h2>
+  <ul>
+    <li><strong>Scope and deliverables:</strong> the more precise, the fewer arguments about what's included.</li>
+    <li><strong>Fees, VAT, deposit and payment terms:</strong> a deposit protects your cash flow, and the Late Payment Act gives you interest and compensation. Chase late invoices with a <a href="{{link:reminder}}">payment reminder letter</a>.</li>
+    <li><strong>Status:</strong> a contract for services, with control and substitution, reflects that you're self-employed.</li>
+    <li><strong>Ownership:</strong> assigning the IP only once you're paid in full is your best protection against non-payment.</li>
+    <li><strong>Termination:</strong> notice, and payment for the work already done.</li>
+  </ul>
+  <p>Once signed, send your invoices with the <a href="{{link:invoice}}">invoice generator</a>.</p>
+  <p class="small muted">General template for business-to-business projects, provided for information. It is not legal advice.</p>
+</section>
