@@ -33,8 +33,10 @@
   // ----- Montants ------------------------------------------------------------
 
   function total(doc) { return round2(INV.compute(doc).ttc); }
+  /** Encaissements en vigueur : ceux marqués supprimés (deletedAt, schéma 2 synchronisé) ne comptent plus. */
+  function payments(doc) { return (doc.payments || []).filter(function (p) { return p && !p.deletedAt; }); }
   function paidAmount(doc) {
-    return round2((doc.payments || []).reduce(function (s, p) { return s + (Number(p.amount) || 0); }, 0));
+    return round2(payments(doc).reduce(function (s, p) { return s + (Number(p.amount) || 0); }, 0));
   }
   /** Total des avoirs émis sur une facture. */
   function credited(documents, invoice) {
@@ -205,7 +207,7 @@
     documents.forEach(function (doc) {
       if (doc.status === "draft" || (doc.type !== "facture" && doc.type !== "avoir")) return;
       var who = (doc.snapshot && doc.snapshot.client && doc.snapshot.client.name) || "";
-      (doc.payments || []).forEach(function (p) {
+      payments(doc).forEach(function (p) {
         if ((from && p.date < from) || (to && p.date > to)) return;
         rows.push({ date: p.date, client: who, nature: nature(doc), method: METHODS[p.method] || p.method,
                     amount: doc.type === "avoir" ? -round2(Number(p.amount)) : round2(Number(p.amount)),
@@ -378,7 +380,7 @@
       var sa = state(doc, today, documents);
       if (sa === "refund") parts.push("La somme de " + fmt.eur(bal) + " vous sera remboursée prochainement.");
       else if (sa === "refunded") {
-        var lastPay = (doc.payments || []).map(function (p) { return p.date; }).sort().pop();
+        var lastPay = payments(doc).map(function (p) { return p.date; }).sort().pop();
         parts.push("La somme de " + fmt.eur(paidAmount(doc)) + " vous a été remboursée le " + fmt.date(lastPay) + ".");
       } else if (origin) {
         var left = balance(origin, documents);
@@ -467,7 +469,7 @@
 
   return { METHODS: METHODS, DEFAULT_PREFIXES: DEFAULT_PREFIXES, PROFILE_FIELDS: PROFILE_FIELDS, COUNTRIES: COUNTRIES,
            EU_COUNTRIES: EU_COUNTRIES, countries: countries,
-           total: total, paidAmount: paidAmount, credited: credited, balance: balance, dueDate: dueDate,
+           total: total, payments: payments, paidAmount: paidAmount, credited: credited, balance: balance, dueDate: dueDate,
            series: series, seriesPrefix: seriesPrefix, nextNumber: nextNumber, continuation: continuation,
            checkIssue: checkIssue, issue: issue, state: state, email: email, fromGenerator: fromGenerator,
            checkPayment: checkPayment, ledger: ledger, cashed: cashed, period: period, acreEnd: acreEnd, rates: rates,

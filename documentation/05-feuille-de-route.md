@@ -29,10 +29,15 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   compte, les quatre pays et la rigueur des règles.
 - **Spécification des comptes en ligne** (E2), première version : [12](12-specification-comptes.md) (offres gratuit
   et « Pro » proposées, synchronisation chiffrée de bout en bout recommandée, étapes C1 à C6).
-- **Prochaines actions de Claude** : comparatif chiffré et à jour des hébergeurs pour la décision d'Ismail ; moteur de
-  synchronisation testé sans serveur (étape C2, schéma 2) ; vérifier les prix des concurrents sur leurs pages officielles ; guides (recouvrement judiciaire, assurance, compte
+- **Étape C2 faite le 20/10/2026** : moteur de synchronisation entre appareils (`engines/espace-sync.js`, schéma 2),
+  testé sans serveur : règles de fusion de [12](12-specification-comptes.md) § 3.1 (décision D16), 17 scénarios écrits,
+  chacun contrôlé en réintroduisant l'erreur qu'il doit détecter, et simulation de 50 scénarios à trois appareils
+  (essai ponctuel : 1 000 scénarios à trois appareils et 300 à cinq, sans écart) ; deux revues de code (20 points
+  traités). Le moteur de l'Espace ignore déjà les encaissements marqués supprimés.
+- **Prochaines actions de Claude** : comparatif chiffré et à jour des hébergeurs pour la décision d'Ismail ; vérifier
+  les prix des concurrents sur leurs pages officielles ; guides (recouvrement judiciaire, assurance, compte
   bancaire) ; veille réglementaire de décembre (dont la version de Factur-X et l'annexe A de XP Z12-012 pour le BT-32
-  en franchise).
+  en franchise). Les étapes C3 (serveur) et C4 (interface des comptes) attendent le choix de l'hébergeur.
 - **En attente d'Ismail** (pas urgent) : structure juridique avec un comptable ; choix de l'hébergeur et budget pour
   les comptes en ligne (E2, voir [12](12-specification-comptes.md) § 8) ; prix de l'offre « Pro » ; à la fin, marque
   et domaine, Gumroad.
@@ -114,6 +119,7 @@ Objectif : un compte gratuit qui rend service dès le premier jour.
 - [ ] Environnements de test et de production, déploiement automatique, tests à chaque modification
 - [ ] Authentification : email avec lien de connexion, connexion Google, double authentification
 - [ ] Modèle de données : utilisateur, entreprise, clients, devis, factures, lignes, paiements, échéances, documents
+- [x] Synchronisation entre appareils : moteur de fusion du schéma 2, testé sans serveur *(étape C2 de [12](12-specification-comptes.md) ; serveur et interface aux étapes C3 et C4)*
 - [ ] Sécurité : données cloisonnées par utilisateur dans la base, sauvegardes quotidiennes, journal d'audit, limites de requêtes
 - [ ] Juridique : CGU, CGV, politique de confidentialité, registre des traitements, contrats de sous-traitance
 - [ ] **[Ismail]** Relecture des CGU et CGV par un avocat ; assurance responsabilité civile professionnelle

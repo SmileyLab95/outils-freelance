@@ -189,3 +189,29 @@ test("revue : montants vides après une sauvegarde JSON (null) ; chronologie au-
   assert.equal(copy.originId, f.id);
   assert.deepEqual(copy.origin, { number: f.number, date: f.date });
 });
+
+test("schéma 2 : un encaissement marqué supprimé (synchronisation) ne compte nulle part", () => {
+  const docs = [];
+  const f = issueAll(docs, draft());
+  f.payments.push({ id: "p1", date: "2026-10-25", amount: 400, method: "virement" });
+  f.payments.push({ id: "p2", date: "2026-10-26", amount: 600, method: "cheque", deletedAt: "2026-10-27T09:00:00Z" });
+  assert.deepEqual(E.payments(f).map((p) => p.id), ["p1"]);
+  assert.equal(E.paidAmount(f), 400);
+  assert.equal(E.balance(f, docs), 600);
+  assert.equal(E.state(f, "2026-10-28", docs), "partial");
+  assert.deepEqual(E.checkPayment(f, { date: "2026-10-28", amount: 600, method: "virement" }, docs), [], "le solde reste encaissable");
+  assert.deepEqual(E.ledger(docs, "2026-01-01", "2026-12-31").map((r) => r.amount), [400]);
+  assert.deepEqual(E.clientTotals(docs, "c1"), { cashed: 400, due: 600 });
+
+  // Avoir remboursé : la date annoncée est celle du remboursement en vigueur, pas d'un remboursement supprimé.
+  const fmt = { eur: (n) => n.toFixed(2).replace(".", ",") + " €", date: (iso) => iso.split("-").reverse().join("/") };
+  const paid = issueAll(docs, draft({ date: "2026-10-23", clientId: "c2" }));
+  paid.payments.push({ id: "p3", date: "2026-10-24", amount: 1000, method: "virement" });
+  const partialCredit = E.creditFromInvoice(paid, "2026-10-25", "a1");
+  partialCredit.lines[0].price = 300;
+  const credit = issueAll(docs, partialCredit);
+  credit.payments.push({ id: "r1", date: "2026-10-27", amount: 300, method: "virement" });
+  credit.payments.push({ id: "r0", date: "2026-10-30", amount: 300, method: "virement", deletedAt: "2026-10-30T12:00:00Z" });
+  assert.equal(E.state(credit, "2026-10-31", docs), "refunded");
+  assert.match(E.email("send", credit, docs, { name: "Camille" }, "2026-10-31", fmt).body, /remboursée le 27\/10\/2026\./);
+});

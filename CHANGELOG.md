@@ -1,5 +1,21 @@
 # Journal des modifications
 
+## 2026-10-20 — Comptes en ligne, étape C2 : moteur de synchronisation
+
+- `engines/espace-sync.js` : fusion de l'Espace entre appareils (schéma 2), sans serveur ni chiffrement, à partir de
+  trois versions (dernière base commune, appareil, compte) : champ par champ, suppressions marquées (`deletedAt`), une
+  modification l'emporte sur une suppression, un document émis sur un brouillon (modifications gardées dans une
+  copie, y compris celles faites ensuite), deux émissions du même brouillon conservées toutes les deux, encaissements
+  fusionnés un par un, liens des devis recalculés, numéros en double signalés, réglages de l'appareil non synchronisés,
+  données d'une version plus récente refusées. Règles dans `documentation/12-specification-comptes.md`, § 3.1
+  (décision D16).
+- Moteur de l'Espace : les encaissements marqués supprimés ne comptent plus dans les montants, le livre des recettes,
+  la synthèse par client ni les emails (fonction `payments`).
+- Tests : 17 scénarios écrits, chacun contrôlé en réintroduisant l'erreur qu'il doit détecter ; simulation de
+  50 scénarios reproductibles à trois appareils (convergence, chaque émission conservée une fois, chaque encaissement
+  une fois sur son document, liens des devis valides, chaque cas de conflit rencontré) ; essai ponctuel sur 1 000
+  scénarios à trois appareils et 300 à cinq. 107 tests unitaires.
+
 ## 2026-10-20 — Spécification des comptes en ligne (première version)
 
 - `documentation/12-specification-comptes.md` : principes (l'Espace reste utilisable sans compte, local d'abord,

@@ -43,6 +43,46 @@ dessous** de ces prix.
   demande une connexion quand plusieurs appareils sont liés (le serveur réserve le numéro), sinon elle reste locale.
 - Import de l'Espace local dans le compte au premier lien (tâche de la feuille de route), sans perte ni doublon.
 
+### 3.1 Règles du moteur de synchronisation (étape C2, `engines/espace-sync.js`)
+
+Le moteur fusionne trois états : la **base** (le dernier état commun, enregistré à la dernière synchronisation), l'état
+**local** et l'état **distant**. Il ne dépend ni du serveur ni du chiffrement : il travaille sur des données en clair,
+sur l'appareil.
+
+| Cas | Règle |
+|---|---|
+| Champ modifié d'un seul côté depuis la base | La modification est gardée. |
+| Même champ modifié des deux côtés | La version la plus récente (`updatedAt`) l'emporte ; le conflit est signalé. |
+| Enregistrement créé d'un seul côté | Il est ajouté. |
+| Supprimé d'un côté, modifié de l'autre | La modification l'emporte (aucune perte de saisie) ; signalé. |
+| Supprimé des deux côtés | Supprimé, sans conflit ; la première date de suppression est gardée. |
+| Effacé sur un appareil encore au schéma 1 (sans marque) | Retiré s'il n'a pas changé ailleurs ; sinon gardé et signalé. Un document émis est toujours gardé. |
+| Brouillon émis sur un appareil, modifié sur l'autre | Le document émis l'emporte (l'émission est définitive) ; si le brouillon modifié diffère, une **copie en brouillon** est gardée ; signalé. Au premier lien (sans base commune), toute différence compte. Un brouillon supprimé n'est pas recopié. Si ce brouillon est encore modifié sur le second appareil avant qu'il ait reçu la copie, les modifications **rejoignent la même copie**. |
+| Même brouillon émis sur deux appareils | Deux numéros différents, ou le même numéro avec un contenu différent : les **deux documents émis sont gardés** (la première émission garde l'identifiant, l'autre devient un document distinct), chacun avec ses encaissements ; signalé, à régulariser par un avoir. Même numéro et même contenu : un seul document, daté de la première émission. L'appareil qui avait la seconde émission la retrouve dans le document distinct, avec les encaissements saisis depuis. |
+| Encaissements d'un document | Réunis, puis fusionnés champ par champ ; un encaissement supprimé (marqué) reste supprimé et ne compte plus dans les montants, le livre des recettes ni les emails. |
+| Document émis marqué supprimé | Impossible : la marque est ignorée ; signalé. |
+| Deux documents émis avec le même numéro | Signalé à chaque synchronisation : à régulariser par un avoir et une nouvelle facture (jamais corrigé automatiquement) ; l'écran permettra de marquer la régularisation comme faite (étape C4). |
+| Liens entre devis et factures | Recalculés après la fusion : un devis pointe vers une facture émise qui le reprend, jamais vers un brouillon supprimé. Un brouillon copié ne reprend pas le lien (le devis n'est pas facturé une seconde fois) ; un document émis copié le garde. |
+| Données d'une version plus récente de l'Espace | Refusées sans rien fusionner : l'appareil doit d'abord charger la nouvelle version. |
+| Réglages de l'appareil (dernière sauvegarde) | Non synchronisés. |
+
+Schéma 2 : `deletedAt` (date-heure) sur les clients, les documents et les encaissements supprimés, au lieu de les
+effacer ; `copyOf` (document d'origine) et `copyFrom` (version copiée d'un brouillon) sur les copies faites par la
+synchronisation ; une sauvegarde du schéma 1 est convertie sans perte.
+
+Critères : la fusion est la même dans les deux sens (local et distant échangés, au signalement près) ; plusieurs
+appareils qui modifient, suppriment, émettent, transforment des devis et encaissent puis se synchronisent
+**convergent** vers le même état ; chaque émission est conservée une seule fois ; chaque encaissement est présent une
+seule fois, sur le document du numéro où il a été saisi ; les liens des devis visent un document existant ; aucune
+saisie n'est perdue sans être signalée. Vérifié par des scénarios écrits (un par règle, chacun contrôlé en réintroduisant
+l'erreur qu'il doit détecter) et une simulation de 50 scénarios aléatoires reproductibles qui passe par chaque cas de
+conflit.
+
+**Reste pour l'étape C4** : l'enregistrement sur l'appareil (`tools/espace-store.js`) et l'interface sont encore au
+schéma 1. À l'ouverture des comptes, ils passent au schéma 2 : sauvegardes du schéma 2 acceptées, suppressions
+marquées au lieu d'effacées, listes et calculs de l'interface sans les éléments marqués (le moteur de l'Espace ignore
+déjà les encaissements marqués), conflits affichés à l'utilisateur.
+
 ## 4. Options d'architecture
 
 | Option | Description | Avantages | Limites |
@@ -77,7 +117,7 @@ choix de l'hébergeur et du budget par Ismail.
 | Étape | Contenu | Critère |
 |---|---|---|
 | C1 | Décisions : hébergeur, budget, structure juridique (Ismail) ; D15 (Claude) | Décisions notées au journal |
-| C2 | Schéma 2 et moteur de synchronisation, testés sans serveur (simulation de deux appareils) | Fusion et suppressions correctes sur 50 scénarios |
+| C2 | Schéma 2 et moteur de synchronisation, testés sans serveur (simulation de trois appareils) | Fusion et suppressions correctes sur 50 scénarios ; **fait le 20/10/2026** |
 | C3 | Serveur : authentification, stockage chiffré, limites, sauvegardes | Tests d'accès entre comptes : aucun accès |
 | C4 | Interface : création de compte, lien d'appareils, phrase de récupération, import de l'Espace local | Parcours navigateur complet, captures relues |
 | C5 | Rappels par email (service d'envoi européen) | Rappels reçus aux bonnes dates sur un compte de test |

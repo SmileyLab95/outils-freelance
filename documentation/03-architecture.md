@@ -156,6 +156,7 @@ Application d'une page, spécifiée dans [09-specification-espace.md](09-specifi
 | `engines/facturx-fr.js` | Données structurées de la facture électronique (CII, profil EN 16931 de Factur-X, règles françaises BR-FR) et contrôle des données manquantes. |
 | `engines/pdfa.js` | Générateur PDF/A-3 sans dépendance : police TrueType incorporée, XMP, OutputIntent sRGB, fichiers joints (/AF). |
 | `engines/facturx-pdf.js` | PDF de la facture électronique : mise en page du modèle commun (`invoiceFR.model`), XML joint. |
+| `engines/espace-sync.js` | Synchronisation entre appareils (comptes en ligne, étape C2) : fusion à trois versions (base commune, local, distant) du schéma 2, règles de [12](12-specification-comptes.md) § 3.1. Pas encore chargé par l'interface (étape C4). Testé par `tests/unit/espace-sync.test.mjs` (scénarios écrits et simulation de plusieurs appareils). |
 | `engines/pdf-fonts.js`, `engines/pdf-srgb.js` | Police Inter (sous-ensemble, `scripts/polices_pdf.py`) et profil sRGB incorporés aux PDF. |
 | `tools/espace-store.js` | Stockage : IndexedDB (repli sur le stockage local), synchronisation entre onglets, contrôle des sauvegardes importées. |
 | `tools/espace.js` | Interface : écrans `#/`, `#/documents`, `#/clients`, `#/recettes`, `#/echeances`, `#/reglages`, `#/importer`. |
