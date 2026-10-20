@@ -47,7 +47,8 @@
     var ht = 0;
     var rows = (doc.lines || []).map(function (l) {
       var qty = amount(l.qty), price = amount(l.price);
-      var total = isFinite(qty) && isFinite(price) ? qty * price : NaN;
+      // Montant de ligne arrondi au centime : la facture lisible et ses données structurées (Factur-X) concordent.
+      var total = isFinite(qty) && isFinite(price) ? Math.round(qty * price * 100) / 100 : NaN;
       if (isFinite(total)) ht += total;
       return { desc: l.desc, qty: qty, price: price, total: total };
     });
@@ -55,6 +56,7 @@
     var place = v.place || "fr";
     var noVat = !!v.franchise || place !== "fr";
     var rate = noVat ? 0 : Number(v.rate) || 0;
+    ht = Math.round(ht * 100) / 100;
     var vat = Math.round(ht * rate) / 100;
     var paid = Number(doc.paid);
     return { rows: rows, ht: ht, rate: rate, vat: vat, ttc: ht + vat, paid: isFinite(paid) ? paid : 0,

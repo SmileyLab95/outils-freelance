@@ -1,5 +1,16 @@
 # Journal des modifications
 
+## 2026-10-20 — Factur-X : moteur XML validé par les fichiers officiels
+
+- Moteur `engines/facturx-fr.js` : données structurées CII, profil EN 16931 de Factur-X 1.09.2, règles françaises BR-FR
+  (cadre de facturation, notes PMT, PMD, AAB et BAR, SIREN et adresses électroniques, catégories de TVA E, S, AE, O, G,
+  avoir lié à sa facture). Pas encore de bouton dans l'Espace (étapes F2, F4 et F5 de l'étude).
+- Chaîne de validation `tests/facturx/` : jeu d'essai de 8 cas, XSD et schematrons officiels exécutés en local ;
+  8/8 conformes, et 8 variantes volontairement fausses toutes rejetées.
+- Moteur de facture commun : montants de ligne arrondis au centime avant le total (la facture lisible et les données
+  structurées concordent toujours).
+- Étude mise à jour : points tranchés par les règles officielles, points restant à confirmer au texte.
+
 ## 2026-10-20 — Espace entrepreneur v1.1
 
 - Envoi au client : sur chaque facture, devis et avoir émis, email prérempli (objet, montant, échéance ou validité,

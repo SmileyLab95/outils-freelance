@@ -22,10 +22,11 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   bouton « Continuer dans mon Espace » dans le générateur public ; reprise d'une numérotation commencée ailleurs (une
   série garde son préfixe jusqu'à la fin de l'année, D13) ; encarts vers l'Espace sur 4 outils ; mention de paiement
   corrigée dans le moteur commun. 73 tests unitaires, parcours navigateur étendu, revue de code (10 points corrigés).
-- **Prochaines actions de Claude** : export Factur-X selon l'[étude](10-etude-factur-x.md) (F1 : lever les points à
-  vérifier dans la norme XP Z12-012 ; F2 : adresse structurée et SIREN ; F3 : XML validé par les schémas et règles
-  officiels ; F4 : PDF/A-3 ; F5 : bouton dans l'Espace) ; étude concurrentielle et spécification des comptes en ligne
-  (E2) ; finitions SEO ; veille réglementaire de décembre.
+- **Factur-X (20/10/2026)** : [étude](10-etude-factur-x.md) faite ; moteur XML conforme aux fichiers officiels
+  (XSD, EN 16931, règles françaises BR-FR) sur 8 cas, chaîne de validation fiable (variantes fautives rejetées).
+- **Prochaines actions de Claude** : Factur-X F2 (adresse structurée, pays, SIREN et adresse électronique dans le
+  profil et les clients), F4 (PDF/A-3 dans le navigateur, validé par veraPDF ou Mustang), F5 (bouton dans l'Espace) ;
+  étude concurrentielle et spécification des comptes en ligne (E2) ; finitions SEO ; veille réglementaire de décembre.
 - **En attente d'Ismail** (pas urgent) : structure juridique avec un comptable ; plus tard, compte d'hébergement pour
   les comptes en ligne (E2) ; à la fin, marque et domaine, Gumroad.
 

@@ -29,11 +29,14 @@ Lues dans le schematron BR-FR (liste non exhaustive ; le test automatique appliq
 | BR-FR-03 | Dates entre 2000 et 2099. | Déjà contrôlé. |
 | BR-FR-04 | Types de document autorisés (380 facture, 381 avoir…). | 380 et 381. |
 | BR-FR-05, 06 | Notes obligatoires, une seule fois chacune : indemnité forfaitaire de recouvrement (PMT), pénalités de retard (PMD), escompte ou absence d'escompte (AAB). | Reprises des mentions du moteur de facture. |
-| BR-FR-08 | Cadre de facturation (BT-23) obligatoire : B1, S1, M1, B2… | **À vérifier** : signification exacte de chaque code dans XP Z12-012 (B = biens, S = services, M = mixte ; 1 = facture simple ; 2 = déjà payée ; 4 = définitive après acompte…). |
+| BR-FR-08 | Cadre de facturation (BT-23) obligatoire : B1, S1, M1, B2… | S1 (services), B1 (biens), M1 (mixte) selon la nature de l'opération : « dépôt d'une facture » simple. Les cadres 2 (déjà payée) et 4 (définitive après acompte) ne sont pas utilisés. |
 | BR-FR-09, 10 | SIRET de 14 chiffres commençant par le SIREN ; SIREN du vendeur obligatoire (9 chiffres). | Contrôle du SIRET dans le profil avant l'export. |
 | BR-FR-11, 31 | Note « BAR » (B2B, B2BINT, B2C…) ; si B2B, SIREN de l'acheteur obligatoire. | Client professionnel en France : B2B et SIREN exigé ; client de l'UE ou hors UE : B2BINT. |
-| BR-FR-12, 13 | Adresse électronique de l'acheteur (BT-49) et du vendeur (BT-34) obligatoires. | **À vérifier** : forme de l'adresse dans l'annuaire (SIREN seul, ou SIREN suivi d'un suffixe). Champ à ajouter au profil et au client. |
-| BR-FR-15, 16 | Catégories de TVA S, E, AE, K, G, O, Z ; taux autorisés. | Franchise : catégorie E avec le motif VATEX-FR-FRANCHISE (**à vérifier**, une règle de correspondance BR-FR-MAP-08 semble dire autre chose) ; autoliquidation UE : AE ; hors UE : **à vérifier** (G ou O). |
+| BR-FR-12, 13, 21 | Adresses électroniques de l'acheteur (BT-49) et du vendeur (BT-34) obligatoires ; en B2B, BT-49 commence par le SIREN de l'acheteur, schéma 0225. | Par défaut le SIREN (adresse de l'annuaire au niveau SIREN), modifiable pour un suffixe ; client à l'étranger (B2BINT) : son email, schéma EM. |
+| BR-FR-15, 16 | Catégories de TVA S, E, AE, K, G, O, Z ; taux autorisés. | Franchise : E avec VATEX-FR-FRANCHISE (code présent dans la liste officielle ; BR-FR-MAP-08 est une règle de transcodage des flux vers l'administration, pas du contenu de la facture). Autoliquidation UE : AE (VATEX-EU-AE). Hors UE : O (VATEX-EU-O) pour des services, G (VATEX-EU-G) pour des biens exportés. |
+| BR-E-02 (EN 16931) | En catégorie E, identifiant de TVA (BT-31) ou identifiant fiscal (BT-32) du vendeur obligatoire. | Vendeur en franchise sans numéro de TVA : SIREN en BT-32 (schéma FC), selon l'annexe A V1.4 de XP Z12-012 citée par un éditeur ; **à confirmer au texte officiel** (non consultable depuis l'environnement de travail). |
+| BR-O-02 à 04 (EN 16931) | En catégorie O, aucun numéro de TVA du vendeur ni de l'acheteur dans les données. | Numéros omis du XML dans ce cas (ils restent sur la facture lisible). |
+| BR-AE-02 (EN 16931) | Autoliquidation : numéros de TVA du vendeur et de l'acheteur. | Contrôlé avant l'export. |
 | BR-FR-CO-05 | Avoir : référence à la facture d'origine (BT-25) avec sa date (BT-26). | Déjà dans le modèle (`origin`). |
 | BR-FR-CO-07 | Échéance postérieure ou égale à la date de facture. | Toujours vrai dans l'Espace. |
 | BR-FR-DEC-01 à 04 | Montants : 2 décimales et un point ; quantités : 4 décimales ; prix : 6 décimales ; taux : 2 décimales. | Formatage du moteur XML. |
@@ -67,21 +70,29 @@ Le schéma reste en version 1 : ces champs sont facultatifs et complétés au pr
 | Contrôle | Outil | Critère |
 |---|---|---|
 | Structure XML | XSD officiels Factur-X 1.09.2 EN 16931 (avec `lxml`) | Aucune erreur |
-| Règles EN 16931 | Schematron officiel `FACTUR-X_EN16931.xslt` (XSLT 2.0, avec `saxonche`) | Aucune erreur |
+| Règles EN 16931 | Schematron officiel `FACTUR-X_EN16931.xslt` (XSLT 2.0, exécuté en local avec `saxonche`) | Aucune erreur ni avertissement |
 | Règles françaises | Schematron `BR-FR-Flux2-Schematron-CII.xslt` | Aucune erreur |
 | PDF/A-3 et Factur-X complet | veraPDF, ou Mustang (validateur Factur-X de référence, sur Maven Central) | Conforme PDF/A-3B, XML trouvé et valide |
 | Rendu | Conversion du PDF en image et relecture | Identique à la page imprimable |
 | Jeu d'essai | Franchise, TVA à 20 %, autoliquidation UE, client hors UE, avoir, acompte, plusieurs lignes, accents et caractères spéciaux, logo | Tous conformes |
 
-Les outils de contrôle ne sont pas publiés avec le site : ils servent aux tests (`tests/facturx/`).
+Les outils de contrôle ne sont pas publiés avec le site : ils servent aux tests (`tests/facturx/`). Attention : la
+fonction de contrôle schematron de la bibliothèque `factur-x` envoie le fichier à un serveur Saxon et **ignore en silence**
+un échec de connexion ; `tests/facturx/valider.py` exécute donc les schematrons lui-même, et un test sur des fichiers
+volontairement faux (note PMT absente, numéro avec espace, total faux, ordre des éléments, BT-49 absent, catégorie O avec
+numéro de TVA, autoliquidation sans numéro du client) vérifie que chaque erreur est bien détectée.
+
+**État au 20/10/2026** : moteur `engines/facturx-fr.js` et jeu d'essai de 8 cas (franchise 2026 et 2027, avoir, TVA à
+20 % avec option pour les débits et caractères spéciaux, TVA à 5,5 % avec acompte, autoliquidation UE, services et biens
+hors UE) : **8/8 conformes** au XSD et aux deux schematrons, sans avertissement.
 
 ## 6. Étapes proposées
 
 | Étape | Contenu | Résultat |
 |---|---|---|
-| F1 | Lever les points « à vérifier » (XP Z12-012 : codes BT-23, adresses électroniques, catégories de TVA, relation du fichier joint) | Section 2 complétée avec les sources |
+| F1 | Lever les points « à vérifier » (XP Z12-012 : codes BT-23, adresses électroniques, catégories de TVA, relation du fichier joint) | **Fait**, sauf BT-32 en franchise et relation du fichier joint (à confirmer au texte) |
 | F2 | Modèle : adresse structurée, SIREN, adresse électronique ; formulaires et reprise des données existantes | Profil et clients prêts |
-| F3 | Moteur XML et sa chaîne de validation (XSD + 2 schematrons) sur le jeu d'essai | XML conforme |
+| F3 | Moteur XML et sa chaîne de validation (XSD + 2 schematrons) sur le jeu d'essai | **Fait** : 8/8 conformes |
 | F4 | PDF/A-3 dans le navigateur, XML joint, métadonnées ; validation veraPDF ou Mustang | Factur-X conforme |
 | F5 | Bouton « Facture électronique (Factur-X) » sur les factures et avoirs émis à un client professionnel ; texte d'aide | Fonction publiée |
 

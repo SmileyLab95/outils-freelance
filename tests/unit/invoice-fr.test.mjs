@@ -37,6 +37,13 @@ test("totaux : franchise, TVA à 20 %, client de l'UE", () => {
   assert.equal(t.noVat, true);
 });
 
+test("montants de ligne arrondis au centime avant le total", () => {
+  const t = inv.compute({ lines: [{ desc: "A", qty: 3, price: 0.335 }, { desc: "B", qty: 3, price: 0.335 }], vat: { rate: 20 } });
+  assert.deepEqual(t.rows.map((r) => r.total), [1.01, 1.01]);
+  assert.equal(t.ht, 2.02);
+  assert.equal(t.vat, 0.4);
+});
+
 test("lignes incomplètes ignorées dans le total", () => {
   const t = inv.compute({ lines: [{ desc: "A", qty: 2, price: 100 }, { desc: "B", qty: NaN, price: 50 }] });
   assert.equal(t.ht, 200);
