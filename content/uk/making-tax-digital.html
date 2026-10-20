@@ -1,0 +1,78 @@
+<!--{
+  "id": "mtd",
+  "slug": "making-tax-digital/",
+  "title": "Making Tax Digital for Sole Traders: Do I Need It? (2026)",
+  "description": "Check when Making Tax Digital for Income Tax applies to you: from April 2026 above £50,000, April 2027 above £30,000, April 2028 above £20,000. Quarterly deadlines and what you need to do.",
+  "menu": "Making Tax Digital checker",
+  "icon": "💻",
+  "blurb": "When MTD applies to you, quarterly deadlines and what to do.",
+  "app": "Making Tax Digital Checker",
+  "scripts": ["tools/uk-mtd.js"],
+  "rules": "uk",
+  "sources": ["mtd_itsa_threshold_2026", "mtd_itsa_threshold_2027", "mtd_itsa_threshold_2028", "mtd_itsa_quarterly_deadlines_2026_27", "mtd_itsa_late_submission_penalty"],
+  "priority": 0.9,
+  "faq": [
+    ["Who has to use Making Tax Digital for Income Tax?", "Sole traders and landlords whose qualifying income (gross self-employment turnover plus gross property income, before expenses) is over £50,000 must use it from 6 April 2026, based on their 2024/25 return. The threshold falls to £30,000 from April 2027 and is planned to fall to £20,000 from April 2028."],
+    ["What do I have to do under MTD?", "Keep digital records of your income and expenses in MTD-compatible software, send a quarterly update to HMRC through that software, and submit a final tax return by 31 January after the end of the tax year. Your tax is still paid on the usual dates."],
+    ["What are the quarterly update deadlines?", "For the 2026/27 tax year: 7 August 2026, 7 November 2026, 7 February 2027 and 7 May 2027, covering the quarters ending 5 July, 5 October, 5 January and 5 April."],
+    ["Is there a penalty for late quarterly updates?", "MTD uses a points system: each late submission adds a point, and a £200 penalty applies once you reach the threshold (4 points for quarterly updates). HMRC has said it will not give points for late quarterly updates in 2026/27, the first year."]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · from April 2026</span>
+    <h1>Making Tax Digital: do I need it?</h1>
+    <p class="lead">Enter your yearly turnover from self-employment and property: find out when Making Tax Digital for Income Tax starts for you, and what changes.</p>
+    <ul class="trust"><li>2026, 2027 and 2028 thresholds</li><li>Quarterly deadlines</li><li>Plain-English checklist</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="uk-mtd-form" onsubmit="return false">
+      <h2>Your qualifying income</h2>
+      <div class="fields">
+        <div class="field full"><label for="m-income">Yearly turnover from self-employment and property, before expenses</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="m-income" name="income" value="40,000" data-save><span>£</span></div>
+          <span class="hint">Add the gross income of all your sole trader businesses and rental properties. Salary, pensions and savings don't count.</span></div>
+      </div>
+    </form>
+    <div class="results">
+      <div class="result-hero">
+        <div class="label">Making Tax Digital starts for you</div>
+        <div class="big" id="m-start">–</div>
+        <div class="sub" id="m-sub">–</div>
+      </div>
+      <div class="card" style="margin-top: 16px; padding: 6px 18px;">
+        <table class="mini-table">
+          <caption>Quarterly updates for 2026/27</caption>
+          <thead><tr><th>Quarter ends</th><th>Update due</th></tr></thead>
+          <tbody id="m-deadlines"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>What changes with Making Tax Digital</h2>
+  <ol>
+    <li><strong>Digital records:</strong> record each income and expense in MTD-compatible software (or a spreadsheet linked to bridging software).</li>
+    <li><strong>Quarterly updates:</strong> send a summary of your income and expenses to HMRC every three months.</li>
+    <li><strong>Final declaration:</strong> confirm your figures and add other income by 31 January after the tax year, instead of the usual return.</li>
+  </ol>
+  <p>Your tax bill and payment dates don't change: you still pay by 31 January and, if needed, make <a href="{{link:tax}}">payments on account</a> on 31 January and 31 July.</p>
+  <h2>Thresholds at a glance</h2>
+  <div class="table-scroll">
+  <table>
+    <thead><tr><th>Qualifying income</th><th>Based on your return for</th><th>MTD from</th></tr></thead>
+    <tbody>
+      <tr><td>Over £50,000</td><td>2024/25</td><td>6 April 2026</td></tr>
+      <tr><td>Over £30,000</td><td>2025/26</td><td>6 April 2027</td></tr>
+      <tr><td>Over £20,000 (planned)</td><td>2026/27</td><td>6 April 2028</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="small muted">Some people are exempt or can apply for an exemption (for example if it isn't reasonably practical to use digital tools). Check GOV.UK for your situation.</p>
+</section>

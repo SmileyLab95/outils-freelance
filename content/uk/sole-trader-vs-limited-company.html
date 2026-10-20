@@ -1,0 +1,99 @@
+<!--{
+  "id": "structure",
+  "slug": "sole-trader-vs-limited-company/",
+  "title": "Sole Trader vs Limited Company Calculator 2026/27",
+  "description": "Compare your take-home pay as a sole trader and through a limited company in 2026/27: income tax, National Insurance, corporation tax and dividend tax side by side. Free calculator.",
+  "menu": "Sole trader vs limited company",
+  "icon": "⚖️",
+  "blurb": "Which pays more in 2026/27? Take-home pay side by side.",
+  "app": "Sole Trader vs Limited Company Calculator",
+  "scripts": ["engines/brackets.js", "engines/tax-uk.js", "tools/uk-structure.js"],
+  "rules": "uk",
+  "sources": ["corporation_tax_small_profits_rate", "corporation_tax_marginal_relief_fraction", "dividend_ordinary_rate", "dividend_allowance", "class1_employer_rate", "employment_allowance", "class4_main_rate", "ir35_summary"],
+  "priority": 0.95,
+  "faq": [
+    ["Is it better to be a sole trader or a limited company in 2026?", "It depends on your profit. With corporation tax at 19% to 25%, employer National Insurance at 15% above £5,000 and higher dividend tax rates from April 2026 (10.75% and 35.75%), the tax saving of a limited company has shrunk. Below roughly £50,000 of profit the difference is often small, and the extra accounting costs can wipe it out. Run your numbers with the calculator."],
+    ["What salary should a limited company director pay themselves?", "Most single directors pay a salary around the Personal Allowance (£12,570) or the employer National Insurance threshold (£5,000), then take the rest as dividends. A salary of at least £6,708 (the lower earnings limit) protects your State Pension record. The calculator lets you compare both."],
+    ["Can I claim the Employment Allowance as a sole director?", "No. A company whose only employee paid above the secondary threshold is a director cannot claim the £10,500 Employment Allowance. The calculator assumes no allowance."],
+    ["What else should I consider besides tax?", "A limited company gives you limited liability and can look more established to some clients, but it means more admin: annual accounts, a confirmation statement, a corporation tax return, payroll, and usually an accountant. Contractors should also check IR35, which can tax an outside-IR35 company much like an employee."]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · 2026/27 rates</span>
+    <h1>Sole trader vs limited company</h1>
+    <p class="lead">Enter your expected profit: see what you would take home as a sole trader and as the sole director of a limited company paying a small salary and dividends.</p>
+    <ul class="trust"><li>Corporation tax with marginal relief</li><li>2026/27 dividend tax rates</li><li>Accounting costs included</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="uk-structure-form" onsubmit="return false">
+      <h2>Your business</h2>
+      <div class="fields">
+        <div class="field full"><label for="s-profit">Profit before tax and before paying yourself</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="s-profit" name="profit" value="60,000" data-save><span>£</span></div></div>
+        <div class="field full"><label for="s-region">Where do you live?</label>
+          <select id="s-region" name="region" data-save>
+            <option value="ruk">England, Wales or Northern Ireland</option>
+            <option value="scotland">Scotland</option>
+          </select></div>
+        <div class="field full"><span class="label">Director's salary</span>
+          <div class="segmented" role="group" aria-label="Director's salary">
+            <button type="button" data-salary="12570" aria-pressed="true">£12,570</button>
+            <button type="button" data-salary="5000" aria-pressed="false">£5,000</button>
+            <button type="button" data-salary="custom" aria-pressed="false">Other</button>
+          </div>
+          <input type="hidden" id="s-salary-mode" name="salaryMode" value="12570" data-save></div>
+        <div class="field full" id="s-salary-field" hidden><label for="s-salary">Salary</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="s-salary" name="salary" value="9,100" data-save><span>£</span></div></div>
+        <div class="field full"><label for="s-costs">Extra yearly costs of a company</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="s-costs" name="costs" value="1,500" data-save><span>£</span></div>
+          <span class="hint">Accountant, payroll, software. Deductible for the company.</span></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="result-hero">
+        <div class="label" id="c-winner-label">Best option</div>
+        <div class="big" id="c-winner">–</div>
+        <div class="sub" id="c-sub">–</div>
+      </div>
+      <div class="compare card">
+        <div class="compare-col" id="c-sole">
+          <h3>Sole trader</h3>
+          <ul class="result-list">
+            <li><span>Income tax</span><b id="c-s-it">–</b></li>
+            <li><span>Class 4 NI</span><b id="c-s-ni">–</b></li>
+            <li><span><strong>Take-home</strong></span><b id="c-s-take">–</b></li>
+          </ul>
+        </div>
+        <div class="compare-col" id="c-ltd">
+          <h3>Limited company</h3>
+          <ul class="result-list">
+            <li><span>Salary</span><b id="c-l-salary">–</b></li>
+            <li><span>Employer + employee NI</span><b id="c-l-ni">–</b></li>
+            <li><span>Corporation tax</span><b id="c-l-ct">–</b></li>
+            <li><span>Dividends paid</span><b id="c-l-div">–</b></li>
+            <li><span>Income + dividend tax</span><b id="c-l-tax">–</b></li>
+            <li><span>Company costs</span><b id="c-l-costs">–</b></li>
+            <li><span><strong>Take-home</strong></span><b id="c-l-take">–</b></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>How the comparison works</h2>
+  <ul>
+    <li><strong>Sole trader:</strong> income tax and Class 4 National Insurance on the whole profit.</li>
+    <li><strong>Limited company:</strong> you are the only director and employee. The company pays your salary and 15% employer National Insurance above £5,000, then corporation tax (19% up to £50,000, 25% from £250,000, with marginal relief in between) on what is left. The rest is paid to you as dividends, taxed at 10.75%, 35.75% or 39.35% after the £500 dividend allowance.</li>
+  </ul>
+  <p>Real life is rarely that tidy: you may keep profits in the company, contribute to a pension through it, or have other income. Use this as a first estimate, then confirm with an accountant before you incorporate.</p>
+  <h2>Contractors: check IR35</h2>
+  <p>If you work through your own company for a client in a way that looks like employment, the off-payroll working rules (IR35) can tax your income much like a salary, removing most of the advantage of a limited company.</p>
+</section>

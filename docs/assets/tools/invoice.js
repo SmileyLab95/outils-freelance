@@ -126,11 +126,14 @@
     });
     var discountPct = Math.min(100, Math.max(0, OF.num(val("iv-discount")) || 0));
     var discount = Math.round(subtotal * discountPct) / 100;
-    var taxRate = Math.max(0, OF.num(val("iv-tax-rate")) || 0);
+    // Taux vide ou « none » : pas de ligne de taxe. Un taux de 0 % s'affiche si le profil le demande (TVA à taux zéro).
+    var rawRate = val("iv-tax-rate");
+    var taxRate = Math.max(0, OF.num(rawRate) || 0);
+    var showTax = rawRate !== "" && rawRate !== "none" && isFinite(OF.num(rawRate)) && (taxRate > 0 || !!P.show_zero_tax);
     var tax = Math.round((subtotal - discount) * taxRate) / 100;
     var total = subtotal - discount + tax;
     var paid = state.type === "invoice" ? Math.max(0, OF.num(val("iv-paid")) || 0) : 0;
-    return { rows: rows, subtotal: subtotal, discountPct: discountPct, discount: discount, taxRate: taxRate, tax: tax, total: total, paid: paid };
+    return { rows: rows, subtotal: subtotal, discountPct: discountPct, discount: discount, taxRate: taxRate, tax: tax, showTax: showTax, total: total, paid: paid };
   }
 
   // ----- Aperçu ----------------------------------------------------------------
@@ -144,7 +147,7 @@
     $("iv-logo-remove").hidden = !state.logo;
 
     var me = [$("iv-me-address").value.trim(), val("iv-me-email"), val("iv-me-phone"),
-      val("iv-me-taxid") ? L.tax_id + " " + val("iv-me-taxid") : ""].filter(Boolean);
+      val("iv-me-taxid") ? L.tax_id + " " + val("iv-me-taxid") : "", val("iv-me-extra")].filter(Boolean);
     var client = [$("iv-client-address").value.trim(), val("iv-client-email"),
       val("iv-client-taxid") ? L.client_tax_id + " " + val("iv-client-taxid") : ""].filter(Boolean);
 
@@ -187,7 +190,7 @@
 
     var tot = [[L.subtotal, OF.money(t.subtotal)]];
     if (t.discount > 0) tot.push([L.discount + " (" + OF.fmt(t.discountPct) + "%)", "− " + OF.money(t.discount)]);
-    if (t.taxRate > 0) tot.push([(val("iv-tax-label") || L.tax) + " (" + OF.fmt(t.taxRate) + "%)", OF.money(t.tax)]);
+    if (t.showTax) tot.push([(val("iv-tax-label") || L.tax) + " (" + OF.fmt(t.taxRate) + "%)", OF.money(t.tax)]);
     tot.push([L.total, OF.money(t.total), !t.paid]);
     if (t.paid > 0) {
       tot.push([L.paid, "− " + OF.money(t.paid)]);

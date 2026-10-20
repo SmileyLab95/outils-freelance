@@ -30,7 +30,7 @@
     "currency": "GBP",
     "name": "United Kingdom",
     "language": "English",
-    "live": false
+    "live": true
   },
   {
     "key": "ca",

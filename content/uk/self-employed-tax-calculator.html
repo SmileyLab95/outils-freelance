@@ -1,0 +1,112 @@
+<!--{
+  "id": "tax",
+  "slug": "self-employed-tax-calculator/",
+  "title": "Self-Employed Tax Calculator 2026/27 (Income Tax + NI)",
+  "description": "Work out your 2026/27 income tax and Class 4 National Insurance as a sole trader in England, Wales, Northern Ireland or Scotland, plus your payments on account. Free, no sign-up.",
+  "menu": "Self-employed tax calculator",
+  "icon": "🧾",
+  "blurb": "Income tax, Class 4 NI and payments on account for 2026/27.",
+  "app": "UK Self-Employed Tax Calculator",
+  "scripts": ["engines/brackets.js", "engines/tax-uk.js", "tools/uk-tax.js"],
+  "rules": "uk",
+  "sources": ["personal_allowance", "income_tax_bands_ruk", "income_tax_bands_scotland", "class4_main_rate", "class2_status", "payments_on_account_fraction", "sa_balancing_payment_deadline"],
+  "priority": 1.0,
+  "faq": [
+    ["How much tax does a sole trader pay in 2026/27?", "Income tax on profits above the £12,570 Personal Allowance: 20% up to £50,270, 40% up to £125,140 and 45% above (Scotland has six bands from 19% to 48%). On top, Class 4 National Insurance: 6% on profits between £12,570 and £50,270, and 2% above. The Personal Allowance shrinks by £1 for every £2 of income over £100,000."],
+    ["What are payments on account?", "Advance payments towards next year's tax bill. If your Self Assessment bill is £1,000 or more and less than 80% of your tax was taken at source, HMRC asks for two payments on account, each half of last year's bill, on 31 January and 31 July. In your first year, this means paying 150% of your bill on the first 31 January."],
+    ["Do I still have to pay Class 2 National Insurance?", "No. Compulsory Class 2 contributions ended in April 2024. If your profits are at least £7,105 in 2026/27, you get National Insurance credits for your State Pension automatically. Below that, you can choose to pay voluntary Class 2 at £3.65 a week."],
+    ["How much should I set aside for tax as a sole trader?", "The percentage shown by the calculator: your income tax plus Class 4 NI divided by your profit. For most sole traders it falls between 15% and 30%. In your first year, set aside extra for the first payment on account."],
+    ["When do I have to pay my tax bill?", "For the 2026/27 tax year (6 April 2026 to 5 April 2027), the online return and the balancing payment are due by 31 January 2028. If you started trading in 2026/27, register for Self Assessment by 5 October 2027."],
+    ["Does Making Tax Digital apply to me?", "From April 2026, sole traders and landlords with qualifying income over £50,000 must keep digital records and send quarterly updates; the threshold drops to £30,000 in April 2027. See our <a href=\"{{link:mtd}}\">Making Tax Digital checker</a>."]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · 2026/27 tax year</span>
+    <h1>Self-employed tax calculator</h1>
+    <p class="lead">Enter your profit: see your income tax, Class 4 National Insurance, what you take home, and what HMRC will ask for on 31 January and 31 July.</p>
+    <ul class="trust"><li>England, Wales, NI and Scotland</li><li>Payments on account</li><li>First-year tax bill</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="uk-tax-form" onsubmit="return false">
+      <h2>Your 2026/27 income</h2>
+      <div class="fields">
+        <div class="field full"><label for="t-profit">Profit from self-employment</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="t-profit" name="profit" value="50,000" data-save><span>£</span></div>
+          <span class="hint">Your income minus allowable expenses (or minus the £1,000 trading allowance).</span></div>
+        <div class="field full"><label for="t-region">Where do you live?</label>
+          <select id="t-region" name="region" data-save>
+            <option value="ruk">England, Wales or Northern Ireland</option>
+            <option value="scotland">Scotland</option>
+          </select></div>
+        <div class="field full"><label for="t-salary">Salary from a job, if any</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="t-salary" name="salary" placeholder="0" data-save><span>£</span></div>
+          <span class="hint">Taxed through PAYE, but it uses up your Personal Allowance and bands first.</span></div>
+        <label class="check full"><input type="checkbox" id="t-first" name="first" data-save>
+          <span>This is my first year of self-employment</span></label>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="result-hero">
+        <div class="label">Tax and NI on your profit</div>
+        <div class="big" id="r-total">–</div>
+        <div class="sub" id="r-sub">–</div>
+      </div>
+      <div class="card split-card">
+        <div class="split-bar" id="r-bar" aria-hidden="true"></div>
+        <ul class="split-legend" id="r-legend"></ul>
+      </div>
+      <ul class="result-list card" style="padding: 6px 18px;">
+        <li><span>Profit</span><b id="r-profit">–</b></li>
+        <li><span id="r-it-label">Income tax</span><b id="r-it">–</b></li>
+        <li><span>Class 4 National Insurance</span><b id="r-ni">–</b></li>
+        <li><span><strong>Take-home</strong></span><b id="r-take">–</b></li>
+      </ul>
+      <div class="card" style="margin-top: 16px; padding: 6px 18px;">
+        <table class="mini-table">
+          <caption>When you pay HMRC</caption>
+          <thead><tr><th>Date</th><th class="text">What</th><th>Amount</th></tr></thead>
+          <tbody id="r-schedule"></tbody>
+        </table>
+        <p class="small muted" id="r-poa-note" style="margin: 8px 0 12px;">–</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <details class="card details-card">
+    <summary><b>See the full calculation</b></summary>
+    <ul class="result-list" id="r-steps"></ul>
+  </details>
+</section>
+
+<section class="section prose">
+  <h2>How sole traders are taxed</h2>
+  <p>As a sole trader you pay income tax and Class 4 National Insurance on your <strong>profit</strong>: what you earn minus allowable business expenses. You report it once a year through Self Assessment, for the tax year running from 6 April to 5 April.</p>
+  <h2>2026/27 rates (England, Wales and Northern Ireland)</h2>
+  <div class="table-scroll">
+  <table>
+    <thead><tr><th>Band</th><th>Income</th><th>Income tax</th><th>Class 4 NI</th></tr></thead>
+    <tbody>
+      <tr><td>Personal Allowance</td><td>Up to £12,570</td><td>0%</td><td>0%</td></tr>
+      <tr><td>Basic rate</td><td>£12,571 to £50,270</td><td>20%</td><td>6%</td></tr>
+      <tr><td>Higher rate</td><td>£50,271 to £125,140</td><td>40%</td><td>2%</td></tr>
+      <tr><td>Additional rate</td><td>Over £125,140</td><td>45%</td><td>2%</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>Scotland sets its own income tax bands: 19%, 20%, 21%, 42%, 45% and 48% in 2026/27. National Insurance is the same across the UK.</p>
+  <h2>Not included</h2>
+  <ul>
+    <li>Student loan repayments, which are collected through Self Assessment on top of tax.</li>
+    <li>Savings, dividend and rental income, and pension contributions, which can change your bands.</li>
+    <li>Marriage allowance, Blind Person's Allowance and other reliefs.</li>
+  </ul>
+  <p class="small muted">Estimate for information only, based on HMRC rates for 2026/27. Check your figures with HMRC's own tools or an accountant.</p>
+</section>

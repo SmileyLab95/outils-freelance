@@ -22,7 +22,6 @@
       "confidence": "high",
       "note": ""
     },
-
     "personal_allowance": {
       "value": 12570,
       "unit": "GBP",
@@ -70,9 +69,21 @@
     },
     "income_tax_bands_ruk": {
       "value": [
-        {"from": 0, "to": 37700, "rate": 0.2},
-        {"from": 37700, "to": 125140, "rate": 0.4},
-        {"from": 125140, "to": null, "rate": 0.45}
+        {
+          "from": 0,
+          "to": 37700,
+          "rate": 0.2
+        },
+        {
+          "from": 37700,
+          "to": 125140,
+          "rate": 0.4
+        },
+        {
+          "from": 125140,
+          "to": null,
+          "rate": 0.45
+        }
       ],
       "unit": "brackets",
       "label": "Income tax bands for England, Wales and Northern Ireland (non-savings, non-dividend income)",
@@ -109,7 +120,12 @@
       "note": "Same figure on taxable and gross income because the PA is nil at 125,140. Some GOV.UK pages write 'over 125,140', others '125,141 and above'; same rule."
     },
     "income_tax_wales": {
-      "value": {"welsh_rate_each_band": 0.1, "basic": 0.2, "higher": 0.4, "additional": 0.45},
+      "value": {
+        "welsh_rate_each_band": 0.1,
+        "basic": 0.2,
+        "higher": 0.4,
+        "additional": 0.45
+      },
       "unit": "rate",
       "label": "Welsh rates of income tax 2026/27",
       "source": "https://www.gov.uk/welsh-income-tax",
@@ -119,12 +135,36 @@
     },
     "income_tax_bands_scotland": {
       "value": [
-        {"from": 0, "to": 3967, "rate": 0.19},
-        {"from": 3967, "to": 16956, "rate": 0.2},
-        {"from": 16956, "to": 31092, "rate": 0.21},
-        {"from": 31092, "to": 62430, "rate": 0.42},
-        {"from": 62430, "to": 125140, "rate": 0.45},
-        {"from": 125140, "to": null, "rate": 0.48}
+        {
+          "from": 0,
+          "to": 3967,
+          "rate": 0.19
+        },
+        {
+          "from": 3967,
+          "to": 16956,
+          "rate": 0.2
+        },
+        {
+          "from": 16956,
+          "to": 31092,
+          "rate": 0.21
+        },
+        {
+          "from": 31092,
+          "to": 62430,
+          "rate": 0.42
+        },
+        {
+          "from": 62430,
+          "to": 125140,
+          "rate": 0.45
+        },
+        {
+          "from": 125140,
+          "to": null,
+          "rate": 0.48
+        }
       ],
       "unit": "brackets",
       "label": "Scottish income tax bands 2026/27: starter, basic, intermediate, higher, advanced, top (non-savings, non-dividend income)",
@@ -135,12 +175,36 @@
     },
     "income_tax_bands_scotland_gross_standard_pa": {
       "value": [
-        {"from": 12570, "to": 16537, "rate": 0.19},
-        {"from": 16537, "to": 29526, "rate": 0.2},
-        {"from": 29526, "to": 43662, "rate": 0.21},
-        {"from": 43662, "to": 75000, "rate": 0.42},
-        {"from": 75000, "to": 125140, "rate": 0.45},
-        {"from": 125140, "to": null, "rate": 0.48}
+        {
+          "from": 12570,
+          "to": 16537,
+          "rate": 0.19
+        },
+        {
+          "from": 16537,
+          "to": 29526,
+          "rate": 0.2
+        },
+        {
+          "from": 29526,
+          "to": 43662,
+          "rate": 0.21
+        },
+        {
+          "from": 43662,
+          "to": 75000,
+          "rate": 0.42
+        },
+        {
+          "from": 75000,
+          "to": 125140,
+          "rate": 0.45
+        },
+        {
+          "from": 125140,
+          "to": null,
+          "rate": 0.48
+        }
       ],
       "unit": "brackets",
       "label": "Scottish bands 2026/27 as displayed by GOV.UK (TOTAL income, standard Personal Allowance) - for display only",
@@ -151,12 +215,36 @@
     },
     "income_tax_bands_scotland_2025_26": {
       "value": [
-        {"from": 0, "to": 2827, "rate": 0.19},
-        {"from": 2827, "to": 14921, "rate": 0.2},
-        {"from": 14921, "to": 31092, "rate": 0.21},
-        {"from": 31092, "to": 62430, "rate": 0.42},
-        {"from": 62430, "to": 125140, "rate": 0.45},
-        {"from": 125140, "to": null, "rate": 0.48}
+        {
+          "from": 0,
+          "to": 2827,
+          "rate": 0.19
+        },
+        {
+          "from": 2827,
+          "to": 14921,
+          "rate": 0.2
+        },
+        {
+          "from": 14921,
+          "to": 31092,
+          "rate": 0.21
+        },
+        {
+          "from": 31092,
+          "to": 62430,
+          "rate": 0.42
+        },
+        {
+          "from": 62430,
+          "to": 125140,
+          "rate": 0.45
+        },
+        {
+          "from": 125140,
+          "to": null,
+          "rate": 0.48
+        }
       ],
       "unit": "brackets",
       "label": "Scottish income tax bands 2025/26 (previous year)",
@@ -165,7 +253,6 @@
       "confidence": "high",
       "note": "TAXABLE income, computed from the official gross bands: starter 12,571-15,397, basic 15,398-27,491, intermediate 27,492-43,662, higher 43,663-75,000, advanced 75,001-125,140, top over 125,140."
     },
-
     "class4_lower_profits_limit": {
       "value": 12570,
       "unit": "GBP",
@@ -256,7 +343,6 @@
       "confidence": "high",
       "note": "Per week. Builds State Pension entitlement only."
     },
-
     "trading_allowance": {
       "value": 1000,
       "unit": "GBP",
@@ -304,9 +390,21 @@
     },
     "use_of_home_flat_rates": {
       "value": [
-        {"hours_per_month_from": 25, "hours_per_month_to": 50, "monthly_amount": 10},
-        {"hours_per_month_from": 51, "hours_per_month_to": 100, "monthly_amount": 18},
-        {"hours_per_month_from": 101, "hours_per_month_to": null, "monthly_amount": 26}
+        {
+          "hours_per_month_from": 25,
+          "hours_per_month_to": 50,
+          "monthly_amount": 10
+        },
+        {
+          "hours_per_month_from": 51,
+          "hours_per_month_to": 100,
+          "monthly_amount": 18
+        },
+        {
+          "hours_per_month_from": 101,
+          "hours_per_month_to": null,
+          "monthly_amount": 26
+        }
       ],
       "unit": "list",
       "label": "Simplified expenses: working from home flat rates (GBP per month)",
@@ -324,7 +422,6 @@
       "confidence": "medium",
       "note": "Finance Act 2024 change. Not re-verified against the live page in this session (web search budget exhausted)."
     },
-
     "sa_registration_deadline": {
       "value": "2027-10-05",
       "unit": "date",
@@ -380,7 +477,10 @@
       "note": "Rule: 31 January after the end of the tax year."
     },
     "payments_on_account_dates": {
-      "value": ["2027-01-31", "2027-07-31"],
+      "value": [
+        "2027-01-31",
+        "2027-07-31"
+      ],
       "unit": "list",
       "label": "Payments on account for tax year 2026/27",
       "source": "https://www.gov.uk/understand-self-assessment-bill/payments-on-account",
@@ -421,8 +521,14 @@
         "daily_after_3_months": 10,
         "daily_max_days": 90,
         "daily_max_total": 900,
-        "after_6_months": {"rate": 0.05, "minimum": 300},
-        "after_12_months": {"rate": 0.05, "minimum": 300}
+        "after_6_months": {
+          "rate": 0.05,
+          "minimum": 300
+        },
+        "after_12_months": {
+          "rate": 0.05,
+          "minimum": 300
+        }
       },
       "unit": "GBP",
       "label": "Self Assessment late filing penalties (current, non-MTD regime)",
@@ -433,9 +539,18 @@
     },
     "sa_late_payment_penalties": {
       "value": [
-        {"days_late": 30, "rate": 0.05},
-        {"days_late": "6 months", "rate": 0.05},
-        {"days_late": "12 months", "rate": 0.05}
+        {
+          "days_late": 30,
+          "rate": 0.05
+        },
+        {
+          "days_late": "6 months",
+          "rate": 0.05
+        },
+        {
+          "days_late": "12 months",
+          "rate": 0.05
+        }
       ],
       "unit": "list",
       "label": "Self Assessment late payment penalties (current, non-MTD regime): 5% of unpaid tax at each point",
@@ -462,7 +577,6 @@
       "confidence": "high",
       "note": "Rule: Bank Rate - 1%, minimum 0.5%."
     },
-
     "mtd_itsa_threshold_2026": {
       "value": 50000,
       "unit": "GBP",
@@ -491,7 +605,12 @@
       "note": "Confirmed on GOV.UK pages; one older GOV.UK page presented this tier as a plan subject to legislation. Based on the 2026/27 tax return."
     },
     "mtd_itsa_quarterly_deadlines_2026_27": {
-      "value": ["2026-08-07", "2026-11-07", "2027-02-07", "2027-05-07"],
+      "value": [
+        "2026-08-07",
+        "2026-11-07",
+        "2027-02-07",
+        "2027-05-07"
+      ],
       "unit": "list",
       "label": "MTD for Income Tax quarterly update deadlines, tax year 2026/27",
       "source": "https://www.gov.uk/guidance/use-making-tax-digital-for-income-tax/updates",
@@ -500,7 +619,12 @@
       "note": "Standard quarters 6 Apr-5 Jul, 6 Jul-5 Oct, 6 Oct-5 Jan, 6 Jan-5 Apr; calendar quarters (1 Apr-30 Jun etc.) may be elected, same deadlines. Updates are cumulative. Tax return (final declaration) for 2026/27 due 2028-01-31. Next deadline from 2026-10-20: 2026-11-07."
     },
     "mtd_itsa_late_submission_penalty": {
-      "value": {"points_threshold": 4, "penalty_at_threshold": 200, "points_expire_months": 24, "no_points_for_quarterly_updates_in": "2026/27"},
+      "value": {
+        "points_threshold": 4,
+        "penalty_at_threshold": 200,
+        "points_expire_months": 24,
+        "no_points_for_quarterly_updates_in": "2026/27"
+      },
       "unit": "GBP",
       "label": "MTD for Income Tax points-based late submission penalties",
       "source": "https://www.gov.uk/guidance/penalties-for-making-tax-digital-for-income-tax",
@@ -510,8 +634,16 @@
     },
     "mtd_itsa_late_payment_penalties": {
       "value": {
-        "2026_27": {"day_15": 0.03, "day_30": 0.03, "annual_from_day_31": 0.1},
-        "2027_28": {"day_15": 0.04, "day_30": 0.04, "annual_from_day_31": 0.1}
+        "2026_27": {
+          "day_15": 0.03,
+          "day_30": 0.03,
+          "annual_from_day_31": 0.1
+        },
+        "2027_28": {
+          "day_15": 0.04,
+          "day_30": 0.04,
+          "annual_from_day_31": 0.1
+        }
       },
       "unit": "rate",
       "label": "MTD for Income Tax late payment penalties",
@@ -520,7 +652,6 @@
       "confidence": "medium",
       "note": "No penalty if paid (or time-to-pay agreed) within 15 days; 16-30 days: % of tax unpaid at day 15; 31+ days: % at day 15 + % at day 30 + annual rate charged daily from day 31 (max 2 years). In the first year a 30-day grace period applies once. The 4% figures for 2027/28 come from the GOV.UK penalties page (corrected 30 March 2026) and should be re-checked."
     },
-
     "vat_standard_rate": {
       "value": 0.2,
       "unit": "rate",
@@ -611,7 +742,6 @@
       "confidence": "medium",
       "note": "Standard rule, not re-verified against the live page in this session. MTD for VAT applies to all VAT-registered businesses since April 2022."
     },
-
     "invoice_requirements_all": {
       "value": [
         "Unique identification (invoice) number",
@@ -703,7 +833,6 @@
       "confidence": "high",
       "note": "Exempt supplies must not be included. Northern Ireland businesses cannot issue simplified invoices to EU customers for goods."
     },
-
     "late_payment_statutory_interest_margin": {
       "value": 0.08,
       "unit": "rate",
@@ -715,8 +844,14 @@
     },
     "late_payment_reference_dates": {
       "value": [
-        {"bank_rate_on": "31 December", "applies_to_debts_falling_due": "1 January - 30 June"},
-        {"bank_rate_on": "30 June", "applies_to_debts_falling_due": "1 July - 31 December"}
+        {
+          "bank_rate_on": "31 December",
+          "applies_to_debts_falling_due": "1 January - 30 June"
+        },
+        {
+          "bank_rate_on": "30 June",
+          "applies_to_debts_falling_due": "1 July - 31 December"
+        }
       ],
       "unit": "list",
       "label": "Reference rate fixing dates",
@@ -744,7 +879,18 @@
       "note": "MPC meeting ended 17 December 2025; decision announced 18 December 2025."
     },
     "boe_next_mpc_dates": {
-      "value": ["2026-11-05", "2026-12-17", "2027-02-04", "2027-03-18", "2027-04-29", "2027-06-17", "2027-07-29", "2027-09-16", "2027-11-04", "2027-12-16"],
+      "value": [
+        "2026-11-05",
+        "2026-12-17",
+        "2027-02-04",
+        "2027-03-18",
+        "2027-04-29",
+        "2027-06-17",
+        "2027-07-29",
+        "2027-09-16",
+        "2027-11-04",
+        "2027-12-16"
+      ],
       "unit": "list",
       "label": "Upcoming Bank of England MPC announcement dates",
       "source": "https://www.bankofengland.co.uk/monetary-policy/upcoming-mpc-dates",
@@ -781,9 +927,21 @@
     },
     "late_payment_fixed_compensation": {
       "value": [
-        {"from": 0, "to": 999.99, "amount": 40},
-        {"from": 1000, "to": 9999.99, "amount": 70},
-        {"from": 10000, "to": null, "amount": 100}
+        {
+          "from": 0,
+          "to": 999.99,
+          "amount": 40
+        },
+        {
+          "from": 1000,
+          "to": 9999.99,
+          "amount": 70
+        },
+        {
+          "from": 10000,
+          "to": null,
+          "amount": 100
+        }
       ],
       "unit": "brackets",
       "label": "Late Payment Act fixed-sum compensation for debt recovery costs (GBP, by size of debt)",
@@ -810,7 +968,6 @@
       "confidence": "medium",
       "note": "Proposals (per commentary and Lords Library briefing): cap on B2B payment terms (60 days, 30 days for public authorities), statutory interest of 8% + base rate made mandatory (contract terms excluding/varying it void), ban on construction retentions, stronger Small Business Commissioner powers. Commencement reportedly 'no earlier than 2027'. Re-check before changing calculators."
     },
-
     "corporation_tax_small_profits_rate": {
       "value": 0.19,
       "unit": "rate",
@@ -911,7 +1068,12 @@
       "note": "Unchanged."
     },
     "dividend_rates_2025_26": {
-      "value": {"ordinary": 0.0875, "upper": 0.3375, "additional": 0.3935, "allowance": 500},
+      "value": {
+        "ordinary": 0.0875,
+        "upper": 0.3375,
+        "additional": 0.3935,
+        "allowance": 500
+      },
       "unit": "rate",
       "label": "Dividend rates and allowance 2025/26 (previous year)",
       "source": "https://www.gov.uk/government/publications/rates-and-allowances-income-tax/income-tax-rates-and-allowances-current-and-past",
@@ -1001,13 +1163,48 @@
       "note": "Client guidance: https://www.gov.uk/guidance/off-payroll-working-for-clients ; size thresholds from 6 April 2025: https://www.gov.uk/hmrc-internal-manuals/employment-status-manual/esm10006a (older pages still show 10.2m / 5.1m)."
     },
     "ir35_small_company_thresholds": {
-      "value": {"turnover_max": 15000000, "balance_sheet_max": 7500000, "employees_max": 50, "criteria_needed": 2},
+      "value": {
+        "turnover_max": 15000000,
+        "balance_sheet_max": 7500000,
+        "employees_max": 50,
+        "criteria_needed": 2
+      },
       "unit": "GBP",
       "label": "Small company thresholds for off-payroll working (client size test)",
       "source": "https://www.gov.uk/hmrc-internal-manuals/employment-status-manual/esm10006a",
       "source_title": "ESM10006A - Off-payroll working legislation: meaning of medium or large-sized non-public sector organisation: Size-threshold changes from 6 April 2025 - HMRC internal manual - GOV.UK",
       "confidence": "high",
       "note": "Companies Act 2006 s.382 limits as amended by SI 2024/1303, for financial years beginning on or after 6 April 2025 (previously 10.2m turnover and 5.1m balance sheet). A client is small if it meets 2 or more of the 3 criteria; the status change takes effect from the following tax year."
+    },
+    "late_payment_reference_rates": {
+      "value": [
+        {
+          "overdue_from": "2025-01-01",
+          "overdue_to": "2025-06-30",
+          "bank_rate": 0.0475
+        },
+        {
+          "overdue_from": "2025-07-01",
+          "overdue_to": "2025-12-31",
+          "bank_rate": 0.0425
+        },
+        {
+          "overdue_from": "2026-01-01",
+          "overdue_to": "2026-06-30",
+          "bank_rate": 0.0375
+        },
+        {
+          "overdue_from": "2026-07-01",
+          "overdue_to": "2026-12-31",
+          "bank_rate": 0.0375
+        }
+      ],
+      "unit": "list",
+      "label": "Bank of England Bank Rate on the reference dates (31 December, 30 June) used by the Late Payment Act",
+      "source": "https://www.bankofengland.co.uk/boeapps/database/Bank-Rate.asp",
+      "source_title": "Bank of England - Official Bank Rate history",
+      "confidence": "high",
+      "note": "Bank Rate on 31 Dec 2024: 4.75% (cut on 7 Nov 2024, next cut 6 Feb 2025); on 30 Jun 2025: 4.25% (8 May to 7 Aug 2025); on 31 Dec 2025 and 30 Jun 2026: 3.75% (since 18 Dec 2025). Statutory interest = 8% + reference rate: 12.75% (debts overdue in H1 2025), 12.25% (H2 2025), 11.75% (2026). Add the 31 Dec 2026 rate after the 17 Dec 2026 MPC decision."
     }
   },
   "open_questions": [

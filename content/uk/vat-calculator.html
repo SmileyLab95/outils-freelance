@@ -1,0 +1,99 @@
+<!--{
+  "id": "salestax",
+  "slug": "vat-calculator/",
+  "title": "VAT Calculator UK: Add or Remove VAT at 20%, 5% or 0%",
+  "description": "Add VAT to a net price or remove VAT from a gross price at the UK rates of 20%, 5% and 0%, with the formula. Plus the £90,000 registration threshold explained. Free.",
+  "menu": "VAT calculator",
+  "icon": "🧮",
+  "blurb": "Add or remove VAT at 20%, 5% or 0%, with the formula.",
+  "app": "UK VAT Calculator",
+  "scripts": ["engines/salestax.js", "tools/salestax.js"],
+  "rules": "uk",
+  "sources": ["vat_standard_rate", "vat_registration_threshold", "vat_frs_limited_cost_trader_rate", "vat_invoice_simplified_threshold"],
+  "priority": 0.9,
+  "faq": [
+    ["How do I add VAT to a price?", "Multiply the net price by 1.2 for the 20% standard rate. For example, £500 + VAT = £500 × 1.2 = £600, of which £100 is VAT. At the 5% reduced rate, multiply by 1.05."],
+    ["How do I remove VAT from a price?", "Divide the gross price by 1.2 (at 20%). £600 ÷ 1.2 = £500 net, so the VAT is £100. Taking 20% off £600 would give £480, which is wrong: that's the most common VAT mistake."],
+    ["When do I have to register for VAT?", "When your VAT taxable turnover goes over £90,000 in any rolling 12-month period, or if you expect it to go over £90,000 in the next 30 days alone. You can deregister if it drops below £88,000. You can also register voluntarily below the threshold."],
+    ["What is the VAT Flat Rate Scheme?", "A simpler scheme for businesses with taxable turnover up to £150,000: you charge clients VAT as usual but pay HMRC a fixed percentage of your gross turnover. If you spend very little on goods, the limited cost trader rate of 16.5% applies, which often removes the benefit."]
+  ]
+}-->
+<script type="application/json" id="salestax-data">
+{
+  "storage": "salestax",
+  "mode": "chips",
+  "custom": true,
+  "custom_label": "VAT",
+  "options": [
+    {"key": "20", "label": "20%", "short": "20% standard", "components": [{"label": "VAT", "rate": 0.2}]},
+    {"key": "5", "label": "5%", "short": "5% reduced", "components": [{"label": "VAT", "rate": 0.05}], "note": "The reduced rate applies to a few goods and services, such as domestic energy and children's car seats."},
+    {"key": "0", "label": "0%", "short": "0% zero rate", "components": [{"label": "VAT", "rate": 0}], "note": "Zero-rated items (most food, books, children's clothes) are still VAT taxable: you record them, at 0%."}
+  ],
+  "labels": {
+    "percent": "%", "rate": "VAT rate", "other": "Other",
+    "amount_net": "Amount excluding VAT", "amount_gross": "Amount including VAT",
+    "result_gross": "Price including VAT", "result_net": "Price excluding VAT",
+    "of_which": "VAT at {rate}: {tax}", "enter_amount": "Enter an amount and a rate.",
+    "net": "Net (excl. VAT)", "gross": "Gross (incl. VAT)", "net_short": "net", "gross_short": "gross",
+    "table": "The same {kind} amount at each rate",
+    "formula_generic": "Gross = net × (1 + VAT rate)"
+  }
+}
+</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · instant</span>
+    <h1>VAT calculator</h1>
+    <p class="lead">Add VAT to a net price or take it off a gross price, at 20%, 5%, 0% or any rate, with the formula you can check.</p>
+    <ul class="trust"><li>UK VAT rates</li><li>Both directions</li><li>Rounded to the penny</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="salestax-form" onsubmit="return false">
+      <h2>Your amount</h2>
+      <div class="segmented" role="group" aria-label="Direction" style="margin-bottom: 16px;">
+        <button type="button" data-dir="net" aria-pressed="true">Add VAT</button>
+        <button type="button" data-dir="gross" aria-pressed="false">Remove VAT</button>
+      </div>
+      <input type="hidden" id="st-dir" name="dir" value="net" data-save>
+      <div class="fields">
+        <div class="field full"><label for="st-amount" id="st-amount-label">Amount excluding VAT</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="st-amount" name="amount" value="1,000" data-save><span>£</span></div></div>
+        <div class="field full"><span class="label">VAT rate</span><div id="st-choices"></div></div>
+        <div class="field full" id="st-custom-field" hidden><label for="st-custom">Other rate</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="st-custom" name="custom" placeholder="e.g. 12.5" data-save><span>%</span></div></div>
+      </div>
+      <p class="notice" id="st-note" hidden style="margin: 14px 0 0;"></p>
+    </form>
+
+    <div class="results">
+      <div class="result-hero">
+        <div class="label" id="st-hero-label">Price including VAT</div>
+        <div class="big" id="st-hero">–</div>
+        <div class="sub" id="st-hero-sub">–</div>
+      </div>
+      <ul class="result-list card" style="padding: 6px 18px;" id="st-list"></ul>
+      <p class="formula" id="st-formula" style="margin-top: 16px;">–</p>
+      <div class="card" style="padding: 6px 18px; margin-top: 16px;">
+        <table class="mini-table">
+          <caption id="st-caption">The same amount at each rate</caption>
+          <thead><tr><th>Rate</th><th>Net</th><th>VAT</th><th>Gross</th></tr></thead>
+          <tbody id="st-table"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>VAT for freelancers and sole traders</h2>
+  <ul>
+    <li><strong>Registration threshold:</strong> £90,000 of VAT taxable turnover over any rolling 12 months. Below it, you don't charge VAT unless you register voluntarily.</li>
+    <li><strong>Invoices:</strong> once registered, your invoices must show your VAT number, the VAT rate and the VAT amount. A simplified VAT invoice is allowed for supplies up to £250. Our <a href="{{link:invoice}}">invoice generator</a> adds the VAT line for you.</li>
+    <li><strong>Flat Rate Scheme:</strong> for turnover up to £150,000, pay HMRC a fixed percentage of your gross turnover; the limited cost trader rate is 16.5%.</li>
+  </ul>
+  <p class="small muted">Information only. Check the VAT treatment of your goods or services on GOV.UK.</p>
+</section>

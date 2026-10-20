@@ -310,6 +310,127 @@ const tests = {
   },
   async "us/legal-notice/"() {},
   async "us/privacy-policy/"() {},
+  async "uk/"(page) {
+    const links = await page.$$eval("a[href]", (as) => as.map((a) => a.getAttribute("href")));
+    for (const href of [...new Set(links.filter((h) => h.startsWith("/outils-freelance/")))]) {
+      const res = await page.request.get(`http://127.0.0.1:${port}${href}`);
+      check(res.status() === 200, `UK : lien interne ${href} (${res.status()})`);
+    }
+    check((await page.getAttribute("html", "lang")) === "en-GB", "UK : langue en-GB");
+  },
+  async "uk/self-employed-tax-calculator/"(page) {
+    // 50 000 £ : impôt 7 486 + Class 4 2 245,80 = 9 731,80 (voir tests unitaires)
+    check((await page.textContent("#r-total")).trim() === "£9,732", `UK : total 9 732 £ (obtenu : ${await page.textContent("#r-total")})`);
+    check((await page.textContent("#r-it")).trim() === "£7,486" && (await page.textContent("#r-ni")).trim() === "£2,246", "UK : impôt 7 486 £ et Class 4 2 246 £");
+    check((await page.textContent("#r-sub")).includes("19.5%") && (await page.textContent("#r-sub")).includes("20%"), "UK : 19,5 % du bénéfice, mettre de côté 20 %");
+    check((await page.$$("#r-schedule tr")).length === 5, "UK : échéancier avec payments on account");
+    await page.check("#t-first");
+    check((await page.textContent("#r-poa-note")).includes("£14,598"), "UK : première année = facture + 1er acompte (14 598 £)");
+    await page.uncheck("#t-first");
+    await page.selectOption("#t-region", "scotland");
+    check((await page.textContent("#r-it")).trim() === "£8,982", "UK : Écosse, impôt 8 982 £");
+    await page.selectOption("#t-region", "ruk");
+    await page.fill("#t-profit", "20,000");
+    await page.fill("#t-salary", "30,000");
+    check((await page.textContent("#r-it")).trim() === "£4,000" && (await page.textContent("#r-ni")).trim() === "£446", "UK : avec un salaire de 30 000 £, impôt supplémentaire 4 000 £, Class 4 446 £");
+    await page.fill("#t-profit", "50,000");
+    await page.fill("#t-salary", "");
+  },
+  async "uk/sole-trader-vs-limited-company/"(page) {
+    // Ltd : 60 000 − 12 570 − 1 135,50 − 1 500 = 44 794,50 ; IS 19 % ; dividendes 36 283,55 ; impôt 3 846,73 → 45 006,81
+    check((await page.textContent("#c-l-take")).trim() === "£45,007", `Ltd : revenu net 45 007 £ (obtenu : ${await page.textContent("#c-l-take")})`);
+    check((await page.textContent("#c-s-take")).trim() === "£46,111", "sole trader : revenu net 46 111 £");
+    check((await page.textContent("#c-winner-label")).includes("Sole trader") && (await page.textContent("#c-winner")).includes("£1,105"), "comparaison : sole trader gagne de 1 105 £");
+    await page.click('[data-salary="custom"]');
+    check(await page.isVisible("#s-salary"), "comparaison : salaire personnalisé");
+    await page.click('[data-salary="12570"]');
+  },
+  async "uk/day-rate-calculator/"(page) {
+    // 260 − 25 − 8 = 227 jours × 80 % = 182 jours facturables
+    check((await page.textContent("#d-days")).includes("182 days"), "UK : 182 jours facturables");
+    const ok = await page.evaluate(() => {
+      const profit = OFE.taxUK.profitForTakeHome(45000, { region: "ruk" }, OF_RULES);
+      const back = OFE.taxUK.soleTrader({ profit, region: "ruk" }, OF_RULES).takeHome;
+      return Math.abs(back - 45000) < 1 && document.getElementById("d-rate").textContent.trim() === OF.money((profit + 4000) / 182 * 1.1, 0);
+    });
+    check(ok, "UK : tarif journalier = (bénéfice + frais) ÷ jours × 1,10");
+  },
+  async "uk/vat-calculator/"(page) {
+    check((await page.textContent("#st-hero")).trim() === "£1,200.00", "VAT : 1 000 £ + 20 % = 1 200 £");
+    await page.click('[data-dir="gross"]');
+    check((await page.textContent("#st-hero")).trim() === "£833.33", "VAT : 1 000 £ TTC → 833,33 £ HT");
+    await page.click('[data-dir="net"]');
+    await page.check('input[name="rate"][value="5"]', { force: true });
+    check((await page.textContent("#st-hero")).trim() === "£1,050.00" && await page.isVisible("#st-note"), "VAT : taux réduit 5 % et note");
+    await page.check('input[name="rate"][value="custom"]', { force: true });
+    await page.fill("#st-custom", "12.5");
+    check((await page.textContent("#st-hero")).trim() === "£1,125.00", "VAT : taux libre 12,5 %");
+    check((await page.$$("#st-table tr")).length === 3, "VAT : tableau des 3 taux");
+    await page.check('input[name="rate"][value="20"]', { force: true });
+  },
+  async "uk/late-payment-interest-calculator/"(page) {
+    // Exigible au 2e semestre 2026 : 8 % + 3,75 % ; 5 000 × 11,75 % × 30 ÷ 365 = 48,29 + 70
+    check((await page.textContent("#l-total")).trim() === "£118.29", `UK retard : 48,29 + 70 = 118,29 £ (obtenu : ${await page.textContent("#l-total")})`);
+    await page.fill("#l-due", "2025-03-15");
+    check((await page.textContent("#l-rate")).includes("12.75%"), "UK retard : dette exigible au 1er semestre 2025 → 12,75 %");
+    await page.fill("#l-due", "2025-09-15");
+    check((await page.textContent("#l-rate")).includes("12.25%"), "UK retard : 2e semestre 2025 → 12,25 %");
+    await page.uncheck("#l-b2b");
+    check((await page.textContent("#l-total")).trim() === "£0.00", "UK retard : client particulier → rien à réclamer");
+    await page.check("#l-b2b");
+    check((await page.textContent("#l-claim")).includes("Late Payment of Commercial Debts"), "UK retard : phrase pour la relance");
+  },
+  async "uk/payment-reminder-letter/"(page) {
+    const due = new Date(Date.now() - 50 * 86400000).toISOString().slice(0, 10);
+    await page.fill("#rm-due", due);
+    await page.fill("#rm-number", "INV-014");
+    await page.fill("#rm-amount", "2000");
+    await page.fill("#rm-contact", "Sarah");
+    check((await page.getAttribute('[data-stage="3"]', "aria-selected")) === "true", "relance UK : 50 jours → letter before action");
+    const body = await page.textContent("#rm-body");
+    check(body.includes("LETTER BEFORE ACTION") && body.includes("£2,000.00") && body.includes("Late Payment of Commercial Debts (Interest) Act 1998"), "relance UK : lettre et intérêts légaux");
+    await page.click('[data-stage="0"]');
+    check((await page.textContent("#rm-subject")).includes("Friendly reminder"), "relance UK : changement d'étape au clic");
+  },
+  async "uk/invoice-generator/"(page) {
+    await page.fill("#iv-me-name", "James Taylor");
+    await page.fill("#iv-client-name", "Brightside Ltd");
+    await page.fill("#l-desc-0", "Website design");
+    await page.fill("#l-qty-0", "1");
+    await page.fill("#l-price-0", "1,800");
+    await page.click("#iv-add-line");
+    await page.fill("#l-desc-1", "Copywriting (days)");
+    await page.fill("#l-qty-1", "3");
+    await page.fill("#l-price-1", "150.50");
+    let text = await page.textContent("#iv-preview");
+    check(text.includes("£2,251.50") && !text.includes("VAT ("), "facture UK : sans TVA par défaut");
+    await page.selectOption("#iv-tax-rate", "20");
+    text = await page.textContent("#iv-preview");
+    check(text.includes("£450.30") && text.includes("£2,701.80"), "facture UK : TVA 20 % = 450,30 £, total 2 701,80 £");
+    await page.selectOption("#iv-tax-rate", "0");
+    check((await page.textContent("#iv-preview")).includes("VAT (0%)"), "facture UK : taux zéro affiché");
+    await page.fill("#iv-me-extra", "Company no. 01234567");
+    check((await page.textContent("#iv-preview")).includes("Company no. 01234567"), "facture UK : mentions de société");
+    await page.click('[data-doctype="estimate"]');
+    check((await page.textContent("#iv-preview")).includes("QUOTE"), "devis UK : titre QUOTE");
+    await page.click('[data-doctype="invoice"]');
+    await page.selectOption("#iv-tax-rate", "none");
+  },
+  async "uk/making-tax-digital/"(page) {
+    check((await page.textContent("#m-start")).trim() === "6 April 2027", "MTD : 40 000 £ → avril 2027");
+    await page.fill("#m-income", "60,000");
+    check((await page.textContent("#m-start")).trim() === "6 April 2026", "MTD : 60 000 £ → avril 2026");
+    await page.fill("#m-income", "15,000");
+    check((await page.textContent("#m-start")).trim() === "Not yet", "MTD : 15 000 £ → pas concerné");
+    check((await page.$$("#m-deadlines tr")).length === 4, "MTD : 4 échéances trimestrielles");
+    await page.fill("#m-income", "40,000");
+  },
+  async "uk/freelance-email-templates/"(page) {
+    await page.click('[data-copy="#tpl-3"]');
+    check(await copied(page, '[data-copy="#tpl-3"]'), "modèles UK : bouton Copy");
+  },
+  async "uk/legal-notice/"() {},
+  async "uk/privacy-policy/"() {},
   async "fr/confidentialite/"() {},
   async "fr/mentions-legales/"() {},
 };

@@ -1,0 +1,83 @@
+<!--{
+  "id": "latefee",
+  "slug": "late-payment-interest-calculator/",
+  "title": "Late Payment Interest Calculator UK (Statutory Interest)",
+  "description": "Calculate the statutory interest (8% + Bank of England base rate) and fixed compensation (£40, £70 or £100) you can claim on a late invoice under the Late Payment Act. Free tool.",
+  "menu": "Late payment interest",
+  "icon": "⏱️",
+  "blurb": "Statutory interest and £40 to £100 compensation on a late invoice.",
+  "app": "UK Late Payment Interest Calculator",
+  "scripts": ["engines/brackets.js", "engines/tax-uk.js", "tools/uk-latefee.js"],
+  "rules": "uk",
+  "sources": ["late_payment_statutory_interest_margin", "late_payment_reference_rates", "late_payment_fixed_compensation", "late_payment_default_due_period"],
+  "priority": 0.85,
+  "faq": [
+    ["Can I charge interest on a late invoice in the UK?", "Yes. Under the Late Payment of Commercial Debts (Interest) Act 1998, a business can claim statutory interest on late payments from another business, even if the contract says nothing about it, unless you agreed a different, substantial remedy in your contract."],
+    ["What is the statutory interest rate?", "8% a year plus the Bank of England base rate on the reference date: 31 December for debts that became overdue in January to June, 30 June for July to December. For debts overdue in 2026, the base rate was 3.75% on both dates, so the rate is 11.75% a year."],
+    ["What is the fixed compensation for late payment?", "On top of interest, you can claim a fixed sum for each late invoice: £40 for debts under £1,000, £70 from £1,000 to £9,999.99, and £100 for £10,000 or more. You can also claim reasonable recovery costs above that."],
+    ["When is a payment late if we didn't agree a date?", "30 days after the customer received your invoice or the goods or services, whichever is later. Between businesses, agreed payment terms can be up to 60 days unless both sides agree longer terms that are not grossly unfair."]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · Late Payment Act</span>
+    <h1>Late payment interest calculator</h1>
+    <p class="lead">Your client paid late, or still hasn't paid? See the statutory interest and fixed compensation the law lets you add, with a sentence ready for your reminder.</p>
+    <ul class="trust"><li>8% + Bank of England base rate</li><li>£40, £70 or £100 compensation</li><li>Daily interest</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="uk-late-form" onsubmit="return false">
+      <h2>The late invoice</h2>
+      <div class="fields">
+        <div class="field full"><label for="l-amount">Amount owed</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="l-amount" name="amount" value="5,000" data-save><span>£</span></div>
+          <span class="hint">Including VAT if you charged it.</span></div>
+        <div class="field"><label for="l-due">Due date</label>
+          <input type="date" id="l-due" name="due" data-save></div>
+        <div class="field"><label for="l-paid">Payment date</label>
+          <input type="date" id="l-paid" name="paid">
+          <span class="hint">Leave empty for today.</span></div>
+        <label class="check full"><input type="checkbox" id="l-b2b" name="b2b" checked data-save>
+          <span>My client is a business or public body (the Act does not apply to consumers)</span></label>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="result-hero">
+        <div class="label">You can claim</div>
+        <div class="big" id="l-total">–</div>
+        <div class="sub" id="l-sub">–</div>
+      </div>
+      <ul class="result-list card" style="padding: 6px 18px;">
+        <li><span>Days late</span><b id="l-days">–</b></li>
+        <li><span id="l-rate-label">Statutory interest rate</span><b id="l-rate">–</b></li>
+        <li><span>Interest per day</span><b id="l-daily">–</b></li>
+        <li><span>Interest so far</span><b id="l-interest">–</b></li>
+        <li><span>Fixed compensation</span><b id="l-comp">–</b></li>
+      </ul>
+      <p class="formula" id="l-formula" style="margin-top: 16px;">–</p>
+      <div class="output" style="margin-top: 16px;">
+        <div class="output-head"><b>Sentence for your reminder</b><button type="button" class="btn btn-ghost btn-sm" data-copy="#l-claim">Copy</button></div>
+        <div class="output-body" id="l-claim">–</div>
+      </div>
+      <p class="small muted" style="margin-top: 12px;">Ready to chase? Use the <a href="{{link:reminder}}">payment reminder letters</a>.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>How statutory interest works</h2>
+  <div class="formula">Interest = amount × (8% + reference rate) × days late ÷ 365</div>
+  <p>The reference rate is the Bank of England base rate on 31 December (for debts that became overdue between 1 January and 30 June) or on 30 June (for debts overdue between 1 July and 31 December). It stays fixed for that debt, even if the base rate changes later.</p>
+  <ul>
+    <li>Debts overdue in the first half of 2025: 4.75% + 8% = 12.75%.</li>
+    <li>Debts overdue in the second half of 2025: 4.25% + 8% = 12.25%.</li>
+    <li>Debts overdue in 2026: 3.75% + 8% = 11.75%.</li>
+  </ul>
+  <p>Interest runs until the debt is paid. Claiming it is your right, but many freelancers use it as leverage: mention it in your reminder and waive it if the client pays promptly.</p>
+  <p class="small muted">Information only, not legal advice. The Act applies to contracts between businesses for the supply of goods or services.</p>
+</section>

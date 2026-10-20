@@ -355,7 +355,7 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--b
 .mini-table { width: 100%; border-collapse: collapse; font-size: .92rem; font-variant-numeric: tabular-nums; }
 .mini-table caption { text-align: left; font-weight: 700; padding: 12px 0 6px; }
 .mini-table th, .mini-table td { padding: 9px 4px; border-bottom: 1px solid var(--line); text-align: right; }
-.mini-table th:first-child, .mini-table td:first-child { text-align: left; }
+.mini-table th:first-child, .mini-table td:first-child, .mini-table .text { text-align: left; }
 .mini-table th { font-size: .78rem; text-transform: uppercase; letter-spacing: .06em; color: var(--faint); }
 .mini-table tr:last-child td { border-bottom: 0; }
 .mini-table tr.current td { color: var(--brand-ink); font-weight: 750; }
@@ -439,3 +439,13 @@ a.country-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg)
 .details-card summary::after { content: "+"; color: var(--brand); font-weight: 800; font-size: 1.2rem; line-height: 1; }
 .details-card[open] summary::after { content: "−"; }
 .details-card .result-list { margin: 0; padding: 0 20px 12px; }
+
+/* ---------- Comparaison côte à côte ---------- */
+.compare { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 16px; padding: 16px; }
+.compare-col { border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 12px 14px 4px; }
+.compare-col h3 { font-size: 1rem; margin: 0 0 4px; }
+.compare-col .result-list { margin: 0; }
+.compare-col .result-list li { font-size: .9rem; padding: 8px 0; }
+.compare-col.is-best { border-color: var(--ok); background: #f3fdf6; box-shadow: 0 0 0 3px rgba(22,163,74,.12); }
+.compare-col.is-best h3::after { content: " ✓"; color: var(--ok); }
+@media (max-width: 520px) { .compare { grid-template-columns: 1fr; } }

@@ -1,0 +1,84 @@
+<!--{
+  "id": "rate",
+  "slug": "day-rate-calculator/",
+  "title": "Freelance Day Rate Calculator UK (After Tax, 2026/27)",
+  "description": "What day rate should you charge as a UK freelancer or contractor? Start from the take-home pay you want: the calculator adds 2026/27 income tax, National Insurance, expenses and unbillable days.",
+  "menu": "Day rate calculator",
+  "icon": "💷",
+  "blurb": "The day rate to charge for the take-home pay you want, tax included.",
+  "app": "UK Freelance Day Rate Calculator",
+  "scripts": ["engines/brackets.js", "engines/tax-uk.js", "tools/uk-rate.js"],
+  "rules": "uk",
+  "sources": ["personal_allowance", "income_tax_bands_ruk", "class4_main_rate"],
+  "priority": 0.9,
+  "faq": [
+    ["How do I work out my freelance day rate?", "Add the take-home pay you want, the income tax and National Insurance on your profit, and your business expenses, then divide by the days you can actually bill in a year. This calculator does it with 2026/27 sole trader rates."],
+    ["How many days a year can a freelancer bill?", "There are about 260 weekdays a year. Take off 8 bank holidays, your holidays and sick days, and the time spent finding work, admin and training: most freelancers bill between 160 and 200 days a year."],
+    ["How do I convert a salary into a day rate?", "A common shortcut is to divide the equivalent annual salary by about 200 and add 20 to 50%, because a freelancer pays for holidays, pension, equipment and quiet periods. The calculator gives a more precise answer based on your own figures."],
+    ["Should contractors inside IR35 use this calculator?", "No. Inside IR35, your client or an umbrella company deducts tax and National Insurance like a salary, and employer costs may be taken from your rate. This calculator assumes you are self-employed outside IR35."]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · tax included</span>
+    <h1>Freelance day rate calculator</h1>
+    <p class="lead">Tell us what you want to take home. We add income tax, National Insurance, expenses and the days you can't bill, and give you the day and hourly rate to charge.</p>
+    <ul class="trust"><li>2026/27 income tax and NI</li><li>Realistic billable days</li><li>Day, hourly and monthly targets</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="uk-rate-form" onsubmit="return false">
+      <h3>Your goal</h3>
+      <div class="fields">
+        <div class="field full"><label for="d-take">Take-home pay you want per year</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="d-take" name="take" value="45,000" data-save><span>£</span></div></div>
+        <div class="field"><label for="d-costs">Business expenses per year</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="d-costs" name="costs" value="4,000" data-save><span>£</span></div></div>
+        <div class="field"><label for="d-region">Where do you live?</label>
+          <select id="d-region" name="region" data-save>
+            <option value="ruk">England, Wales or NI</option>
+            <option value="scotland">Scotland</option>
+          </select></div>
+      </div>
+      <h3>Your time</h3>
+      <div class="fields">
+        <div class="field"><label for="d-holidays">Holiday weeks per year</label>
+          <input type="number" id="d-holidays" name="holidays" value="5" min="0" max="20" data-save></div>
+        <div class="field"><label for="d-bank">Bank holidays</label>
+          <input type="number" id="d-bank" name="bank" value="8" min="0" max="15" data-save></div>
+        <div class="field"><label for="d-unbilled">Unbillable time</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="d-unbilled" name="unbilled" value="20" data-save><span>%</span></div>
+          <span class="hint">Finding work, admin, training, sick days.</span></div>
+        <div class="field"><label for="d-hours">Hours per day</label>
+          <input type="number" id="d-hours" name="hours" value="7.5" min="1" max="12" step="0.5" data-save></div>
+        <div class="field full"><label for="d-buffer">Safety margin</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="d-buffer" name="buffer" value="10" data-save><span>%</span></div></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="result-hero">
+        <div class="label">Recommended day rate</div>
+        <div class="big" id="d-rate">–</div>
+        <div class="sub" id="d-sub">–</div>
+      </div>
+      <ul class="result-list card" style="padding: 6px 18px;">
+        <li><span>Hourly rate</span><b id="d-hour">–</b></li>
+        <li><span>Turnover needed per year</span><b id="d-revenue">–</b></li>
+        <li><span>Turnover needed per month</span><b id="d-month">–</b></li>
+        <li><span>Income tax and NI</span><b id="d-taxes">–</b></li>
+        <li><span>Billable days per year</span><b id="d-days">–</b></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>The maths</h2>
+  <div class="formula">Day rate = (profit needed + expenses) ÷ billable days × (1 + safety margin)</div>
+  <p>The profit needed is found exactly with 2026/27 income tax and Class 4 National Insurance, so the rate stays right in every tax band, including the tapering of the Personal Allowance above £100,000.</p>
+  <p>Billable days start from 260 weekdays, minus your holidays and bank holidays, minus the share of time you cannot bill.</p>
+</section>
