@@ -1,5 +1,14 @@
 # Journal des modifications
 
+## 2026-10-20 — États-Unis : trois nouveaux guides interactifs
+
+- *How much to set aside for taxes* : part de chaque paiement à mettre de côté (moteur `tax-us.js`), répartition
+  d'un paiement, tableau par niveau de bénéfice.
+- *1099-NEC and W-9 guide* : vérificateur (seuil de 2 000 $ pour les paiements de 2026, carte et applications de
+  paiement → 1099-K, sociétés, avocats), échéance du 1er février 2027, retenue de 24 % sans W-9.
+- *Freelance protection laws* : New York (État et ville), Illinois, Californie, Los Angeles, Minneapolis, Columbus ;
+  seuil du contrat écrit avec cumul sur 120 jours, délai de paiement, sanctions, organisme compétent.
+
 ## 2026-10-20 — Générateur de contrat de prestation (5 versions)
 
 - France : contrat de prestation de services (cession de droits d'auteur conforme à l'article L131-3 du CPI,

@@ -1,0 +1,97 @@
+<!--{
+  "id": "freelance-law",
+  "slug": "freelance-isnt-free-act/",
+  "title": "Freelance Isn't Free Act and Other Freelancer Protection Laws (2026 Checker)",
+  "description": "Does your client have to sign a written contract and pay you within 30 days? Check the New York State and NYC Freelance Isn't Free Acts, Illinois, California, Los Angeles, Minneapolis and more, with thresholds and remedies. Free.",
+  "menu": "Freelance protection laws",
+  "icon": "🛡️",
+  "blurb": "Written contract, 30-day payment, double damages: what your local law gives you.",
+  "app": "Freelance Protection Law Checker",
+  "scripts": ["tools/us-freelance-law.js"],
+  "rules": "us",
+  "sources": ["freelance_law_new_york_state", "freelance_law_nyc", "freelance_law_illinois", "freelance_law_california_state", "freelance_law_los_angeles", "freelance_law_minneapolis", "freelance_law_columbus_ohio"],
+  "priority": 0.85,
+  "faq": [
+    ["What is the Freelance Isn't Free Act?", "A law that protects freelancers from late and missing payments. New York City adopted it in 2017 and New York State extended it statewide on August 28, 2024. Clients must sign a written contract for work worth $800 or more (alone or combined with work in the previous 120 days), pay by the date in the contract or within 30 days of completion, and can't retaliate. Late payment can cost them double damages."],
+    ["Which states protect freelancers?", "New York and Illinois have statewide laws, and California's Freelance Worker Protection Act took effect on January 1, 2025. Cities such as New York City, Los Angeles, Minneapolis, Seattle and Columbus, Ohio have their own ordinances. Elsewhere, your contract and general contract law protect you."],
+    ["What must the written contract include?", "Under the New York, Illinois and California laws: both parties' names and mailing addresses, an itemized list of the services, their value, the rate and method of pay, the payment date or how it will be set, and the date by which you must submit your invoice. Our <a href=\"{{link:contract}}\">freelance contract generator</a> covers these points."],
+    ["What can I do if a covered client pays late?", "Send a written reminder that cites the law, then file a complaint with the agency in charge (for example the NYC Department of Consumer and Worker Protection or the New York State Department of Labor) or sue. Courts can award double damages for late payment, plus attorney's fees."],
+    ["Does the law apply if I work remotely for an out-of-state client?", "It depends on the law and on where the work is performed or the client is based. In general, these laws protect freelancers working in the area or hired by businesses located there. When in doubt, contact the agency that enforces the law."]
+  ]
+}-->
+<script type="application/json" id="law-data">{"places": {
+  "nys": {"laws": ["freelance_law_new_york_state"], "verify": false},
+  "nyc": {"laws": ["freelance_law_nyc", "freelance_law_new_york_state"], "verify": false},
+  "il": {"laws": ["freelance_law_illinois"], "verify": false},
+  "ca": {"laws": ["freelance_law_california_state"], "verify": true},
+  "la": {"laws": ["freelance_law_los_angeles", "freelance_law_california_state"], "verify": true},
+  "mpls": {"laws": ["freelance_law_minneapolis"], "verify": true},
+  "cbus": {"laws": ["freelance_law_columbus_ohio"], "verify": true},
+  "other": {"laws": [], "verify": false}
+}}</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · laws in force in 2026</span>
+    <h1>Freelance protection laws</h1>
+    <p class="lead">Pick where you work and the value of the project: see whether your client must sign a written contract, how fast they must pay you, and what happens if they don't.</p>
+    <ul class="trust"><li>New York State and NYC</li><li>Illinois, California, Los Angeles</li><li>Minneapolis and Columbus</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="law-form" onsubmit="return false">
+      <h2>Your project</h2>
+      <div class="fields">
+        <div class="field full"><label for="l-place">Where you work or your client is based</label>
+          <select id="l-place" name="place" data-save>
+            <option value="nyc">New York City</option>
+            <option value="nys">New York State (outside NYC)</option>
+            <option value="il">Illinois</option>
+            <option value="la">Los Angeles</option>
+            <option value="ca">California (outside Los Angeles)</option>
+            <option value="mpls">Minneapolis</option>
+            <option value="cbus">Columbus, Ohio</option>
+            <option value="other">Somewhere else</option>
+          </select></div>
+        <div class="field"><label for="l-value">Value of this project</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="l-value" name="value" value="1,200" data-save><span>$</span></div></div>
+        <div class="field"><label for="l-prior">Other work for this client recently</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="l-prior" name="prior" placeholder="0" data-save><span>$</span></div>
+          <span class="hint">Last 120 days (calendar year in Los Angeles and Minneapolis).</span></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="result-hero" id="l-hero">
+        <div class="label">Under your local freelance law</div>
+        <div class="big" id="l-answer" style="font-size: clamp(1.7rem, 3.6vw, 2.3rem);">–</div>
+        <div class="sub" id="l-sub">–</div>
+      </div>
+      <div class="card" id="l-must" style="margin-top: 16px; padding: 18px;">
+        <h3 style="font-size: 1rem; margin-bottom: 8px;">Your written contract must include</h3>
+        <ul class="small" style="margin: 0; padding-left: 18px;">
+          <li>Both parties' names and mailing addresses</li>
+          <li>An itemized list of the services, their value, and the rate and method of pay</li>
+          <li>The payment date, or how it will be determined</li>
+          <li>The date by which you must submit your invoice</li>
+        </ul>
+        <p class="small" style="margin: 10px 0 0;"><a href="{{link:contract}}">Create a compliant contract →</a></p>
+      </div>
+      <div id="l-details"></div>
+      <p class="notice warn" id="l-verify" hidden style="margin-top: 16px;">Some details of this law could not be fully verified against the official text. Check with the agency in charge before relying on them.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>How to use these laws when a client pays late</h2>
+  <ol>
+    <li><strong>Before the work:</strong> send a written contract with the required details. Under the New York and Illinois laws, a client who refuses to sign one owes you statutory damages.</li>
+    <li><strong>On the due date:</strong> if you haven't been paid, send a polite reminder. Our <a href="{{link:reminder}}">payment reminder emails</a> escalate step by step.</li>
+    <li><strong>A few weeks late:</strong> send a firm reminder citing the law and the double damages it provides, with the <a href="{{link:latefee}}">late fees</a> your contract allows.</li>
+    <li><strong>Still unpaid:</strong> file a complaint with the agency that enforces the law, or go to small claims court.</li>
+  </ol>
+  <p class="small muted">General information, not legal advice. Laws, thresholds and agencies change: check the official sources below.</p>
+</section>

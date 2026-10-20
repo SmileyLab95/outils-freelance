@@ -22,10 +22,10 @@ Les phases s'enchaînent dans cet ordre ; une phase n'est terminée que lorsque 
 - [x] *Hourly rate calculator* (avec équivalent journalier et annuel)
 - [x] *Self-employment tax calculator* (SE tax + impôt fédéral + QBI)
 - [x] *Quarterly estimated tax calculator* (échéances, règle de sécurité, export agenda)
-- [x] *How much to set aside for taxes* (intégré au calculateur d'impôts) — page dédiée à créer
+- [x] *How much to set aside for taxes* (page dédiée, avec répartition d'un paiement)
 - [x] *Late fee calculator* + *payment reminder emails*
 - [x] *Freelance email templates*
-- [ ] Guides : 1099-NEC et W-9, *Freelance Isn't Free Act*
+- [x] Guides : 1099-NEC et W-9 (vérificateur), *Freelance Isn't Free Act* et lois locales (vérificateur)
 - [x] *Privacy policy* et *legal notice*
 
 ## Phase 2 — Royaume-Uni (`/uk/`)

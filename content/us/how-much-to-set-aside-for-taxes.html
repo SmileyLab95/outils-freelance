@@ -1,0 +1,100 @@
+<!--{
+  "id": "set-aside",
+  "slug": "how-much-to-set-aside-for-taxes/",
+  "title": "How Much to Set Aside for Taxes as a Freelancer (2026 Calculator)",
+  "description": "Find the exact percentage of every client payment to set aside for self-employment tax, federal and state income tax in 2026, based on your income, expenses and filing status. Free calculator.",
+  "menu": "How much to set aside for taxes",
+  "icon": "🏦",
+  "blurb": "The share of every payment to put aside for taxes, based on your income.",
+  "app": "Tax Set-Aside Calculator",
+  "scripts": ["engines/brackets.js", "engines/tax-us.js", "tools/us-setaside.js"],
+  "rules": "us",
+  "sources": ["se_tax_total_rate", "federal_brackets_single", "qbi_deduction_rate", "standard_deduction_2026", "estimated_tax_due_dates_2026"],
+  "priority": 0.9,
+  "faq": [
+    ["What percentage should a freelancer set aside for taxes?", "It depends on your profit, filing status and state. With the 15.3% self-employment tax plus federal income tax, most freelancers need between 20% and 35% of what they invoice. The calculator works out your own percentage from the 2026 IRS rules."],
+    ["Should I set aside a percentage of revenue or of profit?", "Of every payment you receive (revenue) is easier to apply. The calculator divides your total tax by your revenue, so expenses are already taken into account: just move that share of each payment to a separate savings account the day it arrives."],
+    ["Where should I keep the money?", "In a separate savings account, ideally a high-yield one, that you don't touch for anything else. Pay your quarterly estimated taxes from it on April 15, June 15, September 15 and January 15."],
+    ["What if I also have a job?", "Enter your W-2 wages: they push your business income into higher brackets and count toward the Social Security wage base. If your employer withholds enough, you may need to set aside less, or you can raise your W-4 withholding instead of making quarterly payments."],
+    ["Is this the exact amount I'll owe?", "It's an estimate for planning. It uses the 2026 brackets, standard deduction, self-employment tax and QBI deduction, but not credits, retirement contributions, the self-employed health insurance deduction or local taxes. For the detailed breakdown, use the <a href=\"{{link:tax}}\">self-employment tax calculator</a>."]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · 2026 tax rules</span>
+    <h1>How much to set aside for taxes</h1>
+    <p class="lead">Enter what you invoice in a typical month: get the share of every client payment to move to your tax savings, so the money is there when quarterly payments are due.</p>
+    <ul class="trust"><li>Self-employment and income tax</li><li>Your filing status and state</li><li>Split any payment instantly</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="setaside-form" onsubmit="return false">
+      <h2>Your income</h2>
+      <div class="fields">
+        <div class="field"><label for="s-income">Invoiced per month</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="s-income" name="income" value="7,000" data-save><span>$</span></div></div>
+        <div class="field"><label for="s-expenses">Business expenses per month</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="s-expenses" name="expenses" value="500" data-save><span>$</span></div></div>
+        <div class="field full"><label for="s-status">Filing status</label>
+          <select id="s-status" name="status" data-save>
+            <option value="single">Single</option>
+            <option value="married_filing_jointly">Married filing jointly</option>
+            <option value="married_filing_separately">Married filing separately</option>
+            <option value="head_of_household">Head of household</option>
+          </select></div>
+        <div class="field"><label for="s-state">State income tax rate</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="s-state" name="state" placeholder="0" data-save><span>%</span></div>
+          <span class="hint">0 in AK, FL, NV, NH, SD, TN, TX, WA, WY.</span></div>
+        <div class="field"><label for="s-wages">W-2 wages for the year (optional)</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="s-wages" name="wages" placeholder="0" data-save><span>$</span></div></div>
+      </div>
+      <h3>Split a payment</h3>
+      <div class="fields">
+        <div class="field full"><label for="s-payment">A client just paid you</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="s-payment" name="payment" value="2,500" data-save><span>$</span></div></div>
+      </div>
+      <ul class="result-list" style="margin-top: 6px;">
+        <li><span>Move to tax savings</span><b id="s-pay-tax">–</b></li>
+        <li><span>Yours to spend</span><b id="s-pay-keep">–</b></li>
+      </ul>
+    </form>
+
+    <div class="results">
+      <div class="result-hero">
+        <div class="label">Set aside</div>
+        <div class="big" id="s-share">–</div>
+        <div class="sub" id="s-sub">–</div>
+      </div>
+      <ul class="result-list card" style="padding: 6px 18px;">
+        <li><span>Self-employment tax</span><b id="s-se">–</b></li>
+        <li><span>Federal income tax</span><b id="s-fed">–</b></li>
+        <li><span>State income tax (estimate)</span><b id="s-state-amt">–</b></li>
+        <li><span><strong>Total tax for the year</strong></span><b id="s-total">–</b></li>
+        <li><span>Federal estimated payment per quarter</span><b id="s-quarter">–</b></li>
+        <li><span>What you keep after expenses and taxes</span><b id="s-keep">–</b></li>
+      </ul>
+      <div class="card" style="margin-top: 16px; padding: 18px;">
+        <h3 style="font-size: 1rem; margin-bottom: 8px;">How the percentage grows with profit</h3>
+        <table class="mini-table">
+          <thead><tr><th>Yearly profit</th><th>Set aside</th><th>Per month</th></tr></thead>
+          <tbody id="s-levels"></tbody>
+        </table>
+        <p class="small muted" style="margin: 8px 0 0;">Same filing status, state rate and wages, as a share of profit.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>A simple system that works</h2>
+  <ol>
+    <li><strong>Open a separate savings account</strong> just for taxes.</li>
+    <li><strong>Every time a client pays you,</strong> move your percentage to it the same day. Don't wait for the end of the month.</li>
+    <li><strong>Pay your quarterly estimated taxes</strong> from that account: the <a href="{{link:estimated-tax}}">quarterly tax calculator</a> gives the minimum to avoid a penalty, and the <a href="{{link:calendar}}">tax calendar</a> reminds you of each due date.</li>
+    <li><strong>Recalculate every few months</strong> as your income changes: the percentage rises with your profit.</li>
+  </ol>
+  <p>Anything left in the account after you file in April is a bonus, or a head start on next year.</p>
+</section>

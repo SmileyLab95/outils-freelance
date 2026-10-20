@@ -749,6 +749,37 @@ const tests = {
     check(text.includes("lois en vigueur en Ontario") && !text.includes("articles 2125"), "contrat CA-FR : droit de l'Ontario");
     await page.selectOption("#k-law", "QC");
   },
+  async "us/how-much-to-set-aside-for-taxes/"(page) {
+    // $7,000/mo − $500 expenses: profit $78,000, tax $16,186 = 19.3% of revenue → 20% (see engine tests)
+    check((await page.textContent("#s-share")).trim() === "20%", "set aside: 20% of every payment at $7,000/month");
+    check((await page.textContent("#s-pay-tax")).trim() === "$500.00" && (await page.textContent("#s-pay-keep")).trim() === "$2,000.00", "set aside: $2,500 payment → $500 to savings");
+    check((await page.$$eval("#s-levels tr", (r) => r.length)) === 6 && (await page.$$eval("#s-levels tr.current", (r) => r.length)) === 1, "set aside: table by profit with current row");
+  },
+  async "us/1099-nec-w9-guide/"(page) {
+    check((await page.textContent("#n-answer")).includes("Yes") && (await page.textContent("#n-due")).trim() === "February 1, 2027", "1099 checker: $3,500 to an individual → file by February 1, 2027");
+    await page.fill("#n-paid", "1,500");
+    check((await page.textContent("#n-answer")).includes("No"), "1099 checker: $1,500 is below the $2,000 threshold");
+    await page.fill("#n-paid", "3,500");
+    await page.selectOption("#n-method", "card");
+    check((await page.textContent("#n-sub")).includes("1099-K"), "1099 checker: card payments go on 1099-K");
+    await page.selectOption("#n-method", "direct");
+    await page.uncheck("#n-w9");
+    check((await page.textContent("#n-notice")).includes("24%"), "1099 checker: backup withholding warning without W-9");
+    await page.check("#n-w9");
+  },
+  async "us/freelance-isnt-free-act/"(page) {
+    check((await page.textContent("#l-answer")).includes("required") && (await page.$$eval(".law-card", (c) => c.length)) === 2, "freelance law: NYC $1,200 → contract required, city and state laws");
+    await page.selectOption("#l-place", "il");
+    await page.fill("#l-value", "400");
+    check((await page.textContent("#l-answer")).startsWith("Not required"), "freelance law: Illinois $400 → below $500");
+    await page.fill("#l-prior", "200");
+    check((await page.textContent("#l-answer")).startsWith("Written contract required"), "freelance law: Illinois 120-day aggregation");
+    await page.selectOption("#l-place", "other");
+    check((await page.textContent("#l-answer")).includes("No freelance law"), "freelance law: elsewhere → no specific law");
+    await page.selectOption("#l-place", "nyc");
+    await page.fill("#l-value", "1,200");
+    await page.fill("#l-prior", "");
+  },
   async "fr/confidentialite/"() {},
   async "fr/mentions-legales/"() {},
 };

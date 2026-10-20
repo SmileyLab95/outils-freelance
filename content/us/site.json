@@ -10,8 +10,10 @@
       "items": [
         "tax",
         "estimated-tax",
+        "set-aside",
         "calendar",
-        "mileage"
+        "mileage",
+        "1099"
       ]
     },
     {
@@ -30,7 +32,8 @@
       "label": "Getting paid",
       "items": [
         "reminder",
-        "latefee"
+        "latefee",
+        "freelance-law"
       ]
     },
     {

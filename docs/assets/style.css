@@ -506,3 +506,10 @@ a.country-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg)
 @media print {
   #calendar-form, .cal-actions { display: none !important; }
 }
+.checklist li > div { padding: 12px 4px; }
+.result-hero.is-negative { background: linear-gradient(135deg, #334155, #52525b); box-shadow: 0 16px 40px rgba(30,41,59,.25); }
+.law-card { margin-top: 16px; padding: 18px; }
+.law-card h3 { font-size: 1rem; margin: 0 0 6px; }
+.law-card .result-list li { display: block; padding: 9px 0; }
+.law-card .result-list li span { display: block; font-size: .78rem; text-transform: uppercase; letter-spacing: .05em; color: var(--faint); }
+.law-card .result-list li b { display: block; text-align: left; font-weight: 600; margin-top: 2px; }

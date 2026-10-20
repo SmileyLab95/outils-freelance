@@ -1,0 +1,93 @@
+<!--{
+  "id": "1099",
+  "slug": "1099-nec-w9-guide/",
+  "title": "Form 1099-NEC and W-9 for Freelancers (2026): Who Files, When and How",
+  "description": "Do you need to send a 1099-NEC? Check in seconds with the new $2,000 threshold for 2026 payments, the February 1, 2027 deadline, W-9 and backup withholding rules, and what to do with the 1099s you receive. Free.",
+  "menu": "1099-NEC and W-9 guide",
+  "icon": "📨",
+  "blurb": "The $2,000 rule, deadlines, W-9 and 1099-K, explained with a quick checker.",
+  "app": "1099-NEC Checker",
+  "scripts": ["tools/us-1099.js"],
+  "rules": "us",
+  "sources": ["form_1099_nec_threshold_2026", "form_1099_nec_due_date_2026_payments", "form_1099_k_threshold", "backup_withholding_rate", "form_w9_basics"],
+  "priority": 0.85,
+  "faq": [
+    ["What is the 1099-NEC threshold for 2026?", "$2,000 per contractor for payments made from January 1, 2026, up from $600. The One Big Beautiful Bill Act raised it, and it will be adjusted for inflation after 2026. Payments made in 2025 still used the $600 threshold."],
+    ["When is the 1099-NEC due?", "By February 1, 2027 for payments made in 2026, both to the contractor and to the IRS (January 31 falls on a Sunday). There is no automatic extension for the IRS copy of Form 1099-NEC."],
+    ["Do I need to send a 1099 if I paid by PayPal or credit card?", "No. Card and payment app transactions are reported by the payment processor on Form 1099-K, so you don't send a 1099-NEC for them. Payments by check, bank transfer, Zelle or cash are yours to report."],
+    ["A client asked me for a W-9. Is that normal?", "Yes. Clients ask for a W-9 to get your legal name, tax classification and taxpayer identification number, so they can send you a 1099-NEC. You give it to the client, not to the IRS. To avoid sharing your Social Security number, get a free EIN from the IRS and use it instead."],
+    ["I didn't get a 1099. Do I still report the income?", "Yes. All self-employment income is taxable, with or without a 1099. Report your total business income on Schedule C, using your own records, and check that it matches or exceeds the 1099-NEC and 1099-K forms you receive."],
+    ["What happens if I don't provide a W-9?", "The client must withhold 24% from reportable payments to you (backup withholding) and send it to the IRS. You'd get it back as a credit on your return, but it hurts your cash flow in the meantime."]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · 2026 rules</span>
+    <h1>Form 1099-NEC and W-9 for freelancers</h1>
+    <p class="lead">Hired a contractor this year? Check whether you need to send a 1099-NEC. Sending invoices yourself? Learn what the W-9 and the 1099s you receive mean for your taxes.</p>
+    <ul class="trust"><li>New $2,000 threshold</li><li>February 1, 2027 deadline</li><li>W-9 and backup withholding</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="nec-form" onsubmit="return false">
+      <h2>The contractor you paid</h2>
+      <div class="fields">
+        <div class="field full"><label for="n-paid">Total paid to this contractor in 2026</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="n-paid" name="paid" value="3,500" data-save><span>$</span></div></div>
+        <div class="field full"><label for="n-type">The contractor is</label>
+          <select id="n-type" name="type" data-save>
+            <option value="individual">An individual or sole proprietor</option>
+            <option value="llc">A single-member LLC or a partnership</option>
+            <option value="corp">A C or S corporation (or an LLC taxed as one)</option>
+            <option value="attorney">An attorney or law firm</option>
+          </select></div>
+        <div class="field full"><label for="n-method">You paid by</label>
+          <select id="n-method" name="method" data-save>
+            <option value="direct">Check, bank transfer, Zelle or cash</option>
+            <option value="card">Credit card, PayPal, Stripe or another payment app</option>
+          </select></div>
+        <div class="field full"><label for="n-what">You paid for</label>
+          <select id="n-what" name="what" data-save>
+            <option value="services">Services</option>
+            <option value="goods">Goods or merchandise only</option>
+          </select></div>
+        <label class="check full"><input type="checkbox" id="n-w9" name="w9" checked data-save><span>I have the contractor's W-9 (name and taxpayer ID)</span></label>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="result-hero" id="n-hero">
+        <div class="label">Form 1099-NEC for 2026</div>
+        <div class="big" id="n-answer" style="font-size: clamp(1.9rem, 4vw, 2.5rem);">–</div>
+        <div class="sub" id="n-sub">–</div>
+      </div>
+      <ul class="checklist card" id="n-steps" style="padding: 10px 18px; margin-top: 16px;">
+        <li><div><strong>Send copy B to the contractor by <span id="n-due">–</span></strong><span>By mail, or by email if they agreed to receive it electronically.</span></div></li>
+        <li><div><strong>File copy A with the IRS by the same date</strong><span>Online for free through the IRS Information Returns Intake System (IRIS), or on paper with Form 1096. E-filing is required if you file 10 or more information returns in total.</span></div></li>
+        <li><div><strong>Check your state's rules</strong><span>Many states also require a copy, directly or through the IRS Combined Federal/State Filing program.</span></div></li>
+      </ul>
+      <p class="notice" id="n-notice" hidden style="margin-top: 16px;"></p>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>If you're the freelancer: W-9 and the 1099s you receive</h2>
+  <h3>Filling in a W-9</h3>
+  <ul>
+    <li><strong>Line 1:</strong> your legal name as shown on your tax return. <strong>Line 2:</strong> your business or LLC name, if different.</li>
+    <li><strong>Tax classification:</strong> “Individual/sole proprietor” for most freelancers, including single-member LLCs that haven't elected to be taxed as a corporation.</li>
+    <li><strong>Taxpayer ID:</strong> your Social Security number or an EIN. An EIN is free from the IRS and keeps your SSN off client paperwork.</li>
+    <li>Send it securely to the client. It never goes to the IRS.</li>
+  </ul>
+  <h3>The 1099s you'll receive</h3>
+  <ul>
+    <li><strong>1099-NEC:</strong> from each client that paid you $2,000 or more by check or bank transfer in 2026.</li>
+    <li><strong>1099-K:</strong> from payment platforms (PayPal, Stripe, marketplaces) when you received more than $20,000 over more than 200 transactions.</li>
+    <li>Report <strong>all</strong> your income on Schedule C, whether or not it appears on a 1099. Estimate what you'll owe with the <a href="{{link:tax}}">self-employment tax calculator</a> and set the right share aside with <a href="{{link:set-aside}}">how much to set aside</a>.</li>
+  </ul>
+  <p class="small muted">General information based on IRS instructions for payments made in 2026. Special cases (medical payments, rents, prizes, foreign contractors) follow other rules.</p>
+</section>
