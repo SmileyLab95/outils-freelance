@@ -34,13 +34,17 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   chacun contrôlé en réintroduisant l'erreur qu'il doit détecter, et simulation de 50 scénarios à trois appareils
   (essai ponctuel : 1 000 scénarios à trois appareils et 300 à cinq, sans écart) ; deux revues de code (20 points
   traités). Le moteur de l'Espace ignore déjà les encaissements marqués supprimés.
-- **Prochaines actions de Claude** : comparatif chiffré et à jour des hébergeurs pour la décision d'Ismail ; vérifier
-  les prix des concurrents sur leurs pages officielles ; guides (recouvrement judiciaire, assurance, compte
-  bancaire) ; veille réglementaire de décembre (dont la version de Factur-X et l'annexe A de XP Z12-012 pour le BT-32
-  en franchise). Les étapes C3 (serveur) et C4 (interface des comptes) attendent le choix de l'hébergeur.
+- **Comparatif des hébergeurs (20/10/2026)** : [13](13-comparatif-hebergeurs.md) ; recommandation : Scaleway (Paris),
+  budget de départ de 20 à 30 € HT par mois ; prix relevés par recherche web, à vérifier sur les grilles officielles.
+  Point nouveau : les clés d'accès et les emails de connexion dépendent du nom de domaine, qui doit donc être choisi
+  **avant l'étape C4** (le déménagement du site peut rester à la fin).
+- **Prochaines actions de Claude** : vérifier les prix des concurrents sur leurs pages officielles ; guides
+  (recouvrement judiciaire, assurance, compte bancaire) ; veille réglementaire de décembre (dont la version de
+  Factur-X et l'annexe A de XP Z12-012 pour le BT-32 en franchise). Les étapes C3 (serveur) et C4 (interface des
+  comptes) attendent le choix de l'hébergeur.
 - **En attente d'Ismail** (pas urgent) : structure juridique avec un comptable ; choix de l'hébergeur et budget pour
-  les comptes en ligne (E2, voir [12](12-specification-comptes.md) § 8) ; prix de l'offre « Pro » ; à la fin, marque
-  et domaine, Gumroad.
+  les comptes en ligne (comparatif [13](13-comparatif-hebergeurs.md), § 6) ; nom de domaine à choisir avant l'étape C4
+  ([13](13-comparatif-hebergeurs.md), § 5) ; prix de l'offre « Pro » ; à la fin, Gumroad.
 
 ## Vue d'ensemble
 
@@ -103,6 +107,7 @@ Objectif : un site mesuré, sous sa propre marque, qui commence à rapporter, et
 - [x] Spécification du MVP : parcours, écrans, modèle de données, critères d'acceptation (`documentation/09-specification-espace.md`)
 - [x] Espace entrepreneur v1 en version locale (France) : voir les fonctions cochées « version locale » en E2.2
 - [ ] Choix techniques consignés dans le journal des décisions (socle, hébergement UE, framework, paiements)
+- [x] Comparatif chiffré des hébergeurs pour la décision d'Ismail ([13](13-comparatif-hebergeurs.md)) : prix à vérifier sur les grilles officielles
 - [ ] **[Ismail]** Choisir la structure juridique pour encaisser des abonnements (avec un expert-comptable)
 - [ ] **[Ismail]** Budget de départ validé
 

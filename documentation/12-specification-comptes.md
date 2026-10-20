@@ -94,7 +94,8 @@ déjà les encaissements marqués), conflits affichés à l'utilisateur.
 **Recommandation** : **C hébergée selon B** : synchronisation chiffrée de bout en bout, sur un hébergeur français ;
 les services qui exigent une lecture côté serveur (rappels, devis en ligne, envoi) n'utilisent que les données
 strictement nécessaires, partagées explicitement par l'utilisateur. Décision technique à confirmer (D15), après le
-choix de l'hébergeur et du budget par Ismail.
+choix de l'hébergeur et du budget par Ismail : voir le [comparatif chiffré des hébergeurs](13-comparatif-hebergeurs.md)
+(recommandation : Scaleway, 20 à 30 € HT par mois au départ ; le nom de domaine doit être choisi avant l'étape C4).
 
 ## 5. Sécurité
 
@@ -125,7 +126,9 @@ choix de l'hébergeur et du budget par Ismail.
 
 ## 8. Décisions et tâches d'Ismail
 
-- [ ] **[Ismail]** Choisir l'hébergeur (Claude fournit le comparatif chiffré à jour avant la décision) et ouvrir le compte.
+- [ ] **[Ismail]** Choisir l'hébergeur (comparatif chiffré : [13](13-comparatif-hebergeurs.md)) et ouvrir le compte.
+- [ ] **[Ismail]** Choisir le nom de domaine avant l'étape C4 (clés d'accès et emails de connexion liés au domaine,
+      [13](13-comparatif-hebergeurs.md) § 5).
 - [ ] **[Ismail]** Valider le budget mensuel de départ (hébergement, envoi d'emails, nom de domaine).
 - [ ] **[Ismail]** Structure juridique pour encaisser des abonnements, avec un expert-comptable.
 - [ ] **[Ismail]** Prix de l'offre « Pro » (après vérification des prix des concurrents).

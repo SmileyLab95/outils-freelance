@@ -1,5 +1,15 @@
 # Journal des modifications
 
+## 2026-10-20 — Comparatif des hébergeurs (étape C1)
+
+- `documentation/13-comparatif-hebergeurs.md` : besoins de l'hébergement des comptes (API, PostgreSQL, emails,
+  sauvegardes ; environ 1 Ko par facture émise), offres et prix relevés chez Scaleway, OVHcloud, Clever Cloud et
+  Supabase avec leurs sources, budget de départ (Scaleway : environ 12 à 20 € HT par mois, 22 à 30 € en haute
+  disponibilité), recommandation (Scaleway, région de Paris), tâches d'Ismail. Prix relevés par recherche web, à
+  vérifier sur les grilles officielles.
+- Dépendance signalée : le nom de domaine doit être choisi avant l'étape C4 (clés d'accès et emails de connexion liés
+  au domaine) ; ajoutée aux décisions en attente.
+
 ## 2026-10-20 — Comptes en ligne, étape C2 : moteur de synchronisation
 
 - `engines/espace-sync.js` : fusion de l'Espace entre appareils (schéma 2), sans serveur ni chiffrement, à partir de
