@@ -234,7 +234,7 @@
         "cma_moselle_prestations": 0.0083,
         "cci_commercant_vente": 0.00015,
         "cci_commercant_prestations": 0.00044,
-        "cci_artisan_double_immatriculation": 0.00007
+        "cci_artisan_double_immatriculation": 7e-05
       },
       "unit": "object",
       "label": "Taxe pour frais de chambre consulaire (micro-entrepreneur), en % du CA",
@@ -245,11 +245,31 @@
     },
     "ir_bareme_revenus_2025": {
       "value": [
-        { "from": 0, "to": 11600, "rate": 0 },
-        { "from": 11600, "to": 29579, "rate": 0.11 },
-        { "from": 29579, "to": 84577, "rate": 0.3 },
-        { "from": 84577, "to": 181917, "rate": 0.41 },
-        { "from": 181917, "to": null, "rate": 0.45 }
+        {
+          "from": 0,
+          "to": 11600,
+          "rate": 0
+        },
+        {
+          "from": 11600,
+          "to": 29579,
+          "rate": 0.11
+        },
+        {
+          "from": 29579,
+          "to": 84577,
+          "rate": 0.3
+        },
+        {
+          "from": 84577,
+          "to": 181917,
+          "rate": 0.41
+        },
+        {
+          "from": 181917,
+          "to": null,
+          "rate": 0.45
+        }
       ],
       "unit": "brackets",
       "label": "Barème de l'impôt sur le revenu 2026 (revenus 2025), par part de quotient familial",
@@ -449,7 +469,11 @@
       "note": "Nombre de PA : de l'ordre d'une centaine d'immatriculées (environ 100 à 110 début 2026), confiance faible : vérifier sur la liste publiée. Les logiciels de facturation non immatriculés (opérateurs de dématérialisation, OD) doivent passer par une PA."
     },
     "facturation_electronique_formats": {
-      "value": ["Factur-X", "UBL", "CII"],
+      "value": [
+        "Factur-X",
+        "UBL",
+        "CII"
+      ],
       "unit": "list",
       "label": "Formats du socle obligatoire",
       "source": "https://www.impots.gouv.fr/professionnel/je-passe-la-facturation-electronique",
@@ -473,17 +497,17 @@
     },
     "facturation_electronique_sanctions": {
       "value": {
-        "facture_non_electronique_par_facture": 15,
+        "facture_non_electronique_par_facture": 50,
         "facture_non_electronique_plafond_annuel": 15000,
-        "e_reporting_par_transmission": 250,
-        "e_reporting_plafond_annuel": 15000
+        "e_reporting_par_transmission": 500,
+        "absence_plateforme_agreee": 500
       },
       "unit": "object",
       "label": "Amendes de la réforme (art. 1737 III et 1788 D CGI)",
       "source": "https://www.legifrance.gouv.fr/codes/id/LEGITEXT000006069577",
       "source_title": "Code général des impôts, art. 1737 et 1788 D - Légifrance",
-      "confidence": "low",
-      "note": "Montants de la LF 2024. Pas d'amende pour une première infraction régularisée dans les 30 jours. Une amende pour défaut de choix d'une plateforme agréée (500 EUR, puis 1 000 EUR faute de régularisation dans les 3 mois) et une hausse de l'amende par facture ont été évoquées pour les LF 2025 ou 2026 : non vérifié, à confirmer."
+      "confidence": "medium",
+      "note": "Montants relevés par la loi de finances pour 2026 (art. 1788 D du CGI) selon la CAPEB, Tide, Banqup et Tiime (2026) : 50 € par facture non électronique (plafond 15 000 € par an), 500 € par transmission d'e-reporting manquante, 500 € en l'absence de plateforme agréée après mise en demeure (puis 1 000 € tous les trois mois). Anciens montants : 15 € et 250 €. Texte officiel à relire."
     },
     "retard_paiement_delais": {
       "value": {
@@ -565,6 +589,15 @@
       "source_title": "Facturation : mentions obligatoires - entreprendre.service-public.fr (art. 1737 CGI, art. L441-9 C. com.)",
       "confidence": "medium",
       "note": "Amende fiscale de 15 EUR par mention manquante ou inexacte, plafonnée au quart du montant de la facture. Amende administrative (DGCCRF) de 75 000 EUR au plus pour une personne physique, 375 000 EUR pour une personne morale. Non revérifié en ligne pendant cette session."
+    },
+    "mention_franchise_tva": {
+      "value": "TVA non applicable, art. L. 223-3 du CIBS",
+      "unit": "text",
+      "label": "Mention de franchise en base de TVA sur les factures depuis la recodification de la TVA",
+      "source": "https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000053107172/2222-02-22",
+      "source_title": "Légifrance - Article L223-3 du Code des impositions sur les biens et services (ordonnance n° 2025-1247 du 17 décembre 2025)",
+      "confidence": "medium",
+      "note": "Article L223-3 du CIBS confirmé sur Légifrance (franchise en base, ordonnance n° 2025-1247). Entrée en vigueur au 1er septembre 2026 et tolérance de l'ancienne mention « art. 293 B du CGI » jusqu'au 31 décembre 2027 : rapportées par plusieurs sources secondaires citant Service-Public Entreprendre, à confirmer. Le site affiche « TVA non applicable, art. L. 223-3 du CIBS (ex-art. 293 B du CGI) » sur les factures pendant la transition."
     }
   },
   "open_questions": [

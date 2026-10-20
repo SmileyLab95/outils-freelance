@@ -53,7 +53,7 @@ const tests = {
     await page.fill("#l-price-1", "150,50");
     const text = await page.textContent("#f-preview");
     check(/2\s?251,50\s?€/.test(text), "facture : total HT calculé (1 800 + 3 × 150,50 = 2 251,50 €)");
-    check(text.includes("TVA non applicable, art. 293 B du CGI"), "facture : mention de franchise de TVA");
+    check(text.includes("TVA non applicable, art. L. 223-3 du CIBS"), "facture : mention de franchise de TVA (CIBS)");
     check(text.includes("40 €"), "facture : indemnité forfaitaire de 40 € (client professionnel)");
     check(text.includes("IBAN FR76 1234"), "facture : IBAN dans les conditions de paiement");
     await page.uncheck("#f-franchise");

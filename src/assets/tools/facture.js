@@ -193,7 +193,7 @@
     }).join("") + "</div>";
 
     var mentions = [];
-    if (t.franchise) mentions.push("TVA non applicable, art. 293 B du CGI.");
+    if (t.franchise) mentions.push("TVA non applicable, art. L. 223-3 du CIBS (ex-art. 293 B du CGI).");
     if (isInvoice) {
       if (val("f-me-iban")) {
         mentions.push("Paiement par virement avant le " + OF.frDate(due) + " · IBAN " + val("f-me-iban") +

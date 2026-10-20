@@ -13,7 +13,7 @@
     ["Le générateur de facture est-il vraiment gratuit ?", "Oui, entièrement. Il n'y a ni inscription ni filigrane. Vous pouvez créer autant de factures et de devis que vous le souhaitez."],
     ["Mes informations sont-elles envoyées quelque part ?", "Non. Tout se passe dans votre navigateur : vos informations sont seulement mémorisées sur votre appareil pour pré-remplir la prochaine facture. Rien n'est envoyé sur un serveur."],
     ["Comment enregistrer ma facture en PDF ?", "Cliquez sur « Télécharger en PDF », puis choisissez « Enregistrer au format PDF » comme imprimante dans la fenêtre qui s'ouvre."],
-    ["Quelles mentions sont obligatoires sur une facture d'auto-entrepreneur ?", "Notamment : numéro unique, date, identité et SIRET du vendeur avec la mention « EI », identité du client, désignation, prix HT, mention « TVA non applicable, art. 293 B du CGI » en franchise, date d'échéance, pénalités de retard et indemnité de 40 € entre professionnels. Le générateur les ajoute pour vous. Voir notre <a href=\"{{link:invoice-rules}}\">checklist complète</a>."],
+    ["Quelles mentions sont obligatoires sur une facture d'auto-entrepreneur ?", "Notamment : numéro unique, date, identité et SIRET du vendeur avec la mention « EI », identité du client, désignation, prix HT, mention « TVA non applicable, art. L. 223-3 du CIBS » en franchise, date d'échéance, pénalités de retard et indemnité de 40 € entre professionnels. Le générateur les ajoute pour vous. Voir notre <a href=\"{{link:invoice-rules}}\">checklist complète</a>."],
     ["Dois-je utiliser la facturation électronique ?", "La facturation électronique devient progressivement obligatoire entre entreprises à partir de septembre 2026 (réception) et de septembre 2027 pour l'émission par les PME et micro-entreprises. Vérifiez le calendrier qui vous concerne sur impots.gouv.fr. Ce générateur produit un PDF classique."]
   ]
 }-->
@@ -96,7 +96,7 @@
       <h3>TVA et conditions</h3>
       <div class="fields">
         <label class="check full"><input type="checkbox" id="f-franchise" name="franchise" checked data-save>
-          <span>Franchise en base de TVA (« TVA non applicable, art. 293 B du CGI »)</span></label>
+          <span>Franchise en base de TVA (« TVA non applicable, art. L. 223-3 du CIBS »)</span></label>
         <div class="field" id="f-vat-rate-field" hidden><label for="f-vat-rate">Taux de TVA</label>
           <select id="f-vat-rate" name="vatRate" data-save>
             <option value="20">20 %</option><option value="10">10 %</option><option value="5.5">5,5 %</option><option value="2.1">2,1 %</option>
