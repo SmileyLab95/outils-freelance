@@ -401,3 +401,9 @@ Ces règles ne s'appliquent qu'entre entreprises (B2B), dans tout le Royaume-Uni
 - [Understanding off-payroll working (IR35) – GOV.UK](https://www.gov.uk/guidance/understanding-off-payroll-working-ir35)
 - [Off-payroll working for clients – GOV.UK](https://www.gov.uk/guidance/off-payroll-working-for-clients)
 - [ESM10006A – size thresholds from 6 April 2025 – HMRC](https://www.gov.uk/hmrc-internal-manuals/employment-status-manual/esm10006a)
+
+## Tax calendar (`data/calendars/uk.json`)
+
+- Self Assessment: 5 October (registration), 31 October (paper), 30 December (PAYE coding), 31 January (online return, balancing payment, first payment on account), 31 July (second payment on account).
+- Making Tax Digital quarterly updates: 7 August, 7 November, 7 February, 7 May (standard update periods); final declaration by 31 January.
+- VAT: 7th of the second month after the end of each quarter, for the three stagger groups.

@@ -372,3 +372,9 @@ Revenu Québec applique les mêmes seuils pour les RTI de la TVQ, avec le numér
 - Île-du-Prince-Édouard, impôt provincial des particuliers : https://www.princeedwardisland.ca/en/information/finance-and-affordability/provincial-personal-income-tax
 
 **Sources secondaires utilisées pour recouper** (non officielles) : EY Tax News (budgets 2026 de l'Alberta, de la C.-B., du Manitoba, du N.-B., de T.-N.-L., de l'Î.-P.-É. et de la N.-É.), Andersen Canada, CI Financial, ATB, Baker Tilly, KPMG.
+
+## Calendrier fiscal (`data/calendars/ca.json`)
+
+- Dates nominales ; l'ARC considère comme fait à temps un paiement reçu le jour ouvrable suivant (indiqué sur les pages).
+- TPS/TVH : déclarants mensuels et trimestriels un mois après la période ; annuels (particuliers avec exercice au 31 décembre) déclaration au 15 juin, paiement au 30 avril ; acomptes trimestriels des déclarants annuels si la taxe nette atteint 3 000 $.
+- REER 2026 : 1er mars 2027 (60e jour de l'année).

@@ -1,0 +1,91 @@
+<!--{
+  "id": "calendar",
+  "slug": "tax-calendar/",
+  "title": "Self-Employed Tax Calendar 2026-2027: Every IRS Deadline for Freelancers",
+  "description": "Quarterly estimated tax dates, Form 1099-NEC, the April 15 return and the October extension deadline: your 2026-2027 IRS calendar as a freelancer, with one-click export to Google Calendar, Apple or Outlook. Free.",
+  "menu": "Tax calendar",
+  "icon": "🗓️",
+  "blurb": "Every IRS deadline for the self-employed, in your calendar.",
+  "app": "Self-Employed Tax Calendar",
+  "scripts": [
+    "tools/calendar.js"
+  ],
+  "rules": "us",
+  "sources": [
+    "estimated_tax_due_dates_2026",
+    "form_1040_due_date_tax_year_2026",
+    "form_1099_nec_threshold_2026"
+  ],
+  "priority": 0.9,
+  "faq": [
+    [
+      "When are quarterly estimated taxes due?",
+      "For 2026 income: April 15, June 15 and September 15, 2026, then January 15, 2027. For 2027 income: April 15, June 15 and September 15, 2027, then January 18, 2028 (January 15 is a Saturday and January 17 is Martin Luther King Jr. Day). The periods are uneven: the second one covers only April and May."
+    ],
+    [
+      "Do I have to make estimated tax payments?",
+      "Generally yes, if you expect to owe $1,000 or more when you file, after withholding and credits. You avoid the underpayment penalty by paying at least 90% of this year's tax or 100% of last year's (110% if your AGI was over $150,000). Our <a href=\"{{link:estimated-tax}}\">quarterly tax calculator</a> works out the amounts."
+    ],
+    [
+      "When do I send 1099-NEC forms?",
+      "By February 1, 2027 for payments made in 2026 (January 31 is a Sunday), to each contractor you paid $2,000 or more and to the IRS. The threshold was $600 for payments made in 2025."
+    ],
+    [
+      "Does an extension give me more time to pay?",
+      "No. Form 4868 extends the time to file to October 15, 2027, but any tax owed is still due on April 15, 2027. Interest and late-payment penalties run from April 15."
+    ],
+    [
+      "How do I add these dates to my calendar?",
+      "Click “Add to my calendar (.ics)”: the file contains the upcoming deadlines that match your settings, with a reminder 3 days before each one. Open it with Google Calendar, Apple Calendar or Outlook, or add a single deadline with its “+ Google Calendar” link."
+    ]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · 2026-2027 deadlines</span>
+    <h1>Self-employed tax calendar</h1>
+    <p class="lead">Every federal deadline a freelancer needs: quarterly estimated taxes, 1099 forms, your return and the extension date. Pick what applies to you, then add the dates to your calendar in one click.</p>
+    <ul class="trust"><li>IRS due dates, weekends and holidays included</li><li>Google, Apple and Outlook export</li><li>Reminder 3 days before</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="calendar-form" onsubmit="return false">
+      <h2>Your situation</h2>
+      <div class="fields">
+        <label class="check full"><input type="checkbox" id="cal-estimated" name="estimated" checked data-save><span>I make quarterly estimated tax payments</span></label>
+        <label class="check full"><input type="checkbox" id="cal-contractors" name="contractors" data-save><span>I paid contractors $2,000 or more in 2026</span></label>
+        <label class="check full"><input type="checkbox" id="cal-extension" name="extension" data-save><span>I file with an extension (Form 4868)</span></label>
+        <label class="check full"><input type="checkbox" id="cal-past" data-save><span>Also show past deadlines</span></label>
+      </div>
+      <div class="preview-actions" style="margin-top: 18px;">
+        <button type="button" class="btn btn-primary" id="cal-ics">Add to my calendar (.ics)</button>
+      </div>
+      <p class="small muted" id="cal-ics-done" aria-live="polite" style="margin: 8px 0 0;">Works with Google Calendar, Apple Calendar and Outlook. Reminder 3 days before each deadline.</p>
+    </form>
+
+    <div class="results">
+      <div class="result-hero">
+        <div class="label">Next deadline</div>
+        <div class="big" id="cal-next">–</div>
+        <div class="sub"><strong id="cal-next-title">–</strong><br><span id="cal-next-left"></span></div>
+      </div>
+      <p class="small muted" id="cal-count" style="margin: 14px 2px 10px;">–</p>
+      <div id="cal-list"></div>
+    </div>
+  </div>
+</section>
+<script type="application/json" id="calendar-ui">{"show_more": "Show the next {n} deadlines", "today": "today", "tomorrow": "tomorrow", "in_days": "in {n} days", "days_ago": "{n} days ago", "and_more": "(+{n} more)", "none": "No upcoming deadlines with these settings.", "estimated": "estimated date", "more": "Learn more", "google": "+ Google Calendar", "count": "{n} upcoming deadlines", "count_one": "{n} upcoming deadline", "exported": "{n} deadlines exported: open the file to add them to your calendar.", "exported_one": "{n} deadline exported: open the file to add it to your calendar.", "prodid": "Freelance Tools", "calendar_name": "Tax deadlines (Freelance Tools)", "file": "tax-calendar"}</script>
+<script type="application/json" id="calendar-data">{{calendar:us}}</script>
+
+<section class="section prose">
+  <h2>The deadlines that matter for freelancers</h2>
+  <ul>
+    <li><strong>Quarterly estimated taxes</strong> cover income tax and self-employment tax on what you earn. Work out the amounts with the <a href="{{link:estimated-tax}}">quarterly tax calculator</a>.</li>
+    <li><strong>April 15</strong> is the day to file your return (Schedule C and Schedule SE) and pay the balance. See what you'll owe with the <a href="{{link:tax}}">self-employment tax calculator</a>.</li>
+    <li><strong>Forms 1099</strong>: you send a 1099-NEC to contractors you paid $2,000 or more, and you receive 1099-NEC and 1099-K forms from your clients and payment platforms.</li>
+  </ul>
+  <p class="small muted">Federal deadlines only. Most states with an income tax use the same estimated tax dates, but check your state's tax agency. For information only.</p>
+</section>

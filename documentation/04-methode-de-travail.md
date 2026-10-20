@@ -58,6 +58,8 @@ Une page n'est terminée que si :
 | Novembre – décembre | Canada | Indexation des barèmes (ARC), MGA du RPC, taux du RRQ et du RQAP | canada.ca, retraitequebec.gouv.qc.ca, revenuquebec.ca |
 | Printemps | Canada | Budgets provinciaux | sites des provinces |
 
+| Décembre | Tous | Calendriers fiscaux de l'année suivante : jours fériés, dates publiées (déclaration de revenus en France, MTD, etc.) | `scripts/calendriers.py`, puis `python3 scripts/calendriers.py` |
+
 À chaque mise à jour : modifier `data/rules/<pays>.json` (valeur, source, `verified_on`), relancer les tests, mettre à jour la fiche pays et le journal des modifications.
 
 ## Outils de travail

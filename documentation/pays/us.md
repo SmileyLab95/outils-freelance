@@ -218,3 +218,8 @@ Précisions : à New York (État), les avocats, professions médicales réglemen
 - CalMatters Digital Democracy — SB 988 : https://calmatters.digitaldemocracy.org/bills/ca_202320240sb988
 - Epstein Becker Green — Columbus, OH freelance protections : https://www.ebglaw.com/workforce-bulletin/columbus-oh-adds-freelance-worker-protections-to-its-city-code
 - Fisher Phillips — FAQ ordonnance de Los Angeles : https://www.fisherphillips.com/en/news-insights/faqs-los-angeles-freelance-worker-protections-ordinance.html
+
+## Tax calendar (`data/calendars/us.json`)
+
+- Dates already moved to the next business day (IRC §7503): 1099-NEC on February 1, 2027; Q4 2027 estimated tax on January 18, 2028 (January 15 is a Saturday, January 17 is MLK Day).
+- 1099-NEC threshold $2,000 for payments made in 2026 (OBBBA), $600 before.

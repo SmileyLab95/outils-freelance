@@ -639,6 +639,57 @@ const tests = {
     check((await page.textContent("#v-deduction")).replace(/\s/g, "") === "3000$", "véhicule CA-FR : 5 000 $ × 12 000 / 20 000 km = 3 000 $");
     await page.fill("#v-fuel", "");
   },
+  async "fr/calendrier-fiscal-auto-entrepreneur/"(page) {
+    await page.goto(BASE + "fr/calendrier-fiscal-auto-entrepreneur/?today=2026-10-20", { waitUntil: "networkidle" });
+    const next = async () => [(await page.textContent("#cal-next")).trim(), await page.textContent("#cal-next-title")];
+    let [day, title] = await next();
+    check(day === "2 novembre 2026" && title.includes("3e trimestre 2026"), "calendrier FR : trimestriel → 2 novembre 2026 (31 octobre reporté)");
+    await page.selectOption("#cal-periodicity", "monthly");
+    [day, title] = await next();
+    check(day === "2 novembre 2026" && title.includes("septembre 2026"), "calendrier FR : mensuel → chiffre d'affaires de septembre");
+    await page.check("#cal-created");
+    const list = await page.textContent("#cal-list");
+    check(list.includes("1447-C-SD") && !list.includes("Paiement de la CFE 2026"), "calendrier FR : création en 2026 → déclaration 1447-C, pas de CFE 2026");
+    const [download] = await Promise.all([page.waitForEvent("download"), page.click("#cal-ics")]);
+    const ics = (await import("fs")).readFileSync(await download.path(), "utf8");
+    const count = parseInt((await page.textContent("#cal-count")).replace(/\D/g, ""), 10);
+    check(ics.startsWith("BEGIN:VCALENDAR") && (ics.match(/BEGIN:VEVENT/g) || []).length === count && ics.includes("TRIGGER:-P3D"),
+      `calendrier FR : export .ics de ${count} échéances avec rappel`);
+    const shown = await page.$$eval(".cal-item", (els) => els.length);
+    await page.click("#cal-more");
+    const all = await page.$$eval(".cal-item", (els) => els.length);
+    check(shown === 8 && all === count, `calendrier FR : 8 échéances, puis les ${count} avec « Afficher les suivantes »`);
+    await page.selectOption("#cal-periodicity", "quarterly");
+    await page.uncheck("#cal-created");
+  },
+  async "us/tax-calendar/"(page) {
+    await page.goto(BASE + "us/tax-calendar/?today=2026-10-20", { waitUntil: "networkidle" });
+    check((await page.textContent("#cal-next")).trim() === "January 15, 2027", "US calendar: next deadline Q4 estimated tax, January 15, 2027");
+    await page.uncheck("#cal-estimated");
+    check((await page.textContent("#cal-next")).trim() === "February 1, 2027", "US calendar: without estimated taxes → February 1, 2027 (1099)");
+    await page.check("#cal-estimated");
+  },
+  async "uk/tax-calendar/"(page) {
+    await page.goto(BASE + "uk/tax-calendar/?today=2026-10-20", { waitUntil: "networkidle" });
+    check((await page.textContent("#cal-next")).trim() === "31 October 2026", "UK calendar: next deadline paper return, 31 October 2026");
+    await page.selectOption("#cal-vat", "1");
+    await page.selectOption("#cal-mtd", "2026");
+    const list = await page.textContent("#cal-list");
+    check(list.includes("quarter ending 30 September 2026") && list.includes("Making Tax Digital quarterly update"), "UK calendar: VAT quarter and MTD updates shown");
+    await page.selectOption("#cal-vat", "none");
+    await page.selectOption("#cal-mtd", "no");
+  },
+  async "ca/tax-calendar/"(page) {
+    await page.goto(BASE + "ca/tax-calendar/?today=2026-10-20", { waitUntil: "networkidle" });
+    check((await page.textContent("#cal-next")).trim() === "December 15, 2026", "CA calendar: next deadline instalment, December 15, 2026");
+    await page.selectOption("#cal-gst", "quarterly");
+    check((await page.textContent("#cal-next")).trim() === "October 31, 2026", "CA calendar: quarterly GST/HST filer → October 31, 2026");
+    await page.selectOption("#cal-gst", "annual");
+  },
+  async "ca/fr/calendrier-fiscal/"(page) {
+    await page.goto(BASE + "ca/fr/calendrier-fiscal/?today=2026-10-20", { waitUntil: "networkidle" });
+    check((await page.textContent("#cal-next")).trim() === "15 décembre 2026", "calendrier CA-FR : acompte provisionnel du 15 décembre 2026");
+  },
   async "fr/confidentialite/"() {},
   async "fr/mentions-legales/"() {},
 };

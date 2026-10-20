@@ -702,6 +702,42 @@
       "source_title": "L'argus - Indemnités kilométriques 2026",
       "confidence": "high",
       "note": "Le montant obtenu avec le barème est majoré de 20 % pour les véhicules électriques."
+    },
+    "calendrier_urssaf_declarations": {
+      "value": "Déclaration mensuelle : chiffre d'affaires du mois M avant la fin du mois M + 1. Trimestrielle : 30 avril, 31 juillet, 31 octobre, 31 janvier. Échéance reportée au jour suivant si elle tombe un week-end ou un jour férié. Changement de périodicité : demande avant le 31 janvier de l'année concernée.",
+      "unit": "text",
+      "label": "Échéances des déclarations Urssaf du micro-entrepreneur",
+      "source": "https://www.autoentrepreneur.urssaf.fr/portail/accueil/une-question/toutes-les-fiches-pratiques/declarer-et-payer-mes-cotisation.html",
+      "source_title": "Déclarer et payer mes cotisations - Autoentrepreneur.urssaf.fr",
+      "confidence": "high",
+      "note": "Report au jour ouvré suivant appliqué dans data/calendars/fr.json (scripts/calendriers.py)."
+    },
+    "cfe_echeance": {
+      "value": "Solde de CFE exigible le 15 décembre ; adhésion au prélèvement à l'échéance jusqu'au 30 novembre ; acompte au 15 juin si la CFE de l'année précédente atteint 3 000 €. Avis uniquement en ligne (espace professionnel).",
+      "unit": "text",
+      "label": "Paiement de la cotisation foncière des entreprises",
+      "source": "https://www.impots.gouv.fr/professionnel/cet-cfe-et-cvae",
+      "source_title": "Impôts locaux : CET (CFE et CVAE) et TF - impots.gouv.fr",
+      "confidence": "high",
+      "note": "Exonération l'année de création et pour un chiffre d'affaires inférieur ou égal à 5 000 € ; base réduite de moitié la deuxième année."
+    },
+    "tva_rsi_calendrier": {
+      "value": "Régime réel simplifié : acomptes en juillet (55 %) et en décembre (40 %), déclaration annuelle CA12 au plus tard le 2e jour ouvré suivant le 1er mai. Régime réel normal : déclaration CA3 mensuelle entre le 15 et le 24 du mois suivant.",
+      "unit": "text",
+      "label": "Calendrier de la TVA",
+      "source": "https://www.impots.gouv.fr/professionnel/tva",
+      "source_title": "TVA - impots.gouv.fr (régimes d'imposition à la TVA)",
+      "confidence": "medium",
+      "note": "La date exacte (entre le 15 et le 24) dépend de l'entreprise : elle figure dans l'espace professionnel."
+    },
+    "versement_liberatoire_option": {
+      "value": "Option à demander à l'Urssaf au plus tard le 30 septembre pour une application au 1er janvier suivant (ou dans les 3 mois de la création).",
+      "unit": "text",
+      "label": "Date limite d'option pour le versement libératoire",
+      "source": "https://www.autoentrepreneur.urssaf.fr/portail/accueil/sinformer-sur-le-statut/lessentiel-du-statut.html",
+      "source_title": "L'essentiel du statut - Autoentrepreneur.urssaf.fr",
+      "confidence": "high",
+      "note": "Sous condition de revenu fiscal de référence."
     }
   },
   "open_questions": [

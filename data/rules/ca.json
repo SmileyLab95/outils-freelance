@@ -675,6 +675,24 @@
       "source_title": "Health premium - Ontario.ca",
       "confidence": "high",
       "note": "Structured version of ontario_health_premium (same figures). No premium at or below $20,000 of taxable income."
+    },
+    "gst_hst_filing_due_dates": {
+      "value": "Monthly and quarterly filers: one month after the end of the reporting period. Annual filers who are individuals with business income and a December 31 year-end: return by June 15, payment by April 30. Annual filers' quarterly instalments: one month after the end of each fiscal quarter, if net tax is $3,000 or more.",
+      "unit": "text",
+      "label": "GST/HST return and payment due dates",
+      "source": "https://laws-lois.justice.gc.ca/eng/acts/E-15/section-238.html",
+      "source_title": "Excise Tax Act, section 238 (filing of returns) - Justice Laws Website",
+      "confidence": "high",
+      "note": "Quebec: GST and QST are filed with Revenu Québec on the same schedule."
+    },
+    "rrsp_deadline_2026": {
+      "value": "2027-03-01",
+      "unit": "date",
+      "label": "RRSP contribution deadline for the 2026 tax year (60 days after year end)",
+      "source": "https://laws-lois.justice.gc.ca/eng/acts/I-3.3/section-146.html",
+      "source_title": "Income Tax Act, section 146 (RRSP) - Justice Laws Website",
+      "confidence": "high",
+      "note": "60th day of 2027 = March 1, 2027 (a Monday)."
     }
   },
   "provinces": {

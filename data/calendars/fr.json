@@ -1,0 +1,713 @@
+{
+ "verified_on": "2026-10-20",
+ "range": [
+  "2026-09-01",
+  "2028-01-31"
+ ],
+ "events": [
+  {
+   "date": "2026-09-01",
+   "kind": "info",
+   "tag": "Réforme",
+   "title": "Facturation électronique : réception obligatoire",
+   "desc": "Toutes les entreprises doivent pouvoir recevoir des factures électroniques via une plateforme agréée.",
+   "link": "einvoicing"
+  },
+  {
+   "date": "2026-09-15",
+   "kind": "vat",
+   "tag": "TVA",
+   "title": "Déclaration de TVA d'août 2026 (CA3)",
+   "desc": "Régime réel normal : déclaration et paiement entre le 15 et le 24 selon votre entreprise (date exacte dans votre espace professionnel).",
+   "when": {
+    "vat": [
+     "normal"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2026-09-30",
+   "kind": "social",
+   "tag": "Urssaf",
+   "title": "Déclaration Urssaf du chiffre d'affaires d'août 2026",
+   "desc": "Déclarez et payez vos cotisations (et le versement libératoire si vous l'avez choisi) sur autoentrepreneur.urssaf.fr, même si votre chiffre d'affaires est nul.",
+   "when": {
+    "periodicity": [
+     "monthly"
+    ]
+   },
+   "link": "tax"
+  },
+  {
+   "date": "2026-09-30",
+   "kind": "info",
+   "tag": "Option",
+   "title": "Option pour le versement libératoire de l'impôt en 2027 : date limite",
+   "desc": "Demande à faire auprès de l'Urssaf au plus tard le 30 septembre pour une application au 1er janvier, si votre revenu fiscal de référence le permet.",
+   "link": "tax"
+  },
+  {
+   "date": "2026-10-15",
+   "kind": "vat",
+   "tag": "TVA",
+   "title": "Déclaration de TVA de septembre 2026 (CA3)",
+   "desc": "Régime réel normal : déclaration et paiement entre le 15 et le 24 selon votre entreprise (date exacte dans votre espace professionnel).",
+   "when": {
+    "vat": [
+     "normal"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2026-11-02",
+   "kind": "social",
+   "tag": "Urssaf",
+   "title": "Déclaration Urssaf du 3e trimestre 2026",
+   "desc": "Chiffre d'affaires encaissé de juillet à septembre 2026. Déclarez et payez vos cotisations sur autoentrepreneur.urssaf.fr, même si votre chiffre d'affaires est nul.",
+   "when": {
+    "periodicity": [
+     "quarterly"
+    ]
+   },
+   "link": "tax"
+  },
+  {
+   "date": "2026-11-02",
+   "kind": "social",
+   "tag": "Urssaf",
+   "title": "Déclaration Urssaf du chiffre d'affaires de septembre 2026",
+   "desc": "Déclarez et payez vos cotisations (et le versement libératoire si vous l'avez choisi) sur autoentrepreneur.urssaf.fr, même si votre chiffre d'affaires est nul.",
+   "when": {
+    "periodicity": [
+     "monthly"
+    ]
+   },
+   "link": "tax"
+  },
+  {
+   "date": "2026-11-15",
+   "kind": "vat",
+   "tag": "TVA",
+   "title": "Déclaration de TVA d'octobre 2026 (CA3)",
+   "desc": "Régime réel normal : déclaration et paiement entre le 15 et le 24 selon votre entreprise (date exacte dans votre espace professionnel).",
+   "when": {
+    "vat": [
+     "normal"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2026-11-30",
+   "kind": "tax",
+   "tag": "CFE",
+   "title": "CFE 2026 : adhésion au prélèvement à l'échéance",
+   "desc": "Dernier jour pour adhérer au prélèvement à l'échéance dans votre espace professionnel impots.gouv.fr. L'avis de CFE y est publié début ou mi-novembre.",
+   "when": {
+    "created": [
+     "off"
+    ]
+   }
+  },
+  {
+   "date": "2026-11-30",
+   "kind": "social",
+   "tag": "Urssaf",
+   "title": "Déclaration Urssaf du chiffre d'affaires d'octobre 2026",
+   "desc": "Déclarez et payez vos cotisations (et le versement libératoire si vous l'avez choisi) sur autoentrepreneur.urssaf.fr, même si votre chiffre d'affaires est nul.",
+   "when": {
+    "periodicity": [
+     "monthly"
+    ]
+   },
+   "link": "tax"
+  },
+  {
+   "date": "2026-12-15",
+   "kind": "vat",
+   "tag": "TVA",
+   "title": "Acompte de TVA de décembre 2026 (40 %)",
+   "desc": "Régime réel simplifié : acompte calculé sur la TVA de l'année précédente, à payer entre le 15 et le 24 selon votre entreprise (date exacte dans votre espace professionnel).",
+   "when": {
+    "vat": [
+     "simplified"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2026-12-15",
+   "kind": "vat",
+   "tag": "TVA",
+   "title": "Déclaration de TVA de novembre 2026 (CA3)",
+   "desc": "Régime réel normal : déclaration et paiement entre le 15 et le 24 selon votre entreprise (date exacte dans votre espace professionnel).",
+   "when": {
+    "vat": [
+     "normal"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2026-12-15",
+   "kind": "tax",
+   "tag": "CFE",
+   "title": "Paiement de la CFE 2026",
+   "desc": "Cotisation foncière des entreprises, à payer en ligne depuis votre espace professionnel. Exonération l'année de création et si votre chiffre d'affaires ne dépasse pas 5 000 €.",
+   "when": {
+    "created": [
+     "off"
+    ]
+   }
+  },
+  {
+   "date": "2026-12-31",
+   "kind": "social",
+   "tag": "Urssaf",
+   "title": "Déclaration Urssaf du chiffre d'affaires de novembre 2026",
+   "desc": "Déclarez et payez vos cotisations (et le versement libératoire si vous l'avez choisi) sur autoentrepreneur.urssaf.fr, même si votre chiffre d'affaires est nul.",
+   "when": {
+    "periodicity": [
+     "monthly"
+    ]
+   },
+   "link": "tax"
+  },
+  {
+   "date": "2026-12-31",
+   "kind": "tax",
+   "tag": "CFE",
+   "title": "Déclaration initiale de CFE (formulaire 1447-C-SD)",
+   "desc": "À déposer avant le 31 décembre de l'année de création de l'entreprise : elle sert à calculer votre CFE à partir de la deuxième année.",
+   "when": {
+    "created": [
+     "on"
+    ]
+   }
+  },
+  {
+   "date": "2027-01-15",
+   "kind": "vat",
+   "tag": "TVA",
+   "title": "Déclaration de TVA de décembre 2026 (CA3)",
+   "desc": "Régime réel normal : déclaration et paiement entre le 15 et le 24 selon votre entreprise (date exacte dans votre espace professionnel).",
+   "when": {
+    "vat": [
+     "normal"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2027-01-31",
+   "kind": "info",
+   "tag": "Option",
+   "title": "Changer de rythme de déclaration Urssaf pour 2027 : date limite",
+   "desc": "Pour passer d'une déclaration trimestrielle à mensuelle (ou l'inverse) dès le 1er janvier, envoyez la demande par la messagerie de votre espace Urssaf avant le 31 janvier."
+  },
+  {
+   "date": "2027-02-01",
+   "kind": "social",
+   "tag": "Urssaf",
+   "title": "Déclaration Urssaf du 4e trimestre 2026",
+   "desc": "Chiffre d'affaires encaissé d'octobre à décembre 2026. Déclarez et payez vos cotisations sur autoentrepreneur.urssaf.fr, même si votre chiffre d'affaires est nul.",
+   "when": {
+    "periodicity": [
+     "quarterly"
+    ]
+   },
+   "link": "tax"
+  },
+  {
+   "date": "2027-02-01",
+   "kind": "social",
+   "tag": "Urssaf",
+   "title": "Déclaration Urssaf du chiffre d'affaires de décembre 2026",
+   "desc": "Déclarez et payez vos cotisations (et le versement libératoire si vous l'avez choisi) sur autoentrepreneur.urssaf.fr, même si votre chiffre d'affaires est nul.",
+   "when": {
+    "periodicity": [
+     "monthly"
+    ]
+   },
+   "link": "tax"
+  },
+  {
+   "date": "2027-02-15",
+   "kind": "vat",
+   "tag": "TVA",
+   "title": "Déclaration de TVA de janvier 2027 (CA3)",
+   "desc": "Régime réel normal : déclaration et paiement entre le 15 et le 24 selon votre entreprise (date exacte dans votre espace professionnel).",
+   "when": {
+    "vat": [
+     "normal"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2027-03-01",
+   "kind": "social",
+   "tag": "Urssaf",
+   "title": "Déclaration Urssaf du chiffre d'affaires de janvier 2027",
+   "desc": "Déclarez et payez vos cotisations (et le versement libératoire si vous l'avez choisi) sur autoentrepreneur.urssaf.fr, même si votre chiffre d'affaires est nul.",
+   "when": {
+    "periodicity": [
+     "monthly"
+    ]
+   },
+   "link": "tax"
+  },
+  {
+   "date": "2027-03-15",
+   "kind": "vat",
+   "tag": "TVA",
+   "title": "Déclaration de TVA de février 2027 (CA3)",
+   "desc": "Régime réel normal : déclaration et paiement entre le 15 et le 24 selon votre entreprise (date exacte dans votre espace professionnel).",
+   "when": {
+    "vat": [
+     "normal"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2027-03-31",
+   "kind": "social",
+   "tag": "Urssaf",
+   "title": "Déclaration Urssaf du chiffre d'affaires de février 2027",
+   "desc": "Déclarez et payez vos cotisations (et le versement libératoire si vous l'avez choisi) sur autoentrepreneur.urssaf.fr, même si votre chiffre d'affaires est nul.",
+   "when": {
+    "periodicity": [
+     "monthly"
+    ]
+   },
+   "link": "tax"
+  },
+  {
+   "date": "2027-04-15",
+   "kind": "vat",
+   "tag": "TVA",
+   "title": "Déclaration de TVA de mars 2027 (CA3)",
+   "desc": "Régime réel normal : déclaration et paiement entre le 15 et le 24 selon votre entreprise (date exacte dans votre espace professionnel).",
+   "when": {
+    "vat": [
+     "normal"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2027-04-15",
+   "kind": "tax",
+   "tag": "Impôt",
+   "title": "Ouverture de la déclaration de revenus 2026",
+   "desc": "Déclarez votre chiffre d'affaires de micro-entrepreneur sur la déclaration complémentaire 2042-C-PRO, même avec le versement libératoire.",
+   "est": true,
+   "link": "tax"
+  },
+  {
+   "date": "2027-04-30",
+   "kind": "social",
+   "tag": "Urssaf",
+   "title": "Déclaration Urssaf du 1er trimestre 2027",
+   "desc": "Chiffre d'affaires encaissé de janvier à mars 2027. Déclarez et payez vos cotisations sur autoentrepreneur.urssaf.fr, même si votre chiffre d'affaires est nul.",
+   "when": {
+    "periodicity": [
+     "quarterly"
+    ]
+   },
+   "link": "tax"
+  },
+  {
+   "date": "2027-04-30",
+   "kind": "social",
+   "tag": "Urssaf",
+   "title": "Déclaration Urssaf du chiffre d'affaires de mars 2027",
+   "desc": "Déclarez et payez vos cotisations (et le versement libératoire si vous l'avez choisi) sur autoentrepreneur.urssaf.fr, même si votre chiffre d'affaires est nul.",
+   "when": {
+    "periodicity": [
+     "monthly"
+    ]
+   },
+   "link": "tax"
+  },
+  {
+   "date": "2027-05-04",
+   "kind": "vat",
+   "tag": "TVA",
+   "title": "Déclaration annuelle de TVA 2026 (CA12)",
+   "desc": "Régime réel simplifié : déclaration et paiement du solde, au plus tard le 2e jour ouvré suivant le 1er mai.",
+   "when": {
+    "vat": [
+     "simplified"
+    ]
+   },
+   "est": true,
+   "link": "salestax"
+  },
+  {
+   "date": "2027-05-15",
+   "kind": "vat",
+   "tag": "TVA",
+   "title": "Déclaration de TVA d'avril 2027 (CA3)",
+   "desc": "Régime réel normal : déclaration et paiement entre le 15 et le 24 selon votre entreprise (date exacte dans votre espace professionnel).",
+   "when": {
+    "vat": [
+     "normal"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2027-05-20",
+   "kind": "tax",
+   "tag": "Impôt",
+   "title": "Déclaration de revenus 2026 : premières dates limites",
+   "desc": "Les dates limites en ligne s'échelonnent de fin mai à début juin selon votre département ; elles sont publiées sur impots.gouv.fr au printemps.",
+   "est": true,
+   "link": "tax"
+  },
+  {
+   "date": "2027-05-31",
+   "kind": "social",
+   "tag": "Urssaf",
+   "title": "Déclaration Urssaf du chiffre d'affaires d'avril 2027",
+   "desc": "Déclarez et payez vos cotisations (et le versement libératoire si vous l'avez choisi) sur autoentrepreneur.urssaf.fr, même si votre chiffre d'affaires est nul.",
+   "when": {
+    "periodicity": [
+     "monthly"
+    ]
+   },
+   "link": "tax"
+  },
+  {
+   "date": "2027-06-15",
+   "kind": "vat",
+   "tag": "TVA",
+   "title": "Déclaration de TVA de mai 2027 (CA3)",
+   "desc": "Régime réel normal : déclaration et paiement entre le 15 et le 24 selon votre entreprise (date exacte dans votre espace professionnel).",
+   "when": {
+    "vat": [
+     "normal"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2027-06-30",
+   "kind": "social",
+   "tag": "Urssaf",
+   "title": "Déclaration Urssaf du chiffre d'affaires de mai 2027",
+   "desc": "Déclarez et payez vos cotisations (et le versement libératoire si vous l'avez choisi) sur autoentrepreneur.urssaf.fr, même si votre chiffre d'affaires est nul.",
+   "when": {
+    "periodicity": [
+     "monthly"
+    ]
+   },
+   "link": "tax"
+  },
+  {
+   "date": "2027-07-15",
+   "kind": "vat",
+   "tag": "TVA",
+   "title": "Acompte de TVA de juillet 2027 (55 %)",
+   "desc": "Régime réel simplifié : acompte calculé sur la TVA de l'année précédente, à payer entre le 15 et le 24 selon votre entreprise (date exacte dans votre espace professionnel).",
+   "when": {
+    "vat": [
+     "simplified"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2027-07-15",
+   "kind": "vat",
+   "tag": "TVA",
+   "title": "Déclaration de TVA de juin 2027 (CA3)",
+   "desc": "Régime réel normal : déclaration et paiement entre le 15 et le 24 selon votre entreprise (date exacte dans votre espace professionnel).",
+   "when": {
+    "vat": [
+     "normal"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2027-08-02",
+   "kind": "social",
+   "tag": "Urssaf",
+   "title": "Déclaration Urssaf du 2e trimestre 2027",
+   "desc": "Chiffre d'affaires encaissé d'avril à juin 2027. Déclarez et payez vos cotisations sur autoentrepreneur.urssaf.fr, même si votre chiffre d'affaires est nul.",
+   "when": {
+    "periodicity": [
+     "quarterly"
+    ]
+   },
+   "link": "tax"
+  },
+  {
+   "date": "2027-08-02",
+   "kind": "social",
+   "tag": "Urssaf",
+   "title": "Déclaration Urssaf du chiffre d'affaires de juin 2027",
+   "desc": "Déclarez et payez vos cotisations (et le versement libératoire si vous l'avez choisi) sur autoentrepreneur.urssaf.fr, même si votre chiffre d'affaires est nul.",
+   "when": {
+    "periodicity": [
+     "monthly"
+    ]
+   },
+   "link": "tax"
+  },
+  {
+   "date": "2027-08-15",
+   "kind": "vat",
+   "tag": "TVA",
+   "title": "Déclaration de TVA de juillet 2027 (CA3)",
+   "desc": "Régime réel normal : déclaration et paiement entre le 15 et le 24 selon votre entreprise (date exacte dans votre espace professionnel).",
+   "when": {
+    "vat": [
+     "normal"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2027-08-31",
+   "kind": "social",
+   "tag": "Urssaf",
+   "title": "Déclaration Urssaf du chiffre d'affaires de juillet 2027",
+   "desc": "Déclarez et payez vos cotisations (et le versement libératoire si vous l'avez choisi) sur autoentrepreneur.urssaf.fr, même si votre chiffre d'affaires est nul.",
+   "when": {
+    "periodicity": [
+     "monthly"
+    ]
+   },
+   "link": "tax"
+  },
+  {
+   "date": "2027-09-01",
+   "kind": "info",
+   "tag": "Réforme",
+   "title": "Facturation électronique : émission obligatoire",
+   "desc": "Les micro-entreprises, TPE et PME émettent leurs factures aux entreprises via une plateforme agréée et transmettent leur e-reporting.",
+   "link": "einvoicing"
+  },
+  {
+   "date": "2027-09-15",
+   "kind": "vat",
+   "tag": "TVA",
+   "title": "Déclaration de TVA d'août 2027 (CA3)",
+   "desc": "Régime réel normal : déclaration et paiement entre le 15 et le 24 selon votre entreprise (date exacte dans votre espace professionnel).",
+   "when": {
+    "vat": [
+     "normal"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2027-09-30",
+   "kind": "social",
+   "tag": "Urssaf",
+   "title": "Déclaration Urssaf du chiffre d'affaires d'août 2027",
+   "desc": "Déclarez et payez vos cotisations (et le versement libératoire si vous l'avez choisi) sur autoentrepreneur.urssaf.fr, même si votre chiffre d'affaires est nul.",
+   "when": {
+    "periodicity": [
+     "monthly"
+    ]
+   },
+   "link": "tax"
+  },
+  {
+   "date": "2027-09-30",
+   "kind": "info",
+   "tag": "Option",
+   "title": "Option pour le versement libératoire de l'impôt en 2028 : date limite",
+   "desc": "Demande à faire auprès de l'Urssaf au plus tard le 30 septembre pour une application au 1er janvier, si votre revenu fiscal de référence le permet.",
+   "link": "tax"
+  },
+  {
+   "date": "2027-10-15",
+   "kind": "vat",
+   "tag": "TVA",
+   "title": "Déclaration de TVA de septembre 2027 (CA3)",
+   "desc": "Régime réel normal : déclaration et paiement entre le 15 et le 24 selon votre entreprise (date exacte dans votre espace professionnel).",
+   "when": {
+    "vat": [
+     "normal"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2027-11-02",
+   "kind": "social",
+   "tag": "Urssaf",
+   "title": "Déclaration Urssaf du 3e trimestre 2027",
+   "desc": "Chiffre d'affaires encaissé de juillet à septembre 2027. Déclarez et payez vos cotisations sur autoentrepreneur.urssaf.fr, même si votre chiffre d'affaires est nul.",
+   "when": {
+    "periodicity": [
+     "quarterly"
+    ]
+   },
+   "link": "tax"
+  },
+  {
+   "date": "2027-11-02",
+   "kind": "social",
+   "tag": "Urssaf",
+   "title": "Déclaration Urssaf du chiffre d'affaires de septembre 2027",
+   "desc": "Déclarez et payez vos cotisations (et le versement libératoire si vous l'avez choisi) sur autoentrepreneur.urssaf.fr, même si votre chiffre d'affaires est nul.",
+   "when": {
+    "periodicity": [
+     "monthly"
+    ]
+   },
+   "link": "tax"
+  },
+  {
+   "date": "2027-11-15",
+   "kind": "vat",
+   "tag": "TVA",
+   "title": "Déclaration de TVA d'octobre 2027 (CA3)",
+   "desc": "Régime réel normal : déclaration et paiement entre le 15 et le 24 selon votre entreprise (date exacte dans votre espace professionnel).",
+   "when": {
+    "vat": [
+     "normal"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2027-11-30",
+   "kind": "tax",
+   "tag": "CFE",
+   "title": "CFE 2027 : adhésion au prélèvement à l'échéance",
+   "desc": "Dernier jour pour adhérer au prélèvement à l'échéance dans votre espace professionnel impots.gouv.fr. L'avis de CFE y est publié début ou mi-novembre."
+  },
+  {
+   "date": "2027-11-30",
+   "kind": "social",
+   "tag": "Urssaf",
+   "title": "Déclaration Urssaf du chiffre d'affaires d'octobre 2027",
+   "desc": "Déclarez et payez vos cotisations (et le versement libératoire si vous l'avez choisi) sur autoentrepreneur.urssaf.fr, même si votre chiffre d'affaires est nul.",
+   "when": {
+    "periodicity": [
+     "monthly"
+    ]
+   },
+   "link": "tax"
+  },
+  {
+   "date": "2027-12-15",
+   "kind": "vat",
+   "tag": "TVA",
+   "title": "Acompte de TVA de décembre 2027 (40 %)",
+   "desc": "Régime réel simplifié : acompte calculé sur la TVA de l'année précédente, à payer entre le 15 et le 24 selon votre entreprise (date exacte dans votre espace professionnel).",
+   "when": {
+    "vat": [
+     "simplified"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2027-12-15",
+   "kind": "vat",
+   "tag": "TVA",
+   "title": "Déclaration de TVA de novembre 2027 (CA3)",
+   "desc": "Régime réel normal : déclaration et paiement entre le 15 et le 24 selon votre entreprise (date exacte dans votre espace professionnel).",
+   "when": {
+    "vat": [
+     "normal"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2027-12-15",
+   "kind": "tax",
+   "tag": "CFE",
+   "title": "Paiement de la CFE 2027",
+   "desc": "Cotisation foncière des entreprises, à payer en ligne depuis votre espace professionnel. Exonération l'année de création et si votre chiffre d'affaires ne dépasse pas 5 000 €.",
+   "when": {
+    "created": [
+     "off"
+    ]
+   }
+  },
+  {
+   "date": "2027-12-15",
+   "kind": "tax",
+   "tag": "CFE",
+   "title": "Paiement de votre première CFE (2027)",
+   "desc": "Première CFE après l'année de création, avec une réduction de moitié la deuxième année d'activité. Avis publié en novembre dans votre espace professionnel impots.gouv.fr.",
+   "when": {
+    "created": [
+     "on"
+    ]
+   }
+  },
+  {
+   "date": "2027-12-31",
+   "kind": "social",
+   "tag": "Urssaf",
+   "title": "Déclaration Urssaf du chiffre d'affaires de novembre 2027",
+   "desc": "Déclarez et payez vos cotisations (et le versement libératoire si vous l'avez choisi) sur autoentrepreneur.urssaf.fr, même si votre chiffre d'affaires est nul.",
+   "when": {
+    "periodicity": [
+     "monthly"
+    ]
+   },
+   "link": "tax"
+  },
+  {
+   "date": "2028-01-15",
+   "kind": "vat",
+   "tag": "TVA",
+   "title": "Déclaration de TVA de décembre 2027 (CA3)",
+   "desc": "Régime réel normal : déclaration et paiement entre le 15 et le 24 selon votre entreprise (date exacte dans votre espace professionnel).",
+   "when": {
+    "vat": [
+     "normal"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2028-01-31",
+   "kind": "info",
+   "tag": "Option",
+   "title": "Changer de rythme de déclaration Urssaf pour 2028 : date limite",
+   "desc": "Pour passer d'une déclaration trimestrielle à mensuelle (ou l'inverse) dès le 1er janvier, envoyez la demande par la messagerie de votre espace Urssaf avant le 31 janvier."
+  },
+  {
+   "date": "2028-01-31",
+   "kind": "social",
+   "tag": "Urssaf",
+   "title": "Déclaration Urssaf du 4e trimestre 2027",
+   "desc": "Chiffre d'affaires encaissé d'octobre à décembre 2027. Déclarez et payez vos cotisations sur autoentrepreneur.urssaf.fr, même si votre chiffre d'affaires est nul.",
+   "when": {
+    "periodicity": [
+     "quarterly"
+    ]
+   },
+   "link": "tax"
+  },
+  {
+   "date": "2028-01-31",
+   "kind": "social",
+   "tag": "Urssaf",
+   "title": "Déclaration Urssaf du chiffre d'affaires de décembre 2027",
+   "desc": "Déclarez et payez vos cotisations (et le versement libératoire si vous l'avez choisi) sur autoentrepreneur.urssaf.fr, même si votre chiffre d'affaires est nul.",
+   "when": {
+    "periodicity": [
+     "monthly"
+    ]
+   },
+   "link": "tax"
+  }
+ ]
+}

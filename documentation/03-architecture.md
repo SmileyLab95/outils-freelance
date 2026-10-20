@@ -40,6 +40,9 @@ content/
 data/
   rules/fr.json        chiffres officiels sourcés et datés, un fichier par pays
   rules/us.json  uk.json  ca.json
+  calendars/<pays>.json échéances fiscales datées (générées par scripts/calendriers.py)
+scripts/
+  calendriers.py       génère data/calendars/ (règles de dates, jours fériés, reports)
 src/
   layout.html          gabarit commun à toutes les pages
   assets/
@@ -128,6 +131,18 @@ Le menu, le pied de page et la grille d'accueil sont construits à partir de `na
 - Le générateur injecte les valeurs (sans les sources) dans les pages qui en ont besoin : `window.OF_RULES.social_security_wage_base_2026`.
 - Les pages affichent la source et la date de vérification des chiffres qu'elles utilisent.
 - Une valeur de confiance `low` n'est jamais utilisée dans un calcul sans avertissement visible.
+
+## Les calendriers fiscaux (`data/calendars/<pays>.json`)
+
+- `scripts/calendriers.py` écrit la liste des échéances de septembre 2026 à janvier 2028. Chaque échéance a une date,
+  une catégorie (`social`, `tax`, `vat`, `filing`, `info`), une étiquette, un titre, une description, des conditions
+  d'affichage (`when`, liées aux champs du formulaire de la page), un drapeau `est` pour les dates estimées et un lien
+  vers un outil du site.
+- Le Canada est bilingue : `tag`, `title` et `desc` valent `{"en": …, "fr": …}`.
+- Dans une page, `{{calendar:fr}}` est remplacé par les échéances dans la langue de la section ; le script générique
+  `tools/calendar.js` les filtre, affiche la prochaine échéance et exporte un fichier `.ics` (rappel 3 jours avant).
+- Report des dates : Urssaf au jour ouvré suivant (jours fériés français dans le script) ; IRS déjà reporté ;
+  HMRC et ARC à la date nominale (l'ARC accepte le jour ouvrable suivant, indiqué sur la page).
 
 ## Les moteurs de calcul (`src/assets/engines/`)
 

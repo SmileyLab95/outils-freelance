@@ -1,0 +1,891 @@
+{
+ "verified_on": "2026-10-20",
+ "range": [
+  "2026-09-01",
+  "2028-01-31"
+ ],
+ "events": [
+  {
+   "date": "2026-09-15",
+   "kind": "tax",
+   "tag": {
+    "en": "Instalments",
+    "fr": "Acomptes"
+   },
+   "title": {
+    "en": "Income tax instalment",
+    "fr": "Acompte provisionnel d'impôt"
+   },
+   "desc": {
+    "en": "Required if your net tax owing is over $3,000 ($1,800 in Quebec) this year and in one of the two previous years. Quebec residents also pay provincial instalments to Revenu Québec.",
+    "fr": "Obligatoire si votre impôt net à payer dépasse 3 000 $ (1 800 $ au Québec) cette année et l'une des deux années précédentes. Au Québec, des acomptes sont aussi versés à Revenu Québec."
+   },
+   "when": {
+    "instalments": [
+     "on"
+    ]
+   },
+   "link": "tax"
+  },
+  {
+   "date": "2026-09-30",
+   "kind": "vat",
+   "tag": {
+    "en": "GST/HST",
+    "fr": "TPS/TVH"
+   },
+   "title": {
+    "en": "GST/HST monthly return (August 2026)",
+    "fr": "TPS/TVH mensuelle (août 2026)"
+   },
+   "desc": {
+    "en": "File and pay online with the CRA (with Revenu Québec for GST and QST in Quebec).",
+    "fr": "Déclarez et payez en ligne auprès de l'ARC (de Revenu Québec pour la TPS et la TVQ au Québec)."
+   },
+   "when": {
+    "gst": [
+     "monthly"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2026-10-31",
+   "kind": "vat",
+   "tag": {
+    "en": "GST/HST",
+    "fr": "TPS/TVH"
+   },
+   "title": {
+    "en": "GST/HST instalment (annual filers)",
+    "fr": "Acompte de TPS/TVH (déclarants annuels)"
+   },
+   "desc": {
+    "en": "Required for annual filers whose net tax was $3,000 or more.",
+    "fr": "Obligatoire pour les déclarants annuels dont la taxe nette atteint 3 000 $."
+   },
+   "when": {
+    "gst": [
+     "annual"
+    ],
+    "gstinst": [
+     "on"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2026-10-31",
+   "kind": "vat",
+   "tag": {
+    "en": "GST/HST",
+    "fr": "TPS/TVH"
+   },
+   "title": {
+    "en": "GST/HST monthly return (September 2026)",
+    "fr": "TPS/TVH mensuelle (septembre 2026)"
+   },
+   "desc": {
+    "en": "File and pay online with the CRA (with Revenu Québec for GST and QST in Quebec).",
+    "fr": "Déclarez et payez en ligne auprès de l'ARC (de Revenu Québec pour la TPS et la TVQ au Québec)."
+   },
+   "when": {
+    "gst": [
+     "monthly"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2026-10-31",
+   "kind": "vat",
+   "tag": {
+    "en": "GST/HST",
+    "fr": "TPS/TVH"
+   },
+   "title": {
+    "en": "GST/HST quarterly return (July to September 2026)",
+    "fr": "TPS/TVH trimestrielle (juillet à septembre 2026)"
+   },
+   "desc": {
+    "en": "File and pay online with the CRA (with Revenu Québec for GST and QST in Quebec).",
+    "fr": "Déclarez et payez en ligne auprès de l'ARC (de Revenu Québec pour la TPS et la TVQ au Québec)."
+   },
+   "when": {
+    "gst": [
+     "quarterly"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2026-11-30",
+   "kind": "vat",
+   "tag": {
+    "en": "GST/HST",
+    "fr": "TPS/TVH"
+   },
+   "title": {
+    "en": "GST/HST monthly return (October 2026)",
+    "fr": "TPS/TVH mensuelle (octobre 2026)"
+   },
+   "desc": {
+    "en": "File and pay online with the CRA (with Revenu Québec for GST and QST in Quebec).",
+    "fr": "Déclarez et payez en ligne auprès de l'ARC (de Revenu Québec pour la TPS et la TVQ au Québec)."
+   },
+   "when": {
+    "gst": [
+     "monthly"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2026-12-15",
+   "kind": "tax",
+   "tag": {
+    "en": "Instalments",
+    "fr": "Acomptes"
+   },
+   "title": {
+    "en": "Income tax instalment",
+    "fr": "Acompte provisionnel d'impôt"
+   },
+   "desc": {
+    "en": "Required if your net tax owing is over $3,000 ($1,800 in Quebec) this year and in one of the two previous years. Quebec residents also pay provincial instalments to Revenu Québec.",
+    "fr": "Obligatoire si votre impôt net à payer dépasse 3 000 $ (1 800 $ au Québec) cette année et l'une des deux années précédentes. Au Québec, des acomptes sont aussi versés à Revenu Québec."
+   },
+   "when": {
+    "instalments": [
+     "on"
+    ]
+   },
+   "link": "tax"
+  },
+  {
+   "date": "2026-12-31",
+   "kind": "vat",
+   "tag": {
+    "en": "GST/HST",
+    "fr": "TPS/TVH"
+   },
+   "title": {
+    "en": "GST/HST monthly return (November 2026)",
+    "fr": "TPS/TVH mensuelle (novembre 2026)"
+   },
+   "desc": {
+    "en": "File and pay online with the CRA (with Revenu Québec for GST and QST in Quebec).",
+    "fr": "Déclarez et payez en ligne auprès de l'ARC (de Revenu Québec pour la TPS et la TVQ au Québec)."
+   },
+   "when": {
+    "gst": [
+     "monthly"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2027-01-31",
+   "kind": "vat",
+   "tag": {
+    "en": "GST/HST",
+    "fr": "TPS/TVH"
+   },
+   "title": {
+    "en": "GST/HST instalment (annual filers)",
+    "fr": "Acompte de TPS/TVH (déclarants annuels)"
+   },
+   "desc": {
+    "en": "Required for annual filers whose net tax was $3,000 or more.",
+    "fr": "Obligatoire pour les déclarants annuels dont la taxe nette atteint 3 000 $."
+   },
+   "when": {
+    "gst": [
+     "annual"
+    ],
+    "gstinst": [
+     "on"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2027-01-31",
+   "kind": "vat",
+   "tag": {
+    "en": "GST/HST",
+    "fr": "TPS/TVH"
+   },
+   "title": {
+    "en": "GST/HST monthly return (December 2026)",
+    "fr": "TPS/TVH mensuelle (décembre 2026)"
+   },
+   "desc": {
+    "en": "File and pay online with the CRA (with Revenu Québec for GST and QST in Quebec).",
+    "fr": "Déclarez et payez en ligne auprès de l'ARC (de Revenu Québec pour la TPS et la TVQ au Québec)."
+   },
+   "when": {
+    "gst": [
+     "monthly"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2027-01-31",
+   "kind": "vat",
+   "tag": {
+    "en": "GST/HST",
+    "fr": "TPS/TVH"
+   },
+   "title": {
+    "en": "GST/HST quarterly return (October to December 2026)",
+    "fr": "TPS/TVH trimestrielle (octobre à décembre 2026)"
+   },
+   "desc": {
+    "en": "File and pay online with the CRA (with Revenu Québec for GST and QST in Quebec).",
+    "fr": "Déclarez et payez en ligne auprès de l'ARC (de Revenu Québec pour la TPS et la TVQ au Québec)."
+   },
+   "when": {
+    "gst": [
+     "quarterly"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2027-02-28",
+   "kind": "vat",
+   "tag": {
+    "en": "GST/HST",
+    "fr": "TPS/TVH"
+   },
+   "title": {
+    "en": "GST/HST monthly return (January 2027)",
+    "fr": "TPS/TVH mensuelle (janvier 2027)"
+   },
+   "desc": {
+    "en": "File and pay online with the CRA (with Revenu Québec for GST and QST in Quebec).",
+    "fr": "Déclarez et payez en ligne auprès de l'ARC (de Revenu Québec pour la TPS et la TVQ au Québec)."
+   },
+   "when": {
+    "gst": [
+     "monthly"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2027-03-01",
+   "kind": "info",
+   "tag": {
+    "en": "RRSP",
+    "fr": "REER"
+   },
+   "title": {
+    "en": "RRSP contribution deadline for 2026",
+    "fr": "Date limite des cotisations REER pour 2026"
+   },
+   "desc": {
+    "en": "Contributions made by today can be deducted on your 2026 return.",
+    "fr": "Les cotisations versées d'ici aujourd'hui sont déductibles de votre revenu 2026."
+   }
+  },
+  {
+   "date": "2027-03-15",
+   "kind": "tax",
+   "tag": {
+    "en": "Instalments",
+    "fr": "Acomptes"
+   },
+   "title": {
+    "en": "Income tax instalment",
+    "fr": "Acompte provisionnel d'impôt"
+   },
+   "desc": {
+    "en": "Required if your net tax owing is over $3,000 ($1,800 in Quebec) this year and in one of the two previous years. Quebec residents also pay provincial instalments to Revenu Québec.",
+    "fr": "Obligatoire si votre impôt net à payer dépasse 3 000 $ (1 800 $ au Québec) cette année et l'une des deux années précédentes. Au Québec, des acomptes sont aussi versés à Revenu Québec."
+   },
+   "when": {
+    "instalments": [
+     "on"
+    ]
+   },
+   "link": "tax"
+  },
+  {
+   "date": "2027-03-31",
+   "kind": "vat",
+   "tag": {
+    "en": "GST/HST",
+    "fr": "TPS/TVH"
+   },
+   "title": {
+    "en": "GST/HST monthly return (February 2027)",
+    "fr": "TPS/TVH mensuelle (février 2027)"
+   },
+   "desc": {
+    "en": "File and pay online with the CRA (with Revenu Québec for GST and QST in Quebec).",
+    "fr": "Déclarez et payez en ligne auprès de l'ARC (de Revenu Québec pour la TPS et la TVQ au Québec)."
+   },
+   "when": {
+    "gst": [
+     "monthly"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2027-04-30",
+   "kind": "vat",
+   "tag": {
+    "en": "GST/HST",
+    "fr": "TPS/TVH"
+   },
+   "title": {
+    "en": "GST/HST annual return: payment due (2026)",
+    "fr": "TPS/TVH annuelle 2026 : paiement"
+   },
+   "desc": {
+    "en": "Annual filers with a December 31 year-end and business income: the tax is due today, the return by June 15.",
+    "fr": "Déclarants annuels avec exercice au 31 décembre et revenus d'entreprise : la taxe est due aujourd'hui, la déclaration au plus tard le 15 juin."
+   },
+   "when": {
+    "gst": [
+     "annual"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2027-04-30",
+   "kind": "vat",
+   "tag": {
+    "en": "GST/HST",
+    "fr": "TPS/TVH"
+   },
+   "title": {
+    "en": "GST/HST instalment (annual filers)",
+    "fr": "Acompte de TPS/TVH (déclarants annuels)"
+   },
+   "desc": {
+    "en": "Required for annual filers whose net tax was $3,000 or more.",
+    "fr": "Obligatoire pour les déclarants annuels dont la taxe nette atteint 3 000 $."
+   },
+   "when": {
+    "gst": [
+     "annual"
+    ],
+    "gstinst": [
+     "on"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2027-04-30",
+   "kind": "vat",
+   "tag": {
+    "en": "GST/HST",
+    "fr": "TPS/TVH"
+   },
+   "title": {
+    "en": "GST/HST monthly return (March 2027)",
+    "fr": "TPS/TVH mensuelle (mars 2027)"
+   },
+   "desc": {
+    "en": "File and pay online with the CRA (with Revenu Québec for GST and QST in Quebec).",
+    "fr": "Déclarez et payez en ligne auprès de l'ARC (de Revenu Québec pour la TPS et la TVQ au Québec)."
+   },
+   "when": {
+    "gst": [
+     "monthly"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2027-04-30",
+   "kind": "vat",
+   "tag": {
+    "en": "GST/HST",
+    "fr": "TPS/TVH"
+   },
+   "title": {
+    "en": "GST/HST quarterly return (January to March 2027)",
+    "fr": "TPS/TVH trimestrielle (janvier à mars 2027)"
+   },
+   "desc": {
+    "en": "File and pay online with the CRA (with Revenu Québec for GST and QST in Quebec).",
+    "fr": "Déclarez et payez en ligne auprès de l'ARC (de Revenu Québec pour la TPS et la TVQ au Québec)."
+   },
+   "when": {
+    "gst": [
+     "quarterly"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2027-04-30",
+   "kind": "tax",
+   "tag": {
+    "en": "Income tax",
+    "fr": "Impôt"
+   },
+   "title": {
+    "en": "Pay your 2026 balance owing (income tax and CPP)",
+    "fr": "Paiement du solde d'impôt 2026 (impôt et RPC/RRQ)"
+   },
+   "desc": {
+    "en": "Self-employed people file by June 15, but any balance owing is due today to avoid interest.",
+    "fr": "Les travailleurs autonomes produisent leur déclaration au plus tard le 15 juin, mais le solde est dû aujourd'hui pour éviter les intérêts."
+   },
+   "link": "tax"
+  },
+  {
+   "date": "2027-05-31",
+   "kind": "vat",
+   "tag": {
+    "en": "GST/HST",
+    "fr": "TPS/TVH"
+   },
+   "title": {
+    "en": "GST/HST monthly return (April 2027)",
+    "fr": "TPS/TVH mensuelle (avril 2027)"
+   },
+   "desc": {
+    "en": "File and pay online with the CRA (with Revenu Québec for GST and QST in Quebec).",
+    "fr": "Déclarez et payez en ligne auprès de l'ARC (de Revenu Québec pour la TPS et la TVQ au Québec)."
+   },
+   "when": {
+    "gst": [
+     "monthly"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2027-06-15",
+   "kind": "filing",
+   "tag": {
+    "en": "Income tax",
+    "fr": "Impôt"
+   },
+   "title": {
+    "en": "2026 tax return deadline for the self-employed",
+    "fr": "Déclaration de revenus 2026 des travailleurs autonomes"
+   },
+   "desc": {
+    "en": "File your T1 with Form T2125 (and your TP-1 in Quebec).",
+    "fr": "Produisez votre T1 avec le formulaire T2125 (et votre TP-1 au Québec, avec l'annexe L)."
+   },
+   "link": "tax"
+  },
+  {
+   "date": "2027-06-15",
+   "kind": "vat",
+   "tag": {
+    "en": "GST/HST",
+    "fr": "TPS/TVH"
+   },
+   "title": {
+    "en": "GST/HST annual return due (2026)",
+    "fr": "Déclaration annuelle de TPS/TVH 2026"
+   },
+   "desc": {
+    "en": "File and pay online with the CRA (with Revenu Québec for GST and QST in Quebec).",
+    "fr": "Déclarez et payez en ligne auprès de l'ARC (de Revenu Québec pour la TPS et la TVQ au Québec)."
+   },
+   "when": {
+    "gst": [
+     "annual"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2027-06-15",
+   "kind": "tax",
+   "tag": {
+    "en": "Instalments",
+    "fr": "Acomptes"
+   },
+   "title": {
+    "en": "Income tax instalment",
+    "fr": "Acompte provisionnel d'impôt"
+   },
+   "desc": {
+    "en": "Required if your net tax owing is over $3,000 ($1,800 in Quebec) this year and in one of the two previous years. Quebec residents also pay provincial instalments to Revenu Québec.",
+    "fr": "Obligatoire si votre impôt net à payer dépasse 3 000 $ (1 800 $ au Québec) cette année et l'une des deux années précédentes. Au Québec, des acomptes sont aussi versés à Revenu Québec."
+   },
+   "when": {
+    "instalments": [
+     "on"
+    ]
+   },
+   "link": "tax"
+  },
+  {
+   "date": "2027-06-30",
+   "kind": "vat",
+   "tag": {
+    "en": "GST/HST",
+    "fr": "TPS/TVH"
+   },
+   "title": {
+    "en": "GST/HST monthly return (May 2027)",
+    "fr": "TPS/TVH mensuelle (mai 2027)"
+   },
+   "desc": {
+    "en": "File and pay online with the CRA (with Revenu Québec for GST and QST in Quebec).",
+    "fr": "Déclarez et payez en ligne auprès de l'ARC (de Revenu Québec pour la TPS et la TVQ au Québec)."
+   },
+   "when": {
+    "gst": [
+     "monthly"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2027-07-31",
+   "kind": "vat",
+   "tag": {
+    "en": "GST/HST",
+    "fr": "TPS/TVH"
+   },
+   "title": {
+    "en": "GST/HST instalment (annual filers)",
+    "fr": "Acompte de TPS/TVH (déclarants annuels)"
+   },
+   "desc": {
+    "en": "Required for annual filers whose net tax was $3,000 or more.",
+    "fr": "Obligatoire pour les déclarants annuels dont la taxe nette atteint 3 000 $."
+   },
+   "when": {
+    "gst": [
+     "annual"
+    ],
+    "gstinst": [
+     "on"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2027-07-31",
+   "kind": "vat",
+   "tag": {
+    "en": "GST/HST",
+    "fr": "TPS/TVH"
+   },
+   "title": {
+    "en": "GST/HST monthly return (June 2027)",
+    "fr": "TPS/TVH mensuelle (juin 2027)"
+   },
+   "desc": {
+    "en": "File and pay online with the CRA (with Revenu Québec for GST and QST in Quebec).",
+    "fr": "Déclarez et payez en ligne auprès de l'ARC (de Revenu Québec pour la TPS et la TVQ au Québec)."
+   },
+   "when": {
+    "gst": [
+     "monthly"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2027-07-31",
+   "kind": "vat",
+   "tag": {
+    "en": "GST/HST",
+    "fr": "TPS/TVH"
+   },
+   "title": {
+    "en": "GST/HST quarterly return (April to June 2027)",
+    "fr": "TPS/TVH trimestrielle (avril à juin 2027)"
+   },
+   "desc": {
+    "en": "File and pay online with the CRA (with Revenu Québec for GST and QST in Quebec).",
+    "fr": "Déclarez et payez en ligne auprès de l'ARC (de Revenu Québec pour la TPS et la TVQ au Québec)."
+   },
+   "when": {
+    "gst": [
+     "quarterly"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2027-08-31",
+   "kind": "vat",
+   "tag": {
+    "en": "GST/HST",
+    "fr": "TPS/TVH"
+   },
+   "title": {
+    "en": "GST/HST monthly return (July 2027)",
+    "fr": "TPS/TVH mensuelle (juillet 2027)"
+   },
+   "desc": {
+    "en": "File and pay online with the CRA (with Revenu Québec for GST and QST in Quebec).",
+    "fr": "Déclarez et payez en ligne auprès de l'ARC (de Revenu Québec pour la TPS et la TVQ au Québec)."
+   },
+   "when": {
+    "gst": [
+     "monthly"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2027-09-15",
+   "kind": "tax",
+   "tag": {
+    "en": "Instalments",
+    "fr": "Acomptes"
+   },
+   "title": {
+    "en": "Income tax instalment",
+    "fr": "Acompte provisionnel d'impôt"
+   },
+   "desc": {
+    "en": "Required if your net tax owing is over $3,000 ($1,800 in Quebec) this year and in one of the two previous years. Quebec residents also pay provincial instalments to Revenu Québec.",
+    "fr": "Obligatoire si votre impôt net à payer dépasse 3 000 $ (1 800 $ au Québec) cette année et l'une des deux années précédentes. Au Québec, des acomptes sont aussi versés à Revenu Québec."
+   },
+   "when": {
+    "instalments": [
+     "on"
+    ]
+   },
+   "link": "tax"
+  },
+  {
+   "date": "2027-09-30",
+   "kind": "vat",
+   "tag": {
+    "en": "GST/HST",
+    "fr": "TPS/TVH"
+   },
+   "title": {
+    "en": "GST/HST monthly return (August 2027)",
+    "fr": "TPS/TVH mensuelle (août 2027)"
+   },
+   "desc": {
+    "en": "File and pay online with the CRA (with Revenu Québec for GST and QST in Quebec).",
+    "fr": "Déclarez et payez en ligne auprès de l'ARC (de Revenu Québec pour la TPS et la TVQ au Québec)."
+   },
+   "when": {
+    "gst": [
+     "monthly"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2027-10-31",
+   "kind": "vat",
+   "tag": {
+    "en": "GST/HST",
+    "fr": "TPS/TVH"
+   },
+   "title": {
+    "en": "GST/HST instalment (annual filers)",
+    "fr": "Acompte de TPS/TVH (déclarants annuels)"
+   },
+   "desc": {
+    "en": "Required for annual filers whose net tax was $3,000 or more.",
+    "fr": "Obligatoire pour les déclarants annuels dont la taxe nette atteint 3 000 $."
+   },
+   "when": {
+    "gst": [
+     "annual"
+    ],
+    "gstinst": [
+     "on"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2027-10-31",
+   "kind": "vat",
+   "tag": {
+    "en": "GST/HST",
+    "fr": "TPS/TVH"
+   },
+   "title": {
+    "en": "GST/HST monthly return (September 2027)",
+    "fr": "TPS/TVH mensuelle (septembre 2027)"
+   },
+   "desc": {
+    "en": "File and pay online with the CRA (with Revenu Québec for GST and QST in Quebec).",
+    "fr": "Déclarez et payez en ligne auprès de l'ARC (de Revenu Québec pour la TPS et la TVQ au Québec)."
+   },
+   "when": {
+    "gst": [
+     "monthly"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2027-10-31",
+   "kind": "vat",
+   "tag": {
+    "en": "GST/HST",
+    "fr": "TPS/TVH"
+   },
+   "title": {
+    "en": "GST/HST quarterly return (July to September 2027)",
+    "fr": "TPS/TVH trimestrielle (juillet à septembre 2027)"
+   },
+   "desc": {
+    "en": "File and pay online with the CRA (with Revenu Québec for GST and QST in Quebec).",
+    "fr": "Déclarez et payez en ligne auprès de l'ARC (de Revenu Québec pour la TPS et la TVQ au Québec)."
+   },
+   "when": {
+    "gst": [
+     "quarterly"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2027-11-30",
+   "kind": "vat",
+   "tag": {
+    "en": "GST/HST",
+    "fr": "TPS/TVH"
+   },
+   "title": {
+    "en": "GST/HST monthly return (October 2027)",
+    "fr": "TPS/TVH mensuelle (octobre 2027)"
+   },
+   "desc": {
+    "en": "File and pay online with the CRA (with Revenu Québec for GST and QST in Quebec).",
+    "fr": "Déclarez et payez en ligne auprès de l'ARC (de Revenu Québec pour la TPS et la TVQ au Québec)."
+   },
+   "when": {
+    "gst": [
+     "monthly"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2027-12-15",
+   "kind": "tax",
+   "tag": {
+    "en": "Instalments",
+    "fr": "Acomptes"
+   },
+   "title": {
+    "en": "Income tax instalment",
+    "fr": "Acompte provisionnel d'impôt"
+   },
+   "desc": {
+    "en": "Required if your net tax owing is over $3,000 ($1,800 in Quebec) this year and in one of the two previous years. Quebec residents also pay provincial instalments to Revenu Québec.",
+    "fr": "Obligatoire si votre impôt net à payer dépasse 3 000 $ (1 800 $ au Québec) cette année et l'une des deux années précédentes. Au Québec, des acomptes sont aussi versés à Revenu Québec."
+   },
+   "when": {
+    "instalments": [
+     "on"
+    ]
+   },
+   "link": "tax"
+  },
+  {
+   "date": "2027-12-31",
+   "kind": "vat",
+   "tag": {
+    "en": "GST/HST",
+    "fr": "TPS/TVH"
+   },
+   "title": {
+    "en": "GST/HST monthly return (November 2027)",
+    "fr": "TPS/TVH mensuelle (novembre 2027)"
+   },
+   "desc": {
+    "en": "File and pay online with the CRA (with Revenu Québec for GST and QST in Quebec).",
+    "fr": "Déclarez et payez en ligne auprès de l'ARC (de Revenu Québec pour la TPS et la TVQ au Québec)."
+   },
+   "when": {
+    "gst": [
+     "monthly"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2028-01-31",
+   "kind": "vat",
+   "tag": {
+    "en": "GST/HST",
+    "fr": "TPS/TVH"
+   },
+   "title": {
+    "en": "GST/HST instalment (annual filers)",
+    "fr": "Acompte de TPS/TVH (déclarants annuels)"
+   },
+   "desc": {
+    "en": "Required for annual filers whose net tax was $3,000 or more.",
+    "fr": "Obligatoire pour les déclarants annuels dont la taxe nette atteint 3 000 $."
+   },
+   "when": {
+    "gst": [
+     "annual"
+    ],
+    "gstinst": [
+     "on"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2028-01-31",
+   "kind": "vat",
+   "tag": {
+    "en": "GST/HST",
+    "fr": "TPS/TVH"
+   },
+   "title": {
+    "en": "GST/HST monthly return (December 2027)",
+    "fr": "TPS/TVH mensuelle (décembre 2027)"
+   },
+   "desc": {
+    "en": "File and pay online with the CRA (with Revenu Québec for GST and QST in Quebec).",
+    "fr": "Déclarez et payez en ligne auprès de l'ARC (de Revenu Québec pour la TPS et la TVQ au Québec)."
+   },
+   "when": {
+    "gst": [
+     "monthly"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2028-01-31",
+   "kind": "vat",
+   "tag": {
+    "en": "GST/HST",
+    "fr": "TPS/TVH"
+   },
+   "title": {
+    "en": "GST/HST quarterly return (October to December 2027)",
+    "fr": "TPS/TVH trimestrielle (octobre à décembre 2027)"
+   },
+   "desc": {
+    "en": "File and pay online with the CRA (with Revenu Québec for GST and QST in Quebec).",
+    "fr": "Déclarez et payez en ligne auprès de l'ARC (de Revenu Québec pour la TPS et la TVQ au Québec)."
+   },
+   "when": {
+    "gst": [
+     "quarterly"
+    ]
+   },
+   "link": "salestax"
+  }
+ ]
+}

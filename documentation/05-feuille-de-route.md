@@ -55,7 +55,7 @@ Les phases s'enchaînent dans cet ordre ; une phase n'est terminée que lorsque 
 - [x] Mention de franchise de TVA mise à jour (art. L. 223-3 du CIBS)
 - [x] Générateur de facture : nouvelles mentions de la réforme (SIREN du client, nature de l'opération…)
 - [x] Indemnités kilométriques (barème officiel)
-- [ ] Calendrier fiscal et social avec export agenda
+- [x] Calendrier fiscal et social avec export agenda
 - [x] Calcul de date d'échéance (30 jours, 45 jours fin de mois — deux méthodes —, 60 jours)
 - [ ] Générateur de contrat de prestation
 
@@ -70,7 +70,7 @@ Les phases s'enchaînent dans cet ordre ; une phase n'est terminée que lorsque 
 
 ## Phase 6 — Outils universels et contenus
 
-- [ ] Calendrier fiscal par pays avec export .ics
+- [x] Calendrier fiscal par pays avec export .ics
 - [x] Indemnités kilométriques des 4 pays
 - [ ] Épargne retraite des indépendants (PER, SEP-IRA / Solo 401(k), SIPP, REER)
 - [ ] Guides de fond : facturer un client étranger, recouvrement, assurance, compte pro

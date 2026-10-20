@@ -1,0 +1,138 @@
+{
+ "verified_on": "2026-10-20",
+ "range": [
+  "2026-09-01",
+  "2028-01-31"
+ ],
+ "events": [
+  {
+   "date": "2026-09-15",
+   "kind": "tax",
+   "tag": "Estimated tax",
+   "title": "Estimated tax payment Q3 2026 (Form 1040-ES)",
+   "desc": "Federal estimated tax for income earned June 1 to August 31, 2026. Pay with IRS Direct Pay, EFTPS or your IRS online account. Most states with an income tax use the same dates.",
+   "when": {
+    "estimated": [
+     "on"
+    ]
+   },
+   "link": "estimated-tax"
+  },
+  {
+   "date": "2026-10-15",
+   "kind": "filing",
+   "tag": "Tax return",
+   "title": "Extended 2025 tax return due",
+   "desc": "Last day to file your 2025 Form 1040 if you requested an extension.",
+   "when": {
+    "extension": [
+     "on"
+    ]
+   }
+  },
+  {
+   "date": "2027-01-15",
+   "kind": "tax",
+   "tag": "Estimated tax",
+   "title": "Estimated tax payment Q4 2026 (Form 1040-ES)",
+   "desc": "Federal estimated tax for income earned September 1 to December 31, 2026. Pay with IRS Direct Pay, EFTPS or your IRS online account. Most states with an income tax use the same dates.",
+   "when": {
+    "estimated": [
+     "on"
+    ]
+   },
+   "link": "estimated-tax"
+  },
+  {
+   "date": "2027-02-01",
+   "kind": "filing",
+   "tag": "1099",
+   "title": "Send Form 1099-NEC to contractors and the IRS",
+   "desc": "For each contractor you paid $2,000 or more in 2026 (the threshold was $600 for 2025 payments). January 31 falls on a Sunday, so the deadline moves to February 1.",
+   "when": {
+    "contractors": [
+     "on"
+    ]
+   }
+  },
+  {
+   "date": "2027-02-01",
+   "kind": "info",
+   "tag": "1099",
+   "title": "Your 1099-NEC and 1099-K forms should have arrived",
+   "desc": "Clients and payment platforms must send them by this date. Check them against your own records before filing."
+  },
+  {
+   "date": "2027-04-15",
+   "kind": "filing",
+   "tag": "Tax return",
+   "title": "2026 tax return and balance due (Form 1040, Schedule C and SE)",
+   "desc": "File your return and pay any tax owed, or file Form 4868 for an automatic six-month extension to file (not to pay). Also the last day for 2026 IRA and HSA contributions.",
+   "link": "tax"
+  },
+  {
+   "date": "2027-04-15",
+   "kind": "tax",
+   "tag": "Estimated tax",
+   "title": "Estimated tax payment Q1 2027 (Form 1040-ES)",
+   "desc": "Federal estimated tax for income earned January 1 to March 31, 2027. Pay with IRS Direct Pay, EFTPS or your IRS online account. Most states with an income tax use the same dates.",
+   "when": {
+    "estimated": [
+     "on"
+    ]
+   },
+   "link": "estimated-tax"
+  },
+  {
+   "date": "2027-06-15",
+   "kind": "tax",
+   "tag": "Estimated tax",
+   "title": "Estimated tax payment Q2 2027 (Form 1040-ES)",
+   "desc": "Federal estimated tax for income earned April 1 to May 31, 2027. Pay with IRS Direct Pay, EFTPS or your IRS online account. Most states with an income tax use the same dates.",
+   "when": {
+    "estimated": [
+     "on"
+    ]
+   },
+   "link": "estimated-tax"
+  },
+  {
+   "date": "2027-09-15",
+   "kind": "tax",
+   "tag": "Estimated tax",
+   "title": "Estimated tax payment Q3 2027 (Form 1040-ES)",
+   "desc": "Federal estimated tax for income earned June 1 to August 31, 2027. Pay with IRS Direct Pay, EFTPS or your IRS online account. Most states with an income tax use the same dates.",
+   "when": {
+    "estimated": [
+     "on"
+    ]
+   },
+   "link": "estimated-tax"
+  },
+  {
+   "date": "2027-10-15",
+   "kind": "filing",
+   "tag": "Tax return",
+   "title": "Extended 2026 tax return due",
+   "desc": "Last day to file your 2026 Form 1040 with an extension. SEP-IRA contributions for 2026 can be made until this date.",
+   "when": {
+    "extension": [
+     "on"
+    ]
+   }
+  },
+  {
+   "date": "2028-01-18",
+   "kind": "tax",
+   "tag": "Estimated tax",
+   "title": "Estimated tax payment Q4 2027 (Form 1040-ES)",
+   "desc": "Federal estimated tax for income earned September 1 to December 31, 2027. Pay with IRS Direct Pay, EFTPS or your IRS online account. Most states with an income tax use the same dates.",
+   "when": {
+    "estimated": [
+     "on"
+    ]
+   },
+   "link": "estimated-tax"
+  }
+ ]
+}

@@ -224,3 +224,9 @@ Point à surveiller : une source non officielle affirme que l'art. 293 B du CGI 
 - Légifrance, Code de commerce : https://www.legifrance.gouv.fr/codes/id/LEGITEXT000005634379
 - Légifrance, Code de la sécurité sociale : https://www.legifrance.gouv.fr/codes/id/LEGITEXT000006073189
 - BCE, *Key ECB interest rates* : https://www.ecb.europa.eu/stats/policy_and_exchange_rates/key_ecb_interest_rates/html/index.en.html
+
+## Calendrier fiscal (`data/calendars/fr.json`)
+
+- Urssaf : échéances reportées au jour ouvré suivant (fiche « Déclarer et payer mes cotisations »), changement de périodicité avant le 31 janvier, option pour le versement libératoire avant le 30 septembre.
+- CFE : 15 décembre, adhésion au prélèvement à l'échéance jusqu'au 30 novembre (impots.gouv.fr).
+- **À revérifier au printemps 2027** : dates limites de la déclaration de revenus 2026 par département (marquées « date estimée ») et date exacte de la CA12 (2e jour ouvré après le 1er mai : 4 mai 2027, estimée).

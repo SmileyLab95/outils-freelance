@@ -1,0 +1,104 @@
+<!--{
+  "id": "calendar",
+  "slug": "calendrier-fiscal-auto-entrepreneur/",
+  "title": "Calendrier fiscal 2026-2027 de l'auto-entrepreneur : toutes vos échéances",
+  "description": "Déclarations Urssaf mensuelles ou trimestrielles, CFE, TVA, impôt sur le revenu, facturation électronique : vos échéances 2026-2027 selon votre situation, avec export vers votre agenda. Gratuit.",
+  "menu": "Calendrier fiscal",
+  "icon": "🗓️",
+  "blurb": "Urssaf, CFE, TVA, impôt : vos échéances, dans votre agenda.",
+  "app": "Calendrier fiscal de l'auto-entrepreneur",
+  "scripts": [
+    "tools/calendar.js"
+  ],
+  "rules": "fr",
+  "sources": [
+    "calendrier_urssaf_declarations",
+    "cfe_echeance",
+    "tva_rsi_calendrier",
+    "versement_liberatoire_option",
+    "facturation_electronique_calendrier"
+  ],
+  "priority": 0.9,
+  "faq": [
+    [
+      "Quand déclarer son chiffre d'affaires d'auto-entrepreneur ?",
+      "En déclaration mensuelle, avant la fin du mois suivant (le chiffre d'affaires d'octobre se déclare en novembre). En déclaration trimestrielle, avant le 30 avril, le 31 juillet, le 31 octobre et le 31 janvier. Une échéance qui tombe un week-end ou un jour férié est reportée au jour ouvré suivant. La déclaration est obligatoire même si votre chiffre d'affaires est nul."
+    ],
+    [
+      "Comment passer de la déclaration trimestrielle à mensuelle ?",
+      "Envoyez la demande par la messagerie de votre espace sur autoentrepreneur.urssaf.fr, avec le motif « modification de la périodicité de vos déclarations et paiements », avant le 31 janvier : le changement s'applique dès le 1er janvier de l'année en cours."
+    ],
+    [
+      "Quand payer la CFE ?",
+      "Le 15 décembre, en ligne depuis votre espace professionnel sur impots.gouv.fr, où l'avis est publié en novembre. Vous en êtes exonéré l'année de création de votre entreprise et tant que votre chiffre d'affaires ne dépasse pas 5 000 €. La deuxième année, la base est réduite de moitié."
+    ],
+    [
+      "Un auto-entrepreneur doit-il faire une déclaration de revenus ?",
+      "Oui, chaque printemps : vous reportez votre chiffre d'affaires de l'année précédente sur la déclaration complémentaire 2042-C-PRO, même si vous avez opté pour le versement libératoire. L'administration applique ensuite l'abattement forfaitaire correspondant à votre activité."
+    ],
+    [
+      "Comment ajouter ces échéances à mon agenda ?",
+      "Cliquez sur « Ajouter à mon agenda (.ics) » : le fichier contient les échéances à venir qui correspondent à vos réglages, avec un rappel 3 jours avant. Ouvrez-le avec Google Agenda, Apple Calendrier ou Outlook. Vous pouvez aussi ajouter une seule échéance avec le lien « + Google Agenda »."
+    ]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Gratuit · échéances 2026-2027</span>
+    <h1>Calendrier fiscal de l'auto-entrepreneur</h1>
+    <p class="lead">Indiquez votre rythme de déclaration et votre régime de TVA : toutes vos échéances Urssaf, CFE, TVA et impôt s'affichent, avec le nombre de jours restants. Ajoutez-les à votre agenda en un clic.</p>
+    <ul class="trust"><li>Dates reportées comme le fait l'Urssaf</li><li>Export Google Agenda, Apple, Outlook</li><li>Rappel 3 jours avant</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="calendar-form" onsubmit="return false">
+      <h2>Votre situation</h2>
+      <div class="fields">
+        <div class="field full"><label for="cal-periodicity">Déclaration du chiffre d'affaires à l'Urssaf</label>
+          <select id="cal-periodicity" name="periodicity" data-save>
+            <option value="quarterly">Trimestrielle</option>
+            <option value="monthly">Mensuelle</option>
+          </select></div>
+        <div class="field full"><label for="cal-vat">TVA</label>
+          <select id="cal-vat" name="vat" data-save>
+            <option value="franchise">Franchise en base (pas de TVA facturée)</option>
+            <option value="simplified">Régime réel simplifié</option>
+            <option value="normal">Régime réel normal (déclaration mensuelle)</option>
+          </select></div>
+        <label class="check full"><input type="checkbox" id="cal-created" name="created" data-save><span>J'ai créé mon entreprise en 2026</span></label>
+        <label class="check full"><input type="checkbox" id="cal-past" data-save><span>Afficher aussi les échéances passées</span></label>
+      </div>
+      <div class="preview-actions" style="margin-top: 18px;">
+        <button type="button" class="btn btn-primary" id="cal-ics">Ajouter à mon agenda (.ics)</button>
+      </div>
+      <p class="small muted" id="cal-ics-done" aria-live="polite" style="margin: 8px 0 0;">Fonctionne avec Google Agenda, Apple Calendrier et Outlook. Rappel 3 jours avant chaque échéance.</p>
+    </form>
+
+    <div class="results">
+      <div class="result-hero">
+        <div class="label">Prochaine échéance</div>
+        <div class="big" id="cal-next">–</div>
+        <div class="sub"><strong id="cal-next-title">–</strong><br><span id="cal-next-left"></span></div>
+      </div>
+      <p class="small muted" id="cal-count" style="margin: 14px 2px 10px;">–</p>
+      <div id="cal-list"></div>
+    </div>
+  </div>
+</section>
+<script type="application/json" id="calendar-ui">{"show_more": "Afficher les {n} échéances suivantes", "today": "aujourd'hui", "tomorrow": "demain", "in_days": "dans {n} jours", "days_ago": "il y a {n} jours", "and_more": "(+ {n})", "none": "Aucune échéance à venir avec ces réglages.", "estimated": "date estimée", "more": "En savoir plus", "google": "+ Google Agenda", "count": "{n} échéances à venir", "count_one": "{n} échéance à venir", "exported": "{n} échéances exportées : ouvrez le fichier pour les ajouter à votre agenda.", "exported_one": "{n} échéance exportée : ouvrez le fichier pour l'ajouter à votre agenda.", "prodid": "Outils Freelance", "calendar_name": "Échéances fiscales (Outils Freelance)", "file": "calendrier-fiscal"}</script>
+<script type="application/json" id="calendar-data">{{calendar:fr}}</script>
+
+<section class="section prose">
+  <h2>Les grandes échéances de l'auto-entrepreneur</h2>
+  <ul>
+    <li><strong>Urssaf :</strong> une déclaration par mois ou par trimestre, même à zéro. Vous payez en même temps vos cotisations et, si vous l'avez choisi, le versement libératoire de l'impôt. Estimez le montant avec le <a href="{{link:tax}}">simulateur auto-entrepreneur</a>.</li>
+    <li><strong>Impôt sur le revenu :</strong> au printemps, votre chiffre d'affaires de l'année précédente se déclare sur la 2042-C-PRO. Les dates limites dépendent de votre département.</li>
+    <li><strong>CFE :</strong> le 15 décembre, à partir de la deuxième année d'activité.</li>
+    <li><strong>TVA :</strong> rien à déclarer en franchise. Au-delà des seuils, vous facturez la TVA et la déclarez selon votre régime. Le <a href="{{link:salestax}}">calcul HT / TTC</a> vous aide à fixer vos prix.</li>
+    <li><strong>Facturation électronique :</strong> à partir du 1er septembre 2027, vos factures aux entreprises passent par une plateforme agréée. <a href="{{link:einvoicing}}">Ce qui change pour vous</a>.</li>
+  </ul>
+  <p class="small muted">Les dates de la TVA (entre le 15 et le 24 du mois) et de la déclaration de revenus dépendent de votre entreprise ou de votre département : vérifiez-les dans votre espace professionnel sur impots.gouv.fr. Informations à titre indicatif.</p>
+</section>

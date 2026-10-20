@@ -1,0 +1,443 @@
+{
+ "verified_on": "2026-10-20",
+ "range": [
+  "2026-09-01",
+  "2028-01-31"
+ ],
+ "events": [
+  {
+   "date": "2026-09-07",
+   "kind": "vat",
+   "tag": "VAT",
+   "title": "VAT return and payment (quarter ending 31 July 2026)",
+   "desc": "Submit through Making Tax Digital software. Direct Debit payments are collected three working days later.",
+   "when": {
+    "vat": [
+     "2"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2026-10-05",
+   "kind": "info",
+   "tag": "Self Assessment",
+   "title": "Register for Self Assessment (2025/26 tax year)",
+   "desc": "If you started self-employment in the 2025/26 tax year, tell HMRC by 5 October.",
+   "when": {
+    "newsa": [
+     "on"
+    ]
+   }
+  },
+  {
+   "date": "2026-10-07",
+   "kind": "vat",
+   "tag": "VAT",
+   "title": "VAT return and payment (quarter ending 31 August 2026)",
+   "desc": "Submit through Making Tax Digital software. Direct Debit payments are collected three working days later.",
+   "when": {
+    "vat": [
+     "3"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2026-10-31",
+   "kind": "filing",
+   "tag": "Self Assessment",
+   "title": "Paper tax return deadline (2025/26)",
+   "desc": "Only if you file on paper. Online returns are due on 31 January."
+  },
+  {
+   "date": "2026-11-07",
+   "kind": "filing",
+   "tag": "Making Tax Digital",
+   "title": "Making Tax Digital quarterly update",
+   "desc": "Send your income and expenses for 6 July to 5 October 2026 from compatible software. No tax is paid with the update.",
+   "when": {
+    "mtd": [
+     "2026"
+    ]
+   },
+   "link": "mtd"
+  },
+  {
+   "date": "2026-11-07",
+   "kind": "vat",
+   "tag": "VAT",
+   "title": "VAT return and payment (quarter ending 30 September 2026)",
+   "desc": "Submit through Making Tax Digital software. Direct Debit payments are collected three working days later.",
+   "when": {
+    "vat": [
+     "1"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2026-12-07",
+   "kind": "vat",
+   "tag": "VAT",
+   "title": "VAT return and payment (quarter ending 31 October 2026)",
+   "desc": "Submit through Making Tax Digital software. Direct Debit payments are collected three working days later.",
+   "when": {
+    "vat": [
+     "2"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2026-12-30",
+   "kind": "filing",
+   "tag": "Self Assessment",
+   "title": "File online by today to pay through your tax code (2025/26)",
+   "desc": "If you owe less than £3,000 and also have PAYE income, HMRC can collect it through your tax code."
+  },
+  {
+   "date": "2027-01-07",
+   "kind": "vat",
+   "tag": "VAT",
+   "title": "VAT return and payment (quarter ending 30 November 2026)",
+   "desc": "Submit through Making Tax Digital software. Direct Debit payments are collected three working days later.",
+   "when": {
+    "vat": [
+     "3"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2027-01-31",
+   "kind": "tax",
+   "tag": "Payment on account",
+   "title": "First payment on account (2026/27)",
+   "desc": "Half of last year's tax bill, paid in advance, if that bill was over £1,000 and less than 80% was deducted at source.",
+   "when": {
+    "poa": [
+     "on"
+    ]
+   },
+   "link": "tax"
+  },
+  {
+   "date": "2027-01-31",
+   "kind": "filing",
+   "tag": "Self Assessment",
+   "title": "Online tax return and balancing payment (2025/26)",
+   "desc": "File your 2025/26 return online and pay what you still owe. Late filing costs £100 straight away.",
+   "link": "tax"
+  },
+  {
+   "date": "2027-02-07",
+   "kind": "filing",
+   "tag": "Making Tax Digital",
+   "title": "Making Tax Digital quarterly update",
+   "desc": "Send your income and expenses for 6 October 2026 to 5 January 2027 from compatible software. No tax is paid with the update.",
+   "when": {
+    "mtd": [
+     "2026"
+    ]
+   },
+   "link": "mtd"
+  },
+  {
+   "date": "2027-02-07",
+   "kind": "vat",
+   "tag": "VAT",
+   "title": "VAT return and payment (quarter ending 31 December 2026)",
+   "desc": "Submit through Making Tax Digital software. Direct Debit payments are collected three working days later.",
+   "when": {
+    "vat": [
+     "1"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2027-03-07",
+   "kind": "vat",
+   "tag": "VAT",
+   "title": "VAT return and payment (quarter ending 31 January 2027)",
+   "desc": "Submit through Making Tax Digital software. Direct Debit payments are collected three working days later.",
+   "when": {
+    "vat": [
+     "2"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2027-04-05",
+   "kind": "info",
+   "tag": "Tax year",
+   "title": "End of the 2026/27 tax year",
+   "desc": "Last day for 2026/27 pension contributions and ISA subscriptions to count for this tax year."
+  },
+  {
+   "date": "2027-04-06",
+   "kind": "info",
+   "tag": "Making Tax Digital",
+   "title": "Making Tax Digital for Income Tax: qualifying income over £30,000",
+   "desc": "Sole traders and landlords with qualifying income over £30,000 in 2025/26 must keep digital records and send quarterly updates from today.",
+   "when": {
+    "mtd": [
+     "2027"
+    ]
+   },
+   "link": "mtd"
+  },
+  {
+   "date": "2027-04-07",
+   "kind": "vat",
+   "tag": "VAT",
+   "title": "VAT return and payment (quarter ending 28 February 2027)",
+   "desc": "Submit through Making Tax Digital software. Direct Debit payments are collected three working days later.",
+   "when": {
+    "vat": [
+     "3"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2027-05-07",
+   "kind": "filing",
+   "tag": "Making Tax Digital",
+   "title": "Making Tax Digital quarterly update",
+   "desc": "Send your income and expenses for 6 January to 5 April 2027 from compatible software. No tax is paid with the update.",
+   "when": {
+    "mtd": [
+     "2026"
+    ]
+   },
+   "link": "mtd"
+  },
+  {
+   "date": "2027-05-07",
+   "kind": "vat",
+   "tag": "VAT",
+   "title": "VAT return and payment (quarter ending 31 March 2027)",
+   "desc": "Submit through Making Tax Digital software. Direct Debit payments are collected three working days later.",
+   "when": {
+    "vat": [
+     "1"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2027-06-07",
+   "kind": "vat",
+   "tag": "VAT",
+   "title": "VAT return and payment (quarter ending 30 April 2027)",
+   "desc": "Submit through Making Tax Digital software. Direct Debit payments are collected three working days later.",
+   "when": {
+    "vat": [
+     "2"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2027-07-07",
+   "kind": "vat",
+   "tag": "VAT",
+   "title": "VAT return and payment (quarter ending 31 May 2027)",
+   "desc": "Submit through Making Tax Digital software. Direct Debit payments are collected three working days later.",
+   "when": {
+    "vat": [
+     "3"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2027-07-31",
+   "kind": "tax",
+   "tag": "Payment on account",
+   "title": "Second payment on account (2026/27)",
+   "desc": "The other half of your advance payment for the 2026/27 tax year.",
+   "when": {
+    "poa": [
+     "on"
+    ]
+   },
+   "link": "tax"
+  },
+  {
+   "date": "2027-08-07",
+   "kind": "filing",
+   "tag": "Making Tax Digital",
+   "title": "Making Tax Digital quarterly update",
+   "desc": "Send your income and expenses for 6 April to 5 July 2027 from compatible software. No tax is paid with the update.",
+   "when": {
+    "mtd": [
+     "2026",
+     "2027"
+    ]
+   },
+   "link": "mtd"
+  },
+  {
+   "date": "2027-08-07",
+   "kind": "vat",
+   "tag": "VAT",
+   "title": "VAT return and payment (quarter ending 30 June 2027)",
+   "desc": "Submit through Making Tax Digital software. Direct Debit payments are collected three working days later.",
+   "when": {
+    "vat": [
+     "1"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2027-09-07",
+   "kind": "vat",
+   "tag": "VAT",
+   "title": "VAT return and payment (quarter ending 31 July 2027)",
+   "desc": "Submit through Making Tax Digital software. Direct Debit payments are collected three working days later.",
+   "when": {
+    "vat": [
+     "2"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2027-10-05",
+   "kind": "info",
+   "tag": "Self Assessment",
+   "title": "Register for Self Assessment (2026/27 tax year)",
+   "desc": "If you started self-employment in the 2026/27 tax year, tell HMRC by 5 October.",
+   "when": {
+    "newsa": [
+     "on"
+    ]
+   }
+  },
+  {
+   "date": "2027-10-07",
+   "kind": "vat",
+   "tag": "VAT",
+   "title": "VAT return and payment (quarter ending 31 August 2027)",
+   "desc": "Submit through Making Tax Digital software. Direct Debit payments are collected three working days later.",
+   "when": {
+    "vat": [
+     "3"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2027-10-31",
+   "kind": "filing",
+   "tag": "Self Assessment",
+   "title": "Paper tax return deadline (2026/27)",
+   "desc": "Only if you file on paper. Online returns are due on 31 January."
+  },
+  {
+   "date": "2027-11-07",
+   "kind": "filing",
+   "tag": "Making Tax Digital",
+   "title": "Making Tax Digital quarterly update",
+   "desc": "Send your income and expenses for 6 July to 5 October 2027 from compatible software. No tax is paid with the update.",
+   "when": {
+    "mtd": [
+     "2026",
+     "2027"
+    ]
+   },
+   "link": "mtd"
+  },
+  {
+   "date": "2027-11-07",
+   "kind": "vat",
+   "tag": "VAT",
+   "title": "VAT return and payment (quarter ending 30 September 2027)",
+   "desc": "Submit through Making Tax Digital software. Direct Debit payments are collected three working days later.",
+   "when": {
+    "vat": [
+     "1"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2027-12-07",
+   "kind": "vat",
+   "tag": "VAT",
+   "title": "VAT return and payment (quarter ending 31 October 2027)",
+   "desc": "Submit through Making Tax Digital software. Direct Debit payments are collected three working days later.",
+   "when": {
+    "vat": [
+     "2"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2027-12-30",
+   "kind": "filing",
+   "tag": "Self Assessment",
+   "title": "File online by today to pay through your tax code (2026/27)",
+   "desc": "If you owe less than £3,000 and also have PAYE income, HMRC can collect it through your tax code."
+  },
+  {
+   "date": "2028-01-07",
+   "kind": "vat",
+   "tag": "VAT",
+   "title": "VAT return and payment (quarter ending 30 November 2027)",
+   "desc": "Submit through Making Tax Digital software. Direct Debit payments are collected three working days later.",
+   "when": {
+    "vat": [
+     "3"
+    ]
+   },
+   "link": "salestax"
+  },
+  {
+   "date": "2028-01-31",
+   "kind": "tax",
+   "tag": "Payment on account",
+   "title": "First payment on account (2027/28)",
+   "desc": "Half of last year's tax bill, paid in advance, if that bill was over £1,000 and less than 80% was deducted at source.",
+   "when": {
+    "poa": [
+     "on"
+    ]
+   },
+   "link": "tax"
+  },
+  {
+   "date": "2028-01-31",
+   "kind": "filing",
+   "tag": "Making Tax Digital",
+   "title": "Making Tax Digital: final declaration for 2026/27",
+   "desc": "Replaces the Self Assessment return for those in Making Tax Digital since April 2026.",
+   "when": {
+    "mtd": [
+     "2026"
+    ]
+   },
+   "link": "mtd"
+  },
+  {
+   "date": "2028-01-31",
+   "kind": "filing",
+   "tag": "Self Assessment",
+   "title": "Online tax return and balancing payment (2026/27)",
+   "desc": "File your 2026/27 return online and pay what you still owe. Late filing costs £100 straight away.",
+   "when": {
+    "mtd": [
+     "no",
+     "2027"
+    ]
+   },
+   "link": "tax"
+  }
+ ]
+}

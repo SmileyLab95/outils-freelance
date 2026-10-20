@@ -1,0 +1,100 @@
+<!--{
+  "id": "calendar",
+  "slug": "tax-calendar/",
+  "title": "Self-Employed Tax Calendar 2026-2027 (Canada): CRA Deadlines",
+  "description": "Instalments, the April 30 balance, the June 15 return, GST/HST returns and the RRSP deadline: your 2026-2027 CRA calendar as a self-employed Canadian, with one-click export to your calendar. Free.",
+  "menu": "Tax calendar",
+  "icon": "🗓️",
+  "blurb": "Instalments, GST/HST, April 30 and June 15, in your calendar.",
+  "app": "Self-Employed Tax Calendar (Canada)",
+  "scripts": [
+    "tools/calendar.js"
+  ],
+  "rules": "ca",
+  "sources": [
+    "instalment_due_dates_2026",
+    "balance_due_date",
+    "filing_deadline_self_employed",
+    "gst_hst_filing_due_dates",
+    "rrsp_deadline_2026"
+  ],
+  "priority": 0.9,
+  "faq": [
+    [
+      "When do self-employed Canadians file their taxes?",
+      "By June 15, 2027 for the 2026 tax year. But any balance owing is due on April 30, 2027: after that date, the CRA charges interest even if you file on time."
+    ],
+    [
+      "When are tax instalments due?",
+      "March 15, June 15, September 15 and December 15. You must pay instalments if your net tax owing is over $3,000 ($1,800 in Quebec) this year and in either of the two previous years. Estimate your tax with the <a href=\"{{link:tax}}\">self-employed tax calculator</a>."
+    ],
+    [
+      "When are GST/HST returns due?",
+      "One month after the end of each reporting period for monthly and quarterly filers. Annual filers who are individuals with business income and a December 31 year-end file by June 15 and pay by April 30. In Quebec, GST and QST are filed with Revenu Québec."
+    ],
+    [
+      "What if a deadline falls on a weekend?",
+      "The CRA considers a payment or return on time if it is received on the next business day. This calendar shows the official due dates."
+    ],
+    [
+      "How do I add these dates to my calendar?",
+      "Click “Add to my calendar (.ics)”: the file contains the upcoming deadlines that match your settings, with a reminder 3 days before each one. Open it with Google Calendar, Apple Calendar or Outlook."
+    ]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · 2026-2027 deadlines</span>
+    <h1>Self-employed tax calendar</h1>
+    <p class="lead">Instalments, your tax return, GST/HST and RRSP: pick what applies to you and see every CRA deadline with the days left. Add them to your calendar in one click.</p>
+    <ul class="trust"><li>CRA and Revenu Québec dates</li><li>GST/HST monthly, quarterly or annual</li><li>Reminder 3 days before</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="calendar-form" onsubmit="return false">
+      <h2>Your situation</h2>
+      <div class="fields">
+        <div class="field full"><label for="cal-gst">GST/HST</label>
+          <select id="cal-gst" name="gst" data-save>
+            <option value="annual">Annual filer</option>
+            <option value="quarterly">Quarterly filer</option>
+            <option value="monthly">Monthly filer</option>
+            <option value="none">Not registered (small supplier)</option>
+          </select></div>
+        <label class="check full"><input type="checkbox" id="cal-instalments" name="instalments" checked data-save><span>I pay income tax instalments</span></label>
+        <label class="check full"><input type="checkbox" id="cal-gstinst" name="gstinst" data-save><span>I pay GST/HST instalments (annual filer, net tax $3,000 or more)</span></label>
+        <label class="check full"><input type="checkbox" id="cal-past" data-save><span>Also show past deadlines</span></label>
+      </div>
+      <div class="preview-actions" style="margin-top: 18px;">
+        <button type="button" class="btn btn-primary" id="cal-ics">Add to my calendar (.ics)</button>
+      </div>
+      <p class="small muted" id="cal-ics-done" aria-live="polite" style="margin: 8px 0 0;">Works with Google Calendar, Apple Calendar and Outlook. Reminder 3 days before each deadline.</p>
+    </form>
+
+    <div class="results">
+      <div class="result-hero">
+        <div class="label">Next deadline</div>
+        <div class="big" id="cal-next">–</div>
+        <div class="sub"><strong id="cal-next-title">–</strong><br><span id="cal-next-left"></span></div>
+      </div>
+      <p class="small muted" id="cal-count" style="margin: 14px 2px 10px;">–</p>
+      <div id="cal-list"></div>
+    </div>
+  </div>
+</section>
+<script type="application/json" id="calendar-ui">{"show_more": "Show the next {n} deadlines", "today": "today", "tomorrow": "tomorrow", "in_days": "in {n} days", "days_ago": "{n} days ago", "and_more": "(+{n} more)", "none": "No upcoming deadlines with these settings.", "estimated": "estimated date", "more": "Learn more", "google": "+ Google Calendar", "count": "{n} upcoming deadlines", "count_one": "{n} upcoming deadline", "exported": "{n} deadlines exported: open the file to add them to your calendar.", "exported_one": "{n} deadline exported: open the file to add it to your calendar.", "prodid": "Freelance Tools", "calendar_name": "Tax deadlines (Freelance Tools)", "file": "tax-calendar"}</script>
+<script type="application/json" id="calendar-data">{{calendar:ca}}</script>
+
+<section class="section prose">
+  <h2>The self-employed tax year in Canada</h2>
+  <ul>
+    <li><strong>April 30:</strong> pay your balance owing for the previous year, including CPP contributions on your self-employment income.</li>
+    <li><strong>June 15:</strong> file your T1 return with Form T2125 (and your TP-1 in Quebec).</li>
+    <li><strong>Instalments</strong> on the 15th of March, June, September and December, if you owe enough tax.</li>
+    <li><strong>GST/HST</strong> once you're registered: check the right rate for your province with the <a href="{{link:salestax}}">GST/HST calculator</a>.</li>
+  </ul>
+  <p class="small muted">The CRA considers a payment on time if it is received on the next business day when a due date falls on a weekend or holiday. For information only.</p>
+</section>

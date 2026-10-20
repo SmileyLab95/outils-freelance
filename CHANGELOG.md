@@ -1,5 +1,17 @@
 # Journal des modifications
 
+## 2026-10-20 — Calendriers fiscaux des 4 pays
+
+- France : déclarations Urssaf mensuelles ou trimestrielles (reportées au jour ouvré suivant), CFE, TVA (réel simplifié
+  et normal), déclaration de revenus, versement libératoire, changement de périodicité (avant le 31 janvier),
+  facturation électronique.
+- États-Unis : acomptes trimestriels (dont le 18 janvier 2028), 1099-NEC (seuil de 2 000 $), déclaration et extension.
+- Royaume-Uni : Self Assessment, payments on account, Making Tax Digital (2026 et 2027), TVA pour les trois groupes de trimestres.
+- Canada (anglais et français) : acomptes provisionnels, solde du 30 avril, déclaration du 15 juin, TPS/TVH
+  annuelle, trimestrielle ou mensuelle, REER.
+- Outil commun `tools/calendar.js` : filtres selon la situation, compte à rebours, export `.ics` avec rappel,
+  lien Google Agenda ; données générées par `scripts/calendriers.py`.
+
 ## 2026-10-20 — Générateur de facture : mentions de la facturation électronique
 
 - SIREN du client (avec n° de TVA séparé), adresse de livraison, nature de l'opération (services, biens, mixte),

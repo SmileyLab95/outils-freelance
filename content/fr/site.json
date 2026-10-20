@@ -19,6 +19,7 @@
       "label": "Statut et revenus",
       "items": [
         "tax",
+        "calendar",
         "structure",
         "rate",
         "mileage"

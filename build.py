@@ -405,6 +405,21 @@ def resolve_links(text, section):
     return LINK_RE.sub(repl, text)
 
 
+CALENDAR_RE = re.compile(r"\{\{calendar:([a-z]+)\}\}")
+
+
+def calendar_json(country, lang):
+    """Échéances de data/calendars/<pays>.json, textes dans la langue de la section, prêtes pour une balise <script>."""
+    data = json.loads((ROOT / "data" / "calendars" / f"{country}.json").read_text(encoding="utf-8"))
+    pick = lambda v: v.get(lang, v["en"]) if isinstance(v, dict) else v
+    for e in data["events"]:
+        for k in ("tag", "title", "desc"):
+            e[k] = pick(e[k])
+        if e.get("link"):
+            e["link"] = "{{link:" + e["link"] + "}}"
+    return json.dumps(data, ensure_ascii=False).replace("</", "<\\/")
+
+
 def render(layout, sections, section, page_id, rules, kit_cta):
     page = section["pages"][page_id]
     meta, content = page["meta"], page["content"]
@@ -417,6 +432,7 @@ def render(layout, sections, section, page_id, rules, kit_cta):
                .replace("{{featured}}", featured_html(section))
                .replace("{{country_cards}}", country_cards(sections))
                .replace("{{kit_cta}}", kit_cta))
+    content = CALENDAR_RE.sub(lambda m: calendar_json(m.group(1), loc["lang"][:2]), content)
     if meta.get("faq"):
         content += faq_html(section, meta["faq"])
     content += sources_html(section, meta, rules)
