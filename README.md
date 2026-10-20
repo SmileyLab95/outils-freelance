@@ -1,6 +1,7 @@
 # Outils Freelance · Freelance Tools
 
-Site d'outils gratuits pour les indépendants, par pays : France (en ligne), États-Unis, Royaume-Uni, Canada (en préparation).
+Site d'outils gratuits pour les indépendants, par pays : France, États-Unis, Royaume-Uni, Canada (anglais et français).
+81 pages indexables, toutes en ligne : factures, impôts, statuts, contrats, calendriers fiscaux, relances, retraite.
 Publié avec GitHub Pages : https://smileylab95.github.io/outils-freelance/
 
 Toute la conception est dans [documentation/](documentation/README.md) : vision, besoins des clients, architecture,
@@ -10,7 +11,7 @@ méthode de travail, feuille de route, affiliation et fiches pays.
 
 ```bash
 python3 build.py                                  # génère le site dans docs/
-node --test tests/unit/*.test.mjs                          # tests des moteurs de calcul
+node --test tests/unit/*.test.mjs                 # tests des moteurs de calcul
 node tests/e2e/verifier.mjs /tmp/captures         # tests navigateur + captures d'écran
 ```
 
@@ -22,6 +23,8 @@ Prérequis : Python 3 et Node 18 ou plus ; Playwright avec Chromium pour les tes
 config/          site.json (adresse, base, redirections), locales.json (sections pays/langue)
 content/         une section par dossier : global/, fr/, us/, uk/, ca/, ca-fr/
 data/rules/      chiffres fiscaux officiels, sourcés et datés, un fichier par pays
+data/calendars/  échéances fiscales par pays (générées par scripts/calendriers.py)
+scripts/         calendriers.py (échéances), og-images.mjs (images de partage)
 src/             layout.html, assets/ (style.css, app.js, engines/, tools/, img/)
 tests/           unit/ (moteurs), e2e/ (navigateur)
 docs/            site généré, publié par GitHub Pages (ne pas modifier à la main)

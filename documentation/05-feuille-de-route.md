@@ -59,6 +59,11 @@ Les phases s'enchaînent dans cet ordre ; une phase n'est terminée que lorsque 
 - [x] Calcul de date d'échéance (30 jours, 45 jours fin de mois — deux méthodes —, 60 jours)
 - [x] Générateur de contrat de prestation (FR, US, UK, Canada anglais et français)
 
+## Phase 7 — Finitions SEO (à planifier)
+
+- [ ] Raccourcir les titres de plus de 60 caractères et les descriptions de plus de 160 caractères (audit du 20/10/2026 : environ 70 pages concernées, sans erreur JSON-LD ni hreflang)
+- [ ] Revérifier en décembre 2026 : mention de franchise de TVA (L. 233-3 du CIBS), barèmes 2027, calendriers 2027-2028
+
 ## Phase 5 — Revenus (reportée à la fin, sur décision du 20/10/2026 : d'abord terminer le site, puis Gumroad, puis l'affiliation)
 
 - [ ] Inscription aux programmes d'affiliation prioritaires (voir [06-affiliation.md](06-affiliation.md))
