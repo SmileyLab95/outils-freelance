@@ -280,6 +280,8 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--b
 .p-title { text-align: right; font-size: 24px; font-weight: 850; letter-spacing: .06em; color: #4f46e5; line-height: 1.1; }
 .p-title span { display: block; font-size: 12px; letter-spacing: 0; color: #17152f; font-weight: 600; margin-top: 4px; }
 .p-parties { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 16px; }
+.p-delivery { margin-top: 6px; font-size: 11px; }
+.p-delivery span { font-size: 10px; color: #6d6a8a; }
 .p-label { font-size: 10px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: #8b88a6; margin-bottom: 4px; }
 .p-meta { display: flex; flex-wrap: wrap; gap: 8px 24px; background: #f5f4fb; border-radius: 6px; padding: 10px 12px; margin-bottom: 16px; }
 .p-meta span { display: block; font-size: 10px; color: #6d6a8a; }

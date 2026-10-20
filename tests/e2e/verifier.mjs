@@ -56,9 +56,18 @@ const tests = {
     check(text.includes("TVA non applicable, art. L. 223-3 du CIBS"), "facture : mention de franchise de TVA (CIBS)");
     check(text.includes("40 €"), "facture : indemnité forfaitaire de 40 € (client professionnel)");
     check(text.includes("IBAN FR76 1234"), "facture : IBAN dans les conditions de paiement");
+    await page.fill("#f-client-id", "812 345 678");
+    const reform = await page.textContent("#f-preview");
+    check(reform.includes("SIREN : 812 345 678") && reform.includes("Prestation de services"), "facture : SIREN du client et nature de l'opération (réforme)");
+    await page.selectOption("#f-nature", "mixte");
+    check((await page.textContent("#f-preview")).includes("Biens et services"), "facture : nature de l'opération mixte");
+    await page.selectOption("#f-nature", "services");
     await page.uncheck("#f-franchise");
     const ttc = await page.textContent("#f-preview");
     check(/2\s?701,80\s?€/.test(ttc), "facture : TVA 20 % appliquée (2 701,80 € TTC)");
+    await page.check("#f-debits");
+    check((await page.textContent("#f-preview")).includes("d'après les débits"), "facture : option pour le paiement de la TVA d'après les débits");
+    await page.uncheck("#f-debits");
     await page.check("#f-franchise");
     await page.click('[data-doctype="devis"]');
     const devis = await page.textContent("#f-preview");

@@ -124,6 +124,18 @@
   }
 
   // ----- Aperçu ----------------------------------------------------------------
+  var NATURES = { services: "Prestation de services", biens: "Livraison de biens", mixte: "Biens et services" };
+
+  /** Identifiants du client professionnel : SIREN (ou n° de TVA saisi à sa place) et n° de TVA. */
+  function clientIds(pro) {
+    if (!pro) return [];
+    var id = val("f-client-id"), vat = val("f-client-vat");
+    return [
+      id ? (/^[A-Z]{2}/i.test(id) ? "N° TVA : " : "SIREN : ") + id : "",
+      vat ? "N° TVA : " + vat : ""
+    ].filter(Boolean);
+  }
+
   function render() {
     var isInvoice = state.type === "facture";
     var t = totals();
@@ -132,6 +144,8 @@
     var validUntil = OF.addDays(date, Math.max(1, parseInt($("f-validity").value, 10) || 30));
     var pro = $("f-client-pro").checked;
     $("f-vat-rate-field").hidden = t.franchise;
+    $("f-debits-field").hidden = t.franchise;
+    form.querySelectorAll("[data-pro]").forEach(function (el) { el.hidden = !pro; });
     $("f-logo-remove").hidden = !state.logo;
 
     var meLines = [
@@ -152,7 +166,9 @@
       "</strong><br>" + (meLines.length ? meLines.map(multiline).join("<br>") : '<span class="p-empty">Statut, adresse, SIRET</span>') +
       '</div><div><div class="p-label">' + (isInvoice ? "Facturé à" : "Client") + "</div><strong>" +
       orHint(val("f-client-name"), "Nom du client") + "</strong><br>" + orHint($("f-client-address").value, "Adresse du client") +
-      (val("f-client-id") ? "<br>" + esc(val("f-client-id")) : "") + "</div></div>";
+      clientIds(pro).map(function (l) { return "<br>" + esc(l); }).join("") +
+      (val("f-client-delivery") ? '<div class="p-delivery"><span>Adresse de livraison</span><br>' + multiline(val("f-client-delivery")) + "</div>" : "") +
+      "</div></div>";
 
     var meta = [["Date", OF.frDate(date)]];
     if (isInvoice) {
@@ -161,6 +177,7 @@
     } else {
       meta.push(["Valable jusqu'au", OF.frDate(validUntil)]);
     }
+    meta.push(["Opération", NATURES[$("f-nature").value] || NATURES.services]);
     html += '<div class="p-meta">' + meta.map(function (m) {
       return "<div><span>" + esc(m[0]) + "</span><b>" + esc(m[1]) + "</b></div>";
     }).join("") + "</div>";
@@ -194,6 +211,7 @@
 
     var mentions = [];
     if (t.franchise) mentions.push("TVA non applicable, art. L. 223-3 du CIBS (ex-art. 293 B du CGI).");
+    else if ($("f-debits").checked) mentions.push("Option pour le paiement de la taxe d'après les débits.");
     if (isInvoice) {
       if (val("f-me-iban")) {
         mentions.push("Paiement par virement avant le " + OF.frDate(due) + " · IBAN " + val("f-me-iban") +

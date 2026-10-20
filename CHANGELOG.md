@@ -1,5 +1,10 @@
 # Journal des modifications
 
+## 2026-10-20 — Générateur de facture : mentions de la facturation électronique
+
+- SIREN du client (avec n° de TVA séparé), adresse de livraison, nature de l'opération (services, biens, mixte),
+  option pour le paiement de la TVA d'après les débits.
+
 ## 2026-10-20 — Indemnités kilométriques des 4 pays
 
 - France : barème kilométrique 2026 (3 à 7 CV, majoration de 20 % pour les voitures électriques, tableau pour toutes

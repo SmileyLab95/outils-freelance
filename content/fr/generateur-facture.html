@@ -14,7 +14,8 @@
     ["Mes informations sont-elles envoyées quelque part ?", "Non. Tout se passe dans votre navigateur : vos informations sont seulement mémorisées sur votre appareil pour pré-remplir la prochaine facture. Rien n'est envoyé sur un serveur."],
     ["Comment enregistrer ma facture en PDF ?", "Cliquez sur « Télécharger en PDF », puis choisissez « Enregistrer au format PDF » comme imprimante dans la fenêtre qui s'ouvre."],
     ["Quelles mentions sont obligatoires sur une facture d'auto-entrepreneur ?", "Notamment : numéro unique, date, identité et SIRET du vendeur avec la mention « EI », identité du client, désignation, prix HT, mention « TVA non applicable, art. L. 223-3 du CIBS » en franchise, date d'échéance, pénalités de retard et indemnité de 40 € entre professionnels. Le générateur les ajoute pour vous. Voir notre <a href=\"{{link:invoice-rules}}\">checklist complète</a>."],
-    ["Dois-je utiliser la facturation électronique ?", "La facturation électronique devient progressivement obligatoire entre entreprises à partir de septembre 2026 (réception) et de septembre 2027 pour l'émission par les PME et micro-entreprises. Vérifiez le calendrier qui vous concerne sur impots.gouv.fr. Ce générateur produit un PDF classique."]
+    ["Dois-je utiliser la facturation électronique ?", "Depuis le 1er septembre 2026, toutes les entreprises doivent pouvoir recevoir des factures électroniques. L'émission devient obligatoire le 1er septembre 2027 pour les PME et micro-entreprises. Ce générateur produit un PDF : il reste valable pour vos clients particuliers et étrangers, et pour vos clients professionnels jusqu'à votre date d'émission obligatoire. Il ajoute déjà les nouvelles mentions de la réforme. Voir <a href=\"{{link:einvoicing}}\">ce qui change pour vous</a>."],
+    ["Quelles sont les nouvelles mentions de la réforme ?", "Le SIREN du client, l'adresse de livraison si elle diffère de celle du client, la nature de l'opération (biens, services ou mixte) et, le cas échéant, l'option pour le paiement de la TVA d'après les débits. Le générateur les ajoute quand vous les renseignez."]
   ]
 }-->
 <section class="hero hero-tool">
@@ -67,8 +68,13 @@
           <input type="text" id="f-client-name" name="clientName" placeholder="Studio Nova SAS" data-save></div>
         <div class="field full"><label for="f-client-address">Adresse</label>
           <textarea id="f-client-address" name="clientAddress" rows="2" placeholder="14 rue des Lilas&#10;69003 Lyon" data-save></textarea></div>
-        <div class="field full"><label for="f-client-id">SIREN / N° de TVA du client</label>
+        <div class="field" data-pro><label for="f-client-id">SIREN du client</label>
           <input type="text" id="f-client-id" name="clientId" placeholder="812 345 678" data-save></div>
+        <div class="field" data-pro><label for="f-client-vat">N° de TVA du client (facultatif)</label>
+          <input type="text" id="f-client-vat" name="clientVat" placeholder="FR00 812345678" data-save></div>
+        <div class="field full" data-pro><span class="hint">Le SIREN du client devient obligatoire avec la <a href="{{link:einvoicing}}">facturation électronique</a> : ajoutez-le dès maintenant.</span></div>
+        <div class="field full"><label for="f-client-delivery">Adresse de livraison (si différente, facultatif)</label>
+          <textarea id="f-client-delivery" name="clientDelivery" rows="2" placeholder="Pour une livraison de biens à une autre adresse" data-save></textarea></div>
         <label class="check full"><input type="checkbox" id="f-client-pro" name="clientPro" checked data-save>
           <span>Client professionnel (ajoute les pénalités de retard et l'indemnité de 40 €)</span></label>
       </div>
@@ -85,6 +91,12 @@
           <input type="number" id="f-terms" name="terms" min="0" max="60" value="30" data-save></div>
         <div class="field" data-only="devis"><label for="f-validity">Validité du devis (jours)</label>
           <input type="number" id="f-validity" name="validity" min="1" value="30" data-save></div>
+        <div class="field full"><label for="f-nature">Nature de l'opération</label>
+          <select id="f-nature" name="nature" data-save>
+            <option value="services">Prestation de services</option>
+            <option value="biens">Livraison de biens</option>
+            <option value="mixte">Mixte (biens et services)</option>
+          </select></div>
         <div class="field" data-only="devis"><label for="f-deposit-pct">Acompte demandé (%)</label>
           <input type="number" id="f-deposit-pct" name="depositPct" min="0" max="100" value="30" data-save></div>
       </div>
@@ -101,6 +113,8 @@
           <select id="f-vat-rate" name="vatRate" data-save>
             <option value="20">20 %</option><option value="10">10 %</option><option value="5.5">5,5 %</option><option value="2.1">2,1 %</option>
           </select></div>
+        <label class="check full" id="f-debits-field" hidden><input type="checkbox" id="f-debits" name="debits" data-save>
+          <span>Option pour le paiement de la TVA d'après les débits</span></label>
         <div class="field" data-only="facture"><label for="f-paid">Acompte déjà versé (€)</label>
           <input type="text" inputmode="decimal" id="f-paid" name="paid" placeholder="0"></div>
         <div class="field full"><label for="f-penalty">Taux des pénalités de retard</label>
