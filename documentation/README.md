@@ -15,6 +15,7 @@ Le site d'outils gratuits pour indépendants (France, États-Unis, Royaume-Uni, 
 | [9. Spécification de l'Espace](09-specification-espace.md) | Espace entrepreneur : périmètre, règles, modèle de données, écrans, critères d'acceptation (v1 et v1.1) |
 | [10. Étude Factur-X](10-etude-factur-x.md) | Export de factures électroniques : cadre officiel, règles françaises, modèle de données, choix techniques, vérification, étapes |
 | [11. Étude concurrentielle](11-etude-concurrentielle.md) | Offres et prix des concurrents (France, États-Unis, Royaume-Uni, Canada), positionnement, pistes de revenus |
+| [12. Spécification des comptes](12-specification-comptes.md) | Comptes en ligne (étape 2) : principes, offres gratuit et « Pro », synchronisation, options d'architecture, sécurité, RGPD, étapes |
 | [Fiches pays](pays/) | Règles fiscales et sociales vérifiées : [France](pays/fr.md), [États-Unis](pays/us.md), [Royaume-Uni](pays/uk.md), [Canada](pays/ca.md) |
 
 Le [README principal](../README.md) explique comment générer, tester et publier le site.

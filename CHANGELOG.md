@@ -1,5 +1,13 @@
 # Journal des modifications
 
+## 2026-10-20 — Spécification des comptes en ligne (première version)
+
+- `documentation/12-specification-comptes.md` : principes (l'Espace reste utilisable sans compte, local d'abord,
+  hébergement dans l'UE), fonctions du compte gratuit et de l'offre « Pro » proposée, synchronisation (schéma 2,
+  suppressions marquées, numérotation sur plusieurs appareils), options d'architecture et recommandation
+  (synchronisation chiffrée de bout en bout chez un hébergeur français), sécurité, RGPD, étapes C1 à C6 et décisions
+  d'Ismail.
+
 ## 2026-10-20 — Finitions SEO et étude concurrentielle
 
 - Titres (60 caractères au plus) et descriptions (160 au plus) revus sur 72 pages des cinq sections : mots-clés en

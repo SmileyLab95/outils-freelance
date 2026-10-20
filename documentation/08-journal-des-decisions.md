@@ -26,7 +26,7 @@ en bas ; elles sortent de la liste quand elles sont prises.
 |---|---|---|---|
 | Marque et nom de domaine | Claude propose 10 noms et vérifie les domaines | Novembre 2026 | Ismail |
 | Structure juridique pour encaisser des abonnements | Micro-entreprise pour démarrer, société ensuite ; à voir avec un expert-comptable | Décembre 2026 | Ismail |
-| Socle technique de l'application | Socle managé hébergé dans l'UE ou hébergeur français ; framework de l'application | Début de l'étape 2 | Claude propose, Ismail valide |
+| Socle technique de l'application (D15) | Recommandation de Claude ([12](12-specification-comptes.md), § 4) : synchronisation chiffrée de bout en bout, sur un hébergeur français ; autres options : plateforme managée en région UE, ou API maison | Début de l'étape 2 | Claude propose, Ismail valide (hébergeur et budget) |
 | Prix des offres Pro et Business | Après l'étude concurrentielle | Fin de l'étape 1 | Ismail |
 | Plateforme(s) agréée(s) partenaire(s) pour la facturation électronique | Comparatif des offres et des API | Mai 2027 | Claude compare, Ismail signe |
 | Budget de départ | Selon les postes du plan (§ 10) | Décembre 2026 | Ismail |

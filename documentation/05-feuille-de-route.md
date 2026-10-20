@@ -27,12 +27,15 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 - **Fait aussi le 20/10/2026** : finitions SEO (72 pages) ; [étude concurrentielle](11-etude-concurrentielle.md),
   première version : les grands acteurs français offrent déjà la facturation gratuite ; nos atouts sont l'absence de
   compte, les quatre pays et la rigueur des règles.
-- **Prochaines actions de Claude** : spécification des comptes en ligne (E2) et grille d'offres « gratuit / Pro » ;
-  vérifier les prix des concurrents sur leurs pages officielles ; guides (recouvrement judiciaire, assurance, compte
+- **Spécification des comptes en ligne** (E2), première version : [12](12-specification-comptes.md) (offres gratuit
+  et « Pro » proposées, synchronisation chiffrée de bout en bout recommandée, étapes C1 à C6).
+- **Prochaines actions de Claude** : comparatif chiffré et à jour des hébergeurs pour la décision d'Ismail ; moteur de
+  synchronisation testé sans serveur (étape C2, schéma 2) ; vérifier les prix des concurrents sur leurs pages officielles ; guides (recouvrement judiciaire, assurance, compte
   bancaire) ; veille réglementaire de décembre (dont la version de Factur-X et l'annexe A de XP Z12-012 pour le BT-32
   en franchise).
-- **En attente d'Ismail** (pas urgent) : structure juridique avec un comptable ; plus tard, compte d'hébergement pour
-  les comptes en ligne (E2) ; à la fin, marque et domaine, Gumroad.
+- **En attente d'Ismail** (pas urgent) : structure juridique avec un comptable ; choix de l'hébergeur et budget pour
+  les comptes en ligne (E2, voir [12](12-specification-comptes.md) § 8) ; prix de l'offre « Pro » ; à la fin, marque
+  et domaine, Gumroad.
 
 ## Vue d'ensemble
 
