@@ -1,0 +1,70 @@
+<!--{
+  "id": "mileage",
+  "slug": "mileage-allowance-calculator/",
+  "title": "Mileage Allowance Calculator UK 2026/27 (55p per Mile)",
+  "description": "Work out your business mileage claim for 2026/27 with HMRC's approved rates: 55p a mile for the first 10,000 miles by car or van, 25p after, 24p for motorcycles and 20p for bicycles. Free.",
+  "menu": "Mileage allowance calculator",
+  "icon": "🚗",
+  "blurb": "Your 2026/27 mileage claim at 55p and 25p a mile.",
+  "app": "UK Mileage Allowance Calculator",
+  "scripts": ["tools/uk-mileage.js"],
+  "rules": "uk",
+  "sources": ["simplified_mileage_car_first_10000", "simplified_mileage_car_after_10000", "simplified_mileage_motorcycle", "simplified_mileage_bicycle"],
+  "priority": 0.85,
+  "faq": [
+    ["What is the HMRC mileage rate for 2026/27?", "55p per mile for the first 10,000 business miles in the tax year by car or van, then 25p per mile. Motorcycles are 24p and bicycles 20p per mile. The car rate rose from 45p (unchanged since 2011) from 6 April 2026."],
+    ["Can sole traders use the mileage rates?", "Yes. Instead of working out the actual cost of running your vehicle, sole traders can use these flat rates as simplified expenses. Once you've used them for a vehicle, you must keep using them for as long as you use that vehicle in your business."],
+    ["My employer pays less than 55p. Can I claim the difference?", "Yes. If you use your own vehicle for work and your employer pays less than the approved rate, you can claim Mileage Allowance Relief on the difference from HMRC. Enter the rate your employer pays to see the amount."],
+    ["Does commuting count?", "No. Travel between home and your normal place of work doesn't count. Trips to clients, temporary workplaces and suppliers do."]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · 2026/27 rates</span>
+    <h1>Mileage allowance calculator</h1>
+    <p class="lead">Enter your business miles for the 2026/27 tax year: see your mileage claim at HMRC's approved rates, and any Mileage Allowance Relief if your employer pays less.</p>
+    <ul class="trust"><li>55p, then 25p a mile</li><li>Motorcycles and bicycles</li><li>Mileage Allowance Relief</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="mileage-form" onsubmit="return false">
+      <h2>Your business travel</h2>
+      <div class="fields">
+        <div class="field full"><label for="m-vehicle">Vehicle</label>
+          <select id="m-vehicle" name="vehicle" data-save>
+            <option value="car">Car or van</option><option value="motorcycle">Motorcycle</option><option value="bicycle">Bicycle</option>
+          </select></div>
+        <div class="field full"><label for="m-miles">Business miles in the tax year</label>
+          <input type="text" inputmode="decimal" id="m-miles" name="miles" value="12,000" data-save></div>
+        <div class="field full"><label for="m-paid">Employees: rate your employer pays (pence per mile, optional)</label>
+          <input type="text" inputmode="decimal" id="m-paid" name="paid" placeholder="0" data-save></div>
+      </div>
+    </form>
+    <div class="results">
+      <div class="result-hero">
+        <div class="label">Your mileage claim</div>
+        <div class="big" id="m-total">–</div>
+        <div class="sub" id="m-sub">–</div>
+      </div>
+      <p class="formula" id="m-formula" style="margin-top: 16px;">–</p>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>Approved mileage rates for 2026/27</h2>
+  <div class="table-scroll">
+  <table>
+    <thead><tr><th>Vehicle</th><th>First 10,000 miles</th><th>Over 10,000 miles</th></tr></thead>
+    <tbody>
+      <tr><td>Car or van</td><td>55p</td><td>25p</td></tr>
+      <tr><td>Motorcycle</td><td>24p</td><td>24p</td></tr>
+      <tr><td>Bicycle</td><td>20p</td><td>20p</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>Sole traders deduct the result from their profit as an allowable expense; see what it saves you with the <a href="{{link:tax}}">self-employed tax calculator</a>.</p>
+</section>

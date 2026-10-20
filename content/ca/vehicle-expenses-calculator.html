@@ -1,0 +1,69 @@
+<!--{
+  "id": "mileage",
+  "slug": "vehicle-expenses-calculator/",
+  "title": "Vehicle Expenses Calculator for Self-Employed Canadians (2026)",
+  "description": "Work out the motor vehicle expenses you can deduct as a self-employed Canadian: your business-use percentage from your logbook, applied to fuel, insurance, maintenance, licence, interest or lease and CCA. Free.",
+  "menu": "Vehicle expenses calculator",
+  "icon": "🚗",
+  "blurb": "The business share of your car costs, from your logbook.",
+  "app": "Canada Vehicle Expenses Calculator",
+  "scripts": ["tools/ca-vehicle.js"],
+  "rules": "ca",
+  "sources": ["vehicle_expenses_self_employed"],
+  "priority": 0.8,
+  "faq": [
+    ["Can self-employed Canadians use a cents-per-kilometre rate?", "No. The CRA's per-kilometre rates are for allowances an employer pays to employees. As a self-employed person, you deduct the business part of your actual vehicle expenses, based on the kilometres you drive for business."],
+    ["How do I calculate my business-use percentage?", "Divide the kilometres driven to earn business income by the total kilometres driven in the year. Keep a logbook with the date, destination, purpose and distance of each business trip."],
+    ["Which vehicle expenses can I deduct?", "Fuel and oil, insurance, maintenance and repairs, licence and registration fees, interest on a car loan or lease payments (both subject to limits), and capital cost allowance (CCA) for the vehicle's depreciation."],
+    ["Where do I claim them?", "On form T2125, in the motor vehicle expenses section (in Québec, also on form TP-80)."]
+  ]
+}-->
+<script type="application/json" id="vehicle-data">{"percent": "%", "sub": "Business use: {share} of {expenses} in vehicle expenses.", "sub_empty": "Enter the kilometres from your logbook."}</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · CRA method</span>
+    <h1>Vehicle expenses calculator</h1>
+    <p class="lead">As a self-employed person, you deduct the business share of your actual vehicle costs. Enter your kilometres and expenses: we work out your business-use percentage and your deduction.</p>
+    <ul class="trust"><li>Business-use percentage</li><li>All deductible expenses</li><li>For form T2125</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="vehicle-form" onsubmit="return false">
+      <h2>Your vehicle in 2026</h2>
+      <div class="fields">
+        <div class="field"><label for="v-business">Kilometres driven for business</label>
+          <input type="text" inputmode="decimal" id="v-business" name="business" value="12,000" data-save></div>
+        <div class="field"><label for="v-total">Total kilometres driven in the year</label>
+          <input type="text" inputmode="decimal" id="v-total" name="total" value="20,000" data-save></div>
+        <div class="field"><label for="v-fuel">Fuel and oil</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="v-fuel" name="fuel" placeholder="0" data-save><span>$</span></div></div>
+        <div class="field"><label for="v-insurance">Insurance</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="v-insurance" name="insurance" placeholder="0" data-save><span>$</span></div></div>
+        <div class="field"><label for="v-maintenance">Maintenance and repairs</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="v-maintenance" name="maintenance" placeholder="0" data-save><span>$</span></div></div>
+        <div class="field"><label for="v-licence">Licence and registration</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="v-licence" name="licence" placeholder="0" data-save><span>$</span></div></div>
+        <div class="field"><label for="v-interest">Interest or lease payments</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="v-interest" name="interest" placeholder="0" data-save><span>$</span></div></div>
+        <div class="field"><label for="v-cca">Capital cost allowance (CCA)</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="v-cca" name="cca" placeholder="0" data-save><span>$</span></div><span class="hint">Depreciation claimed for the vehicle this year.</span></div>
+      </div>
+      <p class="notice warn" id="v-warning" hidden style="margin: 14px 0 0;">Business kilometres can't exceed total kilometres.</p>
+    </form>
+    <div class="results">
+      <div class="result-hero">
+        <div class="label">Deductible vehicle expenses</div>
+        <div class="big" id="v-deduction">–</div>
+        <div class="sub" id="v-sub">–</div>
+      </div>
+      <p class="formula" id="v-formula" style="margin-top: 16px;">–</p>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>Keep a logbook</h2><p>The CRA expects a record of each business trip: date, destination, purpose and kilometres. After a full year, a three-month sample logbook can be used in later years if your use stays similar.</p><p>Deduct the result from your income and see the effect with the <a href="{{link:tax}}">self-employed tax calculator</a>.</p>
+</section>

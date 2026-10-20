@@ -1,15 +1,55 @@
 {
-  "brand": ["Freelance", "Tools"],
+  "brand": [
+    "Freelance",
+    "Tools"
+  ],
   "audience": "For freelancers, sole traders and contractors in the United Kingdom",
   "nav": [
-    {"label": "Tax", "items": ["tax", "structure", "mtd"]},
-    {"label": "Invoicing", "items": ["invoice", "salestax"]},
-    {"label": "Pricing", "items": ["rate"]},
-    {"label": "Getting paid", "items": ["reminder", "latefee"]},
-    {"label": "Templates", "items": ["templates"]}
+    {
+      "label": "Tax",
+      "items": [
+        "tax",
+        "structure",
+        "mtd",
+        "mileage"
+      ]
+    },
+    {
+      "label": "Invoicing",
+      "items": [
+        "invoice",
+        "salestax"
+      ]
+    },
+    {
+      "label": "Pricing",
+      "items": [
+        "rate"
+      ]
+    },
+    {
+      "label": "Getting paid",
+      "items": [
+        "reminder",
+        "latefee"
+      ]
+    },
+    {
+      "label": "Templates",
+      "items": [
+        "templates"
+      ]
+    }
   ],
-  "featured": ["tax", "structure", "invoice"],
-  "footer_links": ["legal", "privacy"],
+  "featured": [
+    "tax",
+    "structure",
+    "invoice"
+  ],
+  "footer_links": [
+    "legal",
+    "privacy"
+  ],
   "strings": {
     "skip": "Skip to content",
     "menu": "Menu",

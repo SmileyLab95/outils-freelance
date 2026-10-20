@@ -1,0 +1,81 @@
+<!--{
+  "id": "mileage",
+  "slug": "bareme-kilometrique/",
+  "title": "Barème kilométrique 2026 : calcul des frais kilométriques",
+  "description": "Calculez vos frais kilométriques avec le barème officiel (revenus 2025, déclarés en 2026) : puissance fiscale de 3 à 7 CV, trois tranches de distance, majoration de 20 % pour les voitures électriques. Gratuit.",
+  "menu": "Barème kilométrique",
+  "icon": "🚗",
+  "blurb": "Vos frais kilométriques selon la puissance et la distance, électrique compris.",
+  "app": "Calculateur du barème kilométrique",
+  "scripts": ["tools/fr-mileage.js"],
+  "rules": "fr",
+  "sources": ["bareme_kilometrique_voitures", "bareme_kilometrique_majoration_electrique"],
+  "priority": 0.9,
+  "faq": [
+    ["Qui peut utiliser le barème kilométrique ?", "Les salariés qui optent pour les frais réels, et les indépendants imposés au régime réel (BNC à la déclaration contrôlée, BIC au réel) pour un véhicule qu'ils n'ont pas inscrit à l'actif. Les micro-entrepreneurs ne peuvent pas déduire leurs frais : l'abattement forfaitaire les couvre déjà."],
+    ["Le barème a-t-il augmenté en 2026 ?", "Non. Le barème appliqué aux revenus de 2025, déclarés en 2026, est celui de l'arrêté du 27 mars 2023, sans revalorisation. Seule la majoration de 20 % pour les véhicules électriques s'ajoute."],
+    ["Que couvre le barème kilométrique ?", "La dépréciation du véhicule, l'entretien, les réparations, les pneus, le carburant et l'assurance. Les péages, les frais de stationnement et les intérêts d'un emprunt pour acheter le véhicule peuvent être ajoutés en plus, sur justificatifs."],
+    ["Comment calculer pour une distance entre 5 001 et 20 000 km ?", "On applique la formule de la tranche à la distance totale : par exemple, pour une 5 CV et 12 000 km, 12 000 × 0,357 + 1 395 = 5 679 €. Le calculateur choisit la bonne tranche automatiquement."]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Gratuit · barème officiel</span>
+    <h1>Barème kilométrique 2026</h1>
+    <p class="lead">Indiquez vos kilomètres professionnels de l'année et la puissance de votre voiture : vos frais kilométriques s'affichent, avec la formule et la majoration pour les voitures électriques.</p>
+    <ul class="trust"><li>Barème des revenus 2025</li><li>3 à 7 CV et plus</li><li>Électrique : + 20 %</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="mileage-form" onsubmit="return false">
+      <h2>Vos déplacements</h2>
+      <div class="fields">
+        <div class="field full"><label for="k-km">Kilomètres professionnels dans l'année</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="k-km" name="km" value="8 000" data-save><span>km</span></div>
+          <span class="hint">Trajets domicile-travail compris pour les salariés, dans la limite de 40 km par trajet sauf exception.</span></div>
+        <div class="field full"><label for="k-cv">Puissance fiscale (carte grise, case P.6)</label>
+          <select id="k-cv" name="cv" data-save>
+            <option value="3">3 CV et moins</option><option value="4">4 CV</option><option value="5" selected>5 CV</option>
+            <option value="6">6 CV</option><option value="7">7 CV et plus</option>
+          </select></div>
+        <label class="check full"><input type="checkbox" id="k-ev" name="ev" data-save><span>Voiture 100 % électrique (+ 20 %)</span></label>
+      </div>
+    </form>
+    <div class="results">
+      <div class="result-hero">
+        <div class="label">Frais kilométriques de l'année</div>
+        <div class="big" id="k-total">–</div>
+        <div class="sub" id="k-sub">–</div>
+      </div>
+      <p class="formula" id="k-formula" style="margin-top: 16px;">–</p>
+      <div class="card" style="padding: 6px 18px; margin-top: 16px;">
+        <table class="mini-table">
+          <caption id="k-caption">Pour la même distance</caption>
+          <thead><tr><th>Puissance</th><th>Thermique</th><th>Électrique</th></tr></thead>
+          <tbody id="k-table"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>Le barème kilométrique des voitures</h2>
+  <div class="table-scroll">
+  <table>
+    <thead><tr><th>Puissance</th><th>Jusqu'à 5 000 km</th><th>De 5 001 à 20 000 km</th><th>Au-delà de 20 000 km</th></tr></thead>
+    <tbody>
+      <tr><td>3 CV et moins</td><td>d × 0,529</td><td>(d × 0,316) + 1 065</td><td>d × 0,370</td></tr>
+      <tr><td>4 CV</td><td>d × 0,606</td><td>(d × 0,340) + 1 330</td><td>d × 0,407</td></tr>
+      <tr><td>5 CV</td><td>d × 0,636</td><td>(d × 0,357) + 1 395</td><td>d × 0,427</td></tr>
+      <tr><td>6 CV</td><td>d × 0,665</td><td>(d × 0,374) + 1 457</td><td>d × 0,447</td></tr>
+      <tr><td>7 CV et plus</td><td>d × 0,697</td><td>(d × 0,394) + 1 515</td><td>d × 0,470</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>d = distance parcourue à titre professionnel dans l'année. Pour les voitures électriques, le résultat est majoré de 20 %.</p>
+  <p class="small muted">Information à titre indicatif. Les motos et cyclomoteurs ont leur propre barème.</p>
+</section>

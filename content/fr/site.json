@@ -16,11 +16,12 @@
       ]
     },
     {
-      "label": "Prix et revenus",
+      "label": "Statut et revenus",
       "items": [
-        "rate",
         "tax",
-        "structure"
+        "structure",
+        "rate",
+        "mileage"
       ]
     },
     {

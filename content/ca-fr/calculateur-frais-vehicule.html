@@ -1,0 +1,69 @@
+<!--{
+  "id": "mileage",
+  "slug": "calculateur-frais-vehicule/",
+  "title": "Frais de véhicule du travailleur autonome : calcul de la part déductible (2026)",
+  "description": "Calculez les frais de véhicule déductibles d'un travailleur autonome : pourcentage d'utilisation pour affaires selon votre registre, appliqué au carburant, aux assurances, à l'entretien, aux immatriculations, aux intérêts ou à la location et à la DPA. Gratuit.",
+  "menu": "Frais de véhicule",
+  "icon": "🚗",
+  "blurb": "La part d'affaires de vos frais d'automobile, selon votre registre.",
+  "app": "Calculateur des frais de véhicule",
+  "scripts": ["tools/ca-vehicle.js"],
+  "rules": "ca",
+  "sources": ["vehicle_expenses_self_employed"],
+  "priority": 0.8,
+  "faq": [
+    ["Un travailleur autonome peut-il utiliser un taux au kilomètre ?", "Non. Les taux au kilomètre de l'ARC et de Revenu Québec visent les allocations versées par un employeur à ses employés. Le travailleur autonome déduit la partie de ses dépenses réelles qui correspond à l'usage pour affaires."],
+    ["Comment calculer le pourcentage d'utilisation pour affaires ?", "Divisez les kilomètres parcourus pour gagner un revenu d'entreprise par le total des kilomètres de l'année. Tenez un registre : date, destination, raison et distance de chaque déplacement d'affaires."],
+    ["Quelles dépenses de véhicule sont déductibles ?", "Le carburant, les assurances, l'entretien et les réparations, les frais d'immatriculation et de permis, les intérêts sur un prêt auto ou les frais de location (avec des plafonds) et la déduction pour amortissement (DPA)."],
+    ["Où les déclarer ?", "Sur le formulaire TP-80 pour Revenu Québec et sur le formulaire T2125 pour l'ARC, dans la section des dépenses relatives aux véhicules à moteur."]
+  ]
+}-->
+<script type="application/json" id="vehicle-data">{"percent": " %", "sub": "Usage pour affaires : {share} de {expenses} de frais de véhicule.", "sub_empty": "Indiquez les kilomètres de votre registre."}</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Gratuit · méthode de l'ARC et de Revenu Québec</span>
+    <h1>Frais de véhicule</h1>
+    <p class="lead">Comme travailleur autonome, vous déduisez la part d'affaires de vos frais réels d'automobile. Indiquez vos kilomètres et vos dépenses : nous calculons votre pourcentage d'utilisation et votre déduction.</p>
+    <ul class="trust"><li>Pourcentage d'utilisation pour affaires</li><li>Toutes les dépenses déductibles</li><li>Pour le TP-80 et le T2125</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="vehicle-form" onsubmit="return false">
+      <h2>Votre véhicule en 2026</h2>
+      <div class="fields">
+        <div class="field"><label for="v-business">Kilomètres parcourus pour affaires</label>
+          <input type="text" inputmode="decimal" id="v-business" name="business" value="12 000" data-save></div>
+        <div class="field"><label for="v-total">Kilomètres parcourus dans l'année</label>
+          <input type="text" inputmode="decimal" id="v-total" name="total" value="20 000" data-save></div>
+        <div class="field"><label for="v-fuel">Carburant et huile</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="v-fuel" name="fuel" placeholder="0" data-save><span>$</span></div></div>
+        <div class="field"><label for="v-insurance">Assurances</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="v-insurance" name="insurance" placeholder="0" data-save><span>$</span></div></div>
+        <div class="field"><label for="v-maintenance">Entretien et réparations</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="v-maintenance" name="maintenance" placeholder="0" data-save><span>$</span></div></div>
+        <div class="field"><label for="v-licence">Immatriculation et permis</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="v-licence" name="licence" placeholder="0" data-save><span>$</span></div></div>
+        <div class="field"><label for="v-interest">Intérêts ou frais de location</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="v-interest" name="interest" placeholder="0" data-save><span>$</span></div></div>
+        <div class="field"><label for="v-cca">Déduction pour amortissement (DPA)</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="v-cca" name="cca" placeholder="0" data-save><span>$</span></div><span class="hint">Amortissement du véhicule pour l'année.</span></div>
+      </div>
+      <p class="notice warn" id="v-warning" hidden style="margin: 14px 0 0;">Les kilomètres d'affaires ne peuvent pas dépasser le total.</p>
+    </form>
+    <div class="results">
+      <div class="result-hero">
+        <div class="label">Frais de véhicule déductibles</div>
+        <div class="big" id="v-deduction">–</div>
+        <div class="sub" id="v-sub">–</div>
+      </div>
+      <p class="formula" id="v-formula" style="margin-top: 16px;">–</p>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>Tenez un registre</h2><p>Notez chaque déplacement d'affaires : date, destination, raison et kilomètres. Après une première année complète, un registre de trois mois peut suffire les années suivantes si votre utilisation reste semblable.</p><p>Déduisez le résultat de votre revenu et voyez l'effet avec le <a href="{{link:tax}}">calculateur d'impôt du travailleur autonome</a>.</p>
+</section>

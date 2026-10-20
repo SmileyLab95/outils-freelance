@@ -1,23 +1,71 @@
 {
-  "brand": ["Freelance", "Tools"],
+  "brand": [
+    "Freelance",
+    "Tools"
+  ],
   "audience": "For freelancers and the self-employed in Canada",
   "nav": [
-    {"label": "Taxes", "items": ["tax", "salestax"]},
-    {"label": "Invoicing", "items": ["invoice"]},
-    {"label": "Pricing", "items": ["rate"]},
-    {"label": "Getting paid", "items": ["reminder", "latefee"]},
-    {"label": "Templates", "items": ["templates"]}
+    {
+      "label": "Taxes",
+      "items": [
+        "tax",
+        "salestax",
+        "mileage"
+      ]
+    },
+    {
+      "label": "Invoicing",
+      "items": [
+        "invoice"
+      ]
+    },
+    {
+      "label": "Pricing",
+      "items": [
+        "rate"
+      ]
+    },
+    {
+      "label": "Getting paid",
+      "items": [
+        "reminder",
+        "latefee"
+      ]
+    },
+    {
+      "label": "Templates",
+      "items": [
+        "templates"
+      ]
+    }
   ],
-  "featured": ["tax", "salestax", "invoice"],
-  "footer_links": ["legal", "privacy"],
+  "featured": [
+    "tax",
+    "salestax",
+    "invoice"
+  ],
+  "footer_links": [
+    "legal",
+    "privacy"
+  ],
   "strings": {
-    "skip": "Skip to content", "menu": "Menu", "close": "Close", "home": "Home",
-    "country": "Country", "country_label": "Choose another country", "all_tools": "All tools",
-    "related": "Related tools", "faq": "Frequently asked questions", "sources": "Official sources",
-    "verified": "Figures last verified on", "site": "This site",
+    "skip": "Skip to content",
+    "menu": "Menu",
+    "close": "Close",
+    "home": "Home",
+    "country": "Country",
+    "country_label": "Choose another country",
+    "all_tools": "All tools",
+    "related": "Related tools",
+    "faq": "Frequently asked questions",
+    "sources": "Official sources",
+    "verified": "Figures last verified on",
+    "site": "This site",
     "tagline": "Free tools for Canadian freelancers and self-employed workers. No sign-up, no paywall.",
     "privacy_note": "🔒 Everything is calculated in your browser: nothing you type is sent to a server.",
     "disclaimer": "For information only: not tax, legal or accounting advice.",
-    "logo_label": "Freelance Tools, home", "tools_count": "{n} free tools", "breadcrumb": "Breadcrumb"
+    "logo_label": "Freelance Tools, home",
+    "tools_count": "{n} free tools",
+    "breadcrumb": "Breadcrumb"
   }
 }

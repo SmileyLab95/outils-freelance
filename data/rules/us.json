@@ -111,13 +111,41 @@
     },
     "federal_brackets_single": {
       "value": [
-        {"from": 0, "to": 12400, "rate": 0.10},
-        {"from": 12400, "to": 50400, "rate": 0.12},
-        {"from": 50400, "to": 105700, "rate": 0.22},
-        {"from": 105700, "to": 201775, "rate": 0.24},
-        {"from": 201775, "to": 256225, "rate": 0.32},
-        {"from": 256225, "to": 640600, "rate": 0.35},
-        {"from": 640600, "to": null, "rate": 0.37}
+        {
+          "from": 0,
+          "to": 12400,
+          "rate": 0.1
+        },
+        {
+          "from": 12400,
+          "to": 50400,
+          "rate": 0.12
+        },
+        {
+          "from": 50400,
+          "to": 105700,
+          "rate": 0.22
+        },
+        {
+          "from": 105700,
+          "to": 201775,
+          "rate": 0.24
+        },
+        {
+          "from": 201775,
+          "to": 256225,
+          "rate": 0.32
+        },
+        {
+          "from": 256225,
+          "to": 640600,
+          "rate": 0.35
+        },
+        {
+          "from": 640600,
+          "to": null,
+          "rate": 0.37
+        }
       ],
       "unit": "brackets",
       "label": "2026 federal income tax brackets - single (taxable income)",
@@ -128,13 +156,41 @@
     },
     "federal_brackets_married_filing_jointly": {
       "value": [
-        {"from": 0, "to": 24800, "rate": 0.10},
-        {"from": 24800, "to": 100800, "rate": 0.12},
-        {"from": 100800, "to": 211400, "rate": 0.22},
-        {"from": 211400, "to": 403550, "rate": 0.24},
-        {"from": 403550, "to": 512450, "rate": 0.32},
-        {"from": 512450, "to": 768700, "rate": 0.35},
-        {"from": 768700, "to": null, "rate": 0.37}
+        {
+          "from": 0,
+          "to": 24800,
+          "rate": 0.1
+        },
+        {
+          "from": 24800,
+          "to": 100800,
+          "rate": 0.12
+        },
+        {
+          "from": 100800,
+          "to": 211400,
+          "rate": 0.22
+        },
+        {
+          "from": 211400,
+          "to": 403550,
+          "rate": 0.24
+        },
+        {
+          "from": 403550,
+          "to": 512450,
+          "rate": 0.32
+        },
+        {
+          "from": 512450,
+          "to": 768700,
+          "rate": 0.35
+        },
+        {
+          "from": 768700,
+          "to": null,
+          "rate": 0.37
+        }
       ],
       "unit": "brackets",
       "label": "2026 federal income tax brackets - married filing jointly",
@@ -145,13 +201,41 @@
     },
     "federal_brackets_head_of_household": {
       "value": [
-        {"from": 0, "to": 17700, "rate": 0.10},
-        {"from": 17700, "to": 67450, "rate": 0.12},
-        {"from": 67450, "to": 105700, "rate": 0.22},
-        {"from": 105700, "to": 201750, "rate": 0.24},
-        {"from": 201750, "to": 256200, "rate": 0.32},
-        {"from": 256200, "to": 640600, "rate": 0.35},
-        {"from": 640600, "to": null, "rate": 0.37}
+        {
+          "from": 0,
+          "to": 17700,
+          "rate": 0.1
+        },
+        {
+          "from": 17700,
+          "to": 67450,
+          "rate": 0.12
+        },
+        {
+          "from": 67450,
+          "to": 105700,
+          "rate": 0.22
+        },
+        {
+          "from": 105700,
+          "to": 201750,
+          "rate": 0.24
+        },
+        {
+          "from": 201750,
+          "to": 256200,
+          "rate": 0.32
+        },
+        {
+          "from": 256200,
+          "to": 640600,
+          "rate": 0.35
+        },
+        {
+          "from": 640600,
+          "to": null,
+          "rate": 0.37
+        }
       ],
       "unit": "brackets",
       "label": "2026 federal income tax brackets - head of household",
@@ -175,7 +259,7 @@
       "note": "OBBBA made the TCJA-level standard deduction permanent and raised the 2025 amounts to $15,750 / $31,500 / $23,625 (single / MFJ / HOH); 2026 amounts are those indexed for inflation. Additional amounts for age 65+/blind and the temporary OBBBA senior deduction are not included here."
     },
     "qbi_deduction_rate": {
-      "value": 0.20,
+      "value": 0.2,
       "unit": "rate",
       "label": "Qualified Business Income (Section 199A) deduction rate",
       "source": "https://www.irs.gov/newsroom/one-big-beautiful-bill-provisions-individuals-and-workers",
@@ -238,7 +322,12 @@
       "note": "New IRC 199A(i): taxpayers who materially participate in an active qualified trade or business with at least $1,000 of aggregate QBI get a deduction of at least $400. Effective for tax years beginning after 2025; both amounts indexed from 2027. Details confirmed only through secondary sources (law firms, beancount.io) in this session."
     },
     "estimated_tax_due_dates_2026": {
-      "value": ["2026-04-15", "2026-06-15", "2026-09-15", "2027-01-15"],
+      "value": [
+        "2026-04-15",
+        "2026-06-15",
+        "2026-09-15",
+        "2027-01-15"
+      ],
       "unit": "date",
       "label": "Form 1040-ES installment due dates for tax year 2026",
       "source": "https://www.irs.gov/pub/irs-pdf/f1040es.pdf",
@@ -265,7 +354,7 @@
       "note": "Also stated on the 2026 Form 1040-ES. Payments are required if tax owed >= $1,000 AND withholding/credits are below the safe-harbor amount."
     },
     "estimated_tax_safe_harbor_current_year_rate": {
-      "value": 0.90,
+      "value": 0.9,
       "unit": "rate",
       "label": "Safe harbor: share of current-year (2026) tax to prepay",
       "source": "https://www.irs.gov/pub/irs-pdf/f1040es.pdf",
@@ -274,7 +363,7 @@
       "note": "Required annual payment = the smaller of 90% of 2026 tax or 100%/110% of 2025 tax. Farmers/fishermen: 66 2/3%."
     },
     "estimated_tax_safe_harbor_prior_year_rate": {
-      "value": 1.00,
+      "value": 1.0,
       "unit": "rate",
       "label": "Safe harbor: share of prior-year (2025) tax to prepay",
       "source": "https://www.irs.gov/pub/irs-pdf/f1040es.pdf",
@@ -283,7 +372,7 @@
       "note": "Prior-year return must cover a full 12-month year. Replaced by 110% when 2025 AGI exceeds the high-AGI threshold."
     },
     "estimated_tax_safe_harbor_prior_year_rate_high_agi": {
-      "value": 1.10,
+      "value": 1.1,
       "unit": "rate",
       "label": "Safe harbor: share of prior-year tax when prior-year AGI is above threshold",
       "source": "https://www.irs.gov/pub/irs-pdf/f1040es.pdf",
@@ -374,7 +463,7 @@
       "unit": "USD",
       "label": "IRS business standard mileage rate per mile, miles driven 2026-01-01 to 2026-06-30",
       "source": "https://www.irs.gov/newsroom/irs-sets-2026-business-standard-mileage-rate-at-725-cents-per-mile-up-25-cents",
-      "source_title": "IRS - IRS sets 2026 business standard mileage rate at 72.5 cents per mile, up 2.5 cents (IR-2025-128, Notice 2026-10)",
+      "source_title": "IRS - IR-2025-128: 2026 business standard mileage rate at 72.5 cents per mile",
       "confidence": "high",
       "note": "Announced 2025-12-29. Depreciation component of the business rate for 2026: 35 cents per mile. Applies to gas, diesel, hybrid and electric vehicles."
     },
@@ -401,7 +490,17 @@
       "note": "Rate unchanged since Rev. Proc. 2013-13 and still on the IRS page. Space must be used regularly and exclusively for business. No depreciation; deduction limited to gross income from the business. Employees cannot claim it (only self-employed)."
     },
     "states_no_individual_income_tax": {
-      "value": ["AK", "FL", "NV", "NH", "SD", "TN", "TX", "WA", "WY"],
+      "value": [
+        "AK",
+        "FL",
+        "NV",
+        "NH",
+        "SD",
+        "TN",
+        "TX",
+        "WA",
+        "WY"
+      ],
       "unit": "list",
       "label": "States with no individual income tax on wage/earned income (2026)",
       "source": "https://taxfoundation.org/data/all/state/state-income-tax-rates-2026/",
@@ -410,7 +509,12 @@
       "note": "Tax Foundation counts 8 states with no individual income tax (AK, FL, NV, NH, SD, TN, TX, WY) plus Washington, which taxes only capital gains (not wages/self-employment income). New Hampshire's interest and dividends tax was repealed from 2025. Business-level taxes can still apply to freelancers (e.g., Washington B&O tax, Tennessee franchise & excise tax on LLCs, Texas franchise tax on LLCs, Nevada commerce tax) - not verified in this session. Local income taxes (e.g., NYC, some Ohio/Pennsylvania cities) are separate."
     },
     "states_tax_services_by_default": {
-      "value": ["HI", "NM", "SD", "WV"],
+      "value": [
+        "HI",
+        "NM",
+        "SD",
+        "WV"
+      ],
       "unit": "list",
       "label": "States whose sales/gross receipts tax applies to services by default",
       "source": "https://www.taxjar.com/sales-tax/when-should-a-business-charge-sales-tax-on-services",
@@ -585,7 +689,7 @@
     "late_fee_example_california": {
       "value": {
         "rule": "If a contract does not stipulate a rate, an obligation bears interest at 10% per year after breach (Civil Code 3289(b)); contractual late charges are assessed under the liquidated damages rule (Civil Code 1671).",
-        "default_interest_rate_after_breach": 0.10
+        "default_interest_rate_after_breach": 0.1
       },
       "unit": "text",
       "label": "California: default contract interest after breach",

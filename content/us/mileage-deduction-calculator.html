@@ -1,0 +1,64 @@
+<!--{
+  "id": "mileage",
+  "slug": "mileage-deduction-calculator/",
+  "title": "Mileage Deduction Calculator 2026 (IRS Standard Mileage Rate)",
+  "description": "Calculate your 2026 business mileage deduction with the IRS standard mileage rate, plus parking and tolls. For freelancers, 1099 contractors and sole proprietors. Free.",
+  "menu": "Mileage deduction calculator",
+  "icon": "🚗",
+  "blurb": "Your 2026 business mileage deduction at the IRS standard rate.",
+  "app": "Mileage Deduction Calculator",
+  "scripts": ["tools/us-mileage.js"],
+  "rules": "us",
+  "sources": ["mileage_rate_business_2026_jan_jun", "mileage_rate_business_2026_jul_dec"],
+  "priority": 0.85,
+  "faq": [
+    ["What is the IRS mileage rate for 2026?", "72.5 cents per business mile from January 1, 2026 (IR-2025-128). The IRS later announced a higher rate of 76 cents per mile for business miles driven from July 1, 2026; check irs.gov for the latest figure before you file."],
+    ["Who can use the standard mileage rate?", "Self-employed people and sole proprietors who use their own car for business. You must choose the standard rate in the first year you use the car for business; after that you can switch between the standard rate and actual expenses in most cases."],
+    ["What counts as business miles?", "Driving between client sites, to meet clients, to pick up supplies or between your home office and other work locations. Commuting from home to a regular workplace doesn't count unless your home is your main place of business."],
+    ["What records do I need?", "A mileage log with the date, destination, business purpose and miles of each trip, made at or near the time of the trip, plus receipts for parking and tolls."]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · 2026 IRS rates</span>
+    <h1>Mileage deduction calculator</h1>
+    <p class="lead">Enter your business miles for each half of 2026: see your deduction at the IRS standard mileage rate, plus the parking and tolls you can add on top.</p>
+    <ul class="trust"><li>IRS standard mileage rate</li><li>Rate change on July 1</li><li>Parking and tolls</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="mileage-form" onsubmit="return false">
+      <h2>Your business driving</h2>
+      <div class="fields">
+        <div class="field"><label for="m-h1">Business miles, Jan 1 to Jun 30</label>
+          <input type="text" inputmode="decimal" id="m-h1" name="h1" value="3,000" data-save></div>
+        <div class="field"><label for="m-h2">Business miles, Jul 1 to Dec 31</label>
+          <input type="text" inputmode="decimal" id="m-h2" name="h2" value="3,000" data-save></div>
+        <div class="field"><label for="m-r1">Rate Jan to Jun (cents)</label>
+          <input type="text" inputmode="decimal" id="m-r1" name="r1" data-save></div>
+        <div class="field"><label for="m-r2">Rate Jul to Dec (cents)</label>
+          <input type="text" inputmode="decimal" id="m-r2" name="r2" data-save></div>
+        <div class="field full"><label for="m-extra">Business parking and tolls</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="m-extra" name="extra" placeholder="0" data-save><span>$</span></div></div>
+      </div>
+    </form>
+    <div class="results">
+      <div class="result-hero">
+        <div class="label">Your 2026 mileage deduction</div>
+        <div class="big" id="m-total">–</div>
+        <div class="sub" id="m-sub">–</div>
+      </div>
+      <p class="formula" id="m-formula" style="margin-top: 16px;">–</p>
+      <p class="small muted">See what it saves you with the <a href="{{link:tax}}">self-employment tax calculator</a>: subtract the deduction from your profit.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>Standard mileage rate or actual expenses?</h2>
+  <p>With the standard rate you multiply your business miles by the IRS rate, which covers gas, maintenance, insurance and depreciation. With the actual expense method you deduct the business share of all your car costs. The standard rate is simpler and often better for fuel-efficient cars; actual expenses can be higher for expensive vehicles driven mostly for business.</p>
+  <p class="small muted">Estimate for information only. Report vehicle expenses on Schedule C (Part IV and line 9).</p>
+</section>

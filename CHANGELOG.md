@@ -1,5 +1,14 @@
 # Journal des modifications
 
+## 2026-10-20 — Indemnités kilométriques des 4 pays
+
+- France : barème kilométrique 2026 (3 à 7 CV, majoration de 20 % pour les voitures électriques, tableau pour toutes
+  les puissances).
+- États-Unis : *mileage deduction calculator* (taux de l'IRS par semestre, parking et péages).
+- Royaume-Uni : *mileage allowance calculator* (55p puis 25p par mille, moto 24p, vélo 20p, Mileage Allowance Relief).
+- Canada (anglais et français) : frais de véhicule déductibles selon la part des kilomètres d'affaires.
+- Règles ajoutées : barème kilométrique et majoration électrique (FR), taux de l'IRS 2026 (US), taux vélo (UK).
+
 ## 2026-10-20 — France : nouveaux outils et mise à jour réglementaire
 
 - Mention de franchise de TVA : « TVA non applicable, art. L. 223-3 du CIBS (ex-art. 293 B du CGI) » (recodification

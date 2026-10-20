@@ -595,6 +595,41 @@ const tests = {
     check((await page.textContent("#c-notice")).includes("retraite"), "statuts : avertissement SASU sans salaire");
     await page.fill("#c-share", "50");
   },
+  async "fr/bareme-kilometrique/"(page) {
+    // 5 CV, 8 000 km : 8 000 × 0,357 + 1 395 = 4 251 €
+    check((await page.textContent("#k-total")).replace(/\s/g, "") === "4251€", "barème kilométrique : 5 CV, 8 000 km → 4 251 €");
+    await page.check("#k-ev");
+    check((await page.textContent("#k-total")).replace(/\s/g, "") === "5101€", "barème kilométrique : véhicule électrique +20 % → 5 101 €");
+    await page.uncheck("#k-ev");
+    await page.fill("#k-km", "12 000");
+    check((await page.textContent("#k-total")).replace(/\s/g, "") === "5679€", "barème kilométrique : 12 000 km → 5 679 €");
+    await page.fill("#k-km", "8 000");
+  },
+  async "us/mileage-deduction-calculator/"(page) {
+    check((await page.textContent("#m-total")).trim() === "$4,455.00", "US mileage: 3,000 × 72.5¢ + 3,000 × 76¢ = $4,455.00");
+  },
+  async "uk/mileage-allowance-calculator/"(page) {
+    check((await page.textContent("#m-total")).trim() === "£6,000.00", "UK mileage: 10,000 × 55p + 2,000 × 25p = £6,000.00");
+    await page.fill("#m-paid", "45");
+    check((await page.textContent("#m-sub")).includes("£600.00"), "UK mileage: Mileage Allowance Relief £600.00 at 45p");
+    await page.fill("#m-paid", "");
+    await page.selectOption("#m-vehicle", "motorcycle");
+    check((await page.textContent("#m-total")).trim() === "£2,880.00", "UK mileage: motorcycle 12,000 × 24p = £2,880.00");
+    await page.selectOption("#m-vehicle", "car");
+  },
+  async "ca/vehicle-expenses-calculator/"(page) {
+    await page.fill("#v-fuel", "5000");
+    check((await page.textContent("#v-deduction")).trim() === "$3,000", "CA vehicle: $5,000 × 12,000 / 20,000 km = $3,000");
+    await page.fill("#v-total", "10,000");
+    check(await page.isVisible("#v-warning"), "CA vehicle: warning when business km exceed total km");
+    await page.fill("#v-total", "20,000");
+    await page.fill("#v-fuel", "");
+  },
+  async "ca/fr/calculateur-frais-vehicule/"(page) {
+    await page.fill("#v-fuel", "5000");
+    check((await page.textContent("#v-deduction")).replace(/\s/g, "") === "3000$", "véhicule CA-FR : 5 000 $ × 12 000 / 20 000 km = 3 000 $");
+    await page.fill("#v-fuel", "");
+  },
   async "fr/confidentialite/"() {},
   async "fr/mentions-legales/"() {},
 };

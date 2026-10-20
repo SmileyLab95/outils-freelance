@@ -1,23 +1,71 @@
 {
-  "brand": ["Outils", "Freelance"],
+  "brand": [
+    "Outils",
+    "Freelance"
+  ],
   "audience": "Pour les travailleurs autonomes au Canada et au Québec",
   "nav": [
-    {"label": "Impôts et taxes", "items": ["tax", "salestax"]},
-    {"label": "Facturer", "items": ["invoice"]},
-    {"label": "Tarifs", "items": ["rate"]},
-    {"label": "Se faire payer", "items": ["reminder", "latefee"]},
-    {"label": "Modèles", "items": ["templates"]}
+    {
+      "label": "Impôts et taxes",
+      "items": [
+        "tax",
+        "salestax",
+        "mileage"
+      ]
+    },
+    {
+      "label": "Facturer",
+      "items": [
+        "invoice"
+      ]
+    },
+    {
+      "label": "Tarifs",
+      "items": [
+        "rate"
+      ]
+    },
+    {
+      "label": "Se faire payer",
+      "items": [
+        "reminder",
+        "latefee"
+      ]
+    },
+    {
+      "label": "Modèles",
+      "items": [
+        "templates"
+      ]
+    }
   ],
-  "featured": ["tax", "salestax", "invoice"],
-  "footer_links": ["legal", "privacy"],
+  "featured": [
+    "tax",
+    "salestax",
+    "invoice"
+  ],
+  "footer_links": [
+    "legal",
+    "privacy"
+  ],
   "strings": {
-    "skip": "Aller au contenu", "menu": "Menu", "close": "Fermer", "home": "Accueil",
-    "country": "Pays", "country_label": "Choisir un autre pays", "all_tools": "Tous les outils",
-    "related": "Outils connexes", "faq": "Questions fréquentes", "sources": "Sources officielles",
-    "verified": "Chiffres vérifiés le", "site": "Le site",
+    "skip": "Aller au contenu",
+    "menu": "Menu",
+    "close": "Fermer",
+    "home": "Accueil",
+    "country": "Pays",
+    "country_label": "Choisir un autre pays",
+    "all_tools": "Tous les outils",
+    "related": "Outils connexes",
+    "faq": "Questions fréquentes",
+    "sources": "Sources officielles",
+    "verified": "Chiffres vérifiés le",
+    "site": "Le site",
     "tagline": "Des outils gratuits, sans inscription, pour les travailleurs autonomes et pigistes du Canada.",
     "privacy_note": "🔒 Tous les calculs se font dans votre navigateur : rien de ce que vous saisissez n'est envoyé à un serveur.",
     "disclaimer": "Information à titre indicatif seulement : ne remplace pas l'avis d'un fiscaliste, d'un comptable ou d'un avocat.",
-    "logo_label": "Outils Freelance, accueil", "tools_count": "{n} outils gratuits", "breadcrumb": "Fil d'Ariane"
+    "logo_label": "Outils Freelance, accueil",
+    "tools_count": "{n} outils gratuits",
+    "breadcrumb": "Fil d'Ariane"
   }
 }

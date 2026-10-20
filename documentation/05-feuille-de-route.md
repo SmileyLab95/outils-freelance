@@ -71,7 +71,7 @@ Les phases s'enchaînent dans cet ordre ; une phase n'est terminée que lorsque 
 ## Phase 6 — Outils universels et contenus
 
 - [ ] Calendrier fiscal par pays avec export .ics
-- [ ] Indemnités kilométriques des 4 pays
+- [x] Indemnités kilométriques des 4 pays
 - [ ] Épargne retraite des indépendants (PER, SEP-IRA / Solo 401(k), SIPP, REER)
 - [ ] Guides de fond : facturer un client étranger, recouvrement, assurance, compte pro
 

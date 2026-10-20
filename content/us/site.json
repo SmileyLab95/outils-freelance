@@ -1,15 +1,53 @@
 {
-  "brand": ["Freelance", "Tools"],
+  "brand": [
+    "Freelance",
+    "Tools"
+  ],
   "audience": "For freelancers and the self-employed in the United States",
   "nav": [
-    {"label": "Taxes", "items": ["tax", "estimated-tax"]},
-    {"label": "Invoicing", "items": ["invoice"]},
-    {"label": "Pricing", "items": ["rate"]},
-    {"label": "Getting paid", "items": ["reminder", "latefee"]},
-    {"label": "Templates", "items": ["templates"]}
+    {
+      "label": "Taxes",
+      "items": [
+        "tax",
+        "estimated-tax",
+        "mileage"
+      ]
+    },
+    {
+      "label": "Invoicing",
+      "items": [
+        "invoice"
+      ]
+    },
+    {
+      "label": "Pricing",
+      "items": [
+        "rate"
+      ]
+    },
+    {
+      "label": "Getting paid",
+      "items": [
+        "reminder",
+        "latefee"
+      ]
+    },
+    {
+      "label": "Templates",
+      "items": [
+        "templates"
+      ]
+    }
   ],
-  "featured": ["tax", "estimated-tax", "invoice"],
-  "footer_links": ["legal", "privacy"],
+  "featured": [
+    "tax",
+    "estimated-tax",
+    "invoice"
+  ],
+  "footer_links": [
+    "legal",
+    "privacy"
+  ],
   "strings": {
     "skip": "Skip to content",
     "menu": "Menu",

@@ -598,6 +598,110 @@
       "source_title": "Légifrance - Article L223-3 du Code des impositions sur les biens et services (ordonnance n° 2025-1247 du 17 décembre 2025)",
       "confidence": "medium",
       "note": "Article L223-3 du CIBS confirmé sur Légifrance (franchise en base, ordonnance n° 2025-1247). Entrée en vigueur au 1er septembre 2026 et tolérance de l'ancienne mention « art. 293 B du CGI » jusqu'au 31 décembre 2027 : rapportées par plusieurs sources secondaires citant Service-Public Entreprendre, à confirmer. Le site affiche « TVA non applicable, art. L. 223-3 du CIBS (ex-art. 293 B du CGI) » sur les factures pendant la transition."
+    },
+    "bareme_kilometrique_voitures": {
+      "value": {
+        "3": [
+          {
+            "to": 5000,
+            "rate": 0.529,
+            "fixed": 0
+          },
+          {
+            "to": 20000,
+            "rate": 0.316,
+            "fixed": 1065
+          },
+          {
+            "to": null,
+            "rate": 0.37,
+            "fixed": 0
+          }
+        ],
+        "4": [
+          {
+            "to": 5000,
+            "rate": 0.606,
+            "fixed": 0
+          },
+          {
+            "to": 20000,
+            "rate": 0.34,
+            "fixed": 1330
+          },
+          {
+            "to": null,
+            "rate": 0.407,
+            "fixed": 0
+          }
+        ],
+        "5": [
+          {
+            "to": 5000,
+            "rate": 0.636,
+            "fixed": 0
+          },
+          {
+            "to": 20000,
+            "rate": 0.357,
+            "fixed": 1395
+          },
+          {
+            "to": null,
+            "rate": 0.427,
+            "fixed": 0
+          }
+        ],
+        "6": [
+          {
+            "to": 5000,
+            "rate": 0.665,
+            "fixed": 0
+          },
+          {
+            "to": 20000,
+            "rate": 0.374,
+            "fixed": 1457
+          },
+          {
+            "to": null,
+            "rate": 0.447,
+            "fixed": 0
+          }
+        ],
+        "7": [
+          {
+            "to": 5000,
+            "rate": 0.697,
+            "fixed": 0
+          },
+          {
+            "to": 20000,
+            "rate": 0.394,
+            "fixed": 1515
+          },
+          {
+            "to": null,
+            "rate": 0.47,
+            "fixed": 0
+          }
+        ]
+      },
+      "unit": "object",
+      "label": "Barème kilométrique des voitures (frais réels) : par puissance fiscale, montant = d × taux + forfait selon la tranche de distance annuelle d",
+      "source": "https://www.legifiscal.fr/actualites-fiscales/4477-ir-revalorisation-2026-bareme-indemnites-kilometriques.html",
+      "source_title": "Barème kilométrique (arrêté du 27 mars 2023), non revalorisé pour l'imposition des revenus 2025",
+      "confidence": "high",
+      "note": "Barème de l'arrêté du 27 mars 2023, inchangé pour les revenus 2023, 2024 et 2025 (déclarés en 2026) selon Legifiscal, L'argus et Legisocial. Coefficients concordants (CFDT-UFETAM, CAPEB). Clé « 3 » = 3 CV et moins, « 7 » = 7 CV et plus. Le barème de l'année suivante est publié au printemps."
+    },
+    "bareme_kilometrique_majoration_electrique": {
+      "value": 0.2,
+      "unit": "rate",
+      "label": "Majoration du barème kilométrique pour les véhicules 100 % électriques",
+      "source": "https://www.largus.fr/actualite-automobile/indemnites-kilometriques-2026-le-bareme-auto-moto-et-scooter-pour-declarer-vos-impots-30046424.html",
+      "source_title": "L'argus - Indemnités kilométriques 2026",
+      "confidence": "high",
+      "note": "Le montant obtenu avec le barème est majoré de 20 % pour les véhicules électriques."
     }
   },
   "open_questions": [
