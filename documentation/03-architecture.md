@@ -156,6 +156,7 @@ Application d'une page, spécifiée dans [09-specification-espace.md](09-specifi
 | `engines/facturx-fr.js` | Données structurées de la facture électronique (CII, profil EN 16931 de Factur-X, règles françaises BR-FR) et contrôle des données manquantes. |
 | `engines/pdfa.js` | Générateur PDF/A-3 sans dépendance : police TrueType incorporée, XMP, OutputIntent sRGB, fichiers joints (/AF). |
 | `engines/facturx-pdf.js` | PDF de la facture électronique : mise en page du modèle commun (`invoiceFR.model`), XML joint. |
+| `engines/assurance-fr.js` | Guide de l'assurance : assurances obligatoires et conseillées selon l'activité, mention ou attestation à porter sur les devis et factures. Testé par `tests/unit/assurance-fr.test.mjs`. |
 | `engines/compte-fr.js` | Guide du compte bancaire : le compte dédié est-il obligatoire (règle des 10 000 € sur deux années civiles) ? Testé par `tests/unit/compte-fr.test.mjs`. |
 | `engines/espace-sync.js` | Synchronisation entre appareils (comptes en ligne, étape C2) : fusion à trois versions (base commune, local, distant) du schéma 2, règles de [12](12-specification-comptes.md) § 3.1. Pas encore chargé par l'interface (étape C4). Testé par `tests/unit/espace-sync.test.mjs` (scénarios écrits et simulation de plusieurs appareils). |
 | `engines/pdf-fonts.js`, `engines/pdf-srgb.js` | Police Inter (sous-ensemble, `scripts/polices_pdf.py`) et profil sRGB incorporés aux PDF. |

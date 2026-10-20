@@ -206,8 +206,9 @@ const tests = {
   },
   async "fr/mentions-obligatoires-facture/"(page) {
     const boxes = await page.$$("#checklist input");
+    check(boxes.length === 12 && (await page.textContent("#checklist")).includes("assurance professionnelle"), "checklist : 12 mentions, dont l'assurance professionnelle");
     for (const b of boxes) await b.check();
-    check((await page.textContent("#cl-msg")).includes("Bravo"), "checklist : toutes les mentions cochées");
+    check((await page.textContent("#cl-msg")).includes("Bravo") && (await page.textContent("#cl-score")).includes("12 sur 12"), "checklist : toutes les mentions cochées");
   },
   async "fr/modeles-emails-freelance/"(page) {
     await page.click('[data-copy="#tpl-1"]');
@@ -880,6 +881,38 @@ const tests = {
     await page.fill("#b-current", "");
     check(!(await page.isVisible("#b-error")), "compte bancaire : message d'erreur retiré une fois le montant corrigé");
   },
+  async "fr/assurance-independant/"(page) {
+    const res = async () => [await page.textContent("#a-answer"), await page.textContent("#a-list"), await page.textContent("#a-documents"), await page.textContent("#a-sub")];
+    let [a, list, docs, sub] = await res();
+    check(a === "Pas en règle générale" && list.includes("Conseillé") && docs.includes("si votre métier impose"), "assurance : prestations de services en micro-entreprise → conseillée, mention si le métier l'impose");
+    await page.selectOption("#a-activity", "construction");
+    [a, list, docs] = await res();
+    check(a.includes("décennale") && list.includes("Obligatoire : Assurance de responsabilité décennale") && list.includes("À vérifier : responsabilité civile") && docs.includes("attestation") && docs.includes("L243-2"), "assurance : travaux → décennale obligatoire, RC pro à vérifier, attestation jointe (L243-2)");
+    await page.selectOption("#a-activity", "artisan");
+    [a, list] = await res();
+    check(a.includes("À vérifier") && list.includes("chambre de métiers") && !(await page.isVisible("#a-artisan")), "assurance : artisanat hors bâtiment → à vérifier pour le métier, case « artisan » masquée");
+    await page.selectOption("#a-activity", "reglementee");
+    [a, list, docs] = await res();
+    check(a.includes("profession") && docs.includes("L132-1") && !docs.includes("si votre métier"), "assurance : profession réglementée en micro-entreprise → mention L132-1");
+    await page.uncheck("#a-micro");
+    [, , docs] = await res();
+    check(docs.includes("n'exige de mention"), "assurance : profession réglementée hors micro-entreprise → pas de mention au titre du Code de l'artisanat");
+    await page.check("#a-artisan");
+    [, , docs] = await res();
+    check(docs.includes("L132-1") && !docs.includes("n'exige"), "assurance : artisan immatriculé hors micro-entreprise → mention L132-1");
+    await page.reload({ waitUntil: "networkidle" });
+    [a, , docs] = await res();
+    check((await page.inputValue("#a-activity")) === "reglementee" && (await page.isChecked("#a-artisan")) && !(await page.isChecked("#a-micro")) && docs.includes("L132-1"), "assurance : choix retrouvés après rechargement");
+    await page.uncheck("#a-artisan");
+    await page.selectOption("#a-activity", "commerce");
+    await page.check("#a-vehicle");
+    [a, list, , sub] = await res();
+    check(a === "Pas en règle générale" && list.includes("Obligatoire : Responsabilité civile automobile") && sub.includes("véhicule"), "assurance : commerce avec véhicule → RC automobile obligatoire, annoncée dans la réponse");
+    // Retour aux valeurs par défaut (enregistrées dans le navigateur) avant les captures.
+    await page.selectOption("#a-activity", "services");
+    await page.uncheck("#a-vehicle");
+    await page.check("#a-micro");
+  },
   async "fr/espace/"(page) {
     // Parcours complet de l'Espace (critères A2 à A11 de documentation/09-specification-espace.md).
     const fs = await import("fs");
@@ -1179,7 +1212,7 @@ for (const [url, run] of Object.entries(tests)) {
       await page.screenshot({ path: path.join(shots, "menu-mobile.png") });
       await page.click(".menu-toggle");
     }
-    await page.evaluate(() => window.scrollTo(0, 0));
+    await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
     await page.screenshot({ path: path.join(shots, `${url.replace(/\/$/, "").replace(/\//g, "_") || "accueil"}-${label}.png`), fullPage: true });
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1);
     if (label === "bureau") {

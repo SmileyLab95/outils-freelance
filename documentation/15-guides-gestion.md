@@ -47,33 +47,51 @@ sourcée ; les règles et leurs sources sont dans `data/rules/fr.json`. Pas de c
 - Parcours navigateur : réponse par défaut et ses étapes, dépassements, statuts, rechargement (statut retrouvé),
   montant illisible ; pas d'erreur JavaScript ; rendu relu sur ordinateur, tablette et mobile.
 
-## 2. Assurance de l'indépendant (`/fr/assurance-independant/`, à construire)
+## 2. Assurance de l'indépendant (`/fr/assurance-independant/`, publié le 20/10/2026)
 
 **Question de l'utilisateur** : « Quelle assurance est obligatoire pour mon activité, et que dois-je indiquer sur mes
 devis et factures ? »
 
-### Règles vérifiées le 20/10/2026 (à reporter dans `data/rules/fr.json`)
+### Règles vérifiées le 20/10/2026 (`data/rules/fr.json`, clés `assurance_*`)
 
 | Règle | Source |
 |---|---|
-| Pas d'obligation générale d'assurance de responsabilité civile professionnelle : elle dépend de l'activité (professions de santé, du droit, de l'immobilier, du bâtiment, agents de voyage, diagnostiqueurs…). Conseillée dans les autres cas ; les clients la demandent souvent. | [economie.gouv.fr, « Professionnels : quelles sont les assurances obligatoires ? »](https://www.economie.gouv.fr/entreprises/gerer-ses-ressources-humaines-et-ses-salaries/professionnels-quelles-sont-les) ; fiches des activités réglementées de Bpifrance Création |
+| Pas d'obligation générale d'assurance de responsabilité civile professionnelle : elle dépend de l'activité (professions de santé, du droit, de l'immobilier, du bâtiment, agents de voyage, diagnostiqueurs…). Conseillée dans les autres cas ; les clients la demandent souvent. | [economie.gouv.fr, « Professionnels : quelles sont les assurances obligatoires ? »](https://www.economie.gouv.fr/entreprises/gerer-ses-ressources-humaines-et-ses-salaries/professionnels-quelles-sont-les-assurances-obligatoires) ; fiches des activités réglementées de Bpifrance Création |
 | Travaux de construction : assurance de responsabilité décennale obligatoire pour toute personne dont la responsabilité décennale peut être engagée, justifiée à l'ouverture de chaque chantier. | Code des assurances, art. L241-1 |
 | Constructeurs soumis à la décennale : attestation d'assurance (modèle fixé par arrêté du 05/01/2016) jointe aux devis et aux factures. | Code des assurances, art. L243-2 ; arrêté du 05/01/2016 |
 | Artisans (secteur des métiers) et micro-entrepreneurs dont l'activité exige une assurance : sur chaque devis et chaque facture, l'assurance professionnelle souscrite, les coordonnées de l'assureur ou du garant et la couverture géographique ; ne s'applique pas aux constructeurs soumis à la décennale (règle précédente). Depuis le 01/07/2023 (reprise de l'art. 22-2 de la loi n° 96-603). | Code de l'artisanat, art. L132-1 |
 
-### Vérificateur (proposition)
+### Vérificateur
 
+- Moteur pur `engines/assurance-fr.js`, fonction `check(input)`, testé par `tests/unit/assurance-fr.test.mjs`.
 - Entrées : nature de l'activité (travaux de construction ; artisanat hors construction ; profession réglementée ;
-  prestation de services ou conseil ; commerce) ; statut (micro-entreprise ou non) ; immatriculation au secteur des
-  métiers et de l'artisanat.
+  prestation de services ou conseil ; commerce) ; micro-entreprise ; immatriculation au secteur des métiers et de
+  l'artisanat (implicite pour l'artisanat hors bâtiment) ; véhicule utilisé pour l'activité.
+- Ce qui n'a pas d'article de loi relevé n'est pas présenté comme obligatoire : la responsabilité civile
+  professionnelle du bâtiment, citée par la page du ministère de l'Économie, est affichée « à vérifier » ; aucun
+  exemple de métier n'est donné sans source.
 - Réponses : assurances obligatoires (décennale, responsabilité civile selon la profession), mentions à porter sur les
   devis et factures (attestation jointe ou mention L132-1), assurances conseillées ; renvoi vers la fiche de
   l'activité réglementée et vers l'ordre professionnel, la liste des professions n'étant pas exhaustive.
-- À ajouter aussi : un point « Assurance professionnelle » dans la liste de vérification des
-  [mentions obligatoires](../content/fr/mentions-obligatoires-facture.html), qui ne l'aborde pas encore.
+- Liste de vérification des [mentions obligatoires](../content/fr/mentions-obligatoires-facture.html) : point
+  « Assurance professionnelle » ajouté (12 points) ; ses sources sont reliées aux règles.
+- Un test unitaire vérifie que le guide et la liste citent les mêmes articles et la même date que les règles.
 
 ### Questions ouvertes
 
 - Sanctions du défaut de mention (art. L132-1) : non relevées.
 - Liste des professions soumises à une responsabilité civile professionnelle obligatoire : à constituer à partir des
   fiches officielles, sans prétendre à l'exhaustivité.
+
+## 3. Typographie française automatique (à construire)
+
+Constat (captures du 20/10/2026) : sur mobile, des retours à la ligne tombent entre « 10 » et « 000 € », après « « »
+ou avant « ; ». Proposition, à l'étape de génération (`build.py`), pour les sections en français (`fr`, `ca-fr`) :
+
+- espace fine insécable (U+202F) avant « ; ! ? » et à l'intérieur des guillemets « » ; espace insécable (U+00A0)
+  avant « : », entre un nombre et son unité (« € », « % », « jours »…), dans les nombres (« 10 000 ») et après
+  « art. » et « n° » ;
+- seulement dans le texte visible : jamais dans les balises `script`, `style`, `code`, `pre`, ni dans les attributs,
+  les adresses web et les heures ;
+- fonction pure testée (cas positifs et cas à ne pas toucher), puis génération complète et parcours navigateur ; les
+  tests qui comparent du texte normalisent les espaces.

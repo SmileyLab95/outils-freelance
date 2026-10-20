@@ -50,8 +50,11 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 - **Assurance (20/10/2026)** : règles vérifiées et guide spécifié ([15](15-guides-gestion.md) § 2) ; la mention de
   l'assurance sur les devis et factures relève désormais de l'article L132-1 du Code de l'artisanat (et, pour la
   décennale, d'une attestation jointe) : liste des mentions corrigée.
-- **Prochaines actions de Claude** : guide « Assurance de l'indépendant » et point « assurance » dans la liste des
-  mentions obligatoires ; typographie française automatique (espaces
+- **Guide « Assurance de l'indépendant » publié (20/10/2026)** : vérificateur selon l'activité (décennale
+  obligatoire pour la construction, responsabilité civile selon la profession, véhicule), mention de l'assurance
+  (Code de l'artisanat, art. L132-1) ou attestation décennale (Code des assurances, art. L243-2) sur les devis et
+  factures ; point « assurance » ajouté à la liste des mentions obligatoires (12 points).
+- **Prochaines actions de Claude** : typographie française automatique (espaces
   insécables) ; guide du recouvrement dès que les textes sont lisibles ; veille réglementaire de décembre (dont la version de
   Factur-X et l'annexe A de XP Z12-012 pour le BT-32 en franchise). Les étapes C3 (serveur) et C4 (interface des
   comptes) attendent le choix de l'hébergeur.
@@ -114,7 +117,8 @@ Objectif : un site mesuré, sous sa propre marque, qui commence à rapporter, et
       étude et plan prêts ([14](14-etude-recouvrement.md)) ; deux textes de 2026 à lire en entier avant publication
 - [x] Guide « Compte bancaire professionnel » avec vérificateur (règle des 10 000 € sur deux ans, mention « EI »,
       droit au compte) : spécification [15](15-guides-gestion.md) § 1
-- [ ] Guide « Assurance de l'indépendant » (spécification [15](15-guides-gestion.md) § 2, règles à vérifier)
+- [x] Guide « Assurance de l'indépendant » avec vérificateur (décennale, responsabilité civile selon l'activité,
+      mention ou attestation sur les devis et factures) : spécification [15](15-guides-gestion.md) § 2
 - [ ] Typographie française automatique dans le générateur : espaces insécables avant « ; : ! ? », dans les montants
       (« 10 000 € ») et les références d'articles, pour éviter les coupures de ligne sur mobile
 

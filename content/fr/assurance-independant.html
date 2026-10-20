@@ -1,0 +1,91 @@
+<!--{
+  "id": "insurance",
+  "slug": "assurance-independant/",
+  "title": "Assurance de l'indépendant : laquelle est obligatoire ?",
+  "description": "RC pro, décennale, véhicule : quelles assurances sont obligatoires pour votre activité, et que mettre sur vos devis et factures ? Vérificateur gratuit.",
+  "menu": "Assurance de l'indépendant",
+  "icon": "🛡️",
+  "blurb": "RC pro, décennale, véhicule : vos obligations et vos mentions en 3 questions.",
+  "app": "Vérificateur d'assurances obligatoires",
+  "scripts": ["engines/assurance-fr.js", "tools/fr-assurance.js"],
+  "rules": "fr",
+  "sources": ["assurance_rc_pro", "assurance_decennale", "assurance_attestation_decennale", "assurance_mention_devis_factures", "assurance_rc_auto"],
+  "priority": 0.8,
+  "faq": [
+    ["L'assurance RC pro est-elle obligatoire pour un auto-entrepreneur ?", "Pas en règle générale : elle dépend de l'activité. Elle est obligatoire notamment pour les professions de santé, du droit et de l'immobilier, ainsi que pour d'autres activités encadrées par un texte propre (agents de voyage, diagnostiqueurs immobiliers…) ; le ministère de l'Économie la cite aussi pour le bâtiment. Dans les autres cas, elle reste fortement conseillée, et beaucoup de clients la demandent avant de signer."],
+    ["Qui doit souscrire une assurance décennale ?", "Toute personne dont la responsabilité décennale peut être engagée pour des travaux de construction : entreprises du bâtiment, artisans, micro-entrepreneurs compris. Elle doit être justifiée à l'ouverture de chaque chantier (article L241-1 du Code des assurances). Les simples travaux d'entretien en sont dispensés."],
+    ["Que faut-il indiquer sur un devis ou une facture ?", "Si une assurance professionnelle est obligatoire pour votre activité, l'artisan et le micro-entrepreneur indiquent l'assurance souscrite, les coordonnées de l'assureur et la couverture géographique du contrat (article L132-1 du Code de l'artisanat). Pour les travaux soumis à la décennale, l'attestation d'assurance est jointe au devis et à la facture (article L243-2 du Code des assurances)."],
+    ["J'utilise ma voiture pour mon activité : que faut-il vérifier ?", "Tout véhicule à moteur doit être assuré au moins en responsabilité civile. Signalez à votre assureur l'usage professionnel du véhicule : un contrat prévu pour un usage privé peut ne pas couvrir vos déplacements professionnels."],
+    ["Mon métier exige-t-il une assurance ?", "Consultez la fiche de votre activité réglementée (Bpifrance Création, guichet des formalités des entreprises) et, pour une profession organisée en ordre, le site de cet ordre. La liste de ce guide n'est pas exhaustive."]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Gratuit · règles vérifiées en 2026</span>
+    <h1>Assurance de l'indépendant : laquelle est obligatoire ?</h1>
+    <p class="lead">Indiquez votre activité : vous saurez quelles assurances sont obligatoires, lesquelles sont conseillées, et ce qu'il faut porter sur vos devis et factures.</p>
+    <ul class="trust"><li>RC pro et décennale</li><li>Mentions des devis et factures</li><li>Textes officiels cités</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="ins-form" onsubmit="return false">
+      <h2>Votre activité</h2>
+      <div class="fields">
+        <div class="field full"><label for="a-activity">Vous exercez</label>
+          <select id="a-activity" name="activity" data-save>
+            <option value="services">Services ou conseil</option>
+            <option value="construction">Travaux du bâtiment</option>
+            <option value="artisan">Artisanat hors bâtiment</option>
+            <option value="reglementee">Profession réglementée</option>
+            <option value="commerce">Commerce, vente de marchandises</option>
+          </select>
+          <span class="hint">Services : informatique, création, formation… Bâtiment : construction, rénovation. Artisanat : réparation, alimentation, coiffure… Profession réglementée : santé, droit, immobilier, agence de voyage…</span></div>
+        <label class="check full"><input type="checkbox" id="a-micro" name="micro" checked data-save><span>Je suis micro-entrepreneur (auto-entrepreneur)</span></label>
+        <label class="check full" id="a-artisan-field"><input type="checkbox" id="a-artisan" name="artisan" data-save><span>Je suis immatriculé comme artisan (secteur des métiers et de l'artisanat)</span></label>
+        <label class="check full"><input type="checkbox" id="a-vehicle" name="vehicle" data-save><span>J'utilise un véhicule pour mon activité</span></label>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="result-hero" id="a-hero">
+        <div class="label">Assurance professionnelle obligatoire</div>
+        <div class="big" id="a-answer" style="font-size: clamp(1.7rem, 4vw, 2.3rem);">–</div>
+        <div class="sub" id="a-sub">–</div>
+      </div>
+      <ul class="checklist card" id="a-list" style="padding: 10px 18px; margin-top: 16px;"></ul>
+      <p class="notice" id="a-documents" style="margin-top: 16px;"></p>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>Les assurances obligatoires selon l'activité</h2>
+  <table>
+    <thead><tr><th>Assurance</th><th>Pour qui</th></tr></thead>
+    <tbody>
+      <tr><td>Responsabilité civile professionnelle</td><td>Obligatoire pour certaines activités seulement : professions de santé (responsabilité civile médicale), du droit, de l'immobilier, agents de voyage, diagnostiqueurs… ; citée aussi par le ministère de l'Économie pour le bâtiment. Conseillée dans les autres cas.<br><span class="small muted">economie.gouv.fr et textes propres à chaque profession</span></td></tr>
+      <tr><td>Responsabilité décennale</td><td>Toute personne dont la responsabilité décennale peut être engagée pour des travaux de construction, justifiée à l'ouverture de chaque chantier. Les simples travaux d'entretien en sont dispensés.<br><span class="small muted">Code des assurances, <span class="nowrap">art. L241-1</span></span></td></tr>
+      <tr><td>Responsabilité civile automobile</td><td>Tout véhicule à moteur, y compris quand il sert à l'activité.<br><span class="small muted">economie.gouv.fr</span></td></tr>
+    </tbody>
+  </table>
+
+  <h2>Ce qu'il faut indiquer sur vos devis et factures</h2>
+  <ul>
+    <li><strong>Artisans et micro-entrepreneurs</strong> dont l'activité exige une assurance : sur chaque devis et chaque facture, l'assurance professionnelle souscrite, les coordonnées de l'assureur ou du garant et la couverture géographique du contrat (article L132-1 du Code de l'artisanat, depuis le 1er juillet 2023).</li>
+    <li><strong>Travaux soumis à la décennale</strong> : l'attestation d'assurance, établie selon le modèle officiel, est jointe au devis et à la facture (article L243-2 du Code des assurances).</li>
+  </ul>
+  <p>Le <a href="{{link:invoice}}">générateur de facture</a> et l'<a href="{{link:espace}}">Espace entrepreneur</a> permettent d'ajouter cette mention dans les notes du document ; vérifiez ensuite l'ensemble avec la <a href="{{link:invoice-rules}}">liste des mentions obligatoires</a>.</p>
+
+  <h2>Les assurances conseillées</h2>
+  <ul>
+    <li><strong>Responsabilité civile professionnelle</strong>, même quand elle n'est pas obligatoire : une erreur de conseil, un retard ou un dommage chez un client peut entraîner une demande d'indemnisation importante.</li>
+    <li><strong>Assurance des locaux et du matériel</strong> (multirisque professionnelle) si vous travaillez dans un local ou avec du matériel coûteux.</li>
+    <li><strong>Protection juridique</strong>, pour être accompagné en cas de litige avec un client ou un fournisseur.</li>
+    <li><strong>Prévoyance</strong> : vérifiez ce que couvre votre protection sociale en cas d'arrêt de travail, puis comparez les contrats complémentaires.</li>
+  </ul>
+  <p>Comparez au moins deux devis d'assurance et lisez les exclusions et les plafonds de garantie avant de signer.</p>
+  <p class="small muted">Informations générales, à jour des textes vérifiés le 20/10/2026 ; elles ne remplacent pas l'avis d'un assureur, de votre ordre professionnel ou de votre chambre consulaire pour votre situation. La liste des professions citées n'est pas exhaustive.</p>
+</section>

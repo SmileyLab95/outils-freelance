@@ -871,6 +871,52 @@
       "source_title": "Interdit bancaire et droit au compte professionnel - Banque de France",
       "confidence": "high",
       "note": "Sans réponse de la banque sous 15 jours, le silence vaut refus ; la banque désignée ouvre le compte dans les 3 jours suivant la remise d'un dossier complet ; services de base sans chéquier ni découvert ; procédure gratuite. Relevé le 20/10/2026 (extraits de la page officielle)."
+    },
+    "assurance_rc_pro": {
+      "value": {
+        "obligation_generale": false
+      },
+      "label": "Pas d'obligation générale d'assurance de responsabilité civile professionnelle : elle dépend de l'activité (professions de santé, du droit, de l'immobilier, du bâtiment, agents de voyage…)",
+      "source": "https://www.economie.gouv.fr/entreprises/gerer-ses-ressources-humaines-et-ses-salaries/professionnels-quelles-sont-les-assurances-obligatoires",
+      "source_title": "Professionnels : quelles sont les assurances obligatoires ? - economie.gouv.fr",
+      "confidence": "medium",
+      "note": "Relevé le 20/10/2026 par extraits de la page officielle : professionnels de santé (RC médicale), du droit (RC professionnelle), du bâtiment (RC professionnelle et décennale) ; autres obligations fixées par les textes propres à chaque activité (agents immobiliers, agents de voyage, diagnostiqueurs…). Liste non exhaustive."
+    },
+    "assurance_decennale": {
+      "value": {
+        "justification": "ouverture de chaque chantier"
+      },
+      "label": "Travaux de construction : assurance de responsabilité décennale obligatoire pour toute personne dont la responsabilité décennale peut être engagée, justifiée à l'ouverture de chaque chantier",
+      "source": "https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000006073984/LEGISCTA000006142820/",
+      "source_title": "Code des assurances, art. L241-1 et suivants (assurance des travaux de construction) - Légifrance",
+      "confidence": "high",
+      "note": "Selon la DGCCRF, les simples travaux d'entretien sont dispensés de l'obligation ; la réhabilitation n'est concernée que si elle peut compromettre la solidité de l'ouvrage ou le rendre impropre à sa destination (economie.gouv.fr, « Malfaçon : mettez en œuvre les garanties »)."
+    },
+    "assurance_attestation_decennale": {
+      "value": true,
+      "label": "Constructeurs soumis à la décennale : attestation d'assurance (modèle fixé par arrêté du 05/01/2016) jointe aux devis et aux factures",
+      "source": "https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000031010272",
+      "source_title": "Code des assurances, art. L243-2 - Légifrance",
+      "confidence": "high",
+      "note": "Modèle d'attestation : arrêté du 5 janvier 2016 (art. A243-3 du Code des assurances)."
+    },
+    "assurance_mention_devis_factures": {
+      "value": {
+        "depuis": "2023-07-01"
+      },
+      "label": "Artisans et micro-entrepreneurs dont l'activité exige une assurance : sur chaque devis et chaque facture, l'assurance souscrite, les coordonnées de l'assureur ou du garant et la couverture géographique (sauf constructeurs soumis à la décennale)",
+      "source": "https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000047362294",
+      "source_title": "Code de l'artisanat, art. L132-1 - Légifrance",
+      "confidence": "high",
+      "note": "En vigueur depuis le 01/07/2023 ; reprend l'art. 22-2 de la loi n° 96-603 du 05/07/1996. Ne s'applique pas aux personnes visées aux art. L241-1 et L241-2 du Code des assurances (constructeurs), qui joignent une attestation (art. L243-2). Sanction du défaut de mention non relevée."
+    },
+    "assurance_rc_auto": {
+      "value": true,
+      "label": "Tout véhicule à moteur doit être assuré, au minimum en responsabilité civile",
+      "source": "https://www.economie.gouv.fr/facileco/quelles-sont-les-assurances-indispensables",
+      "source_title": "Quelles sont les assurances indispensables ? - economie.gouv.fr",
+      "confidence": "high",
+      "note": "La responsabilité civile automobile est la seule assurance automobile obligatoire."
     }
   },
   "open_questions": [
@@ -887,6 +933,7 @@
     "Facturation électronique : nombre exact de plateformes agréées sur la liste impots.gouv.fr ; URL exacte de la page de la liste ; montants des amendes après les LF 2025 et 2026 (amende pour défaut de plateforme, hausse éventuelle des 15 EUR par facture) ; date d'effet des 4 nouvelles mentions (01/09/2026 pour toutes les entreprises, ou date d'émission de chaque entreprise ?).",
     "Smic 2026 : confirmer 12,02 EUR / h au 01/01/2026 et l'absence de revalorisation en cours d'année.",
     "Taux de versement libératoire de 1 % (vente) et 1,7 % (BIC services) : à relire sur une page officielle 2026 (seul le 2,2 % a été vu).",
-    "Compte dédié du micro-entrepreneur (CSS, art. L613-10) : le texte ne fixe ni délai d'ouverture après le second dépassement, ni prorata la première année, ni sortie de l'obligation quand le chiffre d'affaires repasse sous 10 000 € ; le guide le signale sans interpréter."
+    "Compte dédié du micro-entrepreneur (CSS, art. L613-10) : le texte ne fixe ni délai d'ouverture après le second dépassement, ni prorata la première année, ni sortie de l'obligation quand le chiffre d'affaires repasse sous 10 000 € ; le guide le signale sans interpréter.",
+    "Assurance : la liste des professions soumises à une responsabilité civile professionnelle obligatoire n'est pas exhaustive dans le guide (renvoi vers les textes et ordres de chaque profession) ; sanction du défaut de mention de l'assurance (Code de l'artisanat, art. L132-1) non relevée."
   ]
 }

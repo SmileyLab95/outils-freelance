@@ -1,5 +1,18 @@
 # Journal des modifications
 
+## 2026-10-20 — Guide « Assurance de l'indépendant » (France)
+
+- Nouvelle page `/fr/assurance-independant/` (menu « Statut et revenus ») : vérificateur des assurances selon
+  l'activité (travaux du bâtiment, artisanat, profession réglementée, services, commerce), la micro-entreprise,
+  l'immatriculation au secteur des métiers et l'usage d'un véhicule ; décennale obligatoire pour la construction,
+  responsabilité civile selon la profession (« à vérifier » pour le bâtiment, faute d'article de loi relevé),
+  responsabilité civile automobile ; ce qu'il faut porter sur les devis et factures (mention de l'art. L132-1 du Code
+  de l'artisanat ou attestation décennale de l'art. L243-2 du Code des assurances).
+- Mentions obligatoires : point « Assurance professionnelle » ajouté à la liste (12 points), sources de la page
+  reliées aux règles.
+- Règles sourcées `assurance_*` dans `data/rules/fr.json` ; moteur `engines/assurance-fr.js` et 7 tests unitaires
+  (dont la cohérence entre les pages et les règles) ; parcours navigateur ; revue de code (10 points traités).
+
 ## 2026-10-20 — Guide « Compte bancaire professionnel » (France)
 
 - Nouvelle page `/fr/compte-bancaire-professionnel/` (menu « Statut et revenus ») : vérificateur du compte dédié

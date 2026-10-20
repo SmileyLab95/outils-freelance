@@ -7,6 +7,8 @@
   "icon": "✅",
   "blurb": "La checklist pour vérifier qu'une facture est conforme.",
   "scripts": ["tools/checklist.js"],
+  "rules": "fr",
+  "sources": ["mentions_obligatoires_facture", "penalites_retard_regle", "indemnite_forfaitaire_recouvrement", "mention_franchise_tva", "assurance_mention_devis_factures", "assurance_attestation_decennale"],
   "priority": 0.8,
   "faq": [
     ["Quelles sont les mentions obligatoires sur une facture d'auto-entrepreneur ?", "Les mêmes que pour toute facture entre professionnels, avec deux spécificités : la mention « EI » ou « Entrepreneur individuel » à côté de votre nom, et la mention « TVA non applicable, art. 293 B du CGI » (à partir du 1er janvier 2027 : « art. L. 233-3 du CIBS », l'ancienne mention restant admise pendant une période de transition) si vous bénéficiez de la franchise en base de TVA."],
@@ -38,6 +40,7 @@
         <li><label><input type="checkbox"><div><strong>La date d'échéance du paiement</strong><span>Entre professionnels, au plus 60 jours après la date de facture (ou 45 jours fin de mois si c'est convenu).</span></div></label></li>
         <li><label><input type="checkbox"><div><strong>Le taux des pénalités de retard</strong><span>Entre professionnels, au moins trois fois le taux d'intérêt légal.</span></div></label></li>
         <li><label><input type="checkbox"><div><strong>L'indemnité forfaitaire de 40 €</strong><span>« Indemnité forfaitaire pour frais de recouvrement en cas de retard de paiement : 40 € » (entre professionnels).</span></div></label></li>
+        <li><label><input type="checkbox"><div><strong>L'assurance professionnelle, si votre activité l'exige</strong><span>Artisan ou micro-entrepreneur : l'assurance souscrite, les coordonnées de l'assureur et la couverture géographique, sur chaque devis et facture. Travaux soumis à la garantie décennale : l'attestation d'assurance jointe au devis et à la facture. À cocher aussi si votre activité n'exige aucune assurance ; en cas de doute, voir « Votre activité exige une assurance » plus bas.</span></div></label></li>
         <li><label><input type="checkbox"><div><strong>Les conditions d'escompte</strong><span>Ou la mention « Pas d'escompte pour paiement anticipé ».</span></div></label></li>
       </ul>
     </div>
@@ -45,7 +48,7 @@
       <div class="card">
         <div class="label" style="margin-bottom: 8px;">Votre facture</div>
         <div class="progress"><div id="cl-bar"></div></div>
-        <p style="margin: 12px 0 0; font-weight: 700;" id="cl-score">0 sur 11 mentions</p>
+        <p style="margin: 12px 0 0; font-weight: 700;" id="cl-score">0 sur 12 mentions</p>
         <p class="notice warn" id="cl-msg" style="margin: 12px 0 0;">Cochez les mentions présentes sur votre facture.</p>
       </div>
       <a class="btn btn-primary btn-block" href="{{link:invoice}}" style="margin-top: 14px;">Créer une facture conforme gratuitement</a>
@@ -65,7 +68,9 @@
   <p>Vous ne facturez pas la TVA : vos montants sont hors taxes et doivent porter la mention « TVA non applicable, art. 293 B du CGI » (à partir du 1er janvier 2027 : « art. L. 233-3 du CIBS », l'ancienne mention restant admise pendant une période de transition). Vous n'indiquez ni taux ni montant de TVA.</p>
   <h3>Votre client est un particulier</h3>
   <p>Les pénalités de retard et l'indemnité de 40 € ne concernent que les relations entre professionnels. Pour un particulier, une facture est obligatoire dans certains cas (par exemple au-delà de 25 € pour certaines prestations, ou à sa demande).</p>
+  <h3>Votre activité exige une assurance</h3>
+  <p>Si une assurance professionnelle est obligatoire pour votre métier, l'artisan et le micro-entrepreneur l'indiquent sur chaque devis et chaque facture, avec les coordonnées de l'assureur et la couverture géographique du contrat (article L132-1 du Code de l'artisanat). Pour les travaux soumis à la garantie décennale, c'est l'attestation d'assurance qui est jointe au devis et à la facture (article L243-2 du Code des assurances). Le <a href="{{link:insurance}}">guide de l'assurance de l'indépendant</a> vous aide à savoir si vous êtes concerné.</p>
   <h3>Vous avez fait une erreur</h3>
   <p>Ne modifiez jamais une facture envoyée : émettez une facture d'avoir qui l'annule, puis une nouvelle facture corrigée, avec un nouveau numéro.</p>
-  <p class="small muted">Sources : article 242 nonies A de l'annexe II du CGI, articles L441-9 et L441-10 du Code de commerce, service-public.fr. Informations données à titre indicatif.</p>
+  <p class="small muted">Informations données à titre indicatif.</p>
 </section>
