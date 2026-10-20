@@ -24,9 +24,13 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   corrigée dans le moteur commun. 73 tests unitaires, parcours navigateur étendu, revue de code (10 points corrigés).
 - **Factur-X (20/10/2026)** : export publié dans l'Espace ([étude](10-etude-factur-x.md)) : PDF/A-3 avec données
   EN 16931 et règles françaises, validé par les fichiers officiels et par Mustang (veraPDF) ; générateur PDF maison (D14).
-- **Prochaines actions de Claude** : étude concurrentielle et spécification des comptes en ligne (E2) ; finitions
-  SEO (titres et descriptions trop longs) ; guides (recouvrement judiciaire, assurance, compte bancaire) ; veille
-  réglementaire de décembre (dont la version de Factur-X et l'annexe A de XP Z12-012 pour le BT-32 en franchise).
+- **Fait aussi le 20/10/2026** : finitions SEO (72 pages) ; [étude concurrentielle](11-etude-concurrentielle.md),
+  première version : les grands acteurs français offrent déjà la facturation gratuite ; nos atouts sont l'absence de
+  compte, les quatre pays et la rigueur des règles.
+- **Prochaines actions de Claude** : spécification des comptes en ligne (E2) et grille d'offres « gratuit / Pro » ;
+  vérifier les prix des concurrents sur leurs pages officielles ; guides (recouvrement judiciaire, assurance, compte
+  bancaire) ; veille réglementaire de décembre (dont la version de Factur-X et l'annexe A de XP Z12-012 pour le BT-32
+  en franchise).
 - **En attente d'Ismail** (pas urgent) : structure juridique avec un comptable ; plus tard, compte d'hébergement pour
   les comptes en ligne (E2) ; à la fin, marque et domaine, Gumroad.
 
@@ -76,8 +80,8 @@ Objectif : un site mesuré, sous sa propre marque, qui commence à rapporter, et
 
 ### 1.4 Qualité et veille
 
-- [ ] Finitions SEO : raccourcir les titres de plus de 60 caractères et les descriptions de plus de 160 caractères
-      (environ 70 pages, audit du 20/10/2026)
+- [x] Finitions SEO : titres de 60 caractères au plus et descriptions de 160 au plus sur les 83 pages (72 pages
+      revues le 20/10/2026, mots-clés en tête)
 - [ ] Veille de décembre 2026 : barèmes 2027 des 4 pays, PASS 2027, taux d'intérêt légal du 1er semestre 2027,
       numéro définitif de la mention de franchise (L. 233-3 du CIBS), calendriers 2027-2028 (`scripts/calendriers.py`)
 - [ ] Guide du recouvrement judiciaire (injonction de payer, procédure simplifiée) une fois les règles 2026 vérifiées
@@ -85,7 +89,8 @@ Objectif : un site mesuré, sous sa propre marque, qui commence à rapporter, et
 
 ### 1.5 Préparer la plateforme
 
-- [ ] Étude concurrentielle par pays (fonctions, prix, avis) → grille d'offres et de prix
+- [x] Étude concurrentielle par pays, première version ([11](11-etude-concurrentielle.md)) : prix à vérifier sur les pages officielles
+- [ ] Grille d'offres et de prix à partir de l'étude (fonctions gratuites et « Pro »)
 - [ ] Liste d'attente « Espace entrepreneur » sur le site, avec un court questionnaire sur les besoins
 - [x] Spécification du MVP : parcours, écrans, modèle de données, critères d'acceptation (`documentation/09-specification-espace.md`)
 - [x] Espace entrepreneur v1 en version locale (France) : voir les fonctions cochées « version locale » en E2.2

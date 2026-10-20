@@ -1,5 +1,13 @@
 # Journal des modifications
 
+## 2026-10-20 — Finitions SEO et étude concurrentielle
+
+- Titres (60 caractères au plus) et descriptions (160 au plus) revus sur 72 pages des cinq sections : mots-clés en
+  tête, sans promesse au-delà du contenu ; audit : 83 pages conformes.
+- Étude concurrentielle, première version (`documentation/11-etude-concurrentielle.md`) : offres et ordres de prix en
+  France (Indy, Abby, Tiime, Henrri, Freebe) et dans les pays anglophones (Wave, FreshBooks, Bonsai, QuickBooks,
+  FreeAgent), positionnement et pistes de revenus ; prix à vérifier sur les pages officielles.
+
 ## 2026-10-20 — Espace : facture électronique Factur-X
 
 - Sur chaque facture ou avoir émis à un client professionnel : fichier **Factur-X** (PDF/A-3 lisible avec ses données
