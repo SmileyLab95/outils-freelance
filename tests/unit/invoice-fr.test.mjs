@@ -51,11 +51,21 @@ test("mentions d'une facture : virement, escompte, pénalités et 40 € pour un
   const doc = base();
   const m = inv.mentions(doc, inv.compute(doc), R, fmt);
   assert.equal(m[0], "TVA non applicable, art. 293 B du CGI.");
-  assert.match(m[1], /^Paiement par virement avant le 15\/12\/2026 · IBAN FR76 1234 · Référence : F2026-001\.$/);
+  assert.match(m[1], /^Paiement par virement au plus tard le 15\/12\/2026 · IBAN FR76 1234 · Référence : F2026-001\.$/);
   assert.equal(m[2], "Pas d'escompte pour paiement anticipé.");
   assert.match(m[3], /indemnité forfaitaire pour frais de recouvrement de 40 €/);
   doc.client.pro = false;
   assert.equal(inv.mentions(doc, inv.compute(doc), R, fmt).length, 3, "pas de pénalités pour un particulier");
+});
+
+test("mention de paiement : échéance datée, ou à réception si le délai est nul", () => {
+  const doc = base();
+  doc.me.iban = "";
+  assert.match(inv.mentions(doc, inv.compute(doc), R, fmt)[1], /^Paiement au plus tard le 15\/12\/2026\.$/);
+  doc.terms = 0;
+  assert.equal(inv.mentions(doc, inv.compute(doc), R, fmt)[1], "Paiement à réception.");
+  doc.me.iban = "FR76 1234";
+  assert.match(inv.mentions(doc, inv.compute(doc), R, fmt)[1], /^Paiement par virement à réception · IBAN FR76 1234/);
 });
 
 test("mentions : autoliquidation, hors UE, option débits, devis, avoir", () => {

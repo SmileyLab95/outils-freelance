@@ -30,7 +30,7 @@ test("A2 : numérotation par série et par année", () => {
   assert.equal(issueAll(docs, draft({ date: "2026-10-06" })).number, "F2026-002");
   assert.equal(issueAll(docs, draft({ type: "devis", date: "2026-10-06" })).number, "D2026-001");
   assert.equal(issueAll(docs, draft({ date: "2027-01-04" })).number, "F2027-001");
-  assert.equal(E.nextNumber(docs, "facture", "2026", { facture: "FA-" }), "FA-2026-001", "préfixe personnalisé");
+  assert.equal(E.nextNumber(docs, "facture", "2028", { facture: "FA-" }), "FA-2028-001", "préfixe personnalisé");
 });
 
 test("A3/A4 : document émis figé ; date antérieure au dernier document refusée", () => {

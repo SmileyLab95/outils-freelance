@@ -19,6 +19,8 @@
   "use strict";
 
   var NATURES = { services: "Prestation de services", biens: "Livraison de biens", mixte: "Biens et services" };
+  /** Mention manuscrite demandée au client pour accepter un devis (reprise dans l'email d'envoi de l'Espace). */
+  var QUOTE_ACCEPTANCE = "Devis reçu avant l'exécution des travaux, bon pour accord";
   var TITLES = { facture: "FACTURE", devis: "DEVIS", avoir: "AVOIR" };
 
   function esc(text) {
@@ -81,11 +83,13 @@
     else if (v.debits) list.push("Option pour le paiement de la taxe d'après les débits.");
     var me = doc.me || {};
     if (doc.type === "facture") {
+      // Date à laquelle le règlement doit intervenir (art. L441-9 du Code de commerce), aussi affichée en « Échéance ».
+      var when = due > date ? "au plus tard le " + fmt.date(due) : "à réception";
       if (str(me.iban)) {
-        list.push("Paiement par virement avant le " + fmt.date(due) + " · IBAN " + str(me.iban) +
+        list.push("Paiement par virement " + when + " · IBAN " + str(me.iban) +
           (str(me.bic) ? " · BIC " + str(me.bic) : "") + (str(doc.number) ? " · Référence : " + str(doc.number) : "") + ".");
       } else {
-        list.push("Paiement à réception, au plus tard le " + fmt.date(due) + ".");
+        list.push("Paiement " + when + ".");
       }
       list.push("Pas d'escompte pour paiement anticipé.");
       if (doc.client && doc.client.pro) {
@@ -176,11 +180,11 @@
     html += '<div class="p-mentions">' + mentions(doc, t, rules, fmt).map(function (m) { return "<p>" + esc(m) + "</p>"; }).join("") + "</div>";
     if (type === "devis") {
       html += '<div class="p-sign"><div class="p-label">Bon pour accord</div>' +
-        "<p>Date et signature du client, précédées de la mention « Devis reçu avant l'exécution des travaux, bon pour accord ».</p><div class=\"p-sign-box\"></div></div>";
+        "<p>Date et signature du client, précédées de la mention « " + QUOTE_ACCEPTANCE + " ».</p><div class=\"p-sign-box\"></div></div>";
     }
     if (str(doc.notes)) html += '<div class="p-notes">' + multiline(str(doc.notes)) + "</div>";
     return html;
   }
 
-  return { NATURES: NATURES, amount: amount, compute: compute, franchiseMention: franchiseMention, mentions: mentions, render: render, addDays: addDays };
+  return { NATURES: NATURES, QUOTE_ACCEPTANCE: QUOTE_ACCEPTANCE, amount: amount, compute: compute, franchiseMention: franchiseMention, mentions: mentions, render: render, addDays: addDays };
 });

@@ -883,6 +883,10 @@ const tests = {
     await page.waitForFunction(() => /Facture F2026-001/.test(document.querySelector("#espace-view h2").textContent));
     check(true, "Espace : facture émise F2026-001 (A2)");
     check(!(await page.$("#doc-form")), "Espace : facture émise non modifiable (A3)");
+    const sendHref = await page.getAttribute("#d-send", "href");
+    check(sendHref.startsWith("mailto:compta@studio-nova.example?subject=Facture%20F2026-001%20%E2%80%93%20Camille%20Martin%20EI&body=") &&
+      decodeURIComponent(sendHref).replace(/\s+/g, " ").includes("la facture F2026-001 du 10/09/2026, d'un montant de 1 800,00 €. Elle est payable au plus tard le 09/11/2026."),
+      "Espace : email d'envoi prérempli avec destinataire, objet et échéance (A13)");
     await page.fill("#pay-date", "2026-09-15");
     await page.fill("#pay-amount", "800");
     await page.click("#pay-form button[type=submit]");
@@ -963,6 +967,113 @@ const tests = {
       "Espace : brouillon enregistré en quittant l'écran, prix vide conservé vide");
     await page.click("#d-delete");
     await page.waitForTimeout(250);
+
+    // Version 1.1 (documentation/09, section 11) : reprise du générateur, numérotation continuée, envoi par email.
+    const shot = async (name) => {
+      await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
+      await page.screenshot({ path: path.join(shots, `espace-${name}-bureau.png`), fullPage: true });
+      await page.setViewportSize({ width: 390, height: 844 });
+      await page.waitForTimeout(150);
+      await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
+      check(!(await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)), `Espace ${name} (mobile) : pas de défilement horizontal`);
+      await page.screenshot({ path: path.join(shots, `espace-${name}-mobile.png`), fullPage: true });
+      await page.setViewportSize({ width: 1280, height: 900 });
+    };
+    await go("#/reglages");
+    check(await page.isDisabled("#ep-last_facture") && (await text("#ep-last_facture-hint")).includes("Série 2026 commencée dans l'Espace. Prochain numéro : F2026-003"),
+      "Espace : suite de la série fixée une fois la série de l'année commencée");
+    await page.fill("#ep-prefix_facture", "FA-");
+    check((await text("#next-facture")) === "F2026-003", "Espace : nouveau préfixe sans effet sur la série commencée");
+    await page.click("#profile-form button[type=submit]");
+    await page.waitForTimeout(300);
+    check((await text("#ep-prefix_facture-hint")).includes("La série 2026 garde le préfixe « F »"), "Espace : préfixe réservé aux séries suivantes");
+    await page.click("#wipe-btn");
+    await page.waitForFunction(() => /Bienvenue/.test(document.querySelector("#espace-view h2").textContent));
+    await go("#/importer");
+    await page.goto(BASE + "fr/generateur-facture/", { waitUntil: "networkidle" });
+    await page.click('[data-doctype="facture"]');
+    await page.click("#f-next");
+    await page.fill("#f-number", "2026-007");
+    await page.fill("#f-date", "2026-10-18");
+    await page.fill("#f-me-name", "Camille Martin EI");
+    await page.fill("#f-me-siret", "123 456 789 00012");
+    await page.fill("#f-client-name", "Atelier Lumen");
+    await page.check("#f-client-pro");
+    await page.fill("#f-client-id", "901 234 567");
+    await page.fill("#f-terms", "20");
+    await page.fill("#l-desc-0", "Identité visuelle");
+    await page.fill("#l-qty-0", "1");
+    await page.fill("#l-price-0", "950");
+    await page.selectOption("#f-vat-place", "fr");
+    await page.check("#f-franchise");
+    await page.fill("#f-paid", "300");
+    await page.click("#f-espace");
+    await page.waitForURL(/espace\/#\/importer$/);
+    // Même parcours avec la date du jour fixée, pour que le test ne dépende pas de l'année en cours.
+    await page.goto(BASE + "fr/espace/?today=2026-10-20#/importer", { waitUntil: "networkidle" });
+    await page.waitForSelector("#profile-form");
+    check((await text("#espace-view")).includes("sera repris en brouillon dès que votre profil sera créé"), "Espace : document du générateur en attente pendant la création du profil (A18)");
+    check((await page.inputValue("#ep-name")) === "Camille Martin EI", "Espace : profil prérempli depuis le générateur");
+    await page.click("#profile-form button[type=submit]");
+    await page.waitForSelector("#imp-ok");
+    const imp = await text("#espace-view");
+    check(imp.includes("Atelier Lumen (nouvelle fiche)") && imp.includes("950,00 €") && imp.includes("ne l'émettez pas une seconde fois"), "Espace : récapitulatif de la reprise (A14)");
+    check(imp.includes("cette facture recevra le n° 2026-007 à son émission, la suivante le n° 2026-008"), "Espace : numérotation du générateur proposée (A16)");
+    check(imp.includes("Acompte déjà versé indiqué dans le générateur (300,00 €)"), "Espace : acompte du générateur signalé, non repris");
+    await shot("importer");
+    await page.click("#imp-ok");
+    await page.waitForSelector("#doc-form");
+    check((await page.inputValue("#ln-desc-0")) === "Identité visuelle" && (await page.inputValue("#ln-price-0")) === "950" &&
+      (await page.inputValue("#d-terms")) === "20" && (await page.$eval("#d-client option:checked", (o) => o.textContent)) === "Atelier Lumen",
+      "Espace : brouillon repris avec ses lignes, son client et son délai de 20 jours (A14)");
+    check((await page.evaluate(() => localStorage.getItem("of:espace-import"))) === "null", "Espace : dépôt du générateur effacé après la reprise");
+    await page.click("#d-issue");
+    await page.waitForFunction(() => /Facture 2026-007/.test(document.querySelector("#espace-view h2").textContent));
+    check(true, "Espace : facture émise sous le numéro du générateur, 2026-007 (A16)");
+    const href = await page.getAttribute("#d-send", "href");
+    check(href.startsWith("mailto:?subject=Facture%202026-007") && decodeURIComponent(href).includes("payable au plus tard le 07/11/2026") &&
+      href.includes("%0D%0A"), "Espace : email d'envoi sans destinataire, échéance à 20 jours, retours à la ligne CRLF (A13)");
+    check((await text("#espace-view")).includes("Pas d'email dans la fiche du client : l'ajouter pour le préremplir"), "Espace : invitation à compléter l'email du client");
+    await shot("envoi");
+    await go("#/reglages");
+    check(await page.isDisabled("#ep-last_facture") && (await page.inputValue("#ep-prefix_facture")) === "" && (await text("#next-facture")) === "2026-008",
+      "Espace : la numérotation continue à 2026-008 (A16)");
+    await page.fill("#ep-prefix_avoir", "D");
+    await page.click("#profile-form button[type=submit]");
+    await page.waitForTimeout(200);
+    check((await text("#profile-error")).includes("doivent être différents"), "Espace : préfixes identiques refusés");
+    await page.fill("#ep-prefix_avoir", "A");
+    await page.fill("#ep-last_devis", "12");
+    check((await text("#next-devis")) === "D2026-013", "Espace : aperçu du prochain numéro pendant la saisie (A17)");
+    await page.fill("#ep-last_avoir", "douze");
+    await page.click("#profile-form button[type=submit]");
+    await page.waitForTimeout(200);
+    check((await text("#profile-error")).includes("indiquez le rang du dernier numéro utilisé"), "Espace : dernier numéro illisible refusé");
+    await page.fill("#ep-last_avoir", "");
+    await page.click("#profile-form button[type=submit]");
+    await page.waitForTimeout(300);
+    await shot("numerotation");
+    await go("#/documents/nouveau?type=devis");
+    await page.selectOption("#d-client", { label: "Atelier Lumen" });
+    await page.fill("#d-date", "2026-10-19");
+    await page.fill("#ln-desc-0", "Charte graphique");
+    await page.fill("#ln-price-0", "700");
+    await page.waitForTimeout(600);
+    await page.click("#d-issue");
+    await page.waitForFunction(() => /Devis D2026-013/.test(document.querySelector("#espace-view h2").textContent));
+    check(decodeURIComponent(await page.getAttribute("#d-send", "href")).replace(/\s+/g, " ").includes("valable jusqu'au 18/11/2026. Un acompte de 30 % (210,00 €) est demandé à la signature."),
+      "Espace : devis D2026-013 après le dernier numéro déclaré, email avec validité et acompte (A13, A17)");
+    await page.evaluate(() => localStorage.setItem("of:espace-import", JSON.stringify({ doc: { type: "facture", client: { name: "Atelier Lumen" }, lines: [] }, savedAt: new Date().toISOString() })));
+    await go("#/importer");
+    check((await text("#espace-view")).includes("Atelier Lumen (fiche existante)"), "Espace : client du générateur rattaché à la fiche existante (A15)");
+    await page.click("#imp-cancel");
+    await page.waitForTimeout(250);
+    check((await page.evaluate(() => location.hash)) === "#/" && (await page.evaluate(() => localStorage.getItem("of:espace-import"))) === "null",
+      "Espace : « Ne pas reprendre » efface le dépôt (A18)");
+    await page.evaluate(() => localStorage.setItem("of:espace-import", JSON.stringify({ doc: { type: "facture", lines: [] }, savedAt: "2026-01-01T00:00:00Z" })));
+    await go("#/importer");
+    check((await text("#espace-view")).includes("Aucun document à reprendre") && (await page.evaluate(() => localStorage.getItem("of:espace-import"))) === "null",
+      "Espace : document en attente depuis plus de 24 h ignoré et effacé");
     await go("#/");
   },
   async "fr/confidentialite/"() {},

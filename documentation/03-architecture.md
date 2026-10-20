@@ -152,14 +152,18 @@ Application d'une page, spécifiée dans [09-specification-espace.md](09-specifi
 | Fichier | Rôle |
 |---|---|
 | `engines/invoice-fr.js` | Moteur de facture **commun** au générateur public et à l'Espace : totaux, TVA, mentions légales, rendu de la page imprimable. Toute règle de facturation se modifie ici. |
-| `engines/espace-fr.js` | Fonctions pures de l'Espace : numérotation et émission, statuts, avoirs, encaissements, livre des recettes, déclaration Urssaf, plafonds. Testé par `tests/unit/espace-fr.test.mjs`. |
+| `engines/espace-fr.js` | Fonctions pures de l'Espace : numérotation et émission (séries, reprise d'une séquence existante), statuts, avoirs, encaissements, livre des recettes, déclaration Urssaf, plafonds, textes des emails, reprise d'un document du générateur. Testé par `tests/unit/espace-fr.test.mjs` et `tests/unit/espace-v11.test.mjs`. |
 | `tools/espace-store.js` | Stockage : IndexedDB (repli sur le stockage local), synchronisation entre onglets, contrôle des sauvegardes importées. |
-| `tools/espace.js` | Interface : écrans `#/`, `#/documents`, `#/clients`, `#/recettes`, `#/echeances`, `#/reglages`. |
+| `tools/espace.js` | Interface : écrans `#/`, `#/documents`, `#/clients`, `#/recettes`, `#/echeances`, `#/reglages`, `#/importer`. |
 
 - Les données ont la forme `{ schema: 1, profile, clients, documents, settings }`, avec des identifiants uniques et des
   dates de création et de modification, pour être synchronisées telles quelles avec les comptes en ligne (étape 2).
 - La date limite de la déclaration Urssaf vient du calendrier fiscal (`period` des échéances de `data/calendars/fr.json`).
 - `?today=AAAA-MM-JJ` dans l'adresse fixe la date du jour (tests).
+- Passage depuis le générateur public : le bouton « Continuer dans mon Espace » dépose le document en cours dans le
+  stockage local (`of:espace-import`, valable 24 heures) et ouvre `#/importer`, qui en fait un brouillon.
+- Numérotation : une série (type et année) commencée garde le préfixe de ses documents émis ; le préfixe des réglages
+  vaut pour les séries suivantes. `profile.numbering` reprend le dernier numéro utilisé hors de l'Espace.
 
 ## Le générateur de contrat (`tools/contract.js`)
 

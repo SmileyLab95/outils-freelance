@@ -17,6 +17,7 @@ en bas ; elles sortent de la liste quand elles sont prises.
 | D10 | 20/10/2026 | Priorité au site et à la plateforme ; les noms de domaine et Gumroad passent à la fin | Demande d'Ismail : « on attaque le fond, le site web » | Ismail |
 | D11 | 20/10/2026 | Règle de qualité : tout produit ou service est fait avec le maximum de qualité possible ; charte qualité dans la méthode | Demande d'Ismail | Ismail |
 | D12 | 20/10/2026 | L'Espace entrepreneur démarre en version locale (données dans le navigateur, sans compte), avec un modèle de données prêt pour les comptes en ligne de l'étape 2 | Avancer sur le fond sans attendre le domaine ni l'hébergement, en gardant la promesse de confidentialité | Claude, sur la priorité fixée par Ismail |
+| D13 | 20/10/2026 | Numérotation de l'Espace : une série (type et année) commencée garde son préfixe jusqu'à la fin de l'année ; on peut reprendre le dernier numéro utilisé avec un autre outil | Numérotation unique, chronologique et continue (CGI, ann. II, art. 242 nonies A) ; permettre de passer du générateur à l'Espace sans recommencer une séquence | Claude |
 
 ## Décisions en attente
 

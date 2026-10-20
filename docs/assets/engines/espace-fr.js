@@ -72,16 +72,42 @@
     }).sort(function (a, b) { return order(a) < order(b) ? 1 : -1; });
   }
 
-  /** Prochain numéro de la série : F2026-001, F2026-002… (rang le plus élevé + 1). */
-  function nextNumber(documents, type, year, prefixes) {
-    var prefix = (prefixes && prefixes[type] != null ? prefixes[type] : DEFAULT_PREFIXES[type]) + year + "-";
-    var max = 0;
+  /** Préfixe d'une série commencée (celui de son dernier document émis), ou null si la série est vide. */
+  function seriesPrefix(documents, type, year) {
+    var last = series(documents, type, year)[0];
+    if (!last) return null;
+    var at = last.number.lastIndexOf(String(year) + "-");
+    return at > -1 ? last.number.slice(0, at) : null;
+  }
+
+  /**
+   * Prochain numéro de la série : F2026-001, F2026-002… (rang le plus élevé + 1). Une série commencée garde son
+   * préfixe jusqu'à la fin de l'année ; le préfixe des réglages s'applique aux nouvelles séries. numbering
+   * (facultatif) : { facture: { year, last } … }, dernier rang utilisé hors de l'Espace pour continuer une séquence.
+   */
+  function nextNumber(documents, type, year, prefixes, numbering) {
+    var started = seriesPrefix(documents, type, year);
+    var prefix = (started != null ? started : prefixes && prefixes[type] != null ? prefixes[type] : DEFAULT_PREFIXES[type]) + year + "-";
+    var external = numbering && numbering[type];
+    var max = external && String(external.year) === String(year) ? Math.max(0, parseInt(external.last, 10) || 0) : 0;
     documents.forEach(function (d) {
       if (d.type !== type || !d.number || d.number.indexOf(prefix) !== 0) return;
       var n = parseInt(d.number.slice(prefix.length), 10);
       if (n > max) max = n;
     });
     return prefix + String(max + 1).padStart(3, "0");
+  }
+
+  /**
+   * Numérotation du générateur public à continuer dans l'Espace : son numéro a la forme <préfixe><année>-<rang>,
+   * l'année est celle du document et aucun document de ce type n'est encore émis cette année dans l'Espace.
+   * Renvoie { prefix, year, last, number } (number : celui que recevra le document) ou null.
+   */
+  function continuation(documents, type, number, year) {
+    var m = /^([A-Za-z_\-\/]{0,12}?)(\d{4})-(\d{1,6})$/.exec(String(number || "").trim());
+    if (!m || m[2] !== String(year) || +m[3] < 1 || String(+m[3]).padStart(3, "0") !== m[3]) return null;
+    if (series(documents, type, year).length) return null;
+    return { prefix: m[1], year: m[2], last: +m[3] - 1, number: m[1] + m[2] + "-" + m[3] };
   }
 
   /** Contrôles avant émission ; renvoie la liste des erreurs (vide si le document peut être émis). */
@@ -108,11 +134,11 @@
   }
 
   /** Émission : numéro, statut, coordonnées figées. Renvoie un nouveau document (l'original n'est pas modifié). */
-  function issue(documents, doc, me, client, prefixes, now) {
+  function issue(documents, doc, me, client, prefixes, now, numbering) {
     var errors = checkIssue(documents, doc, client);
     if (errors.length) return { errors: errors };
     var issued = JSON.parse(JSON.stringify(doc));
-    issued.number = nextNumber(documents, doc.type, String(doc.date).slice(0, 4), prefixes);
+    issued.number = nextNumber(documents, doc.type, String(doc.date).slice(0, 4), prefixes, numbering);
     issued.status = doc.type === "devis" ? "sent" : "issued";
     issued.snapshot = { me: JSON.parse(JSON.stringify(me || {})), client: JSON.parse(JSON.stringify(client)) };
     issued.issuedAt = now;
@@ -284,6 +310,139 @@
       date: today, serviceDate: today, payments: [] });
   }
 
+  // ----- Emails : envoi d'un document, relance d'une facture ---------------------------------
+
+  /**
+   * Objet et texte d'un email sur un document émis. kind : "send" (envoi du document) ou "reminder" (relance d'une
+   * facture). fmt = { eur, date }. Un lien mailto: ne joint pas de fichier : l'utilisateur joint le PDF téléchargé.
+   */
+  function email(kind, doc, documents, profile, today, fmt) {
+    profile = profile || {};
+    var amountText = fmt.eur(total(doc)) + (INV.compute(doc).noVat ? "" : " TTC");
+    var bal = balance(doc, documents);
+    var due = dueDate(doc);
+    var iban = profile.iban ? "Vous pouvez la régler par virement : IBAN " + profile.iban + (profile.bic ? ", BIC " + profile.bic : "") +
+      ", en indiquant la référence " + doc.number + "." : "";
+    var parts = [], subject;
+    if (kind === "reminder") {
+      var late = due < today;
+      subject = "Facture " + doc.number + (late ? " : rappel de paiement" : " : échéance du " + fmt.date(due));
+      parts.push(late
+        ? "Sauf erreur de ma part, le règlement de la facture " + doc.number + " du " + fmt.date(doc.date) + ", arrivée à échéance le " +
+          fmt.date(due) + ", ne m'est pas encore parvenu. Le montant restant dû est de " + fmt.eur(bal) + "."
+        : "Je me permets de vous rappeler que la facture " + doc.number + " du " + fmt.date(doc.date) + ", d'un montant de " + fmt.eur(bal) +
+          ", arrive à échéance le " + fmt.date(due) + ".");
+      if (iban) parts.push(iban);
+      parts.push("Je reste à votre disposition pour toute question.");
+    } else if (doc.type === "facture") {
+      var st = state(doc, today, documents), credits = documents ? credited(documents, doc) : 0;
+      var payable = (parseInt(doc.terms, 10) || 0) > 0 ? "payable au plus tard le " + fmt.date(due) : "payable à réception";
+      var first = "Veuillez trouver ci-joint la facture " + doc.number + " du " + fmt.date(doc.date) + ", d'un montant de " + amountText + ".";
+      if (st === "cancelled") first += " Elle a été annulée par un avoir.";
+      else if (bal <= 0.005) first += " Elle est déjà réglée : merci !";
+      else if (bal < total(doc) - 0.005) {
+        var nCredits = (documents || []).filter(function (d) { return d.type === "avoir" && d.status !== "draft" && d.originId === doc.id; }).length;
+        var already = paidAmount(doc) > 0
+          ? (credits > 0 ? "des règlements reçus et des avoirs émis" : "des règlements déjà reçus")
+          : (nCredits > 1 ? "des avoirs émis" : "de l'avoir émis");
+        first += " Compte tenu " + already + ", le montant restant dû est de " + fmt.eur(bal) + ", " + payable + ".";
+      } else first += " Elle est " + payable + ".";
+      parts.push(first);
+      if (bal > 0.005 && iban) parts.push(iban);
+      parts.push("Je reste à votre disposition pour toute question.");
+    } else if (doc.type === "devis") {
+      var pct = Math.min(100, Math.max(0, Number(doc.depositPct) || 0));
+      var until = INV.addDays(doc.date, Math.max(1, parseInt(doc.validity, 10) || 30));
+      parts.push("Veuillez trouver ci-joint le devis " + doc.number + " du " + fmt.date(doc.date) + ", d'un montant de " + amountText +
+        ", valable jusqu'au " + fmt.date(until) + "." +
+        (pct > 0 ? " Un acompte de " + String(pct).replace(".", ",") + " % (" + fmt.eur(round2(total(doc) * pct / 100)) + ") est demandé à la signature." : ""));
+      parts.push("Pour l'accepter, il vous suffit de me le retourner daté et signé, avec la mention « " + INV.QUOTE_ACCEPTANCE + " ».");
+      parts.push("Je reste à votre disposition pour en parler.");
+    } else {
+      var origin = doc.originId ? (documents || []).filter(function (d) { return d.id === doc.originId; })[0] : null;
+      var ref = origin ? origin.number + " du " + fmt.date(origin.date) : doc.origin && doc.origin.number ? doc.origin.number : "";
+      parts.push("Veuillez trouver ci-joint l'avoir " + doc.number + " du " + fmt.date(doc.date) + ", d'un montant de " + amountText +
+        (ref ? ", relatif à la facture " + ref : "") + ".");
+      var sa = state(doc, today, documents);
+      if (sa === "refund") parts.push("La somme de " + fmt.eur(bal) + " vous sera remboursée prochainement.");
+      else if (sa === "refunded") {
+        var lastPay = (doc.payments || []).map(function (p) { return p.date; }).sort().pop();
+        parts.push("La somme de " + fmt.eur(paidAmount(doc)) + " vous a été remboursée le " + fmt.date(lastPay) + ".");
+      } else if (origin) {
+        var left = balance(origin, documents);
+        parts.push(left > 0.005 ? "Il vient en déduction de cette facture : le montant restant dû est désormais de " + fmt.eur(left) + "."
+          : "Il vient en déduction de cette facture, qui est ainsi " + (state(origin, today, documents) === "cancelled" ? "annulée." : "soldée."));
+      }
+      parts.push("Je reste à votre disposition pour toute question.");
+    }
+    if (kind !== "reminder") subject = TYPE_NAMES[doc.type] + " " + doc.number + (profile.name ? " – " + profile.name : "");
+    return { subject: subject, body: "Bonjour,\n\n" + parts.join("\n\n") + "\n\nBien cordialement,\n" + (profile.name || "") };
+  }
+  var TYPE_NAMES = { facture: "Facture", devis: "Devis", avoir: "Avoir" };
+
+  // ----- Reprise d'un document du générateur public ------------------------------------------
+
+  var nameKey = function (s) { return String(s || "").trim().replace(/\s+/g, " ").toLowerCase(); };
+  var PROFILE_FIELDS = ["status", "address", "siret", "vat", "email", "phone", "iban", "bic", "logo"];
+  var isISO = function (v) { return /^\d{4}-\d{2}-\d{2}$/.test(v || ""); };
+  var str = function (v) { return String(v == null ? "" : v).trim(); };
+
+  /**
+   * Brouillon de l'Espace à partir du document du générateur public (objet construit par tools/facture.js).
+   * Client : fiche existante du même nom (jamais modifiée), sinon nouvelle fiche. Profil : seuls ses champs vides sont
+   * complétés. La TVA suit le profil et la fiche client, comme pour tout brouillon de l'Espace.
+   * Renvoie { doc, client, newClient, profilePatch, paid, vatDiffers, continuation } ; rien n'est modifié ici.
+   * ids = { doc, client } ; today = date du jour ; now = date-heure ISO.
+   */
+  function fromGenerator(g, profile, clients, documents, ids, today, now) {
+    g = g || {};
+    profile = profile || {};
+    var gc = g.client || {}, gv = g.vat || {}, gme = g.me || {};
+    var type = g.type === "devis" ? "devis" : "facture";
+    var name = str(gc.name).replace(/\s+/g, " ");
+    var same = (clients || []).filter(function (c) { return name && nameKey(c.name) === nameKey(name); })
+      .sort(function (a, b) { return (a.archived ? 1 : 0) - (b.archived ? 1 : 0); });
+    var existing = same[0] || null;
+    var client = existing || (name ? { id: ids.client, name: name, address: str(gc.address), siren: str(gc.id), vat: str(gc.vat), email: "",
+      pro: gc.pro !== false, place: ["fr", "eu", "world"].indexOf(gv.place) > -1 ? gv.place : "fr", delivery: str(gc.delivery), notes: "",
+      archived: false, createdAt: now, updatedAt: now } : null);
+
+    var franchise = profile.vatRegime ? profile.vatRegime === "franchise" : !!gv.franchise;
+    var place = client && client.pro ? client.place || "fr" : "fr";
+    var rate = Number(gv.rate) > 0 ? Number(gv.rate) : profile.vatRate || 20;
+    var amount = function (v) { var n = INV.amount(v); return isFinite(n) ? n : NaN; };
+    var lines = (g.lines || []).map(function (l) { return { desc: String((l && l.desc) || ""), qty: amount(l && l.qty), price: amount(l && l.price) }; })
+      .filter(function (l) { return l.desc.trim() || isFinite(l.price); });
+    if (!lines.length) lines = [{ desc: "", qty: 1, price: NaN }];
+    var date = isISO(g.date) ? g.date : today;
+    var terms = parseInt(g.terms, 10);
+    var deposit = Number(g.depositPct);
+
+    var doc = { id: ids.doc, type: type, status: "draft", date: date, serviceDate: type === "facture" && isISO(g.serviceDate) ? g.serviceDate : date,
+      terms: terms >= 0 ? terms : profile.terms == null ? 30 : profile.terms,
+      validity: parseInt(g.validity, 10) > 0 ? parseInt(g.validity, 10) : 30,
+      depositPct: type === "devis" ? (isFinite(deposit) ? Math.min(100, Math.max(0, deposit)) : 30) : 0,
+      nature: INV.NATURES[g.nature] ? g.nature : "services", clientId: client ? client.id : "", lines: lines,
+      vat: { franchise: franchise, rate: franchise ? profile.vatRate || 20 : rate, place: place, debits: !franchise && place === "fr" && !!gv.debits },
+      penalty: str(g.penalty) || profile.penalty || "", notes: String(g.notes || ""), payments: [], createdAt: now, updatedAt: now };
+
+    var patch = {};
+    PROFILE_FIELDS.forEach(function (k) { if (!str(profile[k]) && str(gme[k])) patch[k] = k === "logo" ? gme[k] : str(gme[k]); });
+
+    // Seulement pour l'année en cours : le préfixe repris vaut pour les séries suivantes.
+    var cont = date.slice(0, 4) === String(today).slice(0, 4) ? continuation(documents || [], type, g.number, date.slice(0, 4)) : null;
+    if (cont) {
+      var prefixes = profile.prefixes || {}, set = profile.numbering && profile.numbering[type];
+      var taken = ["facture", "devis", "avoir"].some(function (t) {
+        return t !== type && (prefixes[t] != null ? prefixes[t] : DEFAULT_PREFIXES[t]) === cont.prefix;
+      });
+      if (taken || (set && String(set.year) === cont.year && (parseInt(set.last, 10) || 0) > cont.last)) cont = null;
+    }
+    var paid = Number(g.paid);
+    return { doc: doc, client: client, newClient: !existing && !!client, profilePatch: patch, paid: paid > 0 ? round2(paid) : 0,
+             vatDiffers: !!profile.vatRegime && !!gv.franchise !== franchise, continuation: cont };
+  }
+
   /** Livre des recettes au format CSV (séparateur « ; », virgule décimale, pour Excel en français). */
   function ledgerCSV(rows) {
     var q = function (v) { return '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"'; };
@@ -294,8 +453,10 @@
     return lines.join("\r\n");
   }
 
-  return { METHODS: METHODS, DEFAULT_PREFIXES: DEFAULT_PREFIXES, total: total, paidAmount: paidAmount, credited: credited, balance: balance,
-           dueDate: dueDate, nextNumber: nextNumber, checkIssue: checkIssue, issue: issue, state: state,
+  return { METHODS: METHODS, DEFAULT_PREFIXES: DEFAULT_PREFIXES, PROFILE_FIELDS: PROFILE_FIELDS,
+           total: total, paidAmount: paidAmount, credited: credited, balance: balance, dueDate: dueDate,
+           series: series, seriesPrefix: seriesPrefix, nextNumber: nextNumber, continuation: continuation,
+           checkIssue: checkIssue, issue: issue, state: state, email: email, fromGenerator: fromGenerator,
            checkPayment: checkPayment, ledger: ledger, cashed: cashed, period: period, acreEnd: acreEnd, rates: rates,
            nextDeclaration: nextDeclaration, thresholds: thresholds, clientTotals: clientTotals,
            invoiceFromQuote: invoiceFromQuote, creditFromInvoice: creditFromInvoice, duplicate: duplicate, ledgerCSV: ledgerCSV };

@@ -155,6 +155,13 @@
     renderLines();
     render();
   });
+  // Vers l'Espace entrepreneur : le document en cours y devient un brouillon (documentation/09, section 11.2).
+  // Aussi au clic du milieu et au menu contextuel (ouverture dans un nouvel onglet).
+  ["click", "auxclick", "contextmenu"].forEach(function (type) {
+    $("f-espace").addEventListener(type, function () {
+      OF.save("espace-import", { doc: currentDoc(), savedAt: new Date().toISOString() });
+    });
+  });
   $("f-reset").addEventListener("click", function () {
     if (!confirm("Effacer toutes les informations saisies ?")) return;
     ["facture", "facture-type", "facture-lines", "facture-numbers", "facture-logo"].forEach(function (k) { OF.save(k, null); });

@@ -1,5 +1,23 @@
 # Journal des modifications
 
+## 2026-10-20 — Espace entrepreneur v1.1
+
+- Envoi au client : sur chaque facture, devis et avoir émis, email prérempli (objet, montant, échéance ou validité,
+  acompte, reste dû, IBAN) à joindre au PDF ; la relance utilise le même moteur de textes, testé.
+- Générateur de facture : bouton « Continuer dans mon Espace » ; l'Espace reprend le document en brouillon (client
+  existant ou nouvelle fiche, profil complété sur ses champs vides, acompte signalé) et propose de continuer la
+  numérotation du générateur (ex. 2026-007, puis 2026-008).
+- Réglages : dernier numéro déjà utilisé cette année pour chaque type, aperçu du prochain numéro, préfixes contrôlés ;
+  une série commencée garde son préfixe jusqu'à la fin de l'année (décision D13).
+- Encarts vers l'Espace sur le simulateur auto-entrepreneur, le calendrier fiscal, la relance de facture impayée et les
+  mentions obligatoires ; nouvelle question fréquente sur la numérotation.
+- Moteur de facture commun : mention de paiement « au plus tard le … », ou « à réception » si le délai est nul (au
+  lieu de « à réception, au plus tard le … »).
+- Qualité : spécification préalable (section 11 de `documentation/09-specification-espace.md`), 73 tests unitaires,
+  parcours navigateur étendu (reprise, envoi, numérotation), revue de code (10 points corrigés), captures relues.
+- Étude de l'export Factur-X (`documentation/10-etude-factur-x.md`) : cadre officiel, règles françaises BR-FR,
+  données à ajouter, choix techniques, chaîne de validation et étapes F1 à F5.
+
 ## 2026-10-20 — Espace entrepreneur v1 (France, version locale)
 
 - Nouvelle page `/fr/espace/` : profil de l'entreprise, clients, devis, factures et avoirs (brouillon puis émission,

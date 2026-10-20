@@ -2,7 +2,7 @@
  * Espace entrepreneur (France, version locale) : application d'une page.
  * Spécification : documentation/09-specification-espace.md. Calculs : OFE.espaceFR et OFE.invoiceFR.
  * Stockage : window.EspaceStore (IndexedDB). Écrans : #/ (tableau de bord), #/documents, #/documents/<id>,
- * #/clients, #/clients/<id>, #/recettes, #/echeances, #/reglages.
+ * #/clients, #/clients/<id>, #/recettes, #/echeances, #/reglages, #/importer (document venu du générateur public).
  */
 (function () {
   "use strict";
@@ -38,6 +38,12 @@
   };
   var NEW_TITLES = { facture: "Nouvelle facture", devis: "Nouveau devis", avoir: "Nouvel avoir" };
   var TERMS = [[0, "À réception"], [15, "15 jours"], [30, "30 jours"], [45, "45 jours"], [60, "60 jours"]];
+  /** Délais proposés, avec le délai du document s'il n'est pas dans la liste (document repris du générateur). */
+  function termsFor(value) {
+    var n = parseInt(value, 10);
+    if (!(n >= 0) || TERMS.some(function (t) { return t[0] === n; })) return TERMS;
+    return TERMS.concat([[n, n + " jours"]]).sort(function (a, b) { return a[0] - b[0]; });
+  }
 
   // ----- Outils ------------------------------------------------------------------
 
@@ -117,7 +123,8 @@
     var nav = app.querySelector(".espace-nav"), current = nav && nav.querySelector('[aria-current="page"]');
     if (current && nav.scrollWidth > nav.clientWidth) nav.scrollLeft = current.offsetLeft - (nav.clientWidth - current.offsetWidth) / 2;
     var views = { accueil: viewWelcome, tableau: viewDashboard, documents: r.id ? viewDocument : viewDocuments,
-                  clients: r.id ? viewClientForm : viewClients, recettes: viewLedger, echeances: viewDeadlines, reglages: viewSettings };
+                  clients: r.id ? viewClientForm : viewClients, recettes: viewLedger, echeances: viewDeadlines, reglages: viewSettings,
+                  importer: viewImport };
     (views[name] || viewDashboard)(r);
     if (!keepFocus && r.key !== currentRoute) {
       var h = view.querySelector("h2");
@@ -133,6 +140,7 @@
     var fromGenerator = OF.load("facture", null);
     view.innerHTML =
       '<div class="espace-welcome"><h2>Bienvenue dans votre espace</h2>' +
+      (pendingImport() ? '<p class="notice">Le document préparé dans le générateur sera repris en brouillon dès que votre profil sera créé.</p>' : "") +
       "<p>Clients, devis, factures, encaissements, livre des recettes et déclarations Urssaf : tout au même endroit. " +
       "Vos données restent <strong>sur cet appareil</strong> : rien n'est envoyé sur un serveur.</p>" +
       "<p>Commencez par décrire votre entreprise : 2 minutes, modifiable à tout moment.</p></div>" +
@@ -152,6 +160,80 @@
              penalty: f.penalty, logo: OF.load("facture-logo", "") };
   }
 
+  // ----- Document venu du générateur public (#/importer) ---------------------------------------------
+
+  var IMPORT_KEY = "espace-import", IMPORT_TTL = 24 * 3600 * 1000;
+  /** Document déposé par le bouton « Continuer dans mon Espace » du générateur (même navigateur, moins de 24 h). */
+  function pendingImport() {
+    var p = OF.load(IMPORT_KEY, null);
+    var age = p && Date.now() - Date.parse(p.savedAt);
+    if (!p || !p.doc || typeof p.doc !== "object" || !(age >= 0 && age < IMPORT_TTL)) {
+      if (p) OF.save(IMPORT_KEY, null);
+      return null;
+    }
+    return p.doc;
+  }
+  var PATCH_LABELS = { status: "statut", address: "adresse", siret: "SIRET", vat: "n° de TVA", email: "email", phone: "téléphone",
+                       iban: "IBAN", bic: "BIC", logo: "logo" };
+
+  function viewImport() {
+    var g = pendingImport();
+    if (!g) {
+      view.innerHTML = '<div class="espace-head"><h2>Reprendre un document du générateur</h2></div>' +
+        '<div class="card espace-card"><p>Aucun document à reprendre. Préparez votre facture ou votre devis dans le ' +
+        '<a href="../generateur-facture/">générateur de facture</a>, puis cliquez sur « Continuer dans mon Espace ».</p>' +
+        '<p class="small"><a href="#/">Retour au tableau de bord</a></p></div>';
+      return;
+    }
+    var res = E.fromGenerator(g, profile(), data.clients, data.documents, { doc: S.uid(), client: S.uid() }, TODAY, now());
+    var d = res.doc, cont = res.continuation;
+    var label = d.type === "devis" ? "ce devis" : "cette facture";
+    var patch = Object.keys(res.profilePatch);
+    var p = profile();
+    var preview = Object.assign({}, d, { me: meFromProfile(Object.assign({}, p, res.profilePatch)), client: clientForDoc(res.client || {}) });
+    view.innerHTML = '<div class="espace-head"><h2>Reprendre le document du générateur</h2></div>' +
+      '<div class="tool-layout wide-left espace-editor"><div class="espace-side espace-noprint"><section class="card espace-card">' +
+      '<ul class="result-list">' +
+      "<li><span>Document</span><b>" + TYPES[d.type] + " (brouillon)</b></li>" +
+      "<li><span>Client</span><b>" + (res.client ? esc(res.client.name) + ' <span class="small muted">(' + (res.newClient ? "nouvelle fiche" : "fiche existante") + ")</span>" : "à choisir") + "</b></li>" +
+      "<li><span>Lignes</span><b>" + d.lines.filter(function (l) { return String(l.desc).trim(); }).length + "</b></li>" +
+      "<li><span>Total</span><b>" + esc(money(E.total(d))) + "</b></li></ul>" +
+      '<p class="notice">Le document devient un brouillon de l\'Espace : relisez-le, puis émettez-le ; il reçoit alors son numéro. ' +
+      "<strong>S'il a déjà été envoyé à votre client depuis le générateur, ne l'émettez pas une seconde fois</strong> : une même vente ne se facture qu'une fois.</p>" +
+      (cont ? '<label class="check"><input type="checkbox" id="imp-continue" checked><span>Continuer la numérotation du générateur : ' + label +
+        " recevra le n° <b class=\"nowrap\">" + esc(cont.number) + "</b> à son émission, " + (d.type === "devis" ? "le suivant" : "la suivante") +
+        ' le n° <span class="nowrap">' + esc(cont.prefix + cont.year + "-" + String(cont.last + 2).padStart(3, "0")) + "</span>" +
+        ".</span></label>" : "") +
+      (patch.length ? '<p class="small muted">Votre profil sera complété avec les informations du générateur : ' + esc(patch.map(function (k) { return PATCH_LABELS[k] || k; }).join(", ")) + ".</p>" : "") +
+      (res.paid ? '<p class="small muted">Acompte déjà versé indiqué dans le générateur (' + esc(money(res.paid)) + ") : enregistrez-le comme encaissement une fois la facture émise.</p>" : "") +
+      (res.vatDiffers ? '<p class="small muted">La TVA suit votre profil (' + (d.vat.franchise ? "franchise en base" : "TVA à " + OF.fmt(d.vat.rate) + " %") +
+        '), et non le réglage du générateur. Vous pouvez modifier votre régime dans les <a href="#/reglages">réglages</a>.</p>' : "") +
+      '<div class="espace-actions"><button type="button" class="btn btn-primary" id="imp-ok">Créer le brouillon</button>' +
+      '<button type="button" class="btn btn-ghost" id="imp-cancel">Ne pas reprendre</button></div></section></div>' +
+      '<div class="results"><div class="paper-wrap"><article class="paper" aria-label="Aperçu du document">' + INV.render(preview, R, FMT) + "</article></div></div></div>";
+
+    $("imp-ok").addEventListener("click", function () {
+      this.disabled = true;
+      var np = Object.assign({}, profile(), res.profilePatch);
+      if (cont && $("imp-continue").checked) {
+        np.prefixes = Object.assign({}, E.DEFAULT_PREFIXES, np.prefixes || {});
+        np.prefixes[d.type] = cont.prefix;
+        np.numbering = Object.assign({}, np.numbering || {});
+        np.numbering[d.type] = { year: cont.year, last: cont.last };
+      }
+      data.profile = np;
+      if (res.newClient) data.clients.push(res.client);
+      data.documents.push(d);
+      OF.save(IMPORT_KEY, null);
+      persist("Brouillon créé à partir du générateur.").then(function () { location.hash = "#/documents/" + d.id; });
+    });
+    $("imp-cancel").addEventListener("click", function () {
+      OF.save(IMPORT_KEY, null);
+      announce("Le document du générateur n'a pas été repris.");
+      location.hash = "#/";
+    });
+  }
+
   // ----- Profil (accueil et réglages) ------------------------------------------------
 
   function field(name, label, value, opts) {
@@ -161,9 +243,80 @@
     if (opts.options) ctrl = '<select id="' + id + '" name="' + name + '">' + options(opts.options, value) + "</select>";
     else if (opts.textarea) ctrl = '<textarea id="' + id + '" name="' + name + '" rows="2" placeholder="' + esc(opts.placeholder || "") + '">' + esc(value || "") + "</textarea>";
     else ctrl = '<input id="' + id + '" name="' + name + '" type="' + (opts.type || "text") + '"' + (opts.inputmode ? ' inputmode="' + opts.inputmode + '"' : "") +
-      ' value="' + esc(value == null ? "" : value) + '" placeholder="' + esc(opts.placeholder || "") + '"' + (opts.required ? " required" : "") + ">";
+      ' value="' + esc(value == null ? "" : value) + '" placeholder="' + esc(opts.placeholder || "") + '"' + (opts.required ? " required" : "") +
+      (opts.disabled ? " disabled" : "") + (opts.hint ? ' aria-describedby="' + id + '-hint"' : "") + ">";
     return '<div class="field' + (opts.half ? "" : " full") + '"><label for="' + id + '">' + esc(label) + "</label>" + ctrl +
-      (opts.hint ? '<span class="hint">' + opts.hint + "</span>" : "") + "</div>";
+      (opts.hint ? '<span class="hint" id="' + id + '-hint">' + opts.hint + "</span>" : "") + "</div>";
+  }
+
+  // ----- Numérotation : préfixes et reprise d'une séquence commencée ailleurs ------------------------
+
+  var NUM_TYPES = [
+    { type: "facture", plural: "factures", last: "Dernier n° de facture" },
+    { type: "devis", plural: "devis", last: "Dernier n° de devis" },
+    { type: "avoir", plural: "avoirs", last: "Dernier n° d'avoir" }];
+  // Caractères admis dans un numéro de facture électronique : lettres, chiffres, + - _ / (règle BR-FR-02) ; pas de chiffres
+  // dans le préfixe, pour lire sans ambiguïté l'année et le rang.
+  var PREFIX_RE = /^[A-Za-z_\-\/]{0,12}$/;
+  function prefixOf(p, type) { return p.prefixes && p.prefixes[type] != null ? p.prefixes[type] : E.DEFAULT_PREFIXES[type]; }
+  function lastUsed(p, type) { var n = p.numbering && p.numbering[type]; return n && String(n.year) === YEAR ? n.last : ""; }
+  /** Série de l'année commencée dans l'Espace : son préfixe et sa suite sont fixés jusqu'à la fin de l'année. */
+  function startedPrefix(type) { return E.seriesPrefix(data.documents, type, YEAR); }
+  /** Rang saisi (« 7 », ou « 2026-007 » / « F2026-007 » de l'année) : nombre, null si vide, false si illisible. */
+  function parseLast(value) {
+    var v = String(value || "").trim();
+    if (!v) return null;
+    if (/^\d{1,6}$/.test(v)) return +v;
+    var m = /^[A-Za-z_\-\/]*(\d{4})-(\d{1,6})$/.exec(v);
+    return m && m[1] === YEAR ? +m[2] : false;
+  }
+
+  function numberingFields(p) {
+    return '<div class="full fields"><h4 class="full">Numérotation</h4>' +
+      '<p class="full small muted">Vous avez déjà émis des documents en ' + YEAR + " avec un autre outil ? Indiquez le dernier numéro utilisé : " +
+      "l'Espace continuera la même séquence, qui doit rester continue.</p>" +
+      NUM_TYPES.map(function (t) {
+        var started = startedPrefix(t.type);
+        return field("prefix_" + t.type, "Préfixe des " + t.plural, prefixOf(p, t.type), { half: true, placeholder: "Aucun",
+            hint: started != null && started !== prefixOf(p, t.type)
+              ? "La série " + YEAR + " garde le préfixe « " + esc(started || "aucun") + " » ; celui-ci s'appliquera aux séries suivantes." : "" }) +
+          field("last_" + t.type, t.last + " utilisé en " + YEAR, lastUsed(p, t.type), { half: true, inputmode: "numeric", disabled: started != null,
+            placeholder: "Aucun (ex. : 7)", hint: (started != null ? "Série " + YEAR + " commencée dans l'Espace. " : "") +
+              'Prochain numéro : <b id="next-' + t.type + '">' + esc(E.nextNumber(data.documents, t.type, YEAR, p.prefixes, p.numbering)) + "</b>" });
+      }).join("") + "</div>";
+  }
+  /** Aperçu du prochain numéro pendant la saisie des réglages. */
+  function bindNumbering(form, p) {
+    var started = {};
+    NUM_TYPES.forEach(function (t) { started[t.type] = startedPrefix(t.type) != null; });
+    form.addEventListener("input", function (e) {
+      var t = /^(prefix|last)_(\w+)$/.exec(e.target.name || "");
+      if (!t) return;
+      var type = t[2], pre = form.elements["prefix_" + type].value.trim();
+      var last = started[type] ? lastUsed(p, type) : parseLast(form.elements["last_" + type].value);
+      var pref = {}, num = {};
+      pref[type] = pre;
+      num[type] = { year: YEAR, last: last || 0 };
+      $("next-" + type).textContent = PREFIX_RE.test(pre) && last !== false ? E.nextNumber(data.documents, type, YEAR, pref, num) : "–";
+    });
+  }
+  /** Lit et contrôle les réglages de numérotation ; renvoie { prefixes, numbering } ou { error }. */
+  function readNumbering(form, p) {
+    var prefixes = {}, numbering = Object.assign({}, p.numbering || {}), error = "";
+    NUM_TYPES.forEach(function (t) {
+      var k = t.type, pre = form.elements["prefix_" + k].value.trim();
+      if (!PREFIX_RE.test(pre)) error = error || "Préfixe des " + t.plural + " : lettres, tirets (- ou _) ou barres obliques seulement, 12 caractères au plus.";
+      prefixes[k] = pre;
+      if (startedPrefix(k) != null) return; // suite fixée par les documents émis
+      var last = parseLast(form.elements["last_" + k].value);
+      if (last === false) error = error || t.last + " : indiquez le rang du dernier numéro utilisé (par exemple 7 pour " + pre + YEAR + "-007).";
+      else if (last === null) { if (numbering[k] && String(numbering[k].year) === YEAR) delete numbering[k]; }
+      else numbering[k] = { year: YEAR, last: last };
+    });
+    if (!error && (prefixes.facture === prefixes.devis || prefixes.facture === prefixes.avoir || prefixes.devis === prefixes.avoir)) {
+      error = "Les préfixes des factures, des devis et des avoirs doivent être différents.";
+    }
+    return error ? { error: error } : { prefixes: prefixes, numbering: numbering };
   }
 
   function profileForm(p, first) {
@@ -191,9 +344,7 @@
         field("bic", "BIC", p.bic, { half: true }) +
         field("terms", "Délai de paiement par défaut", p.terms == null ? 30 : p.terms, { options: TERMS, half: true }) +
         field("penalty", "Taux des pénalités de retard", p.penalty || "trois fois le taux d'intérêt légal", { half: true }) +
-        field("prefix_facture", "Préfixe des factures", (p.prefixes || {}).facture || "F", { half: true, hint: "Numéros : F2026-001, F2026-002…" }) +
-        field("prefix_devis", "Préfixe des devis", (p.prefixes || {}).devis || "D", { half: true }) +
-        field("prefix_avoir", "Préfixe des avoirs", (p.prefixes || {}).avoir || "A", { half: true })) +
+        numberingFields(p)) +
       "</div>" +
       '<p class="form-error" id="profile-error" role="alert" hidden></p>' +
       '<div class="espace-actions"><button type="submit" class="btn btn-primary">' + (first ? "Créer mon espace" : "Enregistrer") + "</button></div></form>";
@@ -208,6 +359,7 @@
     form.elements.activity.addEventListener("change", toggle);
     form.elements.vatRegime.addEventListener("change", toggle);
     toggle();
+    if (!first) bindNumbering(form, data.profile || {});
     form.addEventListener("submit", function (e) {
       e.preventDefault();
       var f = form.elements, p = Object.assign({}, data.profile || {}, first ? generatorExtras() : {});
@@ -220,11 +372,16 @@
       if (!first) {
         ["status", "address", "siret", "vat", "email", "phone", "iban", "bic", "penalty"].forEach(function (k) { p[k] = f[k].value.trim(); });
         p.terms = Number(f.terms.value);
-        p.prefixes = { facture: f.prefix_facture.value.trim() || "F", devis: f.prefix_devis.value.trim() || "D", avoir: f.prefix_avoir.value.trim() || "A" };
+        var numbering = readNumbering(form, p);
+        if (numbering.error) { showError("profile-error", numbering.error); return; }
+        p.prefixes = numbering.prefixes;
+        p.numbering = numbering.numbering;
       }
+      showError("profile-error", "");
       data.profile = p;
       persist(first ? "Votre espace est prêt." : "Profil enregistré.").then(function () {
-        if (first) { S.persist(); location.hash = "#/"; render(); }
+        if (first) { S.persist(); location.hash = pendingImport() ? "#/importer" : "#/"; render(); }
+        else render(true);
       });
     });
   }
@@ -457,7 +614,7 @@
       '<span class="hint"><a href="#/clients/nouveau?retour=' + esc(d.id) + '">Nouveau client</a></span></div>' +
       '<div class="field"><label for="d-date">Date</label><input type="date" id="d-date" name="date" value="' + esc(d.date) + '"></div>' +
       (d.type === "facture" ? '<div class="field"><label for="d-service">Date de la prestation</label><input type="date" id="d-service" name="serviceDate" value="' + esc(d.serviceDate || "") + '"></div>' +
-        '<div class="field"><label for="d-terms">Délai de paiement</label><select id="d-terms" name="terms">' + options(TERMS, d.terms) + "</select></div>" : "") +
+        '<div class="field"><label for="d-terms">Délai de paiement</label><select id="d-terms" name="terms">' + options(termsFor(d.terms), d.terms) + "</select></div>" : "") +
       (d.type === "devis" ? '<div class="field"><label for="d-validity">Validité (jours)</label><input type="text" id="d-validity" name="validity" inputmode="numeric" value="' + esc(d.validity) + '"></div>' +
         '<div class="field"><label for="d-deposit">Acompte à la signature (%)</label><input type="text" id="d-deposit" name="depositPct" inputmode="decimal" value="' + esc(d.depositPct) + '"></div>' : "") +
       '<div class="field"><label for="d-nature">Nature de l\'opération</label><select id="d-nature" name="nature">' +
@@ -563,10 +720,10 @@
     });
     $("d-issue").addEventListener("click", function () {
       var c = client(d.clientId);
-      var res = E.issue(data.documents, d, meFromProfile(profile()), c ? clientForDoc(c) : null, profile().prefixes, now());
+      var res = E.issue(data.documents, d, meFromProfile(profile()), c ? clientForDoc(c) : null, profile().prefixes, now(), profile().numbering);
       if (res.errors.length) { showError("doc-error", res.errors.join(" ")); return; }
       if (!confirm("Émettre " + (d.type === "facture" ? "la facture" : d.type === "devis" ? "le devis" : "l'avoir") + " n° " +
-        E.nextNumber(data.documents, d.type, d.date.slice(0, 4), profile().prefixes) + " ? Il ne pourra plus être modifié.")) return;
+        res.doc.number + " ? Il ne pourra plus être modifié.")) return;
       clearTimeout(bindDraft.t);
       pendingSave = null;
       var issued = res.doc;
@@ -615,6 +772,7 @@
       (d.type === "facture" && credit < tot - 0.005 ? '<button type="button" class="btn btn-ghost" id="d-credit">Créer un avoir</button>' : "") +
       (d.type === "devis" && !d.invoiceId ? '<button type="button" class="btn btn-ghost" id="d-convert">Transformer en facture</button>' : "") +
       "</div>";
+    if (st !== "cancelled") html += sendCard(d);
     if (d.type === "devis") {
       html += '<section class="card espace-card"><h3>Réponse du client</h3><div class="espace-actions">' +
         '<button type="button" class="btn btn-ghost btn-sm" data-quote="accepted"' + (d.status === "accepted" ? ' aria-pressed="true"' : "") + ">Accepté</button>" +
@@ -629,7 +787,7 @@
     if (d.type === "facture" && (st === "overdue" || st === "unpaid" || st === "partial")) {
       html += '<section class="card espace-card"><h3>Relancer le client</h3><p class="small muted">' +
         (st === "overdue" ? "Échéance dépassée de " + OF.daysBetween(E.dueDate(d), TODAY) + " jour(s)." : "Échéance le " + day(E.dueDate(d)) + ".") +
-        '</p><div class="espace-actions"><a class="btn btn-ghost btn-sm" id="d-remind" href="' + esc(reminderMail(d, c, bal)) + '">Écrire l\'email de relance</a>' +
+        '</p><div class="espace-actions"><a class="btn btn-ghost btn-sm" id="d-remind" href="' + esc(mailto(d, "reminder")) + '">Écrire l\'email de relance</a>' +
         '<a class="btn btn-ghost btn-sm" href="../relance-facture-impayee/">Modèles de relance</a></div></section>';
     }
     if (d.origin && d.originId) html += '<p class="small">Avoir de la facture <a href="#/documents/' + esc(d.originId) + '">' + esc(d.origin.number) + "</a>.</p>";
@@ -659,34 +817,48 @@
     return html + "</section>";
   }
 
-  function reminderMail(d, c, bal) {
-    var p = profile();
-    var late = E.state(d, TODAY) === "overdue" || E.dueDate(d) < TODAY;
-    var subject = "Facture " + d.number + (late ? " : rappel de paiement" : " : échéance du " + day(E.dueDate(d)));
-    var body = "Bonjour,\n\n" + (late
-      ? "Sauf erreur de ma part, le règlement de la facture " + d.number + " du " + day(d.date) + ", arrivée à échéance le " + day(E.dueDate(d)) +
-        ", ne m'est pas encore parvenu. Le montant restant dû est de " + money(bal) + "."
-      : "Je me permets de vous rappeler que la facture " + d.number + " du " + day(d.date) + ", d'un montant de " + money(bal) + ", arrive à échéance le " + day(E.dueDate(d)) + ".") +
-      (p.iban ? "\n\nVous pouvez la régler par virement : IBAN " + p.iban + (p.bic ? ", BIC " + p.bic : "") + ", en indiquant la référence " + d.number + "." : "") +
-      "\n\nJe reste à votre disposition pour toute question.\n\nBien cordialement,\n" + (p.name || "");
-    return "mailto:" + encodeURIComponent(c.email || "") + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+  /** Envoi au client : le PDF à joindre, puis l'email prérempli (c'est la messagerie de l'utilisateur qui l'envoie). */
+  function sendCard(d) {
+    var to = recipient(d);
+    return '<section class="card espace-card"><h3>Envoyer au client</h3>' +
+      '<ol class="send-steps small"><li>Téléchargez le PDF.</li><li>Écrivez l\'email prérempli et joignez-y le PDF : ' +
+      "un lien vers votre messagerie ne peut pas joindre de fichier.</li></ol>" +
+      '<div class="espace-actions"><a class="btn btn-ghost btn-sm" id="d-send" href="' + esc(mailto(d, "send")) + '">Écrire l\'email</a></div>' +
+      (to ? '<p class="small muted">À : ' + esc(to) + "</p>"
+        : '<p class="small muted">Pas d\'email dans la fiche du client' +
+          (client(d.clientId) ? ' : <a href="#/clients/' + esc(d.clientId) + '">l\'ajouter</a> pour le préremplir' : "") + ".</p>") +
+      "</section>";
+  }
+  /** Destinataire : email de la fiche client actuelle, sinon celui figé à l'émission. */
+  function recipient(d) {
+    var c = client(d.clientId);
+    return (c && c.email) || (parties(d).client || {}).email || "";
+  }
+  /** Lien mailto: (RFC 6068 : textes encodés, retours à la ligne en CRLF). */
+  function mailto(d, kind) {
+    var m = E.email(kind, d, data.documents, profile(), TODAY, FMT);
+    var enc = function (text) { return encodeURIComponent(text.replace(/\r?\n/g, "\r\n")); };
+    return "mailto:" + encodeURIComponent(recipient(d)).replace(/%40/g, "@") + "?subject=" + enc(m.subject) + "&body=" + enc(m.body);
   }
 
   function bindIssued(d) {
     $("d-print").addEventListener("click", function () { printDoc(d); });
     $("d-duplicate").addEventListener("click", function () {
+      this.disabled = true;
       var copy = E.duplicate(d, TODAY, S.uid());
       copy.createdAt = copy.updatedAt = now();
       data.documents.push(copy);
       persist("Copie créée en brouillon.").then(function () { location.hash = "#/documents/" + copy.id; });
     });
     if ($("d-credit")) $("d-credit").addEventListener("click", function () {
+      this.disabled = true;
       var credit = E.creditFromInvoice(d, TODAY, S.uid());
       credit.createdAt = credit.updatedAt = now();
       data.documents.push(credit);
       persist("Avoir créé en brouillon : ajustez les lignes si l'avoir est partiel.").then(function () { location.hash = "#/documents/" + credit.id; });
     });
     if ($("d-convert")) $("d-convert").addEventListener("click", function () {
+      this.disabled = true;
       var inv = E.invoiceFromQuote(d, TODAY, S.uid());
       inv.createdAt = inv.updatedAt = now();
       d.status = d.status === "refused" ? "accepted" : d.status === "sent" ? "accepted" : d.status;

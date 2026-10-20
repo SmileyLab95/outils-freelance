@@ -149,3 +149,92 @@ navigateur fonctionnel).
 
 Comptes et synchronisation (étape 2), facture électronique et paiement en ligne (étape 3), dépenses et banque (étape 4),
 Espace pour les États-Unis, le Royaume-Uni et le Canada.
+
+## 11. Version 1.1 : envoi par email, passage depuis le générateur, reprise de numérotation
+
+Rédigée le 20/10/2026 avant le développement. Objectif : rendre l'Espace utilisable par celui qui facture déjà avec le
+générateur public, sans casser sa numérotation, et faciliter l'envoi des documents.
+
+### 11.1 Envoyer un document par email
+
+- Sur chaque document émis (facture, devis, avoir) : carte « Envoyer au client » avec deux étapes : télécharger le PDF,
+  puis écrire l'email (lien `mailto:` prérempli : destinataire, objet, texte).
+- Un lien `mailto:` ne peut pas joindre de fichier : l'écran le dit (« joignez le PDF téléchargé »).
+- Destinataire : email de la fiche client actuelle (sinon celui figé à l'émission) ; s'il manque, lien vers la fiche
+  client pour l'ajouter.
+- Textes (moteur `espace-fr.js`, testé) :
+  - **facture** : numéro, date, montant (« TTC » si la TVA s'applique), échéance (« à réception » si délai nul) ; reste
+    dû si un paiement ou un avoir a déjà réduit la facture ; « déjà réglée » si elle est soldée ; IBAN et référence à
+    indiquer quand il reste un montant dû ;
+  - **devis** : numéro, date, montant, date de fin de validité, acompte demandé à la signature, mention à porter pour
+    l'accepter (la même que sur le devis) ;
+  - **avoir** : numéro, date, montant, facture d'origine ; montant à rembourser, ou déduction de la facture et nouveau
+    reste dû ;
+  - **relance** : le texte de la version 1, déplacé dans le moteur.
+- Signature : nom du profil. Aucun texte ne promet un envoi : c'est la messagerie de l'utilisateur qui envoie.
+
+### 11.2 Du générateur public vers l'Espace
+
+- Bouton « Continuer dans mon Espace » sous l'aperçu du générateur. Il dépose le document en cours dans le stockage
+  local du navigateur (clé `of:espace-import`, aussi au clic du milieu et au menu contextuel) et ouvre
+  `/fr/espace/#/importer`. Sans JavaScript, le lien ouvre l'Espace. Un dépôt de plus de 24 heures est ignoré et effacé.
+- Écran `#/importer` :
+  - sans profil : écran d'accueil (profil prérempli avec les coordonnées du générateur), puis reprise du document ;
+  - avec profil : récapitulatif (type, client, lignes, total) et avertissement : le document devient un **brouillon** et
+    reçoit son numéro à l'émission ; **s'il a déjà été envoyé au client depuis le générateur, il ne doit pas être émis
+    une seconde fois** (une même vente n'est facturée qu'une fois) ;
+  - client : fiche existante du même nom (sans tenir compte des majuscules ni des espaces) si elle existe, sinon nouvelle
+    fiche (nom, adresse, SIREN, TVA, adresse de livraison, professionnel, pays) ; une fiche existante n'est pas modifiée ;
+  - coordonnées de l'entreprise : seuls les champs **vides** du profil sont complétés par ceux du générateur ;
+  - l'acompte déjà versé du générateur n'est pas repris comme montant : l'écran invite à l'enregistrer comme encaissement
+    après l'émission ;
+  - boutons « Créer le brouillon » et « Ne pas reprendre » ; dans les deux cas, le dépôt est effacé.
+- Aucun dépôt : message et lien vers le générateur.
+
+### 11.3 Reprendre une numérotation existante
+
+Règle : la numérotation doit rester **unique, chronologique et continue** (CGI, ann. II, art. 242 nonies A). Celui qui a
+déjà émis des factures ailleurs (générateur, autre logiciel) doit pouvoir **continuer sa séquence** plutôt que d'en
+recommencer une.
+
+- Réglages : pour chaque type, « dernier numéro déjà utilisé en <année> » (entier, facultatif), avec l'aperçu du prochain
+  numéro. Stocké dans `profile.numbering = { facture: { year, last }, devis: …, avoir: … }` (champ facultatif, schéma 1
+  inchangé).
+- Prochain numéro = préfixe + année + rang, où rang = 1 + le plus grand entre le rang le plus élevé déjà émis dans
+  l'Espace et le dernier numéro déclaré pour l'année.
+- **Une série commencée garde son préfixe** (celui de son dernier document émis) jusqu'à la fin de l'année, même si le
+  préfixe change dans les réglages ou lors d'une reprise : le nouveau préfixe vaut pour les séries suivantes. Une
+  facture de décembre émise en janvier reçoit donc bien le numéro suivant de la série de décembre.
+- Le dernier numéro déclaré n'est plus modifiable une fois la série de l'année commencée dans l'Espace (pas de trou).
+- Reprise depuis le générateur : si son numéro a la forme `<préfixe><année>-<rang>` (ex. `2026-007`, `D-2026-003`), que
+  l'année est celle du document **et l'année en cours**, qu'aucun document de ce type n'est encore émis cette année dans
+  l'Espace et que le préfixe n'est pas celui d'un autre type, l'écran propose (case cochée) de **continuer cette
+  numérotation** : préfixe repris, dernier numéro = rang − 1, de sorte que le document reçoive le numéro affiché dans le
+  générateur.
+- Réglages : préfixes différents pour les factures, les devis et les avoirs ; lettres, tirets (- ou _) ou barres
+  obliques (12 caractères au plus), seuls caractères admis avec les chiffres dans le numéro d'une facture électronique
+  (règle BR-FR-02 de la norme XP Z12-012).
+
+### 11.4 Raccourcis depuis les outils publics
+
+Encart « Espace entrepreneur » sur les outils qui y mènent naturellement : simulateur auto-entrepreneur (déclaration
+estimée), calendrier fiscal (échéances selon le profil), relance de facture impayée (suivi des retards), mentions
+obligatoires (factures conformes et numérotées). Texte factuel, sans promesse au-delà de ce que fait la version locale.
+
+### 11.5 Critères d'acceptation
+
+| N° | Critère |
+|---|---|
+| A13 | Les textes d'email (facture à payer, en partie payée, soldée ; devis avec acompte ; avoir imputé et à rembourser ; relance) contiennent le numéro, la date, le bon montant et la bonne échéance. |
+| A14 | Le bouton du générateur ouvre l'Espace et le document repris devient un brouillon avec les mêmes lignes, le même client, la même TVA et les mêmes conditions. |
+| A15 | Le client repris est rattaché à la fiche existante du même nom, ou créé ; un profil existant n'est complété que sur ses champs vides. |
+| A16 | Numérotation continuée : générateur à `2026-007` → la facture émise reçoit `2026-007`, la suivante `2026-008`. |
+| A17 | Réglage « dernier numéro utilisé » = 12 → prochaine facture `F2026-013` ; un rang déjà émis plus élevé l'emporte. |
+| A18 | Sans profil, le passage par l'accueil reprend ensuite le document ; « Ne pas reprendre » efface le dépôt ; un dépôt de plus de 24 heures est ignoré. |
+| A19 | Une série commencée garde son préfixe : changer le préfixe en cours d'année n'a d'effet que sur la série suivante. |
+
+Ajouts de la revue de code du 20/10/2026 (v1.1) : série commencée qui garde son préfixe (A19) ; reprise de
+numérotation limitée à l'année en cours ; boutons protégés contre le double clic ; dépôt du générateur limité à
+24 heures ; mention d'acceptation du devis partagée entre le devis et l'email ; numéro affiché à la confirmation
+d'émission identique au numéro attribué. Mention de paiement corrigée dans le moteur commun : « au plus tard le … »,
+ou « à réception » si le délai est nul (au lieu de « à réception, au plus tard le … »).

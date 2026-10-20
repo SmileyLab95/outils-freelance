@@ -18,9 +18,14 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   avoirs, encaissements, livre des recettes, déclaration Urssaf estimée, plafonds, échéances, sauvegarde ;
   moteur de facture commun au générateur public ; spécification ([09](09-specification-espace.md)), 60 tests
   unitaires, parcours navigateur complet, revue de code (10 points corrigés).
-- **Prochaines actions de Claude** : Espace v1.1 (export Factur-X pour préparer la facturation électronique, envoi
-  de la facture par email prérempli, raccourcis depuis les outils publics) ; étude concurrentielle et spécification des
-  comptes en ligne (E2) ; finitions SEO ; veille réglementaire de décembre.
+- **Fait le 20/10/2026 (suite)** : **Espace v1.1** : envoi des factures, devis et avoirs par email prérempli ;
+  bouton « Continuer dans mon Espace » dans le générateur public ; reprise d'une numérotation commencée ailleurs (une
+  série garde son préfixe jusqu'à la fin de l'année, D13) ; encarts vers l'Espace sur 4 outils ; mention de paiement
+  corrigée dans le moteur commun. 73 tests unitaires, parcours navigateur étendu, revue de code (10 points corrigés).
+- **Prochaines actions de Claude** : export Factur-X selon l'[étude](10-etude-factur-x.md) (F1 : lever les points à
+  vérifier dans la norme XP Z12-012 ; F2 : adresse structurée et SIREN ; F3 : XML validé par les schémas et règles
+  officiels ; F4 : PDF/A-3 ; F5 : bouton dans l'Espace) ; étude concurrentielle et spécification des comptes en ligne
+  (E2) ; finitions SEO ; veille réglementaire de décembre.
 - **En attente d'Ismail** (pas urgent) : structure juridique avec un comptable ; plus tard, compte d'hébergement pour
   les comptes en ligne (E2) ; à la fin, marque et domaine, Gumroad.
 
@@ -118,6 +123,8 @@ Objectif : un compte gratuit qui rend service dès le premier jour.
 - [x] Échéances selon le profil *(version locale)*
 - [ ] Rappels d'échéances par email (comptes en ligne)
 - [x] Reprise des informations du générateur de facture ; import et export d'une sauvegarde *(version locale)*
+- [x] Passage du générateur public à l'Espace (document repris en brouillon) et reprise d'une numérotation existante *(version locale)*
+- [x] Envoi des factures, devis et avoirs par email prérempli (messagerie de l'utilisateur) *(version locale)*
 - [ ] Import de la version locale dans le compte en ligne
 - [x] Export complet (PDF, CSV, JSON) et suppression des données *(version locale)*
 
