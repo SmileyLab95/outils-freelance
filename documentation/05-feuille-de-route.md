@@ -50,12 +50,13 @@ Les phases s'enchaînent dans cet ordre ; une phase n'est terminée que lorsque 
 
 ## Phase 4 — France, aller plus loin
 
-- [ ] Comparateur de statuts : micro-entreprise, EI au réel, EURL, SASU
-- [ ] Rubrique facturation électronique : calendrier, obligations, plateformes agréées, nouvelles mentions
+- [x] Comparateur de statuts : micro-entreprise, entreprise au réel (EI / EURL à l'IR), SASU (salaire / dividendes) — EURL à l'IS à ajouter
+- [x] Rubrique facturation électronique : calendrier, obligations, plateformes agréées, nouvelles mentions, checklist
+- [x] Mention de franchise de TVA mise à jour (art. L. 223-3 du CIBS)
 - [ ] Générateur de facture : nouvelles mentions de la réforme (SIREN du client, nature de l'opération…)
 - [ ] Indemnités kilométriques (barème officiel)
 - [ ] Calendrier fiscal et social avec export agenda
-- [ ] Calcul de date d'échéance
+- [x] Calcul de date d'échéance (30 jours, 45 jours fin de mois — deux méthodes —, 60 jours)
 - [ ] Générateur de contrat de prestation
 
 ## Phase 5 — Revenus (reportée à la fin, sur décision du 20/10/2026 : d'abord terminer le site, puis Gumroad, puis l'affiliation)

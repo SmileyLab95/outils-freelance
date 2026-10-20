@@ -74,7 +74,11 @@
     /** Date au format de la section : « 18/10/2026 », « 10/18/2026 », « 18 Oct 2026 »… */
     date: function (iso, options) {
       var d = OF.parseDate(iso);
-      return d ? d.toLocaleDateString(LOCALE, options) : "";
+      if (!d) return "";
+      var text = d.toLocaleDateString(LOCALE, options);
+      // En français, le premier du mois s'écrit « 1er » : « 1er septembre 2027 ».
+      return FRENCH && options && options.month && options.month !== "numeric" && options.month !== "2-digit"
+        ? text.replace(/(^|\s)1 (?=\D)/, "$11er ") : text;
     },
     addDays: function (iso, days) {
       var d = OF.parseDate(iso);

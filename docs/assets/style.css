@@ -449,3 +449,11 @@ a.country-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg)
 .compare-col.is-best { border-color: var(--ok); background: #f3fdf6; box-shadow: 0 0 0 3px rgba(22,163,74,.12); }
 .compare-col.is-best h3::after { content: " ✓"; color: var(--ok); }
 @media (max-width: 520px) { .compare { grid-template-columns: 1fr; } }
+.compare-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; padding: 12px; }
+.compare-3 .compare-col { padding: 10px 10px 2px; }
+.compare-3 .result-list li { flex-direction: column; gap: 0; }
+.compare-col.is-out { opacity: .5; }
+@media (max-width: 520px) { .compare-3 { grid-template-columns: 1fr; } .compare-3 .result-list li { flex-direction: row; } }
+.assumptions { margin-top: 18px; border-top: 1px solid var(--line); padding-top: 12px; }
+.assumptions summary { cursor: pointer; font-weight: 650; font-size: .9rem; color: var(--brand-ink); }
+.result-wrap b { white-space: normal; text-align: right; }

@@ -1,0 +1,97 @@
+<!--{
+  "id": "einvoicing",
+  "slug": "facturation-electronique/",
+  "title": "Facturation électronique 2026-2027 : ce qui change pour les indépendants",
+  "description": "Facture électronique obligatoire : réception dès le 1er septembre 2026, émission dès le 1er septembre 2027 pour les micro-entreprises. Calendrier, plateformes agréées, nouvelles mentions, sanctions et checklist.",
+  "menu": "Facturation électronique",
+  "icon": "⚡",
+  "blurb": "Vos dates, vos obligations et la checklist pour être prêt.",
+  "app": "Vérificateur facturation électronique",
+  "scripts": ["tools/fr-einvoice.js"],
+  "rules": "fr",
+  "sources": ["facturation_electronique_calendrier", "plateformes_agreees", "facturation_electronique_nouvelles_mentions", "facturation_electronique_formats", "facturation_electronique_sanctions"],
+  "priority": 0.95,
+  "faq": [
+    ["La facture électronique est-elle obligatoire pour les auto-entrepreneurs ?", "Oui, pour les ventes et prestations entre entreprises établies en France. Depuis le 1er septembre 2026, toutes les entreprises, y compris les micro-entrepreneurs en franchise de TVA, doivent pouvoir recevoir des factures électroniques. À partir du 1er septembre 2027, les micro-entreprises, TPE et PME devront aussi en émettre."],
+    ["Un PDF envoyé par email est-il une facture électronique ?", "Non. Une facture électronique est un fichier structuré (Factur-X, UBL ou CII) transmis par une plateforme agréée. Le PDF envoyé par email restera possible pour vos clients particuliers et vos clients étrangers, mais plus pour vos clients professionnels français à partir de votre date d'émission obligatoire."],
+    ["Qu'est-ce qu'une plateforme agréée ?", "Un prestataire immatriculé par l'administration fiscale qui transmet vos factures électroniques et les données à l'administration. Chaque entreprise doit en choisir au moins une. Certaines proposent des offres gratuites ou peu coûteuses pour les micro-entrepreneurs ; la liste officielle est publiée sur impots.gouv.fr."],
+    ["Quelles nouvelles mentions faudra-t-il ajouter sur les factures ?", "Quatre mentions s'ajoutent : le numéro SIREN du client, l'adresse de livraison si elle diffère de celle du client, la nature des opérations (biens, services ou mixte) et, le cas échéant, l'option pour le paiement de la TVA d'après les débits."],
+    ["Qu'est-ce que l'e-reporting ?", "La transmission à l'administration, via votre plateforme agréée, des données des opérations qui ne passent pas par une facture électronique : ventes à des particuliers, opérations avec l'étranger, et données de paiement pour les prestations de services. Elle suit le même calendrier que l'émission."],
+    ["Quelles sont les sanctions ?", "Depuis la loi de finances pour 2026 : 50 € par facture non émise au format électronique, dans la limite de 15 000 € par an, et 500 € par transmission d'e-reporting manquante. Ne pas avoir de plateforme agréée expose aussi à une amende après mise en demeure."]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Réforme 2026-2027</span>
+    <h1>Facturation électronique : ce qui change pour vous</h1>
+    <p class="lead">Indiquez la taille de votre entreprise et vos types de clients : vous saurez quand vous devez recevoir, émettre et déclarer vos factures, et ce qu'il faut faire d'ici là.</p>
+    <ul class="trust"><li>Calendrier officiel</li><li>Nouvelles mentions</li><li>Checklist pour être prêt</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="einvoice-form" onsubmit="return false">
+      <h2>Votre situation</h2>
+      <div class="fields">
+        <div class="field full"><label for="e-size">Votre entreprise</label>
+          <select id="e-size" name="size" data-save>
+            <option value="micro">Micro-entreprise ou entreprise individuelle</option>
+            <option value="pme">TPE ou PME (moins de 250 salariés)</option>
+            <option value="eti">ETI ou grande entreprise</option>
+          </select></div>
+        <span class="label full">Vos clients</span>
+        <label class="check full"><input type="checkbox" id="e-b2b" name="b2b" checked data-save><span>Des entreprises établies en France</span></label>
+        <label class="check full"><input type="checkbox" id="e-b2c" name="b2c" data-save><span>Des particuliers</span></label>
+        <label class="check full"><input type="checkbox" id="e-intl" name="intl" data-save><span>Des clients à l'étranger</span></label>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="result-hero">
+        <div class="label">Vous devez émettre des factures électroniques</div>
+        <div class="big" id="e-date">–</div>
+        <div class="sub" id="e-sub">–</div>
+      </div>
+      <ul class="result-list result-wrap card" style="padding: 6px 18px;" id="e-list"></ul>
+      <div class="card" style="margin-top: 16px; padding: 18px;">
+        <h3 style="font-size: 1rem; margin-bottom: 8px;">Votre checklist</h3>
+        <div class="progress" aria-hidden="true"><div id="e-progress"></div></div>
+        <ul class="checklist" id="e-checklist" style="margin-top: 8px;">
+          <li><label><input type="checkbox" data-step="pa"><div><strong>Choisir une plateforme agréée</strong><span>Obligatoire pour recevoir vos factures depuis le 1er septembre 2026.</span></div></label></li>
+          <li><label><input type="checkbox" data-step="siren"><div><strong>Collecter le SIREN de vos clients professionnels</strong><span>Nouvelle mention obligatoire, à demander dès maintenant.</span></div></label></li>
+          <li><label><input type="checkbox" data-step="mentions"><div><strong>Mettre à jour vos modèles de facture</strong><span>Nature des opérations, adresse de livraison, option débits.</span></div></label></li>
+          <li><label><input type="checkbox" data-step="tool"><div><strong>Choisir un outil de facturation compatible</strong><span>Il doit produire du Factur-X, de l'UBL ou du CII, ou être relié à votre plateforme.</span></div></label></li>
+          <li><label><input type="checkbox" data-step="test"><div><strong>Faire un essai avant votre date</strong><span>Envoyez une première facture électronique à un client de confiance.</span></div></label></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>La réforme en bref</h2>
+  <p>Entre entreprises établies en France, les factures papier et PDF laissent la place à des <strong>factures électroniques structurées</strong>, transmises par des <strong>plateformes agréées</strong> par l'administration fiscale. L'objectif : lutter contre la fraude à la TVA, réduire les délais de paiement et préremplir les déclarations de TVA.</p>
+  <div class="table-scroll">
+  <table>
+    <thead><tr><th>Obligation</th><th>Grandes entreprises et ETI</th><th>PME, TPE et micro-entreprises</th></tr></thead>
+    <tbody>
+      <tr><td>Recevoir des factures électroniques</td><td>1er septembre 2026</td><td>1er septembre 2026</td></tr>
+      <tr><td>Émettre des factures électroniques</td><td>1er septembre 2026</td><td>1er septembre 2027</td></tr>
+      <tr><td>E-reporting (particuliers, étranger, paiements)</td><td>1er septembre 2026</td><td>1er septembre 2027</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <h2>Les 4 nouvelles mentions obligatoires</h2>
+  <ul>
+    <li>Le numéro <strong>SIREN du client</strong>.</li>
+    <li>L'<strong>adresse de livraison</strong> des biens si elle diffère de celle du client.</li>
+    <li>La <strong>nature des opérations</strong> : livraison de biens, prestation de services ou les deux.</li>
+    <li>La mention « Option pour le paiement de la taxe d'après les débits », si vous l'avez choisie.</li>
+  </ul>
+  <p>Elles s'ajoutent aux <a href="{{link:invoice-rules}}">mentions obligatoires actuelles</a>, à la date à laquelle vous devez émettre des factures électroniques.</p>
+  <h2>Et notre générateur de facture ?</h2>
+  <p>Le <a href="{{link:invoice}}">générateur de facture</a> produit un PDF : il reste adapté pour vos clients particuliers et étrangers, et pour vos clients professionnels jusqu'à votre date d'émission obligatoire (le 31 août 2027 au plus tard pour une micro-entreprise). Ensuite, vos factures aux entreprises devront passer par votre plateforme agréée.</p>
+  <p class="small muted">Informations à titre indicatif. Le calendrier, la liste des plateformes agréées et les formats sont publiés sur impots.gouv.fr.</p>
+</section>

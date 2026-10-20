@@ -1,5 +1,15 @@
 # Journal des modifications
 
+## 2026-10-20 — France : nouveaux outils et mise à jour réglementaire
+
+- Mention de franchise de TVA : « TVA non applicable, art. L. 223-3 du CIBS (ex-art. 293 B du CGI) » (recodification
+  de la TVA, ordonnance n° 2025-1247 ; article vérifié sur Légifrance).
+- Facturation électronique : vérificateur des dates (réception, émission, e-reporting), nouvelles mentions, sanctions
+  2026 (50 € par facture, 500 € par e-reporting manquant), checklist mémorisée.
+- Calcul de la date d'échéance d'une facture (deux méthodes du « 45 jours fin de mois », maximum légal).
+- Comparateur de statuts : micro-entreprise, entreprise au réel, SASU (moteur `engines/statuts-fr.js`, testé).
+- Dates françaises au format « 1er septembre ».
+
 ## 2026-10-20 — Sections Royaume-Uni et Canada (anglais et français)
 
 - Royaume-Uni (`/uk/`, 12 pages) : impôt du sole trader (Angleterre/Écosse, Class 4, payments on account),

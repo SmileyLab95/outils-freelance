@@ -558,6 +558,43 @@ const tests = {
   },
   async "ca/fr/mentions-legales/"() {},
   async "ca/fr/confidentialite/"() {},
+  async "fr/facturation-electronique/"(page) {
+    check((await page.textContent("#e-date")).trim() === "1er septembre 2027", "facture électronique : micro-entreprise → 1er septembre 2027");
+    await page.selectOption("#e-size", "eti");
+    check((await page.textContent("#e-date")).trim() === "1er septembre 2026", "facture électronique : ETI → 1er septembre 2026");
+    await page.check("#e-b2c");
+    check((await page.textContent("#e-list")).includes("E-reporting"), "facture électronique : e-reporting pour les particuliers");
+    await page.uncheck("#e-b2b");
+    check((await page.textContent("#e-date")).trim() === "Non concerné", "facture électronique : sans clients professionnels");
+    await page.check('[data-step="pa"]');
+    await page.reload({ waitUntil: "networkidle" });
+    check(await page.isChecked('[data-step="pa"]'), "facture électronique : checklist mémorisée");
+    await page.check("#e-b2b");
+    await page.uncheck("#e-b2c");
+    await page.selectOption("#e-size", "micro");
+  },
+  async "fr/calcul-date-echeance-facture/"(page) {
+    await page.fill("#d-date", "2026-03-10");
+    await page.selectOption("#d-terms", "45fdm");
+    check((await page.textContent("#d-due")).trim() === "30 avril 2026", "échéance : 10 mars + 45 jours fin de mois → 30 avril");
+    await page.selectOption("#d-terms", "fdm45");
+    check((await page.textContent("#d-due")).trim() === "15 mai 2026", "échéance : fin de mars + 45 jours → 15 mai");
+    await page.selectOption("#d-terms", "60");
+    check((await page.textContent("#d-due")).trim() === "9 mai 2026" && (await page.getAttribute("#d-notice", "class")).includes("ok"), "échéance : 60 jours, conforme");
+    await page.fill("#d-date", "");
+    await page.selectOption("#d-terms", "30");
+  },
+  async "fr/comparateur-statuts/"(page) {
+    // Micro libérale : 60 000 − 5 000 − 15 480 − 4 983,99 = 34 536 € (voir tests unitaires)
+    check((await page.textContent("#c-m-net")).replace(/\s/g, "") === "34536€", "statuts : micro-entreprise 34 536 €");
+    check((await page.textContent("#c-best-label")).includes("Micro-entreprise"), "statuts : micro la plus avantageuse à 60 000 €");
+    await page.fill("#c-revenue", "120 000");
+    check(await page.evaluate(() => document.getElementById("c-micro").classList.contains("is-out")), "statuts : micro exclue au-delà du plafond");
+    await page.fill("#c-revenue", "60 000");
+    await page.fill("#c-share", "0");
+    check((await page.textContent("#c-notice")).includes("retraite"), "statuts : avertissement SASU sans salaire");
+    await page.fill("#c-share", "50");
+  },
   async "fr/confidentialite/"() {},
   async "fr/mentions-legales/"() {},
 };

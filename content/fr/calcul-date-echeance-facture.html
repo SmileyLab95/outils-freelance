@@ -1,0 +1,75 @@
+<!--{
+  "id": "duedate",
+  "slug": "calcul-date-echeance-facture/",
+  "title": "Calcul de la date d'échéance d'une facture (30, 45 jours fin de mois, 60 jours)",
+  "description": "Calculez la date d'échéance d'une facture : 30 jours, 45 jours fin de mois (les deux méthodes), 60 jours, fin de mois. Vérifiez le délai maximal légal entre professionnels. Gratuit.",
+  "menu": "Date d'échéance d'une facture",
+  "icon": "📅",
+  "blurb": "30 jours, 45 jours fin de mois, 60 jours : la bonne date, et le maximum légal.",
+  "app": "Calculateur de date d'échéance",
+  "scripts": ["tools/fr-echeance.js"],
+  "rules": "fr",
+  "sources": ["retard_paiement_delais", "penalites_retard_regle"],
+  "priority": 0.8,
+  "faq": [
+    ["Comment calculer « 45 jours fin de mois » ?", "Deux méthodes sont admises. La plus courante : on ajoute 45 jours à la date de la facture, puis on va à la fin du mois (facture du 10 mars → 24 avril → 30 avril). Autre méthode : on va à la fin du mois de la facture, puis on ajoute 45 jours (31 mars + 45 jours → 15 mai). Précisez la méthode retenue dans vos conditions de vente."],
+    ["Quel est le délai de paiement maximal entre professionnels ?", "Le délai convenu ne peut pas dépasser 60 jours à compter de la date de la facture, ou 45 jours fin de mois si le contrat le prévoit (article L441-10 du Code de commerce). Sans accord, le délai est de 30 jours après la réception des marchandises ou l'exécution de la prestation."],
+    ["Que se passe-t-il après la date d'échéance ?", "Des pénalités de retard sont dues de plein droit dès le lendemain, au taux prévu dans vos conditions (au moins trois fois le taux d'intérêt légal), ainsi qu'une indemnité forfaitaire de 40 € pour frais de recouvrement. Calculez-les avec notre <a href=\"{{link:latefee}}\">calculateur de pénalités</a>."]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Gratuit · règles du Code de commerce</span>
+    <h1>Date d'échéance d'une facture</h1>
+    <p class="lead">Choisissez la date de la facture et le délai de paiement : la date d'échéance s'affiche, avec le nombre de jours restants et le maximum autorisé entre professionnels.</p>
+    <ul class="trust"><li>45 jours fin de mois : les deux méthodes</li><li>Délai maximal légal</li><li>Jours restants</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="echeance-form" onsubmit="return false">
+      <h2>La facture</h2>
+      <div class="fields">
+        <div class="field full"><label for="d-date">Date de la facture</label>
+          <input type="date" id="d-date" name="date"></div>
+        <div class="field full"><label for="d-terms">Délai de paiement</label>
+          <select id="d-terms" name="terms" data-save>
+            <option value="0">À réception</option>
+            <option value="15">15 jours</option>
+            <option value="30" selected>30 jours</option>
+            <option value="30fdm">30 jours fin de mois</option>
+            <option value="45">45 jours</option>
+            <option value="45fdm">45 jours fin de mois (date + 45 jours, puis fin de mois)</option>
+            <option value="fdm45">Fin de mois + 45 jours</option>
+            <option value="60">60 jours</option>
+          </select></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="result-hero">
+        <div class="label">Date d'échéance</div>
+        <div class="big" id="d-due">–</div>
+        <div class="sub" id="d-sub">–</div>
+      </div>
+      <ul class="result-list card" style="padding: 6px 18px;">
+        <li><span>Délai depuis la facture</span><b id="d-span">–</b></li>
+        <li><span>Maximum légal : 60 jours</span><b id="d-max60">–</b></li>
+        <li><span>Maximum légal : 45 jours fin de mois</span><b id="d-max45">–</b></li>
+      </ul>
+      <p class="notice" id="d-notice" style="margin-top: 16px;">–</p>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>Délais de paiement : ce que dit la loi</h2>
+  <ul>
+    <li><strong>Sans accord :</strong> 30 jours après la réception des marchandises ou l'exécution de la prestation.</li>
+    <li><strong>Avec accord :</strong> au maximum 60 jours à compter de la date de la facture, ou 45 jours fin de mois si c'est prévu au contrat.</li>
+    <li><strong>Sur la facture :</strong> la date d'échéance est une mention obligatoire, comme le taux des pénalités de retard et l'indemnité de 40 €. Le <a href="{{link:invoice}}">générateur de facture</a> la calcule pour vous.</li>
+  </ul>
+  <p class="small muted">Des règles particulières existent pour certains secteurs (transport, produits alimentaires périssables…). Information à titre indicatif.</p>
+</section>

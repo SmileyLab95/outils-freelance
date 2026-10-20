@@ -10,14 +10,17 @@
       "items": [
         "invoice",
         "salestax",
-        "invoice-rules"
+        "invoice-rules",
+        "einvoicing",
+        "duedate"
       ]
     },
     {
       "label": "Prix et revenus",
       "items": [
         "rate",
-        "tax"
+        "tax",
+        "structure"
       ]
     },
     {
@@ -37,7 +40,7 @@
   "featured": [
     "invoice",
     "tax",
-    "salestax"
+    "einvoicing"
   ],
   "footer_links": [
     "legal",

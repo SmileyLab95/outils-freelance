@@ -1,0 +1,113 @@
+<!--{
+  "id": "structure",
+  "slug": "comparateur-statuts/",
+  "title": "Comparateur de statuts : micro-entreprise, entreprise au réel ou SASU ?",
+  "description": "Comparez ce qu'il vous reste selon votre statut : micro-entreprise, entreprise individuelle au réel ou EURL à l'IR, SASU en salaire ou en dividendes. Cotisations, IS, impôt et dividendes 2026. Gratuit.",
+  "menu": "Comparateur de statuts",
+  "icon": "⚖️",
+  "blurb": "Micro, réel ou SASU : ce qu'il vous reste dans chaque cas.",
+  "app": "Comparateur de statuts d'indépendant",
+  "scripts": ["engines/brackets.js", "engines/statuts-fr.js", "tools/fr-statuts.js"],
+  "rules": "fr",
+  "sources": ["micro_activities", "ir_bareme_revenus_2025", "is_taux_reduit", "pfu_total_dividendes_2026", "tns_gerant_majoritaire_taux_global_approx", "sasu_president_taux_global_approx"],
+  "priority": 0.95,
+  "faq": [
+    ["Quel statut choisir pour se lancer en freelance ?", "La micro-entreprise est la plus simple et souvent la plus avantageuse quand vos dépenses sont faibles et votre chiffre d'affaires sous les plafonds (83 600 € pour les services). Le régime réel devient intéressant quand vos dépenses dépassent l'abattement forfaitaire (34 % en libéral). La société (SASU, EURL) se justifie surtout avec un bénéfice élevé, un besoin de protéger son patrimoine ou des associés."],
+    ["SASU : salaire ou dividendes ?", "Les dividendes supportent l'impôt sur les sociétés (15 % puis 25 %) puis le prélèvement forfaitaire unique de 31,4 %, mais n'ouvrent aucun droit à la retraite ni aux indemnités journalières. Le salaire coûte plus cher en charges mais protège. Beaucoup de présidents combinent un salaire modeste et des dividendes."],
+    ["Pourquoi l'EURL à l'IS n'est-elle pas dans le comparateur ?", "En EURL, les dividendes qui dépassent 10 % du capital et des comptes courants supportent des cotisations sociales de travailleur non salarié, ce qui rapproche souvent le résultat de celui de l'entreprise au réel présentée ici. Pour ce cas, un simulateur détaillé ou un expert-comptable est préférable."],
+    ["Les résultats sont-ils exacts ?", "Les règles de la micro-entreprise, de l'impôt sur le revenu, de l'impôt sur les sociétés et des dividendes sont exactes pour 2026. Les cotisations du régime réel et de la SASU sont estimées avec des taux moyens, modifiables en bas du formulaire : elles dépendent de nombreux paramètres. Utilisez le résultat comme ordre de grandeur, puis confirmez avec le simulateur de l'Urssaf ou un expert-comptable."]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Gratuit · règles 2026</span>
+    <h1>Comparateur de statuts</h1>
+    <p class="lead">Micro-entreprise, entreprise au réel ou SASU ? Indiquez votre chiffre d'affaires et vos dépenses : voyez ce qu'il vous reste dans chaque cas, après cotisations et impôts.</p>
+    <ul class="trust"><li>Micro-entreprise aux taux officiels</li><li>SASU en salaire ou dividendes</li><li>Hypothèses visibles et modifiables</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="statuts-form" onsubmit="return false">
+      <h2>Votre activité</h2>
+      <div class="fields">
+        <div class="field full"><label for="c-revenue">Chiffre d'affaires annuel HT</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="c-revenue" name="revenue" value="60 000" data-save><span>€</span></div></div>
+        <div class="field full"><label for="c-expenses">Dépenses professionnelles par an</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="c-expenses" name="expenses" value="5 000" data-save><span>€</span></div>
+          <span class="hint">Matériel, logiciels, déplacements, assurance…</span></div>
+        <div class="field full"><label for="c-activity">Type d'activité (pour la micro-entreprise)</label>
+          <select id="c-activity" name="activity" data-save>
+            <option value="liberal_bnc">Profession libérale (BNC)</option>
+            <option value="cipav">Profession libérale CIPAV</option>
+            <option value="services_bic">Prestations de services commerciales (BIC)</option>
+            <option value="artisan">Activité artisanale (BIC)</option>
+            <option value="vente">Vente de marchandises (BIC)</option>
+          </select></div>
+        <div class="field full"><label for="c-share">SASU : part du bénéfice versée en salaire</label>
+          <div class="input-suffix"><input type="number" id="c-share" name="share" value="50" min="0" max="100" step="5" data-save><span>%</span></div>
+          <span class="hint">Le reste est distribué en dividendes après l'impôt sur les sociétés.</span></div>
+      </div>
+      <details class="assumptions">
+        <summary>Hypothèses de calcul</summary>
+        <div class="fields" style="margin-top: 12px;">
+          <div class="field"><label for="c-tns">Cotisations au réel (en % du revenu net)</label>
+            <div class="input-suffix"><input type="text" inputmode="decimal" id="c-tns" name="tns" value="45" data-save><span>%</span></div></div>
+          <div class="field"><label for="c-coef">SASU : coût total d'un euro de salaire net</label>
+            <input type="text" inputmode="decimal" id="c-coef" name="coef" value="1,82" data-save></div>
+          <div class="field full"><label for="c-company">SASU : frais propres à la société par an</label>
+            <div class="input-suffix"><input type="text" inputmode="decimal" id="c-company" name="company" value="1 500" data-save><span>€</span></div>
+            <span class="hint">Expert-comptable, banque, formalités.</span></div>
+        </div>
+      </details>
+    </form>
+
+    <div class="results">
+      <div class="result-hero">
+        <div class="label" id="c-best-label">Le plus avantageux</div>
+        <div class="big" id="c-best">–</div>
+        <div class="sub" id="c-sub">–</div>
+      </div>
+      <div class="compare compare-3 card">
+        <div class="compare-col" id="c-micro">
+          <h3>Micro-entreprise</h3>
+          <ul class="result-list">
+            <li><span>Cotisations</span><b id="c-m-social">–</b></li>
+            <li><span>Impôt</span><b id="c-m-tax">–</b></li>
+            <li><span><strong>Il vous reste</strong></span><b id="c-m-net">–</b></li>
+          </ul>
+        </div>
+        <div class="compare-col" id="c-real">
+          <h3>Entreprise au réel</h3>
+          <ul class="result-list">
+            <li><span>Cotisations</span><b id="c-r-social">–</b></li>
+            <li><span>Impôt</span><b id="c-r-tax">–</b></li>
+            <li><span><strong>Il vous reste</strong></span><b id="c-r-net">–</b></li>
+          </ul>
+        </div>
+        <div class="compare-col" id="c-sasu">
+          <h3>SASU</h3>
+          <ul class="result-list">
+            <li><span>Charges sur salaire</span><b id="c-s-social">–</b></li>
+            <li><span>IS, impôt et PFU</span><b id="c-s-tax">–</b></li>
+            <li><span><strong>Il vous reste</strong></span><b id="c-s-net">–</b></li>
+          </ul>
+        </div>
+      </div>
+      <p class="notice" id="c-notice" style="margin-top: 16px;">–</p>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>Comment lire la comparaison</h2>
+  <ul>
+    <li><strong>Micro-entreprise :</strong> cotisations au taux officiel sur le chiffre d'affaires, impôt sur le revenu après l'abattement forfaitaire. Vos dépenses réelles ne sont pas déductibles, mais elles réduisent ce qu'il vous reste.</li>
+    <li><strong>Entreprise au réel</strong> (entreprise individuelle ou EURL à l'impôt sur le revenu) : cotisations de travailleur non salarié et impôt sur le bénéfice réel, après déduction des dépenses.</li>
+    <li><strong>SASU :</strong> le salaire du président supporte des charges élevées mais ouvre des droits (retraite, indemnités journalières) ; les dividendes supportent l'impôt sur les sociétés puis le prélèvement forfaitaire unique de 31,4 %, sans droits sociaux.</li>
+  </ul>
+  <p>Le revenu disponible est calculé pour une personne seule (une part), sans décote ni réduction d'impôt. Ce qu'il vous reste ne dit pas tout : la protection sociale, la simplicité de gestion et la protection de votre patrimoine comptent aussi.</p>
+  <p>Pour affiner une micro-entreprise, utilisez le <a href="{{link:tax}}">simulateur auto-entrepreneur</a>.</p>
+</section>
