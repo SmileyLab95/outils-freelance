@@ -1,0 +1,67 @@
+<!--{
+  "id": "invoice-rules",
+  "slug": "mentions-obligatoires-facture/",
+  "title": "Mentions obligatoires d'une facture : la checklist complète (2026)",
+  "description": "Vérifiez votre facture point par point : numérotation, SIRET, mention EI, TVA ou franchise, échéance, pénalités de retard, indemnité de 40 €. Checklist interactive gratuite pour freelances et auto-entrepreneurs.",
+  "menu": "Mentions obligatoires",
+  "icon": "✅",
+  "blurb": "La checklist pour vérifier qu'une facture est conforme.",
+  "scripts": ["tools/checklist.js"],
+  "priority": 0.8,
+  "faq": [
+    ["Quelles sont les mentions obligatoires sur une facture d'auto-entrepreneur ?", "Les mêmes que pour toute facture entre professionnels, avec deux spécificités : la mention « EI » ou « Entrepreneur individuel » à côté de votre nom, et la mention « TVA non applicable, art. 293 B du CGI » si vous bénéficiez de la franchise en base de TVA."],
+    ["Que risque-t-on si une mention manque ?", "Une facture incomplète expose à une amende fiscale de 15 € par mention manquante ou inexacte, plafonnée au quart du montant de la facture (article 1737 du Code général des impôts). Surtout, elle peut retarder votre paiement si le service comptable du client la refuse."],
+    ["Peut-on modifier une facture déjà envoyée ?", "Non. Une facture émise ne se modifie pas et ne se supprime pas : en cas d'erreur, on émet une facture d'avoir qui l'annule, puis une nouvelle facture correcte."],
+    ["Qu'est-ce qui change avec la facturation électronique ?", "La réforme rend progressivement obligatoires la réception (septembre 2026) puis l'émission (septembre 2027 pour les PME et micro-entreprises) de factures électroniques entre entreprises, et ajoute de nouvelles mentions, comme le numéro SIREN du client. Consultez le calendrier sur impots.gouv.fr."]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Checklist interactive</span>
+    <h1>Mentions obligatoires d'une facture</h1>
+    <p class="lead">Prenez votre dernière facture et cochez chaque point présent. En moins de deux minutes, vous savez si elle est conforme.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout wide-left">
+    <div class="card">
+      <ul class="checklist" id="checklist">
+        <li><label><input type="checkbox"><div><strong>Le mot « Facture », un numéro unique et la date</strong><span>La numérotation doit être chronologique et continue, sans trou ni doublon (ex. 2026-001, 2026-002…).</span></div></label></li>
+        <li><label><input type="checkbox"><div><strong>Votre identité complète</strong><span>Nom ou dénomination, adresse, forme juridique. Entrepreneur individuel : la mention « EI » ou « Entrepreneur individuel » juste avant ou après votre nom.</span></div></label></li>
+        <li><label><input type="checkbox"><div><strong>Votre numéro SIREN ou SIRET</strong><span>Et votre numéro RCS ou RM si vous êtes immatriculé.</span></div></label></li>
+        <li><label><input type="checkbox"><div><strong>L'identité de votre client</strong><span>Nom ou raison sociale et adresse de facturation (et son numéro de TVA intracommunautaire s'il en a un).</span></div></label></li>
+        <li><label><input type="checkbox"><div><strong>La date de la prestation ou de la vente</strong><span>Si elle diffère de la date de la facture.</span></div></label></li>
+        <li><label><input type="checkbox"><div><strong>Le détail des prestations</strong><span>Désignation précise, quantité, prix unitaire hors taxes et éventuelles réductions.</span></div></label></li>
+        <li><label><input type="checkbox"><div><strong>Les totaux et la TVA</strong><span>Total HT, taux et montant de TVA, total TTC. En franchise : « TVA non applicable, art. 293 B du CGI ».</span></div></label></li>
+        <li><label><input type="checkbox"><div><strong>La date d'échéance du paiement</strong><span>Entre professionnels, au plus 60 jours après la date de facture (ou 45 jours fin de mois si c'est convenu).</span></div></label></li>
+        <li><label><input type="checkbox"><div><strong>Le taux des pénalités de retard</strong><span>Entre professionnels, au moins trois fois le taux d'intérêt légal.</span></div></label></li>
+        <li><label><input type="checkbox"><div><strong>L'indemnité forfaitaire de 40 €</strong><span>« Indemnité forfaitaire pour frais de recouvrement en cas de retard de paiement : 40 € » (entre professionnels).</span></div></label></li>
+        <li><label><input type="checkbox"><div><strong>Les conditions d'escompte</strong><span>Ou la mention « Pas d'escompte pour paiement anticipé ».</span></div></label></li>
+      </ul>
+    </div>
+    <div class="results">
+      <div class="card">
+        <div class="label" style="margin-bottom: 8px;">Votre facture</div>
+        <div class="progress"><div id="cl-bar"></div></div>
+        <p style="margin: 12px 0 0; font-weight: 700;" id="cl-score">0 sur 11 mentions</p>
+        <p class="notice warn" id="cl-msg" style="margin: 12px 0 0;">Cochez les mentions présentes sur votre facture.</p>
+      </div>
+      <a class="btn btn-primary btn-block" href="{{link:invoice}}" style="margin-top: 14px;">Créer une facture conforme gratuitement</a>
+    </div>
+  </div>
+</section>
+
+{{kit_cta}}
+
+<section class="section prose">
+  <h2>Les cas particuliers à connaître</h2>
+  <h3>Vous êtes en franchise de TVA</h3>
+  <p>Vous ne facturez pas la TVA : vos montants sont hors taxes et doivent porter la mention « TVA non applicable, art. 293 B du CGI ». Vous n'indiquez ni taux ni montant de TVA.</p>
+  <h3>Votre client est un particulier</h3>
+  <p>Les pénalités de retard et l'indemnité de 40 € ne concernent que les relations entre professionnels. Pour un particulier, une facture est obligatoire dans certains cas (par exemple au-delà de 25 € pour certaines prestations, ou à sa demande).</p>
+  <h3>Vous avez fait une erreur</h3>
+  <p>Ne modifiez jamais une facture envoyée : émettez une facture d'avoir qui l'annule, puis une nouvelle facture corrigée, avec un nouveau numéro.</p>
+  <p class="small muted">Sources : article 242 nonies A de l'annexe II du CGI, articles L441-9 et L441-10 du Code de commerce, service-public.fr. Informations données à titre indicatif.</p>
+</section>

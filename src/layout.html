@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="fr">
+<html lang="{{lang}}">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,40 +7,34 @@
 <meta name="description" content="{{description}}">
 <meta name="robots" content="{{robots}}">
 <link rel="canonical" href="{{canonical}}">
+{{alternates}}
 <meta property="og:type" content="website">
-<meta property="og:locale" content="fr_FR">
-<meta property="og:site_name" content="Outils Freelance">
+<meta property="og:locale" content="{{og_locale}}">
+<meta property="og:site_name" content="{{brand_text}}">
 <meta property="og:title" content="{{title}}">
 <meta property="og:description" content="{{description}}">
 <meta property="og:url" content="{{canonical}}">
 <meta property="og:image" content="{{og_image}}">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#4f46e5">
-<meta name="google-site-verification" content="uK9vPP1H_rAcs54A2aGh1PlN1KGWcFg-XbB3TQCLUR8">
+<meta name="google-site-verification" content="{{gsv}}">
 <link rel="icon" href="{{base}}assets/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="{{css}}">
 {{jsonld}}
+{{rules}}
 {{scripts}}
 </head>
-<body>
-<a class="skip" href="#contenu">Aller au contenu</a>
+<body data-currency="{{currency}}" data-section="{{section}}">
+<a class="skip" href="#contenu">{{skip}}</a>
 <header class="site-header">
   <div class="wrap header-inner">
-    <a class="logo" href="{{base}}" aria-label="Outils Freelance, accueil">
-      <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4f46e5"/><stop offset="1" stop-color="#7c3aed"/></linearGradient></defs><rect width="32" height="32" rx="9" fill="url(#lg)"/><path d="M10 9h12v3.2h-8.4v3.3h7.4v3.2h-7.4V23H10z" fill="#fff"/></svg>
-      <span>Outils <b>Freelance</b></span>
-    </a>
-    <nav class="nav" aria-label="Outils">
-      <a href="{{base}}generateur-facture/" data-nav="facture">Facture</a>
-      <a href="{{base}}calculateur-tjm/" data-nav="tjm">TJM</a>
-      <a href="{{base}}simulateur-auto-entrepreneur/" data-nav="charges">Charges</a>
-      <a href="{{base}}calcul-tva-ht-ttc/" data-nav="tva">TVA</a>
-      <a href="{{base}}relance-facture-impayee/" data-nav="relance">Relances</a>
-      <a href="{{base}}penalites-de-retard/" data-nav="penalites">Pénalités</a>
-      <a href="{{base}}mentions-obligatoires-facture/" data-nav="mentions">Mentions</a>
-      <a href="{{base}}modeles-emails-freelance/" data-nav="modeles">Modèles</a>
-    </nav>
-    <a class="btn btn-kit" href="{{kit_url}}" rel="noopener">Kit complet · 9 €</a>
+    <a class="logo" href="{{home}}" aria-label="{{logo_label}}">{{logo_svg}}<span>{{brand}}</span></a>
+    <nav class="nav" id="site-nav" aria-label="{{brand_text}}">{{nav}}</nav>
+    <div class="header-actions">
+      {{country_switch}}
+      {{offer_button}}
+      {{menu_toggle}}
+    </div>
   </div>
 </header>
 
@@ -49,41 +43,9 @@
 </main>
 
 <footer class="site-footer">
-  <div class="wrap footer-grid">
-    <div>
-      <a class="logo logo-footer" href="{{base}}"><span>Outils <b>Freelance</b></span></a>
-      <p>Des outils gratuits, sans inscription, pour les indépendants qui veulent facturer juste et être payés à temps.</p>
-      <p class="privacy-note">🔒 Tous les calculs se font dans votre navigateur : aucune donnée n'est envoyée ni stockée sur un serveur.</p>
-    </div>
-    <div>
-      <h2>Outils</h2>
-      <ul>
-        <li><a href="{{base}}generateur-facture/">Générateur de facture et devis</a></li>
-        <li><a href="{{base}}calculateur-tjm/">Calculateur de TJM</a></li>
-        <li><a href="{{base}}simulateur-auto-entrepreneur/">Simulateur auto-entrepreneur</a></li>
-        <li><a href="{{base}}calcul-tva-ht-ttc/">Calcul de TVA HT / TTC</a></li>
-        <li><a href="{{base}}relance-facture-impayee/">Relance de facture impayée</a></li>
-        <li><a href="{{base}}penalites-de-retard/">Pénalités de retard</a></li>
-      </ul>
-    </div>
-    <div>
-      <h2>Ressources</h2>
-      <ul>
-        <li><a href="{{base}}mentions-obligatoires-facture/">Mentions obligatoires d'une facture</a></li>
-        <li><a href="{{base}}modeles-emails-freelance/">Modèles d'emails gratuits</a></li>
-        <li><a href="{{kit_url}}" rel="noopener">Le Kit du Freelance Pro</a></li>
-      </ul>
-    </div>
-    <div>
-      <h2>Le site</h2>
-      <ul>
-        <li><a href="{{base}}mentions-legales/">Mentions légales</a></li>
-        <li><a href="{{base}}confidentialite/">Confidentialité</a></li>
-      </ul>
-    </div>
-  </div>
+  <div class="wrap footer-grid">{{footer}}</div>
   <div class="wrap footer-bottom">
-    <p>© {{year}} Outils Freelance. Informations données à titre indicatif : elles ne remplacent pas l'avis d'un expert-comptable ou d'un avocat.</p>
+    <p>© {{year}} {{brand_text}}. {{disclaimer}}</p>
   </div>
 </footer>
 </body>

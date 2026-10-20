@@ -1,0 +1,17 @@
+{
+  "site_url": "https://smileylab95.github.io/outils-freelance",
+  "base": "/outils-freelance/",
+  "google_site_verification": "uK9vPP1H_rAcs54A2aGh1PlN1KGWcFg-XbB3TQCLUR8",
+  "redirects": {
+    "generateur-facture/": "fr/generateur-facture/",
+    "calculateur-tjm/": "fr/calculateur-tjm/",
+    "simulateur-auto-entrepreneur/": "fr/simulateur-auto-entrepreneur/",
+    "calcul-tva-ht-ttc/": "fr/calcul-tva-ht-ttc/",
+    "relance-facture-impayee/": "fr/relance-facture-impayee/",
+    "penalites-de-retard/": "fr/penalites-de-retard/",
+    "mentions-obligatoires-facture/": "fr/mentions-obligatoires-facture/",
+    "modeles-emails-freelance/": "fr/modeles-emails-freelance/",
+    "mentions-legales/": "fr/mentions-legales/",
+    "confidentialite/": "fr/confidentialite/"
+  }
+}

@@ -1,0 +1,626 @@
+{
+  "country": "US",
+  "tax_year": "2026",
+  "currency": "USD",
+  "verified_on": "2026-10-20",
+  "values": {
+    "se_tax_social_security_rate": {
+      "value": 0.124,
+      "unit": "rate",
+      "label": "Self-employment tax: Social Security (OASDI) portion",
+      "source": "https://www.ssa.gov/news/en/cola/factsheets/2026.html",
+      "source_title": "SSA - 2026 Cost-of-Living Adjustment (COLA) Fact Sheet",
+      "confidence": "high",
+      "note": "12.4% = 6.2% employee + 6.2% employer equivalent. Applies only up to the Social Security wage base (reduced by any W-2 Social Security wages). Also stated on IRS Topic 554 (https://www.irs.gov/taxtopics/tc554)."
+    },
+    "se_tax_medicare_rate": {
+      "value": 0.029,
+      "unit": "rate",
+      "label": "Self-employment tax: Medicare (HI) portion",
+      "source": "https://www.ssa.gov/news/en/cola/factsheets/2026.html",
+      "source_title": "SSA - 2026 Cost-of-Living Adjustment (COLA) Fact Sheet",
+      "confidence": "high",
+      "note": "2.9% = 1.45% x 2. No earnings cap. Additional Medicare Tax (0.9%) is separate (see additional_medicare_tax_rate)."
+    },
+    "se_tax_total_rate": {
+      "value": 0.153,
+      "unit": "rate",
+      "label": "Self-employment tax combined rate below the wage base",
+      "source": "https://www.irs.gov/taxtopics/tc554",
+      "source_title": "IRS - Topic no. 554, Self-employment tax",
+      "confidence": "high",
+      "note": "12.4% + 2.9%. Above the wage base only 2.9% (+0.9% Additional Medicare Tax above the filing-status threshold) applies."
+    },
+    "se_net_earnings_factor": {
+      "value": 0.9235,
+      "unit": "rate",
+      "label": "Share of net self-employment profit subject to SE tax",
+      "source": "https://www.irs.gov/taxtopics/tc554",
+      "source_title": "IRS - Topic no. 554, Self-employment tax",
+      "confidence": "high",
+      "note": "Net earnings from self-employment = 92.35% of net profit (Schedule C line 31). Computed on Schedule SE."
+    },
+    "se_tax_minimum_net_earnings": {
+      "value": 400,
+      "unit": "USD",
+      "label": "Net earnings from self-employment at or above which SE tax is owed",
+      "source": "https://www.irs.gov/taxtopics/tc554",
+      "source_title": "IRS - Topic no. 554, Self-employment tax",
+      "confidence": "high",
+      "note": "Statutory, not indexed. Church employee income has a separate $108.28 rule (not relevant here). Income tax filing may still be required below this amount."
+    },
+    "se_tax_deduction_share": {
+      "value": 0.5,
+      "unit": "rate",
+      "label": "Share of SE tax deductible above the line (employer-equivalent portion)",
+      "source": "https://www.irs.gov/taxtopics/tc554",
+      "source_title": "IRS - Topic no. 554, Self-employment tax",
+      "confidence": "high",
+      "note": "Deducted on Schedule 1 (Form 1040) in computing AGI. Reduces income tax only, not SE tax itself (the 92.35% factor already accounts for it)."
+    },
+    "social_security_wage_base_2026": {
+      "value": 184500,
+      "unit": "USD",
+      "label": "2026 Social Security contribution and benefit base (taxable maximum)",
+      "source": "https://www.ssa.gov/oact/cola/cbb.html",
+      "source_title": "SSA Office of the Chief Actuary - Contribution and Benefit Base",
+      "confidence": "high",
+      "note": "Up from $176,100 in 2025. Announced 2025-10-24 (press release https://www.ssa.gov/news/en/press/releases/2025-10-24.html). Confirmed by SSA 2026 COLA fact sheet."
+    },
+    "social_security_wage_base_2027": {
+      "value": 192300,
+      "unit": "USD",
+      "label": "2027 Social Security contribution and benefit base (taxable maximum)",
+      "source": "https://www.ssa.gov/news/en/cola/factsheets/2027.html",
+      "source_title": "SSA - 2027 Cost-of-Living Adjustment (COLA) Fact Sheet",
+      "confidence": "high",
+      "note": "Announced 2026-10-14 with the 3.6% COLA for 2027 (https://www.ssa.gov/blog/en/posts/2026-10-14.html). For tax year 2027, not 2026. Max OASDI SE tax 2027 = 0.124 x 192,300 = $23,845.20."
+    },
+    "se_tax_social_security_max_2026": {
+      "value": 22878,
+      "unit": "USD",
+      "label": "Maximum Social Security portion of SE tax in 2026 (derived)",
+      "source": "https://www.ssa.gov/oact/cola/cbb.html",
+      "source_title": "SSA Office of the Chief Actuary - Contribution and Benefit Base",
+      "confidence": "high",
+      "note": "Derived: 0.124 x $184,500 = $22,878. Employee-only maximum is $11,439."
+    },
+    "additional_medicare_tax_rate": {
+      "value": 0.009,
+      "unit": "rate",
+      "label": "Additional Medicare Tax on wages + SE income above threshold",
+      "source": "https://www.irs.gov/instructions/i8959",
+      "source_title": "IRS - Instructions for Form 8959",
+      "confidence": "high",
+      "note": "Applies to combined Medicare wages and SE income above the filing-status threshold; wages are applied against the threshold first. SE losses are not netted. Not deductible as part of the half-SE-tax deduction."
+    },
+    "additional_medicare_tax_thresholds": {
+      "value": {
+        "single": 200000,
+        "married_filing_jointly": 250000,
+        "married_filing_separately": 125000,
+        "head_of_household": 200000,
+        "qualifying_surviving_spouse": 200000
+      },
+      "unit": "USD",
+      "label": "Additional Medicare Tax thresholds by filing status",
+      "source": "https://www.irs.gov/instructions/i8959",
+      "source_title": "IRS - Instructions for Form 8959",
+      "confidence": "high",
+      "note": "Statutory amounts, NOT indexed for inflation."
+    },
+    "federal_brackets_single": {
+      "value": [
+        {"from": 0, "to": 12400, "rate": 0.10},
+        {"from": 12400, "to": 50400, "rate": 0.12},
+        {"from": 50400, "to": 105700, "rate": 0.22},
+        {"from": 105700, "to": 201775, "rate": 0.24},
+        {"from": 201775, "to": 256225, "rate": 0.32},
+        {"from": 256225, "to": 640600, "rate": 0.35},
+        {"from": 640600, "to": null, "rate": 0.37}
+      ],
+      "unit": "brackets",
+      "label": "2026 federal income tax brackets - single (taxable income)",
+      "source": "https://www.irs.gov/pub/irs-drop/rp-25-32.pdf",
+      "source_title": "IRS - Rev. Proc. 2025-32 (2026 inflation adjustments)",
+      "confidence": "high",
+      "note": "Read 'from' as 'over' and 'to' as 'not over'. Rates made permanent by OBBBA (P.L. 119-21, sec. 70101). Also in IRS release IR-2025-103 (2025-10-09). Tax at top of 35% band: $192,979.25."
+    },
+    "federal_brackets_married_filing_jointly": {
+      "value": [
+        {"from": 0, "to": 24800, "rate": 0.10},
+        {"from": 24800, "to": 100800, "rate": 0.12},
+        {"from": 100800, "to": 211400, "rate": 0.22},
+        {"from": 211400, "to": 403550, "rate": 0.24},
+        {"from": 403550, "to": 512450, "rate": 0.32},
+        {"from": 512450, "to": 768700, "rate": 0.35},
+        {"from": 768700, "to": null, "rate": 0.37}
+      ],
+      "unit": "brackets",
+      "label": "2026 federal income tax brackets - married filing jointly",
+      "source": "https://www.irs.gov/pub/irs-drop/rp-25-32.pdf",
+      "source_title": "IRS - Rev. Proc. 2025-32 (2026 inflation adjustments)",
+      "confidence": "high",
+      "note": "Also applies to qualifying surviving spouse. Consistent across IRS release IR-2025-103 and secondary tables (Capital Group, NerdWallet, Tax Foundation)."
+    },
+    "federal_brackets_head_of_household": {
+      "value": [
+        {"from": 0, "to": 17700, "rate": 0.10},
+        {"from": 17700, "to": 67450, "rate": 0.12},
+        {"from": 67450, "to": 105700, "rate": 0.22},
+        {"from": 105700, "to": 201750, "rate": 0.24},
+        {"from": 201750, "to": 256200, "rate": 0.32},
+        {"from": 256200, "to": 640600, "rate": 0.35},
+        {"from": 640600, "to": null, "rate": 0.37}
+      ],
+      "unit": "brackets",
+      "label": "2026 federal income tax brackets - head of household",
+      "source": "https://www.irs.gov/pub/irs-drop/rp-25-32.pdf",
+      "source_title": "IRS - Rev. Proc. 2025-32 (2026 inflation adjustments)",
+      "confidence": "high",
+      "note": "24%/32% boundary is $201,750 per the Rev. Proc. table (cumulative tax $16,155 + 24% over $105,700; tax at $640,600 = $191,171, which only reconciles with $201,750). Some secondary sites (incl. Tax Foundation table) show $201,775, which is the single-filer figure."
+    },
+    "standard_deduction_2026": {
+      "value": {
+        "single": 16100,
+        "married_filing_separately": 16100,
+        "married_filing_jointly": 32200,
+        "head_of_household": 24150
+      },
+      "unit": "USD",
+      "label": "2026 standard deduction by filing status",
+      "source": "https://www.irs.gov/pub/irs-drop/rp-25-32.pdf",
+      "source_title": "IRS - Rev. Proc. 2025-32 (2026 inflation adjustments)",
+      "confidence": "high",
+      "note": "OBBBA made the TCJA-level standard deduction permanent and raised the 2025 amounts to $15,750 / $31,500 / $23,625 (single / MFJ / HOH); 2026 amounts are those indexed for inflation. Additional amounts for age 65+/blind and the temporary OBBBA senior deduction are not included here."
+    },
+    "qbi_deduction_rate": {
+      "value": 0.20,
+      "unit": "rate",
+      "label": "Qualified Business Income (Section 199A) deduction rate",
+      "source": "https://www.irs.gov/newsroom/one-big-beautiful-bill-provisions-individuals-and-workers",
+      "source_title": "IRS - One, Big, Beautiful Bill provisions (Working Families Tax Cuts) - individuals and workers",
+      "confidence": "high",
+      "note": "OBBBA sec. 70105 made Sec. 199A permanent (no more 2025-12-31 sunset) and kept the rate at 20% (the House draft's 23% was not enacted). Deduction also capped at 20% of taxable income minus net capital gain. Taken below AGI; does not reduce SE tax."
+    },
+    "qbi_threshold_2026": {
+      "value": {
+        "single": 201750,
+        "head_of_household": 201750,
+        "married_filing_separately": 201775,
+        "married_filing_jointly": 403500
+      },
+      "unit": "USD",
+      "label": "2026 Sec. 199A threshold (taxable income before QBI deduction) where limitations start",
+      "source": "https://www.irs.gov/pub/irs-drop/rp-25-32.pdf",
+      "source_title": "IRS - Rev. Proc. 2025-32 (2026 inflation adjustments)",
+      "confidence": "high",
+      "note": "Below the threshold, the full 20% applies even to a specified service trade or business (SSTB: consulting, law, accounting, health, performing arts, financial services, etc.). MFS figure ($201,775) differs from single due to rounding, as reported by Spidell (https://spidell.com/?p=641291)."
+    },
+    "qbi_phase_in_range_2026": {
+      "value": {
+        "single": 75000,
+        "head_of_household": 75000,
+        "married_filing_separately": 75000,
+        "married_filing_jointly": 150000
+      },
+      "unit": "USD",
+      "label": "Width of the Sec. 199A phase-in range (OBBBA, from 2026)",
+      "source": "https://www.irs.gov/newsroom/one-big-beautiful-bill-provisions-individuals-and-workers",
+      "source_title": "IRS - One, Big, Beautiful Bill provisions (Working Families Tax Cuts) - individuals and workers",
+      "confidence": "high",
+      "note": "Widened from $50,000 / $100,000 (pre-2026) to $75,000 / $150,000 for tax years beginning after 2025. Within the range, the SSTB exclusion and W-2 wage/UBIA limits phase in."
+    },
+    "qbi_phase_in_end_2026": {
+      "value": {
+        "single": 276750,
+        "head_of_household": 276750,
+        "married_filing_separately": 276775,
+        "married_filing_jointly": 553500
+      },
+      "unit": "USD",
+      "label": "2026 taxable income above which SSTB income gets no QBI deduction / W-2 wage limits fully apply",
+      "source": "https://www.irs.gov/pub/irs-drop/rp-25-32.pdf",
+      "source_title": "IRS - Rev. Proc. 2025-32 (2026 inflation adjustments)",
+      "confidence": "high",
+      "note": "Threshold + phase-in width. Figures reported from Rev. Proc. 2025-32 by Spidell and Clark.com."
+    },
+    "qbi_minimum_deduction": {
+      "value": {
+        "minimum_deduction": 400,
+        "minimum_qbi_required": 1000
+      },
+      "unit": "USD",
+      "label": "OBBBA minimum QBI deduction for active qualified businesses",
+      "source": "https://www.irs.gov/newsroom/one-big-beautiful-bill-provisions-individuals-and-workers",
+      "source_title": "IRS - One, Big, Beautiful Bill provisions (Working Families Tax Cuts) - individuals and workers",
+      "confidence": "medium",
+      "note": "New IRC 199A(i): taxpayers who materially participate in an active qualified trade or business with at least $1,000 of aggregate QBI get a deduction of at least $400. Effective for tax years beginning after 2025; both amounts indexed from 2027. Details confirmed only through secondary sources (law firms, beancount.io) in this session."
+    },
+    "estimated_tax_due_dates_2026": {
+      "value": ["2026-04-15", "2026-06-15", "2026-09-15", "2027-01-15"],
+      "unit": "date",
+      "label": "Form 1040-ES installment due dates for tax year 2026",
+      "source": "https://www.irs.gov/pub/irs-pdf/f1040es.pdf",
+      "source_title": "IRS - 2026 Form 1040-ES, Estimated Tax for Individuals",
+      "confidence": "high",
+      "note": "Periods covered: Jan 1-Mar 31, Apr 1-May 31, Jun 1-Aug 31, Sep 1-Dec 31 (unequal). None of these dates falls on a weekend or legal holiday. Calendar-year individuals only; fiscal-year filers use the 15th day of the 4th, 6th, 9th months and 1st month of the next fiscal year."
+    },
+    "estimated_tax_q4_skip_rule": {
+      "value": "The January 15, 2027 installment is not required if the 2026 return is filed by 2027-02-01 and all tax due is paid with it.",
+      "unit": "text",
+      "label": "Exception to the 4th installment",
+      "source": "https://www.irs.gov/pub/irs-pdf/f1040es.pdf",
+      "source_title": "IRS - 2026 Form 1040-ES, Estimated Tax for Individuals",
+      "confidence": "high",
+      "note": "February 1, 2027 because January 31, 2027 is a Sunday."
+    },
+    "estimated_tax_threshold": {
+      "value": 1000,
+      "unit": "USD",
+      "label": "Expected tax owed (after withholding and refundable credits) from which estimated payments are generally required",
+      "source": "https://www.irs.gov/businesses/small-businesses-self-employed/estimated-taxes",
+      "source_title": "IRS - Estimated taxes",
+      "confidence": "high",
+      "note": "Also stated on the 2026 Form 1040-ES. Payments are required if tax owed >= $1,000 AND withholding/credits are below the safe-harbor amount."
+    },
+    "estimated_tax_safe_harbor_current_year_rate": {
+      "value": 0.90,
+      "unit": "rate",
+      "label": "Safe harbor: share of current-year (2026) tax to prepay",
+      "source": "https://www.irs.gov/pub/irs-pdf/f1040es.pdf",
+      "source_title": "IRS - 2026 Form 1040-ES, Estimated Tax for Individuals",
+      "confidence": "high",
+      "note": "Required annual payment = the smaller of 90% of 2026 tax or 100%/110% of 2025 tax. Farmers/fishermen: 66 2/3%."
+    },
+    "estimated_tax_safe_harbor_prior_year_rate": {
+      "value": 1.00,
+      "unit": "rate",
+      "label": "Safe harbor: share of prior-year (2025) tax to prepay",
+      "source": "https://www.irs.gov/pub/irs-pdf/f1040es.pdf",
+      "source_title": "IRS - 2026 Form 1040-ES, Estimated Tax for Individuals",
+      "confidence": "high",
+      "note": "Prior-year return must cover a full 12-month year. Replaced by 110% when 2025 AGI exceeds the high-AGI threshold."
+    },
+    "estimated_tax_safe_harbor_prior_year_rate_high_agi": {
+      "value": 1.10,
+      "unit": "rate",
+      "label": "Safe harbor: share of prior-year tax when prior-year AGI is above threshold",
+      "source": "https://www.irs.gov/pub/irs-pdf/f1040es.pdf",
+      "source_title": "IRS - 2026 Form 1040-ES, Estimated Tax for Individuals",
+      "confidence": "high",
+      "note": "Applies if 2025 AGI > $150,000 ($75,000 if married filing separately for 2026)."
+    },
+    "estimated_tax_high_agi_threshold": {
+      "value": {
+        "default": 150000,
+        "married_filing_separately": 75000
+      },
+      "unit": "USD",
+      "label": "Prior-year AGI above which the 110% prior-year safe harbor applies",
+      "source": "https://www.irs.gov/pub/irs-pdf/f1040es.pdf",
+      "source_title": "IRS - 2026 Form 1040-ES, Estimated Tax for Individuals",
+      "confidence": "high",
+      "note": "Statutory, not indexed."
+    },
+    "form_1040_due_date_tax_year_2026": {
+      "value": "2027-04-15",
+      "unit": "date",
+      "label": "Due date of the 2026 individual return (Form 1040 with Schedule C and SE)",
+      "source": "https://www.irs.gov/publications/p509",
+      "source_title": "IRS - Publication 509, Tax Calendars",
+      "confidence": "medium",
+      "note": "Statutory rule: 15th day of the 4th month after year end; 2027-04-15 is a Thursday. The 2027 edition of Pub. 509 (calendar for 2027) was not checked in this session. Extension (Form 4868) moves filing, not payment, to 2027-10-15 (Friday)."
+    },
+    "form_1099_nec_threshold_2026": {
+      "value": 2000,
+      "unit": "USD",
+      "label": "Form 1099-NEC / 1099-MISC reporting threshold for payments made in 2026 (per payee, per year)",
+      "source": "https://www.irs.gov/instructions/i1099mec",
+      "source_title": "IRS - Instructions for Forms 1099-MISC and 1099-NEC (Rev. December 2026)",
+      "confidence": "high",
+      "note": "OBBBA (P.L. 119-21) raised the threshold from $600 to $2,000 for payments made after 2025-12-31; same $2,000 applies to backup withholding for these payments. May be adjusted for inflation beginning in calendar year 2027 (2027 amount not yet published). Exceptions reported by secondary sources: royalties stay at $10, gross proceeds paid to attorneys at $600. The payer (client) files, not the freelancer; income is taxable even without a 1099."
+    },
+    "form_1099_nec_threshold_2025": {
+      "value": 600,
+      "unit": "USD",
+      "label": "Form 1099-NEC threshold for payments made in 2025 and earlier",
+      "source": "https://www.irs.gov/instructions/i1099mec",
+      "source_title": "IRS - Instructions for Forms 1099-MISC and 1099-NEC",
+      "confidence": "high",
+      "note": "Kept for reference (payments made before 2026-01-01)."
+    },
+    "form_1099_nec_due_date_2026_payments": {
+      "value": "2027-02-01",
+      "unit": "date",
+      "label": "Deadline to furnish and file Form 1099-NEC for 2026 payments",
+      "source": "https://www.irs.gov/instructions/i1099mec",
+      "source_title": "IRS - Instructions for Forms 1099-MISC and 1099-NEC (Rev. December 2026)",
+      "confidence": "medium",
+      "note": "Rule: January 31 to both recipient and IRS; January 31, 2027 is a Sunday, so the next business day (Monday 2027-02-01) applies. Derived from the general rule, not read verbatim in the Dec 2026 instructions."
+    },
+    "form_1099_k_threshold": {
+      "value": {
+        "gross_payments_over": 20000,
+        "transactions_over": 200
+      },
+      "unit": "USD",
+      "label": "Form 1099-K threshold for third-party settlement organizations (both conditions must be exceeded)",
+      "source": "https://www.irs.gov/newsroom/irs-issues-faqs-on-form-1099-k-threshold-under-the-one-big-beautiful-bill-dollar-limit-reverts-to-20000",
+      "source_title": "IRS - IRS issues FAQs on Form 1099-K threshold under the One, Big, Beautiful Bill; dollar limit reverts to $20,000 (IR-2025-107)",
+      "confidence": "high",
+      "note": "OBBBA retroactively reinstated the pre-ARPA rule (> $20,000 AND > 200 transactions); the $5,000 (2024) / $2,500 (2025) / $600 (2026) phase-in no longer applies. Payment card transactions have no minimum threshold. All income remains taxable whether or not a 1099-K is issued."
+    },
+    "backup_withholding_rate": {
+      "value": 0.24,
+      "unit": "rate",
+      "label": "Backup withholding rate when a payee fails to provide a correct TIN (Form W-9)",
+      "source": "https://www.irs.gov/instructions/i1099mec",
+      "source_title": "IRS - Instructions for Forms 1099-MISC and 1099-NEC",
+      "confidence": "medium",
+      "note": "24% (tied to the 4th-lowest bracket rate, made permanent by OBBBA). Rate confirmed in this session only through secondary sources; not read verbatim on irs.gov."
+    },
+    "form_w9_basics": {
+      "value": "Form W-9 (Request for Taxpayer Identification Number and Certification) is completed by the freelancer and given to the client, not to the IRS. It provides legal name, business name/disregarded entity name, federal tax classification (individual/sole proprietor, single-member LLC, S corporation...), address and TIN (SSN or EIN), with a certification that the payee is not subject to backup withholding. A single-member LLC that is a disregarded entity enters the owner's name on line 1 and the owner's TIN. Missing or incorrect TIN can trigger backup withholding.",
+      "unit": "text",
+      "label": "Form W-9 basics for freelancers",
+      "source": "https://www.irs.gov/forms-pubs/about-form-w-9",
+      "source_title": "IRS - About Form W-9, Request for Taxpayer Identification Number and Certification",
+      "confidence": "medium",
+      "note": "From Form W-9 instructions (Rev. March 2024) as known; the page was not re-read in this session (irs.gov not reachable, search quota exhausted). Verify current revision."
+    },
+    "mileage_rate_business_2026_jan_jun": {
+      "value": 0.725,
+      "unit": "USD",
+      "label": "IRS business standard mileage rate per mile, miles driven 2026-01-01 to 2026-06-30",
+      "source": "https://www.irs.gov/newsroom/irs-sets-2026-business-standard-mileage-rate-at-725-cents-per-mile-up-25-cents",
+      "source_title": "IRS - IRS sets 2026 business standard mileage rate at 72.5 cents per mile, up 2.5 cents (IR-2025-128, Notice 2026-10)",
+      "confidence": "high",
+      "note": "Announced 2025-12-29. Depreciation component of the business rate for 2026: 35 cents per mile. Applies to gas, diesel, hybrid and electric vehicles."
+    },
+    "mileage_rate_business_2026_jul_dec": {
+      "value": 0.76,
+      "unit": "USD",
+      "label": "IRS business standard mileage rate per mile, miles driven 2026-07-01 to 2026-12-31",
+      "source": "https://tax.thomsonreuters.com/news/irs-announces-midyear-increase-in-standard-mileage-rates-for-business-medical-and-moving-expense-purposes/",
+      "source_title": "Thomson Reuters - IRS Announces Midyear Increase in Standard Mileage Rates for Business, Medical, and Moving Expense Purposes",
+      "confidence": "medium",
+      "note": "Mid-year increase announced by the IRS on 2026-07-13 (Announcement 2026-11, IRB 2026-29, modifying Notice 2026-10) because of fuel prices. Corroborated by SHRM, IFEBP and others, but the irs.gov page itself could not be read. Medical/moving rate 23.5 cents from 2026-07-01; charitable unchanged at 14 cents. A calculator must split 2026 miles by date driven."
+    },
+    "home_office_simplified_method": {
+      "value": {
+        "rate_per_sqft": 5,
+        "max_sqft": 300,
+        "max_deduction": 1500
+      },
+      "unit": "USD",
+      "label": "Home office deduction - simplified method",
+      "source": "https://www.irs.gov/businesses/small-businesses-self-employed/simplified-option-for-home-office-deduction",
+      "source_title": "IRS - Simplified option for home office deduction",
+      "confidence": "high",
+      "note": "Rate unchanged since Rev. Proc. 2013-13 and still on the IRS page. Space must be used regularly and exclusively for business. No depreciation; deduction limited to gross income from the business. Employees cannot claim it (only self-employed)."
+    },
+    "states_no_individual_income_tax": {
+      "value": ["AK", "FL", "NV", "NH", "SD", "TN", "TX", "WA", "WY"],
+      "unit": "list",
+      "label": "States with no individual income tax on wage/earned income (2026)",
+      "source": "https://taxfoundation.org/data/all/state/state-income-tax-rates-2026/",
+      "source_title": "Tax Foundation - 2026 State Income Tax Rates and Brackets",
+      "confidence": "high",
+      "note": "Tax Foundation counts 8 states with no individual income tax (AK, FL, NV, NH, SD, TN, TX, WY) plus Washington, which taxes only capital gains (not wages/self-employment income). New Hampshire's interest and dividends tax was repealed from 2025. Business-level taxes can still apply to freelancers (e.g., Washington B&O tax, Tennessee franchise & excise tax on LLCs, Texas franchise tax on LLCs, Nevada commerce tax) - not verified in this session. Local income taxes (e.g., NYC, some Ohio/Pennsylvania cities) are separate."
+    },
+    "states_tax_services_by_default": {
+      "value": ["HI", "NM", "SD", "WV"],
+      "unit": "list",
+      "label": "States whose sales/gross receipts tax applies to services by default",
+      "source": "https://www.taxjar.com/sales-tax/when-should-a-business-charge-sales-tax-on-services",
+      "source_title": "TaxJar - When should a business charge sales tax on services?",
+      "confidence": "medium",
+      "note": "Secondary source. Hawaii (general excise tax) and New Mexico (gross receipts tax) are gross receipts taxes. In the other states, most professional services (consulting, design, writing, legal, accounting) are not subject to sales tax, but each state lists specific taxable services. Always check the state revenue department. Tax Foundation sales tax breadth data (cited in a Wyoming legislature briefing) ranks HI, NM, SD as broadest bases."
+    },
+    "sales_tax_services_washington": {
+      "value": "Since 2025-10-01 (ESSB 5814), Washington retail sales tax applies to newly listed services, including information technology services (help desk, network support, IT consulting, training), certain advertising services, security and others. Professional services delivered electronically are generally not covered per DOR interim guidance. Penalty relief for periods 2025-10-01 to 2026-12-31.",
+      "unit": "text",
+      "label": "Washington: sales tax extended to IT, advertising and other services",
+      "source": "https://dor.wa.gov/taxes-rates/retail-sales-tax/services-newly-subject-retail-sales-tax",
+      "source_title": "Washington Department of Revenue - Services newly subject to retail sales tax",
+      "confidence": "high",
+      "note": "New exclusions took effect 2026-07-01; litigation pending. A 2026 bill (reported as ESSB 6346) may repeal most of the expansion from 2029 - status not confirmed."
+    },
+    "sales_tax_services_maryland_it_rate": {
+      "value": 0.03,
+      "unit": "rate",
+      "label": "Maryland sales and use tax on data / information technology and software publishing services",
+      "source": "https://www.marylandcomptroller.gov/content/dam/mdcomp/tax/legal-publications/technical-bulletins/tb-56.pdf",
+      "source_title": "Maryland Comptroller - Technical Bulletin No. 56, Sales and Use Tax on Data or Information Technology Services",
+      "confidence": "high",
+      "note": "Effective 2025-07-01 (Chapter 604, Acts of 2025). Covers services described in NAICS 518, 519, 5415 (computer systems design and related services) and 5132 (software publishing), regardless of the vendor's own NAICS code. Relevant to freelance developers/IT consultants selling to Maryland customers."
+    },
+    "freelance_law_nyc": {
+      "value": {
+        "name": "NYC Freelance Isn't Free Act (Local Law 140 of 2016)",
+        "effective_date": "2017-05-15",
+        "written_contract_threshold_usd": 800,
+        "aggregation": "$800 alone or aggregated with contracts with the same hiring party over the prior 120 days",
+        "payment_deadline": "Date in the contract; if none, no later than 30 days after completion of the work",
+        "remedies": "Double damages for late/unpaid amounts, retaliation damages, attorney's fees; statutory damages for missing contract",
+        "enforcer": "NYC Department of Consumer and Worker Protection (DCWP), Office of Labor Policy & Standards"
+      },
+      "unit": "text",
+      "label": "New York City freelancer payment protection",
+      "source": "https://www.nyc.gov/assets/dca/downloads/pdf/workers/Protecting-Freelance-Workers.pdf",
+      "source_title": "NYC DCWP - Protecting Freelance Workers (flyer)",
+      "confidence": "high",
+      "note": "Contract must state the work, the pay and the payment date. Hiring party must answer a DCWP complaint within 20 days."
+    },
+    "freelance_law_new_york_state": {
+      "value": {
+        "name": "New York State Freelance Isn't Free Act (General Business Law Article 44-A)",
+        "effective_date": "2024-08-28",
+        "written_contract_threshold_usd": 800,
+        "aggregation": "$800 alone or aggregated with contracts between the same parties over the prior 120 days",
+        "payment_deadline": "Date in the contract; if none, no later than 30 days after completion of the services",
+        "remedies": "Double damages for late payment, statutory damages for missing contract, attorney's fees; civil penalties for patterns",
+        "enforcer": "New York State Attorney General (after chapter amendment S8039)",
+        "excluded": "Lawyers, licensed medical professionals, construction contractors, certain sales representatives"
+      },
+      "unit": "text",
+      "label": "New York State freelancer payment protection",
+      "source": "https://dol.ny.gov/freelance-isnt-free-act",
+      "source_title": "NYS Department of Labor - Freelance Isn't Free Act",
+      "confidence": "high",
+      "note": "Original version (Labor Law 191-d, enforced by NYSDOL) was set for 2024-05-20; chapter amendment S8039 (https://www.nysenate.gov/legislation/bills/2023/S8039) moved it to GBL Art. 44-A with AG enforcement, effective 2024-08-28. Hiring party must keep contracts 6 years (secondary source). Penalty amounts not verified on an official page."
+    },
+    "freelance_law_illinois": {
+      "value": {
+        "name": "Illinois Freelance Worker Protection Act (820 ILCS 193)",
+        "effective_date": "2024-07-01",
+        "written_contract_threshold_usd": 500,
+        "aggregation": "$500 alone or aggregated with contracts with the same contracting entity over the preceding 120 days",
+        "payment_deadline": "Date in the contract; if none, no later than 30 days after completion of the services",
+        "remedies": "Statutory damages ($500 for refused written contract), costs and reasonable attorney's fees; suit within 2 years of the due date",
+        "enforcer": "Illinois Department of Labor (complaints) and civil action"
+      },
+      "unit": "text",
+      "label": "Illinois freelancer payment protection",
+      "source": "https://labor.illinois.gov/laws-rules/legal/freelance-worker-protection-act.html",
+      "source_title": "Illinois Department of Labor - Freelance Worker Protection Act",
+      "confidence": "high",
+      "note": "Applies to contracts taking effect after 2024-07-01, for work performed in Illinois or for an Illinois-based contracting entity. Excludes construction workers, government contracts, employees. Statute: https://www.ilga.gov/Legislation/ILCS/Articles?ActID=4441&ChapterID=68. Hiring party keeps contract 2 years. IDOL provides a model contract."
+    },
+    "freelance_law_california_state": {
+      "value": {
+        "name": "California Freelance Worker Protection Act (SB 988, Bus. & Prof. Code 18100 et seq.)",
+        "effective_date": "2025-01-01",
+        "written_contract_threshold_usd": 250,
+        "aggregation": "$250 alone or aggregated with contracts with the same hiring party over the prior 120 days",
+        "payment_deadline": "Date in the contract; if none, no later than 30 days after completion of the services",
+        "remedies": "Civil action; anti-retaliation; attorney's fees (details not verified)",
+        "enforcer": "Civil action (and public prosecutors)"
+      },
+      "unit": "text",
+      "label": "California statewide freelancer payment protection (professional services)",
+      "source": "https://calmatters.digitaldemocracy.org/bills/ca_202320240sb988",
+      "source_title": "CalMatters Digital Democracy - SB 988 (2023-2024)",
+      "confidence": "medium",
+      "note": "Applies to contracts entered into or renewed on/after 2025-01-01, single-person independent contractors providing professional services. Hiring party keeps contract 4 years. Confirmed via consistent secondary sources; the code text on leginfo.legislature.ca.gov was not read."
+    },
+    "freelance_law_los_angeles": {
+      "value": {
+        "name": "City of Los Angeles Freelance Worker Protections Ordinance",
+        "effective_date": "2023-07-01",
+        "written_contract_threshold_usd": 600,
+        "aggregation": "$600 or more in a calendar year with the same hiring entity, counting prior contracts",
+        "payment_deadline": "Date in the contract; if no written contract or no date, no later than 30 days after completion of the work",
+        "remedies": "$250 if a requested written contract was refused; up to twice the unpaid amount for late/partial payment; contract value for other violations",
+        "enforcer": "Office of Wage Standards (Bureau of Contract Administration) or civil action"
+      },
+      "unit": "text",
+      "label": "Los Angeles freelancer payment protection",
+      "source": "https://wagesla.lacity.gov/sites/g/files/wph1941/files/2023-06/Freelance%20Worker%20Protections%20Summary.pdf",
+      "source_title": "City of Los Angeles Office of Wage Standards - Freelance Worker Protections Summary",
+      "confidence": "medium",
+      "note": "Effective date is 2023-07-01 (not 2025). Details corroborated by CalChamber and Fisher Phillips; official summary PDF not read in full. Records kept 4 years."
+    },
+    "freelance_law_minneapolis": {
+      "value": {
+        "name": "Minneapolis Freelance Worker Protections (Wage Theft Ordinance amendment)",
+        "effective_date": "2021-01-01",
+        "written_contract_threshold_usd": 600,
+        "aggregation": "$600 or more in a calendar year, or $200 or more for work within 7 consecutive days, same commercial hiring party",
+        "payment_deadline": "Date (or mechanism to set the date) stated in the written contract; no statutory 30-day default found",
+        "remedies": "Penalty reported at $250 per worker for missing written contract; late/short payment is a violation",
+        "enforcer": "Minneapolis Department of Civil Rights - Labor Standards Enforcement"
+      },
+      "unit": "text",
+      "label": "Minneapolis freelancer payment protection",
+      "source": "https://minimumwage.minneapolismn.gov/uploads/9/6/3/1/96313024/freelance_faqs_final_draft.pdf",
+      "source_title": "City of Minneapolis Department of Civil Rights - Freelance Worker Protections FAQ",
+      "confidence": "medium",
+      "note": "Written contract mandatory for commercial hiring parties only (optional for individuals hiring in a personal capacity). Penalty amount from secondary sources."
+    },
+    "freelance_law_columbus_ohio": {
+      "value": {
+        "name": "Columbus (OH) wage theft ordinance - freelance worker provisions",
+        "effective_date": "2023 (amendment adopted May 2023; exact effective date not confirmed)",
+        "written_contract_threshold_usd": 250,
+        "aggregation": "$250 alone or over a 120-day period with the same hiring party",
+        "payment_deadline": "Date in the contract; if none, no later than 30 days after completion of the services",
+        "remedies": "Not verified",
+        "enforcer": "City of Columbus (not verified)"
+      },
+      "unit": "text",
+      "label": "Columbus, Ohio freelancer payment protection",
+      "source": "https://www.ebglaw.com/workforce-bulletin/columbus-oh-adds-freelance-worker-protections-to-its-city-code",
+      "source_title": "Epstein Becker Green Workforce Bulletin - Columbus, OH Adds Freelance Worker Protections to Its City Code",
+      "confidence": "medium",
+      "note": "Secondary (law firm) source only; no columbus.gov page found. Contract kept 5 years."
+    },
+    "freelance_law_seattle": {
+      "value": {
+        "name": "Seattle Independent Contractor Protections Ordinance",
+        "effective_date": "2022-09-01",
+        "written_contract_threshold_usd": 600,
+        "aggregation": "$600 or more in a calendar year (as recalled; not verified)",
+        "payment_deadline": "Date in the contract; if none, within 30 days after completion (as recalled; not verified)",
+        "remedies": "Not verified",
+        "enforcer": "Seattle Office of Labor Standards"
+      },
+      "unit": "text",
+      "label": "Seattle independent contractor payment protection",
+      "source": "https://www.seattle.gov/laborstandards",
+      "source_title": "City of Seattle - Office of Labor Standards",
+      "confidence": "low",
+      "note": "NOT verified in this session (web search quota exhausted before the check). Do not display without verification."
+    },
+    "late_fees_federal_rule": {
+      "value": "No federal law sets or caps late fees on invoices between private businesses. A late fee or interest charge is enforceable only if agreed in the contract or accepted terms, and must respect state usury law and the state's liquidated-damages/penalty doctrine (a fee must be a reasonable estimate of the loss, not a penalty). Freelancer protection laws (NYC, NYS, IL, CA, LA...) add statutory remedies such as double damages for late payment but do not set an interest rate.",
+      "unit": "text",
+      "label": "Late fees on invoices: general US rule",
+      "source": "https://www.nyc.gov/assets/dca/downloads/pdf/workers/Protecting-Freelance-Workers.pdf",
+      "source_title": "NYC DCWP - Protecting Freelance Workers (flyer) [for the double-damages remedy]",
+      "confidence": "medium",
+      "note": "General legal principle summarised; no single official page states it. The federal Prompt Payment Act (31 U.S.C. 3901-3907) only covers payments by federal agencies to contractors (interest penalty if paid after the due date, generally 30 days after a proper invoice) - not verified in this session."
+    },
+    "late_fee_example_california": {
+      "value": {
+        "rule": "If a contract does not stipulate a rate, an obligation bears interest at 10% per year after breach (Civil Code 3289(b)); contractual late charges are assessed under the liquidated damages rule (Civil Code 1671).",
+        "default_interest_rate_after_breach": 0.10
+      },
+      "unit": "text",
+      "label": "California: default contract interest after breach",
+      "source": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CIV&sectionNum=3289",
+      "source_title": "California Legislative Information - Civil Code section 3289",
+      "confidence": "low",
+      "note": "From statute knowledge; not verified online in this session (search quota exhausted). California usury limits (Constitution art. XV) are complex and mostly concern loans/forbearance."
+    },
+    "late_fee_example_new_york": {
+      "value": {
+        "rule": "Civil usury ceiling of 16% per year (General Obligations Law 5-501 with Banking Law 14-a); criminal usury above 25% (Penal Law 190.40). Whether an invoice late fee counts as interest depends on the case.",
+        "civil_usury_rate": 0.16,
+        "criminal_usury_rate": 0.25
+      },
+      "unit": "text",
+      "label": "New York: usury ceilings relevant to late interest",
+      "source": "https://www.nysenate.gov/legislation/laws/GOB/5-501",
+      "source_title": "NY State Senate - General Obligations Law section 5-501",
+      "confidence": "low",
+      "note": "From statute knowledge; not verified online in this session. Corporations generally cannot raise civil usury as a defense. Confirm before publishing any cap in a calculator."
+    }
+  },
+  "open_questions": [
+    "Tax year 2027 IRS inflation adjustments (brackets, standard deduction, QBI thresholds, inflation-indexed 1099-NEC/MISC threshold and QBI $400/$1,000 minimum) were not yet published as of the last search; the Rev. Proc. usually comes out in October-November.",
+    "Mid-year 2026 mileage rate (76 cents from 2026-07-01, Announcement 2026-11): confirm the exact wording and URL on irs.gov (only secondary sources were reachable).",
+    "Form 1099-NEC deadline for 2026 payments: confirm 2027-02-01 (Jan 31, 2027 is a Sunday) in the Dec 2026 instructions or Pub. 509 (2027).",
+    "QBI $400 minimum deduction: confirm wording and indexing on an irs.gov page or the 2026 Form 8995 instructions.",
+    "Backup withholding rate (24%) and Form W-9 instructions: re-read on irs.gov (not reachable in this session).",
+    "Seattle Independent Contractor Protections Ordinance: threshold, payment deadline and effective date not verified (search quota exhausted).",
+    "Columbus, Ohio freelance provisions: find the official city code section/page and the exact effective date and remedies.",
+    "New York State FIFA penalty amounts after the S8039 chapter amendment (AG enforcement) - not confirmed on an official page.",
+    "California SB 988: read Bus. & Prof. Code 18100 et seq. on leginfo for remedies and exact definitions.",
+    "Late-fee examples (California Civil Code 3289, New York GOL 5-501 / Banking Law 14-a) and the federal Prompt Payment Act were not verified online in this session; confirm before display.",
+    "Washington ESSB 6346 (possible 2029 repeal of most of the ESSB 5814 service expansion): status not confirmed.",
+    "State business-level taxes in no-income-tax states (WA B&O, TN franchise & excise on LLCs, TX franchise tax, NV commerce tax) are mentioned but not verified.",
+    "Other local freelancer laws may exist or be pending (e.g., other cities/states adopting 'Freelance Isn't Free' laws in 2025-2026) - not surveyed due to search quota."
+  ]
+}

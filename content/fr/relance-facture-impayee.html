@@ -1,0 +1,103 @@
+<!--{
+  "id": "reminder",
+  "slug": "relance-facture-impayee/",
+  "title": "Relance de facture impayée : modèle d'email et lettre de mise en demeure",
+  "description": "Générez l'email de relance adapté au retard de paiement : relance amiable, deuxième relance, relance ferme ou mise en demeure. Gratuit, personnalisé en 30 secondes, prêt à envoyer.",
+  "menu": "Relance de facture impayée",
+  "icon": "📩",
+  "blurb": "L'email adapté au retard, du rappel courtois à la mise en demeure.",
+  "app": "Générateur de relance de facture impayée",
+  "scripts": ["tools/relance.js"],
+  "priority": 0.9,
+  "faq": [
+    ["Quand relancer une facture impayée ?", "Dès quelques jours après l'échéance. Une séquence efficace : un rappel courtois vers J+3, une deuxième relance vers J+10 qui demande une date de paiement, une relance ferme vers J+20 qui rappelle les pénalités, puis une mise en demeure vers J+30."],
+    ["Faut-il envoyer la mise en demeure en recommandé ?", "C'est fortement conseillé : une lettre recommandée avec accusé de réception prouve la date d'envoi et de réception. La mise en demeure est l'étape préalable à une procédure d'injonction de payer."],
+    ["Puis-je réclamer des pénalités de retard ?", "Entre professionnels, oui : les pénalités de retard et l'indemnité forfaitaire de 40 € pour frais de recouvrement sont dues de plein droit (article L441-10 du Code de commerce), à condition de figurer dans vos conditions. Calculez-les avec notre <a href=\"{{link:latefee}}\">calculateur de pénalités</a>."],
+    ["Mes informations sont-elles enregistrées ?", "Seulement sur votre appareil, pour vous éviter de les ressaisir. Rien n'est envoyé sur un serveur."]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Gratuit · prêt à envoyer</span>
+    <h1>Relance de facture impayée</h1>
+    <p class="lead">Indiquez la facture et sa date d'échéance : l'outil calcule le retard, choisit le bon niveau de relance et rédige l'email. Il ne vous reste qu'à l'envoyer.</p>
+    <ul class="trust"><li>4 niveaux, du rappel courtois à la mise en demeure</li><li>Base légale citée</li><li>Ouverture directe dans votre messagerie</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout wide-left">
+    <form class="card form-card" id="relance-form" onsubmit="return false">
+      <h3>La facture</h3>
+      <div class="fields">
+        <div class="field"><label for="r-number">N° de facture</label>
+          <input type="text" id="r-number" name="number" placeholder="2026-014" data-save></div>
+        <div class="field"><label for="r-amount">Montant TTC</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="r-amount" name="amount" placeholder="1 800" data-save><span>€</span></div></div>
+        <div class="field"><label for="r-issue">Date de la facture</label>
+          <input type="date" id="r-issue" name="issue" data-save></div>
+        <div class="field"><label for="r-due">Date d'échéance</label>
+          <input type="date" id="r-due" name="due" data-save></div>
+        <div class="field full"><label for="r-previous">Dates des relances déjà envoyées (facultatif)</label>
+          <input type="text" id="r-previous" name="previous" placeholder="22/10/2026 et 29/10/2026" data-save></div>
+      </div>
+      <h3>Votre client</h3>
+      <div class="fields">
+        <div class="field"><label for="r-contact">Prénom de votre contact</label>
+          <input type="text" id="r-contact" name="contact" placeholder="Julie" data-save></div>
+        <div class="field"><label for="r-email">Email du client</label>
+          <input type="email" id="r-email" name="email" placeholder="julie@client.fr" data-save></div>
+        <div class="field full"><label for="r-company">Raison sociale et adresse (pour la mise en demeure)</label>
+          <textarea id="r-company" name="company" rows="2" placeholder="Studio Nova SAS&#10;14 rue des Lilas, 69003 Lyon" data-save></textarea></div>
+      </div>
+      <h3>Vous</h3>
+      <div class="fields">
+        <div class="field"><label for="r-me">Votre prénom et nom</label>
+          <input type="text" id="r-me" name="me" placeholder="Camille Martin" data-save></div>
+        <div class="field"><label for="r-city">Votre ville</label>
+          <input type="text" id="r-city" name="city" placeholder="Lyon" data-save></div>
+        <div class="field full"><label for="r-me-address">Votre adresse et SIRET (pour la mise en demeure)</label>
+          <textarea id="r-me-address" name="meAddress" rows="2" placeholder="Camille Martin EI, 12 rue de la République, 69002 Lyon · SIRET 123 456 789 00012" data-save></textarea></div>
+        <div class="field full"><label for="r-penalty">Taux des pénalités prévu dans vos conditions</label>
+          <input type="text" id="r-penalty" name="penalty" value="trois fois le taux d'intérêt légal" data-save></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="notice" id="r-status" style="margin-bottom: 14px;">–</div>
+      <div class="tabs" role="tablist" id="r-tabs">
+        <button type="button" class="tab" role="tab" data-stage="0">Rappel J+3</button>
+        <button type="button" class="tab" role="tab" data-stage="1">Relance J+10</button>
+        <button type="button" class="tab" role="tab" data-stage="2">Relance ferme J+20</button>
+        <button type="button" class="tab" role="tab" data-stage="3">Mise en demeure J+30</button>
+      </div>
+      <div class="output">
+        <div class="output-head"><span class="dots">● ● ●</span>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button type="button" class="btn btn-ghost btn-sm" id="r-copy">Copier le message</button>
+            <a class="btn btn-primary btn-sm" id="r-mail" href="#">Ouvrir dans ma messagerie</a>
+          </div>
+        </div>
+        <div class="output-subject" id="r-subject"></div>
+        <div class="output-body" id="r-body"></div>
+      </div>
+      <p class="small muted" style="margin-top: 10px;">Les champs encore entre crochets sont à compléter. Pour la mise en demeure, imprimez la lettre et envoyez-la en recommandé avec accusé de réception.</p>
+    </div>
+  </div>
+</section>
+
+{{kit_cta}}
+
+<section class="section prose">
+  <h2>Comment relancer une facture impayée sans perdre son client ?</h2>
+  <p>La plupart des retards de paiement viennent d'un oubli, d'une validation interne qui traîne ou d'un problème administratif. Commencez donc courtois, puis montez d'un cran à chaque étape :</p>
+  <table>
+    <tr><th>Quand</th><th>Ton</th><th>Objectif</th></tr>
+    <tr><td>J+3</td><td>Rappel courtois</td><td>Signaler un probable oubli, renvoyer la facture</td></tr>
+    <tr><td>J+10</td><td>Relance</td><td>Obtenir une date de paiement, proposer son aide</td></tr>
+    <tr><td>J+20</td><td>Relance ferme</td><td>Rappeler les pénalités de retard et l'indemnité de 40 €</td></tr>
+    <tr><td>J+30</td><td>Mise en demeure</td><td>Fixer un ultime délai avant une procédure de recouvrement</td></tr>
+  </table>
+  <p>Pour suivre automatiquement toutes vos factures et savoir chaque matin laquelle relancer, le <a href="{{kit_url}}" rel="noopener">Kit du Freelance Pro</a> inclut un classeur Excel qui calcule le retard et indique la relance à envoyer.</p>
+</section>

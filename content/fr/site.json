@@ -1,0 +1,71 @@
+{
+  "brand": [
+    "Outils",
+    "Freelance"
+  ],
+  "audience": "Pour les indépendants en France",
+  "nav": [
+    {
+      "label": "Facturer",
+      "items": [
+        "invoice",
+        "salestax",
+        "invoice-rules"
+      ]
+    },
+    {
+      "label": "Prix et revenus",
+      "items": [
+        "rate",
+        "tax"
+      ]
+    },
+    {
+      "label": "Se faire payer",
+      "items": [
+        "reminder",
+        "latefee"
+      ]
+    },
+    {
+      "label": "Trouver des clients",
+      "items": [
+        "templates"
+      ]
+    }
+  ],
+  "featured": [
+    "invoice",
+    "tax",
+    "salestax"
+  ],
+  "footer_links": [
+    "legal",
+    "privacy"
+  ],
+  "offer": {
+    "url": "https://smilyma3in.gumroad.com/l/kit-freelance-pro",
+    "button": "Kit complet · 9 €",
+    "cta": "kit-cta.html"
+  },
+  "strings": {
+    "skip": "Aller au contenu",
+    "menu": "Menu",
+    "close": "Fermer",
+    "home": "Accueil",
+    "country": "Pays",
+    "country_label": "Choisir un autre pays",
+    "all_tools": "Tous les outils",
+    "related": "Outils liés",
+    "faq": "Questions fréquentes",
+    "sources": "Sources officielles",
+    "verified": "Chiffres vérifiés le",
+    "site": "Le site",
+    "tagline": "Des outils gratuits, sans inscription, pour les indépendants qui veulent facturer juste et être payés à temps.",
+    "privacy_note": "🔒 Tous les calculs se font dans votre navigateur : aucune donnée n'est envoyée ni stockée sur un serveur.",
+    "disclaimer": "Informations données à titre indicatif : elles ne remplacent pas l'avis d'un expert-comptable ou d'un avocat.",
+    "logo_label": "Outils Freelance, accueil",
+    "tools_count": "{n} outils gratuits",
+    "breadcrumb": "Fil d'Ariane"
+  }
+}

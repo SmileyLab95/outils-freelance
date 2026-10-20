@@ -1,24 +1,56 @@
-/* Outils Freelance : fonctions communes à toutes les pages. */
+/* Outils Freelance : fonctions communes à toutes les pages (formats, saisie, stockage, copie, menus). */
 (function () {
   "use strict";
 
+  // Langue et devise de la section, posées par le générateur sur <html lang> et <body data-currency>.
+  var LOCALE = document.documentElement.lang || "fr-FR";
+  var CURRENCY = (document.body && document.body.dataset.currency) || "EUR";
+  var SECTION = (document.body && document.body.dataset.section) || "fr";
+  var FRENCH = LOCALE.slice(0, 2) === "fr";
+  // Les données de la section France gardent les clés d'origine ; les autres sections ont leur préfixe.
+  var NS = SECTION === "fr" ? "" : SECTION + ":";
+
   var euro2 = new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR" });
   var euro0 = new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR", maximumFractionDigits: 0 });
-  var number = new Intl.NumberFormat("fr-FR", { maximumFractionDigits: 2 });
+  var money2 = new Intl.NumberFormat(LOCALE, { style: "currency", currency: CURRENCY });
+  var money0 = new Intl.NumberFormat(LOCALE, { style: "currency", currency: CURRENCY, maximumFractionDigits: 0 });
+  var number = new Intl.NumberFormat(LOCALE, { maximumFractionDigits: 2 });
 
   var OF = {
+    locale: LOCALE,
+    currency: CURRENCY,
+    section: SECTION,
+
     /** Montant en euros : OF.eur(1234.5) → « 1 234,50 € » ; OF.eur(1234.5, 0) → « 1 235 € ». */
     eur: function (n, decimals) {
       if (!isFinite(n)) return "–";
       return (decimals === 0 ? euro0 : euro2).format(n);
     },
+    /** Montant dans la devise de la section : « $1,234.50 », « £1,234.50 », « 1 234,50 $ ». */
+    money: function (n, decimals) {
+      if (!isFinite(n)) return "–";
+      return (decimals === 0 ? money0 : money2).format(n);
+    },
     fmt: function (n) { return isFinite(n) ? number.format(n) : "–"; },
 
-    /** Lit un nombre saisi en français (« 1 234,5 », « 26 % »). Renvoie NaN si vide ou invalide. */
+    /**
+     * Lit un nombre saisi (« 1 234,5 », « 1,234.50 », « $1,800 », « 26 % »). Renvoie NaN si vide ou invalide.
+     * Avec les deux séparateurs, le dernier est la décimale. Avec un seul, un groupe de 3 chiffres après le
+     * séparateur de milliers de la langue (virgule en anglais, point en français) est lu comme des milliers.
+     */
     num: function (value) {
       if (typeof value !== "string") value = value && value.value !== undefined ? value.value : String(value);
-      var clean = value.replace(/[\s €%]/g, "").replace(",", ".");
-      return clean === "" ? NaN : Number(clean);
+      var clean = value.replace(/[\s€$£%]|CA|US/g, "");
+      if (clean === "") return NaN;
+      var comma = clean.lastIndexOf(","), dot = clean.lastIndexOf(".");
+      if (comma > -1 && dot > -1) {
+        clean = comma > dot ? clean.replace(/\./g, "").replace(",", ".") : clean.replace(/,/g, "");
+      } else if (comma > -1) {
+        clean = !FRENCH && /^-?\d{1,3}(,\d{3})+$/.test(clean) ? clean.replace(/,/g, "") : clean.replace(",", ".");
+      } else if (dot > -1 && FRENCH && /^-?\d{1,3}(\.\d{3})+$/.test(clean)) {
+        clean = clean.replace(/\./g, "");
+      }
+      return Number(clean);
     },
 
     /** Date du jour au format AAAA-MM-JJ (heure locale). */
@@ -36,6 +68,11 @@
       var d = OF.parseDate(iso);
       return d ? d.toLocaleDateString("fr-FR") : "";
     },
+    /** Date au format de la section : « 18/10/2026 », « 10/18/2026 », « 18 Oct 2026 »… */
+    date: function (iso, options) {
+      var d = OF.parseDate(iso);
+      return d ? d.toLocaleDateString(LOCALE, options) : "";
+    },
     addDays: function (iso, days) {
       var d = OF.parseDate(iso);
       if (!d) return "";
@@ -52,13 +89,13 @@
     /** Stockage local tolérant (navigation privée, stockage bloqué). */
     load: function (key, fallback) {
       try {
-        var raw = window.localStorage.getItem("of:" + key);
+        var raw = window.localStorage.getItem("of:" + NS + key);
         var value = raw ? JSON.parse(raw) : null;
         return value == null ? fallback : value;
       } catch (e) { return fallback; }
     },
     save: function (key, value) {
-      try { window.localStorage.setItem("of:" + key, JSON.stringify(value)); } catch (e) { /* stockage indisponible */ }
+      try { window.localStorage.setItem("of:" + NS + key, JSON.stringify(value)); } catch (e) { /* stockage indisponible */ }
     },
 
     /** Mémorise les champs [data-save] d'un formulaire et les restaure au chargement. */
@@ -87,7 +124,7 @@
         if (!button) return;
         // Garde le libellé d'origine, même en cas de double clic pendant la confirmation.
         if (!button.dataset.label) button.dataset.label = button.textContent;
-        button.textContent = "Copié ✓";
+        button.textContent = FRENCH ? "Copié ✓" : "Copied ✓";
         button.classList.add("copied");
         clearTimeout(button._copyTimer);
         button._copyTimer = setTimeout(function () { button.textContent = button.dataset.label; button.classList.remove("copied"); }, 1600);
@@ -122,6 +159,54 @@
     var target = document.querySelector(button.getAttribute("data-copy"));
     if (target) OF.copy(target.innerText.trim(), button);
   });
+
+  // Menus déroulants (catégories, choix du pays) et panneau de navigation mobile.
+  var header = document.querySelector(".site-header");
+  function closeMenus(except) {
+    document.querySelectorAll(".nav-group.open").forEach(function (group) {
+      if (group === except) return;
+      group.classList.remove("open");
+      group.querySelector(".nav-trigger").setAttribute("aria-expanded", "false");
+    });
+  }
+  document.addEventListener("click", function (event) {
+    var trigger = event.target.closest(".nav-trigger");
+    if (trigger) {
+      var group = trigger.parentElement;
+      var open = !group.classList.contains("open");
+      closeMenus(group);
+      group.classList.toggle("open", open);
+      trigger.setAttribute("aria-expanded", String(open));
+      return;
+    }
+    var toggle = event.target.closest(".menu-toggle");
+    if (toggle && header) {
+      var expanded = header.classList.toggle("menu-open");
+      toggle.setAttribute("aria-expanded", String(expanded));
+      document.documentElement.classList.toggle("no-scroll", expanded);
+      return;
+    }
+    if (!event.target.closest(".nav-menu")) closeMenus();
+  });
+  document.addEventListener("keydown", function (event) {
+    if (event.key !== "Escape") return;
+    closeMenus();
+    if (header && header.classList.contains("menu-open")) {
+      header.classList.remove("menu-open");
+      document.documentElement.classList.remove("no-scroll");
+      var toggle = header.querySelector(".menu-toggle");
+      if (toggle) { toggle.setAttribute("aria-expanded", "false"); toggle.focus(); }
+    }
+  });
+
+  // Accueil mondial : met en avant le pays correspondant à la langue du navigateur.
+  var langs = navigator.languages || [navigator.language || ""];
+  var cards = document.querySelectorAll(".country-card[data-lang]");
+  for (var i = 0; i < langs.length && cards.length; i++) {
+    var wanted = String(langs[i]).toLowerCase();
+    var match = Array.prototype.find.call(cards, function (c) { return c.dataset.lang.toLowerCase() === wanted; });
+    if (match) { match.classList.add("suggested"); break; }
+  }
 
   window.OF = OF;
 })();

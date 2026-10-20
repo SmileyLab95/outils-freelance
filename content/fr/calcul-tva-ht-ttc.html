@@ -1,0 +1,99 @@
+<!--{
+  "id": "salestax",
+  "slug": "calcul-tva-ht-ttc/",
+  "title": "Calcul TVA : convertir un prix HT en TTC et TTC en HT",
+  "description": "Calculez instantanément la TVA, le prix TTC à partir du HT ou le prix HT à partir du TTC, aux taux français de 20 %, 10 %, 5,5 % et 2,1 %. Gratuit, avec la formule détaillée.",
+  "menu": "Calcul de TVA HT ↔ TTC",
+  "icon": "🧮",
+  "blurb": "Du HT au TTC et inversement, à 20 %, 10 %, 5,5 % ou 2,1 %.",
+  "app": "Calculateur de TVA HT / TTC",
+  "scripts": ["tools/tva.js"],
+  "priority": 0.9,
+  "faq": [
+    ["Comment passer d'un prix HT à un prix TTC ?", "Multipliez le prix HT par (1 + taux de TVA). Avec le taux normal de 20 % : TTC = HT × 1,2. Par exemple, 1 000 € HT font 1 200 € TTC."],
+    ["Comment calculer le prix HT à partir du TTC ?", "Divisez le prix TTC par (1 + taux de TVA). Avec 20 % : HT = TTC ÷ 1,2. Attention, retirer 20 % du prix TTC ne donne pas le prix HT : 1 200 € − 20 % = 960 €, alors que le prix HT est de 1 000 €."],
+    ["Quels sont les taux de TVA en France ?", "20 % (taux normal, la plupart des biens et des services), 10 % (restauration, transport de voyageurs, certains travaux dans les logements), 5,5 % (produits alimentaires de base, livres, travaux de rénovation énergétique) et 2,1 % (médicaments remboursables, presse). Des taux particuliers s'appliquent en Corse et en outre-mer."],
+    ["Un auto-entrepreneur doit-il facturer la TVA ?", "Pas tant qu'il bénéficie de la franchise en base : en 2026, jusqu'à 37 500 € de chiffre d'affaires pour les prestations de services et 85 000 € pour la vente. Ses factures portent alors la mention « TVA non applicable, art. 293 B du CGI », et son prix HT est le prix payé par le client."]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Gratuit · résultat instantané</span>
+    <h1>Calcul de TVA : HT ↔ TTC</h1>
+    <p class="lead">Saisissez un montant, choisissez le sens et le taux : le prix hors taxes, la TVA et le prix toutes taxes comprises s'affichent aussitôt, avec la formule.</p>
+    <ul class="trust"><li>Taux français 2026</li><li>Dans les deux sens</li><li>Arrondi au centime</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="tva-form" onsubmit="return false">
+      <h2>Votre montant</h2>
+      <div class="segmented" role="group" aria-label="Sens du calcul" style="margin-bottom: 16px;">
+        <button type="button" data-dir="ht" aria-pressed="true">HT → TTC</button>
+        <button type="button" data-dir="ttc" aria-pressed="false">TTC → HT</button>
+      </div>
+      <input type="hidden" id="v-dir" name="dir" value="ht" data-save>
+      <div class="fields">
+        <div class="field full"><label for="v-amount" id="v-amount-label">Montant hors taxes (HT)</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="v-amount" name="amount" value="1 000" data-save><span>€</span></div></div>
+        <div class="field full"><span class="label">Taux de TVA</span>
+          <div class="rate-chips" role="radiogroup" aria-label="Taux de TVA">
+            <label><input type="radio" name="rate" value="20" checked data-save><span>20 %</span></label>
+            <label><input type="radio" name="rate" value="10" data-save><span>10 %</span></label>
+            <label><input type="radio" name="rate" value="5.5" data-save><span>5,5 %</span></label>
+            <label><input type="radio" name="rate" value="2.1" data-save><span>2,1 %</span></label>
+            <label><input type="radio" name="rate" value="custom" data-save><span>Autre</span></label>
+          </div></div>
+        <div class="field full" id="v-custom-field" hidden><label for="v-custom">Autre taux</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="v-custom" name="custom" placeholder="Ex. : 8,5" data-save><span>%</span></div>
+          <span class="hint">Par exemple les taux applicables en Corse ou en outre-mer.</span></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="result-hero">
+        <div class="label" id="v-hero-label">Prix TTC</div>
+        <div class="big" id="v-hero">–</div>
+        <div class="sub" id="v-hero-sub">–</div>
+      </div>
+      <ul class="result-list card" style="padding: 6px 18px;">
+        <li><span>Montant HT</span><b id="v-ht">–</b></li>
+        <li><span id="v-tva-label">TVA</span><b id="v-tva">–</b></li>
+        <li><span>Montant TTC</span><b id="v-ttc">–</b></li>
+      </ul>
+      <p class="formula" id="v-formula" style="margin-top: 16px;">–</p>
+      <div class="card" style="padding: 6px 18px; margin-top: 16px;">
+        <table class="mini-table">
+          <caption id="v-table-caption">Le même montant aux autres taux</caption>
+          <thead><tr><th>Taux</th><th>HT</th><th>TVA</th><th>TTC</th></tr></thead>
+          <tbody id="v-table"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+{{kit_cta}}
+
+<section class="section prose">
+  <h2>Les formules du calcul de TVA</h2>
+  <div class="formula">TTC = HT × (1 + taux)　·　HT = TTC ÷ (1 + taux)　·　TVA = TTC − HT</div>
+  <p>Avec le taux normal de 20 %, on multiplie le HT par 1,2 pour obtenir le TTC, et on divise le TTC par 1,2 pour retrouver le HT. L'erreur la plus fréquente consiste à retirer 20 % du prix TTC : 1 200 € − 20 % donne 960 €, alors que le prix HT est bien de 1 000 €.</p>
+  <h2>Les taux de TVA en France</h2>
+  <div class="table-scroll">
+  <table>
+    <thead><tr><th>Taux</th><th>Nom</th><th>Exemples</th></tr></thead>
+    <tbody>
+      <tr><td>20 %</td><td>Taux normal</td><td>La plupart des biens et des services : conseil, informatique, design, formation non exonérée…</td></tr>
+      <tr><td>10 %</td><td>Taux intermédiaire</td><td>Restauration, transport de voyageurs, certains travaux dans les logements</td></tr>
+      <tr><td>5,5 %</td><td>Taux réduit</td><td>Produits alimentaires de base, livres, travaux de rénovation énergétique</td></tr>
+      <tr><td>2,1 %</td><td>Taux particulier</td><td>Médicaments remboursables, presse</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <h2>Freelance en franchise de TVA ?</h2>
+  <p>Tant que votre chiffre d'affaires reste sous le seuil de la franchise en base (37 500 € pour les services, 85 000 € pour la vente en 2026), vous ne facturez pas de TVA : votre prix HT est le prix final et vos factures portent la mention « TVA non applicable, art. 293 B du CGI ». Le <a href="{{link:invoice}}">générateur de facture</a> l'ajoute pour vous, et le <a href="{{link:tax}}">simulateur auto-entrepreneur</a> vous indique où vous en êtes par rapport au seuil.</p>
+  <p class="small muted">Informations données à titre indicatif. Vérifiez le taux applicable à votre activité sur impots.gouv.fr.</p>
+</section>
