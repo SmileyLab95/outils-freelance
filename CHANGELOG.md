@@ -1,5 +1,13 @@
 # Journal des modifications
 
+## 2026-10-20 — Recouvrement judiciaire : étude préalable
+
+- `documentation/14-etude-recouvrement.md` : nouvelle procédure de recouvrement des créances commerciales incontestées
+  (loi n° 2026-307 du 23/04/2026, entre commerçants seulement), petites créances (jusqu'à 5 000 €, désormais hors
+  factures entre commerçants), injonction de payer ; points à vérifier avant publication du guide et plan du guide.
+- Relance de facture impayée : la question sur la mise en demeure ne la présente plus comme une étape obligatoire avant
+  l'injonction de payer.
+
 ## 2026-10-20 — Étude concurrentielle : prix revérifiés sur les sites officiels
 
 - `documentation/11-etude-concurrentielle.md` : prix d'Indy, Abby, Tiime, Henrri, Freebe, Wave, FreshBooks et FreeAgent

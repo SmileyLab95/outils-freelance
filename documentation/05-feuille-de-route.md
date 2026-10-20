@@ -40,7 +40,12 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   **avant l'étape C4** (le déménagement du site peut rester à la fin).
 - **Prix des concurrents revérifiés sur leurs sites officiels (20/10/2026)** : premières formules payantes à 9 à
   10 € HT par mois en France ; proposition pour l'offre « Pro » : 4 à 6 € HT par mois ([11](11-etude-concurrentielle.md)).
-- **Prochaines actions de Claude** : guides (recouvrement judiciaire, assurance, compte bancaire) ; veille réglementaire de décembre (dont la version de
+- **Recouvrement judiciaire (20/10/2026)** : étude préalable ([14](14-etude-recouvrement.md)). Nouveauté de 2026 : une
+  procédure sans juge pour les factures impayées **entre commerçants** (loi n° 2026-307), qui ne concerne pas la
+  plupart des indépendants. Guide en attente de la lecture complète de deux textes (décret d'application, décret
+  n° 2026-683), impossible depuis l'environnement de travail.
+- **Prochaines actions de Claude** : guides (assurance, compte bancaire) ; guide du recouvrement dès que les textes
+  sont lisibles ; veille réglementaire de décembre (dont la version de
   Factur-X et l'annexe A de XP Z12-012 pour le BT-32 en franchise). Les étapes C3 (serveur) et C4 (interface des
   comptes) attendent le choix de l'hébergeur.
 - **En attente d'Ismail** (pas urgent) : structure juridique avec un comptable ; choix de l'hébergeur et budget pour
@@ -98,7 +103,8 @@ Objectif : un site mesuré, sous sa propre marque, qui commence à rapporter, et
       revues le 20/10/2026, mots-clés en tête)
 - [ ] Veille de décembre 2026 : barèmes 2027 des 4 pays, PASS 2027, taux d'intérêt légal du 1er semestre 2027,
       numéro définitif de la mention de franchise (L. 233-3 du CIBS), calendriers 2027-2028 (`scripts/calendriers.py`)
-- [ ] Guide du recouvrement judiciaire (injonction de payer, procédure simplifiée) une fois les règles 2026 vérifiées
+- [ ] Guide du recouvrement judiciaire (injonction de payer, procédure simplifiée) une fois les règles 2026 vérifiées :
+      étude et plan prêts ([14](14-etude-recouvrement.md)) ; deux textes de 2026 à lire en entier avant publication
 - [ ] Guides : assurance de l'indépendant, compte bancaire professionnel
 
 ### 1.5 Préparer la plateforme
