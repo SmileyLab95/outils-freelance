@@ -130,6 +130,9 @@ const tests = {
     check((await page.textContent("#s-r-cotis-label")).includes("9,3 %"), "simulateur : vente avec ACRE −25 % → 9,3 %");
     await page.selectOption("#s-acre", "50");
     check((await page.textContent("#s-r-cotis-label")).includes("6,2 %"), "simulateur : vente avec ACRE −50 % → 6,2 %");
+    await page.selectOption("#s-activity", "cipav");
+    check((await page.textContent("#s-r-cotis-label")).includes("13,4 %"), "simulateur : CIPAV avec ACRE −50 % → 13,4 % (taux publié par l'Urssaf)");
+    check((await page.$$(".sources li")).length >= 5, "simulateur : sources officielles affichées");
     await page.selectOption("#s-acre", "0");
     await page.selectOption("#s-activity", "liberal");
     await page.click('[data-period="an"]');

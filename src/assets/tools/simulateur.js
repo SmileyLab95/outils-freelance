@@ -7,21 +7,27 @@
   var $ = function (id) { return document.getElementById(id); };
   var set = function (id, text) { $(id).textContent = text; };
 
-  // Taux 2026 en dixièmes de point, pour des calculs exacts (25,6 % → 256).
-  // cotis : cotisations sociales, cfp : formation professionnelle, vl : versement libératoire, abatt : abattement fiscal (%).
-  var SERVICES = { plafond: 83600, tva: 37500, tvaMaj: 41250 };
-  var VENTE = { plafond: 203100, tva: 85000, tvaMaj: 93500 };
-  var ACTIVITIES = {
-    liberal: { cotis: 256, cfp: 2, vl: 22, abatt: 34, seuils: SERVICES },
-    cipav: { cotis: 232, cfp: 2, vl: 22, abatt: 34, seuils: SERVICES },
-    services: { cotis: 212, cfp: 1, vl: 17, abatt: 50, seuils: SERVICES },
-    artisan: { cotis: 212, cfp: 3, vl: 17, abatt: 50, seuils: SERVICES },
-    vente: { cotis: 123, cfp: 1, vl: 10, abatt: 71, seuils: VENTE }
-  };
+  // Taux officiels de l'année, injectés par le générateur depuis data/rules/fr.json (micro_activities).
+  // Convertis en dixièmes de point pour des calculs exacts (25,6 % → 256).
+  // cotis : cotisations sociales, acre : taux minorés publiés, cfp : formation professionnelle,
+  // vl : versement libératoire, abatt : abattement fiscal (%).
+  var RULES = window.OF_RULES || {};
+  var tenths = function (rate) { return Math.round(rate * 1000); };
+  var KEYS = { liberal: "liberal_bnc", cipav: "cipav", services: "services_bic", artisan: "artisan", vente: "vente" };
+  var ACTIVITIES = {};
+  Object.keys(KEYS).forEach(function (key) {
+    var r = (RULES.micro_activities || {})[KEYS[key]];
+    if (!r) return;
+    ACTIVITIES[key] = {
+      cotis: tenths(r.cotisations), acre: { 50: tenths(r.acre_50), 25: tenths(r.acre_25) },
+      cfp: tenths(r.cfp), vl: tenths(r.versement_liberatoire), abatt: Math.round(r.abattement * 100),
+      seuils: { plafond: r.plafond_ca, tva: r.tva_seuil, tvaMaj: r.tva_seuil_majore }
+    };
+  });
 
-  /** Taux réduit par l'ACRE, arrondi au dixième supérieur comme les taux publiés (12,3 % × 75 % → 9,3 %). */
-  function acreRate(rate, reduction) {
-    return reduction ? Math.ceil(rate * (100 - reduction) / 100) : rate;
+  /** Taux de cotisations avec l'ACRE : taux minorés publiés par l'Urssaf (−50 % ou −25 %). */
+  function acreRate(activity, reduction) {
+    return reduction ? activity.acre[reduction] : activity.cotis;
   }
   var pct = function (tenths) { return OF.fmt(tenths / 10) + " %"; };
 
@@ -47,7 +53,7 @@
     var amount = OF.num($("s-ca").value);
     var ca = period === "mois" ? amount * 12 : amount;
     var acre = Number($("s-acre").value) || 0;
-    var cotisRate = acreRate(a.cotis, acre);
+    var cotisRate = acreRate(a, acre);
     var vlOn = $("s-vl").checked;
     var costs = OF.num($("s-costs").value) || 0;
 
