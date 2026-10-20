@@ -1,5 +1,20 @@
 # Journal des modifications
 
+## 2026-10-20 — Espace entrepreneur v1 (France, version locale)
+
+- Nouvelle page `/fr/espace/` : profil de l'entreprise, clients, devis, factures et avoirs (brouillon puis émission,
+  numérotation continue F2026-001, coordonnées figées à l'émission, contrôle de la chronologie), encaissements
+  partiels, relance par email préremplie, livre des recettes (export CSV, impression), déclaration Urssaf estimée
+  (période, date limite du calendrier, taux de l'activité, ACRE, versement libératoire), jauges du plafond et du seuil
+  de TVA, échéances selon le profil, sauvegarde (export, import contrôlé, effacement), reprise des informations du
+  générateur de facture. Données dans le navigateur (IndexedDB), synchronisées entre onglets ; rien n'est envoyé.
+- Moteur de facture commun `engines/invoice-fr.js` (générateur public et Espace) ; moteur `engines/espace-fr.js`.
+- Règles ajoutées : `livre_recettes_micro`, `conservation_pieces` ; échéances Urssaf du calendrier marquées par période.
+- Qualité : spécification préalable (`documentation/09-specification-espace.md`), charte qualité (règle d'Ismail),
+  60 tests unitaires, parcours navigateur complet, revue de code (10 points corrigés), captures relues.
+- Mobile : lignes de facture (quantité étroite, prix large) corrigées aussi dans le générateur public ; champs de
+  recherche stylés ; option `ONLY=` pour lancer les tests d'une seule page.
+
 ## 2026-10-20 — Plan de développement de la plateforme
 
 - Nouveau cap : passer du site d'outils gratuits à la plateforme de l'entrepreneur avec un compte

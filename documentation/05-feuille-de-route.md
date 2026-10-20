@@ -11,13 +11,18 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 
 *Mis à jour le 20/10/2026.*
 
-- **Étape en cours : E1 — Fondations commerciales** (novembre – décembre 2026).
-- **Fait** : le site d'outils (étape 0) est terminé : 81 pages, 4 pays, tests automatiques, publication continue.
-- **Prochaines actions de Claude** : proposer des noms de marque et vérifier les domaines ; préparer le Pack Contrats
-  & CGV ; préparer le calendrier fiscal 2027 en PDF (produit gratuit) ; ajouter la liste d'attente « Espace
-  entrepreneur » sur le site ; lancer l'étude concurrentielle.
-- **En attente d'Ismail** : choisir la marque et acheter le domaine ; mettre en vente le kit US sur Gumroad et envoyer
-  le lien ; ouvrir un compte d'emailing (Brevo ou équivalent) ; réfléchir au statut juridique avec un comptable.
+- **Priorité (décision D10)** : le site et la plateforme d'abord ; noms de domaine, Gumroad et affiliation à la fin.
+  Règle de qualité maximale pour tout produit ou service (D11, charte dans la [méthode](04-methode-de-travail.md#charte-qualité)).
+- **Étape en cours : E1, volet « plateforme »**, avec des fonctions de l'étape E2 livrées en version locale (D12).
+- **Fait le 20/10/2026** : **Espace entrepreneur v1** (France, version locale) : profil, clients, devis, factures,
+  avoirs, encaissements, livre des recettes, déclaration Urssaf estimée, plafonds, échéances, sauvegarde ;
+  moteur de facture commun au générateur public ; spécification ([09](09-specification-espace.md)), 60 tests
+  unitaires, parcours navigateur complet, revue de code (10 points corrigés).
+- **Prochaines actions de Claude** : Espace v1.1 (export Factur-X pour préparer la facturation électronique, envoi
+  de la facture par email prérempli, raccourcis depuis les outils publics) ; étude concurrentielle et spécification des
+  comptes en ligne (E2) ; finitions SEO ; veille réglementaire de décembre.
+- **En attente d'Ismail** (pas urgent) : structure juridique avec un comptable ; plus tard, compte d'hébergement pour
+  les comptes en ligne (E2) ; à la fin, marque et domaine, Gumroad.
 
 ## Vue d'ensemble
 
@@ -76,7 +81,8 @@ Objectif : un site mesuré, sous sa propre marque, qui commence à rapporter, et
 
 - [ ] Étude concurrentielle par pays (fonctions, prix, avis) → grille d'offres et de prix
 - [ ] Liste d'attente « Espace entrepreneur » sur le site, avec un court questionnaire sur les besoins
-- [ ] Spécification du MVP : parcours, écrans, modèle de données, critères d'acceptation (`documentation/09-specification-espace.md`)
+- [x] Spécification du MVP : parcours, écrans, modèle de données, critères d'acceptation (`documentation/09-specification-espace.md`)
+- [x] Espace entrepreneur v1 en version locale (France) : voir les fonctions cochées « version locale » en E2.2
 - [ ] Choix techniques consignés dans le journal des décisions (socle, hébergement UE, framework, paiements)
 - [ ] **[Ismail]** Choisir la structure juridique pour encaisser des abonnements (avec un expert-comptable)
 - [ ] **[Ismail]** Budget de départ validé
@@ -100,15 +106,20 @@ Objectif : un compte gratuit qui rend service dès le premier jour.
 
 ### 2.2 Fonctions
 
-- [ ] Profil entreprise : pays, statut, régime de TVA, coordonnées ; SIREN complété automatiquement (API Recherche d'entreprises)
-- [ ] Clients : fiche, SIREN ou numéro de TVA vérifié (VIES pour l'UE), historique
-- [ ] Devis et factures dans le cloud (reprise des générateurs actuels) : numérotation continue, PDF, duplication, avoirs
+- [x] Profil entreprise : statut, régime de TVA, coordonnées, ACRE, versement libératoire *(version locale)*
+- [ ] Profil : SIREN complété automatiquement (API Recherche d'entreprises)
+- [x] Clients : fiche, pays, historique et totaux *(version locale)*
+- [ ] Clients : SIREN et numéro de TVA vérifiés (API Recherche d'entreprises, VIES)
+- [x] Devis, factures et avoirs : numérotation continue, PDF, duplication, avoirs, devis transformé en facture *(version locale)*
+- [ ] Devis, factures et avoirs enregistrés dans le cloud (comptes en ligne)
 - [ ] Devis accepté en ligne par le client (lien sécurisé)
-- [ ] Tableau de bord : chiffre d'affaires encaissé, plafonds de la micro-entreprise, cotisations et impôt à provisionner, seuil de TVA
-- [ ] Livre des recettes tenu automatiquement (micro-entrepreneurs)
-- [ ] Rappels d'échéances par email (à partir des calendriers fiscaux existants)
-- [ ] Import des données déjà enregistrées dans le navigateur
-- [ ] Export complet (PDF, CSV, JSON) et suppression du compte
+- [x] Tableau de bord : chiffre d'affaires encaissé, déclaration Urssaf estimée, plafonds, seuil de TVA, impayés *(version locale)*
+- [x] Livre des recettes tenu automatiquement (micro-entrepreneurs), export CSV *(version locale)*
+- [x] Échéances selon le profil *(version locale)*
+- [ ] Rappels d'échéances par email (comptes en ligne)
+- [x] Reprise des informations du générateur de facture ; import et export d'une sauvegarde *(version locale)*
+- [ ] Import de la version locale dans le compte en ligne
+- [x] Export complet (PDF, CSV, JSON) et suppression des données *(version locale)*
 
 ### 2.3 Lancement
 

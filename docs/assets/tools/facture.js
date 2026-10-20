@@ -1,9 +1,9 @@
 /* Générateur de facture et de devis : aperçu en direct, mentions légales, export PDF via l'impression. */
 (function () {
   "use strict";
-  var OF = window.OF;
+  var OF = window.OF, OFE = window.OFE;
   var form = document.getElementById("facture-form");
-  if (!form) return;
+  if (!form || !OFE) return;
   var $ = function (id) { return document.getElementById(id); };
   var preview = $("f-preview");
   var linesBox = $("f-lines");
@@ -19,10 +19,6 @@
   function esc(text) {
     return String(text == null ? "" : text)
       .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-  }
-  function multiline(text) { return esc(text).replace(/\n/g, "<br>"); }
-  function orHint(value, hint) {
-    return value && value.trim() ? multiline(value.trim()) : '<span class="p-empty">' + esc(hint) + "</span>";
   }
   function val(id) { return ($(id).value || "").trim(); }
 
@@ -106,150 +102,35 @@
     state.logo = ""; OF.save("facture-logo", ""); $("f-logo").value = ""; render();
   });
 
-  // ----- Calculs ---------------------------------------------------------------
-  function totals() {
-    var ht = 0;
-    var rows = state.lines.map(function (l) {
-      var qty = OF.num(l.qty), price = OF.num(l.price);
-      var total = isFinite(qty) && isFinite(price) ? qty * price : NaN;
-      if (isFinite(total)) ht += total;
-      return { desc: l.desc, qty: qty, price: price, total: total };
-    });
-    var franchise = $("f-franchise").checked;
-    // Client professionnel à l'étranger : pas de TVA française (autoliquidation dans l'UE, hors champ ailleurs).
-    var place = $("f-vat-place").value;
-    var rate = franchise || place !== "fr" ? 0 : OF.num($("f-vat-rate").value);
-    var vat = Math.round(ht * rate) / 100;
-    var ttc = ht + vat;
-    var paid = OF.num($("f-paid").value);
-    return { rows: rows, ht: ht, rate: rate, vat: vat, ttc: ttc, paid: isFinite(paid) ? paid : 0, franchise: franchise,
-             place: place, noVat: franchise || place !== "fr" };
-  }
-
-  // ----- Mention de franchise de TVA : 293 B du CGI, puis CIBS pour les factures datées à partir du 1er janvier 2027.
+  // ----- Document : les valeurs du formulaire, mises en forme par le moteur OFE.invoiceFR --------------
   var R = window.OF_RULES || {};
-  function franchiseMention(date) {
-    var next = R.mention_franchise_tva_2027;
-    if (next && date >= next.from) return next.text + " (ex-art. 293 B du CGI).";
-    return (R.mention_franchise_tva || "TVA non applicable, art. 293 B du CGI") + ".";
-  }
 
-  // ----- Aperçu ----------------------------------------------------------------
-  var NATURES = { services: "Prestation de services", biens: "Livraison de biens", mixte: "Biens et services" };
-
-  /** Identifiants du client professionnel : SIREN (ou n° de TVA saisi à sa place) et n° de TVA. */
-  function clientIds(pro) {
-    if (!pro) return [];
-    var id = val("f-client-id"), vat = val("f-client-vat");
-    return [
-      id ? (/^[A-Z]{2}/i.test(id) ? "N° TVA : " : "SIREN : ") + id : "",
-      vat ? "N° TVA : " + vat : ""
-    ].filter(Boolean);
+  function currentDoc() {
+    var num = function (id) { return OF.num($(id).value); };
+    return {
+      type: state.type, number: val("f-number"),
+      date: $("f-date").value || OF.today(), serviceDate: $("f-service-date").value,
+      terms: $("f-terms").value, validity: $("f-validity").value, depositPct: num("f-deposit-pct"),
+      nature: $("f-nature").value,
+      me: { name: val("f-me-name"), status: val("f-me-status"), address: $("f-me-address").value.trim(), siret: val("f-me-siret"),
+            vat: val("f-me-vat"), email: val("f-me-email"), phone: val("f-me-phone"), iban: val("f-me-iban"), bic: val("f-me-bic"),
+            logo: state.logo },
+      client: { name: val("f-client-name"), address: $("f-client-address").value, id: val("f-client-id"), vat: val("f-client-vat"),
+                delivery: val("f-client-delivery"), pro: $("f-client-pro").checked },
+      lines: state.lines.map(function (l) { return { desc: l.desc, qty: OF.num(l.qty), price: OF.num(l.price) }; }),
+      vat: { franchise: $("f-franchise").checked, rate: num("f-vat-rate"), place: $("f-vat-place").value, debits: $("f-debits").checked },
+      paid: num("f-paid"), penalty: val("f-penalty"), notes: val("f-notes")
+    };
   }
 
   function render() {
-    var isInvoice = state.type === "facture";
-    var t = totals();
-    var date = $("f-date").value || OF.today();
-    var due = OF.addDays(date, Math.max(0, parseInt($("f-terms").value, 10) || 0));
-    var validUntil = OF.addDays(date, Math.max(1, parseInt($("f-validity").value, 10) || 30));
-    var pro = $("f-client-pro").checked;
+    var doc = currentDoc();
+    var t = OFE.invoiceFR.compute(doc);
     $("f-vat-rate-field").hidden = t.noVat;
     $("f-debits-field").hidden = t.noVat;
-    form.querySelectorAll("[data-pro]").forEach(function (el) { el.hidden = !pro; });
+    form.querySelectorAll("[data-pro]").forEach(function (el) { el.hidden = !doc.client.pro; });
     $("f-logo-remove").hidden = !state.logo;
-
-    var meLines = [
-      val("f-me-status"),
-      $("f-me-address").value.trim(),
-      val("f-me-siret") ? "SIRET : " + val("f-me-siret") : "",
-      val("f-me-vat") ? "N° TVA : " + val("f-me-vat") : "",
-      [val("f-me-email"), val("f-me-phone")].filter(Boolean).join(" · ")
-    ].filter(Boolean);
-
-    var html = '<div class="p-head"><div class="p-brand">' +
-      (state.logo ? '<img src="' + state.logo + '" alt="Logo">' : "") +
-      '<div class="p-me-name">' + orHint(val("f-me-name"), "Votre nom") + "</div></div>" +
-      '<div class="p-title">' + (isInvoice ? "FACTURE" : "DEVIS") +
-      '<span>N° ' + orHint(val("f-number"), "—") + "</span></div></div>";
-
-    html += '<div class="p-parties"><div><div class="p-label">Émetteur</div><strong>' + orHint(val("f-me-name"), "Votre nom") +
-      "</strong><br>" + (meLines.length ? meLines.map(multiline).join("<br>") : '<span class="p-empty">Statut, adresse, SIRET</span>') +
-      '</div><div><div class="p-label">' + (isInvoice ? "Facturé à" : "Client") + "</div><strong>" +
-      orHint(val("f-client-name"), "Nom du client") + "</strong><br>" + orHint($("f-client-address").value, "Adresse du client") +
-      clientIds(pro).map(function (l) { return "<br>" + esc(l); }).join("") +
-      (t.place === "eu" && !val("f-client-vat") ? '<br><span class="p-empty">N° de TVA intracommunautaire du client</span>' : "") +
-      (val("f-client-delivery") ? '<div class="p-delivery"><span>Adresse de livraison</span><br>' + multiline(val("f-client-delivery")) + "</div>" : "") +
-      "</div></div>";
-
-    var meta = [["Date", OF.frDate(date)]];
-    if (isInvoice) {
-      meta.push(["Date de la prestation", OF.frDate($("f-service-date").value || date)]);
-      meta.push(["Échéance", OF.frDate(due)]);
-    } else {
-      meta.push(["Valable jusqu'au", OF.frDate(validUntil)]);
-    }
-    meta.push(["Opération", NATURES[$("f-nature").value] || NATURES.services]);
-    html += '<div class="p-meta">' + meta.map(function (m) {
-      return "<div><span>" + esc(m[0]) + "</span><b>" + esc(m[1]) + "</b></div>";
-    }).join("") + "</div>";
-
-    html += '<table class="p-lines"><thead><tr><th>Désignation</th><th>Qté</th><th>Prix unitaire HT</th><th>Total HT</th></tr></thead><tbody>';
-    t.rows.forEach(function (r) {
-      if (!r.desc && !isFinite(r.price)) return;
-      html += "<tr><td>" + orHint(r.desc, "Désignation") + "</td><td>" + (isFinite(r.qty) ? OF.fmt(r.qty) : "") +
-        "</td><td>" + (isFinite(r.price) ? OF.eur(r.price) : "") + "</td><td>" + (isFinite(r.total) ? OF.eur(r.total) : "") + "</td></tr>";
-    });
-    if (!t.rows.some(function (r) { return r.desc || isFinite(r.price); })) {
-      html += '<tr><td colspan="4"><span class="p-empty">Ajoutez vos prestations dans le formulaire</span></td></tr>';
-    }
-    html += "</tbody></table>";
-
-    var tot = [["Total HT", OF.eur(t.ht)]];
-    if (t.place === "eu") tot.push(["TVA", "autoliquidation"]);
-    else if (t.noVat) tot.push(["TVA", "non applicable"]);
-    else tot.push(["TVA (" + OF.fmt(t.rate) + " %)", OF.eur(t.vat)]);
-    tot.push([t.noVat ? "Total à payer" : "Total TTC", OF.eur(t.ttc), true]);
-    if (isInvoice && t.paid > 0) {
-      tot.push(["Acompte déjà versé", "− " + OF.eur(t.paid)]);
-      tot.push(["Net à payer", OF.eur(t.ttc - t.paid), true]);
-    }
-    if (!isInvoice) {
-      var pct = Math.min(100, Math.max(0, OF.num($("f-deposit-pct").value) || 0));
-      if (pct > 0) tot.push(["Acompte à la signature (" + OF.fmt(pct) + " %)", OF.eur(t.ttc * pct / 100)]);
-    }
-    html += '<div class="p-totals">' + tot.map(function (r) {
-      return '<div class="' + (r[2] ? "p-grand" : "") + '"><span>' + esc(r[0]) + "</span><b>" + esc(r[1]) + "</b></div>";
-    }).join("") + "</div>";
-
-    var mentions = [];
-    if (t.place === "eu") mentions.push("Autoliquidation : TVA due par le preneur (art. 196 de la directive 2006/112/CE).");
-    else if (t.place === "world") mentions.push("TVA non applicable : prestation de services dont le lieu est hors de France (art. 44 de la directive 2006/112/CE).");
-    else if (t.franchise) mentions.push(franchiseMention(date));
-    else if ($("f-debits").checked) mentions.push("Option pour le paiement de la taxe d'après les débits.");
-    if (isInvoice) {
-      if (val("f-me-iban")) {
-        mentions.push("Paiement par virement avant le " + OF.frDate(due) + " · IBAN " + val("f-me-iban") +
-          (val("f-me-bic") ? " · BIC " + val("f-me-bic") : "") + (val("f-number") ? " · Référence : " + val("f-number") : "") + ".");
-      } else {
-        mentions.push("Paiement à réception, au plus tard le " + OF.frDate(due) + ".");
-      }
-      mentions.push("Pas d'escompte pour paiement anticipé.");
-      if (pro) {
-        mentions.push("En cas de retard de paiement : pénalités au taux de " + (val("f-penalty") || "trois fois le taux d'intérêt légal") +
-          " et indemnité forfaitaire pour frais de recouvrement de 40 € (art. L441-10 et D441-5 du Code de commerce).");
-      }
-    } else {
-      mentions.push("Devis valable jusqu'au " + OF.frDate(validUntil) + ". Toute prestation non prévue fera l'objet d'un devis complémentaire.");
-    }
-    html += '<div class="p-mentions">' + mentions.map(function (m) { return "<p>" + esc(m) + "</p>"; }).join("") + "</div>";
-
-    if (!isInvoice) {
-      html += '<div class="p-sign"><div class="p-label">Bon pour accord</div>' +
-        "<p>Date et signature du client, précédées de la mention « Devis reçu avant l'exécution des travaux, bon pour accord ».</p><div class=\"p-sign-box\"></div></div>";
-    }
-    if (val("f-notes")) html += '<div class="p-notes">' + multiline(val("f-notes")) + "</div>";
-    preview.innerHTML = html;
+    preview.innerHTML = OFE.invoiceFR.render(doc, R, { eur: OF.eur, num: OF.fmt, date: OF.frDate });
   }
 
   // ----- Actions ---------------------------------------------------------------

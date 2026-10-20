@@ -14,6 +14,9 @@ en bas ; elles sortent de la liste quand elles sont prises.
 | D7 | 20/10/2026 | Les outils publics restent gratuits et utilisables sans compte | Promesse de confidentialité et moteur d'acquisition | Ismail et Claude |
 | D8 | 20/10/2026 | Pas de conseil juridique ou comptable personnalisé par la plateforme : partenaires et professionnels | Professions réglementées | Claude |
 | D9 | 20/10/2026 | La plateforme sera une « solution compatible » connectée à des plateformes agréées, pas une plateforme agréée | Exigences d'immatriculation trop lourdes au démarrage | Claude (à confirmer à l'étape 3) |
+| D10 | 20/10/2026 | Priorité au site et à la plateforme ; les noms de domaine et Gumroad passent à la fin | Demande d'Ismail : « on attaque le fond, le site web » | Ismail |
+| D11 | 20/10/2026 | Règle de qualité : tout produit ou service est fait avec le maximum de qualité possible ; charte qualité dans la méthode | Demande d'Ismail | Ismail |
+| D12 | 20/10/2026 | L'Espace entrepreneur démarre en version locale (données dans le navigateur, sans compte), avec un modèle de données prêt pour les comptes en ligne de l'étape 2 | Avancer sur le fond sans attendre le domaine ni l'hébergement, en gardant la promesse de confidentialité | Claude, sur la priorité fixée par Ismail |
 
 ## Décisions en attente
 

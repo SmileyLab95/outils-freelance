@@ -145,6 +145,22 @@ Le menu, le pied de page et la grille d'accueil sont construits à partir de `na
 - Report des dates : Urssaf au jour ouvré suivant (jours fériés français dans le script) ; IRS déjà reporté ;
   HMRC et ARC à la date nominale (l'ARC accepte le jour ouvrable suivant, indiqué sur la page).
 
+## L'Espace entrepreneur (`/fr/espace/`)
+
+Application d'une page, spécifiée dans [09-specification-espace.md](09-specification-espace.md).
+
+| Fichier | Rôle |
+|---|---|
+| `engines/invoice-fr.js` | Moteur de facture **commun** au générateur public et à l'Espace : totaux, TVA, mentions légales, rendu de la page imprimable. Toute règle de facturation se modifie ici. |
+| `engines/espace-fr.js` | Fonctions pures de l'Espace : numérotation et émission, statuts, avoirs, encaissements, livre des recettes, déclaration Urssaf, plafonds. Testé par `tests/unit/espace-fr.test.mjs`. |
+| `tools/espace-store.js` | Stockage : IndexedDB (repli sur le stockage local), synchronisation entre onglets, contrôle des sauvegardes importées. |
+| `tools/espace.js` | Interface : écrans `#/`, `#/documents`, `#/clients`, `#/recettes`, `#/echeances`, `#/reglages`. |
+
+- Les données ont la forme `{ schema: 1, profile, clients, documents, settings }`, avec des identifiants uniques et des
+  dates de création et de modification, pour être synchronisées telles quelles avec les comptes en ligne (étape 2).
+- La date limite de la déclaration Urssaf vient du calendrier fiscal (`period` des échéances de `data/calendars/fr.json`).
+- `?today=AAAA-MM-JJ` dans l'adresse fixe la date du jour (tests).
+
 ## Le générateur de contrat (`tools/contract.js`)
 
 - Le texte du contrat est dans la page (`#contract-data`) : préambule, articles, clôture, signatures.

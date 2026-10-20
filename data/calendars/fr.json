@@ -32,6 +32,7 @@
    "tag": "Urssaf",
    "title": "Déclaration Urssaf du chiffre d'affaires d'août 2026",
    "desc": "Déclarez et payez vos cotisations (et le versement libératoire si vous l'avez choisi) sur autoentrepreneur.urssaf.fr, même si votre chiffre d'affaires est nul.",
+   "period": "2026-08",
    "when": {
     "periodicity": [
      "monthly"
@@ -66,6 +67,7 @@
    "tag": "Urssaf",
    "title": "Déclaration Urssaf du 3e trimestre 2026",
    "desc": "Chiffre d'affaires encaissé de juillet à septembre 2026. Déclarez et payez vos cotisations sur autoentrepreneur.urssaf.fr, même si votre chiffre d'affaires est nul.",
+   "period": "2026-T3",
    "when": {
     "periodicity": [
      "quarterly"
@@ -79,6 +81,7 @@
    "tag": "Urssaf",
    "title": "Déclaration Urssaf du chiffre d'affaires de septembre 2026",
    "desc": "Déclarez et payez vos cotisations (et le versement libératoire si vous l'avez choisi) sur autoentrepreneur.urssaf.fr, même si votre chiffre d'affaires est nul.",
+   "period": "2026-09",
    "when": {
     "periodicity": [
      "monthly"
@@ -117,6 +120,7 @@
    "tag": "Urssaf",
    "title": "Déclaration Urssaf du chiffre d'affaires d'octobre 2026",
    "desc": "Déclarez et payez vos cotisations (et le versement libératoire si vous l'avez choisi) sur autoentrepreneur.urssaf.fr, même si votre chiffre d'affaires est nul.",
+   "period": "2026-10",
    "when": {
     "periodicity": [
      "monthly"
@@ -168,6 +172,7 @@
    "tag": "Urssaf",
    "title": "Déclaration Urssaf du chiffre d'affaires de novembre 2026",
    "desc": "Déclarez et payez vos cotisations (et le versement libératoire si vous l'avez choisi) sur autoentrepreneur.urssaf.fr, même si votre chiffre d'affaires est nul.",
+   "period": "2026-11",
    "when": {
     "periodicity": [
      "monthly"
@@ -213,6 +218,7 @@
    "tag": "Urssaf",
    "title": "Déclaration Urssaf du 4e trimestre 2026",
    "desc": "Chiffre d'affaires encaissé d'octobre à décembre 2026. Déclarez et payez vos cotisations sur autoentrepreneur.urssaf.fr, même si votre chiffre d'affaires est nul.",
+   "period": "2026-T4",
    "when": {
     "periodicity": [
      "quarterly"
@@ -226,6 +232,7 @@
    "tag": "Urssaf",
    "title": "Déclaration Urssaf du chiffre d'affaires de décembre 2026",
    "desc": "Déclarez et payez vos cotisations (et le versement libératoire si vous l'avez choisi) sur autoentrepreneur.urssaf.fr, même si votre chiffre d'affaires est nul.",
+   "period": "2026-12",
    "when": {
     "periodicity": [
      "monthly"
@@ -252,6 +259,7 @@
    "tag": "Urssaf",
    "title": "Déclaration Urssaf du chiffre d'affaires de janvier 2027",
    "desc": "Déclarez et payez vos cotisations (et le versement libératoire si vous l'avez choisi) sur autoentrepreneur.urssaf.fr, même si votre chiffre d'affaires est nul.",
+   "period": "2027-01",
    "when": {
     "periodicity": [
      "monthly"
@@ -278,6 +286,7 @@
    "tag": "Urssaf",
    "title": "Déclaration Urssaf du chiffre d'affaires de février 2027",
    "desc": "Déclarez et payez vos cotisations (et le versement libératoire si vous l'avez choisi) sur autoentrepreneur.urssaf.fr, même si votre chiffre d'affaires est nul.",
+   "period": "2027-02",
    "when": {
     "periodicity": [
      "monthly"
@@ -313,6 +322,7 @@
    "tag": "Urssaf",
    "title": "Déclaration Urssaf du 1er trimestre 2027",
    "desc": "Chiffre d'affaires encaissé de janvier à mars 2027. Déclarez et payez vos cotisations sur autoentrepreneur.urssaf.fr, même si votre chiffre d'affaires est nul.",
+   "period": "2027-T1",
    "when": {
     "periodicity": [
      "quarterly"
@@ -326,6 +336,7 @@
    "tag": "Urssaf",
    "title": "Déclaration Urssaf du chiffre d'affaires de mars 2027",
    "desc": "Déclarez et payez vos cotisations (et le versement libératoire si vous l'avez choisi) sur autoentrepreneur.urssaf.fr, même si votre chiffre d'affaires est nul.",
+   "period": "2027-03",
    "when": {
     "periodicity": [
      "monthly"
@@ -375,6 +386,7 @@
    "tag": "Urssaf",
    "title": "Déclaration Urssaf du chiffre d'affaires d'avril 2027",
    "desc": "Déclarez et payez vos cotisations (et le versement libératoire si vous l'avez choisi) sur autoentrepreneur.urssaf.fr, même si votre chiffre d'affaires est nul.",
+   "period": "2027-04",
    "when": {
     "periodicity": [
      "monthly"
@@ -401,6 +413,7 @@
    "tag": "Urssaf",
    "title": "Déclaration Urssaf du chiffre d'affaires de mai 2027",
    "desc": "Déclarez et payez vos cotisations (et le versement libératoire si vous l'avez choisi) sur autoentrepreneur.urssaf.fr, même si votre chiffre d'affaires est nul.",
+   "period": "2027-05",
    "when": {
     "periodicity": [
      "monthly"
@@ -440,6 +453,7 @@
    "tag": "Urssaf",
    "title": "Déclaration Urssaf du 2e trimestre 2027",
    "desc": "Chiffre d'affaires encaissé d'avril à juin 2027. Déclarez et payez vos cotisations sur autoentrepreneur.urssaf.fr, même si votre chiffre d'affaires est nul.",
+   "period": "2027-T2",
    "when": {
     "periodicity": [
      "quarterly"
@@ -453,6 +467,7 @@
    "tag": "Urssaf",
    "title": "Déclaration Urssaf du chiffre d'affaires de juin 2027",
    "desc": "Déclarez et payez vos cotisations (et le versement libératoire si vous l'avez choisi) sur autoentrepreneur.urssaf.fr, même si votre chiffre d'affaires est nul.",
+   "period": "2027-06",
    "when": {
     "periodicity": [
      "monthly"
@@ -479,6 +494,7 @@
    "tag": "Urssaf",
    "title": "Déclaration Urssaf du chiffre d'affaires de juillet 2027",
    "desc": "Déclarez et payez vos cotisations (et le versement libératoire si vous l'avez choisi) sur autoentrepreneur.urssaf.fr, même si votre chiffre d'affaires est nul.",
+   "period": "2027-07",
    "when": {
     "periodicity": [
      "monthly"
@@ -513,6 +529,7 @@
    "tag": "Urssaf",
    "title": "Déclaration Urssaf du chiffre d'affaires d'août 2027",
    "desc": "Déclarez et payez vos cotisations (et le versement libératoire si vous l'avez choisi) sur autoentrepreneur.urssaf.fr, même si votre chiffre d'affaires est nul.",
+   "period": "2027-08",
    "when": {
     "periodicity": [
      "monthly"
@@ -547,6 +564,7 @@
    "tag": "Urssaf",
    "title": "Déclaration Urssaf du 3e trimestre 2027",
    "desc": "Chiffre d'affaires encaissé de juillet à septembre 2027. Déclarez et payez vos cotisations sur autoentrepreneur.urssaf.fr, même si votre chiffre d'affaires est nul.",
+   "period": "2027-T3",
    "when": {
     "periodicity": [
      "quarterly"
@@ -560,6 +578,7 @@
    "tag": "Urssaf",
    "title": "Déclaration Urssaf du chiffre d'affaires de septembre 2027",
    "desc": "Déclarez et payez vos cotisations (et le versement libératoire si vous l'avez choisi) sur autoentrepreneur.urssaf.fr, même si votre chiffre d'affaires est nul.",
+   "period": "2027-09",
    "when": {
     "periodicity": [
      "monthly"
@@ -593,6 +612,7 @@
    "tag": "Urssaf",
    "title": "Déclaration Urssaf du chiffre d'affaires d'octobre 2027",
    "desc": "Déclarez et payez vos cotisations (et le versement libératoire si vous l'avez choisi) sur autoentrepreneur.urssaf.fr, même si votre chiffre d'affaires est nul.",
+   "period": "2027-10",
    "when": {
     "periodicity": [
      "monthly"
@@ -656,6 +676,7 @@
    "tag": "Urssaf",
    "title": "Déclaration Urssaf du chiffre d'affaires de novembre 2027",
    "desc": "Déclarez et payez vos cotisations (et le versement libératoire si vous l'avez choisi) sur autoentrepreneur.urssaf.fr, même si votre chiffre d'affaires est nul.",
+   "period": "2027-11",
    "when": {
     "periodicity": [
      "monthly"
@@ -689,6 +710,7 @@
    "tag": "Urssaf",
    "title": "Déclaration Urssaf du 4e trimestre 2027",
    "desc": "Chiffre d'affaires encaissé d'octobre à décembre 2027. Déclarez et payez vos cotisations sur autoentrepreneur.urssaf.fr, même si votre chiffre d'affaires est nul.",
+   "period": "2027-T4",
    "when": {
     "periodicity": [
      "quarterly"
@@ -702,6 +724,7 @@
    "tag": "Urssaf",
    "title": "Déclaration Urssaf du chiffre d'affaires de décembre 2027",
    "desc": "Déclarez et payez vos cotisations (et le versement libératoire si vous l'avez choisi) sur autoentrepreneur.urssaf.fr, même si votre chiffre d'affaires est nul.",
+   "period": "2027-12",
    "when": {
     "periodicity": [
      "monthly"

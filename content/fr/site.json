@@ -8,6 +8,7 @@
     {
       "label": "Facturer",
       "items": [
+        "espace",
         "invoice",
         "salestax",
         "invoice-rules",
@@ -43,9 +44,9 @@
     }
   ],
   "featured": [
+    "espace",
     "invoice",
-    "tax",
-    "einvoicing"
+    "tax"
   ],
   "footer_links": [
     "legal",

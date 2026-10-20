@@ -787,6 +787,38 @@
       "source_title": "Legifiscal - Mention facture : changement d'article d'exonération de TVA pour les autoentrepreneurs",
       "confidence": "medium",
       "note": "Numéro L. 233-3 donné par Legifiscal et Bpifrance Création après la renumérotation de l'ordonnance n° 2026-671 (l'ordonnance n° 2025-1247 prévoyait L. 223-3). Tolérance de l'ancienne mention jusqu'au 30 juin 2028 selon des résumés de l'ordonnance (31 décembre 2027 selon d'autres) : à vérifier sur Légifrance en décembre 2026. Le site ajoute « (ex-art. 293 B du CGI) » pour lever toute ambiguïté."
+    },
+    "conservation_pieces": {
+      "value": {
+        "commerce_annees": 10,
+        "fiscal_annees": 6
+      },
+      "unit": "object",
+      "label": "Durée de conservation des factures et du livre des recettes",
+      "source": "https://www.legifrance.gouv.fr/codes/id/LEGITEXT000005634379",
+      "source_title": "Code de commerce, art. L123-22 (documents comptables et pièces justificatives : 10 ans) ; Livre des procédures fiscales, art. L102 B (6 ans) - Légifrance",
+      "confidence": "high",
+      "note": "Le délai le plus long (10 ans) est retenu dans l'Espace entrepreneur pour les factures et le livre des recettes."
+    },
+    "livre_recettes_micro": {
+      "value": {
+        "mentions": [
+          "date d'encaissement",
+          "client",
+          "nature de la prestation ou de la vente",
+          "montant encaissé",
+          "mode de règlement",
+          "référence de la facture ou de la pièce justificative"
+        ],
+        "ordre": "chronologique, par date d'encaissement",
+        "registre_achats": "obligatoire en plus pour la vente de marchandises et la fourniture de logement"
+      },
+      "unit": "object",
+      "label": "Livre des recettes du micro-entrepreneur",
+      "source": "https://www.legifrance.gouv.fr/codes/id/LEGITEXT000006069577",
+      "source_title": "Code général des impôts, art. 50-0 (BIC) et 102 ter (BNC) - Légifrance",
+      "confidence": "medium",
+      "note": "Livre-journal présentant le détail des recettes professionnelles, tenu au jour le jour. Liste des mentions recoupée sur plusieurs guides professionnels (L'Expert-Comptable.com, Le Coin des Entrepreneurs) ; texte officiel à relire lors de la veille de décembre."
     }
   },
   "open_questions": [

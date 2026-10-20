@@ -2,6 +2,25 @@
 
 Le site doit être **exact**, **cohérent** et **toujours à jour**. Chaque outil suit le même circuit, du chiffre officiel à la mise en ligne.
 
+## Charte qualité
+
+Règle fixée par Ismail le 20/10/2026 : **tout produit ou service est fait avec le maximum de qualité possible.**
+Concrètement, rien n'est publié ou vendu sans avoir passé ces exigences.
+
+| Moment | Exigence |
+|---|---|
+| Avant | Besoin clair et **spécification écrite** pour tout module important : parcours, écrans, cas limites, critères d'acceptation. |
+| Avant | **Règles vérifiées** aux sources officielles ; une source secondaire doit être recoupée ; toute incertitude est signalée et jamais présentée comme certaine. |
+| Pendant | **Moteurs de calcul purs et testés** avant l'interface : exemples officiels, calculs à la main, cas limites. |
+| Pendant | **Une seule source de vérité** : une règle ou une mention légale n'est écrite qu'à un seul endroit et réutilisée partout. |
+| Pendant | **Accessibilité** : libellés, navigation au clavier, focus visible, contrastes suffisants, résultats annoncés aux lecteurs d'écran. |
+| Pendant | **Tous les états** prévus : vide, erreur, chargement, données incomplètes, très longues valeurs, montants nuls ou négatifs. |
+| Pendant | **Sécurité et vie privée** : données échappées à l'affichage, rien d'envoyé sans nécessité, export et suppression possibles. |
+| Pendant | **Légèreté** : pas de dépendance lourde, pages rapides même sur mobile. |
+| Avant publication | Tous les tests passent ; **captures relues** sur ordinateur, tablette et mobile ; **relecture critique** du code (revue) et des textes (ton, exactitude, fautes). |
+| Avant publication | Documentation, feuille de route et journaux à jour. |
+| Produits vendus | Mêmes exigences, plus : contenu relu en entier, exemples et formules testés, mise en page soignée, conformité juridique vérifiée. |
+
 ## Le rituel de chaque session
 
 1. Lire « Où en est-on ? » dans la [feuille de route](05-feuille-de-route.md) et le [plan de développement](07-plan-de-developpement.md).

@@ -1,0 +1,62 @@
+<!--{
+  "id": "espace",
+  "slug": "espace/",
+  "title": "Espace entrepreneur gratuit : factures, devis, livre des recettes, Urssaf",
+  "description": "Clients, devis, factures, encaissements, livre des recettes et déclaration Urssaf au même endroit. Gratuit, sans inscription : vos données restent sur votre appareil.",
+  "menu": "Espace entrepreneur",
+  "icon": "🗂️",
+  "blurb": "Factures, encaissements, livre des recettes et Urssaf au même endroit.",
+  "app": "Espace entrepreneur",
+  "scripts": ["engines/invoice-fr.js", "engines/espace-fr.js", "tools/espace-store.js", "tools/espace.js"],
+  "rules": "fr",
+  "sources": ["mentions_obligatoires_facture", "livre_recettes_micro", "conservation_pieces", "micro_activities", "acre_conditions", "mention_franchise_tva", "calendrier_urssaf_declarations"],
+  "priority": 1.0,
+  "faq": [
+    ["L'Espace entrepreneur est-il vraiment gratuit ?", "Oui. Il n'y a ni inscription ni abonnement : vous créez votre profil et vous commencez. Une version avec compte en ligne, pour retrouver vos données sur tous vos appareils, est en préparation."],
+    ["Où sont enregistrées mes données ?", "Dans votre navigateur, sur cet appareil uniquement. Rien n'est envoyé sur un serveur. Exportez régulièrement une sauvegarde depuis les réglages : elle vous protège en cas de problème et permet de changer d'appareil."],
+    ["Mes factures sont-elles conformes ?", "Elles portent les mentions obligatoires, la mention de TVA adaptée à votre situation et une numérotation continue (F2026-001, F2026-002…) attribuée à l'émission. Une facture émise ne peut plus être modifiée : on la corrige par un avoir, comme le veut la règle."],
+    ["Le livre des recettes est-il tenu automatiquement ?", "Oui : chaque encaissement que vous enregistrez sur une facture y apparaît, par date, avec le client, la nature de la prestation, le montant, le moyen de paiement et la référence de la facture. Vous pouvez l'exporter en CSV ou l'imprimer."],
+    ["Comment est calculé le montant à déclarer à l'Urssaf ?", "Le micro-entrepreneur déclare le chiffre d'affaires encaissé. L'Espace additionne vos encaissements de la période (mois ou trimestre), applique le taux de votre activité, la contribution à la formation professionnelle, l'ACRE et le versement libératoire si vous les avez, et affiche la date limite. C'est une estimation : la déclaration se fait sur autoentrepreneur.urssaf.fr."]
+  ]
+}-->
+<section class="hero hero-tool hero-compact">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Gratuit · sans inscription</span>
+    <h1>Espace entrepreneur</h1>
+    <p class="lead">Vos clients, devis, factures, encaissements, livre des recettes et déclarations Urssaf, au même endroit. Vos données restent sur votre appareil.</p>
+  </div>
+</section>
+
+<section class="section espace-section">
+  <div id="espace-app" class="espace" data-loading>
+    <nav class="espace-nav espace-noprint" aria-label="Espace entrepreneur">
+      <a href="#/" data-route="tableau"><span aria-hidden="true">📊</span>Tableau de bord</a>
+      <a href="#/documents" data-route="documents"><span aria-hidden="true">🧾</span>Documents</a>
+      <a href="#/clients" data-route="clients"><span aria-hidden="true">👥</span>Clients</a>
+      <a href="#/recettes" data-route="recettes"><span aria-hidden="true">📒</span>Recettes</a>
+      <a href="#/echeances" data-route="echeances"><span aria-hidden="true">🗓️</span>Échéances</a>
+      <a href="#/reglages" data-route="reglages"><span aria-hidden="true">⚙️</span>Réglages</a>
+    </nav>
+    <div class="espace-main">
+      <div id="espace-view" class="espace-view"><p class="muted">Chargement de votre espace…</p></div>
+    </div>
+  </div>
+  <p class="espace-status" id="espace-status" role="status" aria-live="polite"></p>
+  <noscript><p class="notice warn">L'Espace entrepreneur a besoin de JavaScript pour fonctionner.</p></noscript>
+</section>
+<script type="application/json" id="calendar-data">{{calendar:fr}}</script>
+
+<section class="section prose">
+  <h2>Tout ce qu'il faut pour gérer une micro-entreprise</h2>
+  <ul>
+    <li><strong>Devis et factures conformes</strong> : mentions obligatoires, TVA ou franchise, autoliquidation pour vos clients de l'Union européenne, numérotation continue, PDF.</li>
+    <li><strong>Encaissements</strong> : paiements partiels, retards signalés, email de relance prêt à envoyer.</li>
+    <li><strong>Avoirs</strong> : pour annuler ou corriger une facture émise, avec remboursement si elle était déjà payée.</li>
+    <li><strong>Livre des recettes</strong> tenu automatiquement, exportable.</li>
+    <li><strong>Urssaf</strong> : chiffre d'affaires de la période, cotisations estimées et date limite ; jauges du plafond et du seuil de TVA.</li>
+    <li><strong>Échéances</strong> : votre calendrier fiscal, selon votre situation.</li>
+  </ul>
+  <p>Pour une facture ponctuelle, sans rien enregistrer, le <a href="{{link:invoice}}">générateur de facture</a> reste disponible. Pour simuler vos revenus, utilisez le <a href="{{link:tax}}">simulateur auto-entrepreneur</a>.</p>
+  <p class="small muted">Les montants à déclarer sont des estimations ; la déclaration et le paiement se font sur autoentrepreneur.urssaf.fr. Information à titre indicatif.</p>
+</section>

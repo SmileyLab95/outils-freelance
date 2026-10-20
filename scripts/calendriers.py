@@ -67,8 +67,11 @@ def jour_ouvre(d):
     return d
 
 
-def ev(day, kind, tag, title, desc, when=None, est=False, link=None):
+def ev(day, kind, tag, title, desc, when=None, est=False, link=None, period=None):
+    """period : période déclarée (« 2026-09 » ou « 2026-T3 »), lue par l'Espace entrepreneur."""
     e = {"date": day.isoformat() if isinstance(day, date) else day, "kind": kind, "tag": tag, "title": title, "desc": desc}
+    if period:
+        e["period"] = period
     if when:
         e["when"] = when
     if est:
@@ -96,7 +99,7 @@ def france():
                     f"Déclaration Urssaf du chiffre d'affaires {de(MOIS[m - 1])} {y}",
                     "Déclarez et payez vos cotisations (et le versement libératoire si vous l'avez choisi) sur "
                     "autoentrepreneur.urssaf.fr, même si votre chiffre d'affaires est nul.",
-                    {"periodicity": ["monthly"]}, link="tax"))
+                    {"periodicity": ["monthly"]}, link="tax", period=f"{y}-{m:02d}"))
     # Déclaration trimestrielle : avant la fin du mois qui suit le trimestre.
     for y, q in [(2026, 2), (2026, 3), (2026, 4), (2027, 1), (2027, 2), (2027, 3), (2027, 4)]:
         first = 3 * q - 2
@@ -105,7 +108,7 @@ def france():
                     f"Déclaration Urssaf du {q}{'er' if q == 1 else 'e'} trimestre {y}",
                     f"Chiffre d'affaires encaissé {de(MOIS[first - 1])} à {MOIS[3 * q - 1]} {y}. Déclarez et payez "
                     "vos cotisations sur autoentrepreneur.urssaf.fr, même si votre chiffre d'affaires est nul.",
-                    {"periodicity": ["quarterly"]}, link="tax"))
+                    {"periodicity": ["quarterly"]}, link="tax", period=f"{y}-T{q}"))
     for y in (2026, 2027):
         E.append(ev(date(y, 9, 30), "info", "Option",
                     f"Option pour le versement libératoire de l'impôt en {y + 1} : date limite",

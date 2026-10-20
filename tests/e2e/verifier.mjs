@@ -1,5 +1,5 @@
 // Teste le site généré dans docs/ avec un vrai navigateur (Playwright) et produit des captures d'écran.
-// Usage : node tests/e2e/verifier.mjs [dossier-captures]
+// Usage : node tests/e2e/verifier.mjs [dossier-captures]   (ONLY=fr/espace/ pour une seule page)
 import { createRequire } from "module";
 import { spawn } from "child_process";
 import { mkdtempSync, symlinkSync, mkdirSync } from "fs";
@@ -843,11 +843,136 @@ const tests = {
     await page.selectOption("#i-service", "intangible");
     await page.selectOption("#i-client", "pro");
   },
+  async "fr/espace/"(page) {
+    // Parcours complet de l'Espace (critères A2 à A11 de documentation/09-specification-espace.md).
+    const fs = await import("fs");
+    page.on("dialog", (d) => d.accept());
+    const go = async (hash) => { await page.evaluate((h) => { location.hash = h; }, hash); await page.waitForTimeout(150); };
+    const text = async (sel) => (await page.innerText(sel)).replace(/\s+/g, " ").trim();
+    await page.goto(BASE + "fr/espace/?today=2026-10-20", { waitUntil: "networkidle" });
+    check((await text("#espace-view h2")) === "Bienvenue dans votre espace", "Espace : premier lancement");
+    await page.fill("#ep-name", "Camille Martin EI");
+    await page.selectOption("#ep-activity", "liberal_bnc");
+    await page.selectOption("#ep-vatRegime", "franchise");
+    await page.selectOption("#ep-periodicity", "quarterly");
+    await page.click("#profile-form button[type=submit]");
+    await page.waitForSelector(".kpis");
+    check((await text("#espace-view h2")) === "Camille Martin EI", "Espace : profil créé, tableau de bord");
+
+    await go("#/clients/nouveau");
+    await page.fill("#ep-name", "Studio Nova");
+    await page.fill("#ep-siren", "812 345 678");
+    await page.fill("#ep-email", "compta@studio-nova.example");
+    await page.click("#client-form button[type=submit]");
+    await page.waitForSelector(".doc-list");
+    check((await text(".doc-list")).includes("Studio Nova"), "Espace : client créé");
+    const clientId = await page.evaluate(() => location.hash);
+
+    const newInvoice = async (date, desc, price, type = "facture", terms) => {
+      await go("#/documents/nouveau?type=" + type);
+      await page.selectOption("#d-client", { label: "Studio Nova" });
+      await page.fill("#d-date", date);
+      if (terms) await page.selectOption("#d-terms", String(terms));
+      await page.fill("#ln-desc-0", desc);
+      await page.fill("#ln-price-0", String(price));
+      await page.waitForTimeout(600);
+    };
+    await newInvoice("2026-09-10", "Site vitrine", 1800, "facture", 60);
+    check((await text("#d-preview")).includes("1 800,00 €") && (await text("#d-preview")).includes("TVA non applicable, art. 293 B du CGI."), "Espace : aperçu de la facture (moteur commun)");
+    await page.click("#d-issue");
+    await page.waitForFunction(() => /Facture F2026-001/.test(document.querySelector("#espace-view h2").textContent));
+    check(true, "Espace : facture émise F2026-001 (A2)");
+    check(!(await page.$("#doc-form")), "Espace : facture émise non modifiable (A3)");
+    await page.fill("#pay-date", "2026-09-15");
+    await page.fill("#pay-amount", "800");
+    await page.click("#pay-form button[type=submit]");
+    await page.waitForTimeout(250);
+    check((await text("#espace-view .st")) === "Payée en partie", "Espace : paiement partiel (A5)");
+    await page.fill("#pay-date", "2026-09-20");
+    await page.click("#pay-form button[type=submit]");
+    await page.waitForTimeout(250);
+    check((await text("#espace-view .st")) === "Payée", "Espace : facture payée (A5)");
+
+    await go("#/");
+    const kpis = await text(".kpis");
+    check(kpis.includes("Encaissé en 2026 1 800,00 €"), "Espace : encaissé de l'année");
+    check(kpis.includes("Déclaration Urssaf : 3e trimestre 2026 1 800,00 €") && kpis.includes("2 novembre 2026") && kpis.includes("464,40 €"),
+      "Espace : déclaration du 3e trimestre, date limite et cotisations 25,8 % (A7)");
+    check((await text(".gauges")).includes("1 800,00 € / 83 600,00 €"), "Espace : jauge du plafond (A8)");
+
+    await go("#/recettes");
+    const ledger = await text(".ledger");
+    check(ledger.includes("15/09/2026") && ledger.includes("20/09/2026") && ledger.includes("F2026-001") && ledger.includes("Total encaissé en 2026 1 800,00 €"), "Espace : livre des recettes (A6)");
+    const [csv] = await Promise.all([page.waitForEvent("download"), page.click("#ledger-csv")]);
+    check(fs.readFileSync(await csv.path(), "utf8").includes('15/09/2026;"Studio Nova";"Site vitrine";800,00;"Virement";"F2026-001"'), "Espace : export CSV du livre des recettes");
+
+    await newInvoice("2026-08-01", "Maintenance", 200);
+    await page.click("#d-issue");
+    await page.waitForTimeout(200);
+    check((await text("#doc-error")).includes("antérieure à celle du dernier document émis"), "Espace : chronologie de la numérotation (A4)");
+    await page.click("#d-delete");
+    await page.waitForTimeout(250);
+
+    await newInvoice("2026-10-12", "Audit SEO", 600, "devis");
+    await page.click("#d-issue");
+    await page.waitForFunction(() => /Devis D2026-001/.test(document.querySelector("#espace-view h2").textContent));
+    await page.click('[data-quote="accepted"]');
+    await page.waitForTimeout(200);
+    await page.click("#d-convert");
+    await page.waitForSelector("#doc-form");
+    check((await page.inputValue("#ln-desc-0")) === "Audit SEO", "Espace : devis transformé en facture (A9)");
+    await page.fill("#d-date", "2026-10-15");
+    await page.waitForTimeout(500);
+    await page.click("#d-issue");
+    await page.waitForFunction(() => /Facture F2026-002/.test(document.querySelector("#espace-view h2").textContent));
+    await page.click("#d-credit");
+    await page.waitForSelector("#doc-form");
+    await page.fill("#d-date", "2026-10-16");
+    await page.waitForTimeout(500);
+    check((await text("#d-preview")).includes("Avoir relatif à la facture n° F2026-002"), "Espace : avoir lié à la facture (A10)");
+    await page.click("#d-issue");
+    await page.waitForFunction(() => /Avoir A2026-001/.test(document.querySelector("#espace-view h2").textContent));
+    await go("#/documents?filtre=facture");
+    check((await text(".doc-list")).includes("Annulée par avoir"), "Espace : facture annulée par l'avoir (A10)");
+
+    await page.reload({ waitUntil: "networkidle" });
+    await go("#/documents");
+    check((await page.$$eval(".doc-list li", (l) => l.length)) === 4, "Espace : données conservées après rechargement (A11)");
+    await go("#/reglages");
+    const [backup] = await Promise.all([page.waitForEvent("download"), page.click("#export-btn")]);
+    const saved = JSON.parse(fs.readFileSync(await backup.path(), "utf8"));
+    check(saved.schema === 1 && saved.documents.length === 4 && saved.clients.length === 1, "Espace : sauvegarde exportée (A11)");
+    await page.click("#wipe-btn");
+    await page.waitForFunction(() => /Bienvenue/.test(document.querySelector("#espace-view h2").textContent));
+    await page.setInputFiles("#import-file", await backup.path());
+    await page.waitForSelector(".kpis");
+    await go("#/documents");
+    check((await page.$$eval(".doc-list li", (l) => l.length)) === 4, "Espace : sauvegarde restaurée à l'identique (A11)");
+    // Revue de code : quitter l'écran pendant l'enregistrement automatique ; prix vide après rechargement.
+    await page.evaluate(() => { location.hash = "#/documents/nouveau?type=facture"; });
+    await page.waitForSelector("#doc-form");
+    await page.fill("#ln-desc-0", "Prix à définir");
+    await page.evaluate(() => { location.hash = "#/clients"; });
+    await page.waitForTimeout(700);
+    check((await page.evaluate(() => location.hash)) === "#/clients", "Espace : l'adresse reste celle de l'écran affiché");
+    await page.reload({ waitUntil: "networkidle" });
+    await go("#/documents?filtre=draft");
+    await page.click(".doc-list a");
+    await page.waitForSelector("#doc-form");
+    check((await page.inputValue("#ln-desc-0")) === "Prix à définir" && (await page.inputValue("#ln-price-0")) === "",
+      "Espace : brouillon enregistré en quittant l'écran, prix vide conservé vide");
+    await page.click("#d-delete");
+    await page.waitForTimeout(250);
+    await go("#/");
+  },
   async "fr/confidentialite/"() {},
   async "fr/mentions-legales/"() {},
 };
 
+// ONLY=fr/espace/,fr/  : ne lance que ces pages (développement).
+const only = process.env.ONLY ? process.env.ONLY.split(",") : null;
 for (const [url, run] of Object.entries(tests)) {
+  if (only && !only.includes(url)) continue;
   for (const [label, viewport] of [["bureau", { width: 1280, height: 900 }], ["tablette", { width: 1024, height: 768 }], ["mobile", { width: 390, height: 844 }]]) {
     const page = await context.newPage();
     await page.setViewportSize(viewport);
