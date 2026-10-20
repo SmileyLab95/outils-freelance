@@ -76,8 +76,14 @@
   /** Cadre de facturation (BT-23) : facture simple de services (S1), de biens (B1) ou mixte (M1). */
   function businessProcess(doc) { return { biens: "B1", mixte: "M1" }[doc.nature] || "S1"; }
 
-  /** Client à l'étranger : ses factures sont « B2BINT » et son adresse électronique est son email. */
-  var international = function (client) { return client.place === "eu" || client.place === "world"; };
+  /**
+   * Client à l'étranger (factures « B2BINT », adresse électronique = email) : selon le lieu retenu pour la TVA du
+   * document, figé avec lui, plutôt que la fiche client qui a pu changer depuis.
+   */
+  function international(doc) {
+    var place = (doc.vat && doc.vat.place) || ((doc.snapshot || {}).client || {}).place || "fr";
+    return place === "eu" || place === "world";
+  }
 
   /** Données manquantes pour produire un fichier conforme ; liste vide si l'export est possible. */
   function check(doc) {
@@ -88,15 +94,16 @@
     if (!client.pro) errors.push("Le format électronique concerne les clients professionnels.");
     if (!siren(me.siret)) errors.push("Votre SIRET (14 chiffres) est nécessaire.");
     if (client.pro && (!client.place || client.place === "fr") && !siren(client.id)) errors.push("Le SIREN du client (9 chiffres) est nécessaire.");
-    var a = address(me), b = address(client);
-    if (!a.lines.length || !a.postcode || !a.city) errors.push("Votre adresse doit comporter une ligne, un code postal et une ville.");
-    if (!b.lines.length || !b.city) errors.push("L'adresse du client doit comporter une ligne et une ville.");
-    if (client.place === "eu" && (!str(me.vat) || !str(client.vat))) {
+    var a = address(me), b = address(client), abroad = international(doc);
+    if (!a.lines.length || !a.postcode || !a.city) errors.push("Votre adresse doit comporter une ligne, puis le code postal et la ville sur la dernière ligne.");
+    // Client en France : code postal et ville lus sur la dernière ligne ; à l'étranger, les lignes et le pays suffisent (EN 16931).
+    if (!b.lines.length || (!abroad && !b.city)) errors.push(abroad ? "Indiquez l'adresse du client." : "L'adresse du client doit comporter une ligne, puis le code postal et la ville.");
+    if (doc.vat && doc.vat.place === "eu" && (!str(me.vat) || !str(client.vat))) {
       errors.push("Autoliquidation : votre numéro de TVA intracommunautaire et celui du client sont nécessaires.");
     }
-    if (international(client)) {
+    if (abroad) {
       if (!/^[A-Z]{2}$/.test(b.country) || b.country === "FR") errors.push("Indiquez le pays du client.");
-      if (!str(client.email)) errors.push("L'email du client est nécessaire : il lui sert d'adresse de facturation électronique.");
+      if (!str(client.endpoint) && !str(client.email)) errors.push("L'email du client est nécessaire : il lui sert d'adresse de facturation électronique.");
     }
     return errors;
   }
@@ -106,12 +113,11 @@
    * pour un client à l'étranger, son email (schéma EM). Vendeur en franchise sans numéro de TVA : son SIREN comme
    * identifiant fiscal (BT-32, schéma FC), exigé par la règle BR-E-02 (annexe A de XP Z12-012, à confirmer au texte).
    */
-  function party(tag, p, role, cat) {
+  function party(tag, p, role, cat, abroad) {
     var a = address(p);
     var id = siren(role === "seller" ? p.siret : p.id);
     var country = a.country || "FR";
-    var abroad = role === "buyer" && international(p);
-    var endpoint = abroad ? str(p.email) : str(p.endpoint) || id;
+    var endpoint = abroad ? str(p.endpoint) || str(p.email) : str(p.endpoint) || id;
     // Catégorie O (hors champ) : aucun numéro de TVA dans les données (règles BR-O-02 à BR-O-04).
     var vatId = cat.code === "O" ? "" : digits(p.vat).toUpperCase();
     return "<ram:" + tag + ">" +
@@ -160,7 +166,7 @@
       note("Indemnité forfaitaire pour frais de recouvrement en cas de retard de paiement : " + fee + " € (art. L441-10 et D441-5 du Code de commerce).", "PMT") +
       (cat.code === "S" && doc.vat && doc.vat.debits ? note("Option pour le paiement de la taxe d'après les débits.", "TXD") : "") +
       (str(doc.notes) ? note(str(doc.notes), "AAI") : "") +
-      note(international(client) ? "B2BINT" : "B2B", "BAR") +
+      note(international(doc) ? "B2BINT" : "B2B", "BAR") +
       "</rsm:ExchangedDocument>" +
       "<rsm:SupplyChainTradeTransaction>";
 
@@ -178,7 +184,7 @@
         "</ram:IncludedSupplyChainTradeLineItem>";
     });
 
-    out += "<ram:ApplicableHeaderTradeAgreement>" + party("SellerTradeParty", me, "seller", cat) + party("BuyerTradeParty", client, "buyer", cat) +
+    out += "<ram:ApplicableHeaderTradeAgreement>" + party("SellerTradeParty", me, "seller", cat, false) + party("BuyerTradeParty", client, "buyer", cat, international(doc)) +
       "</ram:ApplicableHeaderTradeAgreement>" +
       "<ram:ApplicableHeaderTradeDelivery>" +
       (serviceDate ? "<ram:ActualDeliverySupplyChainEvent>" + date102("ram:OccurrenceDateTime", serviceDate) + "</ram:ActualDeliverySupplyChainEvent>" : "") +

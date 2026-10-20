@@ -897,6 +897,53 @@ const tests = {
     await page.waitForTimeout(250);
     check((await text("#espace-view .st")) === "Payée", "Espace : facture payée (A5)");
 
+    // Facture électronique (Factur-X) : données manquantes signalées, fiches complétées, PDF/A-3 et XML téléchargés.
+    const invoiceHash = await page.evaluate(() => location.hash);
+    await page.click("#d-facturx");
+    await page.waitForFunction(() => /Pour produire un fichier conforme/.test(document.querySelector("#fx-status").textContent), null, { timeout: 15000 });
+    const fxProblems = await text("#fx-status");
+    // (Le SIRET peut déjà venir du générateur de facture testé plus tôt dans le même navigateur.)
+    check(fxProblems.includes("Votre adresse") && fxProblems.includes("L'adresse du client") && fxProblems.includes("Compléter mon profil") &&
+      fxProblems.includes("Compléter la fiche client"), "Espace : Factur-X, données manquantes signalées avec liens vers les fiches");
+    await go("#/reglages");
+    await page.fill("#ep-siret", "123 456 789 00012");
+    await page.fill("#ep-address", "12 rue de la République\n69002 Lyon");
+    await page.fill("#ep-endpoint", "999999999");
+    await page.click("#profile-form button[type=submit]");
+    await page.waitForTimeout(200);
+    check((await text("#profile-error")).includes("doit commencer par votre SIREN (123456789)"), "Espace : adresse de facturation électronique contrôlée");
+    await page.fill("#ep-endpoint", "");
+    await page.click("#profile-form button[type=submit]");
+    await page.waitForTimeout(300);
+    await go("#/clients");
+    await page.click(".doc-list a");
+    await page.waitForSelector("#client-form");
+    await page.fill("#ep-address", "14 rue des Lilas\n69003 Lyon");
+    await page.fill("#ep-endpoint", "111111111_ACHATS");
+    await page.click("#client-form button[type=submit]");
+    await page.waitForTimeout(200);
+    check((await text("#client-error")).includes("doit commencer par le SIREN du client (812345678)"), "Espace : adresse électronique du client contrôlée (A23)");
+    await page.fill("#ep-endpoint", "");
+    await page.click("#client-form button[type=submit]");
+    await page.waitForTimeout(300);
+    await go(invoiceHash);
+    const [fxDownload] = await Promise.all([page.waitForEvent("download"), page.click("#d-facturx")]);
+    const fxPath = path.join(shots, "espace-facturx.pdf");
+    await fxDownload.saveAs(fxPath);
+    const fxBytes = fs.readFileSync(fxPath).toString("latin1");
+    check(fxDownload.suggestedFilename() === "F2026-001-factur-x.pdf" && fxBytes.startsWith("%PDF-1.7") && fxBytes.includes("/AFRelationship /Alternative") &&
+      fxBytes.includes("<ram:ID>F2026-001</ram:ID>") && fxBytes.includes("<pdfaid:part>3</pdfaid:part>"),
+      "Espace : facture électronique téléchargée (PDF/A-3 avec factur-x.xml)");
+    await page.waitForFunction(() => /Factur-X \(PDF\/A-3/.test(document.querySelector("#fx-status").textContent));
+    const fxStatus = await text("#fx-status");
+    check(fxStatus.includes("Complété depuis vos fiches :") && fxStatus.includes("votre adresse") && fxStatus.includes("l'adresse du client"),
+      "Espace : identifiants complétés depuis les fiches, et signalés");
+    const [xmlDownload] = await Promise.all([page.waitForEvent("download"), page.click("#d-facturx-xml")]);
+    await xmlDownload.saveAs(path.join(shots, "espace-facturx.xml"));
+    check(xmlDownload.suggestedFilename() === "F2026-001-factur-x.xml" &&
+      fs.readFileSync(path.join(shots, "espace-facturx.xml"), "utf8").includes("<ram:ID schemeID=\"0002\">812345678</ram:ID>"),
+      "Espace : données Factur-X seules (XML) téléchargées");
+
     await go("#/");
     const kpis = await text(".kpis");
     check(kpis.includes("Encaissé en 2026 1 800,00 €"), "Espace : encaissé de l'année");

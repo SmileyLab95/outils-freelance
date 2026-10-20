@@ -84,10 +84,11 @@
   }
   function meFromProfile(p) {
     return { name: p.name, status: p.status, address: p.address, siret: p.siret, vat: p.vat, email: p.email,
-             phone: p.phone, iban: p.iban, bic: p.bic, logo: p.logo };
+             phone: p.phone, iban: p.iban, bic: p.bic, logo: p.logo, endpoint: p.endpoint || "" };
   }
   function clientForDoc(c) {
-    return { name: c.name, address: c.address, id: c.siren, vat: c.vat, delivery: c.delivery, pro: !!c.pro, email: c.email };
+    return { name: c.name, address: c.address, id: c.siren, vat: c.vat, delivery: c.delivery, pro: !!c.pro, email: c.email,
+             place: c.place || "fr", country: c.place && c.place !== "fr" ? c.country || "" : "", endpoint: c.endpoint || "" };
   }
   function docForRender(d) {
     var p = parties(d);
@@ -338,6 +339,8 @@
         field("address", "Adresse", p.address, { textarea: true, placeholder: "12 rue de la République\n69002 Lyon" }) +
         field("siret", "SIRET", p.siret, { half: true, placeholder: "123 456 789 00012" }) +
         field("vat", "N° de TVA intracommunautaire", p.vat, { half: true }) +
+        field("endpoint", "Adresse de facturation électronique (facultatif)", p.endpoint, { placeholder: "Votre SIREN par défaut",
+          hint: "Pour la facture électronique : par défaut votre SIREN. Indiquez celle de l'annuaire si votre plateforme vous en a attribué une autre (SIREN suivi d'un suffixe)." }) +
         field("email", "Email", p.email, { type: "email", half: true }) +
         field("phone", "Téléphone", p.phone, { type: "tel", half: true }) +
         field("iban", "IBAN", p.iban, { half: true }) +
@@ -370,7 +373,9 @@
       p.acre = Number(f.acre.value);
       p.vl = f.vl.value === "1";
       if (!first) {
-        ["status", "address", "siret", "vat", "email", "phone", "iban", "bic", "penalty"].forEach(function (k) { p[k] = f[k].value.trim(); });
+        ["status", "address", "siret", "vat", "email", "phone", "iban", "bic", "penalty", "endpoint"].forEach(function (k) { p[k] = f[k].value.trim(); });
+        var endpointError = checkEndpoint(p.endpoint, p.siret, "votre SIREN");
+        if (endpointError) { showError("profile-error", endpointError); f.endpoint.focus(); return; }
         p.terms = Number(f.terms.value);
         var numbering = readNumbering(form, p);
         if (numbering.error) { showError("profile-error", numbering.error); return; }
@@ -395,6 +400,25 @@
     return g;
   }
   function showError(id, msg) { var el = $(id); el.textContent = msg; el.hidden = !msg; }
+
+  var regionNames = typeof Intl !== "undefined" && Intl.DisplayNames ? new Intl.DisplayNames(["fr"], { type: "region" }) : null;
+  /** Pays proposés selon le lieu du client, triés par nom ; le premier choix invite à choisir. */
+  function countryOptions(place) {
+    return [["", "Choisir le pays…"]].concat(E.countries(place === "eu" ? "eu" : "world").map(function (code) {
+      return [code, regionNames ? regionNames.of(code) : code];
+    }).sort(function (a, b) { return a[1].localeCompare(b[1], "fr"); }));
+  }
+  /**
+   * Adresse de facturation électronique (annuaire) : vide (le SIREN est utilisé), ou le SIREN suivi éventuellement d'un
+   * suffixe ; lettres, chiffres, - _ . seulement (règles BR-FR-21 et BR-FR-23 de la norme XP Z12-012).
+   */
+  function checkEndpoint(value, sirenOrSiret, whose) {
+    if (!value) return "";
+    var siren = String(sirenOrSiret || "").replace(/\s+/g, "").slice(0, 9);
+    if (!/^[A-Za-z0-9_.-]{9,100}$/.test(value)) return "Adresse de facturation électronique : lettres, chiffres, - _ . seulement, sans espace.";
+    if (/^\d{9}$/.test(siren) && value.indexOf(siren) !== 0) return "L'adresse de facturation électronique doit commencer par " + whose + " (" + siren + ").";
+    return "";
+  }
 
   // ----- Tableau de bord -------------------------------------------------------------
 
@@ -773,6 +797,7 @@
       (d.type === "devis" && !d.invoiceId ? '<button type="button" class="btn btn-ghost" id="d-convert">Transformer en facture</button>' : "") +
       "</div>";
     if (st !== "cancelled") html += sendCard(d);
+    if ((d.type === "facture" || d.type === "avoir") && (parties(d).client || {}).pro) html += facturxCard(d);
     if (d.type === "devis") {
       html += '<section class="card espace-card"><h3>Réponse du client</h3><div class="espace-actions">' +
         '<button type="button" class="btn btn-ghost btn-sm" data-quote="accepted"' + (d.status === "accepted" ? ' aria-pressed="true"' : "") + ">Accepté</button>" +
@@ -829,6 +854,119 @@
           (client(d.clientId) ? ' : <a href="#/clients/' + esc(d.clientId) + '">l\'ajouter</a> pour le préremplir' : "") + ".</p>") +
       "</section>";
   }
+  // ----- Facture électronique (Factur-X) : documentation/10-etude-factur-x.md --------------------------------------
+
+  function facturxCard(d) {
+    var avoir = d.type === "avoir";
+    return '<section class="card espace-card"><h3>' + (avoir ? "Avoir" : "Facture") + " électronique (Factur-X)</h3>" +
+      '<p class="small muted">Un seul fichier PDF/A-3 : le document lisible et ses données structurées (profil EN 16931, règles ' +
+      "françaises), à déposer sur votre plateforme agréée ou à transmettre à votre client professionnel.</p>" +
+      '<div class="espace-actions"><button type="button" class="btn btn-ghost btn-sm" id="d-facturx">Télécharger ' + (avoir ? "l'avoir" : "la facture") +
+      ' électronique</button><button type="button" class="btn btn-ghost btn-sm" id="d-facturx-xml">Données seules (XML)</button></div>' +
+      '<div class="small fx-status" id="fx-status" role="status" aria-live="polite"></div></section>';
+  }
+
+  /** Scripts déclarés dans #lazy-scripts (moteur PDF) : téléchargés en parallèle, exécutés dans l'ordre, une seule fois. */
+  var lazy = null;
+  function loadLazy() {
+    if (lazy) return lazy;
+    var el = $("lazy-scripts"), urls = el ? JSON.parse(el.textContent) : {};
+    lazy = Promise.all(Object.keys(urls).map(function (name) {
+      return new Promise(function (resolve, reject) {
+        var tag = document.createElement("script");
+        tag.src = urls[name];
+        tag.async = false;
+        tag.onload = resolve;
+        tag.onerror = function () { tag.remove(); reject(new Error(name)); };
+        document.head.appendChild(tag);
+      });
+    }));
+    lazy.catch(function () { lazy = null; });
+    return lazy;
+  }
+
+  /**
+   * Document à exporter : coordonnées figées à l'émission, complétées quand elles manquent par les identifiants actuels
+   * du profil et de la fiche client (SIRET, SIREN, pays, email, adresses électroniques, adresse avec code postal et ville).
+   * Les montants, les lignes et les noms ne changent jamais.
+   */
+  function exportDoc(d, FX) {
+    var snap = d.snapshot || {}, me = Object.assign({}, snap.me), cl = Object.assign({}, snap.client);
+    var p = profile(), c = client(d.clientId) || {}, done = [];
+    var fill = function (target, key, value, label) {
+      if (!String(target[key] || "").trim() && String(value || "").trim()) { target[key] = value; done.push(label); }
+    };
+    fill(me, "siret", p.siret, "votre SIRET");
+    fill(me, "endpoint", p.endpoint, "votre adresse de facturation électronique");
+    if (!FX.address(me).postcode && FX.address({ address: p.address }).postcode) { me.address = p.address; done.push("votre adresse"); }
+    // Lieu du client : celui retenu pour la TVA du document, figé avec lui.
+    var place = (d.vat && d.vat.place) || cl.place || "fr";
+    if (!cl.place) cl.place = place;
+    fill(cl, "id", c.siren, "le SIREN du client");
+    fill(cl, "country", place !== "fr" ? c.country : "", "le pays du client");
+    fill(cl, "email", c.email, "l'email du client");
+    fill(cl, "endpoint", c.endpoint, "l'adresse de facturation électronique du client");
+    if (place === "fr" && !FX.address(cl).city && FX.address({ address: c.address }).city) { cl.address = c.address; done.push("l'adresse du client"); }
+    return { doc: Object.assign({}, d, { snapshot: { me: me, client: cl } }), completed: done };
+  }
+
+  /** Logo (image enregistrée dans le profil) converti en JPEG sur fond blanc, ou null. */
+  function logoJPEG(src) {
+    if (!src) return Promise.resolve(null);
+    return new Promise(function (resolve) {
+      var img = new Image();
+      img.onload = function () {
+        if (!img.naturalWidth || !img.naturalHeight) { resolve(null); return; }
+        var scale = Math.min(1, 480 / img.naturalWidth, 240 / img.naturalHeight);
+        var w = Math.max(1, Math.round(img.naturalWidth * scale)), h = Math.max(1, Math.round(img.naturalHeight * scale));
+        var canvas = document.createElement("canvas");
+        canvas.width = w;
+        canvas.height = h;
+        var ctx = canvas.getContext("2d");
+        ctx.fillStyle = "#fff";
+        ctx.fillRect(0, 0, w, h);
+        ctx.drawImage(img, 0, 0, w, h);
+        resolve({ jpeg: OFE.pdfa.base64(canvas.toDataURL("image/jpeg", 0.92).split(",")[1]), width: w, height: h });
+      };
+      img.onerror = function () { resolve(null); };
+      img.src = src;
+    });
+  }
+
+  function exportFacturX(d, xmlOnly, button) {
+    var status = $("fx-status");
+    button.disabled = true;
+    status.textContent = "Préparation du fichier…";
+    var loaded = false;
+    loadLazy().then(function () {
+      loaded = true;
+      var FX = OFE.facturxFR, ex = exportDoc(d, FX), problems = FX.check(ex.doc);
+      var base = String(d.number).replace(/[^A-Za-z0-9_-]/g, "-") + "-factur-x";
+      var completed = ex.completed.length ? " Complété depuis vos fiches : " + ex.completed.join(", ") + "." : "";
+      if (problems.length) {
+        status.innerHTML = '<p class="form-error">Pour produire un fichier conforme :</p><ul>' +
+          problems.map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("") + '</ul><p><a href="#/reglages">Compléter mon profil</a>' +
+          (client(d.clientId) ? ' · <a href="#/clients/' + esc(d.clientId) + '">Compléter la fiche client</a>' : "") + "</p>";
+        return;
+      }
+      if (xmlOnly) {
+        download(FX.xml(ex.doc, data.documents, R, FMT), base + ".xml", "application/xml");
+        status.textContent = "Données Factur-X (" + d.number + ") téléchargées." + completed;
+        return;
+      }
+      return logoJPEG(ex.doc.snapshot.me.logo).then(function (logo) {
+        var out = OFE.facturxPDF.build(ex.doc, data.documents, R, FMT, { fonts: OFE.pdfFonts, icc: OFE.pdfSRGB, logo: logo, now: new Date().toISOString() });
+        download(out.bytes, base + ".pdf", "application/pdf");
+        status.textContent = docLabel(d) + " téléchargé" + (d.type === "facture" ? "e" : "") + " au format Factur-X (PDF/A-3 et données structurées)." + completed +
+          (out.missing.length ? " Caractères absents de la police, remplacés par la lettre sans accent ou par « ? » : " + out.missing.join(" ") + "." : "");
+      });
+    }).catch(function (error) {
+      if (window.console) console.error(error);
+      status.textContent = loaded ? "Le fichier n'a pas pu être produit (" + (error && error.message || "erreur inconnue") + "). Signalez-nous le problème si cela se reproduit."
+        : "Le module de facture électronique n'a pas pu être chargé : vérifiez votre connexion, puis réessayez.";
+    }).then(function () { button.disabled = false; });
+  }
+
   /** Destinataire : email de la fiche client actuelle, sinon celui figé à l'émission. */
   function recipient(d) {
     var c = client(d.clientId);
@@ -843,6 +981,10 @@
 
   function bindIssued(d) {
     $("d-print").addEventListener("click", function () { printDoc(d); });
+    if ($("d-facturx")) {
+      $("d-facturx").addEventListener("click", function () { exportFacturX(d, false, this); });
+      $("d-facturx-xml").addEventListener("click", function () { exportFacturX(d, true, this); });
+    }
     $("d-duplicate").addEventListener("click", function () {
       this.disabled = true;
       var copy = E.duplicate(d, TODAY, S.uid());
@@ -927,10 +1069,14 @@
       field("name", "Nom ou raison sociale", c.name, { required: true, placeholder: "Studio Nova" }) +
       field("pro", "Type de client", c.pro ? "1" : "0", { options: [["1", "Professionnel (entreprise, association…)"], ["0", "Particulier"]], half: true }) +
       field("place", "Pays du client", c.place || "fr", { options: [["fr", "France"], ["eu", "Autre pays de l'Union européenne"], ["world", "Hors de l'Union européenne"]], half: true }) +
+      '<div class="full fields" id="client-country"' + (c.place && c.place !== "fr" ? "" : " hidden") + ">" +
+      field("country", "Pays", c.country || "", { options: countryOptions(c.place), half: true }) + "</div>" +
       field("address", "Adresse", c.address, { textarea: true }) +
       field("siren", "SIREN", c.siren, { half: true, placeholder: "812 345 678", hint: "Obligatoire sur les factures aux entreprises avec la facturation électronique." }) +
       field("vat", "N° de TVA intracommunautaire", c.vat, { half: true }) +
       field("email", "Email", c.email, { type: "email", half: true }) +
+      field("endpoint", "Adresse de facturation électronique (facultatif)", c.endpoint, { half: true, placeholder: "Son SIREN par défaut",
+        hint: "Client en France : par défaut son SIREN ; indiquez celle qu'il vous a communiquée s'il en a plusieurs. Client à l'étranger : l'email où il reçoit ses factures (par défaut, son email)." }) +
       field("delivery", "Adresse de livraison (si différente)", c.delivery, { textarea: true }) +
       field("notes", "Notes internes", c.notes, { textarea: true }) +
       '</div><p class="form-error" id="client-error" role="alert" hidden></p><div class="espace-actions">' +
@@ -939,13 +1085,22 @@
         '<button type="button" class="btn btn-ghost" id="client-archive">' + (c.archived ? "Réactiver" : "Archiver") + "</button>") +
       "</div></form>" + (docs.length ? '<section class="card espace-card"><h3>Documents de ce client</h3>' + docTable(docs) + "</section>" : "");
     var form = $("client-form");
+    form.elements.place.addEventListener("change", function () {
+      var place = form.elements.place.value;
+      $("client-country").hidden = place === "fr";
+      if (place !== "fr") form.elements.country.innerHTML = options(countryOptions(place), form.elements.country.value);
+    });
     form.addEventListener("submit", function (e) {
       e.preventDefault();
       var f = form.elements;
       if (!f.name.value.trim()) { showError("client-error", "Indiquez le nom du client."); f.name.focus(); return; }
-      ["name", "address", "siren", "vat", "email", "delivery", "notes"].forEach(function (k) { c[k] = f[k].value.trim(); });
+      ["name", "address", "siren", "vat", "email", "delivery", "notes", "endpoint"].forEach(function (k) { c[k] = f[k].value.trim(); });
       c.pro = f.pro.value === "1";
       c.place = f.place.value;
+      c.country = c.place === "fr" ? "" : f.country.value;
+      var endpointError = c.place === "fr" ? checkEndpoint(c.endpoint, c.siren, "le SIREN du client")
+        : c.endpoint && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(c.endpoint) ? "Client à l'étranger : son adresse de facturation électronique est une adresse email." : "";
+      if (endpointError) { showError("client-error", endpointError); f.endpoint.focus(); return; }
       c.updatedAt = now();
       if (isNew) { c.createdAt = c.updatedAt; data.clients.push(c); }
       // Les brouillons de ce client suivent ses nouvelles coordonnées (TVA selon le pays) ; les documents émis restent figés.

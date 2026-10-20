@@ -238,3 +238,29 @@ numérotation limitée à l'année en cours ; boutons protégés contre le doubl
 24 heures ; mention d'acceptation du devis partagée entre le devis et l'email ; numéro affiché à la confirmation
 d'émission identique au numéro attribué. Mention de paiement corrigée dans le moteur commun : « au plus tard le … »,
 ou « à réception » si le délai est nul (au lieu de « à réception, au plus tard le … »).
+
+## 12. Facture électronique (Factur-X)
+
+Rédigée le 20/10/2026 à partir de l'[étude](10-etude-factur-x.md), dont elle reprend les règles.
+
+- Sur chaque **facture ou avoir émis à un client professionnel** : carte « Facture électronique (Factur-X) » avec deux
+  boutons : le fichier Factur-X (PDF/A-3 lisible avec `factur-x.xml` joint) et les données seules (XML CII).
+- Le moteur PDF (environ 100 Ko) n'est chargé qu'au premier export (`lazy_scripts` de la page).
+- Avant l'export, contrôle des données (`OFE.facturxFR.check`) : SIRET du vendeur, SIREN du client en France, adresses
+  avec code postal et ville, pays et email d'un client à l'étranger, numéros de TVA en autoliquidation. Les manques
+  sont listés avec des liens vers le profil et la fiche client.
+- Les coordonnées restent celles **figées à l'émission** ; seuls les identifiants manquants (SIRET, SIREN, pays, email,
+  adresses électroniques, adresse avec code postal et ville) sont complétés depuis le profil et la fiche client
+  actuels, et l'écran l'indique. Les montants, les lignes et les noms ne changent jamais.
+- Données nouvelles, facultatives : pays du client hors de France (liste ISO 3166, noms en français) ; adresse de
+  facturation électronique du profil et des clients (par défaut le SIREN ; sinon elle commence par le SIREN, lettres,
+  chiffres, - _ . seulement). Elles sont figées à l'émission avec les autres coordonnées.
+- Logo : converti en JPEG sur fond blanc (480 × 240 pixels au plus) pour le PDF.
+- Caractères absents de la police incorporée : remplacés par la lettre sans accent ou « ? », et signalés à l'écran.
+
+| N° | Critère |
+|---|---|
+| A20 | Données manquantes listées avec des liens ; une fois les fiches complétées, l'export réussit et l'écran signale les identifiants complétés. |
+| A21 | Le fichier produit dans le navigateur est conforme : XSD et schematrons EN 16931 et BR-FR, PDF/A-3 et Factur-X validés par Mustang (veraPDF). |
+| A22 | Le XML seul est identique au XML joint au PDF ; le nom des fichiers reprend le numéro (`F2026-001-factur-x.pdf`). |
+| A23 | Une adresse de facturation électronique qui ne commence pas par le SIREN est refusée dans le profil et la fiche client. |

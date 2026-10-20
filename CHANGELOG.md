@@ -1,5 +1,20 @@
 # Journal des modifications
 
+## 2026-10-20 — Espace : facture électronique Factur-X
+
+- Sur chaque facture ou avoir émis à un client professionnel : fichier **Factur-X** (PDF/A-3 lisible avec ses données
+  structurées `factur-x.xml`, profil EN 16931, règles françaises) et données seules (XML). Données manquantes listées
+  avec des liens vers les fiches ; identifiants manquants complétés depuis le profil et la fiche client, et signalés.
+- Générateur PDF/A-3 maison (`engines/pdfa.js`, décision D14) : police Inter incorporée (sous-ensemble de 330
+  glyphes, licence OFL), profil sRGB (littleCMS, licence zlib), XMP Factur-X ; chargé seulement au premier export.
+- Clients : pays (liste ISO 3166, noms en français) et adresse de facturation électronique ; profil : adresse de
+  facturation électronique, contrôlée (elle commence par le SIREN).
+- Moteur de facture commun : modèle du document (`model`) partagé par la page imprimable et le PDF.
+- Validation : 10 cas (dont une facture de 3 pages avec logo, un client belge, des noms longs) conformes au XSD et aux
+  schematrons EN 16931 et BR-FR, PDF/A-3 et Factur-X validés par Mustang 2.26.0 (veraPDF) ; le fichier produit dans
+  le navigateur est validé de la même façon. Revue de code : 10 points corrigés.
+- Pages : la facturation électronique et l'Espace présentent l'export, sans promettre plus que ce qu'il fait.
+
 ## 2026-10-20 — Factur-X : moteur XML validé par les fichiers officiels
 
 - Moteur `engines/facturx-fr.js` : données structurées CII, profil EN 16931 de Factur-X 1.09.2, règles françaises BR-FR

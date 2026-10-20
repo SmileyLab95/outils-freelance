@@ -8,6 +8,7 @@
   "blurb": "Factures, encaissements, livre des recettes et Urssaf au même endroit.",
   "app": "Espace entrepreneur",
   "scripts": ["engines/invoice-fr.js", "engines/espace-fr.js", "tools/espace-store.js", "tools/espace.js"],
+  "lazy_scripts": ["engines/pdf-fonts.js", "engines/pdf-srgb.js", "engines/pdfa.js", "engines/facturx-fr.js", "engines/facturx-pdf.js"],
   "rules": "fr",
   "sources": ["mentions_obligatoires_facture", "livre_recettes_micro", "conservation_pieces", "micro_activities", "acre_conditions", "mention_franchise_tva", "calendrier_urssaf_declarations"],
   "priority": 1.0,
@@ -15,6 +16,7 @@
     ["L'Espace entrepreneur est-il vraiment gratuit ?", "Oui. Il n'y a ni inscription ni abonnement : vous créez votre profil et vous commencez. Une version avec compte en ligne, pour retrouver vos données sur tous vos appareils, est en préparation."],
     ["Où sont enregistrées mes données ?", "Dans votre navigateur, sur cet appareil uniquement. Rien n'est envoyé sur un serveur. Exportez régulièrement une sauvegarde depuis les réglages : elle vous protège en cas de problème et permet de changer d'appareil."],
     ["Mes factures sont-elles conformes ?", "Elles portent les mentions obligatoires, la mention de TVA adaptée à votre situation et une numérotation continue (F2026-001, F2026-002…) attribuée à l'émission. Une facture émise ne peut plus être modifiée : on la corrige par un avoir, comme le veut la règle."],
+    ["L'Espace produit-il des factures électroniques ?", "Oui, au format Factur-X : un PDF/A-3 lisible qui contient les données structurées de la facture (profil EN 16931, avec les règles françaises de la réforme), vérifiées avec les fichiers de contrôle officiels. Vous pouvez le déposer sur votre plateforme agréée si elle accepte ce format, ou l'envoyer à votre client. À partir de votre date d'obligation (le 1er septembre 2027 pour une micro-entreprise), c'est votre plateforme agréée qui émet et transmet vos factures aux entreprises : le fichier ne la remplace pas. Voir <a href=\"{{link:einvoicing}}\">ce qui change pour vous</a>."],
     ["J'ai déjà émis des factures avec un autre outil : comment continuer ma numérotation ?", "Dans les réglages, indiquez pour chaque type de document le préfixe et le dernier numéro déjà utilisé cette année : l'Espace attribue la suite (par exemple 2026-008 après 2026-007). Si vous venez du générateur de facture du site, le bouton « Continuer dans mon Espace » vous le propose directement."],
     ["Le livre des recettes est-il tenu automatiquement ?", "Oui : chaque encaissement que vous enregistrez sur une facture y apparaît, par date, avec le client, la nature de la prestation, le montant, le moyen de paiement et la référence de la facture. Vous pouvez l'exporter en CSV ou l'imprimer."],
     ["Comment est calculé le montant à déclarer à l'Urssaf ?", "Le micro-entrepreneur déclare le chiffre d'affaires encaissé. L'Espace additionne vos encaissements de la période (mois ou trimestre), applique le taux de votre activité, la contribution à la formation professionnelle, l'ACRE et le versement libératoire si vous les avez, et affiche la date limite. C'est une estimation : la déclaration se fait sur autoentrepreneur.urssaf.fr."]
@@ -52,6 +54,7 @@
   <h2>Tout ce qu'il faut pour gérer une micro-entreprise</h2>
   <ul>
     <li><strong>Devis et factures conformes</strong> : mentions obligatoires, TVA ou franchise, autoliquidation pour vos clients de l'Union européenne, numérotation continue, PDF et email d'envoi prérempli.</li>
+    <li><strong>Facture électronique</strong> : chaque facture ou avoir à un client professionnel au format Factur-X (profil EN 16931), prêt pour votre plateforme agréée.</li>
     <li><strong>Vous facturiez déjà ailleurs ?</strong> L'Espace continue votre numérotation, et reprend en brouillon le document préparé dans le générateur de facture.</li>
     <li><strong>Encaissements</strong> : paiements partiels, retards signalés, email de relance prêt à envoyer.</li>
     <li><strong>Avoirs</strong> : pour annuler ou corriger une facture émise, avec remboursement si elle était déjà payée.</li>

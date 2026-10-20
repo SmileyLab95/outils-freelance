@@ -7,6 +7,9 @@ import path from "node:path";
 const require = createRequire(import.meta.url);
 const E = require("../../src/assets/engines/espace-fr.js");
 const FX = require("../../src/assets/engines/facturx-fr.js");
+const FXPDF = require("../../src/assets/engines/facturx-pdf.js");
+const assets = { fonts: require("../../src/assets/engines/pdf-fonts.js"), icc: require("../../src/assets/engines/pdf-srgb.js"),
+                 logo: null, now: "2026-10-20T10:00:00Z" };
 const data = JSON.parse(readFileSync(new URL("../../data/rules/fr.json", import.meta.url)));
 const R = Object.fromEntries(Object.entries(data.values).map(([k, v]) => [k, v.value]));
 const fmt = { eur: (n) => n.toFixed(2).replace(".", ",") + " €", num: String, date: (iso) => iso.split("-").reverse().join("/") };
@@ -53,11 +56,26 @@ docs = [];
 add("hors-ue-biens", docs, base({ nature: "biens", vat: { franchise: false, rate: 20, place: "world" }, lines: [{ desc: "Affiches imprimées", qty: 10, price: 25 }] }),
   clients.world, { vat: "FR40123456789" });
 docs = [];
+const many = Array.from({ length: 34 }, (_, i) => ({ desc: `Journée d'atelier n° ${i + 1} : préparation, animation et compte rendu détaillé ` +
+  "remis au client, avec les supports de formation et la synthèse des échanges", qty: 1, price: 650 + i }));
+add("plusieurs-pages-logo", docs, base({ lines: many, notes: "Łódź, Ærøskøbing : caractères du latin étendu ; Ω et → sont remplacés." }),
+  clients.fr, { logo: "logo" });
+docs = [];
+add("nom-long-belgique", docs, base({ vat: { franchise: false, rate: 20, place: "eu" },
+  notes: "Merci de rappeler le numéro de facture dans le libellé de votre virement : il nous permet de rapprocher votre paiement sans délai." }),
+  { name: "Atelier de design graphique et de communication visuelle de Bruxelles SRL", address: "Rue Neuve 1\n1000 Bruxelles", country: "BE",
+    vat: "BE0123456789", email: "compta@atelier.example", pro: true, place: "eu" },
+  { name: "Camille Martin EI — Conseil en transformation numérique et formation professionnelle", vat: "FR40123456789", logo: "logo" });
+docs = [];
 add("franchise-2027", docs, base({ date: "2027-01-15", serviceDate: "2027-01-10" }), clients.fr);
 
 for (const [name, doc, all] of cases) {
   const problems = FX.check(doc);
   if (problems.length) console.log(`! ${name} : ${problems.join(" ")}`);
   writeFileSync(path.join(out, name + ".xml"), FX.xml(doc, all, R, fmt));
+  const withLogo = doc.snapshot.me.logo ? Object.assign({}, assets, { logo: { jpeg: readFileSync(new URL("logo.jpg", import.meta.url)), width: 240, height: 120 } }) : assets;
+  const pdf = FXPDF.build(doc, all, R, fmt, withLogo);
+  if (pdf.missing.length) console.log(`! ${name} : caractères remplacés ${pdf.missing.join(" ")}`);
+  writeFileSync(path.join(out, name + ".pdf"), pdf.bytes);
 }
-console.log(`${cases.length} fichiers écrits dans ${out}`);
+console.log(`${cases.length} factures (XML et PDF) écrites dans ${out}`);

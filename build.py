@@ -440,6 +440,10 @@ def render(layout, sections, section, page_id, rules, kit_cta):
         content += related_html(section, page_id)
 
     scripts = "".join(f'<script src="{asset_url(s)}" defer></script>' for s in ["app.js", *meta.get("scripts", [])])
+    # Scripts chargés à la demande par la page (ex. génération du PDF Factur-X) : adresses avec leur empreinte de version.
+    if meta.get("lazy_scripts"):
+        lazy = {name: asset_url(name) for name in meta["lazy_scripts"]}
+        scripts += '<script type="application/json" id="lazy-scripts">' + json.dumps(lazy).replace("</", "<\\/") + "</script>"
     offer = site.get("offer")
     brand = site["brand"]
     values = {

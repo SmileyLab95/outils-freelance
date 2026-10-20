@@ -58,7 +58,7 @@ test("données manquantes signalées avant l'export", () => {
   assert.match(FX.check(issued({}, Object.assign({}, client, { pro: false }))).join(" "), /clients professionnels/);
   assert.match(FX.check(issued({}, Object.assign({}, client, { id: "" }))).join(" "), /SIREN du client/);
   assert.match(FX.check(issued({}, client, Object.assign({}, me, { siret: "123" }))).join(" "), /Votre SIRET/);
-  assert.match(FX.check(issued({}, client, Object.assign({}, me, { address: "12 rue de la République" }))).join(" "), /code postal et une ville/);
+  assert.match(FX.check(issued({}, client, Object.assign({}, me, { address: "12 rue de la République" }))).join(" "), /code postal et la ville/);
   const abroad = { name: "Maple", address: "200 Queen Street\nMontréal", pro: true, place: "world" };
   const problems = FX.check(issued({ vat: { franchise: false, rate: 20, place: "world" } }, abroad)).join(" ");
   assert.match(problems, /pays du client/);
@@ -98,4 +98,24 @@ test("XML : caractères spéciaux échappés, quantités et prix au bon format",
   assert.match(x, /<ram:ChargeAmount>33\.333333<\/ram:ChargeAmount>/);
   assert.match(x, /<ram:LineTotalAmount>83\.33<\/ram:LineTotalAmount>/);
   assert.match(x, /<ram:RateApplicablePercent>5\.5<\/ram:RateApplicablePercent>/);
+});
+
+test("client à l'étranger : adresse sans code postal français, pays, adresse électronique, lieu de TVA figé", () => {
+  const be = { name: "Atelier Bruxelles SRL", address: "Rue Neuve 1\n1000 Bruxelles", country: "BE", vat: "BE0123456789", email: "compta@atelier.example",
+               pro: true, place: "eu" };
+  const doc = issued({ vat: { franchise: false, rate: 20, place: "eu" } }, be, Object.assign({}, me, { vat: "FR40123456789" }));
+  assert.deepEqual(FX.check(doc), [], "adresse belge acceptée : lignes et pays suffisent");
+  let x = FX.xml(doc, [doc], R, fmt);
+  assert.match(x, /<ram:LineOne>Rue Neuve 1<\/ram:LineOne><ram:LineTwo>1000 Bruxelles<\/ram:LineTwo><ram:CountryID>BE<\/ram:CountryID>/);
+  assert.match(x, /<ram:URIID schemeID="EM">compta@atelier\.example<\/ram:URIID>/);
+  assert.match(x, /<ram:Content>B2BINT<\/ram:Content>/);
+  doc.snapshot.client.endpoint = "factures@atelier.example";
+  assert.match(FX.xml(doc, [doc], R, fmt), /<ram:URIID schemeID="EM">factures@atelier\.example<\/ram:URIID>/, "adresse électronique propre au client");
+
+  // Ancien document : lieu absent des coordonnées figées ; c'est le lieu de TVA du document qui compte.
+  const fr = issued({ vat: { franchise: false, rate: 20, place: "fr" } }, Object.assign({}, client, { place: undefined }));
+  fr.snapshot.client.place = "eu";
+  x = FX.xml(fr, [fr], R, fmt);
+  assert.match(x, /<ram:Content>B2B<\/ram:Content>/);
+  assert.match(x, /<ram:CategoryCode>S<\/ram:CategoryCode>/);
 });

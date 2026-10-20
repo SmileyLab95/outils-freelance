@@ -22,11 +22,11 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   bouton « Continuer dans mon Espace » dans le générateur public ; reprise d'une numérotation commencée ailleurs (une
   série garde son préfixe jusqu'à la fin de l'année, D13) ; encarts vers l'Espace sur 4 outils ; mention de paiement
   corrigée dans le moteur commun. 73 tests unitaires, parcours navigateur étendu, revue de code (10 points corrigés).
-- **Factur-X (20/10/2026)** : [étude](10-etude-factur-x.md) faite ; moteur XML conforme aux fichiers officiels
-  (XSD, EN 16931, règles françaises BR-FR) sur 8 cas, chaîne de validation fiable (variantes fautives rejetées).
-- **Prochaines actions de Claude** : Factur-X F2 (adresse structurée, pays, SIREN et adresse électronique dans le
-  profil et les clients), F4 (PDF/A-3 dans le navigateur, validé par veraPDF ou Mustang), F5 (bouton dans l'Espace) ;
-  étude concurrentielle et spécification des comptes en ligne (E2) ; finitions SEO ; veille réglementaire de décembre.
+- **Factur-X (20/10/2026)** : export publié dans l'Espace ([étude](10-etude-factur-x.md)) : PDF/A-3 avec données
+  EN 16931 et règles françaises, validé par les fichiers officiels et par Mustang (veraPDF) ; générateur PDF maison (D14).
+- **Prochaines actions de Claude** : étude concurrentielle et spécification des comptes en ligne (E2) ; finitions
+  SEO (titres et descriptions trop longs) ; guides (recouvrement judiciaire, assurance, compte bancaire) ; veille
+  réglementaire de décembre (dont la version de Factur-X et l'annexe A de XP Z12-012 pour le BT-32 en franchise).
 - **En attente d'Ismail** (pas urgent) : structure juridique avec un comptable ; plus tard, compte d'hébergement pour
   les comptes en ligne (E2) ; à la fin, marque et domaine, Gumroad.
 
@@ -141,7 +141,7 @@ Objectif : un compte gratuit qui rend service dès le premier jour.
 Objectif : être prêt pour l'**obligation d'émettre des factures électroniques au 1er septembre 2027** (PME et
 micro-entreprises), et lancer l'offre Pro.
 
-- [ ] Factures au format Factur-X (PDF + données structurées), validées par des outils de contrôle
+- [x] Factures au format Factur-X (PDF + données structurées), validées par des outils de contrôle *(version locale, export à déposer sur la plateforme de l'utilisateur)*
 - [ ] **[Ismail]** Partenariat avec une ou plusieurs plateformes agréées (Claude compare les offres et leurs API)
 - [ ] Connexion à la plateforme agréée : émission, réception, statuts de traitement, e-reporting
 - [ ] Réception des factures fournisseurs dans l'Espace

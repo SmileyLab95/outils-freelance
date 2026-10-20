@@ -238,3 +238,16 @@ test("A15 : TVA selon le profil, débits et cas limites", () => {
   const ahead = Object.assign({}, profile, { numbering: { facture: { year: "2026", last: 9 } } });
   assert.equal(E.fromGenerator(generatorDoc(), ahead, [], [], ids, "2026-10-20", "t").continuation, null, "numérotation déjà plus avancée");
 });
+
+test("pays : 249 codes ISO, 27 États de l'UE, listes par lieu du client", () => {
+  assert.equal(E.COUNTRIES.length, 249);
+  assert.equal(new Set(E.COUNTRIES).size, 249);
+  assert.equal(E.EU_COUNTRIES.length, 27);
+  E.EU_COUNTRIES.forEach((c) => assert.ok(E.COUNTRIES.includes(c), c));
+  const names = new Intl.DisplayNames(["fr"], { type: "region" });
+  E.COUNTRIES.forEach((c) => assert.notEqual(names.of(c), c, `nom français de ${c}`));
+  assert.equal(E.countries("eu").length, 26);
+  assert.ok(!E.countries("eu").includes("FR") && E.countries("eu").includes("DE"));
+  assert.equal(E.countries("world").length, 222);
+  assert.ok(E.countries("world").includes("CH") && !E.countries("world").includes("DE"));
+});

@@ -153,6 +153,10 @@ Application d'une page, spécifiée dans [09-specification-espace.md](09-specifi
 |---|---|
 | `engines/invoice-fr.js` | Moteur de facture **commun** au générateur public et à l'Espace : totaux, TVA, mentions légales, rendu de la page imprimable. Toute règle de facturation se modifie ici. |
 | `engines/espace-fr.js` | Fonctions pures de l'Espace : numérotation et émission (séries, reprise d'une séquence existante), statuts, avoirs, encaissements, livre des recettes, déclaration Urssaf, plafonds, textes des emails, reprise d'un document du générateur. Testé par `tests/unit/espace-fr.test.mjs` et `tests/unit/espace-v11.test.mjs`. |
+| `engines/facturx-fr.js` | Données structurées de la facture électronique (CII, profil EN 16931 de Factur-X, règles françaises BR-FR) et contrôle des données manquantes. |
+| `engines/pdfa.js` | Générateur PDF/A-3 sans dépendance : police TrueType incorporée, XMP, OutputIntent sRGB, fichiers joints (/AF). |
+| `engines/facturx-pdf.js` | PDF de la facture électronique : mise en page du modèle commun (`invoiceFR.model`), XML joint. |
+| `engines/pdf-fonts.js`, `engines/pdf-srgb.js` | Police Inter (sous-ensemble, `scripts/polices_pdf.py`) et profil sRGB incorporés aux PDF. |
 | `tools/espace-store.js` | Stockage : IndexedDB (repli sur le stockage local), synchronisation entre onglets, contrôle des sauvegardes importées. |
 | `tools/espace.js` | Interface : écrans `#/`, `#/documents`, `#/clients`, `#/recettes`, `#/echeances`, `#/reglages`, `#/importer`. |
 
@@ -162,6 +166,9 @@ Application d'une page, spécifiée dans [09-specification-espace.md](09-specifi
 - `?today=AAAA-MM-JJ` dans l'adresse fixe la date du jour (tests).
 - Passage depuis le générateur public : le bouton « Continuer dans mon Espace » dépose le document en cours dans le
   stockage local (`of:espace-import`, valable 24 heures) et ouvre `#/importer`, qui en fait un brouillon.
+- Facture électronique : les scripts du PDF sont déclarés dans `lazy_scripts` (en-tête de la page) ; le générateur du
+  site les publie avec leur empreinte dans `#lazy-scripts`, et l'Espace ne les charge qu'au premier export. Validation :
+  `tests/facturx/` (XSD et schematrons officiels, Mustang pour le PDF/A-3).
 - Numérotation : une série (type et année) commencée garde le préfixe de ses documents émis ; le préfixe des réglages
   vaut pour les séries suivantes. `profile.numbering` reprend le dernier numéro utilisé hors de l'Espace.
 

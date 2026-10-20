@@ -3,10 +3,14 @@ référence factur-x) : schéma XSD du profil EN 16931, schematron EN 16931 et s
 Les schematrons (XSLT 2.0) sont exécutés ici, en local, avec Saxon : rien n'est envoyé sur un serveur.
 
 Prérequis : pip install factur-x saxonche   (outils de test, non publiés avec le site)
-Usage : python3 tests/facturx/valider.py <dossier> [--controle]
+Usage : python3 tests/facturx/valider.py <dossier> [--controle] [--pdf]
   --controle : vérifie aussi que le validateur rejette des variantes volontairement fausses du jeu d'essai.
+  --pdf : valide aussi les PDF du dossier (PDF/A-3 et Factur-X complet) avec Mustang, installé par
+          tests/facturx/installer-mustang.sh ; MUSTANG_LIB désigne le dossier de ses fichiers .jar.
 """
+import os
 import re
+import subprocess
 import sys
 import tempfile
 from pathlib import Path
@@ -79,6 +83,41 @@ def xsd_ok(path):
         return False
 
 
+def mustang(folder):
+    """Validation des PDF par Mustang : PDF/A-3 conforme (veraPDF) et statut global « valid ». Renvoie les échecs."""
+    lib = Path(os.environ.get("MUSTANG_LIB", Path.home() / ".cache" / "mustang" / "lib"))
+    if not lib.is_dir():
+        print(f"✗ Mustang introuvable ({lib}) : lancer tests/facturx/installer-mustang.sh")
+        return 1
+    pdfs = sorted(folder.glob("*.pdf"))
+    if not pdfs:
+        print(f"✗ Aucun PDF à valider dans {folder}")
+        return 1
+    failures = 0
+    for pdf in pdfs:
+        try:
+            run = subprocess.run(["java", "-cp", str(lib / "*"), "org.mustangproject.commandline.Main", "--action", "validate",
+                                  "--source", str(pdf), "--disable-file-logging"], capture_output=True, text=True, timeout=600)
+        except FileNotFoundError:
+            print("✗ Java introuvable : il est nécessaire pour Mustang")
+            return 1
+        except subprocess.TimeoutExpired:
+            print(f"✗ {pdf.name} : validation trop longue (plus de 10 minutes)")
+            failures += 1
+            continue
+        report = run.stdout
+        compliant = "isCompliant=true" in report
+        status = re.findall(r'<summary status="(\w+)"/>', report)
+        errors = re.findall(r"<error[^>]*>(.*?)</error>", report, re.S)
+        ok = compliant and status and status[-1] == "valid" and not errors
+        print(("✓ " if ok else "✗ ") + f"{pdf.name} : PDF/A-3 {'conforme' if compliant else 'NON conforme'}, "
+              f"statut {status[-1] if status else 'inconnu'}")
+        for e in errors[:10]:
+            print("   " + " ".join(e.split())[:300])
+        failures += not ok
+    return failures
+
+
 def main():
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
     folder = Path(args[0] if args else "facturx-xml")
@@ -103,7 +142,8 @@ def main():
             failures += bool(problems)
         print(f"\n{len(files) - failures}/{len(files)} fichiers conformes (XSD, EN 16931 et règles françaises).")
         missed = controle(executables, folder) if "--controle" in sys.argv else 0
-    sys.exit(1 if failures or missed or not files else 0)
+    pdf_failures = mustang(folder) if "--pdf" in sys.argv else 0
+    sys.exit(1 if failures or missed or pdf_failures or not files else 0)
 
 
 if __name__ == "__main__":

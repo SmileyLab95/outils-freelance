@@ -56,12 +56,14 @@ Le schéma reste en version 1 : ces champs sont facultatifs et complétés au pr
 
 - **XML** : moteur pur `engines/facturx-fr.js` (CII D22B, profil EN 16931, règles BR-FR), même principe que les autres
   moteurs : testé sous Node, utilisé dans le navigateur.
-- **PDF/A-3** : produit dans le navigateur avec `pdf-lib` 1.17.1 (licence MIT) et `@pdf-lib/fontkit` (MIT), copiés
-  dans le site et chargés **seulement au moment de l'export**. Exigences : polices incorporées (Inter, licence OFL),
-  profil de couleur sRGB (OutputIntent), métadonnées XMP (`pdfaid` partie 3, niveau B, et schéma d'extension
-  Factur-X : `DocumentFileName` = `factur-x.xml`, `DocumentType` = `INVOICE`, `ConformanceLevel` = `EN 16931`),
-  fichier joint `factur-x.xml` déclaré dans `/AF` avec la relation `Alternative` (**à vérifier** dans la
-  spécification 1.09 pour le profil EN 16931), aucune transparence ni script.
+- **PDF/A-3** : générateur maison `engines/pdfa.js` (décision D14), sans dépendance, chargé **seulement au moment de
+  l'export** avec la police et le profil de couleur. Plutôt que `pdf-lib` et `fontkit` (1,3 Mo), il écrit
+  directement : police Inter incorporée en TrueType (`scripts/polices_pdf.py` : sous-ensemble de 330 glyphes, 60 Ko
+  pour deux graisses, licence OFL dans `assets/fonts/OFL.txt`), profil sRGB de littleCMS (licence zlib) en
+  OutputIntent, métadonnées XMP (`pdfaid` partie 3, niveau B, et schéma d'extension Factur-X : `DocumentFileName` =
+  `factur-x.xml`, `DocumentType` = `INVOICE`, `ConformanceLevel` = `EN 16931`), fichier joint `factur-x.xml` déclaré
+  dans `/AF` avec la relation `Alternative` (celle que l'implémentation de référence Mustang emploie pour les profils
+  EN 16931 et au-delà, `Data` étant réservé à MINIMUM et BASIC WL), aucune transparence ni script.
 - **Mise en page** : le PDF reprend la présentation de la page imprimable actuelle (même moteur de mentions), dessinée
   directement (texte, filets, tableau des lignes avec retour à la ligne, logo PNG ou JPEG).
 
@@ -82,7 +84,8 @@ un échec de connexion ; `tests/facturx/valider.py` exécute donc les schematron
 volontairement faux (note PMT absente, numéro avec espace, total faux, ordre des éléments, BT-49 absent, catégorie O avec
 numéro de TVA, autoliquidation sans numéro du client) vérifie que chaque erreur est bien détectée.
 
-**État au 20/10/2026** : moteur `engines/facturx-fr.js` et jeu d'essai de 8 cas (franchise 2026 et 2027, avoir, TVA à
+**État au 20/10/2026** : moteur `engines/facturx-fr.js` et jeu d'essai de 9 cas (dont une facture de 3 pages avec
+logo et caractères hors police) ; PDF validés par Mustang 2.26.0 (PDF/A-3 conforme, Factur-X valide). Premier état : (franchise 2026 et 2027, avoir, TVA à
 20 % avec option pour les débits et caractères spéciaux, TVA à 5,5 % avec acompte, autoliquidation UE, services et biens
 hors UE) : **8/8 conformes** au XSD et aux deux schematrons, sans avertissement.
 
@@ -91,10 +94,10 @@ hors UE) : **8/8 conformes** au XSD et aux deux schematrons, sans avertissement.
 | Étape | Contenu | Résultat |
 |---|---|---|
 | F1 | Lever les points « à vérifier » (XP Z12-012 : codes BT-23, adresses électroniques, catégories de TVA, relation du fichier joint) | **Fait**, sauf BT-32 en franchise et relation du fichier joint (à confirmer au texte) |
-| F2 | Modèle : adresse structurée, SIREN, adresse électronique ; formulaires et reprise des données existantes | Profil et clients prêts |
+| F2 | Modèle : pays du client, adresses de facturation électronique ; adresse lue sur sa dernière ligne (code postal et ville) | **Fait** |
 | F3 | Moteur XML et sa chaîne de validation (XSD + 2 schematrons) sur le jeu d'essai | **Fait** : 8/8 conformes |
-| F4 | PDF/A-3 dans le navigateur, XML joint, métadonnées ; validation veraPDF ou Mustang | Factur-X conforme |
-| F5 | Bouton « Facture électronique (Factur-X) » sur les factures et avoirs émis à un client professionnel ; texte d'aide | Fonction publiée |
+| F4 | PDF/A-3 dans le navigateur, XML joint, métadonnées ; validation veraPDF ou Mustang | **Fait** : 9/9 PDF conformes (Mustang 2.26.0, veraPDF) |
+| F5 | Bouton « Facture électronique (Factur-X) » sur les factures et avoirs émis à un client professionnel ; texte d'aide | **Fait** (spécification : section 12 de [09](09-specification-espace.md)) |
 
 ## 7. Limites et prudence
 

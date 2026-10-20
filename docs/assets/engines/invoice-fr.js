@@ -113,31 +113,16 @@
     return [id ? (/^[A-Z]{2}/i.test(id) ? "N° TVA : " : "SIREN : ") + id : "", vat ? "N° TVA : " + vat : ""].filter(Boolean);
   }
 
-  /** Page imprimable complète (contenu de l'élément .paper). */
-  function render(doc, rules, fmt) {
-    fmt = fmt || (typeof window !== "undefined" && window.OF ? { eur: window.OF.eur, num: window.OF.fmt, date: window.OF.frDate } : null);
+  /**
+   * Contenu du document, sans mise en forme : titre, parties, dates, lignes, totaux, mentions. Base commune de la page
+   * imprimable (render) et du PDF de la facture électronique (engines/facturx-pdf.js).
+   */
+  function model(doc, rules, fmt) {
     var t = compute(doc);
     var type = TITLES[doc.type] ? doc.type : "facture";
     var me = doc.me || {}, client = doc.client || {};
     var date = doc.date;
     var due = addDays(date, Math.max(0, parseInt(doc.terms, 10) || 0));
-
-    var meLines = [str(me.status), str(me.address), str(me.siret) ? "SIRET : " + str(me.siret) : "",
-      str(me.vat) ? "N° TVA : " + str(me.vat) : "", [str(me.email), str(me.phone)].filter(Boolean).join(" · ")].filter(Boolean);
-
-    var html = '<div class="p-head"><div class="p-brand">' +
-      (me.logo ? '<img src="' + esc(me.logo) + '" alt="Logo">' : "") +
-      '<div class="p-me-name">' + orHint(me.name, "Votre nom") + "</div></div>" +
-      '<div class="p-title">' + TITLES[type] + "<span>N° " + orHint(doc.number, "—") + "</span></div></div>";
-
-    html += '<div class="p-parties"><div><div class="p-label">Émetteur</div><strong>' + orHint(me.name, "Votre nom") +
-      "</strong><br>" + (meLines.length ? meLines.map(multiline).join("<br>") : '<span class="p-empty">Statut, adresse, SIRET</span>') +
-      '</div><div><div class="p-label">' + (type === "devis" ? "Client" : "Facturé à") + "</div><strong>" +
-      orHint(client.name, "Nom du client") + "</strong><br>" + orHint(client.address, "Adresse du client") +
-      clientIds(client).map(function (l) { return "<br>" + esc(l); }).join("") +
-      (t.place === "eu" && !str(client.vat) ? '<br><span class="p-empty">N° de TVA intracommunautaire du client</span>' : "") +
-      (str(client.delivery) ? '<div class="p-delivery"><span>Adresse de livraison</span><br>' + multiline(str(client.delivery)) + "</div>" : "") +
-      "</div></div>";
 
     var meta = [["Date", fmt.date(date)]];
     if (type === "facture") {
@@ -147,20 +132,6 @@
       meta.push(["Valable jusqu'au", fmt.date(addDays(date, Math.max(1, parseInt(doc.validity, 10) || 30)))]);
     }
     meta.push(["Opération", NATURES[doc.nature] || NATURES.services]);
-    html += '<div class="p-meta">' + meta.map(function (m) {
-      return "<div><span>" + esc(m[0]) + "</span><b>" + esc(m[1]) + "</b></div>";
-    }).join("") + "</div>";
-
-    html += '<table class="p-lines"><thead><tr><th>Désignation</th><th>Qté</th><th>Prix unitaire HT</th><th>Total HT</th></tr></thead><tbody>';
-    t.rows.forEach(function (r) {
-      if (!str(r.desc) && !isFinite(r.price)) return;
-      html += "<tr><td>" + orHint(r.desc, "Désignation") + "</td><td>" + (isFinite(r.qty) ? fmt.num(r.qty) : "") +
-        "</td><td>" + (isFinite(r.price) ? fmt.eur(r.price) : "") + "</td><td>" + (isFinite(r.total) ? fmt.eur(r.total) : "") + "</td></tr>";
-    });
-    if (!t.rows.some(function (r) { return str(r.desc) || isFinite(r.price); })) {
-      html += '<tr><td colspan="4"><span class="p-empty">Ajoutez vos prestations dans le formulaire</span></td></tr>';
-    }
-    html += "</tbody></table>";
 
     var tot = [["Total HT", fmt.eur(t.ht)]];
     if (t.place === "eu") tot.push(["TVA", "autoliquidation"]);
@@ -175,18 +146,66 @@
       var pct = Math.min(100, Math.max(0, Number(doc.depositPct) || 0));
       if (pct > 0) tot.push(["Acompte à la signature (" + fmt.num(pct) + " %)", fmt.eur(t.ttc * pct / 100)]);
     }
-    html += '<div class="p-totals">' + tot.map(function (r) {
+
+    return {
+      type: type, title: TITLES[type], number: str(doc.number), totals: t,
+      me: { name: str(me.name), logo: me.logo || "",
+            lines: [str(me.status), str(me.address), str(me.siret) ? "SIRET : " + str(me.siret) : "",
+                    str(me.vat) ? "N° TVA : " + str(me.vat) : "", [str(me.email), str(me.phone)].filter(Boolean).join(" · ")].filter(Boolean) },
+      client: { label: type === "devis" ? "Client" : "Facturé à", name: str(client.name), address: str(client.address), ids: clientIds(client),
+                vatMissing: t.place === "eu" && !str(client.vat), delivery: str(client.delivery) },
+      meta: meta,
+      rows: t.rows.filter(function (r) { return str(r.desc) || isFinite(r.price); }).map(function (r) {
+        return { desc: str(r.desc), qty: isFinite(r.qty) ? fmt.num(r.qty) : "", price: isFinite(r.price) ? fmt.eur(r.price) : "",
+                 total: isFinite(r.total) ? fmt.eur(r.total) : "" };
+      }),
+      sums: tot,
+      mentions: mentions(doc, t, rules, fmt),
+      sign: type === "devis" ? "Date et signature du client, précédées de la mention « " + QUOTE_ACCEPTANCE + " »." : "",
+      notes: str(doc.notes)
+    };
+  }
+
+  /** Page imprimable complète (contenu de l'élément .paper). */
+  function render(doc, rules, fmt) {
+    fmt = fmt || (typeof window !== "undefined" && window.OF ? { eur: window.OF.eur, num: window.OF.fmt, date: window.OF.frDate } : null);
+    var m = model(doc, rules, fmt), me = m.me, client = m.client;
+
+    var html = '<div class="p-head"><div class="p-brand">' +
+      (me.logo ? '<img src="' + esc(me.logo) + '" alt="Logo">' : "") +
+      '<div class="p-me-name">' + orHint(me.name, "Votre nom") + "</div></div>" +
+      '<div class="p-title">' + m.title + "<span>N° " + orHint(m.number, "—") + "</span></div></div>";
+
+    html += '<div class="p-parties"><div><div class="p-label">Émetteur</div><strong>' + orHint(me.name, "Votre nom") +
+      "</strong><br>" + (me.lines.length ? me.lines.map(multiline).join("<br>") : '<span class="p-empty">Statut, adresse, SIRET</span>') +
+      '</div><div><div class="p-label">' + client.label + "</div><strong>" +
+      orHint(client.name, "Nom du client") + "</strong><br>" + orHint(client.address, "Adresse du client") +
+      client.ids.map(function (l) { return "<br>" + esc(l); }).join("") +
+      (client.vatMissing ? '<br><span class="p-empty">N° de TVA intracommunautaire du client</span>' : "") +
+      (client.delivery ? '<div class="p-delivery"><span>Adresse de livraison</span><br>' + multiline(client.delivery) + "</div>" : "") +
+      "</div></div>";
+
+    html += '<div class="p-meta">' + m.meta.map(function (x) {
+      return "<div><span>" + esc(x[0]) + "</span><b>" + esc(x[1]) + "</b></div>";
+    }).join("") + "</div>";
+
+    html += '<table class="p-lines"><thead><tr><th>Désignation</th><th>Qté</th><th>Prix unitaire HT</th><th>Total HT</th></tr></thead><tbody>';
+    m.rows.forEach(function (r) {
+      html += "<tr><td>" + orHint(r.desc, "Désignation") + "</td><td>" + esc(r.qty) + "</td><td>" + esc(r.price) + "</td><td>" + esc(r.total) + "</td></tr>";
+    });
+    if (!m.rows.length) html += '<tr><td colspan="4"><span class="p-empty">Ajoutez vos prestations dans le formulaire</span></td></tr>';
+    html += "</tbody></table>";
+
+    html += '<div class="p-totals">' + m.sums.map(function (r) {
       return '<div class="' + (r[2] ? "p-grand" : "") + '"><span>' + esc(r[0]) + "</span><b>" + esc(r[1]) + "</b></div>";
     }).join("") + "</div>";
 
-    html += '<div class="p-mentions">' + mentions(doc, t, rules, fmt).map(function (m) { return "<p>" + esc(m) + "</p>"; }).join("") + "</div>";
-    if (type === "devis") {
-      html += '<div class="p-sign"><div class="p-label">Bon pour accord</div>' +
-        "<p>Date et signature du client, précédées de la mention « " + QUOTE_ACCEPTANCE + " ».</p><div class=\"p-sign-box\"></div></div>";
-    }
-    if (str(doc.notes)) html += '<div class="p-notes">' + multiline(str(doc.notes)) + "</div>";
+    html += '<div class="p-mentions">' + m.mentions.map(function (x) { return "<p>" + esc(x) + "</p>"; }).join("") + "</div>";
+    if (m.sign) html += '<div class="p-sign"><div class="p-label">Bon pour accord</div><p>' + esc(m.sign) + '</p><div class="p-sign-box"></div></div>';
+    if (m.notes) html += '<div class="p-notes">' + multiline(m.notes) + "</div>";
     return html;
   }
 
-  return { NATURES: NATURES, QUOTE_ACCEPTANCE: QUOTE_ACCEPTANCE, amount: amount, compute: compute, franchiseMention: franchiseMention, mentions: mentions, render: render, addDays: addDays };
+  return { NATURES: NATURES, QUOTE_ACCEPTANCE: QUOTE_ACCEPTANCE, amount: amount, compute: compute, franchiseMention: franchiseMention, mentions: mentions,
+           model: model, render: render, addDays: addDays };
 });
