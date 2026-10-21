@@ -1,5 +1,24 @@
 # Journal des modifications
 
+## 2026-10-21 — Royaume-Uni : *How much to set aside for tax*
+
+- Nouvelle page `/uk/how-much-to-set-aside-for-tax/` : part de chaque paiement à mettre de côté pour l'*income tax*
+  et la Class 4 (arrondie au point supérieur, comme la page américaine), *payments on account*, ce qui reste,
+  répartition d'un paiement (TVA d'abord si l'utilisateur est immatriculé), tableau de la part selon le bénéfice ;
+  seuil d'immatriculation à la TVA et facture de la première année rappelés. Reliée aux pages française et
+  américaine.
+- Moteur `tax-uk.js` : `soleTrader` prend en compte un salaire (impôt dû sur le bénéfice seulement, PAYE compté dans
+  le test des 80 % des *payments on account*) ; le calculateur d'impôt britannique l'utilise désormais (un seul
+  calcul, résultats inchangés).
+- Revue critique (7 points traités) : arrondi au point supérieur corrigé sur toutes les pages qui l'affichent
+  (une part exacte de 11 % s'affichait 12 %) ; fourchettes « la plupart des indépendants » sans source remplacées
+  par des exemples recalculés par les moteurs (Royaume-Uni, États-Unis) ; récupération de la TVA et maximum annuel
+  de National Insurance sourcés (gov.uk) et signalés ; champs invalides nommés et annoncés ; bordure rouge des
+  saisies invalides sur tout le site.
+- Tests : 4 tests unitaires (salaire, acomptes inutiles grâce au PAYE, textes et exemples recalculés), parcours
+  navigateur de la page (10 vérifications), chaque correction contrôlée en réintroduisant le défaut ; suite
+  complète de 1 707 vérifications.
+
 ## 2026-10-21 — Calculateur « Combien mettre de côté sur chaque paiement » (France)
 
 - Nouvelle page `/fr/combien-mettre-de-cote-auto-entrepreneur/` : pour un paiement reçu, la TVA à reverser, les

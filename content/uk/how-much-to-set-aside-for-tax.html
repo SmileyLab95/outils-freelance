@@ -1,0 +1,103 @@
+<!--{
+  "id": "set-aside",
+  "slug": "how-much-to-set-aside-for-tax/",
+  "title": "How Much to Set Aside for Tax as a Sole Trader (2026/27)",
+  "description": "Work out the share of every client payment to save for income tax and Class 4 NI as a UK sole trader in 2026/27, with VAT and payments on account.",
+  "menu": "How much to set aside for tax",
+  "icon": "🏦",
+  "blurb": "The share of every payment to save for HMRC, based on your profit.",
+  "app": "UK Tax Set-Aside Calculator",
+  "scripts": ["engines/brackets.js", "engines/tax-uk.js", "tools/uk-setaside.js"],
+  "rules": "uk",
+  "sources": ["personal_allowance", "income_tax_bands_ruk", "income_tax_bands_scotland", "class4_lower_profits_limit", "class4_upper_profits_limit", "class4_main_rate", "class4_additional_rate", "payments_on_account_fraction", "payments_on_account_threshold", "payments_on_account_source_deduction_test", "vat_standard_rate", "vat_registration_threshold", "vat_input_tax_recovery", "ni_annual_maximum_refund"],
+  "priority": 0.9,
+  "faq": [
+    ["What percentage should a sole trader set aside for tax?", "It depends on your profit, where you live and any other income. In England, Wales and Northern Ireland, income tax is 20% above the £12,570 Personal Allowance and 40% above £50,270 (Scotland has its own bands); Class 4 National Insurance is 6% on profits between £12,570 and £50,270, then 2% above. With no other income, that's about 15.1% of a £30,000 profit, 19.5% of £50,000 and 30.7% of £100,000. The calculator works out your own percentage from the 2026/27 rates."],
+    ["Should I set aside VAT too?", "Yes, if you're VAT-registered: the VAT in each payment belongs to HMRC and is paid with your VAT return. At the 20% standard rate, that's one sixth of a VAT-inclusive payment. The calculator takes it out first, then works out the tax share on the rest. It doesn't cover the Flat Rate Scheme, where you pay a fixed percentage of your VAT-inclusive turnover instead."],
+    ["I also have a job: how much should I save?", "Enter your salary. Your employer already takes income tax on it through PAYE, but your profit is added on top of your salary, so it's taxed at the rates above it: you may need to save a bigger share. Class 4 National Insurance only applies to your profit."],
+    ["Why is my first tax bill so big?", "Payments on account are based on the previous year's bill, so in your first tax year HMRC usually asks for nothing until the 31 January after the tax year ends. On that date you pay the whole year's tax plus the first payment on account for the next year, half of your bill, unless the bill is under £1,000 or 80% or more of your tax was taken at source. Saving from your first payment avoids the shock."],
+    ["Is this the exact amount I'll owe?", "It's an estimate for planning. It doesn't include Student Loan repayments, the High Income Child Benefit Charge, savings or dividend income, tax reliefs, or the National Insurance annual maximum if you're also employed (HMRC can refund Class 4 paid above it). For the detailed breakdown, use the <a href=\"{{link:tax}}\">self-employed tax calculator</a>."]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · 2026/27 tax year</span>
+    <h1>How much to set aside for tax</h1>
+    <p class="lead">Enter what you invoice in a typical month: get the share of every client payment to move to your tax savings, so the money is there on 31 January and 31 July.</p>
+    <ul class="trust"><li>Income tax and Class 4 NI</li><li>VAT and payments on account</li><li>Split any payment instantly</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="uk-setaside-form" onsubmit="return false">
+      <h2>Your income</h2>
+      <div class="fields">
+        <div class="field"><label for="u-income">Invoiced per month, excluding VAT</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="u-income" name="income" value="4,000" aria-describedby="u-notice" data-save><span>£</span></div></div>
+        <div class="field"><label for="u-expenses">Business expenses per month</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="u-expenses" name="expenses" value="300" aria-describedby="u-expenses-hint u-notice" data-save><span>£</span></div>
+          <span class="hint" id="u-expenses-hint">Excluding any VAT you can reclaim.</span></div>
+        <div class="field full"><label for="u-region">Where do you live?</label>
+          <select id="u-region" name="region" data-save>
+            <option value="ruk">England, Wales or Northern Ireland</option>
+            <option value="scotland">Scotland</option>
+          </select></div>
+        <div class="field full"><label for="u-salary">Salary from a job for the year (optional)</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="u-salary" name="salary" placeholder="0" aria-describedby="u-notice" data-save><span>£</span></div></div>
+        <label class="check full"><input type="checkbox" id="u-vat" name="vat" data-save><span>I'm VAT-registered: my clients pay me 20% VAT on top</span></label>
+      </div>
+      <h3>Split a payment</h3>
+      <div class="fields">
+        <div class="field full"><label for="u-payment" id="u-payment-label">A client just paid you</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="u-payment" name="payment" value="2,000" aria-describedby="u-notice" data-save><span>£</span></div></div>
+      </div>
+      <ul class="result-list" style="margin-top: 6px;">
+        <li id="u-pay-vat-row" hidden><span>VAT to pay HMRC</span><b id="u-pay-vat">–</b></li>
+        <li><span>Move to tax savings</span><b id="u-pay-tax">–</b></li>
+        <li><span>Yours to spend</span><b id="u-pay-keep">–</b></li>
+      </ul>
+    </form>
+
+    <div class="results">
+      <div class="result-hero" role="status" aria-atomic="true">
+        <div class="label">Set aside</div>
+        <div class="big" id="u-share">–</div>
+        <div class="sub" id="u-sub">–</div>
+      </div>
+      <ul class="result-list card" style="padding: 6px 18px;">
+        <li><span id="u-it-label">Income tax</span><b id="u-it">–</b></li>
+        <li><span>Class 4 National Insurance</span><b id="u-ni">–</b></li>
+        <li><span><strong id="u-total-label">Total tax for the year</strong></span><b id="u-total">–</b></li>
+        <li><span>Payments on account (31 January and 31 July)</span><b id="u-poa">–</b></li>
+        <li><span>What you keep after expenses and tax</span><b id="u-keep">–</b></li>
+      </ul>
+      <p class="notice" id="u-notice">–</p>
+      <div class="card" style="margin-top: 16px; padding: 18px;">
+        <h3 style="font-size: 1rem; margin-bottom: 8px;">How the share grows with profit</h3>
+        <table class="mini-table">
+          <caption class="sr-only">Share of profit to set aside, by yearly profit</caption>
+          <thead><tr><th>Yearly profit</th><th>Share of profit</th><th>Per month</th></tr></thead>
+          <tbody id="u-levels"></tbody>
+        </table>
+        <p class="small muted" style="margin: 8px 0 0;">Same region and salary, as a share of profit.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>A simple system that works</h2>
+  <ol>
+    <li><strong>Open a separate savings account</strong> just for tax, and VAT if you're registered.</li>
+    <li><strong>Every time a client pays you,</strong> move your share to it the same day. Don't wait for the end of the month.</li>
+    <li><strong>Pay HMRC from that account</strong>: your balancing payment and first payment on account on 31 January, the second payment on account on 31 July. The <a href="{{link:calendar}}">tax calendar</a> reminds you of each date.</li>
+    <li><strong>Recalculate every few months</strong> as your income changes: the share rises with your profit.</li>
+  </ol>
+  <h2>Your first year</h2>
+  <p>Payments on account are based on the previous year's bill, so HMRC usually asks for nothing during your first tax year. Then, on 31 January, you pay the whole year's bill <em>and</em> the first payment on account for the next year: half the bill again, unless the bill is under £1,000 or 80% or more of your tax was taken at source. Start saving from your very first payment.</p>
+  <h2>VAT</h2>
+  <p>You must register for VAT when your taxable turnover goes over £90,000 in any rolling 12-month period. Once registered, the VAT you charge is not your money: keep all of it aside for your VAT return. You can usually reclaim the VAT on purchases you use for your taxable business supplies, with a valid VAT invoice, so keeping the full amount is the cautious option. The <a href="{{link:salestax}}">VAT calculator</a> adds or removes VAT from any price.</p>
+  <p class="small muted">An estimate for planning, based on the 2026/27 rates published by HMRC. It doesn't replace advice from an accountant for your situation.</p>
+</section>

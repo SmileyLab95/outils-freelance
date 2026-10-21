@@ -26,7 +26,7 @@
     var r = OFE.taxUS.estimate(input(profit), R);
     // Part de chaque encaissement à mettre de côté : impôt total ÷ chiffre d'affaires, arrondie au point supérieur.
     var share = revenue > 0 ? r.total / revenue : 0;
-    var rounded = Math.ceil(share * 100) / 100;
+    var rounded = OF.ceilShare(share);
     set("s-share", revenue > 0 ? pct(rounded) : "–");
     set("s-sub", revenue > 0
       ? "of every payment you receive: about " + OF.money(revenue * rounded / 12, 0) + " a month, " + OF.money(r.total, 0) + " for the year."

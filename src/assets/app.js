@@ -168,6 +168,10 @@
       }
     },
 
+    /** Part arrondie au point de pourcentage supérieur (0,1725 → 0,18), sans bruit de virgule flottante : une part de
+     *  0,11000000000000001 reste 0,11. */
+    ceilShare: function (x) { return Math.ceil(Math.round(x * 1e6) / 1e4) / 100; },
+
     /** Fait télécharger un fichier. Le lien temporaire est retiré aussitôt (il n'a pas de texte, il ne doit pas rester
      *  dans la page) ; l'adresse du fichier est libérée une minute plus tard (Safari peut d'abord demander confirmation). */
     download: function (content, name, type) {

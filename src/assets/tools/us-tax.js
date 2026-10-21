@@ -22,7 +22,7 @@
 
     set("r-total", OF.money(r.total, 0));
     set("r-sub", r.profit > 0
-      ? "That's " + pct(r.effectiveRate) + " of your profit. Set aside about " + pct(Math.ceil(r.effectiveRate * 100) / 100) +
+      ? "That's " + pct(r.effectiveRate) + " of your profit. Set aside about " + pct(OF.ceilShare(r.effectiveRate)) +
         " of every payment you receive."
       : "Enter your net profit for the year.");
     set("r-profit", OF.money(r.profit, 0));

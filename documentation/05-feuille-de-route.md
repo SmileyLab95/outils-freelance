@@ -66,7 +66,8 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   axe-core dans le parcours navigateur (D17). Navigation au clavier corrigée et testée (menus, focus visible).
 - **Nouveau calculateur (21/10/2026)** : « Combien mettre de côté sur chaque paiement » (France) : TVA, cotisations,
   formation professionnelle et impôt (versement libératoire ou estimation au taux du foyer), sur le hors taxes ;
-  moteur commun avec le simulateur, règles relues sur impots.gouv.fr et autoentrepreneur.urssaf.fr.
+  moteur commun avec le simulateur, règles relues sur impots.gouv.fr et autoentrepreneur.urssaf.fr. Même outil
+  pour le Royaume-Uni (*How much to set aside for tax*) ; le Canada suit.
 - **Offres et paiements (21/10/2026)** : grille de prix et comparatif des prestataires ([17](17-offres-et-paiements.md)) ;
   proposition : « Pro » à 5 € HT par mois ou 50 € HT par an, Stripe en France ; 7 à 13 abonnés couvrent
   l'hébergement et la mesure d'audience ; questions de TVA et de facturation à poser à l'expert-comptable.
@@ -152,6 +153,9 @@ Objectif : un site mesuré, sous sa propre marque, qui commence à rapporter, et
 - [x] Calculateur « Combien mettre de côté sur chaque paiement » (micro-entrepreneur : TVA, cotisations, formation
       professionnelle, versement libératoire ou impôt estimé au taux du foyer) ; moteur `engines/micro-fr.js` partagé
       avec le simulateur ; taux de TVA lus dans les règles (spécification [15](15-guides-gestion.md) § 4)
+- [x] Royaume-Uni : *How much to set aside for tax* (part de chaque paiement, TVA si immatriculé, salaire,
+      *payments on account*) ; moteur `tax-uk.js` commun avec le calculateur d'impôt (spécification
+      [pays/uk.md](pays/uk.md))
 
 ### 1.5 Préparer la plateforme
 

@@ -407,3 +407,35 @@ Ces règles ne s'appliquent qu'entre entreprises (B2B), dans tout le Royaume-Uni
 - Self Assessment: 5 October (registration), 31 October (paper), 30 December (PAYE coding), 31 January (online return, balancing payment, first payment on account), 31 July (second payment on account).
 - Making Tax Digital quarterly updates: 7 August, 7 November, 7 February, 7 May (standard update periods); final declaration by 31 January.
 - VAT: 7th of the second month after the end of each quarter, for the three stagger groups.
+
+## Spécification : calculateur *How much to set aside for tax* (`/uk/how-much-to-set-aside-for-tax/`, 21/10/2026)
+
+**Question** : « A client just paid me: how much of it should I keep for HMRC? » Besoin P1 de
+[02](../02-besoins-clients.md) (§ 7), déjà couvert aux États-Unis et en France (même identifiant `set-aside`).
+
+- **Règles** (toutes déjà dans `data/rules/uk.json`) : *Personal Allowance* et sa réduction, barèmes rUK et
+  écossais, Class 4 (6 % et 2 %), *payments on account* (seuil de 1 000 £, test des 80 %, 50 % chacun, dates),
+  taux normal de TVA (20 %) et seuil d'immatriculation (90 000 £).
+- **Moteur** `engines/tax-uk.js` : `soleTrader({ profit, region, salary })` calcule l'impôt dû sur le bénéfice quand
+  la personne a aussi un salaire (impôt sur salaire + bénéfice, moins l'impôt déjà prélevé sur le salaire), la
+  Class 4 sur le bénéfice seul, et les *payments on account* avec l'impôt du salaire compté comme prélevé à la
+  source. Le calculateur d'impôt existant (`tools/uk-tax.js`) l'utilise aussi : un seul calcul.
+- **Entrées** : facturé par mois (hors TVA), dépenses par mois, Écosse ou reste du Royaume-Uni, salaire annuel
+  (facultatif), immatriculation à la TVA (les paiements comprennent alors 20 % de TVA ; le *Flat Rate Scheme* n'est
+  pas couvert, et le texte le dit), montant d'un paiement reçu.
+- **Résultats** : part à mettre de côté sur chaque paiement hors TVA (impôt et Class 4 de l'année ÷ chiffre
+  d'affaires, arrondie au point supérieur, comme la page américaine) ; impôt, Class 4, total, *payments on account*
+  (montant de chacun, ou « non demandés ») ; ce qui reste ; répartition d'un paiement : TVA à reverser (si
+  immatriculé), à mettre de côté, disponible ; tableau de la part selon le bénéfice.
+- **Textes** : la première année, la facture de janvier comprend tout l'impôt de l'année et le premier acompte de
+  l'année suivante ; seuil d'immatriculation à la TVA rappelé ; estimation (pas de *Student Loan*, de
+  *High Income Child Benefit Charge*, de revenus d'épargne ni de crédits d'impôt, ni du maximum annuel de
+  National Insurance pour une personne aussi salariée : Class 4 surestimée dans ce cas, question ouverte des
+  règles). Aucune fourchette « pour la plupart des indépendants » : des exemples recalculés par le moteur, vérifiés
+  par un test (même correction sur les pages américaines et le calculateur d'impôt britannique).
+- **Arrondi** : la part est arrondie au point supérieur par `OF.ceilShare`, sans bruit de virgule flottante (une
+  part de 11 % exacte ne devient pas 12 %), pour toutes les pages qui l'affichent (Royaume-Uni, États-Unis,
+  Canada).
+- **Critères** : tests unitaires du moteur (salaire + bénéfice, calculs à la main, sans salaire identique à
+  l'ancien calcul) ; calculateur d'impôt existant inchangé (parcours navigateur) ; parcours de la nouvelle page
+  (part, TVA, salaire, Écosse, rechargement), accessibilité, captures relues sur ordinateur, tablette et mobile.

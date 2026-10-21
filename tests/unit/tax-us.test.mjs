@@ -91,3 +91,10 @@ test("cotisation retraite de 10 000 $ (SEP-IRA) : AGI et QBI réduits, SE tax in
   near(r.incomeTax, 1240 + 0.12 * 26198.54, "impôt fédéral");
   near(base.total - r.total, 960, "économie : 10 000 × 12 % × 80 % (effet QBI)");
 });
+
+test("pages américaines : exemples de part à mettre de côté recalculés par le moteur (aucune statistique inventée)", () => {
+  const read = (f) => readFileSync(new URL("../../content/us/" + f, import.meta.url), "utf8");
+  const ex = (p) => Math.round(tax.estimate({ profit: p, status: "single", wages: 0, stateRate: 0, sstb: false }, R).effectiveRate * 1000) / 10 + "%";
+  assert.ok(read("how-much-to-set-aside-for-taxes.html").includes(`about ${ex(30000)} of a $30,000 profit, ${ex(50000)} of $50,000 and ${ex(100000)} of $100,000`));
+  assert.ok(read("self-employment-tax-calculator.html").includes(`about ${ex(50000)} of a $50,000 profit and ${ex(100000)} of $100,000`));
+});

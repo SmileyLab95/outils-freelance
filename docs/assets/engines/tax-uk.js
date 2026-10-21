@@ -48,17 +48,25 @@
     return { required: !exempt, each: exempt ? 0 : bill * rules.payments_on_account_fraction };
   }
 
-  /** Sole trader : impôt sur le revenu + Class 4 NI sur le bénéfice. */
+  /**
+   * Sole trader : impôt sur le revenu + Class 4 NI sur le bénéfice. Avec un salaire (input.salary), l'impôt dû sur
+   * le bénéfice est l'impôt sur salaire + bénéfice moins l'impôt déjà prélevé sur le salaire (PAYE), et cet impôt
+   * prélevé compte dans le test des 80 % des payments on account. allowance, taxable, marginal et brackets
+   * portent sur le revenu total.
+   */
   function soleTrader(input, rules) {
-    var profit = Math.max(0, input.profit || 0);
-    var it = incomeTax(profit, input.region, rules);
+    var profit = Math.max(0, input.profit || 0), salary = Math.max(0, input.salary || 0);
+    var all = incomeTax(salary + profit, input.region, rules);
+    var onSalary = incomeTax(salary, input.region, rules);
+    var it = all.tax - onSalary.tax;
     var ni = class4(profit, rules);
-    var total = it.tax + ni.total;
+    var total = it + ni.total;
     return {
-      profit: profit, incomeTax: it.tax, allowance: it.allowance, taxable: it.taxable, marginal: it.marginal,
-      brackets: it.details, class4: ni.total, class4Main: ni.main, class4Additional: ni.additional,
+      profit: profit, salary: salary, incomeTax: it, salaryTax: onSalary.tax, allowance: all.allowance,
+      taxable: all.taxable, marginal: all.marginal, brackets: all.details,
+      class4: ni.total, class4Main: ni.main, class4Additional: ni.additional,
       total: total, takeHome: profit - total, effectiveRate: profit > 0 ? total / profit : 0,
-      paymentsOnAccount: paymentsOnAccount(total, 0, rules)
+      paymentsOnAccount: paymentsOnAccount(total, onSalary.tax, rules)
     };
   }
 

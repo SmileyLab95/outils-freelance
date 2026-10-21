@@ -141,6 +141,8 @@ input[type="text"], input[type="number"], input[type="date"], input[type="email"
 textarea { resize: vertical; min-height: 70px; }
 input:disabled, select:disabled, textarea:disabled { background: #f3f2f9; color: var(--muted); cursor: not-allowed; }
 .nowrap { white-space: nowrap; }
+/* Saisie invalide (aria-invalid posé par les outils) : bordure rouge, en plus du message. */
+input[aria-invalid="true"] { border-color: var(--danger); }
 input:focus, select:focus, textarea:focus { outline: none; border-color: var(--brand); box-shadow: 0 0 0 4px rgba(79,70,229,.14); }
 .input-suffix { position: relative; }
 .input-suffix input { padding-right: 46px; }

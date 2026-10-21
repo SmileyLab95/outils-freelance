@@ -1231,6 +1231,22 @@
       "source_title": "Tax on your private pension contributions: Annual allowance - GOV.UK",
       "confidence": "high",
       "note": "Relief limited to the higher of relevant UK earnings and £3,600 gross. Unused allowance can be carried forward from the 3 previous tax years. Relief at source: the provider adds 20%; higher and additional rate relief is claimed through Self Assessment."
+    },
+    "vat_input_tax_recovery": {
+      "value": "A VAT-registered business can usually reclaim the VAT charged on purchases used for its taxable business supplies, with a valid VAT invoice; not on purchases for non-business use or linked to exempt supplies (subject to the partial exemption rules).",
+      "label": "Reclaiming VAT on business purchases (input tax)",
+      "source": "https://www.gov.uk/hmrc-internal-manuals/vat-input-tax/vit12100",
+      "source_title": "VIT12100 - VAT Input Tax basics: the basic right to deduct principles - HMRC internal manual (with VAT Notice 700/12 and Notice 706)",
+      "confidence": "medium",
+      "note": "Read on 21/10/2026 through search results on gov.uk, page not opened (blocked from the work environment)."
+    },
+    "ni_annual_maximum_refund": {
+      "value": "People who are both employed and self-employed may pay more National Insurance than the annual maximum; deferment of Class 4 ended from 2015/16, but HMRC may refund contributions paid above the maximum for previous tax years.",
+      "label": "National Insurance annual maximum for the employed and self-employed",
+      "source": "https://www.gov.uk/defer-national-insurance",
+      "source_title": "Defer your National Insurance - GOV.UK",
+      "confidence": "medium",
+      "note": "Read on 21/10/2026 through search results, page not opened. The annual maximum formula (SSCR 2001 reg. 100) is not modelled by the calculators: they may overstate Class 4 for people with a salary above the primary threshold."
     }
   },
   "open_questions": [
@@ -1243,6 +1259,8 @@
     "Self Assessment 12-month late filing penalty (additional 5% or GBP 300) not re-confirmed in this session's sources.",
     "Autumn Budget 2026 date not identified: it will set 2027/28 figures (NIC uprating for Class 2/3 and the LEL/SPT, dividend and savings rates, VAT threshold).",
     "Budget 2025 also announced +2 point increases to savings income rates and new property income rates from April 2027: not needed for 2026/27, not verified in detail.",
-    "Cash basis as default since 2024/25, VAT return deadline (1 month + 7 days) and Corporation Tax payment deadline (9 months + 1 day) are standard rules recorded with medium confidence because the live pages were not re-read."
+    "Cash basis as default since 2024/25, VAT return deadline (1 month + 7 days) and Corporation Tax payment deadline (9 months + 1 day) are standard rules recorded with medium confidence because the live pages were not re-read.",
+    "Payments on account, source deduction test: GOV.UK and SALF303 say 'more than 80%', SAM121490 says '80 per cent or more'. The engine applies >= 0.8 (same result except at exactly 80%); to confirm on the legislation (TMA 1970 s59A and the 1996 regulations).",
+    "National Insurance annual maximum (employed and self-employed): formula of SSCR 2001 reg. 100 to source and model in tax-uk.js (Class 4 overstated today for people with a salary above the primary threshold)."
   ]
 }

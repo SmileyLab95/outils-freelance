@@ -390,6 +390,47 @@ const tests = {
     }
     check((await page.getAttribute("html", "lang")) === "en-GB", "UK : langue en-GB");
   },
+  async "uk/how-much-to-set-aside-for-tax/"(page) {
+    // documentation/pays/uk.md (spécification) : 4 000 £ par mois, 300 £ de dépenses → bénéfice 44 400 £ ;
+    // impôt 20 % × 31 830 = 6 366 ; Class 4 6 % × 31 830 = 1 909,80 ; total 8 275,80 = 17,2 % du CA → 18 %.
+    const text = async (sel) => (await page.textContent(sel)).replace(/\s+/g, " ").trim();
+    check((await text("#u-share")) === "18%" && (await text("#u-sub")).includes("about £720 a month, £8,276 for the year"),
+      "UK set aside : 18 % de chaque paiement (impôt et Class 4 de 8 276 £)");
+    check((await text("#u-it")) === "£6,366" && (await text("#u-ni")) === "£1,910" && (await text("#u-poa")) === "£4,138 each",
+      "UK set aside : impôt, Class 4 et payments on account");
+    check((await text("#u-pay-tax")) === "£360.00" && (await text("#u-pay-keep")) === "£1,640.00" && !(await page.isVisible("#u-pay-vat-row")),
+      "UK set aside : 2 000 £ reçus, 360 £ à mettre de côté");
+    await page.check("#u-vat");
+    await page.fill("#u-payment", "2,400");
+    check((await text("#u-pay-vat")) === "£400.00" && (await text("#u-pay-tax")) === "£360.00" && (await text("#u-notice")).includes("Flat Rate Scheme"),
+      "UK set aside : 2 400 £ TTC, TVA de 400 £ mise de côté d'abord");
+    await page.fill("#u-salary", "30,000");
+    // Salaire 30 000 + bénéfice 44 400 : impôt total 7 540 + 40 % × 24 130 = 17 192 ; sur le salaire 3 486 ;
+    // dû sur le bénéfice 13 706 ; avec la Class 4, 15 615,80 = 32,5 % → 33 %.
+    check((await text("#u-share")) === "33%" && (await text("#u-it")) === "£13,706" && (await text("#u-it-label")).includes("on your profit (40% band)"),
+      "UK set aside : avec un salaire de 30 000 £, le bénéfice est imposé à 40 % (33 %)");
+    await page.fill("#u-salary", "");
+    await page.uncheck("#u-vat");
+    await page.fill("#u-income", "8,000");
+    check((await text("#u-notice")).includes("VAT registration threshold"), "UK set aside : seuil de TVA de 90 000 £ dépassé signalé");
+    await page.fill("#u-income", "4,000");
+    await page.selectOption("#u-region", "scotland");
+    check((await text("#u-total")) === "£8,540" && (await text("#u-it")) === "£6,630" && (await text("#u-it-label")).includes("(42% band)"),
+      "UK set aside : barème écossais (tranche à 42 %)");
+    await page.selectOption("#u-region", "ruk");
+    // 2 769 £ par mois, 550 £ de dépenses : impôt et Class 4 de 3 655,08 £ = exactement 11 % de 33 228 £.
+    await page.fill("#u-income", "2,769");
+    await page.fill("#u-expenses", "550");
+    check((await text("#u-share")) === "11%", "UK set aside : part exacte de 11 %, pas arrondie à 12 % (virgule flottante)");
+    await page.fill("#u-expenses", "-200");
+    check((await page.getAttribute("#u-expenses", "aria-invalid")) === "true" && (await text("#u-notice")).includes("Check business expenses") &&
+      (await text("#u-sub")).includes("Check business expenses"), "UK set aside : champ invalide nommé, aussi dans le résumé annoncé");
+    await page.fill("#u-expenses", "300");
+    await page.fill("#u-income", "4,000");
+    await page.selectOption("#u-region", "scotland");
+    await page.reload({ waitUntil: "networkidle" });
+    check((await page.inputValue("#u-region")) === "scotland" && (await page.inputValue("#u-payment")) === "2,400", "UK set aside : saisie retrouvée après rechargement");
+  },
   async "uk/self-employed-tax-calculator/"(page) {
     // 50 000 £ : impôt 7 486 + Class 4 2 245,80 = 9 731,80 (voir tests unitaires)
     check((await page.textContent("#r-total")).trim() === "£9,732", `UK : total 9 732 £ (obtenu : ${await page.textContent("#r-total")})`);

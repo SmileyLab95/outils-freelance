@@ -15,21 +15,17 @@
     var region = $("t-region").value;
     var first = $("t-first").checked;
 
-    // Impôt dû sur le bénéfice = impôt sur (salaire + bénéfice) − impôt déjà prélevé sur le salaire.
-    var all = OFE.taxUK.incomeTax(salary + profit, region, R);
-    var onSalary = OFE.taxUK.incomeTax(salary, region, R);
-    var it = all.tax - onSalary.tax;
-    var ni = OFE.taxUK.class4(profit, R);
-    var total = it + ni.total;
-    var take = profit - total;
-    var poa = OFE.taxUK.paymentsOnAccount(total, onSalary.tax, R);
+    // Impôt dû sur le bénéfice = impôt sur (salaire + bénéfice) − impôt déjà prélevé sur le salaire (moteur commun).
+    var st = OFE.taxUK.soleTrader({ profit: profit, salary: salary, region: region }, R);
+    var it = st.incomeTax, total = st.total, take = st.takeHome, poa = st.paymentsOnAccount;
+    var ni = { main: st.class4Main, additional: st.class4Additional, total: st.class4 };
 
     set("r-total", OF.money(total, 0));
     set("r-sub", profit > 0
-      ? "That's " + pct(total / profit) + " of your profit. Set aside about " + pct(Math.ceil(total / profit * 100) / 100) + " of what you earn."
+      ? "That's " + pct(total / profit) + " of your profit. Set aside about " + pct(OF.ceilShare(total / profit)) + " of what you earn."
       : "Enter your profit for the year.");
     set("r-profit", OF.money(profit, 0));
-    set("r-it-label", "Income tax (" + pct(all.marginal) + " band)");
+    set("r-it-label", "Income tax (" + pct(st.marginal) + " band)");
     set("r-it", OF.money(it, 0));
     set("r-ni", OF.money(ni.total, 0));
     set("r-take", OF.money(take, 0) + " · " + OF.money(take / 12, 0) + "/mo");
@@ -73,11 +69,11 @@
 
     var steps = [
       ["Total income", salary + profit],
-      ["Personal Allowance", -all.allowance],
-      ["Taxable income", all.taxable]
+      ["Personal Allowance", -st.allowance],
+      ["Taxable income", st.taxable]
     ];
-    all.details.forEach(function (b) { steps.push([pct(b.rate) + " on " + OF.money(b.base, 0), b.tax]); });
-    if (salary > 0) steps.push(["Minus income tax already paid on your salary", -onSalary.tax]);
+    st.brackets.forEach(function (b) { steps.push([pct(b.rate) + " on " + OF.money(b.base, 0), b.tax]); });
+    if (salary > 0) steps.push(["Minus income tax already paid on your salary", -st.salaryTax]);
     steps.push(["Income tax on your profit", it]);
     steps.push(["Class 4 NI at 6%", ni.main]);
     if (ni.additional > 0) steps.push(["Class 4 NI at 2%", ni.additional]);

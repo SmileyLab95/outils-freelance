@@ -29,7 +29,7 @@
     var inst = OFE.taxCA.instalments(r, R);
 
     set("r-total", OF.money(r.total, 0));
-    set("r-sub", r.profit > 0 ? fill(L.sub, { rate: pct(r.effectiveRate), aside: pct(Math.ceil(r.effectiveRate * 100) / 100) }) : L.sub_empty);
+    set("r-sub", r.profit > 0 ? fill(L.sub, { rate: pct(r.effectiveRate), aside: pct(OF.ceilShare(r.effectiveRate)) }) : L.sub_empty);
     set("r-profit", OF.money(r.profit, 0));
     set("r-pension-label", r.quebec ? L.pension_qpp : L.pension_cpp);
     set("r-pension", OF.money(r.pensions.total, 0));
