@@ -34,13 +34,15 @@
   /**
    * Taxes de vente perçues par un travailleur autonome inscrit, au taux de la province du client (lieu de la
    * fourniture pour la plupart des services) : TVH, ou TPS + TVQ au Québec, ou TPS seule. La TVP (TVD au Manitoba)
-   * ne vise qu'une liste de services énumérés (règle pst_on_professional_services) : elle n'est pas comptée.
+   * ne vise qu'une liste de services énumérés (règle pst_on_professional_services) : elle n'est ajoutée que si
+   * l'utilisateur indique que son service y est soumis (pst).
    */
-  function salesTaxes(code) {
+  function hasPst(code) { return /^GST\+(PST|RST)$/.test(P[code].sales_tax.type); }
+  function salesTaxes(code, pst) {
     var t = P[code].sales_tax, N = L.sales_names;
     if (t.type === "HST") return [{ name: N.HST, rate: t.rate }];
     var taxes = [{ name: N.GST, rate: t.gst }];
-    if (t.type === "GST+QST") taxes.push({ name: N.QST, rate: t.provincial });
+    if (t.type === "GST+QST" || (pst && hasPst(code))) taxes.push({ name: N[t.type.split("+")[1]], rate: t.provincial });
     return taxes;
   }
 
@@ -78,7 +80,8 @@
     var revenue = income * 12, profit = Math.max(0, revenue - expenses * 12);
     var r = OFE.taxCA.estimate({ profit: profit, province: code }, R, P);
     var inst = OFE.taxCA.instalments(r, R);
-    var taxes = salesTaxes(client), names = list(taxes.map(function (t) { return t.name; }));
+    var pstHere = registered && hasPst(client), pst = pstHere && $("c-pst").checked;
+    var taxes = salesTaxes(client, pst), names = list(taxes.map(function (t) { return t.name; }));
     var salesRate = taxes.reduce(function (s, t) { return s + t.rate; }, 0);
 
     // Part de chaque encaissement hors taxes de vente : impôt et cotisations de l'année ÷ chiffre d'affaires,
@@ -105,6 +108,8 @@
     var net = registered ? payment / (1 + salesRate) : payment;
     $("c-pay-sales-row").hidden = !registered;
     $("c-client-field").hidden = !registered;
+    $("c-pst-field").hidden = !pstHere;
+    if (pstHere) set("c-pst-label", fill(L.pst_box, { tax: L.sales_names[P[client].sales_tax.type.split("+")[1]] }));
     set("c-pay-sales-label", fill(L.sales_row, { taxes: names }));
     set("c-payment-label", registered ? fill(L.payment_label_tax, { taxes: names }) : L.payment_label);
     set("c-pay-sales", OF.money(payment - net));
@@ -112,10 +117,9 @@
     set("c-pay-keep", OF.money(net * (1 - rounded)));
 
     var threshold = R.small_supplier_threshold, over = !registered && revenue > threshold, msgs = [];
-    var pst = P[client].sales_tax.type === "GST+PST" || P[client].sales_tax.type === "GST+RST";
     if (bad.length) msgs.push(error.trim());
     if (over) msgs.push(fill(L.small_supplier, { threshold: OF.money(threshold, 0), taxes: list(salesTaxes(code).map(function (t) { return t.name; })) }));
-    if (registered) msgs.push(fill(L.registered_note, { taxes: names }) + (pst ? " " + L.pst_note : ""));
+    if (registered) msgs.push(fill(L.registered_note, { taxes: names }) + (pstHere && !pst ? " " + L.pst_note : ""));
     msgs.push(fill(L.balance, { date: OF.date(R.balance_due_date, L.long_date) }));
     var notice = $("c-notice");
     notice.textContent = msgs.join(" ");

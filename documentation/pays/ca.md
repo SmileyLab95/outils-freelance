@@ -397,7 +397,9 @@ reliées aux pages américaine, britannique et française). Besoin P1 de [02](..
   **au taux de la province du client** (lieu de la fourniture pour la plupart des services ; par défaut, celle de
   l'utilisateur). La TVP n'est mentionnée que si le client est dans une province qui la perçoit (C.-B., Sask., Man.) ;
   son extension en C.-B. à certains services professionnels, prévue le 1er octobre 2026, a été suspendue le
-  18 septembre 2026 (règle mise à jour).
+  18 septembre 2026 (règle mise à jour). Une case permet d'ajouter la TVP (TVD au Manitoba) quand le service y est
+  soumis ; la FAQ donne des exemples relevés dans les bulletins officiels (logiciel en Saskatchewan, au Manitoba et en
+  C.-B.).
 - **Acomptes** : le moteur distingue au Québec le test de l'ARC (impôt fédéral, 1 800 $) et celui de Revenu Québec
   (impôt du Québec seul, 1 800 $ : les cotisations n'entrent pas dans l'« impôt net à payer », mais sont versées avec
   les acomptes ; relevé sur revenuquebec.ca le 21/10/2026) ; la page présente

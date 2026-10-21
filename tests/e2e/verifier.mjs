@@ -574,6 +574,16 @@ const tests = {
     await page.selectOption("#c-client", "BC");
     check((await text("#c-pay-sales")) === "$161.43" && (await text("#c-pay-sales-label")).startsWith("GST") && (await text("#c-notice")).includes("PST (RST in Manitoba) isn't counted"),
       "CA set aside : client en Colombie-Britannique → TPS seule (5 %), TVP signalée");
+    // Service soumis à la TVP (case cochée) : 3 390 $ ÷ 1,12 → taxes de 363,21 $.
+    await page.check("#c-pst");
+    check((await text("#c-pay-sales")) === "$363.21" && (await text("#c-pay-sales-label")).startsWith("GST and PST") &&
+      !(await text("#c-notice")).includes("isn't counted"), "CA set aside : service soumis à la TVP, client en C.-B. → TPS + TVP (12 %)");
+    await page.selectOption("#c-client", "MB");
+    check((await text("#c-pay-sales-label")).startsWith("GST and RST") && (await text("#c-pst-label")).includes("subject to RST"),
+      "CA set aside : client au Manitoba → TVD");
+    await page.uncheck("#c-pst");
+    await page.selectOption("#c-client", "AB");
+    check(!(await page.isVisible("#c-pst")), "CA set aside : case de la TVP masquée hors C.-B., Sask. et Man.");
     await page.selectOption("#c-client", "same");
     await page.selectOption("#c-province", "QC");
     check((await text("#c-share")) === "27%" && (await text("#c-pension-label")).includes("QPP") &&

@@ -1,5 +1,16 @@
 # Journal des modifications
 
+## 2026-10-21 — Canada : TVP de la province du client, en option
+
+- Règle `pst_on_professional_services` complétée à partir des bulletins officiels de la Saskatchewan (PST-46, PST-7)
+  et du Manitoba (RST 033) : créer ou modifier un logiciel est un service informatique taxable en Saskatchewan ; au
+  Manitoba, les services liés à un logiciel commercial et l'infonuagique (depuis le 1er janvier 2026) sont taxables,
+  le logiciel sur mesure ne l'est pas ; le conseil seul ne l'est généralement pas. Confiance moyenne (lus par
+  recherche) ; question ouverte levée.
+- Calculateurs « combien mettre de côté » (anglais et français) : une case ajoute la TVP (TVD au Manitoba) quand le
+  service y est soumis dans la province du client ; FAQ avec ces exemples.
+- Tests : parcours navigateur (TPS + TVP en C.-B., TVD au Manitoba, case masquée ailleurs).
+
 ## 2026-10-21 — Canada : seuil d'acomptes de Revenu Québec et TVP de la Colombie-Britannique précisés
 
 - Revenu Québec : l'« impôt net à payer » de son seuil de 1 800 $ ne comprend que l'impôt (les cotisations RRQ,

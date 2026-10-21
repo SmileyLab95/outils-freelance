@@ -13,7 +13,7 @@
   "priority": 0.9,
   "faq": [
     ["Quel pourcentage un travailleur autonome doit-il mettre de côté ?", "Cela dépend de votre revenu et de votre province. Vous payez les deux parts du RRQ et le RQAP au Québec (ou du RPC ailleurs), plus l'impôt fédéral et provincial. Sans autre revenu, cela fait environ 26 % d'un revenu net de 50 000 $ et 33,1 % de 100 000 $ au Québec. Le calculateur établit votre propre pourcentage avec les taux de 2026."],
-    ["Faut-il aussi mettre de côté la TPS et la TVQ ?", "Oui, si vous êtes inscrit : la TPS et la TVQ (ou la TVH) que vous percevez ne vous appartiennent pas et se versent avec vos déclarations. Pour la plupart des services, le taux dépend de la province du client, pas de la vôtre : le calculateur utilise celle que vous choisissez et retire d'abord les taxes de chaque paiement. La TVP n'est pas comptée : en Colombie-Britannique, en Saskatchewan et au Manitoba (où elle s'appelle TVD), elle vise une liste de services ; vérifiez si le vôtre y figure."],
+    ["Faut-il aussi mettre de côté la TPS et la TVQ ?", "Oui, si vous êtes inscrit : la TPS et la TVQ (ou la TVH) que vous percevez ne vous appartiennent pas et se versent avec vos déclarations. Pour la plupart des services, le taux dépend de la province du client, pas de la vôtre : le calculateur utilise celle que vous choisissez et retire d'abord les taxes de chaque paiement. La TVP n'est ajoutée que si vous cochez la case : en Colombie-Britannique, en Saskatchewan et au Manitoba (où elle s'appelle TVD), elle vise une liste de services. Par exemple, créer ou modifier un logiciel est un service informatique taxable en Saskatchewan ; au Manitoba, les services liés à un logiciel commercial et l'infonuagique sont taxables, mais pas le logiciel sur mesure ; en Colombie-Britannique, les services liés à un logiciel ne sont pas taxables, mais la vente d'un logiciel l'est. Vérifiez les bulletins de la province du client."],
     ["Dois-je m'inscrire aux fichiers de la TPS et de la TVQ ?", "Dès que vos fournitures taxables dépassent 30 000 $ au cours d'un seul trimestre civil ou des quatre derniers trimestres civils consécutifs, vous n'êtes plus un petit fournisseur et devez vous inscrire (au Québec, à la TVQ aussi). En dessous, l'inscription est facultative."],
     ["Quand payer l'impôt mis de côté ?", "Si votre impôt à payer dépasse 3 000 $ cette année et dépassait aussi 3 000 $ au cours de l'une des deux années précédentes, vous versez des acomptes provisionnels le 15 mars, le 15 juin, le 15 septembre et le 15 décembre. Au Québec, l'ARC applique un seuil de 1 800 $ à votre impôt fédéral, et Revenu Québec son propre seuil de 1 800 $ à votre impôt du Québec. Sinon, tout le solde est dû le 30 avril 2027, même si les travailleurs autonomes ont jusqu'au 15 juin 2027 pour produire leur déclaration."],
     ["Est-ce le montant exact que je devrai ?", "C'est une estimation pour vous organiser. Elle ne tient pas compte d'un revenu d'emploi, des cotisations au REER, des crédits d'impôt autres que le montant personnel de base et le RRQ ou le RPC, des autres déductions ni, au Québec, de la cotisation au Fonds des services de santé et de la prime d'assurance médicaments de la RAMQ. Pour le détail, utilisez le <a href=\"{{link:tax}}\">calculateur d'impôt du travailleur autonome</a>."]
@@ -34,13 +34,14 @@
   "inst_required_qc": "Si ces montants dépassaient aussi {threshold} en {y2} ou en {y1} : environ {parts} par trimestre, au plus tard les {dates}.",
   "inst_part_cra": "{amount} à l'ARC (impôt fédéral)", "inst_part_rq": "{amount} à Revenu Québec (impôt du Québec, RRQ et RQAP)",
   "inst_not": "Votre impôt à payer est inférieur à {threshold} : en général, pas d'acomptes provisionnels.",
-  "sales_names": {"GST": "TPS", "HST": "TVH", "QST": "TVQ"},
+  "sales_names": {"GST": "TPS", "HST": "TVH", "QST": "TVQ", "PST": "TVP", "RST": "TVD"},
   "sales_row": "{taxes} à verser avec vos déclarations",
   "payment_label": "Un client vient de vous payer", "payment_label_tax": "Un client vient de vous payer, taxes comprises ({taxes})",
   "client_same": "La même que la mienne",
   "small_supplier": "Si tout ce montant correspond à des fournitures taxables, vous dépasseriez le seuil de petit fournisseur de {threshold} et devriez vous inscrire ({taxes}).",
   "registered_note": "Les taxes de vente ({taxes}) sont d'abord retirées de chaque paiement, au taux de la province du client.",
-  "pst_note": "La TVP (TVD au Manitoba) n'est pas comptée : elle vise une liste de services dans cette province ; vérifiez si le vôtre y figure.",
+  "pst_note": "La TVP (TVD au Manitoba) n'est pas comptée : elle vise une liste de services dans cette province ; vérifiez si le vôtre y figure et, si oui, cochez la case.",
+  "pst_box": "Mon service est soumis à la {tax} dans la province du client",
   "balance": "Le solde de 2026 est dû le {date}.",
   "check": "Vérifiez {fields} : des chiffres seulement, par exemple 6 000. Montant compté comme 0 en attendant.",
   "fields": {"c-income": "le montant facturé par mois", "c-expenses": "les dépenses", "c-payment": "le paiement reçu"},
@@ -78,6 +79,7 @@
         <div class="field full" id="c-client-field" hidden><label for="c-client">Province ou territoire du client</label>
           <select id="c-client" name="client" aria-describedby="c-client-hint" data-save></select>
           <span class="hint" id="c-client-hint">Pour la plupart des services, le taux des taxes de vente dépend de la province du client.</span></div>
+        <label class="check full" id="c-pst-field" hidden><input type="checkbox" id="c-pst" name="pst" data-save><span id="c-pst-label">Mon service est soumis à la TVP dans la province du client</span></label>
       </div>
       <ul class="result-list" style="margin-top: 6px;">
         <li id="c-pay-sales-row" hidden><span id="c-pay-sales-label">Taxes à verser avec vos déclarations</span><b id="c-pay-sales">–</b></li>

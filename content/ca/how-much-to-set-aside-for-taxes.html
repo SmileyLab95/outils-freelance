@@ -13,7 +13,7 @@
   "priority": 0.9,
   "faq": [
     ["What percentage should a self-employed Canadian set aside for taxes?", "It depends on your profit and your province. You pay both halves of the CPP (or the QPP and QPIP in Quebec) plus federal and provincial income tax. With no other income, that's about 23% of a $50,000 profit and 28.3% of $100,000 in Ontario. The calculator works out your own percentage from the 2026 rates."],
-    ["Should I set aside GST/HST too?", "Yes, if you're registered: the GST/HST (and the QST in Quebec) you collect isn't your money and is sent with your return. For most services, the rate depends on your client's province, not yours: the calculator uses the one you choose and takes the tax out of each payment first. PST isn't counted: in British Columbia, Saskatchewan and Manitoba (where it's called RST), it applies to a list of services, so check whether yours is on it."],
+    ["Should I set aside GST/HST too?", "Yes, if you're registered: the GST/HST (and the QST in Quebec) you collect isn't your money and is sent with your return. For most services, the rate depends on your client's province, not yours: the calculator uses the one you choose and takes the tax out of each payment first. PST is only added if you tick the box: in British Columbia, Saskatchewan and Manitoba (where it's called RST), it applies to a list of services. For example, creating or modifying software is a taxable computer service in Saskatchewan; in Manitoba, services to prewritten software and cloud services are taxable, but custom software isn't; in British Columbia, services to software aren't taxable, but software sales are. Check the bulletins of your client's province."],
     ["Do I have to register for GST/HST?", "Once your taxable supplies go over $30,000 in a single calendar quarter or over the last four consecutive calendar quarters, you're no longer a small supplier and must register (in Quebec, for the QST as well). Below that, registration is optional."],
     ["When do I pay the tax I set aside?", "If your tax owing is more than $3,000 this year and was also over $3,000 in either of the two previous years, you pay quarterly instalments on March 15, June 15, September 15 and December 15. In Quebec, the CRA applies a $1,800 test to your federal tax, and Revenu Québec its own $1,800 test to your Quebec tax. Otherwise, the whole balance is due on April 30, 2027, even though self-employed people have until June 15, 2027 to file."],
     ["Is this the exact amount I'll owe?", "It's an estimate for planning. It doesn't include employment income, RRSP contributions, tax credits other than the basic personal amount and CPP or QPP, other deductions, or in Quebec the health services fund contribution and RAMQ prescription drug insurance premium. For the detailed breakdown, use the <a href=\"{{link:tax}}\">self-employed tax calculator</a>."]
@@ -34,13 +34,14 @@
   "inst_required_qc": "If these amounts were also over {threshold} in {y2} or {y1}: about {parts} per quarter, due {dates}.",
   "inst_part_cra": "{amount} to the CRA (federal tax)", "inst_part_rq": "{amount} to Revenu Québec (Quebec tax, QPP and QPIP)",
   "inst_not": "Your tax owing is under {threshold}: instalments are generally not required.",
-  "sales_names": {"GST": "GST", "HST": "HST", "QST": "QST"},
+  "sales_names": {"GST": "GST", "HST": "HST", "QST": "QST", "PST": "PST", "RST": "RST"},
   "sales_row": "{taxes} to send with your return",
   "payment_label": "A client just paid you", "payment_label_tax": "A client just paid you, including {taxes}",
   "client_same": "Same as mine",
   "small_supplier": "If all of this is taxable supplies, you'd go over the {threshold} small supplier threshold and would have to register for {taxes}.",
   "registered_note": "Sales tax ({taxes}) is taken out of each payment first, at the rate of your client's province.",
-  "pst_note": "PST (RST in Manitoba) isn't counted: it applies to a list of services in that province, so check whether yours is on it.",
+  "pst_note": "PST (RST in Manitoba) isn't counted: it applies to a list of services in that province, so check whether yours is on it and tick the box if it is.",
+  "pst_box": "My service is subject to {tax} in my client's province",
   "balance": "Any balance for 2026 is due on {date}.",
   "check": "Check {fields}: type numbers only, for example 6,000. Counted as 0 until corrected.",
   "fields": {"c-income": "invoiced per month", "c-expenses": "business expenses", "c-payment": "payment received"},
@@ -78,6 +79,7 @@
         <div class="field full" id="c-client-field" hidden><label for="c-client">Client's province or territory</label>
           <select id="c-client" name="client" aria-describedby="c-client-hint" data-save></select>
           <span class="hint" id="c-client-hint">For most services, the sales tax rate depends on where your client is.</span></div>
+        <label class="check full" id="c-pst-field" hidden><input type="checkbox" id="c-pst" name="pst" data-save><span id="c-pst-label">My service is subject to PST in my client's province</span></label>
       </div>
       <ul class="result-list" style="margin-top: 6px;">
         <li id="c-pay-sales-row" hidden><span id="c-pay-sales-label">Sales tax to send with your return</span><b id="c-pay-sales">–</b></li>
