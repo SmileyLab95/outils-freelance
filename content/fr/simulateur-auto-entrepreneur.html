@@ -7,9 +7,9 @@
   "icon": "📊",
   "blurb": "Cotisations Urssaf 2026, ACRE et impôt : ce qu'il vous reste vraiment.",
   "app": "Simulateur de charges auto-entrepreneur",
-  "scripts": ["tools/simulateur.js"],
+  "scripts": ["engines/micro-fr.js", "tools/simulateur.js"],
   "rules": "fr",
-  "sources": ["micro_activities", "micro_cotisations_decret_2025_943", "acre_reduction_depuis_2026_07_01", "acre_conditions", "versement_liberatoire_taux", "vl_rfr_plafond_par_part_2026", "micro_abattements", "micro_plafond_ca_services", "tva_franchise_seuils"],
+  "sources": ["micro_activities", "micro_cotisations_decret_2025_943", "acre_reduction_depuis_2026_07_01", "acre_conditions", "versement_liberatoire_taux", "vl_rfr_plafond_par_part_2026", "micro_abattements", "micro_abattement_minimum", "micro_plafond_ca_services", "tva_franchise_seuils"],
   "priority": 0.9,
   "faq": [
     ["Quel est le taux de cotisations d'un auto-entrepreneur en 2026 ?", "12,3 % du chiffre d'affaires pour la vente de marchandises, 21,2 % pour les prestations de services commerciales ou artisanales (BIC), 25,6 % pour les professions libérales du régime général (BNC) et 23,2 % pour les professions libérales affiliées à la CIPAV. S'y ajoute la contribution à la formation professionnelle : 0,1 % pour les commerçants, 0,3 % pour les artisans et 0,2 % pour les libéraux."],
@@ -41,7 +41,7 @@
             <option value="cipav">Profession libérale réglementée affiliée à la CIPAV</option>
             <option value="services">Prestations de services commerciales (BIC)</option>
             <option value="artisan">Activité artisanale (BIC)</option>
-            <option value="vente">Vente de marchandises, restauration, hébergement (BIC)</option>
+            <option value="vente">Vente de marchandises, restauration, hébergement hors locations meublées (BIC)</option>
           </select>
           <span class="hint">Libéral : conseil, informatique, design, formation, rédaction… Les professions CIPAV sont notamment les architectes, psychologues, ostéopathes.</span></div>
         <div class="field full"><span class="label" id="s-period-label">Chiffre d'affaires encaissé</span>

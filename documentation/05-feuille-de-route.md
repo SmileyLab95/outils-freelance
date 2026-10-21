@@ -64,6 +64,9 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 - **Accessibilité (21/10/2026)** : niveau AA des règles WCAG 2.1 atteint sur toutes les pages et les écrans de
   l'Espace (contrastes, tableaux au clavier, sélecteur de pays) ; contrôlé désormais à chaque vérification par
   axe-core dans le parcours navigateur (D17). Navigation au clavier corrigée et testée (menus, focus visible).
+- **Nouveau calculateur (21/10/2026)** : « Combien mettre de côté sur chaque paiement » (France) : TVA, cotisations,
+  formation professionnelle et impôt (versement libératoire ou estimation au taux du foyer), sur le hors taxes ;
+  moteur commun avec le simulateur, règles relues sur impots.gouv.fr et autoentrepreneur.urssaf.fr.
 - **Offres et paiements (21/10/2026)** : grille de prix et comparatif des prestataires ([17](17-offres-et-paiements.md)) ;
   proposition : « Pro » à 5 € HT par mois ou 50 € HT par an, Stripe en France ; 7 à 13 abonnés couvrent
   l'hébergement et la mesure d'audience ; questions de TVA et de facturation à poser à l'expert-comptable.
@@ -146,6 +149,9 @@ Objectif : un site mesuré, sous sa propre marque, qui commence à rapporter, et
       tableaux défilants, sélecteur de pays, téléchargements) et contrôle intégré au parcours navigateur (D17)
 - [x] Navigation au clavier : menus refermés quand le focus les quitte, Échap qui rend le focus, contour de focus
       opaque ; tests du lien d'évitement, des menus et du panneau mobile
+- [x] Calculateur « Combien mettre de côté sur chaque paiement » (micro-entrepreneur : TVA, cotisations, formation
+      professionnelle, versement libératoire ou impôt estimé au taux du foyer) ; moteur `engines/micro-fr.js` partagé
+      avec le simulateur ; taux de TVA lus dans les règles (spécification [15](15-guides-gestion.md) § 4)
 
 ### 1.5 Préparer la plateforme
 

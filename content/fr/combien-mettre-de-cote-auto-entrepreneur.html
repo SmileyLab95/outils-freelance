@@ -1,0 +1,126 @@
+<!--{
+  "id": "set-aside",
+  "slug": "combien-mettre-de-cote-auto-entrepreneur/",
+  "title": "Combien mettre de côté en auto-entrepreneur ? (2026)",
+  "description": "Un client vous paie : calculez ce qu'il faut mettre de côté pour la TVA, l'Urssaf et l'impôt (versement libératoire ou prélèvement à la source). Taux 2026.",
+  "menu": "Combien mettre de côté",
+  "icon": "🏦",
+  "blurb": "Sur chaque paiement : la part pour l'Urssaf, l'impôt et la TVA.",
+  "app": "Calculateur « combien mettre de côté »",
+  "scripts": ["engines/micro-fr.js", "tools/fr-mettre-de-cote.js"],
+  "rules": "fr",
+  "sources": ["micro_activities", "acre_reduction_avant_2026_07_01", "acre_reduction_depuis_2026_07_01", "acre_date_bascule", "acre_conditions", "ca_declare_hors_taxes", "tva_taux_metropole", "versement_liberatoire_taux", "pas_micro_acomptes", "micro_abattements", "cfe_echeance"],
+  "priority": 0.9,
+  "faq": [
+    ["Combien mettre de côté quand on est auto-entrepreneur ?", "Sur chaque paiement, mettez de côté vos cotisations sociales (de 12,3 % à 25,6 % du chiffre d'affaires hors taxes selon l'activité en 2026), la contribution à la formation professionnelle, l'impôt sur le revenu et, si vous facturez la TVA, toute la TVA encaissée. Pour un libéral (hors Cipav) en franchise de TVA avec le versement libératoire, cela fait 28 % (25,6 % + 0,2 % + 2,2 %) ; le calculateur fait le calcul pour votre situation."],
+    ["Faut-il mettre de côté la TVA ?", "Oui, en entier, si vous facturez la TVA : elle appartient à l'État et vous la reversez lors de vos déclarations de TVA. En franchise en base (mention « TVA non applicable »), il n'y a pas de TVA à mettre de côté."],
+    ["Les cotisations se calculent-elles sur le montant TTC ?", "Non. Le chiffre d'affaires déclaré à l'Urssaf est le montant encaissé hors TVA. Si votre client vous paie 1 200 € TTC avec une TVA de 20 %, vos cotisations portent sur 1 000 €."],
+    ["Comment estimer l'impôt sans le versement libératoire ?", "Vos revenus de micro-entrepreneur donnent lieu à des acomptes prélevés chaque mois (ou chaque trimestre) au taux de votre foyer, sur le chiffre d'affaires après l'abattement forfaitaire (71 %, 50 % ou 34 % selon l'activité). Le calculateur applique votre taux de prélèvement à cette base : c'est une estimation, l'administration calculant les acomptes sur vos revenus des années précédentes, puis régularisant l'année suivante."],
+    ["Où trouver mon taux de prélèvement à la source ?", "Dans votre espace particulier sur impots.gouv.fr, rubrique « Gérer mon prélèvement à la source ». Il figure aussi sur votre dernier avis d'impôt."]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Gratuit · taux 2026</span>
+    <h1>Combien mettre de côté sur chaque paiement ?</h1>
+    <p class="lead">Un client vient de vous payer : indiquez le montant reçu, votre activité et votre situation. Vous saurez ce qu'il faut garder pour la TVA, l'Urssaf et l'impôt, et ce qui vous reste vraiment.</p>
+    <ul class="trust"><li>Taux Urssaf 2026</li><li>TVA, cotisations et impôt</li><li>Textes officiels cités</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="sa-form" onsubmit="return false">
+      <h2>Le paiement reçu</h2>
+      <div class="fields">
+        <div class="field full"><label for="sa-amount">Montant encaissé</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="sa-amount" name="amount" value="1 500" aria-describedby="sa-amount-hint sa-notice" data-save><span>€</span></div>
+          <span class="hint" id="sa-amount-hint">Le montant versé par le client, TVA comprise si vous la facturez.</span></div>
+        <div class="field full"><label for="sa-vat">TVA</label>
+          <select id="sa-vat" name="vat" data-save>
+            <option value="franchise">Pas de TVA (franchise en base)</option>
+            <option value="normal">TVA à 20 % comprise</option>
+            <option value="intermediaire">TVA à 10 % comprise</option>
+            <option value="reduit">TVA à 5,5 % comprise</option>
+            <option value="particulier">TVA à 2,1 % comprise</option>
+          </select></div>
+        <div class="field full"><label for="sa-activity">Type d'activité</label>
+          <select id="sa-activity" name="activity" data-save>
+            <option value="liberal_bnc">Profession libérale (BNC)</option>
+            <option value="cipav">Profession libérale réglementée affiliée à la Cipav</option>
+            <option value="services_bic">Prestations de services commerciales (BIC)</option>
+            <option value="artisan">Activité artisanale (BIC)</option>
+            <option value="vente">Vente de marchandises, restauration, hébergement hors locations meublées (BIC)</option>
+          </select></div>
+        <div class="field full"><label for="sa-acre">ACRE (aide à la création)</label>
+          <select id="sa-acre" name="acre" data-save>
+            <option value="0">Je n'en bénéficie pas</option>
+            <option value="50">Oui, activité créée avant le 1er juillet 2026 (−50 %)</option>
+            <option value="25">Oui, activité créée à partir du 1er juillet 2026 (−25 %)</option>
+          </select></div>
+        <div class="field full"><span class="label" id="sa-tax-label">Impôt sur le revenu</span>
+          <div class="rate-chips" role="radiogroup" aria-labelledby="sa-tax-label">
+            <label><input type="radio" name="tax" value="pas" checked data-save><span>Prélèvement à la source</span></label>
+            <label><input type="radio" name="tax" value="vl" data-save><span>Versement libératoire</span></label>
+          </div></div>
+        <div class="field full" id="sa-pas-field"><label for="sa-pas">Taux de prélèvement de votre foyer (facultatif)</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="sa-pas" name="pas" placeholder="ex. 7,5" aria-describedby="sa-pas-hint sa-notice" data-save><span>%</span></div>
+          <span class="hint" id="sa-pas-hint">Dans votre espace particulier sur impots.gouv.fr, rubrique « Gérer mon prélèvement à la source ».</span></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="result-hero" role="status" aria-atomic="true">
+        <div class="label">À mettre de côté sur ce paiement</div>
+        <div class="big" id="sa-total">–</div>
+        <div class="sub" id="sa-sub">–</div>
+      </div>
+      <ul class="result-list card" style="padding: 6px 18px;">
+        <li><span id="sa-r-vat-label">TVA à reverser</span><b id="sa-r-vat">–</b></li>
+        <li><span id="sa-r-cotis-label">Cotisations sociales</span><b id="sa-r-cotis">–</b></li>
+        <li><span id="sa-r-cfp-label">Formation professionnelle</span><b id="sa-r-cfp">–</b></li>
+        <li><span id="sa-r-tax-label">Impôt sur le revenu</span><b id="sa-r-tax">–</b></li>
+        <li><span><strong id="sa-r-keep-label">Il vous reste</strong></span><b id="sa-r-keep">–</b></li>
+      </ul>
+      <p class="small muted" style="margin: 8px 2px 0;">Non compris : la CFE, payée une fois par an (au plus tard le 15 décembre).</p>
+      <p class="notice" id="sa-notice">–</p>
+      <aside class="espace-cta" aria-label="Compte réservé à l'activité">
+        <p><strong>Mettez cette somme à l'abri dès aujourd'hui.</strong> Un virement vers le compte réservé à votre activité, ou vers un livret, évite de dépenser l'argent de l'Urssaf et des impôts. Le compte dédié devient obligatoire au-delà d'un certain chiffre d'affaires : vérifiez votre cas.</p>
+        <a class="btn btn-ghost btn-sm" href="{{link:bank}}">Dois-je avoir un compte dédié ?</a>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>Comment le montant est calculé</h2>
+  <ol>
+    <li><strong>La TVA</strong>, si vous la facturez : elle est retirée en entier du paiement, puisque vous la reversez au service des impôts. La TVA payée sur vos achats professionnels vient en déduction de ce que vous reversez : tout mettre de côté est donc prudent. Les cotisations et l'impôt portent sur le montant hors taxes, le seul déclaré à l'Urssaf.</li>
+    <li><strong>Les cotisations sociales</strong> : un pourcentage du chiffre d'affaires hors taxes, réduit pendant l'ACRE.</li>
+    <li><strong>La formation professionnelle</strong> : de 0,1 % à 0,3 % du chiffre d'affaires selon l'activité.</li>
+    <li><strong>L'impôt sur le revenu</strong> : avec le versement libératoire, un pourcentage du chiffre d'affaires payé avec les cotisations. Sans cette option, le calculateur estime l'acompte en appliquant votre taux de prélèvement au chiffre d'affaires après l'abattement forfaitaire.</li>
+  </ol>
+
+  <h2>Les taux de 2026 par activité</h2>
+  <div class="table-scroll">
+  <table>
+    <thead><tr><th>Activité</th><th>Cotisations</th><th>Versement libératoire</th><th>Abattement forfaitaire (impôt sans versement libératoire)</th></tr></thead>
+    <tbody>
+      <tr><td>Vente de marchandises, restauration, hébergement</td><td>12,3 %</td><td>1 %</td><td>71 %</td></tr>
+      <tr><td>Prestations de services commerciales ou artisanales (BIC)</td><td>21,2 %</td><td>1,7 %</td><td>50 %</td></tr>
+      <tr><td>Professions libérales (BNC)</td><td>25,6 %</td><td>2,2 %</td><td>34 %</td></tr>
+      <tr><td>Professions libérales affiliées à la Cipav</td><td>23,2 %</td><td>2,2 %</td><td>34 %</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>Les taux minorés de l'ACRE et le détail des cotisations sur l'année sont dans le <a href="{{link:tax}}">simulateur auto-entrepreneur</a>.</p>
+
+  <h2>Ce que ce montant ne comprend pas</h2>
+  <ul>
+    <li><strong>La cotisation foncière des entreprises (CFE)</strong> : un montant annuel, payé au plus tard le 15 décembre, qui ne dépend pas de chaque paiement (pas de CFE l'année de la création). Prévoyez-la à part ; elle figure dans le <a href="{{link:calendar}}">calendrier fiscal</a>.</li>
+    <li><strong>La taxe pour frais de chambre consulaire</strong>, due par les artisans et les commerçants : elle n'est pas comptée ici.</li>
+    <li><strong>La régularisation de l'impôt</strong> : sans versement libératoire, l'impôt définitif est calculé l'année suivante sur les revenus de tout le foyer ; le montant estimé ici peut donc différer.</li>
+  </ul>
+  <p class="small muted">Calcul indicatif fondé sur les taux publiés pour 2026, pour la France métropolitaine. Il ne remplace pas l'avis d'un expert-comptable pour votre situation.</p>
+</section>

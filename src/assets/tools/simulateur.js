@@ -3,25 +3,25 @@
   "use strict";
   var OF = window.OF;
   var form = document.getElementById("sim-form");
-  if (!form) return;
+  if (!form || !window.OF_RULES || !window.OFE || !window.OFE.microFR) return;
   var $ = function (id) { return document.getElementById(id); };
   var set = function (id, text) { $(id).textContent = text; };
 
-  // Taux officiels de l'année, injectés par le générateur depuis data/rules/fr.json (micro_activities).
-  // Convertis en dixièmes de point pour des calculs exacts (25,6 % → 256).
+  // Taux officiels de l'année (data/rules/fr.json, micro_activities), lus par le moteur commun OFE.microFR, comme
+  // le calculateur « combien mettre de côté ». Convertis en dixièmes de point pour des calculs exacts (25,6 % → 256).
   // cotis : cotisations sociales, acre : taux minorés publiés, cfp : formation professionnelle,
   // vl : versement libératoire, abatt : abattement fiscal (%).
-  var RULES = window.OF_RULES || {};
+  var RULES = window.OF_RULES;
+  var MIN_ABATT = RULES.micro_abattement_minimum;
   var tenths = function (rate) { return Math.round(rate * 1000); };
   var KEYS = { liberal: "liberal_bnc", cipav: "cipav", services: "services_bic", artisan: "artisan", vente: "vente" };
   var ACTIVITIES = {};
   Object.keys(KEYS).forEach(function (key) {
-    var r = (RULES.micro_activities || {})[KEYS[key]];
-    if (!r) return;
+    var r = window.OFE.microFR.activity(RULES, KEYS[key]);
     ACTIVITIES[key] = {
-      cotis: tenths(r.cotisations), acre: { 50: tenths(r.acre_50), 25: tenths(r.acre_25) },
-      cfp: tenths(r.cfp), vl: tenths(r.versement_liberatoire), abatt: Math.round(r.abattement * 100),
-      seuils: { plafond: r.plafond_ca, tva: r.tva_seuil, tvaMaj: r.tva_seuil_majore }
+      cotis: tenths(r.cotisations), acre: { 50: tenths(r.acre[50]), 25: tenths(r.acre[25]) },
+      cfp: tenths(r.cfp), vl: tenths(r.vl), abatt: Math.round(r.abattement * 100),
+      seuils: { plafond: r.plafond, tva: r.tva, tvaMaj: r.tvaMajore }
     };
   });
 
@@ -61,8 +61,8 @@
     var cfp = ca * a.cfp / 1000;
     var tax = vlOn ? ca * a.vl / 1000 : 0;
     var net = ca - cotis - cfp - tax - costs;
-    // Revenu imposable sans versement libératoire : CA après abattement forfaitaire (305 € minimum).
-    var taxable = Math.max(0, ca - Math.max(ca * a.abatt / 100, 305));
+    // Revenu imposable sans versement libératoire : CA après abattement forfaitaire (minimum annuel des règles).
+    var taxable = Math.max(0, ca - Math.max(ca * a.abatt / 100, MIN_ABATT));
 
     set("s-net-month", OF.eur(net / 12, 0));
     set("s-net-sub", isFinite(net)

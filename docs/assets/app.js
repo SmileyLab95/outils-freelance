@@ -112,12 +112,20 @@
       var fields = function () {
         return Array.prototype.filter.call(form.elements, function (el) { return el.hasAttribute("data-save"); });
       };
+      // Une valeur enregistrée qui ne correspond plus à aucun choix (option retirée) est ignorée : le choix par défaut
+      // reste affiché, au lieu d'une liste vide et d'un calcul fait sur une autre valeur.
+      var known = function (name, value) {
+        return fields().some(function (r) { return r.type === "radio" && r.name === name && r.value === value; });
+      };
       fields().forEach(function (el) {
-        var name = el.name || el.id;
-        if (saved[name] === undefined) return;
-        if (el.type === "checkbox") el.checked = !!saved[name];
-        else if (el.type === "radio") el.checked = el.value === saved[name];
-        else el.value = saved[name];
+        var name = el.name || el.id, value = saved[name];
+        if (value === undefined) return;
+        if (el.type === "checkbox") el.checked = !!value;
+        else if (el.type === "radio") { if (known(el.name, value)) el.checked = el.value === value; }
+        else if (el.tagName === "SELECT") {
+          if (Array.prototype.some.call(el.options, function (o) { return o.value === value; })) el.value = value;
+        }
+        else el.value = value;
       });
       document.addEventListener("input", function (event) {
         if (event.target !== form && event.target.form !== form) return;

@@ -898,6 +898,46 @@ const tests = {
     await page.selectOption("#i-service", "intangible");
     await page.selectOption("#i-client", "pro");
   },
+  async "fr/combien-mettre-de-cote-auto-entrepreneur/"(page) {
+    // Calculateur « combien mettre de côté » (documentation/15-guides-gestion.md, § 4) : montants calculés à la main.
+    const text = async (sel) => (await page.textContent(sel)).replace(/\s+/g, " ").trim();
+    const total = () => text("#sa-total");
+    check((await total()) === "387,00 €" && (await text("#sa-sub")).includes("25,8 % du paiement, sans l'impôt sur le revenu") &&
+      (await text("#sa-notice")).includes("Base de l'acompte pour ce paiement : 990,00 €"),
+      "mettre de côté : 1 500 € en libéral, cotisations 384 € et formation 3 €, base de l'acompte 990 €");
+    await page.fill("#sa-pas", "7,5");
+    check((await total()) === "461,25 €" && (await text("#sa-r-tax")) === "74,25 €" && (await text("#sa-r-keep")) === "1 038,75 €",
+      "mettre de côté : impôt estimé au taux du foyer de 7,5 % (74,25 €)");
+    await page.selectOption("#sa-vat", "normal");
+    await page.fill("#sa-amount", "1 800");
+    check((await text("#sa-r-vat")) === "300,00 €" && (await text("#sa-r-cotis")) === "384,00 €" && (await total()) === "761,25 €" &&
+      (await text("#sa-notice")).includes("pas à l'Urssaf"), "mettre de côté : 1 800 € TTC, TVA de 300 € reversée, cotisations sur 1 500 € HT");
+    await page.check('input[name="tax"][value="vl"]', { force: true });
+    check((await text("#sa-r-tax")) === "33,00 €" && (await total()) === "720,00 €" && !(await page.isVisible("#sa-pas")),
+      "mettre de côté : versement libératoire de 2,2 %, taux du foyer masqué");
+    await page.selectOption("#sa-acre", "50");
+    check((await text("#sa-r-cotis")) === "192,00 €" && (await total()) === "528,00 €", "mettre de côté : ACRE, taux minoré de 12,8 %");
+    await page.fill("#sa-amount", "mille");
+    check((await page.getAttribute("#sa-amount", "aria-invalid")) === "true" && (await text("#sa-notice")).includes("Montant invalide") &&
+      (await total()) === "–" && (await text("#sa-sub")).includes("Montant invalide"), "mettre de côté : montant illisible signalé, et dans le résumé annoncé");
+    await page.fill("#sa-amount", "1 800");
+    await page.check('input[name="tax"][value="pas"]', { force: true });
+    await page.fill("#sa-pas", "150");
+    check((await page.getAttribute("#sa-pas", "aria-invalid")) === "true" && (await text("#sa-notice")).includes("Taux de prélèvement invalide") && (await text("#sa-r-tax-label")) === "Impôt sur le revenu",
+      "mettre de côté : taux du foyer hors de 0 à 100 % signalé");
+    await page.fill("#sa-pas", "7,5");
+    await page.reload({ waitUntil: "networkidle" });
+    check((await page.inputValue("#sa-vat")) === "normal" && (await page.inputValue("#sa-acre")) === "50" && (await total()) === "569,25 €",
+      "mettre de côté : saisie retrouvée après rechargement (300 + 192 + 3 + 74,25 €)");
+    // Valeur enregistrée devenue obsolète (option retirée) : le choix par défaut reste affiché et sert au calcul.
+    await page.evaluate(() => {
+      const key = Object.keys(localStorage).find((k) => k.endsWith("mettre-de-cote")), saved = JSON.parse(localStorage.getItem(key));
+      localStorage.setItem(key, JSON.stringify({ ...saved, vat: "ancien", tax: "ancien" }));
+    });
+    await page.reload({ waitUntil: "networkidle" });
+    check((await page.inputValue("#sa-vat")) === "franchise" && (await page.isChecked('input[name="tax"][value="pas"]')) && (await total()) === "323,10 €",
+      "mettre de côté : valeur enregistrée obsolète ignorée, choix par défaut affiché et calculé (230,40 + 3,60 + 89,10 €)");
+  },
   async "fr/compte-bancaire-professionnel/"(page) {
     await page.goto(BASE + "fr/compte-bancaire-professionnel/?today=2026-10-20", { waitUntil: "networkidle" });
     const res = async () => [await page.textContent("#b-answer"), await page.textContent("#b-sub"), await page.textContent("#b-steps")];

@@ -1,5 +1,22 @@
 # Journal des modifications
 
+## 2026-10-21 — Calculateur « Combien mettre de côté sur chaque paiement » (France)
+
+- Nouvelle page `/fr/combien-mettre-de-cote-auto-entrepreneur/` : pour un paiement reçu, la TVA à reverser, les
+  cotisations et la formation professionnelle (sur le montant hors taxes, ACRE comprise) et l'impôt (versement
+  libératoire, ou estimation de l'acompte au taux du foyer sur le hors taxes après abattement) ; reste disponible ;
+  CFE et régularisation de l'impôt rappelées. Reliée à la page américaine équivalente.
+- Moteur `engines/micro-fr.js` (calculs exacts en centimes), partagé avec le simulateur auto-entrepreneur, qui lit
+  aussi l'abattement minimum dans les règles ; le calculateur de TVA lit ses taux dans les règles et affiche ses
+  sources.
+- Règles : `ca_declare_hors_taxes`, `tva_taux_metropole`, `pas_micro_acomptes` (relevées par recherche sur les sites
+  officiels, confiance moyenne) ; taux du versement libératoire relus sur impots.gouv.fr (question ouverte levée).
+- Mémorisation des formulaires (tout le site) : une valeur enregistrée qui ne correspond plus à aucun choix est
+  ignorée, au lieu d'une liste vide.
+- Tests : 10 tests du moteur et de la cohérence page/règles (chaque contrôle vérifié en glissant une erreur dans la
+  page), parcours navigateur de la page (9 vérifications), suite complète ; revue critique (11 points traités, dont
+  le taux ACRE de la Cipav signalé comme à confirmer et une seule annonce pour les lecteurs d'écran).
+
 ## 2026-10-21 — Navigation au clavier ; offres et paiements
 
 - Clavier : un menu déroulant se referme quand le focus le quitte, et Échap rend le focus à son bouton (il restait

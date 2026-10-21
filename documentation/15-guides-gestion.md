@@ -105,3 +105,59 @@ ou avant « ; ». Proposition, à l'étape de génération (`build.py`), pour le
   les adresses web et les heures ;
 - fonction pure testée (cas positifs et cas à ne pas toucher), puis génération complète et parcours navigateur ; les
   tests qui comparent du texte normalisent les espaces.
+
+## 4. Combien mettre de côté sur chaque paiement (`/fr/combien-mettre-de-cote-auto-entrepreneur/`)
+
+**Question de l'utilisateur** : « Un client vient de me payer : combien dois-je mettre de côté pour l'Urssaf, les
+impôts et la TVA ? » Besoin P1 de [02](02-besoins-clients.md) (§ 7), déjà couvert aux États-Unis (page équivalente
+`set-aside`, même identifiant pour les liens entre pays).
+
+### Règles (`data/rules/fr.json`)
+
+| Clé | Règle | Source |
+|---|---|---|
+| `micro_activities` | Taux de cotisations, taux minorés de l'ACRE, formation professionnelle, versement libératoire et abattement, par activité | Urssaf (déjà utilisée par le simulateur) |
+| `ca_declare_hors_taxes` (nouvelle) | Le chiffre d'affaires déclaré à l'Urssaf est le montant encaissé hors TVA ; la TVA facturée est reversée au service des impôts | autoentrepreneur.urssaf.fr, « Déterminer mon chiffre d'affaires » |
+| `tva_taux_metropole` (nouvelle) | Taux de TVA en France métropolitaine : 20 %, 10 %, 5,5 % et 2,1 % | economie.gouv.fr |
+| `pas_micro_acomptes` (nouvelle) | Sans versement libératoire, les revenus de micro-entrepreneur donnent lieu à des acomptes contemporains prélevés chaque mois (ou chaque trimestre sur option), au taux du foyer ; avec le versement libératoire, le prélèvement à la source ne s'applique pas | impots.gouv.fr |
+| `cfe_echeance` | CFE payée le 15 décembre : non comprise dans le montant par paiement, rappelée sous le résultat | impots.gouv.fr |
+
+### Moteur `engines/micro-fr.js` (partagé avec le simulateur)
+
+- `activity(rules, key)` : taux de l'activité lus dans `micro_activities` ; une seule lecture des règles pour le
+  simulateur et ce calculateur (le simulateur lit aussi l'abattement minimum dans `micro_abattement_minimum` au lieu
+  d'un nombre écrit dans son script).
+- `setAside({ amount, vatRate, activity, acre, vl, pasRate })` : montant encaissé (TVA comprise s'il y en a) ;
+  calcul en centimes :
+  - hors taxes = montant ÷ (1 + taux de TVA), arrondi au centime ; TVA à reverser = montant − hors taxes ;
+  - cotisations et formation professionnelle = hors taxes × taux (taux minoré si ACRE) ;
+  - impôt : versement libératoire = hors taxes × taux ; sinon, **estimation** = hors taxes × (1 − abattement) × taux
+    de prélèvement du foyer, si l'utilisateur l'indique (sinon non calculé, et dit) ; l'abattement minimum de 305 €
+    est annuel et ne s'applique pas à un paiement ;
+  - total à mettre de côté, part du montant, reste disponible.
+- Entrées invalides (montant illisible, négatif ou supérieur à un milliard d'euros, taux hors de 0 à 100 %) : toutes
+  signalées ensemble (`errors`), jamais ignorées ; le taux du foyer est ignoré avec le versement libératoire. Un taux
+  de TVA ou d'ACRE inconnu est une erreur de programmation (exception).
+
+### Page
+
+- Formulaire : montant encaissé ; TVA (franchise, ou taux compris dans le montant) ; activité ; ACRE ; impôt
+  (prélèvement à la source avec le taux du foyer, facultatif, ou versement libératoire).
+- Résultat : total à mettre de côté et part du paiement ; détail (TVA, cotisations, formation professionnelle,
+  impôt) ; reste disponible ; rappel de la CFE ; conseil de virer la somme sur le compte dédié (lien vers le guide
+  du compte bancaire professionnel).
+- Le texte dit que l'impôt sans versement libératoire est une estimation : les acomptes réels sont calculés par
+  l'administration sur les revenus des années précédentes, puis régularisés.
+- Le calcul de la TVA du calculateur HT ↔ TTC lit aussi `tva_taux_metropole` (une seule source).
+- Cipav avec l'ACRE à −50 % : le taux minoré publié (13,4 %) n'est pas la moitié du taux plein (question ouverte des
+  règles) : le résultat le signale.
+- Accessibilité : le résumé (total, part, reste ou message d'erreur) est la seule zone annoncée aux lecteurs d'écran ;
+  les champs invalides sont marqués et reliés au message.
+
+### Critères d'acceptation
+
+- Tests unitaires : exemples calculés à la main (franchise, TVA à 20 %, ACRE, versement libératoire, taux du foyer),
+  arrondis au centime, entrées invalides, cohérence entre le texte de la page et les règles.
+- Simulateur : mêmes résultats qu'avant le passage au moteur commun (parcours navigateur existant).
+- Parcours navigateur : résultat par défaut, TVA, versement libératoire, taux du foyer, taux invalide, rechargement ;
+  accessibilité (axe-core) ; captures relues sur ordinateur, tablette et mobile.

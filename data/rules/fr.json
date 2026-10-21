@@ -67,7 +67,7 @@
       "source": "https://www.autoentrepreneur.urssaf.fr/portail/accueil/sinformer-sur-le-statut/lessentiel-du-statut.html",
       "source_title": "L'essentiel du statut - Autoentrepreneur.urssaf.fr (avec le tableau ACRE de economie.gouv.fr et le diaporama Urssaf d'avril 2026)",
       "confidence": "high",
-      "note": "Taux en vigueur au 1er janvier 2026. acre_50 = taux minoré pour un début d'activité jusqu'au 30/06/2026 ; acre_25 = début d'activité à partir du 01/07/2026 (décret n° 2026-69). ATTENTION Cipav : le taux ACRE publié par l'Urssaf et economie.gouv.fr pour un début avant le 01/07/2026 est 13,4 %, et non 11,6 % (23,2 % x 50 %). Le tableau Urssaf met un astérisque sur ce taux ; le texte de l'astérisque n'a pas pu être lu. Les autres taux ACRE publiés correspondent à taux plein x 50 % ou x 75 %, arrondi au dixième supérieur (vente : 6,15 -> 6,2 ; 9,225 -> 9,3). cfp services_bic = 0,1 % si l'activité est commerciale (commerçant) : l'Urssaf fixe la CFP selon la catégorie professionnelle (commerçant 0,1 %, artisan 0,3 %, libéral 0,2 %), pas selon la catégorie fiscale. Les taux de versement libératoire de 1 % et 1,7 % n'ont pas été relus dans une source consultée pendant cette session (seul le 2,2 % apparaît dans le diaporama Urssaf d'avril 2026) ; ils sont inchangés depuis 2009 (art. 151-0 CGI)."
+      "note": "Taux en vigueur au 1er janvier 2026. acre_50 = taux minoré pour un début d'activité jusqu'au 30/06/2026 ; acre_25 = début d'activité à partir du 01/07/2026 (décret n° 2026-69). ATTENTION Cipav : le taux ACRE publié par l'Urssaf et economie.gouv.fr pour un début avant le 01/07/2026 est 13,4 %, et non 11,6 % (23,2 % x 50 %). Le tableau Urssaf met un astérisque sur ce taux ; le texte de l'astérisque n'a pas pu être lu. Les autres taux ACRE publiés correspondent à taux plein x 50 % ou x 75 %, arrondi au dixième supérieur (vente : 6,15 -> 6,2 ; 9,225 -> 9,3). cfp services_bic = 0,1 % si l'activité est commerciale (commerçant) : l'Urssaf fixe la CFP selon la catégorie professionnelle (commerçant 0,1 %, artisan 0,3 %, libéral 0,2 %), pas selon la catégorie fiscale. Taux de versement libératoire (1 %, 1,7 %, 2,2 %) relus le 21/10/2026 par recherche sur impots.gouv.fr ; ils sont aussi dans la clé versement_liberatoire_taux (un test vérifie que les deux concordent)."
     },
     "micro_cotisations_decret_2025_943": {
       "value": "Décret n° 2025-943 du 8 septembre 2025 : taux BNC (SSI, hors Cipav) porté de 24,6 % à 25,6 % au 01/01/2026 (au lieu des 26,1 % prévus par le décret n° 2024-484) ; taux global vente 12,3 %, BIC 21,2 % et Cipav 23,2 % inchangés, seule leur répartition interne change (plus de retraite complémentaire, moins de CSG-CRDS).",
@@ -135,10 +135,10 @@
       },
       "unit": "object",
       "label": "Versement libératoire de l'impôt sur le revenu, en % du CA",
-      "source": "https://www.economie.gouv.fr/entreprises/gerer-sa-micro-entreprise/micro-entreprise-comment-fonctionne-le-versement-liberatoire-de-limpot-sur-le-revenu",
-      "source_title": "Micro-entreprise : comment fonctionne le versement libératoire de l'impôt sur le revenu ? - economie.gouv.fr",
+      "source": "https://www.impots.gouv.fr/professionnel/le-versement-liberatoire",
+      "source_title": "Le versement libératoire - impots.gouv.fr (et fiche « Les régimes réservés aux petites entreprises » 2026)",
       "confidence": "medium",
-      "note": "Taux fixés par l'art. 151-0 du CGI et inchangés depuis 2009. Le 2,2 % (BNC) apparaît dans le diaporama Urssaf d'avril 2026. Les taux de 1 % et 1,7 % n'ont pas été relus dans une page officielle pendant cette session."
+      "note": "Taux fixés par l'art. 151-0 du CGI, appliqués au chiffre d'affaires hors taxes : 1 % (vente, fourniture de logement hors locations meublées), 1,7 % (prestations de services BIC), 2,2 % (BNC, Cipav comprise). Relus le 21/10/2026 par recherche sur impots.gouv.fr (page « Le versement libératoire » et fiche « Les régimes réservés aux petites entreprises » 2026), sans ouvrir la page (accès bloqué depuis l'environnement de travail)."
     },
     "vl_rfr_plafond_par_part_2026": {
       "value": 29315,
@@ -917,6 +917,42 @@
       "source_title": "Quelles sont les assurances indispensables ? - economie.gouv.fr",
       "confidence": "high",
       "note": "La responsabilité civile automobile est la seule assurance automobile obligatoire."
+    },
+    "ca_declare_hors_taxes": {
+      "value": {
+        "base": "hors_taxes"
+      },
+      "label": "Le chiffre d'affaires déclaré à l'Urssaf est le montant encaissé hors TVA ; la TVA facturée est reversée au service des impôts",
+      "source": "https://www.autoentrepreneur.urssaf.fr/portail/accueil/une-question/toutes-les-fiches-pratiques/determiner-mon-chiffre-daffaires.html",
+      "source_title": "Déterminer mon chiffre d'affaires - Autoentrepreneur.urssaf.fr",
+      "confidence": "medium",
+      "note": "Relevé le 21/10/2026 par recherche sur le site officiel (montant brut encaissé, hors TVA, sans déduction de charges), sans ouvrir la page (accès bloqué depuis l'environnement de travail)."
+    },
+    "tva_taux_metropole": {
+      "value": {
+        "normal": 0.2,
+        "intermediaire": 0.1,
+        "reduit": 0.055,
+        "particulier": 0.021
+      },
+      "unit": "object",
+      "label": "Taux de TVA en France métropolitaine",
+      "source": "https://www.economie.gouv.fr/entreprises/gerer-sa-fiscalite-et-ses-impots/autres-impots-et-taxes/entreprises-ce-que-vous-devez-savoir-sur-la-tva",
+      "source_title": "Entreprises : ce que vous devez savoir sur la TVA - economie.gouv.fr",
+      "confidence": "medium",
+      "note": "Relevé le 21/10/2026 par recherche sur economie.gouv.fr, sans ouvrir la page. Taux différents en outre-mer (Guadeloupe, Martinique, La Réunion : 8,5 % et 2,1 %) et en Corse : hors du champ des outils."
+    },
+    "pas_micro_acomptes": {
+      "value": {
+        "periodicite": "mensuelle",
+        "option": "trimestrielle",
+        "avec_versement_liberatoire": false
+      },
+      "label": "Sans versement libératoire, les revenus de micro-entrepreneur donnent lieu à des acomptes contemporains prélevés sur le compte bancaire chaque mois (ou chaque trimestre sur option), au taux du foyer ; le prélèvement à la source ne s'applique pas avec le versement libératoire",
+      "source": "https://www.impots.gouv.fr/professionnel/questions/en-tant-que-micro-entrepreneur-suis-je-concerne-par-le-prelevement-la-sourc",
+      "source_title": "En tant que micro-entrepreneur, suis-je concerné par le prélèvement à la source ? - impots.gouv.fr",
+      "confidence": "medium",
+      "note": "Relevé le 21/10/2026 par recherche sur impots.gouv.fr, sans ouvrir la page. L'acompte porte sur le bénéfice après abattement forfaitaire (BOFiP BOI-IR-PAS-20-20-10) ; il est calculé par l'administration sur les revenus des années précédentes, puis régularisé : le calculateur « à mettre de côté » n'en donne qu'une estimation."
     }
   },
   "open_questions": [
@@ -932,7 +968,6 @@
     "Taxe pour frais de chambre consulaire (CMA 0,48 % / 0,22 %, CCI 0,015 % / 0,044 %) : valeurs citées de mémoire, à vérifier sur autoentrepreneur.urssaf.fr.",
     "Facturation électronique : nombre exact de plateformes agréées sur la liste impots.gouv.fr ; URL exacte de la page de la liste ; montants des amendes après les LF 2025 et 2026 (amende pour défaut de plateforme, hausse éventuelle des 15 EUR par facture) ; date d'effet des 4 nouvelles mentions (01/09/2026 pour toutes les entreprises, ou date d'émission de chaque entreprise ?).",
     "Smic 2026 : confirmer 12,02 EUR / h au 01/01/2026 et l'absence de revalorisation en cours d'année.",
-    "Taux de versement libératoire de 1 % (vente) et 1,7 % (BIC services) : à relire sur une page officielle 2026 (seul le 2,2 % a été vu).",
     "Compte dédié du micro-entrepreneur (CSS, art. L613-10) : le texte ne fixe ni délai d'ouverture après le second dépassement, ni prorata la première année, ni sortie de l'obligation quand le chiffre d'affaires repasse sous 10 000 € ; le guide le signale sans interpréter.",
     "Assurance : la liste des professions soumises à une responsabilité civile professionnelle obligatoire n'est pas exhaustive dans le guide (renvoi vers les textes et ordres de chaque profession) ; sanction du défaut de mention de l'assurance (Code de l'artisanat, art. L132-1) non relevée."
   ]

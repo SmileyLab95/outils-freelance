@@ -3,10 +3,12 @@
   "use strict";
   var OF = window.OF;
   var form = document.getElementById("tva-form");
-  if (!form) return;
+  var T = (window.OF_RULES || {}).tva_taux_metropole;
+  if (!form || !T) return;
   var $ = function (id) { return document.getElementById(id); };
   var set = function (id, text) { $(id).textContent = text; };
-  var RATES = [20, 10, 5.5, 2.1];
+  // Taux de data/rules/fr.json (tva_taux_metropole), en pourcentage : une seule source.
+  var RATES = [T.normal, T.intermediaire, T.reduit, T.particulier].map(function (r) { return Math.round(r * 1000) / 10; });
   var cents = function (n) { return Math.round(n * 100) / 100; };
   var coef = new Intl.NumberFormat("fr-FR", { maximumFractionDigits: 4 });
 
