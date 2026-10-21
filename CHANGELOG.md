@@ -1,5 +1,29 @@
 # Journal des modifications
 
+## 2026-10-21 — Royaume-Uni : *What to put on an invoice*
+
+- Nouvelle page `/uk/invoice-requirements/` : liste interactive des détails d'une facture, selon la situation
+  (*sole trader* ou *limited company*, immatriculé à la TVA ou non, mémorisée) ; les points qui ne s'appliquent pas
+  sont masqués et sortent du compte (11 points pour un *sole trader* sans TVA, 18 avec) ; rappel de ne pas faire
+  figurer de TVA sans immatriculation ; facture simplifiée de 250 £ ou moins ; cas des sociétés (nom complet
+  obligatoire ; numéro, siège et lieu d'immatriculation affichés comme recommandés, hors du compte : décision D18).
+  Ajoutée au menu « Invoicing » ; même identifiant que la liste française (liens entre pays).
+- Règle `vat_invoice_full_requirements` revérifiée (Notice 700 § 16.3, manuel VATREC5010, règlement TVA de 1995,
+  art. 14, lus par recherche) : la remise visée est le taux d'escompte ; le fait générateur (*tax point*) est un
+  point distinct de la date de la prestation. Le générateur de facture britannique ne présente plus le numéro et le
+  siège de la société comme obligatoires sur la facture.
+- `tools/checklist.js` généralisé : textes du score et des messages dans la page, filtres facultatifs
+  (`data-when`, `data-show-when`), points recommandés (`data-optional`), condition illisible signalée ; la liste
+  française garde exactement son comportement.
+- Pages britanniques : date de vérification des sources au format du pays (« 20 October 2026 »).
+- Tests : unitaires (chaque point sourcé, chaque élément des quatre règles repris une fois, condition d'affichage,
+  nombre de points selon la situation) ; parcours navigateur (score, filtres à la souris et au clavier,
+  mémorisation, point recommandé hors compte, messages au singulier et au pluriel, y compris sur la liste
+  française) ; chaque nouvelle vérification contrôlée en réintroduisant l'erreur ; suite complète (148 tests
+  unitaires, 1 784 vérifications navigateur, accessibilité comprise) ; revue de code (22 points :
+  20 traités ; reportés : l'orthographe « VAT registered » à harmoniser sur tout le site, et un texte de repli si
+  un attribut manque, couvert pour l'instant par un test).
+
 ## 2026-10-21 — Canada : TVP de la province du client, en option
 
 - Règle `pst_on_professional_services` complétée à partir des bulletins officiels de la Saskatchewan (PST-46, PST-7)

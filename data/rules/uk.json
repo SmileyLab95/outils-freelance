@@ -797,7 +797,7 @@
         "Customer's name and address",
         "Description sufficient to identify the goods or services",
         "For each description: quantity, unit price (excluding VAT), VAT rate and amount excluding VAT",
-        "Any discount offered",
+        "Rate of any cash discount offered",
         "Total amount excluding VAT",
         "Total VAT payable, in sterling",
         "Reverse charge / zero-rate / exempt wording where applicable"
@@ -807,7 +807,7 @@
       "source": "https://www.gov.uk/guidance/vat-guide-notice-700",
       "source_title": "VAT guide (VAT Notice 700) - GOV.UK",
       "confidence": "medium",
-      "note": "Required for standard- or reduced-rated supplies to another VAT-registered business when the VAT-inclusive value exceeds 250 (or on request). A 'modified' invoice (VAT-inclusive values) may be used if the customer agrees. Item list compiled from VAT Notice 700 and HMRC manuals via search excerpts; check section 16 of Notice 700. A VAT invoice is normally issued within 30 days of the supply. See also https://www.gov.uk/guidance/record-keeping-for-vat-notice-70021"
+      "note": "Required for standard- or reduced-rated supplies to another VAT-registered business when the VAT-inclusive value exceeds 250 (or on request). A 'modified' invoice (VAT-inclusive values) may be used if the customer agrees. Items 1 to 11 re-checked on 2026-10-21 against search excerpts of VAT Notice 700 (section 16.3), HMRC manual VATREC5010 and the Value Added Tax Regulations 1995, regulation 14 (https://www.legislation.gov.uk/uksi/1995/2518/regulation/14): the discount item is the rate of any cash discount offered, and the invoice date is required where it differs from the time of supply. The time of supply (tax point) can differ from the date the goods or services were provided: an earlier invoice or payment, or an invoice issued soon after the supply, sets it (Notice 700, time of supply). Item 12 (reverse charge, zero-rate or exempt wording) not confirmed by those excerpts. A VAT invoice is normally issued within 30 days of the supply. See also https://www.gov.uk/guidance/record-keeping-for-vat-notice-70021"
     },
     "vat_invoice_simplified_threshold": {
       "value": 250,

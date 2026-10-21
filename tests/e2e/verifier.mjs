@@ -261,8 +261,15 @@ const tests = {
   async "fr/mentions-obligatoires-facture/"(page) {
     const boxes = await page.$$("#checklist input");
     check(boxes.length === 12 && (await page.textContent("#checklist")).includes("assurance professionnelle"), "checklist : 12 mentions, dont l'assurance professionnelle");
+    const text = async (sel) => (await page.textContent(sel)).replace(/[\u00a0\u202f]/g, " ");
+    check((await text("#cl-msg")) === "Cochez les mentions présentes sur votre facture." && (await text("#cl-score")) === "0 sur 12 mentions",
+      "checklist : message et score de départ");
     for (const b of boxes) await b.check();
     check((await page.textContent("#cl-msg")).includes("Bravo") && (await page.textContent("#cl-score")).includes("12 sur 12"), "checklist : toutes les mentions cochées");
+    await boxes[0].uncheck();
+    check((await text("#cl-msg")) === "Il manque 1 mention. Les points non cochés sont à ajouter avant d'envoyer votre facture.", "checklist : une mention manquante (singulier)");
+    await boxes[1].uncheck();
+    check((await text("#cl-msg")).startsWith("Il manque 2 mentions.") && (await text("#cl-score")) === "10 sur 12 mentions", "checklist : deux mentions manquantes (pluriel)");
   },
   async "fr/modeles-emails-freelance/"(page) {
     await page.click('[data-copy="#tpl-1"]');
@@ -528,6 +535,47 @@ const tests = {
     check((await page.textContent("#iv-preview")).includes("QUOTE"), "devis UK : titre QUOTE");
     await page.click('[data-doctype="invoice"]');
     await page.selectOption("#iv-tax-rate", "none");
+  },
+  async "uk/invoice-requirements/"(page) {
+    const visible = () => page.$$eval("#checklist li", (lis) => lis.filter((li) => !li.hidden && li.offsetParent !== null).map((li) => li.textContent));
+    const score = () => page.textContent("#cl-score");
+    const msg = () => page.textContent("#cl-msg");
+    const tickAll = async () => { for (const box of await page.$$("#checklist li:not([hidden]) input")) await box.check(); };
+    let items = await visible();
+    check(items.length === 11 && (await score()) === "0 of 11 details" && items.some((t) => t.includes("Your own name")) &&
+      !items.some((t) => /VAT registration number|registered company name/.test(t)), "liste UK : 11 points pour un sole trader non immatriculé à la TVA");
+    check((await msg()) === "Tick the details your invoice shows." && await page.isVisible("text=Don't show any VAT"),
+      "liste UK : message de départ et rappel « pas de TVA »");
+    await tickAll();
+    check((await score()) === "11 of 11 details" && (await page.getAttribute("#cl-msg", "class")).includes("ok") &&
+      (await msg()).startsWith("All set"), "liste UK : toutes les mentions cochées");
+    await page.click('label:has(input[name="vat"])');
+    items = await visible();
+    check(items.length === 18 && (await score()) === "11 of 18 details" && items.some((t) => t.includes("VAT registration number")) &&
+      items.some((t) => t.includes("time of supply (tax point)")) && !(await page.isVisible("text=Don't show any VAT")),
+      "liste UK : immatriculé à la TVA → 18 points, 7 de plus");
+    check((await msg()) === "7 details missing: add them before you send your invoice.", "liste UK : 7 points manquants");
+    await page.click('label:has(input[value="ltd"])');
+    items = await visible();
+    check(items.length === 18 && (await score()) === "8 of 17 details" && items.some((t) => t.includes("full registered company name")) &&
+      !items.some((t) => t.includes("Your own name")), "liste UK : société → ses points au lieu de ceux du sole trader, le recommandé hors compte");
+    await page.check("#checklist li[data-optional] input");
+    check((await score()) === "8 of 17 details", "liste UK : cocher le point recommandé ne change pas le compte");
+    await page.focus('input[name="business"][value="ltd"]');
+    await page.keyboard.press("ArrowLeft");
+    check(await page.isChecked('input[name="business"][value="sole"]') && (await score()) === "11 of 18 details", "liste UK : situation changée au clavier (flèches)");
+    await page.keyboard.press("ArrowRight");
+    await page.reload({ waitUntil: "networkidle" });
+    check(await page.isChecked('input[name="business"][value="ltd"]') && await page.isChecked('input[name="vat"]') &&
+      (await score()) === "0 of 17 details", "liste UK : situation mémorisée après rechargement");
+    await page.click('label:has(input[value="sole"])');
+    await page.click('label:has(input[name="vat"])');
+    await tickAll();
+    await page.uncheck("#checklist li:not([hidden]) input >> nth=0");
+    check((await msg()) === "1 detail missing: add it before you send your invoice." && (await score()) === "10 of 11 details",
+      "liste UK : un point manquant (singulier)");
+    check((await page.textContent("main")).includes("£250 or less"), "liste UK : facture simplifiée de 250 £ ou moins");
+    check((await page.textContent(".sources")).includes("20 October 2026"), "liste UK : date de vérification au format britannique");
   },
   async "uk/making-tax-digital/"(page) {
     check((await page.textContent("#m-start")).trim() === "6 April 2027", "MTD : 40 000 £ → avril 2027");

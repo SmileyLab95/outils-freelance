@@ -72,11 +72,14 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 - **Offres et paiements (21/10/2026)** : grille de prix et comparatif des prestataires ([17](17-offres-et-paiements.md)) ;
   proposition : « Pro » à 5 € HT par mois ou 50 € HT par an, Stripe en France ; 7 à 13 abonnés couvrent
   l'hébergement et la mesure d'audience ; questions de TVA et de facturation à poser à l'expert-comptable.
-- **Prochaines actions de Claude** : revérifier les grilles des prestataires de paiement (Stripe, Mollie) sur leurs
-  pages officielles quand Ismail décidera ([17](17-offres-et-paiements.md)) ; guide du recouvrement dès que les textes
-  sont lisibles ; veille réglementaire de décembre (dont la version de Factur-X et l'annexe A de XP Z12-012 pour le
-  BT-32 en franchise). Les étapes C3 (serveur) et C4 (interface des
-  comptes) attendent le choix de l'hébergeur.
+- **Liste des détails d'une facture, Royaume-Uni (21/10/2026)** : *What to put on an invoice*, selon la situation
+  (*sole trader* ou société, TVA ou non) ; chaque élément des règles officielles repris une fois, vérifié par test.
+- **Prochaines actions de Claude** : même liste pour le Canada (anglais et français : mentions exigées pour les
+  crédits de taxe sur les intrants, selon le montant) ; revérifier les grilles des prestataires de paiement (Stripe,
+  Mollie) sur leurs pages officielles quand Ismail décidera ([17](17-offres-et-paiements.md)) ; guide du
+  recouvrement dès que les textes sont lisibles ; veille réglementaire de décembre (dont la version de Factur-X et
+  l'annexe A de XP Z12-012 pour le BT-32 en franchise). Les étapes C3 (serveur) et C4 (interface des comptes)
+  attendent le choix de l'hébergeur.
 - **En attente d'Ismail** (pas urgent) : structure juridique avec un comptable ; choix de l'hébergeur et budget pour
   les comptes en ligne (comparatif [13](13-comparatif-hebergeurs.md), § 6) ; nom de domaine à choisir avant l'étape C4
   ([13](13-comparatif-hebergeurs.md), § 5) ; outil de mesure d'audience ([16](16-mesure-audience.md)) ; prix de l'offre « Pro » et prestataire de paiement
@@ -161,6 +164,11 @@ Objectif : un site mesuré, sous sa propre marque, qui commence à rapporter, et
 - [x] Canada : *How much to set aside for taxes* et « Combien mettre de côté pour l'impôt » (toutes les provinces,
       RPC ou RRQ et RQAP, TPS/TVH et TVQ, acomptes provisionnels) ; un seul script bilingue (spécification
       [pays/ca.md](pays/ca.md))
+- [x] Royaume-Uni : *What to put on an invoice*, liste interactive selon la situation (*sole trader* ou *limited
+      company*, immatriculé à la TVA ou non) ; script `tools/checklist.js` généralisé, chaque élément des règles
+      couvert une fois (test) ; spécification [pays/uk.md](pays/uk.md)
+- [ ] Canada : liste des mentions d'une facture (TPS/TVH et TVQ, règle `itc_invoice_requirements`), en anglais et en
+      français
 
 ### 1.5 Préparer la plateforme
 

@@ -21,6 +21,7 @@
       "label": "Invoicing",
       "items": [
         "invoice",
+        "invoice-rules",
         "salestax"
       ]
     },

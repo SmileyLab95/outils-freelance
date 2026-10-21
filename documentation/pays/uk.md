@@ -439,3 +439,34 @@ Ces règles ne s'appliquent qu'entre entreprises (B2B), dans tout le Royaume-Uni
 - **Critères** : tests unitaires du moteur (salaire + bénéfice, calculs à la main, sans salaire identique à
   l'ancien calcul) ; calculateur d'impôt existant inchangé (parcours navigateur) ; parcours de la nouvelle page
   (part, TVA, salaire, Écosse, rechargement), accessibilité, captures relues sur ordinateur, tablette et mobile.
+
+## Spécification : liste *What to put on an invoice* (`/uk/invoice-requirements/`, 21/10/2026)
+
+**Question** : « Is my invoice complete? » Besoin P2 de [02](../02-besoins-clients.md) (§ 5), couvert en France par la
+liste des mentions obligatoires (même identifiant `invoice-rules`).
+
+- **Règles** (déjà dans `data/rules/uk.json`) : `invoice_requirements_all`, `invoice_requirements_sole_trader`,
+  `invoice_requirements_limited_company` (confiance moyenne sur le numéro d'immatriculation et le siège, dits
+  « recommandés » sur la facture elle-même), `vat_invoice_full_requirements`, `vat_invoice_simplified_threshold` et
+  `vat_invoice_simplified_requirements`.
+- **Liste** : chaque point porte `data-rule="clé:indice"` ; un test vérifie que chaque élément des règles est couvert
+  une fois (aucun oubli, aucun doublon) et que les points en double entre les listes (numéro, nom, client, date…)
+  ne sont posés qu'une fois.
+- **Situation** : *sole trader* ou *limited company* ; immatriculé à la TVA ou non (mémorisée sur l'appareil). Les
+  points qui ne s'appliquent pas sont masqués et sortent du compte : 11 points (*sole trader*) ou 10 (société) sans
+  TVA, 18 ou 17 avec ; sans TVA, la zone du score rappelle de ne pas faire figurer de TVA. Avec TVA, la liste est
+  celle de la facture complète, à remettre aux clients immatriculés ; la facture simplifiée (250 £ ou moins) est
+  décrite sous la liste.
+- **Points recommandés** (décision D18) : le numéro, le siège et le lieu d'immatriculation de la société sont
+  obligatoires sur les lettres, bons de commande et sites, seulement recommandés sur la facture (règle) : point
+  affiché, marqué *Recommended*, hors du compte (`data-optional`).
+- **Fait générateur** (*time of supply*) : point distinct de la date de la prestation, car il peut en différer
+  (facture ou paiement) ; règle revérifiée le 21/10/2026 (Notice 700 § 16.3, règlement TVA de 1995, art. 14) : la
+  remise visée est le taux d'escompte (*cash discount*).
+- **Script commun** `tools/checklist.js`, généralisé : textes du score et des messages dans la page (`data-*`),
+  filtres optionnels (`data-when` sur les points) ; la liste française garde son comportement.
+- **Texte** : facture simplifiée de 250 £ TTC ou moins, cas des sociétés ; seulement ce que les règles sourcées
+  couvrent. L'avoir (*credit note*) et la durée de conservation des pièces n'ont pas encore de règle dans
+  `uk.json` : non traités sur la page, à ajouter lors d'une prochaine vérification aux sources.
+- **Critères** : tests unitaires (couverture des règles, filtres) ; parcours navigateur (score, filtres, messages,
+  page française inchangée) ; accessibilité ; captures relues.

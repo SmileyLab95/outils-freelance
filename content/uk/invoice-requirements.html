@@ -1,0 +1,92 @@
+<!--{
+  "id": "invoice-rules",
+  "slug": "invoice-requirements/",
+  "title": "What to Put on an Invoice (UK): Free Checklist for 2026",
+  "description": "Check your invoice point by point: the details every UK invoice needs, plus what sole traders, limited companies and VAT-registered businesses must add.",
+  "menu": "What to put on an invoice",
+  "icon": "✅",
+  "blurb": "The checklist to make sure an invoice has everything it needs.",
+  "scripts": ["tools/checklist.js"],
+  "rules": "uk",
+  "sources": ["invoice_requirements_all", "invoice_requirements_sole_trader", "invoice_requirements_limited_company", "vat_invoice_full_requirements", "vat_invoice_simplified_threshold", "vat_invoice_simplified_requirements"],
+  "priority": 0.8,
+  "faq": [
+    ["What must a UK invoice include?", "A unique invoice number, your business name, address and contact details, your customer's name and address, a clear description of what you're charging for, the date of the goods or service, the invoice date, the amounts charged, any VAT, and the total owed. Sole traders and limited companies add their own details, listed in the checklist."],
+    ["What extra details does a VAT invoice need?", "Your VAT registration number, a sequential invoice number, the time of supply (tax point), and for each item the quantity, unit price, VAT rate and amount excluding VAT; then the rate of any cash discount, the total excluding VAT, the total VAT in sterling, and the reverse charge, zero-rate or exempt wording where it applies. For a sale of £250 or less including VAT, a simplified invoice is enough, unless your customer asks for a full one."],
+    ["I'm a limited company: what do I need to show?", "Your full registered company name, exactly as on your certificate of incorporation. If a director's name appears other than in the body text or as the signatory, show the names of all directors. Your registered number, registered office address and where you're registered must appear on business letters, order forms and your website; adding them to invoices is good practice."],
+    ["I'm not VAT-registered: what changes?", "Leave VAT out completely: a business that isn't VAT-registered must not show VAT on its invoices."],
+    ["When should I send a VAT invoice?", "Normally within 30 days of the date of supply, to VAT-registered customers when the sale is standard- or reduced-rated."]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Interactive checklist</span>
+    <h1>What to put on an invoice</h1>
+    <p class="lead">Take your latest invoice and tick each detail it shows. In two minutes, you'll know whether anything is missing for a sole trader, a limited company or a VAT-registered business.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout wide-left">
+    <div class="card">
+      <form id="cl-filters" onsubmit="return false" style="margin-bottom: 4px; padding-bottom: 16px; border-bottom: 1px solid var(--line);">
+        <div class="fields">
+          <div class="field full"><span class="label" id="cl-business-label">Your business</span>
+            <div class="rate-chips" role="radiogroup" aria-labelledby="cl-business-label">
+              <label><input type="radio" name="business" value="sole" checked data-save><span>Sole trader</span></label>
+              <label><input type="radio" name="business" value="ltd" data-save><span>Limited company</span></label>
+            </div></div>
+          <div class="field full"><label class="check"><input type="checkbox" name="vat" aria-describedby="cl-vat-hint" data-save><span>I'm VAT-registered</span></label>
+            <span class="hint" id="cl-vat-hint">The list then shows a full VAT invoice, the one to give VAT-registered customers. For a sale of £250 or less including VAT, a simplified invoice is enough: see below.</span></div>
+        </div>
+        <p class="small muted" style="margin: 12px 0 0;">The list below adapts to your answers. Tick each detail your invoice shows, and any “only if” point that doesn't apply to you.</p>
+      </form>
+      <ul class="checklist" id="checklist" data-score="{done} of {total} details" data-all="All set: your invoice includes every detail it needs."
+        data-none="Tick the details your invoice shows." data-missing-one="{missing} detail missing: add it before you send your invoice."
+        data-missing-many="{missing} details missing: add them before you send your invoice.">
+        <li data-rule="invoice_requirements_all:0 vat_invoice_full_requirements:0"><label><input type="checkbox"><div><strong>A unique invoice number</strong><span>One number per invoice, never reused. VAT invoices need a sequential number.</span></div></label></li>
+        <li data-rule="invoice_requirements_all:1 vat_invoice_full_requirements:3"><label><input type="checkbox"><div><strong>Your business address and contact details</strong><span>So your customer knows who to pay and how to reach you. Your name is covered by the points for your type of business.</span></div></label></li>
+        <li data-rule="invoice_requirements_sole_trader:0" data-when="business=sole"><label><input type="checkbox"><div><strong>Your own name</strong><span>As a sole trader, show it even if you use a business name.</span></div></label></li>
+        <li data-rule="invoice_requirements_sole_trader:1" data-when="business=sole"><label><input type="checkbox"><div><strong>Any business (trading) name you use</strong><span>Only if you trade under a name other than your own.</span></div></label></li>
+        <li data-rule="invoice_requirements_sole_trader:2" data-when="business=sole"><label><input type="checkbox"><div><strong>An address where legal documents can be served on you</strong><span>Only if you use a business name.</span></div></label></li>
+        <li data-rule="invoice_requirements_limited_company:0" data-when="business=ltd"><label><input type="checkbox"><div><strong>Your full registered company name</strong><span>Exactly as on your certificate of incorporation.</span></div></label></li>
+        <li data-rule="invoice_requirements_limited_company:1" data-when="business=ltd"><label><input type="checkbox"><div><strong>The names of all directors</strong><span>Only if a director's name appears other than in the body text or as the signatory.</span></div></label></li>
+        <li data-rule="invoice_requirements_limited_company:2" data-when="business=ltd" data-optional><label><input type="checkbox"><div><strong>Recommended: registered number, registered office address and where you're registered</strong><span>England and Wales, Scotland or Northern Ireland. Required on business letters, order forms and your website, so best shown on invoices too. Not counted in the score.</span></div></label></li>
+        <li data-rule="vat_invoice_full_requirements:4" data-when="vat"><label><input type="checkbox"><div><strong>Your VAT registration number</strong></div></label></li>
+        <li data-rule="invoice_requirements_all:2 vat_invoice_full_requirements:5"><label><input type="checkbox"><div><strong>Your customer's name (or company name) and address</strong></div></label></li>
+        <li data-rule="invoice_requirements_all:3 vat_invoice_full_requirements:6"><label><input type="checkbox"><div><strong>A clear description of what you're charging for</strong><span>Enough to identify the goods or services.</span></div></label></li>
+        <li data-rule="invoice_requirements_all:4"><label><input type="checkbox"><div><strong>The date of the goods or service</strong><span>When you supplied them.</span></div></label></li>
+        <li data-rule="vat_invoice_full_requirements:1" data-when="vat"><label><input type="checkbox"><div><strong>The time of supply (tax point)</strong><span>It isn't always the date of the goods or service: it can be the date you invoiced or were paid.</span></div></label></li>
+        <li data-rule="invoice_requirements_all:5 vat_invoice_full_requirements:2"><label><input type="checkbox"><div><strong>The date of the invoice</strong></div></label></li>
+        <li data-rule="invoice_requirements_all:6"><label><input type="checkbox"><div><strong>The amounts charged</strong></div></label></li>
+        <li data-rule="vat_invoice_full_requirements:7" data-when="vat"><label><input type="checkbox"><div><strong>For each item: quantity, unit price and VAT rate</strong><span>With the amount excluding VAT.</span></div></label></li>
+        <li data-rule="vat_invoice_full_requirements:8" data-when="vat"><label><input type="checkbox"><div><strong>The rate of any cash discount</strong><span>Only if you offer one.</span></div></label></li>
+        <li data-rule="vat_invoice_full_requirements:9" data-when="vat"><label><input type="checkbox"><div><strong>The total excluding VAT</strong></div></label></li>
+        <li data-rule="invoice_requirements_all:7 vat_invoice_full_requirements:10" data-when="vat"><label><input type="checkbox"><div><strong>The total VAT, in sterling</strong></div></label></li>
+        <li data-rule="vat_invoice_full_requirements:11" data-when="vat"><label><input type="checkbox"><div><strong>Reverse charge, zero-rate or exempt wording</strong><span>Only where it applies.</span></div></label></li>
+        <li data-rule="invoice_requirements_all:8"><label><input type="checkbox"><div><strong>The total amount owed</strong></div></label></li>
+      </ul>
+    </div>
+    <div class="results">
+      <div class="card" role="status" aria-atomic="true">
+        <div class="label" style="margin-bottom: 8px;">Your invoice</div>
+        <div class="progress"><div id="cl-bar"></div></div>
+        <p style="margin: 12px 0 0; font-weight: 700;" id="cl-score">0 of 11 details</p>
+        <p class="notice warn" id="cl-msg" style="margin: 12px 0 0;">Tick the details your invoice shows.</p>
+        <p class="notice" data-show-when="!vat" style="margin: 12px 0 0;">Not VAT-registered? Don't show any VAT on your invoices.</p>
+      </div>
+      <a class="btn btn-primary btn-block" href="{{link:invoice}}" style="margin-top: 14px;">Create a complete invoice for free</a>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>Special cases</h2>
+  <h3>Sales of £250 or less including VAT</h3>
+  <p>A VAT-registered business can issue a simplified invoice for these sales: your name and address, your VAT registration number, the time of supply, a description of the goods or services, and for each VAT rate the total including VAT and the rate. Exempt supplies can't be on a simplified invoice, and your customer can still ask for a full one. In Northern Ireland, simplified invoices can't be used for goods sold to customers in the EU.</p>
+  <h3>Limited companies</h3>
+  <p>Your full registered company name is required on invoices. Your registered number, registered office address and where you're registered (England and Wales, Scotland or Northern Ireland) are required on business letters, order forms and your website, so adding them to your invoices is good practice.</p>
+  <p>The <a href="{{link:invoice}}">invoice generator</a> lays out every detail for you, and the <a href="{{link:salestax}}">VAT calculator</a> works out the amounts.</p>
+  <p class="small muted">Information for guidance only, based on GOV.UK and HMRC's VAT Notice 700. Check your own situation if in doubt.</p>
+</section>

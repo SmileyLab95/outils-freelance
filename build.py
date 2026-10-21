@@ -310,7 +310,9 @@ def sources_html(section, meta, rules):
         title = entry.get("source_title") or entry["source"]
         items.append(f'<li><a href="{esc(entry["source"])}" rel="noopener">{esc(title)}</a></li>')
     verified = date.fromisoformat(data["verified_on"])
-    shown = verified.strftime("%d/%m/%Y") if section["loc"]["lang"].startswith("fr") else verified.strftime("%B %-d, %Y")
+    # Date dans l'usage du pays : 20/10/2026, 20 October 2026 (Royaume-Uni), October 20, 2026 (États-Unis, Canada).
+    lang = section["loc"]["lang"]
+    shown = verified.strftime("%d/%m/%Y" if lang.startswith("fr") else "%-d %B %Y" if lang == "en-GB" else "%B %-d, %Y")
     return (
         f'<section class="section sources"><h2>{esc(strings["sources"])}</h2><ul>{"".join(items)}</ul>'
         f'<p class="small muted">{esc(strings["verified"])} {shown}.</p></section>'
