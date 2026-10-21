@@ -9,7 +9,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 
 ## Où en est-on ?
 
-*Mis à jour le 20/10/2026.*
+*Mis à jour le 21/10/2026.*
 
 - **Priorité (décision D10)** : le site et la plateforme d'abord ; noms de domaine, Gumroad et affiliation à la fin.
   Règle de qualité maximale pour tout produit ou service (D11, charte dans la [méthode](04-methode-de-travail.md#charte-qualité)).
@@ -61,6 +61,9 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   mêmes règles que les pages, depuis un fichier de règles unique.
 - **Mesure d'audience (21/10/2026)** : comparatif et règles de la CNIL ([16](16-mesure-audience.md)) ;
   recommandation : Plausible (9 $ par mois), sans cookie ni bandeau ; installation prête à faire dès le choix d'Ismail.
+- **Accessibilité (21/10/2026)** : niveau AA des règles WCAG 2.1 atteint sur toutes les pages et les écrans de
+  l'Espace (contrastes, tableaux au clavier, sélecteur de pays) ; contrôlé désormais à chaque vérification par
+  axe-core dans le parcours navigateur (D17).
 - **Prochaines actions de Claude** : guide du recouvrement dès que les textes sont lisibles ; veille réglementaire de décembre (dont la version de
   Factur-X et l'annexe A de XP Z12-012 pour le BT-32 en franchise). Les étapes C3 (serveur) et C4 (interface des
   comptes) attendent le choix de l'hébergeur.
@@ -134,6 +137,8 @@ Objectif : un site mesuré, sous sa propre marque, qui commence à rapporter, et
       (spécification [15](15-guides-gestion.md) § 3)
 - [x] Typographie du texte produit par les scripts des outils (résultats, messages) : mêmes règles, une seule source
       (`data/typo-fr.json`)
+- [x] Accessibilité : audit WCAG 2.1 AA (axe-core) des 84 pages et des écrans de l'Espace, corrections (contrastes,
+      tableaux défilants, sélecteur de pays, téléchargements) et contrôle intégré au parcours navigateur (D17)
 
 ### 1.5 Préparer la plateforme
 

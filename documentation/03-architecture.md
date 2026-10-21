@@ -54,7 +54,8 @@ src/
     img/               images et icônes
 tests/
   unit/                tests des moteurs (node --test), exemples officiels et calculs à la main
-  e2e/verifier.mjs     tests dans un vrai navigateur, captures d'écran
+  e2e/verifier.mjs     tests dans un vrai navigateur, accessibilité (axe-core), captures d'écran
+  e2e/installer-axe.sh installe axe-core, version fixée (outil de test, non publié)
 documentation/         ce dossier
 build.py               générateur : content/ + src/ + data/ → docs/ ; typographie française (espaces insécables) des pages fr et ca-fr
 docs/                  site généré, publié par GitHub Pages (ne jamais modifier à la main)
@@ -203,7 +204,7 @@ Application d'une page, spécifiée dans [09-specification-espace.md](09-specifi
 - **Système de design** unique (`style.css`) : couleurs, rayons, ombres et espacements en variables CSS ; composants réutilisables (carte d'outil, formulaire, résultat principal, liste de résultats, jauge, onglets, FAQ, encart d'offre).
 - **Gabarit d'outil** identique partout : fil d'Ariane → titre et promesse → outil (formulaire à gauche, résultats à droite, empilés sur mobile) → explications → FAQ → sources → outils liés → offre.
 - **Menu par catégories** avec menus déroulants sur ordinateur et panneau plein écran sur mobile ; **sélecteur de pays** qui mène à la page équivalente quand elle existe.
-- **Accessibilité** : navigation au clavier, contrastes suffisants, libellés sur tous les champs, `prefers-reduced-motion` respecté.
+- **Accessibilité** : niveau AA des règles WCAG 2.1, contrôlé par axe-core dans les tests navigateur ; navigation au clavier (tableaux défilants compris, nommés par leur titre), contrastes d'au moins 4,5:1 (texte discret `--faint` compris), libellés sur tous les champs, nom accessible qui reprend le texte affiché, `prefers-reduced-motion` respecté.
 - **Performance** : aucune police externe, aucune bibliothèque, images en WebP avec dimensions, scripts en `defer`, empreinte dans l'adresse des fichiers pour le cache.
 
 ## Formats et saisie

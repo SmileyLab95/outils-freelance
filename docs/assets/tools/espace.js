@@ -950,13 +950,13 @@
         return;
       }
       if (xmlOnly) {
-        download(FX.xml(ex.doc, data.documents, R, FMT), base + ".xml", "application/xml");
+        OF.download(FX.xml(ex.doc, data.documents, R, FMT), base + ".xml", "application/xml");
         status.textContent = "Données Factur-X (" + d.number + ") téléchargées." + completed;
         return;
       }
       return logoJPEG(ex.doc.snapshot.me.logo).then(function (logo) {
         var out = OFE.facturxPDF.build(ex.doc, data.documents, R, FMT, { fonts: OFE.pdfFonts, icc: OFE.pdfSRGB, logo: logo, now: new Date().toISOString() });
-        download(out.bytes, base + ".pdf", "application/pdf");
+        OF.download(out.bytes, base + ".pdf", "application/pdf");
         status.textContent = docLabel(d) + " téléchargé" + (d.type === "facture" ? "e" : "") + " au format Factur-X (PDF/A-3 et données structurées)." + completed +
           (out.missing.length ? " Caractères absents de la police, remplacés par la lettre sans accent ou par « ? » : " + out.missing.join(" ") + "." : "");
       });
@@ -1147,7 +1147,7 @@
       "Conservez-le avec vos factures pendant " + R.conservation_pieces.commerce_annees + " ans.</p></div>";
     if (!rows.length) return;
     $("ledger-csv").addEventListener("click", function () {
-      download("﻿" + E.ledgerCSV(rows), "livre-des-recettes-" + year + ".csv", "text/csv;charset=utf-8");
+      OF.download("﻿" + E.ledgerCSV(rows), "livre-des-recettes-" + year + ".csv", "text/csv;charset=utf-8");
     });
     $("ledger-print").addEventListener("click", function () {
       document.body.classList.add("print-ledger");
@@ -1180,14 +1180,6 @@
       reader.readAsText(file);
     });
   }
-  function download(content, name, type) {
-    var link = document.createElement("a");
-    link.href = URL.createObjectURL(new Blob([content], { type: type }));
-    link.download = name;
-    document.body.appendChild(link);
-    link.click();
-    setTimeout(function () { URL.revokeObjectURL(link.href); link.remove(); }, 1000);
-  }
 
   function viewSettings() {
     var last = data.settings.lastExport;
@@ -1206,7 +1198,7 @@
     $("export-btn").addEventListener("click", function () {
       data.settings.lastExport = now();
       persist("Sauvegarde exportée.").then(function () {
-        download(JSON.stringify(data, null, 1), "espace-entrepreneur-" + TODAY + ".json", "application/json");
+        OF.download(JSON.stringify(data, null, 1), "espace-entrepreneur-" + TODAY + ".json", "application/json");
         render(true);
       });
     });

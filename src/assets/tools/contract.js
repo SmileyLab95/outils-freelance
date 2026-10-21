@@ -96,12 +96,7 @@
       "h3{font-size:11.5pt;margin:14pt 0 4pt}.k-subtitle{text-align:center;font-style:italic}" +
       ".p-label{font-weight:bold;text-transform:uppercase;font-size:9pt}.k-blank{color:#999}" +
       ".k-signs div{margin-top:18pt}.p-sign-box{height:60pt}</style></head><body>" + preview.innerHTML + "</body></html>";
-    var link = document.createElement("a");
-    link.href = URL.createObjectURL(new Blob(["﻿" + doc], { type: "application/msword" }));
-    link.download = D.file + ".doc";
-    document.body.appendChild(link);
-    link.click();
-    setTimeout(function () { URL.revokeObjectURL(link.href); link.remove(); }, 1000);
+    OF.download("﻿" + doc, D.file + ".doc", "application/msword");
   });
   $("k-copy").addEventListener("click", function () { OF.copy(preview.innerText, this); });
   $("k-reset").addEventListener("click", function () {

@@ -185,11 +185,16 @@ def country_switch(sections, section, page_id):
             f'<span><b>{esc(loc["name"])}</b><small>{esc(loc["language"])}</small></span></a>'
         )
     links.append(f'<a class="nav-all" href="{BASE}">{esc(s["country_label"])} →</a>')
-    code = section["loc"]["country"] or "🌐"
-    label = f'{s["country"]} : {section["loc"]["name"]}'
+    # Le nom accessible commence par le texte affiché (« FR »), pour la commande vocale (WCAG 2.5.3) ; l'emoji de la
+    # section mondiale est décoratif.
+    colon = " : " if section["loc"]["lang"].startswith("fr") else ": "
+    label = esc(f'{s["country"]}{colon}{section["loc"]["name"]}')
+    code = section["loc"]["country"]
+    visible = f'<span class="cc">{code}</span><span class="sr-only">, {label}</span>' if code else \
+        f'<span class="cc" aria-hidden="true">🌐</span><span class="sr-only">{label}</span>'
     return (
-        f'<div class="nav-group country-switch"><button class="nav-trigger" type="button" aria-expanded="false" '
-        f'aria-label="{esc(label)}"><span class="cc">{code}</span></button>'
+        f'<div class="nav-group country-switch"><button class="nav-trigger" type="button" aria-expanded="false">'
+        f'{visible}</button>'
         f'<div class="nav-menu nav-menu-right">{"".join(links)}</div></div>'
     )
 
@@ -427,6 +432,26 @@ def calendar_json(country, lang):
     return json.dumps(data, ensure_ascii=False).replace("</", "<\\/")
 
 
+SCROLL_RE = re.compile(r'<h2[^>]*>(.*?)</h2>|<div class="table-scroll">', re.S)
+
+
+def label_scroll_tables(content, slug):
+    """Tableaux défilants : accessibles au clavier (tabindex) et nommés par le titre qui les précède (WCAG 2.1.1)."""
+    heading = [""]
+
+    def repl(m):
+        if m.group(1) is not None:
+            heading[0] = html.unescape(re.sub(r"<[^>]+>", "", m.group(1))).strip()
+            return m.group(0)
+        if not heading[0]:
+            raise SystemExit(f"{slug} : tableau défilant sans titre <h2> avant lui (nom accessible)")
+        return f'<div class="table-scroll" tabindex="0" role="region" aria-label="{esc(heading[0])}">'
+    content = SCROLL_RE.sub(repl, content)
+    if len(re.findall(r'class="[^"]*\btable-scroll\b', content)) != content.count('class="table-scroll" tabindex="0"'):
+        raise SystemExit(f'{slug} : tableau défilant à écrire exactement <div class="table-scroll">')
+    return content
+
+
 def render(layout, sections, section, page_id, rules, kit_cta):
     page = section["pages"][page_id]
     meta, content = page["meta"], page["content"]
@@ -440,6 +465,7 @@ def render(layout, sections, section, page_id, rules, kit_cta):
                .replace("{{country_cards}}", country_cards(sections))
                .replace("{{kit_cta}}", kit_cta))
     content = CALENDAR_RE.sub(lambda m: calendar_json(m.group(1), loc["lang"][:2]), content)
+    content = label_scroll_tables(content, meta["slug"])
     if meta.get("faq"):
         content += faq_html(section, meta["faq"])
     content += sources_html(section, meta, rules)

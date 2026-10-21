@@ -13,7 +13,7 @@
   "use strict";
 
   var rgb = function (hex) { return [1, 3, 5].map(function (i) { return parseInt(hex.substr(i, 2), 16) / 255; }); };
-  var C = { ink: rgb("#17152f"), brand: rgb("#4f46e5"), label: rgb("#8b88a6"), muted: rgb("#6d6a8a"), soft: rgb("#f5f4fb"),
+  var C = { ink: rgb("#17152f"), brand: rgb("#4f46e5"), label: rgb("#6c6987"), muted: rgb("#6d6a8a"), soft: rgb("#f5f4fb"),
             rule: rgb("#ecebf3"), dark: rgb("#14122b"), mention: rgb("#3d3a5c"), white: [1, 1, 1] };
   var M = { left: 42.5, right: 42.5, top: 48, bottom: 56 };
 

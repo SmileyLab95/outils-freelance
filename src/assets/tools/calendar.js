@@ -120,12 +120,7 @@
         "BEGIN:VALARM", "TRIGGER:-P3D", "ACTION:DISPLAY", "DESCRIPTION:" + icsText(e.title), "END:VALARM", "END:VEVENT");
     });
     lines.push("END:VCALENDAR");
-    var link = document.createElement("a");
-    link.href = URL.createObjectURL(new Blob([lines.map(fold).join("\r\n")], { type: "text/calendar" }));
-    link.download = T.file + ".ics";
-    document.body.appendChild(link);
-    link.click();
-    setTimeout(function () { URL.revokeObjectURL(link.href); link.remove(); }, 1000);
+    OF.download(lines.map(fold).join("\r\n"), T.file + ".ics", "text/calendar");
     $("cal-ics-done").textContent = fill(events.length > 1 ? T.exported : T.exported_one, events.length);
   });
 

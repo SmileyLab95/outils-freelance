@@ -36,7 +36,7 @@ Concrètement, rien n'est publié ou vendu sans avoir passé ces exigences.
 | 2. Règles | Rechercher chaque chiffre sur la source officielle du pays ; l'enregistrer dans `data/rules/<pays>.json` avec source, date et niveau de confiance ; documenter dans `documentation/pays/<pays>.md`. | Aucun chiffre sans source. |
 | 3. Moteur | Écrire ou réutiliser un moteur pur dans `src/assets/engines/`. Écrire les tests unitaires **avant** l'interface : exemples officiels, cas calculés à la main, cas limites (0, seuils, plafonds, montants négatifs). | `node --test tests/unit/*.test.mjs` passe. |
 | 4. Page | Créer `content/<section>/<page>.html` avec le gabarit d'outil : promesse, outil, explications, FAQ, sources, outils liés, offre. Ajouter la page au menu (`site.json`). | Page complète, rédigée pour l'utilisateur, pas pour Google. |
-| 5. Vérification | `python3 build.py` puis `node tests/e2e/verifier.mjs <dossier-captures>` : calculs, mémorisation, copie, absence d'erreur, affichage sans débordement sur ordinateur, tablette et mobile. Relire les captures d'écran. | Tous les tests passent ; rendu relu. |
+| 5. Vérification | `python3 build.py` puis `node tests/e2e/verifier.mjs <dossier-captures>` : calculs, mémorisation, copie, absence d'erreur, affichage sans débordement sur ordinateur, tablette et mobile, accessibilité (règles WCAG 2.1 A et AA d'axe-core sur chaque page dans les trois formats, sur ordinateur à l'ouverture et après le parcours, et sur les écrans de l'Espace). Relire les captures d'écran. | Tous les tests passent ; rendu relu. |
 | 6. Publication | Commit clair, envoi sur `main`, vérification que la publication GitHub Pages a réussi. | Page en ligne. |
 | 7. Suivi | Cocher la feuille de route ; après indexation, suivre impressions et clics dans Search Console. | La page vit et s'améliore. |
 
@@ -47,6 +47,8 @@ Une page n'est terminée que si :
 - [ ] chaque chiffre vient de `data/rules/` et sa source est affichée ;
 - [ ] le moteur a des tests unitaires qui passent ;
 - [ ] les tests navigateur couvrent le calcul principal, la mémorisation et l'affichage mobile ;
+- [ ] aucune violation des règles WCAG 2.1 A et AA relevée par axe-core, à l'ouverture et après le parcours (résultats,
+      erreurs) ;
 - [ ] titre de 60 caractères environ, description de 150 environ, une seule balise `h1`, FAQ de 3 à 6 questions ;
 - [ ] la page est reliée : menu, grille d'accueil, outils liés, pages équivalentes des autres pays (`id` commun) ;
 - [ ] le texte est relu : ton simple, phrases courtes, aucune promesse que l'outil ne tient pas ;
@@ -94,7 +96,8 @@ Une page n'est terminée que si :
 |---|---|
 | `python3 build.py` | Génère le site dans `docs/` |
 | `node --test tests/unit/*.test.mjs` | Tests des moteurs de calcul |
-| `node tests/e2e/verifier.mjs /tmp/captures` | Tests navigateur et captures d'écran |
+| `node tests/e2e/verifier.mjs /tmp/captures` | Tests navigateur, accessibilité (axe-core) et captures d'écran |
+| `sh tests/e2e/installer-axe.sh` | Installe axe-core 4.14.0 dans `~/.cache/axe-core` (ou le dossier donné, alors indiqué par `AXE_CORE`) |
 | `python3 -m json.tool data/rules/us.json` | Vérifie qu'un fichier de règles est valide |
 
 ## Journal des modifications

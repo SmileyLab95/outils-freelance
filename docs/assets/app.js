@@ -160,6 +160,18 @@
       }
     },
 
+    /** Fait télécharger un fichier. Le lien temporaire est retiré aussitôt (il n'a pas de texte, il ne doit pas rester
+     *  dans la page) ; l'adresse du fichier est libérée une minute plus tard (Safari peut d'abord demander confirmation). */
+    download: function (content, name, type) {
+      var link = document.createElement("a");
+      link.href = URL.createObjectURL(new Blob([content], { type: type }));
+      link.download = name;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      setTimeout(function () { URL.revokeObjectURL(link.href); }, 60000);
+    },
+
     /** Échappe le texte puis surligne les champs « [à remplir] » restants. */
     highlight: function (text) {
       var safe = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");

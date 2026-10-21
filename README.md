@@ -12,12 +12,13 @@ méthode de travail, feuille de route, affiliation et fiches pays.
 ```bash
 python3 build.py                                  # génère le site dans docs/
 node --test tests/unit/*.test.mjs                 # tests des moteurs de calcul
-node tests/e2e/verifier.mjs /tmp/captures         # tests navigateur + captures d'écran
+node tests/e2e/verifier.mjs /tmp/captures         # tests navigateur, accessibilité + captures d'écran
 node tests/facturx/generer.mjs /tmp/fx            # Factur-X : jeu d'essai XML…
 python3 tests/facturx/valider.py /tmp/fx --controle --pdf   # …validé : XSD, EN 16931, BR-FR, et Mustang pour le PDF/A-3
 ```
 
-Prérequis : Python 3 et Node 18 ou plus ; Playwright avec Chromium pour les tests navigateur ;
+Prérequis : Python 3 et Node 18 ou plus ; Playwright avec Chromium et axe-core (`sh tests/e2e/installer-axe.sh`) pour
+les tests navigateur ;
 `pip install factur-x saxonche` et, pour les PDF, Java et Maven avec `sh tests/facturx/installer-mustang.sh`
 (outils de test, non publiés).
 

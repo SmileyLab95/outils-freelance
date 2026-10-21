@@ -127,6 +127,10 @@ navigateur fonctionnel).
 - États vides rédigés (premier client, premier document), erreurs explicites (date antérieure au dernier document
   émis, montant de paiement invalide…).
 - Rendu relu sur ordinateur, tablette et mobile ; tableaux transformés en listes lisibles sur mobile.
+- Règles WCAG 2.1 A et AA contrôlées par axe-core dans le parcours navigateur, sur chaque écran testé (premier
+  lancement, tableau de bord, clients, saisie et émission d'un document, paiements, Factur-X, réglages avec erreur,
+  livre des recettes, liste des documents, reprise du générateur, envoi, numérotation) ; la reprise, l'envoi et la
+  numérotation aussi sur mobile, le tableau de bord aussi sur tablette et mobile.
 
 ## 9. Critères d'acceptation (tests automatiques)
 

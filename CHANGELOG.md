@@ -1,5 +1,23 @@
 # Journal des modifications
 
+## 2026-10-21 — Accessibilité (WCAG 2.1 AA) contrôlée à chaque vérification
+
+- Audit axe-core (règles WCAG 2.1 A et AA) des 84 pages, sur ordinateur et mobile, puis des états produits par les
+  outils. Corrigé : contraste du texte discret (`--faint` : #6c6987, au moins 4,6:1) et du vert de confirmation
+  (`--ok` : #15803d, 5:1 ; boutons « Copié », cases cochées), champs vides de l'aperçu de facture ; tableaux
+  défilants atteignables au clavier et nommés par leur titre ; nom accessible du sélecteur de pays qui reprend le
+  texte affiché (« FR, Pays : France ») ; lien temporaire des téléchargements retiré aussitôt.
+- Une seule fonction de téléchargement (`OF.download`) au lieu de quatre copies (calendrier, contrat, acomptes US,
+  Espace).
+- Tests : axe-core 4.14.0 (version fixée, `sh tests/e2e/installer-axe.sh`) fait partie du parcours navigateur :
+  chaque page dans les trois formats (sur ordinateur, à l'ouverture et après le parcours), la page 404 et 15 écrans
+  de l'Espace, une fois les transitions terminées ; 362 contrôles d'accessibilité, suite complète de 1 650
+  vérifications (décision D17). Factur-X revalidé après le changement de couleur du PDF (XML conforme, 10 PDF/A-3
+  valides selon Mustang).
+- `build.py` s'arrête si un tableau défilant n'a pas de titre `h2` avant lui ou n'est pas reconnu. Revue de code :
+  aucun défaut bloquant, 7 remarques traitées (documentation précisée, URL des téléchargements libérée après une
+  minute pour Safari, emoji du sélecteur mondial masqué aux lecteurs d'écran…).
+
 ## 2026-10-21 — Mesure d'audience : règles et comparatif
 
 - `documentation/16-mesure-audience.md` : conditions de la CNIL pour une mesure d'audience sans consentement,

@@ -2,11 +2,11 @@
    Outils Freelance : feuille de style commune
    ========================================================================== */
 :root {
-  --ink: #14122b; --ink-2: #2d2b4a; --muted: #5d5a78; --faint: #8b88a6;
+  --ink: #14122b; --ink-2: #2d2b4a; --muted: #5d5a78; --faint: #6c6987;
   --line: #e7e5f0; --line-2: #d9d6ea; --bg: #faf9ff; --card: #ffffff;
   --brand: #4f46e5; --brand-2: #7c3aed; --brand-soft: #eef0ff; --brand-ink: #3730a3;
   --gold: #f59e0b; --gold-2: #fb923c;
-  --ok: #16a34a; --ok-soft: #dcfce7; --warn: #c2410c; --warn-soft: #ffedd5;
+  --ok: #15803d; --ok-soft: #dcfce7; --warn: #c2410c; --warn-soft: #ffedd5;
   --danger: #b91c1c; --danger-soft: #fee2e2; --info-soft: #fef9c3;
   --radius: 14px; --radius-sm: 9px;
   --shadow: 0 1px 2px rgba(20,18,43,.05), 0 8px 24px rgba(20,18,43,.06);
@@ -32,6 +32,8 @@ p { margin: 0 0 1em; }
 .skip:focus { left: 8px; }
 .muted { color: var(--muted); }
 .small { font-size: .875rem; }
+/* Texte lu par les lecteurs d'écran, invisible à l'écran. */
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; border: 0; }
 .center { text-align: center; }
 
 /* ---------- En-tête ---------- */
@@ -284,7 +286,7 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--b
 .p-parties { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 16px; }
 .p-delivery { margin-top: 6px; font-size: 11px; }
 .p-delivery span { font-size: 10px; color: #6d6a8a; }
-.p-label { font-size: 10px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: #8b88a6; margin-bottom: 4px; }
+.p-label { font-size: 10px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--faint); margin-bottom: 4px; }
 .p-meta { display: flex; flex-wrap: wrap; gap: 8px 24px; background: #f5f4fb; border-radius: 6px; padding: 10px 12px; margin-bottom: 16px; }
 .p-meta span { display: block; font-size: 10px; color: #6d6a8a; }
 .p-meta b { font-size: 12px; }
@@ -302,7 +304,7 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--b
 .p-sign p { font-size: 10.5px; margin: 0 0 6px; }
 .p-sign-box { height: 70px; border: 1px dashed #c7c4f0; border-radius: 6px; width: 60%; margin-left: auto; }
 .p-notes { margin-top: 16px; font-size: 11.5px; color: #4f46e5; font-weight: 600; text-align: center; }
-.p-empty { color: #b3b0c9; font-style: italic; font-weight: 400; }
+.p-empty { color: var(--faint); font-style: italic; font-weight: 400; }
 /* Contrat */
 .k-title { text-align: center; font-size: 17px; letter-spacing: .06em; color: #4f46e5; margin: 0 0 4px; }
 .k-subtitle { text-align: center; font-style: italic; color: #4b4868; margin: 0 0 16px; }
@@ -463,7 +465,7 @@ a.country-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg)
 .compare-col h3 { font-size: 1rem; margin: 0 0 4px; }
 .compare-col .result-list { margin: 0; }
 .compare-col .result-list li { font-size: .9rem; padding: 8px 0; }
-.compare-col.is-best { border-color: var(--ok); background: #f3fdf6; box-shadow: 0 0 0 3px rgba(22,163,74,.12); }
+.compare-col.is-best { border-color: var(--ok); background: #f3fdf6; box-shadow: 0 0 0 3px rgba(21,128,61,.12); }
 .compare-col.is-best h3::after { content: " ✓"; color: var(--ok); }
 @media (max-width: 520px) { .compare { grid-template-columns: 1fr; } }
 .compare-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; padding: 12px; }

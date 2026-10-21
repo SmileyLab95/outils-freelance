@@ -2,8 +2,8 @@
 // Usage : node tests/e2e/verifier.mjs [dossier-captures]   (ONLY=fr/espace/ pour une seule page)
 import { createRequire } from "module";
 import { spawn } from "child_process";
-import { mkdtempSync, symlinkSync, mkdirSync } from "fs";
-import { tmpdir } from "os";
+import { mkdtempSync, symlinkSync, mkdirSync, existsSync, readFileSync } from "fs";
+import { tmpdir, homedir } from "os";
 import path from "path";
 
 const require = createRequire(import.meta.url);
@@ -34,6 +34,23 @@ context.on("page", (page) => {
 });
 const failures = [];
 const check = (cond, message) => { if (!cond) failures.push(message); console.log(`${cond ? "✓" : "✗"} ${message}`); };
+
+// Accessibilité : règles WCAG 2.1 A et AA d'axe-core (installé par sh tests/e2e/installer-axe.sh ; dossier dans
+// AXE_CORE), sur chaque page dans les trois formats (sur ordinateur, à l'ouverture et après le parcours) et sur les
+// écrans de l'Espace.
+const AXE_FILE = path.join(process.env.AXE_CORE || path.join(homedir(), ".cache", "axe-core"), "node_modules", "axe-core", "axe.min.js");
+const AXE = existsSync(AXE_FILE) ? readFileSync(AXE_FILE, "utf8") : null;
+check(AXE !== null, `accessibilité : axe-core disponible${AXE ? "" : ` (absent de ${AXE_FILE} → sh tests/e2e/installer-axe.sh)`}`);
+async function accessible(page, label) {
+  if (!AXE) return;
+  if (!(await page.evaluate(() => "axe" in window))) await page.addScriptTag({ content: AXE });
+  // Transitions en cours (bouton « Copié ») : attendre leur fin, sinon axe mesure des couleurs intermédiaires.
+  await page.evaluate(() => Promise.all(document.getAnimations()
+    .filter((a) => a.effect && a.effect.getComputedTiming().endTime !== Infinity).map((a) => a.finished.catch(() => {}))));
+  const violations = await page.evaluate(async () => (await window.axe.run(document, { runOnly: { type: "tag", values: ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"] } }))
+    .violations.map((v) => `${v.id} : ${v.nodes.slice(0, 3).map((n) => n.target.join(" ")).join(", ")}${v.nodes.length > 3 ? "…" : ""}`));
+  check(violations.length === 0, `${label} : accessibilité WCAG 2.1 AA (axe-core)${violations.length ? " → " + violations.join(" | ") : ""}`);
+}
 
 // La copie est asynchrone : on attend la confirmation sur le bouton.
 const copied = (page, sel) => page.waitForFunction((s) => /Copi(é|ed)/.test(document.querySelector(s).textContent), sel, { timeout: 3000 }).then(() => true, () => false);
@@ -947,6 +964,7 @@ const tests = {
     const text = async (sel) => (await page.innerText(sel)).replace(/\s+/g, " ").trim();
     await page.goto(BASE + "fr/espace/?today=2026-10-20", { waitUntil: "networkidle" });
     check((await text("#espace-view h2")) === "Bienvenue dans votre espace", "Espace : premier lancement");
+    await accessible(page, "Espace : premier lancement");
     await page.fill("#ep-name", "Camille Martin EI");
     await page.selectOption("#ep-activity", "liberal_bnc");
     await page.selectOption("#ep-vatRegime", "franchise");
@@ -954,6 +972,7 @@ const tests = {
     await page.click("#profile-form button[type=submit]");
     await page.waitForSelector(".kpis");
     check((await text("#espace-view h2")) === "Camille Martin EI", "Espace : profil créé, tableau de bord");
+    await accessible(page, "Espace : tableau de bord vide");
 
     await go("#/clients/nouveau");
     await page.fill("#ep-name", "Studio Nova");
@@ -962,6 +981,7 @@ const tests = {
     await page.click("#client-form button[type=submit]");
     await page.waitForSelector(".doc-list");
     check((await text(".doc-list")).includes("Studio Nova"), "Espace : client créé");
+    await accessible(page, "Espace : liste des clients");
     const clientId = await page.evaluate(() => location.hash);
 
     const newInvoice = async (date, desc, price, type = "facture", terms) => {
@@ -975,10 +995,12 @@ const tests = {
     };
     await newInvoice("2026-09-10", "Site vitrine", 1800, "facture", 60);
     check((await text("#d-preview")).includes("1 800,00 €") && (await text("#d-preview")).includes("TVA non applicable, art. 293 B du CGI."), "Espace : aperçu de la facture (moteur commun)");
+    await accessible(page, "Espace : facture en cours de saisie");
     await page.click("#d-issue");
     await page.waitForFunction(() => /Facture F2026-001/.test(document.querySelector("#espace-view h2").textContent));
     check(true, "Espace : facture émise F2026-001 (A2)");
     check(!(await page.$("#doc-form")), "Espace : facture émise non modifiable (A3)");
+    await accessible(page, "Espace : facture émise");
     const sendHref = await page.getAttribute("#d-send", "href");
     check(sendHref.startsWith("mailto:compta@studio-nova.example?subject=Facture%20F2026-001%20%E2%80%93%20Camille%20Martin%20EI&body=") &&
       decodeURIComponent(sendHref).replace(/\s+/g, " ").includes("la facture F2026-001 du 10/09/2026, d'un montant de 1 800,00 €. Elle est payable au plus tard le 09/11/2026."),
@@ -992,6 +1014,7 @@ const tests = {
     await page.click("#pay-form button[type=submit]");
     await page.waitForTimeout(250);
     check((await text("#espace-view .st")) === "Payée", "Espace : facture payée (A5)");
+    await accessible(page, "Espace : facture payée, paiements");
 
     // Facture électronique (Factur-X) : données manquantes signalées, fiches complétées, PDF/A-3 et XML téléchargés.
     const invoiceHash = await page.evaluate(() => location.hash);
@@ -1001,6 +1024,7 @@ const tests = {
     // (Le SIRET peut déjà venir du générateur de facture testé plus tôt dans le même navigateur.)
     check(fxProblems.includes("Votre adresse") && fxProblems.includes("L'adresse du client") && fxProblems.includes("Compléter mon profil") &&
       fxProblems.includes("Compléter la fiche client"), "Espace : Factur-X, données manquantes signalées avec liens vers les fiches");
+    await accessible(page, "Espace : Factur-X, données manquantes");
     await go("#/reglages");
     await page.fill("#ep-siret", "123 456 789 00012");
     await page.fill("#ep-address", "12 rue de la République\n69002 Lyon");
@@ -1008,6 +1032,7 @@ const tests = {
     await page.click("#profile-form button[type=submit]");
     await page.waitForTimeout(200);
     check((await text("#profile-error")).includes("doit commencer par votre SIREN (123456789)"), "Espace : adresse de facturation électronique contrôlée");
+    await accessible(page, "Espace : réglages, erreur de saisie");
     await page.fill("#ep-endpoint", "");
     await page.click("#profile-form button[type=submit]");
     await page.waitForTimeout(300);
@@ -1046,10 +1071,12 @@ const tests = {
     check(kpis.includes("Déclaration Urssaf : 3e trimestre 2026 1 800,00 €") && kpis.includes("2 novembre 2026") && kpis.includes("464,40 €"),
       "Espace : déclaration du 3e trimestre, date limite et cotisations 25,8 % (A7)");
     check((await text(".gauges")).includes("1 800,00 € / 83 600,00 €"), "Espace : jauge du plafond (A8)");
+    await accessible(page, "Espace : tableau de bord");
 
     await go("#/recettes");
     const ledger = await text(".ledger");
     check(ledger.includes("15/09/2026") && ledger.includes("20/09/2026") && ledger.includes("F2026-001") && ledger.includes("Total encaissé en 2026 1 800,00 €"), "Espace : livre des recettes (A6)");
+    await accessible(page, "Espace : livre des recettes");
     const [csv] = await Promise.all([page.waitForEvent("download"), page.click("#ledger-csv")]);
     check(fs.readFileSync(await csv.path(), "utf8").includes('15/09/2026;"Studio Nova";"Site vitrine";800,00;"Virement";"F2026-001"'), "Espace : export CSV du livre des recettes");
 
@@ -1057,6 +1084,7 @@ const tests = {
     await page.click("#d-issue");
     await page.waitForTimeout(200);
     check((await text("#doc-error")).includes("antérieure à celle du dernier document émis"), "Espace : chronologie de la numérotation (A4)");
+    await accessible(page, "Espace : document refusé");
     await page.click("#d-delete");
     await page.waitForTimeout(250);
 
@@ -1081,6 +1109,7 @@ const tests = {
     await page.waitForFunction(() => /Avoir A2026-001/.test(document.querySelector("#espace-view h2").textContent));
     await go("#/documents?filtre=facture");
     check((await text(".doc-list")).includes("Annulée par avoir"), "Espace : facture annulée par l'avoir (A10)");
+    await accessible(page, "Espace : liste des documents");
 
     await page.reload({ waitUntil: "networkidle" });
     await go("#/documents");
@@ -1115,11 +1144,13 @@ const tests = {
     const shot = async (name) => {
       await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
       await page.screenshot({ path: path.join(shots, `espace-${name}-bureau.png`), fullPage: true });
+      await accessible(page, `Espace ${name} (bureau)`);
       await page.setViewportSize({ width: 390, height: 844 });
       await page.waitForTimeout(150);
       await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
       check(!(await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)), `Espace ${name} (mobile) : pas de défilement horizontal`);
       await page.screenshot({ path: path.join(shots, `espace-${name}-mobile.png`), fullPage: true });
+      await accessible(page, `Espace ${name} (mobile)`);
       await page.setViewportSize({ width: 1280, height: 900 });
     };
     await go("#/reglages");
@@ -1221,6 +1252,7 @@ const tests = {
   },
   async "fr/confidentialite/"() {},
   async "fr/mentions-legales/"() {},
+  async "404.html"() {},
 };
 
 // ONLY=fr/espace/,fr/  : ne lance que ces pages (développement).
@@ -1231,7 +1263,11 @@ for (const [url, run] of Object.entries(tests)) {
     const page = await context.newPage();
     await page.setViewportSize(viewport);
     const errors = await open(page, url);
-    if (label === "bureau") await run(page);
+    if (label === "bureau") {
+      await accessible(page, `${url || "accueil"} (bureau, à l'ouverture)`);
+      await run(page);
+    }
+    await accessible(page, `${url || "accueil"} (${label}${label === "bureau" ? ", après le parcours" : ""})`);
     if (label === "mobile" && url === "fr/") {
       await page.click(".menu-toggle");
       check(await page.isVisible('.nav a[href$="/fr/generateur-facture/"]'), "menu mobile : panneau ouvert avec les outils");

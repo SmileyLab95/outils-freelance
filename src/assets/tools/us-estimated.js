@@ -65,12 +65,7 @@
     });
     var ics = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Freelance Tools//Estimated tax//EN", "CALSCALE:GREGORIAN"]
       .concat(events, ["END:VCALENDAR"]).join("\r\n");
-    var link = document.createElement("a");
-    link.href = URL.createObjectURL(new Blob([ics], { type: "text/calendar" }));
-    link.download = "estimated-tax-2026.ics";
-    document.body.appendChild(link);
-    link.click();
-    setTimeout(function () { URL.revokeObjectURL(link.href); link.remove(); }, 1000);
+    OF.download(ics, "estimated-tax-2026.ics", "text/calendar");
   });
 
   OF.persistForm(form, "estimated");
