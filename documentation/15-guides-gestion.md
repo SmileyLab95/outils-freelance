@@ -83,14 +83,20 @@ devis et factures ? »
 - Liste des professions soumises à une responsabilité civile professionnelle obligatoire : à constituer à partir des
   fiches officielles, sans prétendre à l'exhaustivité.
 
-## 3. Typographie française automatique (à construire)
+## 3. Typographie française automatique (publiée le 21/10/2026)
 
 Constat (captures du 20/10/2026) : sur mobile, des retours à la ligne tombent entre « 10 » et « 000 € », après « « »
 ou avant « ; ». Proposition, à l'étape de génération (`build.py`), pour les sections en français (`fr`, `ca-fr`) :
 
-- espace fine insécable (U+202F) avant « ; ! ? » et à l'intérieur des guillemets « » ; espace insécable (U+00A0)
-  avant « : », entre un nombre et son unité (« € », « % », « jours »…), dans les nombres (« 10 000 ») et après
-  « art. » et « n° » ;
+- espace fine insécable (U+202F) avant « ; ! ? » et entre les groupes de chiffres (« 10 000 », comme
+  `Intl.NumberFormat`) ; espace insécable (U+00A0) avant « : », à l'intérieur des guillemets « », entre un nombre et
+  son unité (« € », « % », « jours »…) ou le mot qui le suit (« 8 graphiques », « 15 mai »), et après « art. »,
+  « L. » et « n° » (majuscules comprises) ; pas après un nombre qui termine un code (« RRQ2 », « T1 », « J+10 ») ;
+  une année n'est pas lue comme un groupe de milliers ;
+- les boutons « Copier » remplacent l'espace fine insécable par l'espace insécable, connue de toutes les
+  messageries ;
+- limite : le texte produit par les scripts (résultats des outils) n'est pas concerné ; les montants y sont déjà
+  formatés par `Intl.NumberFormat` ; le reste est une amélioration ultérieure ;
 - seulement dans le texte visible : jamais dans les balises `script`, `style`, `code`, `pre`, ni dans les attributs,
   les adresses web et les heures ;
 - fonction pure testée (cas positifs et cas à ne pas toucher), puis génération complète et parcours navigateur ; les

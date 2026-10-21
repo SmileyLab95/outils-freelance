@@ -1,5 +1,17 @@
 # Journal des modifications
 
+## 2026-10-21 — Typographie française automatique
+
+- `build.py` : espaces insécables dans le texte visible des pages en français (`fr`, `ca-fr`) : avant « ; ! ? »
+  (espace fine) et « : », dans les guillemets, entre les groupes de chiffres, entre un nombre et son unité ou le mot
+  qui le suit, après « art. », « L. » et « n° ». Rien n'est retouché dans les balises `script`, `style`, `code`,
+  `pre`, `textarea`, ni dans les attributs ; pas d'espace insécable après la fin d'un code (« RRQ2 », « J+10 »), et
+  une année n'est pas lue comme un groupe de milliers. 37 pages concernées.
+- Boutons « Copier » : l'espace fine insécable devient une espace insécable avant la copie, pour toutes les
+  messageries.
+- Tests : 5 tests de la fonction (cas à traiter et cas à laisser) ; suite navigateur complète (1 275 vérifications) ;
+  captures mobiles relues ; revue de code (8 points traités). Spécification `documentation/15-guides-gestion.md`, § 3.
+
 ## 2026-10-20 — Guide « Assurance de l'indépendant » (France)
 
 - Nouvelle page `/fr/assurance-independant/` (menu « Statut et revenus ») : vérificateur des assurances selon

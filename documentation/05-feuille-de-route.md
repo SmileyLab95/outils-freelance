@@ -54,8 +54,10 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   obligatoire pour la construction, responsabilité civile selon la profession, véhicule), mention de l'assurance
   (Code de l'artisanat, art. L132-1) ou attestation décennale (Code des assurances, art. L243-2) sur les devis et
   factures ; point « assurance » ajouté à la liste des mentions obligatoires (12 points).
-- **Prochaines actions de Claude** : typographie française automatique (espaces
-  insécables) ; guide du recouvrement dès que les textes sont lisibles ; veille réglementaire de décembre (dont la version de
+- **Typographie française automatique (21/10/2026)** : le générateur place les espaces insécables dans les pages en
+  français (« 10 000 € », « art. L. 233-3 », « : ; ! ? », guillemets) ; plus de coupures de ligne mal placées sur
+  mobile ; les boutons « Copier » restent compatibles avec toutes les messageries.
+- **Prochaines actions de Claude** : typographie du texte produit par les scripts des outils ; guide du recouvrement dès que les textes sont lisibles ; veille réglementaire de décembre (dont la version de
   Factur-X et l'annexe A de XP Z12-012 pour le BT-32 en franchise). Les étapes C3 (serveur) et C4 (interface des
   comptes) attendent le choix de l'hébergeur.
 - **En attente d'Ismail** (pas urgent) : structure juridique avec un comptable ; choix de l'hébergeur et budget pour
@@ -119,8 +121,10 @@ Objectif : un site mesuré, sous sa propre marque, qui commence à rapporter, et
       droit au compte) : spécification [15](15-guides-gestion.md) § 1
 - [x] Guide « Assurance de l'indépendant » avec vérificateur (décennale, responsabilité civile selon l'activité,
       mention ou attestation sur les devis et factures) : spécification [15](15-guides-gestion.md) § 2
-- [ ] Typographie française automatique dans le générateur : espaces insécables avant « ; : ! ? », dans les montants
+- [x] Typographie française automatique dans le générateur : espaces insécables avant « ; : ! ? », dans les montants
       (« 10 000 € ») et les références d'articles, pour éviter les coupures de ligne sur mobile
+      (spécification [15](15-guides-gestion.md) § 3)
+- [ ] Typographie du texte produit par les scripts des outils (résultats, emails générés)
 
 ### 1.5 Préparer la plateforme
 

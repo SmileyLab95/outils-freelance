@@ -132,6 +132,9 @@
 
     /** Copie un texte et confirme visuellement sur le bouton. */
     copy: function (text, button) {
+      // Espaces fines insécables (typographie des pages) : remplacées par l'espace insécable, connue de toutes les
+      // messageries, avant de coller le texte dans un email.
+      text = String(text).replace(/\u202f/g, "\u00a0");
       function done() {
         if (!button) return;
         // Garde le libellé d'origine, même en cas de double clic pendant la confirmation.

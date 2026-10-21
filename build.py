@@ -485,10 +485,61 @@ def render(layout, sections, section, page_id, rules, kit_cta):
     if offer:
         out = out.replace("{{kit_url}}", offer["url"])
     out = out.replace("{{base}}", BASE)
+    if loc["lang"].startswith("fr"):
+        out = typographie_fr(out)
     leftover = re.findall(r"\{\{[a-z_:-]+\}\}", out)
     if leftover:
         raise SystemExit(f"{page['file']} : remplacements non résolus {sorted(set(leftover))}")
     return out
+
+
+# ---------------------------------------------------------------------------
+# Typographie française (documentation/15-guides-gestion.md, § 3)
+# ---------------------------------------------------------------------------
+
+NBSP, NNBSP = "\u00a0", "\u202f"   # espace insécable, espace fine insécable
+# Une balise commence par une lettre, « / » ou « ! » : un « < » isolé dans le texte (« CA < 77 700 € ») n'en est pas une.
+TAG_RE = re.compile(r"(<!--.*?-->|<[!/a-zA-Z][^>]*>)", re.S)
+RAW_TAGS = ("script", "style", "code", "pre", "textarea")   # contenu jamais retouché
+LETTER = "A-Za-zÀ-ÿœŒ"
+# Règles appliquées dans l'ordre (motif compilé, remplacement).
+TYPO_FR = [
+    (re.compile(r"« "), "«" + NBSP),                                            # guillemets
+    (re.compile(r" »"), NBSP + "»"),
+    (re.compile(r" ([;!?])"), NNBSP + r"\1"),                                   # ; ! ?
+    (re.compile(r" :"), NBSP + ":"),                                            # :
+    # Milliers : un groupe de 1 à 3 chiffres (pas une année) suivi de groupes de 3 chiffres (10 000, 1 234 567).
+    (re.compile(r"(?<![\d.,])\d{1,3}(?: \d{3})+(?!\d)"), lambda m: m.group(0).replace(" ", NNBSP)),
+    (re.compile(r"(?<=\d) (?=(?:€|%|\$|£|jours?\b|mois\b|ans?\b|km\b|Ko\b|Mo\b|Go\b))"), NBSP),  # 40 €, 20 %
+    # Un nombre et le mot qui suit (8 graphiques, 15 mai, 293 B), sauf la fin d'un code (RRQ2, T1, J+10).
+    (re.compile(r"(?<![\w.,/:+-])(\d{1,3}) (?=[" + LETTER + "])"), r"\1" + NBSP),
+    (re.compile(r"\b([LRDA])\. (?=\d)"), r"\1." + NBSP),                         # art. L. 233-3
+    (re.compile(r"\b((?i:art)\.|(?i:n)°) (?=\w)"), r"\1" + NBSP),                # art. L613-10, N° 2026-014
+]
+
+
+def typo_fr_text(text):
+    """Espaces insécables d'un texte français : guillemets, « : ; ! ? », nombres (et ce qui les suit), références."""
+    for pattern, repl in TYPO_FR:
+        text = pattern.sub(repl, text)
+    return text
+
+
+def typographie_fr(page_html):
+    """Applique typo_fr_text au seul texte visible : ni balises ni attributs, ni script, style, code, pre, textarea."""
+    out, raw = [], None
+    for token in TAG_RE.split(page_html):
+        if token.startswith("<"):
+            name = re.match(r"</?([a-zA-Z0-9]+)", token)
+            name = name.group(1).lower() if name else ""
+            if raw is None and name in RAW_TAGS and not token.startswith("</") and not token.endswith("/>"):
+                raw = name
+            elif raw == name and token.startswith("</"):
+                raw = None
+            out.append(token)
+        else:
+            out.append(token if raw else typo_fr_text(token))
+    return "".join(out)
 
 
 def redirect_page(target):

@@ -56,7 +56,7 @@ tests/
   unit/                tests des moteurs (node --test), exemples officiels et calculs à la main
   e2e/verifier.mjs     tests dans un vrai navigateur, captures d'écran
 documentation/         ce dossier
-build.py               générateur : content/ + src/ + data/ → docs/
+build.py               générateur : content/ + src/ + data/ → docs/ ; typographie française (espaces insécables) des pages fr et ca-fr
 docs/                  site généré, publié par GitHub Pages (ne jamais modifier à la main)
 ```
 
