@@ -1,5 +1,16 @@
 # Journal des modifications
 
+## 2026-10-21 — Canada : seuil d'acomptes de Revenu Québec et TVP de la Colombie-Britannique précisés
+
+- Revenu Québec : l'« impôt net à payer » de son seuil de 1 800 $ ne comprend que l'impôt (les cotisations RRQ,
+  RQAP et FSS sont versées avec les acomptes, mais ne comptent pas dans le test) ; le moteur suivait jusque-là une
+  hypothèse prudente qui annonçait des acomptes à tort entre environ 16 800 $ et 35 900 $ de revenu net. Question
+  ouverte levée ; calculateurs d'impôt et « combien mettre de côté » corrigés.
+- TVP de la Colombie-Britannique : règle complétée (conseil et design non taxables sauf avec des biens ou un
+  logiciel ; services à un logiciel non taxables, vente d'un logiciel taxable). Reste à vérifier : Saskatchewan et
+  Manitoba.
+- Tests : 144 unitaires (acomptes du Québec réécrits sur les nouveaux seuils), parcours navigateur mis à jour.
+
 ## 2026-10-21 — Canada : « How much to set aside for taxes » et « Combien mettre de côté pour l'impôt »
 
 - Deux pages (anglais et français), un seul script bilingue : part de chaque paiement à mettre de côté pour l'impôt

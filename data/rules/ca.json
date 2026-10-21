@@ -66,7 +66,7 @@
       "source": "https://www2.gov.bc.ca/gov/content/taxes/sales-taxes/pst",
       "source_title": "Provincial sales tax (PST) - Province of British Columbia",
       "confidence": "low",
-      "note": "BC: legal services, telecommunication services, software and related services to goods are taxable (BC widened the list of taxable services in recent budgets). Saskatchewan and Manitoba also tax some enumerated services (lists differ). Each province's list of taxable services could not be checked in this session. Do not treat a service as exempt without checking that province's bulletins. BC: the expansion of PST to accounting and bookkeeping, architectural, engineering and geoscience, non-residential real estate and security services planned for October 1, 2026 was paused by the government on September 18, 2026 (temporary regulation; news.gov.bc.ca release 2026PREM0034-001089, BC Notice 2026-001 updated September 21, 2026), read through search results on 21/10/2026."
+      "note": "BC: legal services, telecommunication services, software and related services to goods are taxable (BC widened the list of taxable services in recent budgets). Saskatchewan and Manitoba also tax some enumerated services (lists differ). Each province's list of taxable services could not be checked in this session. Do not treat a service as exempt without checking that province's bulletins. BC: the expansion of PST to accounting and bookkeeping, architectural, engineering and geoscience, non-residential real estate and security services planned for October 1, 2026 was paused by the government on September 18, 2026 (temporary regulation; news.gov.bc.ca release 2026PREM0034-001089, BC Notice 2026-001 updated September 21, 2026), read through search results on 21/10/2026. BC details (Small business guide to PST and Bulletin PST 301, read through search results on 21/10/2026): design and consulting services are not taxable unless they include taxable goods, software or services; services to software (testing, installation, configuration, modification) are not taxable, but the sale of software is; providers of only non-taxable services don't register for PST."
     },
     "small_supplier_threshold": {
       "value": 30000,
@@ -530,7 +530,7 @@
       "source": "https://laws-lois.justice.gc.ca/eng/acts/I-3.3/section-156.1.html",
       "source_title": "Income Tax Act, section 156.1",
       "confidence": "medium",
-      "note": "Federal: $1,800 of federal net tax owing (s. 156.1(1) 'instalment threshold'). Québec: Revenu Québec requires instalments when the estimated net tax owing for the current year exceeds $1,800 and it exceeded $1,800 in either of the two previous years (revenuquebec.ca, 'Acomptes provisionnels', read through search results on 21/10/2026; Taxation Act, CQLR c. I-3, s. 1025 et seq.). Self-employed people also pay their QPP, QPIP and health services fund contributions through these instalments. Whether those contributions count toward the $1,800 test was not confirmed: the engine counts them (prudent: it never says instalments are not required when they might be)."
+      "note": "Federal: $1,800 of federal net tax owing (s. 156.1(1) 'instalment threshold'). Québec: Revenu Québec requires instalments when the estimated net tax owing for the current year exceeds $1,800 and it exceeded $1,800 in either of the two previous years. Revenu Québec defines net tax payable as the tax for the year minus Québec tax withheld at source and refundable credits: QPP, QPIP, health services fund and drug insurance contributions are not part of the test, but they are paid through the same instalments when instalments are required (revenuquebec.ca, 'Acomptes provisionnels' and 'Paiement des cotisations par acomptes provisionnels', read through search results on 21/10/2026; Taxation Act, CQLR c. I-3, s. 1025 et seq.)."
     },
     "filing_deadline_self_employed": {
       "value": "2027-06-15",
@@ -1246,7 +1246,6 @@
     "Québec self-employed: health services fund (FSS) contribution on non-employment income and RAMQ prescription drug insurance premium for 2026 were not researched; both affect a Québec net income calculator.",
     "EI for Québec self-employed: confirm that the Québec rate (1.30%, maximum $895.70) applies to opted-in self-employed people, and the 2026 minimum self-employed earnings needed to claim benefits.",
     "QPIP: confirm the $2,000 minimum net self-employment income for QPIP premiums and the split between deduction and credit for the self-employed.",
-    "Instalments, filing deadlines, Interest Act s. 3/s. 4 text, Criminal Code s. 347 (35% APR since 2025-01-01) and prompt-payment laws (construction only) are stable statutory rules taken from their official sources but not re-opened on 2026-10-20.",
-    "Revenu Québec instalments: does the $1,800 'impôt net à payer' test include QPP, QPIP and health services fund contributions (form TP-1026.A, guide IN-105)? The engine includes QPP and QPIP (prudent)."
+    "Instalments, filing deadlines, Interest Act s. 3/s. 4 text, Criminal Code s. 347 (35% APR since 2025-01-01) and prompt-payment laws (construction only) are stable statutory rules taken from their official sources but not re-opened on 2026-10-20."
   ]
 }

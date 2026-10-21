@@ -64,17 +64,17 @@ test("acomptes provisionnels au-delà de 3 000 $", () => {
   assert.equal(ca.instalments(ca.estimate({ profit: 15000, province: "ON" }, R, P), R).required, false);
 });
 
-test("acomptes au Québec : deux tests distincts, ARC (impôt fédéral) et Revenu Québec (impôt du Québec, RRQ, RQAP)", () => {
-  // 24 000 $ : impôt fédéral 580 $ (sous 1 800 $, pas d'acompte à l'ARC) ; impôt du Québec 345 $ + RRQ 2 583 $
-  // + RQAP 183 $ = 3 111 $ (au-dessus de 1 800 $, acomptes à Revenu Québec, un quart chacun).
-  const r = ca.estimate({ profit: 24000, province: "QC" }, R, P), i = ca.instalments(r, R);
-  assert.deepEqual([i.required, i.requiredFederal, i.requiredQuebec, i.federal], [true, false, true, 0]);
-  near(i.quebec, (r.provincial + r.pensions.total + r.qpip) / 4, "quart de l'impôt du Québec et des cotisations");
-  near(i.quebec * 4, 3111.46, "3 111,46 $ à Revenu Québec");
-  // 66 000 $ : les deux.
-  const b = ca.instalments(ca.estimate({ profit: 66000, province: "QC" }, R, P), R);
-  assert.deepEqual([b.requiredFederal, b.requiredQuebec], [true, true]);
-  near(b.federal, 1257.44, "impôt fédéral ÷ 4");
+test("acomptes au Québec : deux tests distincts, ARC (impôt fédéral) et Revenu Québec (impôt du Québec seul)", () => {
+  // 24 000 $ : impôt fédéral 580 $ et impôt du Québec 345 $, sous 1 800 $ : aucun acompte, même si RRQ + RQAP
+  // dépassent 2 700 $ (les cotisations ne comptent pas dans l'« impôt net à payer » de Revenu Québec).
+  const low = ca.instalments(ca.estimate({ profit: 24000, province: "QC" }, R, P), R);
+  assert.deepEqual([low.required, low.requiredFederal, low.requiredQuebec, low.federal, low.quebec], [false, false, false, 0, 0]);
+  // 36 000 $ : impôt fédéral 1 806 $ et impôt du Québec 1 813 $ : les deux ; la part de Revenu Québec couvre aussi
+  // le RRQ et le RQAP.
+  const r = ca.estimate({ profit: 36000, province: "QC" }, R, P), i = ca.instalments(r, R);
+  assert.deepEqual([i.requiredFederal, i.requiredQuebec], [true, true]);
+  near(i.federal, r.federal / 4, "impôt fédéral ÷ 4");
+  near(i.quebec, (r.provincial + r.pensions.total + r.qpip) / 4, "impôt du Québec, RRQ et RQAP ÷ 4");
   // Hors Québec, un seul test, à l'ARC.
   const on = ca.instalments(ca.estimate({ profit: 30000, province: "ON" }, R, P), R);
   assert.deepEqual([on.requiredFederal, on.requiredQuebec, on.quebec], [true, false, 0]);

@@ -104,8 +104,8 @@
    * Acomptes provisionnels de l'année (condition de l'année en cours seulement : la loi exige aussi que le seuil ait
    * été dépassé l'une des deux années précédentes, ce que l'appelant doit dire).
    * Hors Québec : impôt et RPC à l'ARC si l'impôt à payer dépasse 3 000 $. Au Québec, deux tests distincts :
-   * l'ARC sur l'impôt fédéral (1 800 $), Revenu Québec sur l'impôt du Québec et les cotisations RRQ et RQAP (1 800 $ ;
-   * cotisations comptées par prudence, question ouverte des règles).
+   * l'ARC sur l'impôt fédéral (1 800 $), Revenu Québec sur l'impôt du Québec seul (1 800 $, « impôt net à payer ») ;
+   * les acomptes à Revenu Québec couvrent alors aussi les cotisations RRQ et RQAP.
    */
   function instalments(result, rules) {
     var dates = rules.instalment_due_dates_2026;
@@ -114,10 +114,11 @@
       return { required: req, requiredFederal: req, requiredQuebec: false, threshold: rules.instalment_threshold,
                federal: req ? owing / 4 : 0, quebec: 0, dueDates: dates };
     }
-    var t = rules.instalment_threshold_quebec, qcOwing = result.provincial + result.pensions.total + result.qpip;
-    var fed = result.federal > t, qc = qcOwing > t;
+    var t = rules.instalment_threshold_quebec;
+    var fed = result.federal > t, qc = result.provincial > t;
     return { required: fed || qc, requiredFederal: fed, requiredQuebec: qc, threshold: t,
-             federal: fed ? result.federal / 4 : 0, quebec: qc ? qcOwing / 4 : 0, dueDates: dates };
+             federal: fed ? result.federal / 4 : 0,
+             quebec: qc ? (result.provincial + result.pensions.total + result.qpip) / 4 : 0, dueDates: dates };
   }
 
   function profitForTakeHome(takeHome, input, rules, provinces) {

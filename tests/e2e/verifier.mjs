@@ -581,10 +581,10 @@ const tests = {
       (await text("#c-pay-sales-label")).startsWith("GST and QST") && !(await text("#c-notice")).includes("PST"),
       "CA set aside : Québec, RRQ et RQAP, TPS et TVQ, acomptes à l'ARC et à Revenu Québec");
     await page.fill("#c-income", "2,500");
-    // 2 000 $ de bénéfice par mois au Québec : impôt fédéral 580 $ (pas d'acompte à l'ARC), impôt du Québec, RRQ et
-    // RQAP 3 111 $ (acomptes à Revenu Québec seulement).
-    check((await text("#c-inst-detail")).includes("about $778 to Revenu Québec") && !(await text("#c-inst-detail")).includes("to the CRA"),
-      "CA set aside : Québec, acomptes à Revenu Québec seulement (impôt fédéral sous 1 800 $)");
+    // 2 000 $ de bénéfice par mois au Québec : impôt fédéral 580 $ et impôt du Québec 345 $, sous 1 800 $ : pas
+    // d'acomptes (les cotisations RRQ et RQAP ne comptent pas dans le seuil de Revenu Québec).
+    check((await text("#c-inst")) === "Not required" && (await text("#c-inst-detail")).includes("under $1,800"),
+      "CA set aside : Québec, pas d'acomptes sous 1 800 $ d'impôt fédéral et d'impôt du Québec");
     await page.selectOption("#c-province", "ON");
     await page.fill("#c-income", "1,000");
     await page.fill("#c-expenses", "0");

@@ -399,7 +399,8 @@ reliées aux pages américaine, britannique et française). Besoin P1 de [02](..
   son extension en C.-B. à certains services professionnels, prévue le 1er octobre 2026, a été suspendue le
   18 septembre 2026 (règle mise à jour).
 - **Acomptes** : le moteur distingue au Québec le test de l'ARC (impôt fédéral, 1 800 $) et celui de Revenu Québec
-  (impôt du Québec, RRQ et RQAP, 1 800 $ ; cotisations comptées par prudence, question ouverte) ; la page présente
+  (impôt du Québec seul, 1 800 $ : les cotisations n'entrent pas dans l'« impôt net à payer », mais sont versées avec
+  les acomptes ; relevé sur revenuquebec.ca le 21/10/2026) ; la page présente
   les acomptes sous la condition des deux années précédentes (la loi l'exige ; la première année, ils ne sont souvent
   pas exigés). Le calculateur d'impôt existant utilise la même présentation.
 - **Page** bilingue par un même script (`tools/ca-setaside.js`), libellés dans la page (comme `ca-tax.js`) : part à
