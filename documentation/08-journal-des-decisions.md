@@ -31,6 +31,7 @@ en bas ; elles sortent de la liste quand elles sont prises.
 | Socle technique de l'application (D15) | Recommandation de Claude ([12](12-specification-comptes.md), § 4) : synchronisation chiffrée de bout en bout, sur un hébergeur français ; [comparatif chiffré](13-comparatif-hebergeurs.md) : Scaleway recommandé, 20 à 30 € HT par mois au départ | Début de l'étape 2 | Claude propose, Ismail valide (hébergeur et budget) |
 | Moment du choix du nom de domaine | Avant l'étape C4 des comptes : les clés d'accès et les emails de connexion sont liés au domaine ([13](13-comparatif-hebergeurs.md), § 5) ; le déménagement du site peut rester à la fin (D10) | Avant l'étape C4 | Ismail |
 | Outil de mesure d'audience | Recommandation de Claude ([16](16-mesure-audience.md)) : Plausible, hébergé dans l'UE, sans cookie ; alternative Pirsch | Avant la mise en ligne de la marque | Ismail |
-| Prix des offres Pro et Business | Après l'étude concurrentielle | Fin de l'étape 1 | Ismail |
+| Prix des offres Pro et Business | Proposition de Claude ([17](17-offres-et-paiements.md)) : « Pro » à 5 € HT par mois ou 50 € HT par an ; « Business » plus tard | Fin de l'étape 1 | Ismail |
+| Prestataire de paiement des abonnements | Recommandation de Claude ([17](17-offres-et-paiements.md)) : Stripe en France ; revendeur (Paddle, Stripe Managed Payments) à revoir avant l'ouverture hors de France | Avant l'étape C7 des comptes | Ismail, après avis de l'expert-comptable |
 | Plateforme(s) agréée(s) partenaire(s) pour la facturation électronique | Comparatif des offres et des API | Mai 2027 | Claude compare, Ismail signe |
 | Budget de départ | Selon les postes du plan (§ 10) | Décembre 2026 | Ismail |

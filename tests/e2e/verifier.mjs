@@ -132,6 +132,34 @@ const tests = {
     check(!(await page.isVisible(".nav .nav-group:first-child .nav-menu")), "menu : Échap le referme");
     await page.click(".country-switch .nav-trigger");
     check(await page.isVisible('.country-switch a[hreflang="fr-FR"]'), "sélecteur de pays : France proposée");
+    // Clavier (WCAG 2.1.1, 2.4.1, 2.4.3, 2.4.7) : lien d'évitement, menu ouvert et refermé au clavier, focus visible.
+    await page.reload({ waitUntil: "networkidle" });
+    const active = (fn) => page.evaluate(fn);
+    await page.keyboard.press("Tab");
+    check(await active(() => document.activeElement.matches(".skip") && document.activeElement.getBoundingClientRect().left >= 0),
+      "clavier : « Aller au contenu » est le premier arrêt, et il est visible");
+    await page.keyboard.press("Enter");
+    await page.keyboard.press("Tab");
+    check(await active(() => !!document.activeElement.closest("main")), "clavier : le lien d'évitement mène au contenu");
+    const first = ".nav .nav-group:first-child";
+    await page.focus(`${first} .nav-trigger`);
+    await page.keyboard.press("Enter");
+    check(await page.isVisible(`${first} .nav-menu`) && (await page.getAttribute(`${first} .nav-trigger`, "aria-expanded")) === "true",
+      "clavier : Entrée ouvre le menu");
+    await page.keyboard.press("Tab");
+    check(await active(() => !!document.activeElement.closest(".nav-group.open .nav-menu")), "clavier : Tab entre dans le menu ouvert");
+    check(await active(() => { const s = getComputedStyle(document.activeElement); return s.outlineStyle === "solid" && parseFloat(s.outlineWidth) >= 2 && /^rgb\(/.test(s.outlineColor); }),
+      "clavier : contour de focus visible et opaque");
+    await page.keyboard.press("Escape");
+    check(!(await page.isVisible(`${first} .nav-menu`)) && (await active(() => document.activeElement.matches(".nav-group:first-child > .nav-trigger"))),
+      "clavier : Échap referme le menu et rend le focus à son bouton");
+    await page.focus(`${first} .nav-trigger`);
+    await page.keyboard.press("Enter");
+    const reopened = await page.isVisible(`${first} .nav-menu`);
+    const items = await page.$$eval(`${first} .nav-menu a`, (as) => as.length);
+    for (let i = 0; i <= items; i++) await page.keyboard.press("Tab");
+    check(reopened && !(await page.isVisible(`${first} .nav-menu`)) && (await page.getAttribute(`${first} .nav-trigger`, "aria-expanded")) === "false",
+      "clavier : le menu se referme quand le focus le quitte");
   },
   async ""(page) {
     check((await page.$$("a.country-card")).length >= 1, "accueil mondial : cartes des pays");
@@ -1272,7 +1300,10 @@ for (const [url, run] of Object.entries(tests)) {
       await page.click(".menu-toggle");
       check(await page.isVisible('.nav a[href$="/fr/generateur-facture/"]'), "menu mobile : panneau ouvert avec les outils");
       await page.screenshot({ path: path.join(shots, "menu-mobile.png") });
-      await page.click(".menu-toggle");
+      await page.focus('.nav a[href$="/fr/generateur-facture/"]');
+      await page.keyboard.press("Escape");
+      check(!(await page.isVisible('.nav a[href$="/fr/generateur-facture/"]')) && (await page.evaluate(() => document.activeElement.matches(".menu-toggle"))),
+        "menu mobile : Échap referme le panneau et rend le focus au bouton du menu");
     }
     await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
     await page.screenshot({ path: path.join(shots, `${url.replace(/\/$/, "").replace(/\//g, "_") || "accueil"}-${label}.png`), fullPage: true });

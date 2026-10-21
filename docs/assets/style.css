@@ -26,7 +26,8 @@ h1 { font-size: clamp(2rem, 4.6vw, 3.3rem); font-weight: 850; letter-spacing: -0
 h2 { font-size: clamp(1.45rem, 2.6vw, 2rem); font-weight: 800; }
 h3 { font-size: 1.15rem; font-weight: 750; }
 p { margin: 0 0 1em; }
-:focus-visible { outline: 3px solid rgba(79,70,229,.45); outline-offset: 2px; border-radius: 6px; }
+/* Contour de focus opaque : au moins 3:1 sur les fonds clairs du site (WCAG 1.4.11). */
+:focus-visible { outline: 3px solid var(--brand); outline-offset: 2px; border-radius: 6px; }
 .wrap { width: 100%; max-width: 1160px; margin: 0 auto; padding: 0 20px; }
 .skip { position: absolute; left: -999px; top: 8px; background: var(--ink); color: #fff; padding: 8px 14px; border-radius: 8px; z-index: 100; }
 .skip:focus { left: 8px; }
@@ -213,6 +214,7 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--b
 /* ---------- Encart kit ---------- */
 .kit-cta { width: calc(100% - 40px); max-width: 1120px; margin: 40px auto; display: grid; grid-template-columns: 1.1fr 1fr; gap: 30px; align-items: center; background: radial-gradient(circle at 85% 10%, rgba(124,58,237,.55), rgba(124,58,237,0) 50%), linear-gradient(135deg, #15123a, #241f5c); color: #fff; border-radius: 22px; padding: 36px; box-shadow: var(--shadow-lg); overflow: hidden; }
 .kit-cta h2 { color: #fff; margin: 12px 0 10px; }
+.kit-cta :focus-visible { outline-color: #fff; }
 .kit-cta p { color: #d9d6ff; }
 .kit-cta .checks { list-style: none; padding: 0; margin: 0 0 22px; }
 .kit-cta .checks li { margin: 6px 0; color: #ecebff; }
@@ -370,7 +372,7 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--b
 .rate-chips input { position: absolute; opacity: 0; pointer-events: none; }
 .rate-chips span { display: inline-block; font-weight: 700; font-size: .92rem; padding: 9px 15px; border-radius: 999px; border: 1px solid var(--line-2); background: #fff; color: var(--ink-2); }
 .rate-chips input:checked + span { background: var(--ink); border-color: var(--ink); color: #fff; }
-.rate-chips input:focus-visible + span { outline: 3px solid rgba(79,70,229,.45); outline-offset: 2px; }
+.rate-chips input:focus-visible + span { outline: 3px solid var(--brand); outline-offset: 2px; }
 .mini-table { width: 100%; border-collapse: collapse; font-size: .92rem; font-variant-numeric: tabular-nums; }
 .mini-table caption { text-align: left; font-weight: 700; padding: 12px 0 6px; }
 .mini-table th, .mini-table td { padding: 9px 4px; border-bottom: 1px solid var(--line); text-align: right; }

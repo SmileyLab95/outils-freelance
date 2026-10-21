@@ -215,9 +215,17 @@
     }
     if (!event.target.closest(".nav-menu")) closeMenus();
   });
+  // Clavier : le menu se ferme quand le focus le quitte ; Échap le ferme et rend le focus à son bouton, pour que le
+  // focus ne reste pas sur un lien masqué.
+  document.addEventListener("focusout", function (event) {
+    var group = event.target.closest(".nav-group.open");
+    if (group && !(event.relatedTarget && group.contains(event.relatedTarget))) closeMenus();
+  });
   document.addEventListener("keydown", function (event) {
     if (event.key !== "Escape") return;
+    var open = document.activeElement && document.activeElement.closest(".nav-group.open");
     closeMenus();
+    if (open) open.querySelector(".nav-trigger").focus();
     if (header && header.classList.contains("menu-open")) {
       header.classList.remove("menu-open");
       document.documentElement.classList.remove("no-scroll");

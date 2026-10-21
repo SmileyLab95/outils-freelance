@@ -54,7 +54,8 @@ Chaque besoin du parcours devient un module. Les outils gratuits actuels en sont
 
 Revenus complémentaires : produits numériques (Gumroad puis boutique intégrée), commissions des partenaires
 (affiliation, mise en relation), formations de l'académie, publicité discrète sur les pages publiques (jamais dans
-l'application). Les prix seront fixés après l'étude concurrentielle de l'étape 1.
+l'application). Ce tableau décrit l'offre cible ; la première grille, pour les comptes de l'étape 2, est proposée
+dans [17](17-offres-et-paiements.md) (« Pro » à 5 € HT par mois, fonctions de [12](12-specification-comptes.md) § 2).
 
 **Concurrents à étudier** (pour se situer, pas pour copier) : en France, des outils de facturation et de comptabilité
 pour indépendants comme Abby, Freebe, Indy, Tiime ou Henrri ; aux États-Unis, FreshBooks ou Wave ; au Royaume-Uni,

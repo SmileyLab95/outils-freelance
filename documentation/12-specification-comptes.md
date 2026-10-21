@@ -27,8 +27,9 @@ Les coûts cités sont des **ordres de grandeur relevés dans des comparatifs**,
 | Envoi des factures depuis la plateforme | Non | Non | Oui |
 | Export comptable (fichier pour l'expert-comptable) | CSV des recettes | Oui | Oui |
 
-Le prix de l'offre « Pro » est une **décision d'Ismail** (en attente). Repères de l'étude concurrentielle : la
-facturation de base est gratuite chez les grands acteurs français ; leurs premières formules payantes sont à 9 à
+Le prix de l'offre « Pro » est une **décision d'Ismail** (en attente ; grille, frais de paiement et abonnés
+nécessaires : [17](17-offres-et-paiements.md)). Repères de l'étude concurrentielle : la facturation de base est
+gratuite chez les grands acteurs français ; leurs premières formules payantes sont à 9 à
 10 € HT par mois avec un engagement annuel (relevé du 20/10/2026 sur leurs sites) et incluent la comptabilité. Une
 offre « Pro » centrée sur l'automatisation devrait rester **en dessous** de ces prix (proposition de Claude : 4 à
 6 € HT par mois ; hébergement estimé à 20 à 30 € HT par mois au départ, [13](13-comparatif-hebergeurs.md)).
@@ -124,6 +125,7 @@ choix de l'hébergeur et du budget par Ismail : voir le [comparatif chiffré des
 | C4 | Interface : création de compte, lien d'appareils, phrase de récupération, import de l'Espace local | Parcours navigateur complet, captures relues |
 | C5 | Rappels par email (service d'envoi européen) | Rappels reçus aux bonnes dates sur un compte de test |
 | C6 | Bêta privée avec la liste d'attente | Retours traités, aucun incident de sécurité |
+| C7 | Offre « Pro » : abonnement chez le prestataire de paiement choisi ([17](17-offres-et-paiements.md)), factures, résiliation | Paiement, renouvellement, échec de paiement et résiliation vérifiés en mode test du prestataire |
 
 ## 8. Décisions et tâches d'Ismail
 
@@ -132,4 +134,4 @@ choix de l'hébergeur et du budget par Ismail : voir le [comparatif chiffré des
       [13](13-comparatif-hebergeurs.md) § 5).
 - [ ] **[Ismail]** Valider le budget mensuel de départ (hébergement, envoi d'emails, nom de domaine).
 - [ ] **[Ismail]** Structure juridique pour encaisser des abonnements, avec un expert-comptable.
-- [ ] **[Ismail]** Prix de l'offre « Pro » (après vérification des prix des concurrents).
+- [ ] **[Ismail]** Prix de l'offre « Pro » et prestataire de paiement ([17](17-offres-et-paiements.md) § 7).

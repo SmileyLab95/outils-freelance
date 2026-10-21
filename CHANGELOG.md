@@ -1,5 +1,21 @@
 # Journal des modifications
 
+## 2026-10-21 — Navigation au clavier ; offres et paiements
+
+- Clavier : un menu déroulant se referme quand le focus le quitte, et Échap rend le focus à son bouton (il restait
+  sur un lien masqué) ; contour de focus opaque (indigo, 6:1 sur fond blanc ; blanc sur le bandeau sombre du kit),
+  au lieu d'un indigo transparent à 2:1.
+- Tests : lien d'évitement, ouverture et fermeture des menus au clavier, contour de focus, panneau mobile refermé
+  par Échap ; chaque test contrôlé en réintroduisant le défaut qu'il doit détecter ; suite complète de 1 658
+  vérifications.
+- `documentation/17-offres-et-paiements.md` : prix proposés (« Pro » à 5 € HT par mois ou 50 € HT par an), coûts
+  pris en compte, frais de Stripe, Stripe Managed Payments, Paddle, Lemon Squeezy et Mollie relevés sur leurs sites
+  (grille de GoCardless non trouvée), abonnés nécessaires pour couvrir l'hébergement et la mesure d'audience (7 à 13),
+  questions de TVA et de facturation pour l'expert-comptable, recommandation (Stripe en France) et tâches d'Ismail ;
+  relu (9 points corrigés, dont des frais oubliés et une comparaison trop favorable).
+- Spécification des comptes : étape C7 (abonnement « Pro ») ; plan : l'offre cible renvoie à la première grille.
+- Journal des décisions : décisions en attente complétées (prix, prestataire de paiement).
+
 ## 2026-10-21 — Accessibilité (WCAG 2.1 AA) contrôlée à chaque vérification
 
 - Audit axe-core (règles WCAG 2.1 A et AA) des 84 pages, sur ordinateur et mobile, puis des états produits par les

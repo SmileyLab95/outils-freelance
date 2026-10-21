@@ -63,13 +63,18 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   recommandation : Plausible (9 $ par mois), sans cookie ni bandeau ; installation prête à faire dès le choix d'Ismail.
 - **Accessibilité (21/10/2026)** : niveau AA des règles WCAG 2.1 atteint sur toutes les pages et les écrans de
   l'Espace (contrastes, tableaux au clavier, sélecteur de pays) ; contrôlé désormais à chaque vérification par
-  axe-core dans le parcours navigateur (D17).
-- **Prochaines actions de Claude** : guide du recouvrement dès que les textes sont lisibles ; veille réglementaire de décembre (dont la version de
+  axe-core dans le parcours navigateur (D17). Navigation au clavier corrigée et testée (menus, focus visible).
+- **Offres et paiements (21/10/2026)** : grille de prix et comparatif des prestataires ([17](17-offres-et-paiements.md)) ;
+  proposition : « Pro » à 5 € HT par mois ou 50 € HT par an, Stripe en France ; 7 à 13 abonnés couvrent
+  l'hébergement et la mesure d'audience ; questions de TVA et de facturation à poser à l'expert-comptable.
+- **Prochaines actions de Claude** : revérifier les grilles des prestataires de paiement (Stripe, Mollie) sur leurs
+  pages officielles quand Ismail décidera ([17](17-offres-et-paiements.md)) ; guide du recouvrement dès que les textes sont lisibles ; veille réglementaire de décembre (dont la version de
   Factur-X et l'annexe A de XP Z12-012 pour le BT-32 en franchise). Les étapes C3 (serveur) et C4 (interface des
   comptes) attendent le choix de l'hébergeur.
 - **En attente d'Ismail** (pas urgent) : structure juridique avec un comptable ; choix de l'hébergeur et budget pour
   les comptes en ligne (comparatif [13](13-comparatif-hebergeurs.md), § 6) ; nom de domaine à choisir avant l'étape C4
-  ([13](13-comparatif-hebergeurs.md), § 5) ; outil de mesure d'audience ([16](16-mesure-audience.md)) ; prix de l'offre « Pro » (proposition : 4 à 6 € HT par mois) ; à la fin,
+  ([13](13-comparatif-hebergeurs.md), § 5) ; outil de mesure d'audience ([16](16-mesure-audience.md)) ; prix de l'offre « Pro » et prestataire de paiement
+  ([17](17-offres-et-paiements.md) : 5 € HT par mois ou 50 € HT par an, Stripe) ; à la fin,
   Gumroad.
 
 ## Vue d'ensemble
@@ -139,11 +144,15 @@ Objectif : un site mesuré, sous sa propre marque, qui commence à rapporter, et
       (`data/typo-fr.json`)
 - [x] Accessibilité : audit WCAG 2.1 AA (axe-core) des 84 pages et des écrans de l'Espace, corrections (contrastes,
       tableaux défilants, sélecteur de pays, téléchargements) et contrôle intégré au parcours navigateur (D17)
+- [x] Navigation au clavier : menus refermés quand le focus les quitte, Échap qui rend le focus, contour de focus
+      opaque ; tests du lien d'évitement, des menus et du panneau mobile
 
 ### 1.5 Préparer la plateforme
 
 - [x] Étude concurrentielle par pays, première version ([11](11-etude-concurrentielle.md)) ; prix revérifiés sur les sites officiels le 20/10/2026
-- [ ] Grille d'offres et de prix à partir de l'étude (fonctions gratuites et « Pro »)
+- [x] Grille d'offres et de prix à partir de l'étude (fonctions gratuites et « Pro ») : [17](17-offres-et-paiements.md),
+      avec les prestataires de paiement comparés et le seuil de rentabilité
+- [ ] **[Ismail]** Choisir le prix « Pro » et le prestataire de paiement ([17](17-offres-et-paiements.md) § 7)
 - [ ] Liste d'attente « Espace entrepreneur » sur le site, avec un court questionnaire sur les besoins
 - [x] Spécification du MVP : parcours, écrans, modèle de données, critères d'acceptation (`documentation/09-specification-espace.md`)
 - [x] Espace entrepreneur v1 en version locale (France) : voir les fonctions cochées « version locale » en E2.2
@@ -209,8 +218,9 @@ micro-entreprises), et lancer l'offre Pro.
 - [ ] Réception des factures fournisseurs dans l'Espace
 - [ ] Liens de paiement (carte, virement, prélèvement) et rapprochement des paiements
 - [ ] Relances automatiques (séquences existantes) et pénalités de retard calculées
-- [ ] Offre Pro : abonnement par Stripe, essai gratuit, factures d'abonnement
-- [ ] **[Ismail]** Compte Stripe au nom de l'entreprise
+- [ ] Offre Pro : abonnement chez le prestataire choisi ([17](17-offres-et-paiements.md)), essai s'il est retenu,
+      factures d'abonnement
+- [ ] **[Ismail]** Compte chez le prestataire de paiement, au nom de l'entreprise
 - [ ] Campagne « Prêt pour le 1er septembre 2027 » : pages, emails, guide
 - [ ] Plan B si aucun partenariat n'est signé en juin 2027 : export Factur-X à déposer sur la plateforme de l'utilisateur
 
