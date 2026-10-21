@@ -244,7 +244,7 @@ Les dates sont les mêmes pour Revenu Québec. Des intérêts courent sur le sol
 
 ### Mentions nécessaires pour que le client puisse demander ses CTI
 
-Ces mentions sont prévues par le *Input Tax Credit Information (GST/HST) Regulations*, DORS/91-45 (confiance moyenne). Les seuils sont en vigueur depuis le 2021-01-01 ; ils remplacent les anciens seuils de 30 $ et 150 $.
+Ces mentions sont prévues par le *Input Tax Credit Information (GST/HST) Regulations*, DORS/91-45 (confiance moyenne ; répartition par palier revérifiée le 21/10/2026 sur le tableau du mémorandum 8.4 de l'ARC). Les seuils de 100 $ et 500 $, taxes comprises, remplacent les anciens seuils de 30 $ et 150 $ (date d'effet : l'ARC mentionne le 20 avril 2021, une note antérieure le 2021-01-01 ; non affichée sur le site).
 
 | Total de la facture | Mentions requises |
 |---|---|
@@ -252,7 +252,9 @@ Ces mentions sont prévues par le *Input Tax Credit Information (GST/HST) Regula
 | **100 $ à 499,99 $** | Tout ce qui précède · **numéro d'inscription TPS/TVH** du fournisseur · montant de la taxe (par taux), ou total avec la mention que la TPS/TVH est incluse et son taux · indication des articles taxables lorsque la facture mélange des articles taxables, exonérés ou détaxés |
 | **500 $ ou plus** | Tout ce qui précède · **nom du client** (ou de son mandataire) · **modalités de paiement** · **description** suffisante de chaque fourniture |
 
-Revenu Québec applique les mêmes seuils pour les RTI de la TVQ, avec le numéro de TVQ à partir de 100 $.
+Revenu Québec applique les mêmes seuils pour les RTI de la TVQ, avec le numéro de TVQ à partir de 100 $ ; son tableau semble exiger en plus, pour la TVQ seulement, une description et le montant de TVQ sur les petites factures (non confirmé : question 13). Selon Revenu Québec, ces régimes n'imposent pas de facture particulière, sauf pour la restauration et le transport par taxi.
+
+**Langue (Québec)** : les factures sont rédigées en français (Charte de la langue française, art. 57, 1er alinéa). Le 2e alinéa ajouté en 2022 a vu son entrée en vigueur suspendue par la Cour supérieure ; il n'est pas repris sur le site.
 
 **Bonnes pratiques**, non exigées par la loi fédérale mais attendues des clients : numéro de facture unique, adresse des deux parties, conditions de retard (voir section 7). Pour un client non résident, précisez que la fourniture est détaxée.
 
@@ -300,7 +302,7 @@ Revenu Québec applique les mêmes seuils pour les RTI de la TVQ, avec le numér
 
 1. Revérifier en ligne les taux de taxes de vente (TPS, TVH, TVQ, TVP/TVD) : ils n'ont pas pu être rouverts le 2026-10-20.
 2. Vérifier les listes de services taxables à la TVP/TVD en C.-B., en Saskatchewan et au Manitoba pour les métiers visés par le site (développement, design, conseil, rédaction).
-3. Confirmer sur le RC4022 ou le DORS/91-45 les seuils de facturation pour les CTI : moins de 100 $, 100 $ à 499,99 $, 500 $ et plus.
+3. ~~Confirmer les seuils de facturation pour les CTI~~ : confirmés le 21/10/2026 (tableau du mémorandum 8.4 de l'ARC, *Excise and GST/HST News* n° 118).
 4. Île-du-Prince-Édouard : le taux de 20 % au-delà de 200 000 $ s'applique-t-il en 2026 ou en 2027 ? Le quatrième seuil est-il de 142 250 $ ou de 142 520 $ ?
 5. Terre-Neuve-et-Labrador : confirmer les seuils intermédiaires calculés et le MPB 2026 de 13 094 $.
 6. Colombie-Britannique : confirmer l'adoption du taux de 5,60 % et le MPB de 13 216 $.
@@ -310,6 +312,7 @@ Revenu Québec applique les mêmes seuils pour les RTI de la TVQ, avec le numér
 10. Québec : cotisation au Fonds des services de santé (FSS) et prime au régime public d'assurance médicaments pour 2026.
 11. AE au Québec pour les autonomes : confirmer le taux de 1,30 % et le revenu minimal requis pour toucher des prestations.
 12. RQAP : confirmer le seuil minimal de revenu de travail autonome et la répartition entre déduction et crédit.
+13. Revenu Québec, « Préparation des factures » : pour la TVQ seulement, une description et le montant de TVQ sont-ils exigés sous 500 $ (et sous 100 $) ? Extraits de recherche illisibles ; les pages de la liste des mentions renvoient à cette page pour les factures de moins de 500 $ au Québec.
 
 ---
 
@@ -414,3 +417,40 @@ reliées aux pages américaine, britannique et française). Besoin P1 de [02](..
 - **Critères** : tests unitaires (textes et exemples recalculés, taux de taxe de vente des pages = règles) ; parcours
   navigateur des deux pages (Ontario, Québec, inscription aux taxes, seuil, acomptes, saisie invalide, rechargement) ;
   accessibilité ; captures relues sur ordinateur, tablette et mobile ; revue critique.
+
+## Spécification : liste *What to put on an invoice* / « Que mettre sur une facture » (`/ca/invoice-requirements/`, `/ca/fr/mentions-facture/`, 21/10/2026)
+
+**Question** : « Ma facture contient-elle ce qu'il faut ? » Besoin P2 de [02](../02-besoins-clients.md) (§ 5), couvert en
+France et au Royaume-Uni par la même liste (identifiant `invoice-rules`).
+
+- **Ce que dit la règle** : au Canada, aucune loi ne fixe le contenu d'une facture en général ; les mentions exigées
+  sont celles qui permettent au client inscrit de demander ses crédits de taxe sur les intrants (CTI, DORS/91-45) et,
+  au Québec, ses remboursements de la taxe sur les intrants (RTI). Elles dépendent du total de la facture (moins de
+  100 $, 100 $ à 499,99 $, 500 $ ou plus). La page le dit, sans présenter les mentions comme obligatoires en général.
+- **Règles** (`data/rules/ca.json`) : `itc_invoice_requirements` (revérifiée : tableau de l'ARC, mémorandum 8.4 et
+  *Excise and GST/HST News* n° 118) ; nouvelles : `qst_registration_number_on_invoices` (numéro de TVQ à partir de
+  100 $, Revenu Québec), `quebec_invoices_in_french` (Charte de la langue française, art. 57, 1er alinéa ; le 2e
+  alinéa, dont l'entrée en vigueur a été suspendue, n'est pas repris), `small_supplier_not_required_to_collect`
+  (ARC, mémorandum 2.2).
+- **Situation** : total de la facture, taxes comprises (trois paliers, 500 $ ou plus par défaut) ; inscrit à la
+  TPS/TVH (coché par défaut) ; entreprise au Québec. Conditions combinées (`data-when="gst !amount=under100"`) :
+  la grammaire de `tools/checklist.js` accepte plusieurs conditions séparées par des espaces, toutes requises.
+- **Points** : nom ou raison sociale, date, total (toujours) ; numéro de TPS/TVH et taxe facturée (inscrit, 100 $ ou
+  plus) ; numéro de TVQ (inscrit, Québec, 100 $ ou plus) ; nom du client, modalités de paiement, description de
+  chaque fourniture (inscrit, 500 $ ou plus) ; facture rédigée en français (Québec). Inscrit : 3, 5 ou 8 points selon
+  le palier (4, 7 ou 10 au Québec). Non inscrit : le client n'a pas de crédit de taxe à demander, seules les
+  mentions de base restent (3, ou 4 au Québec) ; rappel que le petit fournisseur ne perçoit généralement pas la
+  TPS/TVH et seuil d'inscription (règles `small_supplier_threshold`, `qst_small_supplier_threshold`).
+- **Annonces** : le score et le message forment la zone annoncée (`role="status"`) ; les rappels sont dans une zone
+  distincte (`aria-live="polite"`), annoncés quand ils apparaissent, pas à chaque case cochée (même structure sur la
+  page britannique).
+- **Incertitude signalée, non publiée** : le tableau de Revenu Québec semble exiger, pour la TVQ seulement, une
+  description et le montant de TVQ dès moins de 500 $ (extraits de recherche illisibles). Au Québec sous 500 $, la
+  page renvoie à la page « Préparation des factures » de Revenu Québec (pour un inscrit) ; question ouverte n° 13.
+  Langue : facture bilingue (art. 89) et fournisseur hors Québec non traités (question ouverte dans `ca.json`).
+- **Bonnes pratiques** (numéro de facture, échéance, moyen de paiement) : en texte, présentées comme utiles et non
+  exigées. Les FAQ des générateurs de facture canadiens sont alignées (le numéro de facture n'y est plus dit exigé ;
+  seuil du petit fournisseur exact).
+- **Critères** : tests unitaires (chaque élément des règles repris une fois, conditions, nombre de points par
+  situation, mêmes points en anglais et en français) ; parcours navigateur des deux pages (paliers, inscription,
+  Québec, messages, mémorisation) ; accessibilité ; captures relues ; revue critique.

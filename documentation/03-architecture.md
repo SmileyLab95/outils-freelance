@@ -96,7 +96,7 @@ Chaque page est un fichier `content/<section>/<nom>.html` qui commence par ses m
 
 Outils génériques pilotés par la page : `tools/invoice.js` (profil JSON `#invoice-profile` : libellés, conditions de paiement, mentions) et `tools/reminder.js` (données JSON `#reminder-data` : étapes, modèles, lois citées). Un nouveau pays les réutilise en fournissant seulement ses textes.
 
-Remplacements disponibles dans le contenu : `{{base}}` (racine du site), `{{home}}` (accueil de la section), `{{kit_cta}}` (encart de l'offre de la section), `{{tools_grid}}` (grille des outils, générée depuis les métadonnées), `{{link:<id>}}` (adresse de la page `<id>` de la même section).
+Remplacements disponibles dans le contenu : `{{base}}` (racine du site), `{{home}}` (accueil de la section), `{{kit_cta}}` (encart de l'offre de la section), `{{tools_grid}}` (grille des outils, générée depuis les métadonnées), `{{link:<id>}}` (adresse de la page `<id>` de la même section), `{{link:<section>/<id>}}` (page d'une autre section, par exemple `{{link:ca-fr/invoice}}` pour renvoyer vers la version française ; lien inconnu : la construction s'arrête).
 
 ## Le fichier `site.json` d'une section
 

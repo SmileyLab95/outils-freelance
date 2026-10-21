@@ -69,12 +69,16 @@
       </ul>
     </div>
     <div class="results">
-      <div class="card" role="status" aria-atomic="true">
+      <div class="card">
         <div class="label" style="margin-bottom: 8px;">Your invoice</div>
         <div class="progress"><div id="cl-bar"></div></div>
-        <p style="margin: 12px 0 0; font-weight: 700;" id="cl-score">0 of 11 details</p>
-        <p class="notice warn" id="cl-msg" style="margin: 12px 0 0;">Tick the details your invoice shows.</p>
-        <p class="notice" data-show-when="!vat" style="margin: 12px 0 0;">Not VAT-registered? Don't show any VAT on your invoices.</p>
+        <div role="status" aria-atomic="true">
+          <p style="margin: 12px 0 0; font-weight: 700;" id="cl-score">0 of 11 details</p>
+          <p class="notice warn" id="cl-msg" style="margin: 12px 0 0;">Tick the details your invoice shows.</p>
+        </div>
+        <div aria-live="polite">
+          <p class="notice" data-show-when="!vat" style="margin: 12px 0 0;">Not VAT-registered? Don't show any VAT on your invoices.</p>
+        </div>
       </div>
       <a class="btn btn-primary btn-block" href="{{link:invoice}}" style="margin-top: 14px;">Create a complete invoice for free</a>
     </div>

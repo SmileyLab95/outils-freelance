@@ -29,7 +29,7 @@ SITE_URL = SITE["site_url"].rstrip("/")  # ex. https://smileylab95.github.io/out
 BASE = SITE["base"]                       # ex. /outils-freelance/
 
 META_RE = re.compile(r"\A\s*<!--(.*?)-->\s*", re.S)
-LINK_RE = re.compile(r"\{\{link:([a-z0-9-]+)\}\}")
+LINK_RE = re.compile(r"\{\{link:(?:([a-z-]+)/)?([a-z0-9-]+)\}\}")   # {{link:id}} ou {{link:section/id}}
 LOGO_SVG = (
     '<svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" '
     'x2="1" y2="1"><stop offset="0" stop-color="#4f46e5"/><stop offset="1" stop-color="#7c3aed"/></linearGradient>'
@@ -410,12 +410,14 @@ def rules_script(meta, rules):
 # Rendu d'une page
 # ---------------------------------------------------------------------------
 
-def resolve_links(text, section):
+def resolve_links(text, section, sections):
+    """{{link:id}} : page de la même section ; {{link:ca-fr/id}} : page d'une autre section (autre langue)."""
     def repl(m):
-        page_id = m.group(1)
-        if page_id not in section["pages"]:
-            raise SystemExit(f"Lien vers une page inconnue « {page_id} » dans la section {section['loc']['key']}")
-        return href(section, page_id)
+        key, page_id = m.group(1) or section["loc"]["key"], m.group(2)
+        target = next((s for s in sections if s["loc"]["key"] == key), None)
+        if target is None or page_id not in target["pages"]:
+            raise SystemExit(f"Lien vers une page inconnue « {m.group(0)} » dans la section {section['loc']['key']}")
+        return href(target, page_id)
     return LINK_RE.sub(repl, text)
 
 
@@ -518,7 +520,7 @@ def render(layout, sections, section, page_id, rules, kit_cta):
     for key, value in values.items():
         out = out.replace("{{" + key + "}}", value)
     out = out.replace("{{home}}", BASE + loc["path"])
-    out = resolve_links(out, section)
+    out = resolve_links(out, section, sections)
     if offer:
         out = out.replace("{{kit_url}}", offer["url"])
     out = out.replace("{{base}}", BASE)

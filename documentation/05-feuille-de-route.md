@@ -72,14 +72,16 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 - **Offres et paiements (21/10/2026)** : grille de prix et comparatif des prestataires ([17](17-offres-et-paiements.md)) ;
   proposition : « Pro » à 5 € HT par mois ou 50 € HT par an, Stripe en France ; 7 à 13 abonnés couvrent
   l'hébergement et la mesure d'audience ; questions de TVA et de facturation à poser à l'expert-comptable.
-- **Liste des détails d'une facture, Royaume-Uni (21/10/2026)** : *What to put on an invoice*, selon la situation
-  (*sole trader* ou société, TVA ou non) ; chaque élément des règles officielles repris une fois, vérifié par test.
-- **Prochaines actions de Claude** : même liste pour le Canada (anglais et français : mentions exigées pour les
-  crédits de taxe sur les intrants, selon le montant) ; revérifier les grilles des prestataires de paiement (Stripe,
-  Mollie) sur leurs pages officielles quand Ismail décidera ([17](17-offres-et-paiements.md)) ; guide du
-  recouvrement dès que les textes sont lisibles ; veille réglementaire de décembre (dont la version de Factur-X et
-  l'annexe A de XP Z12-012 pour le BT-32 en franchise). Les étapes C3 (serveur) et C4 (interface des comptes)
-  attendent le choix de l'hébergeur.
+- **Listes des mentions d'une facture, Royaume-Uni et Canada (21/10/2026)** : *What to put on an invoice* (et
+  « Que mettre sur une facture » au Canada), selon la situation : *sole trader* ou société et TVA au Royaume-Uni ;
+  total de la facture, inscription à la TPS/TVH et Québec au Canada. Chaque élément des règles officielles repris une
+  fois, vérifié par test ; le besoin est couvert dans les trois pays concernés (sans objet aux États-Unis).
+- **Prochaines actions de Claude** : guides « facturer un client étranger » au Royaume-Uni et au Canada (besoin P2
+  de [02](02-besoins-clients.md) § 5) ; revérifier les grilles des prestataires de paiement (Stripe, Mollie) sur leurs
+  pages officielles quand Ismail décidera ([17](17-offres-et-paiements.md)) ; guide du recouvrement dès que les
+  textes sont lisibles ; veille réglementaire de décembre (dont la version de Factur-X et l'annexe A de XP Z12-012
+  pour le BT-32 en franchise, et la question 13 de [pays/ca.md](pays/ca.md) sur la TVQ). Les étapes C3 (serveur) et
+  C4 (interface des comptes) attendent le choix de l'hébergeur.
 - **En attente d'Ismail** (pas urgent) : structure juridique avec un comptable ; choix de l'hébergeur et budget pour
   les comptes en ligne (comparatif [13](13-comparatif-hebergeurs.md), § 6) ; nom de domaine à choisir avant l'étape C4
   ([13](13-comparatif-hebergeurs.md), § 5) ; outil de mesure d'audience ([16](16-mesure-audience.md)) ; prix de l'offre « Pro » et prestataire de paiement
@@ -167,8 +169,9 @@ Objectif : un site mesuré, sous sa propre marque, qui commence à rapporter, et
 - [x] Royaume-Uni : *What to put on an invoice*, liste interactive selon la situation (*sole trader* ou *limited
       company*, immatriculé à la TVA ou non) ; script `tools/checklist.js` généralisé, chaque élément des règles
       couvert une fois (test) ; spécification [pays/uk.md](pays/uk.md)
-- [ ] Canada : liste des mentions d'une facture (TPS/TVH et TVQ, règle `itc_invoice_requirements`), en anglais et en
-      français
+- [x] Canada : *What to put on an invoice* et « Que mettre sur une facture » : mentions pour les CTI selon le total
+      (moins de 100 $, 100 $ à 499,99 $, 500 $ ou plus), numéro de TVQ et français au Québec ; conditions combinées
+      dans `tools/checklist.js` ; spécification [pays/ca.md](pays/ca.md)
 
 ### 1.5 Préparer la plateforme
 

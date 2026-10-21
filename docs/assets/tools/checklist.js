@@ -3,8 +3,9 @@
  * cochés. Textes dans la page, sur la liste #checklist : data-score (« {done} sur {total} mentions »), data-all,
  * data-none, data-missing-one et data-missing-many (« {missing} »). Filtres facultatifs : les champs de #cl-filters
  * décrivent la situation (mémorisée s'ils portent data-save) ; un point marqué data-when="clé=valeur", "clé" ou
- * "!clé" n'est montré et compté que si la situation y répond, et tout élément marqué data-show-when n'est montré que
- * dans ce cas. Un point data-optional (recommandé, non obligatoire) est montré mais n'entre pas dans le compte.
+ * "!clé" (plusieurs conditions séparées par des espaces : toutes requises) n'est montré et compté que si la situation
+ * y répond, et tout élément marqué data-show-when n'est montré que dans ce cas. Un point data-optional (recommandé,
+ * non obligatoire) est montré mais n'entre pas dans le compte.
  */
 (function () {
   "use strict";
@@ -28,13 +29,14 @@
     });
     return s;
   }
-  // Une condition illisible est signalée (erreur visible dans les tests) et le point reste montré.
-  function applies(cond, s) {
-    if (!cond) return true;
-    var m = /^(!?)([\w-]+)(?:=([\w-]+))?$/.exec(cond);
-    if (!m) { console.error("checklist : condition illisible « " + cond + " »"); return true; }
-    var ok = m[3] !== undefined ? String(s[m[2]]) === m[3] : !!s[m[2]];
-    return m[1] ? !ok : ok;
+  // Une condition illisible est signalée (erreur visible dans les tests) et ne masque pas le point.
+  function applies(conds, s) {
+    return !conds || conds.trim().split(/\s+/).every(function (cond) {
+      var m = /^(!?)([\w-]+)(?:=([\w-]+))?$/.exec(cond);
+      if (!m) { console.error("checklist : condition illisible « " + cond + " »"); return true; }
+      var ok = m[3] !== undefined ? String(s[m[2]]) === m[3] : !!s[m[2]];
+      return m[1] ? !ok : ok;
+    });
   }
 
   function update() {

@@ -1,0 +1,86 @@
+<!--{
+  "id": "invoice-rules",
+  "slug": "invoice-requirements/",
+  "title": "What to Put on an Invoice in Canada (GST/HST Checklist)",
+  "description": "Check your invoice point by point: the details your client needs to claim GST/HST input tax credits, by invoice total, plus the QST and French in Quebec.",
+  "menu": "What to put on an invoice",
+  "icon": "✅",
+  "blurb": "The checklist of what an invoice needs for GST/HST input tax credits.",
+  "scripts": ["tools/checklist.js"],
+  "rules": "ca",
+  "sources": ["itc_invoice_requirements", "qst_registration_number_on_invoices", "tax_number_formats", "quebec_invoices_in_french", "small_supplier_not_required_to_collect", "small_supplier_threshold", "qst_small_supplier_threshold"],
+  "priority": 0.8,
+  "faq": [
+    ["What must an invoice include in Canada?", "According to Revenu Québec, the GST/HST and QST rules impose no special invoice format (except for restaurants and taxis in Quebec). What counts is the information a client registered for GST/HST needs to claim input tax credits for the tax you charge: under $100, your name or business name, the invoice date and the total; from $100, also your GST/HST registration number and the tax charged; from $500, also your client's name, the terms of payment and a description of each supply."],
+    ["How do I show the GST/HST on an invoice?", "Either the amount of tax for each rate, or the total with a statement that it includes the GST/HST and the rate. If the invoice mixes taxable items with exempt or zero-rated ones, show which items are taxable."],
+    ["What changes in Quebec?", "Your clients claim input tax refunds for the QST with the same thresholds: from $100, add your QST registration number. Under the Charter of the French language, invoices of businesses in Quebec are drawn up in French. For invoices under $500, your client may need more details for its QST refund: check Revenu Québec's “Preparing Invoices” page."],
+    ["I'm not registered for GST/HST: what changes?", "As a small supplier who isn't registered, you generally don't collect the GST/HST on your taxable supplies, and you can't claim input tax credits; your client has no tax credit to claim either. You must register once your taxable supplies (with those of your associates) go over $30,000 in a single calendar quarter or over four consecutive calendar quarters. In Quebec, the same threshold applies to the QST."],
+    ["Do I need an invoice number?", "These rules don't require one, but a unique number on each invoice makes your records and your client's easier to follow. The <a href=\"{{link:invoice}}\">invoice generator</a> numbers your invoices for you."]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Interactive checklist</span>
+    <h1>What to put on an invoice</h1>
+    <p class="lead">Take your latest invoice and tick each detail it shows. In two minutes, you'll know whether your client has everything they need to claim back the GST/HST (and the QST in Quebec) you charge.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout wide-left">
+    <div class="card">
+      <form id="cl-filters" onsubmit="return false" style="margin-bottom: 4px; padding-bottom: 16px; border-bottom: 1px solid var(--line);">
+        <div class="fields">
+          <div class="field full"><span class="label" id="cl-amount-label">Invoice total, taxes included</span>
+            <div class="rate-chips" role="radiogroup" aria-labelledby="cl-amount-label">
+              <label><input type="radio" name="amount" value="under100" data-save><span>Under $100</span></label>
+              <label><input type="radio" name="amount" value="100to499" data-save><span>$100 to $499.99</span></label>
+              <label><input type="radio" name="amount" value="500plus" checked data-save><span>$500 or more</span></label>
+            </div></div>
+          <label class="check full"><input type="checkbox" name="gst" checked data-save><span>I'm registered for GST/HST (and QST in Quebec)</span></label>
+          <label class="check full"><input type="checkbox" name="quebec" data-save><span>My business is in Quebec</span></label>
+        </div>
+        <p class="small muted" style="margin: 12px 0 0;">The list below adapts to your answers. Tick each detail your invoice shows.</p>
+      </form>
+      <ul class="checklist" id="checklist" data-score="{done} of {total} details" data-all="All set: your invoice includes every detail on the list."
+        data-none="Tick the details your invoice shows." data-missing-one="{missing} detail missing: add it before you send your invoice."
+        data-missing-many="{missing} details missing: add them before you send your invoice.">
+        <li data-rule="itc_invoice_requirements.under_100:0"><label><input type="checkbox"><div><strong>Your name or business name</strong><span>Or the name under which you do business.</span></div></label></li>
+        <li data-rule="itc_invoice_requirements.under_100:1"><label><input type="checkbox"><div><strong>The invoice date</strong></div></label></li>
+        <li data-rule="itc_invoice_requirements.under_100:2"><label><input type="checkbox"><div><strong>The total amount</strong><span>Paid or payable.</span></div></label></li>
+        <li data-rule="itc_invoice_requirements.100_to_499_99:1" data-when="gst !amount=under100"><label><input type="checkbox"><div><strong>Your GST/HST registration number</strong><span>Your 9-digit business number, then RT and 4 digits: for example 123456789 RT0001.</span></div></label></li>
+        <li data-rule="qst_registration_number_on_invoices" data-when="gst quebec !amount=under100"><label><input type="checkbox"><div><strong>Your QST registration number</strong><span>10 digits, then TQ and 4 digits: for example 1234567890 TQ0001.</span></div></label></li>
+        <li data-rule="itc_invoice_requirements.100_to_499_99:2" data-when="gst !amount=under100"><label><input type="checkbox"><div><strong>The tax charged: GST/HST and, in Quebec, QST</strong><span>The tax for each rate, or the total with a statement that it includes the tax and the rate. If taxable items are mixed with exempt or zero-rated ones, show which are taxable.</span></div></label></li>
+        <li data-rule="itc_invoice_requirements.500_and_over:1" data-when="gst amount=500plus"><label><input type="checkbox"><div><strong>Your client's name or business name</strong><span>Or the name of their authorized agent.</span></div></label></li>
+        <li data-rule="itc_invoice_requirements.500_and_over:2" data-when="gst amount=500plus"><label><input type="checkbox"><div><strong>The terms of payment</strong><span>When the invoice is due: on receipt or by a set date, for example.</span></div></label></li>
+        <li data-rule="itc_invoice_requirements.500_and_over:3" data-when="gst amount=500plus"><label><input type="checkbox"><div><strong>A description of each supply</strong><span>Enough to identify each service or item.</span></div></label></li>
+        <li data-rule="quebec_invoices_in_french" data-when="quebec"><label><input type="checkbox"><div><strong>The invoice drawn up in French</strong><span>Charter of the French language, for businesses in Quebec. Our <a href="{{link:ca-fr/invoice}}" hreflang="fr-CA">invoice generator in French</a> can help.</span></div></label></li>
+      </ul>
+    </div>
+    <div class="results">
+      <div class="card">
+        <div class="label" style="margin-bottom: 8px;">Your invoice</div>
+        <div class="progress"><div id="cl-bar"></div></div>
+        <div role="status" aria-atomic="true">
+          <p style="margin: 12px 0 0; font-weight: 700;" id="cl-score">0 of 8 details</p>
+          <p class="notice warn" id="cl-msg" style="margin: 12px 0 0;">Tick the details your invoice shows.</p>
+        </div>
+        <div aria-live="polite">
+          <p class="notice" data-show-when="!gst" style="margin: 12px 0 0;" hidden>Not registered for GST/HST? As a small supplier, you generally don't collect it, so your client has no tax credit to claim: only the basics remain. Registration becomes mandatory once your taxable supplies go over $30,000 in a single calendar quarter or over four consecutive calendar quarters (the same threshold applies to the QST in Quebec).</p>
+          <p class="notice" data-show-when="gst quebec !amount=500plus" style="margin: 12px 0 0;" hidden>Under $500 in Quebec: your client may need more details for its QST refund, such as a description. Check Revenu Québec's <a href="https://www.revenuquebec.ca/en/businesses/consumption-taxes/gsthst-and-qst/collecting-gst-and-qst/preparing-invoices/" rel="noopener">Preparing Invoices</a> page.</p>
+        </div>
+      </div>
+      <a class="btn btn-primary btn-block" href="{{link:invoice}}" style="margin-top: 14px;">Create a complete invoice for free</a>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>Good to know</h2>
+  <h3>These details are for your client's tax credits</h3>
+  <p>According to Revenu Québec, the GST/HST and QST rules impose no special invoice format, except for restaurants and taxis in Quebec. The list follows the information a client registered for GST/HST needs to claim input tax credits for the tax you charge (and, in Quebec, input tax refunds for the QST). The higher the invoice total, the more details it needs: the thresholds are $100 and $500, taxes included. A client who isn't registered, such as a consumer, claims no tax credit.</p>
+  <h3>Also useful</h3>
+  <p>Not required by these rules, but often useful: a unique invoice number, a due date and how to pay you. The <a href="{{link:invoice}}">invoice generator</a> adds them for you, and the <a href="{{link:salestax}}">GST/HST calculator</a> works out the tax for each province.</p>
+  <p class="small muted">Information for guidance only, based on the CRA, Revenu Québec and the Charter of the French language. Check your own situation if in doubt.</p>
+</section>

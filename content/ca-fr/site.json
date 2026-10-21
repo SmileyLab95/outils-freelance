@@ -19,7 +19,8 @@
     {
       "label": "Facturer",
       "items": [
-        "invoice"
+        "invoice",
+        "invoice-rules"
       ]
     },
     {

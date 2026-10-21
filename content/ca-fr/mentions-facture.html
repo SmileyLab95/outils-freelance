@@ -1,0 +1,86 @@
+<!--{
+  "id": "invoice-rules",
+  "slug": "mentions-facture/",
+  "title": "Que mettre sur une facture au Canada (TPS/TVH et TVQ)",
+  "description": "Vérifiez votre facture point par point : les mentions qui permettent à votre client de récupérer la TPS/TVH et la TVQ, selon le total, et le français au Québec.",
+  "menu": "Que mettre sur une facture",
+  "icon": "✅",
+  "blurb": "La liste des mentions pour que votre client récupère la TPS/TVH et la TVQ.",
+  "scripts": ["tools/checklist.js"],
+  "rules": "ca",
+  "sources": ["itc_invoice_requirements", "qst_registration_number_on_invoices", "tax_number_formats", "quebec_invoices_in_french", "small_supplier_not_required_to_collect", "small_supplier_threshold", "qst_small_supplier_threshold"],
+  "priority": 0.8,
+  "faq": [
+    ["Que doit contenir une facture au Canada ?", "Selon Revenu Québec, aucun modèle de facture n'est imposé par les régimes de la TPS/TVH et de la TVQ (sauf pour la restauration et le transport par taxi au Québec). Ce qui compte, ce sont les renseignements dont un client inscrit à la TPS/TVH a besoin pour demander ses crédits de taxe sur les intrants (CTI) à l'égard de la taxe que vous facturez : sous 100 $, votre nom ou votre raison sociale, la date de la facture et le total ; à partir de 100 $, aussi votre numéro d'inscription à la TPS/TVH et la taxe facturée ; à partir de 500 $, aussi le nom de votre client, les modalités de paiement et la description de chaque fourniture."],
+    ["Comment indiquer la TPS/TVH sur une facture ?", "Soit le montant de la taxe pour chaque taux, soit le total avec la mention qu'il comprend la TPS/TVH et le taux. Si la facture mêle des articles taxables et des articles exonérés ou détaxés, indiquez lesquels sont taxables."],
+    ["Qu'est-ce qui change au Québec ?", "Vos clients demandent leurs remboursements de la taxe sur les intrants (RTI) de la TVQ selon les mêmes seuils : à partir de 100 $, ajoutez votre numéro d'inscription au fichier de la TVQ. Selon la Charte de la langue française, les factures des entreprises au Québec sont rédigées en français. Pour une facture de moins de 500 $, votre client peut avoir besoin d'autres renseignements pour son RTI : consultez la page « Préparation des factures » de Revenu Québec."],
+    ["Je ne suis pas inscrit à la TPS/TVH : qu'est-ce qui change ?", "À titre de petit fournisseur non inscrit, vous ne percevez généralement pas la TPS/TVH sur vos fournitures taxables, et vous ne pouvez pas demander de CTI ; votre client n'a pas non plus de crédit à demander. L'inscription devient obligatoire quand vos fournitures taxables (avec celles de vos associés) dépassent 30 000 $ en un seul trimestre civil ou sur quatre trimestres civils consécutifs. Au Québec, le même seuil s'applique à la TVQ."],
+    ["Faut-il un numéro de facture ?", "Ces règles ne l'exigent pas, mais un numéro unique sur chaque facture facilite le suivi, pour vous comme pour votre client. Le <a href=\"{{link:invoice}}\">générateur de facture</a> numérote vos factures pour vous."]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Liste interactive</span>
+    <h1>Que mettre sur une facture</h1>
+    <p class="lead">Prenez votre dernière facture et cochez chaque mention qu'elle contient. En deux minutes, vous saurez si votre client a tout ce qu'il faut pour récupérer la TPS/TVH (et la TVQ au Québec) que vous facturez.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout wide-left">
+    <div class="card">
+      <form id="cl-filters" onsubmit="return false" style="margin-bottom: 4px; padding-bottom: 16px; border-bottom: 1px solid var(--line);">
+        <div class="fields">
+          <div class="field full"><span class="label" id="cl-amount-label">Total de la facture, taxes comprises</span>
+            <div class="rate-chips" role="radiogroup" aria-labelledby="cl-amount-label">
+              <label><input type="radio" name="amount" value="under100" data-save><span>Moins de 100 $</span></label>
+              <label><input type="radio" name="amount" value="100to499" data-save><span>100 $ à 499,99 $</span></label>
+              <label><input type="radio" name="amount" value="500plus" checked data-save><span>500 $ ou plus</span></label>
+            </div></div>
+          <label class="check full"><input type="checkbox" name="gst" checked data-save><span>Je suis inscrit à la TPS/TVH (et à la TVQ au Québec)</span></label>
+          <label class="check full"><input type="checkbox" name="quebec" data-save><span>Mon entreprise est au Québec</span></label>
+        </div>
+        <p class="small muted" style="margin: 12px 0 0;">La liste ci-dessous s'adapte à vos réponses. Cochez chaque mention que votre facture contient.</p>
+      </form>
+      <ul class="checklist" id="checklist" data-score="{done} sur {total} mentions" data-all="C'est complet : votre facture contient toutes les mentions de la liste."
+        data-none="Cochez les mentions présentes sur votre facture." data-missing-one="Il manque {missing} mention : ajoutez-la avant d'envoyer votre facture."
+        data-missing-many="Il manque {missing} mentions : ajoutez-les avant d'envoyer votre facture.">
+        <li data-rule="itc_invoice_requirements.under_100:0"><label><input type="checkbox"><div><strong>Votre nom ou votre raison sociale</strong><span>Ou le nom sous lequel vous exploitez votre entreprise.</span></div></label></li>
+        <li data-rule="itc_invoice_requirements.under_100:1"><label><input type="checkbox"><div><strong>La date de la facture</strong></div></label></li>
+        <li data-rule="itc_invoice_requirements.under_100:2"><label><input type="checkbox"><div><strong>Le montant total</strong><span>Payé ou à payer.</span></div></label></li>
+        <li data-rule="itc_invoice_requirements.100_to_499_99:1" data-when="gst !amount=under100"><label><input type="checkbox"><div><strong>Votre numéro d'inscription à la TPS/TVH</strong><span>Votre numéro d'entreprise à 9 chiffres, suivi de RT et de 4 chiffres : par exemple 123456789 RT0001.</span></div></label></li>
+        <li data-rule="qst_registration_number_on_invoices" data-when="gst quebec !amount=under100"><label><input type="checkbox"><div><strong>Votre numéro d'inscription au fichier de la TVQ</strong><span>10 chiffres, suivis de TQ et de 4 chiffres : par exemple 1234567890 TQ0001.</span></div></label></li>
+        <li data-rule="itc_invoice_requirements.100_to_499_99:2" data-when="gst !amount=under100"><label><input type="checkbox"><div><strong>Les taxes facturées : TPS/TVH et, au Québec, TVQ</strong><span>Le montant de taxe pour chaque taux, ou le total avec la mention qu'il comprend la taxe et le taux. Si la facture mêle des articles taxables et des articles exonérés ou détaxés, indiquez lesquels sont taxables.</span></div></label></li>
+        <li data-rule="itc_invoice_requirements.500_and_over:1" data-when="gst amount=500plus"><label><input type="checkbox"><div><strong>Le nom de votre client ou sa raison sociale</strong><span>Ou celui de son mandataire autorisé.</span></div></label></li>
+        <li data-rule="itc_invoice_requirements.500_and_over:2" data-when="gst amount=500plus"><label><input type="checkbox"><div><strong>Les modalités de paiement</strong><span>Quand la facture est payable : sur réception ou à une date fixée, par exemple.</span></div></label></li>
+        <li data-rule="itc_invoice_requirements.500_and_over:3" data-when="gst amount=500plus"><label><input type="checkbox"><div><strong>La description de chaque fourniture</strong><span>Suffisante pour reconnaître chaque service ou bien.</span></div></label></li>
+        <li data-rule="quebec_invoices_in_french" data-when="quebec"><label><input type="checkbox"><div><strong>Une facture rédigée en français</strong><span>Charte de la langue française, pour les entreprises au Québec. Le <a href="{{link:invoice}}">générateur de facture</a> peut vous aider.</span></div></label></li>
+      </ul>
+    </div>
+    <div class="results">
+      <div class="card">
+        <div class="label" style="margin-bottom: 8px;">Votre facture</div>
+        <div class="progress"><div id="cl-bar"></div></div>
+        <div role="status" aria-atomic="true">
+          <p style="margin: 12px 0 0; font-weight: 700;" id="cl-score">0 sur 8 mentions</p>
+          <p class="notice warn" id="cl-msg" style="margin: 12px 0 0;">Cochez les mentions présentes sur votre facture.</p>
+        </div>
+        <div aria-live="polite">
+          <p class="notice" data-show-when="!gst" style="margin: 12px 0 0;" hidden>Vous n'êtes pas inscrit à la TPS/TVH ? À titre de petit fournisseur, vous ne la percevez généralement pas : votre client n'a donc pas de crédit de taxe à demander, et seules les mentions de base restent. L'inscription devient obligatoire quand vos fournitures taxables dépassent 30 000 $ en un seul trimestre civil ou sur quatre trimestres civils consécutifs (au Québec, le même seuil vaut pour la TVQ).</p>
+          <p class="notice" data-show-when="gst quebec !amount=500plus" style="margin: 12px 0 0;" hidden>Moins de 500 $ au Québec : votre client peut avoir besoin d'autres renseignements pour son RTI de TVQ, comme une description. Consultez la page <a href="https://www.revenuquebec.ca/fr/entreprises/taxes/tpstvh-et-tvq/perception-de-la-tps-et-de-la-tvq/preparation-des-factures/" rel="noopener">Préparation des factures</a> de Revenu Québec.</p>
+        </div>
+      </div>
+      <a class="btn btn-primary btn-block" href="{{link:invoice}}" style="margin-top: 14px;">Créer une facture complète gratuitement</a>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>Bon à savoir</h2>
+  <h3>Ces mentions servent aux crédits de taxe de votre client</h3>
+  <p>Selon Revenu Québec, aucun modèle de facture n'est imposé par les régimes de la TPS/TVH et de la TVQ, sauf pour la restauration et le transport par taxi au Québec. La liste suit les renseignements dont un client inscrit à la TPS/TVH a besoin pour demander ses crédits de taxe sur les intrants à l'égard de la taxe que vous facturez (et, au Québec, ses remboursements de la taxe sur les intrants pour la TVQ). Plus le total est élevé, plus il faut de mentions : les seuils sont de 100 $ et de 500 $, taxes comprises. Un client non inscrit, comme un consommateur, ne demande pas de crédit de taxe.</p>
+  <h3>Utile aussi</h3>
+  <p>Non exigés par ces règles, mais souvent utiles : un numéro de facture unique, une date d'échéance et la façon de vous payer. Le <a href="{{link:invoice}}">générateur de facture</a> les ajoute pour vous, et le <a href="{{link:salestax}}">calculateur de TPS et de TVQ</a> calcule les taxes de chaque province.</p>
+  <p class="small muted">Information à titre indicatif, d'après l'ARC, Revenu Québec et la Charte de la langue française. Vérifiez votre situation en cas de doute.</p>
+</section>

@@ -77,6 +77,15 @@
       "confidence": "medium",
       "note": "You remain a small supplier while worldwide taxable supplies (yours plus those of associates) do not exceed $30,000 in a single calendar quarter or over the last four consecutive calendar quarters. If one quarter alone exceeds $30,000, registration is required from the supply that made you exceed it; if the four-quarter total exceeds it, registration is required within 29 days and you must charge tax from the end of the following month. Voluntary registration is possible (it lets you claim input tax credits). Not re-opened on 2026-10-20."
     },
+    "small_supplier_not_required_to_collect": {
+      "value": "A small supplier that is not registered is generally not required to collect the GST/HST on most of its taxable supplies, and cannot claim input tax credits.",
+      "unit": "text",
+      "label": "Unregistered small supplier: GST/HST generally not collected",
+      "source": "https://www.canada.ca/en/revenue-agency/services/forms-publications/publications/2-2/small-suppliers.html",
+      "source_title": "GST/HST Memorandum 2.2, Small Suppliers - Canada.ca",
+      "confidence": "medium",
+      "note": "Read on 2026-10-21 through search excerpts. Exceptions not covered by the site's tools: taxable sales of real property, taxi and commercial ride-sharing drivers, non-resident performers, certain financial institutions. A person who exceeds the $30,000 threshold in a single calendar quarter must collect the tax from the supply that makes it exceed the threshold."
+    },
     "qst_small_supplier_threshold": {
       "value": 30000,
       "unit": "CAD",
@@ -119,7 +128,25 @@
       "source": "https://laws-lois.justice.gc.ca/eng/regulations/SOR-91-45/",
       "source_title": "Input Tax Credit Information (GST/HST) Regulations (SOR/91-45)",
       "confidence": "medium",
-      "note": "Thresholds are under $100, $100 to $499.99 and $500 or more since 2021-01-01; the earlier thresholds were $30 and $150. Revenu Québec applies the same thresholds for QST input tax refunds, with the QST registration number required from $100. Also summarized in RC4022. Not re-opened on 2026-10-20."
+      "note": "Thresholds are under $100, $100 to $499.99 and $500 or more (they replaced $30 and $150). They apply to the total amount paid or payable shown on the supporting documentation (regulation wording), i.e. taxes included; Revenu Québec states the total value of the purchase including taxes. Re-checked on 2026-10-21 against search excerpts of CRA GST/HST Memorandum 8.4 (Documentary Requirements for Claiming Input Tax Credits, https://www.canada.ca/en/revenue-agency/services/forms-publications/publications/8-4/documentary-requirements-claiming-input-tax-credits.html) and Excise and GST/HST News No. 118: the registration number and the tax indication start at $100; the customer's name, the terms of payment and the description at $500. Effective date: CRA mentions April 20, 2021 (an earlier note said 2021-01-01); not shown on the site. Revenu Québec applies the same thresholds for QST input tax refunds, with the QST registration number required from $100. Also summarized in RC4022."
+    },
+    "qst_registration_number_on_invoices": {
+      "value": 100,
+      "unit": "CAD",
+      "label": "Invoice total (taxes included) from which the supplier's QST registration number must appear for the customer's input tax refund (ITR)",
+      "source": "https://www.revenuquebec.ca/en/businesses/consumption-taxes/gsthst-and-qst/collecting-gst-and-qst/preparing-invoices/",
+      "source_title": "Preparing Invoices - Revenu Québec",
+      "confidence": "medium",
+      "note": "Read on 2026-10-21 through search excerpts (table partly garbled): the supplier's GST and QST registration numbers are not required under $100 and are required from $100; the purchaser's name and the terms of payment from $500. The same table appears to require, for the QST only, a description and the tax amount on smaller invoices: not confirmed, see open questions. Revenu Québec: no special invoice format except for restaurants and taxis; the supplier must provide the information in writing on request."
+    },
+    "quebec_invoices_in_french": {
+      "value": "Invoices, receipts, acquittances and other documents of the same nature are drawn up in French.",
+      "unit": "text",
+      "label": "Charter of the French language, section 57, first paragraph: invoices of businesses in Québec are drawn up in French",
+      "source": "https://www.legisquebec.gouv.qc.ca/en/document/cs/c-11",
+      "source_title": "C-11 - Charter of the French language - LégisQuébec",
+      "confidence": "medium",
+      "note": "Read on 2026-10-21 through search excerpts of LégisQuébec (French: « Les factures, les reçus, les quittances et les autres documents de même nature sont rédigés en français »). The second paragraph added in 2022 (no document sent in another language unless the French version is available on terms at least as favourable) had its entry into force suspended by the Superior Court (August 2022); its current status is not confirmed, so the site does not state it. Whether another language may accompany French (section 89) is not shown on the site."
     },
     "tax_number_formats": {
       "value": {
@@ -1239,12 +1266,13 @@
     }
   },
   "open_questions": [
-    "Invoice information thresholds for input tax credits (under $100 / $100-$499.99 / $500+ since 2021-01-01): check against RC4022 and SOR/91-45; the earlier thresholds were $30 / $150.",
     "British Columbia: confirm enactment of the 5.60% lowest rate (Budget 2026), the 2026 BPA of $13,216 and the $690 BC tax reduction maximum.",
     "CRA reasonable kilometre allowance rates for 2026 not confirmed (2025: 72 cents first 5,000 km, 66 cents after, +4 cents in the territories). Also the 2026 vehicle ceilings (class 10.1 capital cost, zero-emission vehicles, lease, interest).",
     "Québec self-employed: health services fund (FSS) contribution on non-employment income and RAMQ prescription drug insurance premium for 2026 were not researched; both affect a Québec net income calculator.",
     "EI for Québec self-employed: confirm that the Québec rate (1.30%, maximum $895.70) applies to opted-in self-employed people, and the 2026 minimum self-employed earnings needed to claim benefits.",
     "QPIP: confirm the $2,000 minimum net self-employment income for QPIP premiums and the split between deduction and credit for the self-employed.",
-    "Instalments, filing deadlines, Interest Act s. 3/s. 4 text, Criminal Code s. 347 (35% APR since 2025-01-01) and prompt-payment laws (construction only) are stable statutory rules taken from their official sources but not re-opened on 2026-10-20."
+    "Instalments, filing deadlines, Interest Act s. 3/s. 4 text, Criminal Code s. 347 (35% APR since 2025-01-01) and prompt-payment laws (construction only) are stable statutory rules taken from their official sources but not re-opened on 2026-10-20.",
+    "Revenu Québec, 'Preparing Invoices': for the QST only, are a description of the property or service and the QST amount required on invoices under $500 (and under $100)? Search excerpts of the table were garbled; the site sends Québec users to that page for invoices under $500.",
+    "Charter of the French language: may an invoice of a Québec business be bilingual (section 89: French with another language), and does section 57 apply to a supplier outside Québec invoicing a Québec client? The site only states that invoices of businesses in Québec are drawn up in French."
   ]
 }

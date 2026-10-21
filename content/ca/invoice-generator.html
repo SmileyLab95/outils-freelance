@@ -9,12 +9,12 @@
   "app": "Canada Invoice Generator",
   "scripts": ["tools/invoice.js"],
   "rules": "ca",
-  "sources": ["itc_invoice_requirements", "tax_number_formats", "hst_rates", "small_supplier_threshold"],
+  "sources": ["itc_invoice_requirements", "tax_number_formats", "hst_rates", "small_supplier_threshold", "small_supplier_not_required_to_collect", "quebec_invoices_in_french"],
   "priority": 1.0,
   "faq": [
-    ["What must a Canadian invoice include?", "Your business name, the invoice date, a unique invoice number, your client's name, a description of the work and the total. Once you are registered for GST/HST, add your registration number (9-digit business number + RT0001) and the tax charged, so your client can claim input tax credits: for invoices of $100 or more, the CRA expects your GST/HST number and the tax amount or rate; from $500, also the client's name and the terms of payment."],
+    ["What must a Canadian invoice include?", "Your name or business name, the invoice date and the total. Once you are registered for GST/HST, your client needs more to claim input tax credits: from $100, your registration number (9-digit business number + RT0001) and the tax charged; from $500, also the client's name, the terms of payment and a description of each supply. In Quebec, invoices of businesses are drawn up in French: use our <a href=\"{{link:ca-fr/invoice}}\" hreflang=\"fr-CA\">invoice generator in French</a>. An invoice number isn't required by these rules, but it helps you and your client keep track. The <a href=\"{{link:invoice-rules}}\">invoice checklist</a> lists every detail."],
     ["Which GST/HST rate do I put on the invoice?", "Generally the rate of the province where your client is located: 13% HST in Ontario, 15% in New Brunswick, Newfoundland and Labrador and PEI, 14% in Nova Scotia, and 5% GST elsewhere, plus 9.975% QST for Québec clients if you are registered with Revenu Québec."],
-    ["Do I charge GST/HST if I'm a small supplier?", "No. If your taxable revenue is $30,000 or less over four consecutive quarters and you haven't registered voluntarily, you don't charge GST/HST. Choose “Not registered” in the form."],
+    ["Do I charge GST/HST if I'm a small supplier?", "Generally not, if you haven't registered voluntarily: you remain a small supplier while your taxable supplies don't go over $30,000 in a single calendar quarter or over four consecutive calendar quarters. Choose “Not registered” in the form."],
     ["How do I save the invoice as a PDF?", "Click “Download PDF”, then choose “Save as PDF” as the printer. Your details are remembered on this device for next time."]
   ]
 }-->

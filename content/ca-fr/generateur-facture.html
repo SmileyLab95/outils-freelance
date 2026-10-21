@@ -9,11 +9,11 @@
   "app": "Générateur de facture du travailleur autonome",
   "scripts": ["tools/invoice.js"],
   "rules": "ca",
-  "sources": ["itc_invoice_requirements", "tax_number_formats", "qst_rate", "small_supplier_threshold"],
+  "sources": ["itc_invoice_requirements", "qst_registration_number_on_invoices", "tax_number_formats", "qst_rate", "small_supplier_threshold", "small_supplier_not_required_to_collect", "quebec_invoices_in_french"],
   "priority": 1.0,
   "faq": [
-    ["Que doit contenir la facture d'un travailleur autonome ?", "Votre nom ou celui de votre entreprise, la date, un numéro de facture unique, le nom du client, la description des services, le montant et le total. Une fois inscrit aux taxes, ajoutez vos numéros de TPS et de TVQ et le montant de chaque taxe : c'est ce qui permet à votre client de récupérer les taxes payées."],
-    ["Dois-je facturer la TPS et la TVQ ?", "Seulement si vous êtes inscrit. Comme petit fournisseur (30 000 $ ou moins de fournitures taxables sur quatre trimestres consécutifs), vous pouvez ne pas l'être : choisissez alors « Non inscrit » dans le formulaire."],
+    ["Que doit contenir la facture d'un travailleur autonome ?", "Votre nom ou votre raison sociale, la date et le total. Une fois inscrit aux taxes, votre client a besoin de plus pour récupérer les taxes payées : à partir de 100 $, votre numéro de TPS/TVH (et, au Québec, celui de TVQ) et les taxes facturées ; à partir de 500 $, aussi son nom, les modalités de paiement et la description de chaque fourniture. Au Québec, les factures des entreprises sont rédigées en français. Le numéro de facture n'est pas exigé par ces règles, mais il facilite le suivi. La <a href=\"{{link:invoice-rules}}\">liste des mentions</a> détaille chaque point."],
+    ["Dois-je facturer la TPS et la TVQ ?", "Seulement si vous êtes inscrit. Vous restez petit fournisseur tant que vos fournitures taxables ne dépassent pas 30 000 $ en un seul trimestre civil ni sur quatre trimestres civils consécutifs ; vous pouvez alors ne pas être inscrit : choisissez « Non inscrit » dans le formulaire."],
     ["Quelle est la différence entre une facture et une soumission ?", "La soumission (ou devis) propose un prix avant le travail ; une fois acceptée et signée, elle engage les deux parties. La facture réclame le paiement une fois le travail fait."],
     ["Comment enregistrer ma facture en PDF ?", "Cliquez sur « Télécharger en PDF », puis choisissez « Enregistrer au format PDF » comme imprimante. Vos informations restent mémorisées sur cet appareil pour la prochaine fois."]
   ]

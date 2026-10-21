@@ -1,5 +1,31 @@
 # Journal des modifications
 
+## 2026-10-21 — Canada : *What to put on an invoice* et « Que mettre sur une facture »
+
+- Deux pages (anglais et français), même liste : les mentions dont un client inscrit à la TPS/TVH a besoin pour
+  demander ses crédits de taxe sur les intrants, selon le total de la facture taxes comprises (moins de 100 $,
+  100 $ à 499,99 $, 500 $ ou plus : 3, 5 ou 8 points), plus, au Québec, le numéro de TVQ (dès 100 $) et la facture
+  rédigée en français (Charte de la langue française, art. 57) ; sans inscription, seules les mentions de base
+  restent, avec le rappel du petit fournisseur. Situation mémorisée ; ajoutées aux menus « Invoicing » et
+  « Facturer » ; même identifiant que les listes française et britannique.
+- Règles : `itc_invoice_requirements` revérifiée (tableau du mémorandum 8.4 de l'ARC, question ouverte levée) ;
+  nouvelles règles `qst_registration_number_on_invoices`, `quebec_invoices_in_french`,
+  `small_supplier_not_required_to_collect`. Signalé plutôt que publié : les renseignements propres à la TVQ sous
+  500 $ (tableau de Revenu Québec illisible dans les extraits : la page renvoie à Revenu Québec) et deux questions
+  sur la langue des factures.
+- Générateurs de facture canadiens : FAQ alignées (le numéro de facture n'est plus dit exigé ; seuil du petit
+  fournisseur exact, aussi dans les calculateurs de TPS/TVH ; renvoi vers le générateur en français pour le Québec).
+- `tools/checklist.js` : plusieurs conditions par point (toutes requises). `build.py` : liens vers une page d'une
+  autre section (`{{link:ca-fr/invoice}}`). Listes : traits entre les seuls points visibles ; score et message
+  annoncés à part des rappels (aussi au Royaume-Uni).
+- Tests : unitaires (chaque mention des paliers reprise une fois, mêmes points en anglais et en français, conditions
+  des points et des rappels, nombre de points par situation, seuils et exemples de numéros repris des règles) ;
+  parcours navigateur des deux pages (paliers, inscription, Québec, clavier, mémorisation, accessibilité avec les
+  rappels affichés, lien vers le générateur en français), contrôlés en réintroduisant les erreurs ; suite complète (151 tests
+  unitaires, 1 835 vérifications navigateur, accessibilité comprise) ; revue critique
+  (10 points, 9 traités ; confiance des nouvelles règles laissée « moyenne », selon la convention du projet pour une
+  lecture par recherche).
+
 ## 2026-10-21 — Royaume-Uni : *What to put on an invoice*
 
 - Nouvelle page `/uk/invoice-requirements/` : liste interactive des détails d'une facture, selon la situation

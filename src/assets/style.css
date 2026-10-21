@@ -184,8 +184,8 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--b
 
 /* ---------- Checklist ---------- */
 .checklist { list-style: none; margin: 0; padding: 0; }
-.checklist li { border-bottom: 1px solid var(--line); }
-.checklist li:last-child { border-bottom: 0; }
+/* Trait entre deux points visibles, quels que soient les points masqués par les filtres de situation. */
+.checklist li:not([hidden]) ~ li:not([hidden]) { border-top: 1px solid var(--line); }
 .checklist label { display: grid; grid-template-columns: 26px 1fr; gap: 12px; padding: 14px 4px; cursor: pointer; }
 .checklist input { width: 20px; height: 20px; margin-top: 2px; accent-color: var(--ok); }
 .checklist strong { display: block; }

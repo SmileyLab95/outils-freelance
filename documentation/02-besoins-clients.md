@@ -64,9 +64,9 @@ Priorité : **P1** (fort volume de recherche, à faire d'abord), **P2**, **P3**.
 | Besoin | Outil ou contenu | FR | US | UK | CA | Priorité |
 |---|---|---|---|---|---|---|
 | Créer une facture | Générateur de facture (PDF) adapté au pays | ✅ | 🟡 | 🟡 | 🟡 | P1 |
-| Les mentions obligatoires | Checklist interactive | ✅ | — | ✅ | 🟡 | P2 |
+| Les mentions obligatoires | Checklist interactive | ✅ | — | ✅ | ✅ | P2 |
 | Calculer la taxe sur les ventes | Calculateur TVA / *VAT* / TPS-TVH-TVQ par province | ✅ TVA | — | 🟡 VAT | 🟡 par province | P1 |
-| Facturer un client étranger | Guide (autoliquidation, devises, mentions) | 🟡 | 🟡 | 🟡 | 🟡 | P2 |
+| Facturer un client étranger | Guide (autoliquidation, devises, mentions) | ✅ | 🟡 | 🟡 | 🟡 | P2 |
 | Numéroter ses factures | Guide + numérotation automatique dans le générateur | ✅ (auto) | 🟡 | 🟡 | 🟡 | P3 |
 | Facturation électronique obligatoire | Guide, calendrier, comparatif des plateformes agréées | 🟡 | — | — | — | P1 (FR) |
 

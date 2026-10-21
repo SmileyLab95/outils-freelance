@@ -726,6 +726,77 @@ const tests = {
     check(!(await page.textContent("#iv-preview")).includes("GST ("), "facture CA : petit fournisseur sans taxe");
     await page.selectOption("#iv-tax-rate", "ON");
   },
+  async "ca/invoice-requirements/"(page) {
+    const visible = () => page.$$eval("#checklist li", (lis) => lis.filter((li) => !li.hidden && li.offsetParent !== null).map((li) => li.textContent));
+    const score = () => page.textContent("#cl-score");
+    const msg = () => page.textContent("#cl-msg");
+    const tickAll = async () => { for (const box of await page.$$("#checklist li:not([hidden]) input")) await box.check(); };
+    let items = await visible();
+    check(items.length === 8 && (await score()) === "0 of 8 details" && items.some((t) => t.includes("GST/HST registration number")) &&
+      items.some((t) => t.includes("terms of payment")) && !items.some((t) => /QST registration|in French/.test(t)),
+      "liste CA : 8 mentions à 500 $ ou plus, inscrit, hors Québec");
+    check((await msg()) === "Tick the details your invoice shows." && !(await page.isVisible("text=Not registered for GST/HST?")),
+      "liste CA : message de départ, pas de rappel du petit fournisseur");
+    await tickAll();
+    check((await score()) === "8 of 8 details" && (await msg()).startsWith("All set"), "liste CA : toutes les mentions cochées");
+    await page.click('label:has(input[value="100to499"])');
+    items = await visible();
+    check(items.length === 5 && (await score()) === "5 of 5 details" && !items.some((t) => t.includes("terms of payment")),
+      "liste CA : 100 $ à 499,99 $ → 5 mentions (sans client, modalités ni description)");
+    await page.click('label:has(input[value="under100"])');
+    items = await visible();
+    check(items.length === 3 && (await score()) === "3 of 3 details" && !items.some((t) => t.includes("registration number")),
+      "liste CA : moins de 100 $ → nom, date et total");
+    await page.click('label:has(input[name="quebec"])');
+    items = await visible();
+    check(items.length === 4 && items.some((t) => t.includes("in French")) && !items.some((t) => t.includes("QST registration")) &&
+      (await score()) === "3 of 4 details" && (await msg()) === "1 detail missing: add it before you send your invoice." &&
+      await page.isVisible("text=Under $500 in Quebec"), "liste CA : Québec sous 100 $ → français, pas de numéro de TVQ, renvoi à Revenu Québec");
+    await accessible(page, "liste CA (renvoi à Revenu Québec affiché)");
+    const fr = await page.getAttribute("#checklist a[hreflang=fr-CA]", "href");
+    check(fr.endsWith("/ca/fr/generateur-facture/") && (await page.request.get(`http://127.0.0.1:${port}${fr}`)).status() === 200,
+      "liste CA : lien vers le générateur de facture en français");
+    await page.click('label:has(input[value="500plus"])');
+    items = await visible();
+    check(items.length === 10 && items.some((t) => t.includes("QST registration number")) && (await score()) === "8 of 10 details" &&
+      !(await page.isVisible("text=Under $500 in Quebec")), "liste CA : Québec à 500 $ ou plus → 10 mentions, numéro de TVQ");
+    check((await msg()) === "2 details missing: add them before you send your invoice.", "liste CA : 2 mentions manquantes (pluriel)");
+    await page.click('label:has(input[name="gst"])');
+    items = await visible();
+    check(items.length === 4 && !items.some((t) => /registration number|tax charged|terms of payment/.test(t)) &&
+      await page.isVisible("text=Not registered for GST/HST?") && !(await page.isVisible("text=Under $500 in Quebec")),
+      "liste CA : non inscrit → nom, date, total et français (Québec), rappel du petit fournisseur");
+    await page.click('label:has(input[value="100to499"])');
+    check(!(await page.isVisible("text=Under $500 in Quebec")), "liste CA : pas de renvoi à Revenu Québec sans inscription");
+    await accessible(page, "liste CA (rappel du petit fournisseur affiché)");
+    await page.click('label:has(input[value="500plus"])');
+    await page.focus('input[name="amount"][value="500plus"]');
+    await page.keyboard.press("ArrowLeft");
+    check(await page.isChecked('input[name="amount"][value="100to499"]'), "liste CA : palier changé au clavier (flèches)");
+    await page.reload({ waitUntil: "networkidle" });
+    check(await page.isChecked('input[name="amount"][value="100to499"]') && !(await page.isChecked('input[name="gst"]')) &&
+      await page.isChecked('input[name="quebec"]') && (await score()) === "0 of 4 details", "liste CA : situation mémorisée après rechargement");
+    await page.click('label:has(input[value="500plus"])');
+    await page.click('label:has(input[name="gst"])');
+    await page.click('label:has(input[name="quebec"])');
+    check((await score()) === "0 of 8 details", "liste CA : retour à la situation par défaut");
+  },
+  async "ca/fr/mentions-facture/"(page) {
+    const text = async (sel) => (await page.textContent(sel)).replace(/[\u00a0\u202f]/g, " ");
+    const visible = () => page.$$eval("#checklist li", (lis) => lis.filter((li) => !li.hidden && li.offsetParent !== null).length);
+    check((await visible()) === 8 && (await text("#cl-score")) === "0 sur 8 mentions" && (await text("#cl-msg")) === "Cochez les mentions présentes sur votre facture.",
+      "liste CA-FR : 8 mentions par défaut, message de départ");
+    await page.click('label:has(input[name="quebec"])');
+    check((await visible()) === 10 && await page.isVisible("#checklist >> text=rédigée en français"), "liste CA-FR : Québec → 10 mentions, dont le français");
+    for (const box of await page.$$("#checklist li:not([hidden]) input")) await box.check();
+    check((await text("#cl-score")) === "10 sur 10 mentions" && (await text("#cl-msg")).startsWith("C'est complet"), "liste CA-FR : toutes les mentions cochées");
+    await page.uncheck("#checklist li:not([hidden]) input >> nth=0");
+    check((await text("#cl-msg")) === "Il manque 1 mention : ajoutez-la avant d'envoyer votre facture.", "liste CA-FR : une mention manquante (singulier)");
+    await page.click('label:has(input[value="under100"])');
+    check((await visible()) === 4 && await page.isVisible("text=Moins de 500 $ au Québec"), "liste CA-FR : moins de 100 $ au Québec → 4 mentions, renvoi à Revenu Québec");
+    await page.click('label:has(input[value="500plus"])');
+    await page.click('label:has(input[name="quebec"])');
+  },
   async "ca/late-fee-calculator/"(page) {
     check((await page.textContent("#l-fee")).trim() === "$44.38", "intérêts CA : 2 000 $ × 18 % × 45 ÷ 365");
     check((await page.textContent("#l-clause")).includes("per year"), "intérêts CA : clause avec taux annuel (Loi sur l'intérêt)");
