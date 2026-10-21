@@ -84,7 +84,7 @@ Priorité : **P1** (fort volume de recherche, à faire d'abord), **P2**, **P3**.
 | Besoin | Outil ou contenu | FR | US | UK | CA | Priorité |
 |---|---|---|---|---|---|---|
 | Combien vais-je payer ? | Calculateur d'impôts et cotisations | ✅ micro | 🟡 *self-employment tax* + impôt fédéral | 🟡 *income tax* + *NI* | 🟡 fédéral + provincial + RPC/RRQ | P1 |
-| Combien mettre de côté sur chaque facture ? | Calculateur « à mettre de côté » | ✅ | ✅ | ✅ | 🟡 | P1 |
+| Combien mettre de côté sur chaque facture ? | Calculateur « à mettre de côté » | ✅ | ✅ | ✅ | ✅ | P1 |
 | Payer ses acomptes | Calculateur d'acomptes | — | 🟡 *quarterly estimated taxes* | 🟡 *payments on account* | 🟡 acomptes provisionnels | P1 |
 | Ne rater aucune échéance | Calendrier fiscal avec export agenda (.ics) | 🟡 | 🟡 | 🟡 | 🟡 | P2 |
 | Les seuils à surveiller | Jauges (TVA, plafonds) intégrées aux simulateurs | ✅ | 🟡 | 🟡 | 🟡 | P2 |

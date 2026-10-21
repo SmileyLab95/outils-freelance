@@ -9,6 +9,7 @@
       "label": "Taxes",
       "items": [
         "tax",
+        "set-aside",
         "salestax",
         "calendar",
         "retirement",

@@ -1,0 +1,127 @@
+<!--{
+  "id": "set-aside",
+  "slug": "combien-mettre-de-cote-impot/",
+  "title": "Combien mettre de côté pour l'impôt (travailleur autonome)",
+  "description": "La part de chaque paiement à garder pour l'impôt et le RRQ (ou le RPC) en 2026, selon votre province, avec la TPS/TVQ et les acomptes provisionnels.",
+  "menu": "Combien mettre de côté pour l'impôt",
+  "icon": "🏦",
+  "blurb": "La part de chaque paiement à garder pour l'impôt, par province.",
+  "app": "Calculateur « combien mettre de côté »",
+  "scripts": ["engines/brackets.js", "engines/tax-ca.js", "tools/ca-setaside.js"],
+  "rules": "ca",
+  "sources": ["cpp_rate_self_employed", "cpp2_rate_self_employed", "qpp_rate_self_employed", "qpip_rate_self_employed", "federal_income_tax_brackets", "quebec_abatement", "instalment_threshold", "instalment_threshold_quebec", "instalment_due_dates_2026", "balance_due_date", "filing_deadline_self_employed", "gst_rate", "hst_rates", "qst_rate", "pst_on_professional_services", "small_supplier_threshold", "qst_small_supplier_threshold"],
+  "priority": 0.9,
+  "faq": [
+    ["Quel pourcentage un travailleur autonome doit-il mettre de côté ?", "Cela dépend de votre revenu et de votre province. Vous payez les deux parts du RRQ et le RQAP au Québec (ou du RPC ailleurs), plus l'impôt fédéral et provincial. Sans autre revenu, cela fait environ 26 % d'un revenu net de 50 000 $ et 33,1 % de 100 000 $ au Québec. Le calculateur établit votre propre pourcentage avec les taux de 2026."],
+    ["Faut-il aussi mettre de côté la TPS et la TVQ ?", "Oui, si vous êtes inscrit : la TPS et la TVQ (ou la TVH) que vous percevez ne vous appartiennent pas et se versent avec vos déclarations. Pour la plupart des services, le taux dépend de la province du client, pas de la vôtre : le calculateur utilise celle que vous choisissez et retire d'abord les taxes de chaque paiement. La TVP n'est pas comptée : en Colombie-Britannique, en Saskatchewan et au Manitoba (où elle s'appelle TVD), elle vise une liste de services ; vérifiez si le vôtre y figure."],
+    ["Dois-je m'inscrire aux fichiers de la TPS et de la TVQ ?", "Dès que vos fournitures taxables dépassent 30 000 $ au cours d'un seul trimestre civil ou des quatre derniers trimestres civils consécutifs, vous n'êtes plus un petit fournisseur et devez vous inscrire (au Québec, à la TVQ aussi). En dessous, l'inscription est facultative."],
+    ["Quand payer l'impôt mis de côté ?", "Si votre impôt à payer dépasse 3 000 $ cette année et dépassait aussi 3 000 $ au cours de l'une des deux années précédentes, vous versez des acomptes provisionnels le 15 mars, le 15 juin, le 15 septembre et le 15 décembre. Au Québec, l'ARC applique un seuil de 1 800 $ à votre impôt fédéral, et Revenu Québec son propre seuil de 1 800 $ à votre impôt du Québec. Sinon, tout le solde est dû le 30 avril 2027, même si les travailleurs autonomes ont jusqu'au 15 juin 2027 pour produire leur déclaration."],
+    ["Est-ce le montant exact que je devrai ?", "C'est une estimation pour vous organiser. Elle ne tient pas compte d'un revenu d'emploi, des cotisations au REER, des crédits d'impôt autres que le montant personnel de base et le RRQ ou le RPC, des autres déductions ni, au Québec, de la cotisation au Fonds des services de santé et de la prime d'assurance médicaments de la RAMQ. Pour le détail, utilisez le <a href=\"{{link:tax}}\">calculateur d'impôt du travailleur autonome</a>."]
+  ]
+}-->
+<script type="application/json" id="ca-setaside-data">
+{
+  "names": "name_fr", "default_province": "QC", "percent": " %", "per_month": "/mois",
+  "long_date": {"day": "numeric", "month": "long", "year": "numeric"},
+  "day_month": {"day": "numeric", "month": "long"}, "dates_year": "{list} {year}",
+  "sub": "de chaque paiement{excl} : environ {month} par mois. Total de l'année : {year}.", "excl": ", hors taxes de vente",
+  "sub_empty": "Indiquez ce que vous facturez dans un mois habituel.",
+  "pension_cpp": "RPC + RPC2 (les deux parts)", "pension_qpp": "RRQ + RRQ2 (les deux parts) et RQAP",
+  "federal": "Impôt fédéral", "federal_qc": "Impôt fédéral (après l'abattement du Québec)",
+  "provincial": "Impôt – {province}",
+  "inst_value": "{amount}/trimestre", "inst_none": "Non exigés",
+  "inst_required": "Si votre impôt à payer dépassait aussi {threshold} en {y2} ou en {y1} : environ {amount} par trimestre à l'ARC (impôt et RPC), au plus tard les {dates}.",
+  "inst_required_qc": "Si ces montants dépassaient aussi {threshold} en {y2} ou en {y1} : environ {parts} par trimestre, au plus tard les {dates}.",
+  "inst_part_cra": "{amount} à l'ARC (impôt fédéral)", "inst_part_rq": "{amount} à Revenu Québec (impôt du Québec, RRQ et RQAP)",
+  "inst_not": "Votre impôt à payer est inférieur à {threshold} : en général, pas d'acomptes provisionnels.",
+  "sales_names": {"GST": "TPS", "HST": "TVH", "QST": "TVQ"},
+  "sales_row": "{taxes} à verser avec vos déclarations",
+  "payment_label": "Un client vient de vous payer", "payment_label_tax": "Un client vient de vous payer, taxes comprises ({taxes})",
+  "client_same": "La même que la mienne",
+  "small_supplier": "Si tout ce montant correspond à des fournitures taxables, vous dépasseriez le seuil de petit fournisseur de {threshold} et devriez vous inscrire ({taxes}).",
+  "registered_note": "Les taxes de vente ({taxes}) sont d'abord retirées de chaque paiement, au taux de la province du client.",
+  "pst_note": "La TVP (TVD au Manitoba) n'est pas comptée : elle vise une liste de services dans cette province ; vérifiez si le vôtre y figure.",
+  "balance": "Le solde de 2026 est dû le {date}.",
+  "check": "Vérifiez {fields} : des chiffres seulement, par exemple 6 000. Montant compté comme 0 en attendant.",
+  "fields": {"c-income": "le montant facturé par mois", "c-expenses": "les dépenses", "c-payment": "le paiement reçu"},
+  "current_sr": "(le plus proche de votre revenu)"
+}
+</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Gratuit · année d'imposition 2026</span>
+    <h1>Combien mettre de côté pour l'impôt ?</h1>
+    <p class="lead">Indiquez ce que vous facturez dans un mois habituel et votre province : vous obtenez la part de chaque paiement à transférer dans votre épargne pour l'impôt, pour que l'argent soit là à chaque acompte et au solde d'avril.</p>
+    <ul class="trust"><li>Impôt et RRQ ou RPC</li><li>Toutes les provinces et les territoires</li><li>TPS/TVH et TVQ retirées</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="ca-setaside-form" onsubmit="return false">
+      <h2>Vos revenus</h2>
+      <div class="fields">
+        <div class="field"><label for="c-income">Facturé par mois, avant taxes de vente</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="c-income" name="income" value="6 000" aria-describedby="c-notice" data-save><span>$</span></div></div>
+        <div class="field"><label for="c-expenses">Dépenses d'entreprise par mois</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="c-expenses" name="expenses" value="500" aria-describedby="c-expenses-hint c-notice" data-save><span>$</span></div>
+          <span class="hint" id="c-expenses-hint">Sans les taxes que vous récupérez (crédits et remboursements de taxe sur les intrants).</span></div>
+        <div class="field full"><label for="c-province">Province ou territoire de résidence</label>
+          <select id="c-province" name="province" data-save></select></div>
+        <label class="check full"><input type="checkbox" id="c-registered" name="registered" data-save><span>Inscription à la TPS/TVH (et à la TVQ au Québec) : mes clients paient ces taxes en plus</span></label>
+      </div>
+      <h3>Répartir un paiement</h3>
+      <div class="fields">
+        <div class="field full"><label for="c-payment" id="c-payment-label">Un client vient de vous payer</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="c-payment" name="payment" value="3 000" aria-describedby="c-notice" data-save><span>$</span></div></div>
+        <div class="field full" id="c-client-field" hidden><label for="c-client">Province ou territoire du client</label>
+          <select id="c-client" name="client" aria-describedby="c-client-hint" data-save></select>
+          <span class="hint" id="c-client-hint">Pour la plupart des services, le taux des taxes de vente dépend de la province du client.</span></div>
+      </div>
+      <ul class="result-list" style="margin-top: 6px;">
+        <li id="c-pay-sales-row" hidden><span id="c-pay-sales-label">Taxes à verser avec vos déclarations</span><b id="c-pay-sales">–</b></li>
+        <li><span>À transférer dans l'épargne pour l'impôt</span><b id="c-pay-tax">–</b></li>
+        <li><span>Pour vous</span><b id="c-pay-keep">–</b></li>
+      </ul>
+    </form>
+
+    <div class="results">
+      <div class="result-hero" role="status" aria-atomic="true">
+        <div class="label">À mettre de côté</div>
+        <div class="big" id="c-share">–</div>
+        <div class="sub" id="c-sub">–</div>
+      </div>
+      <ul class="result-list card" style="padding: 6px 18px;">
+        <li><span id="c-pension-label">RRQ + RRQ2 (les deux parts) et RQAP</span><b id="c-pension">–</b></li>
+        <li><span id="c-federal-label">Impôt fédéral</span><b id="c-federal">–</b></li>
+        <li><span id="c-provincial-label">Impôt provincial</span><b id="c-provincial">–</b></li>
+        <li><span><strong>Total de l'année</strong></span><b id="c-total">–</b></li>
+        <li><span>Acomptes provisionnels</span><b id="c-inst">–</b></li>
+        <li><span>Ce qui vous reste après dépenses et impôt</span><b id="c-keep">–</b></li>
+      </ul>
+      <p class="small muted" id="c-inst-detail" style="margin: 8px 2px 0;">–</p>
+      <p class="notice" id="c-notice">–</p>
+      <div class="card" style="margin-top: 16px; padding: 18px;">
+        <h3 style="font-size: 1rem; margin-bottom: 8px;">La part augmente avec le revenu</h3>
+        <table class="mini-table">
+          <caption class="sr-only">Part du revenu net à mettre de côté, selon le revenu net annuel, dans la même province</caption>
+          <thead><tr><th>Revenu net annuel</th><th>Part du revenu net</th><th>Par mois</th></tr></thead>
+          <tbody id="c-levels"></tbody>
+        </table>
+        <p class="small muted" style="margin: 8px 0 0;">Même province, sans autre revenu.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>Une méthode simple qui fonctionne</h2>
+  <ol>
+    <li><strong>Ouvrez un compte d'épargne séparé</strong>, réservé à l'impôt, et aux taxes de vente si vous êtes inscrit.</li>
+    <li><strong>À chaque paiement d'un client,</strong> transférez-y votre part le jour même. N'attendez pas la fin du mois.</li>
+    <li><strong>Payez à partir de ce compte</strong> : vos acomptes provisionnels s'ils vous sont demandés, puis le solde au plus tard le 30 avril. Le <a href="{{link:calendar}}">calendrier fiscal</a> donne toutes les dates, et le <a href="{{link:salestax}}">calculateur de TPS et de TVQ</a> ajoute ou retire les taxes de n'importe quel prix.</li>
+    <li><strong>Refaites le calcul régulièrement</strong> : la part augmente avec votre revenu.</li>
+  </ol>
+  <p class="small muted">Estimation pour vous organiser, fondée sur les taux fédéraux et provinciaux de 2026. Elle ne remplace pas l'avis d'un comptable pour votre situation.</p>
+</section>

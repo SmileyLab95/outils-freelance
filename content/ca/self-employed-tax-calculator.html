@@ -22,16 +22,17 @@
 <script type="application/json" id="ca-tax-data">
 {
   "names": "name_en", "default_province": "ON", "percent": "%", "per_month": "/mo",
-  "date_format": {"month": "short", "day": "numeric", "year": "numeric"},
   "pension_cpp": "CPP + CPP2 (both halves)", "pension_qpp": "QPP + QPP2 (both halves)",
   "federal": "Federal income tax", "federal_qc": "Federal tax (after the 16.5% Québec abatement)",
   "provincial": "{province} income tax",
   "sub": "That's {rate} of your profit. Set aside about {aside} of every payment you receive.",
   "sub_empty": "Enter your net self-employment income.",
   "bar": {"net": "Take-home", "pension": "CPP", "pension_qc": "QPP + QPIP", "tax": "Income tax"},
-  "inst_required": "About {amount} per quarter to the CRA (income tax and CPP), due {dates}.",
-  "inst_required_qc": "About {federal} per quarter to the CRA (federal tax) and {quebec} to Revenu Québec (Québec tax, QPP and QPIP), due {dates}.",
+  "inst_required": "If your tax owing was also over {threshold} in {y2} or {y1}: about {amount} per quarter to the CRA (income tax and CPP), due {dates}.",
+  "inst_required_qc": "If these amounts were also over {threshold} in {y2} or {y1}: about {parts} per quarter, due {dates}.",
+  "inst_part_cra": "{amount} to the CRA (federal tax)", "inst_part_rq": "{amount} to Revenu Québec (Québec tax, QPP and QPIP)",
   "inst_not": "Your tax owing is under {threshold}: instalments are generally not required.",
+  "day_month": {"month": "long", "day": "numeric"}, "dates_year": "{list}, {year}",
   "steps": {
     "profit": "Net self-employment income", "pension_deduction": "Deductible part of CPP", "pension_deduction_qc": "Deductible part of QPP",
     "net_income": "Net income", "federal_brackets": "Federal tax on net income", "federal_credits": "Basic personal amount and CPP/QPP credits",
@@ -125,5 +126,6 @@
     </tbody>
   </table>
   </div>
+  <p>To know how much of each client payment to move to your tax savings, including GST/HST, use the <a href="{{link:set-aside}}">set-aside calculator</a>.</p>
   <p class="small muted">Estimate for information only, based on 2026 CRA, Revenu Québec and provincial figures. Your actual tax depends on your full return.</p>
 </section>

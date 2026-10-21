@@ -14,14 +14,33 @@
   var set = function (id, text) { $(id).textContent = text; };
   var pct = function (x) { return OF.fmt(Math.round(x * 1000) / 10) + L.percent; };
   var fill = function (text, vars) { return text.replace(/\{(\w+)\}/g, function (m, k) { return vars[k] != null ? vars[k] : m; }); };
-  var md = function (iso) { return OF.date(iso, L.date_format); };
-  var list = function (items) { return new Intl.ListFormat(OF.locale, { type: "conjunction" }).format(items); };
+  // Énumération dans la langue de la page (« A, B and C », « A, B et C ») ; repli pour les navigateurs anciens.
+  var list = function (items) {
+    return window.Intl && Intl.ListFormat ? new Intl.ListFormat(OF.locale, { type: "conjunction" }).format(items) : items.join(", ");
+  };
 
   // Provinces et territoires, triés par nom dans la langue de la page.
   var codes = Object.keys(P).sort(function (a, b) { return P[a][L.names].localeCompare(P[b][L.names], OF.locale); });
   $("t-province").innerHTML = codes.map(function (c) {
     return '<option value="' + c + '"' + (c === L.default_province ? " selected" : "") + ">" + P[c][L.names] + "</option>";
   }).join("");
+
+  /**
+   * Acomptes provisionnels : condition de l'année en cours (moteur) et rappel de celle des deux années précédentes ;
+   * au Québec, la part de l'ARC et celle de Revenu Québec, chacune seulement si son seuil est dépassé.
+   */
+  function instalmentText(r, inst) {
+    var year = +inst.dueDates[0].slice(0, 4);
+    var dates = fill(L.dates_year, { list: list(inst.dueDates.map(function (iso) { return OF.date(iso, L.day_month); })), year: year });
+    var vars = { threshold: OF.money(inst.threshold, 0), y1: year - 1, y2: year - 2, dates: dates, amount: OF.money(inst.federal, 0) };
+    if (!inst.required) return fill(L.inst_not, vars);
+    if (!r.quebec) return fill(L.inst_required, vars);
+    var parts = [];
+    if (inst.requiredFederal) parts.push(fill(L.inst_part_cra, { amount: OF.money(inst.federal, 0) }));
+    if (inst.requiredQuebec) parts.push(fill(L.inst_part_rq, { amount: OF.money(inst.quebec, 0) }));
+    vars.parts = list(parts);
+    return fill(L.inst_required_qc, vars);
+  }
 
   function compute() {
     var r = OFE.taxCA.estimate({ profit: OF.num($("t-profit").value) || 0, province: $("t-province").value }, R, P);
@@ -54,10 +73,7 @@
       return '<li><i class="' + p.cls + '"></i>' + p.label + " <b>" + Math.round(p.value / sum * 100) + L.percent + "</b></li>";
     }).join("") : "";
 
-    var dates = list(inst.dueDates.map(md));
-    $("r-inst").textContent = !inst.required ? fill(L.inst_not, { threshold: OF.money(inst.threshold, 0) })
-      : r.quebec ? fill(L.inst_required_qc, { federal: OF.money(inst.federal, 0), quebec: OF.money(inst.quebec, 0), dates: dates })
-      : fill(L.inst_required, { amount: OF.money(inst.federal, 0), dates: dates });
+    $("r-inst").textContent = instalmentText(r, inst);
 
     var S = L.steps;
     var steps = [

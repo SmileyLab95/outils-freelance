@@ -100,17 +100,24 @@
     };
   }
 
-  /** Acomptes provisionnels : quart de l'impôt et des cotisations de l'année si le seuil est dépassé. */
+  /**
+   * Acomptes provisionnels de l'année (condition de l'année en cours seulement : la loi exige aussi que le seuil ait
+   * été dépassé l'une des deux années précédentes, ce que l'appelant doit dire).
+   * Hors Québec : impôt et RPC à l'ARC si l'impôt à payer dépasse 3 000 $. Au Québec, deux tests distincts :
+   * l'ARC sur l'impôt fédéral (1 800 $), Revenu Québec sur l'impôt du Québec et les cotisations RRQ et RQAP (1 800 $ ;
+   * cotisations comptées par prudence, question ouverte des règles).
+   */
   function instalments(result, rules) {
-    var threshold = result.quebec ? rules.instalment_threshold_quebec : rules.instalment_threshold;
-    var owing = result.quebec ? result.federal : result.incomeTax + result.pensions.total;
-    var required = owing > threshold;
-    return {
-      required: required, threshold: threshold,
-      federal: required ? (result.quebec ? result.federal : result.incomeTax + result.pensions.total) / 4 : 0,
-      quebec: required && result.quebec ? (result.provincial + result.pensions.total + result.qpip) / 4 : 0,
-      dueDates: rules.instalment_due_dates_2026
-    };
+    var dates = rules.instalment_due_dates_2026;
+    if (!result.quebec) {
+      var owing = result.incomeTax + result.pensions.total, req = owing > rules.instalment_threshold;
+      return { required: req, requiredFederal: req, requiredQuebec: false, threshold: rules.instalment_threshold,
+               federal: req ? owing / 4 : 0, quebec: 0, dueDates: dates };
+    }
+    var t = rules.instalment_threshold_quebec, qcOwing = result.provincial + result.pensions.total + result.qpip;
+    var fed = result.federal > t, qc = qcOwing > t;
+    return { required: fed || qc, requiredFederal: fed, requiredQuebec: qc, threshold: t,
+             federal: fed ? result.federal / 4 : 0, quebec: qc ? qcOwing / 4 : 0, dueDates: dates };
   }
 
   function profitForTakeHome(takeHome, input, rules, provinces) {

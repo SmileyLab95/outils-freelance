@@ -29,7 +29,7 @@
     var rounded = OF.ceilShare(share);
     set("s-share", revenue > 0 ? pct(rounded) : "–");
     set("s-sub", revenue > 0
-      ? "of every payment you receive: about " + OF.money(revenue * rounded / 12, 0) + " a month, " + OF.money(r.total, 0) + " for the year."
+      ? "of every payment you receive: about " + OF.money(revenue * rounded / 12, 0) + " a month. Tax for the year: " + OF.money(r.total, 0) + "."
       : "Enter what you invoice in a typical month.");
     set("s-se", OF.money(r.se.total, 0));
     set("s-fed", OF.money(r.incomeTax + r.additionalMedicare, 0));
@@ -44,10 +44,12 @@
     set("s-pay-keep", OF.money(payment * (1 - rounded)));
 
     // Taux à mettre de côté selon le bénéfice, pour la même situation (sans dépenses).
+    // La ligne la plus proche du bénéfice est signalée (couleur, et texte pour les lecteurs d'écran).
+    var nearest = profit > 0 ? LEVELS.reduce(function (best, p) { return Math.abs(p - profit) < Math.abs(best - profit) ? p : best; }) : null;
     $("s-levels").innerHTML = LEVELS.map(function (p) {
-      var x = OFE.taxUS.estimate(input(p), R);
-      var current = profit >= p * 0.85 && profit < p * 1.18;
-      return "<tr" + (current ? ' class="current"' : "") + "><td>" + OF.money(p, 0) + "</td><td>" + pct(x.effectiveRate) +
+      var x = OFE.taxUS.estimate(input(p), R), current = p === nearest;
+      return "<tr" + (current ? ' class="current"' : "") + "><td>" + OF.money(p, 0) +
+        (current ? '<span class="sr-only"> (closest to your profit)</span>' : "") + "</td><td>" + pct(x.effectiveRate) +
         "</td><td>" + OF.money(x.total / 12, 0) + "</td></tr>";
     }).join("");
   }

@@ -22,16 +22,17 @@
 <script type="application/json" id="ca-tax-data">
 {
   "names": "name_fr", "default_province": "QC", "percent": " %", "per_month": "/mois",
-  "date_format": {"day": "numeric", "month": "long", "year": "numeric"},
   "pension_cpp": "RPC + RPC2 (les deux parts)", "pension_qpp": "RRQ + RRQ2 (les deux parts)",
   "federal": "Impôt fédéral", "federal_qc": "Impôt fédéral (après l'abattement du Québec de 16,5 %)",
   "provincial": "Impôt – {province}",
   "sub": "Soit {rate} de votre revenu. Mettez de côté environ {aside} de chaque paiement reçu.",
   "sub_empty": "Indiquez votre revenu net de travailleur autonome.",
   "bar": {"net": "Revenu net", "pension": "RPC", "pension_qc": "RRQ + RQAP", "tax": "Impôt"},
-  "inst_required": "Environ {amount} par trimestre à l'ARC (impôt et RPC), au plus tard le {dates}.",
-  "inst_required_qc": "Environ {federal} par trimestre à l'ARC (impôt fédéral) et {quebec} à Revenu Québec (impôt du Québec, RRQ et RQAP), au plus tard le {dates}.",
+  "inst_required": "Si votre impôt à payer dépassait aussi {threshold} en {y2} ou en {y1} : environ {amount} par trimestre à l'ARC (impôt et RPC), au plus tard les {dates}.",
+  "inst_required_qc": "Si ces montants dépassaient aussi {threshold} en {y2} ou en {y1} : environ {parts} par trimestre, au plus tard les {dates}.",
+  "inst_part_cra": "{amount} à l'ARC (impôt fédéral)", "inst_part_rq": "{amount} à Revenu Québec (impôt du Québec, RRQ et RQAP)",
   "inst_not": "Votre impôt à payer est inférieur à {threshold} : en général, pas d'acomptes provisionnels.",
+  "day_month": {"day": "numeric", "month": "long"}, "dates_year": "{list} {year}",
   "steps": {
     "profit": "Revenu net d'entreprise", "pension_deduction": "Partie déductible du RPC", "pension_deduction_qc": "Partie déductible du RRQ",
     "net_income": "Revenu net", "federal_brackets": "Impôt fédéral selon les paliers", "federal_credits": "Montant personnel de base et crédit RPC/RRQ",
@@ -112,5 +113,6 @@
     </tbody>
   </table>
   </div>
+  <p>Pour savoir quelle part de chaque paiement transférer dans votre épargne pour l'impôt, taxes de vente comprises, utilisez le <a href="{{link:set-aside}}">calculateur « combien mettre de côté »</a>.</p>
   <p class="small muted">Estimation à titre indicatif, fondée sur les paramètres 2026 de l'ARC, de Revenu Québec, de Retraite Québec et des provinces.</p>
 </section>

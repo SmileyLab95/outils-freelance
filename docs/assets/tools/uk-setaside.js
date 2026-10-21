@@ -30,7 +30,7 @@
     var error = bad.length ? " Check " + bad.join(", ") + ": type numbers only, for example 4,000. Counted as 0 until corrected." : "";
     set("u-share", revenue > 0 ? pct(rounded) : "–");
     set("u-sub", (revenue > 0
-      ? "of every payment" + (vat ? ", excluding VAT" : "") + ": about " + OF.money(revenue * rounded / 12, 0) + " a month, " + OF.money(r.total, 0) + " for the year."
+      ? "of every payment" + (vat ? ", excluding VAT" : "") + ": about " + OF.money(revenue * rounded / 12, 0) + " a month. Tax for the year: " + OF.money(r.total, 0) + "."
       : "Enter what you invoice in a typical month.") + error);
     // Libellé de l'impôt : la tranche n'a de sens que s'il y a de l'impôt ; entre 100 000 £ et 125 140 £, la
     // Personal Allowance diminue (le taux réel dépasse celui de la tranche).
@@ -65,10 +65,12 @@
     notice.className = "notice" + (bad.length || over ? " warn" : "");
 
     // Part du bénéfice à mettre de côté selon le bénéfice, pour la même région et le même salaire.
+    // La ligne la plus proche du bénéfice est signalée (couleur, et texte pour les lecteurs d'écran).
+    var nearest = profit > 0 ? LEVELS.reduce(function (best, p) { return Math.abs(p - profit) < Math.abs(best - profit) ? p : best; }) : null;
     $("u-levels").innerHTML = LEVELS.map(function (p) {
-      var x = OFE.taxUK.soleTrader({ profit: p, salary: salary, region: region }, R);
-      var current = profit >= p * 0.85 && profit < p * 1.18;
-      return "<tr" + (current ? ' class="current"' : "") + "><td>" + OF.money(p, 0) + "</td><td>" + pct(x.effectiveRate) +
+      var x = OFE.taxUK.soleTrader({ profit: p, salary: salary, region: region }, R), current = p === nearest;
+      return "<tr" + (current ? ' class="current"' : "") + "><td>" + OF.money(p, 0) +
+        (current ? '<span class="sr-only"> (closest to your profit)</span>' : "") + "</td><td>" + pct(x.effectiveRate) +
         "</td><td>" + OF.money(x.total / 12, 0) + "</td></tr>";
     }).join("");
   }

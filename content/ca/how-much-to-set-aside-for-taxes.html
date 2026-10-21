@@ -1,0 +1,127 @@
+<!--{
+  "id": "set-aside",
+  "slug": "how-much-to-set-aside-for-taxes/",
+  "title": "How Much to Set Aside for Taxes, Self-Employed Canada (2026)",
+  "description": "Find the share of every client payment to save for income tax and CPP (or QPP and QPIP) in your province in 2026, with GST/HST and instalments.",
+  "menu": "How much to set aside for taxes",
+  "icon": "🏦",
+  "blurb": "The share of every payment to save for the CRA, by province.",
+  "app": "Canada Tax Set-Aside Calculator",
+  "scripts": ["engines/brackets.js", "engines/tax-ca.js", "tools/ca-setaside.js"],
+  "rules": "ca",
+  "sources": ["cpp_rate_self_employed", "cpp2_rate_self_employed", "qpp_rate_self_employed", "qpip_rate_self_employed", "federal_income_tax_brackets", "quebec_abatement", "instalment_threshold", "instalment_threshold_quebec", "instalment_due_dates_2026", "balance_due_date", "filing_deadline_self_employed", "gst_rate", "hst_rates", "qst_rate", "pst_on_professional_services", "small_supplier_threshold", "qst_small_supplier_threshold"],
+  "priority": 0.9,
+  "faq": [
+    ["What percentage should a self-employed Canadian set aside for taxes?", "It depends on your profit and your province. You pay both halves of the CPP (or the QPP and QPIP in Quebec) plus federal and provincial income tax. With no other income, that's about 23% of a $50,000 profit and 28.3% of $100,000 in Ontario. The calculator works out your own percentage from the 2026 rates."],
+    ["Should I set aside GST/HST too?", "Yes, if you're registered: the GST/HST (and the QST in Quebec) you collect isn't your money and is sent with your return. For most services, the rate depends on your client's province, not yours: the calculator uses the one you choose and takes the tax out of each payment first. PST isn't counted: in British Columbia, Saskatchewan and Manitoba (where it's called RST), it applies to a list of services, so check whether yours is on it."],
+    ["Do I have to register for GST/HST?", "Once your taxable supplies go over $30,000 in a single calendar quarter or over the last four consecutive calendar quarters, you're no longer a small supplier and must register (in Quebec, for the QST as well). Below that, registration is optional."],
+    ["When do I pay the tax I set aside?", "If your tax owing is more than $3,000 this year and was also over $3,000 in either of the two previous years, you pay quarterly instalments on March 15, June 15, September 15 and December 15. In Quebec, the CRA applies a $1,800 test to your federal tax, and Revenu Québec its own $1,800 test to your Quebec tax. Otherwise, the whole balance is due on April 30, 2027, even though self-employed people have until June 15, 2027 to file."],
+    ["Is this the exact amount I'll owe?", "It's an estimate for planning. It doesn't include employment income, RRSP contributions, tax credits other than the basic personal amount and CPP or QPP, other deductions, or in Quebec the health services fund contribution and RAMQ prescription drug insurance premium. For the detailed breakdown, use the <a href=\"{{link:tax}}\">self-employed tax calculator</a>."]
+  ]
+}-->
+<script type="application/json" id="ca-setaside-data">
+{
+  "names": "name_en", "default_province": "ON", "percent": "%", "per_month": "/mo",
+  "long_date": {"month": "long", "day": "numeric", "year": "numeric"},
+  "day_month": {"month": "long", "day": "numeric"}, "dates_year": "{list}, {year}",
+  "sub": "of every payment{excl}: about {month} a month. Total for the year: {year}.", "excl": ", excluding sales tax",
+  "sub_empty": "Enter what you invoice in a typical month.",
+  "pension_cpp": "CPP + CPP2 (both halves)", "pension_qpp": "QPP + QPP2 (both halves) and QPIP",
+  "federal": "Federal income tax", "federal_qc": "Federal tax (after the Quebec abatement)",
+  "provincial": "{province} income tax",
+  "inst_value": "{amount}/quarter", "inst_none": "Not required",
+  "inst_required": "If your tax owing was also over {threshold} in {y2} or {y1}: about {amount} per quarter to the CRA (income tax and CPP), due {dates}.",
+  "inst_required_qc": "If these amounts were also over {threshold} in {y2} or {y1}: about {parts} per quarter, due {dates}.",
+  "inst_part_cra": "{amount} to the CRA (federal tax)", "inst_part_rq": "{amount} to Revenu Québec (Quebec tax, QPP and QPIP)",
+  "inst_not": "Your tax owing is under {threshold}: instalments are generally not required.",
+  "sales_names": {"GST": "GST", "HST": "HST", "QST": "QST"},
+  "sales_row": "{taxes} to send with your return",
+  "payment_label": "A client just paid you", "payment_label_tax": "A client just paid you, including {taxes}",
+  "client_same": "Same as mine",
+  "small_supplier": "If all of this is taxable supplies, you'd go over the {threshold} small supplier threshold and would have to register for {taxes}.",
+  "registered_note": "Sales tax ({taxes}) is taken out of each payment first, at the rate of your client's province.",
+  "pst_note": "PST (RST in Manitoba) isn't counted: it applies to a list of services in that province, so check whether yours is on it.",
+  "balance": "Any balance for 2026 is due on {date}.",
+  "check": "Check {fields}: type numbers only, for example 6,000. Counted as 0 until corrected.",
+  "fields": {"c-income": "invoiced per month", "c-expenses": "business expenses", "c-payment": "payment received"},
+  "current_sr": "(closest to your profit)"
+}
+</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · 2026 tax year</span>
+    <h1>How much to set aside for taxes</h1>
+    <p class="lead">Enter what you invoice in a typical month and your province: get the share of every client payment to move to your tax savings, so the money is there for your instalments and your April balance.</p>
+    <ul class="trust"><li>Income tax and CPP or QPP</li><li>Every province and territory</li><li>GST/HST and QST split</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="ca-setaside-form" onsubmit="return false">
+      <h2>Your income</h2>
+      <div class="fields">
+        <div class="field"><label for="c-income">Invoiced per month, before sales tax</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="c-income" name="income" value="6,000" aria-describedby="c-notice" data-save><span>$</span></div></div>
+        <div class="field"><label for="c-expenses">Business expenses per month</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="c-expenses" name="expenses" value="500" aria-describedby="c-expenses-hint c-notice" data-save><span>$</span></div>
+          <span class="hint" id="c-expenses-hint">Excluding any GST/HST (and QST) you can claim back.</span></div>
+        <div class="field full"><label for="c-province">Province or territory of residence</label>
+          <select id="c-province" name="province" data-save></select></div>
+        <label class="check full"><input type="checkbox" id="c-registered" name="registered" data-save><span>I'm registered for GST/HST (and QST in Quebec): my clients pay it on top</span></label>
+      </div>
+      <h3>Split a payment</h3>
+      <div class="fields">
+        <div class="field full"><label for="c-payment" id="c-payment-label">A client just paid you</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="c-payment" name="payment" value="3,000" aria-describedby="c-notice" data-save><span>$</span></div></div>
+        <div class="field full" id="c-client-field" hidden><label for="c-client">Client's province or territory</label>
+          <select id="c-client" name="client" aria-describedby="c-client-hint" data-save></select>
+          <span class="hint" id="c-client-hint">For most services, the sales tax rate depends on where your client is.</span></div>
+      </div>
+      <ul class="result-list" style="margin-top: 6px;">
+        <li id="c-pay-sales-row" hidden><span id="c-pay-sales-label">Sales tax to send with your return</span><b id="c-pay-sales">–</b></li>
+        <li><span>Move to tax savings</span><b id="c-pay-tax">–</b></li>
+        <li><span>Yours to spend</span><b id="c-pay-keep">–</b></li>
+      </ul>
+    </form>
+
+    <div class="results">
+      <div class="result-hero" role="status" aria-atomic="true">
+        <div class="label">Set aside</div>
+        <div class="big" id="c-share">–</div>
+        <div class="sub" id="c-sub">–</div>
+      </div>
+      <ul class="result-list card" style="padding: 6px 18px;">
+        <li><span id="c-pension-label">CPP + CPP2 (both halves)</span><b id="c-pension">–</b></li>
+        <li><span id="c-federal-label">Federal income tax</span><b id="c-federal">–</b></li>
+        <li><span id="c-provincial-label">Provincial income tax</span><b id="c-provincial">–</b></li>
+        <li><span><strong>Total for the year</strong></span><b id="c-total">–</b></li>
+        <li><span>Quarterly instalments</span><b id="c-inst">–</b></li>
+        <li><span>What you keep after expenses and tax</span><b id="c-keep">–</b></li>
+      </ul>
+      <p class="small muted" id="c-inst-detail" style="margin: 8px 2px 0;">–</p>
+      <p class="notice" id="c-notice">–</p>
+      <div class="card" style="margin-top: 16px; padding: 18px;">
+        <h3 style="font-size: 1rem; margin-bottom: 8px;">How the share grows with profit</h3>
+        <table class="mini-table">
+          <caption class="sr-only">Share of profit to set aside, by yearly profit, in the same province</caption>
+          <thead><tr><th>Yearly profit</th><th>Share of profit</th><th>Per month</th></tr></thead>
+          <tbody id="c-levels"></tbody>
+        </table>
+        <p class="small muted" style="margin: 8px 0 0;">Same province, no other income.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>A simple system that works</h2>
+  <ol>
+    <li><strong>Open a separate savings account</strong> just for taxes, and GST/HST if you're registered.</li>
+    <li><strong>Every time a client pays you,</strong> move your share to it the same day. Don't wait for the end of the month.</li>
+    <li><strong>Pay from that account</strong>: your quarterly instalments if the CRA asks for them, then the balance by April 30. The <a href="{{link:calendar}}">tax calendar</a> lists every date, and the <a href="{{link:salestax}}">GST/HST calculator</a> adds or removes sales tax from any price.</li>
+    <li><strong>Recalculate every few months</strong> as your income changes: the share rises with your profit.</li>
+  </ol>
+  <p class="small muted">An estimate for planning, based on the 2026 federal and provincial rates. It doesn't replace advice from an accountant for your situation.</p>
+</section>

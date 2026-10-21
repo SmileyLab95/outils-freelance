@@ -1,5 +1,22 @@
 # Journal des modifications
 
+## 2026-10-21 — Canada : « How much to set aside for taxes » et « Combien mettre de côté pour l'impôt »
+
+- Deux pages (anglais et français), un seul script bilingue : part de chaque paiement à mettre de côté pour l'impôt
+  et le RPC (ou le RRQ et le RQAP), dans les 13 provinces et territoires ; acomptes provisionnels ; répartition d'un
+  paiement, taxes de vente retirées d'abord **au taux de la province du client** (TVH, TPS + TVQ ou TPS seule ; la
+  TVP est signalée, pas comptée) ; seuil du petit fournisseur ; tableau selon le revenu. Reliées aux pages des trois
+  autres pays et aux calculateurs d'impôt canadiens.
+- Moteur `tax-ca.js` : au Québec, deux tests d'acomptes distincts (ARC sur l'impôt fédéral, Revenu Québec sur l'impôt
+  du Québec et les cotisations, par prudence) ; les acomptes sont présentés sous la condition des deux années
+  précédentes, aussi dans les calculateurs d'impôt canadiens (dates en toutes lettres, l'année une fois).
+- Règles : TVP en Colombie-Britannique (extension aux services professionnels suspendue le 18 septembre 2026),
+  seuil de Revenu Québec (deux conditions, revenuquebec.ca) ; une question ouverte sur la base de ce seuil.
+- Pages britannique et américaine : ligne du tableau la plus proche du bénéfice signalée (une seule, annoncée aux
+  lecteurs d'écran) ; résumé « par mois » et total de l'année séparés.
+- Tests : 4 tests unitaires (acomptes du Québec, taux de taxe de vente des 13 provinces, textes et exemples
+  recalculés), 2 parcours navigateur (19 vérifications) ; revue critique (6 points et les remarques traités).
+
 ## 2026-10-21 — Royaume-Uni : *How much to set aside for tax*
 
 - Nouvelle page `/uk/how-much-to-set-aside-for-tax/` : part de chaque paiement à mettre de côté pour l'*income tax*

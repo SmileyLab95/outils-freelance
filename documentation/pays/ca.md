@@ -378,3 +378,36 @@ Revenu Québec applique les mêmes seuils pour les RTI de la TVQ, avec le numér
 - Dates nominales ; l'ARC considère comme fait à temps un paiement reçu le jour ouvrable suivant (indiqué sur les pages).
 - TPS/TVH : déclarants mensuels et trimestriels un mois après la période ; annuels (particuliers avec exercice au 31 décembre) déclaration au 15 juin, paiement au 30 avril ; acomptes trimestriels des déclarants annuels si la taxe nette atteint 3 000 $.
 - REER 2026 : 1er mars 2027 (60e jour de l'année).
+
+## Spécification : calculateur *How much to set aside for taxes* / « Combien mettre de côté pour l'impôt » (21/10/2026)
+
+Pages `/ca/how-much-to-set-aside-for-taxes/` et `/ca/fr/combien-mettre-de-cote-impot/` (identifiant `set-aside`,
+reliées aux pages américaine, britannique et française). Besoin P1 de [02](../02-besoins-clients.md) (§ 7).
+
+- **Règles** (déjà dans `data/rules/ca.json`) : barèmes fédéral et provinciaux, montants personnels, RPC/RPC2,
+  RRQ/RRQ2 et RQAP, abattement du Québec, surtaxe et contribution santé de l'Ontario (moteur `tax-ca.js`, déjà
+  testé) ; acomptes provisionnels (seuils de 3 000 $ et de 1 800 $ au Québec, dates) ; taxes de vente par province
+  (`provinces.*.sales_tax`), TVP généralement non perçue sur les services professionnels
+  (`pst_on_professional_services`), seuil du petit fournisseur de 30 000 $ (`small_supplier_threshold`, et
+  `qst_small_supplier_threshold` au Québec).
+- **Calcul** : bénéfice = (facturé − dépenses) × 12 ; impôt et cotisations de l'année par `taxCA.estimate` (sans
+  revenu d'emploi, comme le calculateur d'impôt existant, et dit) ; part = total ÷ chiffre d'affaires, arrondie au
+  point supérieur (`OF.ceilShare`). Taxe de vente d'un paiement, si l'utilisateur est inscrit : TVH, ou TPS + TVQ au
+  Québec, ou TPS seule (la TVP n'est pas comptée : elle vise des services énumérés, à vérifier) ; retirée d'abord,
+  **au taux de la province du client** (lieu de la fourniture pour la plupart des services ; par défaut, celle de
+  l'utilisateur). La TVP n'est mentionnée que si le client est dans une province qui la perçoit (C.-B., Sask., Man.) ;
+  son extension en C.-B. à certains services professionnels, prévue le 1er octobre 2026, a été suspendue le
+  18 septembre 2026 (règle mise à jour).
+- **Acomptes** : le moteur distingue au Québec le test de l'ARC (impôt fédéral, 1 800 $) et celui de Revenu Québec
+  (impôt du Québec, RRQ et RQAP, 1 800 $ ; cotisations comptées par prudence, question ouverte) ; la page présente
+  les acomptes sous la condition des deux années précédentes (la loi l'exige ; la première année, ils ne sont souvent
+  pas exigés). Le calculateur d'impôt existant utilise la même présentation.
+- **Page** bilingue par un même script (`tools/ca-setaside.js`), libellés dans la page (comme `ca-tax.js`) : part à
+  mettre de côté, impôt fédéral et provincial, RPC ou RRQ + RQAP, acomptes (montant trimestriel et dates, ou non
+  exigés), ce qui reste, répartition d'un paiement, tableau selon le bénéfice ; seuil du petit fournisseur signalé
+  sous condition (« si tout est fourniture taxable »).
+- **Textes** : aucune fourchette « pour la plupart » : exemples recalculés par le moteur et vérifiés par un test ;
+  exclusions dites (revenu d'emploi, REER, crédits, déductions autres que le RPC/RRQ).
+- **Critères** : tests unitaires (textes et exemples recalculés, taux de taxe de vente des pages = règles) ; parcours
+  navigateur des deux pages (Ontario, Québec, inscription aux taxes, seuil, acomptes, saisie invalide, rechargement) ;
+  accessibilité ; captures relues sur ordinateur, tablette et mobile ; revue critique.

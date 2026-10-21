@@ -64,6 +64,35 @@ test("acomptes provisionnels au-delà de 3 000 $", () => {
   assert.equal(ca.instalments(ca.estimate({ profit: 15000, province: "ON" }, R, P), R).required, false);
 });
 
+test("acomptes au Québec : deux tests distincts, ARC (impôt fédéral) et Revenu Québec (impôt du Québec, RRQ, RQAP)", () => {
+  // 24 000 $ : impôt fédéral 580 $ (sous 1 800 $, pas d'acompte à l'ARC) ; impôt du Québec 345 $ + RRQ 2 583 $
+  // + RQAP 183 $ = 3 111 $ (au-dessus de 1 800 $, acomptes à Revenu Québec, un quart chacun).
+  const r = ca.estimate({ profit: 24000, province: "QC" }, R, P), i = ca.instalments(r, R);
+  assert.deepEqual([i.required, i.requiredFederal, i.requiredQuebec, i.federal], [true, false, true, 0]);
+  near(i.quebec, (r.provincial + r.pensions.total + r.qpip) / 4, "quart de l'impôt du Québec et des cotisations");
+  near(i.quebec * 4, 3111.46, "3 111,46 $ à Revenu Québec");
+  // 66 000 $ : les deux.
+  const b = ca.instalments(ca.estimate({ profit: 66000, province: "QC" }, R, P), R);
+  assert.deepEqual([b.requiredFederal, b.requiredQuebec], [true, true]);
+  near(b.federal, 1257.44, "impôt fédéral ÷ 4");
+  // Hors Québec, un seul test, à l'ARC.
+  const on = ca.instalments(ca.estimate({ profit: 30000, province: "ON" }, R, P), R);
+  assert.deepEqual([on.requiredFederal, on.requiredQuebec, on.quebec], [true, false, 0]);
+});
+
+test("taxes de vente des provinces : mêmes taux que les règles générales (TPS, TVH, TVQ, TVP)", () => {
+  for (const [code, p] of Object.entries(P)) {
+    const t = p.sales_tax;
+    if (t.type === "HST") { assert.equal(t.rate, R.hst_rates[code], code); continue; }
+    assert.equal(t.gst, R.gst_rate, code);
+    if (t.type === "GST") assert.equal(t.rate, R.gst_rate, code);
+    else assert.ok(Math.abs(t.rate - (t.gst + t.provincial)) < 1e-12, code);
+    if (t.type === "GST+QST") assert.equal(t.provincial, R.qst_rate, code);
+    if (t.type === "GST+PST" || t.type === "GST+RST") assert.equal(t.provincial, R.pst_rates[code], code);
+  }
+  assert.deepEqual(Object.keys(R.hst_rates).sort(), Object.keys(P).filter((c) => P[c].sales_tax.type === "HST").sort());
+});
+
 test("revenu visé : calcul inverse", () => {
   const target = ca.estimate({ profit: 80000, province: "ON" }, R, P).takeHome;
   const p = ca.profitForTakeHome(target, { province: "ON" }, R, P);
@@ -75,4 +104,28 @@ test("REER de 5 000 $ en Alberta : économie au taux marginal 14 % + 8 %, RPC in
   const r = ca.estimate({ profit: 50000, province: "AB", deduction: 5000 }, R, P);
   assert.equal(r.pensions.total, base.pensions.total);
   near(base.total - r.total, 5000 * (0.14 + 0.08), "économie d'impôt");
+});
+
+test("pages « combien mettre de côté » : seuils, dates et exemples repris des règles et du moteur (anglais et français)", () => {
+  const read = (f) => readFileSync(new URL("../../content/" + f, import.meta.url), "utf8").replace(/[  ]/g, " ");
+  const en = read("ca/how-much-to-set-aside-for-taxes.html"), fr = read("ca-fr/combien-mettre-de-cote-impot.html");
+  const ex = (prov, p) => Math.round(ca.estimate({ profit: p, province: prov }, R, P).effectiveRate * 1000) / 10;
+  const frPct = (x) => String(x).replace(".", ",") + " %";
+  assert.ok(en.includes(`about ${ex("ON", 50000)}% of a $50,000 profit and ${ex("ON", 100000)}% of $100,000 in Ontario`), "exemples (anglais)");
+  assert.ok(fr.includes(`environ ${frPct(ex("QC", 50000))} d'un revenu net de 50 000 $ et ${frPct(ex("QC", 100000))} de 100 000 $ au Québec`), "exemples (français)");
+  const usd = (n) => "$" + n.toLocaleString("en-CA"), cad = (n) => n.toLocaleString("fr-CA").replace(/\s/g, " ") + " $";
+  assert.equal(R.small_supplier_threshold, R.qst_small_supplier_threshold);
+  assert.ok(en.includes(`go over ${usd(R.small_supplier_threshold)} in a single calendar quarter`) && fr.includes(`dépassent ${cad(R.small_supplier_threshold)} au cours d'un seul trimestre`), "petit fournisseur");
+  assert.ok(en.includes(`more than ${usd(R.instalment_threshold)} this year and was also over ${usd(R.instalment_threshold)}`) &&
+    en.includes(`a ${usd(R.instalment_threshold_quebec)} test to your federal tax, and Revenu Québec its own ${usd(R.instalment_threshold_quebec)} test`) &&
+    fr.includes(`dépasse ${cad(R.instalment_threshold)} cette année et dépassait aussi ${cad(R.instalment_threshold)}`) &&
+    fr.includes(`un seuil de ${cad(R.instalment_threshold_quebec)} à votre impôt fédéral, et Revenu Québec son propre seuil de ${cad(R.instalment_threshold_quebec)}`), "seuils des acomptes");
+  const enDate = (iso) => new Date(iso + "T12:00:00Z").toLocaleDateString("en-CA", { month: "long", day: "numeric", timeZone: "UTC" });
+  const frDate = (iso) => new Date(iso + "T12:00:00Z").toLocaleDateString("fr-CA", { day: "numeric", month: "long", timeZone: "UTC" });
+  const d = R.instalment_due_dates_2026;
+  assert.ok(en.includes(`on ${d.slice(0, 3).map(enDate).join(", ")} and ${enDate(d[3])}`), "dates des acomptes (anglais)");
+  assert.ok(fr.includes(`le ${d.slice(0, 3).map(frDate).join(", le ")} et le ${frDate(d[3])}`), "dates des acomptes (français)");
+  assert.ok(en.includes(`due on ${enDate(R.balance_due_date)}, ${R.balance_due_date.slice(0, 4)}`) && en.includes(`until ${enDate(R.filing_deadline_self_employed)}, ${R.filing_deadline_self_employed.slice(0, 4)}`), "solde et déclaration (anglais)");
+  assert.ok(fr.includes(`dû le ${frDate(R.balance_due_date)} ${R.balance_due_date.slice(0, 4)}`) && fr.includes(`jusqu'au ${frDate(R.filing_deadline_self_employed)} ${R.filing_deadline_self_employed.slice(0, 4)}`), "solde et déclaration (français)");
+  for (const page of [en, fr]) assert.equal(JSON.parse(page.match(/<!--(\{.*?\})-->/s)[1]).id, "set-aside");
 });

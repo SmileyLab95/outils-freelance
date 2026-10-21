@@ -394,7 +394,7 @@ const tests = {
     // documentation/pays/uk.md (spécification) : 4 000 £ par mois, 300 £ de dépenses → bénéfice 44 400 £ ;
     // impôt 20 % × 31 830 = 6 366 ; Class 4 6 % × 31 830 = 1 909,80 ; total 8 275,80 = 17,2 % du CA → 18 %.
     const text = async (sel) => (await page.textContent(sel)).replace(/\s+/g, " ").trim();
-    check((await text("#u-share")) === "18%" && (await text("#u-sub")).includes("about £720 a month, £8,276 for the year"),
+    check((await text("#u-share")) === "18%" && (await text("#u-sub")).includes("about £720 a month. Tax for the year: £8,276."),
       "UK set aside : 18 % de chaque paiement (impôt et Class 4 de 8 276 £)");
     check((await text("#u-it")) === "£6,366" && (await text("#u-ni")) === "£1,910" && (await text("#u-poa")) === "£4,138 each",
       "UK set aside : impôt, Class 4 et payments on account");
@@ -551,6 +551,68 @@ const tests = {
       check(res.status() === 200, `CA : lien interne ${href} (${res.status()})`);
     }
     check((await page.$$('link[rel="alternate"][hreflang]')).length === 6, "CA : hreflang vers les 5 sections + x-default");
+  },
+  async "ca/how-much-to-set-aside-for-taxes/"(page) {
+    // documentation/pays/ca.md : 6 000 $ par mois, 500 $ de dépenses → bénéfice 66 000 $ en Ontario ; impôt et RPC
+    // de 16 756,47 $ (moteur testé) = 23,3 % du chiffre d'affaires de 72 000 $ → 24 %.
+    const text = async (sel) => (await page.textContent(sel)).replace(/\s+/g, " ").trim();
+    check((await text("#c-share")) === "24%" && (await text("#c-sub")).includes("about $1,440 a month. Total for the year: $16,756."),
+      "CA set aside : 24 % de chaque paiement en Ontario (16 756 $)");
+    check((await text("#c-pension")) === "$7,438" && (await text("#c-federal")) === "$6,099" && (await text("#c-provincial")) === "$3,220" &&
+      (await text("#c-inst")) === "$4,189/quarter" && (await text("#c-inst-detail")).includes("If your tax owing was also over $3,000 in 2024 or 2025: about $4,189 per quarter to the CRA"),
+      "CA set aside : RPC, impôts et acomptes (sous condition des deux années précédentes)");
+    check((await text("#c-pay-tax")) === "$720.00" && (await text("#c-pay-keep")) === "$2,280.00" && (await text("#c-notice")).includes("$30,000 small supplier threshold") &&
+      !(await page.isVisible("#c-client")), "CA set aside : 3 000 $ reçus, 720 $ de côté ; seuil du petit fournisseur signalé");
+    await page.check("#c-registered");
+    await page.fill("#c-payment", "3,390");
+    check((await text("#c-pay-sales")) === "$390.00" && (await text("#c-pay-tax")) === "$720.00" && (await text("#c-pay-sales-label")).startsWith("HST") &&
+      !(await text("#c-notice")).includes("small supplier"), "CA set aside : inscrit en Ontario, TVH de 390 $ retirée d'abord, plus de message du petit fournisseur");
+    await page.selectOption("#c-province", "AB");
+    await page.selectOption("#c-client", "ON");
+    check((await text("#c-pay-sales")) === "$390.00" && (await text("#c-pay-sales-label")).startsWith("HST"),
+      "CA set aside : résident de l'Alberta, client de l'Ontario → TVH de 13 % (province du client)");
+    await page.selectOption("#c-client", "BC");
+    check((await text("#c-pay-sales")) === "$161.43" && (await text("#c-pay-sales-label")).startsWith("GST") && (await text("#c-notice")).includes("PST (RST in Manitoba) isn't counted"),
+      "CA set aside : client en Colombie-Britannique → TPS seule (5 %), TVP signalée");
+    await page.selectOption("#c-client", "same");
+    await page.selectOption("#c-province", "QC");
+    check((await text("#c-share")) === "27%" && (await text("#c-pension-label")).includes("QPP") &&
+      (await text("#c-inst-detail")).includes("$1,257 to the CRA (federal tax) and $3,555 to Revenu Québec") &&
+      (await text("#c-pay-sales-label")).startsWith("GST and QST") && !(await text("#c-notice")).includes("PST"),
+      "CA set aside : Québec, RRQ et RQAP, TPS et TVQ, acomptes à l'ARC et à Revenu Québec");
+    await page.fill("#c-income", "2,500");
+    // 2 000 $ de bénéfice par mois au Québec : impôt fédéral 580 $ (pas d'acompte à l'ARC), impôt du Québec, RRQ et
+    // RQAP 3 111 $ (acomptes à Revenu Québec seulement).
+    check((await text("#c-inst-detail")).includes("about $778 to Revenu Québec") && !(await text("#c-inst-detail")).includes("to the CRA"),
+      "CA set aside : Québec, acomptes à Revenu Québec seulement (impôt fédéral sous 1 800 $)");
+    await page.selectOption("#c-province", "ON");
+    await page.fill("#c-income", "1,000");
+    await page.fill("#c-expenses", "0");
+    check((await text("#c-inst")) === "Not required" && (await text("#c-inst-detail")).includes("instalments are generally not required"),
+      "CA set aside : acomptes non exigés sous 3 000 $");
+    await page.fill("#c-income", "6,000");
+    await page.fill("#c-expenses", "-1");
+    check((await page.getAttribute("#c-expenses", "aria-invalid")) === "true" && (await text("#c-sub")).includes("Check business expenses"),
+      "CA set aside : champ invalide nommé dans le résumé annoncé");
+    await page.fill("#c-expenses", "500");
+    await page.selectOption("#c-province", "QC");
+    await page.reload({ waitUntil: "networkidle" });
+    check((await page.inputValue("#c-province")) === "QC" && (await page.isChecked("#c-registered")) && (await page.inputValue("#c-client")) === "same",
+      "CA set aside : saisie retrouvée après rechargement");
+  },
+  async "ca/fr/combien-mettre-de-cote-impot/"(page) {
+    // Même calcul au Québec : impôt, RRQ et RQAP de 19 247,84 $ = 26,7 % de 72 000 $ → 27 %.
+    const text = async (sel) => (await page.textContent(sel)).replace(/\s+/g, " ").trim();
+    check((await text("#c-share")) === "27 %" && (await text("#c-sub")).includes("environ 1 620 $ par mois. Total de l'année : 19 248 $.") &&
+      (await text("#c-inst")) === "4 812 $/trimestre" && (await text("#c-inst-detail")).includes("1 257 $ à l'ARC (impôt fédéral) et 3 555 $ à Revenu Québec") &&
+      (await text("#c-inst-detail")).includes("en 2024 ou en 2025") && (await text("#c-inst-detail")).includes("15 décembre 2026"),
+      "CA-FR mettre de côté : 27 % au Québec, acomptes à l'ARC et à Revenu Québec sous condition");
+    await page.check("#c-registered");
+    await page.fill("#c-payment", "3 449,25");
+    check((await text("#c-pay-sales")) === "449,25 $" && (await text("#c-pay-tax")) === "810,00 $" && (await text("#c-pay-sales-label")).startsWith("TPS et TVQ"),
+      "CA-FR mettre de côté : TPS et TVQ (449,25 $) retirées, puis 27 % du reste");
+    check((await text("#c-notice")).includes("sont d'abord retirées") && (await text("#c-notice")).includes("Le solde de 2026 est dû le 30 avril 2027"),
+      "CA-FR mettre de côté : taxes de vente et date du solde rappelées");
   },
   async "ca/self-employed-tax-calculator/"(page) {
     // Ontario, 80 000 $ : RPC 8 892,90 + fédéral 8 698,44 + Ontario 3 785,12 + contribution santé 750 (voir tests unitaires)
