@@ -17,9 +17,9 @@ Le site d'outils gratuits pour indépendants (France, États-Unis, Royaume-Uni, 
 | [11. Étude concurrentielle](11-etude-concurrentielle.md) | Offres et prix des concurrents (France, États-Unis, Royaume-Uni, Canada), positionnement, pistes de revenus |
 | [12. Spécification des comptes](12-specification-comptes.md) | Comptes en ligne (étape 2) : principes, offres gratuit et « Pro », synchronisation, options d'architecture, sécurité, RGPD, étapes |
 | [13. Comparatif des hébergeurs](13-comparatif-hebergeurs.md) | Hébergement des comptes en ligne : offres et prix relevés (Scaleway, OVHcloud, Clever Cloud, Supabase), budget de départ, recommandation, dépendance au nom de domaine |
+| [14. Étude du recouvrement judiciaire](14-etude-recouvrement.md) | Préparation du guide : nouvelle procédure de 2026 entre commerçants, petites créances, injonction de payer, points à vérifier, plan |
 | [15. Guides de gestion](15-guides-gestion.md) | Spécification des guides avec vérificateur : compte bancaire professionnel, assurance de l'indépendant (publiés) |
 | [16. Mesure d'audience](16-mesure-audience.md) | Règles de la CNIL, outils sans cookie comparés, recommandation et mise en place |
-| [14. Étude du recouvrement judiciaire](14-etude-recouvrement.md) | Préparation du guide : nouvelle procédure de 2026 entre commerçants, petites créances, injonction de payer, points à vérifier, plan |
 | [Fiches pays](pays/) | Règles fiscales et sociales vérifiées : [France](pays/fr.md), [États-Unis](pays/us.md), [Royaume-Uni](pays/uk.md), [Canada](pays/ca.md) |
 
 Le [README principal](../README.md) explique comment générer, tester et publier le site.
