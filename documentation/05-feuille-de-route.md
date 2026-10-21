@@ -76,8 +76,12 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   « Que mettre sur une facture » au Canada), selon la situation : *sole trader* ou société et TVA au Royaume-Uni ;
   total de la facture, inscription à la TPS/TVH et Québec au Canada. Chaque élément des règles officielles repris une
   fois, vérifié par test ; le besoin est couvert dans les trois pays concernés (sans objet aux États-Unis).
-- **Prochaines actions de Claude** : guides « facturer un client étranger » au Royaume-Uni et au Canada (besoin P2
-  de [02](02-besoins-clients.md) § 5) ; revérifier les grilles des prestataires de paiement (Stripe, Mollie) sur leurs
+- **Client étranger, Royaume-Uni (21/10/2026)** : assistant *Invoicing overseas clients* : TVA britannique ou non
+  selon le client (entreprise ou particulier, UE ou ailleurs) et le service, mentions et démarches ; règles lues sur
+  GOV.UK et dans les manuels HMRC ; la formulation de la mention, qu'HMRC ne fixe pas, est présentée comme une
+  suggestion.
+- **Prochaines actions de Claude** : guide « facturer un client étranger » au Canada, en anglais et en français
+  (besoin P2 de [02](02-besoins-clients.md) § 5) ; revérifier les grilles des prestataires de paiement (Stripe, Mollie) sur leurs
   pages officielles quand Ismail décidera ([17](17-offres-et-paiements.md)) ; guide du recouvrement dès que les
   textes sont lisibles ; veille réglementaire de décembre (dont la version de Factur-X et l'annexe A de XP Z12-012
   pour le BT-32 en franchise, et la question 13 de [pays/ca.md](pays/ca.md) sur la TVQ). Les étapes C3 (serveur) et
@@ -172,6 +176,14 @@ Objectif : un site mesuré, sous sa propre marque, qui commence à rapporter, et
 - [x] Canada : *What to put on an invoice* et « Que mettre sur une facture » : mentions pour les CTI selon le total
       (moins de 100 $, 100 $ à 499,99 $, 500 $ ou plus), numéro de TVQ et français au Québec ; conditions combinées
       dans `tools/checklist.js` ; spécification [pays/ca.md](pays/ca.md)
+- [x] Royaume-Uni : assistant *Invoicing overseas clients* (TVA des services selon le client et le service : règle
+      générale, services de conseil à un particulier hors du Royaume-Uni, services numériques à des particuliers de
+      l'UE, preuves, case 6, seuil ; réponse « ça dépend » quand la règle n'est pas tranchée) ; moteur
+      `engines/international-uk.js` testé (48 situations) ; option « hors champ » dans le générateur de facture ;
+      spécification [pays/uk.md](pays/uk.md)
+- [ ] Parcours navigateur : un contrôle de contraste (axe) a échoué une fois sur le logo de l'Espace (liste des
+      clients) dans une suite complète, sans se reproduire en isolé (3 essais) : en trouver la cause
+- [ ] Canada : guide « facturer un client étranger » (exportation de services détaxée, TVQ), en anglais et en français
 
 ### 1.5 Préparer la plateforme
 

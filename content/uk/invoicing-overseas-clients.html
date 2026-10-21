@@ -1,0 +1,139 @@
+<!--{
+  "id": "international",
+  "slug": "invoicing-overseas-clients/",
+  "title": "Invoicing Overseas Clients from the UK: VAT on Services",
+  "description": "Client in the EU or elsewhere, business or private: find out whether to charge UK VAT on your services, what to put on the invoice and what to do next.",
+  "menu": "Invoicing overseas clients",
+  "icon": "🌍",
+  "blurb": "UK VAT or not, invoice wording and next steps for a client abroad.",
+  "app": "UK Overseas Invoicing Assistant",
+  "scripts": ["engines/international-uk.js", "tools/uk-international.js"],
+  "rules": "uk",
+  "sources": ["place_of_supply_services_b2b", "place_of_supply_services_b2c", "b2c_described_services_outside_uk", "digital_services_consumers", "eu_non_union_scheme", "vat_territory_isle_of_man", "outside_scope_evidence", "outside_scope_vat_return_box6", "outside_scope_not_taxable_turnover", "vat_registration_threshold", "vat_standard_rate", "vat_invoice_full_requirements"],
+  "priority": 0.8,
+  "faq": [
+    ["Do I charge VAT to a client outside the UK?", "Not if your client is a business: a service to a business is supplied where the business belongs, so it's outside the scope of UK VAT, unless a special rule applies (property, events, transport). For a private client, it depends on the service: consultancy and similar professional services, advertising, data processing and information supplied to someone who belongs outside the UK are also outside the scope; services that follow the general rule are taxed in the UK, as for a UK client."],
+    ["What do I write on an invoice to a business client abroad?", "No UK VAT. HMRC doesn't set a wording for these invoices: a clear statement such as “Outside the scope of UK VAT” helps your client, who accounts for any VAT in its own country. For an EU client, add its VAT number: it's the best evidence that it's a business. In the <a href=\"{{link:invoice}}\">invoice generator</a>, choose “No UK VAT (outside the scope)”."],
+    ["I sell pre-recorded online courses or software to consumers in the EU: what changes?", "Automated digital services to consumers are supplied where the consumer belongs. For a UK business, EU VAT is due on every sale to an EU consumer, whatever the amount, even if you're not VAT-registered in the UK: register for the EU's non-Union scheme in one EU country, or for VAT in each country where you have customers."],
+    ["Do overseas sales count towards the VAT registration threshold?", "Sales outside the scope of UK VAT aren't taxable supplies made in the UK, so they don't count towards the £90,000 threshold. If you're VAT-registered, you still include them in box 6 of your VAT Return. A UK business that only supplies customers outside the UK can register voluntarily."],
+    ["Can I invoice in euros or dollars?", "Yes, the amounts can be in your client's currency. A VAT invoice must still show the total VAT in sterling: that matters only when you charge UK VAT."]
+  ]
+}-->
+<script type="application/json" id="intl-uk-data">
+{
+  "verdicts": {
+    "uk_vat": "Charge UK VAT",
+    "no_vat_unregistered": "No VAT",
+    "outside_scope": "No UK VAT",
+    "eu_vat": "VAT of your client's EU country",
+    "check": "It depends"
+  },
+  "reasons": {
+    "uk_customer": "Your client belongs in the UK or the Isle of Man: charge UK VAT at the usual rate (20% for most services).",
+    "uk_customer_unregistered": "You're not VAT-registered, so you don't charge VAT.",
+    "b2b_general_rule": "A service to a business is supplied where the business belongs: outside the UK, it's outside the scope of UK VAT. Your client accounts for any VAT in its own country.",
+    "special_rules_place": "Services tied to a place follow special rules, checked before the general rule: services related to land and property, admission to events, passenger transport, hire of means of transport, restaurant and catering, and, for private clients, education and training given in person. The VAT may be due where the service takes place: check VAT Notice 741A.",
+    "b2c_described_services": "Consultancy and similar professional services, advertising, data processing, information and licensing of copyright, supplied to a private client who belongs outside the UK, are supplied where the client belongs: outside the scope of UK VAT.",
+    "digital_eu_consumer": "Automated digital services to a private client are supplied where the client belongs. For clients in the EU, EU VAT is due on every sale, whatever its value, even if you're not VAT-registered in the UK.",
+    "digital_consumer_world": "Automated digital services to a private client are supplied where the client belongs: outside the UK and the EU, there's no UK VAT.",
+    "b2c_remote_unsettled": "For a private client abroad, it depends on whether your service counts as one of the listed services (consultancy and similar). If it does, it's outside the scope of UK VAT; if not, the general rule applies and the service is supplied where you belong: charge UK VAT. HMRC's guidance doesn't settle this for design, writing or translation.",
+    "b2c_remote_unregistered": "You're not VAT-registered, so you don't charge VAT either way. Whether the sale is a UK sale depends on whether your service counts as one of the listed services (consultancy and similar): HMRC's guidance doesn't settle this for design, writing or translation."
+  },
+  "wording": {
+    "vat_invoice": "Your VAT registration number, the VAT rate and the VAT amount; for a VAT-registered client, every detail of a full VAT invoice (see the invoice checklist).",
+    "no_vat_shown": "No VAT on the invoice.",
+    "outside_scope_wording": "No VAT on the invoice. HMRC doesn't set a wording; a clear statement helps your client, for example: “Outside the scope of UK VAT: place of supply is the customer's country.”",
+    "customer_vat_number": "Your client's VAT number.",
+    "eu_vat_shown": "The VAT of your client's country, at that country's rate.",
+    "check_wording": "Depends on where the service is taxed: no UK VAT if outside the scope, UK VAT as for a UK client otherwise."
+  },
+  "actions": {
+    "box6": "Include these sales in box 6 of your VAT Return (without VAT).",
+    "not_taxable_turnover": "These sales don't count towards the UK's £90,000 VAT registration threshold.",
+    "counts_towards_threshold": "This sale counts towards the £90,000 VAT registration threshold (taxable turnover over the last 12 months).",
+    "counts_if_uk": "If the sale is a UK sale, it counts towards the £90,000 VAT registration threshold.",
+    "evidence_business": "Keep evidence that your client is a business outside the UK: its VAT number for an EU client, or documents showing its activity. Without it, treat the client as private.",
+    "evidence_location": "Keep a record of where your client lives, such as their address.",
+    "oss_register": "Register for the EU's non-Union scheme in one EU country of your choice: one return per quarter for all your EU sales, due by the end of the following month, and records kept for 10 years. Or register for VAT in each EU country where you have clients.",
+    "local_rules": "Check whether your client's country taxes digital services bought from foreign suppliers.",
+    "check_notice": "Check VAT Notice 741A for your service, or ask HMRC or an accountant."
+  },
+  "no_actions": "Nothing else to do for this sale."
+}
+</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · UK VAT rules</span>
+    <h1>Invoicing overseas clients</h1>
+    <p class="lead">Tell us where your client is, whether they're a business or a private person, and what you sell: find out whether to charge UK VAT, what to put on the invoice and what to do next.</p>
+    <ul class="trust"><li>EU and rest of the world</li><li>Business and private clients</li><li>VAT-registered or not</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="intl-form" onsubmit="return false">
+      <h2>Your invoice</h2>
+      <div class="fields">
+        <div class="field full"><label for="x-registered">Your VAT status</label>
+          <select id="x-registered" name="registered" data-save>
+            <option value="no">Not VAT-registered</option>
+            <option value="yes">VAT-registered</option>
+          </select></div>
+        <div class="field full"><label for="x-location">Your client belongs</label>
+          <select id="x-location" name="location" aria-describedby="x-location-hint" data-save>
+            <option value="eu">In an EU country</option>
+            <option value="world">Elsewhere (US, Switzerland, Channel Islands…)</option>
+            <option value="uk">In the UK or the Isle of Man</option>
+          </select>
+          <span class="hint" id="x-location-hint">A business belongs where it's established; a private client, where they live. The Isle of Man counts as the UK for VAT; the Channel Islands and Gibraltar don't.</span></div>
+        <div class="field full" id="x-customer-field"><label for="x-customer">Your client is</label>
+          <select id="x-customer" name="customer" data-save>
+            <option value="business">A business</option>
+            <option value="consumer">A private person</option>
+          </select></div>
+        <div class="field full" id="x-service-field"><label for="x-service">You sell</label>
+          <select id="x-service" name="service" aria-describedby="x-service-hint" data-save>
+            <option value="listed">Consultancy, advertising, data processing or information</option>
+            <option value="digital">Automated digital service (online software, downloads)</option>
+            <option value="remote">Design, writing or other remote work</option>
+            <option value="place">Events, in-person training, property…</option>
+          </select>
+          <span class="hint" id="x-service-hint">Consultancy covers consultants, engineers, lawyers, accountants and similar services; licensing your copyright counts too. Digital services are supplied over the internet with little or no human involvement, such as pre-recorded courses.</span></div>
+      </div>
+      <p class="small muted" style="margin: 14px 0 0;">For services only: selling goods follows other rules.</p>
+    </form>
+
+    <div class="results">
+      <h2 class="sr-only">Result</h2>
+      <div class="result-hero" role="status" aria-atomic="true">
+        <div class="label">VAT on your invoice</div>
+        <div class="big" id="x-verdict" style="font-size: clamp(1.7rem, 3.6vw, 2.3rem);">–</div>
+        <div class="sub" id="x-why">–</div>
+      </div>
+      <div class="card" style="margin-top: 16px; padding: 18px;">
+        <h3 style="font-size: 1rem; margin-bottom: 8px;">On your invoice</h3>
+        <ul id="x-wording" aria-live="polite" style="margin: 0; padding-left: 18px;"></ul>
+        <p class="small" style="margin: 10px 0 0;">The <a href="{{link:invoice}}">invoice generator</a> lays out your invoice (choose “No UK VAT (outside the scope)” when it applies), and the <a href="{{link:invoice-rules}}">invoice checklist</a> lists every detail.</p>
+      </div>
+      <div class="card" style="margin-top: 16px; padding: 18px;">
+        <h3 style="font-size: 1rem; margin-bottom: 8px;">What to do</h3>
+        <ul id="x-actions" aria-live="polite" style="margin: 0; padding-left: 18px;"></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>The rule in one sentence</h2>
+  <p>For a service, VAT generally follows <strong>the client's country when the client is a business</strong>, and <strong>your country when the client is a private person</strong>, with exceptions for consultancy-type services to private clients outside the UK, digital services and services tied to a place (property, events, transport).</p>
+  <h2>Good to know</h2>
+  <ul>
+    <li><strong>Check that your client is a business</strong> before leaving VAT off: a VAT number, a company registration or their website. Without evidence, the private-client rules apply.</li>
+    <li><strong>Digital services to EU consumers</strong> have no threshold for UK businesses: EU VAT applies from the first sale.</li>
+    <li><strong>Flat Rate Scheme</strong>: how these sales count in your flat rate turnover isn't covered here; check VAT Notice 733.</li>
+    <li><strong>Payment terms and currency</strong> are yours to agree: put them in your <a href="{{link:contract}}">contract</a>, together with who pays the bank fees.</li>
+  </ul>
+  <p class="small muted">Information for guidance only, based on HMRC's VAT Notices 741A, 700/1 and 700/12 and its place of supply manual. For an unusual situation, check with HMRC or an accountant.</p>
+</section>

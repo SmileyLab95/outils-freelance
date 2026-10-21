@@ -470,3 +470,36 @@ liste des mentions obligatoires (même identifiant `invoice-rules`).
   `uk.json` : non traités sur la page, à ajouter lors d'une prochaine vérification aux sources.
 - **Critères** : tests unitaires (couverture des règles, filtres) ; parcours navigateur (score, filtres, messages,
   page française inchangée) ; accessibilité ; captures relues.
+
+## Spécification : assistant *Invoicing overseas clients* (`/uk/invoicing-overseas-clients/`, 21/10/2026)
+
+**Question** : « Dois-je facturer la TVA britannique à mon client étranger, et que mettre sur la facture ? » Besoin P2
+de [02](../02-besoins-clients.md) (§ 5), couvert en France par « Facturer un client étranger » (même identifiant
+`international`).
+
+- **Règles** (nouvelles, `data/rules/uk.json`, lues le 21/10/2026 sur GOV.UK et dans les manuels HMRC, par
+  recherche) : lieu de la prestation entre entreprises (là où le client est établi, Notice 741A § 6.3) et envers
+  un particulier (là où le prestataire est établi, § 6.2) ; services de l'annexe 4A, § 16, du VAT Act 1994 (conseil,
+  services professionnels, publicité, traitement de données, information…) rendus à un particulier établi hors du
+  Royaume-Uni : hors champ (VATPOSS13100) ; services numériques automatisés à des particuliers de l'UE : TVA du pays
+  du client dès la première vente, immatriculation au guichet *non-Union OSS* dans un État de l'UE ou dans chaque
+  État ; preuves (activité du client et pays ; numéro de TVA pour un client de l'UE ; à défaut, traiter comme un
+  particulier) ; case 6 de la déclaration de TVA (Notice 700/12 § 3.7) ; ventes hors champ exclues du chiffre
+  d'affaires taxable (Notice 700/1) et immatriculation volontaire possible. Seuil et taux : règles existantes.
+- **Moteur** `engines/international-uk.js` (UMD, testé) : situation (immatriculé ou non ; client au Royaume-Uni ou
+  dans l'île de Man, dans l'UE ou ailleurs ; entreprise ou particulier ; service de la liste du § 16, service
+  numérique automatisé, autre service rendu à distance, service lié à un lieu) → verdict, raisons, mentions et
+  démarches, sous forme de clés ; les textes sont dans la page.
+- **Réponses sans verdict ferme** (« It depends ») : service lié à un lieu (immobilier, événements, transport,
+  formation en présentiel pour un particulier : règles particulières, renvoi à la Notice 741A) ; autre service à
+  distance (design, rédaction, traduction) pour un particulier à l'étranger, car l'appartenance à la liste du § 16
+  n'est pas établie (question ouverte). Non immatriculé : pas de TVA dans tous les cas, mais la vente compte pour le
+  seuil si elle est britannique.
+- **Ajouts après revue** : territoire (île de Man incluse, îles Anglo-Normandes et Gibraltar exclues) ; guichet
+  *non-Union* de l'UE (règle de la Commission européenne : déclaration trimestrielle, registres 10 ans) ; option
+  « No UK VAT (outside the scope) » dans le générateur de facture ; régime forfaitaire signalé (question ouverte).
+- **Mention sur la facture** : aucune formulation officielle trouvée pour une prestation hors champ ; la page
+  propose une formulation présentée comme une suggestion (« Outside the scope of UK VAT… »), plus le numéro de TVA
+  du client de l'UE, pièce de preuve.
+- **Critères** : tests unitaires du moteur (toutes les combinaisons, contrôlés par mutation) ; parcours navigateur
+  (verdicts, mentions, démarches, mémorisation, accessibilité) ; captures relues ; revue critique.

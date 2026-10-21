@@ -534,6 +534,9 @@ const tests = {
     await page.click('[data-doctype="estimate"]');
     check((await page.textContent("#iv-preview")).includes("QUOTE"), "devis UK : titre QUOTE");
     await page.click('[data-doctype="invoice"]');
+    await page.selectOption("#iv-tax-rate", "outside");
+    text = await page.textContent("#iv-preview");
+    check(!text.includes("VAT (") && text.includes("£2,251.50"), "facture UK : hors champ → aucune ligne de TVA");
     await page.selectOption("#iv-tax-rate", "none");
   },
   async "uk/invoice-requirements/"(page) {
@@ -576,6 +579,47 @@ const tests = {
       "liste UK : un point manquant (singulier)");
     check((await page.textContent("main")).includes("£250 or less"), "liste UK : facture simplifiée de 250 £ ou moins");
     check((await page.textContent(".sources")).includes("20 October 2026"), "liste UK : date de vérification au format britannique");
+  },
+  async "uk/invoicing-overseas-clients/"(page) {
+    const verdict = () => page.textContent("#x-verdict");
+    const why = () => page.textContent("#x-why");
+    const items = (id) => page.$$eval(`#${id} li`, (lis) => lis.map((li) => li.textContent));
+    const choose = async (values) => { for (const [id, value] of Object.entries(values)) await page.selectOption(`#x-${id}`, value); };
+    check((await verdict()) === "No UK VAT" && (await why()).includes("supplied where the business belongs") &&
+      (await items("x-wording")).some((t) => t.includes("client's VAT number")) && (await items("x-actions")).some((t) => t.includes("£90,000")),
+      "client étranger UK : entreprise de l'UE, non immatriculé → hors champ, n° de TVA du client, seuil");
+    await choose({ registered: "yes" });
+    check((await items("x-actions")).some((t) => t.includes("box 6")) && !(await items("x-actions")).some((t) => t.includes("£90,000")),
+      "client étranger UK : immatriculé → case 6, pas de seuil");
+    await choose({ location: "world" });
+    check((await verdict()) === "No UK VAT" && !(await items("x-wording")).some((t) => t.includes("VAT number")), "client étranger UK : entreprise hors UE → pas de n° de TVA demandé");
+    await choose({ service: "place" });
+    check((await verdict()) === "It depends" && (await why()).includes("special rules") && (await items("x-actions"))[0].includes("Notice 741A"),
+      "client étranger UK : service lié à un lieu → règles particulières, sans verdict");
+    await choose({ customer: "consumer", service: "remote" });
+    check((await verdict()) === "It depends" && (await why()).includes("doesn't settle"), "client étranger UK : particulier, design → question non tranchée signalée");
+    await choose({ registered: "no" });
+    check((await verdict()) === "No VAT" && (await items("x-actions"))[0].startsWith("If the sale is a UK sale"), "client étranger UK : non immatriculé, design → pas de TVA, seuil si vente britannique");
+    await choose({ registered: "yes", service: "listed" });
+    check((await verdict()) === "No UK VAT" && (await why()).includes("private client who belongs outside the UK"), "client étranger UK : particulier, conseil → hors champ");
+    await choose({ service: "digital" });
+    check((await verdict()) === "No UK VAT" && (await items("x-actions"))[0].includes("client's country taxes digital services"),
+      "client étranger UK : services numériques à un particulier hors UE → hors champ, règles locales");
+    await choose({ location: "eu" });
+    check((await verdict()) === "VAT of your client's EU country" && (await items("x-actions")).some((t) => t.includes("box 6")),
+      "client étranger UK : immatriculé, numériques à un particulier de l'UE → TVA du pays, case 6");
+    await choose({ registered: "no" });
+    check((await verdict()) === "VAT of your client's EU country" && (await items("x-actions"))[0].includes("non-Union scheme") && (await items("x-actions"))[0].includes("10 years"),
+      "client étranger UK : non immatriculé, numériques à un particulier de l'UE → TVA du pays, guichet non-Union");
+    await accessible(page, "client étranger UK (TVA de l'UE)");
+    await choose({ location: "uk" });
+    check((await verdict()) === "No VAT" && !(await page.isVisible("#x-customer")) && !(await page.isVisible("#x-service")) &&
+      (await items("x-actions"))[0].includes("counts towards the £90,000"), "client étranger UK : client au Royaume-Uni → champs inutiles masqués, seuil");
+    await page.reload({ waitUntil: "networkidle" });
+    check((await page.inputValue("#x-location")) === "uk" && (await verdict()) === "No VAT", "client étranger UK : situation mémorisée après rechargement");
+    // Retour à la situation par défaut pour les formats suivants (tablette, mobile).
+    await choose({ location: "eu", customer: "business", service: "listed" });
+    check((await verdict()) === "No UK VAT", "client étranger UK : situation par défaut rétablie");
   },
   async "uk/making-tax-digital/"(page) {
     check((await page.textContent("#m-start")).trim() === "6 April 2027", "MTD : 40 000 £ → avril 2027");

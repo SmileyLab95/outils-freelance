@@ -1,5 +1,24 @@
 # Journal des modifications
 
+## 2026-10-21 — Royaume-Uni : *Invoicing overseas clients*
+
+- Nouvelle page `/uk/invoicing-overseas-clients/` (menu « Invoicing », même identifiant que « Facturer un client
+  étranger ») : selon l'immatriculation, le pays du client (Royaume-Uni ou île de Man, UE, ailleurs), son statut
+  (entreprise ou particulier) et le service, l'assistant dit s'il faut facturer la TVA britannique, quoi écrire sur
+  la facture et quelles démarches suivre (preuves, case 6, seuil de 90 000 £, guichet *non-Union* de l'UE pour les
+  services numériques à des particuliers, dès la première vente). Quand la règle n'est pas tranchée (design ou
+  rédaction pour un particulier à l'étranger, services liés à un lieu), la réponse est « It depends », avec le
+  renvoi à la Notice 741A.
+- Règles nouvelles (`uk.json`) : lieu de la prestation entre entreprises et envers un particulier, services de
+  l'annexe 4A § 16, services numériques, guichet *non-Union* (Commission européenne), territoire de TVA, preuves,
+  case 6, chiffre d'affaires taxable ; deux questions ouvertes (services « semblables » au conseil, régime
+  forfaitaire). La mention « hors champ », qu'HMRC ne fixe pas, est présentée comme une suggestion.
+- Générateur de facture britannique : option « No UK VAT (outside the scope) », sans ligne de TVA.
+- Moteur `engines/international-uk.js` ; tests : unitaires (les 48 situations, invariants, textes de la page, montants
+  et taux repris des règles), contrôlés en réintroduisant les erreurs ; parcours navigateur (11 situations,
+  mémorisation, accessibilité avec un résultat affiché) ; suite complète (155 tests unitaires, 1 865 vérifications
+  navigateur) ; revue critique (10 points traités).
+
 ## 2026-10-21 — Canada : *What to put on an invoice* et « Que mettre sur une facture »
 
 - Deux pages (anglais et français), même liste : les mentions dont un client inscrit à la TPS/TVH a besoin pour

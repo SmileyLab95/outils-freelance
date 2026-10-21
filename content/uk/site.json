@@ -22,7 +22,8 @@
       "items": [
         "invoice",
         "invoice-rules",
-        "salestax"
+        "salestax",
+        "international"
       ]
     },
     {
