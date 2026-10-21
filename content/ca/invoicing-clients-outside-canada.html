@@ -1,0 +1,131 @@
+<!--{
+  "id": "international",
+  "slug": "invoicing-clients-outside-canada/",
+  "title": "Invoicing Clients Outside Canada: GST/HST on Exports",
+  "description": "Client outside Canada: find out whether your service is zero-rated, the exceptions, what to put on the invoice, and how exports count for GST/HST and QST.",
+  "menu": "Invoicing clients outside Canada",
+  "icon": "🌍",
+  "blurb": "Zero-rated or not, invoice wording and next steps for a client abroad.",
+  "app": "Canada Foreign Client Invoicing Assistant",
+  "scripts": ["engines/international-ca.js", "tools/ca-international.js"],
+  "rules": "ca",
+  "sources": ["export_services_zero_rated", "export_professional_services_zero_rated", "export_ip_non_registered", "export_evidence_non_resident", "small_supplier_includes_zero_rated", "gst_return_line_101", "quick_method_zero_rated", "qst_services_non_residents_zero_rated", "small_supplier_threshold", "small_supplier_not_required_to_collect", "place_of_supply_and_exports"],
+  "priority": 0.8,
+  "faq": [
+    ["Do I charge GST/HST to a client outside Canada?", "Generally not: a service supplied to a non-resident is zero-rated, so the GST/HST applies at 0%. The exceptions depend on the service: services related to real property or goods located in Canada are taxable as in Canada; so are most services given to an individual in Canada, and consulting or professional services to an individual in connection with litigation in Canada. Selling or licensing intellectual property has its own rules."],
+    ["What do I write on the invoice?", "The GST/HST at 0% (and the QST at 0% if your business is in Quebec): in the <a href=\"{{link:invoice}}\">invoice generator</a>, choose “Zero-rated export”. The CRA doesn't set a wording: a clear statement such as “Zero-rated: service supplied to a non-resident” helps. Your client's address outside Canada also supports the zero-rating."],
+    ["Do sales to foreign clients count towards the $30,000 small supplier threshold?", "Yes. The small supplier test is measured on your worldwide taxable supplies, and zero-rated supplies are taxable supplies: your exports count, even though they carry no tax."],
+    ["What about the QST in Quebec?", "The QST follows the same logic: a service supplied to a non-resident is generally zero-rated, with exceptions, such as a client who is an individual physically in Canada."],
+    ["My client is in another province: what do I charge?", "That's not an export: for most services, you charge the GST/HST at the rate of your client's province. The <a href=\"{{link:salestax}}\">GST/HST calculator</a> gives the rate for each province."]
+  ]
+}-->
+<script type="application/json" id="intl-ca-data">
+{
+  "verdicts": {
+    "charge_tax": "Charge GST/HST",
+    "no_tax_unregistered": "No sales tax",
+    "zero_rated": "Zero-rated: 0%",
+    "check": "It depends"
+  },
+  "reasons": {
+    "canada_customer": "Your client is a resident of Canada: charge the GST/HST at the rate of the province where the service is supplied, for most services your client's province. The GST/HST calculator gives each province's rate.",
+    "exception_property": "Services related to real property located in Canada, or to goods located in Canada when the service is performed, aren't zero-rated, even for a non-resident client: they're taxable as in Canada.",
+    "exception_individual": "A service to an individual who is in Canada when dealing with you, or rendered to an individual while in Canada, isn't zero-rated: it's taxable as in Canada.",
+    "export_zero_rated": "A service supplied to a non-resident is generally zero-rated: the GST/HST applies at 0%.",
+    "export_professional": "An advisory, consulting or professional service supplied to a non-resident is zero-rated: the GST/HST applies at 0%.",
+    "exception_litigation": "Exception: a service to an individual in connection with litigation in Canada isn't zero-rated.",
+    "professional_present": "For consulting and professional services, the exceptions differ from other services: litigation in Canada, real property or goods in Canada. When the service is given in Canada, check CRA memorandum 4.5.3.",
+    "ip_rules": "Selling or licensing intellectual property (copyright, software licences, photos, fonts) is zero-rated only if your non-resident client isn't registered for GST/HST, and not if the property can only be used in Canada: check CRA info sheet GI-034.",
+    "qst_zero_rated": "In Quebec, a service supplied to a non-resident is generally zero-rated for the QST too.",
+    "qst_where_supplied": "If your business is in Quebec, the QST also applies when the service is supplied in Quebec: the GST and QST calculator applies the taxes of your client's province.",
+    "other_rules": "Some services, such as advertising, are zero-rated only if the non-resident isn't registered for GST/HST: check CRA memorandum 4.5.3.",
+    "unregistered": "As a small supplier who isn't registered, you generally don't collect the GST/HST."
+  },
+  "wording": {
+    "tax_invoice": "The tax at the province's rate, your registration number and the other details on the invoice checklist.",
+    "no_tax_shown": "No GST/HST on the invoice.",
+    "zero_rated_wording": "The GST/HST at 0% (in the invoice generator, choose “Zero-rated export”). The CRA doesn't set a wording; a clear statement helps, for example: “Zero-rated: service supplied to a non-resident.”",
+    "zero_rated_wording_qc": "The GST and the QST at 0% (in the invoice generator, choose “Zero-rated export (Quebec)”). Neither the CRA nor Revenu Québec sets a wording; a clear statement helps, for example: “Zero-rated (GST and QST): service supplied to a non-resident.”",
+    "client_address": "Your client's address outside Canada.",
+    "check_wording": "Depends on the answer: the GST/HST at 0% if the supply is zero-rated, at the province's rate otherwise."
+  },
+  "actions": {
+    "evidence_non_resident": "Keep evidence that your client is a non-resident, for example their address, business registration and correspondence.",
+    "return_reporting": "On your GST/HST return: with the regular method, include these sales on line 101 (total revenue includes zero-rated supplies); with the quick method, leave them out of line 101 and of the quick method calculation.",
+    "counts_threshold": "This sale counts towards the $30,000 small supplier threshold.",
+    "counts_threshold_exports": "Zero-rated exports still count towards the $30,000 small supplier threshold, which is measured on your worldwide taxable supplies.",
+    "check_memo": "Check the CRA publication mentioned above, or ask the CRA or an accountant."
+  },
+  "no_actions": "Nothing else to do for this sale."
+}
+</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · GST/HST and QST rules</span>
+    <h1>Invoicing clients outside Canada</h1>
+    <p class="lead">Tell us where your client is and what you do for them: find out whether your service is zero-rated, what to put on the invoice and what to do next.</p>
+    <ul class="trust"><li>GST/HST and QST</li><li>Exceptions explained</li><li>Registered or not</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="intl-form" onsubmit="return false">
+      <h2>Your invoice</h2>
+      <div class="fields">
+        <div class="field full"><label for="x-registered">Your status</label>
+          <select id="x-registered" name="registered" data-save>
+            <option value="no">Not registered for GST/HST</option>
+            <option value="yes">Registered for GST/HST (and QST in Quebec)</option>
+          </select></div>
+        <label class="check full"><input type="checkbox" id="x-quebec" name="quebec" data-save><span>My business is in Quebec</span></label>
+        <div class="field full"><label for="x-location">Your client is</label>
+          <select id="x-location" name="location" aria-describedby="x-location-hint" data-save>
+            <option value="abroad">A non-resident of Canada</option>
+            <option value="canada">A resident of Canada</option>
+          </select>
+          <span class="hint" id="x-location-hint">Residence counts, not where your client happens to be. A foreign business acting through an establishment in Canada may be treated as resident: see CRA memorandum 4.5.1.</span></div>
+        <div class="field full" id="x-service-field"><label for="x-service">Your service</label>
+          <select id="x-service" name="service" data-save>
+            <option value="professional">Consulting or professional services</option>
+            <option value="other">Another service (design, writing, IT…)</option>
+            <option value="ip">Selling or licensing your rights (licences, photos…)</option>
+            <option value="property">Work on real property or goods in Canada</option>
+          </select></div>
+        <label class="check full" id="x-present-field"><input type="checkbox" id="x-present" name="present" data-save><span>The service is given in person in Canada, or my client is an individual who is in Canada while dealing with me</span></label>
+      </div>
+      <p class="small muted" style="margin: 14px 0 0;">For services only: exporting goods follows other rules.</p>
+    </form>
+
+    <div class="results">
+      <h2 class="sr-only">Result</h2>
+      <div class="result-hero" role="status" aria-atomic="true">
+        <div class="label">Sales tax on your invoice</div>
+        <div class="big" id="x-verdict" style="font-size: clamp(1.7rem, 3.6vw, 2.3rem);">–</div>
+        <div class="sub" id="x-why">–</div>
+      </div>
+      <div class="card" style="margin-top: 16px; padding: 18px;">
+        <h3 style="font-size: 1rem; margin-bottom: 8px;">On your invoice</h3>
+        <ul id="x-wording" style="margin: 0; padding-left: 18px;"></ul>
+        <p class="small" style="margin: 10px 0 0;">The <a href="{{link:invoice}}">invoice generator</a> lays out your invoice, and the <a href="{{link:invoice-rules}}">invoice checklist</a> lists the details your client needs.</p>
+      </div>
+      <div class="card" style="margin-top: 16px; padding: 18px;">
+        <h3 style="font-size: 1rem; margin-bottom: 8px;">What to do</h3>
+        <ul id="x-actions" style="margin: 0; padding-left: 18px;"></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>The rule in one sentence</h2>
+  <p>A service supplied to <strong>a non-resident</strong> is generally <strong>zero-rated</strong>: the tax applies at 0%, but the sale remains a taxable supply. The exceptions mostly concern <strong>Canada itself</strong>: a service tied to real property or goods located in Canada, a service given to an individual in Canada, or litigation in Canada.</p>
+  <h2>Good to know</h2>
+  <ul>
+    <li><strong>Exports count for the small supplier test</strong>: unlike in some countries, zero-rated sales are part of your worldwide taxable supplies. Once your taxable supplies, exports included, go over $30,000 in a single calendar quarter or over four consecutive calendar quarters, you must register.</li>
+    <li><strong>Keep evidence of non-residence</strong> for each client: it supports the 0% rate.</li>
+    <li><strong>Payment terms and currency</strong> are yours to agree: put them in your <a href="{{link:contract}}">contract</a>, together with who pays the bank fees.</li>
+  </ul>
+  <p class="small muted">Information for guidance only, based on CRA memoranda 4.5.1 and 4.5.3, info sheet GI-034, guides RC4022 and RC4058, and Revenu Québec. For an unusual situation, check with the CRA, Revenu Québec or an accountant.</p>
+</section>

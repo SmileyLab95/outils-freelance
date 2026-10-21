@@ -454,3 +454,36 @@ France et au Royaume-Uni par la même liste (identifiant `invoice-rules`).
 - **Critères** : tests unitaires (chaque élément des règles repris une fois, conditions, nombre de points par
   situation, mêmes points en anglais et en français) ; parcours navigateur des deux pages (paliers, inscription,
   Québec, messages, mémorisation) ; accessibilité ; captures relues ; revue critique.
+
+## Spécification : assistant *Invoicing clients outside Canada* / « Facturer un client étranger » (`/ca/invoicing-clients-outside-canada/`, `/ca/fr/facturer-client-etranger/`, 21/10/2026)
+
+**Question** : « Dois-je facturer la TPS/TVH (et la TVQ) à mon client étranger ? » Besoin P2 de
+[02](../02-besoins-clients.md) (§ 5), couvert en France et au Royaume-Uni (même identifiant `international`).
+
+- **Règles** (nouvelles, `data/rules/ca.json`, lues le 21/10/2026 par recherche) : services exportés détaxés
+  (`export_services_zero_rated` : un service fourni à un non-résident est en général détaxé, sauf s'il est rendu à
+  un particulier présent au Canada, ou s'il porte sur un immeuble situé au Canada ou sur un bien qui s'y trouve,
+  mémorandum 4.5.3) ; preuve de la non-résidence (`export_evidence_non_resident`, mémorandums 4.5.1 et 4.5.3) ;
+  seuil du petit fournisseur calculé sur les fournitures taxables mondiales, détaxées comprises
+  (`small_supplier_includes_zero_rated`, RC4022) ; ligne 101 de la déclaration (`gst_return_line_101`) ; TVQ :
+  services fournis à des non-résidents en général détaxés (`qst_services_non_residents_zero_rated`, Revenu Québec).
+- **Moteur** `engines/international-ca.js` (UMD, testé) : situation (inscrit ou non ; entreprise au Québec ; client
+  résident ou non-résident ; service de conseil ou professionnel (art. 23), autre service (art. 7), vente ou licence
+  de propriété intellectuelle (art. 10), service lié à un immeuble ou à un bien situé au Canada ; service rendu en
+  personne au Canada ou particulier au Canada) → verdict, raisons, mentions, démarches (clés) ; textes dans chaque
+  page, en anglais et en français.
+- **Corrigé après revue** : les services de conseil et professionnels suivent l'art. 23 (exception du litige au
+  Canada ; la présence du client au Canada n'y est pas une exception : « ça dépend ») ; la propriété intellectuelle
+  n'est détaxée que si le non-résident n'est pas inscrit (« ça dépend ») ; la méthode rapide exclut les ventes
+  détaxées de la ligne 101 ; la TVQ est rappelée quand une entreprise du Québec doit facturer la taxe ; la règle
+  `place_of_supply_and_exports` ne lie plus la détaxation à la non-inscription du client en général ; le générateur
+  de facture propose « Exportation détaxée » (TPS/TVH 0 %, ou TPS et TVQ 0 % au Québec).
+- **Différence avec le Royaume-Uni** : une exportation détaxée reste une fourniture taxable ; elle compte dans le
+  seuil de 30 000 $ et se déclare à la ligne 101. La page le dit pour un travailleur autonome non inscrit.
+- **Client au Canada** : renvoi au calculateur de TPS/TVH (taux de la province du client), sans détail.
+- **Signalé, non tranché** : certains services (la publicité, par exemple) ne sont détaxés que si le client
+  non-résident n'est pas inscrit à la TPS/TVH ; la page renvoie au mémorandum 4.5.3.
+- **Mention sur la facture** : aucune formulation officielle relevée ; suggestion présentée comme telle
+  (« Fourniture détaxée : service fourni à un non-résident »).
+- **Critères** : tests unitaires (toutes les situations, textes des deux pages) ; parcours navigateur des deux pages ;
+  accessibilité ; captures relues ; revue critique.

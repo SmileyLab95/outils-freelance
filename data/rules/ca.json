@@ -96,13 +96,85 @@
       "note": "Same $30,000 test as for GST/HST (single quarter or four consecutive quarters). Registration for GST and QST is generally done together with Revenu Québec for businesses located in Québec. Not re-opened on 2026-10-20."
     },
     "place_of_supply_and_exports": {
-      "value": "The GST/HST rate to charge is set by the place of supply: for most services supplied to a Canadian customer, the province of the customer's business or home address, not the supplier's province. Most services supplied to a non-resident customer who is not registered for GST/HST are zero-rated (0%).",
+      "value": "The GST/HST rate to charge is set by the place of supply: for most services supplied to a Canadian customer, the province of the customer's business or home address, not the supplier's province. Most services supplied to a non-resident customer are zero-rated (0%); some only when the non-resident isn't registered for GST/HST (advertising, intellectual property).",
       "unit": "text",
       "label": "Which rate to charge and exports",
       "source": "https://www.canada.ca/en/revenue-agency/services/forms-publications/publications/rc4022.html",
       "source_title": "RC4022 General Information for GST/HST Registrants - Canada.ca",
       "confidence": "medium",
-      "note": "Zero-rating of exported services has exceptions (for example services related to real property in Canada, or services to individuals who are in Canada when the service is performed). QST has its own place-of-supply rules; PST (BC/SK/MB) applies under each province's own rules. Not re-opened on 2026-10-20."
+      "note": "Zero-rating of exported services has exceptions (for example services related to real property in Canada, or services to individuals who are in Canada when the service is performed). QST has its own place-of-supply rules; PST (BC/SK/MB) applies under each province's own rules. Not re-opened on 2026-10-20. Value corrected on 2026-10-21: registration of the non-resident matters only for some services (Memorandum 4.5.3)."
+    },
+    "export_services_zero_rated": {
+      "value": "A supply of a service made to a non-resident person is generally zero-rated (0%), except a service made to an individual who is in Canada when in contact with the supplier or rendered to an individual while in Canada, and a service in respect of real property situated in Canada or of tangible personal property situated in Canada when the service is performed.",
+      "unit": "text",
+      "label": "Exported services (other than advisory, consulting or professional services): zero-rated, with exceptions (Excise Tax Act, Schedule VI, Part V, section 7)",
+      "source": "https://www.canada.ca/en/revenue-agency/services/forms-publications/publications/4-5-3/exports-services-intangible-personal-property.html",
+      "source_title": "GST/HST Memorandum 4.5.3, Exports - Services and Intellectual Property - Canada.ca",
+      "confidence": "medium",
+      "note": "Read on 2026-10-21 through search excerpts of Memorandum 4.5.3 (paragraphs 7(a) and (a.1) of Part V of Schedule VI). Other provisions zero-rate some services only when the non-resident is not registered for GST/HST (advertising, for example): the site does not go into them and refers to the memorandum. Services in respect of goods or real property provided to fulfil a warranty issued by a non-resident, and services on temporarily imported goods, have their own rules. Advisory, consulting and professional services are zero-rated under section 23 instead (rule export_professional_services_zero_rated), with different exceptions."
+    },
+    "export_professional_services_zero_rated": {
+      "value": "An advisory, consulting or professional service made to a non-resident person is zero-rated, except a service rendered to an individual in connection with criminal, civil or administrative litigation in Canada (other than a service rendered before the litigation began), a service in respect of real property situated in Canada, and a service in respect of tangible personal property situated in Canada when the service is performed.",
+      "unit": "text",
+      "label": "Advisory, consulting or professional services to non-residents: zero-rated (Excise Tax Act, Schedule VI, Part V, section 23)",
+      "source": "https://www.canada.ca/en/revenue-agency/services/forms-publications/publications/4-5-3/exports-services-intangible-personal-property.html",
+      "source_title": "GST/HST Memorandum 4.5.3, Exports - Services and Intellectual Property - Canada.ca",
+      "confidence": "medium",
+      "note": "Read on 2026-10-21 through search excerpts of Memorandum 4.5.3 and CRA ruling P-206 (litigation services): exclusions in paragraphs 23(a) to (c); paragraph 23(d) not confirmed by the excerpts. The site gives no verdict when the client is in Canada during the service."
+    },
+    "export_ip_non_registered": {
+      "value": "A supply of intellectual property (or a right to use it) made to a non-resident is zero-rated only if the non-resident is not registered for GST/HST; intangible property that may only be used in Canada is excluded.",
+      "unit": "text",
+      "label": "Intellectual property supplied to non-residents (Excise Tax Act, Schedule VI, Part V, sections 10 and 10.1)",
+      "source": "https://www.canada.ca/en/revenue-agency/services/forms-publications/publications/gi-034/exports-intangible-personal-property.html",
+      "source_title": "GST/HST Info Sheet GI-034, Exports of Intangible Personal Property - Canada.ca",
+      "confidence": "medium",
+      "note": "Read on 2026-10-21 through search excerpts of GI-034, Memorandum 4.5.3 and the GST/HST and Electronic Commerce guide. The site gives no verdict for these supplies and refers to the CRA publications."
+    },
+    "export_evidence_non_resident": {
+      "value": "To zero-rate a supply, keep satisfactory evidence that the customer is a non-resident and, where applicable, not registered for GST/HST.",
+      "unit": "text",
+      "label": "Evidence of the customer's non-residence for zero-rated exports",
+      "source": "https://www.canada.ca/en/revenue-agency/services/forms-publications/publications/4-5-1/exports-determining-residence-status.html",
+      "source_title": "GST/HST Memorandum 4.5.1, Exports - Determining Residence Status - Canada.ca",
+      "confidence": "medium",
+      "note": "Read on 2026-10-21 through search excerpts of Memoranda 4.5.1 and 4.5.3. Memorandum 4.5.1 is dated 1998: residence tests not detailed on the site."
+    },
+    "small_supplier_includes_zero_rated": {
+      "value": "The $30,000 small supplier test is measured on worldwide taxable supplies, and taxable supplies include zero-rated supplies (exports included).",
+      "unit": "text",
+      "label": "Small supplier test: zero-rated supplies count",
+      "source": "https://www.canada.ca/en/revenue-agency/services/forms-publications/publications/rc4022/general-information-gst-hst-registrants.html",
+      "source_title": "General Information for GST/HST Registrants (RC4022) - Canada.ca",
+      "confidence": "high",
+      "note": "Read on 2026-10-21 through search excerpts of RC4022: a taxable supply is made in the course of a commercial activity and is generally subject to the GST/HST, including zero-rated supplies; revenues of associated persons count too. Excluded from the calculation: goodwill, financial services, sales of capital property."
+    },
+    "gst_return_line_101": {
+      "value": "Line 101 (regular method): total revenue from supplies of property and services, including zero-rated and exempt supplies, and other revenue for the reporting period.",
+      "unit": "text",
+      "label": "GST/HST return, line 101: zero-rated supplies included",
+      "source": "https://www.canada.ca/en/revenue-agency/services/forms-publications/publications/rc4022/general-information-gst-hst-registrants.html",
+      "source_title": "General Information for GST/HST Registrants (RC4022) - Canada.ca",
+      "confidence": "high",
+      "note": "Read on 2026-10-21 through search excerpts. The quick method has different instructions; the return also lets you report zero-rated exports separately (lines 90, 91 and 102 when you choose to)."
+    },
+    "quick_method_zero_rated": {
+      "value": "Zero-rated supplies are not part of the quick method calculation and are left out of line 101 for quick method filers; they still count towards the $400,000 eligibility threshold.",
+      "unit": "text",
+      "label": "Quick method: zero-rated exports excluded from the remittance calculation and from line 101",
+      "source": "https://www.canada.ca/en/revenue-agency/services/forms-publications/publications/rc4058/quick-method-accounting-gst-hst.html",
+      "source_title": "Quick Method of Accounting for GST/HST (RC4058) - Canada.ca",
+      "confidence": "medium",
+      "note": "Read on 2026-10-21 through search excerpts of RC4058 and the CRA instructions for preparing a GST/HST return."
+    },
+    "qst_services_non_residents_zero_rated": {
+      "value": "The supply of a service in Québec to a non-resident is generally zero-rated for the QST, with exceptions, including when the recipient is an individual physically in Canada.",
+      "unit": "text",
+      "label": "QST: services supplied to non-residents generally zero-rated",
+      "source": "https://www.revenuquebec.ca/en/businesses/consumption-taxes/gsthst-and-qst/special-cases-gsthst-and-qst/exports-outside-canada-and-shipping-outside-quebec/supplies-of-services-to-non-residents/",
+      "source_title": "Supplies of Services to Non-Residents - Revenu Québec",
+      "confidence": "medium",
+      "note": "Read on 2026-10-21 through search excerpts. Revenu Québec lists among zero-rated services certain professional or consulting services sold to a non-resident, and advertising sold to a non-registered non-resident."
     },
     "itc_invoice_requirements": {
       "value": {

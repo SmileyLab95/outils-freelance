@@ -1,0 +1,131 @@
+<!--{
+  "id": "international",
+  "slug": "facturer-client-etranger/",
+  "title": "Facturer un client étranger : TPS/TVH, TVQ et détaxation",
+  "description": "Client hors du Canada : votre service est-il détaxé, quelles exceptions, que mettre sur la facture, et comment ces ventes comptent pour la TPS/TVH et la TVQ.",
+  "menu": "Facturer un client étranger",
+  "icon": "🌍",
+  "blurb": "Détaxé ou non, mentions et démarches pour un client hors du Canada.",
+  "app": "Assistant facturation d'un client étranger (Canada)",
+  "scripts": ["engines/international-ca.js", "tools/ca-international.js"],
+  "rules": "ca",
+  "sources": ["export_services_zero_rated", "export_professional_services_zero_rated", "export_ip_non_registered", "export_evidence_non_resident", "small_supplier_includes_zero_rated", "gst_return_line_101", "quick_method_zero_rated", "qst_services_non_residents_zero_rated", "small_supplier_threshold", "small_supplier_not_required_to_collect", "place_of_supply_and_exports"],
+  "priority": 0.8,
+  "faq": [
+    ["Dois-je facturer la TPS/TVH à un client hors du Canada ?", "En général, non : un service fourni à un non-résident est détaxé, c'est-à-dire taxable au taux de 0 %. Les exceptions dépendent du service : les services liés à un immeuble ou à un bien situé au Canada sont taxables comme au Canada, tout comme la plupart des services rendus à un particulier au Canada, et les services de conseil ou professionnels rendus à un particulier dans le cadre d'un litige au Canada. La vente ou la licence d'une propriété intellectuelle suit ses propres règles."],
+    ["Que dois-je écrire sur la facture ?", "La TPS/TVH à 0 % (et la TVQ à 0 % si votre entreprise est au Québec) : dans le <a href=\"{{link:invoice}}\">générateur de facture</a>, choisissez « Exportation détaxée ». L'ARC n'impose pas de formulation : une mention claire comme « Fourniture détaxée : service fourni à un non-résident » aide votre client. L'adresse de votre client hors du Canada appuie aussi la détaxation."],
+    ["Les ventes à des clients étrangers comptent-elles dans le seuil de 30 000 $ ?", "Oui. Le seuil du petit fournisseur se calcule sur vos fournitures taxables mondiales, et les fournitures détaxées sont des fournitures taxables : vos exportations comptent, même sans taxe."],
+    ["Et la TVQ au Québec ?", "La TVQ suit la même logique : un service fourni à un non-résident est en général détaxé, avec des exceptions, par exemple un client qui est un particulier physiquement présent au Canada."],
+    ["Mon client est dans une autre province : que dois-je facturer ?", "Ce n'est pas une exportation : pour la plupart des services, vous facturez la TPS/TVH au taux de la province de votre client. Le <a href=\"{{link:salestax}}\">calculateur de TPS et de TVQ</a> donne le taux de chaque province."]
+  ]
+}-->
+<script type="application/json" id="intl-ca-data">
+{
+  "verdicts": {
+    "charge_tax": "Facturez la TPS/TVH",
+    "no_tax_unregistered": "Aucune taxe de vente",
+    "zero_rated": "Détaxé : 0 %",
+    "check": "Ça dépend"
+  },
+  "reasons": {
+    "canada_customer": "Votre client est un résident du Canada : facturez la TPS/TVH au taux de la province où le service est fourni, pour la plupart des services celle de votre client. Le calculateur de TPS et de TVQ donne le taux de chaque province.",
+    "exception_property": "Les services liés à un immeuble situé au Canada, ou à un bien qui se trouve au Canada pendant la prestation, ne sont pas détaxés, même pour un client non-résident : ils sont taxables comme au Canada.",
+    "exception_individual": "Un service rendu à un particulier qui est au Canada quand il traite avec vous, ou rendu à un particulier pendant qu'il est au Canada, n'est pas détaxé : il est taxable comme au Canada.",
+    "export_zero_rated": "Un service fourni à un non-résident est en général détaxé : la TPS/TVH s'applique au taux de 0 %.",
+    "export_professional": "Un service de consultation, de conseil ou un service professionnel fourni à un non-résident est détaxé : la TPS/TVH s'applique au taux de 0 %.",
+    "exception_litigation": "Exception : un service rendu à un particulier dans le cadre d'un litige au Canada n'est pas détaxé.",
+    "professional_present": "Pour les services de conseil et les services professionnels, les exceptions ne sont pas les mêmes que pour les autres services : litige au Canada, immeuble ou bien situé au Canada. Si le service est rendu au Canada, consultez le mémorandum 4.5.3 de l'ARC.",
+    "ip_rules": "La vente ou la licence d'une propriété intellectuelle (droit d'auteur, licence de logiciel, photos, polices) n'est détaxée que si votre client non-résident n'est pas inscrit à la TPS/TVH, et pas si la propriété ne peut être utilisée qu'au Canada : consultez l'info-fiche GI-034 de l'ARC.",
+    "qst_zero_rated": "Au Québec, un service fourni à un non-résident est en général détaxé pour la TVQ aussi.",
+    "qst_where_supplied": "Si votre entreprise est au Québec, la TVQ s'applique aussi quand le service est fourni au Québec : le calculateur de TPS et de TVQ applique les taxes de la province de votre client.",
+    "other_rules": "Certains services, comme la publicité, ne sont détaxés que si le non-résident n'est pas inscrit à la TPS/TVH : consultez le mémorandum 4.5.3 de l'ARC.",
+    "unregistered": "À titre de petit fournisseur non inscrit, vous ne percevez généralement pas la TPS/TVH."
+  },
+  "wording": {
+    "tax_invoice": "La taxe au taux de la province, votre numéro d'inscription et les autres mentions de la liste des mentions.",
+    "no_tax_shown": "Aucune TPS/TVH sur la facture.",
+    "zero_rated_wording": "La TPS/TVH à 0 % (dans le générateur de facture, choisissez « Exportation détaxée »). L'ARC n'impose pas de formulation ; une mention claire aide, par exemple : « Fourniture détaxée : service fourni à un non-résident. »",
+    "zero_rated_wording_qc": "La TPS et la TVQ à 0 % (dans le générateur de facture, choisissez « Exportation détaxée (Québec) »). Ni l'ARC ni Revenu Québec n'imposent de formulation ; une mention claire aide, par exemple : « Fourniture détaxée (TPS et TVQ) : service fourni à un non-résident. »",
+    "client_address": "L'adresse de votre client hors du Canada.",
+    "check_wording": "Selon la réponse : la TPS/TVH à 0 % si la fourniture est détaxée, au taux de la province sinon."
+  },
+  "actions": {
+    "evidence_non_resident": "Conservez la preuve que votre client est un non-résident, par exemple son adresse, son immatriculation et vos échanges.",
+    "return_reporting": "Dans votre déclaration de TPS/TVH : avec la méthode ordinaire, incluez ces ventes à la ligne 101 (le total des ventes comprend les fournitures détaxées) ; avec la méthode rapide, laissez-les hors de la ligne 101 et du calcul de la méthode rapide.",
+    "counts_threshold": "Cette vente compte dans le seuil de 30 000 $ du petit fournisseur.",
+    "counts_threshold_exports": "Les exportations détaxées comptent quand même dans le seuil de 30 000 $ du petit fournisseur, calculé sur vos fournitures taxables mondiales.",
+    "check_memo": "Consultez la publication de l'ARC citée ci-dessus, ou renseignez-vous auprès de l'ARC ou d'un comptable."
+  },
+  "no_actions": "Rien d'autre à faire pour cette vente."
+}
+</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Gratuit · règles de la TPS/TVH et de la TVQ</span>
+    <h1>Facturer un client étranger</h1>
+    <p class="lead">Indiquez où est votre client et ce que vous faites pour lui : vous saurez si votre service est détaxé, quoi mettre sur la facture et quelles démarches suivre.</p>
+    <ul class="trust"><li>TPS/TVH et TVQ</li><li>Exceptions expliquées</li><li>Inscrit ou non</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="intl-form" onsubmit="return false">
+      <h2>Votre facture</h2>
+      <div class="fields">
+        <div class="field full"><label for="x-registered">Votre situation</label>
+          <select id="x-registered" name="registered" data-save>
+            <option value="no">Non inscrit à la TPS/TVH</option>
+            <option value="yes">Inscrit à la TPS/TVH (et à la TVQ au Québec)</option>
+          </select></div>
+        <label class="check full"><input type="checkbox" id="x-quebec" name="quebec" data-save><span>Mon entreprise est au Québec</span></label>
+        <div class="field full"><label for="x-location">Votre client est</label>
+          <select id="x-location" name="location" aria-describedby="x-location-hint" data-save>
+            <option value="abroad">Un non-résident du Canada</option>
+            <option value="canada">Un résident du Canada</option>
+          </select>
+          <span class="hint" id="x-location-hint">C'est la résidence qui compte, pas l'endroit où se trouve votre client. Une entreprise étrangère qui agit par un établissement au Canada peut être considérée comme résidente : voir le mémorandum 4.5.1 de l'ARC.</span></div>
+        <div class="field full" id="x-service-field"><label for="x-service">Votre service</label>
+          <select id="x-service" name="service" data-save>
+            <option value="professional">Conseil ou service professionnel</option>
+            <option value="other">Autre service (design, rédaction, informatique…)</option>
+            <option value="ip">Vente ou licence de vos droits (licences, photos…)</option>
+            <option value="property">Travail sur un immeuble ou un bien au Canada</option>
+          </select></div>
+        <label class="check full" id="x-present-field"><input type="checkbox" id="x-present" name="present" data-save><span>Le service est rendu en personne au Canada, ou mon client est un particulier qui est au Canada quand il traite avec moi</span></label>
+      </div>
+      <p class="small muted" style="margin: 14px 0 0;">Pour les services seulement : l'exportation de biens suit d'autres règles.</p>
+    </form>
+
+    <div class="results">
+      <h2 class="sr-only">Résultat</h2>
+      <div class="result-hero" role="status" aria-atomic="true">
+        <div class="label">Taxes de vente sur votre facture</div>
+        <div class="big" id="x-verdict" style="font-size: clamp(1.7rem, 3.6vw, 2.3rem);">–</div>
+        <div class="sub" id="x-why">–</div>
+      </div>
+      <div class="card" style="margin-top: 16px; padding: 18px;">
+        <h3 style="font-size: 1rem; margin-bottom: 8px;">Sur votre facture</h3>
+        <ul id="x-wording" style="margin: 0; padding-left: 18px;"></ul>
+        <p class="small" style="margin: 10px 0 0;">Le <a href="{{link:invoice}}">générateur de facture</a> met en page votre facture, et la <a href="{{link:invoice-rules}}">liste des mentions</a> détaille ce dont votre client a besoin.</p>
+      </div>
+      <div class="card" style="margin-top: 16px; padding: 18px;">
+        <h3 style="font-size: 1rem; margin-bottom: 8px;">Vos démarches</h3>
+        <ul id="x-actions" style="margin: 0; padding-left: 18px;"></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>La règle en une phrase</h2>
+  <p>Un service fourni à <strong>un non-résident</strong> est en général <strong>détaxé</strong> : la taxe s'applique au taux de 0 %, mais la vente reste une fourniture taxable. Les exceptions concernent surtout <strong>le Canada lui-même</strong> : un service lié à un immeuble ou à un bien situé au Canada, un service rendu à un particulier au Canada, ou un litige au Canada.</p>
+  <h2>Bon à savoir</h2>
+  <ul>
+    <li><strong>Les exportations comptent pour le seuil du petit fournisseur</strong> : contrairement à certains pays, les ventes détaxées font partie de vos fournitures taxables mondiales. Quand vos fournitures taxables, exportations comprises, dépassent 30 000 $ en un seul trimestre civil ou sur quatre trimestres civils consécutifs, l'inscription devient obligatoire.</li>
+    <li><strong>Gardez une preuve de non-résidence</strong> pour chaque client : elle appuie le taux de 0 %.</li>
+    <li><strong>Les modalités de paiement et la devise</strong> se négocient : précisez-les dans votre <a href="{{link:contract}}">contrat de service</a>, avec la prise en charge des frais bancaires.</li>
+  </ul>
+  <p class="small muted">Information à titre indicatif, d'après les mémorandums 4.5.1 et 4.5.3 de l'ARC, l'info-fiche GI-034, les guides RC4022 et RC4058, et Revenu Québec. Pour une situation particulière, renseignez-vous auprès de l'ARC, de Revenu Québec ou d'un comptable.</p>
+</section>

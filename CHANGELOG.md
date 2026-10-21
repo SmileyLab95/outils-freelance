@@ -1,5 +1,26 @@
 # Journal des modifications
 
+## 2026-10-21 — Canada : *Invoicing clients outside Canada* et « Facturer un client étranger »
+
+- Deux pages (anglais et français, menus « Invoicing » et « Facturer », même identifiant que les pages française et
+  britannique) : selon l'inscription, le Québec, la résidence du client et le service, l'assistant dit si la vente
+  est détaxée (0 %) ou taxable, quoi écrire sur la facture et quelles démarches suivre. Services de conseil et
+  professionnels (art. 23 : exception du litige au Canada), autres services (art. 7 : exception du particulier au
+  Canada), services liés à un immeuble ou à un bien au Canada (taxables), propriété intellectuelle et conseil rendu
+  au Canada (« ça dépend », renvoi aux publications de l'ARC). Les exportations détaxées comptent dans le seuil de
+  30 000 $ ; ligne 101 selon la méthode ordinaire ou rapide ; TVQ détaxée aussi.
+- Règles nouvelles (`ca.json`) : `export_services_zero_rated`, `export_professional_services_zero_rated`,
+  `export_ip_non_registered`, `export_evidence_non_resident`, `small_supplier_includes_zero_rated`,
+  `gst_return_line_101`, `quick_method_zero_rated`, `qst_services_non_residents_zero_rated` ;
+  `place_of_supply_and_exports` corrigée (la non-inscription du client ne compte que pour certains services).
+- Générateur de facture canadien : options « Exportation détaxée » (TPS/TVH 0 %) et « (Québec) » (TPS et TVQ 0 %).
+- Pages « client étranger » (Canada et Royaume-Uni) : seuls le verdict et l'explication sont annoncés aux lecteurs
+  d'écran, les listes ne le sont plus à chaque changement.
+- Moteur `engines/international-ca.js` ; tests : unitaires (cas écrits à la main à partir des règles, invariants sur
+  les 64 situations, textes des deux pages), contrôlés en réintroduisant les erreurs ; parcours navigateur des deux
+  pages et du générateur ; suite complète (162 tests unitaires, 1 915 vérifications navigateur) ; revue critique
+  (4 erreurs bloquantes corrigées, dont l'article applicable au conseil).
+
 ## 2026-10-21 — Royaume-Uni : *Invoicing overseas clients*
 
 - Nouvelle page `/uk/invoicing-overseas-clients/` (menu « Invoicing », même identifiant que « Facturer un client

@@ -763,6 +763,12 @@ const tests = {
     await page.fill("#l-price-1", "150.50");
     let text = await page.textContent("#iv-preview");
     check(text.includes("HST (13%)") && text.includes("$292.70") && text.includes("$2,544.20"), "facture CA : TVH Ontario 13 % = 292,70 $");
+    await page.selectOption("#iv-tax-rate", "zero");
+    text = await page.textContent("#iv-preview");
+    check(text.includes("GST/HST (0%)") && text.includes("$2,251.50"), "facture CA : exportation détaxée → TPS/TVH à 0 %");
+    await page.selectOption("#iv-tax-rate", "zero-qc");
+    text = await page.textContent("#iv-preview");
+    check(text.includes("GST (0%)") && text.includes("QST (0%)") && text.includes("$2,251.50"), "facture CA : exportation détaxée (Québec) → TPS et TVQ à 0 %");
     await page.selectOption("#iv-tax-rate", "QC");
     text = await page.textContent("#iv-preview");
     check(text.includes("GST (5%)") && text.includes("$112.58") && text.includes("QST (9.975%)") && text.includes("$224.59") && text.includes("$2,588.67"), "facture CA : TPS + TVQ sur deux lignes");
@@ -840,6 +846,65 @@ const tests = {
     check((await visible()) === 4 && await page.isVisible("text=Moins de 500 $ au Québec"), "liste CA-FR : moins de 100 $ au Québec → 4 mentions, renvoi à Revenu Québec");
     await page.click('label:has(input[value="500plus"])');
     await page.click('label:has(input[name="quebec"])');
+  },
+  async "ca/invoicing-clients-outside-canada/"(page) {
+    const verdict = () => page.textContent("#x-verdict");
+    const why = () => page.textContent("#x-why");
+    const items = (id) => page.$$eval(`#${id} li`, (lis) => lis.map((li) => li.textContent));
+    check((await verdict()) === "No sales tax" && (await why()).includes("consulting or professional service supplied to a non-resident is zero-rated") &&
+      (await items("x-actions")).some((t) => t.includes("Zero-rated exports still count towards the $30,000")),
+      "client étranger CA : non inscrit, conseil à un non-résident → pas de taxe, mais l'exportation compte dans le seuil");
+    await page.selectOption("#x-registered", "yes");
+    check((await verdict()) === "Zero-rated: 0%" && (await why()).includes("litigation in Canada") && (await items("x-wording"))[0].includes("“Zero-rated export”") &&
+      (await items("x-actions")).some((t) => t.includes("quick method")), "client étranger CA : inscrit, conseil → détaxé, litige rappelé, méthodes ordinaire et rapide");
+    await page.check("#x-present");
+    check((await verdict()) === "It depends" && (await why()).includes("memorandum 4.5.3"), "client étranger CA : conseil rendu au Canada → pas de verdict ferme");
+    await page.selectOption("#x-service", "other");
+    check((await verdict()) === "Charge GST/HST" && (await why()).includes("isn't zero-rated"), "client étranger CA : autre service à un particulier au Canada → taxable");
+    await page.check("#x-quebec");
+    check((await why()).includes("the QST also applies when the service is supplied in Quebec"), "client étranger CA : taxable au Québec → TVQ rappelée");
+    await page.uncheck("#x-present");
+    check((await verdict()) === "Zero-rated: 0%" && (await why()).includes("for the QST too") && (await items("x-wording"))[0].includes("“Zero-rated export (Quebec)”"),
+      "client étranger CA : Québec → TPS et TVQ détaxées");
+    await page.selectOption("#x-service", "ip");
+    check((await verdict()) === "It depends" && (await why()).includes("GI-034") && !(await page.isVisible("#x-present")), "client étranger CA : propriété intellectuelle → règles propres, sans verdict");
+    await page.selectOption("#x-service", "property");
+    check((await verdict()) === "Charge GST/HST" && (await why()).includes("real property") && !(await page.isVisible("#x-present")),
+      "client étranger CA : service lié à un immeuble au Canada → taxable, question de présence masquée");
+    await page.selectOption("#x-location", "canada");
+    check((await verdict()) === "Charge GST/HST" && (await why()).includes("your client's province") && !(await page.isVisible("#x-service")),
+      "client étranger CA : client résident → taux de la province du client");
+    await accessible(page, "client étranger CA (client résident)");
+    await page.reload({ waitUntil: "networkidle" });
+    check((await page.inputValue("#x-location")) === "canada" && await page.isChecked("#x-quebec"), "client étranger CA : situation mémorisée après rechargement");
+    // Retour à la situation par défaut pour les formats suivants.
+    await page.selectOption("#x-location", "abroad");
+    await page.selectOption("#x-service", "professional");
+    await page.selectOption("#x-registered", "no");
+    await page.uncheck("#x-quebec");
+    check((await verdict()) === "No sales tax", "client étranger CA : situation par défaut rétablie");
+  },
+  async "ca/fr/facturer-client-etranger/"(page) {
+    const text = async (sel) => (await page.textContent(sel)).replace(/[\u00a0\u202f]/g, " ");
+    check((await text("#x-verdict")) === "Aucune taxe de vente" && (await text("#x-actions")).includes("comptent quand même dans le seuil de 30 000 $"),
+      "client étranger CA-FR : non inscrit → pas de taxe, seuil");
+    await page.selectOption("#x-registered", "yes");
+    await page.check("#x-quebec");
+    check((await text("#x-verdict")) === "Détaxé : 0 %" && (await text("#x-wording")).includes("La TPS et la TVQ à 0 %") && (await text("#x-actions")).includes("méthode rapide"),
+      "client étranger CA-FR : inscrit au Québec → TPS et TVQ détaxées, déclaration");
+    await page.selectOption("#x-service", "other");
+    await page.check("#x-present");
+    check((await text("#x-verdict")) === "Facturez la TPS/TVH" && (await text("#x-why")).includes("la TVQ s'applique aussi"), "client étranger CA-FR : particulier au Canada → taxable, TVQ rappelée");
+    await page.selectOption("#x-service", "property");
+    check(!(await page.isVisible("#x-present")) && (await text("#x-why")).includes("immeuble"), "client étranger CA-FR : immeuble au Canada → taxable, question masquée");
+    await page.selectOption("#x-location", "canada");
+    check(!(await page.isVisible("#x-service")) && (await text("#x-why")).includes("résident du Canada"), "client étranger CA-FR : client résident → champs masqués");
+    await page.selectOption("#x-location", "abroad");
+    await page.selectOption("#x-service", "professional");
+    await page.uncheck("#x-present");
+    await page.selectOption("#x-registered", "no");
+    await page.uncheck("#x-quebec");
+    check((await text("#x-verdict")) === "Aucune taxe de vente", "client étranger CA-FR : situation par défaut rétablie");
   },
   async "ca/late-fee-calculator/"(page) {
     check((await page.textContent("#l-fee")).trim() === "$44.38", "intérêts CA : 2 000 $ × 18 % × 45 ÷ 365");

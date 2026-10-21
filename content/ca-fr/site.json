@@ -20,7 +20,8 @@
       "label": "Facturer",
       "items": [
         "invoice",
-        "invoice-rules"
+        "invoice-rules",
+        "international"
       ]
     },
     {

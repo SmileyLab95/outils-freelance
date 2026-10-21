@@ -269,6 +269,10 @@
         : [{ label: N.GST, rate: t.gst * 100 }].concat(parts[1] ? [{ label: N[parts[1]], rate: t.provincial * 100 }] : []);
       return { key: code, label: PR[code][P.names], components: components };
     });
+    // Exportation de services détaxée (taux de 0 %), avec la TVQ pour une entreprise du Québec.
+    if (L.zero_rated) P.tax_options.push(
+      { key: "zero", label: L.zero_rated, components: [{ label: N.GST + "/" + N.HST, rate: 0 }] },
+      { key: "zero-qc", label: L.zero_rated_qc, components: [{ label: N.GST, rate: 0 }, { label: N.QST, rate: 0 }] });
     $("iv-tax-rate").innerHTML = '<option value="none">' + esc(L.no_tax) + "</option>" + P.tax_options.map(function (o) {
       return '<option value="' + o.key + '"' + (o.key === P.default_tax ? " selected" : "") + ">" + esc(o.label + " · " + o.components.map(function (c) {
         return c.label + " " + OF.rate(c.rate) + L.percent;
