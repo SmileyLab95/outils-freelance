@@ -59,12 +59,14 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   mobile ; les boutons « Copier » restent compatibles avec toutes les messageries.
 - **Typographie du texte des outils (21/10/2026)** : les résultats et messages produits par les outils suivent les
   mêmes règles que les pages, depuis un fichier de règles unique.
+- **Mesure d'audience (21/10/2026)** : comparatif et règles de la CNIL ([16](16-mesure-audience.md)) ;
+  recommandation : Plausible (9 $ par mois), sans cookie ni bandeau ; installation prête à faire dès le choix d'Ismail.
 - **Prochaines actions de Claude** : guide du recouvrement dès que les textes sont lisibles ; veille réglementaire de décembre (dont la version de
   Factur-X et l'annexe A de XP Z12-012 pour le BT-32 en franchise). Les étapes C3 (serveur) et C4 (interface des
   comptes) attendent le choix de l'hébergeur.
 - **En attente d'Ismail** (pas urgent) : structure juridique avec un comptable ; choix de l'hébergeur et budget pour
   les comptes en ligne (comparatif [13](13-comparatif-hebergeurs.md), § 6) ; nom de domaine à choisir avant l'étape C4
-  ([13](13-comparatif-hebergeurs.md), § 5) ; prix de l'offre « Pro » (proposition : 4 à 6 € HT par mois) ; à la fin,
+  ([13](13-comparatif-hebergeurs.md), § 5) ; outil de mesure d'audience ([16](16-mesure-audience.md)) ; prix de l'offre « Pro » (proposition : 4 à 6 € HT par mois) ; à la fin,
   Gumroad.
 
 ## Vue d'ensemble
@@ -93,7 +95,11 @@ Objectif : un site mesuré, sous sa propre marque, qui commence à rapporter, et
 
 ### 1.2 Mesure d'audience
 
-- [ ] Choisir une mesure d'audience sans cookie (pas de bandeau de consentement), l'installer sur toutes les pages
+- [x] Comparer les mesures d'audience sans cookie et les règles de la CNIL ([16](16-mesure-audience.md)) :
+      recommandation Plausible (alternative : Pirsch)
+- [ ] **[Ismail]** Choisir l'outil et ouvrir le compte ([16](16-mesure-audience.md) § 4)
+- [ ] Installer la mesure (script ajouté par `build.py` s'il est configuré, hors Espace), événements des outils,
+      politique de confidentialité mise à jour
 - [ ] Tableau de bord mensuel : visites par pays et par outil, pages d'entrée, clics vers les produits
 - [ ] Premier bilan mensuel ajouté à cette page (section « Bilans »)
 
@@ -162,7 +168,9 @@ Objectif : un compte gratuit qui rend service dès le premier jour.
 ### 2.2 Fonctions
 
 - [x] Profil entreprise : statut, régime de TVA, coordonnées, ACRE, versement libératoire *(version locale)*
-- [ ] Profil : SIREN complété automatiquement (API Recherche d'entreprises)
+- [ ] Profil : SIREN complété automatiquement (API Recherche d'entreprises) — en attente : l'API n'est pas joignable
+      depuis l'environnement de travail (format des réponses et appels depuis le navigateur à vérifier) ; la recherche
+      ne partira qu'à la demande de l'utilisateur, mentionnée dans la politique de confidentialité
 - [x] Clients : fiche, pays, historique et totaux *(version locale)*
 - [ ] Clients : SIREN et numéro de TVA vérifiés (API Recherche d'entreprises, VIES)
 - [x] Devis, factures et avoirs : numérotation continue, PDF, duplication, avoirs, devis transformé en facture *(version locale)*

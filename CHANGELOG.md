@@ -1,5 +1,13 @@
 # Journal des modifications
 
+## 2026-10-21 — Mesure d'audience : règles et comparatif
+
+- `documentation/16-mesure-audience.md` : conditions de la CNIL pour une mesure d'audience sans consentement,
+  comparatif de Plausible, Pirsch, GoatCounter et Matomo (prix relevés sur les sites des éditeurs, hébergement),
+  recommandation (Plausible), plan de mise en place et tâches d'Ismail ; décision ajoutée aux décisions en attente.
+- Feuille de route : la complétion du SIREN par l'API Recherche d'entreprises attend un accès réseau permettant de
+  vérifier le service (format des réponses, appels depuis le navigateur).
+
 ## 2026-10-21 — Typographie du texte produit par les outils
 
 - Règles de typographie française regroupées dans `data/typo-fr.json` (une seule source, syntaxe commune à Python et
