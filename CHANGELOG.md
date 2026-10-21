@@ -1,5 +1,14 @@
 # Journal des modifications
 
+## 2026-10-21 — Typographie du texte produit par les outils
+
+- Règles de typographie française regroupées dans `data/typo-fr.json` (une seule source, syntaxe commune à Python et
+  à JavaScript) : `build.py` les applique au texte des pages ; `engines/typo-fr.js` les applique au texte que les
+  scripts des outils ajoutent ou modifient dans les pages en français (résultats, messages, listes de l'Espace).
+- Tests : parité Python/JavaScript et idempotence sur 23 cas ; parcours navigateur (texte produit par un outil, texte
+  ajouté puis modifié, code et `pre` intacts) ; suite complète (1 277 vérifications) ; revue de code (8 points
+  traités, dont la réunion des règles en une seule source).
+
 ## 2026-10-21 — Typographie française automatique
 
 - `build.py` : espaces insécables dans le texte visible des pages en français (`fr`, `ca-fr`) : avant « ; ! ? »

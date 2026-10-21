@@ -57,7 +57,9 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 - **Typographie française automatique (21/10/2026)** : le générateur place les espaces insécables dans les pages en
   français (« 10 000 € », « art. L. 233-3 », « : ; ! ? », guillemets) ; plus de coupures de ligne mal placées sur
   mobile ; les boutons « Copier » restent compatibles avec toutes les messageries.
-- **Prochaines actions de Claude** : typographie du texte produit par les scripts des outils ; guide du recouvrement dès que les textes sont lisibles ; veille réglementaire de décembre (dont la version de
+- **Typographie du texte des outils (21/10/2026)** : les résultats et messages produits par les outils suivent les
+  mêmes règles que les pages, depuis un fichier de règles unique.
+- **Prochaines actions de Claude** : guide du recouvrement dès que les textes sont lisibles ; veille réglementaire de décembre (dont la version de
   Factur-X et l'annexe A de XP Z12-012 pour le BT-32 en franchise). Les étapes C3 (serveur) et C4 (interface des
   comptes) attendent le choix de l'hébergeur.
 - **En attente d'Ismail** (pas urgent) : structure juridique avec un comptable ; choix de l'hébergeur et budget pour
@@ -124,7 +126,8 @@ Objectif : un site mesuré, sous sa propre marque, qui commence à rapporter, et
 - [x] Typographie française automatique dans le générateur : espaces insécables avant « ; : ! ? », dans les montants
       (« 10 000 € ») et les références d'articles, pour éviter les coupures de ligne sur mobile
       (spécification [15](15-guides-gestion.md) § 3)
-- [ ] Typographie du texte produit par les scripts des outils (résultats, emails générés)
+- [x] Typographie du texte produit par les scripts des outils (résultats, messages) : mêmes règles, une seule source
+      (`data/typo-fr.json`)
 
 ### 1.5 Préparer la plateforme
 

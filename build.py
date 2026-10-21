@@ -382,6 +382,13 @@ def alternates(sections, section, page_id):
     return "\n".join(tags)
 
 
+def typo_script(loc):
+    """Pages en français : règles de typographie (data/typo-fr.json) pour engines/typo-fr.js, window.OF_TYPO."""
+    if not loc["lang"].startswith("fr"):
+        return ""
+    return "<script>window.OF_TYPO=" + json.dumps(TYPO["rules"], ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/") + ";</script>"
+
+
 def rules_script(meta, rules):
     """Valeurs des règles du pays (sans les sources), lisibles par les scripts : window.OF_RULES."""
     if not meta.get("rules"):
@@ -439,7 +446,9 @@ def render(layout, sections, section, page_id, rules, kit_cta):
     if meta.get("menu") and any(page_id in g["items"] for g in site.get("nav", [])):
         content += related_html(section, page_id)
 
-    scripts = "".join(f'<script src="{asset_url(s)}" defer></script>' for s in ["app.js", *meta.get("scripts", [])])
+    # Pages en français : typographie du texte que les scripts des outils produisent (engines/typo-fr.js).
+    base_scripts = ["engines/typo-fr.js", "app.js"] if loc["lang"].startswith("fr") else ["app.js"]
+    scripts = "".join(f'<script src="{asset_url(s)}" defer></script>' for s in [*base_scripts, *meta.get("scripts", [])])
     # Scripts chargés à la demande par la page (ex. génération du PDF Factur-X) : adresses avec leur empreinte de version.
     if meta.get("lazy_scripts"):
         lazy = {name: asset_url(name) for name in meta["lazy_scripts"]}
@@ -459,7 +468,7 @@ def render(layout, sections, section, page_id, rules, kit_cta):
         "gsv": SITE.get("google_site_verification", ""),
         "css": asset_url("style.css"),
         "alternates": alternates(sections, section, page_id),
-        "rules": rules_script(meta, rules),
+        "rules": rules_script(meta, rules) + typo_script(loc),
         "scripts": scripts,
         "jsonld": json_ld(section, page_id, url),
         "skip": esc(strings["skip"]),
@@ -501,21 +510,20 @@ NBSP, NNBSP = "\u00a0", "\u202f"   # espace insécable, espace fine insécable
 # Une balise commence par une lettre, « / » ou « ! » : un « < » isolé dans le texte (« CA < 77 700 € ») n'en est pas une.
 TAG_RE = re.compile(r"(<!--.*?-->|<[!/a-zA-Z][^>]*>)", re.S)
 RAW_TAGS = ("script", "style", "code", "pre", "textarea")   # contenu jamais retouché
-LETTER = "A-Za-zÀ-ÿœŒ"
-# Règles appliquées dans l'ordre (motif compilé, remplacement).
-TYPO_FR = [
-    (re.compile(r"« "), "«" + NBSP),                                            # guillemets
-    (re.compile(r" »"), NBSP + "»"),
-    (re.compile(r" ([;!?])"), NNBSP + r"\1"),                                   # ; ! ?
-    (re.compile(r" :"), NBSP + ":"),                                            # :
-    # Milliers : un groupe de 1 à 3 chiffres (pas une année) suivi de groupes de 3 chiffres (10 000, 1 234 567).
-    (re.compile(r"(?<![\d.,])\d{1,3}(?: \d{3})+(?!\d)"), lambda m: m.group(0).replace(" ", NNBSP)),
-    (re.compile(r"(?<=\d) (?=(?:€|%|\$|£|jours?\b|mois\b|ans?\b|km\b|Ko\b|Mo\b|Go\b))"), NBSP),  # 40 €, 20 %
-    # Un nombre et le mot qui suit (8 graphiques, 15 mai, 293 B), sauf la fin d'un code (RRQ2, T1, J+10).
-    (re.compile(r"(?<![\w.,/:+-])(\d{1,3}) (?=[" + LETTER + "])"), r"\1" + NBSP),
-    (re.compile(r"\b([LRDA])\. (?=\d)"), r"\1." + NBSP),                         # art. L. 233-3
-    (re.compile(r"\b((?i:art)\.|(?i:n)°) (?=\w)"), r"\1" + NBSP),                # art. L613-10, N° 2026-014
-]
+TYPO = json.loads((ROOT / "data" / "typo-fr.json").read_text(encoding="utf-8"))
+
+
+def typo_rule(rule):
+    """Règle de data/typo-fr.json → (motif compilé, remplacement) ; $1 devient \\g<1>."""
+    pattern = re.compile(rule["find"])
+    if "group" in rule:
+        n, spaces = rule["group"], rule["spaces"]
+        return pattern, lambda m: (m.group(0)[:m.start(n) - m.start(0)] + m.group(n).replace(" ", spaces)
+                                   + m.group(0)[m.end(n) - m.start(0):])
+    return pattern, re.sub(r"\$(\d)", r"\\g<\1>", rule["replace"])
+
+
+TYPO_FR = [typo_rule(r) for r in TYPO["rules"]]
 
 
 def typo_fr_text(text):

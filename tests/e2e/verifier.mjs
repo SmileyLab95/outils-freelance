@@ -23,6 +23,15 @@ const BASE = `http://127.0.0.1:${port}/outils-freelance/`;
 
 const browser = await chromium.launch({ executablePath: "/opt/pw-browsers/chromium-1194/chrome-linux/chrome" });
 const context = await browser.newContext({ permissions: ["clipboard-read", "clipboard-write"] });
+// Les pages en français placent des espaces insécables (build.py et engines/typo-fr.js) : les vérifications comparent
+// le texte avec des espaces ordinaires.
+context.on("page", (page) => {
+  const textContent = page.textContent.bind(page);
+  page.textContent = async (...args) => {
+    const value = await textContent(...args);
+    return typeof value === "string" ? value.replace(/[\u00a0\u202f]/g, " ") : value;
+  };
+});
 const failures = [];
 const check = (cond, message) => { if (!cond) failures.push(message); console.log(`${cond ? "✓" : "✗"} ${message}`); };
 
@@ -880,6 +889,23 @@ const tests = {
     await page.fill("#b-prev", "14 000");
     await page.fill("#b-current", "");
     check(!(await page.isVisible("#b-error")), "compte bancaire : message d'erreur retiré une fois le montant corrigé");
+    // Texte brut (sans la normalisation des vérifications) : l'observateur de engines/typo-fr.js.
+    await page.goto(BASE + "fr/compte-bancaire-professionnel/?today=2026-10-20", { waitUntil: "networkidle" });
+    const raw = await page.evaluate(() => document.querySelector("#b-sub").textContent);
+    check(raw.includes("10\u202f000\u00a0€") && raw.includes("2025\u00a0:"), "typographie : texte produit par le script traité (10 000 €, « : »)");
+    const result = await page.evaluate(async () => {
+      const box = document.createElement("div");
+      box.innerHTML = '<p id="ty-p">Total : 10 000 € ; payé ?</p><code id="ty-c">a : b ; c</code><pre id="ty-pre">x ? y</pre>';
+      document.querySelector("main, body").appendChild(box);
+      await new Promise((r) => setTimeout(r, 30));
+      const p = document.getElementById("ty-p");
+      p.firstChild.nodeValue = "Délai : 30 jours";   // modification d'un texte existant
+      await new Promise((r) => setTimeout(r, 30));
+      const out = [p.textContent, document.getElementById("ty-c").textContent, document.getElementById("ty-pre").textContent];
+      box.remove();
+      return out;
+    });
+    check(result[0] === "Délai\u00a0: 30\u00a0jours" && result[1] === "a : b ; c" && result[2] === "x ? y", "typographie : texte ajouté puis modifié traité ; code et pre intacts");
   },
   async "fr/assurance-independant/"(page) {
     const res = async () => [await page.textContent("#a-answer"), await page.textContent("#a-list"), await page.textContent("#a-documents"), await page.textContent("#a-sub")];

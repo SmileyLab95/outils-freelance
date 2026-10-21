@@ -95,8 +95,12 @@ ou avant « ; ». Proposition, à l'étape de génération (`build.py`), pour le
   une année n'est pas lue comme un groupe de milliers ;
 - les boutons « Copier » remplacent l'espace fine insécable par l'espace insécable, connue de toutes les
   messageries ;
-- limite : le texte produit par les scripts (résultats des outils) n'est pas concerné ; les montants y sont déjà
-  formatés par `Intl.NumberFormat` ; le reste est une amélioration ultérieure ;
+- une seule source de règles, `data/typo-fr.json`, écrite dans la syntaxe d'expressions commune à Python et à
+  JavaScript (ni `\b`, ni `\w`, ni `\d`, ni assertion arrière) : `build.py` l'applique au texte des pages ; chaque
+  page en français la reçoit (`window.OF_TYPO`) et `engines/typo-fr.js` l'applique au texte que les scripts des outils
+  ajoutent ou modifient (observateur des changements, idempotent ; jamais dans script, style, code, pre, textarea ni
+  dans une zone modifiable) — depuis le 21/10/2026 ;
+- un test vérifie que Python et JavaScript donnent le même texte sur les mêmes cas, et deux fois le même ;
 - seulement dans le texte visible : jamais dans les balises `script`, `style`, `code`, `pre`, ni dans les attributs,
   les adresses web et les heures ;
 - fonction pure testée (cas positifs et cas à ne pas toucher), puis génération complète et parcours navigateur ; les
