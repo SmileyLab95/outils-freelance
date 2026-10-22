@@ -46,13 +46,14 @@
   }
 
   /**
-   * Déduction QBI (section 199A) d'un indépendant sans salarié ni actif amortissable.
+   * Déduction QBI (section 199A) d'une activité sans actif amortissable.
    * Sous le seuil : 20 % du QBI, limité à 20 % du revenu imposable avant QBI.
-   * Dans la zone de transition : la limite liée aux salaires versés (nulle ici) réduit la déduction
-   * proportionnellement ; pour une activité de service « spécifiée » (SSTB), le QBI est en plus réduit
-   * par le pourcentage applicable. Au-delà : plus de déduction.
+   * Au-delà du seuil, la déduction est limitée à 50 % des salaires W-2 versés par l'activité (w2Wages : nuls pour
+   * un indépendant, le salaire du dirigeant pour une S corp) ; dans la zone de transition, cette limite s'applique
+   * proportionnellement. Pour une activité de service « spécifiée » (SSTB), le QBI et les salaires sont en plus
+   * réduits par le pourcentage applicable, et la déduction disparaît au-delà de la zone de transition.
    */
-  function qbi(qbiAmount, taxableBeforeQbi, status, sstb, rules) {
+  function qbi(qbiAmount, taxableBeforeQbi, status, sstb, rules, w2Wages) {
     if (qbiAmount <= 0 || taxableBeforeQbi <= 0) return 0;
     var rate = rules.qbi_deduction_rate;
     var threshold = rules.qbi_threshold_2026[status];
@@ -61,8 +62,10 @@
     var f = Math.min(1, excess / range);
     // Au-delà de la zone de transition, une SSTB n'est plus une activité qualifiée : ni déduction ni minimum.
     if (sstb && f >= 1) return 0;
-    var tentative = rate * qbiAmount * (sstb ? 1 - f : 1);
-    var deduction = tentative * (1 - f);
+    var applicable = sstb ? 1 - f : 1;
+    var tentative = rate * qbiAmount * applicable;
+    var wageLimit = w2Wages > 0 ? rules.qbi_w2_wage_limit.w2_wage_rate * w2Wages * applicable : 0;
+    var deduction = tentative - f * Math.max(0, tentative - wageLimit);
     var min = rules.qbi_minimum_deduction;
     if (min && qbiAmount >= min.minimum_qbi_required) deduction = Math.max(deduction, min.minimum_deduction);
     return Math.max(0, Math.min(deduction, rate * taxableBeforeQbi, taxableBeforeQbi));
@@ -132,6 +135,6 @@
     return B.solve(f, takeHome, 0, Math.max(1000, takeHome * 4), 0.01);
   }
 
-  return { STATUSES: STATUSES, selfEmployment: selfEmployment, additionalMedicare: additionalMedicare,
+  return { STATUSES: STATUSES, brackets: brackets, selfEmployment: selfEmployment, additionalMedicare: additionalMedicare,
            qbi: qbi, estimate: estimate, quarterly: quarterly, profitForTakeHome: profitForTakeHome };
 });

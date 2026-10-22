@@ -223,3 +223,40 @@ Précisions : à New York (État), les avocats, professions médicales réglemen
 
 - Dates already moved to the next business day (IRC §7503): 1099-NEC on February 1, 2027; Q4 2027 estimated tax on January 18, 2028 (January 15 is a Saturday, January 17 is MLK Day).
 - 1099-NEC threshold $2,000 for payments made in 2026 (OBBBA), $600 before.
+
+## Spécification : comparateur *Sole proprietor vs S corp* (`/us/sole-proprietor-vs-s-corp/`, 22/10/2026)
+
+**Question** : « Passer en *S corporation* me ferait-il payer moins d'impôts fédéraux ? » Besoin P1 de
+[02](../02-besoins-clients.md) (§ 1, « Quel statut choisir ? »), couvert en France et au Royaume-Uni (même
+identifiant `structure`).
+
+- **Statuts comparés** : entreprise individuelle (*sole proprietor*), qui couvre aussi la LLC à un seul associé
+  imposée par défaut comme elle (*disregarded entity*), et *S corporation* (LLC ou société ayant choisi ce régime,
+  formulaire 2553). La C corporation n'est pas traitée.
+- **Règles** (`data/rules/us.json`, lues le 22/10/2026 sur irs.gov par recherche) : nouvelles `fica_rates_2026`
+  (6,2 % + 1,45 % de chaque côté, plafond de 184 500 $ ; Topic 751), `futa_2026` (6,0 % sur les premiers 7 000 $,
+  crédit jusqu'à 5,4 %, soit 0,6 % net ; Topic 759), `scorp_reasonable_compensation` (salaire raisonnable avant
+  toute distribution, requalification possible), `scorp_income_not_se` (revenu de la S corp non soumis à la
+  *self-employment tax* ; instructions du 1120-S), `qbi_w2_wage_limit` (50 % des salaires W-2 au-delà du seuil ;
+  le salaire raisonnable n'est pas du QBI ; instructions du 8995-A), `single_member_llc_default` (LLC à un associé :
+  *disregarded entity*, Schedule C ; S corp par le formulaire 2553). Règles existantes : barèmes, déduction
+  forfaitaire, QBI, *Additional Medicare Tax*.
+- **Calcul S corp** : salaire W choisi par l'utilisateur ; charges patronales FICA et FUTA ; résultat de la société
+  K-1 = bénéfice − W − charges patronales − frais supplémentaires ; impôt fédéral sur W + K-1 (déduction forfaitaire,
+  QBI sur K-1 avec la limite des salaires W-2) ; FICA salariale et *Additional Medicare Tax* sur W. Entreprise
+  individuelle : moteur existant (`taxUS.estimate`). Comparaison du revenu disponible.
+- **Moteur** : `taxUS.qbi` reçoit en option les salaires W-2 (limite de 50 %, réduite comme le QBI pour une SSTB) ;
+  sans salaire, résultats inchangés. Nouveau `engines/structure-us.js` (comparaison).
+- **Non chiffré, dit sur la page** : impôts et frais d'État (certains États imposent les S corp), assurance chômage
+  de l'État, frais de paie et de comptabilité (champ « frais supplémentaires » pour les saisir), assurance santé,
+  retraite. Aucun « bon » salaire n'est proposé : la page rappelle les critères de l'IRS (fonctions, temps,
+  rémunération d'un tiers pour le même travail).
+- **Après revue** : salaire non prérempli (aucun ratio ne doit être suggéré) ; saisie illisible : aucun résultat ;
+  salaire nul : avertissement ; FAQ avec les deux effets sur la QBI et la limite de l'économie au-delà du plafond de
+  la Social Security ; autres effets dits (droits à la Social Security, règle `ssa_benefits_based_on_earnings` ;
+  cotisations SEP sur le salaire ; assurance santé par le W-2) ; barème des époux imposés séparément : celui des
+  célibataires, signalé (question ouverte) ; minimum de 400 $ de QBI appliqué et signalé ; plafond de la Social
+  Security lu dans la seule règle `social_security_wage_base_2026`.
+- **Critères** : tests unitaires (cas calculés à la main, QBI avec salaires dans et au-delà de la zone de
+  transition, SSTB, déclaration commune, salaire nul, bénéfice nul, plafond de la Social Security, frais) ; parcours
+  navigateur ; accessibilité ; captures relues ; revue critique.

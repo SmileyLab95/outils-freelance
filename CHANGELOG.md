@@ -1,5 +1,24 @@
 # Journal des modifications
 
+## 2026-10-22 — États-Unis : comparateur *Sole proprietor vs S corp*
+
+- Nouvelle page `/us/sole-proprietor-vs-s-corp/` (menu « Taxes », même identifiant que les comparateurs de statuts
+  français et britannique) : impôts fédéraux 2026 et revenu disponible d'une entreprise individuelle (ou LLC à un
+  associé) et d'une S corp qui verse un salaire au dirigeant : FICA patronale et salariale, FUTA, *Additional
+  Medicare Tax*, déduction QBI (sur le résultat de la société, limitée à 50 % des salaires W-2 au-delà du seuil),
+  frais propres à la S corp. Aucun salaire n'est proposé : la page rappelle l'obligation d'un salaire raisonnable
+  et avertit si le salaire est nul.
+- Règles nouvelles (`us.json`) : `fica_rates_2026`, `futa_2026`, `scorp_reasonable_compensation`,
+  `scorp_income_not_se`, `qbi_w2_wage_limit`, `single_member_llc_default`, `ssa_benefits_based_on_earnings` ;
+  question ouverte sur le barème 2026 des époux imposés séparément.
+- Moteur commun : la déduction QBI tient compte des salaires W-2 versés (sans effet pour un indépendant sans
+  salarié) ; nouveau moteur `engines/structure-us.js`. Style : tableau de comparaison à trois colonnes lisible sur
+  mobile, aide sous une case à cocher.
+- Tests : unitaires (cas calculés à la main : sous le seuil, déclaration commune, zone de transition avec et sans
+  limite des salaires, SSTB, minimum de 400 $, salaire nul, plafond de la Social Security, frais) ; parcours
+  navigateur ; suite complète (168 tests unitaires, 1 940 vérifications navigateur) ; revue critique (11 points traités ; le débounce de la saisie, absent des autres outils, n'est pas
+  ajouté).
+
 ## 2026-10-22 — Matrice des besoins remise à jour
 
 - `documentation/02-besoins-clients.md` : chaque besoin vérifié contre les pages publiées des quatre pays

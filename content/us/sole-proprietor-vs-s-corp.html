@@ -1,0 +1,101 @@
+<!--{
+  "id": "structure",
+  "slug": "sole-proprietor-vs-s-corp/",
+  "title": "Sole Proprietor vs S Corp Calculator 2026: Tax Savings",
+  "description": "Compare your 2026 federal taxes as a sole proprietor or single-member LLC and as an S corporation paying you a salary: payroll taxes, QBI and what you keep.",
+  "menu": "Sole proprietor vs S corp",
+  "icon": "⚖️",
+  "blurb": "Federal taxes as a sole proprietor or an S corp paying you a salary.",
+  "app": "Sole Proprietor vs S Corp Calculator",
+  "scripts": ["engines/brackets.js", "engines/tax-us.js", "engines/structure-us.js", "tools/us-structure.js"],
+  "rules": "us",
+  "sources": ["single_member_llc_default", "scorp_income_not_se", "scorp_reasonable_compensation", "fica_rates_2026", "futa_2026", "additional_medicare_tax_rate", "additional_medicare_tax_thresholds", "se_tax_total_rate", "se_net_earnings_factor", "social_security_wage_base_2026", "federal_brackets_single", "federal_brackets_married_filing_jointly", "federal_brackets_head_of_household", "standard_deduction_2026", "qbi_deduction_rate", "qbi_threshold_2026", "qbi_phase_in_range_2026", "qbi_w2_wage_limit", "qbi_minimum_deduction", "sep_self_employed_rate", "ssa_benefits_based_on_earnings"],
+  "priority": 0.9,
+  "faq": [
+    ["When does an S corp save tax?", "The profit an S corporation passes through to you isn't subject to self-employment tax: you pay Social Security and Medicare (both halves, plus federal unemployment tax) only on the salary it pays you. Three things shrink the saving: the S corp's own costs (payroll, a separate tax return, state taxes and fees), a smaller QBI deduction below the income threshold (your salary isn't qualified business income), and, on profit above the Social Security wage base, a saving limited to the Medicare part."],
+    ["What is a reasonable salary?", "The IRS requires an S corporation to pay a shareholder who works in the business reasonable compensation before any distribution, and it can treat distributions as wages if the salary is too low. There's no formula: your training, duties, time spent and what similar businesses pay for the same work all count. The calculator doesn't suggest a salary."],
+    ["Is an LLC the same as an S corp?", "No. A single-member LLC is taxed like a sole proprietorship by default: its profit goes on Schedule C and bears self-employment tax. It's taxed as an S corporation only if it elects to, by filing Form 2553."],
+    ["Does an S corp change my QBI deduction?", "Yes, both ways. Your salary isn't qualified business income, so below the taxable income threshold the deduction is smaller than as a sole proprietor. Above the threshold, the deduction is limited to 50% of the W-2 wages the business pays, which includes your salary: an S corp can then keep part of a deduction a sole proprietor would lose."],
+    ["What else changes with an S corp?", "Social Security benefits are based on your covered earnings: a lower salary means lower earnings on your record. Retirement contributions to a SEP-IRA are based on your W-2 salary rather than your self-employment earnings. Health insurance for a more-than-2% shareholder goes through your W-2. The corporation also runs payroll and files its own returns."],
+    ["What isn't included?", "State income taxes and fees (some states tax S corporations), state unemployment tax, payroll and accounting costs (enter them as extra costs), health insurance and retirement contributions. For married filing separately, the single tax brackets are used: check the top brackets if your taxable income is high. The $400 minimum QBI deduction from 2026 is included; its details are still to be confirmed on IRS forms."]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · 2026 tax year</span>
+    <h1>Sole proprietor vs S corp</h1>
+    <p class="lead">Enter your business profit and the salary an S corporation would pay you: compare your 2026 federal taxes and what you keep as a sole proprietor (or single-member LLC) and as an S corp.</p>
+    <ul class="trust"><li>Payroll taxes and self-employment tax</li><li>QBI deduction with W-2 wages</li><li>2026 IRS rates</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="structure-form" onsubmit="return false">
+      <h2>Your business</h2>
+      <div class="fields">
+        <div class="field full"><label for="c-profit">Business profit for the year</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="c-profit" name="profit" value="120,000" aria-describedby="c-profit-hint" data-save><span>$</span></div>
+          <span class="hint" id="c-profit-hint">Revenue minus business expenses, before paying yourself.</span></div>
+        <div class="field full"><label for="c-status">Filing status</label>
+          <select id="c-status" name="status" data-save>
+            <option value="single">Single</option>
+            <option value="married_filing_jointly">Married filing jointly</option>
+            <option value="married_filing_separately">Married filing separately</option>
+            <option value="head_of_household">Head of household</option>
+          </select></div>
+        <div class="field full"><label for="c-salary">Salary the S corp would pay you</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="c-salary" name="salary" aria-describedby="c-salary-hint" data-save><span>$</span></div>
+          <span class="hint" id="c-salary-hint">Your own figure: it must be reasonable for the work you do, what the business would pay someone else to do it.</span></div>
+        <div class="field full"><label for="c-extra">Extra S corp costs per year (optional)</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="c-extra" name="extra" placeholder="0" aria-describedby="c-extra-hint" data-save><span>$</span></div>
+          <span class="hint" id="c-extra-hint">What the S corp itself pays on top of a sole proprietorship: payroll service, extra tax return, state fees and taxes on the company, state unemployment tax. Not your personal state income tax.</span></div>
+        <label class="check full"><input type="checkbox" id="c-sstb" name="sstb" aria-describedby="c-sstb-hint" data-save>
+          <span>My business is a specified service (consulting, law, accounting, health, financial services, performing arts…)</span></label>
+        <span class="hint full" id="c-sstb-hint">Only matters if your taxable income is above $201,750 ($403,500 married filing jointly).</span>
+      </div>
+      <p class="small muted" style="margin: 14px 0 0;">Federal taxes only, for 2026. Your own household's other income isn't included.</p>
+    </form>
+
+    <div class="results">
+      <div class="result-hero" role="status" aria-atomic="true">
+        <div class="label">With an S corp</div>
+        <div class="big" id="c-verdict">–</div>
+        <div class="sub" id="c-sub">–</div>
+      </div>
+      <h2 class="sr-only">Federal taxes compared</h2>
+      <div class="card" style="margin-top: 16px; padding: 18px;">
+          <table class="mini-table compare-table">
+            <caption class="sr-only">Federal taxes for the year, sole proprietor and S corporation</caption>
+            <thead><tr><th scope="col">Federal, 2026</th><th scope="col">Sole proprietor</th><th scope="col">S corp</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Your salary</th><td><span aria-hidden="true">—</span><span class="sr-only">Not applicable</span></td><td id="c-s-salary">–</td></tr>
+              <tr><th scope="row">Profit passed through to you</th><td id="c-p-profit">–</td><td id="c-s-k1">–</td></tr>
+              <tr><th scope="row">Self-employment tax</th><td id="c-p-se">–</td><td><span aria-hidden="true">—</span><span class="sr-only">Not applicable</span></td></tr>
+              <tr><th scope="row">Payroll taxes (both halves, FUTA)</th><td><span aria-hidden="true">—</span><span class="sr-only">Not applicable</span></td><td id="c-s-payroll">–</td></tr>
+              <tr><th scope="row">Additional Medicare Tax</th><td id="c-p-addmed">–</td><td id="c-s-addmed">–</td></tr>
+              <tr><th scope="row">QBI deduction</th><td id="c-p-qbi">–</td><td id="c-s-qbi">–</td></tr>
+              <tr><th scope="row">Federal income tax</th><td id="c-p-income">–</td><td id="c-s-income">–</td></tr>
+              <tr><th scope="row">Extra S corp costs</th><td><span aria-hidden="true">—</span><span class="sr-only">Not applicable</span></td><td id="c-s-extra">–</td></tr>
+              <tr><th scope="row">What you keep</th><td id="c-p-keep">–</td><td id="c-s-keep">–</td></tr>
+            </tbody>
+          </table>
+      </div>
+      <p class="notice" id="c-notice" aria-live="polite" style="margin-top: 16px;">–</p>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>How the comparison works</h2>
+  <p>As a <strong>sole proprietor</strong> (or a single-member LLC, taxed the same way by default), your whole profit bears <strong>self-employment tax</strong> (15.3% on 92.35% of it, Social Security capped) and income tax. As an <strong>S corporation</strong>, the business pays you a salary: Social Security and Medicare apply to that salary only, on both the employer and employee side (7.65% each, Social Security capped at $184,500), plus federal unemployment tax (0.6% on the first $7,000 when the full state credit applies). The rest of the profit passes through to you without self-employment tax.</p>
+  <h2>Before you switch</h2>
+  <ul>
+    <li><strong>Pay yourself a reasonable salary.</strong> With too low a salary, the IRS can treat your distributions as wages, with the payroll taxes due on them.</li>
+    <li><strong>Count the S corp's own costs</strong>: running payroll, filing Form 1120-S, and any state taxes or fees. Enter them above to see the net effect.</li>
+    <li><strong>Look beyond this year's tax</strong>: a lower salary means lower Social Security earnings on your record, and SEP-IRA contributions are based on your W-2 salary.</li>
+    <li><strong>Check your state's rules</strong>: state income tax and state fees aren't in this comparison.</li>
+  </ul>
+  <p class="small muted">An estimate for planning, based on 2026 IRS rates. It doesn't replace advice from a tax professional for your situation.</p>
+</section>

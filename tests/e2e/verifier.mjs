@@ -276,6 +276,36 @@ const tests = {
     check(await copied(page, '[data-copy="#tpl-1"]'), "modèles : bouton Copier");
     check((await page.evaluate(() => navigator.clipboard.readText())).length > 100, "modèles : texte dans le presse-papiers");
   },
+  async "us/sole-proprietor-vs-s-corp/"(page) {
+    const t = (id) => page.textContent(`#${id}`);
+    check((await t("c-verdict")) === "–" && (await t("c-sub")) === "Enter the salary the S corp would pay you." && (await t("c-p-keep")) === "$91,538" &&
+      (await t("c-s-keep")) === "–", "S corp US : aucun salaire proposé, colonne S corp en attente");
+    await page.fill("#c-salary", "60,000");
+    check((await t("c-verdict")) === "+$5,125 a year" && (await t("c-s-payroll")) === "$9,222" && (await t("c-s-keep")) === "$96,663",
+      "S corp US : 120 000 $, salaire 60 000 $ → +5 125 $ par an, charges sociales 9 222 $");
+    await page.fill("#c-extra", "3,000");
+    check((await t("c-verdict")) === "+$2,653 a year" && (await t("c-s-extra")) === "$3,000", "S corp US : frais de 3 000 $ déduits de l'écart");
+    await page.selectOption("#c-status", "married_filing_jointly");
+    await page.fill("#c-extra", "");
+    check((await t("c-verdict")) === "+$6,697 a year", "S corp US : mariés, déclaration commune → +6 697 $");
+    await page.selectOption("#c-status", "single");
+    await page.fill("#c-salary", "0");
+    check((await t("c-notice")).includes("A salary of $0 isn't reasonable") && (await page.getAttribute("#c-notice", "class")).includes("warn"),
+      "S corp US : salaire nul → avertissement du salaire raisonnable");
+    await page.fill("#c-salary", "130,000");
+    check((await t("c-verdict")) === "–" && (await t("c-notice")).includes("Lower the salary"), "S corp US : salaire supérieur au bénéfice → refus expliqué");
+    await page.fill("#c-salary", "abc");
+    check((await page.getAttribute("#c-salary", "aria-invalid")) === "true" && (await t("c-verdict")) === "–" && (await t("c-p-keep")) === "–" &&
+      (await t("c-notice")).includes("Check the salary"), "S corp US : saisie illisible → aucun résultat, champ signalé");
+    await accessible(page, "S corp US (saisie illisible)");
+    await page.fill("#c-salary", "60,000");
+    await page.check("#c-sstb");
+    await page.reload({ waitUntil: "networkidle" });
+    check(await page.isChecked("#c-sstb") && (await page.inputValue("#c-salary")) === "60,000", "S corp US : saisie mémorisée après rechargement");
+    await page.uncheck("#c-sstb");
+    await page.fill("#c-salary", "");
+    check((await t("c-verdict")) === "–", "S corp US : situation par défaut rétablie");
+  },
   async "us/"(page) {
     const links = await page.$$eval("a[href]", (as) => as.map((a) => a.getAttribute("href")));
     for (const href of [...new Set(links.filter((h) => h.startsWith("/outils-freelance/")))]) {

@@ -85,8 +85,10 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   situé au Canada ; les exportations comptent dans le seuil de 30 000 $ et se déclarent à la ligne 101.
 - **Matrice des besoins revue (22/10/2026)** : [02](02-besoins-clients.md) remise en accord avec les pages
   publiées ; besoins encore ouverts classés par priorité (P1 : comparateurs de statuts aux États-Unis et au Canada).
-- **Prochaines actions de Claude** : comparateur de statuts aux États-Unis (*sole proprietor*, LLC, *S-corp* :
-  spécification et règles IRS d'abord), puis au Canada ; convertisseur de tarifs et prix au forfait (4 pays) ;
+- **Comparateur de statuts, États-Unis (22/10/2026)** : *Sole proprietor vs S corp* : impôts fédéraux et revenu
+  disponible comparés selon le salaire versé par la S corp (règles de l'IRS : FICA, FUTA, salaire raisonnable, QBI).
+- **Prochaines actions de Claude** : comparateur de statuts au Canada (entreprise individuelle ou société par
+  actions : spécification et règles de l'ARC d'abord) ; convertisseur de tarifs et prix au forfait (4 pays) ;
   trouver la cause du contrôle de contraste intermittent de l'Espace ; revérifier les grilles des prestataires de
   paiement (Stripe, Mollie) quand Ismail décidera ([17](17-offres-et-paiements.md)) ; guide du recouvrement dès que
   les textes sont lisibles ; veille réglementaire de décembre (dont la version de Factur-X et l'annexe A de XP
@@ -194,7 +196,9 @@ Objectif : un site mesuré, sous sa propre marque, qui commence à rapporter, et
       moteur `engines/international-ca.js` testé (32 situations) ; spécification [pays/ca.md](pays/ca.md)
 - [x] Matrice des besoins ([02](02-besoins-clients.md)) revue le 22/10/2026 d'après les pages publiées, avec la
       liste des besoins encore ouverts par priorité
-- [ ] Comparateur de statuts, États-Unis (*sole proprietor*, LLC, *S-corp*) : besoin P1 ouvert
+- [x] Comparateur de statuts, États-Unis : *Sole proprietor vs S corp* (FICA patronale et salariale, FUTA,
+      salaire raisonnable, QBI avec la limite des salaires W-2) ; moteur `engines/structure-us.js`, déduction QBI
+      du moteur commun étendue ; spécification [pays/us.md](pays/us.md)
 - [ ] Comparateur de statuts, Canada (entreprise individuelle ou société par actions) : besoin P1 ouvert
 - [ ] Convertisseur de tarifs (horaire, journalier, mensuel, annuel) et prix au forfait, 4 pays : besoins P2
 
