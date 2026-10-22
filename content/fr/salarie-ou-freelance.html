@@ -1,0 +1,118 @@
+<!--{
+  "id": "employee-vs-freelance",
+  "slug": "salarie-ou-freelance/",
+  "title": "Salarié ou freelance : le chiffre d'affaires équivalent",
+  "description": "Quel chiffre d'affaires et quel TJM en micro-entreprise pour garder le même revenu qu'avec votre salaire ? Cotisations et impôt 2026 calculés des deux côtés.",
+  "menu": "Salarié ou freelance ?",
+  "icon": "🔀",
+  "blurb": "Le chiffre d'affaires et le TJM qui remplacent votre salaire.",
+  "app": "Calculateur salarié ou freelance",
+  "scripts": ["engines/brackets.js", "engines/micro-fr.js", "engines/employee-freelance.js", "tools/employee-freelance.js"],
+  "rules": "fr",
+  "sources": ["salarie_cotisations_2026", "agirc_arrco_2026", "pass_2026", "ir_deduction_frais_salaires", "ir_bareme_revenus_2025", "ir_decote", "micro_activities", "micro_abattement_minimum"],
+  "priority": 0.8,
+  "faq": [
+    ["Quel chiffre d'affaires pour remplacer un salaire ?", "Avec 40 000 € brut par an, un salarié du secteur privé garde 29 697 € après cotisations et impôt sur le revenu (personne seule, sans autre revenu). En micro-entreprise libérale, sans frais, il faut 42 333 € de chiffre d'affaires pour garder autant, soit 286 € par jour sur 148 jours facturés."],
+    ["Pourquoi le TJM doit-il dépasser le salaire d'une journée ?", "Parce qu'un freelance ne facture pas tous ses jours travaillés : congés, jours fériés, prospection, gestion et formation ne sont pas payés. Il paie aussi lui-même ses cotisations, ses frais et son matériel. Le calculateur divise le chiffre d'affaires nécessaire par les jours réellement facturés (148 par défaut, l'hypothèse du calculateur de TJM)."],
+    ["Les cotisations patronales sont-elles comptées ?", "Non : l'employeur les paie en plus du salaire brut, elles ne font pas partie de votre revenu. Le calcul part du salaire brut et retire les cotisations salariales. En revanche, ce que l'employeur vous apporte en plus du salaire (part de la mutuelle, titres-restaurant, intéressement…) peut être ajouté dans le champ « Avantages de l'employeur »."],
+    ["Et la protection sociale ?", "Elle n'est pas la même : l'employeur d'un salarié cotise pour lui à l'assurance chômage, et ses droits à la retraite et à la prévoyance diffèrent de ceux d'un micro-entrepreneur. Le calculateur compare des montants, pas des droits : renseignez-vous sur vos droits avant de choisir."]
+  ]
+}-->
+<script type="application/json" id="employee-freelance-data">
+{
+  "country": "fr",
+  "fields": {"ef-gross": "salaire brut", "ef-benefits": "avantages de l'employeur", "ef-expenses": "frais professionnels", "ef-units": "jours facturés", "ef-rate": "TJM"},
+  "check": "Vérifiez : {fields}.", "check_notice": "Vérifiez : {fields}. Saisissez seulement des chiffres, par exemple 40 000.",
+  "enter_salary": "Indiquez votre salaire brut annuel.",
+  "enter_units": "Indiquez vos jours facturés par an pour comparer votre TJM.",
+  "not_found": "Aucun chiffre d'affaires ne permet d'atteindre ce revenu.",
+  "sub": "Soit {rate} par jour sur {units} jours facturés, pour garder {target} par an, comme en salarié.",
+  "sub_no_units": "Pour garder {target} par an, comme en salarié.",
+  "at_rate_more": "À {rate} par jour sur {units} jours ({revenue} de chiffre d'affaires), vous garderiez {available} par an : {diff} de plus qu'en salarié.",
+  "at_rate_less": "À {rate} par jour sur {units} jours ({revenue} de chiffre d'affaires), vous garderiez {available} par an : {diff} de moins qu'en salarié.",
+  "at_rate_same": "À {rate} par jour sur {units} jours ({revenue} de chiffre d'affaires), vous garderiez {available} par an, autant qu'en salarié.",
+  "over_ceiling": "Le chiffre d'affaires nécessaire dépasse le plafond de la micro-entreprise ({ceiling} par an) : comparez les autres statuts avec le comparateur de statuts.",
+  "at_rate_over_ceiling": "À ce tarif, votre chiffre d'affaires dépasserait le plafond de la micro-entreprise ({ceiling} par an).",
+  "over_vat": "Le chiffre d'affaires nécessaire, hors TVA, dépasse le seuil de la franchise de TVA ({threshold} par an) : la TVA est due à partir du 1er janvier suivant, et dès le dépassement de {major} dans l'année.",
+  "msg_always": "Impôt d'une personne seule sans autre revenu, décote comprise. Seuls les montants sont comparés, pas la protection sociale (chômage, retraite, prévoyance)."
+}
+</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Gratuit · règles 2026</span>
+    <h1>Salarié ou freelance ?</h1>
+    <p class="lead">Indiquez votre salaire brut : voyez ce qu'il vous laisse après cotisations et impôt, et le chiffre d'affaires, puis le TJM, qu'il vous faudrait en micro-entreprise pour garder le même revenu.</p>
+    <ul class="trust"><li>Cotisations salariales 2026</li><li>Micro-entreprise et impôt</li><li>TJM équivalent</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="ef-form" onsubmit="return false">
+      <h2>Votre salaire</h2>
+      <div class="fields">
+        <div class="field"><label for="ef-gross">Salaire brut annuel</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="ef-gross" name="gross" value="40 000" aria-describedby="ef-gross-hint" data-save><span>€</span></div>
+          <span class="hint" id="ef-gross-hint">Salarié du secteur privé, primes comprises.</span></div>
+        <div class="field"><label for="ef-benefits">Avantages de l'employeur</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="ef-benefits" name="benefits" placeholder="0" aria-describedby="ef-benefits-hint" data-save><span>€</span></div>
+          <span class="hint" id="ef-benefits-hint">Facultatif, par an : part de la mutuelle, titres-restaurant, intéressement…</span></div>
+      </div>
+      <h2 style="margin-top: 20px;">En freelance</h2>
+      <div class="fields">
+        <div class="field full"><label for="ef-activity">Activité en micro-entreprise</label>
+          <select id="ef-activity" name="activity" data-input data-save>
+            <option value="liberal_bnc" selected>Profession libérale (BNC)</option>
+            <option value="cipav">Profession libérale réglementée affiliée à la CIPAV</option>
+            <option value="services_bic">Prestations de services commerciales (BIC)</option>
+            <option value="artisan">Activité artisanale (BIC)</option>
+            <option value="vente">Vente de marchandises (BIC)</option>
+          </select></div>
+        <label class="check full"><input type="checkbox" id="ef-vl" name="vl" data-input data-save>
+          <span>Versement libératoire de l'impôt sur le revenu</span></label>
+        <div class="field"><label for="ef-expenses">Frais professionnels par an</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="ef-expenses" name="expenses" placeholder="0" aria-describedby="ef-expenses-hint" data-save><span>€</span></div>
+          <span class="hint" id="ef-expenses-hint">Logiciels, matériel, assurance, comptable…</span></div>
+        <div class="field"><label for="ef-units">Jours facturés par an</label>
+          <input type="text" inputmode="decimal" id="ef-units" name="units" value="148" aria-describedby="ef-units-hint" data-save>
+          <span class="hint" id="ef-units-hint">Congés, jours fériés et temps non facturé déduits.</span></div>
+        <div class="field full"><label for="ef-rate">Votre TJM en freelance (facultatif)</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="ef-rate" name="rate" aria-describedby="ef-rate-hint" data-save><span>€</span></div>
+          <span class="hint" id="ef-rate-hint">Pour comparer directement avec votre salaire.</span></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="result-hero" role="status" aria-atomic="true">
+        <div class="label">Chiffre d'affaires nécessaire en micro-entreprise</div>
+        <div class="big" id="ef-big">–</div>
+        <div class="sub" id="ef-sub">–</div>
+      </div>
+      <h2 class="sr-only">Détail du calcul</h2>
+      <div class="card" style="margin-top: 16px; padding: 18px;">
+        <table class="mini-table compare-table">
+          <caption class="sr-only">Revenu du salarié et du micro-entrepreneur, par an</caption>
+          <thead><tr><th scope="col">Par an</th><th scope="col">Salarié</th><th scope="col">Freelance</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Salaire brut ou chiffre d'affaires</th><td id="ef-e-gross">–</td><td id="ef-f-gross">–</td></tr>
+            <tr><th scope="row">Cotisations sociales</th><td id="ef-e-contributions">–</td><td id="ef-f-contributions">–</td></tr>
+            <tr><th scope="row">Impôt sur le revenu</th><td id="ef-e-tax">–</td><td id="ef-f-tax">–</td></tr>
+            <tr><th scope="row">Frais professionnels</th><td id="ef-e-expenses">–</td><td id="ef-f-expenses">–</td></tr>
+            <tr><th scope="row">Revenu disponible</th><td id="ef-e-available">–</td><td id="ef-f-available">–</td></tr>
+            <tr id="ef-row-benefits" hidden><th scope="row">Avantages de l'employeur</th><td id="ef-e-benefits">–</td><td id="ef-f-benefits">–</td></tr>
+            <tr id="ef-row-total" hidden><th scope="row">Total comparé</th><td id="ef-e-total">–</td><td id="ef-f-total">–</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="notice" id="ef-notice" aria-live="polite" style="margin-top: 16px;">–</p>
+      <p style="margin-top: 16px;"><a class="btn btn-primary" href="{{link:rate}}">Calculer mon TJM</a></p>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>Comment se fait la comparaison</h2>
+  <p>Côté salarié, le calcul part du <strong>salaire brut</strong> d'un salarié du secteur privé et retire les <strong>cotisations salariales</strong> de 2026 : assurance vieillesse, retraite complémentaire Agirc-Arrco, CSG et CRDS. L'impôt sur le revenu porte sur le net imposable, après la déduction forfaitaire de 10 % pour frais professionnels. La part salariale de la mutuelle et de la prévoyance, propre à chaque entreprise, n'est pas comptée.</p>
+  <p>Côté freelance, le calculateur cherche le <strong>chiffre d'affaires</strong> qui laisse le même revenu en micro-entreprise, après les cotisations de l'activité choisie, l'impôt (après l'abattement forfaitaire, ou au versement libératoire) et vos frais. Divisé par vos <strong>jours facturés</strong>, il donne le TJM équivalent. Au-delà du plafond de la micro-entreprise, le <a href="{{link:structure}}">comparateur de statuts</a> montre les autres choix, et le <a href="{{link:tax}}">simulateur auto-entrepreneur</a> détaille les cotisations.</p>
+</section>

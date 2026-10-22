@@ -907,6 +907,43 @@ const tests = {
     await page.fill("#pp-offer", "");
     check((await page.$$(".pp-line")).length === 3 && (await t("pp-big")) === "5 940 €", "Forfait FR : tâche supprimée, situation par défaut rétablie");
   },
+  async "fr/salarie-ou-freelance/"(page) {
+    // documentation/19-freelance-ou-salarie.md : 40 000 € brut → 29 697 € disponibles ; micro BNC : 42 332,70 € de CA.
+    const t = async (id) => (await page.textContent(`#${id}`)).replace(/\s+/g, " ").trim();
+    check((await t("ef-big")) === "42 333 €" && (await t("ef-sub")) === "Soit 286,03 € par jour sur 148 jours facturés, pour garder 29 697 € par an, comme en salarié." &&
+      (await t("ef-e-contributions")) === "−8 336 €" && (await t("ef-e-tax")) === "−1 967 €" && (await t("ef-e-available")) === "29 697 €" &&
+      (await t("ef-f-available")) === "29 697 €" && !(await page.isVisible("#ef-row-total")),
+      "Salarié ou freelance FR : 40 000 € brut → 42 333 € de CA en micro BNC, 286,03 € par jour");
+    check((await t("ef-notice")).startsWith("Le chiffre d'affaires nécessaire, hors TVA, dépasse le seuil de la franchise de TVA (37 500 € par an)"),
+      "Salarié ou freelance FR : seuil de franchise de TVA signalé (règles)");
+    await page.fill("#ef-benefits", "1 200");
+    await page.fill("#ef-expenses", "3000");
+    await page.fill("#ef-rate", "450");
+    check((await t("ef-big")) === "49 635 €" && (await page.isVisible("#ef-row-total")) && (await t("ef-e-total")) === "30 897 €" && (await t("ef-f-expenses")) === "−3 000 €" &&
+      (await t("ef-notice")).startsWith("À 450,00 € par jour sur 148 jours (66 600 € de chiffre d'affaires), vous garderiez 40 126 € par an : 9 229 € de plus qu'en salarié."),
+      "Salarié ou freelance FR : avantages, frais et TJM comparé");
+    await page.fill("#ef-gross", "150 000");
+    check((await t("ef-notice")).includes("dépasse le plafond de la micro-entreprise (83 600 € par an)") && (await page.getAttribute("#ef-notice", "class")).includes("warn"),
+      "Salarié ou freelance FR : plafond de la micro-entreprise dépassé");
+    await page.fill("#ef-gross", "40 000");
+    await page.selectOption("#ef-activity", "services_bic");
+    await page.fill("#ef-benefits", "");
+    await page.fill("#ef-expenses", "");
+    await page.fill("#ef-rate", "");
+    check((await t("ef-big")) === "38 108 €", "Salarié ou freelance FR : prestations de services BIC → 38 108 €");
+    await page.check("#ef-vl");
+    await page.selectOption("#ef-activity", "liberal_bnc");
+    check((await t("ef-big")) === "41 246 €", "Salarié ou freelance FR : versement libératoire → 41 246 €");
+    await page.fill("#ef-gross", "abc");
+    check((await page.getAttribute("#ef-gross", "aria-invalid")) === "true" && (await t("ef-big")) === "–" && (await t("ef-notice")).includes("Vérifiez : salaire brut"),
+      "Salarié ou freelance FR : saisie illisible signalée");
+    await accessible(page, "Salarié ou freelance FR (saisie illisible)");
+    await page.fill("#ef-gross", "40 000");
+    await page.reload({ waitUntil: "networkidle" });
+    check((await page.isChecked("#ef-vl")) && (await t("ef-big")) === "41 246 €", "Salarié ou freelance FR : saisie retrouvée après rechargement");
+    await page.uncheck("#ef-vl");
+    check((await t("ef-big")) === "42 333 €", "Salarié ou freelance FR : situation par défaut rétablie");
+  },
   async "us/project-price-calculator/"(page) {
     const t = async (id) => (await page.textContent(`#${id}`)).replace(/\s+/g, " ").trim();
     check((await t("pp-big")) === "$6,160" && (await t("pp-r-time")) === "56 hours" && (await t("pp-r-extra")) === "5.6 hours" &&

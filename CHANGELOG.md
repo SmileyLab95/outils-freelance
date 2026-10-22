@@ -1,5 +1,22 @@
 # Journal des modifications
 
+## 2026-10-22 — « Salarié ou freelance ? » (France)
+
+- Nouvelle page `/fr/salarie-ou-freelance/` (menu « Statut et revenus ») : à partir du salaire brut, revenu disponible
+  du salarié du secteur privé (cotisations salariales 2026, impôt d'une personne seule, décote comprise) et chiffre
+  d'affaires dont un micro-entrepreneur a besoin pour garder le même revenu, avec le TJM équivalent sur ses jours
+  facturés ; avantages de l'employeur et frais professionnels facultatifs ; comparaison directe avec un TJM saisi ;
+  plafond de la micro-entreprise et seuil de franchise de TVA signalés.
+- Nouvelles règles sourcées : cotisations salariales du secteur privé (Urssaf, CGI art. 154 quinquies), retraite
+  complémentaire Agirc-Arrco 2026, déduction forfaitaire de 10 % (revenus 2025) ; décote confirmée par le BOFiP.
+- Moteur `engines/employee-freelance.js` (recherche du chiffre d'affaires au centime) et script commun
+  `tools/employee-freelance.js`, prêts pour les trois autres pays ; spécification
+  `documentation/19-freelance-ou-salarie.md`.
+- Tests : unitaires calculés à la main (sous le PASS, entre 1 et 4 PASS, au-delà de 4 et de 8 PASS, déduction minimale
+  et plafonnée, décote, chiffre d'affaires au centime, versement libératoire, plafond micro) et contrôlés par mutation ;
+  exemple de la FAQ recalculé ; parcours navigateur ; suite complète (203 tests unitaires, 2 202 vérifications
+  navigateur).
+
 ## 2026-10-22 — Calculateur de prix au forfait (France, États-Unis, Royaume-Uni, Canada)
 
 - Nouvelles pages `/fr/calcul-prix-forfait/`, `/us/project-price-calculator/`, `/uk/project-price-calculator/`,

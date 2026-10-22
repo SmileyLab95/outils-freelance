@@ -299,8 +299,15 @@
       "label": "Décote (revenus 2025)",
       "source": "https://www.impots.gouv.fr/www2/fichiers/documentation/brochure/ir_2026/pdf_som/21-calcul_impot_369a382.pdf",
       "source_title": "Brochure pratique IR 2026 - Calcul de l'impôt",
-      "confidence": "medium",
-      "note": "Seuils de 1 982 EUR et 3 277 EUR lus dans la brochure 2026. Les forfaits de 897 / 1 483 EUR et le coefficient de 45,25 % sont déduits (897 / 0,4525 = 1 982 ; 1 483 / 0,4525 = 3 277) et n'ont pas été lus directement."
+      "confidence": "high",
+      "note": "Revenus de 2025 : décote = 897 EUR (personne seule) ou 1 483 EUR (couple) moins 45,25 % de l'impôt brut, si l'impôt brut est inférieur à 1 982 EUR ou 3 277 EUR ; calculée sur l'impôt issu du barème, avant les réductions d'impôt. Montants confirmés le 22/10/2026 par le BOFiP (loi n° 2026-103 du 19 février 2026) et la brochure 2026.",
+      "verified_on": "2026-10-22",
+      "more_sources": [
+        {
+          "source": "https://bofip.impots.gouv.fr/bofip/2495-PGP.html/identifiant=BOI-IR-LIQ-20-20-30-20260407",
+          "source_title": "BOFiP, BOI-IR-LIQ-20-20-30 : décote (CGI, art. 197, I-4), revenus de 2025"
+        }
+      ]
     },
     "is_taux_reduit": {
       "value": 0.15,
@@ -747,6 +754,73 @@
       "source_title": "Plafonds de la Sécurité sociale - Urssaf.fr",
       "confidence": "high",
       "note": "Sert au plafond général d'épargne retraite des versements 2026 (revenus 2025) : minimum 4 710 €, maximum 37 680 €."
+    },
+    "salarie_cotisations_2026": {
+      "value": {
+        "vieillesse_plafonnee": 0.069,
+        "vieillesse_deplafonnee": 0.004,
+        "maladie": 0,
+        "chomage": 0,
+        "csg": 0.092,
+        "csg_deductible": 0.068,
+        "crds": 0.005,
+        "csg_assiette_abattue": 0.9825,
+        "csg_abattement_limite_pass": 4
+      },
+      "unit": "object",
+      "label": "Cotisations salariales 2026 du secteur privé (régime général, hors Alsace-Moselle) : taux de la part salariale",
+      "source": "https://www.urssaf.fr/accueil/outils-documentation/taux-baremes/taux-cotisations-secteur-prive.html",
+      "source_title": "Taux de cotisations - Secteur privé - Urssaf.fr",
+      "more_sources": [
+        {
+          "source": "https://www.urssaf.fr/accueil/employeur/cotisations/liste-cotisations/csg-crds.html",
+          "source_title": "La CSG-CRDS - Urssaf.fr (assiette de 98,25 % jusqu'à 4 PASS)"
+        },
+        {
+          "source": "https://www.legifrance.gouv.fr/codes/id/LEGISCTA000006197369",
+          "source_title": "Code général des impôts, art. 154 quinquies : CSG déductible à hauteur de 6,8 points - Légifrance"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-10-22",
+      "note": "Part salariale : vieillesse plafonnée 6,90 % dans la limite du PASS, vieillesse déplafonnée 0,40 % sur la totalité ; maladie et assurance chômage : pas de part salariale (sauf régime local d'Alsace-Moselle, 1,30 % de maladie, non compté). CSG 9,20 % dont 6,80 % déductible du revenu imposable (2,40 % non déductible), CRDS 0,50 % non déductible, sur 98,25 % du salaire brut jusqu'à 4 PASS (192 240 EUR en 2026) et 100 % au-delà. Répartition 6,80 % / 2,90 % (CSG imposable et CRDS) recoupée sur la page Urssaf du particulier employeur au 1er janvier 2026. La part salariale de la complémentaire santé, de la prévoyance et de l'Apec (cadres) n'est pas comprise : elle dépend de l'entreprise ou du statut."
+    },
+    "agirc_arrco_2026": {
+      "value": {
+        "t1": 0.0315,
+        "t1_ceg": 0.0086,
+        "t2": 0.0864,
+        "t2_ceg": 0.0108,
+        "cet": 0.0014,
+        "t2_limite_pass": 8
+      },
+      "unit": "object",
+      "label": "Retraite complémentaire Agirc-Arrco 2026 : part salariale (tranche 1 jusqu'au PASS, tranche 2 jusqu'à 8 PASS)",
+      "source": "https://reglementation.agirc-arrco.fr/home/baremes/listes-area/baremes-1/cotisations-au-regime-agirc-arrco-en-2026.html",
+      "source_title": "Cotisations au régime Agirc-Arrco en 2026 - Agirc-Arrco (réglementation)",
+      "confidence": "high",
+      "verified_on": "2026-10-22",
+      "note": "Tranche 1 : 7,87 % dont 3,15 % salarié ; tranche 2 : 21,59 % dont 8,64 % salarié (répartition 60 % employeur, 40 % salarié). Contribution d'équilibre général (CEG) : 2,15 % sur la tranche 1 dont 0,86 % salarié, 2,70 % sur la tranche 2 dont 1,08 % salarié. Contribution d'équilibre technique (CET) : 0,35 % dont 0,14 % salarié, sur les tranches 1 et 2, seulement si la rémunération dépasse le PASS."
+    },
+    "ir_deduction_frais_salaires": {
+      "value": {
+        "taux": 0.1,
+        "minimum": 509,
+        "maximum": 14555
+      },
+      "unit": "object",
+      "label": "Déduction forfaitaire de 10 % pour frais professionnels sur les salaires (revenus 2025)",
+      "source": "https://www.impots.gouv.fr/particulier/questions/comment-puis-je-beneficier-de-la-deduction-forfaitaire-de-10",
+      "source_title": "Comment puis-je bénéficier de la déduction forfaitaire de 10 % ? - impots.gouv.fr",
+      "more_sources": [
+        {
+          "source": "https://www.impots.gouv.fr/sites/default/files/formulaires/2041-gp/2026/2041-gp_5464.pdf",
+          "source_title": "Notice 2041 GP pour la déclaration des revenus de 2025 - impots.gouv.fr"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-10-22",
+      "note": "Revenus de 2025 : au moins 509 EUR (sauf si le salaire est inférieur), au plus 14 555 EUR par salarié (504 EUR et 14 426 EUR pour les revenus de 2024). Option possible pour les frais réels, non calculée."
     },
     "per_plafond_tns": {
       "value": {

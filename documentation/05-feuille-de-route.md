@@ -103,7 +103,11 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   (TVA, TPS/TVH et TVQ selon la province du client), acompte et solde, et tarif réel du prix proposé par le client,
   dans les quatre pays (cinq pages, [18](18-outils-de-prix.md) § 2). Les besoins P1 et P2 de « Fixer ses prix » sont
   couverts (reste, en P3, la hausse de tarifs).
-- **Prochaines actions de Claude** : outil « Freelance ou salarié ? » (4 pays, P2 : spécification d'abord) ; taux du crédit pour
+- **Salarié ou freelance ? (22/10/2026)** : spécification [19](19-freelance-ou-salarie.md) pour les quatre pays ;
+  France publiée : revenu disponible d'un salarié du privé (cotisations salariales 2026 sourcées, impôt avec
+  décote) et chiffre d'affaires nécessaire en micro-entreprise, avec le TJM équivalent.
+- **Prochaines actions de Claude** : « Salarié ou freelance ? » aux États-Unis, au Royaume-Uni et au Canada
+  ([19](19-freelance-ou-salarie.md) § 7) ; décote dans le comparateur de statuts français ; taux du crédit pour
   dividendes de la Saskatchewan et du Nunavut dès qu'ils sont publiés (formulaires 2026) ;
   trouver la cause du contrôle de contraste intermittent de l'Espace ; revérifier les grilles des prestataires de
   paiement (Stripe, Mollie) quand Ismail décidera ([17](17-offres-et-paiements.md)) ; guide du recouvrement dès que
@@ -224,7 +228,9 @@ Objectif : un site mesuré, sous sa propre marque, qui commence à rapporter, et
       script commun, cinq pages ; spécification [18](18-outils-de-prix.md)
 - [x] Prix au forfait, 4 pays : moteur `engines/project-price.js`, script commun, cinq pages (tâches, imprévus,
       frais, taxes lues dans les règles, acompte, prix proposé par le client) ; spécification [18](18-outils-de-prix.md) § 2
-- [ ] Freelance ou salarié, 4 pays : besoin P2 (spécification d'abord)
+- [ ] Freelance ou salarié, 4 pays : besoin P2, spécification [19](19-freelance-ou-salarie.md)
+  - [x] France : `/fr/salarie-ou-freelance/` (cotisations salariales 2026, micro-entreprise, impôt avec décote)
+  - [ ] États-Unis, Royaume-Uni, Canada
 
 ### 1.5 Préparer la plateforme
 
