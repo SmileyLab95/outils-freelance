@@ -21,99 +21,111 @@ Débutant qui se lance, freelance confirmé qui veut augmenter ses prix, indépe
 
 Légende des colonnes pays : ✅ en ligne · 🟡 prévu · — sans objet.
 Priorité : **P1** (fort volume de recherche, à faire d'abord), **P2**, **P3**.
+Matrice revue le 22/10/2026 d'après les pages publiées (identifiants de `content/<section>/`).
 
 ### 1. Se lancer et choisir son statut
 
 | Besoin | Outil ou contenu | FR | US | UK | CA | Priorité |
 |---|---|---|---|---|---|---|
-| Quel statut choisir ? | Comparateur de statuts (revenu net selon le statut) | 🟡 micro / EI / EURL / SASU | 🟡 sole prop / LLC / S-corp | 🟡 sole trader / Ltd | 🟡 individuelle / incorporée | P1 |
+| Quel statut choisir ? | Comparateur de statuts (revenu net selon le statut) | ✅ micro / réel / EURL à l'IS / SASU | 🟡 sole prop / LLC / S-corp | ✅ sole trader / Ltd | 🟡 individuelle / incorporée | P1 |
 | Les démarches pour démarrer | Checklist interactive de création | 🟡 | 🟡 | 🟡 | 🟡 | P2 |
-| Combien je gagnerai vraiment ? | Simulateur de revenu net | ✅ micro | 🟡 | 🟡 | 🟡 | P1 |
+| Combien je gagnerai vraiment ? | Simulateur de revenu net | ✅ micro | ✅ (calculateur d'impôt) | ✅ (calculateur d'impôt) | ✅ (calculateur d'impôt) | P1 |
 | Freelance ou salarié ? | Comparateur salaire ↔ chiffre d'affaires | 🟡 | 🟡 | 🟡 | 🟡 | P2 |
 
 ### 2. Fixer ses prix
 
 | Besoin | Outil ou contenu | FR | US | UK | CA | Priorité |
 |---|---|---|---|---|---|---|
-| Quel tarif facturer ? | Calculateur de TJM / taux horaire | ✅ | 🟡 | 🟡 | 🟡 | P1 |
+| Quel tarif facturer ? | Calculateur de TJM / taux horaire | ✅ | ✅ | ✅ | ✅ | P1 |
 | Convertir horaire, journalier, mensuel, annuel | Convertisseur de tarifs | 🟡 | 🟡 | 🟡 | 🟡 | P2 |
 | Chiffrer un projet au forfait | Calculateur de prix au forfait (marge, imprévus) | 🟡 | 🟡 | 🟡 | 🟡 | P2 |
-| Augmenter ses tarifs | Calculateur + email d'annonce | 🟡 | 🟡 | 🟡 | 🟡 | P3 |
+| Augmenter ses tarifs | Calculateur + email d'annonce | 🟡 | 🟡 (email ✅) | 🟡 (email ✅) | 🟡 (email ✅) | P3 |
 
 ### 3. Trouver des clients
 
 | Besoin | Outil ou contenu | FR | US | UK | CA | Priorité |
 |---|---|---|---|---|---|---|
-| Écrire à un prospect | Modèles d'emails de prospection | ✅ | 🟡 | 🟡 | 🟡 | P1 |
-| Relancer un devis | Générateur de relance de devis | ✅ (modèles) | 🟡 | 🟡 | 🟡 | P2 |
-| Répondre aux objections (« trop cher ») | Modèles de réponses | ✅ (modèles) | 🟡 | 🟡 | 🟡 | P2 |
+| Écrire à un prospect | Modèles d'emails de prospection | ✅ | ✅ | ✅ | ✅ | P1 |
+| Relancer un devis | Générateur de relance de devis | ✅ (modèles) | ✅ (modèles) | ✅ (modèles) | ✅ (modèles) | P2 |
+| Répondre aux objections (« trop cher ») | Modèles de réponses | ✅ (modèles) | ✅ (modèles) | ✅ (modèles) | ✅ (modèles) | P2 |
 | Rédiger une proposition commerciale | Modèle de proposition | 🟡 | 🟡 | 🟡 | 🟡 | P3 |
 
 ### 4. Devis et contrats
 
 | Besoin | Outil ou contenu | FR | US | UK | CA | Priorité |
 |---|---|---|---|---|---|---|
-| Faire un devis | Générateur de devis (PDF) | ✅ | 🟡 *estimate* | 🟡 *quote* | 🟡 | P1 |
-| Un contrat de prestation | Générateur de contrat (clauses à choisir) | 🟡 | 🟡 | 🟡 | 🟡 | P2 |
+| Faire un devis | Générateur de devis (PDF) | ✅ | ✅ *estimate* | ✅ *quote* | ✅ *estimate* / soumission | P1 |
+| Un contrat de prestation | Générateur de contrat (clauses à choisir) | ✅ | ✅ | ✅ | ✅ | P2 |
 | Protéger un secret | Modèle d'accord de confidentialité (NDA) | 🟡 | 🟡 | 🟡 | 🟡 | P3 |
 | Conditions générales de vente | Générateur de CGV / *terms of service* | 🟡 | 🟡 | 🟡 | 🟡 | P3 |
-| Lois de protection des freelances | Guide *Freelance Isn't Free* (New York) et équivalents | — | 🟡 | — | — | P2 |
+| Lois de protection des freelances | Guide *Freelance Isn't Free* (New York) et équivalents | — | ✅ | — | — | P2 |
 
 ### 5. Facturer
 
 | Besoin | Outil ou contenu | FR | US | UK | CA | Priorité |
 |---|---|---|---|---|---|---|
-| Créer une facture | Générateur de facture (PDF) adapté au pays | ✅ | 🟡 | 🟡 | 🟡 | P1 |
+| Créer une facture | Générateur de facture (PDF) adapté au pays | ✅ | ✅ | ✅ | ✅ | P1 |
 | Les mentions obligatoires | Checklist interactive | ✅ | — | ✅ | ✅ | P2 |
-| Calculer la taxe sur les ventes | Calculateur TVA / *VAT* / TPS-TVH-TVQ par province | ✅ TVA | — | 🟡 VAT | 🟡 par province | P1 |
+| Calculer la taxe sur les ventes | Calculateur TVA / *VAT* / TPS-TVH-TVQ par province | ✅ TVA | — | ✅ VAT | ✅ par province | P1 |
 | Facturer un client étranger | Guide (autoliquidation, devises, mentions) | ✅ | 🟡 | ✅ | ✅ | P2 |
-| Numéroter ses factures | Guide + numérotation automatique dans le générateur | ✅ (auto) | 🟡 | 🟡 | 🟡 | P3 |
-| Facturation électronique obligatoire | Guide, calendrier, comparatif des plateformes agréées | 🟡 | — | — | — | P1 (FR) |
+| Numéroter ses factures | Guide + numérotation automatique dans le générateur | ✅ (auto) | ✅ (auto) | ✅ (auto) | ✅ (auto) | P3 |
+| Facturation électronique obligatoire | Guide, calendrier, export Factur-X (Espace) | ✅ | — | — | — | P1 (FR) |
 
 ### 6. Se faire payer
 
 | Besoin | Outil ou contenu | FR | US | UK | CA | Priorité |
 |---|---|---|---|---|---|---|
-| Relancer un impayé | Générateur de relances (du rappel courtois à la mise en demeure) | ✅ | 🟡 | 🟡 | 🟡 | P1 |
-| Calculer les pénalités | Calculateur de pénalités / *statutory interest* / *late fee* | ✅ | 🟡 | 🟡 | 🟡 | P1 |
-| Date d'échéance | Calculateur de date d'échéance (45 jours fin de mois…) | 🟡 | 🟡 | 🟡 | 🟡 | P3 |
+| Relancer un impayé | Générateur de relances (du rappel courtois à la mise en demeure) | ✅ | ✅ | ✅ | ✅ | P1 |
+| Calculer les pénalités | Calculateur de pénalités / *statutory interest* / *late fee* | ✅ | ✅ | ✅ | ✅ | P1 |
+| Date d'échéance | Calculateur de date d'échéance (45 jours fin de mois…) | ✅ | 🟡 | 🟡 | 🟡 | P3 |
 | Recouvrement en justice | Guide (injonction de payer, *small claims*, *money claim online*) | 🟡 | 🟡 | 🟡 | 🟡 | P2 |
 
 ### 7. Impôts et cotisations
 
 | Besoin | Outil ou contenu | FR | US | UK | CA | Priorité |
 |---|---|---|---|---|---|---|
-| Combien vais-je payer ? | Calculateur d'impôts et cotisations | ✅ micro | 🟡 *self-employment tax* + impôt fédéral | 🟡 *income tax* + *NI* | 🟡 fédéral + provincial + RPC/RRQ | P1 |
+| Combien vais-je payer ? | Calculateur d'impôts et cotisations | ✅ micro | ✅ *self-employment tax* + impôt fédéral | ✅ *income tax* + *NI* | ✅ fédéral + provincial + RPC/RRQ | P1 |
 | Combien mettre de côté sur chaque facture ? | Calculateur « à mettre de côté » | ✅ | ✅ | ✅ | ✅ | P1 |
-| Payer ses acomptes | Calculateur d'acomptes | — | 🟡 *quarterly estimated taxes* | 🟡 *payments on account* | 🟡 acomptes provisionnels | P1 |
-| Ne rater aucune échéance | Calendrier fiscal avec export agenda (.ics) | 🟡 | 🟡 | 🟡 | 🟡 | P2 |
+| Payer ses acomptes | Calculateur d'acomptes | — | ✅ *quarterly estimated taxes* | ✅ *payments on account* (calculateurs d'impôt et « set aside ») | ✅ acomptes provisionnels (idem) | P1 |
+| Ne rater aucune échéance | Calendrier fiscal avec export agenda (.ics) | ✅ | ✅ | ✅ | ✅ | P2 |
 | Les seuils à surveiller | Jauges (TVA, plafonds) intégrées aux simulateurs | ✅ | 🟡 | 🟡 | 🟡 | P2 |
-| Formulaires fiscaux | Guides 1099 / W-9 / W-8BEN | — | 🟡 | — | — | P2 |
-| Déclarations numériques | Guide *Making Tax Digital* | — | — | 🟡 | — | P1 (UK) |
+| Formulaires fiscaux | Guides 1099 / W-9 / W-8BEN | — | ✅ 1099 / W-9 (W-8BEN 🟡) | — | — | P2 |
+| Déclarations numériques | Guide *Making Tax Digital* | — | — | ✅ | — | P1 (UK) |
 
 ### 8. Gérer et piloter
 
 | Besoin | Outil ou contenu | FR | US | UK | CA | Priorité |
 |---|---|---|---|---|---|---|
-| Frais de déplacement | Calculateur d'indemnités kilométriques | 🟡 barème | 🟡 *standard mileage* | 🟡 45p/25p | 🟡 taux ARC | P2 |
+| Frais de déplacement | Calculateur d'indemnités kilométriques | ✅ barème | ✅ *standard mileage* | ✅ 45p/25p | ✅ taux ARC | P2 |
 | Bureau à domicile | Calculateur de déduction | 🟡 | 🟡 | 🟡 | 🟡 | P3 |
+| Devis, factures, encaissements, déclarations | Espace entrepreneur (gratuit, données sur l'appareil) | ✅ | 🟡 | 🟡 | 🟡 | P1 |
 | Suivi des factures et du chiffre d'affaires | Kit Excel (produit payant) | ✅ | ✅ (kit US) | 🟡 | 🟡 | — |
-| Temps facturable | Calculateur de jours / heures facturables | ✅ (dans le TJM) | 🟡 | 🟡 | 🟡 | P3 |
+| Temps facturable | Calculateur de jours / heures facturables | ✅ (dans le TJM) | ✅ (dans le taux horaire) | ✅ (dans le *day rate*) | ✅ (dans le taux horaire) | P3 |
 
 ### 9. Se protéger
 
 | Besoin | Outil ou contenu | FR | US | UK | CA | Priorité |
 |---|---|---|---|---|---|---|
-| Assurance professionnelle | Guide + partenaires (affiliation) | 🟡 | 🟡 | 🟡 | 🟡 | P2 |
-| Retraite | Calculateur d'épargne retraite (PER, SEP-IRA/Solo 401(k), SIPP, REER) | 🟡 | 🟡 | 🟡 | 🟡 | P3 |
-| Compte pro, encaissement | Comparatif + partenaires (affiliation) | 🟡 | 🟡 | 🟡 | 🟡 | P2 |
+| Assurance professionnelle | Guide + partenaires (affiliation) | ✅ guide | 🟡 | 🟡 | 🟡 | P2 |
+| Retraite | Calculateur d'épargne retraite (PER, SEP-IRA/Solo 401(k), SIPP, REER) | ✅ | ✅ | ✅ | ✅ | P3 |
+| Compte pro, encaissement | Guide, comparatif + partenaires (affiliation) | ✅ guide | 🟡 | 🟡 | 🟡 | P2 |
 
 ### 10. Évoluer
 
 | Besoin | Outil ou contenu | FR | US | UK | CA | Priorité |
 |---|---|---|---|---|---|---|
-| Changer de statut | Comparateur (étape 1) + guide de passage | 🟡 | 🟡 | 🟡 | 🟡 | P2 |
+| Changer de statut | Comparateur (étape 1) + guide de passage | 🟡 (comparateur ✅) | 🟡 | 🟡 (comparateur ✅) | 🟡 | P2 |
 | Sous-traiter | Modèle de contrat de sous-traitance | 🟡 | 🟡 | 🟡 | 🟡 | P3 |
+
+### Besoins encore ouverts (22/10/2026)
+
+- **P1** : comparateur de statuts aux États-Unis (*sole proprietor*, LLC, *S-corp*) et au Canada (entreprise
+  individuelle ou société par actions) ; Espace entrepreneur hors de France (après la plateforme française).
+- **P2** : convertisseur de tarifs et prix au forfait (4 pays) ; freelance ou salarié (4 pays) ; checklist de
+  création (4 pays) ; recouvrement en justice (4 pays) ; client étranger aux États-Unis ; W-8BEN ; jauges de seuils
+  (États-Unis, Royaume-Uni, Canada) ; assurance et compte pro hors de France.
+- **P3** : date d'échéance, proposition commerciale, NDA, CGV, bureau à domicile, hausse de tarifs (calculateur),
+  sous-traitance, guide de changement de statut.
 
 ## Les outils « moteurs » partagés
 

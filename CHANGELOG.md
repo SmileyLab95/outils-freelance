@@ -1,5 +1,14 @@
 # Journal des modifications
 
+## 2026-10-22 — Matrice des besoins remise à jour
+
+- `documentation/02-besoins-clients.md` : chaque besoin vérifié contre les pages publiées des quatre pays
+  (calendriers, indemnités kilométriques, retraite, contrats, devis, calculateurs d'impôt et d'acomptes, modèles
+  d'emails, *Making Tax Digital*, numérotation automatique… étaient encore marqués « prévus ») ; nouvelle ligne pour
+  l'Espace entrepreneur ; liste des besoins encore ouverts par priorité.
+- Feuille de route : prochains outils choisis d'après cette liste (comparateurs de statuts aux États-Unis et au
+  Canada en P1, puis convertisseur de tarifs et prix au forfait).
+
 ## 2026-10-21 — Canada : *Invoicing clients outside Canada* et « Facturer un client étranger »
 
 - Deux pages (anglais et français, menus « Invoicing » et « Facturer », même identifiant que les pages française et

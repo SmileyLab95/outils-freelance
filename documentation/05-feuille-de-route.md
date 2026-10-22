@@ -9,7 +9,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 
 ## Où en est-on ?
 
-*Mis à jour le 21/10/2026.*
+*Mis à jour le 22/10/2026.*
 
 - **Priorité (décision D10)** : le site et la plateforme d'abord ; noms de domaine, Gumroad et affiliation à la fin.
   Règle de qualité maximale pour tout produit ou service (D11, charte dans la [méthode](04-methode-de-travail.md#charte-qualité)).
@@ -83,13 +83,15 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 - **Client étranger, Canada (21/10/2026)** : assistant en anglais et en français : service à un non-résident en
   général détaxé (TPS/TVH et TVQ), sauf particulier présent au Canada ou service lié à un immeuble ou à un bien
   situé au Canada ; les exportations comptent dans le seuil de 30 000 $ et se déclarent à la ligne 101.
-- **Prochaines actions de Claude** : mettre à jour la matrice des besoins ([02](02-besoins-clients.md)) d'après
-  les pages publiées, puis choisir les prochains outils parmi les besoins réellement non couverts ; trouver la cause
-  du contrôle de contraste intermittent de l'Espace ; revérifier les grilles des prestataires de paiement (Stripe,
-  Mollie) sur leurs pages officielles quand Ismail décidera ([17](17-offres-et-paiements.md)) ; guide du
-  recouvrement dès que les textes sont lisibles ; veille réglementaire de décembre (dont la version de Factur-X et
-  l'annexe A de XP Z12-012 pour le BT-32 en franchise, et la question 13 de [pays/ca.md](pays/ca.md) sur la TVQ).
-  Les étapes C3 (serveur) et C4 (interface des comptes) attendent le choix de l'hébergeur.
+- **Matrice des besoins revue (22/10/2026)** : [02](02-besoins-clients.md) remise en accord avec les pages
+  publiées ; besoins encore ouverts classés par priorité (P1 : comparateurs de statuts aux États-Unis et au Canada).
+- **Prochaines actions de Claude** : comparateur de statuts aux États-Unis (*sole proprietor*, LLC, *S-corp* :
+  spécification et règles IRS d'abord), puis au Canada ; convertisseur de tarifs et prix au forfait (4 pays) ;
+  trouver la cause du contrôle de contraste intermittent de l'Espace ; revérifier les grilles des prestataires de
+  paiement (Stripe, Mollie) quand Ismail décidera ([17](17-offres-et-paiements.md)) ; guide du recouvrement dès que
+  les textes sont lisibles ; veille réglementaire de décembre (dont la version de Factur-X et l'annexe A de XP
+  Z12-012 pour le BT-32 en franchise, et la question 13 de [pays/ca.md](pays/ca.md) sur la TVQ). Les étapes C3
+  (serveur) et C4 (interface des comptes) attendent le choix de l'hébergeur.
 - **En attente d'Ismail** (pas urgent) : structure juridique avec un comptable ; choix de l'hébergeur et budget pour
   les comptes en ligne (comparatif [13](13-comparatif-hebergeurs.md), § 6) ; nom de domaine à choisir avant l'étape C4
   ([13](13-comparatif-hebergeurs.md), § 5) ; outil de mesure d'audience ([16](16-mesure-audience.md)) ; prix de l'offre « Pro » et prestataire de paiement
@@ -190,8 +192,11 @@ Objectif : un site mesuré, sous sa propre marque, qui commence à rapporter, et
 - [x] Canada : assistant *Invoicing clients outside Canada* / « Facturer un client étranger » (services exportés
       détaxés et exceptions, TVQ, preuve de non-résidence, seuil du petit fournisseur détaxé compris, ligne 101) ;
       moteur `engines/international-ca.js` testé (32 situations) ; spécification [pays/ca.md](pays/ca.md)
-- [ ] Mettre à jour la matrice des besoins ([02](02-besoins-clients.md)) d'après les pages publiées : plusieurs
-      outils en ligne y figurent encore comme prévus
+- [x] Matrice des besoins ([02](02-besoins-clients.md)) revue le 22/10/2026 d'après les pages publiées, avec la
+      liste des besoins encore ouverts par priorité
+- [ ] Comparateur de statuts, États-Unis (*sole proprietor*, LLC, *S-corp*) : besoin P1 ouvert
+- [ ] Comparateur de statuts, Canada (entreprise individuelle ou société par actions) : besoin P1 ouvert
+- [ ] Convertisseur de tarifs (horaire, journalier, mensuel, annuel) et prix au forfait, 4 pays : besoins P2
 
 ### 1.5 Préparer la plateforme
 
