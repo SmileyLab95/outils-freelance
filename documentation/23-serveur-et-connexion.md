@@ -102,7 +102,32 @@ Erreurs : `{ error: "code" }` avec un code stable (`unauthorized`, `forbidden`, 
   avant la réponse).
 - Écarts à la spécification : aucun. Le service d'envoi réel (C5) et l'adaptateur PostgreSQL attendent l'hébergeur.
 
-## 7. Critères de « terminé »
+## 7. Réalisation de C4 (22/10/2026)
+
+- **Brouillons** : `OF_DRAFTS=1 python3 build.py` construit aussi les pages marquées `draft` dans `brouillons/`
+  (ignoré par git, jamais publié), avec l'adresse de l'API (`OF_API_URL`, `/api/v1` par défaut) et les scripts
+  `draft_scripts` ; le site publié (`docs/`) ne contient ni la page du compte ni la synchronisation.
+- **Chiffrement** `engines/compte-crypto.js` (WebCrypto, testé sous Node : `tests/unit/compte-crypto.test.mjs`) :
+  code de récupération (chaque faute de frappe d'un code fixe détectée), clé du compte non exportable, coffre
+  compressé et chiffré, lié au compte et à la version.
+- **Synchronisation** `tools/compte-sync.js` : fusion avec le moteur de C2, réécriture sur la version lue, nouvel
+  essai en cas d'écriture concurrente ; refus d'un coffre modifié ou d'une version plus ancienne renvoyée par le
+  serveur ; si l'Espace est modifié pendant une synchronisation, nouvelle fusion au lieu d'écraser la saisie.
+- **Page `/fr/compte/`** (`tools/compte.js`) : connexion par lien (y compris collé dans un onglet déjà ouvert) ou
+  par clé d'accès, code de récupération (copier, enregistrer, imprimer ; vérification des 4 derniers caractères),
+  ouverture sur un nouvel appareil, état de la synchronisation et conflits nommés par l'élément concerné,
+  appareils, clés d'accès, export, déconnexion (la clé quitte l'appareil, l'Espace reste), suppression.
+- **Espace** : stockage au schéma 1 tant qu'aucun compte n'est actif ; données synchronisées au schéma 2, éléments
+  marqués supprimés retirés au chargement (la fusion de C2 traite ce retrait comme une suppression) ; dans la
+  version en brouillon, ligne d'état et synchronisation à l'ouverture, 3 secondes après chaque modification et au
+  retour de la connexion (`tools/espace-compte.js`) ; l'Espace ouvert se recharge après une synchronisation.
+- **Parcours navigateur** `tests/e2e/comptes.mjs` (37 vérifications) contre un serveur de test qui sert les
+  brouillons et l'API sur la même origine : deux appareils, code de récupération et faute de frappe, conflit,
+  synchronisation dans l'Espace, clé d'accès virtuelle, déconnexion à distance, serveur compromis (coffre modifié,
+  version plus ancienne), export, suppression ; accessibilité de chaque écran ; captures relues sur ordinateur et
+  mobile. 8 erreurs réintroduites dans le code du navigateur, toutes détectées.
+
+## 8. Critères de « terminé »
 
 - **C3** : tests unitaires des briques (jetons, code de récupération, WebAuthn avec un authentificateur logiciel,
   limites) ; tests d'intégration HTTP sur un serveur lancé pour le test : **aucun accès d'un compte aux données d'un

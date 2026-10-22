@@ -122,7 +122,7 @@ choix de l'hébergeur et du budget par Ismail : voir le [comparatif chiffré des
 | C1 | Décisions : hébergeur, budget, structure juridique (Ismail) ; D15 (Claude) | Décisions notées au journal |
 | C2 | Schéma 2 et moteur de synchronisation, testés sans serveur (simulation de trois appareils) | Fusion et suppressions correctes sur 50 scénarios ; **fait le 20/10/2026** |
 | C3 | Serveur : authentification, stockage chiffré, limites, sauvegardes | Tests d'accès entre comptes : aucun accès ; **serveur construit et testé le 22/10/2026, sans mise en ligne** ([23](23-serveur-et-connexion.md)) ; sauvegardes à la mise en ligne |
-| C4 | Interface : création de compte, lien d'appareils, phrase de récupération, import de l'Espace local | Parcours navigateur complet, captures relues |
+| C4 | Interface : création de compte, lien d'appareils, phrase de récupération, import de l'Espace local | Parcours navigateur complet, captures relues ; **fait le 22/10/2026 en brouillon** ([23](23-serveur-et-connexion.md) § 7), publié à l'ouverture des comptes |
 | C5 | Rappels par email (service d'envoi européen) | Rappels reçus aux bonnes dates sur un compte de test |
 | C6 | Bêta privée avec la liste d'attente | Retours traités, aucun incident de sécurité |
 | C7 | Offre « Pro » : abonnement chez le prestataire de paiement choisi ([17](17-offres-et-paiements.md)), factures, résiliation | Paiement, renouvellement, échec de paiement et résiliation vérifiés en mode test du prestataire |

@@ -1,6 +1,9 @@
 /*
  * Stockage de l'Espace entrepreneur : IndexedDB (repli sur le stockage local), synchronisation entre onglets,
- * contrôle des sauvegardes importées. Aucune donnée n'est envoyée sur un serveur.
+ * contrôle des sauvegardes importées. Aucune donnée n'est envoyée sur un serveur par ce fichier ; la synchronisation
+ * chiffrée des comptes (tools/compte-sync.js) y garde aussi l'état du compte de l'appareil (getMeta, setMeta).
+ * Schéma 1 tant que l'Espace reste local ; les données synchronisées sont au schéma 2 (suppressions marquées par
+ * deletedAt) : les éléments marqués sont retirés au chargement, ce que la fusion traite comme une suppression.
  */
 (function () {
   "use strict";
@@ -48,7 +51,7 @@
   /** Vérifie qu'un objet a la forme d'un Espace (sauvegarde importée) ; renvoie un message d'erreur ou "". */
   function validate(data) {
     if (!data || typeof data !== "object") return "Ce fichier n'est pas une sauvegarde de l'Espace entrepreneur.";
-    if (data.schema !== SCHEMA) return "Cette sauvegarde vient d'une version de l'Espace que ce site ne sait pas lire.";
+    if (data.schema !== SCHEMA && data.schema !== 2) return "Cette sauvegarde vient d'une version de l'Espace que ce site ne sait pas lire.";
     if (!Array.isArray(data.clients) || !Array.isArray(data.documents)) return "Cette sauvegarde est incomplète.";
     if (data.profile !== null && data.profile !== undefined && (typeof data.profile !== "object" || !isText(data.profile.name))) {
       return "Le profil de cette sauvegarde est illisible.";
@@ -62,13 +65,21 @@
     return badClient || badDoc ? "Cette sauvegarde contient des éléments illisibles." : "";
   }
 
-  /** Complète les champs facultatifs absents (anciennes données, sauvegardes partielles). */
+  var live = function (x) { return x && !x.deletedAt; };
+
+  /**
+   * Complète les champs facultatifs absents (anciennes données, sauvegardes partielles) et retire les éléments
+   * marqués supprimés (schéma 2) ; un document émis n'est jamais retiré (la fusion ignore déjà sa marque).
+   */
   function normalise(data) {
     var out = Object.assign(empty(), data || {});
     out.settings = Object.assign({ lastExport: null }, out.settings || {});
-    out.clients = out.clients.filter(Boolean);
-    out.documents = out.documents.filter(Boolean).map(function (d) {
-      return Object.assign({ payments: [], lines: [], vat: { franchise: true, rate: 20, place: "fr" } }, d);
+    out.clients = out.clients.filter(live);
+    out.documents = out.documents.filter(function (d) { return d && (!d.deletedAt || d.status !== "draft"); }).map(function (d) {
+      var doc = Object.assign({ payments: [], lines: [], vat: { franchise: true, rate: 20, place: "fr" } }, d);
+      delete doc.deletedAt;
+      doc.payments = (doc.payments || []).filter(live);
+      return doc;
     });
     return out;
   }
@@ -84,16 +95,31 @@
     });
   }
 
-  function save(data) {
+  /**
+   * Enregistre l'Espace. origin : « sync » quand l'enregistrement vient de la synchronisation des comptes (l'Espace
+   * ouvert doit alors relire ses données), sinon une modification faite dans l'Espace. Les autres onglets sont
+   * prévenus par BroadcastChannel, cet onglet par l'évènement « of-espace-saved ».
+   */
+  function save(data, origin) {
     data.savedAt = new Date().toISOString();
     // IndexedDB enregistre une copie (clonage structuré) : pas besoin de copier les données avant.
     var done = mode === "indexeddb"
       ? idb("readwrite", function (s) { return s.put(data, KEY); })
       : new Promise(function (resolve) { localStorage.setItem(LOCAL_KEY, JSON.stringify(data)); resolve(); });
-    return done.then(function () { if (channel) channel.postMessage({ savedAt: data.savedAt }); });
+    return done.then(function () {
+      if (channel) channel.postMessage({ savedAt: data.savedAt });
+      window.dispatchEvent(new CustomEvent("of-espace-saved", { detail: { savedAt: data.savedAt, origin: origin || "espace" } }));
+    });
   }
 
   function onChange(fn) { if (channel) channel.onmessage = fn; }
+
+  // État du compte de l'appareil (clé de chiffrement non exportable, dernière version synchronisée) : IndexedDB
+  // seulement, car une clé WebCrypto ne s'écrit pas dans le stockage local.
+  var META = function (name) { return name + ":" + KEY; };
+  function getMeta(name) { return idb("readonly", function (s) { return s.get(META(name)); }).then(function (v) { return v || null; }); }
+  function setMeta(name, value) { return idb("readwrite", function (s) { return s.put(value, META(name)); }); }
+  function deleteMeta(name) { return idb("readwrite", function (s) { return s.delete(META(name)); }); }
 
   /** Demande au navigateur de ne pas effacer les données en cas de manque d'espace. */
   function persist() {
@@ -106,5 +132,6 @@
   }
 
   window.EspaceStore = { SCHEMA: SCHEMA, empty: empty, load: load, save: save, validate: validate, normalise: normalise,
-                         onChange: onChange, persist: persist, uid: uid, mode: function () { return mode; } };
+                         onChange: onChange, persist: persist, uid: uid, mode: function () { return mode; },
+                         getMeta: getMeta, setMeta: setMeta, deleteMeta: deleteMeta };
 })();

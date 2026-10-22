@@ -56,10 +56,12 @@ server/                serveur des comptes en ligne (Node.js sans dépendance, p
 tests/
   unit/                tests des moteurs (node --test), exemples officiels et calculs à la main
   server/              tests du serveur des comptes : WebAuthn, stockage, API par HTTP
+  e2e/comptes.mjs      parcours des comptes sur les brouillons, contre un serveur de test (deux appareils, clé d'accès virtuelle)
   e2e/verifier.mjs     tests dans un vrai navigateur, accessibilité (axe-core), captures d'écran
   e2e/installer-axe.sh installe axe-core, version fixée (outil de test, non publié)
 documentation/         ce dossier
-build.py               générateur : content/ + src/ + data/ → docs/ ; typographie française (espaces insécables) des pages fr et ca-fr
+build.py               générateur : content/ + src/ + data/ → docs/ ; typographie française (espaces insécables) des pages fr et ca-fr ;
+                       OF_DRAFTS=1 : pages en brouillon (comptes en ligne) dans brouillons/, jamais publié
 docs/                  site généré, publié par GitHub Pages (ne jamais modifier à la main)
 ```
 

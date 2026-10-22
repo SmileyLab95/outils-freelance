@@ -1,5 +1,21 @@
 # Journal des modifications
 
+## 2026-10-22 — Comptes en ligne : écrans de connexion et synchronisation de l'Espace (étape C4), en brouillon
+
+- Page « Mon compte » (`/fr/compte/`) : connexion sans mot de passe (lien par email ou clé d'accès), code de
+  récupération sur le premier appareil, ouverture sur un nouvel appareil, synchronisation et conflits, appareils
+  connectés, clés d'accès, export, déconnexion, suppression du compte.
+- Chiffrement sur l'appareil (`engines/compte-crypto.js`) et synchronisation (`tools/compte-sync.js`) : l'Espace est
+  fusionné sur l'appareil et envoyé chiffré ; un coffre modifié ou une version plus ancienne renvoyés par le serveur
+  sont refusés.
+- Espace : synchronisation à l'ouverture et après chaque modification, ligne d'état (version en brouillon) ; le
+  stockage accepte les données synchronisées et prévient l'Espace ouvert. Rien ne change pour l'Espace local.
+- Générateur : pages en brouillon (`OF_DRAFTS=1`, dossier `brouillons/`, jamais publié) ; décision D25.
+- Tests : `compte-crypto.test.mjs`, parcours `tests/e2e/comptes.mjs` (37 vérifications, deux appareils, clé d'accès
+  virtuelle, serveur compromis) ; suite complète (249 tests unitaires, 27 tests serveur,
+  2 434 vérifications navigateur du site public).
+- **Rien n'est en ligne** : hébergeur, domaine et service d'envoi d'emails restent à décider.
+
 ## 2026-10-22 — Comptes en ligne : serveur (étape C3), sans mise en ligne
 
 - Spécification [23](documentation/23-serveur-et-connexion.md) et décision D15 : synchronisation chiffrée de bout en

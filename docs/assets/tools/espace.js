@@ -1216,8 +1216,9 @@
     editing = null;
     render();
   });
-  // Modification enregistrée dans un autre onglet : reprendre ses données, en gardant le brouillon en cours d'édition ici.
-  S.onChange(function () {
+  // Modification enregistrée dans un autre onglet, ou reçue par la synchronisation des comptes : reprendre les données,
+  // en gardant le brouillon en cours d'édition ici.
+  function reload() {
     S.load().then(function (fresh) {
       if (editing) {
         var kept = false;
@@ -1228,7 +1229,9 @@
       var active = document.activeElement;
       if (!(active && view.contains(active) && /INPUT|TEXTAREA|SELECT/.test(active.tagName))) render(true);
     });
-  });
+  }
+  S.onChange(reload);
+  window.addEventListener("of-espace-saved", function (e) { if (e.detail && e.detail.origin === "sync") reload(); });
   S.load().then(function (loaded) {
     data = loaded;
     app.removeAttribute("data-loading");

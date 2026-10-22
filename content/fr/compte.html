@@ -1,0 +1,123 @@
+<!--{
+  "id": "compte",
+  "slug": "compte/",
+  "title": "Mon compte : Espace entrepreneur sur tous vos appareils",
+  "description": "Connectez-vous sans mot de passe et retrouvez votre Espace entrepreneur sur tous vos appareils, chiffré sur votre appareil avant d'être envoyé.",
+  "draft": true,
+  "api": true,
+  "scripts": ["engines/espace-sync.js", "engines/compte-crypto.js", "tools/espace-store.js", "tools/compte-sync.js", "tools/compte.js"]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Compte gratuit · chiffré de bout en bout</span>
+    <h1>Mon compte</h1>
+    <p class="lead">Retrouvez votre Espace entrepreneur sur tous vos appareils. Vos données sont chiffrées sur votre appareil avant d'être envoyées : personne d'autre que vous ne peut les lire, pas même nous.</p>
+    <ul class="trust"><li>Sans mot de passe</li><li>Chiffré sur votre appareil</li><li>Export et suppression à tout moment</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout wide-left">
+    <div class="card account-card">
+      <p class="notice" id="c-msg" role="status" aria-live="polite" hidden></p>
+
+      <div id="s-loading"><p>Chargement…</p></div>
+
+      <div id="s-signin" hidden>
+        <h2 tabindex="-1">Se connecter ou créer un compte</h2>
+        <form id="f-signin" onsubmit="return false" novalidate>
+          <div class="field full"><label for="c-email">Adresse email</label>
+            <input type="email" id="c-email" autocomplete="email" required aria-describedby="c-email-hint">
+            <span class="hint" id="c-email-hint">Pas de mot de passe : nous vous envoyons un lien de connexion, valable 15 minutes. Le compte est créé à la première connexion.</span></div>
+          <button class="btn btn-primary" type="submit" id="b-link">Recevoir un lien de connexion</button>
+        </form>
+        <div id="passkey-signin" hidden>
+          <p class="small muted" style="margin: 18px 0 8px;">Vous avez déjà ajouté une clé d'accès (empreinte, visage, code de l'appareil) ?</p>
+          <button class="btn btn-ghost" type="button" id="b-passkey">Se connecter avec une clé d'accès</button>
+        </div>
+      </div>
+
+      <div id="s-sent" hidden>
+        <h2 tabindex="-1">Consultez votre boîte de réception</h2>
+        <p>Un lien de connexion a été envoyé à <b id="sent-email"></b>. Il est valable 15 minutes et ne sert qu'une fois. Pensez à regarder dans les courriers indésirables.</p>
+        <button class="btn btn-ghost" type="button" id="b-other-email">Utiliser une autre adresse</button>
+      </div>
+
+      <div id="s-setup" hidden>
+        <h2 tabindex="-1">Protégez votre compte avec un code de récupération</h2>
+        <p>Votre Espace sera chiffré sur cet appareil avant d'être envoyé. Pour l'ouvrir sur un autre appareil, il faudra ce <b>code de récupération</b>. Nous ne le connaissons pas : <b>sans lui, vos données sauvegardées ne pourront pas être récupérées</b> sur un nouvel appareil.</p>
+        <button class="btn btn-primary" type="button" id="b-new-code">Créer mon code de récupération</button>
+        <div id="setup-code" hidden>
+          <p class="label" style="margin: 18px 0 6px;">Votre code de récupération</p>
+          <p class="recovery-code" id="code-text"></p>
+          <div class="btn-row">
+            <button class="btn btn-ghost" type="button" id="b-copy-code">Copier</button>
+            <button class="btn btn-ghost" type="button" id="b-save-code">Enregistrer (.txt)</button>
+            <button class="btn btn-ghost" type="button" id="b-print-code">Imprimer</button>
+          </div>
+          <form id="f-confirm" onsubmit="return false" novalidate style="margin-top: 18px;">
+            <div class="field full"><label for="c-confirm">Pour vérifier que vous l'avez noté, saisissez ses 4 derniers caractères</label>
+              <input type="text" id="c-confirm" maxlength="4" autocomplete="off" autocapitalize="characters" spellcheck="false" class="mono"></div>
+            <div class="field full"><label class="check"><input type="checkbox" id="c-kept"><span>J'ai rangé ce code en lieu sûr (gestionnaire de mots de passe, papier)</span></label></div>
+            <button class="btn btn-primary" type="submit" id="b-activate">Activer la sauvegarde chiffrée</button>
+          </form>
+        </div>
+      </div>
+
+      <div id="s-unlock" hidden>
+        <h2 tabindex="-1">Ouvrez votre Espace sur cet appareil</h2>
+        <p>Saisissez le code de récupération créé sur votre premier appareil. Il ne quitte pas cet appareil : il sert à ouvrir la clé de votre Espace.</p>
+        <form id="f-unlock" onsubmit="return false" novalidate>
+          <div class="field full"><label for="c-code">Code de récupération</label>
+            <input type="text" id="c-code" autocomplete="off" autocapitalize="characters" spellcheck="false" class="mono" aria-describedby="c-code-hint">
+            <span class="hint" id="c-code-hint">28 caractères, avec ou sans tirets.</span></div>
+          <button class="btn btn-primary" type="submit" id="b-unlock">Ouvrir mon Espace</button>
+        </form>
+        <details style="margin-top: 16px;"><summary>J'ai perdu mon code</summary>
+          <p class="small">Sans le code, les données sauvegardées ne peuvent pas être déchiffrées : c'est ce qui garantit que personne d'autre ne peut les lire. Si un de vos appareils est encore connecté, votre Espace y est toujours disponible : exportez-en une sauvegarde depuis l'Espace. Vous pouvez ensuite supprimer ce compte et en recréer un avec la même adresse.</p></details>
+      </div>
+
+      <div id="s-account" hidden>
+        <h2 tabindex="-1">Votre compte</h2>
+        <p>Connecté avec <b id="acc-email"></b>.</p>
+        <div class="notice ok" id="sync-status" role="status" aria-live="polite">–</div>
+        <ul id="sync-conflicts" class="conflicts" hidden></ul>
+        <div class="btn-row" style="margin-top: 12px;">
+          <button class="btn btn-primary" type="button" id="b-sync">Synchroniser maintenant</button>
+          <a class="btn btn-ghost" href="{{link:espace}}">Ouvrir mon Espace</a>
+        </div>
+
+        <h3>Appareils connectés</h3>
+        <ul class="device-list" id="acc-sessions"></ul>
+
+        <h3>Clés d'accès</h3>
+        <p class="small muted">Une clé d'accès (empreinte, visage, code de l'appareil) permet de vous connecter sans email.</p>
+        <ul class="device-list" id="acc-passkeys"></ul>
+        <button class="btn btn-ghost" type="button" id="b-add-passkey">Ajouter une clé d'accès</button>
+
+        <h3>Vos données</h3>
+        <div class="btn-row">
+          <button class="btn btn-ghost" type="button" id="b-export">Exporter mes données du serveur</button>
+          <button class="btn btn-ghost" type="button" id="b-logout">Se déconnecter de cet appareil</button>
+        </div>
+        <details class="danger-zone" style="margin-top: 18px;"><summary>Supprimer mon compte</summary>
+          <p class="small">Le coffre chiffré, la clé enveloppée, les sessions et les clés d'accès sont effacés du serveur, définitivement. L'Espace de cet appareil reste sur cet appareil.</p>
+          <label class="check"><input type="checkbox" id="c-delete-ok"><span>Je comprends que la suppression est définitive</span></label>
+          <button class="btn btn-danger" type="button" id="b-delete" style="margin-top: 10px;">Supprimer mon compte</button>
+        </details>
+      </div>
+    </div>
+
+    <div class="results">
+      <div class="card">
+        <h2 class="label" style="margin: 0 0 8px;">Comment vos données sont protégées</h2>
+        <ul class="small" style="margin: 0; padding-left: 18px;">
+          <li>Votre Espace est chiffré sur votre appareil, avec une clé que seul votre code de récupération permet d'ouvrir.</li>
+          <li>Le serveur ne garde qu'un bloc illisible, votre adresse email et la liste de vos appareils connectés.</li>
+          <li>Sans compte, l'Espace reste disponible et vos données restent sur votre appareil.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>

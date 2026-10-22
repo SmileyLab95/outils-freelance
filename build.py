@@ -12,17 +12,23 @@ Sources :
 Chaque page commence par ses métadonnées en JSON dans un commentaire HTML (voir documentation/03-architecture.md).
 
 Usage : python3 build.py
+        OF_DRAFTS=1 python3 build.py   construit aussi les pages en brouillon (« draft »), dans brouillons/ (jamais
+                                       publié) ; OF_API_URL : adresse de l'API des comptes (défaut /api/v1)
 """
 import hashlib
 import html
 import json
+import os
 import re
 import shutil
 from datetime import date
 from pathlib import Path
 
 ROOT = Path(__file__).parent
-SRC, CONTENT, OUT = ROOT / "src", ROOT / "content", ROOT / "docs"
+# Brouillons (comptes en ligne avant leur ouverture, documentation/23-serveur-et-connexion.md § 5) : construits
+# seulement à la demande, dans un dossier séparé, ignoré par git ; le site publié (docs/) ne les contient jamais.
+DRAFTS = os.environ.get("OF_DRAFTS") == "1"
+SRC, CONTENT, OUT = ROOT / "src", ROOT / "content", ROOT / ("brouillons" if DRAFTS else "docs")
 SITE = json.loads((ROOT / "config" / "site.json").read_text(encoding="utf-8"))
 LOCALES = json.loads((ROOT / "config" / "locales.json").read_text(encoding="utf-8"))
 SITE_URL = SITE["site_url"].rstrip("/")  # ex. https://smileylab95.github.io/outils-freelance
@@ -102,6 +108,8 @@ def load_sections():
             if path.name == site.get("offer", {}).get("cta"):
                 continue
             meta, content = read_page(path)
+            if meta.get("draft") and not DRAFTS:
+                continue
             if meta["id"] in pages:
                 raise SystemExit(f"{path} : identifiant « {meta['id']} » déjà utilisé dans {loc['dir']}")
             pages[meta["id"]] = {"meta": meta, "content": content, "file": path}
@@ -490,7 +498,11 @@ def render(layout, sections, section, page_id, rules, kit_cta):
 
     # Pages en français : typographie du texte que les scripts des outils produisent (engines/typo-fr.js).
     base_scripts = ["engines/typo-fr.js", "app.js"] if loc["lang"].startswith("fr") else ["app.js"]
-    scripts = "".join(f'<script src="{asset_url(s)}" defer></script>' for s in [*base_scripts, *meta.get("scripts", [])])
+    # Scripts réservés aux brouillons (synchronisation des comptes) : absents du site publié.
+    page_scripts = [*meta.get("scripts", []), *(meta.get("draft_scripts", []) if DRAFTS else [])]
+    scripts = "".join(f'<script src="{asset_url(s)}" defer></script>' for s in [*base_scripts, *page_scripts])
+    if DRAFTS and (meta.get("api") or meta.get("draft_scripts")):
+        scripts = f"<script>window.OF_API={json.dumps(os.environ.get('OF_API_URL', '/api/v1'))};</script>" + scripts
     # Scripts chargés à la demande par la page (ex. génération du PDF Factur-X) : adresses avec leur empreinte de version.
     if meta.get("lazy_scripts"):
         lazy = {name: asset_url(name) for name in meta["lazy_scripts"]}
@@ -505,7 +517,7 @@ def render(layout, sections, section, page_id, rules, kit_cta):
         "title": esc(meta["title"]),
         "description": esc(meta["description"]),
         "canonical": url,
-        "robots": "noindex" if meta.get("noindex") else "index, follow",
+        "robots": "noindex" if meta.get("noindex") or meta.get("draft") else "index, follow",
         "og_image": f"{SITE_URL}/assets/img/" + (f"og-{loc['key']}.png" if (ROOT / "src" / "assets" / "img" / f"og-{loc['key']}.png").exists() else "og.png"),
         "gsv": SITE.get("google_site_verification", ""),
         "css": asset_url("style.css"),
@@ -628,7 +640,7 @@ def main():
             target = OUT / (path if path.endswith(".html") else path + "index.html")
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_text(html_out, encoding="utf-8")
-            if not meta.get("noindex"):
+            if not meta.get("noindex") and not meta.get("draft"):
                 urls.append((absolute(path), meta.get("priority", 0.7)))
         print(f"  {section['loc']['key']:7} {len(section['pages'])} pages")
 

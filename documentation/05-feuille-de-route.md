@@ -138,10 +138,14 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   de bout en bout, connexion par lien envoyé par email et par clé d'accès, sans mot de passe. Serveur `server/` sans
   dépendance, 27 tests (dont 17 failles réintroduites, toutes détectées). **Pas de mise en ligne** : Ismail a choisi le
   22/10/2026 de décider plus tard de l'hébergeur et du nom de domaine.
-- **Prochaines actions de Claude** : **étape C4**, écrans de connexion et synchronisation de l'Espace (page
-  `/fr/compte/` construite seulement en brouillon, parcours navigateur contre un serveur de test) ; puis recouvrement
-  en justice au Royaume-Uni, aux États-Unis et au Canada (besoin P2, spécification d'abord) ; assurance et compte
-  professionnel hors de France (P2) ; taux du crédit pour
+- **Comptes en ligne, écrans et synchronisation (étape C4, 22/10/2026)** : page « Mon compte » (connexion par lien
+  ou clé d'accès, code de récupération, nouvel appareil, appareils, export, suppression) et synchronisation chiffrée
+  de l'Espace, à l'ouverture et après chaque modification ; construits **en brouillon** (`OF_DRAFTS=1`, D25) et
+  vérifiés par un parcours navigateur de 37 contrôles contre un serveur de test. **Rien n'est en ligne** : il manque
+  l'hébergeur, le domaine et le service d'envoi d'emails (décisions d'Ismail, puis étape C5).
+- **Prochaines actions de Claude** : recouvrement en justice au Royaume-Uni, aux États-Unis et au Canada (besoin P2,
+  spécification d'abord) ; assurance et compte professionnel hors de France (P2) ; comptes : adaptateur
+  PostgreSQL et sauvegardes dès que l'hébergeur est choisi ; taux du crédit pour
   dividendes de la Saskatchewan et du Nunavut dès qu'ils sont publiés (formulaires 2026) ;
   trouver la cause du contrôle de contraste intermittent de l'Espace ; revérifier les grilles des prestataires de
   paiement (Stripe, Mollie) quand Ismail décidera ([17](17-offres-et-paiements.md)) ; guide du recouvrement dès que
@@ -310,7 +314,7 @@ Objectif : un compte gratuit qui rend service dès le premier jour.
 - [ ] Modèle de données : utilisateur, entreprise, clients, devis, factures, lignes, paiements, échéances, documents
 - [x] Synchronisation entre appareils : moteur de fusion du schéma 2, testé sans serveur *(étape C2 de [12](12-specification-comptes.md) ; serveur et interface aux étapes C3 et C4)*
 - [x] Serveur des comptes (étape C3, [23](23-serveur-et-connexion.md)) : connexion par lien et par clé d'accès, coffre chiffré, testé ; mise en ligne après le choix de l'hébergeur
-- [ ] Écrans de connexion et synchronisation de l'Espace (étape C4)
+- [x] Écrans de connexion et synchronisation de l'Espace (étape C4, en brouillon jusqu'à l'ouverture des comptes)
 - [ ] Sécurité : données cloisonnées par utilisateur dans la base, sauvegardes quotidiennes, journal d'audit, limites de requêtes
 - [ ] Juridique : CGU, CGV, politique de confidentialité, registre des traitements, contrats de sous-traitance
 - [ ] **[Ismail]** Relecture des CGU et CGV par un avocat ; assurance responsabilité civile professionnelle
