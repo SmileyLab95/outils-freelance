@@ -10,7 +10,7 @@
   `documentation/07-plan-de-developpement.md`. Travailler sur l'étape en cours, sauf demande contraire d'Ismail.
 - **Méthode** : suivre `documentation/04-methode-de-travail.md` (circuit d'un outil, définition de « terminé »).
   Aucun chiffre sans source dans `data/rules/` ; aucun chiffre, témoignage ou statistique inventé.
-- **Vérifier avant de publier** : `python3 build.py`, `node --test tests/unit/*.test.mjs`,
+- **Vérifier avant de publier** : `python3 build.py`, `node --test tests/unit/*.test.mjs`, `node --test tests/server/*.test.mjs`,
   `node tests/e2e/verifier.mjs <dossier de captures>` (accessibilité comprise : axe-core installé par
   `sh tests/e2e/installer-axe.sh`) ; relire les captures d'écran. Si la facturation change :
   `node tests/facturx/generer.mjs <dossier>` puis `python3 tests/facturx/valider.py <dossier> --controle --pdf`.

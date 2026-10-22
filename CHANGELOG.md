@@ -1,5 +1,17 @@
 # Journal des modifications
 
+## 2026-10-22 — Comptes en ligne : serveur (étape C3), sans mise en ligne
+
+- Spécification [23](documentation/23-serveur-et-connexion.md) et décision D15 : synchronisation chiffrée de bout en
+  bout (coffre chiffré sur l'appareil, clé du compte enveloppée par un code de récupération), connexion par lien
+  envoyé par email (15 minutes, usage unique) et par clé d'accès, sans mot de passe ; sessions de 30 jours.
+- Serveur `server/` (Node.js sans dépendance) : API `/api/v1`, vérification WebAuthn (ES256, RS256), stockage en
+  mémoire et SQLite, limites de requêtes, protection contre les requêtes forgées, export et suppression du compte.
+- Tests `tests/server/` (27) : authentificateur logiciel, contrat du stockage, API par HTTP (aucun accès entre
+  comptes) ; 17 failles réintroduites, toutes détectées ; revue de sécurité (deux corrections).
+- **Rien n'est en ligne** : le choix de l'hébergeur et du domaine a été reporté par Ismail. Le site public est
+  inchangé.
+
 ## 2026-10-22 — Formulaire W-8BEN pour un client américain (France, Royaume-Uni, Canada)
 
 - Pages « client étranger » de la France, du Royaume-Uni et du Canada (anglais et français) : section et question

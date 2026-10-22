@@ -133,16 +133,24 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   du Canada (anglais et français) : à qui le remettre, absence de retenue pour un travail fait hors des États-Unis,
   retenue de 30 % sans formulaire, W-8BEN-E pour une société, durée de validité ; trois règles communes (IRS). Les
   besoins P2 « Facturer » et « Impôts et cotisations » sont couverts dans les quatre pays.
-- **Prochaines actions de Claude** : recouvrement en justice au Royaume-Uni, aux États-Unis et au Canada (besoin P2,
-  spécification d'abord) ; assurance et compte professionnel hors de France (P2) ; recouvrement en justice au Royaume-Uni, aux États-Unis et au Canada ; taux du crédit pour
+- **Comptes en ligne, serveur (étape C3, 22/10/2026)** : à la demande d'Ismail (« le login pour les utilisateurs et
+  leurs espaces »), spécification [23](23-serveur-et-connexion.md) et décision technique D15 : synchronisation chiffrée
+  de bout en bout, connexion par lien envoyé par email et par clé d'accès, sans mot de passe. Serveur `server/` sans
+  dépendance, 27 tests (dont 17 failles réintroduites, toutes détectées). **Pas de mise en ligne** : Ismail a choisi le
+  22/10/2026 de décider plus tard de l'hébergeur et du nom de domaine.
+- **Prochaines actions de Claude** : **étape C4**, écrans de connexion et synchronisation de l'Espace (page
+  `/fr/compte/` construite seulement en brouillon, parcours navigateur contre un serveur de test) ; puis recouvrement
+  en justice au Royaume-Uni, aux États-Unis et au Canada (besoin P2, spécification d'abord) ; assurance et compte
+  professionnel hors de France (P2) ; taux du crédit pour
   dividendes de la Saskatchewan et du Nunavut dès qu'ils sont publiés (formulaires 2026) ;
   trouver la cause du contrôle de contraste intermittent de l'Espace ; revérifier les grilles des prestataires de
   paiement (Stripe, Mollie) quand Ismail décidera ([17](17-offres-et-paiements.md)) ; guide du recouvrement dès que
   les textes sont lisibles ; veille réglementaire de décembre (dont la version de Factur-X et l'annexe A de XP
-  Z12-012 pour le BT-32 en franchise, et la question 13 de [pays/ca.md](pays/ca.md) sur la TVQ). Les étapes C3
-  (serveur) et C4 (interface des comptes) attendent le choix de l'hébergeur.
+  Z12-012 pour le BT-32 en franchise, et la question 13 de [pays/ca.md](pays/ca.md) sur la TVQ). La mise en ligne
+  des comptes attend le choix de l'hébergeur et du domaine.
 - **En attente d'Ismail** (pas urgent) : structure juridique avec un comptable ; choix de l'hébergeur et budget pour
-  les comptes en ligne (comparatif [13](13-comparatif-hebergeurs.md), § 6) ; nom de domaine à choisir avant l'étape C4
+  les comptes en ligne (comparatif [13](13-comparatif-hebergeurs.md), § 6 ; reporté par Ismail le 22/10/2026, le
+  serveur est prêt) ; nom de domaine à choisir avant la mise en ligne des comptes
   ([13](13-comparatif-hebergeurs.md), § 5) ; outil de mesure d'audience ([16](16-mesure-audience.md)) ; prix de l'offre « Pro » et prestataire de paiement
   ([17](17-offres-et-paiements.md) : 5 € HT par mois ou 50 € HT par an, Stripe) ; à la fin,
   Gumroad.
@@ -301,6 +309,8 @@ Objectif : un compte gratuit qui rend service dès le premier jour.
 - [ ] Authentification : email avec lien de connexion, connexion Google, double authentification
 - [ ] Modèle de données : utilisateur, entreprise, clients, devis, factures, lignes, paiements, échéances, documents
 - [x] Synchronisation entre appareils : moteur de fusion du schéma 2, testé sans serveur *(étape C2 de [12](12-specification-comptes.md) ; serveur et interface aux étapes C3 et C4)*
+- [x] Serveur des comptes (étape C3, [23](23-serveur-et-connexion.md)) : connexion par lien et par clé d'accès, coffre chiffré, testé ; mise en ligne après le choix de l'hébergeur
+- [ ] Écrans de connexion et synchronisation de l'Espace (étape C4)
 - [ ] Sécurité : données cloisonnées par utilisateur dans la base, sauvegardes quotidiennes, journal d'audit, limites de requêtes
 - [ ] Juridique : CGU, CGV, politique de confidentialité, registre des traitements, contrats de sous-traitance
 - [ ] **[Ismail]** Relecture des CGU et CGV par un avocat ; assurance responsabilité civile professionnelle

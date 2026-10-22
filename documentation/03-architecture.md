@@ -52,8 +52,10 @@ src/
     engines/           moteurs de calcul purs, testés unitairement (aucun accès à la page)
     tools/             un script par outil : relie le formulaire au moteur
     img/               images et icônes
+server/                serveur des comptes en ligne (Node.js sans dépendance, pas encore en ligne) : server/README.md
 tests/
   unit/                tests des moteurs (node --test), exemples officiels et calculs à la main
+  server/              tests du serveur des comptes : WebAuthn, stockage, API par HTTP
   e2e/verifier.mjs     tests dans un vrai navigateur, accessibilité (axe-core), captures d'écran
   e2e/installer-axe.sh installe axe-core, version fixée (outil de test, non publié)
 documentation/         ce dossier
