@@ -5,7 +5,8 @@
  * décrivent la situation (mémorisée s'ils portent data-save) ; un point marqué data-when="clé=valeur", "clé" ou
  * "!clé" (plusieurs conditions séparées par des espaces : toutes requises) n'est montré et compté que si la situation
  * y répond, et tout élément marqué data-show-when n'est montré que dans ce cas. Un point data-optional (recommandé,
- * non obligatoire) est montré mais n'entre pas dans le compte.
+ * non obligatoire) est montré mais n'entre pas dans le compte. Un intertitre (li.cl-group, sans case) n'est jamais
+ * compté. Avec data-persist="clé" sur la liste, les cases cochées sont mémorisées (étapes repérées par data-id).
  */
 (function () {
   "use strict";
@@ -61,6 +62,23 @@
   if (filters) {
     window.OF.persistForm(filters, "checklist");
     filters.addEventListener("change", update);
+  }
+  // Cases mémorisées : une démarche faite reste cochée d'une visite à l'autre.
+  var persist = list.getAttribute("data-persist");
+  if (persist) {
+    var done = window.OF.load(persist, {});
+    Array.prototype.forEach.call(list.querySelectorAll("li[data-id] input[type=checkbox]"), function (box) {
+      box.checked = !!done[box.closest("li").getAttribute("data-id")];
+    });
+    list.addEventListener("change", function (e) {
+      var li = e.target.closest("li[data-id]");
+      if (!li || e.target.type !== "checkbox") return;
+      var id = li.getAttribute("data-id");
+      done[id] = e.target.checked;
+      window.OF.save(persist, done);
+      // Variantes d'une même étape selon la situation (même data-id) : cochées ensemble.
+      Array.prototype.forEach.call(list.querySelectorAll('li[data-id="' + id + '"] input[type=checkbox]'), function (b) { b.checked = e.target.checked; });
+    });
   }
   list.addEventListener("change", update);
   update();

@@ -20,6 +20,7 @@
     {
       "label": "Statut et revenus",
       "items": [
+        "start",
         "tax",
         "set-aside",
         "calendar",

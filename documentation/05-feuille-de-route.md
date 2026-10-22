@@ -109,9 +109,10 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   Agirc-Arrco (France), assurance-emploi des salariés (Canada), retraite d'entreprise (Royaume-Uni).
 - **Comparateur de statuts (22/10/2026)** : décote et déduction de 10 % officielles, par un moteur d'impôt commun
   avec « Salarié ou freelance ? » (exemple : EURL à 50 %, 28 070 € au lieu de 27 520 €).
-- **Prochaines actions de Claude** : besoins P2 suivants de
-  [02](02-besoins-clients.md) (checklist de création d'entreprise dans les quatre pays, jauges de seuils hors de
-  France), spécification d'abord ; taux du crédit pour
+- **Checklist « Créer sa micro-entreprise » (22/10/2026)** : les démarches de création en France, dans l'ordre,
+  chacune sourcée (sept règles nouvelles), avec la progression gardée sur l'appareil ([20](20-checklist-creation.md)).
+- **Prochaines actions de Claude** : checklist de création au Royaume-Uni, aux États-Unis et au Canada
+  ([20](20-checklist-creation.md) § 3, règles à rechercher d'abord) ; jauges de seuils hors de France ; taux du crédit pour
   dividendes de la Saskatchewan et du Nunavut dès qu'ils sont publiés (formulaires 2026) ;
   trouver la cause du contrôle de contraste intermittent de l'Espace ; revérifier les grilles des prestataires de
   paiement (Stripe, Mollie) quand Ismail décidera ([17](17-offres-et-paiements.md)) ; guide du recouvrement dès que
@@ -238,6 +239,9 @@ Objectif : un site mesuré, sous sa propre marque, qui commence à rapporter, et
 - [x] Décote dans le comparateur de statuts français : moteur commun `engines/ir-fr.js` (même impôt que « Salarié ou
       freelance ? »)
 - [ ] Simulateur PER : décote non comptée (elle dépend de la situation de famille, que le simulateur ne demande pas)
+- [ ] Checklist de création, 4 pays : besoin P2, spécification [20](20-checklist-creation.md)
+  - [x] France : `/fr/creer-sa-micro-entreprise/` (19 démarches au plus, sourcées, cases mémorisées)
+  - [ ] Royaume-Uni, États-Unis, Canada (recherches des règles à faire, § 3)
 
 ### 1.5 Préparer la plateforme
 

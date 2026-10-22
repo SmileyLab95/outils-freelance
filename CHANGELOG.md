@@ -1,5 +1,24 @@
 # Journal des modifications
 
+## 2026-10-22 — Checklist « Créer sa micro-entreprise » (France)
+
+- Nouvelle page `/fr/creer-sa-micro-entreprise/` (identifiant `start`, en tête du menu « Statut et revenus ») : les
+  démarches de création, dans l'ordre (avant de se déclarer, se déclarer, premières factures, première année), avec
+  pour chacune une explication, un lien vers l'outil du site qui aide à la faire et ses sources officielles. La
+  situation (vente de marchandises, ACRE) montre les étapes concernées ; les cases cochées et la situation restent
+  sur l'appareil (17 à 19 démarches selon la situation, compte bancaire dédié « conseillé », hors du compte).
+- Sept règles sourcées ajoutées : activités exclues de la micro-entreprise (ministère de l'Économie), domiciliation
+  au domicile (C. com., art. L123-10), guichet unique des formalités (ministère, Urssaf), déclaration du chiffre
+  d'affaires en ligne même nul (CSS, art. L613-8), mention « EI » (C. com., art. R526-27), déclaration initiale de
+  CFE 1447-C-SD (impots.gouv.fr), report sur la 2042-C-PRO (impots.gouv.fr). Montant de la pénalité pour une
+  déclaration manquante non publié : les pages de l'Urssaf ne concordent pas (50 € ou 58 €).
+- `tools/checklist.js` : cases mémorisées (`data-persist`), variantes d'une même étape cochées ensemble, intertitres
+  (`li.cl-group`). Spécification `documentation/20-checklist-creation.md`, décision D22.
+- Tests : unitaires (chaque étape sourcée et citée, chaque chiffre, date ou formulaire comparé à sa règle, nombre
+  d'étapes par situation ; 7 erreurs réintroduites et détectées) ; parcours navigateur (situation, cases retrouvées
+  après rechargement, progression, accessibilité) ; suite complète (215 tests unitaires, 2 306 vérifications
+  navigateur).
+
 ## 2026-10-22 — Comparateur de statuts : décote et déduction de 10 % officielles
 
 - Nouveau moteur commun `engines/ir-fr.js` (impôt d'une personne seule : barème des revenus de 2025, décote,

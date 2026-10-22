@@ -1,0 +1,92 @@
+<!--{
+  "id": "start",
+  "slug": "creer-sa-micro-entreprise/",
+  "title": "Créer sa micro-entreprise : la checklist des démarches",
+  "description": "Toutes les démarches pour créer sa micro-entreprise en 2026, dans l'ordre : guichet unique, ACRE, versement libératoire, CFE, facturation. Cochez au fur et à mesure.",
+  "menu": "Créer sa micro-entreprise",
+  "icon": "🚀",
+  "blurb": "Les démarches de création, dans l'ordre, à cocher au fur et à mesure.",
+  "scripts": ["tools/checklist.js"],
+  "rules": "fr",
+  "sources": ["micro_activites_exclues", "micro_plafond_ca_services", "micro_plafond_ca_vente", "domiciliation_domicile", "creation_guichet_unique", "acre_conditions", "versement_liberatoire_option", "vl_rfr_plafond_par_part_2026", "micro_declaration_ca", "mention_ei_documents", "mentions_obligatoires_facture", "mention_franchise_tva", "livre_recettes_micro", "facturation_electronique_calendrier", "plateformes_agreees", "assurance_rc_pro", "assurance_decennale", "assurance_rc_auto", "compte_dedie_micro", "compte_dedie_urssaf", "calendrier_urssaf_declarations", "cfe_declaration_initiale", "cfe_echeance", "tva_franchise_seuils", "micro_declaration_revenus"],
+  "priority": 0.9,
+  "faq": [
+    ["Comment créer sa micro-entreprise ?", "En ligne, sur le guichet unique des formalités des entreprises (formalites.entreprises.gouv.fr) : la déclaration de début d'activité est gratuite, sauf pour les agents commerciaux. Préparez une pièce d'identité, votre numéro de sécurité sociale et une déclaration de non-condamnation. Vous recevez ensuite votre numéro SIRET, puis vous créez votre espace sur autoentrepreneur.urssaf.fr pour déclarer votre chiffre d'affaires."],
+    ["Combien coûte la création d'une micro-entreprise ?", "La déclaration sur le guichet unique est gratuite, sauf l'immatriculation des agents commerciaux. Les services d'accompagnement payants sont facultatifs. Ensuite, vos cotisations sont calculées sur le chiffre d'affaires encaissé : sans chiffre d'affaires, vous ne payez pas de cotisations, mais vous déclarez quand même 0 €."],
+    ["Quand demander l'ACRE ?", "Au plus tard 60 jours après le début de votre activité, si vous remplissez l'une des conditions (demandeur d'emploi indemnisé, moins de 26 ans, bénéficiaire de certains minima sociaux, etc.). Elle n'est pas automatique : vous pouvez la demander dans la déclaration de création, puis envoyer les justificatifs à l'Urssaf."],
+    ["Peut-on créer sa micro-entreprise à son domicile ?", "Oui : vous pouvez déclarer votre domicile comme adresse de l'entreprise et y exercer, sauf si une loi ou une clause de votre bail ou du règlement de copropriété l'interdit. Cette déclaration ne change pas la destination du logement."],
+    ["Faut-il déclarer son chiffre d'affaires s'il est nul ?", "Oui : la déclaration mensuelle ou trimestrielle est obligatoire même à 0 €, en ligne. Une déclaration manquante entraîne une pénalité, et l'absence de chiffre d'affaires pendant deux années civiles de suite peut conduire à la radiation."]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Checklist interactive · règles 2026</span>
+    <h1>Créer sa micro-entreprise : les démarches</h1>
+    <p class="lead">Toutes les démarches pour vous lancer en micro-entreprise, dans l'ordre. Cochez celles que vous avez faites : votre progression est gardée sur cet appareil, vous pouvez revenir quand vous voulez.</p>
+    <ul class="trust"><li>De la déclaration à la première année</li><li>Chaque étape sourcée</li><li>Progression mémorisée</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout wide-left">
+    <div class="card">
+      <form id="cl-filters" onsubmit="return false" style="margin-bottom: 4px; padding-bottom: 16px; border-bottom: 1px solid var(--line);">
+        <h2 style="margin: 0 0 10px; font-size: 1.1rem;">Votre situation</h2>
+        <div class="fields">
+          <div class="field full"><label class="check"><input type="checkbox" name="vente" data-save><span>Je vends des marchandises (ou je fournis un logement)</span></label></div>
+          <div class="field full"><label class="check"><input type="checkbox" name="acre" aria-describedby="cl-acre-hint" data-save><span>Je peux bénéficier de l'ACRE</span></label>
+            <span class="hint" id="cl-acre-hint">Par exemple : demandeur d'emploi indemnisé, moins de 26 ans, bénéficiaire de certains minima sociaux.</span></div>
+        </div>
+      </form>
+      <ul class="checklist" id="checklist" data-persist="creation-micro" data-score="{done} démarches sur {total}"
+        data-all="Toutes les démarches sont faites : bonne route !" data-none="Cochez les démarches que vous avez déjà faites."
+        data-missing-one="Il vous reste {missing} démarche." data-missing-many="Il vous reste {missing} démarches.">
+        <li class="cl-group"><h3>Avant de vous déclarer</h3></li>
+        <li data-id="activite" data-rule="micro_activites_exclues"><label><input type="checkbox"><div><strong>Vérifier que votre activité est possible en micro-entreprise</strong><span>Sont exclues notamment les activités agricoles, la plupart des professions libérales réglementées (avocats, notaires…) et les activités immobilières soumises à la TVA immobilière. Certaines activités exigent un diplôme ou une qualification.</span></div></label></li>
+        <li data-id="plafond" data-rule="micro_plafond_ca_services" data-when="!vente"><label><input type="checkbox"><div><strong>Vérifier que votre chiffre d'affaires restera sous 83 600 € par an</strong><span>C'est le plafond de la micro-entreprise pour les prestations de services. Au-delà, le <a href="{{link:structure}}">comparateur de statuts</a> montre les autres choix.</span></div></label></li>
+        <li data-id="plafond" data-rule="micro_plafond_ca_vente" data-when="vente"><label><input type="checkbox"><div><strong>Vérifier que votre chiffre d'affaires restera sous 203 100 € par an</strong><span>C'est le plafond de la micro-entreprise pour la vente de marchandises et la fourniture de logement. Au-delà, le <a href="{{link:structure}}">comparateur de statuts</a> montre les autres choix.</span></div></label></li>
+        <li data-id="adresse" data-rule="domiciliation_domicile"><label><input type="checkbox"><div><strong>Choisir l'adresse de votre entreprise</strong><span>Votre domicile convient, sauf si une loi ou une clause de votre bail ou du règlement de copropriété l'interdit : vérifiez-les.</span></div></label></li>
+        <li data-id="pieces" data-rule="creation_guichet_unique"><label><input type="checkbox"><div><strong>Préparer vos pièces</strong><span>Une pièce d'identité, votre numéro de sécurité sociale et une déclaration de non-condamnation.</span></div></label></li>
+        <li class="cl-group"><h3>Vous déclarer</h3></li>
+        <li data-id="guichet" data-rule="creation_guichet_unique"><label><input type="checkbox"><div><strong>Déclarer votre début d'activité sur le guichet unique</strong><span>En ligne sur formalites.entreprises.gouv.fr. C'est gratuit, sauf l'immatriculation des agents commerciaux. Les services payants d'accompagnement sont facultatifs.</span></div></label></li>
+        <li data-id="acre" data-rule="acre_conditions" data-when="acre"><label><input type="checkbox"><div><strong>Demander l'ACRE au plus tard 60 jours après le début d'activité</strong><span>Elle n'est pas automatique : cochez-la dans la déclaration, puis envoyez vos justificatifs à l'Urssaf. Elle réduit vos cotisations au début.</span></div></label></li>
+        <li data-id="vl" data-rule="versement_liberatoire_option vl_rfr_plafond_par_part_2026"><label><input type="checkbox"><div><strong>Choisir ou non le versement libératoire de l'impôt</strong><span>Possible si votre revenu fiscal de référence ne dépasse pas un plafond (29 315 € par part en 2026), à demander au plus tard 3 mois après la création. Le <a href="{{link:tax}}">simulateur auto-entrepreneur</a> vous aide à comparer.</span></div></label></li>
+        <li data-id="urssaf" data-rule="micro_declaration_ca"><label><input type="checkbox"><div><strong>Créer votre espace sur autoentrepreneur.urssaf.fr</strong><span>Une fois votre numéro SIRET reçu : c'est là que vous déclarez votre chiffre d'affaires et payez vos cotisations.</span></div></label></li>
+        <li class="cl-group"><h3>Dès vos premières factures</h3></li>
+        <li data-id="ei" data-rule="mention_ei_documents"><label><input type="checkbox"><div><strong>Ajouter « EI » à votre nom sur vos documents professionnels</strong><span>Ou « entrepreneur individuel », juste avant ou après votre nom : factures, devis, tarifs, publicités, courriers.</span></div></label></li>
+        <li data-id="factures" data-rule="mentions_obligatoires_facture mention_franchise_tva"><label><input type="checkbox"><div><strong>Facturer avec les mentions obligatoires</strong><span>Dont, en franchise de TVA, la mention « TVA non applicable, art. 293 B du CGI ». Le <a href="{{link:invoice}}">générateur de factures</a> les ajoute pour vous.</span></div></label></li>
+        <li data-id="recettes" data-rule="livre_recettes_micro"><label><input type="checkbox"><div><strong>Tenir un livre des recettes</strong><span>Vos encaissements jour après jour : date, client, nature, montant, mode de paiement, référence de la facture.</span></div></label></li>
+        <li data-id="achats" data-rule="livre_recettes_micro" data-when="vente"><label><input type="checkbox"><div><strong>Tenir aussi un registre des achats</strong><span>Obligatoire en plus pour la vente de marchandises et la fourniture de logement.</span></div></label></li>
+        <li data-id="einvoice" data-rule="facturation_electronique_calendrier plateformes_agreees"><label><input type="checkbox"><div><strong>Pouvoir recevoir des factures électroniques</strong><span>Obligatoire pour toutes les entreprises depuis le 1er septembre 2026 : choisissez une plateforme agréée. Le <a href="{{link:einvoicing}}">guide de la facturation électronique</a> explique le calendrier.</span></div></label></li>
+        <li data-id="assurance" data-rule="assurance_rc_pro assurance_decennale assurance_rc_auto"><label><input type="checkbox"><div><strong>Vérifier les assurances obligatoires pour votre activité</strong><span>Décennale pour les travaux de construction, assurance du véhicule utilisé pour l'activité ; la responsabilité civile professionnelle dépend du métier. Le <a href="{{link:insurance}}">guide de l'assurance</a> fait le point.</span></div></label></li>
+        <li data-id="compte" data-rule="compte_dedie_micro compte_dedie_urssaf" data-optional><label><input type="checkbox"><div><strong>Conseillé : ouvrir un compte bancaire dédié à l'activité</strong><span>Obligatoire si votre chiffre d'affaires dépasse 10 000 € deux années civiles de suite ; un compte personnel réservé à l'activité suffit. Voir le <a href="{{link:bank}}">guide du compte bancaire</a>. Non compté dans la progression.</span></div></label></li>
+        <li class="cl-group"><h3>Pendant la première année</h3></li>
+        <li data-id="declarer" data-rule="micro_declaration_ca calendrier_urssaf_declarations"><label><input type="checkbox"><div><strong>Déclarer votre chiffre d'affaires chaque mois ou chaque trimestre</strong><span>En ligne, même s'il est nul (0 €). Le <a href="{{link:calendar}}">calendrier fiscal</a> donne les dates.</span></div></label></li>
+        <li data-id="cfe" data-rule="cfe_declaration_initiale"><label><input type="checkbox"><div><strong>Déposer la déclaration initiale de CFE (1447-C-SD) avant le 31 décembre</strong><span>Au plus tard le 31 décembre de l'année de création. Pas de CFE à payer cette année-là.</span></div></label></li>
+        <li data-id="impots" data-rule="cfe_echeance"><label><input type="checkbox"><div><strong>Créer votre espace professionnel sur impots.gouv.fr</strong><span>Les avis de CFE ne sont disponibles qu'en ligne, et la messagerie sécurisée sert à écrire au service des impôts.</span></div></label></li>
+        <li data-id="tva" data-rule="tva_franchise_seuils" data-when="!vente"><label><input type="checkbox"><div><strong>Surveiller le seuil de franchise de TVA : 37 500 € par an</strong><span>Pour les prestations de services. Au-delà, vous facturez la TVA à partir du 1er janvier suivant, et dès que vous dépassez 41 250 € dans l'année.</span></div></label></li>
+        <li data-id="tva" data-rule="tva_franchise_seuils" data-when="vente"><label><input type="checkbox"><div><strong>Surveiller le seuil de franchise de TVA : 85 000 € par an</strong><span>Pour la vente de marchandises. Au-delà, vous facturez la TVA à partir du 1er janvier suivant, et dès que vous dépassez 93 500 € dans l'année.</span></div></label></li>
+        <li data-id="revenus" data-rule="micro_declaration_revenus"><label><input type="checkbox"><div><strong>Reporter votre chiffre d'affaires sur votre déclaration de revenus</strong><span>Chaque printemps, sur la déclaration complémentaire 2042-C-PRO, même si vous avez choisi le versement libératoire.</span></div></label></li>
+      </ul>
+    </div>
+    <div class="results">
+      <div class="card">
+        <div class="label" style="margin-bottom: 8px;">Vos démarches</div>
+        <div class="progress"><div id="cl-bar"></div></div>
+        <div role="status" aria-atomic="true">
+          <p style="margin: 12px 0 0; font-weight: 700;" id="cl-score">0 démarches sur 17</p>
+          <p class="notice warn" id="cl-msg" style="margin: 12px 0 0;">Cochez les démarches que vous avez déjà faites.</p>
+        </div>
+        <p class="small muted" style="margin: 12px 0 0;">Vos réponses et vos cases cochées restent sur cet appareil : rien n'est envoyé.</p>
+      </div>
+      <a class="btn btn-primary btn-block" href="{{link:tax}}" style="margin-top: 14px;">Simuler mes cotisations et mon revenu</a>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>Micro-entreprise : ce qu'il faut savoir avant de se lancer</h2>
+  <p>La micro-entreprise est une entreprise individuelle au régime simplifié : vos cotisations sont un pourcentage du chiffre d'affaires encaissé, et vous ne payez rien si vous n'encaissez rien. Elle convient tant que vos frais restent modestes et que votre chiffre d'affaires reste sous le plafond de votre activité.</p>
+  <p>Avant de vous déclarer, comparez avec les autres statuts dans le <a href="{{link:structure}}">comparateur de statuts</a>, estimez votre revenu avec le <a href="{{link:tax}}">simulateur auto-entrepreneur</a> et votre tarif avec le <a href="{{link:rate}}">calculateur de TJM</a>. Une fois lancé, l'<a href="{{link:espace}}">Espace entrepreneur</a> tient vos factures et votre livre des recettes.</p>
+</section>

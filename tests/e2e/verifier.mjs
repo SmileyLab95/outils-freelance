@@ -944,6 +944,41 @@ const tests = {
     await page.uncheck("#ef-vl");
     check((await t("ef-big")) === "42 333 €", "Salarié ou freelance FR : situation par défaut rétablie");
   },
+  async "fr/creer-sa-micro-entreprise/"(page) {
+    // documentation/20-checklist-creation.md § 2 : 17 démarches comptées par défaut, cases mémorisées.
+    const t = async (id) => (await page.textContent(`#${id}`)).replace(/\s+/g, " ").trim();
+    const box = (id, when) => `#checklist li[data-id="${id}"]${when ? `[data-when="${when}"]` : ""} input`;
+    check((await t("cl-score")) === "0 démarches sur 17" && (await t("cl-msg")) === "Cochez les démarches que vous avez déjà faites." &&
+      !(await page.isVisible(box("acre"))) && (await page.isVisible(box("plafond", "!vente"))) && !(await page.isVisible(box("plafond", "vente"))),
+      "Création FR : 17 démarches par défaut, ACRE et variante « vente » masquées");
+    await page.check("#cl-filters input[name=acre]");
+    await page.check("#cl-filters input[name=vente]");
+    check((await t("cl-score")) === "0 démarches sur 19" && (await page.isVisible(box("acre"))) && (await page.isVisible(box("achats"))) &&
+      (await page.isVisible(box("plafond", "vente"))) && !(await page.isVisible(box("plafond", "!vente"))),
+      "Création FR : ACRE et vente → 19 démarches, plafond et registre des achats de la vente");
+    await page.check(box("activite"));
+    await page.check(box("guichet"));
+    await page.check(box("compte"));
+    check((await t("cl-score")) === "2 démarches sur 19" && (await t("cl-msg")) === "Il vous reste 17 démarches.",
+      "Création FR : deux démarches cochées, compte bancaire conseillé non compté");
+    await page.check(box("plafond", "vente"));
+    await page.uncheck("#cl-filters input[name=vente]");
+    check((await page.isChecked(box("plafond", "!vente"))) && (await t("cl-score")) === "3 démarches sur 18",
+      "Création FR : étape cochée dans une situation, reprise dans sa variante");
+    await page.check("#cl-filters input[name=vente]");
+    await accessible(page, "Création FR (situation et cases cochées)");
+    await page.reload({ waitUntil: "networkidle" });
+    check((await page.isChecked(box("guichet"))) && (await page.isChecked(box("compte"))) && (await page.isChecked("#cl-filters input[name=acre]")) &&
+      (await t("cl-score")) === "3 démarches sur 19", "Création FR : cases et situation retrouvées après rechargement");
+    for (const li of await page.$$("#checklist li[data-id]:not([hidden]) input")) await li.check();
+    check((await t("cl-score")) === "19 démarches sur 19" && (await t("cl-msg")) === "Toutes les démarches sont faites : bonne route !" &&
+      (await page.getAttribute("#cl-msg", "class")).includes("ok"), "Création FR : toutes les démarches faites");
+    // Remise à zéro, cases masquées comprises (un clic par case encore cochée, dans la page).
+    await page.$$eval("#checklist li[data-id] input", (boxes) => boxes.forEach((b) => { if (b.checked) b.click(); }));
+    await page.uncheck("#cl-filters input[name=acre]");
+    await page.uncheck("#cl-filters input[name=vente]");
+    check((await t("cl-score")) === "0 démarches sur 17", "Création FR : situation par défaut rétablie");
+  },
   async "us/salary-vs-freelance/"(page) {
     const t = async (id) => (await page.textContent(`#${id}`)).replace(/\s+/g, " ").trim();
     check((await t("ef-big")) === "$73,141" && (await t("ef-sub")) === "That's $56.79 an hour over 1,288 billed hours, to keep $58,075 a year, as with your salary." &&

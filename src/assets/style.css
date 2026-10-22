@@ -531,6 +531,9 @@ a.country-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg)
   #calendar-form, .cal-actions { display: none !important; }
 }
 .checklist li > div { padding: 12px 4px; }
+.checklist li.cl-group h3 { margin: 20px 4px 2px; font-size: 1rem; }
+.checklist li.cl-group:first-child h3 { margin-top: 4px; }
+.checklist li.cl-group + li:not([hidden]) { border-top: 0; }
 .result-hero.is-negative { background: linear-gradient(135deg, #334155, #52525b); box-shadow: 0 16px 40px rgba(30,41,59,.25); }
 .law-card { margin-top: 16px; padding: 18px; }
 .law-card h3 { font-size: 1rem; margin: 0 0 6px; }
