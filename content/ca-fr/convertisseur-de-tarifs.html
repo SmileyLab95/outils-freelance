@@ -1,0 +1,98 @@
+<!--{
+  "id": "rate-converter",
+  "slug": "convertisseur-de-tarifs/",
+  "title": "Convertisseur de tarifs : horaire, journalier, annuel",
+  "description": "Convertissez un tarif de travailleur autonome à l'heure, au jour, à la semaine, au mois ou à l'an, selon vos jours facturés. Seuil du petit fournisseur signalé.",
+  "menu": "Convertisseur de tarifs",
+  "icon": "🔁",
+  "blurb": "Un tarif horaire, journalier, mensuel ou annuel, converti en un instant.",
+  "app": "Convertisseur de tarifs pour travailleurs autonomes",
+  "scripts": ["engines/rate-convert.js", "tools/rate-converter.js"],
+  "rules": "ca",
+  "sources": ["small_supplier_threshold"],
+  "priority": 0.8,
+  "faq": [
+    ["Comment passer d'un taux horaire à un revenu annuel ?", "Multipliez le taux horaire par les heures facturées dans une journée, puis par les jours facturés dans l'année. Avec 8 heures par jour et 162 jours facturés (1 296 heures), 100 $ de l'heure font 129 600 $ par an, avant dépenses et impôt."],
+    ["Combien d'heures un travailleur autonome facture-t-il par année ?", "Moins qu'un salarié n'est payé. L'hypothèse par défaut est de 162 jours de 8 heures : 52 semaines moins 4 semaines de vacances et 8 jours fériés, soit 232 jours, dont 30 % consacrés à des tâches non facturables (prospection, administration, formation). Modifiez-la selon votre année, ou estimez-la avec le calculateur de taux horaire."],
+    ["Pourquoi ne pas multiplier par 2 080 heures ?", "Les 2 080 heures (40 heures × 52 semaines) correspondent à l'année payée d'un salarié à temps plein, vacances comprises. Un travailleur autonome n'est payé ni pour ses vacances ni pour le temps passé à trouver des clients et à gérer son entreprise : il facture donc moins d'heures."],
+    ["Le montant annuel, est-ce ce que je gagne ?", "Non : c'est ce que vous facturez, avant taxes de vente. Il faut en retirer vos dépenses, l'impôt et les cotisations au RRQ (ou au RPC). Pour savoir quelle part de chaque paiement mettre de côté, utilisez le calculateur « Combien mettre de côté »."]
+  ]
+}-->
+<script type="application/json" id="rate-converter-data">
+{
+  "fields": {"rc-amount": "montant", "rc-hours": "heures par jour", "rc-days": "jours facturés par an"},
+  "check": "Vérifiez : {fields}.", "check_notice": "Vérifiez : {fields}. Saisissez seulement des chiffres, par exemple 100.",
+  "check_assumptions": "Indiquez entre 0 et 24 heures par jour, et entre 1 et 366 jours facturés par an.",
+  "enter_amount": "Indiquez un tarif.",
+  "sub": "Soit {month} par mois en moyenne, pour {days} jours facturés de {hours} h ({total} heures par an).",
+  "thresholds": [
+    {"rule": "small_supplier_threshold",
+     "text": "C'est plus de {threshold} par an : dès que vos fournitures taxables dépassent {threshold} au cours d'un seul trimestre civil ou de quatre trimestres consécutifs, vous n'êtes plus un petit fournisseur et devez vous inscrire à la TPS/TVH (et à la TVQ au Québec)."}
+  ],
+  "msg_always": "Montants avant TPS, TVH ou TVQ. Ce que vous facturez n'est pas ce que vous gagnez : il faut en retirer vos dépenses, l'impôt et les cotisations au RRQ ou au RPC."
+}
+</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Gratuit · résultat instantané</span>
+    <h1>Convertisseur de tarifs</h1>
+    <p class="lead">Un tarif à l'heure, au jour, à la semaine, au mois ou à l'an : voyez ce qu'il représente dans les autres unités, selon les jours que vous facturez vraiment.</p>
+    <ul class="trust"><li>Horaire, journalier, mensuel, annuel</li><li>Vos jours facturés</li><li>Seuil du petit fournisseur signalé</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="rc-form" onsubmit="return false">
+      <h2>Votre tarif</h2>
+      <div class="fields">
+        <div class="field"><label for="rc-amount">Montant avant taxes</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="rc-amount" name="amount" value="100" data-save><span>$</span></div></div>
+        <div class="field"><label for="rc-unit">Par</label>
+          <select id="rc-unit" name="unit" data-save>
+            <option value="hour" selected>heure</option>
+            <option value="day">jour</option>
+            <option value="week">semaine de 5 jours</option>
+            <option value="month">mois</option>
+            <option value="year">an</option>
+          </select></div>
+        <div class="field"><label for="rc-hours">Heures facturées par jour</label>
+          <input type="text" inputmode="decimal" id="rc-hours" name="hours" value="8" data-save></div>
+        <div class="field"><label for="rc-days">Jours facturés par an</label>
+          <input type="text" inputmode="decimal" id="rc-days" name="days" value="162" aria-describedby="rc-days-hint" data-save>
+          <span class="hint" id="rc-days-hint">Jours ouvrables moins vacances, jours fériés et temps non facturé (prospection, administration, formation). Par défaut : 4 semaines de vacances, 8 jours fériés et 30 % de temps non facturé, comme le <a href="{{link:rate}}">calculateur de taux horaire</a>.</span></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="result-hero" role="status" aria-atomic="true">
+        <div class="label">Facturé par an</div>
+        <div class="big" id="rc-big">–</div>
+        <div class="sub" id="rc-sub">–</div>
+      </div>
+      <h2 class="sr-only">Le tarif dans chaque unité</h2>
+      <div class="card" style="margin-top: 16px; padding: 18px;">
+        <table class="mini-table compare-table">
+          <caption class="sr-only">Le tarif converti, avant taxes</caption>
+          <thead><tr><th scope="col">Unité</th><th scope="col">Montant avant taxes</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Par heure</th><td id="rc-hour">–</td></tr>
+            <tr><th scope="row">Par jour</th><td id="rc-day">–</td></tr>
+            <tr><th scope="row">Par semaine de 5 jours</th><td id="rc-week">–</td></tr>
+            <tr><th scope="row">Par mois (moyenne)</th><td id="rc-month">–</td></tr>
+            <tr><th scope="row">Par an</th><td id="rc-year">–</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="notice" id="rc-notice" aria-live="polite" style="margin-top: 16px;">–</p>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>Comment se fait la conversion</h2>
+  <p>Le <strong>tarif journalier</strong> est le taux horaire multiplié par les heures facturées dans la journée. Une <strong>semaine</strong> compte 5 jours facturés. Le <strong>montant annuel</strong> est le tarif journalier multiplié par les jours facturés dans l'année, et le <strong>mois</strong> en est le douzième : une moyenne, car certains mois comptent plus de vacances que d'autres.</p>
+  <p>C'est le nombre de jours facturés qui fait passer d'un tarif à un revenu annuel. Après 4 semaines de vacances et 8 jours fériés, une année compte environ 232 jours ouvrables, mais une partie sert à trouver des clients, à l'administration et à la formation, que vous ne facturez pas. Indiquez votre propre estimation.</p>
+  <p>Pour savoir quel taux demander selon le revenu visé, utilisez le <a href="{{link:rate}}">calculateur de taux horaire</a> ; pour la part de chaque paiement à mettre de côté pour l'impôt, le calculateur <a href="{{link:set-aside}}">« Combien mettre de côté »</a>.</p>
+</section>

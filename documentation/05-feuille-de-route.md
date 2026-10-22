@@ -95,7 +95,11 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   l'écart réel ; règles officielles (taux des sociétés des 13 provinces, crédits pour dividendes, cotisations sur un
   salaire de dirigeant, règle des 5 500 heures du Québec) ; Saskatchewan et Nunavut non calculés faute de taux
   officiel (D19). Le besoin P1 « Quel statut choisir ? » est couvert dans les quatre pays.
-- **Prochaines actions de Claude** : convertisseur de tarifs et prix au forfait (4 pays, P2) ; taux du crédit pour
+- **Convertisseur de tarifs (22/10/2026)** : heure, jour, semaine, mois, an, dans les quatre pays (cinq pages),
+  avec les hypothèses des calculateurs de taux ; seuils signalés selon le chiffre d'affaires annuel (franchise de
+  TVA et plafond micro en France, *Making Tax Digital* et TVA au Royaume-Uni, petit fournisseur au Canada) ;
+  statistiques non sourcées retirées des FAQ des calculateurs de taux ([18](18-outils-de-prix.md)).
+- **Prochaines actions de Claude** : calculateur de prix au forfait (4 pays, P2 : spécification d'abord, [18](18-outils-de-prix.md) § 2) ; taux du crédit pour
   dividendes de la Saskatchewan et du Nunavut dès qu'ils sont publiés (formulaires 2026) ;
   trouver la cause du contrôle de contraste intermittent de l'Espace ; revérifier les grilles des prestataires de
   paiement (Stripe, Mollie) quand Ismail décidera ([17](17-offres-et-paiements.md)) ; guide du recouvrement dès que
@@ -212,7 +216,9 @@ Objectif : un site mesuré, sous sa propre marque, qui commence à rapporter, et
 - [x] Comparateur de statuts, Canada : *Sole proprietor vs corporation* et « Entreprise individuelle ou
       société par actions » (salaire, dividendes, impôt reporté, 11 provinces et territoires ; Saskatchewan et
       Nunavut en attente d'un taux officiel) ; moteur `engines/structure-ca.js` ; spécification [pays/ca.md](pays/ca.md)
-- [ ] Convertisseur de tarifs (horaire, journalier, mensuel, annuel) et prix au forfait, 4 pays : besoins P2
+- [x] Convertisseur de tarifs (horaire, journalier, mensuel, annuel), 4 pays : moteur `engines/rate-convert.js`,
+      script commun, cinq pages ; spécification [18](18-outils-de-prix.md)
+- [ ] Prix au forfait, 4 pays : besoin P2
 
 ### 1.5 Préparer la plateforme
 

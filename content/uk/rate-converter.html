@@ -1,0 +1,100 @@
+<!--{
+  "id": "rate-converter",
+  "slug": "rate-converter/",
+  "title": "Day Rate Converter UK: Hourly, Monthly and Annual",
+  "description": "Convert a UK freelance or contractor day rate to hourly, weekly, monthly and annual figures, and back, based on the days you bill. VAT and MTD limits flagged.",
+  "menu": "Day rate converter",
+  "icon": "🔁",
+  "blurb": "A day rate in hourly, monthly and annual terms, and back.",
+  "app": "Day Rate Converter UK",
+  "scripts": ["engines/rate-convert.js", "tools/rate-converter.js"],
+  "rules": "uk",
+  "sources": ["mtd_itsa_threshold_2026", "vat_registration_threshold"],
+  "priority": 0.8,
+  "faq": [
+    ["How do I convert a day rate to an hourly rate?", "Divide the day rate by the hours you bill in a day: £400 for 7.5 hours is £53.33 an hour. To go the other way, multiply the hourly rate by those hours."],
+    ["How many days a year does a freelancer bill?", "Fewer than the working days in a year. The default here is 182 days: 260 weekdays minus 5 weeks of holiday and 8 bank holidays, with 20% of the rest spent on unbillable work such as sales, admin and training. Change it to match your year, or work it out with the day rate calculator."],
+    ["£500 a day is how much a year?", "With 182 billed days, £500 a day is £91,000 a year, before expenses and tax: just over the £90,000 VAT registration threshold."],
+    ["Is the annual figure what I earn?", "No: it's your turnover, before expenses, Income Tax and National Insurance. To see how much of each payment to put aside, use the set-aside calculator."]
+  ]
+}-->
+<script type="application/json" id="rate-converter-data">
+{
+  "fields": {"rc-amount": "amount", "rc-hours": "hours per day", "rc-days": "billed days per year"},
+  "check": "Check the {fields}.", "check_notice": "Check the {fields}: type numbers only, for example 400.",
+  "check_assumptions": "Enter between 0 and 24 hours a day, and between 1 and 366 billed days a year.",
+  "enter_amount": "Enter a rate.",
+  "sub": "That's {month} a month on average, for {days} billed days of {hours} hours ({total} hours a year).",
+  "thresholds": [
+    {"rule": "mtd_itsa_threshold_2026",
+     "text": "That's over {threshold} a year: Making Tax Digital for Income Tax applies when your income before expenses is above this amount (from April 2026, based on an earlier tax return)."},
+    {"rule": "vat_registration_threshold",
+     "text": "It's also over the VAT registration threshold ({threshold} of taxable turnover in any 12 months): you must register for VAT."}
+  ],
+  "msg_always": "Amounts before VAT. Turnover isn't what you earn: expenses, Income Tax and National Insurance come out of it."
+}
+</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · instant result</span>
+    <h1>Day rate converter</h1>
+    <p class="lead">A day, hourly, weekly, monthly or annual rate: see what it's worth in every other unit, based on the days you really bill.</p>
+    <ul class="trust"><li>Day rate, hourly, monthly, annual</li><li>Your billable days</li><li>VAT and MTD thresholds flagged</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="rc-form" onsubmit="return false">
+      <h2>Your rate</h2>
+      <div class="fields">
+        <div class="field"><label for="rc-amount">Amount before VAT</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="rc-amount" name="amount" value="400" data-save><span>£</span></div></div>
+        <div class="field"><label for="rc-unit">Per</label>
+          <select id="rc-unit" name="unit" data-save>
+            <option value="hour">hour</option>
+            <option value="day" selected>day</option>
+            <option value="week">5-day week</option>
+            <option value="month">month</option>
+            <option value="year">year</option>
+          </select></div>
+        <div class="field"><label for="rc-hours">Billed hours per day</label>
+          <input type="text" inputmode="decimal" id="rc-hours" name="hours" value="7.5" data-save></div>
+        <div class="field"><label for="rc-days">Billed days per year</label>
+          <input type="text" inputmode="decimal" id="rc-days" name="days" value="182" aria-describedby="rc-days-hint" data-save>
+          <span class="hint" id="rc-days-hint">Weekdays minus holiday, bank holidays and unbillable time (sales, admin, training). Default: 5 weeks of holiday, 8 bank holidays and 20% unbillable time, as in the <a href="{{link:rate}}">day rate calculator</a>.</span></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="result-hero" role="status" aria-atomic="true">
+        <div class="label">Turnover per year</div>
+        <div class="big" id="rc-big">–</div>
+        <div class="sub" id="rc-sub">–</div>
+      </div>
+      <h2 class="sr-only">Your rate in each unit</h2>
+      <div class="card" style="margin-top: 16px; padding: 18px;">
+        <table class="mini-table compare-table">
+          <caption class="sr-only">Your rate converted, before VAT</caption>
+          <thead><tr><th scope="col">Unit</th><th scope="col">Amount before VAT</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Per hour</th><td id="rc-hour">–</td></tr>
+            <tr><th scope="row">Per day</th><td id="rc-day">–</td></tr>
+            <tr><th scope="row">Per 5-day week</th><td id="rc-week">–</td></tr>
+            <tr><th scope="row">Per month (average)</th><td id="rc-month">–</td></tr>
+            <tr><th scope="row">Per year</th><td id="rc-year">–</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="notice" id="rc-notice" aria-live="polite" style="margin-top: 16px;">–</p>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>How the conversion works</h2>
+  <p>An <strong>hourly rate</strong> is the day rate divided by the hours you bill in a day. A <strong>week</strong> is 5 billed days. The <strong>annual</strong> figure is the day rate times the days you bill in a year, and a <strong>month</strong> is a twelfth of it: an average, since some months have more holiday or gaps between contracts than others.</p>
+  <p>The number of billed days is what turns a day rate into a yearly turnover. After 5 weeks of holiday and 8 bank holidays, a year has about 227 weekdays left, but part of that time goes to finding work, admin and training, which you can't bill. Enter your own estimate.</p>
+  <p>To work out the day rate you need for the income you want, use the <a href="{{link:rate}}">day rate calculator</a>; to check whether Making Tax Digital applies to you, the <a href="{{link:mtd}}">Making Tax Digital checker</a>.</p>
+</section>

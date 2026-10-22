@@ -1,5 +1,23 @@
 # Journal des modifications
 
+## 2026-10-22 — Convertisseur de tarifs (France, États-Unis, Royaume-Uni, Canada)
+
+- Nouvelles pages `/fr/convertisseur-tjm/`, `/us/rate-converter/`, `/uk/rate-converter/`, `/ca/rate-converter/` et
+  `/ca/fr/convertisseur-de-tarifs/` (même identifiant `rate-converter`, menu « Tarifs » / *Pricing*) : un tarif à
+  l'heure, au jour, à la semaine, au mois ou à l'an, converti dans les autres unités selon les heures et les jours
+  facturés ; hypothèses par défaut reprises du calculateur de taux de chaque section (vérifié par test).
+- Seuils signalés selon le chiffre d'affaires annuel, montants lus dans les règles : franchise de TVA des services
+  et plafond du régime micro (France), *Making Tax Digital for Income Tax* et immatriculation à la TVA
+  (Royaume-Uni), petit fournisseur TPS/TVH (Canada).
+- Moteur `engines/rate-convert.js` et script commun `tools/rate-converter.js` (textes et seuils fournis par chaque
+  page) ; spécification `documentation/18-outils-de-prix.md`.
+- Calculateurs de taux : FAQ sur le temps facturable réécrites à partir de leurs hypothèses par défaut ; les
+  statistiques non sourcées (« la plupart des freelances facturent entre… ») sont retirées ; au Québec, la FAQ parle
+  désormais des 8 jours fériés de la valeur par défaut.
+- Tests : unitaires (conversions, aller-retour dans les 25 combinaisons d'unités, refus, cohérence des pages avec les
+  calculateurs de taux et les règles) ; parcours navigateur des cinq pages ; suite complète (189 tests unitaires,
+  2 082 vérifications navigateur).
+
 ## 2026-10-22 — Canada : comparateur « Sole proprietor vs corporation » / « Entreprise individuelle ou société par actions »
 
 - Nouvelles pages `/ca/sole-proprietor-vs-corporation/` et `/ca/fr/entreprise-individuelle-ou-societe/` (menu

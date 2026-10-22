@@ -1,0 +1,98 @@
+<!--{
+  "id": "rate-converter",
+  "slug": "rate-converter/",
+  "title": "Freelance Rate Converter Canada: Hourly to Yearly",
+  "description": "Convert a freelance rate between hourly, daily, weekly, monthly and yearly in Canada, based on the days you bill. GST/HST small supplier threshold flagged.",
+  "menu": "Rate converter",
+  "icon": "🔁",
+  "blurb": "An hourly, daily, monthly or yearly rate in every other unit.",
+  "app": "Freelance Rate Converter Canada",
+  "scripts": ["engines/rate-convert.js", "tools/rate-converter.js"],
+  "rules": "ca",
+  "sources": ["small_supplier_threshold"],
+  "priority": 0.8,
+  "faq": [
+    ["How do I convert an hourly rate to a yearly income?", "Multiply the hourly rate by the hours you bill in a day, then by the days you bill in a year. With 8 hours a day and 161 billed days (1,288 hours), $100 an hour is $128,800 a year, before expenses and taxes."],
+    ["How many hours does a freelancer bill per year?", "Fewer than an employee is paid for. The default here is 1,288 hours: 52 weeks minus 4 weeks off and 10 holidays, 40 hours a week, and 30% of that time spent on unbillable work such as sales, admin and training. Change it to match your year, or work it out with the hourly rate calculator."],
+    ["Why not just multiply by 2,080 hours?", "2,080 hours (40 hours × 52 weeks) is a full-time employee's paid year, holidays included. A freelancer isn't paid for time off or for the hours spent finding clients and running the business, so the hours you bill are fewer."],
+    ["Is the yearly figure what I earn?", "No: it's what you bill. Business expenses, income tax and CPP contributions (QPP in Quebec) come out of it. To see what to keep aside for taxes, use the set-aside calculator."]
+  ]
+}-->
+<script type="application/json" id="rate-converter-data">
+{
+  "fields": {"rc-amount": "amount", "rc-hours": "hours per day", "rc-days": "billed days per year"},
+  "check": "Check the {fields}.", "check_notice": "Check the {fields}: type numbers only, for example 100.",
+  "check_assumptions": "Enter between 0 and 24 hours a day, and between 1 and 366 billed days a year.",
+  "enter_amount": "Enter a rate.",
+  "sub": "That's {month} a month on average, for {days} billed days of {hours} hours ({total} hours a year).",
+  "thresholds": [
+    {"rule": "small_supplier_threshold",
+     "text": "That's over {threshold} a year: once your taxable supplies go over {threshold} in a single calendar quarter or over four consecutive quarters, you're no longer a small supplier and must register for the GST/HST (and the QST in Quebec)."}
+  ],
+  "msg_always": "Amounts before GST/HST. What you bill isn't what you earn: expenses, income tax and CPP contributions come out of it."
+}
+</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · instant result</span>
+    <h1>Freelance rate converter</h1>
+    <p class="lead">An hourly, daily, weekly, monthly or yearly rate: see what it's worth in every other unit, based on the days you really bill.</p>
+    <ul class="trust"><li>Hourly, daily, monthly, yearly</li><li>Your billable days</li><li>GST/HST threshold flagged</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="rc-form" onsubmit="return false">
+      <h2>Your rate</h2>
+      <div class="fields">
+        <div class="field"><label for="rc-amount">Amount before GST/HST</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="rc-amount" name="amount" value="100" data-save><span>$</span></div></div>
+        <div class="field"><label for="rc-unit">Per</label>
+          <select id="rc-unit" name="unit" data-save>
+            <option value="hour" selected>hour</option>
+            <option value="day">day</option>
+            <option value="week">5-day week</option>
+            <option value="month">month</option>
+            <option value="year">year</option>
+          </select></div>
+        <div class="field"><label for="rc-hours">Billed hours per day</label>
+          <input type="text" inputmode="decimal" id="rc-hours" name="hours" value="8" data-save></div>
+        <div class="field"><label for="rc-days">Billed days per year</label>
+          <input type="text" inputmode="decimal" id="rc-days" name="days" value="161" aria-describedby="rc-days-hint" data-save>
+          <span class="hint" id="rc-days-hint">Working days minus time off, holidays and unbillable time (sales, admin, training). Default: 4 weeks off, 10 holidays and 30% unbillable time, as in the <a href="{{link:rate}}">hourly rate calculator</a>.</span></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="result-hero" role="status" aria-atomic="true">
+        <div class="label">Billed per year</div>
+        <div class="big" id="rc-big">–</div>
+        <div class="sub" id="rc-sub">–</div>
+      </div>
+      <h2 class="sr-only">Your rate in each unit</h2>
+      <div class="card" style="margin-top: 16px; padding: 18px;">
+        <table class="mini-table compare-table">
+          <caption class="sr-only">Your rate converted, before GST/HST</caption>
+          <thead><tr><th scope="col">Unit</th><th scope="col">Amount before GST/HST</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Per hour</th><td id="rc-hour">–</td></tr>
+            <tr><th scope="row">Per day</th><td id="rc-day">–</td></tr>
+            <tr><th scope="row">Per 5-day week</th><td id="rc-week">–</td></tr>
+            <tr><th scope="row">Per month (average)</th><td id="rc-month">–</td></tr>
+            <tr><th scope="row">Per year</th><td id="rc-year">–</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="notice" id="rc-notice" aria-live="polite" style="margin-top: 16px;">–</p>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>How the conversion works</h2>
+  <p>A <strong>daily rate</strong> is the hourly rate times the hours you bill in a day. A <strong>week</strong> is 5 billed days. The <strong>yearly</strong> figure is the daily rate times the days you bill in a year, and a <strong>month</strong> is a twelfth of it: an average, since some months have more time off than others.</p>
+  <p>The number of billed days is what turns a rate into a yearly income. After 4 weeks off and 10 holidays, a year has about 230 working days, but part of that time goes to finding clients, admin and training, which you can't bill. Enter your own estimate.</p>
+  <p>To work out what to charge for the income you want, use the <a href="{{link:rate}}">hourly rate calculator</a>; to see how much of each payment to save for taxes, the <a href="{{link:set-aside}}">set-aside calculator</a>.</p>
+</section>

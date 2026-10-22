@@ -1,0 +1,100 @@
+<!--{
+  "id": "rate-converter",
+  "slug": "convertisseur-tjm/",
+  "title": "Convertisseur TJM : taux horaire, mensuel et annuel",
+  "description": "Convertissez un TJM en taux horaire, en revenu mensuel ou en chiffre d'affaires annuel, et l'inverse, selon vos jours facturés. Seuils TVA et micro signalés.",
+  "menu": "Convertisseur de TJM",
+  "icon": "🔁",
+  "blurb": "Un tarif à l'heure, au jour, au mois ou à l'an, converti en un instant.",
+  "app": "Convertisseur TJM, taux horaire, mensuel et annuel",
+  "scripts": ["engines/rate-convert.js", "tools/rate-converter.js"],
+  "rules": "fr",
+  "sources": ["tva_franchise_seuils", "micro_plafond_ca_services"],
+  "priority": 0.8,
+  "faq": [
+    ["Comment passer d'un TJM à un taux horaire ?", "Divisez le TJM par le nombre d'heures facturées dans la journée : 450 € pour 7 heures font 64,29 € de l'heure. À l'inverse, multipliez le taux horaire par ces heures."],
+    ["Combien de jours facture-t-on par an ?", "Cela dépend de vos congés, des jours fériés et du temps passé à prospecter, gérer et vous former, que vous ne facturez pas. Avec 5 semaines de congés, 8 jours fériés et 35 % de temps non facturé, il reste 148 jours : c'est l'hypothèse par défaut du convertisseur, à adapter. Le calculateur de TJM vous aide à estimer la vôtre."],
+    ["Un TJM de 500 €, combien par mois ?", "Avec 148 jours facturés par an, 500 € par jour font 74 000 € de chiffre d'affaires annuel, soit 6 167 € par mois en moyenne, avant cotisations, impôt et frais."],
+    ["Le chiffre d'affaires, est-ce ce que je gagne ?", "Non : c'est ce que vous facturez, hors TVA. Il faut en retirer les cotisations sociales, l'impôt et vos frais. Pour votre revenu, utilisez le simulateur auto-entrepreneur ou le calculateur « Combien mettre de côté »."]
+  ]
+}-->
+<script type="application/json" id="rate-converter-data">
+{
+  "fields": {"rc-amount": "montant", "rc-hours": "heures par jour", "rc-days": "jours facturés par an"},
+  "check": "Vérifiez : {fields}.", "check_notice": "Vérifiez : {fields}. Saisissez seulement des chiffres, par exemple 450.",
+  "check_assumptions": "Indiquez entre 0 et 24 heures par jour, et entre 1 et 366 jours facturés par an.",
+  "enter_amount": "Indiquez un tarif.",
+  "sub": "Soit {month} par mois en moyenne, pour {days} jours facturés de {hours} h ({total} heures par an).",
+  "thresholds": [
+    {"rule": "tva_franchise_seuils.services_seuil", "vars": {"major": "tva_franchise_seuils.services_seuil_majore"},
+     "text": "C'est au-dessus du seuil de franchise de TVA des prestations de services ({threshold} par an) : la TVA est due à partir du 1er janvier suivant, et dès le dépassement de {major} dans l'année."},
+    {"rule": "micro_plafond_ca_services",
+     "text": "C'est aussi au-dessus du plafond du régime micro-entrepreneur pour les prestations de services ({threshold} par an)."}
+  ],
+  "msg_always": "Montants hors TVA. Le chiffre d'affaires n'est pas votre revenu : retirez-en les cotisations, l'impôt et vos frais."
+}
+</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Gratuit · résultat instantané</span>
+    <h1>Convertisseur TJM</h1>
+    <p class="lead">Un tarif à l'heure, au jour, à la semaine, au mois ou à l'an : voyez ce qu'il représente dans les autres unités, selon les jours que vous facturez vraiment.</p>
+    <ul class="trust"><li>TJM, taux horaire, mensuel et annuel</li><li>Vos jours facturés</li><li>Seuils de TVA et du régime micro</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="rc-form" onsubmit="return false">
+      <h2>Votre tarif</h2>
+      <div class="fields">
+        <div class="field"><label for="rc-amount">Montant hors TVA</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="rc-amount" name="amount" value="450" data-save><span>€</span></div></div>
+        <div class="field"><label for="rc-unit">Par</label>
+          <select id="rc-unit" name="unit" data-save>
+            <option value="hour">heure</option>
+            <option value="day" selected>jour (TJM)</option>
+            <option value="week">semaine de 5 jours</option>
+            <option value="month">mois</option>
+            <option value="year">an</option>
+          </select></div>
+        <div class="field"><label for="rc-hours">Heures facturées par jour</label>
+          <input type="text" inputmode="decimal" id="rc-hours" name="hours" value="7" data-save></div>
+        <div class="field"><label for="rc-days">Jours facturés par an</label>
+          <input type="text" inputmode="decimal" id="rc-days" name="days" value="148" aria-describedby="rc-days-hint" data-save>
+          <span class="hint" id="rc-days-hint">Jours ouvrés moins congés, jours fériés et temps non facturé (prospection, gestion, formation). Par défaut : 5 semaines de congés, 8 jours fériés et 35 % de temps non facturé, comme le <a href="{{link:rate}}">calculateur de TJM</a>.</span></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="result-hero" role="status" aria-atomic="true">
+        <div class="label">Chiffre d'affaires par an</div>
+        <div class="big" id="rc-big">–</div>
+        <div class="sub" id="rc-sub">–</div>
+      </div>
+      <h2 class="sr-only">Le tarif dans chaque unité</h2>
+      <div class="card" style="margin-top: 16px; padding: 18px;">
+        <table class="mini-table compare-table">
+          <caption class="sr-only">Le tarif converti, hors TVA</caption>
+          <thead><tr><th scope="col">Unité</th><th scope="col">Montant hors TVA</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Par heure</th><td id="rc-hour">–</td></tr>
+            <tr><th scope="row">Par jour (TJM)</th><td id="rc-day">–</td></tr>
+            <tr><th scope="row">Par semaine de 5 jours</th><td id="rc-week">–</td></tr>
+            <tr><th scope="row">Par mois (moyenne)</th><td id="rc-month">–</td></tr>
+            <tr><th scope="row">Par an</th><td id="rc-year">–</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="notice" id="rc-notice" aria-live="polite" style="margin-top: 16px;">–</p>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>Comment se fait la conversion</h2>
+  <p>Le <strong>taux horaire</strong> est le TJM divisé par les heures facturées dans la journée. Une <strong>semaine</strong> compte 5 jours facturés. Le <strong>chiffre d'affaires annuel</strong> est le TJM multiplié par les jours facturés dans l'année, et le <strong>mois</strong> en est le douzième : une moyenne, car vos mois ne se ressemblent pas tous (congés, intercontrats).</p>
+  <p>Le point délicat est le nombre de jours facturés. Une année compte environ 228 jours ouvrés une fois retirés les week-ends, 5 semaines de congés et 8 jours fériés, mais une partie part en prospection, en gestion et en formation. Indiquez votre propre estimation : c'est elle qui fait passer d'un TJM à un revenu annuel.</p>
+  <p>Pour savoir quel TJM facturer selon le revenu que vous visez, utilisez le <a href="{{link:rate}}">calculateur de TJM</a> ; pour ce qui vous restera après cotisations et impôt, le <a href="{{link:tax}}">simulateur auto-entrepreneur</a>.</p>
+</section>

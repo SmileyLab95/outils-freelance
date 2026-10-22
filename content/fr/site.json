@@ -27,6 +27,7 @@
         "bank",
         "insurance",
         "rate",
+        "rate-converter",
         "mileage",
         "retirement"
       ]

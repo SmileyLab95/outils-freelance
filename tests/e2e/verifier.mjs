@@ -838,6 +838,69 @@ const tests = {
     await page.selectOption("#c-province", "QC");
     check((await t("c-verdict")) === "+110 $ par an", "CA-FR société : situation par défaut rétablie");
   },
+  async "fr/convertisseur-tjm/"(page) {
+    // documentation/18-outils-de-prix.md : 450 € par jour, 7 h, 148 jours → 66 600 € par an.
+    const t = async (id) => (await page.textContent(`#${id}`)).replace(/\s+/g, " ").trim();
+    check((await t("rc-big")) === "66 600 €" && (await t("rc-hour")) === "64,29 €" && (await t("rc-day")) === "450,00 €" && (await t("rc-week")) === "2 250 €" &&
+      (await t("rc-month")) === "5 550 €" && (await t("rc-sub")) === "Soit 5 550 € par mois en moyenne, pour 148 jours facturés de 7 h (1 036 heures par an).",
+      "Convertisseur FR : TJM de 450 € → 66 600 € par an");
+    check((await page.getAttribute("#rc-day", "class")) === null && (await page.$eval("#rc-day", (td) => td.parentNode.className)) === "current" &&
+      (await t("rc-notice")).includes("au-dessus du seuil de franchise de TVA des prestations de services (37 500 € par an)") &&
+      (await t("rc-notice")).includes("dès le dépassement de 41 250 €") && !(await t("rc-notice")).includes("régime micro"),
+      "Convertisseur FR : ligne saisie mise en avant, seuil de TVA signalé, pas le plafond micro");
+    await page.fill("#rc-amount", "600");
+    check((await t("rc-big")) === "88 800 €" && (await t("rc-notice")).includes("plafond du régime micro-entrepreneur pour les prestations de services (83 600 € par an)"),
+      "Convertisseur FR : 600 € par jour → plafond micro signalé");
+    await page.selectOption("#rc-unit", "month");
+    await page.fill("#rc-amount", "5 550");
+    check((await t("rc-day")) === "450,00 €" && (await page.$eval("#rc-month", (td) => td.parentNode.className)) === "current", "Convertisseur FR : 5 550 € par mois → TJM de 450 €");
+    await page.fill("#rc-hours", "0");
+    check((await t("rc-big")) === "–" && (await page.getAttribute("#rc-hours", "aria-invalid")) === "true" && (await t("rc-notice")).includes("entre 0 et 24 heures"),
+      "Convertisseur FR : 0 heure par jour → refus expliqué, champ signalé");
+    await page.fill("#rc-hours", "7");
+    await page.fill("#rc-amount", "abc");
+    check((await page.getAttribute("#rc-amount", "aria-invalid")) === "true" && (await t("rc-big")) === "–" && (await t("rc-notice")).includes("Vérifiez : montant"),
+      "Convertisseur FR : saisie illisible → aucun résultat");
+    await accessible(page, "Convertisseur FR (saisie illisible)");
+    await page.fill("#rc-amount", "");
+    check((await t("rc-sub")) === "Indiquez un tarif." && (await t("rc-hour")) === "–", "Convertisseur FR : montant vide → invitation à le saisir");
+    await page.fill("#rc-amount", "5 550");
+    await page.reload({ waitUntil: "networkidle" });
+    check((await page.inputValue("#rc-unit")) === "month" && (await t("rc-day")) === "450,00 €", "Convertisseur FR : saisie mémorisée après rechargement");
+    await page.selectOption("#rc-unit", "day");
+    await page.fill("#rc-amount", "450");
+    check((await t("rc-big")) === "66 600 €", "Convertisseur FR : situation par défaut rétablie");
+  },
+  async "us/rate-converter/"(page) {
+    const t = async (id) => (await page.textContent(`#${id}`)).replace(/\s+/g, " ").trim();
+    check((await t("rc-big")) === "$128,800" && (await t("rc-hour")) === "$100.00" && (await t("rc-day")) === "$800.00" && (await t("rc-week")) === "$4,000" &&
+      (await t("rc-month")) === "$10,733" && (await t("rc-sub")).includes("161 billed days of 8 hours (1,288 hours a year)") &&
+      (await t("rc-notice")) === "What you bill isn't what you earn: expenses, self-employment tax and income tax come out of it.",
+      "Converter US : 100 $ de l'heure → 128 800 $ par an, pas de seuil");
+    await page.selectOption("#rc-unit", "year");
+    await page.fill("#rc-amount", "96,600");
+    check((await t("rc-hour")) === "$75.00", "Converter US : 96 600 $ par an → 75 $ de l'heure");
+    await page.selectOption("#rc-unit", "hour");
+    await page.fill("#rc-amount", "100");
+  },
+  async "uk/rate-converter/"(page) {
+    const t = async (id) => (await page.textContent(`#${id}`)).replace(/\s+/g, " ").trim();
+    check((await t("rc-big")) === "£72,800" && (await t("rc-hour")) === "£53.33" && (await t("rc-notice")).includes("Making Tax Digital for Income Tax applies") &&
+      !(await t("rc-notice")).includes("VAT registration threshold"), "Converter UK : 400 £ par jour → 72 800 £, MTD signalé");
+    await page.fill("#rc-amount", "500");
+    check((await t("rc-big")) === "£91,000" && (await t("rc-notice")).includes("VAT registration threshold (£90,000"), "Converter UK : 500 £ par jour → seuil de TVA signalé");
+    await page.fill("#rc-amount", "400");
+  },
+  async "ca/rate-converter/"(page) {
+    const t = async (id) => (await page.textContent(`#${id}`)).replace(/\s+/g, " ").trim();
+    check((await t("rc-big")) === "$128,800" && (await t("rc-notice")).includes("no longer a small supplier") && (await t("rc-notice")).includes("Amounts before GST/HST"),
+      "Converter CA : 100 $ de l'heure → 128 800 $, petit fournisseur signalé");
+  },
+  async "ca/fr/convertisseur-de-tarifs/"(page) {
+    const t = async (id) => (await page.textContent(`#${id}`)).replace(/\s+/g, " ").trim();
+    check((await t("rc-big")) === "129 600 $" && (await t("rc-hour")) === "100,00 $" && (await t("rc-sub")).includes("162 jours facturés de 8 h (1 296 heures par an)") &&
+      (await t("rc-notice")).includes("vous n'êtes plus un petit fournisseur"), "Convertisseur CA-FR : 100 $ de l'heure → 129 600 $, petit fournisseur signalé");
+  },
   async "ca/gst-hst-calculator/"(page) {
     check((await page.textContent("#st-hero")).trim() === "$1,130.00", "TVH : Ontario 13 % par défaut");
     await page.selectOption("#st-region", "QC");
