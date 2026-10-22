@@ -1,0 +1,111 @@
+<!--{
+  "id": "employee-vs-freelance",
+  "slug": "salarie-ou-travailleur-autonome/",
+  "title": "Salarié ou travailleur autonome : le revenu équivalent",
+  "description": "Quel revenu d'entreprise et quel taux horaire faut-il comme travailleur autonome pour garder ce que votre salaire vous laisse ? RRQ, AE, RQAP et impôt 2026.",
+  "menu": "Salarié ou travailleur autonome ?",
+  "icon": "🔀",
+  "blurb": "Le revenu et le taux horaire qui remplacent votre salaire.",
+  "app": "Calculateur salarié ou travailleur autonome",
+  "scripts": ["engines/brackets.js", "engines/tax-ca.js", "engines/employee-freelance.js", "tools/employee-freelance.js"],
+  "rules": "ca",
+  "sources": ["qpp_rate_employee", "qpp_rate_self_employed", "cpp_rate_employee", "cpp_rate_self_employed", "cpp_ympe", "ei_rate_employee", "ei_max_insurable_earnings", "qpip_rate_employee", "qpip_rate_self_employed", "canada_employment_amount_2026", "federal_income_tax_brackets", "quebec_contributions_no_credit", "small_supplier_threshold"],
+  "priority": 0.8,
+  "faq": [
+    ["Quel revenu pour remplacer un salaire ?", "Avec un salaire de 70 000 $ au Québec, vous gardez 51 045 $ après les cotisations (RRQ, assurance-emploi, RQAP) et l'impôt. Comme travailleur autonome, sans dépenses, il vous faut 74 097 $ de revenus pour garder autant, soit 57,17 $ de l'heure sur 1 296 heures facturées."],
+    ["Pourquoi faut-il plus de revenus qu'en salaire ?", "Parce que le travailleur autonome paie les deux parts du RRQ (ou du RPC), celle de l'employé et celle de l'employeur, et qu'il n'a pas droit au montant canadien pour emploi. Il ne paie pas d'assurance-emploi, sauf s'il adhère aux prestations spéciales. Les vacances, les congés et le temps passé à trouver des clients ne sont pas payés non plus : le calculateur divise le revenu nécessaire par les heures réellement facturées (1 296 par défaut)."],
+    ["Les avantages de l'employeur sont-ils comptés ?", "Seulement si vous les indiquez : l'assurance collective, la contribution de l'employeur à un régime de retraite ou au REER et les autres avantages n'ont pas de montant type. Ajoutez leur valeur annuelle dans le champ « Avantages payés par l'employeur » : le calculateur augmente d'autant le revenu nécessaire."],
+    ["Le calcul vaut-il hors du Québec ?", "Oui : choisissez votre province ou territoire de résidence. Hors du Québec, le calculateur utilise le RPC et le taux d'assurance-emploi canadien, sans RQAP, et l'impôt provincial ou territorial de 2026."]
+  ]
+}-->
+<script type="application/json" id="employee-freelance-data">
+{
+  "country": "ca", "na": "Sans objet", "names": "name_fr", "default_province": "QC",
+  "fields": {"ef-gross": "salaire", "ef-benefits": "avantages de l'employeur", "ef-expenses": "dépenses d'entreprise", "ef-units": "heures facturées", "ef-rate": "taux horaire"},
+  "check": "Vérifiez : {fields}.", "check_notice": "Vérifiez : {fields}. Saisissez seulement des chiffres, par exemple 70 000.",
+  "enter_salary": "Indiquez votre salaire annuel.",
+  "enter_units": "Indiquez vos heures facturées par année pour comparer votre taux.",
+  "not_found": "Aucun revenu ne permet d'atteindre ce montant.",
+  "sub": "Soit {rate} de l'heure sur {units} heures facturées, pour garder {target} par année, comme avec votre salaire.",
+  "sub_no_units": "Pour garder {target} par année, comme avec votre salaire.",
+  "at_rate_more": "À {rate} de l'heure pendant {units} heures ({revenue} de revenus), vous garderiez {available} par année : {diff} de plus qu'avec votre salaire.",
+  "at_rate_less": "À {rate} de l'heure pendant {units} heures ({revenue} de revenus), vous garderiez {available} par année : {diff} de moins qu'avec votre salaire.",
+  "at_rate_same": "À {rate} de l'heure pendant {units} heures ({revenue} de revenus), vous garderiez {available} par année, autant qu'avec votre salaire.",
+  "thresholds": [
+    {"rule": "small_supplier_threshold",
+     "text": "Ce revenu dépasse {threshold} par année : dès que vos fournitures taxables dépassent {threshold} au cours d'un seul trimestre civil ou de quatre trimestres consécutifs, vous devez vous inscrire à la TPS/TVH (et à la TVQ au Québec) et la facturer en plus."}
+  ],
+  "msg_always": "Seuls les montants sont comparés : un salarié est aussi couvert par l'assurance-emploi, à laquelle le travailleur autonome n'a accès qu'en adhérant aux prestations spéciales."
+}
+</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Gratuit · règles 2026</span>
+    <h1>Salarié ou travailleur autonome ?</h1>
+    <p class="lead">Indiquez votre salaire et votre province : voyez ce que le salaire vous laisse après les cotisations et l'impôt, et le revenu, puis le taux horaire, qu'il vous faudrait comme travailleur autonome pour garder le même revenu.</p>
+    <ul class="trust"><li>Toutes les provinces et territoires</li><li>RRQ, RPC, AE et RQAP</li><li>Taux horaire équivalent</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="ef-form" onsubmit="return false">
+      <h2>Votre salaire</h2>
+      <div class="fields">
+        <div class="field"><label for="ef-gross">Salaire annuel</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="ef-gross" name="gross" value="70 000" aria-describedby="ef-gross-hint" data-save><span>$</span></div>
+          <span class="hint" id="ef-gross-hint">Avant retenues, primes comprises.</span></div>
+        <div class="field"><label for="ef-benefits">Avantages de l'employeur</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="ef-benefits" name="benefits" placeholder="0" aria-describedby="ef-benefits-hint" data-save><span>$</span></div>
+          <span class="hint" id="ef-benefits-hint">Facultatif, par année : assurance collective, régime de retraite, REER…</span></div>
+        <div class="field full"><label for="ef-province">Province ou territoire de résidence</label>
+          <select id="ef-province" name="province" data-input data-save></select></div>
+      </div>
+      <h2 style="margin-top: 20px;">Travailleur autonome</h2>
+      <div class="fields">
+        <div class="field"><label for="ef-expenses">Dépenses d'entreprise par année</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="ef-expenses" name="expenses" placeholder="0" aria-describedby="ef-expenses-hint" data-save><span>$</span></div>
+          <span class="hint" id="ef-expenses-hint">Logiciels, matériel, assurance, comptable…</span></div>
+        <div class="field"><label for="ef-units">Heures facturées par année</label>
+          <input type="text" inputmode="decimal" id="ef-units" name="units" value="1 296" aria-describedby="ef-units-hint" data-save>
+          <span class="hint" id="ef-units-hint">Vacances, jours fériés et temps non facturé déduits.</span></div>
+        <div class="field full"><label for="ef-rate">Votre taux horaire (facultatif)</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="ef-rate" name="rate" aria-describedby="ef-rate-hint" data-save><span>$</span></div>
+          <span class="hint" id="ef-rate-hint">Pour le comparer directement à votre salaire.</span></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="result-hero" role="status" aria-atomic="true">
+        <div class="label">Revenu nécessaire comme travailleur autonome</div>
+        <div class="big" id="ef-big">–</div>
+        <div class="sub" id="ef-sub">–</div>
+      </div>
+      <h2 class="sr-only">Détail du calcul</h2>
+      <div class="card" style="margin-top: 16px; padding: 18px;">
+        <table class="mini-table compare-table">
+          <caption class="sr-only">Revenu du salarié et du travailleur autonome, par année</caption>
+          <thead><tr><th scope="col">Par année</th><th scope="col">Salarié</th><th scope="col">Autonome</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Salaire ou revenus</th><td id="ef-e-gross">–</td><td id="ef-f-gross">–</td></tr>
+            <tr><th scope="row">RRQ ou RPC, AE, RQAP</th><td id="ef-e-contributions">–</td><td id="ef-f-contributions">–</td></tr>
+            <tr><th scope="row">Impôt sur le revenu</th><td id="ef-e-tax">–</td><td id="ef-f-tax">–</td></tr>
+            <tr><th scope="row">Dépenses d'entreprise</th><td id="ef-e-expenses">–</td><td id="ef-f-expenses">–</td></tr>
+            <tr><th scope="row">Revenu disponible</th><td id="ef-e-available">–</td><td id="ef-f-available">–</td></tr>
+            <tr id="ef-row-benefits" hidden><th scope="row">Avantages de l'employeur</th><td id="ef-e-benefits">–</td><td id="ef-f-benefits">–</td></tr>
+            <tr id="ef-row-total" hidden><th scope="row">Total comparé</th><td id="ef-e-total">–</td><td id="ef-f-total">–</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="notice" id="ef-notice" aria-live="polite" style="margin-top: 16px;">–</p>
+      <p style="margin-top: 16px;"><a class="btn btn-primary" href="{{link:rate}}">Calculer mon taux horaire</a></p>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>Comment se fait la comparaison</h2>
+  <p>Côté salarié, le calcul part de votre <strong>salaire</strong> et retire votre part du <strong>RRQ</strong> (ou du RPC hors du Québec), du <strong>RQAP</strong> au Québec, vos cotisations d'<strong>assurance-emploi</strong> et l'<strong>impôt</strong> fédéral et provincial, avec les crédits prévus pour ces cotisations et le montant canadien pour emploi. La part de l'employeur s'ajoute à votre salaire : elle ne fait pas partie de votre revenu.</p>
+  <p>Côté travailleur autonome, le calculateur cherche le <strong>revenu d'entreprise</strong> qui laisse le même revenu disponible, après vos dépenses, <strong>les deux parts du RRQ</strong> (ou du RPC), le RQAP et l'impôt sur votre revenu net d'entreprise. Divisé par vos <strong>heures facturées</strong>, il donne le taux horaire équivalent. Le <a href="{{link:tax}}">calculateur d'impôt du travailleur autonome</a> détaille le calcul, et la comparaison <a href="{{link:structure}}">entreprise individuelle ou société par actions</a> montre ce qui change avec une société.</p>
+</section>

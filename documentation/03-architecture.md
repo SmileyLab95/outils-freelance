@@ -196,11 +196,15 @@ Application d'une page, spécifiée dans [09-specification-espace.md](09-specifi
 
 | Moteur | Rôle |
 |---|---|
-| `brackets.js` | Impôt selon un barème progressif, taux marginal et moyen |
-| `tax-us.js` | *Self-employment tax*, impôt fédéral, déduction QBI, acomptes trimestriels |
-| `tax-uk.js` (à venir) | *Income tax* (Angleterre, Écosse), *Class 4 NI*, *payments on account* |
-| `tax-ca.js` (à venir) | Impôt fédéral et provincial, RPC/RRQ, acomptes provisionnels |
-| `salestax.js` (à venir) | TVA, *VAT*, TPS/TVH/TVQ/TVP : HT ↔ TTC |
+| `brackets.js` | Impôt selon un barème progressif, arrondi au centime, recherche d'une valeur par dichotomie |
+| `micro-fr.js`, `statuts-fr.js`, `per-fr.js` | Micro-entreprise (taux par activité, somme à mettre de côté), comparaison des statuts français, plafond du PER |
+| `tax-us.js`, `structure-us.js` | *Self-employment tax*, impôt fédéral, déduction QBI, acomptes trimestriels ; *sole proprietor* ou *S corp* |
+| `tax-uk.js` | *Income tax* (Angleterre, Écosse), *Class 1* (salarié) et *Class 4 NI*, *payments on account*, *limited company* |
+| `tax-ca.js`, `structure-ca.js` | Impôt fédéral et provincial, RPC/RRQ, RQAP, assurance-emploi des salariés, acomptes ; société par actions |
+| `international-uk.js`, `international-ca.js` | Facturer un client étranger : TVA, TPS/TVH et TVQ des prestations de services |
+| `salestax.js` | TVA, *VAT*, TPS/TVH/TVQ/TVP : HT ↔ TTC, plusieurs composantes |
+| `rate-convert.js`, `project-price.js` | Conversion d'un tarif (heure, jour, semaine, mois, an) ; prix d'un projet au forfait ([18](18-outils-de-prix.md)) |
+| `employee-freelance.js` | Salarié ou freelance : revenu disponible d'un salarié et chiffre d'affaires équivalent, quatre pays ([19](19-freelance-ou-salarie.md)) ; s'appuie sur les moteurs de chaque pays, chargés par la page |
 
 ## Interface et design
 

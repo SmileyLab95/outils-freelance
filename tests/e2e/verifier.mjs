@@ -944,6 +944,80 @@ const tests = {
     await page.uncheck("#ef-vl");
     check((await t("ef-big")) === "42 333 €", "Salarié ou freelance FR : situation par défaut rétablie");
   },
+  async "us/salary-vs-freelance/"(page) {
+    const t = async (id) => (await page.textContent(`#${id}`)).replace(/\s+/g, " ").trim();
+    check((await t("ef-big")) === "$73,141" && (await t("ef-sub")) === "That's $56.79 an hour over 1,288 billed hours, to keep $58,075 a year, as with your salary." &&
+      (await t("ef-e-contributions")) === "−$5,355" && (await t("ef-e-tax")) === "−$6,570" && (await t("ef-f-available")) === "$58,075" &&
+      (await page.textContent("#ef-e-expenses .sr-only")) === "Not applicable",
+      "Salary vs freelance US : 70 000 $ → 73 141 $ de revenus, 56,79 $ de l'heure ; case sans objet annoncée");
+    await page.selectOption("#ef-status", "married_filing_jointly");
+    check((await t("ef-big")) === "$74,098", "Salary vs freelance US : couple marié → 74 098 $");
+    await page.selectOption("#ef-status", "single");
+    await page.fill("#ef-rate", "100");
+    check((await t("ef-notice")).startsWith("At $100.00 an hour for 1,288 hours ($128,800 in revenue), you would keep $97,655 a year: $39,580 more than with your salary."),
+      "Salary vs freelance US : taux horaire comparé");
+    await page.fill("#ef-benefits", "6,000");
+    await page.fill("#ef-expenses", "2,000");
+    check((await t("ef-big")) === "$82,939" && (await t("ef-e-total")) === "$64,075" && (await page.isVisible("#ef-row-total")), "Salary vs freelance US : avantages et frais");
+    await page.fill("#ef-units", "x");
+    check((await page.getAttribute("#ef-units", "aria-invalid")) === "true" && (await t("ef-notice")).includes("Check the billed hours"), "Salary vs freelance US : saisie illisible signalée");
+    await accessible(page, "Salary vs freelance US (saisie illisible)");
+    await page.fill("#ef-units", "1,288");
+    for (const id of ["#ef-rate", "#ef-benefits", "#ef-expenses"]) await page.fill(id, "");
+    check((await t("ef-big")) === "$73,141", "Salary vs freelance US : situation par défaut rétablie");
+  },
+  async "uk/salary-vs-freelance/"(page) {
+    const t = async (id) => (await page.textContent(`#${id}`)).replace(/\s+/g, " ").trim();
+    check((await t("ef-big")) === "£39,259" && (await t("ef-sub")) === "That's £215.71 a day over 182 billed days, to keep £32,320 a year, as with your salary." &&
+      (await t("ef-e-contributions")) === "−£2,194" && (await t("ef-f-contributions")) === "−£1,601" &&
+      (await t("ef-notice")).startsWith("If you're eligible for automatic enrolment, your employer must pay at least £1,013 a year"),
+      "Salary vs freelance UK : 40 000 £ → 39 259 £, 215,71 £ par jour ; pension minimale de l'employeur");
+    await page.selectOption("#ef-region", "scotland");
+    check((await t("ef-big")) === "£39,248", "Salary vs freelance UK : Écosse → 39 248 £");
+    await page.selectOption("#ef-region", "ruk");
+    await page.fill("#ef-benefits", "1,012.80");
+    await page.fill("#ef-rate", "250");
+    check((await t("ef-big")) === "£40,627" && (await t("ef-notice")).startsWith("At £250.00 a day for 182 days (£45,500 in turnover), you would keep £36,938 a year: £3,606 more than with your salary."),
+      "Salary vs freelance UK : pension ajoutée et tarif journalier comparé");
+    await page.fill("#ef-benefits", "");
+    await page.fill("#ef-rate", "");
+    await page.fill("#ef-gross", "90,000");
+    const n = await t("ef-notice");
+    check(n.includes("Making Tax Digital for Income Tax applies") && !n.includes("VAT registration threshold"), "Salary vs freelance UK : seuil MTD signalé, pas encore la TVA (88 700 £)");
+    await accessible(page, "Salary vs freelance UK (90 000 £)");
+    await page.fill("#ef-gross", "40,000");
+    check((await t("ef-big")) === "£39,259", "Salary vs freelance UK : situation par défaut rétablie");
+  },
+  async "ca/salary-vs-freelance/"(page) {
+    const t = async (id) => (await page.textContent(`#${id}`)).replace(/\s+/g, " ").trim();
+    check((await page.inputValue("#ef-province")) === "ON" && (await page.$$eval("#ef-province option", (o) => o.length)) === 13 &&
+      (await t("ef-big")) === "$73,392" && (await t("ef-e-contributions")) === "−$5,080" && (await t("ef-e-available")) === "$53,786" &&
+      (await t("ef-notice")).includes("register for the GST/HST"),
+      "Salary vs self-employed CA : Ontario, 70 000 $ → 73 392 $ ; RPC et AE du salarié (5 080 $) ; petit fournisseur");
+    await page.selectOption("#ef-province", "QC");
+    check((await t("ef-big")) === "$74,097" && (await t("ef-e-contributions")) === "−$5,386", "Salary vs self-employed CA : Québec (RRQ, RQAP, AE à 1,30 %) → 74 097 $");
+    await page.selectOption("#ef-province", "ON");
+    await page.fill("#ef-rate", "50");
+    check((await t("ef-notice")).startsWith("At $50.00 an hour for 1,288 hours ($64,400 in revenue), you would keep $48,260 a year: $5,526 less than with your salary."),
+      "Salary vs self-employed CA : taux horaire inférieur signalé");
+    await page.fill("#ef-rate", "");
+    await page.reload({ waitUntil: "networkidle" });
+    check((await page.inputValue("#ef-province")) === "ON" && (await t("ef-big")) === "$73,392", "Salary vs self-employed CA : province retrouvée après rechargement");
+  },
+  async "ca/fr/salarie-ou-travailleur-autonome/"(page) {
+    const t = async (id) => (await page.textContent(`#${id}`)).replace(/\s+/g, " ").trim();
+    check((await page.inputValue("#ef-province")) === "QC" && (await t("ef-big")) === "74 097 $" &&
+      (await t("ef-sub")) === "Soit 57,17 $ de l'heure sur 1 296 heures facturées, pour garder 51 045 $ par année, comme avec votre salaire." &&
+      (await page.textContent("#ef-f-benefits .sr-only")) === "Sans objet",
+      "Salarié ou autonome CA-FR : Québec, 70 000 $ → 74 097 $, 57,17 $ de l'heure");
+    await page.selectOption("#ef-province", "ON");
+    check((await t("ef-big")) === "73 392 $" && (await t("ef-sub")).startsWith("Soit 56,63 $ de l'heure"), "Salarié ou autonome CA-FR : Ontario → 73 392 $");
+    await page.selectOption("#ef-province", "QC");
+    await page.fill("#ef-gross", "");
+    check((await t("ef-big")) === "–" && (await t("ef-sub")) === "Indiquez votre salaire annuel.", "Salarié ou autonome CA-FR : salaire vide → invitation à le saisir");
+    await page.fill("#ef-gross", "70 000");
+    check((await t("ef-big")) === "74 097 $", "Salarié ou autonome CA-FR : situation par défaut rétablie");
+  },
   async "us/project-price-calculator/"(page) {
     const t = async (id) => (await page.textContent(`#${id}`)).replace(/\s+/g, " ").trim();
     check((await t("pp-big")) === "$6,160" && (await t("pp-r-time")) === "56 hours" && (await t("pp-r-extra")) === "5.6 hours" &&

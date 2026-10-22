@@ -20,14 +20,15 @@ prévoyance) ; seuls des montants sont comparés.
 
 ## 2. Pages
 
-Identifiant `employee-vs-freelance`, dans le menu après le comparateur de statuts (France : « Statut et revenus ») :
+Identifiant `employee-vs-freelance`, dans le menu après le comparateur de statuts (« Statut et revenus » en France,
+« Taxes » ou « Impôts et taxes » ailleurs) :
 
 | Section | Adresse | Statut du freelance comparé |
 |---|---|---|
 | France | `/fr/salarie-ou-freelance/` | Micro-entrepreneur (activité au choix : libérale BNC par défaut, services BIC, vente) |
 | États-Unis | `/us/salary-vs-freelance/` | *Sole proprietor* (Schedule C) |
 | Royaume-Uni | `/uk/salary-vs-freelance/` | *Sole trader* |
-| Canada | `/ca/salary-vs-freelance/` et `/ca/fr/salarie-ou-travailleur-autonome/` | Travailleur autonome (entreprise individuelle) |
+| Canada | `/ca/salary-vs-freelance/` et `/ca/fr/salarie-ou-travailleur-autonome/` | Travailleur autonome (entreprise individuelle) ; Ontario par défaut en anglais, Québec en français |
 
 ## 3. Saisie et valeurs par défaut
 
@@ -146,5 +147,16 @@ Chaque pays est publié dès que ses pages passent tous les tests.
   sur 148 jours facturés).
 - **Point relevé** : le comparateur de statuts calcule l'impôt sans la décote, alors que ce nouvel outil l'applique ;
   à corriger pour que les deux outils donnent le même impôt (prochaine action).
-- **À faire** : États-Unis, Royaume-Uni, Canada (§ 7).
+- **États-Unis, Royaume-Uni et Canada, faits le 22/10/2026** : fonctions `employeeUS`, `freelanceUS`, `employeeUK`,
+  `freelanceUK`, `employeeCA`, `freelanceCA` ; *Class 1* du salarié extraite dans `taxUK.class1Employee` ;
+  assurance-emploi du salarié ajoutée à `taxCA.personal` (option `insurable`, règle `ei_rate_employee` : 1,63 %,
+  1,30 % au Québec, crédit fédéral ligne 31200 et provincial ligne 58300 hors Québec, cotisations remboursées
+  jusqu'à 2 000 $) ; minimum légal de l'employeur à la retraite d'entreprise au Royaume-Uni affiché (règle
+  `auto_enrolment_2026_27` : 3 % des gains entre 6 240 £ et 50 270 £, au-delà de 10 000 £), à ajouter aux avantages.
+  Exemples par défaut : 70 000 $ aux États-Unis → 73 141,49 $ (56,79 $ de l'heure) ; 40 000 £ → 39 258,65 £
+  (215,71 £ par jour) ; 70 000 $ en Ontario → 73 392,13 $ ; au Québec → 74 097,07 $. Valeurs recalculées à la main
+  (calcul décimal indépendant pour les États-Unis et le Royaume-Uni ; écart de crédit d'assurance-emploi vérifié au
+  Canada) ; 22 erreurs réintroduites dans les moteurs, toutes détectées.
+- **Limites dites dans les pages** : impôt de l'État non compté (États-Unis), remboursement des prêts étudiants non
+  compté (Royaume-Uni), protection sociale non chiffrée (quatre pays).
 

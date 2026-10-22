@@ -18,6 +18,11 @@
     return window.Intl && Intl.ListFormat ? new Intl.ListFormat(OF.locale, { type: "conjunction" }).format(items) : items.join(", ");
   };
   var money = function (n) { return OF.money(n, 0); };
+  var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+  // Valeur d'une règle, éventuellement dans un objet (« tva_franchise_seuils.services_seuil »).
+  var rule = function (path) { return path.split(".").reduce(function (v, k) { return v == null ? v : v[k]; }, R); };
+  // Case sans objet : tiret masqué aux lecteurs d'écran, qui entendent « sans objet ».
+  var NA = '<span aria-hidden="true">–</span><span class="sr-only">' + esc(L.na) + "</span>";
   var NUMBERS = { gross: "ef-gross", benefits: "ef-benefits", expenses: "ef-expenses", units: "ef-units", rate: "ef-rate" };
   var CELLS = ["gross", "contributions", "tax", "expenses", "available", "benefits", "total"];
 
@@ -46,7 +51,7 @@
     Array.prototype.forEach.call(form.querySelectorAll("[data-input]"), function (el) {
       input[el.name] = el.type === "checkbox" ? el.checked : el.value;
     });
-    var r = OFE.employeeFreelance.compare(L.country, input, R);
+    var r = OFE.employeeFreelance.compare(L.country, input, R, R._meta && R._meta.provinces);
     if (r.error) return blank(L.enter_salary, L.msg_always, false);
     if (r.revenue === null) return blank(L.not_found, L.msg_always, true);
 
@@ -58,8 +63,9 @@
     };
     ["e", "f"].forEach(function (side) {
       CELLS.forEach(function (c) {
-        var v = cells[side][c];
-        set("ef-" + side + "-" + c, v === null ? "–" : (v <= -0.5 ? "−" : "") + money(Math.abs(v)));
+        var v = cells[side][c], el = $("ef-" + side + "-" + c);
+        if (v === null) el.innerHTML = NA;
+        else el.textContent = (v <= -0.5 ? "−" : "") + money(Math.abs(v));
       });
     });
     $("ef-row-benefits").hidden = $("ef-row-total").hidden = !withBenefits;
@@ -80,9 +86,21 @@
     else if (f.vatThreshold && f.revenue > f.vatThreshold) {
       msgs.push(fill(L.over_vat, { threshold: money(f.vatThreshold), major: money(f.vatThresholdMajor || f.vatThreshold) }));
     }
+    // Seuils du pays dépassés par le chiffre d'affaires nécessaire (montants lus dans les règles).
+    (L.thresholds || []).forEach(function (t) {
+      if (f.revenue > rule(t.rule)) msgs.push(fill(t.text, { threshold: money(rule(t.rule)) }));
+    });
+    if (e.employerPensionMinimum > 0 && L.pension) msgs.push(fill(L.pension, { amount: money(e.employerPensionMinimum) }));
     msgs.push(L.msg_always);
     $("ef-notice").textContent = msgs.join(" ");
     $("ef-notice").className = "notice" + (f.overCeiling ? " warn" : "");
+  }
+
+  // Canada : provinces et territoires dans l'ordre alphabétique de la langue de la page, province par défaut choisie.
+  var P = R._meta && R._meta.provinces;
+  if ($("ef-province") && P) {
+    $("ef-province").innerHTML = Object.keys(P).sort(function (a, b) { return P[a][L.names].localeCompare(P[b][L.names], OF.locale); })
+      .map(function (c) { return '<option value="' + c + '"' + (c === L.default_province ? " selected" : "") + ">" + esc(P[c][L.names]) + "</option>"; }).join("");
   }
 
   OF.persistForm(form, "employee-freelance");

@@ -579,3 +579,17 @@ d'impôt, « Combien mettre de côté » et le calculateur REER (anglais et fran
   Ontario avec surtaxe et dividendes, salaire au-delà du MGAP, montant laissé, refus) ; invariants (tout verser ≈
   entreprise individuelle à quelques pour cent près ; impôt reporté ≥ 0) ; textes des deux pages repris des règles ;
   parcours navigateur et accessibilité ; captures relues ; revue critique.
+
+## Ajout : assurance-emploi d'un salarié (`engines/tax-ca.js`, 22/10/2026)
+
+Pour l'outil « Salarié ou travailleur autonome ? » ([19](../19-freelance-ou-salarie.md)), `personal()` accepte
+`insurable: true` (salarié sans lien de dépendance ; faux par défaut, comme pour l'actionnaire qui contrôle plus de
+40 % des actions, `ei_controlling_shareholder`). Règle `ei_rate_employee` (ARC et EDSC) :
+
+- cotisation = min(salaire, 68 900 $) × 1,63 % (1,30 % au Québec, où le RQAP couvre la maternité et le congé
+  parental) ; aucune cotisation si la rémunération assurable ne dépasse pas 2 000 $ (remboursée, ligne 45000) ;
+- crédit non remboursable fédéral (ligne 31200, 14 %) et provincial ou territorial hors Québec (ligne 58300 du
+  formulaire 428, au taux le plus bas) ; aucun crédit du Québec (`quebec_contributions_no_credit`).
+
+Tests : écart d'impôt fédéral et provincial égal au crédit attendu (Ontario, Québec), cotisation plafonnée,
+remboursement sous 2 000 $, comparateur de sociétés inchangé (aucune assurance-emploi par défaut).

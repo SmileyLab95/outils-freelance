@@ -70,6 +70,13 @@
     };
   }
 
+  /** Class 1 NIC d'un salarié sur un salaire annuel : taux principal entre PT et UEL, taux réduit au-delà. */
+  function class1Employee(salary, rules) {
+    var s = Math.max(0, salary || 0);
+    return Math.max(0, Math.min(s, rules.class1_upper_earnings_limit) - rules.class1_primary_threshold) * rules.class1_employee_main_rate +
+      Math.max(0, s - rules.class1_upper_earnings_limit) * rules.class1_employee_additional_rate;
+  }
+
   /** Impôt sur les sociétés avec marginal relief entre les deux seuils. */
   function corporationTax(profits, rules) {
     var p = Math.max(0, profits);
@@ -109,8 +116,7 @@
       salary = Math.max(Math.min(salary, profit), 0);
       employerNI = Math.max(0, salary - rules.class1_secondary_threshold) * rules.class1_employer_rate;
     }
-    var employeeNI = Math.max(0, Math.min(salary, rules.class1_upper_earnings_limit) - rules.class1_primary_threshold) * rules.class1_employee_main_rate +
-      Math.max(0, salary - rules.class1_upper_earnings_limit) * rules.class1_employee_additional_rate;
+    var employeeNI = class1Employee(salary, rules);
     var companyProfit = Math.max(0, profit - salary - employerNI - (input.costs || 0));
     var ct = corporationTax(companyProfit, rules);
     var dividends = companyProfit - ct;
@@ -148,7 +154,7 @@
     return { rate: rate, interest: interest, daily: amount * rate / 365, compensation: compensation, total: interest + compensation };
   }
 
-  return { personalAllowance: personalAllowance, incomeTax: incomeTax, class4: class4, paymentsOnAccount: paymentsOnAccount,
+  return { personalAllowance: personalAllowance, incomeTax: incomeTax, class4: class4, class1Employee: class1Employee, paymentsOnAccount: paymentsOnAccount,
            soleTrader: soleTrader, corporationTax: corporationTax, dividendTax: dividendTax, limitedCompany: limitedCompany,
            profitForTakeHome: profitForTakeHome, latePayment: latePayment };
 });

@@ -1,5 +1,25 @@
 # Journal des modifications
 
+## 2026-10-22 — « Salary vs freelance » : États-Unis, Royaume-Uni et Canada
+
+- Nouvelles pages `/us/salary-vs-freelance/`, `/uk/salary-vs-freelance/`, `/ca/salary-vs-freelance/` et
+  `/ca/fr/salarie-ou-travailleur-autonome/` (menu « Taxes » / « Impôts et taxes ») : revenu disponible d'un salarié
+  et revenus dont un indépendant a besoin pour garder autant, avec le tarif horaire ou journalier équivalent ;
+  avantages de l'employeur, frais et tarif facultatifs.
+- États-Unis : FICA, *Additional Medicare Tax* et impôt fédéral du salarié ; *self-employment tax*, déduction QBI et
+  impôt fédéral du *sole proprietor* (impôt de l'État non compté, dit dans la page).
+- Royaume-Uni : *Class 1* et *Income Tax* du salarié (Écosse comprise), *Class 4* du *sole trader* ; minimum légal
+  de l'employeur à la retraite d'entreprise (*automatic enrolment* 2026/27, règle sourcée) ; seuils *Making Tax
+  Digital* et TVA signalés.
+- Canada : RPC ou RRQ, RQAP et assurance-emploi du salarié (nouvelle règle sourcée : 1,63 %, 1,30 % au Québec, avec
+  ses crédits d'impôt), impôts fédéral et provincial des 13 provinces et territoires ; seuil du petit fournisseur.
+- Tableau de résultats : cases sans objet annoncées « sans objet » aux lecteurs d'écran.
+- Moteurs : `taxUK.class1Employee` extraite ; `taxCA.personal` accepte un salaire assurable (assurance-emploi) ;
+  `employeeFreelance` charge à la demande les moteurs du pays. Document d'architecture : liste des moteurs à jour.
+- Tests : 208 unitaires (valeurs recalculées à la main, 22 erreurs réintroduites dans les moteurs et détectées,
+  exemples des FAQ recalculés dans les cinq pages) ; parcours navigateur des quatre pages ; suite complète
+  (2 283 vérifications navigateur).
+
 ## 2026-10-22 — « Salarié ou freelance ? » (France)
 
 - Nouvelle page `/fr/salarie-ou-freelance/` (menu « Statut et revenus ») : à partir du salaire brut, revenu disponible

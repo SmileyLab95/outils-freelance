@@ -92,7 +92,9 @@
   /**
    * Impôt et cotisations d'un particulier : revenu de travail autonome, salaire et dividendes non déterminés.
    * Un revenu de travail autonome et un salaire ensemble ne sont pas prévus (plafonds du RPC comptés séparément).
-   * @param {object} input { province, profit, salary, dividends (montant reçu, non majoré), deduction (REER) }
+   * @param {object} input { province, profit, salary, dividends (montant reçu, non majoré), deduction (REER),
+   *   insurable (salaire soumis à l'assurance-emploi : salarié sans lien de dépendance ; faux pour l'actionnaire
+   *   qui contrôle plus de 40 % des actions) }
    *   Code de province : ON, QC, BC, AB, SK, MB, NS, NB, NL, PE, YT, NT, NU.
    * @param {object} rules valeurs de data/rules/ca.json
    * @param {object} provinces « provinces » de data/rules/ca.json
@@ -110,6 +112,10 @@
     var emp = employeePensions(salary, quebec, rules);
     var parentalEmployee = quebec ? Math.min(salary, rules.qpip_max_insurable_earnings) * rules.qpip_rate_employee : 0;
     var payrollTax = code === "NT" ? salary * rules.nwt_payroll_tax : 0;
+    // Assurance-emploi du salarié : crédit fédéral (ligne 31200) et provincial hors Québec (ligne 58300) ; cotisations
+    // remboursées si la rémunération assurable ne dépasse pas 2 000 $.
+    var E = rules.ei_rate_employee;
+    var ei = input.insurable && salary > E.refund_threshold ? Math.min(salary, rules.ei_max_insurable_earnings) * (quebec ? E.quebec : E.canada) : 0;
     var grossedUp = dividends * (1 + rules.non_eligible_dividend_gross_up);
 
     var deductions = pen.deduction + split.deduction + emp.deduction;
@@ -120,7 +126,7 @@
     var bpa = federalBPA(netIncome, rules);
     var employment = Math.min(salary, rules.canada_employment_amount_2026);
     var fedCredits = rules.federal_non_refundable_credit_rate *
-      (bpa + pen.creditBase + split.creditBase + emp.creditBase + parentalEmployee + employment);
+      (bpa + pen.creditBase + split.creditBase + emp.creditBase + parentalEmployee + employment + ei);
     var fedDividendCredit = grossedUp * rules.federal_dtc_non_eligible;
     var federalBasic = Math.max(0, fedBrackets.tax - fedCredits - fedDividendCredit);
     var abatement = quebec ? federalBasic * rules.quebec_abatement : 0;
@@ -132,7 +138,7 @@
     var provTaxable = Math.max(0, taxable - workers);
     var provBrackets = B.progressive(provTaxable, prov.income_tax_brackets);
     var provRate = prov.income_tax_brackets[0].rate;
-    var provAmounts = provincialBPA(prov, netIncome, rules) + (quebec ? 0 : pen.creditBase + emp.creditBase) +
+    var provAmounts = provincialBPA(prov, netIncome, rules) + (quebec ? 0 : pen.creditBase + emp.creditBase + ei) +
       (code === "YT" ? Math.min(salary, rules.yukon_canada_employment_amount_2026) : 0);
     var provCredits = provRate * provAmounts;
     var dtcRate = rules.provincial_dtc_non_eligible_2026[code];
@@ -147,10 +153,10 @@
     }
     // Ontario : la surtaxe se calcule avant le crédit pour dividendes (formulaire ON428).
     var provincial = Math.max(0, provincialBasic + surtax - provDividendCredit) + premium;
-    var contributions = pen.total + parental + emp.total + parentalEmployee + payrollTax;
+    var contributions = pen.total + parental + emp.total + parentalEmployee + ei + payrollTax;
     return {
       province: code, quebec: quebec, profit: profit, salary: salary, dividends: dividends, grossedUp: grossedUp,
-      pensions: pen, qpip: parental, qpipDeduction: split.deduction, employeePensions: emp, qpipEmployee: parentalEmployee,
+      pensions: pen, qpip: parental, qpipDeduction: split.deduction, employeePensions: emp, qpipEmployee: parentalEmployee, ei: ei,
       payrollTax: payrollTax, contributions: contributions,
       netIncome: netIncome, taxable: taxable,
       federalBrackets: fedBrackets.tax, federalBPA: bpa, federalCredits: fedCredits, federalDividendCredit: fedDividendCredit,

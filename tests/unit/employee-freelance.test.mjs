@@ -92,35 +92,133 @@ test("recherche du chiffre d'affaires : plus petit montant au centime, fonction 
   assert.equal(EF.revenueFor(10, () => 0), null);
 });
 
+const US = rules("us"), UK = rules("uk");
+const caData = JSON.parse(readFileSync(new URL("../../data/rules/ca.json", import.meta.url)));
+const CA = rules("ca"), PROV = caData.provinces;
+const TCA = require("../../src/assets/engines/tax-ca.js");
+
+test("États-Unis, 70 000 $ (single) : FICA 5 355 $, impôt fédéral 6 570 $ ; sole proprietor : 73 141,49 $ (56,79 $ de l'heure)", () => {
+  const e = EF.employeeUS({ gross: 70000, status: "single" }, US);
+  near(e.fica, 5355, "FICA salariale 7,65 %");
+  near(e.incomeTax, 6570, "impôt : 1 240 + 4 560 + 3 500 × 22 %");
+  near(e.available, 58075, "revenu disponible");
+  const r = EF.compare("us", { gross: 70000, status: "single", units: 1288 }, US);
+  assert.equal(r.revenue, 73141.49);
+  assert.ok(EF.freelanceUS({ revenue: 73141.48, status: "single" }, US).available < 58074.995, "un centime de moins ne suffit pas");
+  near(r.rate, 73141.49 / 1288, "taux horaire équivalent");
+  near(EF.compare("us", { gross: 70000, status: "single", units: 1288, rate: 100 }, US).atRate.available, 97655.44, "à 100 $ de l'heure");
+  // Frais déductibles aux États-Unis et au Royaume-Uni : le chiffre d'affaires nécessaire augmente de leur montant.
+  assert.equal(EF.compare("us", { gross: 70000, status: "single", expenses: 5000 }, US).revenue, 78141.49);
+  assert.equal(EF.compare("uk", { gross: 40000, region: "ruk", expenses: 5000 }, UK).revenue, 44258.65);
+});
+
+test("États-Unis, 250 000 $ : Social Security plafonnée, Additional Medicare Tax, tranche à 32 %", () => {
+  const e = EF.employeeUS({ gross: 250000, status: "single" }, US);
+  near(e.fica, 184500 * 0.062 + 250000 * 0.0145, "FICA");
+  near(e.additionalMedicare, 450, "0,9 % au-delà de 200 000 $");
+  near(e.incomeTax, 51304, "impôt fédéral");
+  near(e.contributions, 15064 + 450, "FICA et Additional Medicare Tax");
+  near(e.available, 183182, "revenu disponible");
+  // Couple marié, déclaration commune : déduction standard de 32 200 $, barème des couples (10 % jusqu'à 24 800 $).
+  near(EF.employeeUS({ gross: 70000, status: "married_filing_jointly" }, US).incomeTax, 2480 + 13000 * 0.12, "impôt d'un couple");
+  // Sole proprietor à 300 000 $ : SE tax (Social Security plafonnée) et Additional Medicare Tax sur 92,35 % du bénéfice.
+  const f = EF.freelanceUS({ revenue: 300000, status: "single" }, US);
+  near(f.contributions, 184500 * 0.124 + 277050 * 0.029 + 77050 * 0.009, "SE tax et Additional Medicare Tax");
+});
+
+test("Royaume-Uni, 40 000 £ : NIC 2 194,40 £, impôt 5 486 £ ; sole trader : 39 258,65 £ (215,71 £ par jour) ; pension minimale 1 012,80 £", () => {
+  const e = EF.employeeUK({ gross: 40000, region: "ruk" }, UK);
+  near(e.contributions, 2194.4, "Class 1 : 27 430 £ × 8 %");
+  near(e.incomeTax, 5486, "impôt : 27 430 £ × 20 %");
+  near(e.available, 32319.6, "revenu disponible");
+  near(e.employerPensionMinimum, 1012.8, "3 % de 40 000 £ − 6 240 £");
+  const r = EF.compare("uk", { gross: 40000, region: "ruk", units: 182 }, UK);
+  assert.equal(r.revenue, 39258.65);
+  near(r.rate, 39258.65 / 182, "tarif journalier");
+  assert.equal(EF.employeeUK({ gross: 10000, region: "ruk" }, UK).employerPensionMinimum, 0, "sous le seuil d'affiliation de 10 000 £");
+  const h = EF.employeeUK({ gross: 120000, region: "ruk" }, UK);
+  near(h.incomeTax, 39432, "allocation personnelle réduite au-delà de 100 000 £");
+  near(h.contributions, 4410.6, "2 % au-delà de l'UEL");
+  near(h.employerPensionMinimum, 1320.9, "3 % de 50 270 £ − 6 240 £ : bande plafonnée");
+  assert.equal(EF.compare("uk", { gross: 120000, region: "ruk" }, UK).revenue, 118015.78);
+  assert.ok(EF.employeeUK({ gross: 40000, region: "scotland" }, UK).incomeTax !== e.incomeTax, "barème écossais");
+});
+
+test("Canada : assurance-emploi du salarié (1,63 %, 1,30 % au Québec, plafond, remboursement sous 2 000 $) et ses crédits", () => {
+  const on = (insurable) => TCA.personal({ province: "ON", salary: 70000, insurable }, CA, PROV);
+  const a = on(true), b = on(false);
+  near(a.ei, 1123.07, "68 900 $ × 1,63 %");
+  near(a.contributions - b.contributions, 1123.07, "cotisation ajoutée");
+  near(b.federal - a.federal, 0.14 * 1123.07, "crédit fédéral, ligne 31200");
+  near(b.provincial - a.provincial, 0.0505 * 1123.07, "crédit de l'Ontario, ligne 58300");
+  const qc = (insurable) => TCA.personal({ province: "QC", salary: 70000, insurable }, CA, PROV);
+  const c = qc(true), d = qc(false);
+  near(c.ei, 895.7, "Québec : 68 900 $ × 1,30 %");
+  near(d.federal - c.federal, 0.14 * 895.7 * (1 - 0.165), "crédit fédéral après l'abattement du Québec");
+  near(d.provincial - c.provincial, 0, "pas de crédit du Québec");
+  assert.equal(TCA.personal({ province: "ON", salary: 2000, insurable: true }, CA, PROV).ei, 0, "cotisations remboursées jusqu'à 2 000 $");
+  assert.equal(TCA.personal({ province: "ON", salary: 70000 }, CA, PROV).ei, 0, "actionnaire : pas d'assurance-emploi par défaut");
+});
+
+test("Canada : salarié et travailleur autonome comparés au centime (Ontario, Québec, Saskatchewan)", () => {
+  for (const province of ["ON", "QC", "SK"]) {
+    const r = EF.compare("ca", { gross: 70000, province, units: 1288 }, CA, PROV);
+    const e = TCA.personal({ province, salary: 70000, insurable: true }, CA, PROV);
+    near(r.employee.available, 70000 - e.total, `${province} : revenu disponible du salarié`);
+    assert.equal(r.freelance.available.toFixed(2), r.target.toFixed(2), `${province} : même revenu disponible`);
+    const less = TCA.estimate({ province, profit: r.revenue - 0.01 }, CA, PROV);
+    assert.ok(r.revenue - 0.01 - less.total < r.target - 0.005, `${province} : un centime de moins ne suffit pas`);
+    // Le travailleur autonome paie les deux parts du RPC ou du RRQ : il lui faut plus que le salaire brut.
+    assert.ok(r.revenue > 70000, `${province} : ${r.revenue}`);
+  }
+  // Dépenses déductibles : le chiffre d'affaires nécessaire augmente exactement de leur montant.
+  const base = EF.compare("ca", { gross: 70000, province: "ON" }, CA, PROV).revenue;
+  assert.equal(Math.round((EF.compare("ca", { gross: 70000, province: "ON", expenses: 5000 }, CA, PROV).revenue - base) * 100), 500000);
+});
+
 // Pages : exemple de la FAQ recalculé à partir des valeurs par défaut, jours facturés identiques à ceux du
 // convertisseur de la même section, sources citées présentes dans les règles.
 const read = (f) => readFileSync(new URL("../../content/" + f, import.meta.url), "utf8").replace(/[  ]/g, " ");
 const num = (s) => Number(String(s).replace(/\s/g, "").replace(",", "."));
 const PAGES = {
-  fr: ["fr/salarie-ou-freelance.html", "fr/convertisseur-tjm.html", "fr", "fr-FR",
-    "Avec {gross} € brut par an, un salarié du secteur privé garde {available} € après cotisations et impôt sur le revenu (personne seule, sans autre revenu). En micro-entreprise libérale, sans frais, il faut {revenue} € de chiffre d'affaires pour garder autant, soit {rate} € par jour sur {units} jours facturés."]
+  fr: ["fr/salarie-ou-freelance.html", "fr/convertisseur-tjm.html", "fr", "fr-FR", false,
+    "Avec {gross} € brut par an, un salarié du secteur privé garde {available} € après cotisations et impôt sur le revenu (personne seule, sans autre revenu). En micro-entreprise libérale, sans frais, il faut {revenue} € de chiffre d'affaires pour garder autant, soit {rate} € par jour sur {units} jours facturés."],
+  us: ["us/salary-vs-freelance.html", "us/rate-converter.html", "us", "en-US", true,
+    "With a ${gross} salary, a single filer keeps ${available} after FICA and federal income tax. As a sole proprietor with no expenses, you need ${revenue} in revenue to keep the same amount, or ${rate2} an hour over {units} billed hours."],
+  uk: ["uk/salary-vs-freelance.html", "uk/rate-converter.html", "uk", "en-GB", false,
+    "With a £{gross} salary, you keep £{available} after Income Tax and National Insurance (outside Scotland). As a sole trader with no expenses, you need £{revenue} in turnover to keep the same amount, or £{rate2} a day over {units} billed days."],
+  ca: ["ca/salary-vs-freelance.html", "ca/rate-converter.html", "ca", "en-CA", true,
+    "With a ${gross} salary in Ontario, you keep ${available} after CPP, EI and income tax. Self-employed with no expenses, you need ${revenue} in revenue to keep the same amount, or ${rate2} an hour over {units} billed hours."],
+  "ca-fr": ["ca-fr/salarie-ou-travailleur-autonome.html", "ca-fr/convertisseur-de-tarifs.html", "ca", "fr-CA", true,
+    "Avec un salaire de {gross} $ au Québec, vous gardez {available} $ après les cotisations (RRQ, assurance-emploi, RQAP) et l'impôt. Comme travailleur autonome, sans dépenses, il vous faut {revenue} $ de revenus pour garder autant, soit {rate2} $ de l'heure sur {units} heures facturées."]
 };
 
 test("pages : exemple de la FAQ = calcul avec les valeurs par défaut ; jours du convertisseur ; sources", () => {
-  for (const [section, [page, converter, country, locale, sentence]] of Object.entries(PAGES)) {
+  for (const [section, [page, converter, country, locale, hourly, sentence]] of Object.entries(PAGES)) {
     const html = read(page), conv = read(converter), R = rules(country);
     const data = JSON.parse(/id="employee-freelance-data">([\s\S]*?)<\/script>/.exec(html)[1]);
     const front = JSON.parse(/<!--(\{[\s\S]*?\})-->/.exec(html)[1]);
-    const field = (h, id) => num(new RegExp(`id="${id}"[^>]*value="([^"]*)"`).exec(h)[1]);
+    // Nombre affiché dans la langue de la page : virgule des milliers en anglais, virgule décimale en français.
+    const parse = (v) => locale.startsWith("en") ? Number(v.replace(/[\s,]/g, "")) : num(v);
+    const field = (h, id) => parse(new RegExp(`id="${id}"[^>]*value="([^"]*)"`).exec(h)[1]);
     const selected = (id) => { const m = new RegExp(`id="${id}"[\\s\\S]*?<option value="(\\w+)" selected`).exec(html); return m && m[1]; };
     const input = { gross: field(html, "ef-gross"), units: field(html, "ef-units") };
     for (const id of ["activity", "status", "region", "province"]) if (selected("ef-" + id)) input[id] = selected("ef-" + id);
-    const r = EF.compare(data.country, input, R);
+    if (data.default_province) input.province = data.default_province;
+    const r = EF.compare(data.country, input, R, PROV);
     const f = (n, d = 0) => n.toLocaleString(locale, { minimumFractionDigits: d, maximumFractionDigits: d }).replace(/\s/g, " ");
     const expected = sentence.replace("{gross}", f(input.gross)).replace("{available}", f(r.employee.available)).replace("{revenue}", f(r.revenue))
-      .replace("{rate}", f(r.rate)).replace("{units}", f(input.units));
+      .replace("{rate}", f(r.rate)).replace("{rate2}", f(r.rate, 2)).replace("{units}", f(input.units));
     assert.ok(html.includes(expected), `${section} : exemple de la FAQ\n${expected}`);
     assert.equal(front.id, "employee-vs-freelance");
-    assert.equal(input.units, field(conv, "rc-days"), `${section} : jours facturés du convertisseur`);
+    assert.equal(input.units, field(conv, "rc-days") * (hourly ? field(conv, "rc-hours") : 1), `${section} : jours ou heures facturés du convertisseur`);
     for (const key of front.sources || []) assert.ok(R[key] !== undefined, `${section} : source ${key}`);
-    for (const key of ["fields", "check", "check_notice", "enter_salary", "enter_units", "not_found", "sub", "sub_no_units", "at_rate_more",
-      "at_rate_less", "at_rate_same", "over_ceiling", "at_rate_over_ceiling", "over_vat", "msg_always"]) {
-      assert.ok(data[key] !== undefined, `${section} : texte ${key}`);
-    }
+    const keys = ["na", "fields", "check", "check_notice", "enter_salary", "enter_units", "not_found", "sub", "sub_no_units", "at_rate_more",
+      "at_rate_less", "at_rate_same", "msg_always"].concat(country === "fr" ? ["over_ceiling", "at_rate_over_ceiling", "over_vat"] : [])
+      .concat(country === "uk" ? ["pension"] : []).concat(country === "ca" ? ["names", "default_province"] : []);
+    for (const key of keys) assert.ok(data[key] !== undefined, `${section} : texte ${key}`);
+    for (const t of data.thresholds || []) assert.equal(typeof R[t.rule], "number", `${section} : seuil ${t.rule}`);
+    for (const key of Object.values(data.fields)) assert.ok(key.length > 0);
+    assert.deepEqual(Object.keys(data.fields).sort(), ["ef-benefits", "ef-expenses", "ef-gross", "ef-rate", "ef-units"]);
   }
 });

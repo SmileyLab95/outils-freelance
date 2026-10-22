@@ -1,0 +1,115 @@
+<!--{
+  "id": "employee-vs-freelance",
+  "slug": "salary-vs-freelance/",
+  "title": "Salary vs Freelance Calculator: Revenue to Match a Salary",
+  "description": "How much revenue, and what hourly rate, do you need as a freelancer to keep what your salary leaves you? FICA, self-employment tax and federal tax for 2026.",
+  "menu": "Salary vs freelance",
+  "icon": "🔀",
+  "blurb": "The revenue and hourly rate that replace your salary.",
+  "app": "Salary vs Freelance Calculator",
+  "scripts": ["engines/brackets.js", "engines/tax-us.js", "engines/structure-us.js", "engines/employee-freelance.js", "tools/employee-freelance.js"],
+  "rules": "us",
+  "sources": ["fica_rates_2026", "social_security_wage_base_2026", "additional_medicare_tax_rate", "standard_deduction_2026", "federal_brackets_single", "se_tax_total_rate", "se_net_earnings_factor", "qbi_deduction_rate", "futa_2026"],
+  "priority": 0.8,
+  "faq": [
+    ["How much do I need to bill to replace my salary?", "With a $70,000 salary, a single filer keeps $58,075 after FICA and federal income tax. As a sole proprietor with no expenses, you need $73,141 in revenue to keep the same amount, or $56.79 an hour over 1,288 billed hours."],
+    ["Why does my freelance rate need to be higher than my hourly wage?", "Because you only bill part of your working time: vacation, holidays, finding clients and admin aren't paid. You also pay both halves of Social Security and Medicare through the self-employment tax, and your own benefits. The calculator divides the revenue you need by the hours you actually bill (1,288 by default, the assumption of the hourly rate calculator)."],
+    ["Are employer benefits included?", "Only if you enter them: health insurance premiums paid by your employer, a 401(k) match and other benefits have no standard amount. Add their yearly value under “Employer-paid benefits” and the calculator raises the revenue you need to cover them."],
+    ["What about state income tax?", "It isn't included, on either side: rates and rules depend on your state. The comparison covers FICA, the self-employment tax and federal income tax, with the standard deduction and, for the freelancer, the qualified business income deduction."]
+  ]
+}-->
+<script type="application/json" id="employee-freelance-data">
+{
+  "country": "us", "na": "Not applicable",
+  "fields": {"ef-gross": "salary", "ef-benefits": "employer-paid benefits", "ef-expenses": "business expenses", "ef-units": "billed hours", "ef-rate": "hourly rate"},
+  "check": "Check the {fields}.", "check_notice": "Check the {fields}: type numbers only, for example 70,000.",
+  "enter_salary": "Enter your yearly salary.",
+  "enter_units": "Enter your billed hours per year to compare your rate.",
+  "not_found": "No revenue reaches this income.",
+  "sub": "That's {rate} an hour over {units} billed hours, to keep {target} a year, as with your salary.",
+  "sub_no_units": "To keep {target} a year, as with your salary.",
+  "at_rate_more": "At {rate} an hour for {units} hours ({revenue} in revenue), you would keep {available} a year: {diff} more than with your salary.",
+  "at_rate_less": "At {rate} an hour for {units} hours ({revenue} in revenue), you would keep {available} a year: {diff} less than with your salary.",
+  "at_rate_same": "At {rate} an hour for {units} hours ({revenue} in revenue), you would keep {available} a year, the same as with your salary.",
+  "msg_always": "Federal taxes only: state and local income taxes aren't included. Only money is compared: an employee is also covered by unemployment insurance, paid for by the employer."
+}
+</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · 2026 rules</span>
+    <h1>Salary vs freelance calculator</h1>
+    <p class="lead">Enter your salary: see what it leaves you after FICA and federal income tax, and the revenue, then the hourly rate, you'd need as a freelancer to keep the same income.</p>
+    <ul class="trust"><li>FICA and self-employment tax</li><li>Federal income tax and QBI</li><li>Equivalent hourly rate</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="ef-form" onsubmit="return false">
+      <h2>Your salary</h2>
+      <div class="fields">
+        <div class="field"><label for="ef-gross">Yearly salary</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="ef-gross" name="gross" value="70,000" aria-describedby="ef-gross-hint" data-save><span>$</span></div>
+          <span class="hint" id="ef-gross-hint">Before taxes and deductions, bonuses included.</span></div>
+        <div class="field"><label for="ef-benefits">Employer-paid benefits</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="ef-benefits" name="benefits" placeholder="0" aria-describedby="ef-benefits-hint" data-save><span>$</span></div>
+          <span class="hint" id="ef-benefits-hint">Optional, per year: health insurance premiums, 401(k) match…</span></div>
+        <div class="field full"><label for="ef-status">Filing status</label>
+          <select id="ef-status" name="status" data-input data-save>
+            <option value="single" selected>Single</option>
+            <option value="married_filing_jointly">Married filing jointly</option>
+            <option value="married_filing_separately">Married filing separately</option>
+            <option value="head_of_household">Head of household</option>
+          </select></div>
+      </div>
+      <h2 style="margin-top: 20px;">As a freelancer</h2>
+      <div class="fields">
+        <div class="field"><label for="ef-expenses">Business expenses per year</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="ef-expenses" name="expenses" placeholder="0" aria-describedby="ef-expenses-hint" data-save><span>$</span></div>
+          <span class="hint" id="ef-expenses-hint">Software, equipment, insurance, accountant…</span></div>
+        <div class="field"><label for="ef-units">Billed hours per year</label>
+          <input type="text" inputmode="decimal" id="ef-units" name="units" value="1,288" aria-describedby="ef-units-hint" data-save>
+          <span class="hint" id="ef-units-hint">After vacation, holidays and unbilled time.</span></div>
+        <div class="field full"><label for="ef-rate">Your freelance hourly rate (optional)</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="ef-rate" name="rate" aria-describedby="ef-rate-hint" data-save><span>$</span></div>
+          <span class="hint" id="ef-rate-hint">To compare it directly with your salary.</span></div>
+        <label class="check full"><input type="checkbox" id="ef-sstb" name="sstb" aria-describedby="ef-sstb-hint" data-input data-save>
+          <span>My business would be a specified service trade or business (consulting, law, health, finance…)</span></label>
+        <span class="hint full" id="ef-sstb-hint">Only matters if your taxable income is above $201,750 ($403,500 married filing jointly).</span>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="result-hero" role="status" aria-atomic="true">
+        <div class="label">Revenue you need as a freelancer</div>
+        <div class="big" id="ef-big">–</div>
+        <div class="sub" id="ef-sub">–</div>
+      </div>
+      <h2 class="sr-only">Breakdown</h2>
+      <div class="card" style="margin-top: 16px; padding: 18px;">
+        <table class="mini-table compare-table">
+          <caption class="sr-only">Employee and sole proprietor income, per year</caption>
+          <thead><tr><th scope="col">Per year</th><th scope="col">Employee</th><th scope="col">Freelancer</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Salary or revenue</th><td id="ef-e-gross">–</td><td id="ef-f-gross">–</td></tr>
+            <tr><th scope="row">Social Security and Medicare</th><td id="ef-e-contributions">–</td><td id="ef-f-contributions">–</td></tr>
+            <tr><th scope="row">Federal income tax</th><td id="ef-e-tax">–</td><td id="ef-f-tax">–</td></tr>
+            <tr><th scope="row">Business expenses</th><td id="ef-e-expenses">–</td><td id="ef-f-expenses">–</td></tr>
+            <tr><th scope="row">Take-home</th><td id="ef-e-available">–</td><td id="ef-f-available">–</td></tr>
+            <tr id="ef-row-benefits" hidden><th scope="row">Employer-paid benefits</th><td id="ef-e-benefits">–</td><td id="ef-f-benefits">–</td></tr>
+            <tr id="ef-row-total" hidden><th scope="row">Total compared</th><td id="ef-e-total">–</td><td id="ef-f-total">–</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="notice" id="ef-notice" aria-live="polite" style="margin-top: 16px;">–</p>
+      <p style="margin-top: 16px;"><a class="btn btn-primary" href="{{link:rate}}">Work out my hourly rate</a></p>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>How the comparison works</h2>
+  <p>On the employee side, the calculator starts from your <strong>gross salary</strong> and takes off your share of <strong>FICA</strong> (Social Security up to the wage base, Medicare, and the Additional Medicare Tax on high wages) and <strong>federal income tax</strong> after the standard deduction. Your employer pays the other half of FICA and unemployment tax on top of your salary: they aren't part of your income.</p>
+  <p>On the freelance side, it looks for the <strong>revenue</strong> that leaves the same income as a sole proprietor, after your expenses, the <strong>self-employment tax</strong> (both halves of Social Security and Medicare) and federal income tax, with half of the self-employment tax and the qualified business income deduction taken off. Divided by your <strong>billed hours</strong>, it gives the equivalent hourly rate. The <a href="{{link:tax}}">self-employment tax calculator</a> shows the full detail, and the <a href="{{link:structure}}">S corp comparison</a> what changes with a company.</p>
+</section>

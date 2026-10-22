@@ -1234,6 +1234,28 @@
       "confidence": "high",
       "note": "Same amount as 2025/26 (raised from 5,000 on 6 April 2025). NOT available to a company whose only employee paid above the secondary threshold is its sole director (typical one-person freelance limited company): https://www.gov.uk/hmrc-internal-manuals/national-insurance-manual/nim06545"
     },
+    "auto_enrolment_2026_27": {
+      "value": {
+        "earnings_trigger": 10000,
+        "lower_limit": 6240,
+        "upper_limit": 50270,
+        "employer_minimum_rate": 0.03,
+        "total_minimum_rate": 0.08
+      },
+      "unit": "object",
+      "label": "Workplace pension automatic enrolment 2026/27: earnings trigger, qualifying earnings band and minimum contributions",
+      "source": "https://www.gov.uk/government/publications/review-of-the-automatic-enrolment-earnings-trigger-and-qualifying-earnings-band-for-202627/review-of-the-automatic-enrolment-earnings-trigger-and-qualifying-earnings-band-for-202627",
+      "source_title": "Review of the Automatic Enrolment Earnings Trigger and Qualifying Earnings Band for 2026/27 - GOV.UK",
+      "more_sources": [
+        {
+          "source": "https://www.thepensionsregulator.gov.uk/en/employers/new-employers/im-an-employer-who-has-to-provide-a-pension/choose-a-pension-scheme/understanding-your-costs/making-contributions-to-your-pension-scheme",
+          "source_title": "Making contributions to your pension scheme - The Pensions Regulator"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-10-22",
+      "note": "Thresholds kept at their 2025/26 values for 2026/27: earnings trigger £10,000 a year, qualifying earnings from £6,240 to £50,270. Minimum total contribution 8% of qualifying earnings, of which the employer pays at least 3%. Applies to eligible jobholders aged 22 to State Pension age; employers may use other bases (for example all pay) that meet the same minimum."
+    },
     "ir35_summary": {
       "value": "IR35 (the 'off-payroll working rules', Chapters 8 and 10 of Part 2 ITEPA 2003) applies when a contractor provides services to a client through an intermediary, usually their own personal service limited company, and would be an employee of the client if engaged directly (control, personal service/no real substitution, mutuality of obligation). If the engagement is 'inside IR35', the income must be taxed broadly like employment income: income tax and employee and employer Class 1 NIC, with no tax advantage from dividends. Sole traders invoicing in their own name are not under IR35, although their employment status can still be challenged.\n\nWho decides depends on the client. For public sector clients and for medium or large private/voluntary sector clients, the client must determine status, issue a Status Determination Statement with reasons, and the fee-payer (client or agency) deducts PAYE and NIC; the contractor can challenge it through the client's disagreement process (45-day response). For small private sector clients, the contractor's own company decides and accounts for any deemed employment payment itself. A company is small if it meets at least two of: turnover not over 15 million, balance sheet total not over 7.5 million, 50 employees or fewer (thresholds for financial years beginning on or after 6 April 2025). HMRC's CEST tool helps assess status.",
       "unit": "text",

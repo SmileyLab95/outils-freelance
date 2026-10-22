@@ -430,6 +430,30 @@
       "confidence": "medium",
       "note": "Québec EI rate 1.30% (maximum $895.70) is confirmed. It is lower because maternity and parental benefits are covered by QPIP. That this exact rate applies to Québec self-employed who opt in to EI sickness, compassionate care and caregiving benefits was not confirmed on a CRA self-employed page."
     },
+    "ei_rate_employee": {
+      "value": {
+        "canada": 0.0163,
+        "quebec": 0.013,
+        "refund_threshold": 2000
+      },
+      "unit": "object",
+      "label": "EI premium rate on a salary, employee share, 2026 (outside Québec and in Québec), with the non-refundable credit",
+      "source": "https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/payroll/payroll-deductions-contributions/employment-insurance-ei/ei-premium-rates-maximums.html",
+      "source_title": "EI premium rates and maximums - Canada.ca",
+      "more_sources": [
+        {
+          "source": "https://www.canada.ca/en/employment-social-development/news/2025/09/canada-employment-insurance-commission-sets-the-2026-employment-insurance-premium-rate.html",
+          "source_title": "Canada Employment Insurance Commission sets the 2026 Employment Insurance premium rate - Canada.ca"
+        },
+        {
+          "source": "https://www.canada.ca/en/revenue-agency/services/tax/individuals/topics/about-your-tax-return/tax-return/completing-a-tax-return/deductions-credits-expenses/line-31200-employment-insurance-premiums-through-employment.html",
+          "source_title": "Line 31200 - Employment insurance premiums through employment - Canada.ca"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-10-22",
+      "note": "2026: $1.63 per $100 of insurable earnings up to $68,900 (maximum $1,123.07); in Québec $1.30 (maximum $895.70), lower because QPIP covers maternity and parental benefits. Employers pay 1.4 times the employee premium. Federal non-refundable credit on line 31200 (at the lowest federal rate); outside Québec, the same amount goes on line 58300 of the provincial or territorial Form 428. Québec gives no credit for EI premiums (quebec_contributions_no_credit). If insurable earnings are $2,000 or less, the premiums are refunded (line 45000) instead of being claimed."
+    },
     "federal_income_tax_brackets": {
       "value": [
         {

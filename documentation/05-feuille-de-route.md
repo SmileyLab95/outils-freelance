@@ -103,11 +103,13 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   (TVA, TPS/TVH et TVQ selon la province du client), acompte et solde, et tarif réel du prix proposé par le client,
   dans les quatre pays (cinq pages, [18](18-outils-de-prix.md) § 2). Les besoins P1 et P2 de « Fixer ses prix » sont
   couverts (reste, en P3, la hausse de tarifs).
-- **Salarié ou freelance ? (22/10/2026)** : spécification [19](19-freelance-ou-salarie.md) pour les quatre pays ;
-  France publiée : revenu disponible d'un salarié du privé (cotisations salariales 2026 sourcées, impôt avec
-  décote) et chiffre d'affaires nécessaire en micro-entreprise, avec le TJM équivalent.
-- **Prochaines actions de Claude** : « Salarié ou freelance ? » aux États-Unis, au Royaume-Uni et au Canada
-  ([19](19-freelance-ou-salarie.md) § 7) ; décote dans le comparateur de statuts français ; taux du crédit pour
+- **Salarié ou freelance ? (22/10/2026)** : publié dans les quatre pays (cinq pages, [19](19-freelance-ou-salarie.md)) :
+  revenu disponible d'un salarié (cotisations salariales et impôt, règles sourcées) et chiffre d'affaires dont un
+  indépendant a besoin pour garder autant, avec le tarif équivalent. Nouvelles règles : cotisations salariales et
+  Agirc-Arrco (France), assurance-emploi des salariés (Canada), retraite d'entreprise (Royaume-Uni).
+- **Prochaines actions de Claude** : décote dans le comparateur de statuts français ; besoins P2 suivants de
+  [02](02-besoins-clients.md) (checklist de création d'entreprise dans les quatre pays, jauges de seuils hors de
+  France), spécification d'abord ; taux du crédit pour
   dividendes de la Saskatchewan et du Nunavut dès qu'ils sont publiés (formulaires 2026) ;
   trouver la cause du contrôle de contraste intermittent de l'Espace ; revérifier les grilles des prestataires de
   paiement (Stripe, Mollie) quand Ismail décidera ([17](17-offres-et-paiements.md)) ; guide du recouvrement dès que
@@ -228,9 +230,10 @@ Objectif : un site mesuré, sous sa propre marque, qui commence à rapporter, et
       script commun, cinq pages ; spécification [18](18-outils-de-prix.md)
 - [x] Prix au forfait, 4 pays : moteur `engines/project-price.js`, script commun, cinq pages (tâches, imprévus,
       frais, taxes lues dans les règles, acompte, prix proposé par le client) ; spécification [18](18-outils-de-prix.md) § 2
-- [ ] Freelance ou salarié, 4 pays : besoin P2, spécification [19](19-freelance-ou-salarie.md)
-  - [x] France : `/fr/salarie-ou-freelance/` (cotisations salariales 2026, micro-entreprise, impôt avec décote)
-  - [ ] États-Unis, Royaume-Uni, Canada
+- [x] Freelance ou salarié, 4 pays : moteur `engines/employee-freelance.js`, script commun, cinq pages (France :
+      cotisations salariales 2026 et micro-entreprise ; États-Unis : FICA et SE tax ; Royaume-Uni : Class 1 et
+      Class 4, retraite d'entreprise ; Canada : RPC/RRQ, RQAP, assurance-emploi) ; spécification [19](19-freelance-ou-salarie.md)
+- [ ] Décote dans le comparateur de statuts français (même impôt que « Salarié ou freelance ? »)
 
 ### 1.5 Préparer la plateforme
 

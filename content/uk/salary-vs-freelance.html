@@ -1,0 +1,117 @@
+<!--{
+  "id": "employee-vs-freelance",
+  "slug": "salary-vs-freelance/",
+  "title": "Salary vs Freelance Calculator: Day Rate to Match a Salary",
+  "description": "What turnover and day rate do you need as a sole trader to keep what your salary leaves you? Income Tax and National Insurance for 2026/27 on both sides.",
+  "menu": "Salary vs freelance",
+  "icon": "🔀",
+  "blurb": "The turnover and day rate that replace your salary.",
+  "app": "Salary vs Freelance Calculator",
+  "scripts": ["engines/brackets.js", "engines/tax-uk.js", "engines/employee-freelance.js", "tools/employee-freelance.js"],
+  "rules": "uk",
+  "sources": ["class1_primary_threshold", "class1_employee_main_rate", "class1_employee_additional_rate", "class4_main_rate", "personal_allowance", "personal_allowance_taper_threshold", "income_tax_bands_ruk", "income_tax_bands_scotland", "auto_enrolment_2026_27", "vat_registration_threshold", "mtd_itsa_threshold_2026"],
+  "priority": 0.8,
+  "faq": [
+    ["How much do I need to earn as a freelancer to replace my salary?", "With a £40,000 salary, you keep £32,320 after Income Tax and National Insurance (outside Scotland). As a sole trader with no expenses, you need £39,259 in turnover to keep the same amount, or £215.71 a day over 182 billed days."],
+    ["Why does my day rate need to be higher than my daily salary?", "Because you only bill part of your working days: holidays, bank holidays, finding clients and admin aren't paid. You also pay for your own equipment, insurance and pension. The calculator divides the turnover you need by the days you actually bill (182 by default, the assumption of the day rate calculator)."],
+    ["Is my employer's pension contribution included?", "Only if you enter it. If you're eligible for automatic enrolment, your employer must pay a minimum into your workplace pension: the calculator shows that minimum for your salary, and you can add it, or what your employer really pays, under “Employer pension and benefits”."],
+    ["Why can a sole trader need less than the salary?", "Self-employed people pay Class 4 National Insurance at a lower rate than employees' Class 1, on profits above the same threshold, and the same Income Tax. That's why, with no expenses, the turnover needed can be close to the salary or below it. But holidays, sick days and gaps between contracts aren't paid: the day rate is what really matters."]
+  ]
+}-->
+<script type="application/json" id="employee-freelance-data">
+{
+  "country": "uk", "na": "Not applicable",
+  "fields": {"ef-gross": "salary", "ef-benefits": "employer pension and benefits", "ef-expenses": "business expenses", "ef-units": "billed days", "ef-rate": "day rate"},
+  "check": "Check the {fields}.", "check_notice": "Check the {fields}: type numbers only, for example 40,000.",
+  "enter_salary": "Enter your yearly salary.",
+  "enter_units": "Enter your billed days per year to compare your day rate.",
+  "not_found": "No turnover reaches this income.",
+  "sub": "That's {rate} a day over {units} billed days, to keep {target} a year, as with your salary.",
+  "sub_no_units": "To keep {target} a year, as with your salary.",
+  "at_rate_more": "At {rate} a day for {units} days ({revenue} in turnover), you would keep {available} a year: {diff} more than with your salary.",
+  "at_rate_less": "At {rate} a day for {units} days ({revenue} in turnover), you would keep {available} a year: {diff} less than with your salary.",
+  "at_rate_same": "At {rate} a day for {units} days ({revenue} in turnover), you would keep {available} a year, the same as with your salary.",
+  "pension": "If you're eligible for automatic enrolment, your employer must pay at least {amount} a year into your workplace pension on this salary: add it, or what your employer really pays, to count it.",
+  "thresholds": [
+    {"rule": "mtd_itsa_threshold_2026",
+     "text": "This turnover is over {threshold} a year: Making Tax Digital for Income Tax applies when your income before expenses is above this amount (from April 2026, based on an earlier tax return)."},
+    {"rule": "vat_registration_threshold",
+     "text": "It's also over the VAT registration threshold ({threshold} of taxable turnover in any 12 months): you must register for VAT, and charge it on top."}
+  ],
+  "msg_always": "Student loan repayments aren't included. Only money is compared, not sick pay, holiday pay or other employee rights."
+}
+</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · 2026/27 rules</span>
+    <h1>Salary vs freelance calculator</h1>
+    <p class="lead">Enter your salary: see what it leaves you after Income Tax and National Insurance, and the turnover, then the day rate, you'd need as a sole trader to keep the same income.</p>
+    <ul class="trust"><li>Class 1 and Class 4 National Insurance</li><li>Income Tax, Scotland included</li><li>Equivalent day rate</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="ef-form" onsubmit="return false">
+      <h2>Your salary</h2>
+      <div class="fields">
+        <div class="field"><label for="ef-gross">Yearly salary</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="ef-gross" name="gross" value="40,000" aria-describedby="ef-gross-hint" data-save><span>£</span></div>
+          <span class="hint" id="ef-gross-hint">Before tax, bonuses included.</span></div>
+        <div class="field"><label for="ef-benefits">Employer pension and benefits</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="ef-benefits" name="benefits" placeholder="0" aria-describedby="ef-benefits-hint" data-save><span>£</span></div>
+          <span class="hint" id="ef-benefits-hint">Optional, per year: employer pension contributions, private medical insurance…</span></div>
+        <div class="field full"><label for="ef-region">Where do you live?</label>
+          <select id="ef-region" name="region" data-input data-save>
+            <option value="ruk" selected>England, Wales or Northern Ireland</option>
+            <option value="scotland">Scotland</option>
+          </select></div>
+      </div>
+      <h2 style="margin-top: 20px;">As a freelancer</h2>
+      <div class="fields">
+        <div class="field"><label for="ef-expenses">Business expenses per year</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="ef-expenses" name="expenses" placeholder="0" aria-describedby="ef-expenses-hint" data-save><span>£</span></div>
+          <span class="hint" id="ef-expenses-hint">Software, equipment, insurance, accountant…</span></div>
+        <div class="field"><label for="ef-units">Billed days per year</label>
+          <input type="text" inputmode="decimal" id="ef-units" name="units" value="182" aria-describedby="ef-units-hint" data-save>
+          <span class="hint" id="ef-units-hint">After holidays, bank holidays and unbilled time.</span></div>
+        <div class="field full"><label for="ef-rate">Your day rate (optional)</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="ef-rate" name="rate" aria-describedby="ef-rate-hint" data-save><span>£</span></div>
+          <span class="hint" id="ef-rate-hint">To compare it directly with your salary.</span></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="result-hero" role="status" aria-atomic="true">
+        <div class="label">Turnover you need as a sole trader</div>
+        <div class="big" id="ef-big">–</div>
+        <div class="sub" id="ef-sub">–</div>
+      </div>
+      <h2 class="sr-only">Breakdown</h2>
+      <div class="card" style="margin-top: 16px; padding: 18px;">
+        <table class="mini-table compare-table">
+          <caption class="sr-only">Employee and sole trader income, per year</caption>
+          <thead><tr><th scope="col">Per year</th><th scope="col">Employee</th><th scope="col">Sole trader</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Salary or turnover</th><td id="ef-e-gross">–</td><td id="ef-f-gross">–</td></tr>
+            <tr><th scope="row">National Insurance</th><td id="ef-e-contributions">–</td><td id="ef-f-contributions">–</td></tr>
+            <tr><th scope="row">Income Tax</th><td id="ef-e-tax">–</td><td id="ef-f-tax">–</td></tr>
+            <tr><th scope="row">Business expenses</th><td id="ef-e-expenses">–</td><td id="ef-f-expenses">–</td></tr>
+            <tr><th scope="row">Take-home</th><td id="ef-e-available">–</td><td id="ef-f-available">–</td></tr>
+            <tr id="ef-row-benefits" hidden><th scope="row">Employer pension and benefits</th><td id="ef-e-benefits">–</td><td id="ef-f-benefits">–</td></tr>
+            <tr id="ef-row-total" hidden><th scope="row">Total compared</th><td id="ef-e-total">–</td><td id="ef-f-total">–</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="notice" id="ef-notice" aria-live="polite" style="margin-top: 16px;">–</p>
+      <p style="margin-top: 16px;"><a class="btn btn-primary" href="{{link:rate}}">Work out my day rate</a></p>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>How the comparison works</h2>
+  <p>On the employee side, the calculator starts from your <strong>salary</strong> and takes off <strong>Class 1 National Insurance</strong> and <strong>Income Tax</strong> (Scottish rates if you live in Scotland), with the personal allowance tapered above £100,000. Your employer's National Insurance and pension contributions are paid on top of your salary: they aren't part of your income, unless you add the pension to compare like with like.</p>
+  <p>On the freelance side, it looks for the <strong>turnover</strong> that leaves the same income as a sole trader, after your expenses, <strong>Class 4 National Insurance</strong> and Income Tax on your profit. Divided by your <strong>billed days</strong>, it gives the equivalent day rate. The <a href="{{link:tax}}">self-employed tax calculator</a> shows the full detail, and the <a href="{{link:structure}}">sole trader vs limited company comparison</a> what changes with a company.</p>
+</section>
