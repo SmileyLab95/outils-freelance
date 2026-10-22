@@ -1,0 +1,119 @@
+<!--{
+  "id": "project-price",
+  "slug": "calcul-prix-forfaitaire/",
+  "title": "Calculer un prix forfaitaire : travailleur autonome",
+  "description": "Chiffrez un projet à prix forfaitaire : tâches, taux horaire, marge pour imprévus, frais, TPS/TVH et TVQ, acompte. Et analysez le budget de votre client.",
+  "menu": "Prix forfaitaire",
+  "icon": "🧮",
+  "blurb": "Le prix d'un projet à partir des heures estimées, avec une marge pour imprévus.",
+  "app": "Calculateur de prix forfaitaire pour travailleurs autonomes",
+  "scripts": ["engines/salestax.js", "engines/project-price.js", "tools/project-price.js"],
+  "rules": "ca",
+  "sources": ["gst_rate", "hst_rates", "qst_rate", "pst_on_professional_services", "small_supplier_threshold"],
+  "priority": 0.8,
+  "faq": [
+    ["Comment calculer un prix forfaitaire ?", "Estimez le temps de chaque tâche, ajoutez une marge pour les imprévus (allers-retours, réunions, retards), multipliez par votre taux horaire et ajoutez les frais compris dans le prix. Avec 56 heures estimées, 10 % d'imprévus et un taux de 100 $ de l'heure, le prix est de 6 160 $ avant taxes."],
+    ["Quelle marge prévoir pour les imprévus ?", "Cela dépend de la clarté du cahier des charges et de votre expérience de ce type de projet. Le calculateur part de 10 % à titre d'exemple : augmentez-la si le périmètre est flou ou si le client multiplie les demandes."],
+    ["Faut-il demander un acompte ?", "Ce n'est pas obligatoire, mais un acompte à la signature de la soumission réduit le risque de non-paiement et finance le début du travail. Son montant se négocie et s'écrit dans la soumission ou le contrat : le calculateur le calcule sur le total taxes comprises."],
+    ["Le client me propose un prix : comment savoir s'il est correct ?", "Indiquez-le dans le champ « Prix ou budget du client » : le calculateur le divise par le temps estimé, frais retirés, et le compare à votre taux horaire. Un prix au forfait n'est intéressant que si votre estimation de temps est fiable."]
+  ]
+}-->
+<script type="application/json" id="project-price-data">
+{
+  "percent": " %", "one_below": 2,
+  "task": "Tâche", "task_placeholder": "Ex. : maquettes", "remove": "Supprimer la tâche {n}",
+  "units": {
+    "day": {"rate": "Tarif journalier (avant taxes)", "time": "Jours", "one": "jour", "other": "jours"},
+    "hour": {"rate": "Taux horaire (avant taxes)", "time": "Heures", "one": "heure", "other": "heures"}
+  },
+  "fields": {"time": "durée de la tâche {n}", "rate": "tarif", "contingency": "marge pour imprévus", "expenses": "frais", "deposit": "acompte", "offer": "prix proposé"},
+  "check": "Vérifiez : {fields}.", "check_notice": "Vérifiez : {fields}. Saisissez seulement des chiffres, par exemple 100.",
+  "enter_time": "Indiquez la durée d'au moins une tâche.", "enter_rate": "Indiquez votre tarif.",
+  "covered": "Il couvre {covered} de travail : {time} d'estimation et {contingency} d'imprévus.",
+  "sub_tax": "{gross} taxes comprises.", "tax": "Taxes",
+  "offer_less": "Un prix de {offer} avant taxes revient à {rate} par {unit} de travail estimé, soit {diff} de moins que votre tarif ({yours}).",
+  "offer_more": "Un prix de {offer} avant taxes revient à {rate} par {unit} de travail estimé, soit {diff} de plus que votre tarif ({yours}).",
+  "offer_low": "Un prix de {offer} avant taxes ne couvre pas les frais inclus dans le prix ({expenses}).",
+  "offer_same": "Un prix de {offer} avant taxes revient à votre tarif ({yours}) par {unit} de travail estimé.",
+  "msg_always": "Si vous percevez la TPS/TVH (et la TVQ), choisissez la province du client. La TVP n'est pas comptée : la plupart des services professionnels en sont exemptés, mais chaque province taxe une liste de services. La marge pour imprévus protège votre tarif si le projet prend plus de temps que prévu.",
+  "provinces": {"none": "Non inscrit (petit fournisseur)", "names": "name_fr", "tax_names": {"GST": "TPS", "HST": "TVH", "QST": "TVQ"}},
+  "default_lines": [["Démarrage et planification", "8"], ["Conception et réalisation", "40"], ["Tests et mise en ligne", "8"]]
+}
+</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Gratuit · résultat instantané</span>
+    <h1>Calculer un prix forfaitaire</h1>
+    <p class="lead">Listez les tâches et leur durée : le calculateur en déduit le prix à proposer, avec une marge pour imprévus, vos frais, les taxes et l'acompte. Et il vous dit ce que vaut le prix proposé par votre client.</p>
+    <ul class="trust"><li>Tâches et marge pour imprévus</li><li>TPS/TVH, TVQ et acompte</li><li>Budget du client analysé</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="pp-form" onsubmit="return false">
+      <h2>Votre projet</h2>
+      <div class="fields">
+        <div class="field"><label for="pp-unit">Je compte en</label>
+          <select id="pp-unit" name="unit" data-save>
+            <option value="hour" selected>heures</option>
+            <option value="day">jours</option>
+          </select></div>
+        <div class="field"><label for="pp-rate" id="pp-rate-label">Taux horaire (avant taxes)</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="pp-rate" name="rate" value="100" data-save><span>$</span></div></div>
+      </div>
+      <h3 class="pp-subtitle">Tâches</h3>
+      <div id="pp-lines"></div>
+      <button type="button" class="btn btn-ghost btn-sm" id="pp-add">+ Ajouter une tâche</button>
+      <div class="fields" style="margin-top: 16px;">
+        <div class="field"><label for="pp-contingency">Marge pour imprévus</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="pp-contingency" name="contingency" value="10" data-save><span>%</span></div></div>
+        <div class="field"><label for="pp-expenses">Frais inclus dans le prix</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="pp-expenses" name="expenses" placeholder="0" aria-describedby="pp-expenses-hint" data-save><span>$</span></div>
+          <span class="hint" id="pp-expenses-hint">Déplacements, achats, licences…</span></div>
+        <div class="field"><label for="pp-tax">Taxes (province du client)</label>
+          <select id="pp-tax" name="tax" data-save></select></div>
+        <div class="field"><label for="pp-deposit">Acompte demandé (facultatif)</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="pp-deposit" name="deposit" placeholder="0" data-save><span>%</span></div></div>
+        <div class="field full"><label for="pp-offer">Prix ou budget du client (facultatif, avant taxes)</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="pp-offer" name="offer" aria-describedby="pp-offer-hint" data-save><span>$</span></div>
+          <span class="hint" id="pp-offer-hint">Pour savoir ce qu'il vous rapporte par heure (ou par jour) de travail estimé.</span></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="result-hero" role="status" aria-atomic="true">
+        <div class="label">Prix à proposer (avant taxes)</div>
+        <div class="big" id="pp-big">–</div>
+        <div class="sub" id="pp-sub">–</div>
+      </div>
+      <h2 class="sr-only">Détail du prix</h2>
+      <div class="card" style="margin-top: 16px; padding: 18px;">
+        <table class="mini-table compare-table">
+          <caption class="sr-only">Détail du prix au forfait</caption>
+          <thead><tr><th scope="col">Détail</th><th scope="col">Montant</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Temps estimé</th><td id="pp-r-time">–</td></tr>
+            <tr><th scope="row">Marge pour imprévus</th><td id="pp-r-extra">–</td></tr>
+            <tr><th scope="row">Honoraires</th><td id="pp-r-fees">–</td></tr>
+            <tr><th scope="row">Frais</th><td id="pp-r-expenses">–</td></tr>
+            <tr><th scope="row">Total avant taxes</th><td id="pp-r-net">–</td></tr>
+            <tr id="pp-row-tax" hidden><th scope="row" id="pp-tax-label">Taxes</th><td id="pp-r-tax">–</td></tr>
+            <tr id="pp-row-gross" hidden><th scope="row">Total taxes comprises</th><td id="pp-r-gross">–</td></tr>
+            <tr id="pp-row-deposit" hidden><th scope="row">Acompte</th><td id="pp-r-deposit">–</td></tr>
+            <tr id="pp-row-balance" hidden><th scope="row">Solde</th><td id="pp-r-balance">–</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="notice" id="pp-notice" aria-live="polite" style="margin-top: 16px;">–</p>
+      <p style="margin-top: 16px;"><a class="btn btn-primary" href="{{link:invoice}}">Créer la soumission</a></p>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>Comment se calcule un prix forfaitaire</h2>
+  <p>Le prix forfaitaire se fixe à l'avance, quel que soit le temps réellement passé. Il se construit à partir de votre <strong>estimation du temps</strong> de chaque tâche, à laquelle s'ajoute une <strong>marge pour imprévus</strong> : allers-retours, réunions, attentes de validation. Ce temps, multiplié par votre taux horaire, donne vos honoraires ; les <strong>frais</strong> que vous incluez dans le prix (déplacements, achats) s'y ajoutent.</p>
+  <p>Écrivez dans la soumission ce que le prix comprend (livrables, nombre d'allers-retours) et ce qui sera facturé en plus : c'est ce qui protège le forfait des demandes supplémentaires. Le <a href="{{link:invoice}}">générateur de factures et de soumissions</a> en fait un document, et le <a href="{{link:rate-converter}}">convertisseur de tarifs</a> traduit votre taux au jour, au mois ou à l'année.</p>
+</section>

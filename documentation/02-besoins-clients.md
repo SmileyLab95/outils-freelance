@@ -38,7 +38,7 @@ Matrice revue le 22/10/2026 d'après les pages publiées (identifiants de `conte
 |---|---|---|---|---|---|---|
 | Quel tarif facturer ? | Calculateur de TJM / taux horaire | ✅ | ✅ | ✅ | ✅ | P1 |
 | Convertir horaire, journalier, mensuel, annuel | Convertisseur de tarifs | ✅ | ✅ | ✅ | ✅ | P2 |
-| Chiffrer un projet au forfait | Calculateur de prix au forfait (marge, imprévus) | 🟡 | 🟡 | 🟡 | 🟡 | P2 |
+| Chiffrer un projet au forfait | Calculateur de prix au forfait (marge, imprévus) | ✅ | ✅ | ✅ | ✅ | P2 |
 | Augmenter ses tarifs | Calculateur + email d'annonce | 🟡 | 🟡 (email ✅) | 🟡 (email ✅) | 🟡 (email ✅) | P3 |
 
 ### 3. Trouver des clients
@@ -120,7 +120,7 @@ Matrice revue le 22/10/2026 d'après les pages publiées (identifiants de `conte
 ### Besoins encore ouverts (22/10/2026)
 
 - **P1** : Espace entrepreneur hors de France (après la plateforme française). Comparateur de statuts au Canada fait le 22/10/2026 (Saskatchewan et Nunavut en attente d'un taux officiel).
-- **P2** : prix au forfait (4 pays ; convertisseur de tarifs fait le 22/10/2026) ; freelance ou salarié (4 pays) ; checklist de
+- **P2** (convertisseur de tarifs et prix au forfait faits le 22/10/2026) : freelance ou salarié (4 pays) ; checklist de
   création (4 pays) ; recouvrement en justice (4 pays) ; client étranger aux États-Unis ; W-8BEN ; jauges de seuils
   (États-Unis, Royaume-Uni, Canada) ; assurance et compte pro hors de France.
 - **P3** : date d'échéance, proposition commerciale, NDA, CGV, bureau à domicile, hausse de tarifs (calculateur),

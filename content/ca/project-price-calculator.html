@@ -1,0 +1,119 @@
+<!--{
+  "id": "project-price",
+  "slug": "project-price-calculator/",
+  "title": "Project Price Calculator for Freelancers in Canada",
+  "description": "Price a fixed-fee project from your tasks and hourly rate, with a contingency buffer, expenses, GST/HST (and QST) and a deposit. Check a client's budget.",
+  "menu": "Project price calculator",
+  "icon": "🧮",
+  "blurb": "A fixed price from your estimated time, with a buffer for the unexpected.",
+  "app": "Project Price Calculator Canada",
+  "scripts": ["engines/salestax.js", "engines/project-price.js", "tools/project-price.js"],
+  "rules": "ca",
+  "sources": ["gst_rate", "hst_rates", "qst_rate", "pst_on_professional_services", "small_supplier_threshold"],
+  "priority": 0.8,
+  "faq": [
+    ["How do I price a fixed-fee project?", "Estimate the time each task will take, add a buffer for the unexpected (revisions, meetings, delays), multiply by your rate and add any expenses included in the price. With 56 estimated hours, a 10% buffer and $100 an hour, the price is $6,160 before sales tax."],
+    ["How big should the contingency buffer be?", "It depends on how clear the scope is and how often you've done this kind of project. The calculator starts at 10% as an example: raise it when the scope is vague or the client tends to add requests."],
+    ["Should I ask for a deposit?", "Nothing requires it, but a deposit when the client signs lowers the risk of not being paid and funds the start of the work. Agree on the amount and write it in your estimate or contract."],
+    ["A client gave me a budget: is it enough?", "Enter it as the client's price: the calculator subtracts the expenses, divides the rest by your estimated time and compares the result with your hourly rate. A fixed fee only works if your time estimate is reliable."]
+  ]
+}-->
+<script type="application/json" id="project-price-data">
+{
+  "percent": "%",
+  "task": "Task", "task_placeholder": "E.g. design mockups", "remove": "Remove task {n}",
+  "units": {
+    "day": {"rate": "Day rate", "time": "Days", "one": "day", "other": "days"},
+    "hour": {"rate": "Hourly rate", "time": "Hours", "one": "hour", "other": "hours"}
+  },
+  "fields": {"time": "time for task {n}", "rate": "rate", "contingency": "contingency buffer", "expenses": "expenses", "deposit": "deposit", "offer": "client's price"},
+  "check": "Check the {fields}.", "check_notice": "Check the {fields}: type numbers only, for example 100.",
+  "enter_time": "Enter the time for at least one task.", "enter_rate": "Enter your rate.",
+  "covered": "It covers {covered} of work: {time} estimated plus a {contingency} buffer.",
+  "sub_tax": "{gross} with sales tax.", "tax": "Sales tax",
+  "offer_less": "A price of {offer} works out at {rate} per estimated {unit} of work: {diff} less than your rate ({yours}).",
+  "offer_more": "A price of {offer} works out at {rate} per estimated {unit} of work: {diff} more than your rate ({yours}).",
+  "offer_low": "A price of {offer} doesn't cover the expenses included in the price ({expenses}).",
+  "offer_same": "A price of {offer} works out at your rate ({yours}) per estimated {unit} of work.",
+  "msg_always": "Choose the client's province if you're registered for the GST/HST. PST isn't included: most professional services are exempt, but each province taxes a list of services. The buffer protects your rate if the project takes longer than planned.",
+  "provinces": {"none": "Not registered (small supplier)", "names": "name_en", "tax_names": {"GST": "GST", "HST": "HST", "QST": "QST"}},
+  "default_lines": [["Discovery and planning", "8"], ["Design and build", "40"], ["Testing and launch", "8"]]
+}
+</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · instant result</span>
+    <h1>Project price calculator</h1>
+    <p class="lead">List the tasks and how long they'll take: get the fixed price to quote, with a buffer for the unexpected, your expenses, sales tax and a deposit. And see what a client's budget pays you per hour.</p>
+    <ul class="trust"><li>Tasks and contingency buffer</li><li>GST/HST and QST</li><li>Client's budget checked</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="pp-form" onsubmit="return false">
+      <h2>Your project</h2>
+      <div class="fields">
+        <div class="field"><label for="pp-unit">I price in</label>
+          <select id="pp-unit" name="unit" data-save>
+            <option value="hour" selected>hours</option>
+            <option value="day">days</option>
+          </select></div>
+        <div class="field"><label for="pp-rate" id="pp-rate-label">Hourly rate</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="pp-rate" name="rate" value="100" data-save><span>$</span></div></div>
+      </div>
+      <h3 class="pp-subtitle">Tasks</h3>
+      <div id="pp-lines"></div>
+      <button type="button" class="btn btn-ghost btn-sm" id="pp-add">+ Add a task</button>
+      <div class="fields" style="margin-top: 16px;">
+        <div class="field"><label for="pp-contingency">Contingency buffer</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="pp-contingency" name="contingency" value="10" data-save><span>%</span></div></div>
+        <div class="field"><label for="pp-expenses">Expenses included in the price</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="pp-expenses" name="expenses" placeholder="0" aria-describedby="pp-expenses-hint" data-save><span>$</span></div>
+          <span class="hint" id="pp-expenses-hint">Travel, purchases, software licences…</span></div>
+        <div class="field"><label for="pp-tax">Sales tax (client's province)</label>
+          <select id="pp-tax" name="tax" data-save></select></div>
+        <div class="field"><label for="pp-deposit">Deposit (optional)</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="pp-deposit" name="deposit" placeholder="0" data-save><span>%</span></div></div>
+        <div class="field full"><label for="pp-offer">Client's price or budget (optional, before tax)</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="pp-offer" name="offer" aria-describedby="pp-offer-hint" data-save><span>$</span></div>
+          <span class="hint" id="pp-offer-hint">To see what it pays you per estimated hour (or day) of work.</span></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="result-hero" role="status" aria-atomic="true">
+        <div class="label">Price to quote (before tax)</div>
+        <div class="big" id="pp-big">–</div>
+        <div class="sub" id="pp-sub">–</div>
+      </div>
+      <h2 class="sr-only">Price breakdown</h2>
+      <div class="card" style="margin-top: 16px; padding: 18px;">
+        <table class="mini-table compare-table">
+          <caption class="sr-only">Fixed-fee price breakdown</caption>
+          <thead><tr><th scope="col">Breakdown</th><th scope="col">Amount</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Estimated time</th><td id="pp-r-time">–</td></tr>
+            <tr><th scope="row">Contingency buffer</th><td id="pp-r-extra">–</td></tr>
+            <tr><th scope="row">Fees</th><td id="pp-r-fees">–</td></tr>
+            <tr><th scope="row">Expenses</th><td id="pp-r-expenses">–</td></tr>
+            <tr><th scope="row">Total before tax</th><td id="pp-r-net">–</td></tr>
+            <tr id="pp-row-tax" hidden><th scope="row" id="pp-tax-label">Sales tax</th><td id="pp-r-tax">–</td></tr>
+            <tr id="pp-row-gross" hidden><th scope="row">Total with sales tax</th><td id="pp-r-gross">–</td></tr>
+            <tr id="pp-row-deposit" hidden><th scope="row">Deposit</th><td id="pp-r-deposit">–</td></tr>
+            <tr id="pp-row-balance" hidden><th scope="row">Balance</th><td id="pp-r-balance">–</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="notice" id="pp-notice" aria-live="polite" style="margin-top: 16px;">–</p>
+      <p style="margin-top: 16px;"><a class="btn btn-primary" href="{{link:invoice}}">Create the estimate</a></p>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>How a fixed-fee price is built</h2>
+  <p>A fixed fee is agreed up front, whatever time the work actually takes. It starts from your <strong>time estimate</strong> for each task, plus a <strong>contingency buffer</strong> for revisions, meetings and waiting for approvals. That time, multiplied by your rate, gives your fees; the <strong>expenses</strong> you include in the price (travel, purchases) are added on top.</p>
+  <p>Write in the estimate what the price includes (deliverables, number of revision rounds) and what will be billed on top: that's what protects a fixed fee from scope creep. The <a href="{{link:invoice}}">invoice and estimate generator</a> turns it into a document, and the <a href="{{link:rate-converter}}">rate converter</a> shows your rate per day, month or year.</p>
+</section>

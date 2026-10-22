@@ -99,7 +99,11 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   avec les hypothèses des calculateurs de taux ; seuils signalés selon le chiffre d'affaires annuel (franchise de
   TVA et plafond micro en France, *Making Tax Digital* et TVA au Royaume-Uni, petit fournisseur au Canada) ;
   statistiques non sourcées retirées des FAQ des calculateurs de taux ([18](18-outils-de-prix.md)).
-- **Prochaines actions de Claude** : calculateur de prix au forfait (4 pays, P2 : spécification d'abord, [18](18-outils-de-prix.md) § 2) ; taux du crédit pour
+- **Prix au forfait (22/10/2026)** : tâches et durées, marge pour imprévus, frais, taxe de vente lue dans les règles
+  (TVA, TPS/TVH et TVQ selon la province du client), acompte et solde, et tarif réel du prix proposé par le client,
+  dans les quatre pays (cinq pages, [18](18-outils-de-prix.md) § 2). Les besoins P1 et P2 de « Fixer ses prix » sont
+  couverts (reste, en P3, la hausse de tarifs).
+- **Prochaines actions de Claude** : outil « Freelance ou salarié ? » (4 pays, P2 : spécification d'abord) ; taux du crédit pour
   dividendes de la Saskatchewan et du Nunavut dès qu'ils sont publiés (formulaires 2026) ;
   trouver la cause du contrôle de contraste intermittent de l'Espace ; revérifier les grilles des prestataires de
   paiement (Stripe, Mollie) quand Ismail décidera ([17](17-offres-et-paiements.md)) ; guide du recouvrement dès que
@@ -218,7 +222,9 @@ Objectif : un site mesuré, sous sa propre marque, qui commence à rapporter, et
       Nunavut en attente d'un taux officiel) ; moteur `engines/structure-ca.js` ; spécification [pays/ca.md](pays/ca.md)
 - [x] Convertisseur de tarifs (horaire, journalier, mensuel, annuel), 4 pays : moteur `engines/rate-convert.js`,
       script commun, cinq pages ; spécification [18](18-outils-de-prix.md)
-- [ ] Prix au forfait, 4 pays : besoin P2
+- [x] Prix au forfait, 4 pays : moteur `engines/project-price.js`, script commun, cinq pages (tâches, imprévus,
+      frais, taxes lues dans les règles, acompte, prix proposé par le client) ; spécification [18](18-outils-de-prix.md) § 2
+- [ ] Freelance ou salarié, 4 pays : besoin P2 (spécification d'abord)
 
 ### 1.5 Préparer la plateforme
 

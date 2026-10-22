@@ -871,6 +871,86 @@ const tests = {
     await page.fill("#rc-amount", "450");
     check((await t("rc-big")) === "66 600 €", "Convertisseur FR : situation par défaut rétablie");
   },
+  async "fr/calcul-prix-forfait/"(page) {
+    // documentation/18-outils-de-prix.md § 2 : 2 + 8 + 2 jours, 10 % d'imprévus, TJM de 450 € → 5 940 € HT.
+    const t = async (id) => (await page.textContent(`#${id}`)).replace(/\s+/g, " ").trim();
+    check((await t("pp-big")) === "5 940 €" && (await t("pp-r-time")) === "12 jours" && (await t("pp-r-extra")) === "1,2 jour" &&
+      (await t("pp-r-fees")) === "5 940,00 €" && (await t("pp-sub")) === "Il couvre 13,2 jours de travail : 12 jours d'estimation et 10 % d'imprévus." &&
+      !(await page.isVisible("#pp-row-tax")) && !(await page.isVisible("#pp-row-deposit")), "Forfait FR : 12 jours à 450 € + 10 % → 5 940 € HT, sans TVA ni acompte");
+    await page.selectOption("#pp-tax", "normal");
+    await page.fill("#pp-deposit", "30");
+    check((await t("pp-tax-label")) === "TVA" && (await t("pp-r-tax")) === "1 188,00 €" && (await t("pp-r-gross")) === "7 128,00 €" &&
+      (await t("pp-r-deposit")) === "2 138,40 €" && (await t("pp-r-balance")) === "4 989,60 €" && (await t("pp-sub")).startsWith("7 128 € TTC."),
+      "Forfait FR : TVA à 20 % lue dans les règles, acompte de 30 % sur le TTC");
+    check((await page.$eval("#pp-tax", (s) => [...s.options].map((o) => o.textContent).join(" | "))).replace(/[\u00a0\u202f]/g, " ").includes("Taux normal · TVA 20 %"), "Forfait FR : taux de TVA affichés depuis les règles");
+    await page.fill("#pp-offer", "5 000");
+    check((await t("pp-notice")).includes("Un prix de 5 000,00 € HT revient à 416,67 € par jour de travail estimé, soit 33,33 € de moins que votre tarif (450,00 €)."),
+      "Forfait FR : prix proposé par le client analysé");
+    await page.click("#pp-add");
+    await page.fill("#pp-desc-3", "Formation");
+    await page.fill("#pp-time-3", "1");
+    check((await page.$$(".pp-line")).length === 4 && (await t("pp-r-time")) === "13 jours" && (await t("pp-big")) === "6 435 €", "Forfait FR : tâche ajoutée (13 jours → 6 435 €)");
+    await page.fill("#pp-time-0", "abc");
+    check((await page.getAttribute("#pp-time-0", "aria-invalid")) === "true" && (await t("pp-big")) === "–" && (await t("pp-notice")).includes("Vérifiez : durée de la tâche 1"),
+      "Forfait FR : durée illisible → aucun résultat, champ nommé");
+    await accessible(page, "Forfait FR (saisie illisible, quatre tâches)");
+    await page.fill("#pp-time-0", "2");
+    await page.selectOption("#pp-unit", "hour");
+    check((await t("pp-rate-label")) === "Taux horaire (hors TVA)" && (await page.textContent("label[for='pp-time-0']")).trim() === "Heures", "Forfait FR : unité en heures, libellés changés");
+    await page.selectOption("#pp-unit", "day");
+    await page.reload({ waitUntil: "networkidle" });
+    check((await page.$$(".pp-line")).length === 4 && (await page.inputValue("#pp-desc-3")) === "Formation" && (await page.inputValue("#pp-tax")) === "normal",
+      "Forfait FR : tâches et saisie retrouvées après rechargement");
+    await page.click(".pp-line:nth-child(4) .line-remove");
+    await page.selectOption("#pp-tax", "none");
+    await page.fill("#pp-deposit", "");
+    await page.fill("#pp-offer", "");
+    check((await page.$$(".pp-line")).length === 3 && (await t("pp-big")) === "5 940 €", "Forfait FR : tâche supprimée, situation par défaut rétablie");
+  },
+  async "us/project-price-calculator/"(page) {
+    const t = async (id) => (await page.textContent(`#${id}`)).replace(/\s+/g, " ").trim();
+    check((await t("pp-big")) === "$6,160" && (await t("pp-r-time")) === "56 hours" && (await t("pp-r-extra")) === "5.6 hours" &&
+      !(await page.$("#pp-tax")) && (await t("pp-notice")).includes("Sales tax isn't included"), "Project price US : 56 h à 100 $ + 10 % → 6 160 $, pas de taxe de vente");
+    await page.fill("#pp-deposit", "50");
+    await page.fill("#pp-offer", "5,000");
+    check((await t("pp-r-deposit")) === "$3,080.00" && (await t("pp-r-balance")) === "$3,080.00" &&
+      (await t("pp-notice")).includes("A price of $5,000.00 works out at $89.29 per estimated hour of work: $10.71 less than your rate ($100.00)."),
+      "Project price US : acompte de 50 %, budget du client analysé");
+    await page.fill("#pp-expenses", "600");
+    await page.fill("#pp-offer", "500");
+    check((await t("pp-notice")).startsWith("A price of $500.00 doesn't cover the expenses included in the price ($600.00).") && (await t("pp-big")) === "$6,760",
+      "Project price US : budget inférieur aux frais signalé, sans tarif négatif");
+    await page.fill("#pp-expenses", "");
+    await page.fill("#pp-deposit", "");
+    await page.fill("#pp-offer", "");
+  },
+  async "uk/project-price-calculator/"(page) {
+    const t = async (id) => (await page.textContent(`#${id}`)).replace(/\s+/g, " ").trim();
+    check((await t("pp-big")) === "£5,280" && (await t("pp-r-time")) === "12 days", "Project price UK : 12 jours à 400 £ + 10 % → 5 280 £");
+    await page.selectOption("#pp-tax", "standard");
+    check((await t("pp-tax-label")) === "VAT" && (await t("pp-r-tax")) === "£1,056.00" && (await t("pp-r-gross")) === "£6,336.00" &&
+      (await page.$eval("#pp-tax", (s) => [...s.options].map((o) => o.textContent).join(" | "))).includes("Standard rate · VAT 20%"),
+      "Project price UK : TVA à 20 % lue dans les règles");
+    await page.selectOption("#pp-tax", "none");
+  },
+  async "ca/project-price-calculator/"(page) {
+    const t = async (id) => (await page.textContent(`#${id}`)).replace(/\s+/g, " ").trim();
+    check((await t("pp-big")) === "$6,160" && !(await page.isVisible("#pp-row-tax")), "Project price CA : 6 160 $ avant taxes, non inscrit par défaut");
+    await page.selectOption("#pp-tax", "QC");
+    check((await t("pp-tax-label")) === "GST + QST" && (await t("pp-r-tax")) === "$922.46" && (await t("pp-r-gross")) === "$7,082.46",
+      "Project price CA : Québec, TPS et TVQ (922,46 $)");
+    await page.selectOption("#pp-tax", "ON");
+    check((await t("pp-tax-label")) === "HST" && (await t("pp-r-tax")) === "$800.80", "Project price CA : Ontario, TVH de 13 %");
+    await page.selectOption("#pp-tax", "none");
+  },
+  async "ca/fr/calcul-prix-forfaitaire/"(page) {
+    const t = async (id) => (await page.textContent(`#${id}`)).replace(/\s+/g, " ").trim();
+    check((await t("pp-big")) === "6 160 $" && (await t("pp-r-time")) === "56 heures" && (await t("pp-r-extra")) === "5,6 heures" &&
+      (await t("pp-rate-label")) === "Taux horaire (avant taxes)", "Prix forfaitaire CA-FR : 56 heures à 100 $ + 10 % → 6 160 $");
+    await page.selectOption("#pp-tax", "QC");
+    check((await t("pp-tax-label")) === "TPS + TVQ" && (await t("pp-r-gross")) === "7 082,46 $", "Prix forfaitaire CA-FR : TPS et TVQ");
+    await page.selectOption("#pp-tax", "none");
+  },
   async "us/rate-converter/"(page) {
     const t = async (id) => (await page.textContent(`#${id}`)).replace(/\s+/g, " ").trim();
     check((await t("rc-big")) === "$128,800" && (await t("rc-hour")) === "$100.00" && (await t("rc-day")) === "$800.00" && (await t("rc-week")) === "$4,000" &&

@@ -279,6 +279,12 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--b
   .line-row { grid-template-columns: 64px minmax(0, 1fr) 34px; }
   .line-row .line-desc { grid-column: 1 / -1; }
 }
+/* Calculateur de prix au forfait : tâches (intitulé, durée, suppression). */
+.pp-subtitle { font-size: .95rem; margin: 18px 0 8px; }
+.pp-line { grid-template-columns: minmax(0, 1fr) 96px 34px; }
+@media (max-width: 520px) {
+  .pp-line { grid-template-columns: minmax(0, 1fr) 34px; }
+}
 .preview-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 6px; }
 .print-hint { margin: 0 0 12px; }
 .paper-wrap { background: #e9e7f3; border-radius: var(--radius); padding: 18px; margin-bottom: 12px; }

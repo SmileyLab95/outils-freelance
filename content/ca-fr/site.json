@@ -29,7 +29,8 @@
       "label": "Tarifs",
       "items": [
         "rate",
-        "rate-converter"
+        "rate-converter",
+        "project-price"
       ]
     },
     {

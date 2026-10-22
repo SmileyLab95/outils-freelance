@@ -21,7 +21,7 @@ Le site d'outils gratuits pour indépendants (France, États-Unis, Royaume-Uni, 
 | [15. Guides de gestion](15-guides-gestion.md) | Spécification des guides avec vérificateur : compte bancaire professionnel, assurance de l'indépendant (publiés) |
 | [16. Mesure d'audience](16-mesure-audience.md) | Règles de la CNIL, outils sans cookie comparés, recommandation et mise en place |
 | [17. Offres et paiements](17-offres-et-paiements.md) | Prix proposés, prestataires de paiement comparés, seuil de rentabilité, questions de TVA pour l'expert-comptable |
-| [18. Outils de prix](18-outils-de-prix.md) | Convertisseur de tarifs (4 pays) et, à venir, prix au forfait |
+| [18. Outils de prix](18-outils-de-prix.md) | Convertisseur de tarifs et calculateur de prix au forfait (4 pays) |
 | [Fiches pays](pays/) | Règles fiscales et sociales vérifiées : [France](pays/fr.md), [États-Unis](pays/us.md), [Royaume-Uni](pays/uk.md), [Canada](pays/ca.md) |
 
 Le [README principal](../README.md) explique comment générer, tester et publier le site.

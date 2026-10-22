@@ -1,5 +1,23 @@
 # Journal des modifications
 
+## 2026-10-22 — Calculateur de prix au forfait (France, États-Unis, Royaume-Uni, Canada)
+
+- Nouvelles pages `/fr/calcul-prix-forfait/`, `/us/project-price-calculator/`, `/uk/project-price-calculator/`,
+  `/ca/project-price-calculator/` et `/ca/fr/calcul-prix-forfaitaire/` (identifiant `project-price`, menu « Tarifs »
+  / *Pricing*) : tâches et durées estimées (dix au plus, ajout et suppression), marge pour imprévus, frais inclus,
+  taxe de vente, acompte et solde ; ce que vaut, par jour ou par heure de travail estimé, le prix proposé par le
+  client (avec un message dédié quand il ne couvre pas les frais). Unité et tarif par défaut repris du convertisseur
+  de la même section (vérifié par test).
+- Taxes lues dans les règles, aucun taux écrit dans les pages : TVA à 20 %, 10 % ou 5,5 % ou franchise (France) ;
+  TVA à 20 % ou 5 % (Royaume-Uni) ; TPS/TVH, et TVQ au Québec, selon la province du client (Canada), la TVP n'étant
+  pas comptée ; aux États-Unis, pas de champ : la page rappelle que la taxe dépend de l'État et du type de service.
+- Moteur `engines/project-price.js` (taxes par `engines/salestax.js`) et script commun `tools/project-price.js` ;
+  spécification `documentation/18-outils-de-prix.md` § 2.
+- Tests : unitaires (calculs à la main, arrondis, taxes à deux composantes, acompte, prix proposé, refus ; exemples
+  des FAQ recalculés depuis les valeurs par défaut ; taux cités en source) ; parcours navigateur des cinq pages
+  (ajout et suppression de tâches, saisie illisible, rechargement, accessibilité) ; suite complète (195 tests
+  unitaires, 2 177 vérifications navigateur).
+
 ## 2026-10-22 — Convertisseur de tarifs (France, États-Unis, Royaume-Uni, Canada)
 
 - Nouvelles pages `/fr/convertisseur-tjm/`, `/us/rate-converter/`, `/uk/rate-converter/`, `/ca/rate-converter/` et

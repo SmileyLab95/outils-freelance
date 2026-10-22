@@ -43,7 +43,41 @@ par mois et par an ? »
   freelances facturent entre… ») au profit des hypothèses par défaut, vérifiées par test. Au Québec, le convertisseur
   compte 8 jours fériés comme le calculateur de taux horaire (162 jours facturés).
 
-## 2. Prix au forfait (à spécifier)
+## 2. Prix au forfait (spécification du 22/10/2026)
 
-Lignes de travail (heures ou jours × tarif), frais refacturés, marge pour imprévus, acompte ; total hors taxes et
-taxes de vente selon le pays ; lien vers le générateur de devis. Spécification à écrire après le convertisseur.
+**Question** : « Quel prix proposer pour ce projet, et que vaut le prix que mon client propose ? »
+
+- **Pages** (identifiant `project-price`, même groupe du menu que le calculateur de taux) : `/fr/calcul-prix-forfait/`,
+  `/us/project-price-calculator/`, `/uk/project-price-calculator/`, `/ca/project-price-calculator/` et
+  `/ca/fr/calcul-prix-forfaitaire/`.
+- **Saisie** : unité de travail (jours ou heures) et tarif correspondant ; tâches (intitulé et durée estimée, dix au
+  plus, ajout et suppression comme les lignes du générateur de facture) ; marge pour imprévus (en %, ajoutée au
+  temps) ; frais inclus dans le prix (déplacements, achats, licences) ; acompte demandé (en %, facultatif) ; taxe
+  de vente ; prix proposé par le client (facultatif).
+- **Valeurs par défaut** (exemples modifiables, présentés comme tels) : unité et tarif du convertisseur de la même
+  section (jours à 450 € en France, 400 £ au Royaume-Uni ; heures à 100 $ aux États-Unis et au Canada) ; trois
+  tâches d'exemple ; 10 % d'imprévus ; pas de frais, pas d'acompte ; pas de taxe (franchise en France,
+  non-inscription au Royaume-Uni et au Canada).
+- **Taxe de vente** (taux lus dans les règles, aucun taux écrit dans la page) : France, franchise ou TVA à 20 %,
+  10 % ou 5,5 % (`tva_taux_metropole`) ; Royaume-Uni, pas de TVA, 20 % ou 5 % (`vat_standard_rate`,
+  `vat_reduced_rate`) ; Canada, non inscrit ou province du client : TPS/TVH, et TVQ au Québec (`provinces`),
+  la TVP n'étant pas comptée (`pst_on_professional_services` : la plupart des services professionnels en sont
+  exemptés, liste fermée par province) ; États-Unis, pas de champ : la taxe de vente sur les services dépend de
+  l'État, la page le dit.
+- **Calcul** (moteur `engines/project-price.js`, fonction pure testée ; taxes par `engines/salestax.js`) : temps
+  estimé = somme des tâches ; temps couvert = temps estimé × (1 + imprévus) ; honoraires = temps couvert × tarif ;
+  prix hors taxes = honoraires + frais, au centime ; taxes sur le prix hors taxes ; acompte = total taxes comprises
+  × pourcentage, au centime ; solde = total − acompte. Prix proposé par le client (hors taxes) : tarif réel =
+  (prix − frais) ÷ temps estimé, comparé au tarif saisi.
+- **Résultat** : prix hors taxes en tête, avec le total taxes comprises et le temps couvert ; tableau (temps
+  estimé, imprévus, honoraires, frais, hors taxes, taxes, total, acompte, solde) ; tarif réel du prix proposé (s'il
+  ne couvre pas les frais, un message le dit au lieu d'afficher un tarif nul ou négatif) ; lien vers le générateur
+  de devis. Saisie illisible : aucun résultat, champ signalé.
+- **Critères** : tests unitaires (calculs à la main, arrondis, taxes à plusieurs composantes, acompte, prix proposé,
+  refus) ; textes repris des règles ; parcours navigateur des cinq pages (ajout et suppression de tâches,
+  sauvegarde) ; accessibilité ; captures relues ; revue critique.
+
+- **Fait le 22/10/2026** : moteur, script commun et cinq pages. La relecture a ajouté le cas d'un prix proposé
+  inférieur aux frais (message dédié, vérifié dans le navigateur en réintroduisant l'erreur), repris le mot
+  *quote* du générateur britannique, et rendu neutres les textes du Canada français et des FAQ anglaises (le temps
+  peut être compté en jours ou en heures).
