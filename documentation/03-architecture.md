@@ -131,7 +131,10 @@ Le menu, le pied de page et la grille d'accueil sont construits à partir de `na
 ```
 
 - Le générateur injecte les valeurs (sans les sources) dans les pages qui en ont besoin : `window.OF_RULES.social_security_wage_base_2026`.
-- Les pages affichent la source et la date de vérification des chiffres qu'elles utilisent.
+- Les pages affichent la source et la date de vérification des chiffres qu'elles utilisent. Une règle peut avoir sa
+  propre date (`verified_on`, quand elle a été lue après la date du fichier) : la page affiche la plus récente. Une
+  règle qui rassemble plusieurs textes (un taux par province) liste ses autres sources dans `more_sources`
+  (`[{"source": …, "source_title": …}]`), affichées avec les autres.
 - Une valeur de confiance `low` n'est jamais utilisée dans un calcul sans avertissement visible.
 
 ## Les calendriers fiscaux (`data/calendars/<pays>.json`)

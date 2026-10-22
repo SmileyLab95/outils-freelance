@@ -1,0 +1,169 @@
+<!--{
+  "id": "structure",
+  "slug": "entreprise-individuelle-ou-societe/",
+  "title": "Entreprise individuelle ou société par actions (2026)",
+  "description": "Faut-il constituer votre société ? Comparez vos impôts 2026 en entreprise individuelle et en société par actions (salaire ou dividendes), avec l'impôt reporté.",
+  "menu": "Entreprise individuelle ou société",
+  "icon": "⚖️",
+  "blurb": "Faut-il constituer votre société ? Impôts et revenu côte à côte.",
+  "app": "Comparateur entreprise individuelle ou société par actions",
+  "scripts": ["engines/brackets.js", "engines/tax-ca.js", "engines/structure-ca.js", "tools/ca-structure.js"],
+  "rules": "ca",
+  "sources": ["corporate_tax_rates_2026", "quebec_sbd_paid_hours", "non_eligible_dividend_gross_up", "federal_dtc_non_eligible", "provincial_dtc_non_eligible_2026", "ontario_dtc_after_surtax", "cpp_employer_contributions", "employee_cpp_tax_treatment", "ei_controlling_shareholder", "canada_employment_amount_2026", "qpip_rate_employer", "qpip_shareholder_salary", "fss_employer_rate_2026", "nwt_payroll_tax", "cpp_on_dividends", "rrsp_earned_income_types", "personal_services_business", "passive_income_business_limit", "tosi_family_dividends", "qpp_rate_self_employed", "cpp_rate_self_employed", "cpp2_rate_self_employed", "cpp_ympe", "cpp2_yampe", "qpip_rate_self_employed", "qpip_self_employed_tax_treatment", "rrsp_limits_2026", "federal_income_tax_brackets", "federal_bpa_reduction_rule", "quebec_abatement", "ontario_surtax", "ontario_health_premium", "yukon_canada_employment_amount_2026", "quebec_deduction_for_workers", "quebec_contributions_no_credit"],
+  "priority": 0.9,
+  "faq": [
+    ["Est-ce avantageux de se constituer en société au Québec ?", "Si vous versez tout le bénéfice, une société fait rarement économiser beaucoup d'impôt : le taux des petites entreprises et le crédit d'impôt pour dividendes sont conçus pour que le total reste proche de celui d'une entreprise individuelle. Au Québec, une société d'une seule personne n'atteint en général pas les 5 500 heures rémunérées exigées pour le taux réduit : elle paie 20,5 % (9 % au fédéral et 11,5 % au Québec), et l'intégration y est moins bonne. L'avantage vient surtout du bénéfice laissé dans la société : l'impôt personnel est reporté jusqu'à son versement, pas annulé. Avec des dividendes seulement, vous ne cotisez plus au RRQ, ce qui réduit votre rente."],
+    ["Salaire ou dividendes ?", "Le salaire est déduit du revenu de la société et imposé comme un revenu d'emploi : il porte le RRQ (le RPC hors Québec) des deux côtés et le RQAP, ouvre droit à la rente et crée des droits de cotisation au REER. Les dividendes sont versés sur le bénéfice après impôt de la société et donnent droit au crédit d'impôt pour dividendes, mais ne portent ni RRQ ni droits REER. Actionnaire qui contrôle plus de 40 % des actions avec droit de vote, vous ne payez pas d'assurance-emploi sur votre salaire. Essayez plusieurs salaires dans le comparateur."],
+    ["Qu'est-ce qu'une entreprise de services personnels ?", "Si vous travaillez pour votre client comme le ferait un employé (horaires, outils et encadrement), votre société peut être une entreprise de services personnels. Elle perd alors le taux des petites entreprises, paie 5 % d'impôt fédéral de plus et ne peut presque rien déduire d'autre que votre salaire. Le comparateur ne traite pas ce cas."],
+    ["Qu'est-ce que la règle des 5 500 heures ?", "Au Québec, la déduction pour petite entreprise n'est entière que si la société paie à ses employés au moins 5 500 heures de travail dans l'année ; elle diminue entre 5 500 et 5 000 heures et disparaît en dessous, sauf pour les activités des secteurs primaire et manufacturier. Une personne à temps plein travaille environ 2 000 heures par an. Un salaire coûte aussi à la société le RQAP de l'employeur et la cotisation au Fonds des services de santé (1,65 %)."],
+    ["Pourquoi la Saskatchewan et le Nunavut n'y sont-ils pas ?", "Leur taux de crédit d'impôt pour dividendes non déterminés de 2026 n'a pas pu être confirmé sur une source officielle. La comparaison sera ajoutée dès qu'il le sera ; les chiffres de l'entreprise individuelle restent affichés."],
+    ["Qu'est-ce que le comparateur ne prend pas en compte ?", "Les dividendes versés à des membres de la famille (impôt sur le revenu fractionné), les revenus de placement dans la société, les frais de constitution et de comptabilité (à saisir comme frais de la société), les taxes provinciales sur la masse salariale des grandes entreprises, la CNESST, la cotisation relative aux normes du travail et la cotisation des particuliers au Fonds des services de santé, les réductions d'impôt pour faible revenu, l'impôt minimum de remplacement, les dividendes déterminés, et un salaire cumulé avec un revenu de travail autonome."]
+  ]
+}-->
+<script type="application/json" id="structure-ca-data">
+{
+  "names": "name_fr",
+  "default_province": "QC",
+  "fields": {
+    "c-profit": "bénéfice",
+    "c-salary": "salaire",
+    "c-keep": "montant laissé dans la société",
+    "c-extra": "frais de la société"
+  },
+  "check": "Vérifiez : {fields}.",
+  "check_notice": "Vérifiez : {fields}. Saisissez seulement des chiffres, par exemple 100 000.",
+  "enter_profit": "Indiquez le bénéfice de votre activité.",
+  "about_same": "À peu près pareil",
+  "per_year": "{amount} par an",
+  "sub_more": "Vous auriez {amount} de plus après impôt qu'en entreprise individuelle, en vous versant tout le bénéfice.",
+  "sub_less": "Vous auriez {amount} de moins après impôt qu'en entreprise individuelle, en vous versant tout le bénéfice.",
+  "sub_same": "Les deux choix vous laissent à peu près la même somme après impôt, en vous versant tout le bénéfice.",
+  "breakdown": "Soit {parts}.",
+  "sub_keep_more": "Vous auriez {amount} de plus, en comptant les {keep} laissés dans la société.",
+  "sub_keep_less": "Vous auriez {amount} de moins, en comptant les {keep} laissés dans la société.",
+  "sub_deferred": "L'impôt personnel de {deferred} sur ce montant n'est que reporté : il sera dû quand ce montant vous sera versé.",
+  "all_diff": "En vous versant tout, vous auriez {all} de {more_less} qu'en entreprise individuelle : {parts}.",
+  "all_same": "En vous versant tout, vous auriez à peu près la même somme qu'en entreprise individuelle : {parts}.",
+  "more": "plus",
+  "less": "moins",
+  "and": " et ",
+  "part_contrib_less": "{amount} de {contrib} en moins ({loss})",
+  "part_contrib_more": "{amount} de {contrib} en plus",
+  "part_tax_less": "{amount} d'impôts et de frais en moins",
+  "part_tax_more": "{amount} d'impôts et de frais en plus",
+  "part_none": "les mêmes cotisations et les mêmes impôts",
+  "plan_cpp": {
+    "contrib": "cotisations au RPC",
+    "loss": "rente plus faible",
+    "no_salary_loss": "aucune rente du RPC"
+  },
+  "plan_qpp": {
+    "contrib": "cotisations au RRQ et au RQAP",
+    "loss": "rente plus faible et moins d'assurance parentale",
+    "no_salary_loss": "ni rente du RRQ ni protection du RQAP"
+  },
+  "contrib_cpp": "RPC (les deux parts)",
+  "contrib_qpp": "RRQ et RQAP (les deux parts)",
+  "other_fss": "Fonds des services de santé (employeur)",
+  "other_nwt": "Impôt sur le salaire des T.N.-O.",
+  "msg_salary": "Avec ce salaire, vous paieriez {amount} de {contrib} de moins qu'en entreprise individuelle : {loss}. Votre salaire crée des droits REER ; les dividendes, non.",
+  "msg_no_salary": "Sans salaire, vous paieriez {amount} de {contrib} de moins qu'en entreprise individuelle et n'acquerriez {no_salary_loss} pour l'année. Les dividendes ne créent pas de droits REER.",
+  "msg_salary_more": "Avec ce salaire, vous paieriez {amount} de {contrib} de plus qu'en entreprise individuelle.",
+  "msg_quebec_hours": "Sans 5 500 heures rémunérées par an, votre société paie le taux général du Québec (11,5 %) plutôt que le taux des petites entreprises. Cochez la case seulement si elle paie autant d'heures à ses employés.",
+  "msg_quebec_fss": "La cotisation des particuliers au Fonds des services de santé n'est pas comptée.",
+  "where": {
+    "SK": "en Saskatchewan",
+    "NU": "au Nunavut"
+  },
+  "of": {
+    "SK": "de la Saskatchewan",
+    "NU": "du Nunavut"
+  },
+  "msg_not_available": "La comparaison n'est pas encore offerte {where} : le taux de 2026 du crédit d'impôt pour dividendes {of} n'a pas pu être confirmé sur une source officielle. Les chiffres de l'entreprise individuelle sont affichés.",
+  "msg_salary_too_high": "Réduisez le salaire ou les frais : avec les cotisations de l'employeur, ils dépassent le bénéfice.",
+  "msg_above_limit": "Le revenu de la société dépasserait le plafond des affaires de 500 000 $ : ce cas n'est pas traité.",
+  "msg_keep_too_high": "Vous pouvez laisser au plus {amount} dans la société : son bénéfice après impôt.",
+  "sub_error": "Pas de comparaison pour ces chiffres.",
+  "msg_always": "Estimation pour une société dont vous êtes l'unique actionnaire, pour son année d'imposition du 1er janvier au 31 décembre 2026."
+}
+</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Gratuit · année d'imposition 2026</span>
+    <h1>Entreprise individuelle ou société par actions</h1>
+    <p class="lead">Faut-il constituer votre société ? Indiquez votre bénéfice et la façon dont votre société vous paierait : comparez vos impôts 2026 et ce qui vous reste, en entreprise individuelle et en société.</p>
+    <ul class="trust"><li>Salaire, dividendes ou les deux</li><li>Impôt reporté sur le bénéfice laissé</li><li>Québec, provinces et territoires</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="structure-form" onsubmit="return false">
+      <h2>Votre activité</h2>
+      <div class="fields">
+        <div class="field full"><label for="c-profit">Bénéfice de l'année</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="c-profit" name="profit" value="100 000" aria-describedby="c-profit-hint" data-save><span>$</span></div>
+          <span class="hint" id="c-profit-hint">Revenus moins dépenses d'entreprise, avant votre rémunération.</span></div>
+        <div class="field full"><label for="c-province">Province ou territoire</label>
+          <select id="c-province" name="province" data-save></select></div>
+        <div class="field full"><label for="c-salary">Salaire versé par la société (facultatif)</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="c-salary" name="salary" placeholder="0" aria-describedby="c-salary-hint" data-save><span>$</span></div>
+          <span class="hint" id="c-salary-hint">Laissez vide pour une rémunération en dividendes seulement.</span></div>
+        <div class="field full"><label for="c-keep">Montant laissé dans la société (facultatif)</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="c-keep" name="keep" placeholder="0" aria-describedby="c-keep-hint" data-save><span>$</span></div>
+          <span class="hint" id="c-keep-hint">Bénéfice après impôt de la société que vous ne retirez pas cette année. Laissez vide pour tout retirer.</span></div>
+        <div class="field full"><label for="c-extra">Frais propres à la société par an (facultatif)</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="c-extra" name="extra" placeholder="0" aria-describedby="c-extra-hint" data-save><span>$</span></div>
+          <span class="hint" id="c-extra-hint">Ce que la société paie en plus d'une entreprise individuelle : comptable, déclaration T2 (et CO-17 au Québec), déclaration annuelle au registraire.</span></div>
+        <div class="full" id="c-hours-field" hidden>
+          <label class="check"><input type="checkbox" id="c-hours" name="hours" aria-describedby="c-hours-hint" data-save>
+            <span>Ma société rémunère au moins 5 500 heures de travail par an</span></label>
+          <span class="hint" id="c-hours-hint">Québec seulement : heures payées à ses employés. Une personne à temps plein en fait environ 2 000 par an.</span>
+        </div>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="result-hero" role="status" aria-atomic="true">
+        <div class="label">En société par actions</div>
+        <div class="big" id="c-verdict">–</div>
+        <div class="sub" id="c-sub">–</div>
+      </div>
+      <h2 class="sr-only">Impôts comparés</h2>
+      <div class="card" style="margin-top: 16px; padding: 18px;">
+          <table class="mini-table compare-table">
+            <caption class="sr-only">Impôts et cotisations de 2026, en entreprise individuelle et en société</caption>
+            <thead><tr><th scope="col">2026</th><th scope="col">Entreprise individuelle</th><th scope="col">Société</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Votre salaire</th><td><span aria-hidden="true">—</span><span class="sr-only">Sans objet</span></td><td id="c-s-salary">–</td></tr>
+              <tr><th scope="row">Dividendes versés</th><td><span aria-hidden="true">—</span><span class="sr-only">Sans objet</span></td><td id="c-s-dividends">–</td></tr>
+              <tr><th scope="row" id="c-contrib-label">RRQ et RQAP (les deux parts)</th><td id="c-p-contrib">–</td><td id="c-s-contrib">–</td></tr>
+              <tr id="c-other-row" hidden><th scope="row" id="c-other-label">Fonds des services de santé (employeur)</th><td><span aria-hidden="true">—</span><span class="sr-only">Sans objet</span></td><td id="c-s-other">–</td></tr>
+              <tr><th scope="row">Impôt de la société</th><td><span aria-hidden="true">—</span><span class="sr-only">Sans objet</span></td><td id="c-s-corptax">–</td></tr>
+              <tr><th scope="row">Impôt personnel</th><td id="c-p-tax">–</td><td id="c-s-tax">–</td></tr>
+              <tr><th scope="row">Frais de la société</th><td><span aria-hidden="true">—</span><span class="sr-only">Sans objet</span></td><td id="c-s-extra">–</td></tr>
+              <tr><th scope="row">Laissé dans la société</th><td><span aria-hidden="true">—</span><span class="sr-only">Sans objet</span></td><td id="c-s-keep">–</td></tr>
+              <tr><th scope="row">Ce que vous recevez</th><td id="c-p-receive">–</td><td id="c-s-receive">–</td></tr>
+            </tbody>
+          </table>
+      </div>
+      <p class="notice" id="c-notice" aria-live="polite" style="margin-top: 16px;">–</p>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>Comment se fait la comparaison</h2>
+  <p>En <strong>entreprise individuelle</strong>, votre bénéfice est imposé à vos taux personnels et porte les deux parts du RRQ (12,6 % des gains entre 3 500 $ et 74 600 $, et 8 % de RRQ2 sur les gains de 74 600 $ à 85 000 $ ; RPC de 11,9 % hors Québec) et, au Québec, le RQAP. En <strong>société par actions</strong> (société privée sous contrôle canadien), le bénéfice qui reste après votre salaire est imposé au taux des petites entreprises : 9 % au fédéral et un taux provincial, sur les premiers 500 000 $ (au Québec, le taux réduit exige 5 500 heures rémunérées par an ; sinon, le taux général de 11,5 % s'applique). Ce que vous retirez en dividendes est imposé de nouveau chez vous, avec une majoration de 15 % et des crédits d'impôt pour dividendes qui compensent l'impôt de la société.</p>
+  <p>Les deux calculs portent sur l'année d'imposition 2026 : l'année de la société va du 1er janvier au 31 décembre 2026. En Ontario, le taux des petites entreprises passe de 3,2 % à 2,2 % le 1er juillet 2026 (budget de l'Ontario de 2026) : le taux de l'année est calculé au prorata.</p>
+  <h2>Avant de constituer votre société</h2>
+  <ul>
+    <li><strong>Vérifiez que votre client n'est pas en fait votre employeur.</strong> Si vous travaillez pour lui comme le ferait un employé, votre société peut être une entreprise de services personnels : pas de taux des petites entreprises, et peu de déductions.</li>
+    <li><strong>Pensez à votre rente et à votre REER.</strong> Les dividendes ne portent pas de cotisations au RRQ et n'ouvrent pas de droit à la rente ; les droits REER viennent du salaire (18 % du salaire, jusqu'au plafond annuel, pour l'année suivante), pas des dividendes.</li>
+    <li><strong>Comptez les frais</strong> : constitution, comptable, déclarations de la société (T2 et CO-17 au Québec) et déclaration annuelle. Saisissez-les ci-dessus pour voir l'effet net.</li>
+    <li><strong>Le bénéfice laissé dans la société</strong> n'échappe pas à l'impôt : l'impôt personnel sera dû à son versement. Placé dans la société, son revenu est imposé autrement, et un revenu passif de plus de 50 000 $ par an réduit le plafond des affaires.</li>
+    <li><strong>Des dividendes versés à des membres de la famille</strong> peuvent être soumis à l'impôt sur le revenu fractionné, au taux le plus élevé.</li>
+  </ul>
+  <p class="small muted">Estimation pour planifier, d'après les chiffres de 2026 de l'ARC, de Revenu Québec et des provinces. Elle ne remplace pas les conseils d'un comptable pour votre situation.</p>
+</section>

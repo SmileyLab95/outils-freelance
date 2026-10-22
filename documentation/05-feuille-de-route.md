@@ -90,11 +90,13 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 - **Québec : impôt du travailleur autonome corrigé (22/10/2026)** : pas de crédit du Québec pour la part de base du
   RRQ, déduction pour travailleur (6 %, au plus 1 450 $), RQAP déductible en partie ; calculateur d'impôt, « Combien
   mettre de côté » et REER (exemple : 60 000 $ → 16 721 $ au lieu de 16 663 $).
-- **Comparateur de statuts, Canada : étape 1 faite (22/10/2026)** : règles officielles (taux des sociétés des
-  13 provinces, crédits pour dividendes, cotisations sur un salaire de dirigeant, règle des 5 500 heures du Québec)
-  et spécification ([pays/ca.md](pays/ca.md)) ; Saskatchewan et Nunavut non calculés faute de taux officiel (D19).
-- **Prochaines actions de Claude** : comparateur de statuts au Canada, étapes 2 et 3 (moteur `structure-ca.js` et
-  tests calculés à la main, puis pages anglaise et française) ; convertisseur de tarifs et prix au forfait (4 pays) ;
+- **Comparateur de statuts, Canada (22/10/2026)** : *Sole proprietor vs corporation* et « Entreprise individuelle
+  ou société par actions » : salaire, dividendes et montant laissé dans la société ; impôt reporté distingué de
+  l'écart réel ; règles officielles (taux des sociétés des 13 provinces, crédits pour dividendes, cotisations sur un
+  salaire de dirigeant, règle des 5 500 heures du Québec) ; Saskatchewan et Nunavut non calculés faute de taux
+  officiel (D19). Le besoin P1 « Quel statut choisir ? » est couvert dans les quatre pays.
+- **Prochaines actions de Claude** : convertisseur de tarifs et prix au forfait (4 pays, P2) ; taux du crédit pour
+  dividendes de la Saskatchewan et du Nunavut dès qu'ils sont publiés (formulaires 2026) ;
   trouver la cause du contrôle de contraste intermittent de l'Espace ; revérifier les grilles des prestataires de
   paiement (Stripe, Mollie) quand Ismail décidera ([17](17-offres-et-paiements.md)) ; guide du recouvrement dès que
   les textes sont lisibles ; veille réglementaire de décembre (dont la version de Factur-X et l'annexe A de XP
@@ -207,7 +209,9 @@ Objectif : un site mesuré, sous sa propre marque, qui commence à rapporter, et
       du moteur commun étendue ; spécification [pays/us.md](pays/us.md)
 - [x] Québec : calcul de l'impôt du travailleur autonome corrigé (aucun crédit du Québec pour le RRQ de base,
       déduction pour travailleur, RQAP déductible en partie) ; tests recalculés à la main, contrôlés par mutation
-- [ ] Comparateur de statuts, Canada (entreprise individuelle ou société par actions) : besoin P1 ouvert ; règles et spécification faites le 22/10/2026
+- [x] Comparateur de statuts, Canada : *Sole proprietor vs corporation* et « Entreprise individuelle ou
+      société par actions » (salaire, dividendes, impôt reporté, 11 provinces et territoires ; Saskatchewan et
+      Nunavut en attente d'un taux officiel) ; moteur `engines/structure-ca.js` ; spécification [pays/ca.md](pays/ca.md)
 - [ ] Convertisseur de tarifs (horaire, journalier, mensuel, annuel) et prix au forfait, 4 pays : besoins P2
 
 ### 1.5 Préparer la plateforme

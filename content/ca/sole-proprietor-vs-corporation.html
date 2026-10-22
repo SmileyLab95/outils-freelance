@@ -1,0 +1,161 @@
+<!--{
+  "id": "structure",
+  "slug": "sole-proprietor-vs-corporation/",
+  "title": "Sole Proprietor vs Corporation Calculator 2026",
+  "description": "Should you incorporate? Compare 2026 taxes as a sole proprietor and through a corporation paying you a salary or dividends, with tax deferred on profit kept in.",
+  "menu": "Sole proprietor vs corporation",
+  "icon": "⚖️",
+  "blurb": "Should you incorporate? Taxes and what you keep, side by side.",
+  "app": "Sole Proprietor vs Corporation Calculator",
+  "scripts": ["engines/brackets.js", "engines/tax-ca.js", "engines/structure-ca.js", "tools/ca-structure.js"],
+  "rules": "ca",
+  "sources": ["corporate_tax_rates_2026", "quebec_sbd_paid_hours", "non_eligible_dividend_gross_up", "federal_dtc_non_eligible", "provincial_dtc_non_eligible_2026", "ontario_dtc_after_surtax", "cpp_employer_contributions", "employee_cpp_tax_treatment", "ei_controlling_shareholder", "canada_employment_amount_2026", "qpip_rate_employer", "qpip_shareholder_salary", "fss_employer_rate_2026", "nwt_payroll_tax", "cpp_on_dividends", "rrsp_earned_income_types", "personal_services_business", "passive_income_business_limit", "tosi_family_dividends", "cpp_rate_self_employed", "cpp2_rate_self_employed", "qpp_rate_self_employed", "cpp_ympe", "cpp2_yampe", "qpip_rate_self_employed", "qpip_self_employed_tax_treatment", "rrsp_limits_2026", "federal_income_tax_brackets", "federal_bpa_reduction_rule", "quebec_abatement", "ontario_surtax", "ontario_health_premium", "yukon_canada_employment_amount_2026", "quebec_deduction_for_workers", "quebec_contributions_no_credit"],
+  "priority": 0.9,
+  "faq": [
+    ["Is it worth incorporating in Canada?", "If you pay out all the profit, a corporation rarely saves much income tax: the small business rate and the dividend tax credit are designed so that the total comes close to a sole proprietor's. The saving comes from profit you leave in the corporation, taxed at a combined 9% to 12.2% in 2026 (20.5% in Quebec without 5,500 paid hours) until you take it out: that tax is deferred, not cancelled. Paid only in dividends, you also stop paying CPP, which means a smaller pension."],
+    ["Should I pay myself a salary or dividends?", "A salary is deducted from the corporation's income and taxed as employment income. It carries CPP (QPP in Quebec) on both the employer and employee sides, earns CPP pension and creates RRSP room. Dividends are paid from profit after corporate tax and get the dividend tax credit; they carry no CPP and create no RRSP room. As a shareholder controlling more than 40% of the voting shares, you pay no EI on your salary. Try several salaries in the calculator."],
+    ["What is a personal services business?", "If you would be your client's employee without the corporation (same hours, tools and control as an employee), your corporation may be a personal services business. It then loses the small business rate, pays an extra 5% federal tax and can deduct almost nothing but your salary. The calculator doesn't cover this case."],
+    ["Why is Quebec different?", "Quebec's small business deduction requires the corporation to pay its employees for at least 5,500 hours of work a year (partly between 5,000 and 5,500 hours). Most one-person corporations don't reach it and pay the 11.5% general Quebec rate on top of the 9% federal rate. A salary also costs the corporation the employer QPIP premium and the Health Services Fund contribution (1.65%)."],
+    ["Why are Saskatchewan and Nunavut missing?", "Their 2026 dividend tax credit rates for non-eligible dividends couldn't be confirmed on an official source. The comparison will be added once they are; sole proprietor figures are still shown."],
+    ["What isn't included?", "Dividends paid to family members (tax on split income), investment income earned inside the corporation, incorporation and accounting costs (enter them as extra costs), provincial payroll taxes on large payrolls, workers' compensation, Quebec's labour standards contribution and the Health Services Fund contribution of individuals, low-income tax reductions, the alternative minimum tax, eligible dividends, and a salary combined with self-employment income."]
+  ]
+}-->
+<script type="application/json" id="structure-ca-data">
+{
+  "names": "name_en",
+  "default_province": "ON",
+  "fields": {
+    "c-profit": "business profit",
+    "c-salary": "salary",
+    "c-keep": "amount left in the corporation",
+    "c-extra": "extra costs"
+  },
+  "check": "Check the {fields}.",
+  "check_notice": "Check the {fields}: type numbers only, for example 100,000.",
+  "enter_profit": "Enter your business profit.",
+  "about_same": "About the same",
+  "per_year": "{amount} a year",
+  "sub_more": "You'd have {amount} more after tax than as a sole proprietor, with all the profit paid out to you.",
+  "sub_less": "You'd have {amount} less after tax than as a sole proprietor, with all the profit paid out to you.",
+  "sub_same": "Both options leave you about the same after tax, with all the profit paid out to you.",
+  "breakdown": "That's {parts}.",
+  "sub_keep_more": "You'd have {amount} more, counting the {keep} left in the corporation.",
+  "sub_keep_less": "You'd have {amount} less, counting the {keep} left in the corporation.",
+  "sub_deferred": "The personal tax of {deferred} on that amount is only deferred: it's due when it's paid out to you.",
+  "all_diff": "All paid out, you'd have {all} {more_less} than as a sole proprietor: {parts}.",
+  "all_same": "All paid out, you'd have about the same as a sole proprietor: {parts}.",
+  "more": "more",
+  "less": "less",
+  "and": " and ",
+  "part_contrib_less": "{amount} less in {contrib} ({loss})",
+  "part_contrib_more": "{amount} more in {contrib}",
+  "part_tax_less": "{amount} less in taxes and costs",
+  "part_tax_more": "{amount} more in taxes and costs",
+  "part_none": "the same contributions and taxes",
+  "plan_cpp": {
+    "contrib": "CPP contributions",
+    "loss": "a smaller pension",
+    "no_salary_loss": "no CPP pension"
+  },
+  "plan_qpp": {
+    "contrib": "QPP and QPIP contributions",
+    "loss": "a smaller pension and less parental insurance",
+    "no_salary_loss": "no QPP pension and no QPIP parental insurance"
+  },
+  "contrib_cpp": "CPP contributions (both halves)",
+  "contrib_qpp": "QPP and QPIP (both halves)",
+  "other_fss": "Health Services Fund (employer)",
+  "other_nwt": "NWT payroll tax",
+  "msg_salary": "With this salary, you'd pay {amount} less in {contrib} than as a sole proprietor: {loss}. Your salary creates RRSP room; dividends don't.",
+  "msg_no_salary": "Without a salary, you'd pay {amount} less in {contrib} than as a sole proprietor and earn {no_salary_loss} for the year. Dividends create no RRSP room.",
+  "msg_salary_more": "With this salary, you'd pay {amount} more in {contrib} than as a sole proprietor.",
+  "msg_quebec_hours": "Without 5,500 paid hours a year, your corporation pays Quebec's 11.5% general rate rather than the small business rate. Tick the box only if it pays its employees that many hours.",
+  "msg_quebec_fss": "The Health Services Fund contribution of individuals isn't included.",
+  "msg_not_available": "The comparison isn't available yet for {where}: its 2026 dividend tax credit rate couldn't be confirmed on an official source. Sole proprietor figures are shown.",
+  "msg_salary_too_high": "Lower the salary or the extra costs: with the employer contributions, they're more than the business profit.",
+  "msg_above_limit": "The corporation's income would be over the $500,000 small business limit: this calculator doesn't cover that case.",
+  "msg_keep_too_high": "You can leave at most {amount} in the corporation: its profit after corporate tax.",
+  "sub_error": "No comparison for these figures.",
+  "msg_always": "Estimate for a corporation with you as its only shareholder, for its tax year from January 1 to December 31, 2026."
+}
+</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · 2026 tax year</span>
+    <h1>Sole proprietor vs corporation</h1>
+    <p class="lead">Should you incorporate? Enter your business profit and how your corporation would pay you: compare your 2026 taxes and what you keep, as a sole proprietor and through a corporation.</p>
+    <ul class="trust"><li>Salary, dividends or both</li><li>Tax deferred on profit kept in</li><li>Provinces and territories, Quebec included</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="structure-form" onsubmit="return false">
+      <h2>Your business</h2>
+      <div class="fields">
+        <div class="field full"><label for="c-profit">Business profit for the year</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="c-profit" name="profit" value="100,000" aria-describedby="c-profit-hint" data-save><span>$</span></div>
+          <span class="hint" id="c-profit-hint">Revenue minus business expenses, before paying yourself.</span></div>
+        <div class="field full"><label for="c-province">Province or territory</label>
+          <select id="c-province" name="province" data-save></select></div>
+        <div class="field full"><label for="c-salary">Salary the corporation pays you (optional)</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="c-salary" name="salary" placeholder="0" aria-describedby="c-salary-hint" data-save><span>$</span></div>
+          <span class="hint" id="c-salary-hint">Leave empty to be paid in dividends only.</span></div>
+        <div class="field full"><label for="c-keep">Amount left in the corporation (optional)</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="c-keep" name="keep" placeholder="0" aria-describedby="c-keep-hint" data-save><span>$</span></div>
+          <span class="hint" id="c-keep-hint">Profit after corporate tax that you don't take out this year. Leave empty to take everything out.</span></div>
+        <div class="field full"><label for="c-extra">Extra corporation costs per year (optional)</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="c-extra" name="extra" placeholder="0" aria-describedby="c-extra-hint" data-save><span>$</span></div>
+          <span class="hint" id="c-extra-hint">What the corporation pays on top of a sole proprietorship: accountant, T2 return, annual filings.</span></div>
+        <div class="full" id="c-hours-field" hidden>
+          <label class="check"><input type="checkbox" id="c-hours" name="hours" aria-describedby="c-hours-hint" data-save>
+            <span>My corporation pays at least 5,500 hours of work a year</span></label>
+          <span class="hint" id="c-hours-hint">Quebec only: hours paid to its employees. One person working full time is about 2,000 hours a year.</span>
+        </div>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="result-hero" role="status" aria-atomic="true">
+        <div class="label">With a corporation</div>
+        <div class="big" id="c-verdict">–</div>
+        <div class="sub" id="c-sub">–</div>
+      </div>
+      <h2 class="sr-only">Taxes compared</h2>
+      <div class="card" style="margin-top: 16px; padding: 18px;">
+          <table class="mini-table compare-table">
+            <caption class="sr-only">Taxes and contributions for 2026, sole proprietor and corporation</caption>
+            <thead><tr><th scope="col">2026</th><th scope="col">Sole proprietor</th><th scope="col">Corporation</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Your salary</th><td><span aria-hidden="true">—</span><span class="sr-only">Not applicable</span></td><td id="c-s-salary">–</td></tr>
+              <tr><th scope="row">Dividends paid to you</th><td><span aria-hidden="true">—</span><span class="sr-only">Not applicable</span></td><td id="c-s-dividends">–</td></tr>
+              <tr><th scope="row" id="c-contrib-label">CPP contributions (both halves)</th><td id="c-p-contrib">–</td><td id="c-s-contrib">–</td></tr>
+              <tr id="c-other-row" hidden><th scope="row" id="c-other-label">Health Services Fund (employer)</th><td><span aria-hidden="true">—</span><span class="sr-only">Not applicable</span></td><td id="c-s-other">–</td></tr>
+              <tr><th scope="row">Corporate income tax</th><td><span aria-hidden="true">—</span><span class="sr-only">Not applicable</span></td><td id="c-s-corptax">–</td></tr>
+              <tr><th scope="row">Personal income tax</th><td id="c-p-tax">–</td><td id="c-s-tax">–</td></tr>
+              <tr><th scope="row">Extra corporation costs</th><td><span aria-hidden="true">—</span><span class="sr-only">Not applicable</span></td><td id="c-s-extra">–</td></tr>
+              <tr><th scope="row">Left in the corporation</th><td><span aria-hidden="true">—</span><span class="sr-only">Not applicable</span></td><td id="c-s-keep">–</td></tr>
+              <tr><th scope="row">What you receive</th><td id="c-p-receive">–</td><td id="c-s-receive">–</td></tr>
+            </tbody>
+          </table>
+      </div>
+      <p class="notice" id="c-notice" aria-live="polite" style="margin-top: 16px;">–</p>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>How the comparison works</h2>
+  <p>As a <strong>sole proprietor</strong>, your profit is taxed at your personal rates and bears both halves of the CPP (11.9% of earnings between $3,500 and $74,600, and 8% CPP2 on earnings from $74,600 to $85,000). Through a <strong>corporation</strong> (a Canadian-controlled private corporation), the profit left after your salary is taxed at the small business rate: 9% federal plus a provincial rate, on the first $500,000 (in Quebec, the provincial small business rate needs 5,500 paid hours a year; otherwise the 11.5% general rate applies). What you take out as dividends is taxed again in your hands, with a 15% gross-up and dividend tax credits that offset the corporate tax.</p>
+  <p>Both sides use the 2026 tax year: the corporation's year runs from January 1 to December 31, 2026. Ontario's small business rate falls from 3.2% to 2.2% on July 1, 2026 (2026 Ontario Budget), so the year's rate is prorated.</p>
+  <h2>Before you incorporate</h2>
+  <ul>
+    <li><strong>Make sure you're not an incorporated employee.</strong> If you'd be your client's employee without the corporation, it's a personal services business: no small business rate, and few deductions.</li>
+    <li><strong>Think about your pension and RRSP.</strong> Dividends carry no CPP contributions and earn no pension; RRSP room comes from a salary (18% of it, up to the annual limit, for the following year), not from dividends.</li>
+    <li><strong>Count the costs</strong>: incorporation, an accountant, the corporation's T2 return and annual filings. Enter them above to see the net effect.</li>
+    <li><strong>Profit left in the corporation</strong> isn't tax-free: personal tax is due when it's paid out. Invested inside the corporation, its income is taxed differently, and passive income above $50,000 a year reduces the small business limit.</li>
+    <li><strong>Paying dividends to family members</strong> can trigger the tax on split income, at the highest rate.</li>
+  </ul>
+  <p class="small muted">An estimate for planning, based on 2026 CRA, Revenu Québec and provincial figures. It doesn't replace advice from an accountant for your situation.</p>
+</section>

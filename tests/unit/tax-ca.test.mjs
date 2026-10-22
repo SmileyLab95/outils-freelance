@@ -149,3 +149,16 @@ test("pages « combien mettre de côté » : seuils, dates et exemples repris de
   assert.ok(fr.includes(`dû le ${frDate(R.balance_due_date)} ${R.balance_due_date.slice(0, 4)}`) && fr.includes(`jusqu'au ${frDate(R.filing_deadline_self_employed)} ${R.filing_deadline_self_employed.slice(0, 4)}`), "solde et déclaration (français)");
   for (const page of [en, fr]) assert.equal(JSON.parse(page.match(/<!--(\{.*?\})-->/s)[1]).id, "set-aside");
 });
+
+test("montant personnel de base réduit : Manitoba (200 000 à 400 000 $) et Yukon (comme le fédéral)", () => {
+  // Manitoba, 300 000 $ : revenu net 300 000 − 5 773,45 = 294 226,55 ; montant 15 780 × (1 − 94 226,55 ÷ 200 000)
+  // = 8 345,53 ; crédits 10,8 % × (8 345,53 + 3 519,45) = 1 281,42.
+  near(ca.estimate({ profit: 300000, province: "MB" }, R, P).provincialCredits, 1281.42, "Manitoba, 300 000 $");
+  // Au-delà de 400 000 $ de revenu net : plus de montant de base, seul le crédit du RPC reste (10,8 % × 3 519,45).
+  near(ca.estimate({ profit: 450000, province: "MB" }, R, P).provincialCredits, 380.1, "Manitoba, 450 000 $");
+  // Yukon, 220 000 $ : revenu net 214 226,55 ; montant 16 452 − 1 623 × 0,42557 = 15 761,30 ; crédits 6,4 % ×
+  // (15 761,30 + 3 519,45) = 1 233,97.
+  near(ca.estimate({ profit: 220000, province: "YT" }, R, P).provincialCredits, 1233.97, "Yukon, 220 000 $");
+  // Sous les seuils, montant entier.
+  near(ca.provincialBPA(P.MB, 150000, R), 15780, "Manitoba sous 200 000 $");
+});

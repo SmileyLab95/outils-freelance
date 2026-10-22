@@ -760,6 +760,84 @@ const tests = {
     await page.selectOption("#t-province", "ON");
     await page.fill("#t-profit", "80,000");
   },
+  async "ca/sole-proprietor-vs-corporation/"(page) {
+    // Valeurs des tests unitaires (tests/unit/structure-ca.test.mjs).
+    const t = async (id) => (await page.textContent(`#${id}`)).replace(/\s+/g, " ").trim();
+    check((await t("c-verdict")) === "+$6,836 a year" && (await t("c-p-receive")) === "$71,662" && (await t("c-s-receive")) === "$78,498" &&
+      (await t("c-s-corptax")) === "$11,696" && (await t("c-s-dividends")) === "$88,304" && (await t("c-p-contrib")) === "$9,293" && (await t("c-s-contrib")) === "$0",
+      "CA société : Ontario, 100 000 $ en dividendes → +6 836 $ par an");
+    check((await t("c-sub")) === "You'd have $6,836 more after tax than as a sole proprietor, with all the profit paid out to you. That's $9,293 less in CPP contributions (a smaller pension) and $2,457 more in taxes and costs." &&
+      (await t("c-notice")).includes("you'd pay $9,293 less in CPP contributions") && !(await page.isVisible("#c-hours-field")) && !(await page.isVisible("#c-other-row")),
+      "CA société : RPC non versé signalé, case des 5 500 heures masquée hors Québec");
+    const sources = (await page.textContent("section.sources")).replace(/\s+/g, " ");
+    check(sources.includes("B.C. basic personal income tax credits") && sources.includes("Yukon-specific income tax measures") &&
+      sources.includes("What's new for corporations"), "CA société : sources de chaque province listées (règles à plusieurs sources)");
+    await page.fill("#c-profit", "150,000");
+    await page.fill("#c-salary", "60,000");
+    await page.fill("#c-keep", "30,000");
+    check((await t("c-verdict")) === "+$12,273 a year" && (await t("c-sub")).includes("counting the $30,000 left in the corporation") &&
+      (await t("c-sub")).includes("The personal tax of $10,597 on that amount is only deferred") &&
+      (await t("c-sub")).includes("All paid out, you'd have $1,676 more than as a sole proprietor: $2,569 less in CPP contributions (a smaller pension) and $893 more in taxes and costs.") &&
+      (await t("c-s-keep")) === "$30,000", "CA société : 30 000 $ laissés → impôt reporté de 10 597 $, +1 676 $ si tout est versé");
+    await page.fill("#c-profit", "100,000");
+    await page.fill("#c-salary", "");
+    await page.fill("#c-keep", "90,000");
+    check((await t("c-verdict")) === "–" && (await t("c-notice")).includes("You can leave at most $88,304") && (await t("c-s-receive")) === "–" &&
+      (await t("c-p-receive")) === "$71,662", "CA société : montant laissé trop grand → refus, entreprise individuelle affichée");
+    await page.fill("#c-keep", "");
+    await page.fill("#c-profit", "");
+    check((await t("c-verdict")) === "–" && (await t("c-sub")) === "Enter your business profit." && (await t("c-p-receive")) === "–",
+      "CA société : bénéfice vide → invitation à le saisir, aucun résultat");
+    await page.fill("#c-profit", "100,000");
+    await page.selectOption("#c-province", "SK");
+    check((await t("c-verdict")) === "–" && (await t("c-notice")).includes("isn't available yet for Saskatchewan") && (await t("c-p-receive")) !== "–",
+      "CA société : Saskatchewan non calculée, message");
+    await page.selectOption("#c-province", "NT");
+    await page.fill("#c-salary", "50,000");
+    check(await page.isVisible("#c-other-row") && (await t("c-other-label")) === "NWT payroll tax" && (await t("c-s-other")) === "$1,000" && (await t("c-s-contrib")) === "$5,534",
+      "CA société : T.N.-O., impôt de 2 % sur le salaire");
+    await page.selectOption("#c-province", "QC");
+    await page.fill("#c-profit", "120,000");
+    check(await page.isVisible("#c-hours-field") && (await t("c-contrib-label")) === "QPP and QPIP (both halves)" && (await t("c-verdict")) === "−$1,986 a year" &&
+      (await t("c-other-label")) === "Health Services Fund (employer)" && (await t("c-s-other")) === "$825" && (await t("c-s-contrib")) === "$6,375" &&
+      (await t("c-notice")).includes("Without 5,500 paid hours a year") && (await t("c-notice")).includes("Health Services Fund contribution of individuals isn't included"),
+      "CA société : Québec, salaire de 50 000 $, RRQ, RQAP et FSS");
+    await accessible(page, "CA société (Québec, salaire)");
+    await page.fill("#c-salary", "130,000");
+    check((await t("c-verdict")) === "–" && (await t("c-notice")).includes("Lower the salary"), "CA société : salaire supérieur au bénéfice → refus expliqué");
+    await page.fill("#c-salary", "abc");
+    check((await page.getAttribute("#c-salary", "aria-invalid")) === "true" && (await t("c-verdict")) === "–" && (await t("c-p-receive")) === "–" &&
+      (await t("c-notice")).includes("Check the salary"), "CA société : saisie illisible → aucun résultat, champ signalé");
+    await page.fill("#c-salary", "50,000");
+    await page.check("#c-hours");
+    await page.reload({ waitUntil: "networkidle" });
+    check((await page.inputValue("#c-province")) === "QC" && await page.isChecked("#c-hours") && (await page.inputValue("#c-salary")) === "50,000",
+      "CA société : saisie mémorisée après rechargement");
+    await page.uncheck("#c-hours");
+    await page.fill("#c-salary", "");
+    await page.fill("#c-profit", "100,000");
+    await page.selectOption("#c-province", "ON");
+    check((await t("c-verdict")) === "+$6,836 a year", "CA société : situation par défaut rétablie");
+  },
+  async "ca/fr/entreprise-individuelle-ou-societe/"(page) {
+    const t = async (id) => (await page.textContent(`#${id}`)).replace(/\s+/g, " ").trim();
+    check((await t("c-verdict")) === "+110 $ par an" && (await t("c-s-corptax")) === "20 500 $" && (await t("c-p-receive")) === "66 860 $" &&
+      (await t("c-s-receive")) === "66 970 $" && (await t("c-contrib-label")) === "RRQ et RQAP (les deux parts)",
+      "CA-FR société : Québec, 100 000 $ en dividendes, taux général → +110 $ par an");
+    check((await t("c-sub")).endsWith("Soit 10 555 $ de cotisations au RRQ et au RQAP en moins (rente plus faible et moins d'assurance parentale) et 10 445 $ d'impôts et de frais en plus."),
+      "CA-FR société : écart décomposé (cotisations non versées, impôts et frais)");
+    check((await t("c-notice")).includes("Sans salaire, vous paieriez 10 555 $ de cotisations au RRQ et au RQAP de moins qu'en entreprise individuelle et n'acquerriez ni rente du RRQ ni protection du RQAP pour l'année.") &&
+      (await t("c-notice")).includes("Sans 5 500 heures rémunérées par an") &&
+      await page.isVisible("#c-hours-field"), "CA-FR société : RRQ et RQAP non versés et règle des 5 500 heures signalés");
+    await page.check("#c-hours");
+    check((await t("c-verdict")) === "+6 009 $ par an" && (await t("c-s-corptax")) === "12 200 $" && !(await t("c-notice")).includes("Sans 5 500 heures"),
+      "CA-FR société : 5 500 heures → taux réduit, +6 009 $ par an");
+    await page.uncheck("#c-hours");
+    await page.selectOption("#c-province", "NU");
+    check((await t("c-verdict")) === "–" && (await t("c-notice")).includes("pas encore offerte au Nunavut"), "CA-FR société : Nunavut non calculé, message");
+    await page.selectOption("#c-province", "QC");
+    check((await t("c-verdict")) === "+110 $ par an", "CA-FR société : situation par défaut rétablie");
+  },
   async "ca/gst-hst-calculator/"(page) {
     check((await page.textContent("#st-hero")).trim() === "$1,130.00", "TVH : Ontario 13 % par défaut");
     await page.selectOption("#st-region", "QC");

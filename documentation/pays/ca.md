@@ -319,7 +319,9 @@ Revenu Québec applique les mêmes seuils pour les RTI de la TVQ, avec le numér
     formulaires 2026 : Nouvelle-Écosse 1,5 %, T.N.-O. 6 %, Alberta 2,18 %, ordre surtaxe / crédit pour dividendes de
     l'ON428, prorata du taux de l'Ontario au 1er juillet 2026.
 15. Québec : lire l'annexe R (déduction du RQAP du travailleur autonome) ; impôt sur le salaire des T.N.-O. :
-    déductible ou non de l'impôt sur le revenu (traité comme non déductible).
+    déductible ou non de l'impôt sur le revenu (traité comme non déductible) ; règle des 5 500 heures : les heures
+    d'un actionnaire (salarié ou non) comptent-elles, avec un plafond hebdomadaire par personne ? (non confirmé sur
+    une source officielle ; la page parle seulement des heures payées aux employés).
 
 ---
 
@@ -564,6 +566,15 @@ d'impôt, « Combien mettre de côté » et le calculateur REER (anglais et fran
   cotisation des particuliers au FSS sur les revenus autres que d'emploi, normes du travail et CNESST ; impôt minimum
   de remplacement ; réductions d'impôt pour faible revenu de l'Ontario et de la C.-B. (absentes aussi du calculateur
   d'impôt).
+- **Après revue (relecture indépendante, 22/10/2026)** : aucun écart de calcul ; le résumé décompose désormais
+  toujours l'écart « tout versé » en cotisations non versées (RPC, ou RRQ et RQAP : rente et assurance parentale
+  moindres) et en impôts et frais, pour qu'un gain venant surtout du RPC non versé ne passe pas pour une économie
+  d'impôt ; impôt reporté omis s'il est nul ; bénéfice vide : invitation à le saisir ; cotisations plus élevées en
+  société signalées ; cotisation des particuliers au FSS signalée comme non comptée au Québec ; sources complètes
+  (RPC, REER, surtaxe et contribution-santé de l'Ontario, montant du Yukon) ; textes précisés (RPC2 de 74 600 $ à
+  85 000 $, plafond REER, budget de l'Ontario, exception du Québec, règle des heures sans « vous compris », non
+  confirmé) ; montant personnel de base réduit du Manitoba (200 000 à 400 000 $) et du Yukon (comme le fédéral)
+  ajouté au moteur commun, ce qui corrige aussi le calculateur d'impôt pour les revenus élevés.
 - **Critères** : tests unitaires (cas calculés à la main hors Québec, au Québec avec et sans 5 500 heures, en
   Ontario avec surtaxe et dividendes, salaire au-delà du MGAP, montant laissé, refus) ; invariants (tout verser ≈
   entreprise individuelle à quelques pour cent près ; impôt reporté ≥ 0) ; textes des deux pages repris des règles ;

@@ -304,12 +304,16 @@ def sources_html(section, meta, rules):
         entry = data["values"].get(key)
         if not entry:
             raise SystemExit(f"{meta['slug']} : la source « {key} » n'existe pas dans data/rules/{meta['rules']}.json")
-        if entry["source"] in seen:
-            continue
-        seen.add(entry["source"])
-        title = entry.get("source_title") or entry["source"]
-        items.append(f'<li><a href="{esc(entry["source"])}" rel="noopener">{esc(title)}</a></li>')
-    verified = date.fromisoformat(data["verified_on"])
+        # Une règle qui rassemble plusieurs textes (un taux par province, par exemple) liste aussi ses autres sources.
+        for ref in [entry] + entry.get("more_sources", []):
+            if ref["source"] in seen:
+                continue
+            seen.add(ref["source"])
+            title = ref.get("source_title") or ref["source"]
+            items.append(f'<li><a href="{esc(ref["source"])}" rel="noopener">{esc(title)}</a></li>')
+    # Date de vérification du fichier, ou plus récente si l'une des règles citées a été lue depuis (« verified_on »).
+    verified = max([date.fromisoformat(data["verified_on"])] +
+                   [date.fromisoformat(data["values"][k]["verified_on"]) for k in keys if "verified_on" in data["values"][k]])
     # Date dans l'usage du pays : 20/10/2026, 20 October 2026 (Royaume-Uni), October 20, 2026 (États-Unis, Canada).
     lang = section["loc"]["lang"]
     shown = verified.strftime("%d/%m/%Y" if lang.startswith("fr") else "%-d %B %Y" if lang == "en-GB" else "%B %-d, %Y")

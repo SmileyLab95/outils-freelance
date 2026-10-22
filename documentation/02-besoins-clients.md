@@ -27,7 +27,7 @@ Matrice revue le 22/10/2026 d'après les pages publiées (identifiants de `conte
 
 | Besoin | Outil ou contenu | FR | US | UK | CA | Priorité |
 |---|---|---|---|---|---|---|
-| Quel statut choisir ? | Comparateur de statuts (revenu net selon le statut) | ✅ micro / réel / EURL à l'IS / SASU | ✅ sole prop (ou LLC) / S-corp | ✅ sole trader / Ltd | 🟡 individuelle / incorporée | P1 |
+| Quel statut choisir ? | Comparateur de statuts (revenu net selon le statut) | ✅ micro / réel / EURL à l'IS / SASU | ✅ sole prop (ou LLC) / S-corp | ✅ sole trader / Ltd | ✅ individuelle / société par actions (sauf Sask. et Nunavut) | P1 |
 | Les démarches pour démarrer | Checklist interactive de création | 🟡 | 🟡 | 🟡 | 🟡 | P2 |
 | Combien je gagnerai vraiment ? | Simulateur de revenu net | ✅ micro | ✅ (calculateur d'impôt) | ✅ (calculateur d'impôt) | ✅ (calculateur d'impôt) | P1 |
 | Freelance ou salarié ? | Comparateur salaire ↔ chiffre d'affaires | 🟡 | 🟡 | 🟡 | 🟡 | P2 |
@@ -114,12 +114,12 @@ Matrice revue le 22/10/2026 d'après les pages publiées (identifiants de `conte
 
 | Besoin | Outil ou contenu | FR | US | UK | CA | Priorité |
 |---|---|---|---|---|---|---|
-| Changer de statut | Comparateur (étape 1) + guide de passage | 🟡 (comparateur ✅) | 🟡 | 🟡 (comparateur ✅) | 🟡 | P2 |
+| Changer de statut | Comparateur (étape 1) + guide de passage | 🟡 (comparateur ✅) | 🟡 (comparateur ✅) | 🟡 (comparateur ✅) | 🟡 (comparateur ✅) | P2 |
 | Sous-traiter | Modèle de contrat de sous-traitance | 🟡 | 🟡 | 🟡 | 🟡 | P3 |
 
 ### Besoins encore ouverts (22/10/2026)
 
-- **P1** : comparateur de statuts au Canada (entreprise individuelle ou société par actions) ; Espace entrepreneur hors de France (après la plateforme française).
+- **P1** : Espace entrepreneur hors de France (après la plateforme française). Comparateur de statuts au Canada fait le 22/10/2026 (Saskatchewan et Nunavut en attente d'un taux officiel).
 - **P2** : convertisseur de tarifs et prix au forfait (4 pays) ; freelance ou salarié (4 pays) ; checklist de
   création (4 pays) ; recouvrement en justice (4 pays) ; client étranger aux États-Unis ; W-8BEN ; jauges de seuils
   (États-Unis, Royaume-Uni, Canada) ; assurance et compte pro hors de France.

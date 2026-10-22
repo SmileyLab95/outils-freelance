@@ -1,5 +1,38 @@
 # Journal des modifications
 
+## 2026-10-22 — Canada : comparateur « Sole proprietor vs corporation » / « Entreprise individuelle ou société par actions »
+
+- Nouvelles pages `/ca/sole-proprietor-vs-corporation/` et `/ca/fr/entreprise-individuelle-ou-societe/` (menu
+  « Taxes » / « Impôts et taxes », même identifiant que les comparateurs des trois autres pays) : impôts et
+  cotisations 2026 en entreprise individuelle et en société par actions (SPCC) dont le travailleur autonome est
+  l'unique actionnaire. Saisie : bénéfice, province, salaire (facultatif), montant laissé dans la société, frais
+  propres à la société ; au Québec, case des 5 500 heures rémunérées. Résultat : ce que vous recevez et ce qui reste
+  dans la société, impôt reporté sur ce montant, écart si tout est versé, cotisations RPC ou RRQ non versées
+  (rente et droits REER rappelés).
+- Moteur `engines/structure-ca.js` : impôt de la société (taux de l'Ontario au prorata des jours pour l'année
+  civile 2026, taux général du Québec sans 5 500 heures), charges de l'employeur (RPC ou RRQ, RQAP et FSS au Québec,
+  pas d'AE), dividendes non déterminés et impôt personnel (fonction `personal()` du moteur commun : crédits pour
+  dividendes fédéral et provinciaux, surtaxe de l'Ontario avant le crédit, montant canadien pour emploi et celui du
+  Yukon, impôt sur le salaire des T.N.-O.). Saskatchewan et Nunavut non calculés tant que leur taux officiel n'est
+  pas lu (D19).
+- Générateur : une règle peut citer plusieurs sources (`more_sources`, une par province pour les crédits pour
+  dividendes) et avoir sa propre date de vérification (`verified_on`) ; la page affiche la plus récente.
+- Style : tiret « sans objet » en gris dans les tableaux de comparaison (il ne se lit plus comme un signe moins) ;
+  aide sous une case à cocher regroupée.
+- Moteur commun : montant personnel de base réduit du Manitoba (de 200 000 à 400 000 $ de revenu net) et du Yukon
+  (comme le montant fédéral) ; corrige aussi le calculateur d'impôt et « Combien mettre de côté » pour les revenus
+  élevés dans ces deux provinces.
+- Relecture indépendante : aucun écart de calcul ; résumé du résultat décomposé (cotisations non versées, impôts et
+  frais), pour qu'un gain venant surtout du RPC non versé ne passe pas pour une économie d'impôt ; perte de
+  l'assurance parentale (RQAP) dite au Québec ; cas limites (bénéfice vide, impôt reporté nul, cotisations plus
+  élevées en société) ; sources et textes précisés.
+- Tests : unitaires (cas calculés à la main et recalculés indépendamment : Ontario en dividendes, Ontario avec
+  salaire et montant laissé, salaire au-delà du MGAP, Québec avec et sans 5 500 heures, Québec avec salaire, Yukon,
+  T.N.-O., Î.-P.-É., refus ; invariants sur 11 provinces : conservation de l'argent, écart = tout versé + impôt
+  reporté, intégration à 5 % près ; Manitoba et Yukon à revenu élevé) ; chaque élément du calcul contrôlé en
+  réintroduisant l'erreur (8 mutations) ; textes des deux pages repris des règles ; parcours navigateur des deux
+  pages ; suite complète (181 tests unitaires, 1 991 vérifications navigateur).
+
 ## 2026-10-22 — Québec : impôt du travailleur autonome corrigé ; règles du comparateur canadien
 
 - Calcul québécois corrigé (moteur `engines/tax-ca.js`, utilisé par le calculateur d'impôt, « Combien mettre de

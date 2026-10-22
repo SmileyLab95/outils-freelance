@@ -71,6 +71,17 @@
     return max - (max - min) * f;
   }
 
+  /**
+   * Montant personnel de base provincial : fixe, ou réduit selon le revenu net (Manitoba : de 200 000 $ à 400 000 $,
+   * nul au-delà ; Yukon : même réduction que le montant fédéral).
+   */
+  function provincialBPA(prov, netIncome, rules) {
+    if (prov.basic_personal_amount_follows_federal) return federalBPA(netIncome, rules);
+    var o = prov.basic_personal_amount_phase_out;
+    if (!o) return prov.basic_personal_amount;
+    return prov.basic_personal_amount * (1 - Math.min(1, Math.max(0, (netIncome - o.from) / (o.to - o.from))));
+  }
+
   function healthPremium(taxable, rules) {
     var steps = rules.ontario_health_premium_steps.filter(function (s) { return taxable > s.from; });
     if (!steps.length) return 0;
@@ -121,7 +132,7 @@
     var provTaxable = Math.max(0, taxable - workers);
     var provBrackets = B.progressive(provTaxable, prov.income_tax_brackets);
     var provRate = prov.income_tax_brackets[0].rate;
-    var provAmounts = prov.basic_personal_amount + (quebec ? 0 : pen.creditBase + emp.creditBase) +
+    var provAmounts = provincialBPA(prov, netIncome, rules) + (quebec ? 0 : pen.creditBase + emp.creditBase) +
       (code === "YT" ? Math.min(salary, rules.yukon_canada_employment_amount_2026) : 0);
     var provCredits = provRate * provAmounts;
     var dtcRate = rules.provincial_dtc_non_eligible_2026[code];
@@ -192,6 +203,6 @@
   }
 
   return { pensions: pensions, qpip: qpip, qpipSplit: qpipSplit, employeePensions: employeePensions,
-           federalBPA: federalBPA, healthPremium: healthPremium, personal: personal,
+           federalBPA: federalBPA, provincialBPA: provincialBPA, healthPremium: healthPremium, personal: personal,
            estimate: estimate, instalments: instalments, profitForTakeHome: profitForTakeHome };
 });
