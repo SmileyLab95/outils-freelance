@@ -979,6 +979,26 @@ const tests = {
     await page.uncheck("#cl-filters input[name=vente]");
     check((await t("cl-score")) === "0 démarches sur 17", "Création FR : situation par défaut rétablie");
   },
+  async "uk/how-to-become-a-sole-trader/"(page) {
+    const t = async (id) => (await page.textContent(`#${id}`)).replace(/\s+/g, " ").trim();
+    const box = (id) => `#checklist li[data-id="${id}"] input`;
+    check((await t("cl-score")) === "0 of 10 steps" && !(await page.isVisible(box("name"))) && !(await page.isVisible(box("home"))),
+      "Sole trader UK : 10 étapes par défaut, nom commercial et domicile masqués");
+    await page.check("#cl-filters input[name=name]");
+    await page.check("#cl-filters input[name=home]");
+    await page.check(box("register"));
+    await page.check(box("name"));
+    check((await t("cl-score")) === "2 of 12 steps" && (await t("cl-msg")) === "10 steps left.", "Sole trader UK : situation et deux étapes faites");
+    await accessible(page, "Sole trader UK (situation et cases cochées)");
+    await page.reload({ waitUntil: "networkidle" });
+    check((await page.isChecked(box("register"))) && (await t("cl-score")) === "2 of 12 steps", "Sole trader UK : progression retrouvée après rechargement");
+    for (const li of await page.$$("#checklist li[data-id]:not([hidden]) input")) await li.check();
+    check((await t("cl-msg")) === "All done: good luck with your business!", "Sole trader UK : toutes les étapes faites");
+    await page.$$eval("#checklist li[data-id] input", (boxes) => boxes.forEach((b) => { if (b.checked) b.click(); }));
+    await page.uncheck("#cl-filters input[name=name]");
+    await page.uncheck("#cl-filters input[name=home]");
+    check((await t("cl-score")) === "0 of 10 steps", "Sole trader UK : situation par défaut rétablie");
+  },
   async "us/salary-vs-freelance/"(page) {
     const t = async (id) => (await page.textContent(`#${id}`)).replace(/\s+/g, " ").trim();
     check((await t("ef-big")) === "$73,141" && (await t("ef-sub")) === "That's $56.79 an hour over 1,288 billed hours, to keep $58,075 a year, as with your salary." &&

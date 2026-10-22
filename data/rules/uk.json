@@ -316,6 +316,103 @@
       "confidence": "high",
       "note": ""
     },
+    "uk_register_sole_trader": {
+      "value": {
+        "start_before_registering": true,
+        "register_above": "trading_allowance",
+        "national_insurance_number_needed": true
+      },
+      "unit": "object",
+      "label": "Registering as a sole trader: register for Self Assessment once trading income goes over the trading allowance",
+      "source": "https://www.gov.uk/become-sole-trader/register-sole-trader",
+      "source_title": "Become a sole trader: Register as a sole trader - GOV.UK",
+      "confidence": "high",
+      "verified_on": "2026-10-22",
+      "note": "You can start trading straight away. You register as a sole trader by registering for Self Assessment, which you must do if you earn more than £1,000 (trading_allowance) in a tax year (6 April to 5 April), by 5 October after the end of that tax year (sa_registration_deadline). You need a National Insurance number, and can apply for one if you don't have it. Registering late can lead to a penalty. A sole trader runs the business as an individual, keeps all the profits after tax and is personally responsible for any losses the business makes (GOV.UK, What a sole trader is).",
+      "more_sources": [
+        {
+          "source": "https://www.gov.uk/become-sole-trader",
+          "source_title": "Become a sole trader: What a sole trader is - GOV.UK"
+        },
+        {
+          "source": "https://www.gov.uk/self-assessment-tax-returns/deadlines",
+          "source_title": "Self Assessment tax returns: Deadlines - GOV.UK"
+        }
+      ]
+    },
+    "uk_business_name_rules": {
+      "value": [
+        "It can't include 'limited', 'Ltd', 'limited liability partnership', 'LLP', 'public limited company' or 'plc'",
+        "It can't be offensive",
+        "It can't be the same as an existing trade mark",
+        "Sensitive words or expressions, or a name suggesting a connection with government or local authorities, need permission"
+      ],
+      "unit": "list",
+      "label": "Sole trader business (trading) name: rules",
+      "source": "https://www.gov.uk/become-sole-trader/choose-your-business-name",
+      "source_title": "Become a sole trader: Choose your business name - GOV.UK",
+      "confidence": "high",
+      "verified_on": "2026-10-22",
+      "note": "A business name is any name other than your own. You don't have to register it; registering a trade mark is the way to stop others using it. Your own name and any business name appear on invoices (invoice_requirements_sole_trader)."
+    },
+    "uk_licences": {
+      "value": "Check whether you need a licence, permit or certification for your activity (for example to play music, sell food or trade in the street) with the GOV.UK licence finder.",
+      "unit": "text",
+      "label": "Licences and permits for a new business",
+      "source": "https://www.gov.uk/find-licences",
+      "source_title": "Find a licence - GOV.UK",
+      "more_sources": [
+        {
+          "source": "https://www.gov.uk/become-sole-trader",
+          "source_title": "Become a sole trader: What a sole trader is - GOV.UK"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-10-22",
+      "note": "The sole trader guidance on GOV.UK asks new sole traders to check licences and permits; the finder asks questions about the activity and lists what may be needed. If the finder lists nothing, local councils advise checking with them too."
+    },
+    "uk_business_from_home": {
+      "value": [
+        "your mortgage provider or landlord",
+        "your home insurance provider",
+        "your local council (planning permission and business rates in some cases)"
+      ],
+      "unit": "list",
+      "label": "Running a business from home: who to check with",
+      "source": "https://www.gov.uk/run-business-from-home",
+      "source_title": "Running a business from home - GOV.UK",
+      "confidence": "high",
+      "verified_on": "2026-10-22",
+      "note": "You may need permission from your mortgage provider or landlord; standard home insurance may not cover business use; a council may require planning permission if the business changes the character of the home, and business rates can apply to a part used only for work. Small business rate relief thresholds differ between pages: not published."
+    },
+    "uk_ico_fee": {
+      "value": "Organisations that process personal information, sole traders included, must pay a data protection fee to the Information Commissioner's Office unless they're exempt.",
+      "unit": "text",
+      "label": "ICO data protection fee",
+      "source": "https://ico.org.uk/for-organisations/data-protection-fee/",
+      "source_title": "Data protection fee - ICO",
+      "more_sources": [
+        {
+          "source": "https://ico.org.uk/for-organisations/data-protection-fee/data-protection-fee-self-assessment/",
+          "source_title": "Data protection fee self assessment - ICO"
+        }
+      ],
+      "confidence": "medium",
+      "verified_on": "2026-10-22",
+      "note": "Exemptions include processing only for staff administration, advertising and marketing your own goods and services, and your own accounts and records; the ICO's self-assessment tool says whether you must pay. Fee amounts differ between ICO pages (older documents show other figures): not published."
+    },
+    "uk_records_retention": {
+      "value": {
+        "years_after_filing_deadline": 5
+      },
+      "unit": "object",
+      "label": "Self-employed records: how long to keep them",
+      "source": "https://www.gov.uk/self-employed-records/how-long-to-keep-your-records",
+      "source_title": "Business records if you're self-employed: How long to keep your records - GOV.UK",
+      "confidence": "high",
+      "verified_on": "2026-10-22",
+      "note": "Keep records of business income and expenses for at least 5 years after the 31 January submission deadline of the relevant tax year (example: a 2022/23 return sent online by 31 January 2024 means keeping records until at least the end of January 2029). Making Tax Digital records follow the same timeline."
+    },
     "class2_voluntary_weekly_rate": {
       "value": 3.65,
       "unit": "GBP",

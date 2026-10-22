@@ -23,7 +23,7 @@ Le site d'outils gratuits pour indépendants (France, États-Unis, Royaume-Uni, 
 | [17. Offres et paiements](17-offres-et-paiements.md) | Prix proposés, prestataires de paiement comparés, seuil de rentabilité, questions de TVA pour l'expert-comptable |
 | [18. Outils de prix](18-outils-de-prix.md) | Convertisseur de tarifs et calculateur de prix au forfait (4 pays) |
 | [19. Salarié ou freelance ?](19-freelance-ou-salarie.md) | Revenu d'un salarié et chiffre d'affaires équivalent en freelance (4 pays) |
-| [20. Checklist de création](20-checklist-creation.md) | Les démarches pour démarrer, étape par étape et sourcées (France faite ; 3 pays à venir) |
+| [20. Checklist de création](20-checklist-creation.md) | Les démarches pour démarrer, étape par étape et sourcées (France et Royaume-Uni faits ; États-Unis et Canada à venir) |
 | [Fiches pays](pays/) | Règles fiscales et sociales vérifiées : [France](pays/fr.md), [États-Unis](pays/us.md), [Royaume-Uni](pays/uk.md), [Canada](pays/ca.md) |
 
 Le [README principal](../README.md) explique comment générer, tester et publier le site.

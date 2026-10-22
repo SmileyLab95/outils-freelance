@@ -1,5 +1,18 @@
 # Journal des modifications
 
+## 2026-10-22 — Checklist *How to become a sole trader* (Royaume-Uni)
+
+- Nouvelle page `/uk/how-to-become-a-sole-trader/` (identifiant `start`, en tête du menu *Tax*) : nom commercial,
+  licences, travail à domicile, numéro de National Insurance, inscription à la Self Assessment, redevance de l'ICO,
+  factures, registres, *Making Tax Digital*, seuil de TVA, déclaration et paiements ; situation (nom commercial,
+  domicile) et cases gardées sur l'appareil (10 à 12 étapes).
+- Six règles sourcées ajoutées (GOV.UK, ICO) : inscription comme *sole trader*, règles du nom commercial, licences,
+  activité à domicile, redevance de l'ICO (montants non publiés, pages discordantes), durée de conservation des
+  registres.
+- Tests : structure commune aux checklists de France et du Royaume-Uni ; nouveau contrôle : tout montant écrit dans
+  une étape est celui d'une règle (il a révélé qu'une erreur de montant pouvait passer quand le montant figure deux
+  fois) ; parcours navigateur ; suite complète (220 tests unitaires, 2 327 vérifications navigateur).
+
 ## 2026-10-22 — Checklist « Créer sa micro-entreprise » (France)
 
 - Nouvelle page `/fr/creer-sa-micro-entreprise/` (identifiant `start`, en tête du menu « Statut et revenus ») : les

@@ -30,43 +30,53 @@ const applies = (conds, s) => conds.trim().split(/\s+/).every((cond) => {
 const counted = (list, s) => list.filter((i) => !i.optional && (!i.when || applies(i.when, s))).length;
 const fr = (n) => n.toLocaleString("fr-FR").replace(/[  ]/g, " ");
 
+// Pages : fichier, règles du pays, champs de situation, nombre d'étapes comptées par situation, étapes conseillées,
+// score affiché sans JavaScript.
+const PAGES = {
+  France: { file: "content/fr/creer-sa-micro-entreprise.html", country: "fr", fields: ["vente", "acre"], optional: ["compte"],
+    counts: [[{}, 17], [{ acre: true }, 18], [{ vente: true }, 18], [{ vente: true, acre: true }, 19]], score: "0 démarches sur 17" },
+  "Royaume-Uni": { file: "content/uk/how-to-become-a-sole-trader.html", country: "uk", fields: ["name", "home"], optional: [],
+    counts: [[{}, 10], [{ name: true }, 11], [{ home: true }, 11], [{ name: true, home: true }, 12]], score: "0 of 10 steps" }
+};
+
+for (const [label, P] of Object.entries(PAGES)) {
+  const html = read(P.file), R = rulesOf(P.country), list = steps(html);
+
+  test(`${label} : chaque étape porte une règle existante citée dans les sources, et chaque source sert à une étape`, () => {
+    assert.ok(list.length > 0);
+    const sources = front(html).sources, used = new Set(list.flatMap((i) => i.rules));
+    for (const i of list) {
+      assert.ok(i.id && i.rules.length, `${i.text.slice(0, 40)} : data-id et data-rule`);
+      for (const key of i.rules) {
+        assert.ok(R[key] !== undefined, `${i.id} : règle ${key}`);
+        assert.ok(sources.includes(key), `${i.id} : ${key} dans les sources de la page`);
+      }
+    }
+    for (const key of sources) assert.ok(used.has(key), `source ${key} utilisée par une étape`);
+  });
+
+  test(`${label} : conditions sur les seuls champs de situation mémorisés ; identifiants partagés par des variantes exclusives`, () => {
+    for (const i of list) if (i.when) for (const cond of i.when.split(/\s+/)) {
+      assert.match(cond, CONDITION, `${i.id} : condition lisible`);
+      assert.ok(P.fields.includes(CONDITION.exec(cond)[2]), `${i.id} : ${cond}`);
+    }
+    for (const name of P.fields) assert.match(html, new RegExp(`name="${name}"[^>]*data-save`), `champ ${name} mémorisé`);
+    for (const [s] of P.counts) {
+      const shown = list.filter((i) => !i.when || applies(i.when, s)).map((i) => i.id);
+      assert.equal(new Set(shown).size, shown.length, `identifiants uniques dans la situation ${JSON.stringify(s)}`);
+    }
+    assert.match(html, /id="checklist" data-persist="[\w-]+"/, "cases mémorisées");
+  });
+
+  test(`${label} : nombre d'étapes comptées selon la situation ; étapes conseillées hors du compte`, () => {
+    for (const [s, n] of P.counts) assert.equal(counted(list, s), n, JSON.stringify(s));
+    assert.deepEqual(list.filter((i) => i.optional).map((i) => i.id), P.optional);
+    assert.ok(html.includes(`id="cl-score">${P.score}<`), "score affiché sans JavaScript : situation par défaut");
+  });
+}
+
 const FR = read("content/fr/creer-sa-micro-entreprise.html"), R = rulesOf("fr"), S = steps(FR);
 const step = (id, when) => S.find((i) => i.id === id && (when === undefined || i.when === when));
-
-test("France : chaque étape porte une règle existante citée dans les sources, et chaque source sert à une étape", () => {
-  assert.ok(S.length > 0);
-  const sources = front(FR).sources, used = new Set(S.flatMap((i) => i.rules));
-  for (const i of S) {
-    assert.ok(i.id && i.rules.length, `${i.text.slice(0, 40)} : data-id et data-rule`);
-    for (const key of i.rules) {
-      assert.ok(R[key] !== undefined, `${i.id} : règle ${key}`);
-      assert.ok(sources.includes(key), `${i.id} : ${key} dans les sources de la page`);
-    }
-  }
-  for (const key of sources) assert.ok(used.has(key), `source ${key} utilisée par une étape`);
-});
-
-test("France : conditions lisibles, sur les seuls champs de situation mémorisés ; identifiants partagés par des variantes exclusives", () => {
-  for (const i of S) if (i.when) for (const cond of i.when.split(/\s+/)) {
-    assert.match(cond, CONDITION, `${i.id} : condition lisible`);
-    assert.ok(["vente", "acre"].includes(CONDITION.exec(cond)[2]), `${i.id} : ${cond}`);
-  }
-  for (const name of ["vente", "acre"]) assert.match(FR, new RegExp(`name="${name}"[^>]*data-save`), `champ ${name} mémorisé`);
-  // Un même identifiant (case mémorisée) ne sert qu'à des variantes qui ne sont jamais montrées ensemble.
-  for (const s of [{}, { vente: true }, { acre: true }, { vente: true, acre: true }]) {
-    const shown = S.filter((i) => !i.when || applies(i.when, s)).map((i) => i.id);
-    assert.equal(new Set(shown).size, shown.length, `identifiants uniques dans la situation ${JSON.stringify(s)}`);
-  }
-});
-
-test("France : nombre de démarches comptées selon la situation ; compte bancaire conseillé, non compté", () => {
-  assert.equal(counted(S, {}), 17);
-  assert.equal(counted(S, { acre: true }), 18);
-  assert.equal(counted(S, { vente: true }), 18);
-  assert.equal(counted(S, { vente: true, acre: true }), 19);
-  assert.deepEqual(S.filter((i) => i.optional).map((i) => i.id), ["compte"]);
-  assert.match(FR, /id="cl-score">0 démarches sur 17</, "score affiché sans JavaScript : situation par défaut");
-});
 
 test("France : chiffres, dates et formulaires de la page repris des règles", () => {
   const T = R.tva_franchise_seuils;
@@ -92,4 +102,40 @@ test("France : chiffres, dates et formulaires de la page repris des règles", ()
   assert.equal(R.facturation_electronique_calendrier.reception_toutes_entreprises, "2026-09-01");
   assert.ok(step("einvoice").text.includes("1er septembre 2026"));
   for (const piece of R.creation_guichet_unique.pieces) assert.ok(step("pieces").text.toLowerCase().includes(piece), piece);
+});
+
+test("Royaume-Uni : montants, dates et délais de la page repris des règles", () => {
+  const U = rulesOf("uk"), L = steps(read("content/uk/how-to-become-a-sole-trader.html"));
+  const st = (id) => L.find((i) => i.id === id);
+  const gbp = (n) => "£" + n.toLocaleString("en-GB");
+  const day = (iso) => new Date(iso + "T00:00:00Z").toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
+  const checks = [
+    [st("register"), `${gbp(U.trading_allowance)} in a tax year`], [st("register"), `by ${day(U.sa_registration_deadline)}`],
+    [st("records"), `at least ${U.uk_records_retention.years_after_filing_deadline} years`],
+    [st("mtd"), `over ${gbp(U.mtd_itsa_threshold_2026)}`],
+    [st("vat"), gbp(U.vat_registration_threshold)],
+    [st("return"), `by ${day(U.sa_online_return_deadline)}`],
+    [st("pay"), `${gbp(U.payments_on_account_threshold)} or more`]
+  ];
+  for (const [s, expected] of checks) assert.ok(s && s.text.includes(expected), `${s && s.id} : « ${expected} »`);
+  assert.deepEqual(U.payments_on_account_dates.map((d) => d.slice(5)), ["01-31", "07-31"]);
+  assert.ok(st("pay").text.includes("on 31 January and 31 July"));
+  assert.equal(U.sa_balancing_payment_deadline.slice(5), "01-31");
+  for (const word of ["'limited'", "'Ltd'", "'LLP'", "'plc'"]) assert.ok(U.uk_business_name_rules[0].includes(word) && st("name").text.includes(word), word);
+});
+
+test("tous les montants des étapes viennent des règles (aucun montant écrit sans règle)", () => {
+  const F = rulesOf("fr"), U = rulesOf("uk"), T = F.tva_franchise_seuils;
+  const allowed = {
+    // 0 € : la déclaration de chiffre d'affaires « même nul ».
+    "content/fr/creer-sa-micro-entreprise.html": { re: /(\d{1,3}(?: \d{3})*) €/g, values: [0, F.micro_plafond_ca_services, F.micro_plafond_ca_vente,
+      F.vl_rfr_plafond_par_part_2026, F.compte_dedie_micro.seuil_ca, T.services_seuil, T.services_seuil_majore, T.vente_seuil, T.vente_seuil_majore] },
+    "content/uk/how-to-become-a-sole-trader.html": { re: /£(\d{1,3}(?:,\d{3})*)/g, values: [U.trading_allowance, U.mtd_itsa_threshold_2026,
+      U.vat_registration_threshold, U.payments_on_account_threshold] }
+  };
+  for (const [file, { re, values }] of Object.entries(allowed)) {
+    const amounts = steps(read(file)).flatMap((i) => [...i.text.matchAll(re)].map((m) => Number(m[1].replace(/[ ,]/g, ""))));
+    assert.ok(amounts.length > 0, file);
+    for (const a of amounts) assert.ok(values.includes(a), `${file} : ${a} n'est pas un montant des règles`);
+  }
 });

@@ -59,14 +59,34 @@ Situation : « Je vends des marchandises » (plafond, seuil de TVA et registre d
 Non publiés faute de source concordante : le montant de la pénalité pour une déclaration de chiffre d'affaires
 manquante (50 € ou 58 € selon les pages de l'Urssaf).
 
-## 3. Royaume-Uni, États-Unis, Canada
+## 3. Royaume-Uni : *How to become a sole trader* (`/uk/how-to-become-a-sole-trader/`, 22/10/2026)
 
-Même principe, recherches à faire avant le code : *register for Self Assessment* (date limite du 5 octobre), nom
-commercial, licences, TVA et *Making Tax Digital*, ICO (Royaume-Uni) ; nom commercial (*DBA*), EIN facultatif,
-licences et permis, taxe de vente de l'État, W-9, acomptes trimestriels (États-Unis) ; enregistrement du nom dans
-la province, numéro d'entreprise, TPS/TVH et TVQ au-delà de 30 000 $, acomptes provisionnels (Canada).
+Situation : « I'll trade under a business name » (règles du nom) ; « I'll run my business from home ».
 
-## 4. Critères de « terminé »
+| Étape | Règles |
+|---|---|
+| Nom commercial conforme : ni *limited*, *Ltd*, *LLP*, *plc*, ni nom offensant ou déjà déposé ; mots sensibles soumis à autorisation | `uk_business_name_rules` (nouvelle, GOV.UK) |
+| Licence ou permis selon l'activité (*licence finder*) | `uk_licences` (nouvelle) |
+| Domicile : prêteur ou bailleur, assureur, conseil local (urbanisme, *business rates*) | `uk_business_from_home` (nouvelle) |
+| Numéro de National Insurance | `uk_register_sole_trader` (nouvelle) |
+| Inscription à la Self Assessment au-delà de 1 000 £ de recettes, au plus tard le 5 octobre suivant la fin de l'année fiscale | `uk_register_sole_trader`, `sa_registration_deadline`, `trading_allowance` |
+| Redevance de protection des données de l'ICO, sauf exemption (montants non publiés : pages discordantes) | `uk_ico_fee` (nouvelle) |
+| Nom (et nom commercial) sur les factures | `invoice_requirements_sole_trader` |
+| Registres de recettes et dépenses, gardés 5 ans après la date limite du 31 janvier | `uk_records_retention` (nouvelle) |
+| *Making Tax Digital for Income Tax* au-delà de 50 000 £ (à partir d'avril 2026, sur une déclaration antérieure) | `mtd_itsa_threshold_2026` |
+| Seuil d'immatriculation à la TVA (90 000 £ sur 12 mois glissants) | `vat_registration_threshold` |
+| Déclaration en ligne avant le 31 janvier, paiement du solde et acomptes (*payments on account*) | `sa_online_return_deadline`, `sa_balancing_payment_deadline`, `payments_on_account_dates`, `payments_on_account_threshold` |
+
+10 étapes comptées par défaut, 12 au plus. Un test vérifie que **chaque montant écrit dans les étapes** (France et
+Royaume-Uni) est celui d'une règle.
+
+## 4. États-Unis et Canada
+
+Même principe, recherches à faire avant le code : nom commercial (*DBA*), EIN facultatif, licences et permis, taxe
+de vente de l'État, W-9, acomptes trimestriels (États-Unis) ; enregistrement du nom dans la province, numéro
+d'entreprise, TPS/TVH et TVQ au-delà de 30 000 $, acomptes provisionnels (Canada).
+
+## 5. Critères de « terminé »
 
 - Chaque étape porte au moins une règle existante, citée dans les sources de la page ; chaque chiffre de la page est
   vérifié contre sa règle (test).
