@@ -35,6 +35,24 @@
     fmt: function (n) { return isFinite(n) ? number.format(n) : "–"; },
     /** Taux en pourcentage, jusqu'à 3 décimales (9,975 pour la TVQ). */
     rate: function (n) { return isFinite(n) ? rateFormat.format(n) : "–"; },
+    /**
+     * Jauge de seuil : texte #id (« 85 % de 83 600 € », « 85% of £90,000 ») et barre #id-bar (orange au-delà de 85 %,
+     * rouge au-delà du seuil). Sans valeur, « – » et barre vide. Renvoie la part du seuil atteinte (ou NaN).
+     */
+    gauge: function (id, value, limit) {
+      var ratio = isFinite(value) && limit > 0 ? value / limit : NaN;
+      var bar = document.getElementById(id + "-bar");
+      bar.style.width = (isFinite(ratio) ? Math.min(100, Math.max(0, ratio * 100)) : 0) + "%";
+      bar.className = ratio > 1 ? "over" : ratio > OF.gaugeNear ? "near" : "";
+      // Jamais « 100 % » juste sous ou juste au-dessus du seuil : l'arrondi ne doit pas cacher de quel côté on est.
+      var shown = Math.round(ratio * 100);
+      if (ratio < 1) shown = Math.min(shown, 99); else if (ratio > 1) shown = Math.max(shown, 101);
+      document.getElementById(id).textContent = isFinite(ratio)
+        ? OF.fmt(shown) + (FRENCH ? " % de " : "% of ") + OF.money(limit, 0) : "–";
+      return ratio;
+    },
+    /** Part du seuil à partir de laquelle une jauge passe à l'orange (« vous approchez du seuil »). */
+    gaugeNear: 0.85,
 
     /**
      * Lit un nombre saisi (« 1 234,5 », « 1,234.50 », « $1,800 », « 26 % »). Renvoie NaN si vide ou invalide.

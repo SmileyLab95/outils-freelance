@@ -39,14 +39,6 @@
     return period;
   }
 
-  function gauge(id, value, limit) {
-    var ratio = value / limit;
-    var bar = $(id + "-bar");
-    bar.style.width = Math.min(100, Math.max(0, ratio * 100)) + "%";
-    bar.className = ratio > 1 ? "over" : ratio > 0.85 ? "near" : "";
-    set(id, isFinite(ratio) ? Math.round(ratio * 100) + " % de " + OF.eur(limit, 0) : "–");
-  }
-
   function compute() {
     var a = ACTIVITIES[$("s-activity").value] || ACTIVITIES.liberal;
     var period = syncPeriod();
@@ -97,8 +89,8 @@
 
     // Plafonds et seuils.
     var s = a.seuils;
-    gauge("s-g-plafond", ca, s.plafond);
-    gauge("s-g-tva", ca, s.tva);
+    OF.gauge("s-g-plafond", ca, s.plafond);
+    OF.gauge("s-g-tva", ca, s.tva);
     var notice = $("s-notice"), msg, level = "ok";
     if (!isFinite(ca) || ca <= 0) { msg = "Indiquez votre chiffre d'affaires pour vérifier les seuils."; level = ""; }
     else if (ca > s.plafond) { msg = "Vous dépassez le plafond de la micro-entreprise (" + OF.eur(s.plafond, 0) + "). Si cela se produit deux années de suite, vous passez au régime réel au 1er janvier suivant : parlez-en à un expert-comptable."; level = "warn"; }

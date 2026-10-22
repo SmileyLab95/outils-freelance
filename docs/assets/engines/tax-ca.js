@@ -193,12 +193,13 @@
     var dates = rules.instalment_due_dates_2026;
     if (!result.quebec) {
       var owing = result.incomeTax + result.pensions.total, req = owing > rules.instalment_threshold;
-      return { required: req, requiredFederal: req, requiredQuebec: false, threshold: rules.instalment_threshold,
+      // measure : montant comparé au seuil (jauge) ; au Québec, le plus élevé des deux impôts.
+      return { required: req, requiredFederal: req, requiredQuebec: false, threshold: rules.instalment_threshold, measure: owing,
                federal: req ? owing / 4 : 0, quebec: 0, dueDates: dates };
     }
     var t = rules.instalment_threshold_quebec;
     var fed = result.federal > t, qc = result.provincial > t;
-    return { required: fed || qc, requiredFederal: fed, requiredQuebec: qc, threshold: t,
+    return { required: fed || qc, requiredFederal: fed, requiredQuebec: qc, threshold: t, measure: Math.max(result.federal, result.provincial),
              federal: fed ? result.federal / 4 : 0,
              quebec: qc ? (result.provincial + result.pensions.total + result.qpip) / 4 : 0, dueDates: dates };
   }

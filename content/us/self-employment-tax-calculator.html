@@ -9,7 +9,7 @@
   "app": "Self-Employment Tax Calculator",
   "scripts": ["engines/brackets.js", "engines/tax-us.js", "tools/us-tax.js"],
   "rules": "us",
-  "sources": ["se_tax_total_rate", "social_security_wage_base_2026", "additional_medicare_tax_thresholds", "federal_brackets_single", "qbi_deduction_rate", "estimated_tax_due_dates_2026", "states_no_individual_income_tax"],
+  "sources": ["se_tax_total_rate", "se_tax_medicare_rate", "social_security_wage_base_2026", "additional_medicare_tax_rate", "additional_medicare_tax_thresholds", "federal_brackets_single", "qbi_deduction_rate", "qbi_threshold_2026", "qbi_phase_in_range_2026", "qbi_minimum_deduction", "estimated_tax_threshold", "estimated_tax_due_dates_2026", "states_no_individual_income_tax"],
   "priority": 1.0,
   "faq": [
     ["How much is self-employment tax in 2026?", "15.3% of your net earnings from self-employment: 12.4% for Social Security and 2.9% for Medicare. Net earnings are 92.35% of your net profit. The Social Security part stops at the 2026 wage base of $184,500 (including any W-2 wages); the Medicare part has no limit, and an extra 0.9% Additional Medicare Tax applies above $200,000 ($250,000 for married couples filing jointly)."],
@@ -82,6 +82,26 @@
         <h3 style="font-size: 1rem; margin-bottom: 8px;">Quarterly estimated payments</h3>
         <p id="r-quarterly" style="margin: 0;">–</p>
         <p class="small muted" style="margin: 8px 0 0;">Want to pay the legal minimum? Use the <a href="{{link:estimated-tax}}">quarterly tax calculator</a> with last year's tax.</p>
+      </div>
+      <div class="card gauges">
+        <h2 class="label" style="margin: 0;">Thresholds to watch</h2>
+        <div class="gauge">
+          <div class="gauge-head"><span>Estimated tax (federal tax owed after withholding)</span><b id="g-est">–</b></div>
+          <div class="progress"><div id="g-est-bar"></div></div>
+        </div>
+        <div class="gauge">
+          <div class="gauge-head"><span>Social Security wage base (SE earnings and wages)</span><b id="g-ss">–</b></div>
+          <div class="progress"><div id="g-ss-bar"></div></div>
+        </div>
+        <div class="gauge">
+          <div class="gauge-head"><span>Additional Medicare Tax (SE earnings and wages)</span><b id="g-addmed">–</b></div>
+          <div class="progress"><div id="g-addmed-bar"></div></div>
+        </div>
+        <div class="gauge">
+          <div class="gauge-head"><span>QBI deduction limits (taxable income before QBI)</span><b id="g-qbi">–</b></div>
+          <div class="progress"><div id="g-qbi-bar"></div></div>
+        </div>
+        <p class="notice" id="g-notice" aria-live="polite">–</p>
       </div>
     </div>
   </div>

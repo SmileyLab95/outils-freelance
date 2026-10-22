@@ -9,7 +9,7 @@
   "app": "Canada Self-Employed Tax Calculator",
   "scripts": ["engines/brackets.js", "engines/tax-ca.js", "tools/ca-tax.js"],
   "rules": "ca",
-  "sources": ["cpp_rate_self_employed", "cpp2_rate_self_employed", "qpp_rate_self_employed", "qpip_rate_self_employed", "qpip_self_employed_tax_treatment", "quebec_contributions_no_credit", "quebec_deduction_for_workers", "federal_income_tax_brackets", "federal_bpa_reduction_rule", "quebec_abatement", "ontario_health_premium", "instalment_threshold"],
+  "sources": ["cpp_rate_self_employed", "cpp2_rate_self_employed", "qpp_rate_self_employed", "qpip_rate_self_employed", "qpip_self_employed_tax_treatment", "quebec_contributions_no_credit", "quebec_deduction_for_workers", "federal_income_tax_brackets", "federal_bpa_reduction_rule", "quebec_abatement", "ontario_health_premium", "instalment_threshold", "instalment_threshold_quebec", "small_supplier_threshold", "qst_small_supplier_threshold", "small_supplier_includes_zero_rated", "small_supplier_not_required_to_collect"],
   "priority": 1.0,
   "faq": [
     ["How much tax does a self-employed person pay in Canada?", "Federal and provincial income tax on your net self-employment income, plus both halves of the Canada Pension Plan: 11.9% of earnings between $3,500 and $74,600 in 2026, and 8% CPP2 between $74,600 and $85,000. In Québec, the QPP rate is 12.6% and you also pay the QPIP premium (0.764%)."],
@@ -33,6 +33,14 @@
   "inst_part_cra": "{amount} to the CRA (federal tax)", "inst_part_rq": "{amount} to Revenu Québec (Québec tax, QPP and QPIP)",
   "inst_not": "Your tax owing is under {threshold}: instalments are generally not required.",
   "day_month": {"month": "long", "day": "numeric"}, "dates_year": "{list}, {year}",
+  "gst_label": "GST/HST small supplier threshold", "gst_label_qc": "Small supplier threshold (GST/HST and QST)",
+  "inst_label": "Instalment threshold (net tax owing)", "inst_label_qc": "Instalment threshold (federal or Québec tax)",
+  "gst_empty": "Enter your sales before expenses to check the small supplier threshold.",
+  "gst_over": "Over {threshold}: once your taxable supplies go over it in a single calendar quarter or over four consecutive quarters, you're no longer a small supplier and must register for the GST/HST.",
+  "gst_over_qc": "Over {threshold}: once your taxable supplies go over it in a single calendar quarter or over four consecutive quarters, you're no longer a small supplier and must register for the GST/HST and the QST.",
+  "gst_near": "Getting close to {threshold}: watch your taxable supplies in each calendar quarter and over the last four.",
+  "gst_under": "Under {threshold}, you're a small supplier: you generally don't have to register for the GST/HST (you can still register voluntarily to claim input tax credits).",
+  "gst_under_qc": "Under {threshold}, you're a small supplier: you generally don't have to register for the GST/HST and the QST (you can still register voluntarily to claim input tax credits).",
   "steps": {
     "profit": "Net self-employment income", "pension_deduction": "Deductible part of CPP", "pension_deduction_qc": "Deductible part of QPP",
     "net_income": "Net income", "federal_brackets": "Federal tax on net income", "federal_credits": "Basic personal amount and contribution credits", "qpip_deduction": "Deductible part of QPIP",
@@ -61,6 +69,9 @@
         <div class="field full"><label for="t-profit">Net self-employment income</label>
           <div class="input-suffix"><input type="text" inputmode="decimal" id="t-profit" name="profit" value="80,000" data-save><span>$</span></div>
           <span class="hint">Your business income minus expenses (form T2125, line 9946).</span></div>
+        <div class="field full"><label for="t-revenue">Sales before expenses (optional)</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="t-revenue" name="revenue" aria-describedby="t-revenue-hint" data-save><span>$</span></div>
+          <span class="hint" id="t-revenue-hint">Your taxable sales for the year, exports included: they're checked against the small supplier threshold below.</span></div>
         <div class="field full"><label for="t-province">Province or territory of residence on December 31</label>
           <select id="t-province" name="province" data-save></select></div>
       </div>
@@ -87,6 +98,18 @@
       <div class="card" style="margin-top: 16px; padding: 18px;">
         <h3 style="font-size: 1rem; margin-bottom: 8px;">Quarterly instalments</h3>
         <p id="r-inst" style="margin: 0;">–</p>
+      </div>
+      <div class="card gauges">
+        <h2 class="label" style="margin: 0;">Thresholds to watch</h2>
+        <div class="gauge">
+          <div class="gauge-head"><span id="g-gst-label">GST/HST small supplier threshold</span><b id="g-gst">–</b></div>
+          <div class="progress"><div id="g-gst-bar"></div></div>
+        </div>
+        <div class="gauge">
+          <div class="gauge-head"><span id="g-inst-label">Instalment threshold (net tax owing)</span><b id="g-inst">–</b></div>
+          <div class="progress"><div id="g-inst-bar"></div></div>
+        </div>
+        <p class="notice" id="g-notice" aria-live="polite">–</p>
       </div>
     </div>
   </div>

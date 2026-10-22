@@ -208,10 +208,18 @@ const tests = {
     await page.selectOption("#s-activity", "liberal");
     await page.click('[data-period="an"]');
     check(/^36\s?000$/.test(await page.inputValue("#s-ca")) && /^2\s?226\s?€$/.test((await page.textContent("#s-net-month")).trim()), "simulateur : passage au CA annuel sans changer le résultat");
+    // Jauges (fonction commune OF.gauge) : 36 000 € = 43 % du plafond, 96 % du seuil de TVA (orange).
+    const gauge = async (id) => [(await page.textContent(`#${id}`)).replace(/\s/g, ""), await page.getAttribute(`#${id}-bar`, "class")];
+    check(JSON.stringify([await gauge("s-g-plafond"), await gauge("s-g-tva")]) === JSON.stringify([["43%de83600€", ""], ["96%de37500€", "near"]]),
+      "simulateur : jauges à 43 % du plafond et 96 % du seuil de TVA (orange)");
     await page.fill("#s-ca", "43 200");
     check((await page.textContent("#s-notice")).includes("dès le jour du dépassement"), "simulateur : alerte TVA au-delà de 41 250 €");
     await page.fill("#s-ca", "90 000");
     check((await page.textContent("#s-notice")).includes("plafond de la micro-entreprise"), "simulateur : alerte plafond de 83 600 €");
+    check(JSON.stringify(await gauge("s-g-plafond")) === JSON.stringify(["108%de83600€", "over"]), "simulateur : jauge du plafond à 108 %, en rouge");
+    await page.fill("#s-ca", "");
+    check((await page.textContent("#s-g-plafond")).trim() === "–" && (await page.getAttribute("#s-g-plafond-bar", "style")).includes("width: 0%"),
+      "simulateur : sans chiffre d'affaires, jauges vides");
     await page.fill("#s-ca", "36 000");
     await page.reload({ waitUntil: "networkidle" });
     check((await page.getAttribute('[data-period="an"]', "aria-pressed")) === "true", "simulateur : période mémorisée après rechargement");
@@ -334,6 +342,36 @@ const tests = {
     check((await page.$$(".sources li")).length >= 4, "SE tax : sources officielles affichées");
     await page.fill("#t-profit", "80,000");
     await page.selectOption("#t-status", "single");
+    // Jauges des seuils (documentation/21-jauges-de-seuils.md) ; rapports calculés avec le moteur (tests unitaires).
+    const gauges = async () => Promise.all(["g-est", "g-ss", "g-addmed", "g-qbi"].map(async (id) =>
+      (await page.textContent(`#${id}`)).trim() + ((await page.getAttribute(`#${id}-bar`, "class")) ? " " + (await page.getAttribute(`#${id}-bar`, "class")) : "")));
+    const notice = async () => [(await page.textContent("#g-notice")).trim(), await page.getAttribute("#g-notice", "class")];
+    check(JSON.stringify(await gauges()) === JSON.stringify(["1,665% of $1,000 over", "40% of $184,500", "37% of $200,000", "29% of $201,750"]) &&
+      JSON.stringify(await notice()) === JSON.stringify(["You're below the Social Security wage base, the Additional Medicare Tax threshold and the QBI limits.", "notice ok"]),
+      "SE tax : jauges à 80 000 $ (acomptes dépassés, autres seuils loin)");
+    await page.fill("#t-profit", "210,000");
+    let [msg, cls] = await notice();
+    check(JSON.stringify(await gauges()) === JSON.stringify(["5,559% of $1,000 over", "105% of $184,500 over", "97% of $200,000 near", "89% of $201,750 near"]) &&
+      msg.startsWith("Over the $184,500 wage base, no more Social Security tax on the excess: only the 2.9% Medicare part continues.") &&
+      msg.includes("Getting close to the QBI threshold ($201,750 of taxable income)") && cls === "notice",
+      "SE tax : 210 000 $ → plafond Social Security dépassé, QBI proche (message neutre)");
+    await page.fill("#t-profit", "250,000");
+    await page.check("#t-sstb");
+    [msg, cls] = await notice();
+    check(msg.includes("Over $200,000 for your filing status, the 0.9% Additional Medicare Tax applies to the excess") &&
+      msg.includes("the QBI deduction of a specified service business shrinks, and disappears at $276,750.") && cls === "notice warn",
+      "SE tax : 250 000 $, activité de service → Additional Medicare et QBI réduite (alerte)");
+    await page.uncheck("#t-sstb");
+    await page.fill("#t-profit", "300,000");
+    check((await notice())[0].includes("with neither, it shrinks to the $400 minimum at $276,750."), "SE tax : 300 000 $ → QBI ramenée au minimum de 400 $");
+    await page.selectOption("#t-status", "married_filing_jointly");
+    check((await gauges())[2] === "111% of $250,000 over" && (await gauges())[3].endsWith("of $403,500"), "SE tax : couple, 300 000 $ → 277 050 $ = 111 % de 250 000 $ ; seuil QBI de 403 500 $");
+    await page.selectOption("#t-status", "single");
+    await page.fill("#t-profit", "");
+    await page.fill("#t-wages", "250,000");
+    check(!(await notice())[0].includes("QBI deduction") && (await notice())[0].includes("Additional Medicare Tax"), "SE tax : salaire seul → pas de message sur la déduction QBI");
+    await page.fill("#t-wages", "");
+    await page.fill("#t-profit", "80,000");
   },
   async "us/quarterly-tax-calculator/"(page) {
     check((await page.textContent("#q-per")).trim() === "$3,746", `acomptes : 90 % × 16 647,47 ÷ 4 = 3 746 $ (obtenu : ${await page.textContent("#q-per")})`);
@@ -485,6 +523,28 @@ const tests = {
     check((await page.textContent("#r-it")).trim() === "£4,000" && (await page.textContent("#r-ni")).trim() === "£446", "UK : avec un salaire de 30 000 £, impôt supplémentaire 4 000 £, Class 4 446 £");
     await page.fill("#t-profit", "50,000");
     await page.fill("#t-salary", "");
+    // Jauges des seuils sur le chiffre d'affaires (documentation/21-jauges-de-seuils.md).
+    const gauge = async (id) => (await page.textContent(`#${id}`)).trim() + ((await page.getAttribute(`#${id}-bar`, "class")) ? " " + (await page.getAttribute(`#${id}-bar`, "class")) : "");
+    const notice = async () => [(await page.textContent("#g-notice")).trim(), await page.getAttribute("#g-notice", "class")];
+    check((await gauge("g-vat")) === "–" && (await gauge("g-mtd")) === "–" &&
+      JSON.stringify(await notice()) === JSON.stringify(["Enter your income before expenses to check the VAT and Making Tax Digital thresholds.", "notice"]),
+      "UK : sans chiffre d'affaires, jauges vides et invitation à le saisir");
+    await page.fill("#t-turnover", "80,000");
+    let [msg, cls] = await notice();
+    check((await gauge("g-vat")) === "89% of £90,000 near" && (await gauge("g-mtd")) === "160% of £50,000 over" &&
+      msg.startsWith("Getting close to the VAT registration threshold (£90,000)") && msg.includes("£50,000 from April 2026, £30,000 from April 2027 and £20,000 from April 2028") &&
+      cls === "notice warn", "UK : 80 000 £ → TVA proche (orange), Making Tax Digital dès avril 2026 (alerte)");
+    await page.fill("#t-turnover", "90,300");
+    check((await gauge("g-vat")) === "101% of £90,000 over" && (await notice())[0].startsWith("Over £90,000: you must register for VAT"),
+      "UK : 90 300 £ → 101 % (jamais « 100 % » au-dessus du seuil), inscription à la TVA");
+    await page.fill("#t-turnover", "25,000");
+    [msg, cls] = await notice();
+    check(msg === "At this level, Making Tax Digital for Income Tax will apply to you from April 2028, for qualifying income over £20,000, each time measured on an earlier tax return (property income counts too)." &&
+      cls === "notice", "UK : 25 000 £ → Making Tax Digital à partir d'avril 2028 (message neutre)");
+    await page.fill("#t-turnover", "800");
+    [msg, cls] = await notice();
+    check(msg.startsWith("Under the £1,000 trading allowance") && cls === "notice ok", "UK : 800 £ → trading allowance");
+    await page.fill("#t-turnover", "");
   },
   async "uk/sole-trader-vs-limited-company/"(page) {
     // Ltd : 60 000 − 12 570 − 1 135,50 − 1 500 = 44 794,50 ; IS 19 % ; dividendes 36 283,55 ; impôt 3 846,73 → 45 006,81
@@ -759,6 +819,27 @@ const tests = {
     check((await page.textContent("#r-total")).trim() === "$11,191", "CA : Alberta 50 000 $ → 11 191 $");
     await page.selectOption("#t-province", "ON");
     await page.fill("#t-profit", "80,000");
+    // Jauges des seuils (documentation/21-jauges-de-seuils.md) : acomptes sur l'impôt calculé, petit fournisseur sur les ventes.
+    const gauge = async (id) => (await page.textContent(`#${id}`)).trim() + ((await page.getAttribute(`#${id}-bar`, "class")) ? " " + (await page.getAttribute(`#${id}-bar`, "class")) : "");
+    const notice = async () => [(await page.textContent("#g-notice")).trim(), await page.getAttribute("#g-notice", "class")];
+    check((await gauge("g-inst")) === "738% of $3,000 over" && (await gauge("g-gst")) === "–" &&
+      JSON.stringify(await notice()) === JSON.stringify(["Enter your sales before expenses to check the small supplier threshold.", "notice"]),
+      "CA : acomptes à 738 % du seuil (22 126 $ d'impôt et RPC), jauge du petit fournisseur vide sans ventes");
+    await page.fill("#t-revenue", "27,000");
+    check((await gauge("g-gst")) === "90% of $30,000 near" && JSON.stringify(await notice()) ===
+      JSON.stringify(["Getting close to $30,000: watch your taxable supplies in each calendar quarter and over the last four.", "notice"]), "CA : 27 000 $ de ventes → seuil proche");
+    await page.selectOption("#t-province", "QC");
+    await page.fill("#t-revenue", "45,000");
+    let [msg, cls] = await notice();
+    check((await page.textContent("#g-gst-label")).trim() === "Small supplier threshold (GST/HST and QST)" && (await gauge("g-gst")) === "150% of $30,000 over" &&
+      msg.endsWith("you're no longer a small supplier and must register for the GST/HST and the QST.") && cls === "notice warn" &&
+      (await page.textContent("#g-inst-label")).trim() === "Instalment threshold (federal or Québec tax)" && (await gauge("g-inst")).endsWith("of $1,800 over"),
+      "CA : Québec, 45 000 $ → inscription TPS/TVH et TVQ, seuil des acomptes de 1 800 $");
+    await page.fill("#t-revenue", "12,000");
+    check(JSON.stringify(await notice()) === JSON.stringify(["Under $30,000, you're a small supplier: you generally don't have to register for the GST/HST and the QST (you can still register voluntarily to claim input tax credits).", "notice ok"]),
+      "CA : 12 000 $ → petit fournisseur");
+    await page.fill("#t-revenue", "");
+    await page.selectOption("#t-province", "ON");
   },
   async "ca/sole-proprietor-vs-corporation/"(page) {
     // Valeurs des tests unitaires (tests/unit/structure-ca.test.mjs).
@@ -1409,6 +1490,18 @@ const tests = {
     check(steps.includes("PartiedéductibleduRQAP−200$") && steps.includes("Déductionpourtravailleur(Québec)−1450$") &&
       steps.includes("RevenuimposableauQuébec54225$") && steps.includes("MontantpersonneldebaseduQuébec−2653$"),
       "CA-FR : détail du calcul québécois (RQAP déductible, déduction pour travailleur, aucun crédit RRQ au Québec)");
+    // Jauges : au Québec, le plus élevé des deux impôts (Québec, 4 938 $ à 60 000 $) comparé à 1 800 $.
+    const flat = async (id) => (await page.textContent(`#${id}`)).replace(/\s/g, "");
+    await page.fill("#t-revenue", "33 000");
+    check((await flat("g-inst")) === "274%de1800$" && (await flat("g-gst")) === "110%de30000$" &&
+      (await page.textContent("#g-notice")).includes("vous n'êtes plus un petit fournisseur et devez vous inscrire à la TPS/TVH et à la TVQ.") &&
+      (await page.getAttribute("#g-notice", "class")) === "notice warn", "CA-FR : 33 000 $ de ventes → inscription TPS/TVH et TVQ, acomptes à 274 %");
+    await page.selectOption("#t-province", "NB");
+    check((await page.textContent("#g-gst-label")).trim() === "Seuil du petit fournisseur (TPS/TVH)" &&
+      (await page.textContent("#g-notice")).includes("devez vous inscrire à la TPS/TVH.") && (await flat("g-inst")).endsWith("de3000$"),
+      "CA-FR : Nouveau-Brunswick → TPS/TVH seule, seuil des acomptes de 3 000 $");
+    await page.fill("#t-revenue", "");
+    await page.selectOption("#t-province", "QC");
   },
   async "ca/fr/calcul-tps-tvq/"(page) {
     check((await page.textContent("#st-hero")).replace(/\s/g, "") === "114,98$", "TPS/TVQ : 100 $ → 114,98 $");

@@ -9,7 +9,7 @@
   "app": "Calculateur d'impôt du travailleur autonome",
   "scripts": ["engines/brackets.js", "engines/tax-ca.js", "tools/ca-tax.js"],
   "rules": "ca",
-  "sources": ["qpp_rate_self_employed", "qpip_rate_self_employed", "qpip_self_employed_tax_treatment", "quebec_contributions_no_credit", "quebec_deduction_for_workers", "cpp_rate_self_employed", "federal_income_tax_brackets", "quebec_abatement", "instalment_threshold_quebec"],
+  "sources": ["qpp_rate_self_employed", "qpip_rate_self_employed", "qpip_self_employed_tax_treatment", "quebec_contributions_no_credit", "quebec_deduction_for_workers", "cpp_rate_self_employed", "federal_income_tax_brackets", "quebec_abatement", "instalment_threshold_quebec", "instalment_threshold", "small_supplier_threshold", "qst_small_supplier_threshold", "small_supplier_includes_zero_rated", "small_supplier_not_required_to_collect"],
   "priority": 1.0,
   "faq": [
     ["Combien d'impôt paie un travailleur autonome au Québec ?", "De l'impôt fédéral et de l'impôt du Québec sur votre revenu net d'entreprise, plus les deux parts du Régime de rentes du Québec : 12,6 % des gains entre 3 500 $ et 74 600 $ en 2026, et 8 % de RRQ2 entre 74 600 $ et 85 000 $. S'ajoute la cotisation au RQAP (0,764 %). Les résidents du Québec bénéficient d'un abattement de 16,5 % de l'impôt fédéral de base."],
@@ -33,6 +33,14 @@
   "inst_part_cra": "{amount} à l'ARC (impôt fédéral)", "inst_part_rq": "{amount} à Revenu Québec (impôt du Québec, RRQ et RQAP)",
   "inst_not": "Votre impôt à payer est inférieur à {threshold} : en général, pas d'acomptes provisionnels.",
   "day_month": {"day": "numeric", "month": "long"}, "dates_year": "{list} {year}",
+  "gst_label": "Seuil du petit fournisseur (TPS/TVH)", "gst_label_qc": "Seuil du petit fournisseur (TPS/TVH et TVQ)",
+  "inst_label": "Seuil des acomptes provisionnels (impôt net)", "inst_label_qc": "Seuil des acomptes (impôt fédéral ou du Québec)",
+  "gst_empty": "Indiquez vos ventes avant dépenses pour les comparer au seuil du petit fournisseur.",
+  "gst_over": "Au-delà de {threshold} : dès que vos fournitures taxables le dépassent au cours d'un seul trimestre civil ou de quatre trimestres consécutifs, vous n'êtes plus un petit fournisseur et devez vous inscrire à la TPS/TVH.",
+  "gst_over_qc": "Au-delà de {threshold} : dès que vos fournitures taxables le dépassent au cours d'un seul trimestre civil ou de quatre trimestres consécutifs, vous n'êtes plus un petit fournisseur et devez vous inscrire à la TPS/TVH et à la TVQ.",
+  "gst_near": "Vous approchez de {threshold} : surveillez vos fournitures taxables de chaque trimestre civil et des quatre derniers.",
+  "gst_under": "Sous {threshold}, vous êtes un petit fournisseur : en général, l'inscription à la TPS/TVH n'est pas obligatoire (vous pouvez vous inscrire volontairement pour demander des crédits de taxe sur les intrants).",
+  "gst_under_qc": "Sous {threshold}, vous êtes un petit fournisseur : en général, l'inscription à la TPS/TVH et à la TVQ n'est pas obligatoire (vous pouvez vous inscrire volontairement pour demander des crédits de taxe sur les intrants).",
   "steps": {
     "profit": "Revenu net d'entreprise", "pension_deduction": "Partie déductible du RPC", "pension_deduction_qc": "Partie déductible du RRQ",
     "net_income": "Revenu net", "federal_brackets": "Impôt fédéral selon les paliers", "federal_credits": "Montant personnel de base et crédits pour cotisations", "qpip_deduction": "Partie déductible du RQAP",
@@ -61,6 +69,9 @@
         <div class="field full"><label for="t-profit">Revenu net de travailleur autonome</label>
           <div class="input-suffix"><input type="text" inputmode="decimal" id="t-profit" name="profit" value="60 000" data-save><span>$</span></div>
           <span class="hint">Vos revenus d'entreprise moins vos dépenses (formulaire TP-80 au Québec, T2125 au fédéral).</span></div>
+        <div class="field full"><label for="t-revenue">Ventes avant dépenses (facultatif)</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="t-revenue" name="revenue" aria-describedby="t-revenue-hint" data-save><span>$</span></div>
+          <span class="hint" id="t-revenue-hint">Vos ventes taxables de l'année, exportations comprises : elles sont comparées au seuil du petit fournisseur ci-dessous.</span></div>
         <div class="field full"><label for="t-province">Province ou territoire de résidence au 31 décembre</label>
           <select id="t-province" name="province" data-save></select></div>
       </div>
@@ -87,6 +98,18 @@
       <div class="card" style="margin-top: 16px; padding: 18px;">
         <h3 style="font-size: 1rem; margin-bottom: 8px;">Acomptes provisionnels</h3>
         <p id="r-inst" style="margin: 0;">–</p>
+      </div>
+      <div class="card gauges">
+        <h2 class="label" style="margin: 0;">Seuils à surveiller</h2>
+        <div class="gauge">
+          <div class="gauge-head"><span id="g-gst-label">Seuil du petit fournisseur (TPS/TVH et TVQ)</span><b id="g-gst">–</b></div>
+          <div class="progress"><div id="g-gst-bar"></div></div>
+        </div>
+        <div class="gauge">
+          <div class="gauge-head"><span id="g-inst-label">Seuil des acomptes (impôt fédéral ou du Québec)</span><b id="g-inst">–</b></div>
+          <div class="progress"><div id="g-inst-bar"></div></div>
+        </div>
+        <p class="notice" id="g-notice" aria-live="polite">–</p>
       </div>
     </div>
   </div>

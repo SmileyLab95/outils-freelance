@@ -88,7 +88,7 @@ Matrice revue le 22/10/2026 d'après les pages publiées (identifiants de `conte
 | Combien mettre de côté sur chaque facture ? | Calculateur « à mettre de côté » | ✅ | ✅ | ✅ | ✅ | P1 |
 | Payer ses acomptes | Calculateur d'acomptes | — | ✅ *quarterly estimated taxes* | ✅ *payments on account* (calculateurs d'impôt et « set aside ») | ✅ acomptes provisionnels (idem) | P1 |
 | Ne rater aucune échéance | Calendrier fiscal avec export agenda (.ics) | ✅ | ✅ | ✅ | ✅ | P2 |
-| Les seuils à surveiller | Jauges (TVA, plafonds) intégrées aux simulateurs | ✅ | 🟡 | 🟡 | 🟡 | P2 |
+| Les seuils à surveiller | Jauges (TVA, plafonds) intégrées aux simulateurs | ✅ | ✅ | ✅ | ✅ | P2 |
 | Formulaires fiscaux | Guides 1099 / W-9 / W-8BEN | — | ✅ 1099 / W-9 (W-8BEN 🟡) | — | — | P2 |
 | Déclarations numériques | Guide *Making Tax Digital* | — | — | ✅ | — | P1 (UK) |
 
@@ -121,9 +121,8 @@ Matrice revue le 22/10/2026 d'après les pages publiées (identifiants de `conte
 
 - **P1** : Espace entrepreneur hors de France (après la plateforme française). Comparateur de statuts au Canada fait le 22/10/2026 (Saskatchewan et Nunavut en attente d'un taux officiel).
 - **P2** (convertisseur de tarifs, prix au forfait et « freelance ou salarié » faits le 22/10/2026) : checklist de
-  création faite dans les 4 pays le 22/10/2026 ; recouvrement en justice (4 pays) ; client
-  étranger aux États-Unis ; W-8BEN ; jauges de seuils (États-Unis, Royaume-Uni, Canada) ; assurance et compte pro hors
-  de France.
+  création et jauges de seuils faites dans les 4 pays le 22/10/2026 ; recouvrement en justice (4 pays) ; client
+  étranger aux États-Unis ; W-8BEN ; assurance et compte pro hors de France.
 - **P3** : date d'échéance, proposition commerciale, NDA, CGV, bureau à domicile, hausse de tarifs (calculateur),
   sous-traitance, guide de changement de statut.
 

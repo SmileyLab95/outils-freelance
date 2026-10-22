@@ -118,7 +118,14 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 - **Checklist de création au Canada (22/10/2026)** : anglais et français, cinq règles nouvelles ; la checklist
   existe dans les quatre pays. Défaut corrigé : la situation d'une liste effaçait celle d'une autre liste de la
   même section (Royaume-Uni touché quelques heures).
-- **Prochaines actions de Claude** : jauges de seuils hors de France (besoin P2, spécification d'abord) ; jauges de seuils hors de France ; taux du crédit pour
+- **Jauges de seuils hors de France (22/10/2026)** : dans les calculateurs d'impôt du Royaume-Uni (TVA, *Making Tax
+  Digital*, *trading allowance*), du Canada en anglais et en français (petit fournisseur TPS/TVH et TVQ, acomptes
+  provisionnels) et des États-Unis (acomptes, *Social Security wage base*, *Additional Medicare Tax*, déduction QBI),
+  avec un champ facultatif de chiffre d'affaires là où le seuil porte sur les ventes ([21](21-jauges-de-seuils.md)).
+  Mise en forme commune avec le simulateur français (`OF.gauge`). Les besoins P2 « Impôts et cotisations » sont
+  couverts, sauf le W-8BEN.
+- **Prochaines actions de Claude** : client étranger aux États-Unis et W-8BEN (besoins P2) : brouillon de
+  spécification [22](22-client-etranger-us-et-w8ben.md), règles à ajouter avec leurs sources avant le code ; recouvrement en justice au Royaume-Uni, aux États-Unis et au Canada ; taux du crédit pour
   dividendes de la Saskatchewan et du Nunavut dès qu'ils sont publiés (formulaires 2026) ;
   trouver la cause du contrôle de contraste intermittent de l'Espace ; revérifier les grilles des prestataires de
   paiement (Stripe, Mollie) quand Ismail décidera ([17](17-offres-et-paiements.md)) ; guide du recouvrement dès que
@@ -250,6 +257,9 @@ Objectif : un site mesuré, sous sa propre marque, qui commence à rapporter, et
   - [x] Royaume-Uni : `/uk/how-to-become-a-sole-trader/` (12 étapes au plus, GOV.UK et ICO)
   - [x] États-Unis : `/us/how-to-start-freelancing/` (9 étapes au plus, SBA et IRS)
   - [x] Canada : `/ca/how-to-start-a-business/` et `/ca/fr/demarrer-entreprise-individuelle/` (8 étapes au plus)
+- [x] Jauges de seuils hors de France (besoin P2, spécification [21](21-jauges-de-seuils.md)) : Royaume-Uni (TVA,
+      *Making Tax Digital*), Canada (petit fournisseur, acomptes), États-Unis (acomptes, *wage base*, *Additional
+      Medicare Tax*, QBI) ; fonction commune `OF.gauge`
 
 ### 1.5 Préparer la plateforme
 

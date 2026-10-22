@@ -42,6 +42,25 @@
     return fill(L.inst_required_qc, vars);
   }
 
+  /**
+   * Jauges des seuils (documentation/21-jauges-de-seuils.md) : petit fournisseur sur les ventes saisies, acomptes sur
+   * l'impôt calculé (au Québec, le plus élevé des deux impôts, chacun comparé au même seuil).
+   */
+  function thresholds(r, inst) {
+    var sales = OF.num($("t-revenue").value), has = isFinite(sales) && sales > 0;
+    var limit = R.small_supplier_threshold, qc = r.quebec ? "_qc" : "";
+    set("g-gst-label", L["gst_label" + qc]);
+    set("g-inst-label", L["inst_label" + qc]);
+    OF.gauge("g-gst", has ? sales : NaN, limit);
+    OF.gauge("g-inst", inst.measure, inst.threshold);
+    var vars = { threshold: OF.money(limit, 0) };
+    var text = !has ? L.gst_empty : sales > limit ? fill(L["gst_over" + qc], vars)
+      : sales > limit * OF.gaugeNear ? fill(L.gst_near, vars) : fill(L["gst_under" + qc], vars);
+    $("g-notice").textContent = text;
+    // Rouge au-delà du seuil, neutre à l'approche (comme la barre orange), vert en dessous.
+    $("g-notice").className = "notice" + (!has ? "" : sales > limit ? " warn" : sales > limit * OF.gaugeNear ? "" : " ok");
+  }
+
   function compute() {
     var r = OFE.taxCA.estimate({ profit: OF.num($("t-profit").value) || 0, province: $("t-province").value }, R, P);
     var name = P[r.province][L.names];
@@ -74,6 +93,7 @@
     }).join("") : "";
 
     $("r-inst").textContent = instalmentText(r, inst);
+    thresholds(r, inst);
 
     var S = L.steps;
     var steps = [

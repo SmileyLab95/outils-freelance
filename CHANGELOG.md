@@ -1,5 +1,23 @@
 # Journal des modifications
 
+## 2026-10-22 — Jauges de seuils au Royaume-Uni, au Canada et aux États-Unis
+
+- Calculateurs d'impôt : nouvelle carte « *Thresholds to watch* » / « Seuils à surveiller » avec jauges et message
+  ([21](documentation/21-jauges-de-seuils.md)).
+  - Royaume-Uni : seuil d'immatriculation à la TVA et *Making Tax Digital for Income Tax*, sur un nouveau champ
+    facultatif de chiffre d'affaires (le seuil porte sur les ventes, pas sur le bénéfice) ; *trading allowance*.
+  - Canada (anglais et français) : seuil du petit fournisseur (TPS/TVH, et TVQ au Québec) sur un champ facultatif de
+    ventes ; seuil des acomptes provisionnels sur l'impôt calculé.
+  - États-Unis : acomptes trimestriels, *Social Security wage base*, *Additional Medicare Tax*, limites de la
+    déduction QBI (message propre aux activités de service).
+- Fonction commune `OF.gauge`, reprise par le simulateur auto-entrepreneur : le pourcentage n'affiche plus « 100 % »
+  juste sous ou juste au-dessus d'un seuil, et les grands pourcentages ont leur séparateur de milliers.
+- Moteurs : `instalments()` (Canada) donne le montant comparé au seuil ; `estimate()` (États-Unis) donne le revenu
+  imposable avant QBI.
+- Tests : nouveau fichier `jauges.test.mjs` (aucun montant écrit dans les scripts ni dans les messages, règles
+  citées dans les sources) ; parcours navigateur des cinq calculateurs ; suite complète (236 tests unitaires,
+  2 407 vérifications navigateur).
+
 ## 2026-10-22 — Checklist de création au Canada (anglais et français) ; situation des listes corrigée
 
 - Nouvelles pages `/ca/how-to-start-a-business/` et `/ca/fr/demarrer-entreprise-individuelle/` (identifiant `start`) :

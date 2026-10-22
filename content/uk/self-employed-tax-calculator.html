@@ -9,7 +9,7 @@
   "app": "UK Self-Employed Tax Calculator",
   "scripts": ["engines/brackets.js", "engines/tax-uk.js", "tools/uk-tax.js"],
   "rules": "uk",
-  "sources": ["personal_allowance", "income_tax_bands_ruk", "income_tax_bands_scotland", "class4_main_rate", "class2_status", "payments_on_account_fraction", "sa_balancing_payment_deadline"],
+  "sources": ["personal_allowance", "income_tax_bands_ruk", "income_tax_bands_scotland", "class4_main_rate", "class2_status", "payments_on_account_fraction", "sa_balancing_payment_deadline", "vat_registration_threshold", "mtd_itsa_threshold_2026", "mtd_itsa_threshold_2027", "mtd_itsa_threshold_2028", "trading_allowance"],
   "priority": 1.0,
   "faq": [
     ["How much tax does a sole trader pay in 2026/27?", "Income tax on profits above the £12,570 Personal Allowance: 20% up to £50,270, 40% up to £125,140 and 45% above (Scotland has six bands from 19% to 48%). On top, Class 4 National Insurance: 6% on profits between £12,570 and £50,270, and 2% above. The Personal Allowance shrinks by £1 for every £2 of income over £100,000."],
@@ -38,6 +38,9 @@
         <div class="field full"><label for="t-profit">Profit from self-employment</label>
           <div class="input-suffix"><input type="text" inputmode="decimal" id="t-profit" name="profit" value="50,000" data-save><span>£</span></div>
           <span class="hint">Your income minus allowable expenses (or minus the £1,000 trading allowance).</span></div>
+        <div class="field full"><label for="t-turnover">Income before expenses (optional)</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="t-turnover" name="turnover" aria-describedby="t-turnover-hint" data-save><span>£</span></div>
+          <span class="hint" id="t-turnover-hint">Your turnover: it checks the VAT and Making Tax Digital thresholds below.</span></div>
         <div class="field full"><label for="t-region">Where do you live?</label>
           <select id="t-region" name="region" data-save>
             <option value="ruk">England, Wales or Northern Ireland</option>
@@ -74,6 +77,18 @@
           <tbody id="r-schedule"></tbody>
         </table>
         <p class="small muted" id="r-poa-note" style="margin: 8px 0 12px;">–</p>
+      </div>
+      <div class="card gauges">
+        <h2 class="label" style="margin: 0;">Thresholds to watch</h2>
+        <div class="gauge">
+          <div class="gauge-head"><span>VAT registration threshold</span><b id="g-vat">–</b></div>
+          <div class="progress"><div id="g-vat-bar"></div></div>
+        </div>
+        <div class="gauge">
+          <div class="gauge-head"><span>Making Tax Digital for Income Tax (from April 2026)</span><b id="g-mtd">–</b></div>
+          <div class="progress"><div id="g-mtd-bar"></div></div>
+        </div>
+        <p class="notice" id="g-notice" aria-live="polite">–</p>
       </div>
     </div>
   </div>

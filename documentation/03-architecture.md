@@ -220,6 +220,9 @@ Application d'une page, spécifiée dans [09-specification-espace.md](09-specifi
 - Les montants sont affichés avec `Intl.NumberFormat` selon la langue et la devise de la section (`1 234,50 €`, `$1,234.50`, `£1,234.50`, `1 234,50 $`).
 - La saisie accepte les deux conventions (`1 234,5`, `1,234.50`, `1.800`) : `OF.num()` reconnaît le séparateur décimal selon la section.
 - Les dates sont saisies avec le sélecteur natif et affichées au format local.
+- Les jauges de seuils passent par `OF.gauge(id, valeur, seuil)` : « 85 % of £90,000 » dans la langue de la page,
+  barre orange au-delà de `OF.gaugeNear` (85 %), rouge au-delà du seuil ; le pourcentage n'affiche jamais « 100 % »
+  juste sous ou juste au-dessus du seuil ([21](21-jauges-de-seuils.md)).
 
 ## Référencement
 

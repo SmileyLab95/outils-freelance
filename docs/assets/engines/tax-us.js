@@ -97,7 +97,7 @@
     return {
       status: status, profit: profit, wages: wages,
       se: se, additionalMedicare: addMedicare,
-      agi: agi, standardDeduction: standard, qbiDeduction: qbiDeduction, taxable: taxable,
+      agi: agi, standardDeduction: standard, taxableBeforeQbi: taxableBeforeQbi, qbiDeduction: qbiDeduction, taxable: taxable,
       incomeTax: income.tax, marginalRate: income.marginal, brackets: income.details,
       federal: federal, state: state, total: total,
       effectiveRate: profit > 0 ? total / profit : 0,

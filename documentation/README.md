@@ -24,6 +24,8 @@ Le site d'outils gratuits pour indépendants (France, États-Unis, Royaume-Uni, 
 | [18. Outils de prix](18-outils-de-prix.md) | Convertisseur de tarifs et calculateur de prix au forfait (4 pays) |
 | [19. Salarié ou freelance ?](19-freelance-ou-salarie.md) | Revenu d'un salarié et chiffre d'affaires équivalent en freelance (4 pays) |
 | [20. Checklist de création](20-checklist-creation.md) | Les démarches pour démarrer, étape par étape et sourcées (4 pays) |
+| [21. Jauges de seuils](21-jauges-de-seuils.md) | TVA, *Making Tax Digital*, petit fournisseur, acomptes, *wage base*, QBI dans les calculateurs d'impôt |
+| [22. Client étranger (États-Unis) et W-8BEN](22-client-etranger-us-et-w8ben.md) | Brouillon : taxe du pays du client, revenu en dollars, retenue étrangère, FBAR ; W-8BEN pour un client américain |
 | [Fiches pays](pays/) | Règles fiscales et sociales vérifiées : [France](pays/fr.md), [États-Unis](pays/us.md), [Royaume-Uni](pays/uk.md), [Canada](pays/ca.md) |
 
 Le [README principal](../README.md) explique comment générer, tester et publier le site.

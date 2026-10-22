@@ -9,6 +9,29 @@
   var pct = function (x) { return OF.fmt(Math.round(x * 1000) / 10) + "%"; };
   var long = function (iso) { return OF.date(iso, { day: "numeric", month: "short", year: "numeric" }); };
 
+  // Jauges des seuils (documentation/21-jauges-de-seuils.md) : chiffre d'affaires saisi, montants des règles.
+  function thresholds() {
+    var turnover = OF.num($("t-turnover").value), has = isFinite(turnover) && turnover > 0;
+    var vat = R.vat_registration_threshold, mtd = [R.mtd_itsa_threshold_2026, R.mtd_itsa_threshold_2027, R.mtd_itsa_threshold_2028];
+    OF.gauge("g-vat", has ? turnover : NaN, vat);
+    OF.gauge("g-mtd", has ? turnover : NaN, mtd[0]);
+    var msgs = [], warn = false, near = false, m = OF.money;
+    if (!has) msgs.push("Enter your income before expenses to check the VAT and Making Tax Digital thresholds.");
+    else {
+      if (turnover > vat) { warn = true; msgs.push("Over " + m(vat, 0) + ": you must register for VAT if your taxable turnover went over it in the last 12 months, or will in the next 30 days alone."); }
+      else if (turnover > vat * OF.gaugeNear) { near = true; msgs.push("Getting close to the VAT registration threshold (" + m(vat, 0) + "): watch your taxable turnover over any 12 months."); }
+      var later = " each time measured on an earlier tax return (property income counts too).";
+      if (turnover > mtd[0]) { warn = true; msgs.push("At this level, Making Tax Digital for Income Tax applies to you, or will soon: digital records and quarterly updates for qualifying income over " + m(mtd[0], 0) + " from April 2026, " + m(mtd[1], 0) + " from April 2027 and " + m(mtd[2], 0) + " from April 2028," + later); }
+      else if (turnover > mtd[1]) { near = true; msgs.push("At this level, Making Tax Digital for Income Tax will apply to you: from April 2027 for qualifying income over " + m(mtd[1], 0) + " (" + m(mtd[2], 0) + " from April 2028)," + later); }
+      else if (turnover > mtd[2]) { near = true; msgs.push("At this level, Making Tax Digital for Income Tax will apply to you from April 2028, for qualifying income over " + m(mtd[2], 0) + "," + later); }
+      if (turnover <= R.trading_allowance) msgs.push("Under the " + m(R.trading_allowance, 0) + " trading allowance, you don't need to tell HMRC about this income, unless you're in Self Assessment for another reason.");
+      if (!msgs.length) msgs.push("You're below the VAT and Making Tax Digital thresholds.");
+    }
+    $("g-notice").textContent = msgs.join(" ");
+    // Rouge si un seuil est dépassé, neutre s'il approche ou s'appliquera plus tard, vert sinon.
+    $("g-notice").className = "notice" + (!has ? "" : warn ? " warn" : near ? "" : " ok");
+  }
+
   function compute() {
     var profit = Math.max(0, OF.num($("t-profit").value) || 0);
     var salary = Math.max(0, OF.num($("t-salary").value) || 0);
@@ -66,6 +89,8 @@
       : first ? "First year: on " + long(balancing) + " you pay your whole 2026/27 bill plus the first payment on account, " +
           OF.money(total + poa.each, 0) + " in total. Plan for it now."
       : "Payments on account for 2026/27 are based on your 2025/26 bill. From January 2028 they will be " + OF.money(poa.each, 0) + " each.";
+
+    thresholds();
 
     var steps = [
       ["Total income", salary + profit],

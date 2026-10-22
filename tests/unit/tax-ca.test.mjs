@@ -100,6 +100,18 @@ test("acomptes au Québec : deux tests distincts, ARC (impôt fédéral) et Reve
   assert.deepEqual([on.requiredFederal, on.requiredQuebec, on.quebec], [true, false, 0]);
 });
 
+test("acomptes : la mesure de la jauge franchit le seuil exactement quand les acomptes deviennent obligatoires", () => {
+  for (const province of ["ON", "QC", "AB", "BC"]) {
+    for (let profit = 5000; profit <= 120000; profit += 2500) {
+      const r = ca.estimate({ profit, province }, R, P), i = ca.instalments(r, R);
+      assert.equal(i.required, i.measure > i.threshold, `${province} ${profit}`);
+    }
+  }
+  const qc = ca.instalments(ca.estimate({ profit: 36000, province: "QC" }, R, P), R);
+  assert.equal(qc.threshold, R.instalment_threshold_quebec);
+  near(qc.measure, ca.estimate({ profit: 36000, province: "QC" }, R, P).provincial, "Québec : le plus élevé des deux impôts");
+});
+
 test("taxes de vente des provinces : mêmes taux que les règles générales (TPS, TVH, TVQ, TVP)", () => {
   for (const [code, p] of Object.entries(P)) {
     const t = p.sales_tax;

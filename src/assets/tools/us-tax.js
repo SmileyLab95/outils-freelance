@@ -9,6 +9,40 @@
   var pct = function (x) { return OF.fmt(Math.round(x * 1000) / 10) + "%"; };
   var md = function (iso) { return OF.date(iso, { month: "short", day: "numeric", year: "numeric" }); };
 
+  /**
+   * Jauges des seuils (documentation/21-jauges-de-seuils.md), mesurées sur les données saisies ; montants des règles.
+   * Le message des acomptes est déjà dans la carte « Quarterly estimated payments ».
+   */
+  function thresholds(r, q) {
+    var m = OF.money, earnings = r.se.earnings + r.wages;
+    var base = R.social_security_wage_base_2026, med = R.additional_medicare_tax_thresholds[r.status];
+    var qbiStart = R.qbi_threshold_2026[r.status], qbiEnd = qbiStart + R.qbi_phase_in_range_2026[r.status];
+    OF.gauge("g-est", q.owed, R.estimated_tax_threshold);
+    OF.gauge("g-ss", earnings, base);
+    OF.gauge("g-addmed", earnings, med);
+    OF.gauge("g-qbi", r.taxableBeforeQbi, qbiStart);
+    var msgs = [], warn = false, near = false;
+    if (earnings > base) msgs.push("Over the " + m(base, 0) + " wage base, no more Social Security tax on the excess: only the " +
+      pct(R.se_tax_medicare_rate) + " Medicare part continues.");
+    if (earnings > med) { warn = true; msgs.push("Over " + m(med, 0) + " for your filing status, the " + pct(R.additional_medicare_tax_rate) +
+      " Additional Medicare Tax applies to the excess (included above)."); }
+    // Messages QBI seulement avec un bénéfice d'activité : sans lui, il n'y a pas de déduction à limiter.
+    if (r.profit > 0 && r.taxableBeforeQbi > qbiStart) {
+      warn = true;
+      msgs.push($("t-sstb").checked
+        ? "Over " + m(qbiStart, 0) + " of taxable income, the QBI deduction of a specified service business shrinks, and disappears at " + m(qbiEnd, 0) + "."
+        : "Over " + m(qbiStart, 0) + " of taxable income, the QBI deduction is capped by the W-2 wages your business pays and its qualified property: with neither, it shrinks to the " +
+          m(R.qbi_minimum_deduction.minimum_deduction, 0) + " minimum at " + m(qbiEnd, 0) + ".");
+    } else if (r.profit > 0 && r.taxableBeforeQbi > qbiStart * OF.gaugeNear) {
+      near = true;
+      msgs.push("Getting close to the QBI threshold (" + m(qbiStart, 0) + " of taxable income): above it, the deduction starts to shrink for a specified service business or one without employees.");
+    }
+    if (!msgs.length) msgs.push("You're below the Social Security wage base, the Additional Medicare Tax threshold and the QBI limits.");
+    $("g-notice").textContent = msgs.join(" ");
+    // Rouge si un seuil coûte plus cher (Additional Medicare, QBI réduite), neutre à l'approche, vert sinon.
+    $("g-notice").className = "notice" + (warn ? " warn" : near ? "" : " ok");
+  }
+
   function compute() {
     var input = {
       profit: OF.num($("t-profit").value) || 0,
@@ -57,6 +91,7 @@
         (r.state > 0 ? " Your state may also require estimated payments." : "")
       : "You expect to owe less than " + OF.money(R.estimated_tax_threshold, 0) +
         " in federal tax after withholding: quarterly payments are generally not required.";
+    thresholds(r, q);
 
     // Détail du calcul.
     var steps = [
