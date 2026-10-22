@@ -9,14 +9,15 @@
   "app": "Canada Foreign Client Invoicing Assistant",
   "scripts": ["engines/international-ca.js", "tools/ca-international.js"],
   "rules": "ca",
-  "sources": ["export_services_zero_rated", "export_professional_services_zero_rated", "export_ip_non_registered", "export_evidence_non_resident", "small_supplier_includes_zero_rated", "gst_return_line_101", "quick_method_zero_rated", "qst_services_non_residents_zero_rated", "small_supplier_threshold", "small_supplier_not_required_to_collect", "place_of_supply_and_exports"],
+  "sources": ["export_services_zero_rated", "export_professional_services_zero_rated", "export_ip_non_registered", "export_evidence_non_resident", "small_supplier_includes_zero_rated", "gst_return_line_101", "quick_method_zero_rated", "qst_services_non_residents_zero_rated", "small_supplier_threshold", "small_supplier_not_required_to_collect", "place_of_supply_and_exports", "w8ben_purpose", "w8ben_services_outside_us", "w8ben_validity"],
   "priority": 0.8,
   "faq": [
     ["Do I charge GST/HST to a client outside Canada?", "Generally not: a service supplied to a non-resident is zero-rated, so the GST/HST applies at 0%. The exceptions depend on the service: services related to real property or goods located in Canada are taxable as in Canada; so are most services given to an individual in Canada, and consulting or professional services to an individual in connection with litigation in Canada. Selling or licensing intellectual property has its own rules."],
     ["What do I write on the invoice?", "The GST/HST at 0% (and the QST at 0% if your business is in Quebec): in the <a href=\"{{link:invoice}}\">invoice generator</a>, choose “Zero-rated export”. The CRA doesn't set a wording: a clear statement such as “Zero-rated: service supplied to a non-resident” helps. Your client's address outside Canada also supports the zero-rating."],
     ["Do sales to foreign clients count towards the $30,000 small supplier threshold?", "Yes. The small supplier test is measured on your worldwide taxable supplies, and zero-rated supplies are taxable supplies: your exports count, even though they carry no tax."],
     ["What about the QST in Quebec?", "The QST follows the same logic: a service supplied to a non-resident is generally zero-rated, with exceptions, such as a client who is an individual physically in Canada."],
-    ["My client is in another province: what do I charge?", "That's not an export: for most services, you charge the GST/HST at the rate of your client's province. The <a href=\"{{link:salestax}}\">GST/HST calculator</a> gives the rate for each province."]
+    ["My client is in another province: what do I charge?", "That's not an export: for most services, you charge the GST/HST at the rate of your client's province. The <a href=\"{{link:salestax}}\">GST/HST calculator</a> gives the rate for each province."],
+    ["A US client asked me for a W-8BEN: what do I do?", "Fill it in and give it to your client (not the IRS) before the first payment: it shows you're not a US person. For work done from Canada, your pay isn't US-source income, so there's no US withholding; without the form, your client may have to withhold 30%. A company uses Form <span class=\"nowrap\">W-8BEN-E</span>."]
   ]
 }-->
 <script type="application/json" id="intl-ca-data">
@@ -127,5 +128,14 @@
     <li><strong>Keep evidence of non-residence</strong> for each client: it supports the 0% rate.</li>
     <li><strong>Payment terms and currency</strong> are yours to agree: put them in your <a href="{{link:contract}}">contract</a>, together with who pays the bank fees.</li>
   </ul>
-  <p class="small muted">Information for guidance only, based on CRA memoranda 4.5.1 and 4.5.3, info sheet GI-034, guides RC4022 and RC4058, and Revenu Québec. For an unusual situation, check with the CRA, Revenu Québec or an accountant.</p>
+  <h2>US clients: Form W-8BEN</h2>
+  <p>A client in the United States will often ask you for a <strong class="nowrap">Form W-8BEN</strong>. You give it to your client, not to the IRS: it shows you're not a US person. Fill it in before the first payment.</p>
+  <ul>
+    <li><strong>Work done from Canada</strong>: pay to a non-US resident for work done outside the United States isn't US-source income, so there's no US withholding on it.</li>
+    <li><strong>Without the form</strong>, your client may have to withhold 30% of your payments.</li>
+    <li><strong>Who fills it in</strong>: an individual, sole proprietors included; a company uses Form <span class="nowrap">W-8BEN-E</span>.</li>
+    <li><strong>How long it lasts</strong>: until December 31 of the third year after you sign it (a form signed in 2026 lasts until the end of 2029), unless your circumstances change, which calls for a new form.</li>
+    <li><strong>Work done in the United States</strong>: that part is US-source income, and an exemption is claimed on a different form (Form 8233).</li>
+  </ul>
+  <p class="small muted">Information for guidance only, based on CRA memoranda 4.5.1 and 4.5.3, info sheet GI-034, guides RC4022 and RC4058, and Revenu Québec, and for Form W-8BEN on the IRS instructions and Publication 515. For an unusual situation, check with the CRA, Revenu Québec or an accountant.</p>
 </section>

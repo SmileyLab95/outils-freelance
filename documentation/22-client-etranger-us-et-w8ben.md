@@ -3,8 +3,7 @@
 Besoins P2 de [02](02-besoins-clients.md) : « Facturer un client étranger » (§ 5, colonne États-Unis, 🟡) et
 « Formulaires fiscaux : W-8BEN » (§ 7). Spécification du 22/10/2026 : règles recherchées le 22/10/2026 sur les
 sites officiels (IRS, FinCEN, Commission européenne, GOV.UK, ARC), lues par extraits de recherche (les sites de l'IRS
-et de l'ARC ne s'ouvrent pas directement depuis l'environnement de travail). **§ 1 réalisé et publié le 22/10/2026 ;
-§ 2 (W-8BEN) à faire.**
+et de l'ARC ne s'ouvrent pas directement depuis l'environnement de travail). **§ 1 et § 2 réalisés le 22/10/2026.**
 
 ## 1. États-Unis : *Invoicing international clients* (`/us/invoicing-international-clients/`)
 
@@ -64,6 +63,17 @@ la même question : facturer un client hors de son pays.
 | Sans formulaire, le client peut devoir retenir 30 % (ou la retenue de sauvegarde) | `w8ben_purpose` |
 | Services rendus **aux** États-Unis : formulaire 8233 (exemption par convention), pas le W-8BEN | `w8ben_purpose` |
 | Validité : jusqu'au 31 décembre de la troisième année suivant la signature, sauf changement de situation | `w8ben_validity` |
+
+### Réalisation (22/10/2026)
+
+- Section « Client américain : le formulaire W-8BEN » / « US clients: Form W-8BEN » à la fin de la partie explicative
+  des quatre pages, avant la note des sources, et une question dans la FAQ ; règles communes `w8ben_purpose`,
+  `w8ben_services_outside_us`, `w8ben_validity` (shared.json) citées dans les sources de chaque page.
+- Non publiés : quel numéro fiscal national inscrire en ligne 6a (non vérifié pays par pays), le délai pour remettre
+  un nouveau formulaire après un changement de situation (non confirmé).
+- Tests : `w8ben.test.mjs` (règles citées, 30 %, W-8BEN-E, formulaire 8233 et durée repris des règles, même texte
+  dans les pages d'une même langue) ; 6 erreurs réintroduites, toutes détectées. Revue des captures : les noms de
+  formulaires se coupaient au trait d'union en fin de ligne (« W-/8BEN-E ») : insécables désormais.
 
 ## 3. Critères de « terminé »
 

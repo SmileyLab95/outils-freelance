@@ -73,7 +73,8 @@ test("la page : un texte par clé, un choix par valeur, des sources, des chiffre
     assert.ok(front.sources.includes(key), `règle ${key} citée par la page`);
   const pounds = [...html.matchAll(/£[\d,]+/g)].map((m) => m[0]);
   assert.ok(pounds.length >= 4 && pounds.every((p) => p === `£${rules.vat_registration_threshold.value.toLocaleString("en-GB")}`), `montants : ${pounds}`);
-  const percents = [...html.matchAll(/(\d+)%/g)].map((m) => Number(m[1]) / 100);
+  // Taux de TVA seulement : la retenue américaine du W-8BEN (« withhold 30% ») est vérifiée par w8ben.test.mjs.
+  const percents = [...html.replace(/withhold \d+%/g, "").matchAll(/(\d+)%/g)].map((m) => Number(m[1]) / 100);
   assert.deepEqual([...new Set(percents)], [rules.vat_standard_rate.value], "taux de TVA repris de la règle");
   assert.match(rules.eu_non_union_scheme.value, /10 years/, "conservation des registres (règle)");
 });

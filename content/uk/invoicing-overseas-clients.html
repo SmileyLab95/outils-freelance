@@ -9,14 +9,15 @@
   "app": "UK Overseas Invoicing Assistant",
   "scripts": ["engines/international-uk.js", "tools/uk-international.js"],
   "rules": "uk",
-  "sources": ["place_of_supply_services_b2b", "place_of_supply_services_b2c", "b2c_described_services_outside_uk", "digital_services_consumers", "eu_non_union_scheme", "vat_territory_isle_of_man", "outside_scope_evidence", "outside_scope_vat_return_box6", "outside_scope_not_taxable_turnover", "vat_registration_threshold", "vat_standard_rate", "vat_invoice_full_requirements"],
+  "sources": ["place_of_supply_services_b2b", "place_of_supply_services_b2c", "b2c_described_services_outside_uk", "digital_services_consumers", "eu_non_union_scheme", "vat_territory_isle_of_man", "outside_scope_evidence", "outside_scope_vat_return_box6", "outside_scope_not_taxable_turnover", "vat_registration_threshold", "vat_standard_rate", "vat_invoice_full_requirements", "w8ben_purpose", "w8ben_services_outside_us", "w8ben_validity"],
   "priority": 0.8,
   "faq": [
     ["Do I charge VAT to a client outside the UK?", "Not if your client is a business: a service to a business is supplied where the business belongs, so it's outside the scope of UK VAT, unless a special rule applies (property, events, transport). For a private client, it depends on the service: consultancy and similar professional services, advertising, data processing and information supplied to someone who belongs outside the UK are also outside the scope; services that follow the general rule are taxed in the UK, as for a UK client."],
     ["What do I write on an invoice to a business client abroad?", "No UK VAT. HMRC doesn't set a wording for these invoices: a clear statement such as “Outside the scope of UK VAT” helps your client, who accounts for any VAT in its own country. For an EU client, add its VAT number: it's the best evidence that it's a business. In the <a href=\"{{link:invoice}}\">invoice generator</a>, choose “No UK VAT (outside the scope)”."],
     ["I sell pre-recorded online courses or software to consumers in the EU: what changes?", "Automated digital services to consumers are supplied where the consumer belongs. For a UK business, EU VAT is due on every sale to an EU consumer, whatever the amount, even if you're not VAT-registered in the UK: register for the EU's non-Union scheme in one EU country, or for VAT in each country where you have customers."],
     ["Do overseas sales count towards the VAT registration threshold?", "Sales outside the scope of UK VAT aren't taxable supplies made in the UK, so they don't count towards the £90,000 threshold. If you're VAT-registered, you still include them in box 6 of your VAT Return. A UK business that only supplies customers outside the UK can register voluntarily."],
-    ["Can I invoice in euros or dollars?", "Yes, the amounts can be in your client's currency. A VAT invoice must still show the total VAT in sterling: that matters only when you charge UK VAT."]
+    ["Can I invoice in euros or dollars?", "Yes, the amounts can be in your client's currency. A VAT invoice must still show the total VAT in sterling: that matters only when you charge UK VAT."],
+    ["A US client asked me for a W-8BEN: what do I do?", "Fill it in and give it to your client (not the IRS) before the first payment: it shows you're not a US person. For work done from the UK, your pay isn't US-source income, so there's no US withholding; without the form, your client may have to withhold 30%. A company uses Form <span class=\"nowrap\">W-8BEN-E</span>."]
   ]
 }-->
 <script type="application/json" id="intl-uk-data">
@@ -135,5 +136,14 @@
     <li><strong>Flat Rate Scheme</strong>: how these sales count in your flat rate turnover isn't covered here; check VAT Notice 733.</li>
     <li><strong>Payment terms and currency</strong> are yours to agree: put them in your <a href="{{link:contract}}">contract</a>, together with who pays the bank fees.</li>
   </ul>
-  <p class="small muted">Information for guidance only, based on HMRC's VAT Notices 741A, 700/1 and 700/12 and its place of supply manual. For an unusual situation, check with HMRC or an accountant.</p>
+  <h2>US clients: Form W-8BEN</h2>
+  <p>A client in the United States will often ask you for a <strong class="nowrap">Form W-8BEN</strong>. You give it to your client, not to the IRS: it shows you're not a US person. Fill it in before the first payment.</p>
+  <ul>
+    <li><strong>Work done from the UK</strong>: pay to a non-US resident for work done outside the United States isn't US-source income, so there's no US withholding on it.</li>
+    <li><strong>Without the form</strong>, your client may have to withhold 30% of your payments.</li>
+    <li><strong>Who fills it in</strong>: an individual, sole traders included; a company uses Form <span class="nowrap">W-8BEN-E</span>.</li>
+    <li><strong>How long it lasts</strong>: until 31 December of the third year after you sign it (a form signed in 2026 lasts until the end of 2029), unless your circumstances change, which calls for a new form.</li>
+    <li><strong>Work done in the United States</strong>: that part is US-source income, and an exemption is claimed on a different form (Form 8233).</li>
+  </ul>
+  <p class="small muted">Information for guidance only, based on HMRC's VAT Notices 741A, 700/1 and 700/12 and its place of supply manual, and for Form W-8BEN on the IRS instructions and Publication 515. For an unusual situation, check with HMRC or an accountant.</p>
 </section>

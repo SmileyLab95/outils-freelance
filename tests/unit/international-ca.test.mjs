@@ -3,6 +3,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { createRequire } from "node:module";
 import { readFileSync } from "node:fs";
+import { ruleEntries } from "./regles.mjs";
 
 const intl = createRequire(import.meta.url)("../../src/assets/engines/international-ca.js");
 const all = [];
@@ -78,9 +79,9 @@ for (const [page, lang] of [["content/ca/invoicing-clients-outside-canada.html",
     for (const [name, values] of [["location", intl.LOCATIONS], ["service", intl.SERVICES]])
       for (const value of values) assert.match(html, new RegExp(`<select[^>]*name="${name}"[\\s\\S]*?<option value="${value}"`), `choix ${name}=${value}`);
     const front = JSON.parse(/<!--(\{[\s\S]*?\})-->/.exec(html)[1]);
-    const rules = JSON.parse(readFileSync(new URL("../../data/rules/ca.json", import.meta.url))).values;
+    const rules = ruleEntries("ca");
     assert.equal(front.id, "international");
-    for (const key of front.sources) assert.ok(rules[key], `source ${key} présente dans ca.json`);
+    for (const key of front.sources) assert.ok(rules[key], `source ${key} présente dans ca.json ou shared.json`);
     for (const key of ["export_services_zero_rated", "export_professional_services_zero_rated", "export_ip_non_registered", "export_evidence_non_resident",
       "small_supplier_includes_zero_rated", "gst_return_line_101", "quick_method_zero_rated", "qst_services_non_residents_zero_rated",
       "small_supplier_threshold", "small_supplier_not_required_to_collect"])

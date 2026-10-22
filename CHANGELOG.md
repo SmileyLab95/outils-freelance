@@ -1,5 +1,14 @@
 # Journal des modifications
 
+## 2026-10-22 — Formulaire W-8BEN pour un client américain (France, Royaume-Uni, Canada)
+
+- Pages « client étranger » de la France, du Royaume-Uni et du Canada (anglais et français) : section et question
+  sur le W-8BEN (à qui le remettre, pas de retenue américaine pour un travail fait hors des États-Unis, retenue de
+  30 % sans formulaire, W-8BEN-E pour une société, durée de validité, formulaire 8233 pour un travail fait aux
+  États-Unis) ; trois règles communes sourcées (instructions du W-8BEN, publication 515 de l'IRS).
+- Tests : `w8ben.test.mjs` ; deux tests existants lisent désormais les règles communes ; suite complète
+  (245 tests unitaires, 2 434 vérifications navigateur).
+
 ## 2026-10-22 — Client étranger aux États-Unis ; règles communes à plusieurs pays
 
 - Nouvelle page `/us/invoicing-international-clients/` (identifiant `international`, menu *Invoicing*) : selon le

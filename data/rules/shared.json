@@ -94,6 +94,38 @@
       "confidence": "high",
       "note": "Read on 2026-10-22 through search excerpts of the CRA digital-economy pages: a non-resident vendor not carrying on business in Canada and not registered under the normal regime must register under the simplified regime when its taxable supplies of intangible personal property or services to 'specified Canadian recipients' (consumers who haven't shown a normal GST/HST registration) exceed $30,000 CAD over any 12-month period; traditional services such as legal and accounting services are covered, not only streaming or apps (https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/gst-hst-businesses/digital-economy-gsthst/charge-collect/cross-border.html). Tax at 5% GST or the HST rate of the recipient's province; sales through a registered distribution platform are excluded from the vendor's threshold; registration through the non-resident web form, no security deposit; amounts in Canadian dollars.",
       "verified_on": "2026-10-22"
+    },
+    "w8ben_purpose": {
+      "value": "Form W-8BEN is given by a non-US individual to the US payer or withholding agent that asks for it (not to the IRS), before the payment, to establish foreign status and claim any treaty benefit. Without it, the payer may have to withhold 30% or apply backup withholding. A foreign company uses Form W-8BEN-E instead, and an individual claiming exemption on pay for services performed in the United States uses Form 8233 or W-4.",
+      "unit": "text",
+      "label": "Form W-8BEN: who gives it, to whom, and why",
+      "source": "https://www.irs.gov/instructions/iw8ben",
+      "source_title": "Instructions for Form W-8BEN (Rev. October 2021) - IRS",
+      "confidence": "high",
+      "note": "Read on 2026-10-22 through search excerpts of the instructions (irs.gov not reachable directly). Line 6a: foreign tax identifying number (required in some cases, such as a US financial account with income reported on Form 1042-S; can replace a US TIN for a treaty claim); line 6b: box for residents of countries that don't require a foreign TIN. The site doesn't say which national number to enter (not verified per country).",
+      "verified_on": "2026-10-22"
+    },
+    "w8ben_services_outside_us": {
+      "value": "Pay to a nonresident alien for services performed outside the United States is foreign-source income: it is not subject to US withholding and is not reported on Form 1042-S. When the work is done partly in the United States, the part for US work is US-source (apportioned by time).",
+      "unit": "text",
+      "label": "Services performed outside the US by a nonresident: no US withholding",
+      "source": "https://www.irs.gov/publications/p515",
+      "source_title": "Publication 515, Withholding of Tax on Nonresident Aliens and Foreign Entities - IRS",
+      "confidence": "high",
+      "note": "Read on 2026-10-22 through search excerpts of Pub. 515 (2026) and the IRS page 'Foreign source income - Form 1042-S reporting not required' (https://www.irs.gov/individuals/international-taxpayers/foreign-source-income-form-1042-s-reporting-not-required). The payer may still ask for Form W-8BEN to document foreign status.",
+      "verified_on": "2026-10-22"
+    },
+    "w8ben_validity": {
+      "value": {
+        "years_after_signing": 3
+      },
+      "unit": "object",
+      "label": "Form W-8BEN: valid until the last day of the third calendar year after signing, unless circumstances change",
+      "source": "https://www.irs.gov/instructions/iw8ben",
+      "source_title": "Instructions for Form W-8BEN (Rev. October 2021) - IRS",
+      "confidence": "high",
+      "note": "Read on 2026-10-22 through search excerpts: a form signed on September 30, 2015 remains valid until December 31, 2018 (IRS example); a change in circumstances that makes information incorrect requires a new form (the deadline to give it was not confirmed in this session). Indefinite validity exists in some cases with documentary evidence, not for treaty claims: not covered by the site.",
+      "verified_on": "2026-10-22"
     }
   }
 }

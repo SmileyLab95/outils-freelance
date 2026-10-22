@@ -9,14 +9,15 @@
   "app": "Assistant facturation internationale",
   "scripts": ["tools/fr-international.js"],
   "rules": "fr",
-  "sources": ["mention_franchise_tva", "tva_franchise_seuils"],
+  "sources": ["mention_franchise_tva", "tva_franchise_seuils", "w8ben_purpose", "w8ben_services_outside_us", "w8ben_validity"],
   "priority": 0.85,
   "faq": [
     ["Un auto-entrepreneur peut-il facturer un client étranger ?", "Oui, sans formalité particulière. Pour un client professionnel de l'Union européenne, il doit obtenir un numéro de TVA intracommunautaire auprès de son service des impôts des entreprises, même en franchise en base, et facturer hors taxes avec la mention « Autoliquidation »."],
     ["Faut-il facturer la TVA à un client européen ?", "Pas s'il s'agit d'une entreprise : le service est imposable dans son pays et c'est lui qui autoliquide la TVA. Pour un particulier européen, la TVA française s'applique en principe (ou la franchise), sauf pour les services numériques au-delà de 10 000 € de ventes par an dans l'UE."],
     ["Qu'est-ce que la DES ?", "La déclaration européenne de services : chaque mois où vous avez facturé un service à une entreprise d'un autre pays de l'UE, vous déclarez son numéro de TVA et le montant hors taxes sur douane.gouv.fr, au plus tard le 10e jour ouvrable du mois suivant. Elle permet aux administrations de vérifier l'autoliquidation."],
     ["Et quand j'achète un service à une entreprise étrangère ?", "C'est l'inverse : en tant qu'entreprise, vous devez autoliquider la TVA sur les services achetés à un prestataire de l'UE (logiciels, publicité, hébergement…), même en franchise en base. En franchise, vous la déclarez et la payez sans pouvoir la déduire : intégrez-la dans vos coûts et demandez à votre service des impôts quelle déclaration déposer."],
-    ["Puis-je rédiger ma facture en anglais ?", "Oui. La facture peut être rédigée dans une autre langue et dans une autre devise ; l'administration peut demander une traduction. Une facture bilingue français-anglais évite toute difficulté."]
+    ["Puis-je rédiger ma facture en anglais ?", "Oui. La facture peut être rédigée dans une autre langue et dans une autre devise ; l'administration peut demander une traduction. Une facture bilingue français-anglais évite toute difficulté."],
+    ["Mon client américain me demande un W-8BEN : que faire ?", "Remplissez-le et remettez-le à votre client (pas à l'IRS) avant le premier paiement : il montre que vous n'êtes pas une personne américaine. Pour un travail fait depuis la France, votre rémunération n'est pas un revenu de source américaine et ne subit pas de retenue américaine ; sans formulaire, votre client peut devoir retenir 30 %. Une société remplit le <span class=\"nowrap\">W-8BEN-E</span>."]
   ]
 }-->
 <section class="hero hero-tool">
@@ -93,5 +94,14 @@
     <li><strong>Les délais de paiement</strong> se négocient : précisez la devise, le délai et les frais bancaires dans votre <a href="{{link:contract}}">contrat</a> ou vos conditions générales.</li>
     <li><strong>Vos propres achats à l'étranger</strong> (logiciels, publicité) peuvent vous obliger à autoliquider la TVA, même en franchise.</li>
   </ul>
-  <p class="small muted">Les mentions citent la directive 2006/112/CE, autorisée sur les factures et inchangée par le transfert de la TVA dans le CIBS au 1er janvier 2027. Information à titre indicatif : pour une situation particulière, interrogez votre service des impôts des entreprises.</p>
+  <h2>Client américain : le formulaire W-8BEN</h2>
+  <p>Un client établi aux États-Unis vous demande souvent un formulaire <strong class="nowrap">W-8BEN</strong>. Vous le remettez à votre client, pas à l'IRS : il montre que vous n'êtes pas une personne américaine. Remplissez-le avant le premier paiement.</p>
+  <ul>
+    <li><strong>Travail fait depuis la France</strong> : la rémunération d'un non-résident pour un travail fait hors des États-Unis n'est pas un revenu de source américaine, et ne subit pas de retenue à la source américaine.</li>
+    <li><strong>Sans formulaire</strong>, votre client peut devoir retenir 30 % de vos paiements.</li>
+    <li><strong>Qui le remplit</strong> : une personne physique, entrepreneur individuel compris ; une société remplit le <span class="nowrap">W-8BEN-E</span>.</li>
+    <li><strong>Durée</strong> : jusqu'au 31 décembre de la troisième année qui suit la signature (un formulaire signé en 2026 vaut jusqu'à fin 2029), sauf changement de situation, qui demande un nouveau formulaire.</li>
+    <li><strong>Travail fait aux États-Unis</strong> : la part correspondante est un revenu de source américaine, et une exemption se demande avec un autre formulaire (8233).</li>
+  </ul>
+  <p class="small muted">Les mentions citent la directive 2006/112/CE, autorisée sur les factures et inchangée par le transfert de la TVA dans le CIBS au 1er janvier 2027. Le W-8BEN suit les instructions du formulaire et la publication 515 de l'IRS. Information à titre indicatif : pour une situation particulière, interrogez votre service des impôts des entreprises.</p>
 </section>

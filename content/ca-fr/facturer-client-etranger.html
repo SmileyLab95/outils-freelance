@@ -9,14 +9,15 @@
   "app": "Assistant facturation d'un client étranger (Canada)",
   "scripts": ["engines/international-ca.js", "tools/ca-international.js"],
   "rules": "ca",
-  "sources": ["export_services_zero_rated", "export_professional_services_zero_rated", "export_ip_non_registered", "export_evidence_non_resident", "small_supplier_includes_zero_rated", "gst_return_line_101", "quick_method_zero_rated", "qst_services_non_residents_zero_rated", "small_supplier_threshold", "small_supplier_not_required_to_collect", "place_of_supply_and_exports"],
+  "sources": ["export_services_zero_rated", "export_professional_services_zero_rated", "export_ip_non_registered", "export_evidence_non_resident", "small_supplier_includes_zero_rated", "gst_return_line_101", "quick_method_zero_rated", "qst_services_non_residents_zero_rated", "small_supplier_threshold", "small_supplier_not_required_to_collect", "place_of_supply_and_exports", "w8ben_purpose", "w8ben_services_outside_us", "w8ben_validity"],
   "priority": 0.8,
   "faq": [
     ["Dois-je facturer la TPS/TVH à un client hors du Canada ?", "En général, non : un service fourni à un non-résident est détaxé, c'est-à-dire taxable au taux de 0 %. Les exceptions dépendent du service : les services liés à un immeuble ou à un bien situé au Canada sont taxables comme au Canada, tout comme la plupart des services rendus à un particulier au Canada, et les services de conseil ou professionnels rendus à un particulier dans le cadre d'un litige au Canada. La vente ou la licence d'une propriété intellectuelle suit ses propres règles."],
     ["Que dois-je écrire sur la facture ?", "La TPS/TVH à 0 % (et la TVQ à 0 % si votre entreprise est au Québec) : dans le <a href=\"{{link:invoice}}\">générateur de facture</a>, choisissez « Exportation détaxée ». L'ARC n'impose pas de formulation : une mention claire comme « Fourniture détaxée : service fourni à un non-résident » aide votre client. L'adresse de votre client hors du Canada appuie aussi la détaxation."],
     ["Les ventes à des clients étrangers comptent-elles dans le seuil de 30 000 $ ?", "Oui. Le seuil du petit fournisseur se calcule sur vos fournitures taxables mondiales, et les fournitures détaxées sont des fournitures taxables : vos exportations comptent, même sans taxe."],
     ["Et la TVQ au Québec ?", "La TVQ suit la même logique : un service fourni à un non-résident est en général détaxé, avec des exceptions, par exemple un client qui est un particulier physiquement présent au Canada."],
-    ["Mon client est dans une autre province : que dois-je facturer ?", "Ce n'est pas une exportation : pour la plupart des services, vous facturez la TPS/TVH au taux de la province de votre client. Le <a href=\"{{link:salestax}}\">calculateur de TPS et de TVQ</a> donne le taux de chaque province."]
+    ["Mon client est dans une autre province : que dois-je facturer ?", "Ce n'est pas une exportation : pour la plupart des services, vous facturez la TPS/TVH au taux de la province de votre client. Le <a href=\"{{link:salestax}}\">calculateur de TPS et de TVQ</a> donne le taux de chaque province."],
+    ["Mon client américain me demande un W-8BEN : que faire ?", "Remplissez-le et remettez-le à votre client (pas à l'IRS) avant le premier paiement : il montre que vous n'êtes pas une personne américaine. Pour un travail fait depuis le Canada, votre rémunération n'est pas un revenu de source américaine et ne subit pas de retenue américaine ; sans formulaire, votre client peut devoir retenir 30 %. Une société remplit le <span class=\"nowrap\">W-8BEN-E</span>."]
   ]
 }-->
 <script type="application/json" id="intl-ca-data">
@@ -127,5 +128,14 @@
     <li><strong>Gardez une preuve de non-résidence</strong> pour chaque client : elle appuie le taux de 0 %.</li>
     <li><strong>Les modalités de paiement et la devise</strong> se négocient : précisez-les dans votre <a href="{{link:contract}}">contrat de service</a>, avec la prise en charge des frais bancaires.</li>
   </ul>
-  <p class="small muted">Information à titre indicatif, d'après les mémorandums 4.5.1 et 4.5.3 de l'ARC, l'info-fiche GI-034, les guides RC4022 et RC4058, et Revenu Québec. Pour une situation particulière, renseignez-vous auprès de l'ARC, de Revenu Québec ou d'un comptable.</p>
+  <h2>Client américain : le formulaire W-8BEN</h2>
+  <p>Un client établi aux États-Unis vous demande souvent un formulaire <strong class="nowrap">W-8BEN</strong>. Vous le remettez à votre client, pas à l'IRS : il montre que vous n'êtes pas une personne américaine. Remplissez-le avant le premier paiement.</p>
+  <ul>
+    <li><strong>Travail fait depuis le Canada</strong> : la rémunération d'un non-résident pour un travail fait hors des États-Unis n'est pas un revenu de source américaine, et ne subit pas de retenue à la source américaine.</li>
+    <li><strong>Sans formulaire</strong>, votre client peut devoir retenir 30 % de vos paiements.</li>
+    <li><strong>Qui le remplit</strong> : une personne physique, entrepreneur individuel compris ; une société remplit le <span class="nowrap">W-8BEN-E</span>.</li>
+    <li><strong>Durée</strong> : jusqu'au 31 décembre de la troisième année qui suit la signature (un formulaire signé en 2026 vaut jusqu'à fin 2029), sauf changement de situation, qui demande un nouveau formulaire.</li>
+    <li><strong>Travail fait aux États-Unis</strong> : la part correspondante est un revenu de source américaine, et une exemption se demande avec un autre formulaire (8233).</li>
+  </ul>
+  <p class="small muted">Information à titre indicatif, d'après les mémorandums 4.5.1 et 4.5.3 de l'ARC, l'info-fiche GI-034, les guides RC4022 et RC4058, Revenu Québec et, pour le W-8BEN, les instructions du formulaire et la publication 515 de l'IRS. Pour une situation particulière, renseignez-vous auprès de l'ARC, de Revenu Québec ou d'un comptable.</p>
 </section>
