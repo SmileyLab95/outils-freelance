@@ -1369,7 +1369,8 @@ const tests = {
     // Micro libérale : 60 000 − 5 000 − 15 480 − 4 983,99 = 34 536 € (voir tests unitaires)
     check((await page.textContent("#c-m-net")).replace(/\s/g, "") === "34536€", "statuts : micro-entreprise 34 536 €");
     check((await page.textContent("#c-best-label")).includes("Micro-entreprise"), "statuts : micro la plus avantageuse à 60 000 €");
-    check((await page.textContent("#c-e-net")).replace(/\s/g, "") === "27520€", "statuts : EURL à l'IS, rémunération 50 % → 27 520 € (moteur testé)");
+    // EURL : rémunération nette 18 448,28 € ; impôt avant décote 550,38 € annulé par la décote (647,95 €).
+    check((await page.textContent("#c-e-net")).replace(/\s/g, "") === "28070€", "statuts : EURL à l'IS, rémunération 50 % → 28 070 €, décote comprise (moteur testé)");
     await page.fill("#c-revenue", "120 000");
     check(await page.evaluate(() => document.getElementById("c-micro").classList.contains("is-out")), "statuts : micro exclue au-delà du plafond");
     await page.fill("#c-revenue", "60 000");

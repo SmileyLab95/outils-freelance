@@ -34,7 +34,9 @@ test("SASU : tout en dividendes ou tout en salaire", () => {
   near(div.available, (55000 - 9500) * (1 - 0.314), "dividendes après PFU 31,4 %");
   const sal = st.sasu({ revenue: 60000, expenses: 5000, salaryShare: 1, sasuCoef: 1.82 }, R);
   const net = 55000 / 1.82;
-  near(sal.available, net - (net * 0.9 - 11600) * 0.11, "salaire net après impôt");
+  // Impôt avant décote (net × 0,9 − 11 600) × 11 % = 1 715,76 € ; décote 897 − 45,25 % × 1 715,76 = 120,62 €.
+  const raw = (net * 0.9 - 11600) * 0.11;
+  near(sal.available, net - (raw - (897 - 0.4525 * raw)), "salaire net après impôt, décote comprise");
 });
 
 test("EURL à l'IS : tout en dividendes (capital de 1 000 €) ou tout en rémunération", () => {
@@ -46,4 +48,12 @@ test("EURL à l'IS : tout en dividendes (capital de 1 000 €) ou tout en rémun
   const sal = st.eurlIS({ revenue: 60000, expenses: 5000, salaryShare: 1, tnsRate: 0.45, capital: 1000 }, R);
   const net = 55000 / 1.45;
   near(sal.available, net - (1977.69 + (net * 0.9 - 29579) * 0.3), "rémunération nette après impôt (abattement de 10 %)");
+});
+
+test("EURL à l'IS, rémunération de 50 % : impôt annulé par la décote (impôt avant décote 601,59 €)", () => {
+  const r = st.eurlIS({ revenue: 60000, expenses: 5000, salaryShare: 0.5, tnsRate: 0.45, capital: 1000 }, R);
+  // 27 500 € de budget → 18 965,52 € nets ; 90 % = 17 068,97 € ; (17 068,97 − 11 600) × 11 % = 601,59 € < décote.
+  near(r.salaryTax, 0, "impôt sur la rémunération");
+  // IS 15 % × 27 500 = 4 125 € ; 23 375 € de dividendes : 100 € au PFU, 23 275 € aux cotisations TNS (45 %) et à 12,8 %.
+  near(r.available, 55000 / 2 / 1.45 + 23375 - 23275 * 0.45 - (100 * 0.314 + 23275 * 0.128), "revenu disponible");
 });

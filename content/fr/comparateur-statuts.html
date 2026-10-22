@@ -7,9 +7,9 @@
   "icon": "⚖️",
   "blurb": "Micro, réel, EURL ou SASU : ce qu'il vous reste dans chaque cas.",
   "app": "Comparateur de statuts d'indépendant",
-  "scripts": ["engines/brackets.js", "engines/statuts-fr.js", "tools/fr-statuts.js"],
+  "scripts": ["engines/brackets.js", "engines/ir-fr.js", "engines/statuts-fr.js", "tools/fr-statuts.js"],
   "rules": "fr",
-  "sources": ["micro_activities", "ir_bareme_revenus_2025", "is_taux_reduit", "pfu_total_dividendes_2026", "pfu_part_impot", "tns_gerant_majoritaire_taux_global_approx", "sasu_president_taux_global_approx"],
+  "sources": ["micro_activities", "ir_bareme_revenus_2025", "ir_decote", "ir_deduction_frais_salaires", "is_taux_reduit", "pfu_total_dividendes_2026", "pfu_part_impot", "tns_gerant_majoritaire_taux_global_approx", "sasu_president_taux_global_approx"],
   "priority": 0.95,
   "faq": [
     ["Quel statut choisir pour se lancer en freelance ?", "La micro-entreprise est la plus simple et souvent la plus avantageuse quand vos dépenses sont faibles et votre chiffre d'affaires sous les plafonds (83 600 € pour les services). Le régime réel devient intéressant quand vos dépenses dépassent l'abattement forfaitaire (34 % en libéral). La société (SASU, EURL) se justifie surtout avec un bénéfice élevé, un besoin de protéger son patrimoine ou des associés."],
@@ -119,6 +119,6 @@
     <li><strong>EURL à l'IS :</strong> la rémunération du gérant supporte les cotisations de travailleur non salarié et l'impôt sur le revenu (après l'abattement de 10 %) ; le reste du bénéfice supporte l'impôt sur les sociétés, puis les dividendes : prélèvement forfaitaire unique jusqu'à 10 % du capital et des comptes courants, cotisations TNS au-delà.</li>
     <li><strong>SASU :</strong> le salaire du président supporte des charges élevées mais ouvre des droits (retraite, indemnités journalières) ; les dividendes supportent l'impôt sur les sociétés puis le prélèvement forfaitaire unique de 31,4 %, sans droits sociaux.</li>
   </ul>
-  <p>Le revenu disponible est calculé pour une personne seule (une part), sans décote ni réduction d'impôt. Ce qu'il vous reste ne dit pas tout : la protection sociale, la simplicité de gestion et la protection de votre patrimoine comptent aussi.</p>
+  <p>Le revenu disponible est calculé pour une personne seule (une part), décote comprise, sans réduction ni crédit d'impôt. Ce qu'il vous reste ne dit pas tout : la protection sociale, la simplicité de gestion et la protection de votre patrimoine comptent aussi.</p>
   <p>Pour affiner une micro-entreprise, utilisez le <a href="{{link:tax}}">simulateur auto-entrepreneur</a>.</p>
 </section>

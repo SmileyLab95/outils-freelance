@@ -37,13 +37,8 @@
 
   // ----- France ------------------------------------------------------------------------------------------------
 
-  /** Impôt sur le revenu d'une personne seule (une part), décote comprise, sans réductions ni crédits d'impôt. */
-  function incomeTaxFR(taxable, rules) {
-    var raw = B.progressive(Math.max(0, taxable), rules.ir_bareme_revenus_2025).tax;
-    var D = rules.ir_decote;
-    var decote = raw < D.seuil_impot_celibataire ? Math.min(raw, Math.max(0, D.forfait_celibataire - D.coefficient * raw)) : 0;
-    return { raw: raw, decote: decote, tax: raw - decote };
-  }
+  /** Impôt sur le revenu d'une personne seule (une part), décote comprise : moteur commun irFR. */
+  function incomeTaxFR(taxable, rules) { return dep("irFR", "./ir-fr.js").incomeTax(taxable, rules); }
 
   /**
    * Salarié du secteur privé (régime général, hors Alsace-Moselle) : cotisations salariales, salaire net, net
@@ -64,8 +59,7 @@
     var contributions = pension + complementary + other + csg + crds;
     var net = gross - contributions;
     var netTaxable = net + (csg - csgDeductible) + crds;
-    var D = rules.ir_deduction_frais_salaires;
-    var deduction = Math.min(D.maximum, Math.max(netTaxable * D.taux, Math.min(D.minimum, netTaxable)));
+    var deduction = dep("irFR", "./ir-fr.js").salaryDeduction(netTaxable, rules);
     var taxable = Math.max(0, netTaxable - deduction);
     var it = incomeTaxFR(taxable, rules);
     return {

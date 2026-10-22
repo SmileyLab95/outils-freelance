@@ -145,8 +145,9 @@ Chaque pays est publié dès que ses pages passent tous les tests.
   commun `tools/employee-freelance.js` ; page `/fr/salarie-ou-freelance/`. Exemple : 40 000 € brut laissent
   29 697,21 € ; en micro-entreprise libérale sans frais, il faut 42 332,70 € de chiffre d'affaires (286,03 € par jour
   sur 148 jours facturés).
-- **Point relevé** : le comparateur de statuts calcule l'impôt sans la décote, alors que ce nouvel outil l'applique ;
-  à corriger pour que les deux outils donnent le même impôt (prochaine action).
+- **Point relevé, corrigé le 22/10/2026** : le comparateur de statuts calculait l'impôt sans la décote ; les deux
+  outils utilisent désormais le moteur commun `engines/ir-fr.js`. Reste le simulateur PER, qui ne compte pas la
+  décote (elle dépend de la situation de famille, que ce simulateur ne demande pas).
 - **États-Unis, Royaume-Uni et Canada, faits le 22/10/2026** : fonctions `employeeUS`, `freelanceUS`, `employeeUK`,
   `freelanceUK`, `employeeCA`, `freelanceCA` ; *Class 1* du salarié extraite dans `taxUK.class1Employee` ;
   assurance-emploi du salarié ajoutée à `taxCA.personal` (option `insurable`, règle `ei_rate_employee` : 1,63 %,

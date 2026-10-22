@@ -107,7 +107,9 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   revenu disponible d'un salarié (cotisations salariales et impôt, règles sourcées) et chiffre d'affaires dont un
   indépendant a besoin pour garder autant, avec le tarif équivalent. Nouvelles règles : cotisations salariales et
   Agirc-Arrco (France), assurance-emploi des salariés (Canada), retraite d'entreprise (Royaume-Uni).
-- **Prochaines actions de Claude** : décote dans le comparateur de statuts français ; besoins P2 suivants de
+- **Comparateur de statuts (22/10/2026)** : décote et déduction de 10 % officielles, par un moteur d'impôt commun
+  avec « Salarié ou freelance ? » (exemple : EURL à 50 %, 28 070 € au lieu de 27 520 €).
+- **Prochaines actions de Claude** : besoins P2 suivants de
   [02](02-besoins-clients.md) (checklist de création d'entreprise dans les quatre pays, jauges de seuils hors de
   France), spécification d'abord ; taux du crédit pour
   dividendes de la Saskatchewan et du Nunavut dès qu'ils sont publiés (formulaires 2026) ;
@@ -233,7 +235,9 @@ Objectif : un site mesuré, sous sa propre marque, qui commence à rapporter, et
 - [x] Freelance ou salarié, 4 pays : moteur `engines/employee-freelance.js`, script commun, cinq pages (France :
       cotisations salariales 2026 et micro-entreprise ; États-Unis : FICA et SE tax ; Royaume-Uni : Class 1 et
       Class 4, retraite d'entreprise ; Canada : RPC/RRQ, RQAP, assurance-emploi) ; spécification [19](19-freelance-ou-salarie.md)
-- [ ] Décote dans le comparateur de statuts français (même impôt que « Salarié ou freelance ? »)
+- [x] Décote dans le comparateur de statuts français : moteur commun `engines/ir-fr.js` (même impôt que « Salarié ou
+      freelance ? »)
+- [ ] Simulateur PER : décote non comptée (elle dépend de la situation de famille, que le simulateur ne demande pas)
 
 ### 1.5 Préparer la plateforme
 

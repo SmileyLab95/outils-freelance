@@ -1,5 +1,17 @@
 # Journal des modifications
 
+## 2026-10-22 — Comparateur de statuts : décote et déduction de 10 % officielles
+
+- Nouveau moteur commun `engines/ir-fr.js` (impôt d'une personne seule : barème des revenus de 2025, décote,
+  déduction forfaitaire de 10 % avec son minimum et son plafond), utilisé par le comparateur de statuts et par
+  « Salarié ou freelance ? » : les deux outils calculent désormais le même impôt.
+- Comparateur de statuts : la décote est appliquée (elle réduit ou annule l'impôt des revenus modestes) et la
+  déduction de 10 % sur la rémunération de SASU ou d'EURL suit le minimum et le plafond officiels. Exemple par
+  défaut : EURL à l'IS, rémunération de 50 %, 28 070 € par an au lieu de 27 520 € (impôt de 550 € annulé par la
+  décote) ; micro-entreprise et entreprise au réel inchangées à 60 000 €. Texte de méthode mis à jour.
+- Tests : moteur commun (décote, décote limitée à l'impôt, seuil, minimum, plafond), comparateur recalculé à la main,
+  5 erreurs réintroduites et détectées ; suite complète (211 tests unitaires, 2 283 vérifications navigateur).
+
 ## 2026-10-22 — « Salary vs freelance » : États-Unis, Royaume-Uni et Canada
 
 - Nouvelles pages `/us/salary-vs-freelance/`, `/uk/salary-vs-freelance/`, `/ca/salary-vs-freelance/` et

@@ -197,6 +197,7 @@ Application d'une page, spécifiée dans [09-specification-espace.md](09-specifi
 | Moteur | Rôle |
 |---|---|
 | `brackets.js` | Impôt selon un barème progressif, arrondi au centime, recherche d'une valeur par dichotomie |
+| `ir-fr.js` | Impôt sur le revenu d'une personne seule en France : barème, décote, déduction de 10 % (commun au comparateur de statuts et à « Salarié ou freelance ? ») |
 | `micro-fr.js`, `statuts-fr.js`, `per-fr.js` | Micro-entreprise (taux par activité, somme à mettre de côté), comparaison des statuts français, plafond du PER |
 | `tax-us.js`, `structure-us.js` | *Self-employment tax*, impôt fédéral, déduction QBI, acomptes trimestriels ; *sole proprietor* ou *S corp* |
 | `tax-uk.js` | *Income tax* (Angleterre, Écosse), *Class 1* (salarié) et *Class 4 NI*, *payments on account*, *limited company* |

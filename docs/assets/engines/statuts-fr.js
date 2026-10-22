@@ -4,17 +4,18 @@
  * choisi), SASU (rémunération et/ou dividendes, charges au taux moyen choisi, IS, prélèvement forfaitaire unique),
  * EURL à l'IS (rémunération du gérant TNS, IS, dividendes soumis aux cotisations TNS au-delà de 10 % du capital).
  * Les taux moyens de cotisations TNS et assimilé salarié sont des hypothèses modifiables, pas des barèmes exacts.
+ * Impôt sur le revenu (barème, décote, déduction de 10 % des rémunérations) : moteur commun irFR.
  */
 (function (root, factory) {
-  var api = factory(root.OFE ? root.OFE.brackets : require("./brackets.js"));
+  var api = factory(root.OFE ? root.OFE.brackets : require("./brackets.js"), root.OFE ? root.OFE.irFR : require("./ir-fr.js"));
   if (typeof module === "object" && module.exports) module.exports = api;
   else (root.OFE = root.OFE || {}).statutsFR = api;
-})(typeof self !== "undefined" ? self : this, function (B) {
+})(typeof self !== "undefined" ? self : this, function (B, IR) {
   "use strict";
 
-  /** Impôt sur le revenu pour une part (sans décote ni réductions). */
+  /** Impôt sur le revenu pour une part, décote comprise (sans réductions ni crédits d'impôt). */
   function incomeTax(taxable, rules) {
-    return B.progressive(Math.max(0, taxable), rules.ir_bareme_revenus_2025).tax;
+    return IR.incomeTax(taxable, rules).tax;
   }
 
   /** Impôt sur les sociétés : taux réduit jusqu'au seuil, taux normal au-delà. */
@@ -52,7 +53,7 @@
     var budget = profit * Math.min(1, Math.max(0, input.salaryShare));
     var netSalary = budget / input.sasuCoef;
     var social = budget - netSalary;
-    var salaryTax = incomeTax(netSalary * 0.9, rules);
+    var salaryTax = incomeTax(netSalary - IR.salaryDeduction(netSalary, rules), rules);
     var is = corporateTax(profit - budget, rules);
     var dividends = profit - budget - is;
     var pfu = dividends * rules.pfu_total_dividendes_2026;
@@ -70,7 +71,7 @@
     var budget = profit * Math.min(1, Math.max(0, input.salaryShare));
     var netSalary = budget / (1 + input.tnsRate);
     var salarySocial = budget - netSalary;
-    var salaryTax = incomeTax(netSalary * 0.9, rules);
+    var salaryTax = incomeTax(netSalary - IR.salaryDeduction(netSalary, rules), rules);
     var is = corporateTax(profit - budget, rules);
     var dividends = profit - budget - is;
     var normal = Math.min(dividends, Math.max(0, input.capital || 0) * 0.1);
