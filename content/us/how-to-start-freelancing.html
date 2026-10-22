@@ -1,0 +1,78 @@
+<!--{
+  "id": "start",
+  "slug": "how-to-start-freelancing/",
+  "title": "How to Start Freelancing: Step-by-Step Checklist",
+  "description": "Every step to start freelancing as a sole proprietor in the US, in order: business name (DBA), licenses, state taxes, W-9, records, estimated taxes and Form 1040.",
+  "menu": "Start freelancing",
+  "icon": "🚀",
+  "blurb": "The steps to start as a sole proprietor, in order, to tick off as you go.",
+  "scripts": ["tools/checklist.js"],
+  "rules": "us",
+  "sources": ["us_sole_prop_default", "single_member_llc_default", "us_dba", "us_licenses", "us_state_tax_id", "states_tax_services_by_default", "us_ein", "form_w9_basics", "freelance_law_new_york_state", "freelance_law_nyc", "freelance_law_illinois", "freelance_law_california_state", "us_records_retention", "us_business_bank_account", "estimated_tax_threshold", "estimated_tax_due_dates_2026", "form_1040_due_date_tax_year_2026"],
+  "priority": 0.9,
+  "faq": [
+    ["Do I need to register to start freelancing?", "Not as a business structure: if you do business without registering as another kind of business, you're automatically a sole proprietor. But you may need a DBA if you use a business name, licenses or permits for your activity and location, and a state tax registration if you owe state taxes such as sales tax."],
+    ["Do I need an EIN as a freelancer?", "Not if you work alone: a sole proprietor without employees who doesn't file excise or pension plan tax returns can use their Social Security number. You need an EIN once you hire an employee or file those returns. Getting one is free."],
+    ["When do I pay taxes as a freelancer?", "Through estimated tax payments each quarter if you expect to owe $1,000 or more for the year: for 2026, by April 15, June 15 and September 15, 2026, and January 15, 2027. Then you file Form 1040 with Schedule C and Schedule SE by April 15, 2027."],
+    ["How long should I keep my records?", "Generally at least 3 years from the date you file your return, longer in some cases (for example 6 years if you leave out income worth more than 25% of the gross income on your return)."]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Interactive checklist · 2026 rules</span>
+    <h1>How to start freelancing</h1>
+    <p class="lead">Every step to start freelancing as a sole proprietor, in order. Tick the ones you've done: your progress stays on this device, so you can come back any time.</p>
+    <ul class="trust"><li>From your business name to your tax return</li><li>Every step sourced from the IRS and the SBA</li><li>Progress saved</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout wide-left">
+    <div class="card">
+      <form id="cl-filters" onsubmit="return false" style="margin-bottom: 4px; padding-bottom: 16px; border-bottom: 1px solid var(--line);">
+        <h2 style="margin: 0 0 10px; font-size: 1.1rem;">Your situation</h2>
+        <div class="fields">
+          <div class="field full"><label class="check"><input type="checkbox" name="name" data-save><span>I'll use a business name, not just my own name</span></label></div>
+          <div class="field full"><label class="check"><input type="checkbox" name="law" data-save><span>I'll work in New York, California or Illinois</span></label></div>
+        </div>
+      </form>
+      <ul class="checklist" id="checklist" data-persist="start-freelancing" data-score="{done} of {total} steps"
+        data-all="All done: good luck with your business!" data-none="Tick the steps you've already done."
+        data-missing-one="{missing} step left." data-missing-many="{missing} steps left.">
+        <li class="cl-group"><h3>Before you start</h3></li>
+        <li data-id="structure" data-rule="us_sole_prop_default single_member_llc_default"><label><input type="checkbox"><div><strong>Decide how to run your business</strong><span>Doing business without registering as another kind of business makes you a sole proprietor automatically. A single-member LLC is taxed the same way by default. The <a href="{{link:structure}}">S corp comparison</a> shows when an S corporation election can pay.</span></div></label></li>
+        <li data-id="dba" data-rule="us_dba" data-when="name"><label><input type="checkbox"><div><strong>Register your business name (DBA)</strong><span>Many states require you to file a "doing business as" name with the state or county if you don't use your own name.</span></div></label></li>
+        <li data-id="licenses" data-rule="us_licenses"><label><input type="checkbox"><div><strong>Check the licenses and permits you need</strong><span>They depend on your activity and location: federal for some regulated activities, state and local (city or county) for others.</span></div></label></li>
+        <li data-id="state" data-rule="us_state_tax_id states_tax_services_by_default"><label><input type="checkbox"><div><strong>Check your state tax registrations</strong><span>Whether you need a state tax ID or a sales tax permit depends on the state taxes you owe: Hawaii, New Mexico, South Dakota and West Virginia tax services by default, and other states tax some services. Ask your state's Department of Revenue.</span></div></label></li>
+        <li data-id="ein" data-rule="us_ein" data-optional><label><input type="checkbox"><div><strong>Optional: get a free EIN</strong><span>Not required if you work alone and don't file excise or pension plan returns: your Social Security number works. You need one once you hire an employee. Not counted in your progress.</span></div></label></li>
+        <li class="cl-group"><h3>With your first clients</h3></li>
+        <li data-id="w9" data-rule="form_w9_basics"><label><input type="checkbox"><div><strong>Be ready to give clients a Form W-9</strong><span>It gives them your name, tax classification, address and taxpayer identification number; you give it to the client, not to the IRS. The <a href="{{link:1099}}">1099-NEC and W-9 guide</a> explains it.</span></div></label></li>
+        <li data-id="contract" data-rule="freelance_law_new_york_state freelance_law_nyc freelance_law_illinois freelance_law_california_state" data-when="law"><label><input type="checkbox"><div><strong>Put each job in a written contract</strong><span>Freelance protection laws require one from $800 in New York (State and City), $500 in Illinois and $250 in California, counting work for the same client over the prior 120 days. See the <a href="{{link:freelance-law}}">freelance protection laws</a>.</span></div></label></li>
+        <li data-id="records" data-rule="us_records_retention"><label><input type="checkbox"><div><strong>Keep records of your income and expenses</strong><span>Generally for at least 3 years from the date you file your return, longer in some cases.</span></div></label></li>
+        <li data-id="bank" data-rule="us_business_bank_account" data-optional><label><input type="checkbox"><div><strong>Recommended: open a business bank account</strong><span>It keeps business money separate from personal money. As a sole proprietor, you can open one with your Social Security number. Not counted in your progress.</span></div></label></li>
+        <li class="cl-group"><h3>During the year</h3></li>
+        <li data-id="estimated" data-rule="estimated_tax_threshold estimated_tax_due_dates_2026"><label><input type="checkbox"><div><strong>Pay estimated tax each quarter</strong><span>If you expect to owe $1,000 or more for the year: for 2026, by April 15, June 15 and September 15, 2026, and January 15, 2027. The <a href="{{link:estimated-tax}}">quarterly tax calculator</a> works out the amounts.</span></div></label></li>
+        <li data-id="return" data-rule="form_1040_due_date_tax_year_2026"><label><input type="checkbox"><div><strong>File Form 1040 with Schedule C and Schedule SE</strong><span>For 2026, by April 15, 2027. The <a href="{{link:tax}}">self-employment tax calculator</a> estimates your bill.</span></div></label></li>
+      </ul>
+    </div>
+    <div class="results">
+      <div class="card">
+        <div class="label" style="margin-bottom: 8px;">Your steps</div>
+        <div class="progress"><div id="cl-bar"></div></div>
+        <div role="status" aria-atomic="true">
+          <p style="margin: 12px 0 0; font-weight: 700;" id="cl-score">0 of 7 steps</p>
+          <p class="notice warn" id="cl-msg" style="margin: 12px 0 0;">Tick the steps you've already done.</p>
+        </div>
+        <p class="small muted" style="margin: 12px 0 0;">Your answers and ticks stay on this device: nothing is sent.</p>
+      </div>
+      <a class="btn btn-primary btn-block" href="{{link:tax}}" style="margin-top: 14px;">Estimate my self-employment tax</a>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>Sole proprietor: what to know before you start</h2>
+  <p>As a sole proprietor, your business isn't separate from you: its profit goes on your own return (Schedule C), and you pay self-employment tax for Social Security and Medicare (Schedule SE) on top of income tax. Rules also depend on your state and city, so check their websites too.</p>
+  <p>Before you start, compare with an S corporation in the <a href="{{link:structure}}">S corp comparison</a>, set your rate with the <a href="{{link:rate}}">hourly rate calculator</a> and see <a href="{{link:set-aside}}">how much to set aside for taxes</a> from each payment.</p>
+</section>

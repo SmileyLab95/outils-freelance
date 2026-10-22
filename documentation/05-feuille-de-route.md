@@ -113,8 +113,10 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   chacune sourcée (sept règles nouvelles), avec la progression gardée sur l'appareil ([20](20-checklist-creation.md)).
 - **Checklist *How to become a sole trader* (22/10/2026)** : la même chose au Royaume-Uni (six règles nouvelles,
   GOV.UK et ICO).
-- **Prochaines actions de Claude** : checklist de création aux États-Unis et au Canada
-  ([20](20-checklist-creation.md) § 4, règles à rechercher d'abord) ; jauges de seuils hors de France ; taux du crédit pour
+- **Checklist *How to start freelancing* (22/10/2026)** : la même chose aux États-Unis (sept règles nouvelles,
+  SBA et IRS).
+- **Prochaines actions de Claude** : checklist de création au Canada (anglais et français,
+  [20](20-checklist-creation.md) § 5, règles à rechercher d'abord) ; jauges de seuils hors de France ; taux du crédit pour
   dividendes de la Saskatchewan et du Nunavut dès qu'ils sont publiés (formulaires 2026) ;
   trouver la cause du contrôle de contraste intermittent de l'Espace ; revérifier les grilles des prestataires de
   paiement (Stripe, Mollie) quand Ismail décidera ([17](17-offres-et-paiements.md)) ; guide du recouvrement dès que
@@ -244,7 +246,8 @@ Objectif : un site mesuré, sous sa propre marque, qui commence à rapporter, et
 - [ ] Checklist de création, 4 pays : besoin P2, spécification [20](20-checklist-creation.md)
   - [x] France : `/fr/creer-sa-micro-entreprise/` (19 démarches au plus, sourcées, cases mémorisées)
   - [x] Royaume-Uni : `/uk/how-to-become-a-sole-trader/` (12 étapes au plus, GOV.UK et ICO)
-  - [ ] États-Unis, Canada (recherches des règles à faire, § 4)
+  - [x] États-Unis : `/us/how-to-start-freelancing/` (9 étapes au plus, SBA et IRS)
+  - [ ] Canada (recherches des règles à faire, § 5)
 
 ### 1.5 Préparer la plateforme
 

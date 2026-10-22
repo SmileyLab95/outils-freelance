@@ -801,6 +801,97 @@
       "confidence": "high",
       "note": "Read on 2026-10-22 through search excerpts of the IRS page and the Form SS-4 and Form 2553 instructions. A disregarded LLC is still a separate entity for employment and certain excise taxes."
     },
+    "us_sole_prop_default": {
+      "value": "You're automatically considered a sole proprietorship if you do business activities but don't register as any other kind of business; you don't need to register it at the state level.",
+      "unit": "text",
+      "label": "Sole proprietorship: formed automatically, no state registration",
+      "source": "https://www.sba.gov/business-guide/launch-your-business/choose-business-structure",
+      "source_title": "Choose a business structure - U.S. Small Business Administration",
+      "confidence": "high",
+      "verified_on": "2026-10-22",
+      "note": "A sole proprietorship has no legal separation from its owner. Registering a business name (DBA), licenses and tax registrations are separate steps (us_dba, us_licenses, us_state_tax_id)."
+    },
+    "us_dba": {
+      "value": "Many states require sole proprietors to use their own name for the business unless they file another name, called a DBA (doing business as), trade name, assumed name or fictitious name, with the state or county; a few states don't require it.",
+      "unit": "text",
+      "label": "Business name other than your own: DBA registration",
+      "source": "https://www.sba.gov/business-guide/launch-your-business/register-your-business",
+      "source_title": "Register your business - U.S. Small Business Administration",
+      "confidence": "high",
+      "verified_on": "2026-10-22",
+      "note": "Where to file (secretary of state, county clerk) depends on the state and sometimes the county. A DBA doesn't give legal protection of the name by itself."
+    },
+    "us_licenses": {
+      "value": "Licenses and permits depend on your business activity and location: federal for some regulated activities, state and local (city or county) for others.",
+      "unit": "text",
+      "label": "Business licenses and permits",
+      "source": "https://www.sba.gov/business-guide/launch-your-business/apply-licenses-permits",
+      "source_title": "Apply for licenses and permits - U.S. Small Business Administration",
+      "confidence": "high",
+      "verified_on": "2026-10-22",
+      "note": "Requirements vary by state, county and municipality: check your state, city and county websites."
+    },
+    "us_ein": {
+      "value": {
+        "needed_without_employees": false,
+        "free": true,
+        "needed_when": [
+          "you hire an employee",
+          "you file excise or pension plan tax returns"
+        ]
+      },
+      "unit": "object",
+      "label": "EIN for a sole proprietor",
+      "source": "https://www.irs.gov/faqs/small-business-self-employed-other-business/entities/entities-2",
+      "source_title": "Entities 2 - IRS frequently asked questions",
+      "more_sources": [
+        {
+          "source": "https://www.sba.gov/business-guide/launch-your-business/get-federal-state-tax-id-numbers",
+          "source_title": "Get federal and state tax ID numbers - U.S. Small Business Administration"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-10-22",
+      "note": "A sole proprietor without employees who doesn't file excise or pension plan tax returns doesn't need an EIN (but can get one) and uses their Social Security number as taxpayer identification number. An EIN is needed once you hire an employee or file excise or pension plan returns; banks may ask for one to open some retirement accounts. Applying is free (SBA, IRS online assistant)."
+    },
+    "us_state_tax_id": {
+      "value": "Whether you need a state tax ID (for example a sales tax permit) depends on whether your business owes state taxes: check with your state's Department of Revenue.",
+      "unit": "text",
+      "label": "State tax registration (state tax ID, sales tax permit)",
+      "source": "https://www.sba.gov/business-guide/launch-your-business/get-federal-state-tax-id-numbers",
+      "source_title": "Get federal and state tax ID numbers - U.S. Small Business Administration",
+      "confidence": "high",
+      "verified_on": "2026-10-22",
+      "note": "The process varies by state; the SBA's state registration lookup lists the office to contact. Which states tax services: states_tax_services_by_default and the state-specific rules."
+    },
+    "us_records_retention": {
+      "value": {
+        "general_years": 3
+      },
+      "unit": "object",
+      "label": "How long to keep business tax records (general rule)",
+      "source": "https://www.irs.gov/taxtopics/tc305",
+      "source_title": "Topic no. 305, Recordkeeping - IRS",
+      "more_sources": [
+        {
+          "source": "https://www.irs.gov/publications/p583",
+          "source_title": "Publication 583, Starting a Business and Keeping Records - IRS"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-10-22",
+      "note": "Keep records until the period of limitations for the return runs out: generally 3 years from the date you filed (a return filed early counts as filed on the due date). Longer periods: 6 years if you leave out income over 25% of the gross income shown, 7 years for a worthless securities or bad debt deduction, no limit for a fraudulent return or no return; employment tax records at least 4 years; property records until the period of limitations ends for the year you dispose of it (Publication 583)."
+    },
+    "us_business_bank_account": {
+      "value": "A business bank account keeps business funds separate from personal funds, which matters because a sole proprietorship has no legal separation from its owner; a sole proprietor can use a Social Security number instead of an EIN to open one.",
+      "unit": "text",
+      "label": "Business bank account (recommended)",
+      "source": "https://www.sba.gov/business-guide/launch-your-business/open-business-bank-account",
+      "source_title": "Open a business bank account - U.S. Small Business Administration",
+      "confidence": "high",
+      "verified_on": "2026-10-22",
+      "note": "A recommendation, not a legal requirement for a sole proprietor. Banks may ask for a business license or DBA documents."
+    },
     "ssa_benefits_based_on_earnings": {
       "value": "Social Security benefits are based on your lifetime covered earnings (wages and net self-employment earnings), not on the taxes you paid.",
       "unit": "text",

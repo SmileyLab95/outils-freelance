@@ -999,6 +999,22 @@ const tests = {
     await page.uncheck("#cl-filters input[name=home]");
     check((await t("cl-score")) === "0 of 10 steps", "Sole trader UK : situation par défaut rétablie");
   },
+  async "us/how-to-start-freelancing/"(page) {
+    const t = async (id) => (await page.textContent(`#${id}`)).replace(/\s+/g, " ").trim();
+    const box = (id) => `#checklist li[data-id="${id}"] input`;
+    check((await t("cl-score")) === "0 of 7 steps" && !(await page.isVisible(box("dba"))) && !(await page.isVisible(box("contract"))) && (await page.isVisible(box("ein"))),
+      "Start freelancing US : 7 étapes par défaut, DBA et contrat masqués, EIN facultatif visible");
+    await page.check("#cl-filters input[name=law]");
+    await page.check(box("contract"));
+    await page.check(box("ein"));
+    check((await t("cl-score")) === "1 of 8 steps" && (await t("cl-msg")) === "7 steps left.", "Start freelancing US : contrat écrit compté, EIN facultatif non compté");
+    await accessible(page, "Start freelancing US (situation et cases cochées)");
+    await page.reload({ waitUntil: "networkidle" });
+    check((await page.isChecked(box("contract"))) && (await page.isChecked(box("ein"))) && (await t("cl-score")) === "1 of 8 steps", "Start freelancing US : progression retrouvée après rechargement");
+    await page.$$eval("#checklist li[data-id] input", (boxes) => boxes.forEach((b) => { if (b.checked) b.click(); }));
+    await page.uncheck("#cl-filters input[name=law]");
+    check((await t("cl-score")) === "0 of 7 steps", "Start freelancing US : situation par défaut rétablie");
+  },
   async "us/salary-vs-freelance/"(page) {
     const t = async (id) => (await page.textContent(`#${id}`)).replace(/\s+/g, " ").trim();
     check((await t("ef-big")) === "$73,141" && (await t("ef-sub")) === "That's $56.79 an hour over 1,288 billed hours, to keep $58,075 a year, as with your salary." &&

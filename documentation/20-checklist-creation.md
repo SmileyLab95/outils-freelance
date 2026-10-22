@@ -80,13 +80,33 @@ Situation : « I'll trade under a business name » (règles du nom) ; « I'll ru
 10 étapes comptées par défaut, 12 au plus. Un test vérifie que **chaque montant écrit dans les étapes** (France et
 Royaume-Uni) est celui d'une règle.
 
-## 4. États-Unis et Canada
+## 4. États-Unis : *How to start freelancing* (`/us/how-to-start-freelancing/`, 22/10/2026)
 
-Même principe, recherches à faire avant le code : nom commercial (*DBA*), EIN facultatif, licences et permis, taxe
-de vente de l'État, W-9, acomptes trimestriels (États-Unis) ; enregistrement du nom dans la province, numéro
-d'entreprise, TPS/TVH et TVQ au-delà de 30 000 $, acomptes provisionnels (Canada).
+Situation : « I'll use a business name » (DBA) ; « I'll work in New York, California or Illinois » (lois de
+protection des freelances).
 
-## 5. Critères de « terminé »
+| Étape | Règles |
+|---|---|
+| Choisir sa forme : *sole proprietor* automatiquement, LLC à un associé imposée de même | `us_sole_prop_default` (nouvelle, SBA), `single_member_llc_default` |
+| Nom commercial (*DBA*) auprès de l'État ou du comté | `us_dba` (nouvelle, SBA) |
+| Licences et permis (fédéral, État, ville ou comté) | `us_licenses` (nouvelle, SBA) |
+| Inscriptions fiscales de l'État (numéro fiscal, permis de taxe de vente) ; États qui taxent les services par défaut | `us_state_tax_id` (nouvelle, SBA), `states_tax_services_by_default` |
+| Facultatif : EIN gratuit (inutile sans salarié ni déclaration d'accise ou de plan de retraite) | `us_ein` (nouvelle, IRS) |
+| Formulaire W-9 pour les clients | `form_w9_basics` |
+| Contrat écrit : à partir de 800 $ (New York, État et ville), 500 $ (Illinois), 250 $ (Californie), sur 120 jours | `freelance_law_*` |
+| Registres gardés en général 3 ans après le dépôt de la déclaration | `us_records_retention` (nouvelle, IRS) |
+| Conseillé : compte bancaire professionnel | `us_business_bank_account` (nouvelle, SBA) |
+| Acomptes trimestriels (1040-ES) dès 1 000 $ d'impôt attendu ; déclaration 1040 avec annexes C et SE | `estimated_tax_threshold`, `estimated_tax_due_dates_2026`, `form_1040_due_date_tax_year_2026` |
+
+7 étapes comptées par défaut, 9 au plus ; EIN et compte bancaire hors du compte. Montants et dates des FAQ vérifiés
+comme ceux des étapes.
+
+## 5. Canada
+
+Même principe, recherches à faire avant le code : enregistrement du nom dans la province, numéro d'entreprise,
+TPS/TVH et TVQ au-delà de 30 000 $, acomptes provisionnels.
+
+## 6. Critères de « terminé »
 
 - Chaque étape porte au moins une règle existante, citée dans les sources de la page ; chaque chiffre de la page est
   vérifié contre sa règle (test).

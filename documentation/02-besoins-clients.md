@@ -28,7 +28,7 @@ Matrice revue le 22/10/2026 d'après les pages publiées (identifiants de `conte
 | Besoin | Outil ou contenu | FR | US | UK | CA | Priorité |
 |---|---|---|---|---|---|---|
 | Quel statut choisir ? | Comparateur de statuts (revenu net selon le statut) | ✅ micro / réel / EURL à l'IS / SASU | ✅ sole prop (ou LLC) / S-corp | ✅ sole trader / Ltd | ✅ individuelle / société par actions (sauf Sask. et Nunavut) | P1 |
-| Les démarches pour démarrer | Checklist interactive de création | ✅ micro-entreprise | 🟡 | ✅ sole trader | 🟡 | P2 |
+| Les démarches pour démarrer | Checklist interactive de création | ✅ micro-entreprise | ✅ sole proprietor | ✅ sole trader | 🟡 | P2 |
 | Combien je gagnerai vraiment ? | Simulateur de revenu net | ✅ micro | ✅ (calculateur d'impôt) | ✅ (calculateur d'impôt) | ✅ (calculateur d'impôt) | P1 |
 | Freelance ou salarié ? | Comparateur salaire ↔ chiffre d'affaires | ✅ | ✅ | ✅ | ✅ | P2 |
 
@@ -121,7 +121,7 @@ Matrice revue le 22/10/2026 d'après les pages publiées (identifiants de `conte
 
 - **P1** : Espace entrepreneur hors de France (après la plateforme française). Comparateur de statuts au Canada fait le 22/10/2026 (Saskatchewan et Nunavut en attente d'un taux officiel).
 - **P2** (convertisseur de tarifs, prix au forfait et « freelance ou salarié » faits le 22/10/2026) : checklist de
-  création (États-Unis, Canada ; France et Royaume-Uni faits le 22/10/2026) ; recouvrement en justice (4 pays) ; client
+  création (Canada ; France, Royaume-Uni et États-Unis faits le 22/10/2026) ; recouvrement en justice (4 pays) ; client
   étranger aux États-Unis ; W-8BEN ; jauges de seuils (États-Unis, Royaume-Uni, Canada) ; assurance et compte pro hors
   de France.
 - **P3** : date d'échéance, proposition commerciale, NDA, CGV, bureau à domicile, hausse de tarifs (calculateur),

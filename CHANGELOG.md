@@ -1,5 +1,16 @@
 # Journal des modifications
 
+## 2026-10-22 — Checklist *How to start freelancing* (États-Unis)
+
+- Nouvelle page `/us/how-to-start-freelancing/` (identifiant `start`, en tête du menu *Taxes*) : forme de
+  l'entreprise, nom commercial (DBA), licences et permis, inscriptions fiscales de l'État, EIN facultatif, W-9,
+  contrat écrit (New York, Californie, Illinois), registres, compte bancaire conseillé, acomptes trimestriels,
+  déclaration 1040 ; situation et cases gardées sur l'appareil (7 à 9 étapes).
+- Sept règles sourcées ajoutées (SBA, IRS) : *sole proprietorship* par défaut, DBA, licences, EIN, inscription
+  fiscale de l'État, durée de conservation des registres, compte bancaire.
+- Tests : la checklist rejoint les contrôles communs ; montants et dates des FAQ vérifiés contre les règles dans les
+  trois pays ; parcours navigateur ; suite complète (224 tests unitaires, 2 347 vérifications navigateur).
+
 ## 2026-10-22 — Checklist *How to become a sole trader* (Royaume-Uni)
 
 - Nouvelle page `/uk/how-to-become-a-sole-trader/` (identifiant `start`, en tête du menu *Tax*) : nom commercial,

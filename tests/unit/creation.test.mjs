@@ -36,7 +36,9 @@ const PAGES = {
   France: { file: "content/fr/creer-sa-micro-entreprise.html", country: "fr", fields: ["vente", "acre"], optional: ["compte"],
     counts: [[{}, 17], [{ acre: true }, 18], [{ vente: true }, 18], [{ vente: true, acre: true }, 19]], score: "0 démarches sur 17" },
   "Royaume-Uni": { file: "content/uk/how-to-become-a-sole-trader.html", country: "uk", fields: ["name", "home"], optional: [],
-    counts: [[{}, 10], [{ name: true }, 11], [{ home: true }, 11], [{ name: true, home: true }, 12]], score: "0 of 10 steps" }
+    counts: [[{}, 10], [{ name: true }, 11], [{ home: true }, 11], [{ name: true, home: true }, 12]], score: "0 of 10 steps" },
+  "États-Unis": { file: "content/us/how-to-start-freelancing.html", country: "us", fields: ["name", "law"], optional: ["ein", "bank"],
+    counts: [[{}, 7], [{ name: true }, 8], [{ law: true }, 8], [{ name: true, law: true }, 9]], score: "0 of 7 steps" }
 };
 
 for (const [label, P] of Object.entries(PAGES)) {
@@ -102,6 +104,8 @@ test("France : chiffres, dates et formulaires de la page repris des règles", ()
   assert.equal(R.facturation_electronique_calendrier.reception_toutes_entreprises, "2026-09-01");
   assert.ok(step("einvoice").text.includes("1er septembre 2026"));
   for (const piece of R.creation_guichet_unique.pieces) assert.ok(step("pieces").text.toLowerCase().includes(piece), piece);
+  const faq = front(FR).faq.flat().join(" ");
+  assert.ok(faq.includes("Au plus tard 60 jours") && faq.includes(R.creation_guichet_unique.site), "délai et site de la FAQ");
 });
 
 test("Royaume-Uni : montants, dates et délais de la page repris des règles", () => {
@@ -122,20 +126,54 @@ test("Royaume-Uni : montants, dates et délais de la page repris des règles", (
   assert.ok(st("pay").text.includes("on 31 January and 31 July"));
   assert.equal(U.sa_balancing_payment_deadline.slice(5), "01-31");
   for (const word of ["'limited'", "'Ltd'", "'LLP'", "'plc'"]) assert.ok(U.uk_business_name_rules[0].includes(word) && st("name").text.includes(word), word);
+  const faq = front(read("content/uk/how-to-become-a-sole-trader.html")).faq.flat().join(" ");
+  assert.ok(faq.includes(day(U.sa_registration_deadline)) && faq.includes(`For at least ${U.uk_records_retention.years_after_filing_deadline} years`), "dates et délais de la FAQ");
 });
 
-test("tous les montants des étapes viennent des règles (aucun montant écrit sans règle)", () => {
-  const F = rulesOf("fr"), U = rulesOf("uk"), T = F.tva_franchise_seuils;
+test("tous les montants des étapes et des FAQ viennent des règles (aucun montant écrit sans règle)", () => {
+  const F = rulesOf("fr"), U = rulesOf("uk"), A = rulesOf("us"), T = F.tva_franchise_seuils;
   const allowed = {
     // 0 € : la déclaration de chiffre d'affaires « même nul ».
     "content/fr/creer-sa-micro-entreprise.html": { re: /(\d{1,3}(?: \d{3})*) €/g, values: [0, F.micro_plafond_ca_services, F.micro_plafond_ca_vente,
       F.vl_rfr_plafond_par_part_2026, F.compte_dedie_micro.seuil_ca, T.services_seuil, T.services_seuil_majore, T.vente_seuil, T.vente_seuil_majore] },
     "content/uk/how-to-become-a-sole-trader.html": { re: /£(\d{1,3}(?:,\d{3})*)/g, values: [U.trading_allowance, U.mtd_itsa_threshold_2026,
-      U.vat_registration_threshold, U.payments_on_account_threshold] }
+      U.vat_registration_threshold, U.payments_on_account_threshold] },
+    "content/us/how-to-start-freelancing.html": { re: /\$(\d{1,3}(?:,\d{3})*)/g, values: [A.estimated_tax_threshold,
+      A.freelance_law_new_york_state.written_contract_threshold_usd, A.freelance_law_nyc.written_contract_threshold_usd,
+      A.freelance_law_illinois.written_contract_threshold_usd, A.freelance_law_california_state.written_contract_threshold_usd] }
   };
   for (const [file, { re, values }] of Object.entries(allowed)) {
-    const amounts = steps(read(file)).flatMap((i) => [...i.text.matchAll(re)].map((m) => Number(m[1].replace(/[ ,]/g, ""))));
+    // Étapes et FAQ de la page.
+    const texts = steps(read(file)).map((i) => i.text).concat(front(read(file)).faq.flat().map(text));
+    const amounts = texts.flatMap((s) => [...s.matchAll(re)].map((m) => Number(m[1].replace(/[ ,]/g, ""))));
     assert.ok(amounts.length > 0, file);
     for (const a of amounts) assert.ok(values.includes(a), `${file} : ${a} n'est pas un montant des règles`);
   }
+});
+
+test("États-Unis : montants, dates, États et délais de la page repris des règles", () => {
+  const A = rulesOf("us"), L = steps(read("content/us/how-to-start-freelancing.html"));
+  const st = (id) => L.find((i) => i.id === id);
+  const usd = (n) => "$" + n.toLocaleString("en-US");
+  const day = (iso, year = true) => new Date(iso + "T00:00:00Z").toLocaleDateString("en-US", { month: "long", day: "numeric", ...(year ? { year: "numeric" } : {}), timeZone: "UTC" });
+  const [q1, q2, q3, q4] = A.estimated_tax_due_dates_2026;
+  assert.ok(st("estimated").text.includes(`${usd(A.estimated_tax_threshold)} or more`));
+  assert.ok(st("estimated").text.includes(`by ${day(q1, false)}, ${day(q2, false)} and ${day(q3)}, and ${day(q4)}`), st("estimated").text);
+  assert.ok(st("return").text.includes(`by ${day(A.form_1040_due_date_tax_year_2026)}`));
+  assert.ok(st("records").text.includes(`at least ${A.us_records_retention.general_years} years`));
+  const law = st("contract").text;
+  assert.ok(law.includes(`${usd(A.freelance_law_new_york_state.written_contract_threshold_usd)} in New York (State and City)`));
+  assert.equal(A.freelance_law_nyc.written_contract_threshold_usd, A.freelance_law_new_york_state.written_contract_threshold_usd);
+  assert.ok(law.includes(`${usd(A.freelance_law_illinois.written_contract_threshold_usd)} in Illinois`));
+  assert.ok(law.includes(`${usd(A.freelance_law_california_state.written_contract_threshold_usd)} in California`));
+  for (const k of ["freelance_law_new_york_state", "freelance_law_nyc", "freelance_law_illinois", "freelance_law_california_state"]) {
+    assert.match(A[k].aggregation, /120 days/, k);
+  }
+  const STATES = { HI: "Hawaii", NM: "New Mexico", SD: "South Dakota", WV: "West Virginia" };
+  assert.deepEqual(A.states_tax_services_by_default, Object.keys(STATES));
+  assert.ok(st("state").text.includes("Hawaii, New Mexico, South Dakota and West Virginia tax services by default"));
+  assert.equal(A.us_ein.needed_without_employees, false);
+  const faq = front(read("content/us/how-to-start-freelancing.html")).faq.flat().join(" ");
+  assert.ok(faq.includes(`by ${day(q1, false)}, ${day(q2, false)} and ${day(q3)}, and ${day(q4)}`) && faq.includes(`by ${day(A.form_1040_due_date_tax_year_2026)}`), "dates de la FAQ");
+  assert.ok(faq.includes(`at least ${A.us_records_retention.general_years} years`));
 });
