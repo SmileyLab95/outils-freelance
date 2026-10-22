@@ -1,5 +1,13 @@
 # Journal des modifications
 
+## 2026-10-22 — Site publié : scripts des comptes retirés
+
+- Les scripts utilisés seulement par les brouillons (page du compte, synchronisation, chiffrement, moteur de fusion)
+  ne sont plus copiés dans le site publié : aucune page publique ne les chargeait, mais ils restaient accessibles par
+  leur adresse (défaut trouvé en relisant la publication précédente).
+- Tests : suite complète (249 tests unitaires, 27 tests serveur, 37 vérifications du parcours des comptes,
+  2 434 vérifications navigateur du site public).
+
 ## 2026-10-22 — Comptes en ligne : écrans de connexion et synchronisation de l'Espace (étape C4), en brouillon
 
 - Page « Mon compte » (`/fr/compte/`) : connexion sans mot de passe (lien par email ou clé d'accès), code de

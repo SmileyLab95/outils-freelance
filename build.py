@@ -615,6 +615,18 @@ def redirect_page(target):
     )
 
 
+def draft_only_assets():
+    """Scripts chargés seulement par les brouillons (pages « draft », « draft_scripts ») : absents du site publié."""
+    draft, public = set(), set()
+    for path in CONTENT.glob("*/*.html"):
+        if not META_RE.match(path.read_text(encoding="utf-8")):
+            continue   # fragment inclus dans d'autres pages (encart de l'offre)
+        meta, _ = read_page(path)
+        (draft if meta.get("draft") else public).update(meta.get("scripts", []) + meta.get("lazy_scripts", []))
+        draft.update(meta.get("draft_scripts", []))
+    return sorted(draft - public)
+
+
 # ---------------------------------------------------------------------------
 # Programme principal
 # ---------------------------------------------------------------------------
@@ -625,6 +637,9 @@ def main():
     OUT.mkdir()
     shutil.copytree(SRC / "assets", OUT / "assets")
     (OUT / ".nojekyll").write_text("")
+    if not DRAFTS:
+        for name in draft_only_assets():
+            (OUT / "assets" / name).unlink()
 
     layout = (SRC / "layout.html").read_text(encoding="utf-8")
     rules = Rules()

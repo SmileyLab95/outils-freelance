@@ -106,7 +106,8 @@ Erreurs : `{ error: "code" }` avec un code stable (`unauthorized`, `forbidden`, 
 
 - **Brouillons** : `OF_DRAFTS=1 python3 build.py` construit aussi les pages marquées `draft` dans `brouillons/`
   (ignoré par git, jamais publié), avec l'adresse de l'API (`OF_API_URL`, `/api/v1` par défaut) et les scripts
-  `draft_scripts` ; le site publié (`docs/`) ne contient ni la page du compte ni la synchronisation.
+  `draft_scripts` ; le site publié (`docs/`) ne contient ni la page du compte ni la synchronisation, ni même leurs
+  scripts (`draft_only_assets()` les retire de `docs/assets`, relecture du 22/10/2026).
 - **Chiffrement** `engines/compte-crypto.js` (WebCrypto, testé sous Node : `tests/unit/compte-crypto.test.mjs`) :
   code de récupération (chaque faute de frappe d'un code fixe détectée), clé du compte non exportable, coffre
   compressé et chiffré, lié au compte et à la version.
