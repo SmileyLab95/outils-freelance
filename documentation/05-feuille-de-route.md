@@ -124,8 +124,13 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   avec un champ facultatif de chiffre d'affaires là où le seuil porte sur les ventes ([21](21-jauges-de-seuils.md)).
   Mise en forme commune avec le simulateur français (`OF.gauge`). Les besoins P2 « Impôts et cotisations » sont
   couverts, sauf le W-8BEN.
-- **Prochaines actions de Claude** : client étranger aux États-Unis et W-8BEN (besoins P2) : brouillon de
-  spécification [22](22-client-etranger-us-et-w8ben.md), règles à ajouter avec leurs sources avant le code ; recouvrement en justice au Royaume-Uni, aux États-Unis et au Canada ; taux du crédit pour
+- **Client étranger aux États-Unis (22/10/2026)** : assistant `/us/invoicing-international-clients/` (taxe du pays
+  du client dans l'UE, au Royaume-Uni et au Canada, selon le client et le service ; revenu en dollars, retenue
+  étrangère et formulaire 6166, crédit d'impôt étranger, FBAR, taxe de vente des États) ; « Facturer un client
+  étranger » est couvert dans les quatre pays. Nouveau fichier de règles communes (`data/rules/shared.json`, D24) et
+  test du format de toutes les règles (13 règles sans unité complétées).
+- **Prochaines actions de Claude** : sections W-8BEN dans les pages « client étranger » de la France, du Royaume-Uni
+  et du Canada (spécification [22](22-client-etranger-us-et-w8ben.md) § 2, règles à ajouter dans les règles communes) ; recouvrement en justice au Royaume-Uni, aux États-Unis et au Canada ; taux du crédit pour
   dividendes de la Saskatchewan et du Nunavut dès qu'ils sont publiés (formulaires 2026) ;
   trouver la cause du contrôle de contraste intermittent de l'Espace ; revérifier les grilles des prestataires de
   paiement (Stripe, Mollie) quand Ismail décidera ([17](17-offres-et-paiements.md)) ; guide du recouvrement dès que
@@ -257,6 +262,9 @@ Objectif : un site mesuré, sous sa propre marque, qui commence à rapporter, et
   - [x] Royaume-Uni : `/uk/how-to-become-a-sole-trader/` (12 étapes au plus, GOV.UK et ICO)
   - [x] États-Unis : `/us/how-to-start-freelancing/` (9 étapes au plus, SBA et IRS)
   - [x] Canada : `/ca/how-to-start-a-business/` et `/ca/fr/demarrer-entreprise-individuelle/` (8 étapes au plus)
+- [x] Client étranger aux États-Unis (besoin P2, spécification [22](22-client-etranger-us-et-w8ben.md)) : moteur
+      `engines/international-us.js`, règles communes `data/rules/shared.json`
+- [ ] W-8BEN pour un client américain (France, Royaume-Uni, Canada) : spécification [22](22-client-etranger-us-et-w8ben.md) § 2
 - [x] Jauges de seuils hors de France (besoin P2, spécification [21](21-jauges-de-seuils.md)) : Royaume-Uni (TVA,
       *Making Tax Digital*), Canada (petit fournisseur, acomptes), États-Unis (acomptes, *wage base*, *Additional
       Medicare Tax*, QBI) ; fonction commune `OF.gauge`

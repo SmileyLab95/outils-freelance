@@ -373,6 +373,43 @@ const tests = {
     await page.fill("#t-wages", "");
     await page.fill("#t-profit", "80,000");
   },
+  async "us/invoicing-international-clients/"(page) {
+    // Client étranger (documentation/22) : verdicts du moteur, textes de la page, démarches américaines.
+    const verdict = () => page.textContent("#x-verdict");
+    const why = () => page.textContent("#x-why");
+    const items = (id) => page.$$eval(`#${id} li`, (lis) => lis.map((li) => li.textContent));
+    const choose = async (values) => { for (const [id, value] of Object.entries(values)) await page.selectOption(`#x-${id}`, value); };
+    let us = await items("x-us");
+    check((await verdict()) === "No foreign tax to charge" && (await why()).includes("reverse charge") &&
+      (await items("x-wording")).some((t) => t.includes("client's VAT number")) && us.length === 4 && us[0].includes("Schedule C") &&
+      us[1].includes("US-source income") && us[2].includes("$10,000") && us[3].includes("Hawaii, New Mexico, South Dakota and West Virginia"),
+      "client étranger US : entreprise de l'UE → autoliquidation, n° de TVA, quatre démarches américaines");
+    await choose({ workplace: "abroad" });
+    check((await items("x-us"))[1].includes("Income for work done abroad is foreign-source"), "client étranger US : travail en partie à l'étranger → crédit d'impôt étranger possible");
+    await choose({ customer: "consumer", service: "digital" });
+    check((await verdict()) === "Foreign VAT from your first sale" && (await items("x-actions"))[0].includes("non-Union scheme") &&
+      (await items("x-actions"))[0].includes("10 years"), "client étranger US : numérique à un particulier de l'UE → TVA dès la première vente, guichet non-Union");
+    await choose({ service: "remote" });
+    check((await verdict()) === "Usually no foreign tax" && (await why()).includes("used on their territory"), "client étranger US : autre service à un particulier de l'UE → en général pas de TVA, exceptions signalées");
+    await choose({ location: "uk", service: "digital" });
+    check((await verdict()) === "Foreign VAT from your first sale" && (await items("x-actions"))[0].includes("within 30 days"), "client étranger US : numérique à un particulier britannique → immatriculation sous 30 jours");
+    await choose({ location: "canada", service: "remote" });
+    check((await verdict()) === "Canadian tax above C$30,000" && (await why()).includes("legal or accounting") &&
+      (await items("x-actions"))[0].includes("any 12 months"), "client étranger US : service à un particulier canadien → seuil de 30 000 $ CA sur 12 mois");
+    await accessible(page, "client étranger US (Canada, particulier)");
+    await choose({ customer: "business" });
+    check((await verdict()) === "No foreign tax to charge" && (await items("x-wording"))[0].includes("GST/HST registration number"), "client étranger US : entreprise canadienne → n° de TPS/TVH du client");
+    await choose({ service: "place" });
+    check((await verdict()) === "It depends" && (await why()).includes("special rules"), "client étranger US : service lié à un lieu → sans verdict");
+    await choose({ location: "world", service: "remote" });
+    check((await verdict()) === "It depends" && (await why()).includes("covers the EU, the UK and Canada"), "client étranger US : autre pays → renvoi aux règles locales");
+    await page.reload({ waitUntil: "networkidle" });
+    check((await page.inputValue("#x-location")) === "world" && (await page.inputValue("#x-workplace")) === "abroad" && (await verdict()) === "It depends",
+      "client étranger US : situation mémorisée après rechargement");
+    // Retour à la situation par défaut pour les formats suivants (tablette, mobile).
+    await choose({ location: "eu", customer: "business", service: "remote", workplace: "us" });
+    check((await verdict()) === "No foreign tax to charge", "client étranger US : situation par défaut rétablie");
+  },
   async "us/quarterly-tax-calculator/"(page) {
     check((await page.textContent("#q-per")).trim() === "$3,746", `acomptes : 90 % × 16 647,47 ÷ 4 = 3 746 $ (obtenu : ${await page.textContent("#q-per")})`);
     await page.fill("#e-prior-tax", "12000");

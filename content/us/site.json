@@ -23,7 +23,8 @@
     {
       "label": "Invoicing",
       "items": [
-        "invoice"
+        "invoice",
+        "international"
       ]
     },
     {

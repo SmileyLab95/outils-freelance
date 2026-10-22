@@ -136,6 +136,11 @@ Le menu, le pied de page et la grille d'accueil sont construits à partir de `na
   règle qui rassemble plusieurs textes (un taux par province) liste ses autres sources dans `more_sources`
   (`[{"source": …, "source_title": …}]`), affichées avec les autres.
 - Une valeur de confiance `low` n'est jamais utilisée dans un calcul sans avertissement visible.
+- **Règles communes** (`data/rules/shared.json`, même format, `verified_on` obligatoire sur chaque règle) : le système
+  d'un autre pays cité par plusieurs sections (TVA de l'UE, TVA britannique et TPS/TVH pour un prestataire étranger,
+  formulaires américains). Le générateur les ajoute aux règles de chaque pays ; une même clé ne peut pas figurer dans
+  les deux fichiers (le build s'arrête). Les tests lisent les règles de la même façon (`tests/unit/regles.mjs`), et
+  `regles.test.mjs` vérifie le format de toutes les règles (valeur, unité, libellé, source, confiance).
 
 ## Les calendriers fiscaux (`data/calendars/<pays>.json`)
 
@@ -202,7 +207,7 @@ Application d'une page, spécifiée dans [09-specification-espace.md](09-specifi
 | `tax-us.js`, `structure-us.js` | *Self-employment tax*, impôt fédéral, déduction QBI, acomptes trimestriels ; *sole proprietor* ou *S corp* |
 | `tax-uk.js` | *Income tax* (Angleterre, Écosse), *Class 1* (salarié) et *Class 4 NI*, *payments on account*, *limited company* |
 | `tax-ca.js`, `structure-ca.js` | Impôt fédéral et provincial, RPC/RRQ, RQAP, assurance-emploi des salariés, acomptes ; société par actions |
-| `international-uk.js`, `international-ca.js` | Facturer un client étranger : TVA, TPS/TVH et TVQ des prestations de services |
+| `international-uk.js`, `international-ca.js`, `international-us.js` | Facturer un client étranger : TVA, TPS/TVH et TVQ des prestations de services ; aux États-Unis, taxe du pays du client (UE, Royaume-Uni, Canada) et démarches américaines ([22](22-client-etranger-us-et-w8ben.md)) |
 | `salestax.js` | TVA, *VAT*, TPS/TVH/TVQ/TVP : HT ↔ TTC, plusieurs composantes |
 | `rate-convert.js`, `project-price.js` | Conversion d'un tarif (heure, jour, semaine, mois, an) ; prix d'un projet au forfait ([18](18-outils-de-prix.md)) |
 | `employee-freelance.js` | Salarié ou freelance : revenu disponible d'un salarié et chiffre d'affaires équivalent, quatre pays ([19](19-freelance-ou-salarie.md)) ; s'appuie sur les moteurs de chaque pays, chargés par la page |

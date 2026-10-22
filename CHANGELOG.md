@@ -1,5 +1,20 @@
 # Journal des modifications
 
+## 2026-10-22 — Client étranger aux États-Unis ; règles communes à plusieurs pays
+
+- Nouvelle page `/us/invoicing-international-clients/` (identifiant `international`, menu *Invoicing*) : selon le
+  pays du client (UE, Royaume-Uni, Canada, ailleurs), son type et le service, taxe étrangère à facturer ou non
+  (autoliquidation des entreprises, TVA dès la première vente de services numériques aux particuliers de l'UE et du
+  Royaume-Uni, seuil canadien de 30 000 $ CA sur 12 mois pour les services vendus aux particuliers) ; mentions et
+  démarches ; aux États-Unis, revenu en dollars, retenue étrangère (formulaire 6166, crédit d'impôt limité au revenu
+  de source étrangère), FBAR et taxe de vente des États. « Facturer un client étranger » existe dans les quatre pays.
+- Règles communes (`data/rules/shared.json`, décision D24) ajoutées par le générateur aux règles de chaque pays :
+  huit règles (UE, Royaume-Uni, Canada), dont trois déplacées de uk.json ; quatre règles américaines (IRS, FinCEN).
+- Nouveau test du format de toutes les règles (valeur, unité, libellé, source, confiance) : 13 règles sans unité
+  complétées.
+- Tests : moteur sur 48 situations, textes et montants de la page, parcours navigateur ; suite complète (242 tests unitaires, 2 434
+  vérifications navigateur).
+
 ## 2026-10-22 — Jauges de seuils au Royaume-Uni, au Canada et aux États-Unis
 
 - Calculateurs d'impôt : nouvelle carte « *Thresholds to watch* » / « Seuils à surveiller » avec jauges et message

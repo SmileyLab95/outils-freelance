@@ -1,0 +1,99 @@
+{
+  "scope": "Rules about another country's system that several sections cite (EU VAT for UK and US freelancers, US forms for French, British and Canadian freelancers). The build merges these values into every country's rules; a key may not exist in both.",
+  "verified_on": "2026-10-22",
+  "values": {
+    "eu_non_union_scheme": {
+      "value": "A business not established in the EU that supplies services to consumers in the EU can register for the non-Union scheme in one Member State and declare all its EU supplies there: one return per calendar quarter, due by the end of the following month (a nil return when there were no sales); records kept for 10 years.",
+      "unit": "text",
+      "label": "EU One Stop Shop, non-Union scheme (suppliers not established in the EU)",
+      "source": "https://vat-one-stop-shop.ec.europa.eu/one-stop-shop_en",
+      "source_title": "The One Stop Shop - VAT e-Commerce - European Commission",
+      "confidence": "medium",
+      "note": "Read on 2026-10-21 through search excerpts of the Commission's OSS pages and guidelines. The records must include the information used to determine where the customer is established or usually resides; the older 'two pieces of non-contradictory evidence' presumption (2015 guide) is not shown on the site.",
+      "verified_on": "2026-10-21"
+    },
+    "place_of_supply_services_b2b": {
+      "value": "Where the customer belongs",
+      "unit": "text",
+      "label": "UK VAT: place of supply of services to a business customer (general rule)",
+      "source": "https://www.gov.uk/guidance/vat-place-of-supply-of-services-notice-741a",
+      "source_title": "Place of supply of services (VAT Notice 741A) - GOV.UK",
+      "confidence": "high",
+      "note": "Notice 741A paragraph 6.3, read on 2026-10-21 through search excerpts. Special rules (land and property, admission to events, passenger transport, hire of means of transport, restaurant and catering, and for non-business customers cultural, educational and entertainment services, taxed where performed) are checked first. A service to a business customer belonging outside the UK is therefore outside the scope of UK VAT; the customer accounts for any VAT in its own country (reverse charge). A customer who gives a VAT number may be presumed to be in business unless the service is wholly for private use. A business belongs where it has its business establishment or a fixed establishment (the one most directly concerned with the supply when there are several); a private person, where they usually live (VAT Act 1994 section 9, not re-read).",
+      "verified_on": "2026-10-21"
+    },
+    "place_of_supply_services_b2c": {
+      "value": "Where the supplier belongs",
+      "unit": "text",
+      "label": "UK VAT: place of supply of services to a non-business customer (general rule)",
+      "source": "https://www.gov.uk/guidance/vat-place-of-supply-of-services-notice-741a",
+      "source_title": "Place of supply of services (VAT Notice 741A) - GOV.UK",
+      "confidence": "high",
+      "note": "Notice 741A paragraph 6.2, read on 2026-10-21 through search excerpts. Non-business customers include private individuals and persons receiving services wholly for a private purpose. Exceptions: special rules, Schedule 4A paragraph 16 services to customers outside the UK, digital services.",
+      "verified_on": "2026-10-21"
+    },
+    "eu_b2b_reverse_charge": {
+      "value": "A service supplied to a business customer in the EU is taxed where the customer is established. When the supplier is based outside the EU, the business customer usually accounts for the VAT itself in its own country (reverse charge), and the supplier has no EU VAT to charge.",
+      "unit": "text",
+      "label": "EU VAT on services to an EU business customer from a supplier outside the EU (general rule, reverse charge)",
+      "source": "https://europa.eu/youreurope/business/finance-and-tax/vat/cross-border-vat/index_en.htm",
+      "source_title": "Cross-border VAT - Your Europe",
+      "confidence": "high",
+      "note": "Read on 2026-10-22 through search excerpts of Your Europe and of the Commission page 'Place of taxation' (VAT Directive art. 44: B2B services taxed where the customer is established; art. 196: customer liable). The reverse charge on services from non-established suppliers is applied differently across Member States (art. 194 is optional, some require the customer to be established): the site gives the general rule only. Exceptions (land, events, passenger transport) follow special rules. A valid VAT number is the usual evidence of business status.",
+      "verified_on": "2026-10-22"
+    },
+    "eu_b2c_general_rule": {
+      "value": "A service supplied to a private customer is generally taxed where the supplier is established (VAT Directive, art. 45). Exceptions: electronically supplied services are taxed where the customer lives, services connected with land, events and transport follow special rules, and Member States may tax some services used and enjoyed in their territory (art. 59a).",
+      "unit": "text",
+      "label": "EU VAT on services to private customers: general rule and main exceptions",
+      "source": "https://taxation-customs.ec.europa.eu/taxation/vat/vat-directive/place-taxation_en",
+      "source_title": "Place of taxation - Taxation and Customs Union - European Commission",
+      "confidence": "medium",
+      "note": "Read on 2026-10-22 through search excerpts of the Commission page and of the consolidated VAT Directive (art. 45, 58, 59a). For a supplier established only outside the EU, the general rule places the supply outside the EU: this is the site's reading of art. 45 (not stated in so many words by the sources), hence a cautious answer on the site.",
+      "verified_on": "2026-10-22"
+    },
+    "uk_b2b_reverse_charge_overseas": {
+      "value": "A UK business that receives services from a supplier belonging outside the UK accounts for the UK VAT itself (reverse charge) on almost all business-to-business services; the overseas supplier charges no UK VAT.",
+      "unit": "text",
+      "label": "UK reverse charge on services received from overseas suppliers",
+      "source": "https://www.gov.uk/guidance/vat-place-of-supply-of-services-notice-741a",
+      "source_title": "Place of supply of services (VAT Notice 741A) - GOV.UK",
+      "confidence": "high",
+      "note": "Notice 741A section 5, read on 2026-10-22 through search excerpts: the reverse charge applies even if the overseas supplier has a UK VAT registration number; the customer enters output and input tax on its VAT Return (boxes 1, 4, 6 and 7).",
+      "verified_on": "2026-10-22"
+    },
+    "uk_netp_no_threshold": {
+      "value": "A business with no establishment in the UK (non-established taxable person) has no VAT registration threshold: it must register as soon as it makes any taxable supply in the UK, including digital services to UK consumers, and notify HMRC within 30 days.",
+      "unit": "text",
+      "label": "UK VAT registration for overseas businesses (no threshold)",
+      "source": "https://www.gov.uk/government/publications/vat-notice-7001-should-i-be-registered-for-vat/vat-notice-7001-should-i-be-registered-for-vat",
+      "source_title": "Who should register for VAT (VAT Notice 700/1) - GOV.UK",
+      "confidence": "high",
+      "note": "Read on 2026-10-22 through search excerpts of Notice 700/1, HMRC manual VATREG37370 and 'VAT rules for supplies of digital services to consumers' (https://www.gov.uk/guidance/the-vat-rules-if-you-supply-digital-services-to-private-consumers): threshold not available to NETPs since 1 December 2012; digital services to UK consumers are supplied where the consumer is; without the customer's VAT number, treat the sale as business-to-consumer.",
+      "verified_on": "2026-10-22"
+    },
+    "ca_b2b_nonresident": {
+      "value": "A non-resident who does not carry on business in Canada and is not registered generally does not charge the GST/HST on services to a Canadian business that gives its normal GST/HST registration number; the customer self-assesses the tax when it doesn't use the service exclusively in its commercial activities.",
+      "unit": "text",
+      "label": "GST/HST on services from a non-resident to a Canadian business customer",
+      "source": "https://www.canada.ca/en/revenue-agency/services/forms-publications/publications/rc4027/doing-business-canada-gst-hst-information-non-residents.html",
+      "source_title": "Doing Business in Canada - GST/HST Information for Non-Residents (RC4027) - Canada.ca",
+      "confidence": "medium",
+      "note": "Read on 2026-10-22 through search excerpts of RC4027 and GST 300-9 (imported taxable supplies: line 405 of the customer's return, or form GST59 if not registered; 'exclusively' means 90% or more). A customer who doesn't give evidence of its normal registration is a 'specified Canadian recipient' (rule ca_simplified_regime).",
+      "verified_on": "2026-10-22"
+    },
+    "ca_simplified_regime": {
+      "value": {
+        "threshold": 30000,
+        "period_months": 12
+      },
+      "unit": "object",
+      "label": "Simplified GST/HST registration for non-resident vendors selling services to Canadian consumers",
+      "source": "https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/gst-hst-businesses/digital-economy-gsthst/find-out-need-register/cross-border-threshold-amounts.html",
+      "source_title": "Cross-border digital products and services threshold amounts - Canada.ca",
+      "confidence": "high",
+      "note": "Read on 2026-10-22 through search excerpts of the CRA digital-economy pages: a non-resident vendor not carrying on business in Canada and not registered under the normal regime must register under the simplified regime when its taxable supplies of intangible personal property or services to 'specified Canadian recipients' (consumers who haven't shown a normal GST/HST registration) exceed $30,000 CAD over any 12-month period; traditional services such as legal and accounting services are covered, not only streaming or apps (https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/gst-hst-businesses/digital-economy-gsthst/charge-collect/cross-border.html). Tax at 5% GST or the HST rate of the recipient's province; sales through a registered distribution platform are excluded from the vendor's threshold; registration through the non-resident web form, no security deposit; amounts in Canadian dollars.",
+      "verified_on": "2026-10-22"
+    }
+  }
+}

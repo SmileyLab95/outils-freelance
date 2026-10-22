@@ -1042,6 +1042,7 @@
       "value": {
         "compte_personnel_accepte": true
       },
+      "unit": "object",
       "label": "Le compte dédié peut être un compte personnel ou professionnel, réservé à l'activité ; conseillé même sous le seuil",
       "source": "https://www.autoentrepreneur.urssaf.fr/portail/accueil/sinformer-sur-le-statut/lessentiel-du-statut.html",
       "source_title": "L'essentiel du statut - Autoentrepreneur.urssaf.fr",
@@ -1053,6 +1054,7 @@
         "mention": "EI",
         "depuis": "2022-05-15"
       },
+      "unit": "object",
       "label": "Entrepreneur individuel : l'intitulé de chaque compte bancaire dédié à l'activité contient sa dénomination (nom suivi de « EI » ou « entrepreneur individuel »)",
       "source": "https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000045697814",
       "source_title": "Code de commerce, art. R526-27 - Légifrance",
@@ -1061,6 +1063,7 @@
     },
     "compte_commercant": {
       "value": true,
+      "unit": "boolean",
       "label": "Tout commerçant (personne physique ou société commerciale) doit se faire ouvrir un compte dans un établissement de crédit",
       "source": "https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000006219343",
       "source_title": "Code de commerce, art. L123-24 - Légifrance",
@@ -1072,6 +1075,7 @@
         "silence_vaut_refus_jours": 15,
         "ouverture_jours": 3
       },
+      "unit": "object",
       "label": "Droit au compte professionnel : après un refus, la Banque de France désigne une banque qui ouvre un compte avec les services de base",
       "source": "https://www.banque-france.fr/fr/a-votre-service/entreprises/interdit-bancaire-droit-compte-professionnel",
       "source_title": "Interdit bancaire et droit au compte professionnel - Banque de France",
@@ -1082,6 +1086,7 @@
       "value": {
         "obligation_generale": false
       },
+      "unit": "object",
       "label": "Pas d'obligation générale d'assurance de responsabilité civile professionnelle : elle dépend de l'activité (professions de santé, du droit, de l'immobilier, du bâtiment, agents de voyage…)",
       "source": "https://www.economie.gouv.fr/entreprises/gerer-ses-ressources-humaines-et-ses-salaries/professionnels-quelles-sont-les-assurances-obligatoires",
       "source_title": "Professionnels : quelles sont les assurances obligatoires ? - economie.gouv.fr",
@@ -1092,6 +1097,7 @@
       "value": {
         "justification": "ouverture de chaque chantier"
       },
+      "unit": "object",
       "label": "Travaux de construction : assurance de responsabilité décennale obligatoire pour toute personne dont la responsabilité décennale peut être engagée, justifiée à l'ouverture de chaque chantier",
       "source": "https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000006073984/LEGISCTA000006142820/",
       "source_title": "Code des assurances, art. L241-1 et suivants (assurance des travaux de construction) - Légifrance",
@@ -1100,6 +1106,7 @@
     },
     "assurance_attestation_decennale": {
       "value": true,
+      "unit": "boolean",
       "label": "Constructeurs soumis à la décennale : attestation d'assurance (modèle fixé par arrêté du 05/01/2016) jointe aux devis et aux factures",
       "source": "https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000031010272",
       "source_title": "Code des assurances, art. L243-2 - Légifrance",
@@ -1110,6 +1117,7 @@
       "value": {
         "depuis": "2023-07-01"
       },
+      "unit": "object",
       "label": "Artisans et micro-entrepreneurs dont l'activité exige une assurance : sur chaque devis et chaque facture, l'assurance souscrite, les coordonnées de l'assureur ou du garant et la couverture géographique (sauf constructeurs soumis à la décennale)",
       "source": "https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000047362294",
       "source_title": "Code de l'artisanat, art. L132-1 - Légifrance",
@@ -1118,6 +1126,7 @@
     },
     "assurance_rc_auto": {
       "value": true,
+      "unit": "boolean",
       "label": "Tout véhicule à moteur doit être assuré, au minimum en responsabilité civile",
       "source": "https://www.economie.gouv.fr/facileco/quelles-sont-les-assurances-indispensables",
       "source_title": "Quelles sont les assurances indispensables ? - economie.gouv.fr",
@@ -1128,6 +1137,7 @@
       "value": {
         "base": "hors_taxes"
       },
+      "unit": "object",
       "label": "Le chiffre d'affaires déclaré à l'Urssaf est le montant encaissé hors TVA ; la TVA facturée est reversée au service des impôts",
       "source": "https://www.autoentrepreneur.urssaf.fr/portail/accueil/une-question/toutes-les-fiches-pratiques/determiner-mon-chiffre-daffaires.html",
       "source_title": "Déterminer mon chiffre d'affaires - Autoentrepreneur.urssaf.fr",
@@ -1154,6 +1164,7 @@
         "option": "trimestrielle",
         "avec_versement_liberatoire": false
       },
+      "unit": "object",
       "label": "Sans versement libératoire, les revenus de micro-entrepreneur donnent lieu à des acomptes contemporains prélevés sur le compte bancaire chaque mois (ou chaque trimestre sur option), au taux du foyer ; le prélèvement à la source ne s'applique pas avec le versement libératoire",
       "source": "https://www.impots.gouv.fr/professionnel/questions/en-tant-que-micro-entrepreneur-suis-je-concerne-par-le-prelevement-la-sourc",
       "source_title": "En tant que micro-entrepreneur, suis-je concerné par le prélèvement à la source ? - impots.gouv.fr",

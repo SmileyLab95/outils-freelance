@@ -900,6 +900,50 @@
       "source_title": "Understanding the Benefits (2026) - SSA",
       "confidence": "high",
       "note": "Read on 2026-10-22 through search excerpts of SSA publications (benefits based on the highest 35 years of indexed earnings). A lower S corp salary therefore means lower earnings on the owner's record."
+    },
+    "us_foreign_currency_translation": {
+      "value": "Report every amount in US dollars. Translate a foreign-currency payment at the exchange rate in effect when you receive it (spot rate); income received evenly through the year can be translated at the IRS yearly average rate. The IRS has no official exchange rate and generally accepts any posted rate used consistently.",
+      "unit": "text",
+      "label": "Foreign-currency income: translation into US dollars",
+      "source": "https://www.irs.gov/individuals/international-taxpayers/foreign-currency-and-currency-exchange-rates",
+      "source_title": "Foreign currency and currency exchange rates - IRS",
+      "confidence": "high",
+      "note": "Read on 2026-10-22 through search excerpts (irs.gov not reachable directly). Yearly averages: https://www.irs.gov/individuals/international-taxpayers/yearly-average-currency-exchange-rates. A self-employed person with a foreign qualified business unit (QBU) can have another functional currency: not covered by the site.",
+      "verified_on": "2026-10-22"
+    },
+    "us_form_6166": {
+      "value": "To claim a reduced rate of foreign withholding under a US income tax treaty, a US resident can ask the IRS for Form 6166 (certification of US residency) with Form 8802, then send it to the foreign payer or withholding agent.",
+      "unit": "text",
+      "label": "Form 6166: US residency certification for treaty benefits",
+      "source": "https://www.irs.gov/individuals/international-taxpayers/form-6166-certification-of-us-tax-residency",
+      "source_title": "Form 6166 - Certification of U.S. tax residency - IRS",
+      "confidence": "high",
+      "note": "Read on 2026-10-22 through search excerpts. Some countries apply the treaty rate at payment, others withhold the full rate and refund the excess. Form 6166 cannot be used to prove US tax paid for a foreign tax credit. The US-Hungary treaty was terminated from 2024-01-01.",
+      "verified_on": "2026-10-22"
+    },
+    "us_ftc_source_rule": {
+      "value": "The foreign tax credit (Form 1116) is limited to the US tax on foreign-source income. Self-employment income is sourced where the work is performed (often apportioned by time): work done in the United States gives US-source income, even for a foreign client, unless a treaty re-sources it.",
+      "unit": "text",
+      "label": "Foreign tax credit: source of self-employment income",
+      "source": "https://www.irs.gov/publications/p514",
+      "source_title": "Publication 514, Foreign Tax Credit for Individuals - IRS",
+      "confidence": "medium",
+      "note": "Read on 2026-10-22 through search excerpts of Pub. 514 (2025): self-employed taxpayers use the method that most correctly reflects the source, in many cases a time basis; income re-sourced by treaty has its own Form 1116 category. Consequence (site wording): foreign tax withheld on work done in the US is often not creditable; ask the foreign payer to apply the treaty rate first.",
+      "verified_on": "2026-10-22"
+    },
+    "us_fbar": {
+      "value": {
+        "threshold": 10000,
+        "due": "April 15",
+        "extended_due": "October 15"
+      },
+      "unit": "object",
+      "label": "FBAR (FinCEN Form 114): foreign financial accounts over $10,000 in total at any time in the year",
+      "source": "https://www.irs.gov/businesses/small-businesses-self-employed/report-of-foreign-bank-and-financial-accounts-fbar",
+      "source_title": "Report of Foreign Bank and Financial Accounts (FBAR) - IRS",
+      "confidence": "high",
+      "note": "Read on 2026-10-22 through search excerpts. Filed with FinCEN (BSA E-Filing), not with the tax return; automatic extension to October 15; aggregate value of all foreign accounts. Form 8938 (FATCA) has separate, higher thresholds: not covered.",
+      "verified_on": "2026-10-22"
     }
   },
   "open_questions": [
@@ -916,6 +960,9 @@
     "Washington ESSB 6346 (possible 2029 repeal of most of the ESSB 5814 service expansion): status not confirmed.",
     "State business-level taxes in no-income-tax states (WA B&O, TN franchise & excise on LLCs, TX franchise tax, NV commerce tax) are mentioned but not verified.",
     "Other local freelancer laws may exist or be pending (e.g., other cities/states adopting 'Freelance Isn't Free' laws in 2025-2026) - not surveyed due to search quota.",
-    "2026 tax brackets for married filing separately (Rev. Proc. 2025-32, section 3): not confirmed; the site uses the single brackets for this status and says so on the S corp comparator."
+    "2026 tax brackets for married filing separately (Rev. Proc. 2025-32, section 3): not confirmed; the site uses the single brackets for this status and says so on the S corp comparator.",
+    "State sales tax on services supplied to clients abroad: no general official source (states follow 'benefit received' or 'service performed' sourcing); the international page sends readers to their state's rules (22/10/2026).",
+    "Whether a foreign payer must issue Form 1099-NEC to a US contractor: no reliable source found; the site only says to report all income with or without a 1099 (22/10/2026).",
+    "Treaty re-sourcing of US-source self-employment income for the foreign tax credit (Pub. 514, separate Form 1116 category): not detailed by treaty on the site (22/10/2026)."
   ]
 }

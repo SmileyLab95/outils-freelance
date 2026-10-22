@@ -3,6 +3,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { createRequire } from "node:module";
 import { readFileSync } from "node:fs";
+import { ruleEntries } from "./regles.mjs";
 
 const intl = createRequire(import.meta.url)("../../src/assets/engines/international-uk.js");
 const all = [];
@@ -65,8 +66,8 @@ test("la page : un texte par clé, un choix par valeur, des sources, des chiffre
   for (const [name, values] of [["location", intl.LOCATIONS], ["customer", intl.CUSTOMERS], ["service", intl.SERVICES]])
     for (const value of values) assert.match(html, new RegExp(`<select[^>]*name="${name}"[\\s\\S]*?<option value="${value}"`), `choix ${name}=${value}`);
   const front = JSON.parse(/<!--(\{[\s\S]*?\})-->/.exec(html)[1]);
-  const rules = JSON.parse(readFileSync(new URL("../../data/rules/uk.json", import.meta.url))).values;
-  for (const key of front.sources) assert.ok(rules[key], `source ${key} présente dans uk.json`);
+  const rules = ruleEntries("uk");
+  for (const key of front.sources) assert.ok(rules[key], `source ${key} présente dans uk.json ou shared.json`);
   for (const key of ["place_of_supply_services_b2b", "place_of_supply_services_b2c", "b2c_described_services_outside_uk", "digital_services_consumers",
     "eu_non_union_scheme", "vat_territory_isle_of_man", "outside_scope_evidence", "outside_scope_vat_return_box6", "outside_scope_not_taxable_turnover"])
     assert.ok(front.sources.includes(key), `règle ${key} citée par la page`);

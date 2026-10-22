@@ -1,0 +1,149 @@
+<!--{
+  "id": "international",
+  "slug": "invoicing-international-clients/",
+  "title": "Invoicing International Clients from the US: Tax Guide",
+  "description": "Client in the EU, the UK, Canada or elsewhere: see whether you charge foreign VAT or GST, how to report the income in dollars, and what to file in the US.",
+  "menu": "Invoicing international clients",
+  "icon": "🌍",
+  "blurb": "Foreign VAT or GST, income in dollars, withholding and FBAR for a client abroad.",
+  "app": "US International Invoicing Assistant",
+  "scripts": ["engines/international-us.js", "tools/us-international.js"],
+  "rules": "us",
+  "sources": ["eu_b2b_reverse_charge", "eu_b2c_general_rule", "eu_non_union_scheme", "uk_b2b_reverse_charge_overseas", "place_of_supply_services_b2c", "uk_netp_no_threshold", "ca_b2b_nonresident", "ca_simplified_regime", "us_foreign_currency_translation", "us_form_6166", "us_ftc_source_rule", "us_fbar", "states_tax_services_by_default"],
+  "priority": 0.8,
+  "faq": [
+    ["Do I charge VAT or sales tax to a client abroad?", "Not to a business client in the EU or the UK: for services, the client accounts for any VAT itself (reverse charge). Private customers are different: EU and UK VAT is due from your first sale of automated digital services, and Canada taxes services and digital products sold to its consumers once your sales there go over C$30,000 in 12 months. US sales tax is set by each state, and most states don't tax most professional services."],
+    ["How do I report income paid in euros, pounds or Canadian dollars?", "In US dollars, on Schedule C like any other income. Convert each payment at the exchange rate on the day you receive it, or use the IRS yearly average rate if you're paid evenly through the year. The IRS has no official rate: use a posted rate, and the same method every time."],
+    ["My client's country withheld tax on my payment: can I get it back?", "Ask your client to apply the reduced rate of its tax treaty with the US, using Form 6166, a certificate of US residency you request from the IRS with Form 8802. A foreign tax credit (Form 1116) only offsets US tax on foreign-source income: if you did the work in the US, the income is US-source and the credit usually doesn't help, unless the treaty says otherwise."],
+    ["Do I have to file an FBAR?", "Yes, if you hold financial accounts outside the US worth more than $10,000 in total at any time in the year. The FBAR (FinCEN Form 114) is filed with FinCEN, not with your tax return, by April 15, with an automatic extension to October 15."],
+    ["Will my foreign client send me a Form 1099?", "Don't count on it. Report all your income from foreign clients whether or not you receive a Form 1099."]
+  ]
+}-->
+<script type="application/json" id="intl-us-data">
+{
+  "verdicts": {
+    "no_foreign_tax": "No foreign tax to charge",
+    "foreign_vat": "Foreign VAT from your first sale",
+    "usually_none": "Usually no foreign tax",
+    "threshold": "Canadian tax above C$30,000",
+    "check": "It depends"
+  },
+  "reasons": {
+    "eu_b2b": "A service to a business in the EU is taxed in your client's country, and when you're based outside the EU, your client usually accounts for the VAT itself (reverse charge). You don't register for EU VAT or charge it.",
+    "uk_b2b": "A UK business that buys services from a supplier outside the UK accounts for the UK VAT itself (reverse charge): you don't charge UK VAT.",
+    "ca_b2b": "If you don't carry on business in Canada and aren't registered for the GST/HST, you generally don't charge it to a Canadian business that gives you its GST/HST registration number: your client self-assesses any tax due.",
+    "eu_digital_consumer": "Automated digital services to private customers are taxed where the customer lives. For a business based outside the EU, EU VAT is due from the first sale to an EU consumer, at the rate of the customer's country.",
+    "uk_digital_consumer": "Digital services to UK consumers are taxed in the UK, and a business with no UK establishment has no VAT registration threshold: UK VAT is due from the first sale.",
+    "ca_consumer_threshold": "Canada taxes services and digital products that non-resident businesses sell to its consumers, including traditional services such as legal or accounting services. Once these sales go over C$30,000 in any 12 months, you must register under the simplified GST/HST regime.",
+    "eu_b2c_general": "Most services to a private customer are taxed where the supplier is established: for a business based only in the US, that's outside the EU, so usually no EU VAT. But EU countries may tax some services used on their territory, and services tied to a place follow special rules.",
+    "uk_b2c_general": "In the UK, most services to a private customer are taxed where the supplier belongs: for a business based only in the US, there's usually no UK VAT. Digital services and services tied to a place are the main exceptions.",
+    "special_rules_place": "Services tied to a place follow special rules in most countries: property, admission to events, transport, or work done on site. The tax may be due where the service takes place, sometimes with a registration there.",
+    "world_rules": "This assistant covers the EU, the UK and Canada. Other countries have their own rules, especially for digital services sold to consumers."
+  },
+  "wording": {
+    "reverse_charge_wording": "No foreign VAT on the invoice. A note helps your client, for example: “Reverse charge: VAT to be accounted for by the customer” (a suggested wording, not an official one).",
+    "customer_vat_number": "Your client's VAT number.",
+    "customer_gst_number": "No GST/HST on the invoice, and your client's GST/HST registration number.",
+    "eu_vat_shown": "Once you're registered: the VAT of your customer's EU country, at that country's rate.",
+    "uk_vat_shown": "Once you're registered: UK VAT.",
+    "ca_tax_once_registered": "No Canadian tax below the threshold; once registered, GST or HST at the rate of your customer's province.",
+    "no_vat_shown": "No foreign tax on the invoice.",
+    "check_wording": "Depends on where the service is taxed: check before you send the invoice."
+  },
+  "actions": {
+    "evidence_business": "Keep evidence that your client is a business, such as its VAT number. Without it, the private-customer rules apply.",
+    "evidence_gst_number": "Keep your client's GST/HST registration number: without it, the sale counts as a sale to a consumer.",
+    "evidence_location": "Keep a record of where your customer lives, such as their address.",
+    "oss_register": "Register for the EU's non-Union scheme in one EU country of your choice: one return per quarter for all your EU sales, due by the end of the following month (a nil return when there were none), and records kept for 10 years.",
+    "uk_register": "Register for UK VAT with HMRC within 30 days, as a business not established in the UK.",
+    "ca_track_threshold": "Add up your sales to Canadian consumers over any 12 months; above C$30,000, register with the CRA's non-resident web form. Sales made through a registered distribution platform don't count.",
+    "check_local": "Check the rules of your client's country with its tax authority, or ask an accountant."
+  },
+  "us": {
+    "report_in_dollars": "Report this income on Schedule C in US dollars, whether or not you get a Form 1099: convert each payment at the exchange rate on the day you receive it, or at the IRS yearly average rate if you're paid evenly through the year, with the same method every time.",
+    "withholding_us_work": "If your client's country withholds tax, ask for the reduced rate of its tax treaty with the US, using Form 6166 (request it from the IRS with Form 8802). Work done in the US gives US-source income, so a foreign tax credit (Form 1116) usually can't offset that tax, unless the treaty says otherwise.",
+    "withholding_abroad_work": "If your client's country withholds tax, ask for the reduced treaty rate with Form 6166 (request it with Form 8802). Income for work done abroad is foreign-source: foreign tax on it can count towards a foreign tax credit (Form 1116), within its limit.",
+    "fbar": "If you hold financial accounts outside the US worth more than $10,000 in total at any time in the year, file an FBAR (FinCEN Form 114) with FinCEN by April 15 (automatic extension to October 15).",
+    "state_sales_tax": "US sales tax is set by each state: in most states, professional services such as consulting, design or writing aren't taxed, but Hawaii, New Mexico, South Dakota and West Virginia tax services by default. Check your state's rules for clients abroad."
+  }
+}
+</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · EU, UK and Canada rules</span>
+    <h1>Invoicing international clients</h1>
+    <p class="lead">Tell us where your client is, whether they're a business or a private person, and what you sell: see whether you charge foreign VAT or GST, what to put on the invoice, and what to do in the US.</p>
+    <ul class="trust"><li>EU, UK and Canada</li><li>Business and private clients</li><li>Income in dollars, withholding, FBAR</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="intl-form" onsubmit="return false">
+      <h2>Your client</h2>
+      <div class="fields">
+        <div class="field full"><label for="x-location">Your client is based</label>
+          <select id="x-location" name="location" aria-describedby="x-location-hint" data-save>
+            <option value="eu">In an EU country</option>
+            <option value="uk">In the United Kingdom</option>
+            <option value="canada">In Canada</option>
+            <option value="world">Elsewhere</option>
+          </select>
+          <span class="hint" id="x-location-hint">A business is based where it's established; a private customer, where they live.</span></div>
+        <div class="field full"><label for="x-customer">Your client is</label>
+          <select id="x-customer" name="customer" data-save>
+            <option value="business">A business</option>
+            <option value="consumer">A private person</option>
+          </select></div>
+        <div class="field full"><label for="x-service">You sell</label>
+          <select id="x-service" name="service" aria-describedby="x-service-hint" data-save>
+            <option value="remote">A service done remotely</option>
+            <option value="digital">An automated digital service</option>
+            <option value="place">A service tied to a place</option>
+          </select>
+          <span class="hint" id="x-service-hint">Done remotely: consulting, design, writing, live online sessions. Automated digital: supplied over the internet with little or no human involvement, such as downloads, online software or pre-recorded courses. Tied to a place: events, property, work on site.</span></div>
+        <div class="field full"><label for="x-workplace">You do the work</label>
+          <select id="x-workplace" name="workplace" data-save>
+            <option value="us">From the US</option>
+            <option value="abroad">Partly from another country</option>
+          </select></div>
+      </div>
+      <p class="small muted" style="margin: 14px 0 0;">For services only, as a sole proprietor or single-member LLC: selling goods follows other rules.</p>
+    </form>
+
+    <div class="results">
+      <h2 class="sr-only">Result</h2>
+      <div class="result-hero" role="status" aria-atomic="true">
+        <div class="label">Foreign tax on your invoice</div>
+        <div class="big" id="x-verdict" style="font-size: clamp(1.7rem, 3.6vw, 2.3rem);">–</div>
+        <div class="sub" id="x-why">–</div>
+      </div>
+      <div class="card" style="margin-top: 16px; padding: 18px;">
+        <h3 style="font-size: 1rem; margin-bottom: 8px;">On your invoice</h3>
+        <ul id="x-wording" style="margin: 0; padding-left: 18px;"></ul>
+        <p class="small" style="margin: 10px 0 0;">The <a href="{{link:invoice}}">invoice generator</a> lays out your invoice, in your client's currency if you agree on one.</p>
+      </div>
+      <div class="card" style="margin-top: 16px; padding: 18px;">
+        <h3 style="font-size: 1rem; margin-bottom: 8px;">What to do for this client</h3>
+        <ul id="x-actions" style="margin: 0; padding-left: 18px;"></ul>
+      </div>
+      <div class="card" style="margin-top: 16px; padding: 18px;">
+        <h3 style="font-size: 1rem; margin-bottom: 8px;">In the US</h3>
+        <ul id="x-us" style="margin: 0; padding-left: 18px;"></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>The rule in one sentence</h2>
+  <p>For a service, foreign VAT generally follows <strong>the client's country when the client is a business</strong>, and that business accounts for it itself, while sales to <strong>private customers</strong> can make you liable for the tax of their country, from the first sale for digital services in the EU and the UK, and above a threshold in Canada.</p>
+  <h2>Good to know</h2>
+  <ul>
+    <li><strong>Check that your client is a business</strong> before leaving the tax off: its VAT or GST/HST number, or documents showing its activity.</li>
+    <li><strong>Your US taxes don't change</strong>: income from foreign clients is taxed like any other, and self-employment tax applies to it. The <a href="{{link:tax}}">self-employment tax calculator</a> estimates both.</li>
+    <li><strong>Currency, payment terms and bank fees</strong> are yours to agree: put them in your <a href="{{link:contract}}">contract</a>.</li>
+  </ul>
+  <p class="small muted">Information for guidance only, based on IRS and FinCEN guidance, the European Commission, HMRC and the Canada Revenue Agency. For an unusual situation, check with the tax authority concerned or an accountant.</p>
+</section>

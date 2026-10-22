@@ -70,13 +70,21 @@ def read_page(path):
 
 
 class Rules(dict):
-    """Fichiers data/rules/<pays>.json, lus seulement quand une page en a besoin."""
+    """Fichiers data/rules/<pays>.json, lus seulement quand une page en a besoin, complétés par les règles communes
+    de data/rules/shared.json (système d'un autre pays cité par plusieurs sections : TVA de l'UE, formulaires
+    américains) ; une même clé ne peut pas figurer dans les deux fichiers."""
 
     def __missing__(self, country):
         path = ROOT / "data" / "rules" / f"{country}.json"
         if not path.exists():
             raise SystemExit(f"Règles introuvables : {path.relative_to(ROOT)}")
-        self[country] = json.loads(path.read_text(encoding="utf-8"))
+        data = json.loads(path.read_text(encoding="utf-8"))
+        shared = json.loads((ROOT / "data" / "rules" / "shared.json").read_text(encoding="utf-8"))["values"]
+        twice = sorted(set(shared) & set(data["values"]))
+        if twice:
+            raise SystemExit(f"{path.relative_to(ROOT)} : règles déjà dans data/rules/shared.json {twice}")
+        data["values"].update(shared)
+        self[country] = data
         return self[country]
 
 

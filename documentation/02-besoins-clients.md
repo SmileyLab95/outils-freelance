@@ -67,7 +67,7 @@ Matrice revue le 22/10/2026 d'après les pages publiées (identifiants de `conte
 | Créer une facture | Générateur de facture (PDF) adapté au pays | ✅ | ✅ | ✅ | ✅ | P1 |
 | Les mentions obligatoires | Checklist interactive | ✅ | — | ✅ | ✅ | P2 |
 | Calculer la taxe sur les ventes | Calculateur TVA / *VAT* / TPS-TVH-TVQ par province | ✅ TVA | — | ✅ VAT | ✅ par province | P1 |
-| Facturer un client étranger | Guide (autoliquidation, devises, mentions) | ✅ | 🟡 | ✅ | ✅ | P2 |
+| Facturer un client étranger | Guide (autoliquidation, devises, mentions) | ✅ | ✅ | ✅ | ✅ | P2 |
 | Numéroter ses factures | Guide + numérotation automatique dans le générateur | ✅ (auto) | ✅ (auto) | ✅ (auto) | ✅ (auto) | P3 |
 | Facturation électronique obligatoire | Guide, calendrier, export Factur-X (Espace) | ✅ | — | — | — | P1 (FR) |
 
@@ -121,8 +121,9 @@ Matrice revue le 22/10/2026 d'après les pages publiées (identifiants de `conte
 
 - **P1** : Espace entrepreneur hors de France (après la plateforme française). Comparateur de statuts au Canada fait le 22/10/2026 (Saskatchewan et Nunavut en attente d'un taux officiel).
 - **P2** (convertisseur de tarifs, prix au forfait et « freelance ou salarié » faits le 22/10/2026) : checklist de
-  création et jauges de seuils faites dans les 4 pays le 22/10/2026 ; recouvrement en justice (4 pays) ; client
-  étranger aux États-Unis ; W-8BEN ; assurance et compte pro hors de France.
+  création, jauges de seuils et client étranger faits dans les 4 pays le 22/10/2026 ; recouvrement en justice
+  (4 pays) ; W-8BEN (sections prévues dans les pages « client étranger » de la France, du Royaume-Uni et du Canada) ;
+  assurance et compte pro hors de France.
 - **P3** : date d'échéance, proposition commerciale, NDA, CGV, bureau à domicile, hausse de tarifs (calculateur),
   sous-traitance, guide de changement de statut.
 
