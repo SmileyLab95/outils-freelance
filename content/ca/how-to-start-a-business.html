@@ -1,0 +1,79 @@
+<!--{
+  "id": "start",
+  "slug": "how-to-start-a-business/",
+  "title": "How to Start a Sole Proprietorship in Canada: Checklist",
+  "description": "Every step to start as a self-employed sole proprietor in Canada, in order: business name, permits, GST/HST and QST, records, instalments and your return.",
+  "menu": "Start a sole proprietorship",
+  "icon": "🚀",
+  "blurb": "The steps to start as a sole proprietor, in order, to tick off as you go.",
+  "scripts": ["tools/checklist.js"],
+  "rules": "ca",
+  "sources": ["ca_sole_prop", "ca_provincial_registration", "ca_permits_bizpal", "small_supplier_threshold", "qst_small_supplier_threshold", "ca_business_number", "ei_rate_self_employed", "itc_invoice_requirements", "small_supplier_not_required_to_collect", "ca_records_retention", "instalment_threshold", "instalment_threshold_quebec", "instalment_due_dates_2026", "filing_deadline_self_employed", "balance_due_date"],
+  "priority": 0.9,
+  "faq": [
+    ["How do I start a sole proprietorship in Canada?", "A sole proprietorship is an unincorporated business owned by one person: you report its income on your own return. If you use a business name, register it with your province or territory. Check the permits and licences you need with BizPaL, and register for the GST/HST once your taxable supplies go over $30,000."],
+    ["Do I need a business number as a sole proprietor?", "Only when you register for a CRA program account, such as the GST/HST: you then get your business number at the same time. In Quebec, Revenu Québec registers you for the GST/HST and the QST."],
+    ["When is my first tax return due?", "As a self-employed person, you have until June 15 to file your return (June 15, 2027 for 2026), but any balance owing is due by April 30 (April 30, 2027 for 2026)."],
+    ["How long do I keep my records?", "For six years from the end of the last tax year they relate to."]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Interactive checklist · 2026 rules</span>
+    <h1>How to start a sole proprietorship</h1>
+    <p class="lead">Every step to start as a self-employed sole proprietor, in order. Tick the ones you've done: your progress stays on this device, so you can come back any time.</p>
+    <ul class="trust"><li>From your business name to your tax return</li><li>Every step sourced from official sites</li><li>Progress saved</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout wide-left">
+    <div class="card">
+      <form id="cl-filters" onsubmit="return false" style="margin-bottom: 4px; padding-bottom: 16px; border-bottom: 1px solid var(--line);">
+        <h2 style="margin: 0 0 10px; font-size: 1.1rem;">Your situation</h2>
+        <div class="fields">
+          <div class="field full"><label class="check"><input type="checkbox" name="name" data-save><span>I'll use a business name, not just my own name</span></label></div>
+          <div class="field full"><label class="check"><input type="checkbox" name="quebec" data-save><span>I live in Quebec</span></label></div>
+        </div>
+      </form>
+      <ul class="checklist" id="checklist" data-persist="start-sole-proprietor" data-score="{done} of {total} steps"
+        data-all="All done: good luck with your business!" data-none="Tick the steps you've already done."
+        data-missing-one="{missing} step left." data-missing-many="{missing} steps left.">
+        <li class="cl-group"><h3>Before you start</h3></li>
+        <li data-id="structure" data-rule="ca_sole_prop"><label><input type="checkbox"><div><strong>Decide how to run your business</strong><span>A sole proprietorship is an unincorporated business owned by one person: you report its income on your own return and pay personal income tax on it. The <a href="{{link:structure}}">sole proprietor vs corporation comparison</a> shows when a corporation can pay.</span></div></label></li>
+        <li data-id="name" data-rule="ca_provincial_registration" data-when="name"><label><input type="checkbox"><div><strong>Register your business name with your province or territory</strong><span>Most businesses register where they do business; a sole proprietor using only their own name may not need to. Newfoundland and Labrador has no provincial registration for sole proprietorships.</span></div></label></li>
+        <li data-id="permits" data-rule="ca_permits_bizpal"><label><input type="checkbox"><div><strong>Check the permits and licences you need</strong><span>BizPaL, a free government service, lists the federal, provincial or territorial and municipal permits for your activity and location.</span></div></label></li>
+        <li class="cl-group"><h3>Register</h3></li>
+        <li data-id="gst" data-rule="small_supplier_threshold ca_business_number" data-when="!quebec"><label><input type="checkbox"><div><strong>Register for the GST/HST once you go over $30,000</strong><span>When your taxable supplies go over $30,000 in a single calendar quarter or over four consecutive quarters, you're no longer a small supplier. You get your business number (BN) at the same time; you need your social insurance number.</span></div></label></li>
+        <li data-id="gst" data-rule="small_supplier_threshold qst_small_supplier_threshold ca_business_number" data-when="quebec"><label><input type="checkbox"><div><strong>Register for the GST/HST and the QST once you go over $30,000</strong><span>When your taxable supplies go over $30,000 in a single calendar quarter or over four consecutive quarters. In Quebec, Revenu Québec registers you for both; you get your business number (BN) at the same time.</span></div></label></li>
+        <li data-id="ei" data-rule="ei_rate_self_employed" data-optional><label><input type="checkbox"><div><strong>Optional: sign up for EI special benefits</strong><span>Self-employed people can opt in through an agreement with Service Canada; premiums are then due for the whole calendar year you sign up. Not counted in your progress.</span></div></label></li>
+        <li class="cl-group"><h3>From your first invoice</h3></li>
+        <li data-id="invoices" data-rule="itc_invoice_requirements small_supplier_not_required_to_collect"><label><input type="checkbox"><div><strong>Put the right details on your invoices</strong><span>Not registered yet? You generally don't charge the GST/HST. Once registered, your invoices show your registration number so your clients can claim input tax credits. The <a href="{{link:invoice-rules}}">invoice checklist</a> lists every detail.</span></div></label></li>
+        <li data-id="records" data-rule="ca_records_retention"><label><input type="checkbox"><div><strong>Keep your records and receipts</strong><span>For six years from the end of the last tax year they relate to.</span></div></label></li>
+        <li class="cl-group"><h3>During the year</h3></li>
+        <li data-id="instalments" data-rule="instalment_threshold instalment_due_dates_2026" data-when="!quebec"><label><input type="checkbox"><div><strong>Plan for tax instalments</strong><span>Required once your net tax owing is over $3,000 this year and in one of the two previous years: then due March 15, June 15, September 15 and December 15. <a href="{{link:set-aside}}">How much to set aside</a> helps you get ready.</span></div></label></li>
+        <li data-id="instalments" data-rule="instalment_threshold_quebec instalment_due_dates_2026" data-when="quebec"><label><input type="checkbox"><div><strong>Plan for tax instalments</strong><span>In Quebec, required once your net tax owing is over $1,800 this year and in one of the two previous years (federal and Quebec tax are tested separately): then due March 15, June 15, September 15 and December 15. <a href="{{link:set-aside}}">How much to set aside</a> helps you get ready.</span></div></label></li>
+        <li data-id="return" data-rule="filing_deadline_self_employed balance_due_date"><label><input type="checkbox"><div><strong>File your return by June 15, pay by April 30</strong><span>Report your business income on Form T2125 with your return: for 2026, file by June 15, 2027, but pay any balance by April 30, 2027. The <a href="{{link:tax}}">self-employed tax calculator</a> estimates your bill.</span></div></label></li>
+      </ul>
+    </div>
+    <div class="results">
+      <div class="card">
+        <div class="label" style="margin-bottom: 8px;">Your steps</div>
+        <div class="progress"><div id="cl-bar"></div></div>
+        <div role="status" aria-atomic="true">
+          <p style="margin: 12px 0 0; font-weight: 700;" id="cl-score">0 of 7 steps</p>
+          <p class="notice warn" id="cl-msg" style="margin: 12px 0 0;">Tick the steps you've already done.</p>
+        </div>
+        <p class="small muted" style="margin: 12px 0 0;">Your answers and ticks stay on this device: nothing is sent.</p>
+      </div>
+      <a class="btn btn-primary btn-block" href="{{link:tax}}" style="margin-top: 14px;">Estimate my tax and CPP</a>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>Sole proprietor: what to know before you start</h2>
+  <p>As a sole proprietor, your business isn't separate from you: you report its income on your own return, with your CPP contributions (QPP in Quebec) on your net business income. Registration rules also depend on your province or territory, so check its website too.</p>
+  <p>Before you start, compare with a corporation in the <a href="{{link:structure}}">sole proprietor vs corporation comparison</a>, set your rate with the <a href="{{link:rate}}">hourly rate calculator</a> and see <a href="{{link:set-aside}}">how much to set aside for taxes</a> from each payment.</p>
+</section>

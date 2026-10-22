@@ -430,6 +430,68 @@
       "confidence": "medium",
       "note": "Québec EI rate 1.30% (maximum $895.70) is confirmed. It is lower because maternity and parental benefits are covered by QPIP. That this exact rate applies to Québec self-employed who opt in to EI sickness, compassionate care and caregiving benefits was not confirmed on a CRA self-employed page."
     },
+    "ca_sole_prop": {
+      "value": "A sole proprietorship is an unincorporated business owned by one individual: the owner reports the business income on their own return and pays personal income tax on it.",
+      "unit": "text",
+      "label": "Sole proprietorship (unincorporated business owned by one person)",
+      "source": "https://www.canada.ca/en/revenue-agency/services/tax/businesses/small-businesses-self-employed-income/setting-your-business/sole-proprietorship.html",
+      "source_title": "Sole proprietorship - Canada.ca",
+      "confidence": "medium",
+      "verified_on": "2026-10-22",
+      "note": "Read through search excerpts of the CRA page (22/10/2026). Business income is reported on Form T2125 with the T1 return; a sole proprietor may need a business number and GST/HST account (ca_business_number)."
+    },
+    "ca_provincial_registration": {
+      "value": "Most businesses need to register with the provinces and territories where they plan to do business; in some cases, a sole proprietorship operating under the owner's own name doesn't need to. Newfoundland and Labrador has no provincial registration for sole proprietorships or partnerships.",
+      "unit": "text",
+      "label": "Registering a sole proprietorship (business name) with the province or territory",
+      "source": "https://www.canada.ca/en/services/business/start/register-with-gov/register-sole-prop-partner.html",
+      "source_title": "Registering a sole proprietorship or partnership - Canada.ca",
+      "confidence": "high",
+      "verified_on": "2026-10-22",
+      "note": "Rules and fees depend on the province or territory (Québec: Registraire des entreprises). Registering in some provinces gives a business number automatically, but the lists differ between CRA pages: not published."
+    },
+    "ca_business_number": {
+      "value": {
+        "needed_when": "registering for a CRA program account (such as GST/HST)",
+        "sin_required": true,
+        "quebec_gst_administered_by": "Revenu Québec"
+      },
+      "unit": "object",
+      "label": "Business number (BN) for a sole proprietor",
+      "source": "https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/business-registration/business-number-program-account/need-bn.html",
+      "source_title": "When you need a BN - Canada.ca",
+      "more_sources": [
+        {
+          "source": "https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/gst-hst-businesses/gst-hst-account/register-account.html",
+          "source_title": "Register for a GST/HST account - Canada.ca"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-10-22",
+      "note": "An unincorporated business only needs a BN when it registers for CRA program accounts; without a BN, you get one when you register for the GST/HST. The social insurance number is mandatory for a sole proprietor registering for a GST/HST account. In Québec, the GST/HST is administered by Revenu Québec, which also registers you for the QST."
+    },
+    "ca_permits_bizpal": {
+      "value": "BizPaL is a free government service that lists the permits and licences a business may need from federal, provincial or territorial and municipal governments, based on its activities and location.",
+      "unit": "text",
+      "label": "Permits and licences: BizPaL",
+      "source": "https://ised-isde.canada.ca/site/bizpal/en",
+      "source_title": "BizPaL Initiative - Innovation, Science and Economic Development Canada",
+      "confidence": "high",
+      "verified_on": "2026-10-22",
+      "note": "BizPaL doesn't issue permits or take payments; each government keeps its own information up to date, so check with the issuing government too. Coverage: all provinces and some territories and municipalities."
+    },
+    "ca_records_retention": {
+      "value": {
+        "years": 6
+      },
+      "unit": "object",
+      "label": "How long to keep business records",
+      "source": "https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/keeping-records/where-keep-your-records-long-request-permission-destroy-them-early.html",
+      "source_title": "Where to keep your records, for how long and how to request the permission to destroy them early - Canada.ca",
+      "confidence": "high",
+      "verified_on": "2026-10-22",
+      "note": "Keep records and supporting documents for six years from the end of the last tax year they relate to (for a return filed late, six years from the date you file it); some records, such as those on long-term property, longer. Destroying them earlier needs the CRA's permission (Form T137)."
+    },
     "ei_rate_employee": {
       "value": {
         "canada": 0.0163,

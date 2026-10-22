@@ -23,6 +23,9 @@ restent ? »
   compte (même règle que D18).
 - **Réutilisation** : script commun `tools/checklist.js`, étendu pour mémoriser les cases (`data-persist` sur la
   liste, `data-id` sur chaque étape) et accepter des intertitres (`li.cl-group`, sans case, jamais comptés).
+  La situation d'une liste mémorisée est gardée sous sa propre clé (`<data-persist>-situation`) : `persistForm`
+  remplace tout l'objet enregistré, et la clé commune « checklist » aurait effacé les réponses de la liste des
+  mentions de facture de la même section (défaut trouvé en relecture, avant publication des pages du Canada).
 - **Chiffres** (délais, seuils, dates) écrits dans la page et vérifiés par test contre les règles.
 
 ## 2. France : créer sa micro-entreprise (`/fr/creer-sa-micro-entreprise/`)
@@ -101,10 +104,24 @@ protection des freelances).
 7 étapes comptées par défaut, 9 au plus ; EIN et compte bancaire hors du compte. Montants et dates des FAQ vérifiés
 comme ceux des étapes.
 
-## 5. Canada
+## 5. Canada : `/ca/how-to-start-a-business/` et `/ca/fr/demarrer-entreprise-individuelle/` (22/10/2026)
 
-Même principe, recherches à faire avant le code : enregistrement du nom dans la province, numéro d'entreprise,
-TPS/TVH et TVQ au-delà de 30 000 $, acomptes provisionnels.
+Situation : « I'll use a business name » ; « I live in Quebec » (cochée par défaut en français). Mêmes étapes,
+règles et conditions dans les deux langues (vérifié par test).
+
+| Étape | Règles |
+|---|---|
+| Choisir sa forme : entreprise individuelle (non constituée, un seul propriétaire) | `ca_sole_prop` (nouvelle, ARC) |
+| Enregistrer le nom dans la province ou le territoire (pas toujours nécessaire sous son propre nom ; aucun enregistrement provincial à Terre-Neuve-et-Labrador) | `ca_provincial_registration` (nouvelle) |
+| Permis et licences : PerLE / BizPaL | `ca_permits_bizpal` (nouvelle, ISDE) |
+| Inscription à la TPS/TVH (et à la TVQ au Québec) au-delà de 30 000 $ ; numéro d'entreprise reçu en même temps | `small_supplier_threshold`, `qst_small_supplier_threshold`, `ca_business_number` (nouvelle) |
+| Facultatif : prestations spéciales de l'assurance-emploi | `ei_rate_self_employed` |
+| Mentions des factures (numéro d'inscription une fois inscrit) | `itc_invoice_requirements`, `small_supplier_not_required_to_collect` |
+| Registres gardés 6 ans après la fin de la dernière année concernée | `ca_records_retention` (nouvelle, ARC) |
+| Acomptes provisionnels au-delà de 3 000 $ d'impôt net (1 800 $ au Québec) deux années sur trois | `instalment_threshold`, `instalment_threshold_quebec`, `instalment_due_dates_2026` |
+| Déclaration (T2125) au 15 juin, solde au 30 avril | `filing_deadline_self_employed`, `balance_due_date` |
+
+7 étapes comptées par défaut, 8 au plus ; l'assurance-emploi hors du compte.
 
 ## 6. Critères de « terminé »
 

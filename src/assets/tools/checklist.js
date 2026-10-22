@@ -59,12 +59,14 @@
     msg.textContent = missing === 0 && total > 0 ? D.all : done === 0 ? D.none
       : fill(missing > 1 ? D.missingMany : D.missingOne, { missing: missing });
   }
+  // Cases mémorisées : une démarche faite reste cochée d'une visite à l'autre. Une liste mémorisée garde aussi sa
+  // situation sous sa propre clé : persistForm remplace tout l'objet enregistré, et une clé partagée entre deux
+  // listes d'une même section effacerait les réponses de l'autre.
+  var persist = list.getAttribute("data-persist");
   if (filters) {
-    window.OF.persistForm(filters, "checklist");
+    window.OF.persistForm(filters, persist ? persist + "-situation" : "checklist");
     filters.addEventListener("change", update);
   }
-  // Cases mémorisées : une démarche faite reste cochée d'une visite à l'autre.
-  var persist = list.getAttribute("data-persist");
   if (persist) {
     var done = window.OF.load(persist, {});
     Array.prototype.forEach.call(list.querySelectorAll("li[data-id] input[type=checkbox]"), function (box) {

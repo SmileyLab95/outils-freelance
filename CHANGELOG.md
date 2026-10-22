@@ -1,5 +1,21 @@
 # Journal des modifications
 
+## 2026-10-22 — Checklist de création au Canada (anglais et français) ; situation des listes corrigée
+
+- Nouvelles pages `/ca/how-to-start-a-business/` et `/ca/fr/demarrer-entreprise-individuelle/` (identifiant `start`) :
+  forme de l'entreprise, enregistrement du nom, permis (PerLE / BizPaL), TPS/TVH et TVQ au-delà de 30 000 $ avec le
+  numéro d'entreprise, assurance-emploi facultative, factures, registres, acomptes provisionnels, déclaration ;
+  Québec coché par défaut en français. La checklist de création existe maintenant dans les quatre pays (cinq pages).
+- Cinq règles sourcées ajoutées (ARC, Canada.ca, ISDE) : entreprise individuelle, enregistrement provincial, numéro
+  d'entreprise, PerLE / BizPaL, durée de conservation des registres.
+- **Défaut corrigé** dans `tools/checklist.js` : toutes les listes d'une section gardaient leur situation sous la
+  même clé, que chaque page remplaçait entièrement. Répondre à la checklist de création effaçait la situation
+  enregistrée dans la liste des mentions de facture (au Royaume-Uni depuis la publication de la checklist ce jour).
+  Les listes à cases mémorisées ont désormais leur propre clé ; contrôle ajouté au parcours navigateur (vérifié en
+  réintroduisant le défaut).
+- Tests : mêmes étapes, règles et conditions dans les deux langues ; montants, dates et délais repris des règles ;
+  parcours navigateur ; suite complète (231 tests unitaires, 2 387 vérifications navigateur).
+
 ## 2026-10-22 — Checklist *How to start freelancing* (États-Unis)
 
 - Nouvelle page `/us/how-to-start-freelancing/` (identifiant `start`, en tête du menu *Taxes*) : forme de

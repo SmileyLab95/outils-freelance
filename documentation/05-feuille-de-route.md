@@ -115,8 +115,10 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   GOV.UK et ICO).
 - **Checklist *How to start freelancing* (22/10/2026)** : la même chose aux États-Unis (sept règles nouvelles,
   SBA et IRS).
-- **Prochaines actions de Claude** : checklist de création au Canada (anglais et français,
-  [20](20-checklist-creation.md) § 5, règles à rechercher d'abord) ; jauges de seuils hors de France ; taux du crédit pour
+- **Checklist de création au Canada (22/10/2026)** : anglais et français, cinq règles nouvelles ; la checklist
+  existe dans les quatre pays. Défaut corrigé : la situation d'une liste effaçait celle d'une autre liste de la
+  même section (Royaume-Uni touché quelques heures).
+- **Prochaines actions de Claude** : jauges de seuils hors de France (besoin P2, spécification d'abord) ; jauges de seuils hors de France ; taux du crédit pour
   dividendes de la Saskatchewan et du Nunavut dès qu'ils sont publiés (formulaires 2026) ;
   trouver la cause du contrôle de contraste intermittent de l'Espace ; revérifier les grilles des prestataires de
   paiement (Stripe, Mollie) quand Ismail décidera ([17](17-offres-et-paiements.md)) ; guide du recouvrement dès que
@@ -243,11 +245,11 @@ Objectif : un site mesuré, sous sa propre marque, qui commence à rapporter, et
 - [x] Décote dans le comparateur de statuts français : moteur commun `engines/ir-fr.js` (même impôt que « Salarié ou
       freelance ? »)
 - [ ] Simulateur PER : décote non comptée (elle dépend de la situation de famille, que le simulateur ne demande pas)
-- [ ] Checklist de création, 4 pays : besoin P2, spécification [20](20-checklist-creation.md)
+- [x] Checklist de création, 4 pays : besoin P2, spécification [20](20-checklist-creation.md)
   - [x] France : `/fr/creer-sa-micro-entreprise/` (19 démarches au plus, sourcées, cases mémorisées)
   - [x] Royaume-Uni : `/uk/how-to-become-a-sole-trader/` (12 étapes au plus, GOV.UK et ICO)
   - [x] États-Unis : `/us/how-to-start-freelancing/` (9 étapes au plus, SBA et IRS)
-  - [ ] Canada (recherches des règles à faire, § 5)
+  - [x] Canada : `/ca/how-to-start-a-business/` et `/ca/fr/demarrer-entreprise-individuelle/` (8 étapes au plus)
 
 ### 1.5 Préparer la plateforme
 

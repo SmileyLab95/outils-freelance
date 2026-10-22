@@ -38,7 +38,11 @@ const PAGES = {
   "Royaume-Uni": { file: "content/uk/how-to-become-a-sole-trader.html", country: "uk", fields: ["name", "home"], optional: [],
     counts: [[{}, 10], [{ name: true }, 11], [{ home: true }, 11], [{ name: true, home: true }, 12]], score: "0 of 10 steps" },
   "États-Unis": { file: "content/us/how-to-start-freelancing.html", country: "us", fields: ["name", "law"], optional: ["ein", "bank"],
-    counts: [[{}, 7], [{ name: true }, 8], [{ law: true }, 8], [{ name: true, law: true }, 9]], score: "0 of 7 steps" }
+    counts: [[{}, 7], [{ name: true }, 8], [{ law: true }, 8], [{ name: true, law: true }, 9]], score: "0 of 7 steps" },
+  Canada: { file: "content/ca/how-to-start-a-business.html", country: "ca", fields: ["name", "quebec"], optional: ["ei"],
+    counts: [[{}, 7], [{ name: true }, 8], [{ quebec: true }, 7], [{ name: true, quebec: true }, 8]], score: "0 of 7 steps" },
+  "Canada (français)": { file: "content/ca-fr/demarrer-entreprise-individuelle.html", country: "ca", fields: ["name", "quebec"], optional: ["ei"],
+    counts: [[{ quebec: true }, 7], [{ name: true, quebec: true }, 8], [{}, 7], [{ name: true }, 8]], score: "0 démarches sur 7" }
 };
 
 for (const [label, P] of Object.entries(PAGES)) {
@@ -131,7 +135,7 @@ test("Royaume-Uni : montants, dates et délais de la page repris des règles", (
 });
 
 test("tous les montants des étapes et des FAQ viennent des règles (aucun montant écrit sans règle)", () => {
-  const F = rulesOf("fr"), U = rulesOf("uk"), A = rulesOf("us"), T = F.tva_franchise_seuils;
+  const F = rulesOf("fr"), U = rulesOf("uk"), A = rulesOf("us"), C = rulesOf("ca"), T = F.tva_franchise_seuils;
   const allowed = {
     // 0 € : la déclaration de chiffre d'affaires « même nul ».
     "content/fr/creer-sa-micro-entreprise.html": { re: /(\d{1,3}(?: \d{3})*) €/g, values: [0, F.micro_plafond_ca_services, F.micro_plafond_ca_vente,
@@ -140,7 +144,9 @@ test("tous les montants des étapes et des FAQ viennent des règles (aucun monta
       U.vat_registration_threshold, U.payments_on_account_threshold] },
     "content/us/how-to-start-freelancing.html": { re: /\$(\d{1,3}(?:,\d{3})*)/g, values: [A.estimated_tax_threshold,
       A.freelance_law_new_york_state.written_contract_threshold_usd, A.freelance_law_nyc.written_contract_threshold_usd,
-      A.freelance_law_illinois.written_contract_threshold_usd, A.freelance_law_california_state.written_contract_threshold_usd] }
+      A.freelance_law_illinois.written_contract_threshold_usd, A.freelance_law_california_state.written_contract_threshold_usd] },
+    "content/ca/how-to-start-a-business.html": { re: /\$(\d{1,3}(?:,\d{3})*)/g, values: [C.small_supplier_threshold, C.instalment_threshold, C.instalment_threshold_quebec] },
+    "content/ca-fr/demarrer-entreprise-individuelle.html": { re: /(\d{1,3}(?: \d{3})*) \$/g, values: [C.small_supplier_threshold, C.instalment_threshold, C.instalment_threshold_quebec] }
   };
   for (const [file, { re, values }] of Object.entries(allowed)) {
     // Étapes et FAQ de la page.
@@ -176,4 +182,34 @@ test("États-Unis : montants, dates, États et délais de la page repris des rè
   const faq = front(read("content/us/how-to-start-freelancing.html")).faq.flat().join(" ");
   assert.ok(faq.includes(`by ${day(q1, false)}, ${day(q2, false)} and ${day(q3)}, and ${day(q4)}`) && faq.includes(`by ${day(A.form_1040_due_date_tax_year_2026)}`), "dates de la FAQ");
   assert.ok(faq.includes(`at least ${A.us_records_retention.general_years} years`));
+});
+
+test("Canada (anglais et français) : montants, dates et délais repris des règles ; mêmes étapes dans les deux langues", () => {
+  const C = rulesOf("ca");
+  assert.equal(C.qst_small_supplier_threshold, C.small_supplier_threshold);
+  assert.deepEqual(C.instalment_due_dates_2026.map((d) => d.slice(5)), ["03-15", "06-15", "09-15", "12-15"]);
+  const pages = {
+    en: [read("content/ca/how-to-start-a-business.html"), (n) => "$" + n.toLocaleString("en-CA"),
+      (iso, y = true) => new Date(iso + "T00:00:00Z").toLocaleDateString("en-CA", { month: "long", day: "numeric", ...(y ? { year: "numeric" } : {}), timeZone: "UTC" }),
+      "March 15, June 15, September 15 and December 15", "six years"],
+    fr: [read("content/ca-fr/demarrer-entreprise-individuelle.html"), (n) => n.toLocaleString("fr-CA").replace(/\s/g, " ") + " $",
+      (iso, y = true) => new Date(iso + "T00:00:00Z").toLocaleDateString("fr-CA", { day: "numeric", month: "long", ...(y ? { year: "numeric" } : {}), timeZone: "UTC" }),
+      "le 15 mars, le 15 juin, le 15 septembre et le 15 décembre", "Six ans"]
+  };
+  const ids = {};
+  for (const [lang, [html, money, day, dates, years]] of Object.entries(pages)) {
+    const L = steps(html), st = (id, when) => L.find((i) => i.id === id && (when === undefined || i.when === when));
+    ids[lang] = L.map((i) => `${i.id}:${i.when}:${i.rules.join(",")}:${i.optional}`);
+    for (const when of ["!quebec", "quebec"]) assert.ok(st("gst", when).text.includes(money(C.small_supplier_threshold)), `${lang} ${when} : seuil`);
+    assert.ok(st("instalments", "!quebec").text.includes(money(C.instalment_threshold)), `${lang} : acomptes`);
+    assert.ok(st("instalments", "quebec").text.includes(money(C.instalment_threshold_quebec)), `${lang} : acomptes au Québec`);
+    for (const when of ["!quebec", "quebec"]) assert.ok(st("instalments", when).text.includes(dates), `${lang} ${when} : échéances`);
+    assert.ok(st("return").text.includes(day(C.filing_deadline_self_employed)) && st("return").text.includes(day(C.balance_due_date)), `${lang} : dates de la déclaration`);
+    assert.equal(C.ca_records_retention.years, 6);
+    assert.ok(st("records").text.includes(years), `${lang} : six ans`);
+    const faq = front(html).faq.flat().join(" ");
+    assert.ok(faq.includes(day(C.filing_deadline_self_employed)) && faq.includes(day(C.balance_due_date)), `${lang} : dates de la FAQ`);
+  }
+  assert.deepEqual(ids.fr, ids.en, "mêmes étapes, mêmes règles, mêmes conditions dans les deux langues");
+  assert.match(pages.fr[0], /name="quebec" checked data-save/, "Québec coché par défaut en français");
 });

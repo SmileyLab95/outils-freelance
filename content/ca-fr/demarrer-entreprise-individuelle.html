@@ -1,0 +1,79 @@
+<!--{
+  "id": "start",
+  "slug": "demarrer-entreprise-individuelle/",
+  "title": "Démarrer comme travailleur autonome : la checklist",
+  "description": "Les démarches pour démarrer comme travailleur autonome au Canada, dans l'ordre : nom, permis, TPS/TVH et TVQ, factures, registres, acomptes, déclaration.",
+  "menu": "Démarrer comme travailleur autonome",
+  "icon": "🚀",
+  "blurb": "Les démarches pour démarrer en entreprise individuelle, dans l'ordre, à cocher.",
+  "scripts": ["tools/checklist.js"],
+  "rules": "ca",
+  "sources": ["ca_sole_prop", "ca_provincial_registration", "ca_permits_bizpal", "small_supplier_threshold", "qst_small_supplier_threshold", "ca_business_number", "ei_rate_self_employed", "itc_invoice_requirements", "small_supplier_not_required_to_collect", "ca_records_retention", "instalment_threshold", "instalment_threshold_quebec", "instalment_due_dates_2026", "filing_deadline_self_employed", "balance_due_date"],
+  "priority": 0.9,
+  "faq": [
+    ["Comment démarrer une entreprise individuelle au Canada ?", "L'entreprise individuelle est une entreprise non constituée en société, qui appartient à une seule personne : vous déclarez ses revenus dans votre propre déclaration. Si vous utilisez un nom d'entreprise, enregistrez-le auprès de votre province ou territoire. Vérifiez les permis et licences avec PerLE, et inscrivez-vous à la TPS/TVH (et à la TVQ au Québec) dès que vos fournitures taxables dépassent 30 000 $."],
+    ["Faut-il un numéro d'entreprise ?", "Seulement quand vous vous inscrivez à un compte de programme de l'ARC, comme la TPS/TVH : vous recevez alors votre numéro d'entreprise en même temps. Au Québec, Revenu Québec vous inscrit à la TPS/TVH et à la TVQ."],
+    ["Quand produire ma première déclaration ?", "Comme travailleur autonome, vous avez jusqu'au 15 juin pour produire votre déclaration (le 15 juin 2027 pour 2026), mais le solde dû se paie au plus tard le 30 avril (le 30 avril 2027 pour 2026)."],
+    ["Combien de temps garder mes registres ?", "Six ans à partir de la fin de la dernière année d'imposition qu'ils concernent."]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Checklist interactive · règles 2026</span>
+    <h1>Démarrer comme travailleur autonome</h1>
+    <p class="lead">Toutes les démarches pour démarrer en entreprise individuelle, dans l'ordre. Cochez celles que vous avez faites : votre progression reste sur cet appareil, vous pouvez revenir quand vous voulez.</p>
+    <ul class="trust"><li>Du nom de l'entreprise à la déclaration</li><li>Chaque étape sourcée</li><li>Progression gardée</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout wide-left">
+    <div class="card">
+      <form id="cl-filters" onsubmit="return false" style="margin-bottom: 4px; padding-bottom: 16px; border-bottom: 1px solid var(--line);">
+        <h2 style="margin: 0 0 10px; font-size: 1.1rem;">Votre situation</h2>
+        <div class="fields">
+          <div class="field full"><label class="check"><input type="checkbox" name="name" data-save><span>J'utiliserai un nom d'entreprise, pas seulement mon nom</span></label></div>
+          <div class="field full"><label class="check"><input type="checkbox" name="quebec" checked data-save><span>J'habite au Québec</span></label></div>
+        </div>
+      </form>
+      <ul class="checklist" id="checklist" data-persist="start-entreprise-individuelle" data-score="{done} démarches sur {total}"
+        data-all="Toutes les démarches sont faites : bon succès !" data-none="Cochez les démarches que vous avez déjà faites."
+        data-missing-one="Il vous reste {missing} démarche." data-missing-many="Il vous reste {missing} démarches.">
+        <li class="cl-group"><h3>Avant de commencer</h3></li>
+        <li data-id="structure" data-rule="ca_sole_prop"><label><input type="checkbox"><div><strong>Choisir la forme de votre entreprise</strong><span>L'entreprise individuelle n'est pas constituée en société et appartient à une seule personne : vous déclarez ses revenus dans votre propre déclaration et payez l'impôt des particuliers. La comparaison <a href="{{link:structure}}">entreprise individuelle ou société par actions</a> montre quand une société peut être avantageuse.</span></div></label></li>
+        <li data-id="name" data-rule="ca_provincial_registration" data-when="name"><label><input type="checkbox"><div><strong>Enregistrer le nom de votre entreprise auprès de la province ou du territoire</strong><span>La plupart des entreprises s'enregistrent là où elles exercent ; une entreprise individuelle qui n'utilise que le nom de son propriétaire peut en être dispensée. Terre-Neuve-et-Labrador n'a pas d'enregistrement provincial des entreprises individuelles.</span></div></label></li>
+        <li data-id="permits" data-rule="ca_permits_bizpal"><label><input type="checkbox"><div><strong>Vérifier les permis et licences nécessaires</strong><span>PerLE (BizPaL), un service gouvernemental gratuit, liste les permis fédéraux, provinciaux ou territoriaux et municipaux selon votre activité et votre lieu.</span></div></label></li>
+        <li class="cl-group"><h3>Vous inscrire</h3></li>
+        <li data-id="gst" data-rule="small_supplier_threshold ca_business_number" data-when="!quebec"><label><input type="checkbox"><div><strong>Vous inscrire à la TPS/TVH au-delà de 30 000 $</strong><span>Dès que vos fournitures taxables dépassent 30 000 $ au cours d'un seul trimestre civil ou de quatre trimestres consécutifs, vous n'êtes plus un petit fournisseur. Vous recevez votre numéro d'entreprise (NE) en même temps ; votre numéro d'assurance sociale est demandé.</span></div></label></li>
+        <li data-id="gst" data-rule="small_supplier_threshold qst_small_supplier_threshold ca_business_number" data-when="quebec"><label><input type="checkbox"><div><strong>Vous inscrire à la TPS/TVH et à la TVQ au-delà de 30 000 $</strong><span>Dès que vos fournitures taxables dépassent 30 000 $ au cours d'un seul trimestre civil ou de quatre trimestres consécutifs. Au Québec, Revenu Québec vous inscrit aux deux ; vous recevez votre numéro d'entreprise (NE) en même temps.</span></div></label></li>
+        <li data-id="ei" data-rule="ei_rate_self_employed" data-optional><label><input type="checkbox"><div><strong>Facultatif : adhérer aux prestations spéciales de l'assurance-emploi</strong><span>Les travailleurs autonomes peuvent y adhérer par une entente avec Service Canada ; les cotisations sont alors dues pour toute l'année civile de l'adhésion. Non compté dans la progression.</span></div></label></li>
+        <li class="cl-group"><h3>Dès vos premières factures</h3></li>
+        <li data-id="invoices" data-rule="itc_invoice_requirements small_supplier_not_required_to_collect"><label><input type="checkbox"><div><strong>Mettre les bonnes mentions sur vos factures</strong><span>Pas encore d'inscription à la TPS/TVH ? En général, vous ne la facturez pas. Après l'inscription, vos factures portent votre numéro d'inscription, pour que vos clients demandent leurs crédits de taxe sur les intrants. La <a href="{{link:invoice-rules}}">liste des mentions</a> détaille tout.</span></div></label></li>
+        <li data-id="records" data-rule="ca_records_retention"><label><input type="checkbox"><div><strong>Garder vos registres et vos pièces justificatives</strong><span>Six ans à partir de la fin de la dernière année d'imposition qu'ils concernent.</span></div></label></li>
+        <li class="cl-group"><h3>Pendant l'année</h3></li>
+        <li data-id="instalments" data-rule="instalment_threshold instalment_due_dates_2026" data-when="!quebec"><label><input type="checkbox"><div><strong>Prévoir les acomptes provisionnels</strong><span>Obligatoires dès que votre impôt net à payer dépasse 3 000 $ cette année et l'une des deux années précédentes : ils sont alors dus le 15 mars, le 15 juin, le 15 septembre et le 15 décembre. <a href="{{link:set-aside}}">Combien mettre de côté</a> vous aide à vous préparer.</span></div></label></li>
+        <li data-id="instalments" data-rule="instalment_threshold_quebec instalment_due_dates_2026" data-when="quebec"><label><input type="checkbox"><div><strong>Prévoir les acomptes provisionnels</strong><span>Au Québec, obligatoires dès que votre impôt net à payer dépasse 1 800 $ cette année et l'une des deux années précédentes (impôt fédéral et impôt du Québec vérifiés séparément) : ils sont alors dus le 15 mars, le 15 juin, le 15 septembre et le 15 décembre. <a href="{{link:set-aside}}">Combien mettre de côté</a> vous aide à vous préparer.</span></div></label></li>
+        <li data-id="return" data-rule="filing_deadline_self_employed balance_due_date"><label><input type="checkbox"><div><strong>Produire votre déclaration avant le 15 juin, payer avant le 30 avril</strong><span>Déclarez vos revenus d'entreprise avec le formulaire T2125 : pour 2026, déclaration au plus tard le 15 juin 2027, mais solde à payer au plus tard le 30 avril 2027. Le <a href="{{link:tax}}">calculateur d'impôt du travailleur autonome</a> estime le montant.</span></div></label></li>
+      </ul>
+    </div>
+    <div class="results">
+      <div class="card">
+        <div class="label" style="margin-bottom: 8px;">Vos démarches</div>
+        <div class="progress"><div id="cl-bar"></div></div>
+        <div role="status" aria-atomic="true">
+          <p style="margin: 12px 0 0; font-weight: 700;" id="cl-score">0 démarches sur 7</p>
+          <p class="notice warn" id="cl-msg" style="margin: 12px 0 0;">Cochez les démarches que vous avez déjà faites.</p>
+        </div>
+        <p class="small muted" style="margin: 12px 0 0;">Vos réponses et vos cases cochées restent sur cet appareil : rien n'est envoyé.</p>
+      </div>
+      <a class="btn btn-primary btn-block" href="{{link:tax}}" style="margin-top: 14px;">Estimer mon impôt et mes cotisations</a>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>Entreprise individuelle : ce qu'il faut savoir avant de commencer</h2>
+  <p>En entreprise individuelle, votre entreprise n'est pas distincte de vous : vous déclarez ses revenus dans votre propre déclaration, avec vos cotisations au RRQ (ou au RPC hors du Québec) sur votre revenu net d'entreprise. Les règles d'enregistrement dépendent aussi de votre province ou territoire : consultez son site.</p>
+  <p>Avant de commencer, comparez avec une société dans la comparaison <a href="{{link:structure}}">entreprise individuelle ou société par actions</a>, fixez votre tarif avec le <a href="{{link:rate}}">calculateur de taux horaire</a> et voyez <a href="{{link:set-aside}}">combien mettre de côté</a> sur chaque paiement.</p>
+</section>
