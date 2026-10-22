@@ -87,8 +87,14 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   publiées ; besoins encore ouverts classés par priorité (P1 : comparateurs de statuts aux États-Unis et au Canada).
 - **Comparateur de statuts, États-Unis (22/10/2026)** : *Sole proprietor vs S corp* : impôts fédéraux et revenu
   disponible comparés selon le salaire versé par la S corp (règles de l'IRS : FICA, FUTA, salaire raisonnable, QBI).
-- **Prochaines actions de Claude** : comparateur de statuts au Canada (entreprise individuelle ou société par
-  actions : spécification et règles de l'ARC d'abord) ; convertisseur de tarifs et prix au forfait (4 pays) ;
+- **Québec : impôt du travailleur autonome corrigé (22/10/2026)** : pas de crédit du Québec pour la part de base du
+  RRQ, déduction pour travailleur (6 %, au plus 1 450 $), RQAP déductible en partie ; calculateur d'impôt, « Combien
+  mettre de côté » et REER (exemple : 60 000 $ → 16 721 $ au lieu de 16 663 $).
+- **Comparateur de statuts, Canada : étape 1 faite (22/10/2026)** : règles officielles (taux des sociétés des
+  13 provinces, crédits pour dividendes, cotisations sur un salaire de dirigeant, règle des 5 500 heures du Québec)
+  et spécification ([pays/ca.md](pays/ca.md)) ; Saskatchewan et Nunavut non calculés faute de taux officiel (D19).
+- **Prochaines actions de Claude** : comparateur de statuts au Canada, étapes 2 et 3 (moteur `structure-ca.js` et
+  tests calculés à la main, puis pages anglaise et française) ; convertisseur de tarifs et prix au forfait (4 pays) ;
   trouver la cause du contrôle de contraste intermittent de l'Espace ; revérifier les grilles des prestataires de
   paiement (Stripe, Mollie) quand Ismail décidera ([17](17-offres-et-paiements.md)) ; guide du recouvrement dès que
   les textes sont lisibles ; veille réglementaire de décembre (dont la version de Factur-X et l'annexe A de XP
@@ -199,7 +205,9 @@ Objectif : un site mesuré, sous sa propre marque, qui commence à rapporter, et
 - [x] Comparateur de statuts, États-Unis : *Sole proprietor vs S corp* (FICA patronale et salariale, FUTA,
       salaire raisonnable, QBI avec la limite des salaires W-2) ; moteur `engines/structure-us.js`, déduction QBI
       du moteur commun étendue ; spécification [pays/us.md](pays/us.md)
-- [ ] Comparateur de statuts, Canada (entreprise individuelle ou société par actions) : besoin P1 ouvert
+- [x] Québec : calcul de l'impôt du travailleur autonome corrigé (aucun crédit du Québec pour le RRQ de base,
+      déduction pour travailleur, RQAP déductible en partie) ; tests recalculés à la main, contrôlés par mutation
+- [ ] Comparateur de statuts, Canada (entreprise individuelle ou société par actions) : besoin P1 ouvert ; règles et spécification faites le 22/10/2026
 - [ ] Convertisseur de tarifs (horaire, journalier, mensuel, annuel) et prix au forfait, 4 pays : besoins P2
 
 ### 1.5 Préparer la plateforme

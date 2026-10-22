@@ -78,15 +78,19 @@
     var S = L.steps;
     var steps = [
       [S.profit, r.profit],
-      [r.quebec ? S.pension_deduction_qc : S.pension_deduction, -r.pensions.deduction],
+      [r.quebec ? S.pension_deduction_qc : S.pension_deduction, -r.pensions.deduction]
+    ];
+    if (r.qpipDeduction > 0) steps.push([S.qpip_deduction, -r.qpipDeduction]);
+    steps.push(
       [S.net_income, r.netIncome],
       [S.federal_brackets, r.federalBrackets],
       [S.federal_credits, -r.federalCredits]
-    ];
+    );
     if (r.quebec) steps.push([S.abatement, -r.abatement]);
     steps.push([S.federal, r.federal]);
+    if (r.workersDeduction > 0) steps.push([S.workers_qc, -r.workersDeduction], [S.taxable_qc, r.provincialTaxable]);
     steps.push([fill(S.provincial_brackets, { province: name }), r.provincialBrackets]);
-    steps.push([S.provincial_credits, -r.provincialCredits]);
+    steps.push([r.quebec ? S.provincial_credits_qc : S.provincial_credits, -r.provincialCredits]);
     if (r.surtax > 0) steps.push([S.surtax, r.surtax]);
     if (r.healthPremium > 0) steps.push([S.health, r.healthPremium]);
     steps.push([fill(S.provincial, { province: name }), r.provincial]);

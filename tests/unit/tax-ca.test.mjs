@@ -32,15 +32,29 @@ test("Ontario, 80 000 $ : fédéral, provincial, contribution santé", () => {
   near(r.total, 8892.9 + 8698.44475 + 3785.1216 + 750, "total", 0.02);
 });
 
-test("Québec, 60 000 $ : RRQ, RQAP, abattement de 16,5 %", () => {
+test("Québec, 60 000 $ : RRQ, RQAP (déduction et crédit fédéral), abattement de 16,5 %, déduction pour travailleur", () => {
   const r = ca.estimate({ profit: 60000, province: "QC" }, R, P);
-  // RRQ : 56 500 × 12,6 % = 7 119 ; déduction 56 500 × 7,3 % = 4 124,50 ; crédit 56 500 × 5,3 % = 2 994,50
+  // RRQ : 56 500 × 12,6 % = 7 119 ; déduction 56 500 × 7,3 % = 4 124,50 ; crédit fédéral 56 500 × 5,3 % = 2 994,50
   near(r.pensions.total, 7119, "RRQ");
+  // RQAP : 60 000 × 0,764 % = 458,40, dont 60 000 × (0,764 % − 0,430 %) = 200,40 déductibles, 258 au crédit fédéral
   near(r.qpip, 458.4, "RQAP 0,764 %");
-  // Fédéral : 14 % × 55 875,50 − 14 % × (16 452 + 2 994,50) = 5 100,06, moins l'abattement de 16,5 %
-  near(r.federal, 5100.06 * 0.835, "impôt fédéral après abattement");
-  // Québec : 7 608,30 + 19 % × 1 530,50 − 14 % × (18 952 + 2 994,50)
-  near(r.provincial, 7608.3 + 290.795 - 3072.51, "impôt du Québec");
+  near(r.qpipDeduction, 200.4, "part déductible du RQAP");
+  near(r.netIncome, 55675.1, "revenu net : 60 000 − 4 124,50 − 200,40");
+  // Fédéral : 14 % × 55 675,10 − 14 % × (16 452 + 2 994,50 + 258) = 5 035,884, moins l'abattement de 16,5 %
+  near(r.federal, 5035.884 * 0.835, "impôt fédéral après abattement");
+  // Québec : déduction pour travailleur min(1 450, 6 % × 60 000) ; 14 % × (55 675,10 − 1 450) − 14 % × 18 952
+  // (aucun crédit du Québec pour le RRQ ni le RQAP)
+  near(r.workersDeduction, 1450, "déduction pour travailleur plafonnée");
+  near(r.provincial, 7591.514 - 2653.28, "impôt du Québec");
+});
+
+test("Québec, 20 000 $ : déduction pour travailleur de 6 %, sous le plafond", () => {
+  const r = ca.estimate({ profit: 20000, province: "QC" }, R, P);
+  near(r.workersDeduction, 1200, "6 % × 20 000");
+  // RRQ : 16 500 × 7,3 % = 1 204,50 déductibles ; RQAP : 20 000 × 0,334 % = 66,80 ; revenu net 18 728,70 ;
+  // Québec : 14 % × (18 728,70 − 1 200) = 2 454,018, moins 2 653,28 : impôt nul
+  near(r.netIncome, 18728.7, "revenu net");
+  assert.equal(r.provincial, 0);
 });
 
 test("Alberta, 50 000 $ : crédits au taux le plus bas (8 %)", () => {
@@ -65,14 +79,20 @@ test("acomptes provisionnels au-delà de 3 000 $", () => {
 });
 
 test("acomptes au Québec : deux tests distincts, ARC (impôt fédéral) et Revenu Québec (impôt du Québec seul)", () => {
-  // 24 000 $ : impôt fédéral 580 $ et impôt du Québec 345 $, sous 1 800 $ : aucun acompte, même si RRQ + RQAP
+  // 24 000 $ : impôt fédéral 559 $ et impôt du Québec 283 $, sous 1 800 $ : aucun acompte, même si RRQ + RQAP
   // dépassent 2 700 $ (les cotisations ne comptent pas dans l'« impôt net à payer » de Revenu Québec).
   const low = ca.instalments(ca.estimate({ profit: 24000, province: "QC" }, R, P), R);
   assert.deepEqual([low.required, low.requiredFederal, low.requiredQuebec, low.federal, low.quebec], [false, false, false, 0, 0]);
-  // 36 000 $ : impôt fédéral 1 806 $ et impôt du Québec 1 813 $ : les deux ; la part de Revenu Québec couvre aussi
+  // 36 000 $ : impôt fédéral 2 124,91 × 0,835 = 1 774,30 $, sous le seuil ; impôt du Québec 14 % × 32 057,26 −
+  // 2 653,28 = 1 834,74 $, au-dessus : acomptes à Revenu Québec seulement.
+  const mid = ca.instalments(ca.estimate({ profit: 36000, province: "QC" }, R, P), R);
+  assert.deepEqual([mid.required, mid.requiredFederal, mid.requiredQuebec, mid.federal], [true, false, true, 0]);
+  // 40 000 $ : impôt fédéral 2 179 $ et impôt du Québec 2 352 $ : les deux ; la part de Revenu Québec couvre aussi
   // le RRQ et le RQAP.
-  const r = ca.estimate({ profit: 36000, province: "QC" }, R, P), i = ca.instalments(r, R);
+  const r = ca.estimate({ profit: 40000, province: "QC" }, R, P), i = ca.instalments(r, R);
   assert.deepEqual([i.requiredFederal, i.requiredQuebec], [true, true]);
+  near(r.federal, 2610.076 * 0.835, "impôt fédéral");
+  near(r.provincial, 5005.266 - 2653.28, "impôt du Québec");
   near(i.federal, r.federal / 4, "impôt fédéral ÷ 4");
   near(i.quebec, (r.provincial + r.pensions.total + r.qpip) / 4, "impôt du Québec, RRQ et RQAP ÷ 4");
   // Hors Québec, un seul test, à l'ARC.

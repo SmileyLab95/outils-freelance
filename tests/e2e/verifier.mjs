@@ -709,11 +709,11 @@ const tests = {
     await page.selectOption("#c-client", "same");
     await page.selectOption("#c-province", "QC");
     check((await text("#c-share")) === "27%" && (await text("#c-pension-label")).includes("QPP") &&
-      (await text("#c-inst-detail")).includes("$1,257 to the CRA (federal tax) and $3,555 to Revenu Québec") &&
+      (await text("#c-inst-detail")).includes("$1,240 to the CRA (federal tax) and $3,591 to Revenu Québec") &&
       (await text("#c-pay-sales-label")).startsWith("GST and QST") && !(await text("#c-notice")).includes("PST"),
       "CA set aside : Québec, RRQ et RQAP, TPS et TVQ, acomptes à l'ARC et à Revenu Québec");
     await page.fill("#c-income", "2,500");
-    // 2 000 $ de bénéfice par mois au Québec : impôt fédéral 580 $ et impôt du Québec 345 $, sous 1 800 $ : pas
+    // 2 000 $ de bénéfice par mois au Québec : impôt fédéral 559 $ et impôt du Québec 283 $, sous 1 800 $ : pas
     // d'acomptes (les cotisations RRQ et RQAP ne comptent pas dans le seuil de Revenu Québec).
     check((await text("#c-inst")) === "Not required" && (await text("#c-inst-detail")).includes("under $1,800"),
       "CA set aside : Québec, pas d'acomptes sous 1 800 $ d'impôt fédéral et d'impôt du Québec");
@@ -733,10 +733,10 @@ const tests = {
       "CA set aside : saisie retrouvée après rechargement");
   },
   async "ca/fr/combien-mettre-de-cote-impot/"(page) {
-    // Même calcul au Québec : impôt, RRQ et RQAP de 19 247,84 $ = 26,7 % de 72 000 $ → 27 %.
+    // Même calcul au Québec : impôt, RRQ et RQAP de 19 323,30 $ = 26,8 % de 72 000 $ → 27 %.
     const text = async (sel) => (await page.textContent(sel)).replace(/\s+/g, " ").trim();
-    check((await text("#c-share")) === "27 %" && (await text("#c-sub")).includes("environ 1 620 $ par mois. Total de l'année : 19 248 $.") &&
-      (await text("#c-inst")) === "4 812 $/trimestre" && (await text("#c-inst-detail")).includes("1 257 $ à l'ARC (impôt fédéral) et 3 555 $ à Revenu Québec") &&
+    check((await text("#c-share")) === "27 %" && (await text("#c-sub")).includes("environ 1 620 $ par mois. Total de l'année : 19 323 $.") &&
+      (await text("#c-inst")) === "4 831 $/trimestre" && (await text("#c-inst-detail")).includes("1 240 $ à l'ARC (impôt fédéral) et 3 591 $ à Revenu Québec") &&
       (await text("#c-inst-detail")).includes("en 2024 ou en 2025") && (await text("#c-inst-detail")).includes("15 décembre 2026"),
       "CA-FR mettre de côté : 27 % au Québec, acomptes à l'ARC et à Revenu Québec sous condition");
     await page.check("#c-registered");
@@ -752,7 +752,7 @@ const tests = {
     check((await page.textContent("#r-federal")).trim() === "$8,698" && (await page.textContent("#r-provincial")).trim() === "$4,535", "CA : fédéral 8 698 $, Ontario 4 535 $");
     await page.selectOption("#t-province", "QC");
     await page.fill("#t-profit", "60,000");
-    check((await page.textContent("#r-total")).trim() === "$16,663" && await page.isVisible("#r-qpip-row"), "CA : Québec 60 000 $ → 16 663 $, RQAP affiché");
+    check((await page.textContent("#r-total")).trim() === "$16,721" && await page.isVisible("#r-qpip-row"), "CA : Québec 60 000 $ → 16 721 $, RQAP affiché");
     check((await page.textContent("#r-inst")).includes("Revenu Québec"), "CA : acomptes ARC et Revenu Québec");
     await page.selectOption("#t-province", "AB");
     await page.fill("#t-profit", "50,000");
@@ -959,8 +959,14 @@ const tests = {
   },
   async "ca/fr/calculateur-impot-travailleur-autonome/"(page) {
     const total = (await page.textContent("#r-total")).replace(/\s/g, "");
-    check(total === "16663$", `CA-FR : Québec 60 000 $ → 16 663 $ (obtenu : ${total})`);
+    check(total === "16721$", `CA-FR : Québec 60 000 $ → 16 721 $ (obtenu : ${total})`);
     check((await page.textContent("#r-pension-label")).includes("RRQ"), "CA-FR : libellé RRQ");
+    // Détail : part déductible du RQAP (200 $), déduction pour travailleur plafonnée (1 450 $), revenu imposable au
+    // Québec 54 225 $, montant personnel de base du Québec (14 % × 18 952 $ = 2 653 $).
+    const steps = (await page.textContent("#r-steps")).replace(/\s/g, "");
+    check(steps.includes("PartiedéductibleduRQAP−200$") && steps.includes("Déductionpourtravailleur(Québec)−1450$") &&
+      steps.includes("RevenuimposableauQuébec54225$") && steps.includes("MontantpersonneldebaseduQuébec−2653$"),
+      "CA-FR : détail du calcul québécois (RQAP déductible, déduction pour travailleur, aucun crédit RRQ au Québec)");
   },
   async "ca/fr/calcul-tps-tvq/"(page) {
     check((await page.textContent("#st-hero")).replace(/\s/g, "") === "114,98$", "TPS/TVQ : 100 $ → 114,98 $");

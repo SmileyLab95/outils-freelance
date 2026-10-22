@@ -9,14 +9,14 @@
   "app": "Canada Self-Employed Tax Calculator",
   "scripts": ["engines/brackets.js", "engines/tax-ca.js", "tools/ca-tax.js"],
   "rules": "ca",
-  "sources": ["cpp_rate_self_employed", "cpp2_rate_self_employed", "qpp_rate_self_employed", "qpip_rate_self_employed", "federal_income_tax_brackets", "federal_bpa_reduction_rule", "quebec_abatement", "ontario_health_premium", "instalment_threshold"],
+  "sources": ["cpp_rate_self_employed", "cpp2_rate_self_employed", "qpp_rate_self_employed", "qpip_rate_self_employed", "qpip_self_employed_tax_treatment", "quebec_contributions_no_credit", "quebec_deduction_for_workers", "federal_income_tax_brackets", "federal_bpa_reduction_rule", "quebec_abatement", "ontario_health_premium", "instalment_threshold"],
   "priority": 1.0,
   "faq": [
     ["How much tax does a self-employed person pay in Canada?", "Federal and provincial income tax on your net self-employment income, plus both halves of the Canada Pension Plan: 11.9% of earnings between $3,500 and $74,600 in 2026, and 8% CPP2 between $74,600 and $85,000. In Québec, the QPP rate is 12.6% and you also pay the QPIP premium (0.764%)."],
-    ["Is CPP deductible for the self-employed?", "Partly. The “employer” half of your contributions, the enhanced part of the “employee” half and all CPP2 contributions are deducted from your income; the base part of the employee half gives you a non-refundable tax credit. The calculator applies both."],
+    ["Is CPP deductible for the self-employed?", "Partly. The “employer” half of your contributions, the enhanced part of the “employee” half and all CPP2 contributions are deducted from your income; the base part of the employee half gives you a non-refundable tax credit. In Québec, that credit exists on your federal return only: Québec gives no credit for QPP or QPIP contributions (its basic personal amount takes them into account), but part of the QPIP premium is deductible and the deduction for workers lowers your Québec taxable income. The calculator applies all of these."],
     ["What are the 2026 federal tax brackets?", "14% up to $58,523, 20.5% up to $117,045, 26% up to $181,440, 29% up to $258,482 and 33% above. The basic personal amount is $16,452, reduced gradually to $14,829 for net income between $181,440 and $258,482."],
     ["Do I have to pay tax instalments?", "If your net tax owing is more than $3,000 in 2026 and in either 2025 or 2024 ($1,800 in Québec), the CRA asks for quarterly instalments, due March 15, June 15, September 15 and December 15. Self-employed people must file by June 15, 2027, but any balance is due by April 30, 2027."],
-    ["What does this calculator leave out?", "Other income (salary, investments), RRSP contributions, deductions other than CPP/QPP, tax credits beyond the basic personal amount and CPP/QPP, low-income tax reductions, optional EI special benefits, and in Québec the health services fund contribution and RAMQ prescription drug insurance premium."]
+    ["What does this calculator leave out?", "Other income (salary, investments), RRSP contributions, deductions other than CPP/QPP, QPIP and the Québec deduction for workers, tax credits beyond the basic personal amount and contributions, low-income tax reductions, optional EI special benefits, and in Québec the health services fund contribution and RAMQ prescription drug insurance premium."]
   ]
 }-->
 <script type="application/json" id="ca-tax-data">
@@ -35,9 +35,10 @@
   "day_month": {"month": "long", "day": "numeric"}, "dates_year": "{list}, {year}",
   "steps": {
     "profit": "Net self-employment income", "pension_deduction": "Deductible part of CPP", "pension_deduction_qc": "Deductible part of QPP",
-    "net_income": "Net income", "federal_brackets": "Federal tax on net income", "federal_credits": "Basic personal amount and CPP/QPP credits",
+    "net_income": "Net income", "federal_brackets": "Federal tax on net income", "federal_credits": "Basic personal amount and contribution credits", "qpip_deduction": "Deductible part of QPIP",
+    "workers_qc": "Québec deduction for workers", "taxable_qc": "Income taxed by Québec",
     "abatement": "Québec abatement (16.5%)", "federal": "Federal income tax",
-    "provincial_brackets": "{province} tax on net income", "provincial_credits": "Provincial credits",
+    "provincial_brackets": "{province} tax on taxable income", "provincial_credits": "Provincial credits", "provincial_credits_qc": "Québec basic personal amount",
     "surtax": "Ontario surtax", "health": "Ontario Health Premium", "provincial": "{province} income tax"
   }
 }

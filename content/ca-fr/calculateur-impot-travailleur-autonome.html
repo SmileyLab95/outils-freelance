@@ -9,14 +9,14 @@
   "app": "Calculateur d'impôt du travailleur autonome",
   "scripts": ["engines/brackets.js", "engines/tax-ca.js", "tools/ca-tax.js"],
   "rules": "ca",
-  "sources": ["qpp_rate_self_employed", "qpip_rate_self_employed", "cpp_rate_self_employed", "federal_income_tax_brackets", "quebec_abatement", "instalment_threshold_quebec"],
+  "sources": ["qpp_rate_self_employed", "qpip_rate_self_employed", "qpip_self_employed_tax_treatment", "quebec_contributions_no_credit", "quebec_deduction_for_workers", "cpp_rate_self_employed", "federal_income_tax_brackets", "quebec_abatement", "instalment_threshold_quebec"],
   "priority": 1.0,
   "faq": [
     ["Combien d'impôt paie un travailleur autonome au Québec ?", "De l'impôt fédéral et de l'impôt du Québec sur votre revenu net d'entreprise, plus les deux parts du Régime de rentes du Québec : 12,6 % des gains entre 3 500 $ et 74 600 $ en 2026, et 8 % de RRQ2 entre 74 600 $ et 85 000 $. S'ajoute la cotisation au RQAP (0,764 %). Les résidents du Québec bénéficient d'un abattement de 16,5 % de l'impôt fédéral de base."],
-    ["Le RRQ est-il déductible pour un travailleur autonome ?", "En partie : la part « employeur », la partie bonifiée de la part « employé » et tout le RRQ2 sont déduits du revenu ; la part de base de la part « employé » donne droit à un crédit d'impôt non remboursable. Le calculateur applique les deux."],
+    ["Le RRQ est-il déductible pour un travailleur autonome ?", "En partie : la part « employeur », la partie bonifiée de la part « employé » et tout le RRQ2 sont déduits du revenu ; la part de base de la part « employé » donne droit à un crédit d'impôt non remboursable, à la déclaration fédérale seulement : le Québec n'accorde aucun crédit pour les cotisations au RRQ et au RQAP (son montant personnel de base en tient compte). Au Québec, une partie de la cotisation au RQAP est aussi déductible, et la déduction pour travailleur réduit le revenu imposable. Le calculateur applique tout cela."],
     ["Quels sont les paliers d'imposition du Québec en 2026 ?", "14 % jusqu'à 54 345 $, 19 % jusqu'à 108 680 $, 24 % jusqu'à 132 245 $ et 25,75 % au-delà. Le montant personnel de base est de 18 952 $."],
     ["Dois-je payer des acomptes provisionnels ?", "Au Québec, si votre impôt net à payer dépasse 1 800 $ pour l'année et pour l'une des deux années précédentes, Revenu Québec et l'ARC vous demandent des acomptes trimestriels, au plus tard le 15 mars, le 15 juin, le 15 septembre et le 15 décembre. Ailleurs au Canada, le seuil est de 3 000 $."],
-    ["Qu'est-ce que le calculateur ne prend pas en compte ?", "Vos autres revenus (salaire, placements), les cotisations au REER, les crédits autres que le montant personnel de base et le RRQ/RPC, les réductions pour faible revenu, l'assurance-emploi facultative et, au Québec, la cotisation au Fonds des services de santé et la prime d'assurance médicaments de la RAMQ."]
+    ["Qu'est-ce que le calculateur ne prend pas en compte ?", "Vos autres revenus (salaire, placements), les cotisations au REER, les déductions autres que les cotisations et la déduction pour travailleur, les crédits autres que le montant personnel de base et les cotisations, les réductions pour faible revenu, l'assurance-emploi facultative et, au Québec, la cotisation au Fonds des services de santé et la prime d'assurance médicaments de la RAMQ."]
   ]
 }-->
 <script type="application/json" id="ca-tax-data">
@@ -35,9 +35,10 @@
   "day_month": {"day": "numeric", "month": "long"}, "dates_year": "{list} {year}",
   "steps": {
     "profit": "Revenu net d'entreprise", "pension_deduction": "Partie déductible du RPC", "pension_deduction_qc": "Partie déductible du RRQ",
-    "net_income": "Revenu net", "federal_brackets": "Impôt fédéral selon les paliers", "federal_credits": "Montant personnel de base et crédit RPC/RRQ",
+    "net_income": "Revenu net", "federal_brackets": "Impôt fédéral selon les paliers", "federal_credits": "Montant personnel de base et crédits pour cotisations", "qpip_deduction": "Partie déductible du RQAP",
+    "workers_qc": "Déduction pour travailleur (Québec)", "taxable_qc": "Revenu imposable au Québec",
     "abatement": "Abattement du Québec (16,5 %)", "federal": "Impôt fédéral",
-    "provincial_brackets": "Impôt – {province}, selon les paliers", "provincial_credits": "Crédits provinciaux",
+    "provincial_brackets": "Impôt – {province}, selon les paliers", "provincial_credits": "Crédits provinciaux", "provincial_credits_qc": "Montant personnel de base du Québec",
     "surtax": "Surtaxe de l'Ontario", "health": "Contribution-santé de l'Ontario", "provincial": "Impôt – {province}"
   }
 }

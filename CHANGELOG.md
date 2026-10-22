@@ -1,5 +1,25 @@
 # Journal des modifications
 
+## 2026-10-22 — Québec : impôt du travailleur autonome corrigé ; règles du comparateur canadien
+
+- Calcul québécois corrigé (moteur `engines/tax-ca.js`, utilisé par le calculateur d'impôt, « Combien mettre de
+  côté » et le calculateur REER, en anglais et en français) : plus de crédit du Québec pour la part de base du RRQ
+  (le Québec n'en accorde pas : impôt sous-estimé d'au plus 528 $) ; déduction pour travailleur de 6 %, au plus
+  1 450 $ en 2026 (impôt surestimé jusqu'ici) ; RQAP : part « employeur » déduite et crédit fédéral sur le reste.
+  Exemple : 60 000 $ au Québec, 16 721 $ d'impôt et de cotisations au lieu de 16 663 $. Détail du calcul de la page
+  enrichi (RQAP déductible, déduction pour travailleur, revenu imposable au Québec) ; textes et exemples mis à jour.
+- Moteur : nouvelle fonction `personal()` (revenu de travail autonome, salaire et dividendes non déterminés), base
+  du futur comparateur entreprise individuelle / société par actions ; résultats inchangés hors Québec.
+- Règles nouvelles (`ca.json`), lues le 22/10/2026 : taux d'impôt des sociétés 2026 (fédéral et 13 provinces,
+  changements de l'Ontario et de T.-N.-L.), règle des 5 500 heures du Québec, majoration et crédits pour dividendes
+  non déterminés (fédéral et 11 provinces ; Saskatchewan et Nunavut non trouvés), ordre surtaxe / crédit de l'ON428,
+  RPC et RRQ de l'employeur, AE exclue pour l'actionnaire qui contrôle plus de 40 % des actions, montant canadien
+  pour emploi (et celui du Yukon), RQAP salarié et employeur, FSS, impôt sur le salaire des T.N.-O., entreprise de
+  services personnels, revenus passifs, TOSI, absence de cotisations et de droits REER sur les dividendes.
+- Spécification du comparateur dans `documentation/pays/ca.md` ; décision D19 ; questions ouvertes 14 et 15.
+- Tests : unitaires québécois recalculés à la main (60 000 $, 20 000 $, acomptes à 24 000, 36 000 et 40 000 $),
+  chacune des trois corrections contrôlée en réintroduisant l'erreur ; parcours navigateur.
+
 ## 2026-10-22 — États-Unis : comparateur *Sole proprietor vs S corp*
 
 - Nouvelle page `/us/sole-proprietor-vs-s-corp/` (menu « Taxes », même identifiant que les comparateurs de statuts

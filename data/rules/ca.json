@@ -311,7 +311,7 @@
       "source": "https://www.canada.ca/en/revenue-agency/news/2023/05/the-canada-pension-plan-enhancement--businesses-individuals-and-self-employed-what-it-means-for-you.html",
       "source_title": "The Canada Pension Plan enhancement - Businesses, individuals and self-employed: what it means for you - Canada.ca",
       "confidence": "medium",
-      "note": "QPP works the same way on the Québec and federal returns (base employee half gives a credit; employer half and enhanced parts are deducted). For a calculator: deduction = 50% of total contribution + enhanced employee share; credit = 4.95% (CPP) or 5.3% (QPP 2026) of contributory earnings. Not re-opened on 2026-10-20."
+      "note": "QPP works the same way on the federal return. On the Québec return, the employer half and enhanced parts are deducted but the base employee half gives no credit (quebec_contributions_no_credit, checked 2026-10-22). For a calculator: deduction = 50% of total contribution + enhanced employee share; credit = 4.95% (CPP) or 5.3% (QPP 2026) of contributory earnings. Not re-opened on 2026-10-20."
     },
     "qpp_maximum_pensionable_earnings": {
       "value": 74600,
@@ -805,6 +805,322 @@
       "source_title": "CRA - MP, DB, RRSP, DPSP, ALDA, TFSA limits, YMPE and the YAMPE",
       "confidence": "high",
       "note": "Room for 2026 = lesser of 18% of 2025 earned income and $33,810, minus any pension adjustment, plus unused room. 2027 limit: $35,390."
+    },
+    "corporate_tax_rates_2026": {
+      "value": {
+        "federal_small_business": 0.09,
+        "federal_general": 0.15,
+        "federal_business_limit": 500000,
+        "provinces": {
+          "AB": {
+            "lower": 0.02,
+            "higher": 0.08,
+            "business_limit": 500000
+          },
+          "BC": {
+            "lower": 0.02,
+            "higher": 0.12,
+            "business_limit": 500000
+          },
+          "MB": {
+            "lower": 0.0,
+            "higher": 0.12,
+            "business_limit": 500000
+          },
+          "NB": {
+            "lower": 0.025,
+            "higher": 0.14,
+            "business_limit": 500000
+          },
+          "NL": {
+            "lower": 0.02,
+            "higher": 0.15,
+            "business_limit": 500000
+          },
+          "NS": {
+            "lower": 0.015,
+            "higher": 0.14,
+            "business_limit": 700000
+          },
+          "NT": {
+            "lower": 0.02,
+            "higher": 0.115,
+            "business_limit": 500000
+          },
+          "NU": {
+            "lower": 0.03,
+            "higher": 0.12,
+            "business_limit": 500000
+          },
+          "ON": {
+            "lower": 0.032,
+            "higher": 0.115,
+            "business_limit": 500000,
+            "lower_change": {
+              "from": "2026-07-01",
+              "rate": 0.022,
+              "prorated": true
+            }
+          },
+          "PE": {
+            "lower": 0.01,
+            "higher": 0.15,
+            "business_limit": 600000
+          },
+          "QC": {
+            "lower": 0.032,
+            "higher": 0.115,
+            "business_limit": 500000,
+            "lower_change": {
+              "years_starting_after": "2026-04-29",
+              "rate": 0.022
+            }
+          },
+          "SK": {
+            "lower": 0.01,
+            "higher": 0.12,
+            "business_limit": 600000
+          },
+          "YT": {
+            "lower": 0.0,
+            "higher": 0.12,
+            "business_limit": 500000
+          }
+        }
+      },
+      "unit": "rate",
+      "label": "Corporate income tax rates on active business income of a Canadian-controlled private corporation (CCPC), 2026: federal and provincial lower (small business) and higher (general) rates",
+      "source": "https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/corporations/corporation-tax-rates.html",
+      "source_title": "Corporation tax rates - Canada.ca",
+      "confidence": "medium",
+      "note": "Read on 2026-10-22 through web search (canada.ca cannot be opened directly). Federal: 9% after the small business deduction on the first $500,000, 15% general rate. Provincial lower rates apply to income eligible for the federal small business deduction, up to the provincial business limit. Changes found on 'What's new for corporations' (canada.ca): Ontario lower rate 3.2% -> 2.2% from 2026-07-01, prorated for a tax year that straddles that date (2026 Ontario Budget, annex); Newfoundland and Labrador lower rate 2.5% -> 2.0% retroactive to 2026-01-01 (1.5% on 2027-01-01, 1% on 2028-01-01). Prince Edward Island higher rate 16% -> 15% from 2025-07-01, business limit $600,000. Saskatchewan lower rate 1% made permanent (Saskatchewan Affordability Act, Dec. 2024), limit $600,000. Alberta and Québec are not in the CRA table: Alberta 2% / 8% (alberta.ca); Québec: general rate 11.5%, small business deduction 8.3% (minimum rate 3.2%), raised to 9.3% (minimum rate 2.2%) for tax years starting after 2026-04-29 (Finances Québec Bulletin d'information 2026-3; Revenu Québec, Hausse du taux de la déduction pour petite entreprise, 2026-05-04), and only with 5,500 paid hours (see quebec_sbd_paid_hours)."
+    },
+    "quebec_sbd_paid_hours": {
+      "value": {
+        "full_deduction_hours": 5500,
+        "no_deduction_hours": 5000
+      },
+      "unit": "hours",
+      "label": "Québec small business deduction: paid hours requirement (sectors other than primary and manufacturing)",
+      "source": "https://www.revenuquebec.ca/fr/entreprises/impots/impot-des-societes/declaration-de-revenus-des-societes/calcul-de-limpot-sur-le-revenu-dune-societe/deduction-pour-petite-entreprise/",
+      "source_title": "Déduction pour petite entreprise - Revenu Québec",
+      "confidence": "medium",
+      "note": "Read on 2026-10-22 through web search. The full Québec small business deduction requires at least 5,500 hours paid to the corporation's employees (associated corporations included) in the year or the previous year; it is reduced linearly between 5,500 and 5,000 hours and is nil at 5,000 hours or fewer, except for the share of primary and manufacturing activities. Unchanged by the 2026 increase of the deduction (Revenu Québec, 2026-05-04). A one-person service corporation (about 2,000 hours a year) therefore pays the 11.5% general Québec rate; the federal small business deduction still applies."
+    },
+    "non_eligible_dividend_gross_up": {
+      "value": 0.15,
+      "unit": "rate",
+      "label": "Gross-up of dividends other than eligible dividends (taxable amount = 115% of the dividend)",
+      "source": "https://www.canada.ca/en/revenue-agency/services/tax/individuals/topics/about-your-tax-return/tax-return/completing-a-tax-return/personal-income/line-12000-taxable-amount-dividends-eligible-other-than-eligible-taxable-canadian-corporations.html",
+      "source_title": "Lines 12000 and 12010 - Taxable amount of dividends - Canada.ca",
+      "confidence": "high",
+      "note": "Dividends paid out of income taxed at the small business rate are 'other than eligible' (non-eligible) dividends. Québec uses the same 15% gross-up for ordinary dividends (Finances Québec, Dépenses fiscales, fiche 130501), unchanged by Bulletin 2026-3."
+    },
+    "federal_dtc_non_eligible": {
+      "value": 0.090301,
+      "unit": "rate",
+      "label": "Federal dividend tax credit on non-eligible dividends: 9/13 of the gross-up, 9.0301% of the taxable amount",
+      "source": "https://www.canada.ca/en/revenue-agency/services/tax/individuals/topics/about-your-tax-return/tax-return/completing-a-tax-return/deductions-credits-expenses/line-40425-federal-dividend-tax-credit.html",
+      "source_title": "Line 40425 - Federal dividend tax credit - Canada.ca",
+      "confidence": "high",
+      "note": "Dividends paid in 2019 or later: 9/13 of the gross-up (T5 guide, box 12). The engine uses 9/13 x 15% x dividend, which equals 9.0301% of the taxable amount (rounded)."
+    },
+    "provincial_dtc_non_eligible_2026": {
+      "value": {
+        "AB": 0.0218,
+        "BC": 0.0196,
+        "MB": 0.007835,
+        "NB": 0.0275,
+        "NL": 0.032,
+        "NS": 0.015,
+        "NT": 0.06,
+        "ON": 0.029863,
+        "PE": 0.0130435,
+        "QC": 0.0342,
+        "YT": 0.0067,
+        "SK": null,
+        "NU": null
+      },
+      "unit": "rate",
+      "label": "Provincial and territorial dividend tax credit on non-eligible dividends, 2026, as a share of the taxable (grossed-up) amount",
+      "source": "https://www.ontario.ca/page/ontario-dividend-tax-credit",
+      "source_title": "Ontario dividend tax credit - ontario.ca (and the sources listed in the note for each province)",
+      "confidence": "medium",
+      "note": "Read on 2026-10-22 through web search. ON 2.9863% for 2020-2026 (ontario.ca); 1.9863% proposed from 2027-01-01 (2026 Ontario Budget). BC 1.96% for 2026 (gov.bc.ca, B.C. basic personal income tax credits). AB 2.18% (CRA Worksheet AB428; 149/890 of the gross-up under the Alberta Act since 2019; not re-read for 2026). MB 0.7835% (The Income Tax Act, C.C.S.M. c. I10, s. 4.7(1), version in force on 2026-01-01). NB 2.75% for 2019 and later (New Brunswick Income Tax Act, laws.gnb.ca). NL 3.2% for 2025 and 2026 (gov.nl.ca, Personal Income Tax). NS 1.5% from 2025 (CRA, Nova Scotia tax information for 2025; 2026 not confirmed). PE: 10% of the gross-up (Prince Edward Island Income Tax Act, s. 20, current to 2026-05-29) = 1.30435% of the taxable amount. QC 3.42% of the grossed-up amount after 2021 (Finances Québec, Dépenses fiscales, fiche 130501); 2.69% for dividends after 2026-12-31 (Bulletin d'information 2026-3). YT 0.67% (yukon.ca, Yukon income tax). NT 6% (fin.gov.nt.ca, NWT personal income tax credits, 2011-2023 figures; 2026 not confirmed). SK and NU: no official 2026 figure found (null): the comparator does not compute these two."
+    },
+    "ontario_dtc_after_surtax": {
+      "value": "On Form ON428 the Ontario surtax is calculated on basic Ontario tax (after non-refundable credits) and the Ontario dividend tax credit is subtracted afterwards (result not below zero); the Ontario Health Premium is added on taxable income.",
+      "unit": "text",
+      "label": "Order of calculation on Form ON428: surtax, then dividend tax credit",
+      "source": "https://www.canada.ca/content/dam/cra-arc/formspubs/pbg/5006-c/5006-c-22e.pdf",
+      "source_title": "Form ON428 (2022) Ontario Tax - Canada.ca",
+      "confidence": "medium",
+      "note": "Latest ON428 found through search is the 2022 form (dividend credit subtracted at line 70 after the surtax is added at line 69, floored at zero at line 71). Not re-read on a 2026 form."
+    },
+    "cpp_employer_contributions": {
+      "value": "The employer pays a CPP contribution equal to the employee's (5.95% on pensionable earnings above $3,500 up to $74,600, and 4% CPP2 from $74,600 to $85,000 in 2026); employee maximum $4,230.45 plus $416 of CPP2. In Québec, QPP: 6.30% each up to $74,600 and 4% QPP2 each.",
+      "unit": "text",
+      "label": "CPP and QPP on a salary: employer and employee shares, 2026",
+      "source": "https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/payroll/payroll-deductions-contributions/canada-pension-plan-cpp/cpp-contribution-rates-maximums.html",
+      "source_title": "CPP contribution rates, maximums and exemptions - Canada.ca",
+      "confidence": "high",
+      "note": "Rates and limits match cpp_rate_employee, cpp_ympe, cpp2_yampe, qpp_rate_employee, qpp2_rate_self_employed / 2. The employer share is a payroll cost of the corporation."
+    },
+    "employee_cpp_tax_treatment": {
+      "value": "Employee contributions: the base part (4.95% CPP, 5.30% QPP in 2026) gives a federal non-refundable credit; the enhanced part (first additional 1% and CPP2/QPP2 4%) is deducted from income (line 22215).",
+      "unit": "text",
+      "label": "Tax treatment of CPP/QPP contributions deducted from a salary",
+      "source": "https://www.canada.ca/en/revenue-agency/services/tax/individuals/topics/about-your-tax-return/tax-return/completing-a-tax-return/deductions-credits-expenses/line-22215-deduction-cpp-qpp-enhanced-contributions-employment-income.html",
+      "source_title": "Line 22215 - Deduction for CPP or QPP enhanced contributions on employment income - Canada.ca",
+      "confidence": "medium",
+      "note": "Same split as for the self-employed (cpp_deductibility_self_employed). Provinces other than Québec also give a credit on the base part at their lowest rate; Québec does not (quebec_contributions_no_credit). Not re-opened on 2026-10-22."
+    },
+    "ei_controlling_shareholder": {
+      "value": "Employment of a person who controls more than 40% of the voting shares of the corporation is not insurable: no EI premiums (employee or employer) on that person's salary.",
+      "unit": "text",
+      "label": "No Employment Insurance on the salary of a shareholder controlling more than 40% of the voting shares",
+      "source": "https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/payroll/payroll-deductions-contributions/employment-insurance-ei.html",
+      "source_title": "About the deduction of EI premiums - Canada.ca",
+      "confidence": "high",
+      "note": "Employment Insurance Act, para. 5(2)(b); also stated in the CRA page 'Determine if employment is pensionable and insurable' and the ROE guide. Such a shareholder can register for EI special benefits for the self-employed."
+    },
+    "canada_employment_amount_2026": {
+      "value": 1501,
+      "unit": "CAD",
+      "label": "Canada employment amount, 2026 (federal credit on employment income, at 14%)",
+      "source": "https://www.canada.ca/content/dam/cra-arc/migration/cra-arc/tx/bsnss/tpcs/pyrll/t4032/2026/t4032-oc-1-26e.pdf",
+      "source_title": "T4032-OC, Payroll Deductions Tables, January 1, 2026 - Canada.ca",
+      "confidence": "high",
+      "note": "Lesser of $1,501 and employment income; maximum credit $210.14. Not available on self-employment income (canada_employment_amount). 2025: $1,471."
+    },
+    "qpip_rate_employee": {
+      "value": 0.0043,
+      "unit": "rate",
+      "label": "QPIP premium rate on a salary, employee share, 2026",
+      "source": "https://www.revenuquebec.ca/fr/entreprises/retenues-a-la-source-et-cotisations-de-lemployeur/calcul-des-retenues-et-des-cotisations/cotisations-au-rqap/maximum-de-revenus-assurables-et-taux-de-cotisation/",
+      "source_title": "Maximum de revenus assurables et taux de cotisation au RQAP - Revenu Québec",
+      "confidence": "high",
+      "note": "Maximum insurable earnings $103,000; employee maximum $442.90."
+    },
+    "qpip_rate_employer": {
+      "value": 0.00602,
+      "unit": "rate",
+      "label": "QPIP premium rate on a salary, employer share, 2026",
+      "source": "https://www.revenuquebec.ca/fr/entreprises/retenues-a-la-source-et-cotisations-de-lemployeur/calcul-des-retenues-et-des-cotisations/cotisations-au-rqap/maximum-de-revenus-assurables-et-taux-de-cotisation/",
+      "source_title": "Maximum de revenus assurables et taux de cotisation au RQAP - Revenu Québec",
+      "confidence": "high",
+      "note": "Maximum insurable earnings $103,000; employer maximum $620.06."
+    },
+    "qpip_shareholder_salary": {
+      "value": "QPIP premiums are withheld and paid on the salary of a shareholder (or the shareholder's spouse) working as an employee, whatever the number of shares held; employment that is not insurable for EI is not necessarily excluded from QPIP.",
+      "unit": "text",
+      "label": "QPIP applies to the salary of a controlling shareholder",
+      "source": "https://www.revenuquebec.ca/fr/entreprises/retenues-et-cotisations/calculer-les-retenues-a-la-source-et-vos-cotisations-demployeur/regime-quebecois-dassurance-parentale/remunerations-assujetties/",
+      "source_title": "Rémunérations assujetties au Régime québécois d'assurance parentale - Revenu Québec",
+      "confidence": "high",
+      "note": "Read on 2026-10-22 through web search."
+    },
+    "qpip_self_employed_tax_treatment": {
+      "value": "Self-employed QPIP premiums: on the federal return, the part above the employee rate is deducted (line 22300; 43.736% of the premiums in 2025) and the rest gives a non-refundable credit (line 31215, up to the employee maximum). On the Québec return, the deduction is calculated on Schedule R (line 248).",
+      "unit": "text",
+      "label": "Tax treatment of QPIP premiums on self-employment income",
+      "source": "https://www.canada.ca/en/revenue-agency/services/tax/individuals/topics/about-your-tax-return/tax-return/completing-a-tax-return/deductions-credits-expenses/line-22300-deduction-provincial-parental-insurance-plan-ppip-premiums-on-self-employment-income.html",
+      "source_title": "Line 22300 - Deduction for PPIP premiums on self-employment income - Canada.ca",
+      "confidence": "medium",
+      "note": "Federal split: high (2025: (0.878% - 0.494%) / 0.878% = 43.736%; for 2026 the engine uses (0.764% - 0.430%) / 0.764%). Québec: Schedule R not read; the engine deducts the same part above the employee rate (medium), with no Québec credit for the rest (quebec_contributions_no_credit)."
+    },
+    "quebec_contributions_no_credit": {
+      "value": "Québec gives no non-refundable tax credit for an employee's base QPP contribution, QPIP premium or EI premium: these contributions are taken into account in the basic personal amount. Only deductions apply (enhanced QPP parts, self-employed employer-equivalent shares).",
+      "unit": "text",
+      "label": "Québec: no tax credit for QPP base contributions, QPIP and EI premiums",
+      "source": "https://cffp.recherche.usherbrooke.ca/outils-ressources/guide-mesures-fiscales/cotisations-rrq-rqap-et-assurance-emploi/",
+      "source_title": "Cotisations au RRQ, au RQAP et à l'assurance-emploi - Guide des mesures fiscales, Chaire en fiscalité et en finances publiques (Université de Sherbrooke)",
+      "confidence": "medium",
+      "note": "University tax research centre, not a government page; consistent with the Revenu Québec line-by-line help, which lists only deductions (line 248, Schedule U). Federal credits still apply to Québec residents."
+    },
+    "quebec_deduction_for_workers": {
+      "value": {
+        "rate": 0.06,
+        "max_2026": 1450
+      },
+      "unit": "rate",
+      "label": "Québec deduction for workers (line 201): 6% of eligible work income, up to $1,450 in 2026",
+      "source": "https://www.revenuquebec.ca/fr/entreprises/retenues-a-la-source-et-cotisations-de-lemployeur/employeur-principaux-changements-2026/",
+      "source_title": "Employeurs : principaux changements pour 2026 - Revenu Québec",
+      "confidence": "high",
+      "note": "2025 maximum $1,420 (Revenu Québec, line 201). Eligible work income: employment income and the net income of a business carried on alone or as an active partner (Finances Québec, Dépenses fiscales, fiche 110906). Québec return only."
+    },
+    "fss_employer_rate_2026": {
+      "value": 0.0165,
+      "unit": "rate",
+      "label": "Québec Health Services Fund (FSS) employer contribution rate, 2026, total payroll of $1 million or less (sectors other than primary and manufacturing)",
+      "source": "https://www.revenuquebec.ca/en/businesses/source-deductions-and-employer-contributions/calculating-source-deductions-and-contributions/employer-contribution-to-the-health-services-fund/total-payroll-threshold-and-health-services-fund-contribution-rate/",
+      "source_title": "Total Payroll Threshold and Health Services Fund Contribution Rate - Revenu Québec",
+      "confidence": "high",
+      "note": "Paid by the employer on the salaries it pays. Above $1 million of payroll, a sliding rate up to 4.26%."
+    },
+    "nwt_payroll_tax": {
+      "value": 0.02,
+      "unit": "rate",
+      "label": "Northwest Territories payroll tax on employment income (withheld from employees' pay)",
+      "source": "https://www.fin.gov.nt.ca/en/services/licences-taxes-et-droits/payroll-tax-employees",
+      "source_title": "Payroll Tax for Employees - Government of the Northwest Territories",
+      "confidence": "high",
+      "note": "2% of the remuneration of employees working in the NWT, borne by the employee and withheld by the employer; not part of territorial income tax (not on the T4). Its income tax deductibility was not checked: the engine treats it as not deductible."
+    },
+    "personal_services_business": {
+      "value": "A corporation is a personal services business when the incorporated worker would otherwise be an employee of the client (and it has five full-time employees or fewer). It cannot claim the small business deduction or the general rate reduction, pays an extra 5% federal tax on that income, and can deduct only the salary and benefits paid to the worker and a few other expenses.",
+      "unit": "text",
+      "label": "Personal services business (PSB): no small business rate for an incorporated employee",
+      "source": "https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/corporations/corporation-income-tax-return/tax-implications-personal-services-business/fact-sheet-personal-business.html",
+      "source_title": "Personal services business - Fact sheet - Canada.ca",
+      "confidence": "high",
+      "note": "Read on 2026-10-22 through web search. Québec has its own special measures for PSBs (Revenu Québec, 'Mesures particulières applicables aux sociétés exploitant une entreprise de services personnels')."
+    },
+    "passive_income_business_limit": {
+      "value": "The $500,000 business limit is reduced when the corporation and its associated corporations earn more than $50,000 of passive investment income in the previous year, and is nil at $150,000.",
+      "unit": "text",
+      "label": "Small business limit reduced by passive investment income",
+      "source": "https://www.canada.ca/en/revenue-agency/programs/about-canada-revenue-agency-cra/federal-government-budgets/budget-2018-equality-growth-strong-middle-class/passive-investment-income/small-business-deduction-rules.html",
+      "source_title": "Small business deduction rules - Canada.ca",
+      "confidence": "high",
+      "note": "Reduction: business limit / $500,000 x 5 x (adjusted aggregate investment income - $50,000). Ontario and New Brunswick do not apply this reduction to their own business limit."
+    },
+    "tosi_family_dividends": {
+      "value": "Dividends from a private corporation paid to a family member can be taxed at the highest marginal rate (tax on split income, TOSI), unless an exclusion applies (for example, an adult actively engaged in the business on a regular, continuous and substantial basis).",
+      "unit": "text",
+      "label": "Tax on split income (TOSI) on dividends paid to family members",
+      "source": "https://www.canada.ca/en/revenue-agency/programs/about-canada-revenue-agency-cra/federal-government-budgets/income-sprinkling/guidance-split-income-rules-adults.html",
+      "source_title": "Guidance on the application of the split income rules for adults - Canada.ca",
+      "confidence": "high",
+      "note": "The comparator assumes a single shareholder who receives all the salary and dividends."
+    },
+    "cpp_on_dividends": {
+      "value": "CPP and QPP contributions are calculated on employment and self-employment earnings only: dividends, a return on the shareholder's investment, carry no contributions and earn no pension.",
+      "unit": "text",
+      "label": "No CPP/QPP contributions on dividends",
+      "source": "https://www.canada.ca/en/services/benefits/publicpensions/cpp/contributions.html",
+      "source_title": "Contributions to the Canada Pension Plan - Canada.ca",
+      "confidence": "medium",
+      "note": "Canada.ca: contributions are made only on earnings; the self-employed do not contribute on other income such as investment earnings. CRA shareholder benefits page: dividends are a return on investment, not payment for services."
+    },
+    "rrsp_earned_income_types": {
+      "value": "RRSP room is based on earned income: mainly employment income and self-employment earnings (minus certain expenses and losses). Dividends are not in the list, so dividends create no RRSP room.",
+      "unit": "text",
+      "label": "RRSP earned income: salary and self-employment income, not dividends",
+      "source": "https://www.canada.ca/en/revenue-agency/services/tax/individuals/topics/rrsps-related-plans/definitions-rrsps.html",
+      "source_title": "Definitions for RRSPs - Canada.ca",
+      "confidence": "medium",
+      "note": "Room for a year = 18% of the previous year's earned income up to the dollar limit (rrsp_limits_2026)."
+    },
+    "yukon_canada_employment_amount_2026": {
+      "value": 1501,
+      "unit": "CAD",
+      "label": "Yukon Canada employment amount, 2026 (Yukon credit on employment income, at the lowest Yukon rate)",
+      "source": "https://www.canada.ca/content/dam/cra-arc/migration/cra-arc/tx/bsnss/tpcs/pyrll/t4032/2026/t4032-yt-1-26e.pdf",
+      "source_title": "T4032-YT, Payroll Deductions Tables, January 1, 2026 - Canada.ca",
+      "confidence": "high",
+      "note": "Yukon is the only province or territory with its own Canada employment amount (Form YT428, line 58310: lesser of federal line 31260 and the cap; 2025 cap $1,471). Maximum Yukon credit 2026: $96.06 (6.4%)."
     }
   },
   "provinces": {
@@ -1345,6 +1661,9 @@
     "QPIP: confirm the $2,000 minimum net self-employment income for QPIP premiums and the split between deduction and credit for the self-employed.",
     "Instalments, filing deadlines, Interest Act s. 3/s. 4 text, Criminal Code s. 347 (35% APR since 2025-01-01) and prompt-payment laws (construction only) are stable statutory rules taken from their official sources but not re-opened on 2026-10-20.",
     "Revenu Québec, 'Preparing Invoices': for the QST only, are a description of the property or service and the QST amount required on invoices under $500 (and under $100)? Search excerpts of the table were garbled; the site sends Québec users to that page for invoices under $500.",
-    "Charter of the French language: may an invoice of a Québec business be bilingual (section 89: French with another language), and does section 57 apply to a supplier outside Québec invoicing a Québec client? The site only states that invoices of businesses in Québec are drawn up in French."
+    "Charter of the French language: may an invoice of a Québec business be bilingual (section 89: French with another language), and does section 57 apply to a supplier outside Québec invoicing a Québec client? The site only states that invoices of businesses in Québec are drawn up in French.",
+    "Comparator sole proprietor vs corporation: Saskatchewan and Nunavut non-eligible dividend tax credit rates for 2026 were not found on an official page (secondary sources give 2.519% for Saskatchewan from 2024, after the cancellation of the planned change). The comparator does not compute these two until an official figure is read (Forms SK428 and NU428).",
+    "Comparator: confirm on 2026 forms the Nova Scotia (1.5%), Northwest Territories (6%) and Alberta (2.18%) non-eligible dividend tax credit rates, the order surtax / dividend tax credit on Form ON428, and the day-based proration of the Ontario rate cut of 2026-07-01. For 2027: Ontario dividend credit 1.9863% (proposed), Québec 2.69%, Newfoundland and Labrador lower rate 1.5%.",
+    "Québec: read Schedule R (QPIP deduction on self-employment income) and confirm that the Northwest Territories payroll tax is not deductible for income tax."
   ]
 }

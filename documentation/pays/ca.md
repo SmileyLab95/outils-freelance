@@ -311,8 +311,15 @@ Revenu Québec applique les mêmes seuils pour les RTI de la TVQ, avec le numér
 9. Trouver les taux par kilomètre et les plafonds automobiles 2026.
 10. Québec : cotisation au Fonds des services de santé (FSS) et prime au régime public d'assurance médicaments pour 2026.
 11. AE au Québec pour les autonomes : confirmer le taux de 1,30 % et le revenu minimal requis pour toucher des prestations.
-12. RQAP : confirmer le seuil minimal de revenu de travail autonome et la répartition entre déduction et crédit.
+12. RQAP : confirmer le seuil minimal de revenu de travail autonome. Répartition entre déduction et crédit : fédéral
+    confirmé le 22/10/2026 (ligne 22300 : part au-delà du taux « salarié ») ; annexe R du Québec à lire.
 13. Revenu Québec, « Préparation des factures » : pour la TVQ seulement, une description et le montant de TVQ sont-ils exigés sous 500 $ (et sous 100 $) ? Extraits de recherche illisibles ; les pages de la liste des mentions renvoient à cette page pour les factures de moins de 500 $ au Québec.
+14. Comparateur de statuts : taux du crédit pour dividendes non déterminés de 2026 en Saskatchewan et au Nunavut
+    (non trouvés sur une source officielle ; ces deux provinces ne sont pas calculées) ; à confirmer sur les
+    formulaires 2026 : Nouvelle-Écosse 1,5 %, T.N.-O. 6 %, Alberta 2,18 %, ordre surtaxe / crédit pour dividendes de
+    l'ON428, prorata du taux de l'Ontario au 1er juillet 2026.
+15. Québec : lire l'annexe R (déduction du RQAP du travailleur autonome) ; impôt sur le salaire des T.N.-O. :
+    déductible ou non de l'impôt sur le revenu (traité comme non déductible).
 
 ---
 
@@ -487,3 +494,77 @@ France et au Royaume-Uni par la même liste (identifiant `invoice-rules`).
   (« Fourniture détaxée : service fourni à un non-résident »).
 - **Critères** : tests unitaires (toutes les situations, textes des deux pages) ; parcours navigateur des deux pages ;
   accessibilité ; captures relues ; revue critique.
+
+## Correction : impôt d'un travailleur autonome au Québec (`engines/tax-ca.js`, 22/10/2026)
+
+Relevé en préparant le comparateur de statuts : trois écarts dans le calcul québécois, qui alimente le calculateur
+d'impôt, « Combien mettre de côté » et le calculateur REER (anglais et français).
+
+- **Pas de crédit du Québec pour la part de base du RRQ** (`quebec_contributions_no_credit`) : le régime québécois
+  n'accorde aucun crédit pour les cotisations de base au RRQ, au RQAP ni à l'AE (prises en compte dans le montant
+  personnel de base). Le moteur appliquait au Québec, comme ailleurs, le crédit au taux le plus bas sur la part
+  « salarié » de base : impôt du Québec sous-estimé d'au plus 14 % × 5,3 % × 71 100 $ = 527,58 $. Le crédit fédéral,
+  lui, demeure.
+- **Déduction pour travailleur** (`quebec_deduction_for_workers`) : 6 % du revenu de travail admissible (revenu
+  d'entreprise net compris), au plus 1 450 $ en 2026, à la déclaration du Québec seulement. Absente du moteur : impôt
+  du Québec surestimé d'au plus 1 450 $ × taux marginal.
+- **RQAP du travailleur autonome** (`qpip_self_employed_tax_treatment`) : au fédéral, déduction de la part qui
+  dépasse le taux « salarié » ((0,764 % − 0,430 %) ÷ 0,764 % de la cotisation, ligne 22300) et crédit à 14 % sur le
+  reste (ligne 31215) ; au Québec, déduction de la même part (annexe R, confiance moyenne). Absents du moteur.
+- **Critères** : cas recalculés à la main ; les valeurs attendues des tests québécois existants sont mises à jour avec
+  le détail du calcul ; pages concernées relues (exemples chiffrés du texte calculés par le moteur).
+
+## Spécification : comparateur *Sole proprietor vs corporation* / « Entreprise individuelle ou société par actions » (`/ca/sole-proprietor-vs-corporation/`, `/ca/fr/entreprise-individuelle-ou-societe/`, 22/10/2026)
+
+**Question** : « Ai-je intérêt à me constituer en société par actions ? » Besoin P1 de
+[02](../02-besoins-clients.md) (§ 1, « Quel statut choisir ? »), couvert en France, aux États-Unis et au Royaume-Uni
+(même identifiant `structure`).
+
+- **Principe** (intégration) : les bénéfices d'une société privée sous contrôle canadien (SPCC) sont imposés au taux
+  des petites entreprises, puis de nouveau chez l'actionnaire quand ils lui sont versés en dividendes (dividendes
+  non déterminés, majorés de 15 %, crédit d'impôt pour dividendes). Tout verser donne à peu près le même impôt
+  qu'en entreprise individuelle ; l'avantage principal vient de l'**impôt reporté** sur les bénéfices laissés dans la
+  société. L'outil montre les deux effets séparément.
+- **Année** : année d'imposition 2026 de la société, du 1er janvier au 31 décembre 2026, et impôt personnel 2026
+  (dividendes reçus en 2026). Ontario : taux réduit de 3,2 % jusqu'au 30 juin, puis 2,2 %, au prorata des jours
+  (181 et 184 jours : 2,6959 %). Terre-Neuve-et-Labrador : 2,0 % (rétroactif au 1er janvier 2026). Québec : taux
+  réduit de 3,2 % (l'année commence avant le 30 avril 2026) seulement avec 5 500 heures rémunérées, sinon taux
+  général de 11,5 %. Changements de 2027 (Ontario 1,9863 % proposé, Québec 2,69 %, T.-N.-L. 1,5 %) : veille de
+  décembre.
+- **Saisie** : bénéfice de l'activité (avant la rémunération du dirigeant) ; province ; salaire versé par la société
+  (facultatif, 0 = dividendes seulement) ; montant laissé dans la société après impôt (facultatif, 0 = tout est
+  versé) ; frais propres à la société (facultatif : comptabilité, déclaration T2, registre) ; au Québec seulement,
+  case « la société rémunère au moins 5 500 heures de travail par an ».
+- **Société** : charges de l'employeur sur le salaire W (RPC ou RRQ, RPC2 ou RRQ2 de la part « employeur » ; au
+  Québec RQAP employeur 0,602 % et FSS 1,65 %) ; pas d'AE (actionnaire qui contrôle plus de 40 % des actions,
+  `ei_controlling_shareholder`) ; revenu imposable B = bénéfice − frais − W − charges de l'employeur ; impôt
+  B × (9 % + taux provincial réduit) ; après impôt A = B − impôt ; dividendes D = A − montant laissé.
+  Refus : B < 0 (« salaire trop élevé »), B > 500 000 $ (plafond des affaires : hors du champ de l'outil), montant
+  laissé > A.
+- **Actionnaire** : salaire W (RPC ou RRQ « salarié », RQAP salarié au Québec, impôt sur le salaire de 2 % aux
+  T.N.-O.) et dividendes D. Revenu net = W + 1,15 × D − part bonifiée des cotisations. Fédéral : barème − 14 % ×
+  (montant personnel de base selon le revenu net + part de base des cotisations + montant canadien pour emploi
+  (1 501 $ au plus) + RQAP salarié) − crédit pour dividendes (9/13 de la majoration), au moins 0 ; abattement du
+  Québec. Province : barème (au Québec, après la déduction pour travailleur) − taux le plus bas × (montant personnel
+  de base + part de base des cotisations, sauf au Québec) − crédit provincial pour dividendes (taux de
+  `provincial_dtc_non_eligible_2026` × montant majoré), au moins 0 ; Ontario : surtaxe calculée avant le crédit pour
+  dividendes, puis contribution-santé.
+- **Entreprise individuelle** : moteur existant (`taxCA.estimate`, corrigé pour le Québec, voir ci-dessus).
+- **Résultat** : ce que vous recevez (après impôt personnel) et ce qui reste dans la société, comparés au revenu
+  disponible de l'entreprise individuelle. Écart affiché = (reçu + laissé dans la société) − revenu disponible en
+  entreprise individuelle ; dont impôt reporté = impôt personnel qu'aurait coûté le versement immédiat du montant
+  laissé (calcul refait avec tout versé) ; et écart « tout versé ». Tableau : salaire, dividendes, cotisations, impôt
+  de la société, impôt personnel, frais, reçu, laissé dans la société.
+- **Provinces non calculées** : Saskatchewan et Nunavut (taux du crédit pour dividendes 2026 non trouvé sur une
+  source officielle) : message, renvoi au calculateur d'impôt.
+- **Dit sur la page, non chiffré** : entreprise de services personnels (`personal_services_business` : pas de taux
+  réduit pour un « employé incorporé ») ; aucun droit au RPC/RRQ ni droits REER sur les dividendes
+  (`cpp_on_dividends`, `rrsp_earned_income_types`) ; dividendes versés à la famille (`tosi_family_dividends`) ;
+  revenus de placement dans la société (`passive_income_business_limit`) ; frais de constitution ; au Québec,
+  cotisation des particuliers au FSS sur les revenus autres que d'emploi, normes du travail et CNESST ; impôt minimum
+  de remplacement ; réductions d'impôt pour faible revenu de l'Ontario et de la C.-B. (absentes aussi du calculateur
+  d'impôt).
+- **Critères** : tests unitaires (cas calculés à la main hors Québec, au Québec avec et sans 5 500 heures, en
+  Ontario avec surtaxe et dividendes, salaire au-delà du MGAP, montant laissé, refus) ; invariants (tout verser ≈
+  entreprise individuelle à quelques pour cent près ; impôt reporté ≥ 0) ; textes des deux pages repris des règles ;
+  parcours navigateur et accessibilité ; captures relues ; revue critique.
