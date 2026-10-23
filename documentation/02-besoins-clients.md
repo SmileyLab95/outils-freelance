@@ -39,7 +39,7 @@ Matrice revue le 22/10/2026 d'après les pages publiées (identifiants de `conte
 | Quel tarif facturer ? | Calculateur de TJM / taux horaire | ✅ | ✅ | ✅ | ✅ | P1 |
 | Convertir horaire, journalier, mensuel, annuel | Convertisseur de tarifs | ✅ | ✅ | ✅ | ✅ | P2 |
 | Chiffrer un projet au forfait | Calculateur de prix au forfait (marge, imprévus) | ✅ | ✅ | ✅ | ✅ | P2 |
-| Augmenter ses tarifs | Calculateur + email d'annonce | 🟡 | 🟡 (email ✅) | 🟡 (email ✅) | 🟡 (email ✅) | P3 |
+| Augmenter ses tarifs | Calculateur + email d'annonce | ✅ | ✅ | ✅ | ✅ | P3 |
 
 ### 3. Trouver des clients
 
@@ -123,8 +123,8 @@ Matrice revue le 22/10/2026 d'après les pages publiées (identifiants de `conte
 - **P2** (convertisseur de tarifs, prix au forfait et « freelance ou salarié » faits le 22/10/2026) : checklist de
   création, jauges de seuils, client étranger et W-8BEN faits le 22/10/2026 ; recouvrement en justice fait au
   Royaume-Uni, au Canada et aux États-Unis le 23/10/2026, à faire en France (textes de 2026 à lire) ; compte pro et assurance hors de France et guide de changement de statut faits le 23/10/2026.
-- **P3** : date d'échéance, proposition commerciale, NDA, CGV, hausse de tarifs (calculateur), sous-traitance
-  (bureau à domicile fait le 23/10/2026).
+- **P3** : date d'échéance, proposition commerciale, NDA, CGV, sous-traitance (bureau à domicile et hausse de
+  tarifs faits le 23/10/2026).
 
 ## Les outils « moteurs » partagés
 

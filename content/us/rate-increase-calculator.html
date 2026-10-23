@@ -1,0 +1,137 @@
+<!--{
+  "id": "raise",
+  "slug": "rate-increase-calculator/",
+  "title": "Rate Increase Calculator for Freelancers",
+  "description": "See what a rate increase earns you per month, how much work you could lose before earning less, and how it compares with inflation.",
+  "menu": "Rate increase calculator",
+  "icon": "📈",
+  "blurb": "What a raise earns, and the work you can afford to lose.",
+  "app": "Freelance Rate Increase Calculator",
+  "scripts": [
+    "engines/price-increase.js",
+    "tools/price-increase.js"
+  ],
+  "priority": 0.6,
+  "faq": [
+    [
+      "How much should I raise my rates?",
+      "There's no rule: many freelancers review their rates once a year. This calculator shows what a given increase earns you and how much work you could lose before earning less than today."
+    ],
+    [
+      "How much work can I lose after a rate increase?",
+      "With a 10% increase, you can lose up to 9.1% of your billed time before your monthly revenue falls below today's: 1 minus the old rate divided by the new rate."
+    ],
+    [
+      "Should my rates keep up with inflation?",
+      "If your costs and your clients' prices rise, a rate that stays the same is worth less each year. Enter the latest inflation figure from the official statistics agency to see the rate that keeps pace and your real increase."
+    ],
+    [
+      "How do I announce a rate increase?",
+      "Tell your clients in writing, ahead of time, with the date and the new rate, and keep work already agreed at the current rate. The email templates page has a ready-to-copy message."
+    ]
+  ]
+}-->
+<script type="application/json" id="pi-data">
+{
+  "percent": "%",
+  "per": {
+    "hour": "/ hour",
+    "day": "/ day"
+  },
+  "volume_label": {
+    "hour": "Hours billed a month",
+    "day": "Days billed a month"
+  },
+  "units": {
+    "hour": "hours",
+    "day": "days"
+  },
+  "sub": {
+    "up": "A {pct} increase.",
+    "down": "A {pct} decrease.",
+    "same": "Same rate as today."
+  },
+  "breakeven": {
+    "up": "You can lose up to {pct} of your billed {unit} before earning less than today.",
+    "none": "The rate doesn't go up: there's no margin to lose work."
+  },
+  "invalid": "Enter your current rate.",
+  "country": "us"
+}
+</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · no sign-up</span>
+    <h1>Rate increase calculator</h1>
+    <p class="lead">Enter your current rate and the increase you're planning: see your new monthly revenue, the work you could lose before earning less, and how the increase compares with inflation.</p>
+    <ul class="trust"><li>Monthly revenue before and after</li><li>Break-even work loss</li><li>Inflation check</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="pi-form" onsubmit="return false">
+      <h2>Your rate</h2>
+      <div class="fields">
+        <div class="field"><label for="pi-rate">Current rate</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="pi-rate" name="rate" value="85" data-save><span>$</span></div></div>
+        <div class="field"><label for="pi-unit">Billed per</label>
+          <select id="pi-unit" name="unit" data-save>
+            <option value="hour" selected>Hour</option>
+            <option value="day">Day</option>
+          </select></div>
+        <div class="field full"><label for="pi-mode">Your new rate</label>
+          <select id="pi-mode" name="mode" data-save>
+            <option value="percent" selected>Raise by a percentage</option>
+            <option value="rate">Enter the new rate</option>
+          </select></div>
+        <div class="field full" id="pi-increase-field"><label for="pi-increase">Increase</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="pi-increase" name="increase" value="10" data-save><span>%</span></div></div>
+        <div class="field full" id="pi-new-rate-field" hidden><label for="pi-new-rate">New rate</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="pi-new-rate" name="new_rate" value="95" data-save><span>$</span></div></div>
+        <div class="field"><label for="pi-volume" id="pi-volume-label">Hours billed a month</label>
+          <input type="text" inputmode="decimal" id="pi-volume" name="volume" value="100" data-save></div>
+        <div class="field"><label for="pi-loss">Share of work you might lose</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="pi-loss" name="loss" value="0" data-save><span>%</span></div></div>
+        <div class="field full"><label for="pi-inflation">Inflation over the last 12 months (optional)</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="pi-inflation" name="inflation" placeholder="Optional" aria-describedby="pi-inflation-hint" data-save><span>%</span></div>
+          <span class="hint" id="pi-inflation-hint">Latest figure: <a href="https://www.bls.gov/cpi/" rel="noopener">Bureau of Labor Statistics (CPI)</a>.</span></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <h2 class="sr-only">Result</h2>
+      <div class="result-hero" role="status" aria-atomic="true">
+        <div class="label">Your new rate</div>
+        <div class="big" id="pi-big">–</div>
+        <div class="sub" id="pi-sub">–</div>
+      </div>
+      <div id="pi-results">
+        <ul class="result-list card result-wrap" style="padding: 6px 18px; margin-top: 16px;">
+          <li><span>Monthly revenue today</span><b id="pi-before">–</b></li>
+          <li><span>Monthly revenue after the increase</span><b id="pi-after">–</b></li>
+          <li><span>Change</span><b id="pi-change">–</b></li>
+          <li id="pi-inflation-rate-row" hidden><span>Rate that keeps pace with inflation</span><b id="pi-inflation-rate">–</b></li>
+          <li id="pi-real-row" hidden><span>Real increase, after inflation</span><b id="pi-real">–</b></li>
+        </ul>
+        <p class="notice" id="pi-breakeven" style="margin-top: 16px;">–</p>
+      </div>
+      <a class="btn btn-primary btn-block" href="{{link:templates}}" style="margin-top: 14px;">Rate increase email template</a>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>How the calculator works</h2>
+  <ul>
+    <li><strong>Break-even work loss</strong>: 1 minus your current rate divided by your new rate. Lose less work than that and you earn more than today; lose more and you earn less.</li>
+    <li><strong>Inflation</strong>: enter the latest 12-month figure from the Bureau of Labor Statistics to see the rate that keeps pace, and your real increase after inflation.</li>
+  </ul>
+  <h2>Before you announce it</h2>
+  <ul>
+    <li>Check your numbers with the <a href="{{link:rate}}">rate calculator</a>, which starts from the income you need.</li>
+    <li>Tell your clients in writing, ahead of time, with the date and the new rate; keep work already agreed at today's rate. Copy the <a href="{{link:templates}}">rate increase email template</a>.</li>
+  </ul>
+  <p class="small muted">A planning tool: it only uses the figures you enter.</p>
+</section>

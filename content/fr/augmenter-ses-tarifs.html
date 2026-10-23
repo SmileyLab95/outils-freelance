@@ -1,0 +1,137 @@
+<!--{
+  "id": "raise",
+  "slug": "augmenter-ses-tarifs/",
+  "title": "Augmenter ses tarifs : calculateur pour freelance",
+  "description": "Ce qu'une hausse de TJM vous rapporte par mois, le travail que vous pouvez perdre sans gagner moins, et l'effet de l'inflation. Gratuit.",
+  "menu": "Augmenter ses tarifs",
+  "icon": "📈",
+  "blurb": "Ce que rapporte une hausse, et le travail que vous pouvez perdre.",
+  "app": "Calculateur de hausse de tarifs",
+  "scripts": [
+    "engines/price-increase.js",
+    "tools/price-increase.js"
+  ],
+  "priority": 0.6,
+  "faq": [
+    [
+      "De combien augmenter ses tarifs ?",
+      "Il n'y a pas de règle : beaucoup d'indépendants revoient leurs tarifs une fois par an. Le calculateur montre ce qu'une hausse vous rapporte et le travail que vous pouvez perdre sans gagner moins qu'aujourd'hui."
+    ],
+    [
+      "Combien de travail puis-je perdre après une hausse ?",
+      "Avec une hausse de 10 %, vous pouvez perdre jusqu'à 9,1 % de votre temps facturé avant que votre chiffre d'affaires mensuel passe sous celui d'aujourd'hui : 1 moins l'ancien tarif divisé par le nouveau."
+    ],
+    [
+      "Mes tarifs doivent-ils suivre l'inflation ?",
+      "Si vos coûts et les prix augmentent, un tarif inchangé vaut un peu moins chaque année. Saisissez le dernier chiffre de l'inflation publié par l'organisme statistique officiel pour voir le tarif qui la suit et votre hausse réelle."
+    ],
+    [
+      "Comment annoncer une hausse de tarifs ?",
+      "Prévenez vos clients par écrit, à l'avance, avec la date et le nouveau tarif, et gardez le tarif actuel pour ce qui est déjà convenu. La page des modèles d'emails propose un message prêt à copier."
+    ]
+  ]
+}-->
+<script type="application/json" id="pi-data">
+{
+  "percent": " %",
+  "per": {
+    "hour": "/ heure",
+    "day": "/ jour"
+  },
+  "volume_label": {
+    "hour": "Heures facturées par mois",
+    "day": "Jours facturés par mois"
+  },
+  "units": {
+    "hour": "heures",
+    "day": "jours"
+  },
+  "sub": {
+    "up": "Une hausse de {pct}.",
+    "down": "Une baisse de {pct}.",
+    "same": "Le même tarif qu'aujourd'hui."
+  },
+  "breakeven": {
+    "up": "Vous pouvez perdre jusqu'à {pct} de vos {unit} facturés sans gagner moins qu'aujourd'hui.",
+    "none": "Le tarif ne monte pas : aucune marge pour perdre du travail."
+  },
+  "invalid": "Indiquez votre tarif actuel.",
+  "country": "fr"
+}
+</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Gratuit · sans inscription</span>
+    <h1>Calculateur de hausse de tarifs</h1>
+    <p class="lead">Indiquez votre tarif actuel et la hausse envisagée : voyez votre nouveau chiffre d'affaires mensuel, le travail que vous pouvez perdre sans gagner moins, et la comparaison avec l'inflation.</p>
+    <ul class="trust"><li>Chiffre d'affaires avant et après</li><li>Travail que vous pouvez perdre</li><li>Comparaison avec l'inflation</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="pi-form" onsubmit="return false">
+      <h2>Votre tarif</h2>
+      <div class="fields">
+        <div class="field"><label for="pi-rate">Tarif actuel</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="pi-rate" name="rate" value="500" data-save><span>€</span></div></div>
+        <div class="field"><label for="pi-unit">Facturé à</label>
+          <select id="pi-unit" name="unit" data-save>
+            <option value="hour">L'heure</option>
+            <option value="day" selected>La journée</option>
+          </select></div>
+        <div class="field full"><label for="pi-mode">Votre nouveau tarif</label>
+          <select id="pi-mode" name="mode" data-save>
+            <option value="percent" selected>Une hausse en pourcentage</option>
+            <option value="rate">Saisir le nouveau tarif</option>
+          </select></div>
+        <div class="field full" id="pi-increase-field"><label for="pi-increase">Hausse</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="pi-increase" name="increase" value="10" data-save><span>%</span></div></div>
+        <div class="field full" id="pi-new-rate-field" hidden><label for="pi-new-rate">Nouveau tarif</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="pi-new-rate" name="new_rate" value="550" data-save><span>€</span></div></div>
+        <div class="field"><label for="pi-volume" id="pi-volume-label">Jours facturés par mois</label>
+          <input type="text" inputmode="decimal" id="pi-volume" name="volume" value="15" data-save></div>
+        <div class="field"><label for="pi-loss">Part du travail que vous pourriez perdre</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="pi-loss" name="loss" value="0" data-save><span>%</span></div></div>
+        <div class="field full"><label for="pi-inflation">Inflation sur les 12 derniers mois (facultatif)</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="pi-inflation" name="inflation" placeholder="Facultatif" aria-describedby="pi-inflation-hint" data-save><span>%</span></div>
+          <span class="hint" id="pi-inflation-hint">Dernier chiffre : <a href="https://www.insee.fr/fr/statistiques/4268033" rel="noopener">Insee (l'essentiel sur l'inflation)</a>.</span></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <h2 class="sr-only">Résultat</h2>
+      <div class="result-hero" role="status" aria-atomic="true">
+        <div class="label">Votre nouveau tarif</div>
+        <div class="big" id="pi-big">–</div>
+        <div class="sub" id="pi-sub">–</div>
+      </div>
+      <div id="pi-results">
+        <ul class="result-list card result-wrap" style="padding: 6px 18px; margin-top: 16px;">
+          <li><span>Chiffre d'affaires mensuel aujourd'hui</span><b id="pi-before">–</b></li>
+          <li><span>Chiffre d'affaires mensuel après la hausse</span><b id="pi-after">–</b></li>
+          <li><span>Écart</span><b id="pi-change">–</b></li>
+          <li id="pi-inflation-rate-row" hidden><span>Tarif qui suit l'inflation</span><b id="pi-inflation-rate">–</b></li>
+          <li id="pi-real-row" hidden><span>Hausse réelle, après inflation</span><b id="pi-real">–</b></li>
+        </ul>
+        <p class="notice" id="pi-breakeven" style="margin-top: 16px;">–</p>
+      </div>
+      <a class="btn btn-primary btn-block" href="{{link:templates}}" style="margin-top: 14px;">Modèle d'email pour annoncer la hausse</a>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>Comment fonctionne le calculateur</h2>
+  <ul>
+    <li><strong>Travail que vous pouvez perdre</strong> : 1 moins votre tarif actuel divisé par le nouveau. En perdant moins de travail que cela, vous gagnez plus qu'aujourd'hui ; au-delà, vous gagnez moins.</li>
+    <li><strong>Inflation</strong> : saisissez le dernier chiffre sur 12 mois publié par l'organisme statistique officiel (Insee) pour voir le tarif qui la suit et votre hausse réelle.</li>
+  </ul>
+  <h2>Avant de l'annoncer</h2>
+  <ul>
+    <li>Vérifiez vos chiffres avec le <a href="{{link:rate}}">calculateur de tarif</a>, qui part du revenu dont vous avez besoin.</li>
+    <li>Prévenez vos clients par écrit, à l'avance, avec la date et le nouveau tarif ; gardez le tarif actuel pour ce qui est déjà convenu. Copiez le <a href="{{link:templates}}">modèle d'email d'annonce</a>.</li>
+  </ul>
+  <p class="small muted">Outil de réflexion : il n'utilise que les chiffres que vous saisissez.</p>
+</section>

@@ -169,9 +169,12 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   plafond et report), au Royaume-Uni (forfait mensuel ou part des coûts réels), au Canada en anglais et en français
   (part de surface et de temps, plafond au revenu net, report) et en France (micro : aucune déduction ; réel :
   prorata de surface) ([27](27-bureau-a-domicile.md)).
-- **Prochaines actions de Claude** : besoins P3 restants ([02](02-besoins-clients.md) : hausse de tarifs,
-  proposition commerciale, accord de confidentialité, CGV, sous-traitance), en commençant par le calculateur de
-  hausse de tarifs (4 pays) ; comptes : adaptateur
+- **Hausse de tarifs (23/10/2026)** : calculateur dans les 4 pays (nouveau chiffre d'affaires, travail que l'on peut
+  perdre sans gagner moins, inflation saisie avec un lien vers l'organisme statistique officiel) et modèle d'email
+  d'annonce ajouté en France ([28](28-hausse-de-tarifs.md)).
+- **Prochaines actions de Claude** : besoins P3 restants ([02](02-besoins-clients.md) : proposition commerciale,
+  accord de confidentialité, CGV, sous-traitance), en commençant par l'accord de confidentialité (générateur, avec
+  le moteur du générateur de contrat) ; comptes : adaptateur
   PostgreSQL et sauvegardes dès que l'hébergeur est choisi ; taux du crédit pour
   dividendes de la Saskatchewan et du Nunavut dès qu'ils sont publiés (formulaires 2026) ;
   trouver la cause du contrôle de contraste intermittent de l'Espace ; revérifier les grilles des prestataires de
@@ -252,6 +255,8 @@ Objectif : un site mesuré, sous sa propre marque, qui commence à rapporter, et
       [26](26-changement-de-statut.md)
 - [x] Calculateur du bureau à domicile dans les 4 pays (méthodes officielles, plafond, report) :
       [27](27-bureau-a-domicile.md)
+- [x] Calculateur de hausse de tarifs dans les 4 pays et modèle d'email d'annonce en France :
+      [28](28-hausse-de-tarifs.md)
 - [ ] Guide du recouvrement judiciaire (injonction de payer, procédure simplifiée) une fois les règles 2026 vérifiées :
       étude et plan prêts ([14](14-etude-recouvrement.md)) ; deux textes de 2026 à lire en entier avant publication
 - [x] Guide « Compte bancaire professionnel » avec vérificateur (règle des 10 000 € sur deux ans, mention « EI »,

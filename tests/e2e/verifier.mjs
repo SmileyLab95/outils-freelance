@@ -283,6 +283,8 @@ const tests = {
     await page.click('[data-copy="#tpl-1"]');
     check(await copied(page, '[data-copy="#tpl-1"]'), "modèles : bouton Copier");
     check((await page.evaluate(() => navigator.clipboard.readText())).length > 100, "modèles : texte dans le presse-papiers");
+    await page.click('[data-copy="#tpl-7"]');
+    check((await page.evaluate(() => navigator.clipboard.readText())).includes("Évolution de mes tarifs"), "modèles : modèle d'annonce de hausse copié");
   },
   async "us/sole-proprietor-vs-s-corp/"(page) {
     const t = (id) => page.textContent(`#${id}`);
@@ -547,6 +549,29 @@ const tests = {
     await page.fill("#ho-office", "150");
     await page.fill("#ho-expenses", "24,000");
   },
+  async "us/rate-increase-calculator/"(page) {
+    const t = async (id) => (await page.textContent(`#${id}`)).replace(/\s+/g, " ").trim();
+    check((await t("pi-big")) === "$93.50 / hour" && (await t("pi-sub")) === "A 10% increase." && (await t("pi-before")) === "$8,500.00" &&
+      (await t("pi-after")) === "$9,350.00" && (await t("pi-change")) === "+$850.00 (+10%)" && !(await page.isVisible("#pi-real-row")),
+      `hausse US : 85 $ + 10 %, 100 heures → 93,50 $ (obtenu : ${await t("pi-big")})`);
+    check((await t("pi-breakeven")) === "You can lose up to 9.1% of your billed hours before earning less than today.", "hausse US : perte supportable de 9,1 %");
+    await page.fill("#pi-inflation", "3");
+    check((await t("pi-inflation-rate")) === "$87.55 / hour" && (await t("pi-real")) === "+6.8%", "hausse US : inflation de 3 % → tarif qui suit et hausse réelle");
+    await page.fill("#pi-loss", "20");
+    check((await t("pi-after")) === "$7,480.00" && (await t("pi-change")) === "−$1,020.00 (−12%)", "hausse US : 20 % de travail perdu → chiffre d'affaires en baisse");
+    await page.selectOption("#pi-mode", "rate");
+    check((await page.isVisible("#pi-new-rate")) && !(await page.isVisible("#pi-increase")) && (await t("pi-big")) === "$95.00 / hour" && (await t("pi-sub")) === "A 11.8% increase.",
+      "hausse US : nouveau tarif saisi → hausse recalculée");
+    await accessible(page, "hausse US (nouveau tarif, inflation, perte)");
+    await page.reload({ waitUntil: "networkidle" });
+    check((await page.inputValue("#pi-mode")) === "rate" && (await page.inputValue("#pi-loss")) === "20", "hausse US : saisie mémorisée après rechargement");
+    await page.fill("#pi-rate", "");
+    check((await t("pi-sub")) === "Enter your current rate." && !(await page.isVisible("#pi-results")), "hausse US : tarif vide → message, résultats masqués");
+    await page.fill("#pi-rate", "85");
+    await page.selectOption("#pi-mode", "percent");
+    await page.fill("#pi-loss", "0");
+    await page.fill("#pi-inflation", "");
+  },
   async "us/invoice-generator/"(page) {
     await page.fill("#iv-me-name", "Alex Morgan Design LLC");
     await page.fill("#iv-client-name", "Northwind Inc.");
@@ -809,6 +834,15 @@ const tests = {
     await accessible(page, "use of home UK (moins de 25 heures)");
     await page.fill("#ho-hours", "60");
     await page.fill("#ho-costs", "3,000");
+  },
+  async "uk/rate-increase-calculator/"(page) {
+    const t = async (id) => (await page.textContent(`#${id}`)).replace(/\s+/g, " ").trim();
+    check((await t("pi-big")) === "£440.00 / day" && (await t("pi-before")) === "£6,000.00" && (await t("pi-after")) === "£6,600.00" &&
+      (await t("pi-breakeven")).includes("of your billed days"), `hausse UK : 400 £ par jour + 10 %, 15 jours (obtenu : ${await t("pi-big")})`);
+    await page.selectOption("#pi-unit", "hour");
+    check((await t("pi-volume-label")) === "Hours billed a month" && (await t("pi-big")) === "£440.00 / hour", "hausse UK : unité changée → libellés à l'heure");
+    await accessible(page, "hausse UK (à l'heure)");
+    await page.selectOption("#pi-unit", "day");
   },
   async "uk/payment-reminder-letter/"(page) {
     const due = new Date(Date.now() - 50 * 86400000).toISOString().slice(0, 10);
@@ -1822,6 +1856,16 @@ const tests = {
     check((await t("ho-sub")).includes("aucune des deux conditions"), "bureau CA-FR : condition non remplie");
     await page.check("#ho-eligible");
   },
+  async "ca/rate-increase-calculator/"(page) {
+    const t = async (id) => (await page.textContent(`#${id}`)).replace(/\s+/g, " ").trim();
+    check((await t("pi-big")) === "$99.00 / hour" && (await t("pi-sub")) === "A 10% increase.", `hausse CA : 90 $ + 10 % (obtenu : ${await t("pi-big")})`);
+    await accessible(page, "hausse CA");
+  },
+  async "ca/fr/calculateur-hausse-tarifs/"(page) {
+    const t = async (id) => (await page.textContent(`#${id}`)).replace(/\s+/g, " ").trim();
+    check((await t("pi-big")).replace(/\s/g, "") === "99,00$/heure" && (await t("pi-sub")).replace(/\s/g, "") === "Unehaussede10%.",
+      `hausse CA-FR : 90 $ + 10 % (obtenu : ${await t("pi-big")})`);
+  },
   async "ca/freelance-email-templates/"() {},
   async "ca/legal-notice/"() {},
   async "ca/privacy-policy/"() {},
@@ -1952,6 +1996,15 @@ const tests = {
     await page.reload({ waitUntil: "networkidle" });
     check((await page.inputValue("#ho-regime")) === "reel", "bureau FR : régime mémorisé après rechargement");
     await page.selectOption("#ho-regime", "micro");
+  },
+  async "fr/augmenter-ses-tarifs/"(page) {
+    const t = async (id) => (await page.textContent(`#${id}`)).replace(/\s+/g, " ").trim();
+    check((await t("pi-big")).replace(/\s/g, "") === "550,00€/jour" && (await t("pi-breakeven")).replace(/\s/g, "").includes("jusqu'à9,1%devosjoursfacturés"),
+      `hausse FR : TJM de 500 € + 10 %, 15 jours (obtenu : ${await t("pi-big")})`);
+    await page.fill("#pi-increase", "-5");
+    check((await t("pi-sub")).replace(/\s/g, "") === "Unebaissede5%." && (await t("pi-breakeven")).startsWith("Le tarif ne monte pas"), "hausse FR : baisse de tarif signalée");
+    await accessible(page, "hausse FR (baisse)");
+    await page.fill("#pi-increase", "10");
   },
   async "fr/comparateur-statuts/"(page) {
     // Micro libérale : 60 000 − 5 000 − 15 480 − 4 983,99 = 34 536 € (voir tests unitaires)

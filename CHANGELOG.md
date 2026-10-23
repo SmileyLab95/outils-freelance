@@ -1,5 +1,16 @@
 # Journal des modifications
 
+## 2026-10-23 — Hausse de tarifs (4 pays)
+
+- Calculateur « *Rate increase* » aux États-Unis, au Royaume-Uni et au Canada, et « Augmenter ses tarifs » en France
+  et au Canada en français : nouveau tarif, chiffre d'affaires mensuel avant et après, travail que l'on peut perdre
+  sans gagner moins (1 − ancien tarif ÷ nouveau), tarif qui suit l'inflation saisie et hausse réelle ; lien vers le
+  BLS, l'ONS, Statistique Canada ou l'Insee pour le dernier chiffre.
+- France : modèle d'email « Annoncer une hausse de tarifs » ajouté aux modèles d'emails (7 modèles).
+- Spécification [28](documentation/28-hausse-de-tarifs.md). Tests : `price-increase.test.mjs` ; 10 erreurs
+  réintroduites, toutes détectées ; suite complète (331 tests unitaires, 27 tests serveur, 2 964
+  vérifications navigateur du site public).
+
 ## 2026-10-23 — Bureau à domicile (4 pays)
 
 - Calculateurs du bureau à domicile : « *Home office deduction* » aux États-Unis (méthode simplifiée de l'IRS à 5 $ par

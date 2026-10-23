@@ -36,7 +36,8 @@
       "items": [
         "rate",
         "rate-converter",
-        "project-price"
+        "project-price",
+        "raise"
       ]
     },
     {
