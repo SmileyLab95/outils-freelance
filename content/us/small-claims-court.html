@@ -1,0 +1,281 @@
+<!--{
+  "id": "court",
+  "slug": "small-claims-court/",
+  "title": "Small Claims Court Limits by State for Unpaid Invoices",
+  "description": "Find the small claims limit in your state, whether it changes for an LLC, and the steps to sue a client over an unpaid invoice. All 50 states and DC.",
+  "menu": "Small claims court",
+  "icon": "⚖️",
+  "blurb": "The small claims limit in every state, and how to sue a client.",
+  "app": "US Small Claims Court Finder",
+  "scripts": [
+    "engines/court-us.js",
+    "tools/us-court.js"
+  ],
+  "rules": "us",
+  "sources": [
+    "us_small_claims_limits"
+  ],
+  "priority": 0.8,
+  "faq": [
+    [
+      "Can I take a client to small claims court for an unpaid invoice?",
+      "Yes. Every state has a small claims court (or a court with a simplified procedure) for money claims up to a limit, designed for people who represent themselves. Send a final demand letter first, then file in the state, and usually the county, where your client lives or does business: each state's rules say where you can file."
+    ],
+    [
+      "What is the small claims limit in my state?",
+      "It ranges from $2,500 in Kentucky to $25,000 in Delaware and Tennessee. Some limits depend on the court or the county (New York, North Carolina, Pennsylvania), and Georgia and Wisconsin raise theirs for claims filed from January 1, 2027. Many states don't count interest and court costs towards the limit."
+    ],
+    [
+      "Does it matter if I have an LLC or a corporation?",
+      "Sometimes. In California, a business entity can claim up to $6,250 instead of $12,500, and in Washington $5,000 instead of $10,000; in New York, a corporation files a commercial claim. Some states require a company to have a lawyer (Illinois, the District of Columbia, and New Jersey above $5,000), while others don't allow lawyers at all (Michigan, Nebraska). A sole proprietor sues as an individual."
+    ],
+    [
+      "Do I need a lawyer for small claims court?",
+      "No: small claims courts are designed for people who represent themselves. Some states don't allow lawyers, or allow them only with the judge's permission."
+    ],
+    [
+      "How long do I have to sue for an unpaid invoice?",
+      "It depends on your state's statute of limitations, which is often different for written and oral contracts. Check your state's law, and don't wait: the older the debt, the harder it is to collect."
+    ]
+  ]
+}-->
+<script type="application/json" id="court-us-data">
+{
+  "notes": {
+    "AL": "Small claims are a division of the district court. Filing fees depend on the county.",
+    "AK": "The limit doesn't count costs, interest and attorney fees. You can file a larger claim, but you give up the amount above $10,000.",
+    "AZ": "Small claims division of the justice court. The limit rose from $3,500 to $5,000 in 2025 and doesn't count interest and costs.",
+    "AR": "Small claims division of the district court, for contracts and for damage to or recovery of personal property.",
+    "CA": "$12,500 if you sue as an individual, sole proprietors included; $6,250 for a corporation, an LLC or another entity. No more than two claims over $2,500 a year anywhere in California, and a claim can't be split.",
+    "CO": "The limit doesn't count interest and costs. No more than 2 claims a month in a county, and 18 a year.",
+    "CT": "The limit counts attorney fees and collection costs, but not interest.",
+    "DE": "Justice of the Peace Court. Filing a larger claim there means giving up the amount above $25,000.",
+    "DC": "Small Claims and Conciliation Branch of the Superior Court. The limit doesn't count interest, attorney fees and costs. A business that files a claim must have a lawyer.",
+    "FL": "County court small claims. The limit doesn't count costs, interest and attorney fees.",
+    "GA": "Magistrate court. For claims filed from January 1, 2027, the limit rises to $25,000.",
+    "HI": "Small claims division of the district court. The limit doesn't count interest and costs.",
+    "ID": "The limit rose from $5,000 to $15,000 on July 1, 2026.",
+    "IL": "The limit doesn't count interest and costs. A corporation must be represented by a lawyer.",
+    "IN": "A corporation can appear without a lawyer only for claims of $6,000 or less. Filing in small claims means giving up anything above $10,000.",
+    "IA": "The limit doesn't count interest and court costs.",
+    "KS": "The limit rose from $4,000 to $10,000 in 2024.",
+    "KY": "Small claims division of the district court. The limit doesn't count interest and costs, and you can file no more than 25 claims a year.",
+    "LA": "Small claims divisions of city courts hear claims up to $5,000, not counting interest, costs, attorney fees and penalties; justice of the peace courts also hear claims up to $5,000.",
+    "ME": "The limit rose from $6,000 to $10,000 on January 1, 2026, and doesn't count interest and costs.",
+    "MD": "District court. The limit doesn't count interest, costs and attorney fees.",
+    "MA": "Small claims are filed in the District Court, the Boston Municipal Court or the Housing Court.",
+    "MI": "Small claims division of the district court. No lawyers: a business is represented by an officer or employee who knows the facts, and either side can ask to move the case to the regular district court.",
+    "MN": "Conciliation court. The limit is $4,000 for a claim involving a consumer credit transaction.",
+    "MS": "Justice court.",
+    "MO": "The limit doesn't count interest and costs. No more than 12 claims a year.",
+    "MT": "Small claims court, if your client can be served in the county. The limit doesn't count costs.",
+    "NE": "No lawyers. The limit doesn't count interest and costs. No more than 2 claims a week and 10 a year.",
+    "NV": "Justice court. Filing a larger claim means giving up the excess, and a claim can't be split.",
+    "NH": "District division of the circuit court. The limit doesn't count interest and costs. Claims over $5,000 go to mandatory mediation, and you must file online.",
+    "NJ": "Small Claims Section of the Special Civil Part up to $5,000, Special Civil Part up to $20,000. A corporation must have a lawyer for claims over $5,000.",
+    "NM": "Magistrate court (Metropolitan Court in Bernalillo County). Your client must be served in New Mexico.",
+    "NY": "$10,000 in New York City, $5,000 in City Courts, $3,000 in Town and Village Courts. A corporation, partnership or association files a commercial claim instead: up to $10,000 in New York City and $5,000 in City Courts.",
+    "NC": "Magistrates hear small claims up to a limit set by each county, from $5,000 to $10,000: ask the clerk of court.",
+    "ND": "There's no jury and no appeal.",
+    "OH": "Small claims division of the municipal or county court. The limit doesn't count interest and costs.",
+    "OK": "The limit doesn't count attorney fees and costs.",
+    "OR": "There's no appeal from a small claims judgment.",
+    "PA": "Magisterial district judges hear claims up to $12,000, not counting interest and costs; the limit is $10,000 in Philadelphia Municipal Court.",
+    "RI": "District court, for claims based on a contract, a retail sale or services. The limit doesn't count interest and costs.",
+    "SC": "Magistrate court.",
+    "SD": "Magistrate court. A small claims decision can't be appealed.",
+    "TN": "General sessions courts hear claims up to $25,000 in most counties; a few larger counties have other limits.",
+    "TX": "Justice court. The limit counts attorney fees, but not statutory interest and court costs.",
+    "UT": "The limit counts attorney fees, but not court costs and interest, for claims filed from 2025 to 2029.",
+    "VT": "The limit is $5,000 for consumer credit and medical debt.",
+    "VA": "Small claims division of the general district court. The limit doesn't count interest, and lawyers generally can't represent the parties.",
+    "WA": "$10,000 if you sue as an individual, $5,000 for a business or other entity. Lawyers can take part only with the judge's permission.",
+    "WV": "Magistrate court. The limit rose to $20,000 in July 2025 and doesn't count interest and costs.",
+    "WI": "For claims filed from January 1, 2027, the limit rises to $15,000.",
+    "WY": "Circuit court."
+  },
+  "links": {
+    "AL": "https://www.alabamalegalhelp.org/resource/small-claims-court",
+    "AK": "https://public.courts.alaska.gov/web/forms/docs/sc-100.pdf",
+    "AZ": "https://www.azcourts.gov/legalinfohub/Legal-Info-Sheets/Legal-Info-Sheets-Small-Claims/Plaintiffs-Initial-Steps",
+    "AR": "https://arcourts.gov/courts/district-courts",
+    "CA": "https://selfhelp.courts.ca.gov/small-claims-california",
+    "CO": "https://www.coloradojudicial.gov/self-help/opening-case",
+    "CT": "https://www.jud.ct.gov/directory/directory/directions/smallclaims.htm",
+    "DE": "https://www.courts.delaware.gov/jpcourt/jurisdiction.aspx",
+    "DC": "https://www.dccourts.gov/superior-court/superior-court-divisions/civil-division/small-claims",
+    "FL": "https://www.flcourts.gov/Courts-System/florida-courts-help/diy-florida",
+    "GA": "https://georgiacourts.gov/a2j/self-help-resources/navigating-the-courts/",
+    "HI": "https://www.courts.state.hi.us/small_claims",
+    "ID": "https://legislature.idaho.gov/statutesrules/idstat/title1/t1ch23/sect1-2301/",
+    "IL": "https://www.illinoislegalaid.org/legal-information/small-claims-basics",
+    "IN": "https://www.in.gov/courts/files/small-claims-manual.pdf",
+    "IA": "https://www.iowacourts.gov/for-the-public/representing-yourself/small-claims",
+    "KS": "https://self-help.kscourts.gov/SmallClaims",
+    "KY": "https://www.kycourts.gov/Legal-Help/Documents/P-6_Small_Claims_Handbook.pdf",
+    "LA": "https://www.legis.la.gov/legis/Law.aspx?d=77961",
+    "ME": "https://www.courts.maine.gov/help/small-claims/index.html",
+    "MD": "https://www.mdcourts.gov/legalhelp/smallclaims",
+    "MA": "https://www.mass.gov/info-details/small-claims-court",
+    "MI": "https://michiganlegalhelp.org/resources/money-debt-and-consumer-issues/overview-of-small-claims-court",
+    "MN": "https://mncourts.gov/help-topics/conciliation-court",
+    "MS": "https://courts.ms.gov/trialcourts/justicecourt/justicecourt.php",
+    "MO": "https://www.courts.mo.gov/page.jsp?id=704",
+    "MT": "https://courts.mt.gov/forms/civilforms",
+    "NE": "https://supremecourt.nebraska.gov/self-help/small-claims",
+    "NV": "https://nvcourts.gov/aoc/discover_nevada_justice/small_claims_court",
+    "NH": "https://www.courts.nh.gov/our-courts/circuit-court/district-division/civil-cases",
+    "NJ": "https://www.njcourts.gov/self-help/special-civil-court",
+    "NM": "https://nmcourts.gov/wp-content/uploads/sites/22/2023/11/How-to-File-a-Civil-Lawsuit-7_10_2023.pdf",
+    "NY": "https://www.nycourts.gov/help/small-claims",
+    "NC": "https://www.nccourts.gov/help-topics/lawsuits-and-small-claims/small-claims",
+    "ND": "https://www.ndcourts.gov/legal-self-help/small-claims",
+    "OH": "https://codes.ohio.gov/ohio-revised-code/section-1925.02",
+    "OK": "https://www.oscn.net/applications/oscn/DeliverDocument.asp?CiteID=438809",
+    "OR": "https://www.courts.oregon.gov/forms/Documents/SC-INSTR-plntf.pdf",
+    "PA": "https://www.pacourts.us/Storage/media/pdfs/20210211/190236-pennsylvaniamagisterialdistrictjudgebenchbookjan2020-007553.pdf",
+    "RI": "https://www.courts.ri.gov/Courts/districtcourt/Pages/Small%20Claims.aspx",
+    "SC": "https://www.sccourts.org/courts/trial-courts/magistrate-court/",
+    "SD": "https://ujs.sd.gov/self-help/civil-law-help/small-claims/",
+    "TN": "https://www.tncourts.gov/courts/general-sessions-courts",
+    "TX": "https://texaslawhelp.org/article/how-to-sue-in-justice-court-small-claims-court",
+    "UT": "https://www.utcourts.gov/en/self-help/case-categories/consumer/small-claims.html",
+    "VT": "https://www.vermontjudiciary.org/civil/suing-and-being-sued",
+    "VA": "https://selfhelp.vacourts.gov/page/11/small-claims",
+    "WA": "https://www.courts.wa.gov/newsinfo/resources/?altMenu=smal&fa=newsinfo_jury.scc",
+    "WV": "https://www.courtswv.gov/lower-courts/magistrate-courts",
+    "WI": "https://www.wicourts.gov/services/public/selfhelp/smallclaims.htm",
+    "WY": "https://www.wyocourts.gov/legal-help-by-topic/small-claims/"
+  },
+  "verdicts": {
+    "small_claims": "Small claims court",
+    "depends": "Depends on the court",
+    "above_limit": "Above the limit"
+  },
+  "subs": {
+    "small_claims": "Your claim fits under the {limit} limit.",
+    "depends": "Your claim fits only in some courts or counties, where the limit goes up to {max}.",
+    "above_limit": "The limit is {limit}. In most states you can give up the excess to stay in small claims; otherwise, sue in a higher court."
+  },
+  "next": "From {date}: {limit}."
+}
+</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · All 50 states and DC</span>
+    <h1>Small claims court for an unpaid invoice</h1>
+    <p class="lead">Your client still hasn't paid after your reminders? Find the small claims limit in your state, whether it changes for an LLC, and how a small claims case works.</p>
+    <ul class="trust"><li>51 jurisdictions</li><li>Limits checked in October 2026</li><li>Court and law links</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="court-form" onsubmit="return false">
+      <h2>Your claim</h2>
+      <div class="fields">
+        <div class="field full"><label for="c-state">State where you'll file</label>
+          <select id="c-state" name="state" aria-describedby="c-state-hint" data-save>
+            <option value="AL">Alabama</option>
+            <option value="AK">Alaska</option>
+            <option value="AZ">Arizona</option>
+            <option value="AR">Arkansas</option>
+            <option value="CA" selected>California</option>
+            <option value="CO">Colorado</option>
+            <option value="CT">Connecticut</option>
+            <option value="DE">Delaware</option>
+            <option value="DC">District of Columbia</option>
+            <option value="FL">Florida</option>
+            <option value="GA">Georgia</option>
+            <option value="HI">Hawaii</option>
+            <option value="ID">Idaho</option>
+            <option value="IL">Illinois</option>
+            <option value="IN">Indiana</option>
+            <option value="IA">Iowa</option>
+            <option value="KS">Kansas</option>
+            <option value="KY">Kentucky</option>
+            <option value="LA">Louisiana</option>
+            <option value="ME">Maine</option>
+            <option value="MD">Maryland</option>
+            <option value="MA">Massachusetts</option>
+            <option value="MI">Michigan</option>
+            <option value="MN">Minnesota</option>
+            <option value="MS">Mississippi</option>
+            <option value="MO">Missouri</option>
+            <option value="MT">Montana</option>
+            <option value="NE">Nebraska</option>
+            <option value="NV">Nevada</option>
+            <option value="NH">New Hampshire</option>
+            <option value="NJ">New Jersey</option>
+            <option value="NM">New Mexico</option>
+            <option value="NY">New York</option>
+            <option value="NC">North Carolina</option>
+            <option value="ND">North Dakota</option>
+            <option value="OH">Ohio</option>
+            <option value="OK">Oklahoma</option>
+            <option value="OR">Oregon</option>
+            <option value="PA">Pennsylvania</option>
+            <option value="RI">Rhode Island</option>
+            <option value="SC">South Carolina</option>
+            <option value="SD">South Dakota</option>
+            <option value="TN">Tennessee</option>
+            <option value="TX">Texas</option>
+            <option value="UT">Utah</option>
+            <option value="VT">Vermont</option>
+            <option value="VA">Virginia</option>
+            <option value="WA">Washington</option>
+            <option value="WV">West Virginia</option>
+            <option value="WI">Wisconsin</option>
+            <option value="WY">Wyoming</option>
+          </select>
+          <span class="hint" id="c-state-hint">Usually where your client lives or does business.</span></div>
+        <div class="field full"><label for="c-amount">Amount you're claiming</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="c-amount" name="amount" value="5,000" aria-describedby="c-amount-hint" data-save><span>$</span></div>
+          <span class="hint" id="c-amount-hint">The unpaid invoice, without interest or court costs.</span></div>
+        <div class="field full"><label for="c-entity">You're suing as</label>
+          <select id="c-entity" name="entity" data-save>
+            <option value="individual" selected>An individual or a sole proprietor</option>
+            <option value="entity">An LLC or a corporation</option>
+          </select></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <h2 class="sr-only">Result</h2>
+      <div class="result-hero" role="status" aria-atomic="true">
+        <div class="label">Where to claim</div>
+        <div class="big" id="c-verdict" style="font-size: clamp(1.7rem, 3.6vw, 2.3rem);">–</div>
+        <div class="sub" id="c-sub">–</div>
+      </div>
+      <ul class="result-list result-wrap card" style="padding: 6px 18px;">
+        <li><span>Small claims limit</span><b id="c-limit">–</b></li>
+        <li id="c-next-row" hidden><span>Coming change</span><b id="c-next">–</b></li>
+      </ul>
+      <div class="card" style="margin-top: 16px; padding: 18px;">
+        <h3 style="font-size: 1rem; margin-bottom: 8px;">Good to know in <span id="c-name">California</span></h3>
+        <p id="c-note" style="margin: 0;">–</p>
+        <p class="small" style="margin: 10px 0 0;"><a id="c-link" href="https://selfhelp.courts.ca.gov/small-claims-california" rel="noopener">Small claims information for this state</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>How a small claims case works</h2>
+  <ol>
+    <li><strong>Final demand.</strong> Send a last written demand with the amount, a deadline and what you'll do next: the <a href="{{link:reminder}}">payment reminder generator</a> writes it.</li>
+    <li><strong>Check the limit and the court.</strong> Usually in the state, and the county, where your client lives or does business: each state's rules say where you can file.</li>
+    <li><strong>File your claim</strong> and pay the filing fee, which depends on the state, the county and the amount.</li>
+    <li><strong>Serve your client.</strong> The claim must reach your client in the way your state's rules require.</li>
+    <li><strong>The hearing.</strong> Bring your contract or accepted quote, the invoice, your reminders and any reply from your client. Some courts offer mediation first, and in some it's mandatory.</li>
+    <li><strong>Collect.</strong> If your client still doesn't pay after the judgment, ask the court how to enforce it, for example by garnishing wages or levying a bank account.</li>
+  </ol>
+  <h2>Good to know</h2>
+  <ul>
+    <li><strong>Interest and late fees</strong>: claim what your contract provides. The <a href="{{link:latefee}}">late fee calculator</a> works it out.</li>
+    <li><strong>Freelance protection laws</strong>: in New York, California and a few other places, freelance laws add remedies, such as double damages for late payment in New York: see the <a href="{{link:freelance-law}}">Freelance Isn't Free Act guide</a>.</li>
+    <li><strong>Don't wait</strong>: the time limit to sue depends on your state and on whether your contract was written.</li>
+  </ul>
+  <p class="small muted">Information for guidance only, from each state's court and legislature pages. Limits change: check with the court clerk before you file. For a large or complex claim, talk to a lawyer or your state's legal aid.</p>
+</section>

@@ -149,9 +149,10 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   prescription de 6 ans ; Écosse et Irlande du Nord renvoyées) et outil « Petites créances » du Canada en anglais et
   en français (tribunal, plafond et prescription des 13 provinces et territoires, particularités du Québec ; plafond
   du Nunavut non confirmé, donc non affiché). Quatorze règles nouvelles, chacune avec sa source officielle (D26).
-- **Prochaines actions de Claude** : recouvrement en justice aux États-Unis (plafonds des 51 juridictions déjà
-  recherchés le 23/10/2026, [24](24-recouvrement-uk-us-ca.md) § 3 ; reste à relire la source exacte de chacun, puis
-  l'outil) ; assurance et compte professionnel hors de France (P2) ; comptes : adaptateur
+- **Recouvrement en justice aux États-Unis (23/10/2026)** : outil *Small claims court* des 50 États et du district
+  de Columbia (plafond selon le statut, plafonds selon le tribunal ou le comté, hausses du 01/01/2027 en Géorgie et
+  au Wisconsin, particularités de chaque État) ; le besoin P2 « Recouvrement en justice » est couvert hors de France.
+- **Prochaines actions de Claude** : assurance et compte professionnel hors de France (P2) ; comptes : adaptateur
   PostgreSQL et sauvegardes dès que l'hébergeur est choisi ; taux du crédit pour
   dividendes de la Saskatchewan et du Nunavut dès qu'ils sont publiés (formulaires 2026) ;
   trouver la cause du contrôle de contraste intermittent de l'Espace ; revérifier les grilles des prestataires de
@@ -222,7 +223,7 @@ Objectif : un site mesuré, sous sa propre marque, qui commence à rapporter, et
       numéro définitif de la mention de franchise (L. 233-3 du CIBS), calendriers 2027-2028 (`scripts/calendriers.py`)
 - [x] Recouvrement en justice au Royaume-Uni (*small claims* : frais, circuit, démarches) et au Canada (petites
       créances des 13 provinces et territoires, anglais et français) : spécification [24](24-recouvrement-uk-us-ca.md)
-- [ ] Recouvrement en justice aux États-Unis (*small claims* des 50 États et du district de Columbia) :
+- [x] Recouvrement en justice aux États-Unis (*small claims* des 50 États et du district de Columbia) :
       [24](24-recouvrement-uk-us-ca.md) § 3
 - [ ] Guide du recouvrement judiciaire (injonction de payer, procédure simplifiée) une fois les règles 2026 vérifiées :
       étude et plan prêts ([14](14-etude-recouvrement.md)) ; deux textes de 2026 à lire en entier avant publication

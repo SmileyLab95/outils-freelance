@@ -165,6 +165,7 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--b
 .result-list { margin: 14px 0 0; padding: 0; list-style: none; }
 .result-list li { display: flex; justify-content: space-between; gap: 12px; padding: 11px 2px; border-bottom: 1px solid var(--line); font-size: .95rem; }
 .result-list li:last-child { border-bottom: 0; }
+.result-list li:has(~ li[hidden]):not(:has(~ li:not([hidden]))) { border-bottom: 0; }
 .result-list b { font-variant-numeric: tabular-nums; white-space: nowrap; }
 .notice { border-radius: var(--radius-sm); padding: 12px 14px; font-size: .9rem; background: var(--brand-soft); color: var(--brand-ink); }
 .notice.warn { background: var(--warn-soft); color: #7c2d12; }

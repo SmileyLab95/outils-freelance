@@ -463,6 +463,33 @@ const tests = {
     await page.click("#rm-copy");
     check(await copied(page, "#rm-copy"), "relance US : bouton Copy");
   },
+  async "us/small-claims-court/"(page) {
+    const text = (id) => page.textContent(`#${id}`).then((t) => t.trim());
+    check((await text("c-verdict")) === "Small claims court" && (await text("c-limit")) === "$12,500" && (await text("c-note")).includes("sole proprietors") &&
+      (await page.getAttribute("#c-link", "href")).includes("selfhelp.courts.ca.gov") && !(await page.isVisible("#c-next-row")),
+      `small claims US : Californie, 5 000 $ → plafond de 12 500 $ (obtenu : ${await text("c-verdict")}, ${await text("c-limit")})`);
+    await page.selectOption("#c-entity", "entity");
+    await page.fill("#c-amount", "7,000");
+    check((await text("c-limit")) === "$6,250" && (await text("c-verdict")) === "Above the limit" && (await text("c-sub")).includes("$6,250"),
+      "small claims US : Californie, LLC, 7 000 $ → au-delà du plafond de 6 250 $");
+    await page.selectOption("#c-state", "NY");
+    await page.selectOption("#c-entity", "individual");
+    check((await text("c-verdict")) === "Depends on the court" && (await text("c-limit")) === "$3,000 to $10,000" && (await text("c-name")) === "New York",
+      "small claims US : New York, 7 000 $ → selon le tribunal, de 3 000 à 10 000 $");
+    await page.selectOption("#c-state", "GA");
+    check(new Date() < new Date("2027-01-01")
+      ? (await text("c-limit")) === "$15,000" && await page.isVisible("#c-next-row") && (await text("c-next")) === "From January 1, 2027: $25,000."
+      : (await text("c-limit")) === "$25,000" && !(await page.isVisible("#c-next-row")), "small claims US : Géorgie → 15 000 $, puis 25 000 $ au 1er janvier 2027");
+    await page.selectOption("#c-state", "KY");
+    await page.fill("#c-amount", "3,000");
+    check((await text("c-verdict")) === "Above the limit" && (await text("c-limit")) === "$2,500", "small claims US : Kentucky, 3 000 $ → au-delà du plafond de 2 500 $");
+    await accessible(page, "small claims US (Kentucky)");
+    await page.reload({ waitUntil: "networkidle" });
+    check((await page.inputValue("#c-state")) === "KY" && (await text("c-limit")) === "$2,500", "small claims US : situation mémorisée après rechargement");
+    await page.selectOption("#c-state", "CA");
+    await page.fill("#c-amount", "5,000");
+    check((await text("c-verdict")) === "Small claims court", "small claims US : situation par défaut rétablie");
+  },
   async "us/invoice-generator/"(page) {
     await page.fill("#iv-me-name", "Alex Morgan Design LLC");
     await page.fill("#iv-client-name", "Northwind Inc.");

@@ -78,7 +78,7 @@ Matrice revue le 22/10/2026 d'après les pages publiées (identifiants de `conte
 | Relancer un impayé | Générateur de relances (du rappel courtois à la mise en demeure) | ✅ | ✅ | ✅ | ✅ | P1 |
 | Calculer les pénalités | Calculateur de pénalités / *statutory interest* / *late fee* | ✅ | ✅ | ✅ | ✅ | P1 |
 | Date d'échéance | Calculateur de date d'échéance (45 jours fin de mois…) | ✅ | 🟡 | 🟡 | 🟡 | P3 |
-| Recouvrement en justice | Guide (injonction de payer, *small claims*, *money claim online*) | 🟡 | 🟡 | ✅ *small claims* (frais, circuit, démarches) | ✅ petites créances (13 provinces et territoires) | P2 |
+| Recouvrement en justice | Guide (injonction de payer, *small claims*, *money claim online*) | 🟡 | ✅ *small claims* (51 juridictions) | ✅ *small claims* (frais, circuit, démarches) | ✅ petites créances (13 provinces et territoires) | P2 |
 
 ### 7. Impôts et cotisations
 
@@ -122,8 +122,7 @@ Matrice revue le 22/10/2026 d'après les pages publiées (identifiants de `conte
 - **P1** : Espace entrepreneur hors de France (après la plateforme française). Comparateur de statuts au Canada fait le 22/10/2026 (Saskatchewan et Nunavut en attente d'un taux officiel).
 - **P2** (convertisseur de tarifs, prix au forfait et « freelance ou salarié » faits le 22/10/2026) : checklist de
   création, jauges de seuils, client étranger et W-8BEN faits le 22/10/2026 ; recouvrement en justice fait au
-  Royaume-Uni et au Canada le 22/10/2026, à faire aux États-Unis (51 juridictions à vérifier) et en France (textes
-  de 2026 à lire) ; assurance et compte pro hors de France.
+  Royaume-Uni, au Canada et aux États-Unis le 23/10/2026, à faire en France (textes de 2026 à lire) ; assurance et compte pro hors de France.
 - **P3** : date d'échéance, proposition commerciale, NDA, CGV, bureau à domicile, hausse de tarifs (calculateur),
   sous-traitance, guide de changement de statut.
 

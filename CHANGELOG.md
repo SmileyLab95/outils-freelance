@@ -1,5 +1,18 @@
 # Journal des modifications
 
+## 2026-10-23 — Recouvrement en justice : États-Unis
+
+- `/us/small-claims-court/` : plafond des *small claims* dans les 50 États et le district de Columbia, selon que l'on
+  agit en son nom (*sole proprietor* compris) ou comme LLC ou société (Californie, Washington, New York) ; plafonds
+  qui dépendent du tribunal ou du comté (New York, Caroline du Nord, Pennsylvanie) ; hausses du 1er janvier 2027
+  (Géorgie, Wisconsin) appliquées à leur date ; particularités de chaque État (avocats, nombre de demandes, exclusions)
+  et lien vers les informations de l'État. Les pages des relances et des pénalités de retard renvoient vers l'outil.
+- Règle `us_small_claims_limits` (us.json), une source par État ; recherches détaillées dans la spécification
+  [24](documentation/24-recouvrement-uk-us-ca.md), § 3.
+- Feuille de style : plus de trait sous la dernière ligne visible d'une liste de résultats.
+- Tests : `court-us.test.mjs` ; 12 erreurs réintroduites, toutes détectées ; suite complète (271 tests unitaires,
+  27 tests serveur, 2 525 vérifications navigateur du site public).
+
 ## 2026-10-23 — Recouvrement en justice : Royaume-Uni et Canada
 
 - Spécification [24](documentation/24-recouvrement-uk-us-ca.md) (Royaume-Uni, Canada, puis États-Unis) et décision

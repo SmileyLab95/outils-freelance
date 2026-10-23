@@ -2,7 +2,7 @@
 
 Besoin P2 de [02](02-besoins-clients.md) : « Recouvrement en justice » (*small claims*, *money claim online*), colonnes
 Royaume-Uni, États-Unis et Canada (la France attend les textes de 2026 : [14](14-etude-recouvrement.md)).
-Spécification du 22/10/2026 ; **§ 1 et § 2 réalisés le 23/10/2026**. Les règles ont été recherchées le 22/10/2026 sur les sites officiels (GOV.UK,
+Spécification du 22/10/2026 ; **§ 1, § 2 et § 3 réalisés le 23/10/2026**. Les règles ont été recherchées le 22/10/2026 sur les sites officiels (GOV.UK,
 justice.gov.uk, legislation.gov.uk, tribunaux et lois des provinces), lues par extraits de recherche : aucun de ces
 sites ne s'ouvre directement depuis l'environnement de travail. Confiance « medium » quand seul un extrait a été lu,
 « high » quand plusieurs pages officielles concordent.
@@ -97,7 +97,7 @@ défense), les intérêts judiciaires de chaque province.
   travailleur autonome) : texte précisé.
 - Les pages de relances (anglais et français) renvoient vers l'outil.
 
-## 3. États-Unis : *Small claims court* (`/us/small-claims-court/`) — à faire après le Canada
+## 3. États-Unis : *Small claims court* (`/us/small-claims-court/`)
 
 Même outil : l'État où l'on dépose, le montant réclamé et le statut du freelance (*sole proprietor*, ou société et
 LLC : plusieurs États ont un plafond plus bas ou exigent un avocat pour une société) ; réponse : le tribunal, le
@@ -105,7 +105,7 @@ plafond, les particularités, le lien officiel. La prescription des contrats (di
 le contrat est écrit ou non) ne sera publiée que si elle est vérifiée de la même façon. Les frais de dépôt varient
 souvent selon le comté : pas publiés.
 
-### Recherches du 22 et du 23/10/2026 (non publiées)
+### Recherches du 22 et du 23/10/2026
 
 Plafonds lus par extraits de recherche sur les sites des tribunaux et des législatures de chaque État (« moyen » :
 pages de comté ou guides seulement, texte de loi non lu). À reprendre une à une dans les règles, avec la source exacte.
@@ -154,7 +154,7 @@ pages de comté ou guides seulement, texte de loi non lu). À reprendre une à u
 | RI | 5 000 $ hors intérêts et frais (*District Court*) | | élevée |
 | SC | 7 500 $ (*magistrate court*, § 22-3-10) ; projets de hausse non adoptés à ce jour | | élevée (à revoir en décembre) |
 | SD | 12 000 $ (*magistrate court*) | pas d'appel | élevée |
-| TN | 25 000 $ (*General Sessions*, T.C.A. § 16-15-501(d)(1), d'après la note fiscale de 2025), autres plafonds dans quelques grands comtés | projet HB 982 / SB 572 (50 000 $) de 2025 : sort inconnu | faible : à confirmer avant publication |
+| TN | 25 000 $ (*General Sessions*, T.C.A. § 16-15-501(d)(1), d'après la note fiscale de 2025), autres plafonds dans quelques grands comtés | projet HB 982 / SB 572 (50 000 $) retiré du calendrier le 18/03/2026 | moyenne |
 | TX | 20 000 $ hors intérêts légaux et frais, honoraires compris (*justice court*) | | élevée |
 | UT | 20 000 $ honoraires compris, hors frais et intérêts (demandes de 2025 à 2029) | | élevée |
 | VA | 5 000 $ hors intérêts (§ 16.1-122.2) | en général sans avocat | élevée |
@@ -164,10 +164,23 @@ pages de comté ou guides seulement, texte de loi non lu). À reprendre une à u
 | WV | 20 000 $ hors intérêts et frais depuis le 07/07/2025 (§ 50-2-1) | | élevée |
 | WY | 6 000 $ (*circuit court*) | | élevée |
 
-**À faire avant publication** : relire la source officielle exacte de chaque ligne pour la règle (`us.json`) ;
-décider de l'affichage des États à plafond multiple (New York, Caroline du Nord, Tennessee) ; prévoir les changements
-du 01/01/2027 (Géorgie, Wisconsin) par une date d'effet dans la règle ; vérifier qui peut représenter une société
-dans chaque État où le plafond ou la représentation changent.
+### Réalisation (23/10/2026)
+
+- Page `/us/small-claims-court/` (menu « *Getting paid* ») : État, montant, statut (personne physique ou *sole
+  proprietor*, ou LLC et société). Verdict : *small claims*, « *depends on the court* » (New York, Caroline du Nord,
+  Pennsylvanie : plafond selon le tribunal ou le comté) ou au-delà du plafond ; plafond applicable, changement à venir
+  (Géorgie et Wisconsin au 01/01/2027, appliqué automatiquement à partir de la date), particularités de l'État, lien
+  vers les informations de l'État.
+- Moteur `engines/court-us.js` ; règle `us_small_claims_limits` (us.json) : plafond, plafond d'une entité
+  (Californie, Washington, New York), fourchette, date d'effet, et chaque chiffre cité par les notes de la page
+  (anciens plafonds, nombre de demandes par an, seuils de médiation ou d'avocat), une source par État.
+- Tennessee : le projet de hausse à 50 000 $ a été retiré en mars 2026, plafond de 25 000 $ (note fiscale de 2025).
+- Tests : `court-us.test.mjs` (plafond de chaque juridiction aux bornes, fourchettes, entités, dates d'effet, chaque
+  montant d'une note pris dans l'entrée de son État, FAQ) ; parcours navigateur ; 12 erreurs réintroduites, toutes
+  détectées. Revue des captures : un trait de séparation restait sous la dernière ligne visible d'une liste de
+  résultats quand la ligne suivante était masquée (corrigé dans la feuille de style commune).
+- La prescription des contrats n'est pas chiffrée (différente selon l'État et selon que le contrat est écrit) ; les
+  frais de dépôt non plus (selon le comté).
 
 ## 4. Pages existantes reliées
 
