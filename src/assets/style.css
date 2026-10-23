@@ -330,6 +330,9 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--b
 .k-signs .p-sign-box { width: 100%; margin: 6px 0 0; }
 .k-sign-note { font-size: 10px; color: #6d6a8a; }
 .k-blank { font-size: 11px; }
+.k-witness { margin-top: 12px; }
+.k-witness-line { margin: 28px 0 0; border-top: 1px solid #c7c4f0; padding-top: 2px; font-size: 10px; color: #6d6a8a; }
+.k-witness .k-witness-line:nth-child(2) { margin-top: 46px; }   /* place pour la signature du témoin */
 @media (max-width: 520px) { .k-signs { grid-template-columns: 1fr; } }
 
 @media print {
@@ -343,6 +346,7 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--b
   .paper { box-shadow: none; border-radius: 0; padding: 0; min-height: 0; font-size: 11pt; }
   .p-empty { color: transparent; }
   .k-blank { display: inline-block; min-width: 140px; border-bottom: 1px solid #17152f; line-height: 1; }
+  .k-signs > div { break-inside: avoid; }   /* une signature (et son témoin) jamais coupée entre deux pages */
 }
 
 /* ---------- Modèles d'emails et accueil ---------- */

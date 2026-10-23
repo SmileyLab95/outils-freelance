@@ -1,5 +1,22 @@
 # Journal des modifications
 
+## 2026-10-23 — Accord de confidentialité (4 pays)
+
+- Générateur d'accord de confidentialité : « Accord de confidentialité » en France, « *NDA template* » aux
+  États-Unis, au Royaume-Uni et au Canada, « Entente de confidentialité » au Canada en français. Mutuel ou à sens
+  unique (le client communique, ou vous communiquez), objet autorisé, date d'effet, période d'échange, durée de
+  confidentialité en années, exclusions, restitution ou destruction, signalements protégés, options rétro-ingénierie
+  et données personnelles ; PDF, Word et copie, saisie gardée sur l'appareil, séparée de celle du contrat.
+- Royaume-Uni : accord à sens unique sous droit anglais ou nord-irlandais rédigé comme un *deed*, avec un témoin
+  sous chaque signature (guide de l'IPO). États-Unis : avis d'immunité du *Defend Trade Secrets Act*. Canada : droit
+  de la province, et règle québécoise des contrats d'adhésion (Charte de la langue française, art. 55). France :
+  articles 1112-2 et 1210 du Code civil, L151-1 et L151-8 du Code de commerce. Onze règles nouvelles.
+- Moteur de rendu commun aux contrats et accords (`engines/contract-doc.js`) ; contrat de prestation rendu à
+  l'identique, et lié au nouvel accord ; une signature n'est plus coupée entre deux pages à l'impression.
+- Spécification [29](documentation/29-accord-de-confidentialite.md), décision D28. Tests : `contract-doc.test.mjs` ;
+  30 erreurs réintroduites, toutes détectées ; suite complète (351 tests unitaires, 27 tests serveur, 3 061
+  vérifications navigateur du site public).
+
 ## 2026-10-23 — Hausse de tarifs (4 pays)
 
 - Calculateur « *Rate increase* » aux États-Unis, au Royaume-Uni et au Canada, et « Augmenter ses tarifs » en France

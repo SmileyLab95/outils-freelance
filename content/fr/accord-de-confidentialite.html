@@ -1,0 +1,134 @@
+<!--{
+  "id": "nda",
+  "slug": "accord-de-confidentialite/",
+  "title": "Accord de confidentialité (NDA) : modèle gratuit",
+  "description": "Générez un accord de confidentialité mutuel ou à sens unique : objet, durée, exclusions, restitution des informations. Droit français, en PDF et Word.",
+  "menu": "Accord de confidentialité",
+  "icon": "🔒",
+  "blurb": "Protégez vos échanges avant une mission, en PDF ou en Word.",
+  "app": "Générateur d'accord de confidentialité",
+  "scripts": [
+    "engines/contract-doc.js",
+    "tools/contract.js"
+  ],
+  "rules": "fr",
+  "sources": [
+    "confidentialite_negociations",
+    "engagements_perpetuels",
+    "secret_affaires"
+  ],
+  "priority": 0.7,
+  "faq": [
+    [
+      "Quand faire signer un accord de confidentialité ?",
+      "Avant de communiquer l'information : un projet, un fichier de clients, un code source, une idée de produit. Pour une mission déjà signée, la clause de confidentialité du <a href=\"{{link:contract}}\">contrat de prestation</a> peut suffire."
+    ],
+    [
+      "Que prévoit la loi sans accord ?",
+      "Pendant des négociations, celui qui utilise ou divulgue sans autorisation une information confidentielle engage déjà sa responsabilité (article 1112-2 du Code civil). Mais la loi ne dit ni quelles informations sont confidentielles, ni pendant combien de temps : l'accord le précise. Pour relever du secret des affaires, une information doit en outre faire l'objet de mesures de protection raisonnables de la part de son détenteur (article L151-1 du Code de commerce) ; signer un accord de confidentialité est l'une des mesures possibles."
+    ],
+    [
+      "Accord mutuel ou à sens unique ?",
+      "À sens unique si une seule partie communique des informations confidentielles, mutuel si les deux le font. Le générateur fixe les rôles : la Partie divulgatrice communique l'information, la Partie destinataire la reçoit et doit la protéger."
+    ],
+    [
+      "Combien de temps dure la confidentialité ?",
+      "La loi ne fixe pas de durée, mais les engagements perpétuels sont interdits (article 1210 du Code civil) : l'accord fixe donc une durée en années, qui court après la fin de la période d'échange. Choisissez-la selon la durée de vie de l'information."
+    ],
+    [
+      "L'accord peut-il empêcher un signalement ?",
+      "Non : le secret des affaires ne peut pas être opposé à celui qui révèle de bonne foi, pour protéger l'intérêt général, une activité illégale, une faute ou un comportement répréhensible, notamment un lanceur d'alerte, ni à l'exercice de la liberté d'expression et d'information (article L151-8 du Code de commerce). L'accord le rappelle."
+    ],
+    [
+      "Ce modèle remplace-t-il un avocat ?",
+      "Non. Il couvre les discussions courantes entre professionnels. Pour un secret de grande valeur, une invention à breveter, un partenaire à l'étranger ou des clauses que l'autre partie veut négocier, faites-le relire par un avocat."
+    ]
+  ]
+}-->
+<script type="application/json" id="contract-data">{"store": "nda", "doc_title": [{"when": {"direction": ["mutual"]}, "text": "ACCORD DE CONFIDENTIALITÉ MUTUEL"}, {"text": "ACCORD DE CONFIDENTIALITÉ"}], "file": "Accord de confidentialité", "article": "Article {n} – {title}", "reset_confirm": "Effacer toutes les informations saisies ?", "hints": {"p_name": "nom du prestataire", "c_name": "nom du client", "purpose": "objet autorisé", "start": "date", "period": "période", "years": "durée", "today": "date"}, "preamble": ["Entre les soussignés :", "{p_name}[[p_status|, {p_status}]][[p_address|, dont l'adresse est : {p_address}]][[p_id|, immatriculé(e) sous le numéro SIRET {p_id}]][[p_email|, joignable à l'adresse {p_email}]], ci-après « le Prestataire »,", "Et :", "{c_name}[[c_status|, {c_status}]][[c_address|, dont le siège est situé : {c_address}]][[c_id|, immatriculée sous le numéro {c_id}]][[c_rep|, représentée par {c_rep}]], ci-après « le Client »,", "ensemble désignés « les Parties ».", {"when": {"direction": ["mutual"]}, "text": "Chaque Partie peut communiquer des Informations confidentielles à l'autre. Dans le présent accord, la « Partie divulgatrice » est celle qui communique une information et la « Partie destinataire » celle qui la reçoit."}, {"when": {"direction": ["to_me"]}, "text": "Le Client (la « Partie divulgatrice ») communique des Informations confidentielles au Prestataire (la « Partie destinataire »)."}, {"when": {"direction": ["from_me"]}, "text": "Le Prestataire (la « Partie divulgatrice ») communique des Informations confidentielles au Client (la « Partie destinataire »)."}, "Il a été convenu ce qui suit."], "clauses": [{"title": "Objet", "paras": ["Le présent accord fixe les conditions dans lesquelles sont protégées les Informations confidentielles échangées entre les Parties pour l'objet suivant : {purpose} (l'« Objet autorisé »)."]}, {"title": "Informations confidentielles", "paras": ["Sont des « Informations confidentielles » toutes les informations non publiques, de quelque nature qu'elles soient (techniques, commerciales, financières ou relatives aux clients), communiquées par la Partie divulgatrice à la Partie destinataire par écrit, oralement, visuellement ou par voie électronique, qu'elles soient désignées comme confidentielles ou qu'elles le soient par leur nature ou les circonstances de leur communication, ainsi que les notes, analyses et copies qui les contiennent. L'existence et le contenu des discussions entre les Parties sont également confidentiels.", "Ne sont pas des Informations confidentielles les informations dont la Partie destinataire prouve qu'elles étaient publiques au moment de leur communication ou le sont devenues sans faute de sa part, qu'elle les connaissait déjà de façon licite et sans obligation de confidentialité, qu'elle les a reçues licitement d'un tiers libre de les communiquer, ou qu'elle les a développées de façon indépendante, sans utiliser les Informations confidentielles."]}, {"title": "Obligations de la Partie destinataire", "paras": ["La Partie destinataire s'engage à utiliser les Informations confidentielles uniquement pour l'Objet autorisé, à ne pas les communiquer à des tiers sans l'accord écrit préalable de la Partie divulgatrice, à les protéger avec au moins le même soin que ses propres informations confidentielles, et au minimum avec un soin raisonnable, et à n'en faire des copies que dans la mesure nécessaire à l'Objet autorisé.", "Elle ne peut les communiquer qu'à ses salariés, sous-traitants et conseils qui ont besoin de les connaître pour l'Objet autorisé et qui sont tenus à une obligation de confidentialité au moins équivalente à celle du présent accord ; elle répond du respect du présent accord par ces personnes.", "Elle informe sans délai la Partie divulgatrice de toute utilisation ou divulgation non autorisée dont elle a connaissance et prend les mesures raisonnables pour en limiter les effets.", {"when": {"reverse": ["on"]}, "text": "Elle s'interdit d'analyser, de démonter, de décompiler ou de reproduire les prototypes, logiciels, échantillons ou objets qui lui sont confiés en vue d'en découvrir la composition ou le fonctionnement (rétro-ingénierie)."}, {"when": {"personal": ["on"]}, "text": "Si des données personnelles sont communiquées, la Partie destinataire ne les traite que pour l'Objet autorisé, dans le respect du règlement (UE) 2016/679 (RGPD) et de la loi n° 78-17 du 6 janvier 1978 relative à l'informatique, aux fichiers et aux libertés."}]}, {"title": "Divulgation exigée par la loi et signalements protégés", "paras": ["Si la loi, une décision de justice ou une autorité oblige la Partie destinataire à communiquer une Information confidentielle, elle en informe d'abord la Partie divulgatrice lorsque la loi le permet, et ne communique que ce qui est exigé.", "Le présent accord ne fait pas obstacle à l'exercice de la liberté d'expression et d'information, ni aux signalements et divulgations protégés par la loi, notamment ceux des lanceurs d'alerte (article L151-8 du Code de commerce)."]}, {"title": "Restitution et destruction", "paras": ["À la fin de la période d'échange, ou à tout moment sur demande écrite de la Partie divulgatrice, la Partie destinataire restitue ou détruit les Informations confidentielles et leurs copies, et le confirme par écrit si on le lui demande. Elle peut conserver les copies qu'une obligation légale lui impose de garder et celles qui figurent dans des sauvegardes automatiques ; elles restent soumises au présent accord."]}, {"title": "Absence de licence et d'engagement", "paras": ["Les Informations confidentielles restent la propriété de la Partie divulgatrice. Leur communication ne confère à la Partie destinataire aucun droit de propriété intellectuelle ni aucune licence, en dehors de leur utilisation pour l'Objet autorisé.", "Les Informations confidentielles sont communiquées en l'état, sans garantie quant à leur exactitude ou à leur exhaustivité. Le présent accord n'oblige aucune Partie à communiquer une information ni à conclure un contrat ; chaque Partie reste libre de mettre fin aux discussions à tout moment, dans le respect de la bonne foi."]}, {"title": "Durée", "paras": [{"when": {"has_start": ["on"]}, "text": "Le présent accord prend effet le {start}. Il s'applique aux Informations confidentielles communiquées pendant les {period} qui suivent cette date (la « période d'échange »)."}, {"when": {"has_start": ["off"]}, "text": "Le présent accord prend effet à la date de sa signature. Il s'applique aux Informations confidentielles communiquées pendant les {period} qui suivent cette date (la « période d'échange »)."}, "Chaque Partie peut mettre fin plus tôt à la période d'échange par écrit. La signature d'un contrat entre les Parties ne met pas fin au présent accord, sauf stipulation contraire de ce contrat. Les obligations de la Partie destinataire s'appliquent pendant la période d'échange et pendant {years} après sa fin."]}, {"title": "Manquement", "paras": ["Toute utilisation ou divulgation non autorisée engage la responsabilité de la Partie destinataire. La Partie divulgatrice peut demander en justice la réparation de son préjudice et toute mesure propre à prévenir ou à faire cesser l'atteinte, y compris en référé."]}, {"title": "Droit applicable et litiges", "paras": ["Le présent accord est soumis au droit français. En cas de différend sur sa validité, son interprétation ou son exécution, les Parties recherchent d'abord une solution amiable. À défaut d'accord dans un délai de 30 jours, le litige est porté devant les juridictions compétentes."]}, {"title": "Dispositions générales", "paras": ["Le présent accord exprime l'intégralité de l'accord des Parties sur son objet. Toute modification fait l'objet d'un avenant écrit signé par les deux Parties. Si une clause est déclarée nulle, les autres restent applicables. Aucune Partie ne peut céder le présent accord sans l'accord écrit de l'autre. Il peut être signé électroniquement."]}], "closing": ["Fait en deux exemplaires originaux, le {today}."], "signatures": [{"title": "Le Prestataire", "name": "{p_name}"}, {"title": "Le Client", "name": "{c_name}[[c_rep|, représenté par {c_rep}]]"}], "sign_note": "Date et signature, précédées de la mention « Lu et approuvé »"}</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Gratuit · PDF et Word</span>
+    <h1>Accord de confidentialité (NDA)</h1>
+    <p class="lead">Choisissez qui communique des informations, décrivez l'objet et fixez la durée : l'accord se rédige en direct. Téléchargez-le en PDF pour le signer, ou en Word pour l'adapter.</p>
+    <ul class="trust"><li>Mutuel ou à sens unique</li><li>Clauses de droit français</li><li>Vos données restent sur votre appareil</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout wide-left">
+    <form class="card form-card" id="contract-form" autocomplete="off" onsubmit="return false">
+      <h3>Vous (le prestataire)</h3>
+      <div class="fields">
+        <div class="field full"><label for="k-p-name">Nom ou raison sociale</label>
+          <input type="text" id="k-p-name" name="p_name" placeholder="Camille Martin EI" value="" data-save></div>
+        <div class="field full"><label for="k-p-status">Statut</label>
+          <input type="text" id="k-p-status" name="p_status" placeholder="Entrepreneur individuel (micro-entreprise)" value="" data-save></div>
+        <div class="field full"><label for="k-p-address">Adresse</label>
+          <input type="text" id="k-p-address" name="p_address" placeholder="12 rue de la République, 69002 Lyon" value="" data-save></div>
+        <div class="field"><label for="k-p-id">SIRET</label>
+          <input type="text" id="k-p-id" name="p_id" placeholder="123 456 789 00012" value="" data-save></div>
+        <div class="field"><label for="k-p-email">Email</label>
+          <input type="text" id="k-p-email" name="p_email" placeholder="contact@exemple.fr" value="" data-save></div>
+      </div>
+      <h3>L'autre partie (client ou client potentiel)</h3>
+      <div class="fields">
+        <div class="field full"><label for="k-c-name">Nom ou raison sociale</label>
+          <input type="text" id="k-c-name" name="c_name" placeholder="Studio Nova" value="" data-save></div>
+        <div class="field full"><label for="k-c-status">Forme juridique et capital</label>
+          <input type="text" id="k-c-status" name="c_status" placeholder="SAS au capital de 10 000 €" value="" data-save></div>
+        <div class="field full"><label for="k-c-address">Adresse du siège</label>
+          <input type="text" id="k-c-address" name="c_address" placeholder="14 rue des Lilas, 69003 Lyon" value="" data-save></div>
+        <div class="field"><label for="k-c-id">Immatriculation</label>
+          <input type="text" id="k-c-id" name="c_id" placeholder="RCS Lyon 812 345 678" value="" data-save></div>
+        <div class="field"><label for="k-c-rep">Représenté par</label>
+          <input type="text" id="k-c-rep" name="c_rep" placeholder="Mme Léa Dupont, présidente" value="" data-save></div>
+      </div>
+      <h3>L'accord</h3>
+      <div class="fields">
+        <div class="field full"><label for="k-direction">Qui communique des informations confidentielles ?</label>
+          <select id="k-direction" name="direction" data-save><option value="mutual" selected>Les deux parties (accord mutuel)</option><option value="to_me">Le client me communique des informations (sens unique)</option><option value="from_me">Je communique des informations au client (sens unique)</option></select></div>
+        <div class="field full"><label for="k-purpose">Objet autorisé : à quoi servent les informations</label>
+          <textarea id="k-purpose" name="purpose" rows="3" placeholder="étudier la refonte du site internet de Studio Nova et, en cas d'accord, réaliser la mission" aria-describedby="k-purpose-hint" data-save></textarea>
+          <span class="hint" id="k-purpose-hint">Soyez précis : les informations ne pourront servir qu'à cela.</span></div>
+        <div class="field"><label for="k-start">Date d'effet (facultatif)</label>
+          <input type="date" id="k-start" name="start" aria-describedby="k-start-hint" data-save>
+          <span class="hint" id="k-start-hint">À défaut, la date de signature.</span></div>
+        <div class="field"><label for="k-period">Informations échangées pendant</label>
+          <select id="k-period" name="period" data-save><option value="6">6 mois</option><option value="12" selected>12 mois</option><option value="24">24 mois</option><option value="36">36 mois</option></select></div>
+        <div class="field"><label for="k-years">Puis confidentielles pendant</label>
+          <select id="k-years" name="years" aria-describedby="k-years-hint" data-save><option value="1">1 an</option><option value="2">2 ans</option><option value="3" selected>3 ans</option><option value="5">5 ans</option><option value="10">10 ans</option></select>
+          <span class="hint" id="k-years-hint">Une durée est nécessaire : les engagements perpétuels sont interdits.</span></div>
+      </div>
+      <h3>Options</h3>
+      <div class="fields">
+        <label class="check full"><input type="checkbox" id="k-reverse" name="reverse" checked data-save><span>Interdire l'analyse des prototypes, logiciels et échantillons (rétro-ingénierie)</span></label>
+        <label class="check full"><input type="checkbox" id="k-personal" name="personal" data-save><span>Les informations comprennent des données personnelles</span></label>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="preview-actions">
+        <button type="button" class="btn btn-primary" id="k-print">Télécharger en PDF</button>
+        <button type="button" class="btn btn-ghost" id="k-word">Télécharger en Word</button>
+        <button type="button" class="btn btn-ghost" id="k-copy">Copier le texte</button>
+      </div>
+      <p class="small muted print-hint">PDF : choisissez « Enregistrer au format PDF » dans la fenêtre d'impression. Word : le fichier s'ouvre dans Word, LibreOffice ou Google Docs pour être modifié.</p>
+      <div class="paper-wrap"><article class="paper" id="k-preview" aria-label="Aperçu de l'accord"></article></div>
+      <button type="button" class="btn btn-ghost btn-sm" id="k-reset">Tout effacer</button>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>Ce que contient un bon accord de confidentialité</h2>
+  <ul>
+    <li><strong>L'objet autorisé :</strong> les informations ne peuvent servir qu'à cela ; décrivez-le avec précision.</li>
+    <li><strong>Ce qui est confidentiel, et ce qui ne l'est pas :</strong> les informations publiques, déjà connues, reçues librement d'un tiers ou développées de façon indépendante sont exclues.</li>
+    <li><strong>La durée :</strong> une période d'échange, puis un nombre d'années de confidentialité ; jamais « pour toujours ».</li>
+    <li><strong>La fin des discussions :</strong> les informations sont rendues ou détruites, et personne n'est obligé de signer un contrat.</li>
+  </ul>
+  <p>Faites signer l'accord avant de communiquer quoi que ce soit, indiquez « Confidentiel » sur vos documents et gardez une trace de ce que vous avez transmis et à quelle date. Quand la mission se concrétise, rédigez le <a href="{{link:contract}}">contrat de prestation</a>.</p>
+  <p class="small muted">Modèle fourni à titre indicatif, pour des discussions entre professionnels. Il ne constitue pas un conseil juridique.</p>
+</section>

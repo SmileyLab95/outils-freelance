@@ -1572,6 +1572,43 @@
       "confidence": "medium",
       "verified_on": "2026-10-23",
       "note": "Read through search excerpts. The space must be used regularly and exclusively as the principal place of business or to meet clients (exceptions: storage when the home is the only fixed location, daycare). Indirect home expenses are allocated by the share of floor space; direct expenses are deductible in full. The deduction can't exceed the gross income limitation (figured on Form 8829, which first takes the business part of mortgage interest, taxes and casualty losses, and other business expenses); the excess is carried over to the next year. The tool approximates the limit with the profit before the deduction and doesn't figure depreciation."
+    },
+    "dtsa_whistleblower_immunity": {
+      "value": {
+        "immunity": "An individual shall not be held criminally or civilly liable under any Federal or State trade secret law for the disclosure of a trade secret that is made in confidence to a Federal, State, or local government official, either directly or indirectly, or to an attorney, solely for the purpose of reporting or investigating a suspected violation of law; or is made in a complaint or other document filed in a lawsuit or other proceeding, if such filing is made under seal.",
+        "retaliation_lawsuit": "An individual who files a lawsuit for retaliation by an employer for reporting a suspected violation of law may disclose the trade secret to the attorney of the individual and use the trade secret information in the court proceeding, if the individual files any document containing the trade secret under seal and does not disclose the trade secret, except pursuant to court order.",
+        "notice_required": true,
+        "employee_includes_contractors": true,
+        "without_notice": "no exemplary damages or attorney fees against an employee who was not given notice"
+      },
+      "unit": "object",
+      "label": "Defend Trade Secrets Act: whistleblower immunity and the notice employers must give",
+      "source": "https://www.govinfo.gov/content/pkg/USCODE-2023-title18/pdf/USCODE-2023-title18-partI-chap90-sec1833.pdf",
+      "source_title": "18 U.S.C. § 1833 (Exceptions to prohibitions) - GovInfo",
+      "more_sources": [
+        {
+          "source": "https://www.congress.gov/114/plaws/publ153/PLAW-114publ153.pdf",
+          "source_title": "Public Law 114-153, Defend Trade Secrets Act of 2016 - Congress.gov"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-10-23",
+      "note": "§ 1833(b)(1) and (2) (immunity and anti-retaliation lawsuits); (b)(3): an employer shall provide notice of the immunity in any contract or agreement with an employee that governs the use of a trade secret or other confidential information (or cross-reference a reporting policy); applies to contracts entered into or updated after May 11, 2016; (b)(4): 'employee' includes any individual performing work as a contractor or consultant for an employer. The immunity does not cover public disclosure. Read through search excerpts."
+    },
+    "trade_secret_reasonable_measures": {
+      "value": [
+        "confidentiality agreements signed by people with access, including outside parties such as potential customers, before they access the information",
+        "limiting access to people who need it",
+        "marking materials as confidential",
+        "return or destruction of materials when the relationship ends"
+      ],
+      "unit": "list",
+      "label": "Trade secrets: reasonable measures to keep information secret (USPTO examples)",
+      "source": "https://www.uspto.gov/sites/default/files/documents/tradesecretsiptoolkit.pdf",
+      "source_title": "Trade Secret Intellectual Property Toolkit - USPTO",
+      "confidence": "medium",
+      "verified_on": "2026-10-23",
+      "note": "A trade secret must be information whose owner has taken reasonable measures to keep it secret (18 U.S.C. § 1839(3)); the USPTO toolkit says reasonableness is judged case by case and lists these measures as examples. Read through search excerpts."
     }
   },
   "open_questions": [

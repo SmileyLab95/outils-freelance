@@ -52,6 +52,7 @@
       "label": "Templates",
       "items": [
         "contract",
+        "nda",
         "templates"
       ]
     }

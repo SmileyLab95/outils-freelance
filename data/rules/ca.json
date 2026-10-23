@@ -1818,6 +1818,52 @@
       "confidence": "medium",
       "verified_on": "2026-10-23",
       "note": "Read through search excerpts. Can't be more than the business's net income before these expenses: no loss created or increased; unused amounts are carried forward to the next year. Capital outlays (computers, desks, chairs) aren't business-use-of-home expenses. Claiming capital cost allowance on the home triggers capital gain and recapture rules on sale: the tool doesn't include CCA. Principal-place space needn't be used exclusively; personal use is apportioned, for example by hours."
+    },
+    "ca_trade_secrets_nda": {
+      "value": {
+        "registration": false,
+        "lasts_while_secret": true,
+        "nda_before_sharing": true,
+        "who_signs": [
+          "employees",
+          "contractors",
+          "business partners"
+        ]
+      },
+      "unit": "object",
+      "label": "Trade secrets: no registration; non-disclosure agreements before sharing (CIPO)",
+      "source": "https://ised-isde.canada.ca/site/canadian-intellectual-property-office/en/trade-secrets",
+      "source_title": "Trade secrets - Canadian Intellectual Property Office",
+      "more_sources": [
+        {
+          "source": "https://ised-isde.canada.ca/site/canadian-intellectual-property-office/en/what-intellectual-property/what-trade-secret",
+          "source_title": "What is a trade secret? - Canadian Intellectual Property Office"
+        }
+      ],
+      "confidence": "medium",
+      "verified_on": "2026-10-23",
+      "note": "No formal application or registration process for trade secrets in Canada; protection can last as long as the information stays secret. CIPO lists non-disclosure or confidentiality agreements among the ways to keep information secret, recommends having employees, contractors and business partners sign them before sensitive information is shared, and keeping records of the measures taken, since enforcing a confidentiality agreement can be hard. Read through search excerpts."
+    },
+    "qc_adhesion_contract_french": {
+      "value": {
+        "from": "2023-06-01",
+        "french_version_first": true,
+        "other_language_only_if_express_wish_after_french_version": true,
+        "employment_contracts_excluded": true
+      },
+      "unit": "object",
+      "label": "Quebec: a contract of adhesion must first be given in French (Charter of the French language, s. 55)",
+      "source": "https://www.oqlf.gouv.qc.ca/francisation/entreprises/contrats-adhesion.html",
+      "source_title": "Entreprises : contrats d'adhésion - Office québécois de la langue française",
+      "more_sources": [
+        {
+          "source": "https://www.legisquebec.gouv.qc.ca/fr/document/lc/C-11",
+          "source_title": "Charte de la langue française (chapitre C-11), art. 55 - LégisQuébec"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-10-23",
+      "note": "Art. 55: contracts of adhesion and related documents are drawn up in French; the parties may be bound only by a version in another language if, after the French version has been given to the adherent, that is their express wish (since June 1, 2023). The adherent cannot be charged for the French version. Employment contracts follow the language-of-work provisions; contracts used in relations outside Quebec are not covered. Whether a given agreement is a contract of adhesion (Civil Code of Québec, art. 1379) depends on whether its essential terms were imposed. Read through search excerpts."
     }
   },
   "provinces": {

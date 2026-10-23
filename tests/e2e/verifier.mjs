@@ -21,7 +21,10 @@ const server = spawn("python3", ["-m", "http.server", String(port), "--bind", "1
 await new Promise((r) => setTimeout(r, 800));
 const BASE = `http://127.0.0.1:${port}/outils-freelance/`;
 
-const browser = await chromium.launch({ executablePath: "/opt/pw-browsers/chromium-1194/chrome-linux/chrome" });
+// Paramètres régionaux en UTF-8, comme sur les appareils des visiteurs : sinon Chromium renomme « download » un fichier
+// téléchargé dont le nom a un accent (« Accord de confidentialité.doc »).
+const browser = await chromium.launch({ executablePath: "/opt/pw-browsers/chromium-1194/chrome-linux/chrome",
+  env: { ...process.env, LANG: "C.UTF-8", LC_ALL: "C.UTF-8" } });
 const context = await browser.newContext({ permissions: ["clipboard-read", "clipboard-write"] });
 // Les pages en français placent des espaces insécables (build.py et engines/typo-fr.js) : les vérifications comparent
 // le texte avec des espaces ordinaires.
@@ -2162,6 +2165,89 @@ const tests = {
     await page.selectOption("#k-law", "ON");
     text = await page.textContent("#k-preview");
     check(text.includes("lois en vigueur en Ontario") && !text.includes("articles 2125"), "contrat CA-FR : droit de l'Ontario");
+    await page.selectOption("#k-law", "QC");
+  },
+  async "fr/accord-de-confidentialite/"(page) {
+    const preview = async () => (await page.textContent("#k-preview")).replace(/\s+/g, " ");
+    let text = await preview();
+    check(text.includes("ACCORD DE CONFIDENTIALITÉ MUTUEL") && text.includes("Chaque Partie peut communiquer") && text.includes("à la date de sa signature"),
+      "accord FR : mutuel par défaut, effet à la signature");
+    check(text.includes("pendant les 12 mois qui suivent") && text.includes("pendant 3 ans après sa fin") && text.includes("(article L151-8 du Code de commerce)"),
+      "accord FR : période de 12 mois, 3 ans de confidentialité, lanceurs d'alerte");
+    await page.fill("#k-p-name", "Camille Martin EI");
+    await page.fill("#k-c-name", "Atelier Secret");
+    await page.fill("#k-purpose", "étudier la refonte du site");
+    await page.selectOption("#k-direction", "to_me");
+    await page.selectOption("#k-years", "5");
+    await page.fill("#k-start", "2027-03-01");
+    await page.check("#k-personal");
+    text = await preview();
+    check(text.includes("ACCORD DE CONFIDENTIALITÉ") && !text.includes("MUTUEL") && text.includes("Le Client (la « Partie divulgatrice ») communique des Informations confidentielles au Prestataire"),
+      "accord FR : sens unique, le client communique");
+    check(text.includes("prend effet le 1 mars 2027") || text.includes("prend effet le 1er mars 2027"), "accord FR : date d'effet");
+    check(text.includes("pendant 5 ans après sa fin") && text.includes("règlement (UE) 2016/679 (RGPD)") && text.includes("l'objet suivant : étudier la refonte du site"),
+      "accord FR : 5 ans, données personnelles, objet autorisé");
+    const [download] = await Promise.all([page.waitForEvent("download"), page.click("#k-word")]);
+    const doc = (await import("fs")).readFileSync(await download.path(), "utf8");
+    check(download.suggestedFilename() === "Accord de confidentialité.doc" && doc.includes("ACCORD DE CONFIDENTIALITÉ"), "accord FR : téléchargement Word");
+    await page.click("#k-copy");
+    check(await copied(page, "#k-copy"), "accord FR : bouton Copier");
+    await page.reload({ waitUntil: "networkidle" });
+    check((await page.inputValue("#k-c-name")) === "Atelier Secret" && (await page.inputValue("#k-direction")) === "to_me", "accord FR : saisie mémorisée");
+    const saved = await page.evaluate(() => [localStorage.getItem("of:nda"), localStorage.getItem("of:contract")]);
+    check((saved[0] || "").includes("Atelier Secret") && !(saved[1] || "").includes("Atelier Secret"), "accord FR : saisie séparée de celle du contrat de prestation");
+    await page.selectOption("#k-direction", "mutual");
+    await page.selectOption("#k-years", "3");
+    await page.fill("#k-start", "");
+    await page.uncheck("#k-personal");
+  },
+  async "us/nda-template/"(page) {
+    let text = await page.textContent("#k-preview");
+    check(text.includes("MUTUAL NON-DISCLOSURE AGREEMENT") && text.includes("In consideration of their mutual promises") && text.includes("laws of the State of New York"),
+      "US NDA: mutual by default, consideration, New York law");
+    check(text.includes("Notice of immunity under the Defend Trade Secrets Act") && text.includes("solely for the purpose of reporting or investigating a suspected violation of law"),
+      "US NDA: DTSA immunity notice");
+    await page.selectOption("#k-direction", "from_me");
+    await page.selectOption("#k-period", "6");
+    text = await page.textContent("#k-preview");
+    check(text.includes("Contractor (the “Discloser”) intends to disclose Confidential Information to Client (the “Recipient”)") && text.includes("in the 6 months following that date"),
+      "US NDA: one-way from contractor, 6-month disclosure period");
+    check(text.includes("Defend Trade Secrets Act"), "US NDA: DTSA notice kept for a one-way agreement");
+    await page.selectOption("#k-direction", "mutual");
+    await page.selectOption("#k-period", "12");
+  },
+  async "uk/nda-template/"(page) {
+    let text = await page.textContent("#k-preview");
+    check(text.includes("This agreement is made on") && !text.includes("deed"), "UK NDA: mutual agreement, ordinary signatures");
+    await page.selectOption("#k-direction", "to_me");
+    text = await page.textContent("#k-preview");
+    check(text.includes("This deed is made on") && text.includes("executed as a deed and is delivered") && (await page.$$eval(".k-witness-line", (l) => l.length)) === 6,
+      "UK NDA: one-way under English law worded as a deed, witness under each signature");
+    check(text.includes("unauthorised") && !text.includes("unauthorized"), "UK NDA: British spelling");
+    await page.selectOption("#k-law", "SC");
+    text = await page.textContent("#k-preview");
+    check(!text.includes("deed") && text.includes("governed by the law of Scotland") && (await page.$$eval(".k-witness-line", (l) => l.length)) === 0,
+      "UK NDA: one-way under Scots law, no deed wording");
+    await page.selectOption("#k-law", "EW");
+    await page.selectOption("#k-direction", "mutual");
+  },
+  async "ca/nda-template/"(page) {
+    let text = await page.textContent("#k-preview");
+    check(text.includes("laws in force in Ontario") && text.includes("No licence and no obligation"), "CA NDA: Ontario law, Canadian spelling");
+    await page.selectOption("#k-law", "QC");
+    text = await page.textContent("#k-preview");
+    check(text.includes("laws in force in Quebec"), "CA NDA: Quebec law");
+    check((await page.$('.faq a[href$="/ca/fr/entente-de-confidentialite/"]')) !== null, "CA NDA: link to the French version for Quebec");
+    await page.selectOption("#k-law", "ON");
+  },
+  async "ca/fr/entente-de-confidentialite/"(page) {
+    let text = (await page.textContent("#k-preview")).replace(/\s+/g, " ");
+    check(text.includes("ENTENTE DE CONFIDENTIALITÉ MUTUELLE") && text.includes("lois en vigueur au Québec"), "entente CA-FR : mutuelle, Québec par défaut");
+    await page.selectOption("#k-direction", "from_me");
+    await page.selectOption("#k-law", "ON");
+    text = (await page.textContent("#k-preview")).replace(/\s+/g, " ");
+    check(text.includes("Le Prestataire (la « Partie divulgatrice ») communique") && text.includes("tribunaux compétents en Ontario"), "entente CA-FR : unilatérale, droit de l'Ontario");
+    await page.selectOption("#k-direction", "mutual");
     await page.selectOption("#k-law", "QC");
   },
   async "us/how-much-to-set-aside-for-taxes/"(page) {

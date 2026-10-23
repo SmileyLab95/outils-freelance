@@ -172,15 +172,21 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 - **Hausse de tarifs (23/10/2026)** : calculateur dans les 4 pays (nouveau chiffre d'affaires, travail que l'on peut
   perdre sans gagner moins, inflation saisie avec un lien vers l'organisme statistique officiel) et modèle d'email
   d'annonce ajouté en France ([28](28-hausse-de-tarifs.md)).
-- **Prochaines actions de Claude** : besoins P3 restants ([02](02-besoins-clients.md) : proposition commerciale,
-  accord de confidentialité, CGV, sous-traitance), en commençant par l'accord de confidentialité (générateur, avec
-  le moteur du générateur de contrat) ; comptes : adaptateur
+- **Accord de confidentialité (23/10/2026)** : générateur dans les 4 pays (cinq pages), mutuel ou à sens unique,
+  objet autorisé, période d'échange et durée en années, exclusions, restitution, signalements protégés ; *deed* avec
+  témoins pour un accord à sens unique en Angleterre, au pays de Galles et en Irlande du Nord ; avis du *Defend Trade
+  Secrets Act* aux États-Unis ; règle québécoise des contrats d'adhésion ; moteur de rendu commun avec le contrat de
+  prestation, rendu à l'identique ([29](29-accord-de-confidentialite.md), décision D28).
+- **Prochaines actions de Claude** : besoins P3 restants ([02](02-besoins-clients.md) : proposition commerciale, CGV,
+  sous-traitance, date d'échéance hors de France), en commençant par la proposition commerciale (générateur, avec le
+  moteur de rendu des contrats et accords) ; comptes : adaptateur
   PostgreSQL et sauvegardes dès que l'hébergeur est choisi ; taux du crédit pour
   dividendes de la Saskatchewan et du Nunavut dès qu'ils sont publiés (formulaires 2026) ;
   trouver la cause du contrôle de contraste intermittent de l'Espace ; revérifier les grilles des prestataires de
   paiement (Stripe, Mollie) quand Ismail décidera ([17](17-offres-et-paiements.md)) ; guide du recouvrement dès que
   les textes sont lisibles ; veille réglementaire de décembre (dont la version de Factur-X et l'annexe A de XP
-  Z12-012 pour le BT-32 en franchise, et la question 13 de [pays/ca.md](pays/ca.md) sur la TVQ). La mise en ligne
+  Z12-012 pour le BT-32 en franchise, la question 13 de [pays/ca.md](pays/ca.md) sur la TVQ, et le
+  remplacement annoncé de la section 17 du *Victims and Prisoners Act 2024* sur les accords de confidentialité). La mise en ligne
   des comptes attend le choix de l'hébergeur et du domaine.
 - **En attente d'Ismail** (pas urgent) : structure juridique avec un comptable ; choix de l'hébergeur et budget pour
   les comptes en ligne (comparatif [13](13-comparatif-hebergeurs.md), § 6 ; reporté par Ismail le 22/10/2026, le

@@ -1,0 +1,131 @@
+<!--{
+  "id": "nda",
+  "slug": "nda-template/",
+  "title": "Free NDA Template for Freelancers: Mutual or One-Way",
+  "description": "Create a mutual or one-way non-disclosure agreement: purpose, term, exclusions, return of information and the DTSA notice. Download as PDF or Word.",
+  "menu": "NDA template",
+  "icon": "🔒",
+  "blurb": "A clear non-disclosure agreement in minutes, as a PDF or Word file.",
+  "app": "Non-disclosure agreement generator",
+  "scripts": [
+    "engines/contract-doc.js",
+    "tools/contract.js"
+  ],
+  "rules": "us",
+  "sources": [
+    "dtsa_whistleblower_immunity",
+    "trade_secret_reasonable_measures"
+  ],
+  "priority": 0.7,
+  "faq": [
+    [
+      "When should a freelancer sign an NDA?",
+      "Before any confidential information changes hands: when a client wants to share product plans, code, data or customer lists before hiring you, or when you pitch your own idea to a partner. Once the project is signed, the confidentiality clause of your <a href=\"{{link:contract}}\">freelance contract</a> may be enough."
+    ],
+    [
+      "Mutual or one-way NDA?",
+      "Use a one-way agreement when only one side shares confidential information, and a mutual agreement when both do. The generator sets the roles for you: the Discloser shares the information, the Recipient receives it and must protect it."
+    ],
+    [
+      "Why does the template include a Defend Trade Secrets Act notice?",
+      "Under the Defend Trade Secrets Act, an employer must give notice of whistleblower immunity in any agreement with an employee that governs confidential information, and “employee” includes an individual working as a contractor or consultant. Without the notice, the employer cannot recover exemplary damages or attorney fees from that individual under the Act. The notice is always included, whoever shares the information."
+    ],
+    [
+      "How long should confidentiality last?",
+      "Choose a length based on how long the information stays valuable. The template protects information shared during the disclosure period for the number of years you pick after that period ends. A trade secret keeps its legal protection only while its owner takes reasonable measures to keep it secret; the USPTO lists confidentiality agreements signed before access, and the return of materials, among those measures."
+    ],
+    [
+      "Is this template legal advice?",
+      "No. It covers common business-to-business discussions. For a high-value secret, an invention you plan to patent, an agreement under foreign law or terms the other side wants to negotiate, have a lawyer review it."
+    ]
+  ]
+}-->
+<script type="application/json" id="contract-data">{"store": "nda", "doc_title": [{"when": {"direction": ["mutual"]}, "text": "MUTUAL NON-DISCLOSURE AGREEMENT"}, {"text": "NON-DISCLOSURE AGREEMENT"}], "file": "Non-disclosure agreement", "article": "{n}. {title}", "reset_confirm": "Clear everything you entered?", "hints": {"p_name": "contractor name", "c_name": "client name", "purpose": "purpose", "start": "start date", "period": "period", "years": "years", "law": "governing law", "today": "date"}, "preamble": ["This Agreement is made on {today} between:", "{p_name}[[p_status|, {p_status}]][[p_address|, of {p_address}]][[p_id|, EIN {p_id}]][[p_email|, {p_email}]] (the “Contractor”), and", "{c_name}[[c_status|, {c_status}]][[c_address|, of {c_address}]][[c_id|, {c_id}]][[c_rep|, represented by {c_rep}]] (the “Client”).", {"when": {"direction": ["mutual"]}, "text": "Each party may disclose Confidential Information to the other. In this Agreement, the “Discloser” is the party disclosing Confidential Information and the “Recipient” is the party receiving it. In consideration of their mutual promises, the parties agree as follows."}, {"when": {"direction": ["to_me"]}, "text": "Client (the “Discloser”) intends to disclose Confidential Information to Contractor (the “Recipient”). In consideration of the Discloser making that information available, the parties agree as follows."}, {"when": {"direction": ["from_me"]}, "text": "Contractor (the “Discloser”) intends to disclose Confidential Information to Client (the “Recipient”). In consideration of the Discloser making that information available, the parties agree as follows."}], "clauses": [{"title": "Purpose", "paras": ["The Recipient will use the Confidential Information only for the following purpose: {purpose} (the “Purpose”)."]}, {"title": "Confidential Information", "paras": ["“Confidential Information” means all non-public information disclosed by the Discloser to the Recipient, in writing, orally, visually or electronically, whether or not it is marked as confidential, that a reasonable person would understand to be confidential given its nature and the circumstances of disclosure, including business, technical, financial and customer information, together with any notes, analyses and copies containing it. The existence and content of the parties' discussions are also Confidential Information.", "Confidential Information does not include information that the Recipient can show (a) is or becomes public through no fault of the Recipient; (b) was lawfully known to the Recipient before disclosure, without a duty of confidentiality; (c) is lawfully received from a third party who is free to disclose it; or (d) is independently developed by the Recipient without use of the Confidential Information."]}, {"title": "Recipient's obligations", "paras": ["The Recipient will: (a) use the Confidential Information only for the Purpose; (b) not disclose it to any third party without the Discloser's prior written consent; (c) protect it with at least the same care it uses for its own confidential information, and no less than reasonable care; and (d) copy it only as needed for the Purpose.", "The Recipient may disclose Confidential Information only to its employees, contractors and professional advisers who need to know it for the Purpose and are bound by confidentiality obligations at least as protective as this Agreement. The Recipient is responsible for their compliance.", "The Recipient will promptly notify the Discloser of any unauthorized use or disclosure it becomes aware of and take reasonable steps to limit its effects.", {"when": {"reverse": ["on"]}, "text": "The Recipient will not reverse engineer, decompile, disassemble or analyze the composition of any prototype, software, sample or other item provided by the Discloser."}, {"when": {"personal": ["on"]}, "text": "If Confidential Information includes personal information, the Recipient will use it only for the Purpose and in compliance with applicable privacy and data protection laws."}]}, {"title": "Required and protected disclosures", "paras": ["If the Recipient is required by law, regulation or court order to disclose Confidential Information, it will, where legally permitted, give the Discloser prompt notice so that the Discloser may seek a protective order, and will disclose only what is required.", "Nothing in this Agreement prevents either party from reporting a possible violation of law to a government agency or law enforcement, or from making any other disclosure protected by whistleblower laws."]}, {"title": "Notice of immunity under the Defend Trade Secrets Act", "paras": ["Under 18 U.S.C. § 1833(b), an individual shall not be held criminally or civilly liable under any federal or state trade secret law for the disclosure of a trade secret that (a) is made in confidence to a federal, state or local government official, either directly or indirectly, or to an attorney, solely for the purpose of reporting or investigating a suspected violation of law; or (b) is made in a complaint or other document filed in a lawsuit or other proceeding, if such filing is made under seal. An individual who files a lawsuit for retaliation by an employer for reporting a suspected violation of law may disclose the trade secret to the individual's attorney and use the trade secret information in the court proceeding, if the individual files any document containing the trade secret under seal and does not disclose the trade secret, except pursuant to court order."]}, {"title": "Return or destruction", "paras": ["When the Disclosure Period ends, or at any time on the Discloser's written request, the Recipient will return or destroy the Confidential Information and all copies, and confirm this in writing if asked. The Recipient may keep copies it is legally required to retain and copies held in automatic backup systems; these remain subject to this Agreement."]}, {"title": "No license and no obligation", "paras": ["All Confidential Information remains the property of the Discloser. No license or other right under any patent, copyright, trade secret or other intellectual property is granted to the Recipient, except the limited right to use the Confidential Information for the Purpose.", "Confidential Information is provided “as is”, without any warranty as to its accuracy or completeness. Nothing in this Agreement obliges either party to disclose any information or to enter into any further agreement."]}, {"title": "Term", "paras": [{"when": {"has_start": ["on"]}, "text": "This Agreement takes effect on {start} and covers Confidential Information disclosed in the {period} following that date (the “Disclosure Period”)."}, {"when": {"has_start": ["off"]}, "text": "This Agreement takes effect on the date it is signed and covers Confidential Information disclosed in the {period} following that date (the “Disclosure Period”)."}, "Either party may end the Disclosure Period earlier by written notice. Signing a services contract does not end this Agreement unless that contract says so. The Recipient's obligations continue during the Disclosure Period and for {years} after it ends."]}, {"title": "Remedies", "paras": ["Unauthorized use or disclosure of Confidential Information may cause the Discloser harm that money damages alone cannot adequately remedy. In addition to any other remedy, the Discloser may seek an injunction or other equitable relief."]}, {"title": "Governing law and disputes", "paras": ["This Agreement is governed by the laws of the State of {law}. The parties will first try in good faith to resolve any dispute informally. If they cannot within 30 days, either party may bring the dispute before the competent courts of the State of {law}."]}, {"title": "General", "paras": ["This Agreement is the entire agreement between the parties on its subject and replaces any prior discussions about it. Any change must be in writing and signed by both parties. If any provision is found unenforceable, the rest remains in effect. Neither party may assign this Agreement without the other's written consent. This Agreement may be signed electronically and in counterparts."]}], "closing": ["Signed by the parties on the dates below."], "signatures": [{"title": "Contractor", "name": "{p_name}"}, {"title": "Client", "name": "{c_name}[[c_rep|, by {c_rep}]]"}], "sign_note": "Signature, name and date"}</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · PDF and Word</span>
+    <h1>NDA template for freelancers</h1>
+    <p class="lead">Choose who shares information, describe the purpose and set the length: your non-disclosure agreement writes itself as you type. Download it as a PDF to sign, or as Word to edit.</p>
+    <ul class="trust"><li>Mutual or one-way</li><li>Defend Trade Secrets Act notice included</li><li>Your data stays on your device</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout wide-left">
+    <form class="card form-card" id="contract-form" autocomplete="off" onsubmit="return false">
+      <h3>You (the contractor)</h3>
+      <div class="fields">
+        <div class="field full"><label for="k-p-name">Name or business name</label>
+          <input type="text" id="k-p-name" name="p_name" placeholder="Alex Morgan Design LLC" value="" data-save></div>
+        <div class="field full"><label for="k-p-status">Legal form (optional)</label>
+          <input type="text" id="k-p-status" name="p_status" placeholder="a New York limited liability company" value="" data-save></div>
+        <div class="field full"><label for="k-p-address">Address</label>
+          <input type="text" id="k-p-address" name="p_address" placeholder="123 Main St, Brooklyn, NY 11201" value="" data-save></div>
+        <div class="field"><label for="k-p-id">EIN (optional)</label>
+          <input type="text" id="k-p-id" name="p_id" placeholder="" value="" data-save></div>
+        <div class="field"><label for="k-p-email">Email</label>
+          <input type="text" id="k-p-email" name="p_email" placeholder="hello@example.com" value="" data-save></div>
+      </div>
+      <h3>The other party (client or prospective client)</h3>
+      <div class="fields">
+        <div class="field full"><label for="k-c-name">Name or business name</label>
+          <input type="text" id="k-c-name" name="c_name" placeholder="Northwind Studio" value="" data-save></div>
+        <div class="field full"><label for="k-c-status">Legal form (optional)</label>
+          <input type="text" id="k-c-status" name="c_status" placeholder="a Delaware corporation" value="" data-save></div>
+        <div class="field full"><label for="k-c-address">Address</label>
+          <input type="text" id="k-c-address" name="c_address" placeholder="500 Market St, San Francisco, CA 94105" value="" data-save></div>
+        <div class="field"><label for="k-c-id">Company or tax number (optional)</label>
+          <input type="text" id="k-c-id" name="c_id" placeholder="" value="" data-save></div>
+        <div class="field"><label for="k-c-rep">Signing on behalf of the client</label>
+          <input type="text" id="k-c-rep" name="c_rep" placeholder="Jordan Lee, CEO" value="" data-save></div>
+      </div>
+      <h3>The agreement</h3>
+      <div class="fields">
+        <div class="field full"><label for="k-direction">Who shares confidential information?</label>
+          <select id="k-direction" name="direction" data-save><option value="mutual" selected>Both parties (mutual)</option><option value="to_me">The client shares with me (one-way)</option><option value="from_me">I share with the client (one-way)</option></select></div>
+        <div class="field full"><label for="k-purpose">Purpose: what the information may be used for</label>
+          <textarea id="k-purpose" name="purpose" rows="3" placeholder="evaluating a redesign of the Northwind Studio website and, if agreed, carrying out the project" aria-describedby="k-purpose-hint" data-save></textarea>
+          <span class="hint" id="k-purpose-hint">Be precise: the information may be used for this purpose only.</span></div>
+        <div class="field"><label for="k-start">Start date (optional)</label>
+          <input type="date" id="k-start" name="start" aria-describedby="k-start-hint" data-save>
+          <span class="hint" id="k-start-hint">Leave empty to start on signing.</span></div>
+        <div class="field"><label for="k-period">Information shared during</label>
+          <select id="k-period" name="period" data-save><option value="6">6 months</option><option value="12" selected>12 months</option><option value="24">24 months</option><option value="36">36 months</option></select></div>
+        <div class="field"><label for="k-years">Then kept confidential for</label>
+          <select id="k-years" name="years" aria-describedby="k-years-hint" data-save><option value="1">1 year</option><option value="2">2 years</option><option value="3" selected>3 years</option><option value="5">5 years</option><option value="10">10 years</option></select>
+          <span class="hint" id="k-years-hint">Pick a length that matches how long the information stays valuable.</span></div>
+        <div class="field"><label for="k-law">Governing law (state)</label>
+          <input type="text" id="k-law" name="law" placeholder="New York" value="New York" data-save></div>
+      </div>
+      <h3>Options</h3>
+      <div class="fields">
+        <label class="check full"><input type="checkbox" id="k-reverse" name="reverse" checked data-save><span>No reverse engineering of prototypes, software or samples</span></label>
+        <label class="check full"><input type="checkbox" id="k-personal" name="personal" data-save><span>The information includes personal information</span></label>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="preview-actions">
+        <button type="button" class="btn btn-primary" id="k-print">Download PDF</button>
+        <button type="button" class="btn btn-ghost" id="k-word">Download Word</button>
+        <button type="button" class="btn btn-ghost" id="k-copy">Copy text</button>
+      </div>
+      <p class="small muted print-hint">PDF: choose “Save as PDF” in the print window. Word: the file opens in Word, LibreOffice or Google Docs for editing.</p>
+      <div class="paper-wrap"><article class="paper" id="k-preview" aria-label="Agreement preview"></article></div>
+      <button type="button" class="btn btn-ghost btn-sm" id="k-reset">Clear everything</button>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>What a good NDA covers</h2>
+  <ul>
+    <li><strong>The purpose:</strong> the information may be used for this purpose only, so describe it precisely.</li>
+    <li><strong>What is confidential, and what is not:</strong> public information, what you already knew, what a third party gave you freely and what you developed on your own are excluded.</li>
+    <li><strong>How long it lasts:</strong> a disclosure period, then a number of years of confidentiality.</li>
+    <li><strong>The end of the discussions:</strong> the information is returned or destroyed, and nobody is obliged to sign a contract.</li>
+  </ul>
+  <p>Sign the agreement before sharing anything, mark your documents “Confidential” and keep a record of what you sent and when. When the project goes ahead, write the <a href="{{link:contract}}">freelance contract</a>.</p>
+  <p class="small muted">General template for business-to-business discussions, provided for information. It is not legal advice.</p>
+</section>

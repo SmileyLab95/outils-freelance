@@ -1304,6 +1304,56 @@
       "confidence": "medium",
       "verified_on": "2026-10-23",
       "note": "Lu par extraits de recherche (version de 2012 du BOFiP, principe inchangé à notre connaissance). Pour des locaux affectés à la fois à l'activité et à l'habitation, la fraction du loyer déductible est, à titre de règle pratique, le rapport entre la superficie professionnelle et la superficie totale ; l'exploitant procède à la ventilation sous sa responsabilité et la justifie. Le texte vise les BNC ; l'outil l'applique aux autres dépenses du logement par la même règle de proportion, en le signalant."
+    },
+    "confidentialite_negociations": {
+      "value": "Celui qui utilise ou divulgue sans autorisation une information confidentielle obtenue à l'occasion des négociations engage sa responsabilité dans les conditions du droit commun.",
+      "unit": "text",
+      "label": "Négociations : utiliser ou divulguer une information confidentielle engage la responsabilité",
+      "source": "https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000032007140/",
+      "source_title": "Code civil, art. 1112-2 - Légifrance",
+      "confidence": "high",
+      "verified_on": "2026-10-23",
+      "note": "Article créé par l'ordonnance n° 2016-131 du 10 février 2016. La loi ne dit ni quelles informations sont confidentielles, ni pendant combien de temps : c'est l'objet d'un accord de confidentialité. Lu par extraits de recherche."
+    },
+    "engagements_perpetuels": {
+      "value": {
+        "perpetuel_interdit": true,
+        "sortie": "comme pour un contrat à durée indéterminée"
+      },
+      "unit": "object",
+      "label": "Les engagements perpétuels sont prohibés",
+      "source": "https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000006070721/LEGISCTA000006150252/",
+      "source_title": "Code civil, art. 1210 à 1215 (durée du contrat) - Légifrance",
+      "confidence": "high",
+      "verified_on": "2026-10-23",
+      "note": "Art. 1210 : « Les engagements perpétuels sont prohibés. Chaque contractant peut y mettre fin dans les conditions prévues pour le contrat à durée indéterminée. » D'où une durée de confidentialité exprimée en années dans l'accord. Lu par extraits de recherche."
+    },
+    "secret_affaires": {
+      "value": {
+        "criteres": [
+          "information non généralement connue ni aisément accessible pour les personnes familières de ce type d'informations",
+          "valeur commerciale, effective ou potentielle, du fait de son caractère secret",
+          "mesures de protection raisonnables prises par son détenteur légitime pour en conserver le caractère secret"
+        ],
+        "exceptions": [
+          "liberté d'expression et de communication, dont la liberté de la presse",
+          "révélation de bonne foi d'une activité illégale, d'une faute ou d'un comportement répréhensible, dont le droit d'alerte (loi n° 2016-1691, art. 6)",
+          "protection d'un intérêt légitime reconnu par le droit de l'Union européenne ou le droit national"
+        ]
+      },
+      "unit": "object",
+      "label": "Secret des affaires : information protégée et exceptions",
+      "source": "https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000037266553",
+      "source_title": "Code de commerce, art. L151-1 - Légifrance",
+      "more_sources": [
+        {
+          "source": "https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000037266573/",
+          "source_title": "Code de commerce, art. L151-8 (version de la loi n° 2022-401) - Légifrance"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-10-23",
+      "note": "Loi n° 2018-670 du 30 juillet 2018. L151-8 : à l'occasion d'une instance relative à une atteinte au secret des affaires, le secret n'est pas opposable dans les trois cas listés ; version en vigueur depuis le 1er septembre 2022. Un accord de confidentialité est l'une des mesures de protection qu'un détenteur peut prendre ; la loi ne dresse pas de liste de ces mesures. Lu par extraits de recherche."
     }
   },
   "open_questions": [

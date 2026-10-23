@@ -1918,6 +1918,76 @@
       "confidence": "medium",
       "verified_on": "2026-10-23",
       "note": "Read through search excerpts. You can claim a proportion of costs such as heating, electricity, Council Tax, mortgage interest or rent, using a reasonable method, for example the number of rooms used for business and the time spent working from home. Official example: 4 rooms, one used only as an office, electricity £1,120 a year: £280; office used one day a week: £40 (£280 / 7). Flat-rate example: 40 hours a month for 10 months and 60 hours for 2 months: £100 + £36 = £136. You can't claim both the flat rate and actual costs for the same household costs; phone and internet are claimed separately on their business use."
+    },
+    "uk_nda_guidance": {
+      "value": {
+        "one_way_if_only_one_party_discloses": true,
+        "one_way_may_need_deed": true,
+        "define_permitted_purpose_precisely": true,
+        "sign_before_disclosing": true
+      },
+      "unit": "object",
+      "label": "Non-disclosure agreements: IPO guidance (one-way or mutual, deed, permitted purpose)",
+      "source": "https://www.gov.uk/government/publications/non-disclosure-agreements",
+      "source_title": "Non-disclosure agreements - GOV.UK (Intellectual Property Office)",
+      "confidence": "medium",
+      "verified_on": "2026-10-23",
+      "note": "Use a one-way NDA if only you are disclosing information and a mutual NDA if both parties are; don't make what should be a one-way agreement into an artificial mutual agreement. If the NDA is one-way only, it may need to be executed as a deed to make it enforceable. Restrict the use of the information to a permitted purpose stated as precisely as possible. Example one-way NDA (executed as a deed) and mutual NDA published. Guidance dated 2015, read through search excerpts."
+    },
+    "uk_deed_execution": {
+      "value": {
+        "must_say_it_is_a_deed": true,
+        "individual": "signed in the presence of a witness who attests the signature, and delivered as a deed",
+        "company": "signed by two authorised signatories (directors or the company secretary), or by a director in the presence of a witness who attests the signature, and delivered as a deed",
+        "scotland": "different rules (not covered)"
+      },
+      "unit": "object",
+      "label": "Executing a deed in England and Wales and Northern Ireland",
+      "source": "https://www.legislation.gov.uk/ukpga/1989/34/section/1",
+      "source_title": "Law of Property (Miscellaneous Provisions) Act 1989, s. 1 - legislation.gov.uk",
+      "more_sources": [
+        {
+          "source": "https://www.legislation.gov.uk/nisi/2005/1452/article/3/made",
+          "source_title": "Law Reform (Miscellaneous Provisions) (Northern Ireland) Order 2005, art. 3 - legislation.gov.uk"
+        },
+        {
+          "source": "https://www.legislation.gov.uk/ukpga/2006/46/section/44",
+          "source_title": "Companies Act 2006, s. 44 - legislation.gov.uk"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-10-23",
+      "note": "LP(MP)A 1989 s. 1(2): the instrument must make it clear on its face that it is intended to be a deed; s. 1(3): signed by the individual in the presence of a witness who attests the signature (or at their direction in the presence of two witnesses) and delivered as a deed. Northern Ireland: same requirements since 15 November 2005 (2005 Order, art. 3). Companies: Companies Act 2006 s. 44 (two authorised signatories, or a director in the presence of a witness) and s. 46 (deed if executed and delivered as a deed; presumed delivered on execution). Scotland has its own rules on execution. Read through search excerpts."
+    },
+    "uk_patent_prior_disclosure": {
+      "value": "You may lose the right to a patent if your invention becomes public before you apply; if you discuss it with anyone apart from a patent attorney, you may need a non-disclosure agreement.",
+      "unit": "text",
+      "label": "Patents: keep the invention secret until you apply",
+      "source": "https://www.gov.uk/patent-your-invention/before-you-apply",
+      "source_title": "Apply for a patent: Before you apply - GOV.UK",
+      "confidence": "high",
+      "verified_on": "2026-10-23",
+      "note": "The Manual of Patent Practice (section 2) adds that an invention must not have been disclosed anywhere in the world before the filing date. Read through search excerpts."
+    },
+    "uk_nda_victims_disclosures": {
+      "value": {
+        "from": "2025-10-01",
+        "extent": "England and Wales",
+        "void_to_the_extent": "it prevents a victim of crime (or a person who reasonably believes they are one) from making a permitted disclosure, for example to the police or a qualified lawyer"
+      },
+      "unit": "object",
+      "label": "NDAs signed from 1 October 2025: disclosures by victims of crime cannot be prevented",
+      "source": "https://www.gov.uk/government/publications/victims-and-prisoners-act-2024-changes-to-non-disclosure-agreements/victims-and-prisoners-act-2024-changes-to-non-disclosure-agreements",
+      "source_title": "Victims and Prisoners Act 2024: changes to non-disclosure agreements (for businesses) - GOV.UK",
+      "more_sources": [
+        {
+          "source": "https://www.legislation.gov.uk/ukpga/2024/21/section/17",
+          "source_title": "Victims and Prisoners Act 2024, s. 17 - legislation.gov.uk"
+        }
+      ],
+      "confidence": "medium",
+      "verified_on": "2026-10-23",
+      "note": "Section 17 applies to agreements made on or after 1 October 2025; some permitted disclosures took effect on 12 December 2025 (Permitted Disclosures Regulations 2025). Disclosures made mainly to publicise the information are not protected. The Victims and Courts Bill would repeal and replace section 17 with a wider rule: status to check at the December review. Read through search excerpts."
     }
   },
   "open_questions": [

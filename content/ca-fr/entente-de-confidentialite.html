@@ -1,0 +1,131 @@
+<!--{
+  "id": "nda",
+  "slug": "entente-de-confidentialite/",
+  "title": "Entente de confidentialité : modèle gratuit (Canada)",
+  "description": "Rédigez une entente de confidentialité mutuelle ou unilatérale selon les lois de votre province : objet, durée, exclusions, restitution. En PDF et Word.",
+  "menu": "Entente de confidentialité",
+  "icon": "🔒",
+  "blurb": "Une entente de confidentialité claire en quelques minutes, en PDF ou en Word.",
+  "app": "Générateur d'entente de confidentialité",
+  "scripts": [
+    "engines/contract-doc.js",
+    "tools/contract.js"
+  ],
+  "rules": "ca",
+  "sources": [
+    "ca_trade_secrets_nda",
+    "qc_adhesion_contract_french"
+  ],
+  "priority": 0.7,
+  "faq": [
+    [
+      "Quand faire signer une entente de confidentialité ?",
+      "Avant de communiquer quoi que ce soit de sensible. L'Office de la propriété intellectuelle du Canada recommande de faire signer une entente de non-divulgation aux employés, sous-traitants et partenaires avant de leur communiquer des renseignements sensibles, et de garder une trace des mesures prises. Une fois le contrat signé, la clause de confidentialité du <a href=\"{{link:contract}}\">contrat de service</a> peut suffire."
+    ],
+    [
+      "Entente mutuelle ou unilatérale ?",
+      "Unilatérale si une seule partie communique des informations confidentielles, mutuelle si les deux le font. Le générateur fixe les rôles : la Partie divulgatrice communique l'information, la Partie destinataire la reçoit et doit la protéger."
+    ],
+    [
+      "Combien de temps dure la confidentialité ?",
+      "Choisissez la durée selon la durée de vie de l'information. Au Canada, les secrets commerciaux ne sont pas enregistrés : ils ne sont protégés que tant qu'ils restent secrets. L'entente protège les informations communiquées pendant la période d'échange, puis pendant le nombre d'années choisi après sa fin."
+    ],
+    [
+      "Faut-il une version française au Québec ?",
+      "Oui pour un contrat d'adhésion : selon la Charte de la langue française (article 55), un contrat dont les clauses essentielles sont imposées et ne peuvent pas être discutées est remis d'abord en français ; une version dans une autre langue ne lie les parties que si elles le veulent expressément après la remise de la version française. Ce modèle est rédigé en français."
+    ],
+    [
+      "Ce modèle remplace-t-il un avocat ?",
+      "Non. Il couvre les discussions courantes entre entreprises. Pour un secret de grande valeur, une invention à breveter, une entente soumise à une loi étrangère ou des clauses que l'autre partie veut négocier, faites-le relire par un avocat ou un notaire."
+    ]
+  ]
+}-->
+<script type="application/json" id="contract-data">{"store": "nda", "doc_title": [{"when": {"direction": ["mutual"]}, "text": "ENTENTE DE CONFIDENTIALITÉ MUTUELLE"}, {"text": "ENTENTE DE CONFIDENTIALITÉ"}], "file": "Entente de confidentialité", "article": "Article {n} – {title}", "reset_confirm": "Effacer toutes les informations saisies ?", "hints": {"p_name": "nom du prestataire", "c_name": "nom du client", "purpose": "objet autorisé", "start": "date", "period": "période", "years": "durée", "law": "droit applicable", "today": "date"}, "preamble": ["Entre :", "{p_name}[[p_status|, {p_status}]][[p_address|, dont l'adresse est : {p_address}]][[p_id|, numéro d'entreprise {p_id}]][[p_email|, joignable à l'adresse {p_email}]], ci-après « le Prestataire »,", "Et :", "{c_name}[[c_status|, {c_status}]][[c_address|, dont le siège est situé : {c_address}]][[c_id|, numéro d'entreprise {c_id}]][[c_rep|, représentée par {c_rep}]], ci-après « le Client »,", "ensemble désignés « les Parties ».", {"when": {"direction": ["mutual"]}, "text": "Chaque Partie peut communiquer des Informations confidentielles à l'autre. Dans la présente entente, la « Partie divulgatrice » est celle qui communique une information et la « Partie destinataire » celle qui la reçoit."}, {"when": {"direction": ["to_me"]}, "text": "Le Client (la « Partie divulgatrice ») communique des Informations confidentielles au Prestataire (la « Partie destinataire »)."}, {"when": {"direction": ["from_me"]}, "text": "Le Prestataire (la « Partie divulgatrice ») communique des Informations confidentielles au Client (la « Partie destinataire »)."}, "Les Parties conviennent de ce qui suit."], "clauses": [{"title": "Objet", "paras": ["La présente entente fixe les conditions dans lesquelles sont protégées les Informations confidentielles échangées entre les Parties pour l'objet suivant : {purpose} (l'« Objet autorisé »)."]}, {"title": "Informations confidentielles", "paras": ["Sont des « Informations confidentielles » toutes les informations non publiques, de quelque nature qu'elles soient (techniques, commerciales, financières ou relatives aux clients), communiquées par la Partie divulgatrice à la Partie destinataire par écrit, oralement, visuellement ou par voie électronique, qu'elles soient désignées comme confidentielles ou qu'elles le soient par leur nature ou les circonstances de leur communication, ainsi que les notes, analyses et copies qui les contiennent. L'existence et le contenu des discussions entre les Parties sont également confidentiels.", "Ne sont pas des Informations confidentielles les informations dont la Partie destinataire prouve qu'elles étaient publiques au moment de leur communication ou le sont devenues sans faute de sa part, qu'elle les connaissait déjà de façon licite et sans obligation de confidentialité, qu'elle les a reçues licitement d'un tiers libre de les communiquer, ou qu'elle les a développées de façon indépendante, sans utiliser les Informations confidentielles."]}, {"title": "Obligations de la Partie destinataire", "paras": ["La Partie destinataire s'engage à utiliser les Informations confidentielles uniquement pour l'Objet autorisé, à ne pas les communiquer à des tiers sans l'accord écrit préalable de la Partie divulgatrice, à les protéger avec au moins le même soin que ses propres informations confidentielles, et au minimum avec un soin raisonnable, et à n'en faire des copies que dans la mesure nécessaire à l'Objet autorisé.", "Elle ne peut les communiquer qu'à ses salariés, sous-traitants et conseils qui ont besoin de les connaître pour l'Objet autorisé et qui sont tenus à une obligation de confidentialité au moins équivalente à celle de la présente entente ; elle répond du respect de la présente entente par ces personnes.", "Elle informe sans délai la Partie divulgatrice de toute utilisation ou divulgation non autorisée dont elle a connaissance et prend les mesures raisonnables pour en limiter les effets.", {"when": {"reverse": ["on"]}, "text": "Elle s'interdit d'analyser, de démonter, de décompiler ou de reproduire les prototypes, logiciels, échantillons ou objets qui lui sont confiés en vue d'en découvrir la composition ou le fonctionnement (rétro-ingénierie)."}, {"when": {"personal": ["on"]}, "text": "Si des renseignements personnels sont communiqués, la Partie destinataire ne les utilise que pour l'Objet autorisé et respecte les lois applicables sur la protection des renseignements personnels."}]}, {"title": "Divulgation exigée par la loi et signalements protégés", "paras": ["Si la loi, une décision de justice ou une autorité oblige la Partie destinataire à communiquer une Information confidentielle, elle en informe d'abord la Partie divulgatrice lorsque la loi le permet, et ne communique que ce qui est exigé.", "La présente entente n'empêche aucune Partie de signaler une infraction ou un manquement à la loi à la police, à un organisme de réglementation ou à une autre autorité publique, ni de faire toute autre divulgation protégée par la loi."]}, {"title": "Restitution et destruction", "paras": ["À la fin de la période d'échange, ou à tout moment sur demande écrite de la Partie divulgatrice, la Partie destinataire restitue ou détruit les Informations confidentielles et leurs copies, et le confirme par écrit si on le lui demande. Elle peut conserver les copies qu'une obligation légale lui impose de garder et celles qui figurent dans des sauvegardes automatiques ; elles restent soumises à la présente entente."]}, {"title": "Absence de licence et d'engagement", "paras": ["Les Informations confidentielles restent la propriété de la Partie divulgatrice. Leur communication ne confère à la Partie destinataire aucun droit de propriété intellectuelle ni aucune licence, en dehors de leur utilisation pour l'Objet autorisé.", "Les Informations confidentielles sont communiquées en l'état, sans garantie quant à leur exactitude ou à leur exhaustivité. La présente entente n'oblige aucune Partie à communiquer une information ni à conclure un contrat."]}, {"title": "Durée", "paras": [{"when": {"has_start": ["on"]}, "text": "La présente entente prend effet le {start}. Elle s'applique aux Informations confidentielles communiquées pendant les {period} qui suivent cette date (la « période d'échange »)."}, {"when": {"has_start": ["off"]}, "text": "La présente entente prend effet à la date de sa signature. Elle s'applique aux Informations confidentielles communiquées pendant les {period} qui suivent cette date (la « période d'échange »)."}, "Chaque Partie peut mettre fin plus tôt à la période d'échange par écrit. La signature d'un contrat entre les Parties ne met pas fin à la présente entente, sauf stipulation contraire de ce contrat. Les obligations de la Partie destinataire s'appliquent pendant la période d'échange et pendant {years} après sa fin."]}, {"title": "Manquement", "paras": ["Toute utilisation ou divulgation non autorisée engage la responsabilité de la Partie destinataire. La Partie divulgatrice peut demander au tribunal une injonction ou toute autre mesure propre à faire cesser l'atteinte, en plus de dommages-intérêts."]}, {"title": "Droit applicable et litiges", "paras": ["La présente entente est régie par les lois en vigueur {law}. En cas de différend, les Parties recherchent d'abord une solution amiable. À défaut d'entente dans un délai de 30 jours, le différend est soumis aux tribunaux compétents {law}."]}, {"title": "Dispositions générales", "paras": ["La présente entente exprime l'intégralité de l'accord des Parties sur son objet. Toute modification fait l'objet d'un écrit signé par les deux Parties. Si une clause est déclarée nulle, les autres restent applicables. Aucune Partie ne peut céder la présente entente sans l'accord écrit de l'autre. Elle peut être signée électroniquement."]}], "closing": ["Signé par les Parties aux dates indiquées ci-dessous."], "signatures": [{"title": "Le Prestataire", "name": "{p_name}"}, {"title": "Le Client", "name": "{c_name}[[c_rep|, représenté par {c_rep}]]"}], "sign_note": "Nom, signature et date", "option_text": {"law": {"QC": "au Québec", "ON": "en Ontario", "NB": "au Nouveau-Brunswick", "MB": "au Manitoba", "AB": "en Alberta", "BC": "en Colombie-Britannique", "SK": "en Saskatchewan", "NS": "en Nouvelle-Écosse", "NL": "à Terre-Neuve-et-Labrador", "PE": "à l'Île-du-Prince-Édouard", "YT": "au Yukon", "NT": "dans les Territoires du Nord-Ouest", "NU": "au Nunavut"}}}</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Gratuit · PDF et Word</span>
+    <h1>Entente de confidentialité</h1>
+    <p class="lead">Choisissez qui communique des informations, décrivez l'objet et fixez la durée : l'entente se rédige en direct, selon les lois de votre province. Téléchargez-la en PDF pour la signer, ou en Word pour l'adapter.</p>
+    <ul class="trust"><li>Mutuelle ou unilatérale</li><li>Toutes les provinces et les territoires</li><li>Vos données restent sur votre appareil</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout wide-left">
+    <form class="card form-card" id="contract-form" autocomplete="off" onsubmit="return false">
+      <h3>Vous (le prestataire)</h3>
+      <div class="fields">
+        <div class="field full"><label for="k-p-name">Nom ou raison sociale</label>
+          <input type="text" id="k-p-name" name="p_name" placeholder="Camille Tremblay Design" value="" data-save></div>
+        <div class="field full"><label for="k-p-status">Forme juridique (facultatif)</label>
+          <input type="text" id="k-p-status" name="p_status" placeholder="travailleuse autonome" value="" data-save></div>
+        <div class="field full"><label for="k-p-address">Adresse</label>
+          <input type="text" id="k-p-address" name="p_address" placeholder="1234, rue Saint-Denis, Montréal (Québec) H2X 3K8" value="" data-save></div>
+        <div class="field"><label for="k-p-id">Numéro d'entreprise (facultatif)</label>
+          <input type="text" id="k-p-id" name="p_id" placeholder="NEQ ou numéro d'entreprise" value="" data-save></div>
+        <div class="field"><label for="k-p-email">Courriel</label>
+          <input type="text" id="k-p-email" name="p_email" placeholder="bonjour@exemple.ca" value="" data-save></div>
+      </div>
+      <h3>L'autre partie (client ou client potentiel)</h3>
+      <div class="fields">
+        <div class="field full"><label for="k-c-name">Nom ou raison sociale</label>
+          <input type="text" id="k-c-name" name="c_name" placeholder="Studio Boréal inc." value="" data-save></div>
+        <div class="field full"><label for="k-c-status">Forme juridique (facultatif)</label>
+          <input type="text" id="k-c-status" name="c_status" placeholder="société par actions" value="" data-save></div>
+        <div class="field full"><label for="k-c-address">Adresse du siège</label>
+          <input type="text" id="k-c-address" name="c_address" placeholder="500, boulevard René-Lévesque Ouest, Montréal (Québec) H2Z 1W7" value="" data-save></div>
+        <div class="field"><label for="k-c-id">Numéro d'entreprise (facultatif)</label>
+          <input type="text" id="k-c-id" name="c_id" placeholder="" value="" data-save></div>
+        <div class="field"><label for="k-c-rep">Représenté par</label>
+          <input type="text" id="k-c-rep" name="c_rep" placeholder="Léa Gagnon, présidente" value="" data-save></div>
+      </div>
+      <h3>L'entente</h3>
+      <div class="fields">
+        <div class="field full"><label for="k-direction">Qui communique des informations confidentielles ?</label>
+          <select id="k-direction" name="direction" data-save><option value="mutual" selected>Les deux parties (entente mutuelle)</option><option value="to_me">Le client me communique des informations (unilatérale)</option><option value="from_me">Je communique des informations au client (unilatérale)</option></select></div>
+        <div class="field full"><label for="k-purpose">Objet autorisé : à quoi servent les informations</label>
+          <textarea id="k-purpose" name="purpose" rows="3" placeholder="étudier la refonte du site Web de Studio Boréal et, en cas d'entente, réaliser le mandat" aria-describedby="k-purpose-hint" data-save></textarea>
+          <span class="hint" id="k-purpose-hint">Soyez précis : les informations ne pourront servir qu'à cela.</span></div>
+        <div class="field"><label for="k-start">Date d'effet (facultatif)</label>
+          <input type="date" id="k-start" name="start" aria-describedby="k-start-hint" data-save>
+          <span class="hint" id="k-start-hint">À défaut, la date de signature.</span></div>
+        <div class="field"><label for="k-period">Informations échangées pendant</label>
+          <select id="k-period" name="period" data-save><option value="6">6 mois</option><option value="12" selected>12 mois</option><option value="24">24 mois</option><option value="36">36 mois</option></select></div>
+        <div class="field"><label for="k-years">Puis confidentielles pendant</label>
+          <select id="k-years" name="years" aria-describedby="k-years-hint" data-save><option value="1">1 an</option><option value="2">2 ans</option><option value="3" selected>3 ans</option><option value="5">5 ans</option><option value="10">10 ans</option></select>
+          <span class="hint" id="k-years-hint">Choisissez une durée adaptée à la durée de vie de l'information.</span></div>
+        <div class="field full"><label for="k-law">Droit applicable</label>
+          <select id="k-law" name="law" data-save><option value="QC" selected>Québec</option><option value="ON">Ontario</option><option value="NB">Nouveau-Brunswick</option><option value="MB">Manitoba</option><option value="AB">Alberta</option><option value="BC">Colombie-Britannique</option><option value="SK">Saskatchewan</option><option value="NS">Nouvelle-Écosse</option><option value="NL">Terre-Neuve-et-Labrador</option><option value="PE">Île-du-Prince-Édouard</option><option value="YT">Yukon</option><option value="NT">Territoires du Nord-Ouest</option><option value="NU">Nunavut</option></select></div>
+      </div>
+      <h3>Options</h3>
+      <div class="fields">
+        <label class="check full"><input type="checkbox" id="k-reverse" name="reverse" checked data-save><span>Interdire l'analyse des prototypes, logiciels et échantillons (rétro-ingénierie)</span></label>
+        <label class="check full"><input type="checkbox" id="k-personal" name="personal" data-save><span>Les informations comprennent des données personnelles</span></label>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="preview-actions">
+        <button type="button" class="btn btn-primary" id="k-print">Télécharger en PDF</button>
+        <button type="button" class="btn btn-ghost" id="k-word">Télécharger en Word</button>
+        <button type="button" class="btn btn-ghost" id="k-copy">Copier le texte</button>
+      </div>
+      <p class="small muted print-hint">PDF : choisissez « Enregistrer au format PDF » dans la fenêtre d'impression. Word : le fichier s'ouvre dans Word, LibreOffice ou Google Docs pour être modifié.</p>
+      <div class="paper-wrap"><article class="paper" id="k-preview" aria-label="Aperçu de l'entente"></article></div>
+      <button type="button" class="btn btn-ghost btn-sm" id="k-reset">Tout effacer</button>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>Ce que contient une bonne entente de confidentialité</h2>
+  <ul>
+    <li><strong>L'objet autorisé :</strong> les informations ne peuvent servir qu'à cela ; décrivez-le avec précision.</li>
+    <li><strong>Ce qui est confidentiel, et ce qui ne l'est pas :</strong> les informations publiques, déjà connues, reçues librement d'un tiers ou développées de façon indépendante sont exclues.</li>
+    <li><strong>La durée :</strong> une période d'échange, puis un nombre d'années de confidentialité.</li>
+    <li><strong>La fin des discussions :</strong> les informations sont rendues ou détruites, et personne n'est obligé de signer un contrat.</li>
+  </ul>
+  <p>Faites signer l'entente avant de communiquer quoi que ce soit, indiquez « Confidentiel » sur vos documents et gardez une trace de ce que vous avez transmis et à quelle date. Quand le projet se concrétise, rédigez le <a href="{{link:contract}}">contrat de service</a>.</p>
+  <p class="small muted">Modèle fourni à titre indicatif, pour des discussions entre entreprises. Il ne constitue pas un avis juridique.</p>
+</section>

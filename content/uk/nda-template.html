@@ -1,0 +1,133 @@
+<!--{
+  "id": "nda",
+  "slug": "nda-template/",
+  "title": "Free NDA Template (UK): Mutual or One-Way",
+  "description": "Create a mutual or one-way non-disclosure agreement under the law of England and Wales, Scotland or Northern Ireland, worded as a deed where needed.",
+  "menu": "NDA template",
+  "icon": "🔒",
+  "blurb": "A clear non-disclosure agreement in minutes, as a PDF or Word file.",
+  "app": "Non-disclosure agreement generator",
+  "scripts": [
+    "engines/contract-doc.js",
+    "tools/contract.js"
+  ],
+  "rules": "uk",
+  "sources": [
+    "uk_nda_guidance",
+    "uk_deed_execution",
+    "uk_patent_prior_disclosure",
+    "uk_nda_victims_disclosures"
+  ],
+  "priority": 0.7,
+  "faq": [
+    [
+      "When should a freelancer sign an NDA?",
+      "Before any confidential information changes hands: when a client wants to share plans, code, data or customer lists before hiring you, or when you pitch your own idea. If you plan to patent an invention, GOV.UK warns that you may lose the right to a patent if it becomes public before you apply, and that you may need an NDA to discuss it with anyone apart from a patent attorney."
+    ],
+    [
+      "Mutual or one-way NDA?",
+      "The Intellectual Property Office advises a one-way NDA if only one side discloses information and a mutual NDA if both do, without turning a one-way agreement into an artificial mutual one. It also advises stating the permitted purpose as precisely as possible."
+    ],
+    [
+      "Why is my one-way NDA worded as a deed?",
+      "The Intellectual Property Office notes that a one-way NDA may need to be executed as a deed to be enforceable. Under the law of England and Wales or Northern Ireland, the generator words a one-way agreement as a deed: each party signs in the presence of a witness, who signs and adds their name and address, and a company can sign through a director in front of a witness. Scotland has its own rules, so a one-way agreement under Scots law keeps ordinary signatures."
+    ],
+    [
+      "Can an NDA stop someone reporting a crime?",
+      "Not always. Since 1 October 2025, in England and Wales, a term in an agreement made from that date is void to the extent it stops a victim of crime from making certain disclosures, for example to the police or a qualified lawyer (Victims and Prisoners Act 2024, section 17). The template also says that nothing in it prevents a disclosure the law protects or permits."
+    ],
+    [
+      "Is this template legal advice?",
+      "No. It covers common business-to-business discussions. For a high-value secret, an invention you plan to patent, an agreement under foreign law or terms the other side wants to negotiate, have a lawyer review it."
+    ]
+  ]
+}-->
+<script type="application/json" id="contract-data">{"store": "nda", "doc_title": [{"when": {"direction": ["mutual"]}, "text": "MUTUAL NON-DISCLOSURE AGREEMENT"}, {"text": "NON-DISCLOSURE AGREEMENT"}], "file": "Non-disclosure agreement", "article": "{n}. {title}", "reset_confirm": "Clear everything you entered?", "hints": {"p_name": "contractor name", "c_name": "client name", "purpose": "purpose", "start": "start date", "period": "period", "years": "years", "law": "governing law", "today": "date"}, "preamble": [{"when": [{"direction": ["mutual"]}, {"law": ["SC"]}], "text": "This agreement is made on {today} between:"}, {"when": {"direction": ["to_me", "from_me"], "law": ["EW", "NI"]}, "text": "This deed is made on {today} between:"}, "{p_name}[[p_status|, {p_status}]][[p_address|, of {p_address}]][[p_id|, company number {p_id}]][[p_email|, {p_email}]] (the “Contractor”), and", "{c_name}[[c_status|, {c_status}]][[c_address|, of {c_address}]][[c_id|, {c_id}]][[c_rep|, represented by {c_rep}]] (the “Client”).", {"when": {"direction": ["mutual"]}, "text": "Each party may disclose Confidential Information to the other. In this agreement, the “Discloser” is the party disclosing Confidential Information and the “Recipient” is the party receiving it. In consideration of their mutual promises, the parties agree as follows."}, {"when": {"direction": ["to_me"]}, "text": "Client (the “Discloser”) intends to disclose Confidential Information to Contractor (the “Recipient”). The parties agree as follows."}, {"when": {"direction": ["from_me"]}, "text": "Contractor (the “Discloser”) intends to disclose Confidential Information to Client (the “Recipient”). The parties agree as follows."}], "clauses": [{"title": "Purpose", "paras": ["The Recipient will use the Confidential Information only for the following purpose: {purpose} (the “Purpose”)."]}, {"title": "Confidential Information", "paras": ["“Confidential Information” means all non-public information disclosed by the Discloser to the Recipient, in writing, orally, visually or electronically, whether or not it is marked as confidential, that a reasonable person would understand to be confidential given its nature and the circumstances of disclosure, including business, technical, financial and customer information, together with any notes, analyses and copies containing it. The existence and content of the parties' discussions are also Confidential Information.", "Confidential Information does not include information that the Recipient can show (a) is or becomes public through no fault of the Recipient; (b) was lawfully known to the Recipient before disclosure, without a duty of confidentiality; (c) is lawfully received from a third party who is free to disclose it; or (d) is independently developed by the Recipient without use of the Confidential Information."]}, {"title": "Recipient's obligations", "paras": ["The Recipient will: (a) use the Confidential Information only for the Purpose; (b) not disclose it to any third party without the Discloser's prior written consent; (c) protect it with at least the same care it uses for its own confidential information, and no less than reasonable care; and (d) copy it only as needed for the Purpose.", "The Recipient may disclose Confidential Information only to its employees, contractors and professional advisers who need to know it for the Purpose and are bound by confidentiality obligations at least as protective as this agreement. The Recipient is responsible for their compliance.", "The Recipient will promptly notify the Discloser of any unauthorised use or disclosure it becomes aware of and take reasonable steps to limit its effects.", {"when": {"reverse": ["on"]}, "text": "The Recipient will not reverse engineer, decompile, disassemble or analyse the composition of any prototype, software, sample or other item provided by the Discloser."}, {"when": {"personal": ["on"]}, "text": "If Confidential Information includes personal information, the Recipient will use it only for the Purpose and in compliance with the UK GDPR and the Data Protection Act 2018."}]}, {"title": "Required and protected disclosures", "paras": ["If the Recipient is required by law, regulation or court order to disclose Confidential Information, it will, where legally permitted, tell the Discloser first, and will disclose only what is required.", "Nothing in this agreement prevents either party from making a disclosure that the law protects or permits, including a protected disclosure under whistleblowing law or a disclosure to the police, a regulator or a legal adviser."]}, {"title": "Return or destruction", "paras": ["When the Disclosure Period ends, or at any time on the Discloser's written request, the Recipient will return or destroy the Confidential Information and all copies, and confirm this in writing if asked. The Recipient may keep copies it is legally required to retain and copies held in automatic backup systems; these remain subject to this agreement."]}, {"title": "No licence and no obligation", "paras": ["All Confidential Information remains the property of the Discloser. No licence or other right under any patent, copyright, trade secret or other intellectual property is granted to the Recipient, except the limited right to use the Confidential Information for the Purpose.", "Confidential Information is provided “as is”, without any warranty as to its accuracy or completeness. Nothing in this agreement obliges either party to disclose any information or to enter into any further agreement."]}, {"title": "Term", "paras": [{"when": {"has_start": ["on"]}, "text": "This agreement takes effect on {start} and covers Confidential Information disclosed in the {period} following that date (the “Disclosure Period”)."}, {"when": {"has_start": ["off"]}, "text": "This agreement takes effect on the date it is signed and covers Confidential Information disclosed in the {period} following that date (the “Disclosure Period”)."}, "Either party may end the Disclosure Period earlier by written notice. Signing a services contract does not end this agreement unless that contract says so. The Recipient's obligations continue during the Disclosure Period and for {years} after it ends."]}, {"title": "Remedies", "paras": ["Damages alone may not be an adequate remedy for a breach of this agreement. The Discloser may apply to the court for an injunction (in Scotland, an interdict) or other relief, in addition to any other remedy."]}, {"title": "Governing law and disputes", "paras": ["This agreement is governed by the law of {law}. The parties will first try in good faith to resolve any dispute informally; if they cannot within 30 days, the courts of {law} have exclusive jurisdiction."]}, {"title": "General", "paras": ["This agreement is the entire agreement between the parties on its subject and replaces any prior discussions about it. Any change must be in writing and signed by both parties. If any provision is found unenforceable, the rest remains in effect. Neither party may assign this agreement without the other's written consent. No one other than the parties has any right to enforce any of its terms.", {"when": [{"direction": ["mutual"]}, {"law": ["SC"]}], "text": "This agreement may be signed electronically and in counterparts."}, {"when": {"direction": ["to_me", "from_me"], "law": ["EW", "NI"]}, "text": "This agreement is executed as a deed and is delivered on the date written at the start."}]}], "closing": [{"when": [{"direction": ["mutual"]}, {"law": ["SC"]}], "text": "Signed by the parties on the dates below."}, {"when": {"direction": ["to_me", "from_me"], "law": ["EW", "NI"]}, "text": "Executed as a deed by the parties below."}], "signatures": [{"when": [{"direction": ["mutual"]}, {"law": ["SC"]}], "title": "Contractor", "name": "{p_name}"}, {"when": [{"direction": ["mutual"]}, {"law": ["SC"]}], "title": "Client", "name": "{c_name}[[c_rep|, by {c_rep}]]"}, {"when": {"direction": ["to_me", "from_me"], "law": ["EW", "NI"]}, "title": "Contractor", "name": "Executed as a deed by {p_name}", "witness": {"title": "in the presence of:", "lines": ["Witness signature", "Witness name", "Witness address"]}, "note": "Signature and date (a company signs through a director)"}, {"when": {"direction": ["to_me", "from_me"], "law": ["EW", "NI"]}, "title": "Client", "name": "Executed as a deed by {c_name}[[c_rep|, acting by {c_rep}]]", "witness": {"title": "in the presence of:", "lines": ["Witness signature", "Witness name", "Witness address"]}, "note": "Signature and date (a company signs through a director)"}], "sign_note": "Signature, name and date"}</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · PDF and Word</span>
+    <h1>NDA template</h1>
+    <p class="lead">Choose who shares information, describe the purpose and set the length: your non-disclosure agreement writes itself as you type, as a deed when the law calls for one. Download it as a PDF to sign, or as Word to edit.</p>
+    <ul class="trust"><li>Mutual or one-way</li><li>Deed wording for one-way agreements</li><li>Your data stays on your device</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout wide-left">
+    <form class="card form-card" id="contract-form" autocomplete="off" onsubmit="return false">
+      <h3>You (the contractor)</h3>
+      <div class="fields">
+        <div class="field full"><label for="k-p-name">Name or business name</label>
+          <input type="text" id="k-p-name" name="p_name" placeholder="Alex Morgan Design Ltd" value="" data-save></div>
+        <div class="field full"><label for="k-p-status">Legal form (optional)</label>
+          <input type="text" id="k-p-status" name="p_status" placeholder="a sole trader" value="" data-save></div>
+        <div class="field full"><label for="k-p-address">Address</label>
+          <input type="text" id="k-p-address" name="p_address" placeholder="12 High Street, Manchester M1 1AA" value="" data-save></div>
+        <div class="field"><label for="k-p-id">Company number (optional)</label>
+          <input type="text" id="k-p-id" name="p_id" placeholder="" value="" data-save></div>
+        <div class="field"><label for="k-p-email">Email</label>
+          <input type="text" id="k-p-email" name="p_email" placeholder="hello@example.com" value="" data-save></div>
+      </div>
+      <h3>The other party (client or prospective client)</h3>
+      <div class="fields">
+        <div class="field full"><label for="k-c-name">Name or business name</label>
+          <input type="text" id="k-c-name" name="c_name" placeholder="Northwind Studio" value="" data-save></div>
+        <div class="field full"><label for="k-c-status">Legal form (optional)</label>
+          <input type="text" id="k-c-status" name="c_status" placeholder="a private limited company" value="" data-save></div>
+        <div class="field full"><label for="k-c-address">Address</label>
+          <input type="text" id="k-c-address" name="c_address" placeholder="1 King Street, London EC2V 8AU" value="" data-save></div>
+        <div class="field"><label for="k-c-id">Company or tax number (optional)</label>
+          <input type="text" id="k-c-id" name="c_id" placeholder="" value="" data-save></div>
+        <div class="field"><label for="k-c-rep">Signing on behalf of the client</label>
+          <input type="text" id="k-c-rep" name="c_rep" placeholder="Jordan Lee, CEO" value="" data-save></div>
+      </div>
+      <h3>The agreement</h3>
+      <div class="fields">
+        <div class="field full"><label for="k-direction">Who shares confidential information?</label>
+          <select id="k-direction" name="direction" data-save><option value="mutual" selected>Both parties (mutual)</option><option value="to_me">The client shares with me (one-way)</option><option value="from_me">I share with the client (one-way)</option></select></div>
+        <div class="field full"><label for="k-purpose">Purpose: what the information may be used for</label>
+          <textarea id="k-purpose" name="purpose" rows="3" placeholder="evaluating a redesign of the Northwind Studio website and, if agreed, carrying out the project" aria-describedby="k-purpose-hint" data-save></textarea>
+          <span class="hint" id="k-purpose-hint">Be precise: the information may be used for this purpose only.</span></div>
+        <div class="field"><label for="k-start">Start date (optional)</label>
+          <input type="date" id="k-start" name="start" aria-describedby="k-start-hint" data-save>
+          <span class="hint" id="k-start-hint">Leave empty to start on signing.</span></div>
+        <div class="field"><label for="k-period">Information shared during</label>
+          <select id="k-period" name="period" data-save><option value="6">6 months</option><option value="12" selected>12 months</option><option value="24">24 months</option><option value="36">36 months</option></select></div>
+        <div class="field"><label for="k-years">Then kept confidential for</label>
+          <select id="k-years" name="years" aria-describedby="k-years-hint" data-save><option value="1">1 year</option><option value="2">2 years</option><option value="3" selected>3 years</option><option value="5">5 years</option><option value="10">10 years</option></select>
+          <span class="hint" id="k-years-hint">Pick a length that matches how long the information stays valuable.</span></div>
+        <div class="field"><label for="k-law">Governing law</label>
+          <select id="k-law" name="law" data-save><option value="EW" selected>England and Wales</option><option value="SC">Scotland</option><option value="NI">Northern Ireland</option></select></div>
+      </div>
+      <h3>Options</h3>
+      <div class="fields">
+        <label class="check full"><input type="checkbox" id="k-reverse" name="reverse" checked data-save><span>No reverse engineering of prototypes, software or samples</span></label>
+        <label class="check full"><input type="checkbox" id="k-personal" name="personal" data-save><span>The information includes personal information</span></label>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="preview-actions">
+        <button type="button" class="btn btn-primary" id="k-print">Download PDF</button>
+        <button type="button" class="btn btn-ghost" id="k-word">Download Word</button>
+        <button type="button" class="btn btn-ghost" id="k-copy">Copy text</button>
+      </div>
+      <p class="small muted print-hint">PDF: choose “Save as PDF” in the print window. Word: the file opens in Word, LibreOffice or Google Docs for editing.</p>
+      <div class="paper-wrap"><article class="paper" id="k-preview" aria-label="Agreement preview"></article></div>
+      <button type="button" class="btn btn-ghost btn-sm" id="k-reset">Clear everything</button>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>What a good NDA covers</h2>
+  <ul>
+    <li><strong>The purpose:</strong> the information may be used for this purpose only, so describe it precisely.</li>
+    <li><strong>What is confidential, and what is not:</strong> public information, what you already knew, what a third party gave you freely and what you developed on your own are excluded.</li>
+    <li><strong>How long it lasts:</strong> a disclosure period, then a number of years of confidentiality.</li>
+    <li><strong>The end of the discussions:</strong> the information is returned or destroyed, and nobody is obliged to sign a contract.</li>
+  </ul>
+  <p>Sign the agreement before sharing anything, mark your documents “Confidential” and keep a record of what you sent and when. When the project goes ahead, write the <a href="{{link:contract}}">freelance contract</a>.</p>
+  <p class="small muted">General template for business-to-business discussions, provided for information. It is not legal advice.</p>
+</section>
