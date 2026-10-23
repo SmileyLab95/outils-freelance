@@ -155,8 +155,14 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 - **Compte bancaire d'entreprise hors de France (23/10/2026)** : vérificateur au Royaume-Uni, aux États-Unis et au
   Canada (anglais et français) : obligatoire ou conseillé selon la forme de l'activité, EIN, conservation des registres
   ([25](25-compte-et-assurance-hors-france.md), § 3).
-- **Prochaines actions de Claude** : assurance hors de France (P2 ; recherches faites le 23/10/2026,
-  [25](25-compte-et-assurance-hors-france.md)) ; comptes : adaptateur
+- **Assurances hors de France (23/10/2026)** : vérificateur au Royaume-Uni (*employers' liability* selon la forme et
+  le personnel, assurance auto, *professional indemnity*, *public liability*, domicile), aux États-Unis (obligations
+  d'employeur selon l'État : accidents du travail, Texas, chômage, invalidité dans cinq États ; assurances conseillées
+  de la SBA) et au Canada en anglais et en français (protection personnelle auprès des 13 organismes, construction en
+  Ontario, employeur, domicile) ; exemption britannique non confirmée affichée « à vérifier » (D26). Le besoin P2
+  « Assurance professionnelle » est couvert dans les quatre pays ([25](25-compte-et-assurance-hors-france.md), § 5).
+- **Prochaines actions de Claude** : guide de changement de statut (dernier besoin P2 ouvert hors recouvrement
+  français, [02](02-besoins-clients.md) § 10) ; comptes : adaptateur
   PostgreSQL et sauvegardes dès que l'hébergeur est choisi ; taux du crédit pour
   dividendes de la Saskatchewan et du Nunavut dès qu'ils sont publiés (formulaires 2026) ;
   trouver la cause du contrôle de contraste intermittent de l'Espace ; revérifier les grilles des prestataires de
@@ -229,6 +235,10 @@ Objectif : un site mesuré, sous sa propre marque, qui commence à rapporter, et
       créances des 13 provinces et territoires, anglais et français) : spécification [24](24-recouvrement-uk-us-ca.md)
 - [x] Recouvrement en justice aux États-Unis (*small claims* des 50 États et du district de Columbia) :
       [24](24-recouvrement-uk-us-ca.md) § 3
+- [x] Compte bancaire d'entreprise au Royaume-Uni, aux États-Unis et au Canada (anglais et français) :
+      [25](25-compte-et-assurance-hors-france.md) § 3
+- [x] Assurances de l'activité au Royaume-Uni, aux États-Unis et au Canada (anglais et français) :
+      [25](25-compte-et-assurance-hors-france.md) § 4 et § 5
 - [ ] Guide du recouvrement judiciaire (injonction de payer, procédure simplifiée) une fois les règles 2026 vérifiées :
       étude et plan prêts ([14](14-etude-recouvrement.md)) ; deux textes de 2026 à lire en entier avant publication
 - [x] Guide « Compte bancaire professionnel » avec vérificateur (règle des 10 000 € sur deux ans, mention « EI »,

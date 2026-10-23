@@ -1,5 +1,22 @@
 # Journal des modifications
 
+## 2026-10-23 — Assurances de l'activité : Royaume-Uni, États-Unis, Canada
+
+- Vérificateur « *Business insurance* » au Royaume-Uni, aux États-Unis et au Canada, et « Assurance d'entreprise » au
+  Canada en français : selon la situation, les assurances obligatoires, à vérifier, à faire, conseillées ou
+  facultatives. Royaume-Uni : *employers' liability* (5 millions de livres, amendes, exemption familiale hors
+  *limited company*), assurance auto pour un usage professionnel, *professional indemnity*, *public liability*,
+  domicile. États-Unis : obligations d'employeur selon l'État (accidents du travail, cas du Texas, chômage,
+  invalidité en Californie, à Hawaï, au New Jersey, dans l'État de New York et au Rhode Island), assurances
+  conseillées par la SBA. Canada : protection personnelle auprès des 13 organismes (liens officiels), construction en
+  Ontario, employeur, assurance habitation.
+- Huit règles nouvelles, chacune avec ses sources officielles (GOV.UK, HSE, Business.gov.uk, SBA, TDI, WSIB et
+  organismes provinciaux, ACFC) ; spécification [25](documentation/25-compte-et-assurance-hors-france.md), § 4 et § 5.
+  Les pages du compte bancaire renvoient vers l'outil.
+- Tests : `insurance-intl.test.mjs` (toutes les combinaisons de réponses) ; 15 erreurs réintroduites, toutes
+  détectées ; suite complète (288 tests unitaires, 27 tests serveur, 2 679 vérifications navigateur du site
+  public).
+
 ## 2026-10-23 — Compte bancaire d'entreprise : Royaume-Uni, États-Unis, Canada
 
 - Vérificateur « *Business bank account* » au Royaume-Uni, aux États-Unis et au Canada, et « Compte bancaire

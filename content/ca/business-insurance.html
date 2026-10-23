@@ -1,0 +1,137 @@
+<!--{
+  "id": "insurance",
+  "slug": "business-insurance/",
+  "title": "Business Insurance in Canada: What's Required?",
+  "description": "Workers' compensation for yourself and your workers, home insurance, business insurance: see what's compulsory in your province and what to check.",
+  "menu": "Business insurance",
+  "icon": "🛡️",
+  "blurb": "Workers' comp and home insurance, by province.",
+  "app": "Canada Business Insurance Checker",
+  "scripts": ["engines/insurance-intl.js", "tools/intl-insurance.js"],
+  "rules": "ca",
+  "sources": ["ca_workers_comp_personal_coverage", "ca_home_based_business_insurance"],
+  "priority": 0.7,
+  "faq": [
+    ["Is workers' compensation mandatory for the self-employed in Canada?", "In general, no: if you work alone, you can choose personal coverage with your province's or territory's board. Ontario construction is the exception: independent operators and sole proprietors must have WSIB coverage, unless they only do home renovation work hired and paid directly by the occupant or a family member."],
+    ["Do I need to register when I hire employees?", "Check with your province's or territory's board: in the industries where coverage is compulsory, an employer must register to cover its workers."],
+    ["Does my home insurance cover my home business?", "Generally not, according to the Financial Consumer Agency of Canada. Tell your insurer you run a business from home: using your home for purposes your insurer isn't aware of may cancel your policy."],
+    ["Which board covers my province or territory?", "The table on this page lists the workers' compensation board of each province and territory: for example WSIB in Ontario, CNESST in Québec and WorkSafeBC in British Columbia."]
+  ]
+}-->
+<script type="application/json" id="ins-data">
+{
+  "country": "ca",
+  "board_name": "board",
+  "and": " and ",
+  "verdicts": {
+    "some": "{names}",
+    "check": "Some points to check",
+    "none": "None in general"
+  },
+  "subs": {
+    "some": "Compulsory in your situation. The other lines below are to check or recommended.",
+    "check": "Nothing is compulsory for yourself, but your workers may need to be covered: see below.",
+    "none": "Workers' compensation for yourself is optional. This checker doesn't cover vehicles or regulated professions: ask your insurer or regulator."
+  },
+  "levels": {
+    "required": "Required: ",
+    "check": "Check: ",
+    "todo": "To do: ",
+    "recommended": "Recommended: ",
+    "optional": "Optional: "
+  },
+  "names": {
+    "ca_self_construction": "WSIB coverage for yourself",
+    "ca_self_optional": "workers' compensation for yourself",
+    "ca_workers": "workers' compensation for your workers",
+    "ca_home": "tell your home insurer",
+    "ca_business": "business insurance"
+  },
+  "texts": {
+    "ca_self_construction": "In Ontario construction, independent operators, sole proprietors, partners and executive officers must have WSIB coverage. Exceptions: people whose construction work is all home renovation on an existing home, hired and paid directly by the occupant or a family member, and one partner or executive officer per business who does no construction work.",
+    "ca_self_optional": "Coverage for yourself is optional: you can apply to {board} for personal coverage, under its eligibility conditions.",
+    "ca_workers": "Check with {board} whether your industry must be covered: if it is, register as an employer to cover your workers.",
+    "ca_home": "Home insurance generally won't cover claims related to a home-based business, and using your home for purposes your insurer isn't aware of may cancel your policy.",
+    "ca_business": "Consider business insurance for the risks of your work. Canada.ca's Protecting your business page presents the main types, and the needs of home-based businesses."
+  }
+}
+</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · all provinces and territories</span>
+    <h1>Which business insurance do you need?</h1>
+    <p class="lead">Pick your province or territory and answer a few questions: see what's compulsory, what to check with your workers' compensation board, and what to tell your insurer.</p>
+    <ul class="trust"><li>13 provinces and territories</li><li>Official sources</li><li>No insurer, no sales pitch</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="ins-form" onsubmit="return false">
+      <h2>Your business</h2>
+      <div class="fields">
+        <div class="field full"><label for="i-province">Province or territory where you work</label>
+          <select id="i-province" name="province" data-save>
+            <option value="ON" selected>Ontario</option>
+            <option value="QC">Québec</option>
+            <option value="BC">British Columbia</option>
+            <option value="AB">Alberta</option>
+            <option value="SK">Saskatchewan</option>
+            <option value="MB">Manitoba</option>
+            <option value="NS">Nova Scotia</option>
+            <option value="NB">New Brunswick</option>
+            <option value="PE">Prince Edward Island</option>
+            <option value="NL">Newfoundland and Labrador</option>
+            <option value="YT">Yukon</option>
+            <option value="NT">Northwest Territories</option>
+            <option value="NU">Nunavut</option>
+          </select></div>
+        <label class="check full"><input type="checkbox" id="i-employees" name="employees" data-save><span>I have employees</span></label>
+        <label class="check full" id="i-construction-field"><input type="checkbox" id="i-construction" name="construction" data-save><span>I work in construction</span></label>
+        <label class="check full"><input type="checkbox" id="i-home" name="home" data-save><span>I work from home</span></label>
+      </div>
+    </form>
+
+    <div class="results">
+      <h2 class="sr-only">Result</h2>
+      <div class="result-hero" id="i-hero" role="status" aria-atomic="true">
+        <div class="label">Insurance required by law</div>
+        <div class="big" id="i-verdict" style="font-size: clamp(1.5rem, 3.4vw, 2.1rem);">–</div>
+        <div class="sub" id="i-sub">–</div>
+      </div>
+      <ul class="checklist card" id="i-list" style="padding: 10px 18px; margin-top: 16px;"></ul>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>Workers' compensation boards</h2>
+  <p>Each province and territory has its own board. As a self-employed person working alone, you can usually choose personal coverage; as an employer, check whether your industry must be covered.</p>
+  <table>
+    <thead><tr><th>Province or territory</th><th>Board</th></tr></thead>
+    <tbody>
+      <tr><td>Ontario</td><td><a href="https://www.wsib.ca/en/businesses/registration-and-coverage/can-i-choose-have-wsib-insurance" rel="noopener">WSIB</a></td></tr>
+      <tr><td>Québec</td><td><a href="https://www.cnesst.gouv.qc.ca/sites/default/files/documents/note278h_0.pdf" rel="noopener">CNESST</a></td></tr>
+      <tr><td>British Columbia</td><td><a href="https://www.worksafebc.com/en/insurance/need-coverage/optional-coverage/personal-coverage" rel="noopener">WorkSafeBC</a></td></tr>
+      <tr><td>Alberta</td><td><a href="https://www.wcb.ab.ca/insurance-and-premiums/types-of-coverage/personal-coverage.html" rel="noopener">WCB Alberta</a></td></tr>
+      <tr><td>Saskatchewan</td><td><a href="https://www.wcbsask.com/optional-personal-coverage" rel="noopener">WCB Saskatchewan</a></td></tr>
+      <tr><td>Manitoba</td><td><a href="https://www.wcb.mb.ca/employers/optional-coverage/optional-coverage-for-business-owners/" rel="noopener">WCB Manitoba</a></td></tr>
+      <tr><td>Nova Scotia</td><td><a href="https://www.wcb.ns.ca/employers/workplace-injury-insurance/do-you-need-coverage" rel="noopener">WCB Nova Scotia</a></td></tr>
+      <tr><td>New Brunswick</td><td><a href="https://www.worksafenb.ca/employers/insurance/accounts-and-coverage/" rel="noopener">WorkSafeNB</a></td></tr>
+      <tr><td>Prince Edward Island</td><td><a href="https://www.wcb.pe.ca/Employers/Coverage" rel="noopener">WCB PEI</a></td></tr>
+      <tr><td>Newfoundland and Labrador</td><td><a href="https://workplacenl.ca/site/uploads/2023/09/101.00-Coverage-Under-the-WHSC-Act-2018-09-11.pdf" rel="noopener">WorkplaceNL</a></td></tr>
+      <tr><td>Yukon</td><td><a href="https://www.wcb.yk.ca/web-0021/web-0104/web-0026" rel="noopener">Yukon Workers' Safety and Compensation Board</a></td></tr>
+      <tr><td>Northwest Territories</td><td><a href="https://wscc.nt.ca/documents/self-employed" rel="noopener">WSCC</a></td></tr>
+      <tr><td>Nunavut</td><td><a href="https://wscc.nt.ca/documents/self-employed" rel="noopener">WSCC</a></td></tr>
+    </tbody>
+  </table>
+  <h2>Working from home</h2>
+  <p>Home insurance generally won't cover claims related to a home-based business, and it may cover some business equipment only while it's in your home. Tell your insurer, and review what your policy covers.</p>
+  <h2>Good to know</h2>
+  <ul>
+    <li><strong>Setting up</strong>: the <a href="{{link:start}}">business startup checklist</a> lists every step, and the <a href="{{link:bank}}">business bank account checker</a> covers your account.</li>
+    <li><strong>Your contracts</strong>: the <a href="{{link:contract}}">freelance contract generator</a> includes a limitation of liability clause.</li>
+  </ul>
+  <p class="small muted">Information for guidance only, from the workers' compensation boards and the Financial Consumer Agency of Canada. It doesn't replace advice from your board, an insurer or your regulator.</p>
+</section>

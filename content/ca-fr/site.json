@@ -9,6 +9,7 @@
       "label": "Impôts et taxes",
       "items": [
         "start",
+        "insurance",
         "tax",
         "set-aside",
         "structure",

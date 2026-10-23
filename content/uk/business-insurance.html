@@ -1,0 +1,136 @@
+<!--{
+  "id": "insurance",
+  "slug": "business-insurance/",
+  "title": "Business Insurance UK: What's Required by Law?",
+  "description": "Employers' liability, motor, public liability, professional indemnity: see which business insurance the law requires for you and which is worth having.",
+  "menu": "Business insurance",
+  "icon": "🛡️",
+  "blurb": "Required or recommended, for your situation.",
+  "app": "UK Business Insurance Checker",
+  "scripts": ["engines/insurance-intl.js", "tools/intl-insurance.js"],
+  "rules": "uk",
+  "sources": ["uk_compulsory_business_insurance", "uk_employers_liability_insurance", "uk_business_from_home"],
+  "priority": 0.7,
+  "faq": [
+    ["Is business insurance a legal requirement in the UK?", "Only two types are: employers' liability insurance if people work for you, and motor insurance if you use a vehicle in your business, your own car included. Public liability and professional indemnity aren't required by law, unless a contract, your regulator or your professional body asks for them."],
+    ["Do sole traders need employers' liability insurance?", "Not while nobody works for you, or if your only employees are close family members. As soon as you employ anyone else, you need cover of at least £5 million from an authorised insurer."],
+    ["Does a limited company need employers' liability insurance?", "As soon as it employs anyone, family members included: the close-family exemption doesn't apply to limited companies. If you're the company's only worker, check the exemptions in the GOV.UK and HSE guidance, or ask an insurer."],
+    ["Is public liability insurance compulsory?", "No. Business.gov.uk says almost all businesses need it, especially if you deal with the public or a contract requires it."],
+    ["I work from home: does my home insurance cover my business?", "Not necessarily: standard home insurance may not cover business use. Tell your home insurer, and check with your mortgage provider or landlord."],
+    ["Do the same rules apply in Northern Ireland?", "Northern Ireland has its own employers' liability regulations: check HSENI's guidance. This page follows the rules for England, Scotland and Wales."]
+  ]
+}-->
+<script type="application/json" id="ins-data">
+{
+  "country": "uk",
+  "and": " and ",
+  "verdicts": {
+    "some": "{names}",
+    "check": "Some points to check",
+    "none": "None for now"
+  },
+  "subs": {
+    "some": "Required by law in your situation. The other lines below are recommended or to check.",
+    "check": "Nothing is clearly required, but some rules depend on your case: see below.",
+    "none": "No insurance is compulsory in your situation, but public liability is worth considering."
+  },
+  "levels": {
+    "required": "Required: ",
+    "check": "Check: ",
+    "todo": "To do: ",
+    "recommended": "Recommended: ",
+    "not_required": "Not required: "
+  },
+  "names": {
+    "uk_el_employees": "employers' liability insurance",
+    "uk_el_company_family": "employers' liability insurance",
+    "uk_el_family": "employers' liability insurance",
+    "uk_el_company_alone": "employers' liability insurance",
+    "uk_el_alone": "employers' liability insurance",
+    "uk_motor": "motor insurance for business use",
+    "uk_pi_regulated": "professional indemnity insurance",
+    "uk_pi_advice": "professional indemnity insurance",
+    "uk_public_liability": "public liability insurance",
+    "uk_home": "tell your home insurer"
+  },
+  "texts": {
+    "uk_el_employees": "Compulsory as soon as you become an employer: cover of at least £5 million from an authorised insurer, with the certificate displayed where your employees can see it. Fines: £2,500 for each day without cover, £1,000 if the certificate isn't displayed.",
+    "uk_el_company_family": "The close-family exemption doesn't apply to limited companies: as soon as your company employs anyone, family included, it needs cover of at least £5 million from an authorised insurer. Fine: £2,500 for each day without cover.",
+    "uk_el_family": "Not needed if your only employees are close family members. As soon as you employ anyone else, you'll need cover of at least £5 million from an authorised insurer.",
+    "uk_el_company_alone": "Your company is an employer as soon as it employs someone under a contract of employment, which can include you as a director. Check the exemptions in the GOV.UK and HSE guidance, or ask an insurer, before going without it. With any other employee, cover of at least £5 million is compulsory.",
+    "uk_el_alone": "Not needed while nobody works for you. From your first employee who isn't close family, you'll need cover of at least £5 million from an authorised insurer.",
+    "uk_motor": "Required by law for any vehicle you use in your business, your personal car included: tell your insurer you use it for work.",
+    "uk_pi_regulated": "Some regulators and professional bodies require it, in health for example: check your regulator's rules and the cover they ask for.",
+    "uk_pi_advice": "Not required by law, but Business.gov.uk says you need it if you give clients legal, financial or other professional advice or services.",
+    "uk_public_liability": "Not required by law, but needed by almost all businesses, especially if you deal with the public or a client's contract requires it.",
+    "uk_home": "Standard home insurance may not cover business use. Check with your mortgage provider or landlord too."
+  }
+}
+</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · UK rules</span>
+    <h1>Which business insurance do you need?</h1>
+    <p class="lead">Answer a few questions: see which insurance the law requires for your business, which is worth having, and what to check.</p>
+    <ul class="trust"><li>Employers' liability and motor</li><li>Official guidance</li><li>No insurer, no sales pitch</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="ins-form" onsubmit="return false">
+      <h2>Your business</h2>
+      <div class="fields">
+        <div class="field full"><label for="i-structure">You're running your business as</label>
+          <select id="i-structure" name="structure" data-save>
+            <option value="sole_trader" selected>A sole trader or partnership</option>
+            <option value="limited">A limited company</option>
+          </select></div>
+        <div class="field full"><label for="i-staff">Who works for you?</label>
+          <select id="i-staff" name="staff" data-save>
+            <option value="none" selected>Nobody, I work alone</option>
+            <option value="family">Only close family members</option>
+            <option value="employees">Employees</option>
+          </select></div>
+        <label class="check full"><input type="checkbox" id="i-vehicle" name="vehicle" data-save><span>I use a vehicle for my work</span></label>
+        <label class="check full"><input type="checkbox" id="i-advice" name="advice" data-save><span>I give clients advice or professional services</span></label>
+        <label class="check full"><input type="checkbox" id="i-regulated" name="regulated" data-save><span>My profession has a regulator or professional body</span></label>
+        <label class="check full"><input type="checkbox" id="i-home" name="home" data-save><span>I work from home</span></label>
+      </div>
+    </form>
+
+    <div class="results">
+      <h2 class="sr-only">Result</h2>
+      <div class="result-hero" id="i-hero" role="status" aria-atomic="true">
+        <div class="label">Insurance required by law</div>
+        <div class="big" id="i-verdict" style="font-size: clamp(1.5rem, 3.4vw, 2.1rem);">–</div>
+        <div class="sub" id="i-sub">–</div>
+      </div>
+      <ul class="checklist card" id="i-list" style="padding: 10px 18px; margin-top: 16px;"></ul>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>What the law requires</h2>
+  <table>
+    <thead><tr><th>Insurance</th><th>Who needs it</th></tr></thead>
+    <tbody>
+      <tr><td>Employers' liability</td><td>Any employer, from the first employee: at least £5 million of cover from an authorised insurer. Not needed if your only employees are close family members (except in a limited company) or are based outside England, Scotland and Wales.<br><span class="small muted">GOV.UK, HSE</span></td></tr>
+      <tr><td>Motor insurance</td><td>Any vehicle used in your business, a personal car included.<br><span class="small muted">Business.gov.uk</span></td></tr>
+    </tbody>
+  </table>
+  <h2>Worth having</h2>
+  <ul>
+    <li><strong>Public liability</strong>: needed by almost all businesses, especially if you deal with the public or if a contract requires it.</li>
+    <li><strong>Professional indemnity</strong>: if you give advice or professional services; compulsory if your regulator or your industry requires it.</li>
+  </ul>
+  <p>Compare quotes from at least two insurers and read the exclusions and limits before you sign.</p>
+  <h2>Good to know</h2>
+  <ul>
+    <li><strong>Setting up</strong>: the <a href="{{link:start}}">sole trader checklist</a> lists every step, and the <a href="{{link:bank}}">business bank account checker</a> covers your account.</li>
+    <li><strong>Your contracts</strong>: the <a href="{{link:contract}}">freelance contract generator</a> includes a limitation of liability clause.</li>
+  </ul>
+  <p class="small muted">Information for guidance only, from GOV.UK, the HSE and Business.gov.uk, for England, Scotland and Wales. It doesn't replace advice from an insurer or your regulator.</p>
+</section>

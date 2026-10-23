@@ -1,0 +1,137 @@
+<!--{
+  "id": "insurance",
+  "slug": "assurance-entreprise/",
+  "title": "Assurance d'entreprise au Canada : ce qui est obligatoire",
+  "description": "Accidents du travail pour vous et vos employés, assurance habitation, assurance des entreprises : ce qui est obligatoire dans votre province et quoi vérifier.",
+  "menu": "Assurance d'entreprise",
+  "icon": "🛡️",
+  "blurb": "Accidents du travail et assurance habitation, par province.",
+  "app": "Vérificateur d'assurances d'entreprise (Canada)",
+  "scripts": ["engines/insurance-intl.js", "tools/intl-insurance.js"],
+  "rules": "ca",
+  "sources": ["ca_workers_comp_personal_coverage", "ca_home_based_business_insurance"],
+  "priority": 0.7,
+  "faq": [
+    ["L'assurance accidents du travail est-elle obligatoire pour un travailleur autonome ?", "En général, non : si vous travaillez seul, vous pouvez choisir une protection personnelle auprès de l'organisme de votre province ou territoire. La construction en Ontario fait exception : les exploitants indépendants et propriétaires uniques doivent être couverts par la CSPAAT, sauf s'ils ne font que des rénovations résidentielles pour lesquelles l'occupant ou un membre de sa famille les engage et les paie directement."],
+    ["Dois-je m'inscrire quand j'embauche ?", "Vérifiez auprès de l'organisme de votre province ou territoire : dans les secteurs où la protection est obligatoire, un employeur doit s'inscrire pour couvrir ses employés."],
+    ["Mon assurance habitation couvre-t-elle mon entreprise à domicile ?", "En général, non, selon l'Agence de la consommation en matière financière du Canada. Prévenez votre assureur : utiliser votre logement à des fins qu'il ignore peut entraîner l'annulation de votre police."],
+    ["Quel organisme couvre ma province ou mon territoire ?", "Le tableau de cette page indique l'organisme de chaque province et territoire : par exemple la CNESST au Québec, la CSPAAT en Ontario et WorkSafeBC en Colombie-Britannique."]
+  ]
+}-->
+<script type="application/json" id="ins-data">
+{
+  "country": "ca",
+  "board_name": "board_fr",
+  "and": " et ",
+  "verdicts": {
+    "some": "{names}",
+    "check": "Points à vérifier",
+    "none": "Aucune en général"
+  },
+  "subs": {
+    "some": "Obligatoire dans votre situation. Les autres lignes ci-dessous sont à vérifier ou conseillées.",
+    "check": "Rien n'est obligatoire pour vous-même, mais vos employés devront peut-être être couverts : voir ci-dessous.",
+    "none": "L'assurance accidents du travail pour vous-même est facultative. Ce vérificateur ne traite ni des véhicules ni des professions réglementées : renseignez-vous auprès de votre assureur ou de votre ordre professionnel."
+  },
+  "levels": {
+    "required": "Obligatoire : ",
+    "check": "À vérifier : ",
+    "todo": "À faire : ",
+    "recommended": "Conseillé : ",
+    "optional": "Facultatif : "
+  },
+  "names": {
+    "ca_self_construction": "protection de la CSPAAT pour vous-même",
+    "ca_self_optional": "assurance accidents du travail pour vous-même",
+    "ca_workers": "assurance accidents du travail de vos employés",
+    "ca_home": "prévenir votre assureur habitation",
+    "ca_business": "assurance des entreprises"
+  },
+  "texts": {
+    "ca_self_construction": "Dans la construction en Ontario, les exploitants indépendants, propriétaires uniques, associés et dirigeants doivent être couverts par la CSPAAT. Exceptions : les personnes dont tous les travaux de construction sont des rénovations d'un logement existant, pour lesquelles l'occupant ou un membre de sa famille les engage et les paie directement, et un associé ou un dirigeant par entreprise qui ne fait aucun travail de construction.",
+    "ca_self_optional": "La protection pour vous-même est facultative : vous pouvez la demander à l'organisme de votre province ou territoire ({board}), selon ses conditions d'admissibilité.",
+    "ca_workers": "Vérifiez auprès de l'organisme de votre province ou territoire ({board}) si votre secteur d'activité doit être couvert : si c'est le cas, inscrivez-vous comme employeur pour protéger vos employés.",
+    "ca_home": "L'assurance habitation ne couvre généralement pas les sinistres liés à une entreprise à domicile, et utiliser votre logement à des fins que votre assureur ignore peut entraîner l'annulation de votre police.",
+    "ca_business": "Envisagez une assurance des entreprises adaptée aux risques de votre activité. Canada.ca présente les principaux types d'assurance des entreprises et les besoins des entreprises à domicile."
+  }
+}
+</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Gratuit · toutes les provinces et territoires</span>
+    <h1>De quelles assurances votre entreprise a-t-elle besoin ?</h1>
+    <p class="lead">Choisissez votre province ou territoire et répondez à quelques questions : ce qui est obligatoire, ce qu'il faut vérifier auprès de l'organisme d'indemnisation, et ce qu'il faut dire à votre assureur.</p>
+    <ul class="trust"><li>13 provinces et territoires</li><li>Sources officielles</li><li>Aucun assureur, aucune publicité</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="ins-form" onsubmit="return false">
+      <h2>Votre entreprise</h2>
+      <div class="fields">
+        <div class="field full"><label for="i-province">Province ou territoire où vous travaillez</label>
+          <select id="i-province" name="province" data-save>
+            <option value="ON">Ontario</option>
+            <option value="QC" selected>Québec</option>
+            <option value="BC">Colombie-Britannique</option>
+            <option value="AB">Alberta</option>
+            <option value="SK">Saskatchewan</option>
+            <option value="MB">Manitoba</option>
+            <option value="NS">Nouvelle-Écosse</option>
+            <option value="NB">Nouveau-Brunswick</option>
+            <option value="PE">Île-du-Prince-Édouard</option>
+            <option value="NL">Terre-Neuve-et-Labrador</option>
+            <option value="YT">Yukon</option>
+            <option value="NT">Territoires du Nord-Ouest</option>
+            <option value="NU">Nunavut</option>
+          </select></div>
+        <label class="check full"><input type="checkbox" id="i-employees" name="employees" data-save><span>J'ai des employés</span></label>
+        <label class="check full" id="i-construction-field"><input type="checkbox" id="i-construction" name="construction" data-save><span>Je travaille dans la construction</span></label>
+        <label class="check full"><input type="checkbox" id="i-home" name="home" data-save><span>Je travaille à domicile</span></label>
+      </div>
+    </form>
+
+    <div class="results">
+      <h2 class="sr-only">Résultat</h2>
+      <div class="result-hero" id="i-hero" role="status" aria-atomic="true">
+        <div class="label">Assurance obligatoire</div>
+        <div class="big" id="i-verdict" style="font-size: clamp(1.5rem, 3.4vw, 2.1rem);">–</div>
+        <div class="sub" id="i-sub">–</div>
+      </div>
+      <ul class="checklist card" id="i-list" style="padding: 10px 18px; margin-top: 16px;"></ul>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>Les organismes d'indemnisation des accidents du travail</h2>
+  <p>Chaque province et territoire a son organisme. Travailleur autonome sans employé, vous pouvez en général choisir une protection personnelle ; employeur, vérifiez si votre secteur doit être couvert.</p>
+  <table>
+    <thead><tr><th>Province ou territoire</th><th>Organisme</th></tr></thead>
+    <tbody>
+      <tr><td>Ontario</td><td><a href="https://www.wsib.ca/en/businesses/registration-and-coverage/can-i-choose-have-wsib-insurance" rel="noopener">CSPAAT</a></td></tr>
+      <tr><td>Québec</td><td><a href="https://www.cnesst.gouv.qc.ca/sites/default/files/documents/note278h_0.pdf" rel="noopener">CNESST</a></td></tr>
+      <tr><td>Colombie-Britannique</td><td><a href="https://www.worksafebc.com/en/insurance/need-coverage/optional-coverage/personal-coverage" rel="noopener">WorkSafeBC</a></td></tr>
+      <tr><td>Alberta</td><td><a href="https://www.wcb.ab.ca/insurance-and-premiums/types-of-coverage/personal-coverage.html" rel="noopener">WCB Alberta</a></td></tr>
+      <tr><td>Saskatchewan</td><td><a href="https://www.wcbsask.com/optional-personal-coverage" rel="noopener">WCB Saskatchewan</a></td></tr>
+      <tr><td>Manitoba</td><td><a href="https://www.wcb.mb.ca/employers/optional-coverage/optional-coverage-for-business-owners/" rel="noopener">WCB Manitoba</a></td></tr>
+      <tr><td>Nouvelle-Écosse</td><td><a href="https://www.wcb.ns.ca/employers/workplace-injury-insurance/do-you-need-coverage" rel="noopener">WCB Nova Scotia</a></td></tr>
+      <tr><td>Nouveau-Brunswick</td><td><a href="https://www.worksafenb.ca/employers/insurance/accounts-and-coverage/" rel="noopener">Travail sécuritaire NB</a></td></tr>
+      <tr><td>Île-du-Prince-Édouard</td><td><a href="https://www.wcb.pe.ca/Employers/Coverage" rel="noopener">WCB PEI</a></td></tr>
+      <tr><td>Terre-Neuve-et-Labrador</td><td><a href="https://workplacenl.ca/site/uploads/2023/09/101.00-Coverage-Under-the-WHSC-Act-2018-09-11.pdf" rel="noopener">WorkplaceNL</a></td></tr>
+      <tr><td>Yukon</td><td><a href="https://www.wcb.yk.ca/web-0021/web-0104/web-0026" rel="noopener">Yukon Workers' Safety and Compensation Board</a></td></tr>
+      <tr><td>Territoires du Nord-Ouest</td><td><a href="https://wscc.nt.ca/documents/self-employed" rel="noopener">WSCC</a></td></tr>
+      <tr><td>Nunavut</td><td><a href="https://wscc.nt.ca/documents/self-employed" rel="noopener">WSCC</a></td></tr>
+    </tbody>
+  </table>
+  <h2>Travailler à domicile</h2>
+  <p>L'assurance habitation ne couvre généralement pas les sinistres liés à une entreprise à domicile, et elle ne protège parfois le matériel de l'entreprise que lorsqu'il se trouve chez vous. Prévenez votre assureur et vérifiez ce que couvre votre police.</p>
+  <h2>Bon à savoir</h2>
+  <ul>
+    <li><strong>Pour démarrer</strong> : la <a href="{{link:start}}">liste des étapes de démarrage</a> et le <a href="{{link:bank}}">vérificateur du compte bancaire d'entreprise</a>.</li>
+    <li><strong>Vos contrats</strong> : le <a href="{{link:contract}}">générateur de contrat de service</a> comprend une clause de limitation de responsabilité.</li>
+  </ul>
+  <p class="small muted">Information générale, tirée des sites des organismes d'indemnisation et de l'Agence de la consommation en matière financière du Canada. Elle ne remplace pas l'avis de votre organisme, d'un assureur ou de votre ordre professionnel.</p>
+</section>

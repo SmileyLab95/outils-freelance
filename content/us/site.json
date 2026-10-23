@@ -9,6 +9,7 @@
       "label": "Taxes",
       "items": [
         "start",
+        "insurance",
         "tax",
         "estimated-tax",
         "set-aside",

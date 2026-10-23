@@ -1732,6 +1732,50 @@
       "confidence": "high",
       "verified_on": "2026-10-23",
       "note": "Business.gov.uk: limited companies must have a business bank account."
+    },
+    "uk_employers_liability_insurance": {
+      "value": {
+        "min_cover": 5000000,
+        "fine_per_day": 2500,
+        "certificate_fine": 1000,
+        "only_close_family_exempt": true,
+        "only_staff_based_abroad_exempt": true,
+        "family_exemption_for_limited_companies": false
+      },
+      "unit": "object",
+      "label": "Employers' liability insurance: compulsory as soon as you become an employer",
+      "source": "https://www.gov.uk/employers-liability-insurance",
+      "source_title": "Employers' liability insurance - GOV.UK",
+      "more_sources": [
+        {
+          "source": "https://www.hse.gov.uk/pubns/hse40.htm",
+          "source_title": "Employers' Liability (Compulsory Insurance) Act 1969: a brief guide for employers - HSE"
+        },
+        {
+          "source": "https://www.legislation.gov.uk/uksi/1998/2573/made",
+          "source_title": "The Employers' Liability (Compulsory Insurance) Regulations 1998 - legislation.gov.uk"
+        },
+        {
+          "source": "https://www.hseni.gov.uk/articles/insurance",
+          "source_title": "Insurance - HSENI (Northern Ireland)"
+        }
+      ],
+      "confidence": "medium",
+      "verified_on": "2026-10-23",
+      "note": "Read through search excerpts. GOV.UK: from your first employee, cover of at least £5 million from an authorised insurer; fine of £2,500 for each day without proper cover; certificate displayed where employees can see it (or online), fine of £1,000 if not. Not needed if you only employ a close family member or someone based outside England, Scotland and Wales. HSE: the family exemption does not apply to family businesses incorporated as limited companies. Northern Ireland has its own regulations (HSENI); they exempt a company whose only employee owns 50% or more of its issued share capital (SR 2022/101). The same exemption for Great Britain was not confirmed by a readable official source: the tool answers 'check' for a company with no other employee."
+    },
+    "uk_compulsory_business_insurance": {
+      "value": [
+        "employers' liability insurance, if people work for you",
+        "motor insurance, if you use vehicles in your business, a personal car included"
+      ],
+      "unit": "list",
+      "label": "The only business insurance required by law",
+      "source": "https://www.business.gov.uk/support/regulations-and-licensing/insuring-your-business/",
+      "source_title": "Insuring your business - Business.gov.uk",
+      "confidence": "medium",
+      "verified_on": "2026-10-23",
+      "note": "Read through search excerpts. Public liability is needed by almost all businesses, especially if you deal with the public or a contract requires it; professional indemnity if you give clients legal, financial or other professional advice or services, or if your regulator or industry requires it. Tell your insurers if you use your home or your car for the business."
     }
   },
   "open_questions": [

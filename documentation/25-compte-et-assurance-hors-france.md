@@ -2,7 +2,7 @@
 
 Besoins P2 de [02](02-besoins-clients.md) : « Assurance professionnelle » et « Compte pro, encaissement », colonnes
 États-Unis, Royaume-Uni et Canada (la France est faite : [15](15-guides-gestion.md), § 1 et § 2). **Compte bancaire réalisé le
-23/10/2026 (§ 3) ; assurance en cours.** Mêmes identifiants que les pages françaises (`bank`,
+23/10/2026 (§ 3), assurance le même jour (§ 4 et § 5).** Mêmes identifiants que les pages françaises (`bank`,
 `insurance`) pour les liens de langue et de pays. Pas de partenaires ni d'affiliation (D4) ; pas de conseil personnalisé
 (D8).
 
@@ -61,3 +61,54 @@ britanniques n'est pas reprise (non vérifiée).
   sur mobile (raccourcis ; aux États-Unis, une indication rappelle qu'une LLC à plusieurs membres est une société de
   personnes par défaut).
 
+## 4. Assurance : spécification (23/10/2026)
+
+Compléments lus le 23/10/2026 par extraits de recherche (les sites officiels ne s'ouvrent pas depuis l'environnement de
+travail) :
+
+- Royaume-Uni : l'exemption « famille proche » ne s'applique pas aux entreprises familiales constituées en *limited
+  company* (HSE, guide *hse40*) ; une exemption pour la société dont le seul salarié détient au moins 50 % du capital est
+  écrite dans le règlement d'Irlande du Nord (SR 2022/101) mais **pas confirmée pour la Grande-Bretagne** par une source
+  officielle lisible : l'outil répond « à vérifier » pour une société sans autre salarié que son dirigeant. L'Irlande du
+  Nord a ses propres règles (HSENI) : signalé, pas calculé.
+- États-Unis : SBA, les travailleurs indépendants (*sole proprietors*, associés, membres de LLC qui ne sont pas salariés)
+  ne sont en général pas couverts par l'assurance accidents du travail, la loi de l'État peut leur permettre d'y adhérer ;
+  Texas : l'employeur qui ne s'assure pas prévient ses salariés (affiche, avis écrit aux nouveaux) et dépose un avis à
+  la DWC chaque année entre le 1er février et le 30 avril (TDI).
+- Canada : Ontario, construction : les exploitants indépendants et propriétaires uniques doivent être couverts par la
+  CSPAAT (WSIB), sauf s'ils ne font que de la rénovation de logements existants, engagés et payés directement par
+  l'occupant ou sa famille, et sauf un associé ou un dirigeant par entreprise qui ne fait aucun travail de
+  construction (WSIB, politique 12-01-06) ; l'assurance habitation ne couvre en général pas les sinistres
+  liés à une entreprise à domicile et il faut prévenir son assureur, faute de quoi la police peut être annulée (ACFC).
+
+Pages : `/uk/business-insurance/`, `/us/business-insurance/`, `/ca/business-insurance/` et
+`/ca/fr/assurance-entreprise/` (identifiant `insurance` comme la page française, menu « *Running your business* » /
+« Gérer son activité » ou équivalent). Un moteur `engines/insurance-intl.js`, fonction pure `check(pays, situation)` qui
+renvoie la réponse principale et une liste de lignes `{ key, level }`, `level` parmi `required` (obligatoire),
+`check` (à vérifier), `recommended` (conseillé), `optional` (facultatif) et `not_required` (pas obligatoire, avec la
+raison). Les textes sont dans les pages.
+
+| Pays | Questions | Lignes |
+|---|---|---|
+| Royaume-Uni | Forme (*sole trader* ou *partnership* / *limited company*) ; qui travaille pour vous (personne / famille proche seulement / des salariés) ; véhicule pour le travail ; conseils ou services professionnels ; profession réglementée ; travail à domicile | *Employers' liability* : obligatoire avec des salariés, ou avec la famille dans une *limited company* ; pas obligatoire seul ou avec la famille proche hors société ; à vérifier pour une société sans autre salarié. Assurance auto avec usage professionnel : obligatoire avec un véhicule. *Professional indemnity* : à vérifier (profession réglementée) ou conseillée (conseils). *Public liability* : conseillée (utile à presque toutes les entreprises). Domicile : prévenir son assureur habitation (et son prêteur ou bailleur). |
+| États-Unis | État (51) ; salariés ; services ou conseils ; travail à domicile | Avec salariés : accidents du travail obligatoires selon l'État (Texas : à vérifier, facultatif avec obligations d'information) ; assurance chômage (inscription à l'agence de l'État) ; invalidité en Californie, à Hawaï, au New Jersey, dans l'État de New York et au Rhode Island. Pour soi : accidents du travail en général non couverts, adhésion possible selon l'État. *General liability* conseillée ; *professional liability* conseillée pour les services ; domicile : avenant (*rider*) à l'assurance habitation. |
+| Canada | Province ou territoire (13) ; salariés ; construction (Ontario seulement) ; travail à domicile | Accidents du travail pour soi : facultatif auprès de l'organisme de la province, obligatoire dans la construction en Ontario sauf rénovation résidentielle directe ; avec salariés : vérifier auprès de l'organisme si l'industrie est obligatoirement couverte ; domicile : prévenir l'assureur habitation ; assurance des entreprises : conseillée, types présentés par Canada.ca. |
+
+Pas de prix, pas d'assureur cité, pas de minimum de garantie autre que les 5 millions de livres de l'*employers'
+liability*. Tests : chaque combinaison de réponses de chaque pays (moteur), un texte par clé et aucun texte inutilisé,
+chiffres des pages repris des règles, parcours navigateur et erreurs réintroduites.
+
+## 5. Assurance : réalisation (23/10/2026)
+
+- Pages `/uk/business-insurance/`, `/us/business-insurance/`, `/ca/business-insurance/` et
+  `/ca/fr/assurance-entreprise/` (identifiant `insurance`, dans le premier menu après la checklist de démarrage),
+  liées depuis les pages du compte bancaire.
+- Moteur `engines/insurance-intl.js` (`check(pays, situation, règles)`, six niveaux : obligatoire, à vérifier, à
+  faire, conseillée, facultative, pas obligatoire ; la réponse principale vient des lignes obligatoires, sinon des
+  lignes à vérifier, et « à faire » ne la change pas) et outil commun `tools/intl-insurance.js` ; huit règles nouvelles (uk.json,
+  us.json, ca.json), `uk_business_from_home` réutilisée. Au Canada, le tableau des organismes et leurs liens viennent
+  de la règle (nom anglais, nom français quand il est confirmé : CSPAAT, CNESST, Travail sécuritaire NB).
+- Tests : `insurance-intl.test.mjs` (toutes les combinaisons de réponses des trois pays, textes des quatre pages,
+  chiffres et organismes repris des règles) ; parcours navigateur des quatre pages ; 15 erreurs réintroduites, toutes
+  détectées (deux tests ajoutés pour cela). Revue des captures : « £5 million » coupé en fin de ligne sur mobile
+  (espace insécable) ; organismes canadiens rendus cliquables vers leur page officielle.

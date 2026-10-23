@@ -501,6 +501,20 @@ const tests = {
     check((await page.inputValue("#k-structure")) === "entity", "compte US : situation mémorisée après rechargement");
     await page.selectOption("#k-structure", "sole_prop");
   },
+  async "us/business-insurance/"(page) {
+    const text = (id) => page.textContent(`#${id}`).then((t) => t.trim());
+    check((await text("i-verdict")) === "None in general" && (await text("i-list")).includes("Recommended: professional liability insurance"),
+      `assurance US : sans salarié → rien d'obligatoire en général (obtenu : ${await text("i-verdict")})`);
+    await page.check("#i-employees");
+    check((await text("i-verdict")) === "Workers' compensation, unemployment insurance and disability insurance", "assurance US : Californie avec salariés → trois obligations");
+    await page.selectOption("#i-state", "TX");
+    check((await text("i-verdict")) === "Unemployment insurance" && (await text("i-list")).includes("between February 1 and April 30"), "assurance US : Texas → accidents du travail à vérifier");
+    await accessible(page, "assurance US (Texas, salariés)");
+    await page.reload({ waitUntil: "networkidle" });
+    check((await page.inputValue("#i-state")) === "TX" && (await page.isChecked("#i-employees")), "assurance US : situation mémorisée après rechargement");
+    await page.uncheck("#i-employees");
+    await page.selectOption("#i-state", "CA");
+  },
   async "us/invoice-generator/"(page) {
     await page.fill("#iv-me-name", "Alex Morgan Design LLC");
     await page.fill("#iv-client-name", "Northwind Inc.");
@@ -710,6 +724,27 @@ const tests = {
     await page.reload({ waitUntil: "networkidle" });
     check((await page.inputValue("#k-structure")) === "limited", "compte UK : situation mémorisée après rechargement");
     await page.selectOption("#k-structure", "sole_trader");
+  },
+  async "uk/business-insurance/"(page) {
+    const text = (id) => page.textContent(`#${id}`).then((t) => t.trim());
+    const negative = () => page.$eval("#i-hero", (el) => el.classList.contains("is-negative"));
+    check((await text("i-verdict")) === "None for now" && (await negative()) && (await text("i-list")).includes("Not required: employers' liability insurance") &&
+      (await text("i-list")).includes("Recommended: public liability insurance"), `assurance UK : seul → rien d'obligatoire (obtenu : ${await text("i-verdict")})`);
+    await page.selectOption("#i-staff", "employees");
+    check((await text("i-verdict")) === "Employers' liability insurance" && !(await negative()) && (await text("i-list")).includes("at least £5 million"),
+      "assurance UK : salariés → employers' liability, 5 millions");
+    await page.check("#i-vehicle");
+    check((await text("i-verdict")) === "Employers' liability insurance and motor insurance for business use", "assurance UK : salariés et véhicule → deux obligations");
+    await accessible(page, "assurance UK (salariés, véhicule)");
+    await page.selectOption("#i-structure", "limited");
+    await page.selectOption("#i-staff", "family");
+    check((await text("i-list")).includes("close-family exemption doesn't apply to limited companies"), "assurance UK : société et famille → exemption non applicable");
+    await page.uncheck("#i-vehicle");
+    await page.selectOption("#i-staff", "none");
+    check((await text("i-verdict")) === "Some points to check" && (await text("i-list")).includes("Check: employers' liability insurance"), "assurance UK : société seule → à vérifier");
+    await page.reload({ waitUntil: "networkidle" });
+    check((await page.inputValue("#i-structure")) === "limited" && (await text("i-verdict")) === "Some points to check", "assurance UK : situation mémorisée après rechargement");
+    await page.selectOption("#i-structure", "sole_trader");
   },
   async "uk/payment-reminder-letter/"(page) {
     const due = new Date(Date.now() - 50 * 86400000).toISOString().slice(0, 10);
@@ -1647,6 +1682,34 @@ const tests = {
     await page.selectOption("#k-structure", "business_name");
     check((await text("k-verdict")) === "Nécessaire" && (await text("k-reasons")).includes("chèques faits au nom de votre entreprise"), "compte CA-FR : raison sociale → compte nécessaire");
     await page.selectOption("#k-structure", "own_name");
+  },
+  async "ca/business-insurance/"(page) {
+    const text = (id) => page.textContent(`#${id}`).then((t) => t.trim());
+    const hidden = () => page.$eval("#i-construction-field", (el) => el.hidden);
+    check((await text("i-verdict")) === "None in general" && !(await hidden()) && (await text("i-list")).includes("apply to WSIB"),
+      `assurance CA : Ontario seul → protection facultative auprès de la WSIB (obtenu : ${await text("i-verdict")})`);
+    await page.check("#i-construction");
+    check((await text("i-verdict")) === "WSIB coverage for yourself", "assurance CA : construction en Ontario → obligatoire");
+    await accessible(page, "assurance CA (construction en Ontario)");
+    await page.selectOption("#i-province", "BC");
+    check((await hidden()) && (await text("i-verdict")) === "None in general" && (await text("i-list")).includes("apply to WorkSafeBC"), "assurance CA : hors Ontario → question construction masquée");
+    await page.check("#i-employees");
+    check((await text("i-verdict")) === "Some points to check" && (await text("i-list")).includes("Check with WorkSafeBC"), "assurance CA : employeur → à vérifier auprès de l'organisme");
+    await page.uncheck("#i-employees");
+    await page.selectOption("#i-province", "ON");
+    await page.uncheck("#i-construction");
+  },
+  async "ca/fr/assurance-entreprise/"(page) {
+    const text = (id) => page.textContent(`#${id}`).then((t) => t.trim());
+    check((await text("i-verdict")) === "Aucune en général" && (await page.$eval("#i-construction-field", (el) => el.hidden)) && (await text("i-list")).includes("(CNESST)"),
+      `assurance CA-FR : Québec seul → protection facultative auprès de la CNESST (obtenu : ${await text("i-verdict")})`);
+    await page.selectOption("#i-province", "NB");
+    check((await text("i-list")).includes("Travail sécuritaire NB"), "assurance CA-FR : nom français de l'organisme");
+    await page.selectOption("#i-province", "ON");
+    await page.check("#i-construction");
+    check((await text("i-verdict")) === "Protection de la CSPAAT pour vous-même", "assurance CA-FR : construction en Ontario → obligatoire");
+    await page.uncheck("#i-construction");
+    await page.selectOption("#i-province", "QC");
   },
   async "ca/freelance-email-templates/"() {},
   async "ca/legal-notice/"() {},

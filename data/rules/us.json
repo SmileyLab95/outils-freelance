@@ -1405,6 +1405,82 @@
       "confidence": "medium",
       "verified_on": "2026-10-23",
       "note": "SBA: a business bank account offers limited personal liability protection by keeping business funds separate from personal funds; banks commonly ask for an EIN (or the owner's Social Security number for a sole proprietorship), formation documents, ownership agreements and a business license. State law decides when a court disregards an LLC's liability protection: not covered here."
+    },
+    "us_employer_insurance": {
+      "value": {
+        "workers_compensation": true,
+        "unemployment": true,
+        "disability_states": [
+          "CA",
+          "HI",
+          "NJ",
+          "NY",
+          "RI",
+          "PR"
+        ]
+      },
+      "unit": "object",
+      "label": "Insurance required for businesses with employees",
+      "source": "https://www.sba.gov/business-guide/launch-your-business/get-business-insurance",
+      "source_title": "Get business insurance - U.S. Small Business Administration",
+      "more_sources": [
+        {
+          "source": "https://www.sba.gov/business-guide/manage-your-business/hire-manage-employees",
+          "source_title": "Hire and manage employees - U.S. Small Business Administration"
+        }
+      ],
+      "confidence": "medium",
+      "verified_on": "2026-10-23",
+      "note": "Read through search excerpts. SBA: every business with employees must have workers' compensation, unemployment and disability insurance; in practice these are state rules: workers' compensation under state law (rules and cost vary by state), unemployment insurance tax through the state workforce agency, and disability insurance required only in California, Hawaii, New Jersey, New York, Rhode Island and Puerto Rico. Laws requiring insurance vary by state: check your state's website."
+    },
+    "us_texas_workers_comp": {
+      "value": {
+        "optional_for_private_employers": true,
+        "notice_to_employees": true,
+        "annual_notice_to_dwc": "February 1 to April 30"
+      },
+      "unit": "object",
+      "label": "Texas: workers' compensation is optional for most private employers",
+      "source": "https://www.tdi.texas.gov/wc/employer/index.html",
+      "source_title": "Workers' compensation: employer information - Texas Department of Insurance",
+      "more_sources": [
+        {
+          "source": "https://www.tdi.texas.gov/wc/nonsubscriber.html",
+          "source_title": "Employer E-File online reporting (non-subscribers) - Texas Department of Insurance"
+        }
+      ],
+      "confidence": "medium",
+      "verified_on": "2026-10-23",
+      "note": "Read through search excerpts. Texas is the only state where most private employers can choose not to carry workers' compensation. An employer without it posts a notice of no coverage where employees can see it (English, Spanish and other languages as needed), gives written notice to new employees, and files a notice (DWC Form-005) with the Division of Workers' Compensation each year between February 1 and April 30, after hiring its first employee and after ending a policy."
+    },
+    "us_workers_comp_owners": {
+      "value": {
+        "owners_usually_covered": false,
+        "opt_in_possible_under_state_law": true
+      },
+      "unit": "object",
+      "label": "Workers' compensation for business owners: usually not covered, opt-in depends on the state",
+      "source": "https://www.sba.gov/blog/rethinking-insurance-coverage",
+      "source_title": "Rethinking insurance coverage - U.S. Small Business Administration",
+      "confidence": "medium",
+      "verified_on": "2026-10-23",
+      "note": "Read through search excerpts of an SBA article. Sole proprietors, partners and LLC members who aren't employees are usually not covered by workers' compensation; state law may allow them to opt in. Businesses in every state must provide it to employees, family members included, with rules and costs that vary by state."
+    },
+    "us_business_insurance_types": {
+      "value": {
+        "general_liability": "any business",
+        "professional_liability": "businesses that provide services to customers",
+        "commercial_property": "businesses with significant property and physical assets",
+        "home_based_business": "a rider added to homeowner's insurance",
+        "business_owners_policy": "a bundle of the typical coverages"
+      },
+      "unit": "object",
+      "label": "Common types of business insurance (SBA)",
+      "source": "https://www.sba.gov/business-guide/launch-your-business/get-business-insurance",
+      "source_title": "Get business insurance - U.S. Small Business Administration",
+      "confidence": "medium",
+      "verified_on": "2026-10-23",
+      "note": "Read through search excerpts. General liability: bodily injury, property damage, medical expenses, libel, slander, defending lawsuits and judgments. Professional liability: client claims of mistakes (malpractice), negligence or unfinished work. Home-based business insurance: added to homeowner's insurance as a rider, it can cover a small amount of business equipment and liability for third-party injuries."
     }
   },
   "open_questions": [
