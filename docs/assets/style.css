@@ -327,9 +327,18 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--b
 .line-row .field label { font-size: .75rem; }
 .line-remove { height: 42px; border: 1px solid var(--line-2); background: #fff; border-radius: var(--radius-sm); color: var(--faint); cursor: pointer; font-size: .9rem; }
 .line-remove:hover { color: var(--danger); border-color: var(--danger); }
+/* Lignes avec unité (Espace : heure, jour) : la désignation et le bouton de suppression, puis quantité, unité et prix. */
+.line-row.has-unit { grid-template-columns: 72px 104px minmax(0, 1fr) 34px; grid-template-areas: "desc desc desc remove" "qty unit price price";
+  padding-bottom: 12px; border-bottom: 1px solid var(--line); margin-bottom: 12px; }
+.line-row.has-unit .line-desc { grid-area: desc; }
+.line-row.has-unit .line-qty { grid-area: qty; }
+.line-row.has-unit .line-unit { grid-area: unit; }
+.line-row.has-unit .line-price { grid-area: price; }
+.line-row.has-unit .line-remove { grid-area: remove; }
 @media (max-width: 520px) {
   .line-row { grid-template-columns: 64px minmax(0, 1fr) 34px; }
   .line-row .line-desc { grid-column: 1 / -1; }
+  .line-row.has-unit { grid-template-columns: 64px 92px minmax(0, 1fr) 34px; }
 }
 /* Proposition commerciale : étapes (intitulé, durée, prix) et options (intitulé, prix). */
 .pr-phases { grid-template-columns: minmax(0, 1fr) 110px 110px 34px; }
@@ -756,6 +765,29 @@ a.country-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg)
 .ledger .num { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
 .ledger tfoot td { font-weight: 750; border-bottom: 0; }
 .espace .gauge-head { flex-wrap: wrap; }
+/* Temps passé (documentation/37-temps-passe.md) */
+.time-billable { align-self: end; padding-bottom: 10px; }
+.time-due { list-style: none; margin: 0; padding: 0; }
+.time-due li { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.time-due li:last-child { border-bottom: 0; }
+.time-due .dl-main { flex: 1; }
+.time-month { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+.time-month h3 { margin: 0; text-transform: capitalize; }
+.time-totals { list-style: none; margin: 0 0 14px; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.time-totals li { display: flex; flex-direction: column; gap: 2px; background: var(--bg); border-radius: var(--radius-sm); padding: 10px 12px; min-width: 0; }
+.time-totals span:first-child { font-size: .8rem; color: var(--muted); font-weight: 650; }
+.time-totals b { font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.time-pick { border: 0; margin: 0 0 14px; padding: 0; display: grid; gap: 8px; }
+.time-pick legend { font-weight: 700; margin-bottom: 8px; padding: 0; }
+.time-facts { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 6px 16px; margin: 0; }
+.time-facts dt { color: var(--muted); }
+.time-facts dd { margin: 0; }
+@media (max-width: 560px) {
+  .time-totals { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .time-totals li:last-child { grid-column: 1 / -1; }
+  .time-due li { flex-wrap: wrap; }
+  .time-due .btn { width: 100%; justify-content: center; }
+}
 @media (max-width: 640px) {
   .ledger thead { display: none; }
   .ledger tr { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 12px; padding: 10px 0; border-bottom: 1px solid var(--line); }

@@ -46,6 +46,18 @@ test("A3/A4 : document émis figé ; date antérieure au dernier document refus�
   assert.deepEqual(zero.errors, ["Le montant total doit être positif."]);
 });
 
+test("ligne commencée mais incomplète : émission refusée, avec le numéro de la ligne (doc 37, § 6)", () => {
+  const ok = { desc: "Maquettes", qty: 2, price: 300 };
+  const check = (lines) => E.checkIssue([], draft({ lines }), client);
+  assert.deepEqual(check([ok, { desc: "Sans prix", qty: 1, price: NaN }]),
+    ["Complétez la ligne 2 (désignation, quantité et prix unitaire hors taxes) ou supprimez-la."]);
+  assert.deepEqual(check([{ desc: "", qty: 1, price: 120 }, ok, { desc: "Sans quantité", qty: NaN, price: 50 }, { desc: "Sans prix", qty: 1, price: null }]),
+    ["Complétez les lignes 1, 3 et 4 (désignation, quantité et prix unitaire hors taxes) ou supprimez-les."]);
+  assert.deepEqual(check([ok, { desc: "  ", qty: 1, price: NaN }, { desc: "", qty: 3, price: "" }]), [], "lignes vides (rien de visible) ignorées");
+  assert.deepEqual(check([{ desc: "Offert", qty: 1, price: 0 }, { desc: "Sans prix", qty: 1 }]).length, 1, "prix nul accepté, prix absent refusé");
+  assert.deepEqual(check([ok, { desc: "Conseil", qty: "1,5", price: 80 }]).length, 1, "quantité illisible refusée");
+});
+
 test("A5 : paiement partiel puis solde ; retard", () => {
   const docs = [];
   const f = issueAll(docs, draft());
@@ -179,7 +191,7 @@ test("revue : montants vides après une sauvegarde JSON (null) ; chronologie au-
   const docs = [];
   const saved = JSON.parse(JSON.stringify(draft({ lines: [{ desc: "Sans prix", qty: 1, price: NaN }] })));
   assert.equal(saved.lines[0].price, null);
-  assert.match(E.issue(docs, saved, me, client, null, "now").errors.join(" "), /Ajoutez au moins une ligne/);
+  assert.match(E.issue(docs, saved, me, client, null, "now").errors.join(" "), /Complétez la ligne 1 /);
   const many = [{ type: "facture", status: "issued", number: "F2026-999", date: "2026-10-01" },
                 { type: "facture", status: "issued", number: "F2026-1000", date: "2026-10-09" }];
   assert.equal(E.nextNumber(many, "facture", "2026"), "F2026-1001");

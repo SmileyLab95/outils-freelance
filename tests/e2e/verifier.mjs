@@ -2968,6 +2968,161 @@ const tests = {
     await go("#/importer");
     check((await text("#espace-view")).includes("Aucun document à reprendre") && (await page.evaluate(() => localStorage.getItem("of:espace-import"))) === "null",
       "Espace : document en attente depuis plus de 24 h ignoré et effacé");
+
+    // Temps passé (documentation/37-temps-passe.md) : saisie, liste du mois, facturation d'un client, brouillon supprimé,
+    // retrait du brouillon, émission (temps verrouillés), unités dans la facture. Prochaine facture : 2026-008.
+    await go("#/temps");
+    check((await text("#espace-view h2")) === "Temps passé" && (await text("#espace-view")).includes("Aucun temps saisi en octobre 2026") &&
+      !(await page.$(".time-due")) && (await page.inputValue("#ep-date")) === "2026-10-20" && (await page.isChecked("#ep-billable")),
+      "Temps : page vide, date du jour, « Facturable » coché");
+    await page.click("#time-form button[type=submit]");
+    check((await text("#time-error")) === "Indiquez la tâche. Indiquez la durée : par exemple 1,5 ou 1h30. Choisissez le client, ou décochez « Facturable » pour un temps interne." &&
+      (await page.getAttribute("#ep-task", "aria-invalid")) === "true" && (await page.getAttribute("#ep-duration", "aria-invalid")) === "true" &&
+      (await page.getAttribute("#ep-clientId", "aria-invalid")) === "true" && (await page.getAttribute("#ep-date", "aria-invalid")) === "false" &&
+      (await page.evaluate(() => document.activeElement.id)) === "ep-task", "Temps : saisie incomplète refusée, champs signalés, curseur sur le premier");
+    await page.fill("#ep-task", "Essai");
+    await page.selectOption("#ep-clientId", { label: "Atelier Lumen" });
+    for (const [duration, message] of [["1h75", "Indiquez la durée : par exemple 1,5 ou 1h30."], ["25", "Une saisie compte 24 heures au plus : saisissez chaque jour séparément."]]) {
+      await page.fill("#ep-duration", duration);
+      await page.click("#time-form button[type=submit]");
+      check((await text("#time-error")) === message && (await page.evaluate(() => document.activeElement.id)) === "ep-duration", `Temps : durée « ${duration} » refusée`);
+    }
+    await accessible(page, "Temps : saisie refusée");
+    const timeRows = () => page.$$eval("#espace-view .time-table tbody tr", (r) => r.length);
+    const addTime = async ({ date = "2026-10-20", client = "Atelier Lumen", task, duration, unit = "hour", rate, billable = true }) => {
+      const before = await timeRows();
+      await page.fill("#ep-date", date);
+      await page.selectOption("#ep-clientId", client ? { label: client } : "");
+      await page.selectOption("#ep-unit", unit);
+      await page.fill("#ep-task", task);
+      await page.fill("#ep-duration", duration);
+      if (rate !== undefined) await page.fill("#ep-rate", rate);
+      if (billable) await page.check("#ep-billable"); else await page.uncheck("#ep-billable");
+      await page.click("#time-form button[type=submit]");
+      await page.waitForFunction((n) => document.querySelectorAll("#espace-view .time-table tbody tr").length > n, before);
+    };
+    await addTime({ task: "Maquettes de la page d'accueil", duration: "2h30", rate: "60" });
+    check((await page.evaluate(() => document.activeElement.id)) === "ep-task" && (await page.inputValue("#ep-task")) === "" && (await page.inputValue("#ep-duration")) === "" &&
+      (await page.$eval("#ep-clientId option:checked", (o) => o.textContent)) === "Atelier Lumen" && (await page.inputValue("#ep-rate")) === "60",
+      "Temps : après l'ajout, tâche et durée vidées, client et taux gardés, curseur sur la tâche");
+    check((await text("#espace-view .time-table")).includes("20/10/2026 Atelier Lumen Maquettes de la page d'accueil 2 h 30 À facturer 150,00 €"), "Temps : saisie « 2h30 » listée, 150,00 €");
+    await addTime({ date: "2026-10-19", task: "Maquettes de la page d'accueil", duration: "1:30" });
+    check((await text("#espace-view .time-table")).includes("19/10/2026 Atelier Lumen Maquettes de la page d'accueil 1 h 30 À facturer 90,00 €"), "Temps : taux prérempli (dernier taux du client)");
+    await page.selectOption("#ep-unit", "day");
+    check((await page.inputValue("#ep-rate")) === "" && (await text('label[for="ep-rate"]')) === "Taux journalier HT" && (await text("#ep-duration-help")) === "En jours : 1 ou 0,5.",
+      "Temps : en jours, taux journalier, aide adaptée, pas de taux horaire repris");
+    await addTime({ task: "Atelier de cadrage", duration: "0,5", unit: "day", rate: "450" });
+    await addTime({ client: "", task: "Prospection", duration: "45 min", rate: "", billable: false });
+    check(await page.isChecked("#ep-billable"), "Temps : « Facturable » coché de nouveau après un temps interne");
+    await addTime({ task: "Recette", duration: "1", rate: "" });
+    let month = await text("#espace-view");
+    check(month.includes("Temps du mois 5 h 45 et 0,5 jour") && month.includes("Facturable 5 h et 0,5 jour") && month.includes("Montant facturable 465,00 € hors 1 temps sans taux") &&
+      month.includes("Temps interne Prospection 45 min Non facturable –"), "Temps : totaux du mois, temps interne sans montant");
+    check((await text(".time-due")).includes("Atelier Lumen 5 h et 0,5 jour · 4 saisies 465,00 € 1 temps sans taux Facturer"), "Temps : à facturer par client (montant de la facture par tâche)");
+    await accessible(page, "Temps : liste du mois");
+    const [timeCsv] = await Promise.all([page.waitForEvent("download"), page.click("#time-csv")]);
+    check(fs.readFileSync(await timeCsv.path(), "utf8").includes(`20/10/2026;"Atelier Lumen";"Maquettes de la page d'accueil";2,5;heure;60,00;150,00;oui`), "Temps : export CSV du mois");
+    await page.click('.time-month a[aria-label^="Mois précédent"]');
+    await page.waitForTimeout(150);
+    check((await text(".time-month h3")) === "Septembre 2026" && (await text("#espace-view")).includes("Aucun temps saisi en septembre 2026"), "Temps : mois précédent");
+    await go("#/");
+    check((await text("#espace-view")).includes("Temps à facturer : 465,00 € et du temps sans taux, pour 1 client."), "Temps : rappel au tableau de bord");
+    await go("#/temps");
+
+    await page.click('.time-due a[aria-label="Facturer le temps de Atelier Lumen"]');
+    await page.waitForSelector("#ti-form");
+    let lines = await text("#ti-preview");
+    check((await text("#espace-view h2")) === "Facturer le temps : Atelier Lumen" &&
+      lines.includes("Maquettes de la page d'accueil — du 19/10/2026 au 20/10/2026 4 h × 60,00 € 240,00 €") && lines.includes("Atelier de cadrage — 20/10/2026 0,5 j × 450,00 € 225,00 €") &&
+      lines.includes("Recette — 20/10/2026 1 h · prix à saisir à saisir") && lines.includes("Total HT (hors lignes sans prix) 465,00 €") && !lines.includes("Prospection"),
+      "Temps : facturation par tâche (regroupement, période, prix à saisir)");
+    await page.check('[name="mode"][value="entry"]');
+    check((await text("#ti-preview")).includes("Maquettes de la page d'accueil — 19/10/2026 1,5 h × 60,00 € 90,00 €"), "Temps : une ligne par saisie");
+    for (const box of await page.$$('[name="entry"]')) await box.uncheck();
+    await page.click("#ti-form button[type=submit]");
+    check((await text("#ti-preview")) === "Cochez au moins un temps." && (await text("#ti-error")) === "Cochez au moins un temps à reprendre.", "Temps : aucun temps coché, refusé");
+    for (const box of await page.$$('[name="entry"]')) await box.check();
+    await page.check('[name="mode"][value="task"]');
+    await shot("temps-facturer");
+    const invoiceTime = async () => {
+      await go("#/temps/facturer?client=" + await page.evaluate(() => window.EspaceStore.load().then((d) => d.clients.find((c) => c.name === "Atelier Lumen").id)));
+      await page.click("#ti-form button[type=submit]");
+      await page.waitForSelector("#doc-form");
+      return page.evaluate(() => location.hash);
+    };
+    let draftHash = await invoiceTime();
+    check((await page.inputValue("#ln-desc-0")) === "Maquettes de la page d'accueil — du 19/10/2026 au 20/10/2026" && (await page.inputValue("#ln-qty-0")) === "4" &&
+      (await page.inputValue("#ln-unit-0")) === "hour" && (await page.inputValue("#ln-price-0")) === "60" && (await page.inputValue("#ln-unit-1")) === "day" &&
+      (await page.inputValue("#ln-price-2")) === "" && (await page.inputValue("#d-service")) === "2026-10-20" &&
+      (await page.$eval("#d-client option:checked", (o) => o.textContent)) === "Atelier Lumen", "Temps : brouillon créé (lignes, unités, prix, date de la prestation)");
+    check((await text("#d-preview")).includes("Maquettes de la page d'accueil — du 19/10/2026 au 20/10/2026 4 h 60,00 € 240,00 €") && (await text("#d-preview")).includes("0,5 j 450,00 € 225,00 €"),
+      "Temps : unités dans l'aperçu de la facture");
+    await page.click("#d-issue");
+    check((await text("#doc-error")) === "Complétez la ligne 3 (désignation, quantité et prix unitaire hors taxes) ou supprimez-la.", "Facture : ligne sans prix refusée à l'émission, avec son numéro");
+    await go("#/temps");
+    check((await text("#espace-view .time-table")).split("Dans un brouillon").length - 1 === 4 && !(await page.$(".time-due")), "Temps : temps repris dans le brouillon, plus rien à facturer");
+    await go(draftHash);
+    await page.waitForSelector("#d-delete");
+    await page.click("#d-delete");
+    await page.waitForTimeout(300);
+    await go("#/temps");
+    check((await text(".time-due")).includes("465,00 €") && !(await text("#espace-view .time-table")).includes("Dans un brouillon"), "Temps : brouillon supprimé, temps de nouveau à facturer");
+    draftHash = await invoiceTime();
+    await go("#/temps");
+    await page.click('#espace-view .time-table a:text("Recette")');
+    await page.waitForSelector("#time-unlink");
+    check((await text("#espace-view .notice")).includes("Ce temps est repris dans le brouillon de facture : si vous le modifiez, la ligne du brouillon ne change pas."), "Temps : avertissement sur un temps repris dans un brouillon");
+    await accessible(page, "Temps : temps dans un brouillon");
+    await page.click("#time-unlink");
+    await page.waitForFunction(() => !document.getElementById("time-unlink"));
+    check((await text("#espace-view .st")) === "À facturer", "Temps : retiré du brouillon, de nouveau à facturer");
+    await go(draftHash);
+    await page.waitForSelector("#doc-form");
+    await page.click('[data-remove="2"]');
+    await page.waitForTimeout(600);
+    await page.click("#d-issue");
+    await page.waitForFunction(() => /Facture 2026-008/.test(document.querySelector("#espace-view h2").textContent));
+    check((await text("#d-preview")).includes("4 h 60,00 € 240,00 €") && (await text("#d-preview")).includes("Total à payer 465,00 €"), "Temps : facture 2026-008 émise avec les unités");
+    await go("#/temps");
+    month = await text("#espace-view .time-table");
+    check(month.split("Facturé").length - 1 === 3 && month.includes("Recette 1 h À facturer –") && (await text(".time-due")).includes("Atelier Lumen 1 h · 1 saisie Taux à préciser 1 temps sans taux"),
+      "Temps : temps facturés, temps retiré encore à facturer (taux à préciser)");
+    await page.click('#espace-view .time-table a:text("Atelier de cadrage")');
+    await page.waitForSelector(".time-facts");
+    check(!(await page.$("#time-form")) && (await text("#espace-view .notice")).includes("Ce temps est repris dans la facture 2026-008, émise : il ne peut plus être modifié ni supprimé.") &&
+      (await text(".time-facts")).includes("Durée 0,5 jour Taux HT 450,00 € par jour"), "Temps : temps facturé en lecture seule, lien vers la facture");
+    await accessible(page, "Temps : temps facturé");
+    await go("#/temps");
+    await page.click('#espace-view .time-table a:text("Prospection")');
+    await page.waitForSelector("#time-delete");   // formulaire de modification (la saisie rapide porte aussi l'identifiant time-form)
+    check((await page.inputValue("#ep-duration")) === "0h45" && !(await page.isChecked("#ep-billable")) && (await page.inputValue("#ep-clientId")) === "",
+      "Temps : modification, durée affichée « 0h45 »");
+    await page.fill("#ep-duration", "1h10");
+    await page.click("#time-form button[type=submit]");
+    await page.waitForSelector("#espace-view .time-table");
+    check((await text("#espace-view .time-table")).includes("Prospection 1 h 10 Non facturable"), "Temps : temps modifié (1h10)");
+    await page.click('#espace-view .time-table a:text("Prospection")');
+    await page.waitForSelector("#time-delete");
+    await page.click("#time-delete");
+    await page.waitForSelector("#espace-view .time-table");
+    check(!(await text("#espace-view .time-table")).includes("Prospection") && (await timeRows()) === 4, "Temps : temps supprimé");
+    await shot("temps");
+    // Sauvegarde : le temps passé y est ; un temps illisible est refusé ; une sauvegarde antérieure au module est acceptée.
+    await go("#/reglages");
+    const [timeBackup] = await Promise.all([page.waitForEvent("download"), page.click("#export-btn")]);
+    const withTime = JSON.parse(fs.readFileSync(await timeBackup.path(), "utf8"));
+    check(withTime.timeEntries.length === 4 && withTime.timeEntries.filter((x) => x.invoiceId).length === 3, "Temps : compris dans la sauvegarde, avec la facture liée");
+    const restore = (name, content) => page.setInputFiles("#import-file", { name, mimeType: "application/json", buffer: Buffer.from(JSON.stringify(content)) });
+    await restore("illisible.json", Object.assign({}, withTime, { timeEntries: withTime.timeEntries.concat([{ id: "x", date: "2026-10-20", unit: "semaine", quantity: 1 }]) }));
+    await page.waitForFunction(() => !document.getElementById("import-error").hidden);
+    check((await text("#import-error")) === "Cette sauvegarde contient des éléments illisibles.", "Temps : sauvegarde avec un temps illisible refusée");
+    const before = Object.assign({}, withTime);
+    delete before.timeEntries;
+    await restore("ancienne.json", before);
+    await page.waitForSelector(".kpis");
+    await go("#/temps");
+    check((await text("#espace-view")).includes("Aucun temps saisi en octobre 2026") && (await page.$$eval(".doc-list li, .time-due li", (l) => l.length)) === 0,
+      "Temps : sauvegarde antérieure au module acceptée (aucun temps)");
     await go("#/");
   },
   async "fr/recherche-nom-de-domaine/"(page) {

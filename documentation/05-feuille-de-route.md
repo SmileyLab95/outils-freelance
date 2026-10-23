@@ -9,7 +9,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 
 ## Où en est-on ?
 
-*Mis à jour le 23/10/2026 (soir).*
+*Mis à jour le 23/10/2026 (nuit).*
 
 - **Priorité (décision D10)** : le site et la plateforme d'abord ; noms de domaine, Gumroad et affiliation à la fin.
   Règle de qualité maximale pour tout produit ou service (D11, charte dans la [méthode](04-methode-de-travail.md#charte-qualité)).
@@ -206,8 +206,13 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   registre des achats obligatoire pour la vente de marchandises (CGI, art. 50-0 ; Code de commerce, art. L123-28),
   rappel au tableau de bord, export CSV, impression ; synchronisé avec les comptes ([36](36-depenses-et-registre-des-achats.md),
   décision D34).
+- **Temps passé (23/10/2026)** : nouvel onglet « Temps » de l'Espace : saisie rapide en heures ou en jours (1h30,
+  1:30, 45 min), temps interne non facturable, temps à facturer par client, facture créée en brouillon (une ligne par
+  tâche ou par saisie), temps verrouillé une fois la facture émise ; lignes de facture avec unité (« 1,5 h », « 2 j »,
+  codes HUR et DAY dans le Factur-X, validés) ; correction du moteur commun : une ligne commencée sans prix bloque
+  l'émission ([37](37-temps-passe.md), décision D35).
 - **Prochaines actions de Claude** : refonte, suite ([31](31-vision-plateforme.md) § 5) : modules suivants de l'Espace
-  (temps passé, prospects, trésorerie) ; puis besoins P3 restants
+  (prospects, trésorerie) ; puis besoins P3 restants
   ([02](02-besoins-clients.md) : CGV, sous-traitance, date d'échéance hors de France) ;
   comptes : adaptateur
   PostgreSQL et sauvegardes dès que l'hébergeur est choisi ; taux du crédit pour

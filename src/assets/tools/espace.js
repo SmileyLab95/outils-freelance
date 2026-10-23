@@ -3,6 +3,7 @@
  * Spécification : documentation/09-specification-espace.md. Calculs : OFE.espaceFR et OFE.invoiceFR.
  * Stockage : window.EspaceStore (IndexedDB). Écrans : #/ (tableau de bord), #/documents, #/documents/<id>,
  * #/clients, #/clients/<id>, #/recettes, #/depenses, #/depenses/<id> (documentation/36-depenses-et-registre-des-achats.md),
+ * #/temps, #/temps/<id>, #/temps/facturer?client=<id> (documentation/37-temps-passe.md),
  * #/echeances, #/reglages, #/importer (document venu du générateur public).
  */
 (function () {
@@ -126,6 +127,7 @@
     if (current && nav.scrollWidth > nav.clientWidth) nav.scrollLeft = current.offsetLeft - (nav.clientWidth - current.offsetWidth) / 2;
     var views = { accueil: viewWelcome, tableau: viewDashboard, documents: r.id ? viewDocument : viewDocuments,
                   clients: r.id ? viewClientForm : viewClients, recettes: viewLedger, depenses: r.id ? viewExpenseForm : viewExpenses,
+                  temps: r.id === "facturer" ? viewTimeInvoice : r.id ? viewTimeForm : viewTime,
                   echeances: viewDeadlines, reglages: viewSettings,
                   importer: viewImport };
     (views[name] || viewDashboard)(r);
@@ -144,7 +146,7 @@
     view.innerHTML =
       '<div class="espace-welcome"><h2>Bienvenue dans votre espace</h2>' +
       (pendingImport() ? '<p class="notice">Le document préparé dans le générateur sera repris en brouillon dès que votre profil sera créé.</p>' : "") +
-      "<p>Clients, devis, factures, encaissements, livre des recettes, dépenses et déclarations Urssaf : tout au même endroit. " +
+      "<p>Clients, devis, factures, encaissements, temps passé, livre des recettes, dépenses et déclarations Urssaf : tout au même endroit. " +
       "Vos données restent <strong>sur cet appareil</strong> : rien n'est envoyé sur un serveur.</p>" +
       "<p>Commencez par décrire votre entreprise : 2 minutes, modifiable à tout moment.</p></div>" +
       profileForm(fromGenerator ? generatorProfile(fromGenerator) : { activity: "liberal_bnc", vatRegime: "franchise", periodicity: "quarterly" }, true) +
@@ -439,7 +441,7 @@
       '<div class="espace-quick espace-noprint"><a class="btn btn-primary btn-sm" href="#/documents/nouveau?type=facture">+ Facture</a>' +
       '<a class="btn btn-ghost btn-sm" href="#/documents/nouveau?type=devis">+ Devis</a>' +
       '<a class="btn btn-ghost btn-sm" href="#/clients/nouveau">+ Client</a></div></div>';
-    html += profileReminder() + purchasesReminder() + backupReminder();
+    html += profileReminder() + purchasesReminder() + timeReminder() + backupReminder();
     html += '<div class="kpis">' +
       kpi("Encaissé en " + YEAR, money(year), countText(E.ledger(data.documents, YEAR + "-01-01", YEAR + "-12-31").filter(function (x) { return x.amount > 0; }).length, "encaissement", "encaissements")) +
       kpi("À encaisser", money(openSum), open.length ? countText(open.length, "facture", "factures") + (late.length ? ", dont " + late.length + " en retard" : "") : "Aucune facture en attente", late.length ? "is-warn" : "") +
@@ -503,6 +505,15 @@
     if (E.expenseRows(data.expenses, YEAR + "-01-01", YEAR + "-12-31").rows.length) return "";
     return '<p class="notice espace-noprint">Vente de marchandises : tenez votre <b>registre des achats</b>, obligatoire avec le livre des recettes. ' +
       '<a href="#/depenses">Saisir vos achats</a></p>';
+  }
+
+  /** Temps à facturer (documentation/37-temps-passe.md) : montant et nombre de clients. */
+  function timeReminder() {
+    var due = E.unbilledByClient(data.timeEntries, data.documents);
+    if (!due.length) return "";
+    var sum = due.reduce(function (s, c) { return s + c.amount; }, 0), missing = due.some(function (c) { return c.missingRate; });
+    return '<p class="notice espace-noprint">Temps à facturer : ' + (sum > 0 ? "<b>" + esc(money(sum)) + "</b>" + (missing ? " et du temps sans taux" : "") : "du temps sans taux") +
+      ", pour " + countText(due.length, "client", "clients") + '. <a href="#/temps">Facturer le temps passé</a></p>';
   }
 
   function backupReminder() {
@@ -627,11 +638,13 @@
     if (d.status === "draft") renderDraft(d); else renderIssued(d);
   }
 
+  var LINE_UNITS = [["", "Aucune"], ["hour", "Heure"], ["day", "Jour"]];
   function linesHTML(d) {
     return d.lines.map(function (l, i) {
-      return '<div class="line-row" data-line="' + i + '">' +
+      return '<div class="line-row has-unit" data-line="' + i + '">' +
         '<div class="field line-desc"><label for="ln-desc-' + i + '">Désignation</label><input type="text" id="ln-desc-' + i + '" data-k="desc" value="' + esc(l.desc) + '"></div>' +
         '<div class="field line-qty"><label for="ln-qty-' + i + '">Qté</label><input type="text" id="ln-qty-' + i + '" data-k="qty" inputmode="decimal" value="' + (isFinite(INV.amount(l.qty)) ? esc(OF.fmt(l.qty)) : "") + '"></div>' +
+        '<div class="field line-unit"><label for="ln-unit-' + i + '">Unité</label><select id="ln-unit-' + i + '" data-k="unit">' + options(LINE_UNITS, l.unit || "") + "</select></div>" +
         '<div class="field line-price"><label for="ln-price-' + i + '">Prix unitaire HT</label><div class="input-suffix"><input type="text" id="ln-price-' + i + '" data-k="price" inputmode="decimal" value="' + (isFinite(INV.amount(l.price)) ? esc(String(l.price).replace(".", ",")) : "") + '"><span>€</span></div></div>' +
         '<button type="button" class="line-remove" data-remove="' + i + '" aria-label="Supprimer la ligne ' + (i + 1) + '" title="Supprimer">✕</button></div>';
     }).join("");
@@ -712,7 +725,7 @@
       var row = t.closest("[data-line]");
       if (row) {
         var l = d.lines[+row.getAttribute("data-line")], k = t.getAttribute("data-k");
-        l[k] = k === "desc" ? t.value : OF.num(t.value);
+        if (k === "unit") { if (t.value) l.unit = t.value; else delete l.unit; } else l[k] = k === "desc" ? t.value : OF.num(t.value);
       } else if (t.name === "rate") d.vat.rate = Number(t.value);
       else if (t.name === "depositPct" || t.name === "validity" || t.name === "terms") d[t.name] = Number(OF.num(t.value)) || 0;
       else if (t.name) d[t.name] = t.value;
@@ -1246,6 +1259,248 @@
       if (!confirm("Supprimer cette dépense ?")) return;
       data.expenses = data.expenses.filter(function (e) { return e.id !== x.id; });
       persist("Dépense supprimée.").then(function () { location.hash = "#/depenses?annee=" + x.date.slice(0, 4); });
+    });
+  }
+
+  // ----- Temps passé (documentation/37-temps-passe.md) --------------------------------------------------------
+
+  var TIME_STATES = { internal: ["Non facturable", "st-draft"], unbilled: ["À facturer", "st-unpaid"],
+                      draft: ["Dans un brouillon", "st-partial"], invoiced: ["Facturé", "st-paid"] };
+  var TIME_UNITS = [["hour", "Heures"], ["day", "Jours"]];
+  var timeDefaults = null;  // saisie rapide : date, client, unité et taux de la dernière saisie (« Facturable » revient coché)
+  function timeEntry(id) { return data.timeEntries.filter(function (t) { return t.id === id; })[0] || null; }
+  function clientName(id) { var c = client(id); return c ? c.name : id ? "Client inconnu" : ""; }
+  function timeBadge(state) { var st = TIME_STATES[state]; return '<span class="st ' + st[1] + '">' + esc(st[0]) + "</span>"; }
+  /** « 12 h 30 et 1,5 jour » ; « 0 h » si rien. */
+  function durations(hours, days) {
+    var parts = [];
+    if (hours) parts.push(E.durationLabel(hours, "hour"));
+    if (days) parts.push(E.durationLabel(days, "day"));
+    return parts.join(" et ") || "0 h";
+  }
+  var rateText = function (n) { return n === null || n === undefined || !isFinite(n) ? "" : String(Math.round(n * 100) / 100).replace(".", ","); };
+  function monthShift(key, n) {
+    var m = +key.slice(5, 7) - 1 + n, y = +key.slice(0, 4) + Math.floor(m / 12);
+    return y + "-" + String(((m % 12) + 12) % 12 + 1).padStart(2, "0");
+  }
+  var monthLabel = function (key) { return OF.date(key + "-01", { month: "long", year: "numeric" }); };
+
+  /** Champs d'un temps (saisie rapide et modification). */
+  function timeFields(x) {
+    var clients = data.clients.filter(function (c) { return !c.archived || c.id === x.clientId; })
+      .sort(function (a, b) { return String(a.name || "").localeCompare(String(b.name || ""), "fr"); })
+      .map(function (c) { return [c.id, c.name]; });
+    var perDay = x.unit === "day";
+    return field("date", "Date", x.date, { type: "date", half: true, required: true }) +
+      field("clientId", "Client", x.clientId || "", { options: [["", "Aucun (temps interne)"]].concat(clients), half: true }) +
+      field("task", "Tâche", x.task, { required: true, placeholder: "Maquettes de la page d'accueil", hint: "Elle devient la désignation de la ligne de facture." }) +
+      field("duration", "Durée", durationInput(x.quantity, x.unit), { half: true, required: true, placeholder: perDay ? "1" : "1h30",
+        hint: '<span id="ep-duration-help">' + (perDay ? "En jours : 1 ou 0,5." : "Par exemple 1,5 ou 1h30 ou 45 min.") + "</span>" }) +
+      field("unit", "Unité", x.unit || "hour", { options: TIME_UNITS, half: true }) +
+      field("rate", perDay ? "Taux journalier HT" : "Taux horaire HT", rateText(x.rate), { half: true, inputmode: "decimal", placeholder: perDay ? "450" : "60",
+        hint: "En euros, facultatif : prérempli par le dernier taux de ce client." }) +
+      '<div class="field time-billable"><label class="check"><input type="checkbox" id="ep-billable" name="billable"' + (x.billable === false ? "" : " checked") +
+      "><span>Facturable</span></label></div>";
+  }
+  function readTime(form) {
+    var f = form.elements, rate = f.rate.value.trim();
+    return { date: f.date.value, clientId: f.clientId.value, task: f.task.value.trim(), unit: f.unit.value,
+             quantity: E.parseDuration(f.duration.value, f.unit.value), rate: rate ? OF.num(rate) : null, billable: f.billable.checked };
+  }
+  /** Erreurs affichées et champs signalés ; renvoie vrai si la saisie est valide. */
+  function showTimeErrors(form, next, errorId) {
+    var errors = E.timeErrors(next), bad = {};
+    errors.forEach(function (e) { bad[e.field] = true; });
+    ["date", "clientId", "task", "duration", "unit", "rate"].forEach(function (k) { form.elements[k].setAttribute("aria-invalid", String(!!bad[k])); });
+    showError(errorId, errors.map(function (e) { return e.message; }).join(" "));
+    if (errors.length) form.elements[errors[0].field].focus();
+    return !errors.length;
+  }
+  /** Durée dans le champ de modification : « 1h10 » plutôt que 1,17 ; jours en décimal. */
+  function durationInput(q, unit) {
+    if (q === null || q === undefined || !isFinite(q)) return "";
+    if (unit === "day") return rateText(q);
+    var min = Math.round(q * 60);
+    return Math.floor(min / 60) + (min % 60 ? "h" + String(min % 60).padStart(2, "0") : "");
+  }
+  /**
+   * Libellés, aide et taux qui suivent l'unité et le client. keepRate : taux d'un temps existant, gardé ; sinon (saisie
+   * rapide) le taux est prérempli par le dernier taux du client et de l'unité, tant que l'utilisateur n'en a pas tapé un.
+   */
+  function bindTimeForm(form, exceptId, keepRate) {
+    var f = form.elements, typed = !!keepRate;
+    f.rate.addEventListener("input", function () { typed = !!f.rate.value.trim(); });
+    var sync = function () {
+      var perDay = f.unit.value === "day";
+      form.querySelector('label[for="ep-rate"]').textContent = perDay ? "Taux journalier HT" : "Taux horaire HT";
+      f.rate.placeholder = perDay ? "450" : "60";
+      f.duration.placeholder = perDay ? "1" : "1h30";
+      $("ep-duration-help").textContent = perDay ? "En jours : 1 ou 0,5." : "Par exemple 1,5 ou 1h30 ou 45 min.";
+      if (!typed) {
+        var others = data.timeEntries.filter(function (t) { return t.id !== exceptId; });
+        f.rate.value = rateText(E.lastRate(others, f.clientId.value, f.unit.value));
+      }
+    };
+    f.unit.addEventListener("change", sync);
+    f.clientId.addEventListener("change", sync);
+    return sync;
+  }
+
+  function viewTime(r) {
+    var month = /^\d{4}-(0[1-9]|1[0-2])$/.test(r.params.mois || "") ? r.params.mois : TODAY.slice(0, 7);
+    var s = E.timeSummary(data.timeEntries, data.documents, month + "-01", month + "-31");
+    var due = E.unbilledByClient(data.timeEntries, data.documents)
+      .sort(function (a, b) { return String(clientName(a.clientId)).localeCompare(String(clientName(b.clientId)), "fr"); });
+    var x = Object.assign({ date: TODAY, clientId: "", unit: "hour", rate: null, billable: true }, timeDefaults);
+    if (x.clientId && !client(x.clientId)) x.clientId = "";
+    var prev = monthShift(month, -1), next = monthShift(month, 1);
+    view.innerHTML = '<div class="espace-head"><h2>Temps passé</h2><div class="espace-quick espace-noprint">' +
+      '<button type="button" class="btn btn-ghost btn-sm" id="time-csv"' + (s.rows.length ? "" : " disabled") + ">Exporter le mois (CSV)</button>" +
+      '<button type="button" class="btn btn-ghost btn-sm" id="time-print"' + (s.rows.length ? "" : " disabled") + ">Imprimer</button></div></div>" +
+      '<form class="card espace-card espace-noprint" id="time-form" novalidate><h3>Saisir du temps</h3><div class="fields">' + timeFields(x) + "</div>" +
+      '<p class="form-error" id="time-error" role="alert" hidden></p><div class="espace-actions"><button type="submit" class="btn btn-primary">Ajouter</button></div></form>' +
+      (due.length ? '<section class="card espace-card espace-noprint"><h3>À facturer</h3><ul class="time-due">' + due.map(function (c) {
+        return "<li><span class=\"dl-main\"><b>" + esc(clientName(c.clientId)) + '</b><span class="small muted">' + esc(durations(c.hours, c.days)) + " · " +
+          esc(countText(c.entries.length, "saisie", "saisies")) + "</span></span>" +
+          '<span class="dl-side"><b>' + esc(c.amount || !c.missingRate ? money(c.amount) : "Taux à préciser") + "</b>" + (c.missingRate ? '<span class="small muted">' + esc(countText(c.missingRate, "temps sans taux", "temps sans taux")) + "</span>" : "") + "</span>" +
+          '<a class="btn btn-primary btn-sm" href="#/temps/facturer?client=' + esc(c.clientId) + '" aria-label="Facturer le temps de ' + esc(clientName(c.clientId)) + '">Facturer</a></li>';
+      }).join("") + "</ul></section>" : "") +
+      '<section class="card espace-card"><div class="time-month"><a class="btn btn-ghost btn-sm espace-noprint" href="#/temps?mois=' + prev + '" aria-label="Mois précédent : ' + esc(monthLabel(prev)) + '">←</a>' +
+      "<h3>" + esc(monthLabel(month)) + '</h3><a class="btn btn-ghost btn-sm espace-noprint" href="#/temps?mois=' + next + '" aria-label="Mois suivant : ' + esc(monthLabel(next)) + '">→</a></div>' +
+      '<ul class="time-totals"><li><span>Temps du mois</span><b>' + esc(durations(s.hours, s.days)) + "</b></li><li><span>Facturable</span><b>" +
+      esc(durations(s.billable.hours, s.billable.days)) + "</b></li><li><span>Montant facturable</span><b>" + esc(money(s.billable.amount)) + "</b>" +
+      (s.billable.missingRate ? '<span class="small muted">hors ' + esc(countText(s.billable.missingRate, "temps sans taux", "temps sans taux")) + "</span>" : "") + "</li></ul>" +
+      (s.rows.length ? '<table class="ledger time-table"><thead><tr><th>Date</th><th>Client</th><th>Tâche</th><th>Durée</th><th>État</th><th class="num">Montant</th></tr></thead><tbody>' +
+        s.rows.map(function (t) {
+          return '<tr><td class="c-date">' + day(t.date) + '</td><td class="c-client">' + esc(clientName(t.clientId) || "Temps interne") +
+            '</td><td class="c-nature"><a href="#/temps/' + esc(t.id) + '">' + esc(t.task) + '</a></td><td class="c-method">' + esc(E.durationLabel(t.quantity, t.unit)) +
+            '</td><td class="c-ref">' + timeBadge(t.state) + '</td><td class="num">' + (t.amount === null ? "–" : esc(money(t.amount))) + "</td></tr>";
+        }).join("") + "</tbody></table>"
+        : '<p class="muted">Aucun temps saisi en ' + esc(monthLabel(month)) + ".</p>") +
+      '<p class="small muted">Notez aussi le temps que vous ne facturez pas (prospection, administratif) : décochez « Facturable ». ' +
+      "Ce suivi est facultatif : ce n'est pas un registre obligatoire.</p></section>";
+    var form = $("time-form");
+    bindTimeForm(form, null, false)();
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var t = readTime(form);
+      if (!showTimeErrors(form, t, "time-error")) return;
+      if (t.rate !== null) t.rate = Math.round(t.rate * 100) / 100;
+      Object.assign(t, { id: S.uid(), createdAt: now(), updatedAt: now() });
+      data.timeEntries.push(t);
+      timeDefaults = { date: t.date, clientId: t.clientId, unit: t.unit, rate: t.rate };
+      persist("Temps ajouté : " + E.durationLabel(t.quantity, t.unit) + (t.clientId ? " pour " + clientName(t.clientId) : "") + ".").then(function () {
+        history.replaceState(null, "", "#/temps?mois=" + t.date.slice(0, 7));
+        currentRoute = route().key;
+        render(true);
+        $("ep-task").focus();
+      });
+    });
+    if (!s.rows.length) return;
+    $("time-csv").addEventListener("click", function () {
+      OF.download("﻿" + E.timeCSV(s.rows, clientName), "temps-passe-" + month + ".csv", "text/csv;charset=utf-8");
+    });
+    $("time-print").addEventListener("click", function () {
+      document.body.classList.add("print-ledger");
+      window.print();
+      document.body.classList.remove("print-ledger");
+    });
+  }
+
+  function viewTimeForm(r) {
+    var x = timeEntry(r.id);
+    if (!x) { view.innerHTML = '<div class="espace-head"><h2>Temps introuvable</h2></div><p><a href="#/temps">Retour au temps passé</a></p>'; return; }
+    var state = E.timeState(x, data.documents), d = x.invoiceId ? doc(x.invoiceId) : null;
+    var back = "#/temps?mois=" + x.date.slice(0, 7);
+    var head = '<div class="espace-head"><h2>' + esc(x.task) + "</h2>" + timeBadge(state) + "</div>";
+    if (state === "invoiced") {
+      view.innerHTML = head + '<div class="card espace-card"><p class="notice">Ce temps est repris dans la <a href="#/documents/' + esc(d.id) + '">facture ' + esc(d.number) +
+        "</a>, émise : il ne peut plus être modifié ni supprimé.</p><dl class=\"time-facts\"><dt>Date</dt><dd>" + day(x.date) + "</dd><dt>Client</dt><dd>" +
+        esc(clientName(x.clientId)) + "</dd><dt>Durée</dt><dd>" + esc(E.durationLabel(x.quantity, x.unit)) + "</dd><dt>Taux HT</dt><dd>" +
+        (x.rate === null || x.rate === undefined ? "–" : esc(money(x.rate) + (x.unit === "day" ? " par jour" : " par heure"))) + '</dd></dl><div class="espace-actions"><a class="btn btn-ghost" href="' + back + '">Retour au temps passé</a></div></div>';
+      return;
+    }
+    view.innerHTML = head + (state === "draft" ? '<div class="notice espace-noprint"><p>Ce temps est repris dans le <a href="#/documents/' + esc(d.id) +
+      '">brouillon de facture</a> : si vous le modifiez, la ligne du brouillon ne change pas.</p><button type="button" class="btn btn-ghost btn-sm" id="time-unlink">Retirer du brouillon</button></div>' : "") +
+      '<form class="card espace-card" id="time-form" novalidate><div class="fields">' + timeFields(x) + "</div>" +
+      '<p class="form-error" id="time-error" role="alert" hidden></p><div class="espace-actions">' +
+      '<button type="submit" class="btn btn-primary">Enregistrer</button><a class="btn btn-ghost" href="' + back + '">Annuler</a>' +
+      '<button type="button" class="btn btn-ghost" id="time-delete">Supprimer</button></div></form>';
+    var form = $("time-form");
+    bindTimeForm(form, x.id, true);
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var t = readTime(form);
+      if (!showTimeErrors(form, t, "time-error")) return;
+      if (t.rate !== null) t.rate = Math.round(t.rate * 100) / 100;
+      Object.assign(x, t, { updatedAt: now() });
+      persist("Temps modifié.").then(function () { location.hash = "#/temps?mois=" + x.date.slice(0, 7); });
+    });
+    $("time-delete").addEventListener("click", function () {
+      if (!confirm(state === "draft" ? "Supprimer ce temps ? Sa ligne reste dans le brouillon de facture : supprimez-la aussi." : "Supprimer ce temps ?")) return;
+      data.timeEntries = data.timeEntries.filter(function (t) { return t.id !== x.id; });
+      persist("Temps supprimé.").then(function () { location.hash = back; });
+    });
+    if ($("time-unlink")) $("time-unlink").addEventListener("click", function () {
+      delete x.invoiceId;
+      x.updatedAt = now();
+      persist("Temps retiré du brouillon : supprimez aussi sa ligne dans le brouillon de facture.").then(function () { render(true); });
+    });
+  }
+
+  function viewTimeInvoice(r) {
+    var c = client(r.params.client);
+    var due = c && E.unbilledByClient(data.timeEntries, data.documents).filter(function (x) { return x.clientId === c.id; })[0];
+    if (!due) {
+      view.innerHTML = '<div class="espace-head"><h2>Facturer le temps</h2></div><div class="card espace-card"><p class="muted">Aucun temps à facturer' +
+        (c ? " pour " + esc(c.name) : "") + '.</p><p><a href="#/temps">Retour au temps passé</a></p></div>';
+      return;
+    }
+    view.innerHTML = '<div class="espace-head"><h2>Facturer le temps : ' + esc(c.name) + "</h2></div>" +
+      '<form class="card espace-card" id="ti-form" novalidate><fieldset class="time-pick"><legend>Temps à reprendre</legend>' +
+      due.entries.map(function (t) {
+        return '<label class="check"><input type="checkbox" name="entry" value="' + esc(t.id) + '" checked><span>' + day(t.date) + " · " + esc(t.task) + " · " +
+          esc(E.durationLabel(t.quantity, t.unit)) + (t.rate === null || t.rate === undefined ? " · sans taux" : " · " + esc(money(t.rate)) + (t.unit === "day" ? " / jour" : " / heure")) + "</span></label>";
+      }).join("") + '</fieldset><fieldset class="time-pick"><legend>Lignes de la facture</legend>' +
+      '<label class="check"><input type="radio" name="mode" value="task" checked><span>Une ligne par tâche (temps regroupés, avec la période)</span></label>' +
+      '<label class="check"><input type="radio" name="mode" value="entry"><span>Une ligne par saisie (avec sa date)</span></label></fieldset>' +
+      '<h3>Aperçu des lignes</h3><div id="ti-preview" aria-live="polite"></div>' +
+      '<p class="form-error" id="ti-error" role="alert" hidden></p><div class="espace-actions">' +
+      '<button type="submit" class="btn btn-primary">Créer la facture en brouillon</button><a class="btn btn-ghost" href="#/temps">Annuler</a></div>' +
+      '<p class="small muted">La facture est créée en brouillon : relisez-la, complétez les prix manquants, puis émettez-la comme d\'habitude.</p></form>';
+    var form = $("ti-form");
+    var picked = function () {
+      var ids = Array.prototype.filter.call(form.querySelectorAll('[name="entry"]'), function (i) { return i.checked; }).map(function (i) { return i.value; });
+      return due.entries.filter(function (t) { return ids.indexOf(t.id) > -1; });
+    };
+    var mode = function () { return form.querySelector('[name="mode"]:checked').value; };
+    var preview = function () {
+      var res = E.timeInvoice(picked(), mode());
+      var ht = INV.compute({ lines: res.lines }).ht, missing = res.lines.filter(function (l) { return !isFinite(l.price); }).length;
+      $("ti-preview").innerHTML = res.lines.length ? '<table class="ledger"><thead><tr><th>Désignation</th><th>Quantité × prix unitaire HT</th><th class="num">Total HT</th></tr></thead><tbody>' +
+        res.lines.map(function (l) {
+          var qty = OF.fmt(l.qty) + INV.UNITS[l.unit];
+          return '<tr><td class="c-nature">' + esc(l.desc) + '</td><td class="c-method">' + esc(isFinite(l.price) ? qty + " × " + money(l.price) : qty + " · prix à saisir") +
+            '</td><td class="num">' + (isFinite(l.price) ? esc(money(Math.round(l.qty * l.price * 100) / 100)) : "à saisir") + "</td></tr>";
+        }).join("") + '</tbody><tfoot><tr><td colspan="2">Total HT' + (missing ? " (hors lignes sans prix)" : "") + '</td><td class="num">' + esc(money(ht)) + "</td></tr></tfoot></table>" +
+        (missing ? '<p class="small muted">' + esc(countText(missing, "ligne", "lignes")) + " sans prix : à saisir dans le brouillon avant d'émettre la facture.</p>" : "")
+        : '<p class="muted">Cochez au moins un temps.</p>';
+    };
+    form.addEventListener("change", preview);
+    preview();
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var list = picked();
+      if (!list.length) { showError("ti-error", "Cochez au moins un temps à reprendre."); return; }
+      var res = E.timeInvoice(list, mode());
+      var d = newDraft("facture", c.id);
+      d.lines = res.lines;
+      d.serviceDate = res.serviceDate;
+      data.documents.push(d);
+      list.forEach(function (t) { t.invoiceId = d.id; t.updatedAt = now(); });
+      persist("Facture créée en brouillon à partir de " + countText(list.length, "temps", "temps") + " : relisez-la, puis émettez-la.").then(function () {
+        location.hash = "#/documents/" + d.id;
+      });
     });
   }
 

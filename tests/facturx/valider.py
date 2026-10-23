@@ -55,6 +55,7 @@ MUTATIONS = [
         "</ram:URIUniversalCommunication></ram:SellerTradeParty>",
         "</ram:URIUniversalCommunication><ram:SpecifiedTaxRegistration><ram:ID schemeID=\"VA\">FR40123456789</ram:ID>"
         "</ram:SpecifiedTaxRegistration></ram:SellerTradeParty>")),
+    ("temps-heures-jours.xml", "code d'unité inventé (BR-CL-23, FX-SCH-A-000613)", lambda x: x.replace('unitCode="HUR"', 'unitCode="HEURE"', 1)),
     ("autoliquidation-ue.xml", "autoliquidation sans numéro de TVA du client (BR-AE-02)",
      lambda x: re.sub(r"<ram:SpecifiedTaxRegistration><ram:ID schemeID=\"VA\">DE\d+</ram:ID></ram:SpecifiedTaxRegistration>", "", x)),
 ]

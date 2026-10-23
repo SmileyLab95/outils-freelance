@@ -10,7 +10,7 @@ const E = require("../../src/assets/engines/espace-fr.js");
 
 const T = (n) => new Date(Date.UTC(2026, 9, 1, 8) + n * 60000).toISOString();
 const uidFrom = (prefix) => { let k = 0; return () => `${prefix}-${++k}`; };
-const state = (over = {}) => Object.assign({ schema: 2, profile: null, clients: [], documents: [], expenses: [], settings: { lastExport: null }, savedAt: null }, over);
+const state = (over = {}) => Object.assign({ schema: 2, profile: null, clients: [], documents: [], expenses: [], timeEntries: [], settings: { lastExport: null }, savedAt: null }, over);
 const client = (over = {}) => Object.assign({ id: "c1", name: "Studio Nova", email: "a@nova.example", pro: true, place: "fr", createdAt: T(0), updatedAt: T(0) }, over);
 const draft = (over = {}) => Object.assign({ id: "d1", type: "facture", status: "draft", date: "2026-10-05", clientId: "c1", terms: 30, nature: "services",
   lines: [{ desc: "Site", qty: 1, price: 1000 }], vat: { franchise: true, rate: 20, place: "fr" }, payments: [], createdAt: T(0), updatedAt: T(0) }, over);
@@ -525,4 +525,37 @@ test("dépenses : supprimée d'un côté (retirée, ou conservée si modifiée d
   const old = { schema: 1, clients: [], documents: [] };
   assert.deepEqual(S.migrate(old).expenses, [], "ancienne sauvegarde sans dépenses");
   assert.deepEqual(merge(null, old, state({ expenses: [expense()] })).data.expenses.map((e) => e.id), ["e1"], "liste d'un seul côté");
+});
+
+// Temps passé (documentation/37-temps-passe.md) : fusionné comme les dépenses ; champs nommés en français.
+const entry = (over = {}) => Object.assign({ id: "t1", date: "2026-10-12", clientId: "c1", task: "Maquettes", unit: "hour", quantity: 2, rate: 60,
+  billable: true, createdAt: T(0), updatedAt: T(0) }, over);
+
+test("temps passé : ajouté des deux côtés, champs différents gardés, conflit sur un même champ nommé en français", () => {
+  const o = state({ timeEntries: [entry()] });
+  const a = state({ timeEntries: [entry({ task: "Maquettes v2", updatedAt: T(2) }), entry({ id: "t2", quantity: 1, createdAt: T(1), updatedAt: T(1) })] });
+  const b = state({ timeEntries: [entry({ invoiceId: "d1", updatedAt: T(3) }), entry({ id: "t3", unit: "day", quantity: 1, createdAt: T(1), updatedAt: T(1) })] });
+  let r = merge(o, a, b);
+  assert.deepEqual(r.data.timeEntries.map((e) => e.id), ["t1", "t2", "t3"]);
+  assert.deepEqual([r.data.timeEntries[0].task, r.data.timeEntries[0].invoiceId], ["Maquettes v2", "d1"], "champs différents : les deux gardés");
+  assert.deepEqual(r.conflicts, []);
+  r = merge(o, state({ timeEntries: [entry({ quantity: 2.5, rate: 70, updatedAt: T(2) })] }), state({ timeEntries: [entry({ quantity: 3, rate: 65, updatedAt: T(4) })] }));
+  assert.deepEqual([r.data.timeEntries[0].quantity, r.data.timeEntries[0].rate], [3, 65], "même champ : la plus récente");
+  assert.equal(r.conflicts[0].message, "Temps passé modifié sur deux appareils : la version la plus récente est gardée (durée, taux).");
+  const spent = merge(state({ expenses: [expense()] }), state({ expenses: [expense({ supplier: "A", label: "B", ref: "C", updatedAt: T(2) })] }),
+    state({ expenses: [expense({ supplier: "X", label: "Y", ref: "Z", updatedAt: T(3) })] }));
+  assert.match(spent.conflicts[0].message, /\(nature, référence de la pièce, fournisseur\)\.$/, "dépenses : champs nommés en français");
+});
+
+test("temps passé : supprimé d'un côté (retiré, ou conservé si modifié de l'autre) ; anciennes données sans liste", () => {
+  const o = state({ timeEntries: [entry()] });
+  assert.deepEqual(merge(o, state({ timeEntries: [] }), o).data.timeEntries, [], "supprimé d'un côté, inchangé de l'autre : retiré");
+  const r = merge(o, state({ timeEntries: [] }), state({ timeEntries: [entry({ quantity: 3, updatedAt: T(2) })] }));
+  assert.deepEqual(r.data.timeEntries.map((e) => e.quantity), [3], "supprimé et modifié : conservé");
+  assert.deepEqual(r.conflicts.map((c) => [c.kind, c.type, c.message]),
+    [["time", "removed-modified", "Temps passé effacé sur un appareil mais modifié sur un autre : il est conservé."]]);
+  const marked = merge(o, state({ timeEntries: [entry({ deletedAt: T(1), updatedAt: T(1) })] }), state({ timeEntries: [entry({ task: "Intégration", updatedAt: T(2) })] }));
+  assert.deepEqual(marked.conflicts.map((c) => [c.kind, c.type]), [["time", "deleted-modified"]]);
+  assert.deepEqual(S.migrate({ schema: 1, clients: [], documents: [] }).timeEntries, [], "ancienne sauvegarde sans temps");
+  assert.deepEqual(merge(null, { schema: 2, clients: [], documents: [] }, state({ timeEntries: [entry()] })).data.timeEntries.map((e) => e.id), ["t1"]);
 });

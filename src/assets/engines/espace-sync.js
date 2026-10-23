@@ -22,7 +22,9 @@
                  status: "statut", archived: "archivage", delivery: "adresse de livraison", place: "pays", country: "pays",
                  iban: "IBAN", bic: "BIC", siret: "SIRET", penalty: "pénalités", nature: "nature", validity: "validité",
                  depositPct: "acompte", prefixes: "préfixes", numbering: "numérotation", endpoint: "adresse électronique",
-                 amount: "montant", method: "moyen de paiement", note: "note", invoiceId: "facture liée", pro: "type de client", logo: "logo" };
+                 amount: "montant", method: "moyen de paiement", note: "note", invoiceId: "facture liée", pro: "type de client", logo: "logo",
+                 supplier: "fournisseur", label: "nature", ref: "référence de la pièce",
+                 task: "tâche", unit: "unité", quantity: "durée", rate: "taux", billable: "facturable" };
   var labels = function (fields) { return fields.map(function (k) { return LABELS[k] || k; }).join(", "); };
 
   // ----- Comparaison et copie ------------------------------------------------------------------
@@ -76,6 +78,7 @@
     out.clients = (Array.isArray(out.clients) ? out.clients : []).filter(Boolean);
     out.documents = (Array.isArray(out.documents) ? out.documents : []).filter(Boolean);
     out.expenses = (Array.isArray(out.expenses) ? out.expenses : []).filter(Boolean);
+    out.timeEntries = (Array.isArray(out.timeEntries) ? out.timeEntries : []).filter(Boolean);
     out.documents.forEach(function (d) {
       d.payments = (Array.isArray(d.payments) ? d.payments : []).filter(Boolean);
       d.payments.forEach(function (pay, i) { if (typeof pay.id !== "string" || !pay.id) pay.id = d.id + "-p" + (i + 1); });
@@ -126,7 +129,8 @@
   var REMOVED = { client: "Client effacé sur un appareil mais modifié sur un autre : il est conservé.",
                   document: "Brouillon effacé sur un appareil mais modifié sur un autre : il est conservé.",
                   payment: "Encaissement effacé sur un appareil mais modifié sur un autre : il est conservé.",
-                  expense: "Dépense effacée sur un appareil mais modifiée sur un autre : elle est conservée." };
+                  expense: "Dépense effacée sur un appareil mais modifiée sur un autre : elle est conservée.",
+                  time: "Temps passé effacé sur un appareil mais modifié sur un autre : il est conservé." };
   var byId = function (list) { var m = {}; (list || []).forEach(function (x) { m[x.id] = x; }); return m; };
 
   /**
@@ -282,7 +286,7 @@
     return doc;
   }
 
-  /** Fiche client ou dépense : fusion champ par champ ; même règle de suppression et de modification croisées. */
+  /** Fiche client, dépense ou temps passé : fusion champ par champ ; même règle de suppression et de modification croisées. */
   function mergeRecord(kind, deleted, changed) {
     return function (o, a, b, ctx) {
       var res = mergeFields(o, a, b);
@@ -296,6 +300,8 @@
     "Fiche modifiée sur deux appareils : la version la plus récente est gardée");
   var mergeExpense = mergeRecord("expense", "Dépense supprimée sur un appareil mais modifiée sur un autre : elle est conservée.",
     "Dépense modifiée sur deux appareils : la version la plus récente est gardée");
+  var mergeTime = mergeRecord("time", "Temps passé supprimé sur un appareil mais modifié sur un autre : il est conservé.",
+    "Temps passé modifié sur deux appareils : la version la plus récente est gardée");
 
   /**
    * Liens entre devis et factures après fusion : un devis pointe vers une facture émise qui le reprend (la première
@@ -353,6 +359,7 @@
       message: "Profil modifié sur deux appareils : la version la plus récente est gardée (" + labels(profile.conflicts) + ")." });
     var clients = mergeList("client", base.clients, local.clients, remote.clients, ctx, mergeClient);
     var expenses = mergeList("expense", base.expenses, local.expenses, remote.expenses, ctx, mergeExpense);
+    var timeEntries = mergeList("time", base.timeEntries, local.timeEntries, remote.timeEntries, ctx, mergeTime);
     var documents = mergeList("document", base.documents, local.documents, remote.documents, ctx, mergeDocument, issued);
     // Versions d'un appareil qui n'avait pas encore reçu une copie : reportées sur cette copie (fusion depuis la même base).
     for (var guard = 0; ctx.rebase.length && guard < 1000; guard++) {
@@ -368,7 +375,7 @@
         message: "Le numéro " + dup.number + " a été attribué à " + dup.ids.length + " documents émis sur des appareils différents : à régulariser par un avoir et un nouveau document." });
     });
     return {
-      data: { schema: SCHEMA, profile: profile.value, clients: clients, documents: documents, expenses: expenses,
+      data: { schema: SCHEMA, profile: profile.value, clients: clients, documents: documents, expenses: expenses, timeEntries: timeEntries,
               settings: clone(local.settings) || { lastExport: null }, savedAt: local.savedAt || null },
       conflicts: ctx.conflicts
     };

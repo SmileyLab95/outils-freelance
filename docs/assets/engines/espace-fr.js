@@ -129,9 +129,18 @@
     var errors = [];
     if (!/^\d{4}-\d{2}-\d{2}$/.test(doc.date || "")) errors.push("Indiquez la date du document.");
     if (!client || !String(client.name || "").trim()) errors.push("Choisissez un client.");
-    var lines = (doc.lines || []).filter(function (l) { return String(l.desc || "").trim() && isFinite(INV.amount(l.price)) && isFinite(INV.amount(l.qty)); });
-    if (!lines.length) errors.push("Ajoutez au moins une ligne avec une désignation, une quantité et un prix.");
-    else if (total(doc) <= 0) errors.push("Le montant total doit être positif.");
+    // Ligne commencée (désignation ou prix saisi, comme dans l'aperçu) : désignation, quantité et prix obligatoires.
+    var started = [], incomplete = [];
+    (doc.lines || []).forEach(function (l, i) {
+      if (!(String(l.desc || "").trim() || isFinite(INV.amount(l.price)))) return;
+      started.push(i + 1);
+      if (!(String(l.desc || "").trim() && isFinite(INV.amount(l.price)) && isFinite(INV.amount(l.qty)))) incomplete.push(i + 1);
+    });
+    if (!started.length) errors.push("Ajoutez au moins une ligne avec une désignation, une quantité et un prix.");
+    else if (incomplete.length) {
+      errors.push((incomplete.length > 1 ? "Complétez les lignes " + incomplete.slice(0, -1).join(", ") + " et " + incomplete[incomplete.length - 1]
+        : "Complétez la ligne " + incomplete[0]) + " (désignation, quantité et prix unitaire hors taxes) ou supprimez-" + (incomplete.length > 1 ? "les." : "la."));
+    } else if (total(doc) <= 0) errors.push("Le montant total doit être positif.");
     else if (doc.type === "avoir" && doc.originId) {
       var origin = documents.filter(function (d) { return d.id === doc.originId; })[0];
       if (origin && total(doc) > total(origin) - credited(documents, origin) + 0.005) {
@@ -499,6 +508,144 @@
     return lines.join("\r\n");
   }
 
+  // ----- Temps passé (documentation/37-temps-passe.md) -------------------------------------------------------
+
+  var TIME_MAX = { hour: 24, day: 1 };
+  var NBSP = "\u00a0";
+  var dec = function (n) { return String(round2(n)).replace(".", ","); };
+  var frDay = function (d) { return String(d || "").split("-").reverse().join("/"); };
+  var hasRate = function (t) { return t.rate !== null && t.rate !== undefined && t.rate !== "" && isFinite(Number(t.rate)); };
+  var byDate = function (a, b) {
+    return a.date < b.date ? -1 : a.date > b.date ? 1 : (a.createdAt || "") < (b.createdAt || "") ? -1 : (a.createdAt || "") > (b.createdAt || "") ? 1 : (a.id < b.id ? -1 : 1);
+  };
+
+  /** Durée saisie en heures (1,5 ; 1h30 ; 1 h 30 ; 1:30 ; 45 min) ou en jours (1 ; 0,5) ; NaN si illisible. */
+  function parseDuration(text, unit) {
+    var s = String(text == null ? "" : text).trim().toLowerCase().replace(/\s+/g, " "), m;
+    var decimal = function (v) { return round2(Number(v.replace(",", "."))); };
+    if (unit === "day") return (m = /^(\d+(?:[.,]\d+)?) ?(?:j|jours?)?$/.exec(s)) ? decimal(m[1]) : NaN;
+    if (unit !== "hour") return NaN;
+    if ((m = /^(\d+(?:[.,]\d+)?) ?(?:h|heures?)?$/.exec(s))) return decimal(m[1]);
+    if ((m = /^(\d+) ?h ?(?:(\d{1,2}) ?(?:min|mn)?)?$/.exec(s)) || (m = /^(\d+):(\d{2})$/.exec(s))) {
+      var min = m[2] ? +m[2] : 0;
+      return min < 60 ? round2(+m[1] + min / 60) : NaN;
+    }
+    if ((m = /^(\d+) ?(?:min|mn)$/.exec(s))) return round2(+m[1] / 60);
+    return NaN;
+  }
+
+  /** Durée lisible : « 1 h 05 », « 45 min », « 3 h » ; « 0,5 jour », « 2 jours ». */
+  function durationLabel(quantity, unit) {
+    var q = Number(quantity);
+    if (!isFinite(q)) return "";
+    if (unit === "day") return dec(q) + NBSP + (q >= 2 ? "jours" : "jour");
+    var min = Math.round(q * 60), h = Math.floor(min / 60), rest = min % 60;
+    if (!h) return rest + NBSP + "min";
+    return h + NBSP + "h" + (rest ? NBSP + String(rest).padStart(2, "0") : "");
+  }
+
+  /** Erreurs de saisie d'un temps, avec le champ concerné : date, task, unit, duration, clientId, rate. */
+  function timeErrors(t) {
+    var errors = [], add = function (field, message) { errors.push({ field: field, message: message }); };
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(t.date || "")) add("date", "Indiquez la date.");
+    if (!String(t.task || "").trim()) add("task", "Indiquez la tâche.");
+    var q = Number(t.quantity);
+    if (!Object.prototype.hasOwnProperty.call(TIME_MAX, t.unit)) add("unit", "Choisissez l'unité : heures ou jours.");
+    else if (!(isFinite(q) && q > 0)) add("duration", t.unit === "day" ? "Indiquez la durée en jours : par exemple 1 ou 0,5." : "Indiquez la durée : par exemple 1,5 ou 1h30.");
+    else if (q > TIME_MAX[t.unit]) add("duration", (t.unit === "day" ? "Une saisie compte une journée au plus" : "Une saisie compte 24 heures au plus") + " : saisissez chaque jour séparément.");
+    if (t.billable !== false && !t.clientId) add("clientId", "Choisissez le client, ou décochez « Facturable » pour un temps interne.");
+    if (t.rate !== null && t.rate !== undefined && t.rate !== "" && !(isFinite(Number(t.rate)) && Number(t.rate) >= 0)) add("rate", "Le taux doit être un montant positif.");
+    return errors;
+  }
+  function checkTime(t) { return timeErrors(t).map(function (e) { return e.message; }); }
+
+  /** État calculé d'un temps : internal (non facturable), unbilled (à facturer), draft (dans un brouillon), invoiced. */
+  function timeState(t, documents) {
+    if (t.billable === false) return "internal";
+    var d = t.invoiceId ? (documents || []).filter(function (x) { return x && x.id === t.invoiceId; })[0] : null;
+    if (!d) return "unbilled";
+    return d.status === "draft" ? "draft" : "invoiced";
+  }
+
+  /** Dernier taux saisi pour ce client et cette unité (date, puis ordre de saisie), ou null. */
+  function lastRate(entries, clientId, unit) {
+    var list = (entries || []).filter(function (t) { return t && clientId && t.clientId === clientId && t.unit === unit && hasRate(t); }).sort(byDate);
+    return list.length ? Number(list[list.length - 1].rate) : null;
+  }
+
+  /** Lignes de facture : une par tâche (tâche, unité et taux identiques regroupés, avec la période) ou une par saisie. */
+  function timeInvoiceLines(entries, mode) {
+    var list = (entries || []).filter(Boolean).slice().sort(byDate);
+    var price = function (t) { return hasRate(t) ? Number(t.rate) : NaN; };
+    if (mode === "entry") {
+      return list.map(function (t) { return { desc: String(t.task || "").trim() + " — " + frDay(t.date), qty: round2(t.quantity), unit: t.unit, price: price(t) }; });
+    }
+    var groups = [], index = {};
+    list.forEach(function (t) {
+      var key = nameKey(t.task) + "|" + t.unit + "|" + (hasRate(t) ? Number(t.rate) : "");
+      if (!index[key]) { index[key] = { task: String(t.task || "").trim(), unit: t.unit, price: price(t), qty: 0, first: t.date, last: t.date }; groups.push(index[key]); }
+      var g = index[key];
+      g.qty += Number(t.quantity) || 0;
+      g.last = t.date;
+    });
+    return groups.map(function (g) {
+      return { desc: g.task + " — " + (g.first === g.last ? frDay(g.first) : "du " + frDay(g.first) + " au " + frDay(g.last)),
+               qty: round2(g.qty), unit: g.unit, price: g.price };
+    });
+  }
+
+  /** Montant HT d'une liste de lignes (comme le moteur de facture : chaque ligne arrondie au centime). */
+  var linesAmount = function (lines) {
+    return round2(lines.reduce(function (s, l) { return s + (isFinite(l.price) ? round2(l.qty * l.price) : 0); }, 0));
+  };
+
+  /** Brouillon de facture à partir de temps : lignes et date de la prestation (dernière saisie reprise). */
+  function timeInvoice(entries, mode) {
+    var dates = (entries || []).filter(Boolean).map(function (t) { return t.date; }).sort();
+    return { lines: timeInvoiceLines(entries, mode), serviceDate: dates[dates.length - 1] || "" };
+  }
+
+  /** Temps d'une période (le plus récent en haut) et totaux : heures, jours, part facturable, montant facturable. */
+  function timeSummary(entries, documents, from, to) {
+    var rows = (entries || []).filter(function (t) { return t && t.date && (!from || t.date >= from) && (!to || t.date <= to); })
+      .sort(byDate).reverse().map(function (t) {
+        return { id: t.id, date: t.date, clientId: t.clientId || "", task: t.task || "", unit: t.unit, quantity: round2(t.quantity),
+                 rate: hasRate(t) ? Number(t.rate) : null, amount: hasRate(t) && t.billable !== false ? round2(t.quantity * t.rate) : null,
+                 billable: t.billable !== false, state: timeState(t, documents) };
+      });
+    var sum = function (list, unit) { return round2(list.reduce(function (s, r) { return s + (r.unit === unit ? r.quantity : 0); }, 0)); };
+    var billable = rows.filter(function (r) { return r.billable; });
+    return { rows: rows, hours: sum(rows, "hour"), days: sum(rows, "day"),
+             billable: { hours: sum(billable, "hour"), days: sum(billable, "day"),
+                         amount: round2(billable.reduce(function (s, r) { return s + (r.amount || 0); }, 0)),
+                         missingRate: billable.filter(function (r) { return r.rate === null; }).length } };
+  }
+
+  /** Temps à facturer, par client : saisies (les plus anciennes d'abord), heures, jours, montant de la facture par tâche. */
+  function unbilledByClient(entries, documents) {
+    var out = [], index = {};
+    (entries || []).filter(function (t) { return t && t.clientId && timeState(t, documents) === "unbilled"; }).sort(byDate).forEach(function (t) {
+      if (!index[t.clientId]) { index[t.clientId] = { clientId: t.clientId, entries: [] }; out.push(index[t.clientId]); }
+      index[t.clientId].entries.push(t);
+    });
+    return out.map(function (c) {
+      var s = timeSummary(c.entries, documents);
+      return { clientId: c.clientId, entries: c.entries, hours: s.hours, days: s.days,
+               amount: linesAmount(timeInvoiceLines(c.entries, "task")), missingRate: s.billable.missingRate };
+    });
+  }
+
+  function timeCSV(rows, clientName) {
+    var q = function (v) { return '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"'; };
+    var lines = ["Date;Client;Tâche;Durée;Unité;Taux HT;Montant HT;Facturable"];
+    rows.forEach(function (r) {
+      lines.push([frDay(r.date), q(clientName(r.clientId)), q(r.task), dec(r.quantity), r.unit === "day" ? "jour" : "heure",
+                  r.rate === null ? "" : r.rate.toFixed(2).replace(".", ","), r.amount === null ? "" : r.amount.toFixed(2).replace(".", ","),
+                  r.billable ? "oui" : "non"].join(";"));
+    });
+    return lines.join("\r\n");
+  }
+
   function ledgerCSV(rows) {
     var q = function (v) { return '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"'; };
     var lines = ["Date;Client;Nature;Montant;Moyen de paiement;Référence"];
@@ -516,5 +663,8 @@
            checkPayment: checkPayment, ledger: ledger, cashed: cashed, period: period, acreEnd: acreEnd, rates: rates,
            nextDeclaration: nextDeclaration, thresholds: thresholds, clientTotals: clientTotals,
            invoiceFromQuote: invoiceFromQuote, creditFromInvoice: creditFromInvoice, duplicate: duplicate, ledgerCSV: ledgerCSV,
-           purchasesRequired: purchasesRequired, expenseRows: expenseRows, checkExpense: checkExpense, expensesCSV: expensesCSV };
+           purchasesRequired: purchasesRequired, expenseRows: expenseRows, checkExpense: checkExpense, expensesCSV: expensesCSV,
+           parseDuration: parseDuration, durationLabel: durationLabel, checkTime: checkTime, timeErrors: timeErrors, timeState: timeState, lastRate: lastRate,
+           timeInvoiceLines: timeInvoiceLines, timeInvoice: timeInvoice, timeSummary: timeSummary, unbilledByClient: unbilledByClient,
+           timeCSV: timeCSV };
 });

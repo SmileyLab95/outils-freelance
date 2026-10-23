@@ -272,3 +272,4 @@ Rédigée le 20/10/2026 à partir de l'[étude](10-etude-factur-x.md), dont elle
 ## Modules ajoutés depuis la v1.1
 
 - **Dépenses et registre des achats** (23/10/2026) : [36](36-depenses-et-registre-des-achats.md).
+- **Temps passé** (23/10/2026) : [37](37-temps-passe.md) ; lignes de facture avec unité (heure, jour).

@@ -1,5 +1,25 @@
 # Journal des modifications
 
+## 2026-10-23 — Temps passé (Espace entrepreneur)
+
+- Nouvel onglet **Temps** de l'Espace : saisie rapide en heures ou en jours (« 1h30 », « 1:30 », « 45 min », « 0,5 »),
+  taux prérempli par le dernier taux du client, temps interne non facturable, liste du mois avec ses totaux, export CSV,
+  impression.
+- **Temps à facturer** par client, rappelé au tableau de bord ; **facture créée en brouillon** à partir du temps, avec
+  une ligne par tâche (période « du … au … ») ou une ligne par saisie, et la date de la prestation. Un brouillon
+  supprimé rend le temps à facturer ; une facture émise verrouille le temps qu'elle reprend.
+- Factures de l'Espace : **unité des lignes** (heure, jour), affichée dans l'aperçu et le PDF (« 1,5 h », « 2 j ») et
+  codée dans le Factur-X (HUR, DAY), validé par les fichiers officiels et Mustang.
+- Correction : une facture dont une ligne était commencée sans prix (ou sans quantité, ou sans désignation) pouvait être
+  émise ; la ligne paraissait sur le PDF mais pas dans le XML Factur-X. L'émission est désormais refusée avec le numéro
+  de la ligne.
+- Synchronisation des comptes : temps passé fusionné entre appareils ; noms des champs en conflit affichés en français
+  (ceux des dépenses s'affichaient en anglais).
+- Spécification [37](documentation/37-temps-passe.md), décision D35. Tests : `temps.test.mjs` (12), lignes incomplètes,
+  2 tests de synchronisation ; 38 erreurs réintroduites, toutes détectées ; Factur-X : 11 factures conformes ; parcours
+  de l'Espace et des comptes ; suite complète (408 tests unitaires, 29 tests serveur, 3 358 vérifications navigateur du
+  site public, parcours de l'Espace repassé après deux corrections de texte).
+
 ## 2026-10-23 — Dépenses et registre des achats (Espace entrepreneur)
 
 - Nouvel onglet **Dépenses** de l'Espace : saisie (date, fournisseur, nature, montant payé, moyen de paiement,

@@ -67,6 +67,12 @@ add("nom-long-belgique", docs, base({ vat: { franchise: false, rate: 20, place: 
     vat: "BE0123456789", email: "compta@atelier.example", pro: true, place: "eu" },
   { name: "Camille Martin EI — Conseil en transformation numérique et formation professionnelle", vat: "FR40123456789", logo: "logo" });
 docs = [];
+// Temps passé facturé (documentation/37-temps-passe.md) : quantités en heures (HUR) et en jours (DAY), ligne sans unité (C62).
+add("temps-heures-jours", docs, base({ vat: { franchise: false, rate: 20, place: "fr" }, lines: [
+  { desc: "Maquettes de la page d'accueil — du 12/10/2026 au 16/10/2026", qty: 3.75, unit: "hour", price: 60 },
+  { desc: "Atelier de cadrage — 15/10/2026", qty: 0.5, unit: "day", price: 450 }, { desc: "Licence de police", qty: 1, price: 40 }] }),
+  clients.fr, { vat: "FR40123456789" });
+docs = [];
 add("franchise-2027", docs, base({ date: "2027-01-15", serviceDate: "2027-01-10" }), clients.fr);
 
 for (const [name, doc, all] of cases) {

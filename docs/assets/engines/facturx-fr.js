@@ -15,6 +15,8 @@
     'xmlns:ram="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100" ' +
     'xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:100"';
   var PROFILE = "urn:cen.eu:en16931:2017";
+  // Unité de la quantité (BT-130) : recommandation n° 20 de la CEE-ONU ; C62 (unité) pour une ligne sans unité.
+  var UNIT_CODES = { hour: "HUR", day: "DAY" };
 
   function esc(v) {
     return String(v == null ? "" : v).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -176,7 +178,7 @@
         "<ram:SpecifiedTradeProduct>" + el("ram:Name", esc(str(r.desc))) + "</ram:SpecifiedTradeProduct>" +
         "<ram:SpecifiedLineTradeAgreement><ram:NetPriceProductTradePrice>" + el("ram:ChargeAmount", number(r.price, 6)) +
         "</ram:NetPriceProductTradePrice></ram:SpecifiedLineTradeAgreement>" +
-        "<ram:SpecifiedLineTradeDelivery>" + el("ram:BilledQuantity", number(r.qty, 4), ' unitCode="C62"') + "</ram:SpecifiedLineTradeDelivery>" +
+        "<ram:SpecifiedLineTradeDelivery>" + el("ram:BilledQuantity", number(r.qty, 4), ' unitCode="' + (UNIT_CODES[r.unit] || "C62") + '"') + "</ram:SpecifiedLineTradeDelivery>" +
         "<ram:SpecifiedLineTradeSettlement><ram:ApplicableTradeTax>" + el("ram:TypeCode", "VAT") + el("ram:CategoryCode", cat.code) +
         (cat.rate == null ? "" : el("ram:RateApplicablePercent", number(cat.rate, 2))) + "</ram:ApplicableTradeTax>" +
         "<ram:SpecifiedTradeSettlementLineMonetarySummation>" + el("ram:LineTotalAmount", amount(r.total)) +

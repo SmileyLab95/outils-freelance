@@ -34,6 +34,8 @@
   }
   /** Nombre saisi, ou NaN si la valeur est vide (null, chaîne vide) : une sauvegarde JSON transforme NaN en null. */
   function amount(v) { return v === null || v === undefined || v === "" ? NaN : Number(v); }
+  /** Unités de quantité d'une ligne (facultatives) : abréviation affichée après la quantité. */
+  var UNITS = { hour: "\u00a0h", day: "\u00a0j" };
 
   function addDays(iso, days) {
     var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || "");
@@ -50,7 +52,7 @@
       // Montant de ligne arrondi au centime : la facture lisible et ses données structurées (Factur-X) concordent.
       var total = isFinite(qty) && isFinite(price) ? Math.round(qty * price * 100) / 100 : NaN;
       if (isFinite(total)) ht += total;
-      return { desc: l.desc, qty: qty, price: price, total: total };
+      return { desc: l.desc, qty: qty, unit: Object.prototype.hasOwnProperty.call(UNITS, l.unit) ? l.unit : "", price: price, total: total };
     });
     var v = doc.vat || {};
     var place = v.place || "fr";
@@ -156,7 +158,7 @@
                 vatMissing: t.place === "eu" && !str(client.vat), delivery: str(client.delivery) },
       meta: meta,
       rows: t.rows.filter(function (r) { return str(r.desc) || isFinite(r.price); }).map(function (r) {
-        return { desc: str(r.desc), qty: isFinite(r.qty) ? fmt.num(r.qty) : "", price: isFinite(r.price) ? fmt.eur(r.price) : "",
+        return { desc: str(r.desc), qty: isFinite(r.qty) ? fmt.num(r.qty) + (UNITS[r.unit] || "") : "", price: isFinite(r.price) ? fmt.eur(r.price) : "",
                  total: isFinite(r.total) ? fmt.eur(r.total) : "" };
       }),
       sums: tot,
@@ -206,6 +208,6 @@
     return html;
   }
 
-  return { NATURES: NATURES, QUOTE_ACCEPTANCE: QUOTE_ACCEPTANCE, amount: amount, compute: compute, franchiseMention: franchiseMention, mentions: mentions,
+  return { NATURES: NATURES, UNITS: UNITS, QUOTE_ACCEPTANCE: QUOTE_ACCEPTANCE, amount: amount, compute: compute, franchiseMention: franchiseMention, mentions: mentions,
            model: model, render: render, addDays: addDays };
 });
