@@ -1,0 +1,32 @@
+# Contrôle mensuel des serveurs RDAP de la recherche de noms de domaine (documentation/33-noms-de-domaine.md) :
+# table de data/rules/shared.json comparée au fichier d'amorçage de l'IANA, et réponses réelles de chaque registre.
+name: Vérifier les serveurs RDAP
+
+on:
+  schedule:
+    - cron: "17 6 1 * *"
+  workflow_dispatch:
+    inputs:
+      rapport:
+        description: "Afficher les résultats sans échouer"
+        type: boolean
+        default: false
+      extensions:
+        description: "Extensions à examiner en plus de la table (séparées par des espaces)"
+        type: string
+        default: ""
+
+permissions:
+  contents: read
+
+jobs:
+  verifier:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Vérifier
+        env:
+          RAPPORT: ${{ inputs.rapport && '--rapport' || '' }}
+          EXTENSIONS: ${{ inputs.extensions }}
+        run: python3 scripts/verifier_rdap.py $RAPPORT $EXTENSIONS
