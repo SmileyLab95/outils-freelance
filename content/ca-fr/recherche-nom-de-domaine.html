@@ -1,0 +1,167 @@
+<!--{
+  "id": "domain",
+  "slug": "recherche-nom-de-domaine/",
+  "title": "Recherche de nom de domaine gratuite : .ca, .quebec, .com",
+  "description": "Votre nom est-il libre en .ca, .quebec ou .com ? Réponse des registres officiels, variantes, marques à vérifier et où réserver. Gratuit, sans inscription.",
+  "menu": "Nom de domaine",
+  "blurb": "Votre nom est-il libre en .ca, .quebec ? Réponse des registres.",
+  "app": "Recherche de nom de domaine",
+  "scripts": [
+    "engines/domain.js",
+    "tools/domain.js"
+  ],
+  "rules": "ca",
+  "sources": [
+    "rdap_protocol",
+    "rdap_servers",
+    "rdap_status_dropping",
+    "domain_ca_eligibility",
+    "domain_quebec_eligibility",
+    "domain_https_only",
+    "domain_registrar_directories",
+    "trademark_search_cipo"
+  ],
+  "priority": 0.7,
+  "faq": [
+    [
+      "« Probablement libre », est-ce sûr ?",
+      "Le registre de l'extension (l'ACEI pour .ca, Verisign pour .com…) répond qu'il ne connaît pas ce nom. Certains noms sont pourtant réservés, interdits ou vendus plus cher (« premium ») : la réponse définitive vient du registraire au moment de l'achat. Un nom peut aussi être pris par quelqu'un d'autre entre votre recherche et votre achat."
+    ],
+    [
+      "Pourquoi .io, .co, .us ou .eu ne sont-ils pas proposés ?",
+      "Leurs registres ne publient pas de service de consultation RDAP dans l'annuaire officiel de l'IANA (vérifié le 23 octobre 2026) : l'outil ne peut pas les interroger. Vérifiez-les directement chez un registraire."
+    ],
+    [
+      "Mes recherches sont-elles privées ?",
+      "Les noms recherchés partent de votre navigateur directement vers les registres officiels, seulement quand vous cliquez sur « Rechercher ». Ils ne passent pas par nos serveurs et ne sont pas mémorisés. Comme pour toute visite d'un site, le registre voit l'adresse IP de votre connexion."
+    ],
+    [
+      "Qui peut acheter un .ca ou un .quebec ?",
+      "Le .ca demande un lien avec le Canada dans l'une des catégories des règles de présence au Canada de l'ACEI (par exemple citoyens canadiens, résidents permanents, sociétés constituées au Canada, titulaires d'une marque enregistrée au Canada). Le .quebec demande de pouvoir démontrer un lien ou un intérêt raisonnable envers la communauté québécoise, à l'enregistrement et pendant toute la vie du nom."
+    ],
+    [
+      "Combien coûte un nom de domaine ?",
+      "Le prix dépend du registraire et de l'extension ; nous ne vendons pas de noms de domaine. Comparez le prix de la première année et celui du renouvellement, et ce qui est compris (adresse courriel, protection des coordonnées, redirection)."
+    ]
+  ]
+}-->
+<script type="application/json" id="dn-data">
+{
+  "state": { "pending": "Vérification…", "free": "Probablement libre", "taken": "Déjà pris", "dropping": "En cours de suppression", "unknown": "Non vérifié" },
+  "free_detail": "À confirmer chez un registraire au moment de l'achat.",
+  "since": "pris depuis le {date}",
+  "expires": "expire le {date}",
+  "registrar": "registraire : {name}",
+  "dropping_detail": "Ce nom va être supprimé et pourrait redevenir libre",
+  "unknown": {
+    "rate": "Trop de recherches d'affilée : réessayez dans une minute.",
+    "error": "Le registre n'a pas répondu : réessayez, ou vérifiez chez un registraire."
+  },
+  "notes": {
+    "fr": "Le .fr est réservé aux personnes qui résident, et aux entreprises établies, dans l'Union européenne, en Islande, au Liechtenstein, en Norvège ou en Suisse.",
+    "ca": "Le .ca demande un lien avec le Canada (règles de présence au Canada de l'ACEI).",
+    "quebec": "Le .quebec demande un lien avec la communauté québécoise.",
+    "uk": "Hors du Royaume-Uni, il faut fournir une adresse de signification au Royaume-Uni.",
+    "co.uk": "Hors du Royaume-Uni, il faut fournir une adresse de signification au Royaume-Uni."
+  },
+  "https_only": "Les sites en .dev et .app ne s'ouvrent qu'en HTTPS : prévoyez un certificat.",
+  "changed": "Nous cherchons « {label} » : un nom de domaine n'a ni espaces, ni accents, ni signes.",
+  "unknown_tld": "L'extension .{tld} ne peut pas être vérifiée ici : son registre ne publie pas de service RDAP dans l'annuaire de l'IANA. Vérifiez-la chez un registraire ; voici les autres extensions.",
+  "errors": {
+    "empty": "Saisissez le nom que vous voulez, par exemple « Studio Lumière ».",
+    "long": "Ce nom dépasse 63 caractères, la limite d'un nom de domaine : raccourcissez-le.",
+    "hyphens": "Un nom de domaine ne peut pas avoir deux tirets en 3e et 4e positions.",
+    "chars": "Utilisez des lettres, des chiffres et des tirets."
+  },
+  "searching": "Recherche en cours auprès des registres…",
+  "summary": "Recherche terminée : {free}, {taken}, {unknown}.",
+  "count": {
+    "free": { "one": "{n} probablement libre", "other": "{n} probablement libres" },
+    "taken": { "one": "{n} déjà pris", "other": "{n} déjà pris" },
+    "unknown": { "one": "{n} non vérifié", "other": "{n} non vérifiés" }
+  }
+}
+</script>
+<template id="dn-icons">{{icon:hourglass}}{{icon:circle-check}}{{icon:circle-x}}{{icon:circle-question-mark}}</template>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Gratuit · sans inscription</span>
+    <h1>Recherche de nom de domaine</h1>
+    <p class="lead">Votre nom est-il libre en .ca, en .quebec ou en .com ? L'outil pose la question directement aux registres officiels (l'ACEI pour .ca, PointQuébec pour .quebec, Verisign pour .com…), propose des variantes et vous dit quoi vérifier avant d'acheter.</p>
+    <ul class="trust"><li>Réponse des registres officiels</li><li>Variantes de votre nom</li><li>Nous ne vendons pas de noms</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="dn-wrap">
+    <form class="card form-card dn-form" id="dn-form" novalidate data-main="ca"
+          data-default="ca quebec com net org" data-extra="pro app consulting design dev info online site studio tech xyz">
+      <div class="field">
+        <label for="dn-name">Nom souhaité</label>
+        <div class="dn-search">
+          <input type="text" id="dn-name" name="name" autocomplete="off" autocapitalize="none" spellcheck="false"
+                 placeholder="Studio Lumière, marie-tremblay.ca…" aria-describedby="dn-name-hint dn-name-error">
+          <button class="btn btn-primary" type="submit">{{icon:search}}Rechercher</button>
+        </div>
+        <span class="hint" id="dn-name-hint">Avec ou sans extension : « studio-lumiere.ca » fonctionne aussi.</span>
+        <p class="dn-error" id="dn-name-error" hidden></p>
+      </div>
+      <fieldset class="dn-set">
+        <legend>Extensions</legend>
+        <div class="dn-chips" id="dn-default"></div>
+        <details class="dn-more">
+          <summary>Plus d'extensions (<span id="dn-more-count"></span>)</summary>
+          <div class="dn-chips" id="dn-extra"></div>
+        </details>
+        <p class="dn-error" id="dn-tld-error" hidden>Cochez au moins une extension.</p>
+      </fieldset>
+      <fieldset class="dn-set">
+        <legend>Pour des idées de variantes (facultatif)</legend>
+        <div class="fields">
+          <div class="field"><label for="dn-activity">Votre activité</label>
+            <input type="text" id="dn-activity" name="activity" autocomplete="off" placeholder="graphiste, coach…"></div>
+          <div class="field"><label for="dn-city">Votre ville</label>
+            <input type="text" id="dn-city" name="city" autocomplete="off" placeholder="Montréal, Québec…"></div>
+        </div>
+      </fieldset>
+    </form>
+
+    <p class="dn-summary" id="dn-summary" role="status"></p>
+    <div class="dn-results" id="dn-results" hidden>
+      <p class="notice" id="dn-message" hidden></p>
+      <h2 id="dn-title">Votre nom</h2>
+      <ul class="dn-list" id="dn-list" aria-labelledby="dn-title"></ul>
+      <h2 id="dn-variants-title" hidden>Idées de variantes</h2>
+      <ul class="dn-list" id="dn-variants" aria-labelledby="dn-variants-title" hidden></ul>
+      <p class="small muted">Réponses des registres au moment de la recherche. Un nom vous plaît ? <a href="#dn-registrars">Voyez où le réserver</a>.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>Avant d'acheter : trois vérifications</h2>
+  <ol>
+    <li><strong>Les marques de commerce.</strong> Un nom de domaine libre peut reprendre une marque protégée. Cherchez votre nom dans la <a href="https://ised-isde.canada.ca/opic/recherche-marques/srch?lang=fre" rel="noopener">Base de données sur les marques de commerce canadiennes</a>, avec les variantes d'orthographe et les équivalents en anglais ; l'OPIC recommande de ne pas s'en tenir à cette seule recherche. Les noms d'entreprise se vérifient à part (NUANS, registres des entreprises).</li>
+    <li><strong>Les conditions de l'extension.</strong> Le .ca demande un lien avec le Canada (règles de présence au Canada de l'ACEI) ; le .quebec, un lien avec la communauté québécoise. Les sites en .dev et .app ne s'ouvrent qu'en HTTPS.</li>
+    <li><strong>Le même nom partout.</strong> Si possible, le même nom pour votre entreprise, votre site, votre adresse courriel et vos réseaux : vos clients vous retrouvent plus facilement.</li>
+  </ol>
+
+  <h2 id="dn-registrars">Où réserver votre nom</h2>
+  <p>Les registres ne vendent pas les noms eux-mêmes : on les achète auprès d'un <strong>registraire</strong> accrédité, ou d'un revendeur. Les listes officielles :</p>
+  <ul>
+    <li><a href="https://www.cira.ca/en/ca-domains/registrar-list/" rel="noopener">liste des registraires certifiés de l'ACEI</a> (en anglais), pour le .ca ;</li>
+    <li><a href="https://registre.quebec/registraires-accredites/" rel="noopener">registraires accrédités de PointQuébec</a>, pour le .quebec ;</li>
+    <li><a href="https://www.icann.org/en/contracted-parties/accredited-registrars/list-of-accredited-registrars" rel="noopener">liste des registraires accrédités par l'ICANN</a> (en anglais), pour le .com, le .net, le .org et les autres extensions génériques.</li>
+  </ul>
+  <p>Comparez le prix de la première année et celui du renouvellement, et ce qui est compris (adresse courriel, protection de vos coordonnées). Nous ne touchons aucune commission sur ces liens.</p>
+
+  <h2>Bien choisir</h2>
+  <ul>
+    <li><strong>Court et facile à dicter</strong> : un nom qu'on comprend au téléphone, sans orthographe ambiguë.</li>
+    <li><strong>Sans trait d'union si possible</strong>, sauf s'il rend le nom plus lisible (« marie-tremblay »).</li>
+    <li><strong>À votre nom</strong> : enregistrez-vous comme titulaire, même si un prestataire s'occupe de votre site.</li>
+    <li><strong>Renouvellement automatique</strong> : un nom qui n'est pas renouvelé peut être perdu et racheté par un autre.</li>
+    <li><strong>Une adresse courriel pro</strong> : avec votre nom, créez une adresse comme bonjour@votrenom.ca, chez votre registraire ou un service de courriel.</li>
+  </ul>
+</section>

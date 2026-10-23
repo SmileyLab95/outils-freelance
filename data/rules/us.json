@@ -1609,6 +1609,22 @@
       "confidence": "medium",
       "verified_on": "2026-10-23",
       "note": "A trade secret must be information whose owner has taken reasonable measures to keep it secret (18 U.S.C. § 1839(3)); the USPTO toolkit says reasonableness is judged case by case and lists these measures as examples. Read through search excerpts."
+    },
+    "trademark_search_uspto": {
+      "value": "Search the USPTO database for registered and pending federal trademarks that may conflict with the name; a full clearance search also covers state trademark registers and unregistered (common-law) use on the internet. A state business name registration does not give federal trademark rights.",
+      "unit": "text",
+      "label": "Check trademarks before choosing a name (USPTO)",
+      "source": "https://www.uspto.gov/trademarks/search",
+      "source_title": "USPTO, Search our trademark database",
+      "more_sources": [
+        {
+          "source": "https://www.uspto.gov/trademarks/search/comprehensive-clearance-search-similar-trademarks",
+          "source_title": "USPTO, Comprehensive clearance search for similar trademarks"
+        }
+      ],
+      "confidence": "medium",
+      "note": "Read through search excerpts on 2026-10-23.",
+      "verified_on": "2026-10-23"
     }
   },
   "open_questions": [

@@ -1,5 +1,31 @@
 # Journal des modifications
 
+## 2026-10-23 — Recherche de noms de domaine
+
+- Nouvel outil dans les cinq sections, étape « Démarrer » : « Recherche de nom de domaine » en France et au Canada en
+  français, « *Domain name search* » aux États-Unis, au Royaume-Uni et au Canada. Le navigateur interroge directement
+  les registres officiels par le protocole RDAP (19 extensions : .fr, .com, .net, .org, .pro, .co.uk, .uk, .ca,
+  .quebec, .dev, .app…) : « probablement libre », « déjà pris » avec date de création, d'expiration et registraire,
+  « en cours de suppression », « non vérifié » ; variantes (sans tiret, avec l'activité, avec la ville) ; extension
+  tapée avec le nom cochée d'office ; conditions des extensions (.fr, .ca, .quebec, .uk, HTTPS de .dev et .app) ;
+  marques à vérifier (INPI, USPTO, UKIPO et Companies House, OPIC) ; listes officielles de registraires (Afnic, ICANN,
+  Nominet, ACEI, PointQuébec), sans lien partenaire pour l'instant.
+- Règles nouvelles dans `data/rules/` : table des serveurs (fichier d'amorçage de l'IANA, RFC 9224), réponses RDAP
+  (RFC 7480 ; ICANN : RDAP remplace WHOIS depuis le 28/01/2025), statuts de suppression, conditions des extensions,
+  recherche de marques par pays.
+- Contrôle mensuel aux sources par GitHub Actions (`scripts/verifier_rdap.py`) : table comparée au fichier de l'IANA,
+  réponse réelle de chaque registre (200, 404, autorisation CORS) ; .eu, .us, .io et .co n'ont pas de service RDAP.
+- Confidentialité : les pages des cinq sections expliquent que les noms recherchés partent du navigateur vers les
+  registres (sans cookie ni page d'origine, rien de mémorisé) ; le pied de page dit « rien n'est envoyé à nos serveurs ».
+- Spécification [33](documentation/33-noms-de-domaine.md), décision D32 ; règles de transparence de l'affiliation
+  relues aux sources officielles (France, États-Unis, Royaume-Uni, Canada). Tests : `domain.test.mjs` (13 tests ;
+  42 erreurs réintroduites, toutes détectées) ; parcours navigateur avec réponses de registres simulées ; suite
+  complète (382 tests unitaires, 27 tests serveur, 3 304 vérifications navigateur du site public) ; parcours
+  de l'outil relancés après la relecture du code (une recherche remplacée n'envoie plus ses noms restants).
+- Spécification de l'inscription au compte gratuit ([34](documentation/34-inscription-compte-gratuit.md)) : écran
+  Bienvenue, informations facultatives chiffrées dans l'Espace, lettre d'information par case non cochée avec preuve
+  du consentement, premiers pas ; règles d'emails des quatre pays relues.
+
 ## 2026-10-23 — Nouveau design et vision de la plateforme
 
 - Vision de la plateforme complète ([31](documentation/31-vision-plateforme.md)) : outils ouverts sans compte, compte

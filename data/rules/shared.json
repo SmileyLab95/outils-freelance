@@ -1,6 +1,6 @@
 {
-  "scope": "Rules about another country's system that several sections cite (EU VAT for UK and US freelancers, US forms for French, British and Canadian freelancers). The build merges these values into every country's rules; a key may not exist in both.",
-  "verified_on": "2026-10-22",
+  "scope": "Rules about another country's system that several sections cite (EU VAT for UK and US freelancers, US forms for French, British and Canadian freelancers) and rules of the domain name registries. The build merges these values into every country's rules; a key may not exist in both.",
+  "verified_on": "2026-10-23",
   "values": {
     "eu_non_union_scheme": {
       "value": "A business not established in the EU that supplies services to consumers in the EU can register for the non-Union scheme in one Member State and declare all its EU supplies there: one return per calendar quarter, due by the end of the following month (a nil return when there were no sales); records kept for 10 years.",
@@ -126,6 +126,186 @@
       "confidence": "high",
       "note": "Read on 2026-10-22 through search excerpts: a form signed on September 30, 2015 remains valid until December 31, 2018 (IRS example); a change in circumstances that makes information incorrect requires a new form (the deadline to give it was not confirmed in this session). Indefinite validity exists in some cases with documentary evidence, not for treaty claims: not covered by the site.",
       "verified_on": "2026-10-22"
+    },
+    "rdap_servers": {
+      "value": {
+        "com": "https://rdap.verisign.com/com/v1/",
+        "net": "https://rdap.verisign.com/net/v1/",
+        "org": "https://rdap.publicinterestregistry.org/rdap/",
+        "fr": "https://rdap.nic.fr/",
+        "uk": "https://rdap.nominet.uk/uk/",
+        "co.uk": "https://rdap.nominet.uk/uk/",
+        "ca": "https://rdap.ca.fury.ca/rdap/",
+        "quebec": "https://rdap.nic.quebec/",
+        "pro": "https://rdap.identitydigital.services/rdap/",
+        "info": "https://rdap.identitydigital.services/rdap/",
+        "studio": "https://rdap.identitydigital.services/rdap/",
+        "consulting": "https://rdap.identitydigital.services/rdap/",
+        "dev": "https://pubapi.registry.google/rdap/",
+        "app": "https://pubapi.registry.google/rdap/",
+        "design": "https://rdap.nic.design/",
+        "tech": "https://rdap.radix.host/rdap/",
+        "online": "https://rdap.radix.host/rdap/",
+        "site": "https://rdap.radix.host/rdap/",
+        "xyz": "https://rdap.centralnic.com/xyz/"
+      },
+      "unit": "object",
+      "label": "RDAP servers of the domain extensions offered by the domain name search",
+      "source": "https://data.iana.org/rdap/dns.json",
+      "source_title": "IANA, RDAP Bootstrap Service Registry for the Domain Name Space (dns.json)",
+      "more_sources": [
+        {
+          "source": "https://www.rfc-editor.org/rfc/rfc9224.html",
+          "source_title": "RFC 9224, Finding the Authoritative RDAP Service (IETF), section 4"
+        }
+      ],
+      "confidence": "high",
+      "note": "Read on 2026-10-23 by scripts/verifier_rdap.py in GitHub Actions (file published 2026-10-22T23:00:04Z). co.uk uses the entry of the longest matching label, uk (RFC 9224, section 4). Each server answered 200 for a registered name, 404 for a random name and sent Access-Control-Allow-Origin: *. .paris and .bzh also answered correctly but are not offered (their registration conditions were not checked). Not in the IANA file on that date: .eu, .us, .io, .co, .me, .be, .ch, .de. Checked again every month by .github/workflows/verifier-rdap.yml.",
+      "verified_on": "2026-10-23"
+    },
+    "rdap_protocol": {
+      "value": {
+        "found": 200,
+        "not_found": 404,
+        "rate_limited": 429,
+        "cors": "Access-Control-Allow-Origin: *",
+        "media_type": "application/rdap+json"
+      },
+      "unit": "object",
+      "label": "RDAP answers: 200 when the registry has the domain, 404 when it does not, 429 when queries are rate-limited; servers should allow reading from other websites (CORS)",
+      "source": "https://www.rfc-editor.org/rfc/rfc7480.html",
+      "source_title": "RFC 7480, HTTP Usage in the Registration Data Access Protocol (IETF), sections 4.2, 5.1, 5.3, 5.5 and 5.6",
+      "more_sources": [
+        {
+          "source": "https://www.icann.org/en/announcements/details/icann-update-launching-rdap-sunsetting-whois-27-01-2025-en",
+          "source_title": "ICANN, Launching RDAP; Sunsetting WHOIS (27 January 2025)"
+        }
+      ],
+      "confidence": "high",
+      "note": "RFC 7480: a server returns 404 when it has no object for the query (section 5.3), may return 429 when a client exceeds its limits (section 5.5) and should add Access-Control-Allow-Origin: * (section 5.6). ICANN: RDAP became the definitive source of gTLD registration data on 28 January 2025, replacing WHOIS. A 404 only says the registry has no such domain: reserved, blocked or premium names may still not be available at the normal price, which only a registrar can confirm.",
+      "verified_on": "2026-10-23"
+    },
+    "rdap_status_dropping": {
+      "value": [
+        "redemption period",
+        "pending delete"
+      ],
+      "unit": "list",
+      "label": "RDAP statuses of a domain being deleted (it may become available again)",
+      "source": "https://www.iana.org/assignments/rdap-json-values/rdap-json-values.xhtml",
+      "source_title": "IANA, RDAP JSON Values registry (status values)",
+      "more_sources": [
+        {
+          "source": "https://www.rfc-editor.org/rfc/rfc8056.html",
+          "source_title": "RFC 8056, EPP and RDAP Status Mapping (IETF)"
+        },
+        {
+          "source": "https://www.rfc-editor.org/rfc/rfc3915.html",
+          "source_title": "RFC 3915, Domain Registry Grace Period Mapping for EPP (IETF)"
+        }
+      ],
+      "confidence": "medium",
+      "note": "Read through search excerpts on 2026-10-23. redemption period: a delete has been received and the domain can still be restored; pending delete: deletion requested, not yet complete (purge after the redemption period).",
+      "verified_on": "2026-10-23"
+    },
+    "domain_fr_eligibility": {
+      "value": "A .fr name can be registered by a natural person residing, or a legal person whose registered office or principal place of business is, in a Member State of the European Union, Iceland, Liechtenstein, Norway or Switzerland; the condition applies for the whole life of the name (the administrative contact must meet it too). Afnic does not check requests beforehand; registration goes through an accredited registrar.",
+      "unit": "text",
+      "label": ".fr: who can register (Afnic naming policy)",
+      "source": "https://www.afnic.fr/wp-media/uploads/2026/07/afnic-naming-policy-2026-07-06.pdf",
+      "source_title": "Afnic, naming policy (version of 6 July 2026)",
+      "confidence": "medium",
+      "note": "Read through search excerpts of the Afnic naming policy and FAQ on 2026-10-23, not the full text.",
+      "verified_on": "2026-10-23"
+    },
+    "domain_ca_eligibility": {
+      "value": "A .ca registrant must show a connection with Canada in one of the categories of the Canadian Presence Requirements (for example Canadian citizens, permanent residents, corporations under Canadian law, holders of a trademark registered in Canada).",
+      "unit": "text",
+      "label": ".ca: Canadian Presence Requirements (CIRA)",
+      "source": "https://www.cira.ca/en/resources/documents/domains/canadian-presence-requirements-registrants/",
+      "source_title": "CIRA, Canadian Presence Requirements for Registrants",
+      "confidence": "medium",
+      "note": "Read through search excerpts on 2026-10-23.",
+      "verified_on": "2026-10-23"
+    },
+    "domain_quebec_eligibility": {
+      "value": "A .quebec registrant (natural or legal person) must be able to show a link or reasonable interest with the Quebec community at registration and for the whole life of the name; some geographic, heritage and generic names are reserved.",
+      "unit": "text",
+      "label": ".quebec: who can register (PointQuébec)",
+      "source": "https://registre.quebec/faq/",
+      "source_title": "PointQuébec, Foire aux questions",
+      "more_sources": [
+        {
+          "source": "https://registre.quebec/registraires-accredites/",
+          "source_title": "PointQuébec, registraires accrédités"
+        }
+      ],
+      "confidence": "medium",
+      "note": "Read through search excerpts on 2026-10-23.",
+      "verified_on": "2026-10-23"
+    },
+    "domain_uk_address_for_service": {
+      "value": "Any person may register a .uk or .co.uk name; where the registrant's address is not in the United Kingdom, a UK address for service must also be supplied (not a PO box or equivalent).",
+      "unit": "text",
+      "label": ".uk and .co.uk: registrants outside the UK (Nominet rules)",
+      "source": "https://nominet.uk/wp-content/uploads/2025/03/UK-rules-of-registration.pdf",
+      "source_title": "Nominet, Rules of registration (20 March 2024)",
+      "confidence": "medium",
+      "note": "Read through search excerpts on 2026-10-23.",
+      "verified_on": "2026-10-23"
+    },
+    "domain_https_only": {
+      "value": [
+        "dev",
+        "app"
+      ],
+      "unit": "list",
+      "label": ".dev and .app sites only load over HTTPS (extensions on the HSTS preload list); registrars must say so before purchase",
+      "source": "https://www.registry.google/policies/registration/dev/",
+      "source_title": "Google Registry, .dev registration policy",
+      "more_sources": [
+        {
+          "source": "https://get.app/",
+          "source_title": "Google Registry, .app"
+        }
+      ],
+      "confidence": "medium",
+      "note": "Read through search excerpts on 2026-10-23.",
+      "verified_on": "2026-10-23"
+    },
+    "domain_registrar_directories": {
+      "value": {
+        "afnic": "https://www.afnic.fr/fr/votre-nom-de-domaine/comment-choisir-et-creer-mon-nom-de-domaine/trouver-mon-bureau-d-enregistrement-8.html",
+        "icann": "https://www.icann.org/en/contracted-parties/accredited-registrars/list-of-accredited-registrars",
+        "uk": "https://theukdomain.uk/domain-support/who-do-i-buy-my-domain-from/",
+        "cira": "https://www.cira.ca/en/ca-domains/registrar-list/",
+        "quebec": "https://registre.quebec/registraires-accredites/"
+      },
+      "unit": "object",
+      "label": "Official lists of accredited registrars (Afnic, ICANN, Nominet, CIRA, PointQuébec)",
+      "source": "https://www.icann.org/en/contracted-parties/accredited-registrars/list-of-accredited-registrars",
+      "source_title": "ICANN, List of Accredited Registrars",
+      "more_sources": [
+        {
+          "source": "https://www.afnic.fr/fr/votre-nom-de-domaine/comment-choisir-et-creer-mon-nom-de-domaine/trouver-mon-bureau-d-enregistrement-8.html",
+          "source_title": "Afnic, trouver mon bureau d'enregistrement"
+        },
+        {
+          "source": "https://theukdomain.uk/domain-support/who-do-i-buy-my-domain-from/",
+          "source_title": "The UK Domain (Nominet), Who do I buy my domain name from?"
+        },
+        {
+          "source": "https://www.cira.ca/en/ca-domains/registrar-list/",
+          "source_title": "CIRA, Domain Name Registrar List"
+        },
+        {
+          "source": "https://registre.quebec/registraires-accredites/",
+          "source_title": "PointQuébec, registraires accrédités"
+        }
+      ],
+      "confidence": "medium",
+      "note": "Pages found on the official sites on 2026-10-23. The registries do not sell names themselves: names are bought from an accredited registrar (or a reseller). The UK Domain says it cannot recommend one registrar over another.",
+      "verified_on": "2026-10-23"
     }
   }
 }

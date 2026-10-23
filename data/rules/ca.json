@@ -1864,6 +1864,26 @@
       "confidence": "high",
       "verified_on": "2026-10-23",
       "note": "Art. 55: contracts of adhesion and related documents are drawn up in French; the parties may be bound only by a version in another language if, after the French version has been given to the adherent, that is their express wish (since June 1, 2023). The adherent cannot be charged for the French version. Employment contracts follow the language-of-work provisions; contracts used in relations outside Quebec are not covered. Whether a given agreement is a contract of adhesion (Civil Code of Québec, art. 1379) depends on whether its essential terms were imposed. Read through search excerpts."
+    },
+    "trademark_search_cipo": {
+      "value": "Search the Canadian Trademarks Database (all active and inactive applications and registrations) before choosing a name, with spelling variants and French or English equivalents; CIPO says decisions should not rest on this search alone. Corporate and business names are checked separately (NUANS, provincial registries).",
+      "unit": "text",
+      "label": "Check trademarks before choosing a name (CIPO)",
+      "source": "https://ised-isde.canada.ca/cipo/trademark-search/srch",
+      "source_title": "CIPO, Canadian Trademarks Database",
+      "more_sources": [
+        {
+          "source": "https://ised-isde.canada.ca/opic/recherche-marques/srch?lang=fre",
+          "source_title": "OPIC, Base de données sur les marques de commerce canadiennes"
+        },
+        {
+          "source": "https://www.canada.ca/en/services/business/start/choosing-a-business-name-2.html",
+          "source_title": "Canada.ca, Choosing a business name"
+        }
+      ],
+      "confidence": "medium",
+      "note": "Read through search excerpts on 2026-10-23.",
+      "verified_on": "2026-10-23"
     }
   },
   "provinces": {

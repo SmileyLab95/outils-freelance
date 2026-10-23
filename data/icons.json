@@ -34,7 +34,8 @@
     "1099": "file-text",
     "freelance-law": "shield",
     "estimated-tax": "calendar-check",
-    "mtd": "laptop"
+    "mtd": "laptop",
+    "domain": "at-sign"
   },
   "stages": {
     "start": "rocket",

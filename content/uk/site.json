@@ -15,6 +15,7 @@
         "employee-vs-freelance",
         "switch",
         "bank",
+        "domain",
         "insurance"
       ]
     },
@@ -92,7 +93,7 @@
     "verified": "Figures last verified on",
     "site": "This site",
     "tagline": "Free tools for UK freelancers, sole traders and contractors. No sign-up, no paywall.",
-    "privacy_note": "🔒 Everything is calculated in your browser: nothing you type is sent to a server.",
+    "privacy_note": "🔒 Everything is calculated in your browser: nothing you type is sent to our servers.",
     "disclaimer": "For information only: not tax, legal or accounting advice.",
     "logo_label": "Freelance Tools, home",
     "tools_count": "{n} free tools",

@@ -15,6 +15,7 @@
         "employee-vs-freelance",
         "switch",
         "bank",
+        "domain",
         "insurance"
       ]
     },
@@ -91,7 +92,7 @@
     "verified": "Chiffres vérifiés le",
     "site": "Le site",
     "tagline": "Des outils gratuits, sans inscription, pour les travailleurs autonomes et pigistes du Canada.",
-    "privacy_note": "🔒 Tous les calculs se font dans votre navigateur : rien de ce que vous saisissez n'est envoyé à un serveur.",
+    "privacy_note": "🔒 Tous les calculs se font dans votre navigateur : rien de ce que vous saisissez n'est envoyé à nos serveurs.",
     "disclaimer": "Information à titre indicatif seulement : ne remplace pas l'avis d'un fiscaliste, d'un comptable ou d'un avocat.",
     "logo_label": "Outils Freelance, accueil",
     "tools_count": "{n} outils gratuits",

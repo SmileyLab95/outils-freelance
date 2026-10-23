@@ -15,6 +15,7 @@
         "employee-vs-freelance",
         "switch",
         "bank",
+        "domain",
         "insurance"
       ]
     },
@@ -98,7 +99,7 @@
     "verified": "Chiffres vérifiés le",
     "site": "Le site",
     "tagline": "Des outils gratuits, sans inscription, pour les indépendants qui veulent facturer juste et être payés à temps.",
-    "privacy_note": "🔒 Tous les calculs se font dans votre navigateur : aucune donnée n'est envoyée ni stockée sur un serveur.",
+    "privacy_note": "🔒 Tous les calculs se font dans votre navigateur : vos saisies ne sont ni envoyées ni stockées sur nos serveurs.",
     "disclaimer": "Informations données à titre indicatif : elles ne remplacent pas l'avis d'un expert-comptable ou d'un avocat.",
     "logo_label": "Outils Freelance, accueil",
     "tools_count": "{n} outils gratuits",

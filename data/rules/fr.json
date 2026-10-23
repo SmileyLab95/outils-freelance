@@ -1378,6 +1378,22 @@
       "confidence": "high",
       "verified_on": "2026-10-23",
       "note": "Ordonnance n° 2016-131 du 10 février 2016. Art. 1113 : le contrat est formé par la rencontre d'une offre et d'une acceptation. Art. 1116 : la rétractation de l'offre pendant le délai empêche la conclusion du contrat et engage la responsabilité extracontractuelle de son auteur. Art. 1117 : l'offre est aussi caduque en cas d'incapacité ou de décès de son auteur, ou de décès de son destinataire (loi du 20 avril 2018). Lu par extraits de recherche."
+    },
+    "marque_recherche_inpi": {
+      "value": "La base marques de DATA INPI couvre les marques françaises (en vigueur ou non, depuis 1976), les marques de l'Union européenne en vigueur et les marques internationales visant la France ; la recherche à l'identique n'est qu'une première vérification : avant un dépôt, l'INPI conseille une recherche de similarités (orthographe, phonétique, sens).",
+      "unit": "text",
+      "label": "Vérifier les marques avant de choisir un nom (INPI)",
+      "source": "https://www.inpi.fr/ressources/propriete-intellectuelle/rechercher-une-marque-base-marques",
+      "source_title": "INPI, Rechercher une marque (base marques)",
+      "more_sources": [
+        {
+          "source": "https://data.inpi.fr/",
+          "source_title": "DATA INPI"
+        }
+      ],
+      "confidence": "medium",
+      "note": "Lu par extraits de recherche le 23/10/2026. Les résultats de DATA INPI sont donnés à titre indicatif.",
+      "verified_on": "2026-10-23"
     }
   },
   "open_questions": [

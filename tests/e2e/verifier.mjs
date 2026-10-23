@@ -58,10 +58,46 @@ async function accessible(page, label) {
 // La copie est asynchrone : on attend la confirmation sur le bouton.
 const copied = (page, sel) => page.waitForFunction((s) => /Copi(é|ed)/.test(document.querySelector(s).textContent), sel, { timeout: 3000 }).then(() => true, () => false);
 
+// Recherche de noms de domaine : le navigateur de test n'a pas accès à Internet ; les réponses des registres sont
+// simulées (par défaut 404, nom libre). Relève chaque requête (adresse, en-têtes) et le nombre de requêtes simultanées.
+async function mockRdap(page, answers, delay = 30) {
+  const reqs = { list: [], peak: 0, running: 0, delay };
+  await page.route((url) => url.hostname !== "127.0.0.1", async (route) => {
+    const req = route.request(), m = /\/domain\/([^/?#]+)$/.exec(req.url());
+    const domain = m ? m[1] : "", tld = domain.slice(domain.indexOf(".") + 1);
+    reqs.list.push({ url: req.url(), domain, tld, headers: await req.allHeaders() });
+    reqs.running++; reqs.peak = Math.max(reqs.peak, reqs.running);
+    await new Promise((resolve) => setTimeout(resolve, reqs.delay));
+    reqs.running--;
+    const answer = answers[domain] === undefined ? 404 : answers[domain];
+    if (answer === "abort") return route.abort("failed");
+    const headers = { "Access-Control-Allow-Origin": "*", "Content-Type": "application/rdap+json" };
+    return route.fulfill({ status: typeof answer === "number" ? answer : 200, headers,
+                           body: JSON.stringify(typeof answer === "number" ? { errorCode: answer } : answer) });
+  });
+  return reqs;
+}
+const rdapTaken = (registrar, status = ["active"]) => ({
+  objectClassName: "domain", status,
+  entities: [{ objectClassName: "entity", roles: ["registrant"], vcardArray: ["vcard", [["fn", {}, "text", "REDACTED FOR PRIVACY"]]] },
+             { objectClassName: "entity", roles: ["registrar"], vcardArray: ["vcard", [["version", {}, "text", "4.0"], ["fn", {}, "text", registrar]]] }],
+  events: [{ eventAction: "registration", eventDate: "2009-03-04T10:00:00Z" }, { eventAction: "expiration", eventDate: "2027-03-04T10:00:00Z" }],
+});
+const dnRows = (page, list) => page.$$eval(`${list} .dn-row`, (rows) => rows.map((r) => ({
+  name: r.querySelector(".dn-name").textContent, state: r.dataset.state, text: r.textContent.replace(/\s+/g, " ") })));
+const dnDone = (page) => page.waitForFunction(() => /terminée|complete/.test(document.querySelector("#dn-summary").textContent), null, { timeout: 8000 });
+const dnText = async (page, sel) => (await page.textContent(sel)).replace(/\s+/g, " ");
+
 async function open(page, url) {
   const errors = [];
   page.on("pageerror", (e) => errors.push(e.message));
-  page.on("console", (m) => { if (m.type() === "error") errors.push(m.text()); });
+  // Chrome écrit « Failed to load resource » pour toute réponse 404 ou 429 : attendu des registres interrogés par la
+  // recherche de noms de domaine (serveurs externes) ; une ressource du site qui manque reste une erreur.
+  page.on("console", (m) => {
+    if (m.type() !== "error") return;
+    if (/^Failed to load resource/.test(m.text()) && m.location().url && !m.location().url.startsWith(BASE)) return;
+    errors.push(m.text());
+  });
   const res = await page.goto(BASE + url, { waitUntil: "networkidle" });
   check(res.status() === 200, `${url || "accueil"} : page servie (200)`);
   return errors;
@@ -2869,6 +2905,128 @@ const tests = {
     check((await text("#espace-view")).includes("Aucun document à reprendre") && (await page.evaluate(() => localStorage.getItem("of:espace-import"))) === "null",
       "Espace : document en attente depuis plus de 24 h ignoré et effacé");
     await go("#/");
+  },
+  async "fr/recherche-nom-de-domaine/"(page) {
+    const reqs = await mockRdap(page, {
+      "marie-dupont.com": rdapTaken("Exemple Registrar SAS"), "marie-dupont.net": 429, "marie-dupont.org": "abort",
+      "marie-dupont.pro": rdapTaken("Exemple Registrar SAS", ["redemption period"]), "mariedupont.com": rdapTaken("Autre registraire"),
+    });
+    await page.click("#dn-form button[type=submit]");
+    check(await page.isVisible("#dn-name-error") && (await page.getAttribute("#dn-name", "aria-invalid")) === "true"
+      && (await page.evaluate(() => document.activeElement.id)) === "dn-name", "domaine : nom vide signalé, champ en erreur et focus");
+    await page.fill("#dn-name", "Marie Dupont");
+    await page.fill("#dn-activity", "Graphiste");
+    await page.fill("#dn-city", "Lyon");
+    await page.click("#dn-form button[type=submit]");
+    await dnDone(page);
+    check(!(await page.isVisible("#dn-name-error")) && (await page.getAttribute("#dn-name", "aria-invalid")) === "false", "domaine : erreur effacée");
+    check((await dnText(page, "#dn-message")).includes("Nous cherchons « marie-dupont »"), "domaine : nom mis en forme annoncé");
+    const rows = await dnRows(page, "#dn-list");
+    check(rows.map((r) => r.name).join(" ") === "marie-dupont.fr marie-dupont.com marie-dupont.net marie-dupont.org marie-dupont.pro",
+      `domaine : extensions cochées d'office, dans l'ordre (${rows.map((r) => r.name).join(" ")})`);
+    check(rows[0].state === "free" && rows[0].text.includes("Probablement libre") && rows[0].text.includes("Union européenne"),
+      "domaine : .fr probablement libre, avec ses conditions");
+    check(rows[1].state === "taken" && rows[1].text.includes("pris depuis le 4 mars 2009 · expire le 4 mars 2027 · registraire : Exemple Registrar SAS"),
+      `domaine : .com déjà pris, dates et registraire (${rows[1].text})`);
+    check(rows[2].state === "unknown" && rows[2].text.includes("réessayez dans une minute"), "domaine : 429, trop de recherches");
+    check(rows[3].state === "unknown" && rows[3].text.includes("n'a pas répondu"), "domaine : registre injoignable, non vérifié");
+    check(rows[4].state === "dropping" && rows[4].text.includes("pourrait redevenir libre"), "domaine : nom en cours de suppression");
+    const ideas = await dnRows(page, "#dn-variants");
+    check(ideas.map((r) => r.name).join(" ") === "mariedupont.fr mariedupont.com marie-dupont-graphiste.fr marie-dupont-graphiste.com "
+      + "graphiste-marie-dupont.fr graphiste-marie-dupont.com marie-dupont-lyon.fr marie-dupont-lyon.com", "domaine : variantes en .fr et en .com");
+    check(ideas[1].state === "taken" && ideas.filter((r) => r.state === "free").length === 7, "domaine : état de chaque variante");
+    check([...rows, ...ideas].filter((r) => r.text.includes("Union européenne")).length === 1, "domaine : condition du .fr affichée une seule fois");
+    check((await dnText(page, "#dn-summary")).includes("Recherche terminée : 8 probablement libres, 3 déjà pris, 2 non vérifiés."),
+      "domaine : bilan annoncé aux lecteurs d'écran");
+    const servers = await page.evaluate(() => window.OF_RULES.rdap_servers);
+    check(reqs.list.length === 13 && reqs.list.every((r) => r.url === servers[r.tld] + "domain/" + r.domain), "domaine : 13 requêtes, aux serveurs de la table");
+    check(reqs.list.every((r) => /application\/rdap\+json/.test(r.headers.accept || "") && !r.headers.referer && !r.headers.cookie),
+      "domaine : requête RDAP, sans page d'origine ni cookie");
+    check(reqs.peak <= 4, `domaine : au plus 4 requêtes à la fois (${reqs.peak})`);
+    await page.screenshot({ path: path.join(shots, "domaine-resultats.png"), fullPage: true });
+
+    // Extension tapée et cochée d'office ; .dev : HTTPS obligatoire.
+    await page.fill("#dn-activity", ""); await page.fill("#dn-city", "");
+    await page.fill("#dn-name", "https://www.Studio-Lumiere.dev/");
+    await page.press("#dn-name", "Enter");
+    await dnDone(page);
+    const dev = await dnRows(page, "#dn-list");
+    check(dev[0].name === "studio-lumiere.dev" && dev[0].text.includes("HTTPS") && (await page.isChecked('input[name=tld][value="dev"]'))
+      && await page.isHidden("#dn-message"), "domaine : extension tapée cochée, vérifiée en premier, note HTTPS");
+    check((await dnRows(page, "#dn-variants")).map((r) => r.name).join(" ") === "studiolumiere.fr studiolumiere.com", "domaine : variante sans tiret");
+    // Extension sans RDAP, nouvelle recherche qui remplace la précédente (réponses lentes : la première n'a pas fini).
+    reqs.delay = 400;
+    await page.fill("#dn-name", "lumiere.io");
+    await page.press("#dn-name", "Enter");
+    await page.fill("#dn-name", "atelier-nord");
+    await page.press("#dn-name", "Enter");
+    await page.waitForFunction(() => /terminée/.test(document.querySelector("#dn-summary").textContent)
+      && document.querySelector("#dn-list .dn-name").textContent.startsWith("atelier-nord"), null, { timeout: 8000 });
+    check((await dnRows(page, "#dn-list")).every((r) => r.name.startsWith("atelier-nord.")), "domaine : seule la dernière recherche s'affiche");
+    reqs.delay = 30;
+    const sent = reqs.list.filter((r) => r.domain.startsWith("lumiere.")).length;
+    check(sent <= 4, `domaine : la recherche remplacée n'envoie pas ses noms restants (${sent} envoyés sur 6)`);
+    await page.fill("#dn-name", "lumiere.io");
+    await page.press("#dn-name", "Enter");
+    await dnDone(page);
+    check((await dnText(page, "#dn-message")).includes("L'extension .io ne peut pas être vérifiée ici"), "domaine : extension sans RDAP signalée");
+    // Aucune extension cochée.
+    for (const box of await page.$$("input[name=tld]:checked")) await box.uncheck();
+    await page.press("#dn-name", "Enter");
+    check(await page.isVisible("#dn-tld-error") && (await page.evaluate(() => document.activeElement.value)) === "fr", "domaine : au moins une extension");
+    await page.check('input[name=tld][value="net"]');
+    await page.fill("#dn-name", "atelier-nord");
+    await page.press("#dn-name", "Enter");
+    await dnDone(page);
+    check(await page.isHidden("#dn-tld-error"), "domaine : erreur d'extension effacée");
+    check((await dnRows(page, "#dn-variants")).map((r) => r.name).join(" ") === "ateliernord.net",
+      "domaine : variantes sur la première extension cochée quand .fr et .com ne le sont pas");
+  },
+  async "us/domain-name-search/"(page) {
+    const reqs = await mockRdap(page, { "bright-studio.com": rdapTaken("Example Registrar, Inc.") });
+    await page.fill("#dn-name", "Bright Studio");
+    await page.click("#dn-form button[type=submit]");
+    await dnDone(page);
+    const rows = await dnRows(page, "#dn-list");
+    check(rows.map((r) => r.name).join(" ") === "bright-studio.com bright-studio.net bright-studio.org bright-studio.pro bright-studio.dev", "US domain: default extensions");
+    check(rows[0].text.includes("registered on March 4, 2009 · expires on March 4, 2027 · registrar: Example Registrar, Inc."), `US domain: taken .com, US dates (${rows[0].text})`);
+    check(rows[4].state === "free" && rows[4].text.includes("only open over HTTPS"), "US domain: .dev note");
+    check((await dnRows(page, "#dn-variants")).map((r) => r.name).join(" ") === "brightstudio.com", "US domain: variation on .com only");
+    check((await dnText(page, "#dn-summary")).includes("Search complete: 5 probably available, 1 taken, 0 not checked."), "US domain: summary");
+    check(reqs.list.length === 6, "US domain: 6 requests");
+  },
+  async "uk/domain-name-search/"(page) {
+    await mockRdap(page, { "bright-studio.com": rdapTaken("Example Registrar Ltd") });
+    await page.fill("#dn-name", "Bright Studio");
+    await page.click("#dn-form button[type=submit]");
+    await dnDone(page);
+    const rows = await dnRows(page, "#dn-list");
+    check(rows.map((r) => r.name).join(" ") === "bright-studio.co.uk bright-studio.uk bright-studio.com bright-studio.net bright-studio.org", "UK domain: default extensions");
+    check(rows[0].state === "free" && rows[0].text.includes("UK address for service") && !rows[1].text.includes("UK address for service"),
+      "UK domain: .co.uk note, not repeated for .uk");
+    check(rows[2].text.includes("registered on 4 March 2009 · expires on 4 March 2027"), `UK domain: UK dates (${rows[2].text})`);
+    check((await dnRows(page, "#dn-variants")).map((r) => r.name).join(" ") === "brightstudio.co.uk brightstudio.com", "UK domain: variations on .co.uk and .com");
+  },
+  async "ca/domain-name-search/"(page) {
+    await mockRdap(page, { "bright-studio.com": rdapTaken("Example Registrar Inc.") });
+    await page.fill("#dn-name", "Bright Studio");
+    await page.click("#dn-form button[type=submit]");
+    await dnDone(page);
+    const rows = await dnRows(page, "#dn-list");
+    check(rows.map((r) => r.name).join(" ") === "bright-studio.ca bright-studio.com bright-studio.net bright-studio.org bright-studio.pro", "CA domain: default extensions");
+    check(rows[0].state === "free" && rows[0].text.includes("connection with Canada"), "CA domain: .ca note");
+    check(rows[1].text.includes("registered on March 4, 2009"), `CA domain: dates (${rows[1].text})`);
+  },
+  async "ca/fr/recherche-nom-de-domaine/"(page) {
+    await mockRdap(page, { "atelier-tremblay.com": rdapTaken("Registraire Exemple inc.") });
+    await page.fill("#dn-name", "Atelier Tremblay");
+    await page.click("#dn-form button[type=submit]");
+    await dnDone(page);
+    const rows = await dnRows(page, "#dn-list");
+    check(rows.map((r) => r.name).join(" ") === "atelier-tremblay.ca atelier-tremblay.quebec atelier-tremblay.com atelier-tremblay.net atelier-tremblay.org", "domaine CA-FR : extensions");
+    check(rows[1].state === "free" && rows[1].text.includes("communauté québécoise"), "domaine CA-FR : conditions du .quebec");
+    check(rows[2].text.includes("pris depuis le 4 mars 2009 · expire le 4 mars 2027 · registraire : Registraire Exemple inc."), `domaine CA-FR : dates (${rows[2].text})`);
+    check((await dnText(page, "#dn-summary")).includes("Recherche terminée : 6 probablement libres, 1 déjà pris, 0 non vérifié."), "domaine CA-FR : bilan");
   },
   async "fr/confidentialite/"() {},
   async "fr/mentions-legales/"() {},

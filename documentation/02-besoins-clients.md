@@ -21,7 +21,7 @@ Débutant qui se lance, freelance confirmé qui veut augmenter ses prix, indépe
 
 Légende des colonnes pays : ✅ en ligne · 🟡 prévu · — sans objet.
 Priorité : **P1** (fort volume de recherche, à faire d'abord), **P2**, **P3**.
-Matrice revue le 22/10/2026 d'après les pages publiées (identifiants de `content/<section>/`).
+Matrice revue le 23/10/2026 d'après les pages publiées (identifiants de `content/<section>/`).
 
 ### 1. Se lancer et choisir son statut
 
@@ -31,6 +31,7 @@ Matrice revue le 22/10/2026 d'après les pages publiées (identifiants de `conte
 | Les démarches pour démarrer | Checklist interactive de création | ✅ micro-entreprise | ✅ sole proprietor | ✅ sole trader | ✅ entreprise individuelle | P2 |
 | Combien je gagnerai vraiment ? | Simulateur de revenu net | ✅ micro | ✅ (calculateur d'impôt) | ✅ (calculateur d'impôt) | ✅ (calculateur d'impôt) | P1 |
 | Freelance ou salarié ? | Comparateur salaire ↔ chiffre d'affaires | ✅ | ✅ | ✅ | ✅ | P2 |
+| Un nom de domaine et une adresse email pro | Recherche de nom de domaine (registres officiels, variantes, marques à vérifier, listes de registraires) | ✅ .fr, .com… | ✅ .com, .dev… | ✅ .co.uk, .uk… | ✅ .ca, .quebec… | P2 |
 
 ### 2. Fixer ses prix
 

@@ -30,6 +30,8 @@ Le site d'outils gratuits pour indépendants (France, États-Unis, Royaume-Uni, 
 | [30. Proposition commerciale](30-proposition-commerciale.md) | Générateur de proposition commerciale (4 pays) : étapes et prix, options, acompte, validité, « n'est pas un contrat » (réalisé le 23/10/2026) |
 | [31. Vision de la plateforme](31-vision-plateforme.md) | Compte gratuit, Pro, dons ; carte complète des besoins du freelance ; revenus sans trahir la promesse ; ordre de réalisation (23/10/2026) |
 | [32. Design](32-design.md) | Système de design « le cachet » : critique, jetons, polices, icônes, navigation par étapes, recherche, accueil (23/10/2026) |
+| [33. Noms de domaine](33-noms-de-domaine.md) | Recherche de disponibilité par RDAP : règles et sources, extensions, lecture des réponses, liens partenaires et transparence par pays, confidentialité, contrôle mensuel (23/10/2026) |
+| [34. Inscription au compte gratuit](34-inscription-compte-gratuit.md) | Bienvenue, informations facultatives, choix d'emails (case non cochée, preuve du consentement), premiers pas, données chiffrées ou non, serveur, sources des quatre pays (23/10/2026) |
 | [27. Bureau à domicile](27-bureau-a-domicile.md) | Déduction du bureau à domicile dans les 4 pays : méthodes officielles, plafonds et reports (réalisé le 23/10/2026) |
 | [26. Changement de statut](26-changement-de-statut.md) | Passer de l'entreprise individuelle à la société dans les 4 pays : démarches sourcées et listes d'étapes des quatre pays (réalisé le 23/10/2026) |
 | [25. Compte pro et assurance hors de France](25-compte-et-assurance-hors-france.md) | Compte bancaire et assurances au Royaume-Uni, aux États-Unis et au Canada : ce qui est obligatoire, à vérifier et conseillé (réalisé le 23/10/2026) |

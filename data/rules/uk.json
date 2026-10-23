@@ -1988,6 +1988,22 @@
       "confidence": "medium",
       "verified_on": "2026-10-23",
       "note": "Section 17 applies to agreements made on or after 1 October 2025; some permitted disclosures took effect on 12 December 2025 (Permitted Disclosures Regulations 2025). Disclosures made mainly to publicise the information are not protected. The Victims and Courts Bill would repeal and replace section 17 with a wider rule: status to check at the December review. Read through search excerpts."
+    },
+    "trademark_search_ukipo": {
+      "value": "Search the UK trade mark register (by word, phrase, owner or number) before choosing a name, and the Companies House register: a company name cannot be the same as an existing one, and registering a company name does not protect it as a trade mark.",
+      "unit": "text",
+      "label": "Check trade marks and company names before choosing a name (IPO, Companies House)",
+      "source": "https://www.gov.uk/search-for-trademark",
+      "source_title": "GOV.UK, Search for a trade mark",
+      "more_sources": [
+        {
+          "source": "https://www.gov.uk/guidance/searching-the-companies-house-register",
+          "source_title": "GOV.UK, Searching the Companies House register"
+        }
+      ],
+      "confidence": "medium",
+      "note": "Read through search excerpts on 2026-10-23.",
+      "verified_on": "2026-10-23"
     }
   },
   "open_questions": [

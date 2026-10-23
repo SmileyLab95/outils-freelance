@@ -186,9 +186,17 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   ([31](31-vision-plateforme.md), décision D30 : les outils restent ouverts sans compte).
 - **Refonte du design, première partie (23/10/2026)** : identité « le cachet », polices et icônes servies par le site,
   panneau « Outils » en cinq étapes, recherche de tous les outils, nouvel accueil dans les cinq sections
-  ([32](32-design.md), décision D31).
-- **Prochaines actions de Claude** : refonte, suite ([31](31-vision-plateforme.md) § 5) : recherche de noms de domaine
-  (protocole RDAP), écrans d'inscription et tableau de bord du compte gratuit (brouillon), pages Offres et Soutenir
+  ([32](32-design.md), décision D31). Publiée après 3 190 vérifications navigateur sans échec.
+- **Recherche de noms de domaine (23/10/2026)** : outil dans les cinq sections (étape Démarrer) : le navigateur
+  interroge les registres officiels par RDAP (.fr, .com, .co.uk, .ca, .quebec… : 19 extensions), « probablement libre »,
+  « déjà pris » avec dates et registraire, « en cours de suppression », variantes, conditions des extensions, marques à
+  vérifier (INPI, USPTO, UKIPO et Companies House, OPIC), listes officielles de registraires ; table des serveurs
+  contrôlée chaque mois aux sources par GitHub Actions ; pages Confidentialité mises à jour ([33](33-noms-de-domaine.md),
+  décision D32). Liens partenaires prêts à être ajoutés après l'inscription d'Ismail.
+- **Prochaines actions de Claude** : refonte, suite ([31](31-vision-plateforme.md) § 5) : écrans d'inscription et
+  premiers pas du compte gratuit, en brouillon, d'après la spécification [34](34-inscription-compte-gratuit.md)
+  (écrite le 23/10/2026 : informations facultatives chiffrées, lettre d'information par case non cochée avec preuve du
+  consentement, règles de la CNIL, de l'ICO, du CRTC et de la FTC), pages Offres et Soutenir
   (brouillon, avec le comparatif des solutions de dons et leurs règles fiscales) ; puis besoins P3 restants
   ([02](02-besoins-clients.md) : CGV, sous-traitance, date d'échéance hors de France) ;
   comptes : adaptateur
@@ -200,7 +208,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   Z12-012 pour le BT-32 en franchise, la question 13 de [pays/ca.md](pays/ca.md) sur la TVQ, et le
   remplacement annoncé de la section 17 du *Victims and Prisoners Act 2024* sur les accords de confidentialité). La mise en ligne
   des comptes attend le choix de l'hébergeur et du domaine.
-- **En attente d'Ismail** (pas urgent) : choix de la solution de dons et inscription aux programmes d'affiliation
+- **En attente d'Ismail** (pas urgent) : envoyer ou non une lettre d'information aux inscrits, et à quelle fréquence au plus ([34](34-inscription-compte-gratuit.md)) ; choix de la solution de dons et inscription aux programmes d'affiliation
   (registraires de noms de domaine d'abord), quand les comparatifs seront prêts ; structure juridique avec un comptable ; choix de l'hébergeur et budget pour
   les comptes en ligne (comparatif [13](13-comparatif-hebergeurs.md), § 6 ; reporté par Ismail le 22/10/2026, le
   serveur est prêt) ; nom de domaine à choisir avant la mise en ligne des comptes
@@ -227,6 +235,7 @@ Objectif : un site mesuré, sous sa propre marque, qui commence à rapporter, et
 ### 1.1 Marque et domaine
 
 - [ ] Proposer 10 noms de marque utilisables en français et en anglais, vérifier les domaines disponibles (.com, .fr)
+      (l'outil de recherche de noms de domaine est prêt : [33](33-noms-de-domaine.md))
 - [ ] **[Ismail]** Choisir la marque et acheter le domaine
 - [ ] Basculer le site sur le domaine (`config/site.json`), redirections depuis GitHub Pages, nouvelle propriété
       Search Console, envoi du plan du site

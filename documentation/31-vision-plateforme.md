@@ -68,7 +68,7 @@ G compte gratuit, P Pro, ⇄ partenaire signalé.
 | Choisir son statut | Comparateurs de statuts, salarié ou freelance | ✅ | V |
 | Créer son entreprise | Checklists de création | ✅ | V |
 | Trouver un nom | Idées de noms et vérification : registres officiels (INPI, Companies House, registres provinciaux), marques | ⬜ | V |
-| **Nom de domaine et email pro** | Recherche de disponibilité (protocole RDAP, norme de l'IETF), idées de variantes, liens vers des registraires | ⬜ (priorité) | V, ⇄ |
+| **Nom de domaine et email pro** | Recherche de disponibilité (protocole RDAP, norme de l'IETF), idées de variantes, marques à vérifier, listes officielles de registraires ([33](33-noms-de-domaine.md)) ; liens partenaires après l'inscription d'Ismail | ✅ (partenaires ⬜) | V, ⇄ |
 | Site ou portfolio | Page publique hébergée sur la plateforme (carte de visite, réalisations, contact) ; comparatif des créateurs de sites | ⬜ | P, ⇄ |
 | Identité visuelle | Générateur de signature d'email, carte de visite avec QR code, palette et logo simple | ⬜ | V |
 | Banque pro | Vérificateurs du compte obligatoire ; comparatif des banques en ligne | ✅ / ⬜ | V, ⇄ |
@@ -176,7 +176,7 @@ fuseaux horaires des clients, générateur de QR code, convertisseur de devises,
 1. **Refonte du design** (doc 32) : système de design, icônes, navigation par étapes de la vie du freelance, recherche,
    nouvel accueil, appel à créer un compte gratuit dès que les comptes ouvrent.
 2. **Recherche de noms de domaine** (publique, sans partenaire au départ ; liens partenaires après l'inscription
-   d'Ismail aux programmes).
+   d'Ismail aux programmes) : publiée le 23/10/2026 ([33](33-noms-de-domaine.md)).
 3. **Inscription et tableau de bord du compte gratuit** (brouillon jusqu'au choix de l'hébergeur et du domaine).
 4. **Pages Offres et Soutenir** (brouillon jusqu'aux choix d'Ismail : prix du Pro, prestataire de paiement et de dons).
 5. Modules du compte gratuit : prospects, temps passé, dépenses, trésorerie.

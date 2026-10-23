@@ -198,6 +198,8 @@ Juste après : Pennylane (FR), 1st Formations et Simply Business (UK), ANNA (UK,
 ## 4. Obligations de transparence par pays
 
 > Partie rédigée à partir des textes connus, **sans vérification en ligne pendant cette session** (quota de recherche atteint). Faire relire, et vérifier les versions en vigueur sur les sites officiels cités.
+>
+> **Mise à jour du 23/10/2026** : les quatre règles de base ont été relues aux sources officielles pour la recherche de noms de domaine ([33](33-noms-de-domaine.md), § 5) : LCEN, art. 20 (Légifrance) ; FAQ de la FTC sur les *Endorsement Guides* ; conseils de l'ASA sur l'affiliation (étiquette « Ad » ; le seul mot « affiliate » ne suffit pas) ; guide du Bureau de la concurrence sur le marketing d'influence (un simple lien affilié ne suffit probablement pas). Les autres points de cette partie restent à vérifier.
 
 ### France
 

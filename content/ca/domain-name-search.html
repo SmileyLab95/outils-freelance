@@ -1,0 +1,182 @@
+<!--{
+  "id": "domain",
+  "slug": "domain-name-search/",
+  "title": "Domain Name Search: Is Your .ca Available? (Free)",
+  "description": "Check whether your name is available as a .ca, .com or .net, straight from the official registries. Variations, trademark checks and where to register. Free, no sign-up.",
+  "menu": "Domain name search",
+  "blurb": "Is your name free as a .ca? Answers from the registries.",
+  "app": "Domain name search",
+  "scripts": [
+    "engines/domain.js",
+    "tools/domain.js"
+  ],
+  "rules": "ca",
+  "sources": [
+    "rdap_protocol",
+    "rdap_servers",
+    "rdap_status_dropping",
+    "domain_ca_eligibility",
+    "domain_quebec_eligibility",
+    "domain_https_only",
+    "domain_registrar_directories",
+    "trademark_search_cipo"
+  ],
+  "priority": 0.7,
+  "faq": [
+    [
+      "Is “probably available” certain?",
+      "The registry for the extension (Verisign for .com, for example) says it has no record of the name. Some names are still reserved, blocked or sold at a higher (“premium”) price: the final answer comes from the registrar when you buy. Someone else can also register the name between your search and your purchase."
+    ],
+    [
+      "Why are .io, .co, .us and .eu not offered?",
+      "Their registries do not publish an RDAP lookup service in the official IANA directory (checked on October 23, 2026), so the tool cannot ask them. Check them directly with a registrar."
+    ],
+    [
+      "Are my searches private?",
+      "The names you search go from your browser straight to the official registries, only when you click “Search”. They do not go through our servers and are not stored. As with any website you visit, the registry sees your connection's IP address."
+    ],
+    [
+      "Who can register a .ca?",
+      "A .ca registrant must show a connection with Canada in one of the categories of CIRA's Canadian Presence Requirements, for example Canadian citizens, permanent residents, corporations under Canadian law or holders of a trademark registered in Canada."
+    ],
+    [
+      "How much does a domain name cost?",
+      "The price depends on the registrar and the extension; we do not sell domain names. Compare the first-year price with the renewal price, and what is included (email address, privacy of your contact details, forwarding)."
+    ]
+  ]
+}-->
+<script type="application/json" id="dn-data">
+{
+  "state": {
+    "pending": "Checking…",
+    "free": "Probably available",
+    "taken": "Taken",
+    "dropping": "Being deleted",
+    "unknown": "Not checked"
+  },
+  "free_detail": "Confirm with a registrar when you buy.",
+  "since": "registered on {date}",
+  "expires": "expires on {date}",
+  "registrar": "registrar: {name}",
+  "dropping_detail": "This name is being deleted and may become available again",
+  "unknown": {
+    "rate": "Too many searches in a row: try again in a minute.",
+    "error": "The registry did not answer: try again, or check with a registrar."
+  },
+  "notes": {
+    "fr": "A .fr name is reserved for people who live, and businesses established, in the European Union, Iceland, Liechtenstein, Norway or Switzerland.",
+    "ca": "A .ca name requires a connection with Canada (CIRA's Canadian Presence Requirements).",
+    "quebec": "A .quebec name requires a link with the Quebec community.",
+    "uk": "If you are outside the UK, you must give a UK address for service.",
+    "co.uk": "If you are outside the UK, you must give a UK address for service."
+  },
+  "https_only": ".dev and .app sites only open over HTTPS: plan for a certificate.",
+  "changed": "We are searching for “{label}”: a domain name has no spaces, accents or symbols.",
+  "unknown_tld": "The .{tld} extension cannot be checked here: its registry does not publish an RDAP service in the IANA directory. Check it with a registrar; here are the other extensions.",
+  "errors": {
+    "empty": "Enter the name you want, for example “Bright Studio”.",
+    "long": "This name is longer than 63 characters, the limit for a domain name: shorten it.",
+    "hyphens": "A domain name cannot have hyphens in both the 3rd and 4th positions.",
+    "chars": "Use letters, numbers and hyphens."
+  },
+  "searching": "Searching the registries…",
+  "summary": "Search complete: {free}, {taken}, {unknown}.",
+  "count": {
+    "free": {
+      "one": "{n} probably available",
+      "other": "{n} probably available"
+    },
+    "taken": {
+      "one": "{n} taken",
+      "other": "{n} taken"
+    },
+    "unknown": {
+      "one": "{n} not checked",
+      "other": "{n} not checked"
+    }
+  }
+}
+</script>
+<template id="dn-icons">{{icon:hourglass}}{{icon:circle-check}}{{icon:circle-x}}{{icon:circle-question-mark}}</template>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · no sign-up</span>
+    <h1>Domain name search</h1>
+    <p class="lead">Is your name available as a .ca or a .com? The tool asks the official registries directly (CIRA for .ca, Verisign for .com…), suggests variations and tells you what to check before you buy.</p>
+    <ul class="trust"><li>Answers from the official registries</li><li>Variations of your name</li><li>We do not sell domain names</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="dn-wrap">
+    <form class="card form-card dn-form" id="dn-form" novalidate data-main="ca"
+          data-default="ca com net org pro" data-extra="quebec app consulting design dev info online site studio tech xyz">
+      <div class="field">
+        <label for="dn-name">Name you want</label>
+        <div class="dn-search">
+          <input type="text" id="dn-name" name="name" autocomplete="off" autocapitalize="none" spellcheck="false"
+                 placeholder="Bright Studio, janesmith.ca…" aria-describedby="dn-name-hint dn-name-error">
+          <button class="btn btn-primary" type="submit">{{icon:search}}Search</button>
+        </div>
+        <span class="hint" id="dn-name-hint">With or without an extension: “brightstudio.ca” works too.</span>
+        <p class="dn-error" id="dn-name-error" hidden></p>
+      </div>
+      <fieldset class="dn-set">
+        <legend>Extensions</legend>
+        <div class="dn-chips" id="dn-default"></div>
+        <details class="dn-more">
+          <summary>More extensions (<span id="dn-more-count"></span>)</summary>
+          <div class="dn-chips" id="dn-extra"></div>
+        </details>
+        <p class="dn-error" id="dn-tld-error" hidden>Tick at least one extension.</p>
+      </fieldset>
+      <fieldset class="dn-set">
+        <legend>For ideas of variations (optional)</legend>
+        <div class="fields">
+          <div class="field"><label for="dn-activity">What you do</label>
+            <input type="text" id="dn-activity" name="activity" autocomplete="off" placeholder="designer, coach…"></div>
+          <div class="field"><label for="dn-city">Your city</label>
+            <input type="text" id="dn-city" name="city" autocomplete="off" placeholder="Toronto, Calgary…"></div>
+        </div>
+      </fieldset>
+    </form>
+
+    <p class="dn-summary" id="dn-summary" role="status"></p>
+    <div class="dn-results" id="dn-results" hidden>
+      <p class="notice" id="dn-message" hidden></p>
+      <h2 id="dn-title">Your name</h2>
+      <ul class="dn-list" id="dn-list" aria-labelledby="dn-title"></ul>
+      <h2 id="dn-variants-title" hidden>Ideas of variations</h2>
+      <ul class="dn-list" id="dn-variants" aria-labelledby="dn-variants-title" hidden></ul>
+      <p class="small muted">Answers from the registries at the time of your search. Like a name? <a href="#dn-registrars">See where to register it</a>.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>Before you buy: three checks</h2>
+  <ol>
+    <li><strong>Trademarks.</strong> An available domain can still use someone else's trademark. Search the <a href="https://ised-isde.canada.ca/cipo/trademark-search/srch" rel="noopener">Canadian Trademarks Database</a>, with spelling variants and French and English equivalents; CIPO says not to rely on this search alone. Business and corporate names are checked separately (NUANS, provincial registries).</li>
+    <li><strong>The rules of the extension.</strong> A .ca name requires a connection with Canada (CIRA's Canadian Presence Requirements); a .quebec name, a link with the Quebec community. .dev and .app sites only open over HTTPS.</li>
+    <li><strong>The same name everywhere.</strong> If you can, use the same name for your business, website, email address and social accounts: clients find you more easily.</li>
+  </ol>
+
+  <h2 id="dn-registrars">Where to register your name</h2>
+  <p>Registries do not sell names themselves: you buy them from an accredited <strong>registrar</strong>, or a reseller. The official lists:</p>
+  <ul>
+    <li><a href="https://www.cira.ca/en/ca-domains/registrar-list/" rel="noopener">CIRA's list of certified registrars</a>, for .ca;</li>
+    <li><a href="https://registre.quebec/registraires-accredites/" rel="noopener">PointQuébec's accredited registrars</a> (in French), for .quebec;</li>
+    <li>ICANN's <a href="https://www.icann.org/en/contracted-parties/accredited-registrars/list-of-accredited-registrars" rel="noopener">list of accredited registrars</a>, for .com, .net, .org and the other generic extensions.</li>
+  </ul>
+  <p>Compare the first-year price with the renewal price, and what is included (email address, privacy of your contact details). We earn no commission on these links.</p>
+
+  <h2>Choosing well</h2>
+  <ul>
+    <li><strong>Short and easy to say</strong>: a name people get right over the phone, with no tricky spelling.</li>
+    <li><strong>No hyphen if you can avoid it</strong>, unless it makes the name clearer (“jane-smith”).</li>
+    <li><strong>In your own name</strong>: register yourself as the registrant, even if someone else builds your website.</li>
+    <li><strong>Automatic renewal</strong>: a name that is not renewed can be lost and bought by someone else.</li>
+    <li><strong>A professional email address</strong>: with your domain, create an address like hello@yourname.ca, with your registrar or an email service.</li>
+  </ul>
+</section>
