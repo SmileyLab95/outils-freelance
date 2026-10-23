@@ -162,7 +162,8 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   Ontario, employeur, domicile) ; exemption britannique non confirmée affichée « à vérifier » (D26). Le besoin P2
   « Assurance professionnelle » est couvert dans les quatre pays ([25](25-compte-et-assurance-hors-france.md), § 5).
 - **Prochaines actions de Claude** : guide de changement de statut (dernier besoin P2 ouvert hors recouvrement
-  français, [02](02-besoins-clients.md) § 10) ; comptes : adaptateur
+  français, [02](02-besoins-clients.md) § 10 ; spécification et recherches faites le 23/10/2026,
+  [26](26-changement-de-statut.md) : règles, listes d'étapes des quatre pays, tests) ; comptes : adaptateur
   PostgreSQL et sauvegardes dès que l'hébergeur est choisi ; taux du crédit pour
   dividendes de la Saskatchewan et du Nunavut dès qu'ils sont publiés (formulaires 2026) ;
   trouver la cause du contrôle de contraste intermittent de l'Espace ; revérifier les grilles des prestataires de
