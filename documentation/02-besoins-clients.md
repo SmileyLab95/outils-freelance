@@ -114,17 +114,17 @@ Matrice revue le 22/10/2026 d'après les pages publiées (identifiants de `conte
 
 | Besoin | Outil ou contenu | FR | US | UK | CA | Priorité |
 |---|---|---|---|---|---|---|
-| Changer de statut | Comparateur (étape 1) + guide de passage | 🟡 (comparateur ✅) | 🟡 (comparateur ✅) | 🟡 (comparateur ✅) | 🟡 (comparateur ✅) | P2 |
+| Changer de statut | Comparateur (étape 1) + guide de passage | ✅ | ✅ | ✅ | ✅ | P2 |
 | Sous-traiter | Modèle de contrat de sous-traitance | 🟡 | 🟡 | 🟡 | 🟡 | P3 |
 
-### Besoins encore ouverts (22/10/2026)
+### Besoins encore ouverts (23/10/2026)
 
 - **P1** : Espace entrepreneur hors de France (après la plateforme française). Comparateur de statuts au Canada fait le 22/10/2026 (Saskatchewan et Nunavut en attente d'un taux officiel).
 - **P2** (convertisseur de tarifs, prix au forfait et « freelance ou salarié » faits le 22/10/2026) : checklist de
   création, jauges de seuils, client étranger et W-8BEN faits le 22/10/2026 ; recouvrement en justice fait au
-  Royaume-Uni, au Canada et aux États-Unis le 23/10/2026, à faire en France (textes de 2026 à lire) ; compte pro et assurance hors de France faits le 23/10/2026 ; guide de changement de statut.
+  Royaume-Uni, au Canada et aux États-Unis le 23/10/2026, à faire en France (textes de 2026 à lire) ; compte pro et assurance hors de France et guide de changement de statut faits le 23/10/2026.
 - **P3** : date d'échéance, proposition commerciale, NDA, CGV, bureau à domicile, hausse de tarifs (calculateur),
-  sous-traitance, guide de changement de statut.
+  sous-traitance.
 
 ## Les outils « moteurs » partagés
 

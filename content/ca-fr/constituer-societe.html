@@ -1,0 +1,89 @@
+<!--{
+  "id": "switch",
+  "slug": "constituer-societe/",
+  "title": "Constituer son entreprise en société : les étapes",
+  "description": "Toutes les étapes pour passer de l'entreprise individuelle à la société par actions : constitution, comptes de l'ARC, article 85, compte bancaire et T2.",
+  "menu": "Constituer une société",
+  "icon": "🔁",
+  "blurb": "Les étapes pour passer en société par actions, dans l'ordre.",
+  "scripts": ["tools/checklist.js"],
+  "rules": "ca",
+  "sources": ["ca_federal_incorporation", "ca_ontario_incorporation_fee", "ca_corporation_separate_entity", "ca_change_legal_status", "ca_business_number", "ca_section_85_rollover", "ca_t2_filing_deadline", "filing_deadline_self_employed"],
+  "priority": 0.7,
+  "faq": [
+    ["Comment constituer mon entreprise individuelle en société ?", "Constituez la société au fédéral auprès de Corporations Canada (200 $ en ligne) ou auprès de votre province (300 $ en Ontario), ouvrez un compte bancaire au nom de la société, inscrivez-la aux comptes de l'ARC dont elle a besoin et fermez ceux de l'entreprise individuelle."],
+    ["La société peut-elle garder mon numéro de TPS/TVH ?", "Non. Vos comptes de TPS/TVH et de retenues sur la paie ne passent pas d'eux-mêmes au nouveau numéro d'entreprise de la société : elle s'inscrit à ses propres comptes, et ceux de l'entreprise individuelle sont en général fermés."],
+    ["Comment transférer les biens de mon entreprise à la société ?", "Par le choix prévu à l'article 85 (formulaire T2057), vous pouvez les transférer en reportant l'impôt, à condition de recevoir des actions en contrepartie. Préparez-le avec un comptable : un choix produit en retard entraîne une pénalité pouvant aller jusqu'à 8 000 $."],
+    ["Quand la déclaration de la société est-elle due ?", "La déclaration T2 est due dans les 6 mois suivant la fin de l'année d'imposition de la société, même sans impôt à payer. Sa première année d'imposition ne peut pas dépasser 53 semaines."]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Liste interactive · sources officielles</span>
+    <h1>Constituer son entreprise en société</h1>
+    <p class="lead">Toutes les étapes pour passer de l'entreprise individuelle à la société par actions, dans l'ordre. Cochez celles qui sont faites : votre progression reste sur cet appareil.</p>
+    <ul class="trust"><li>De la constitution à la déclaration T2</li><li>Chaque étape sourcée (ARC, Corporations Canada)</li><li>Progression mémorisée</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout wide-left">
+    <div class="card">
+      <form id="cl-filters" onsubmit="return false" style="margin-bottom: 4px; padding-bottom: 16px; border-bottom: 1px solid var(--line);">
+        <h2 style="margin: 0 0 10px; font-size: 1.1rem;">Votre situation</h2>
+        <div class="fields">
+          <div class="field full"><label for="cl-where">Où constituer la société</label>
+            <select id="cl-where" name="where" aria-describedby="cl-where-hint" data-save>
+              <option value="federal" selected>Au fédéral (Corporations Canada)</option>
+              <option value="ontario">En Ontario</option>
+            </select>
+            <span class="hint" id="cl-where-hint">Dans une autre province ou un territoire, adressez-vous au registre provincial.</span></div>
+          <div class="field full"><label class="check"><input type="checkbox" name="gst" data-save><span>Je suis inscrit à la TPS/TVH</span></label></div>
+          <div class="field full"><label class="check"><input type="checkbox" name="salary" checked data-save><span>La société me versera un salaire</span></label></div>
+          <div class="field full"><label class="check"><input type="checkbox" name="assets" data-save><span>Je lui transférerai des biens (équipement, contrats…)</span></label></div>
+        </div>
+      </form>
+      <ul class="checklist" id="checklist" data-persist="switch-corp" data-score="{done} étapes sur {total}"
+        data-all="Tout est fait : votre société est prête !" data-none="Cochez les étapes déjà faites."
+        data-missing-one="Il reste {missing} étape." data-missing-many="Il reste {missing} étapes.">
+        <li class="cl-group"><h3>Constituer la société</h3></li>
+        <li data-id="incorporate" data-rule="ca_federal_incorporation" data-when="where=federal"><label><input type="checkbox"><div><strong>Constituer la société au fédéral auprès de Corporations Canada</strong><span>200 $ en ligne, en général en 1 jour ouvrable (100 $ de plus pour le service express en 4 heures ; 250 $ par courriel ou par la poste). La société reçoit son numéro d'entreprise (NE) et son compte d'impôt des sociétés. Vous pouvez l'enregistrer en même temps en Ontario, en Nouvelle-Écosse ou à Terre-Neuve-et-Labrador, sans frais en Ontario.</span></div></label></li>
+        <li data-id="incorporate" data-rule="ca_ontario_incorporation_fee" data-when="where=ontario"><label><input type="checkbox"><div><strong>Constituer la société en Ontario</strong><span>300 $ en ligne. Il faut un rapport de recherche de nom de l'Ontario, sauf si vous choisissez une dénomination numérique.</span></div></label></li>
+        <li data-id="bank" data-rule="ca_corporation_separate_entity"><label><input type="checkbox"><div><strong>Ouvrir un compte bancaire au nom de la société</strong><span>La société est une entité juridique distincte : son argent lui appartient et se garde à son nom.</span></div></label></li>
+        <li class="cl-group"><h3>Comptes de l'ARC</h3></li>
+        <li data-id="gst" data-rule="ca_change_legal_status ca_business_number" data-when="gst"><label><input type="checkbox"><div><strong>Inscrire la société à la TPS/TVH</strong><span>Votre compte de TPS/TVH ne passe pas de lui-même au nouveau numéro d'entreprise de la société. Au Québec, Revenu Québec administre la TPS/TVH et la TVQ.</span></div></label></li>
+        <li data-id="payroll" data-rule="ca_change_legal_status" data-when="salary"><label><input type="checkbox"><div><strong>Ouvrir un compte de retenues sur la paie pour votre salaire</strong><span>Les comptes de retenues sur la paie ne passent pas non plus au nouveau numéro : la société s'inscrit aux siens.</span></div></label></li>
+        <li data-id="close" data-rule="ca_change_legal_status"><label><input type="checkbox"><div><strong>Fermer les comptes de l'ARC de l'entreprise individuelle</strong><span>Dans la plupart des cas, son numéro d'entreprise et ses comptes sont fermés une fois que la société a pris le relais.</span></div></label></li>
+        <li class="cl-group" data-when="assets"><h3>Transférer l'entreprise</h3></li>
+        <li data-id="s85" data-rule="ca_section_85_rollover" data-when="assets"><label><input type="checkbox"><div><strong>Préparer le choix de l'article 85 avec un comptable</strong><span>Pour transférer vos biens en reportant l'impôt, produisez le formulaire T2057 avec la société : vous devez recevoir des actions en contrepartie. Un choix produit en retard entraîne une pénalité pouvant aller jusqu'à 8 000 $.</span></div></label></li>
+        <li class="cl-group"><h3>Déclarations de revenus</h3></li>
+        <li data-id="t2" data-rule="ca_t2_filing_deadline"><label><input type="checkbox"><div><strong>Produire la déclaration T2 de la société chaque année</strong><span>Dans les 6 mois suivant la fin de son année d'imposition, même sans impôt à payer. La première année d'imposition ne peut pas dépasser 53 semaines.</span></div></label></li>
+        <li data-id="t1" data-rule="filing_deadline_self_employed"><label><input type="checkbox"><div><strong>Déclarer les derniers revenus de l'entreprise individuelle</strong><span>Dans votre déclaration personnelle, à la date limite des travailleurs autonomes : le 15 juin 2027 pour 2026.</span></div></label></li>
+      </ul>
+    </div>
+    <div class="results">
+      <div class="card">
+        <div class="label" style="margin-bottom: 8px;">Vos étapes</div>
+        <div class="progress"><div id="cl-bar"></div></div>
+        <div role="status" aria-atomic="true">
+          <p style="margin: 12px 0 0; font-weight: 700;" id="cl-score">0 étapes sur 6</p>
+          <p class="notice warn" id="cl-msg" style="margin: 12px 0 0;">Cochez les étapes déjà faites.</p>
+        </div>
+        <p class="small muted" style="margin: 12px 0 0;">Vos réponses et vos cases restent sur cet appareil : rien n'est envoyé.</p>
+      </div>
+      <a class="btn btn-primary btn-block" href="{{link:structure}}" style="margin-top: 14px;">Comparer entreprise individuelle et société</a>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>Avant de constituer la société</h2>
+  <p>Une société par actions est une entité juridique distincte, avec sa propre déclaration de revenus et ses propres comptes. Vérifiez que le passage en vaut la peine avec le <a href="{{link:structure}}">comparateur entreprise individuelle ou société</a>, et préparez le transfert de votre entreprise avec un comptable.</p>
+  <h2>Bon à savoir</h2>
+  <ul>
+    <li><strong>Assurances</strong> : le <a href="{{link:insurance}}">vérificateur d'assurances d'entreprise</a> traite des accidents du travail dès que vous avez des employés.</li>
+    <li><strong>Factures</strong> : utilisez désormais le nom et les numéros d'inscription de la société ; voir la <a href="{{link:invoice-rules}}">liste des mentions d'une facture</a>.</li>
+  </ul>
+  <p class="small muted">Information générale, tirée des sites de l'ARC, de Corporations Canada et de l'Ontario. Elle ne remplace pas l'avis d'un comptable pour votre situation.</p>
+</section>

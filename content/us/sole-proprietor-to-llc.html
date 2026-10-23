@@ -1,0 +1,83 @@
+<!--{
+  "id": "switch",
+  "slug": "sole-proprietor-to-llc/",
+  "title": "Sole Proprietor to LLC: Step-by-Step Checklist",
+  "description": "Every step to move from sole proprietor to LLC, and to S corp if you choose: state filing, EIN, bank account, Form 2553 deadline, payroll and records.",
+  "menu": "Sole proprietor to LLC",
+  "icon": "🔁",
+  "blurb": "The steps to form your LLC, and elect S corp, in order.",
+  "scripts": ["tools/checklist.js"],
+  "rules": "us",
+  "sources": ["us_llc_formation", "us_new_ein_rules", "us_llc_separate_funds", "us_s_election_deadline", "scorp_reasonable_compensation", "us_employer_insurance", "us_records_retention"],
+  "priority": 0.7,
+  "faq": [
+    ["How do I change from sole proprietor to LLC?", "File articles of organization with your state, with a registered agent in the state, then check your business licenses, open a bank account in the LLC's name and keep its funds separate. Registering usually costs less than $300, depending on the state."],
+    ["Does my LLC need a new EIN?", "A single-member LLC can keep using your sole proprietor EIN if it doesn't elect to be taxed as a corporation or S corporation, has no employees and owes no excise tax. Otherwise, it needs its own EIN."],
+    ["When is Form 2553 due?", "No more than 2 months and 15 days after the beginning of the tax year the S corporation election should apply to, or at any time during the year before. An LLC that files Form 2553 doesn't also need Form 8832."],
+    ["Do I have to pay myself a salary in an S corp?", "Yes: an S corporation must pay a shareholder who works in the business reasonable compensation before making other distributions, through payroll. There's no fixed formula."]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Interactive checklist · official guidance</span>
+    <h1>From sole proprietor to LLC</h1>
+    <p class="lead">Every step to move your business into an LLC, and to elect S corporation status if you choose, in order. Tick the ones you've done: your progress stays on this device.</p>
+    <ul class="trust"><li>From your state filing to Form 2553</li><li>Every step sourced from the IRS and the SBA</li><li>Progress saved</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout wide-left">
+    <div class="card">
+      <form id="cl-filters" onsubmit="return false" style="margin-bottom: 4px; padding-bottom: 16px; border-bottom: 1px solid var(--line);">
+        <h2 style="margin: 0 0 10px; font-size: 1.1rem;">Your situation</h2>
+        <div class="fields">
+          <div class="field full"><label class="check"><input type="checkbox" name="scorp" data-save><span>I want the LLC taxed as an S corporation</span></label></div>
+          <div class="field full"><label class="check"><input type="checkbox" name="employees" data-save><span>The LLC will have employees</span></label></div>
+        </div>
+      </form>
+      <ul class="checklist" id="checklist" data-persist="switch-llc" data-score="{done} of {total} steps"
+        data-all="All done: your LLC is ready!" data-none="Tick the steps you've already done."
+        data-missing-one="{missing} step left." data-missing-many="{missing} steps left.">
+        <li class="cl-group"><h3>Form the LLC</h3></li>
+        <li data-id="articles" data-rule="us_llc_formation"><label><input type="checkbox"><div><strong>File articles of organization with your state</strong><span>You need a registered agent located in the state. Registering usually costs less than $300, depending on the state, and many states require an annual or biennial report, with a fee.</span></div></label></li>
+        <li data-id="licenses" data-rule="us_llc_formation"><label><input type="checkbox"><div><strong>Check your business licenses</strong><span>Converting to an LLC may mean new licenses, depending on your state and local rules.</span></div></label></li>
+        <li data-id="ein" data-rule="us_new_ein_rules" data-when="!scorp !employees"><label><input type="checkbox"><div><strong>Check your EIN</strong><span>A single-member LLC can keep using your sole proprietor EIN, if you have one, as long as it isn't taxed as a corporation or S corporation, has no employees and owes no excise tax.</span></div></label></li>
+        <li data-id="ein" data-rule="us_new_ein_rules" data-when="scorp"><label><input type="checkbox"><div><strong>Get a new EIN for the LLC</strong><span>It needs its own EIN once it's taxed as an S corporation or a corporation. Getting one is free on IRS.gov.</span></div></label></li>
+        <li data-id="ein" data-rule="us_new_ein_rules" data-when="!scorp employees"><label><input type="checkbox"><div><strong>Get a new EIN for the LLC</strong><span>It needs its own EIN once it has employees. Getting one is free on IRS.gov.</span></div></label></li>
+        <li data-id="bank" data-rule="us_llc_separate_funds"><label><input type="checkbox"><div><strong>Open a bank account in the LLC's name</strong><span>Keeping the LLC's money separate from yours is part of its limited liability protection.</span></div></label></li>
+        <li class="cl-group" data-when="scorp"><h3>S corporation</h3></li>
+        <li data-id="form2553" data-rule="us_s_election_deadline" data-when="scorp"><label><input type="checkbox"><div><strong>File Form 2553 on time</strong><span>No more than 2 months and 15 days after the beginning of the tax year the election should apply to, or at any time during the year before. The LLC doesn't also file Form 8832.</span></div></label></li>
+        <li data-id="salary" data-rule="scorp_reasonable_compensation" data-when="scorp"><label><input type="checkbox"><div><strong>Pay yourself a reasonable salary through payroll</strong><span>Before taking other distributions: there's no fixed formula, so compare your duties and time with what similar businesses pay.</span></div></label></li>
+        <li class="cl-group" data-when="employees"><h3>Employees</h3></li>
+        <li data-id="insurance" data-rule="us_employer_insurance" data-when="employees"><label><input type="checkbox"><div><strong>Get the insurance your state requires for employers</strong><span>Workers' compensation, unemployment insurance and, in some states, disability insurance: the <a href="{{link:insurance}}">business insurance checker</a> shows your state's rules.</span></div></label></li>
+        <li class="cl-group"><h3>Keep going</h3></li>
+        <li data-id="records" data-rule="us_records_retention"><label><input type="checkbox"><div><strong>Keep your records</strong><span>Generally for 3 years from the date you file the return they support.</span></div></label></li>
+      </ul>
+    </div>
+    <div class="results">
+      <div class="card">
+        <div class="label" style="margin-bottom: 8px;">Your steps</div>
+        <div class="progress"><div id="cl-bar"></div></div>
+        <div role="status" aria-atomic="true">
+          <p style="margin: 12px 0 0; font-weight: 700;" id="cl-score">0 of 5 steps</p>
+          <p class="notice warn" id="cl-msg" style="margin: 12px 0 0;">Tick the steps you've already done.</p>
+        </div>
+        <p class="small muted" style="margin: 12px 0 0;">Your answers and ticks stay on this device: nothing is sent.</p>
+      </div>
+      <a class="btn btn-primary btn-block" href="{{link:structure}}" style="margin-top: 14px;">Compare sole proprietor and S corp</a>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>Before you switch</h2>
+  <p>By default, the IRS treats a single-member LLC like a sole proprietorship: its income still goes on your Schedule C, so forming one mainly changes your liability protection. Electing S corporation status changes your federal taxes: see whether it's worth it with the <a href="{{link:structure}}">sole proprietor vs S corp calculator</a>, which counts payroll and filing costs.</p>
+  <h2>Good to know</h2>
+  <ul>
+    <li><strong>Your bank account</strong>: the <a href="{{link:bank}}">business bank account checker</a> explains what the bank asks for.</li>
+    <li><strong>Your contracts and invoices</strong>: use the LLC's name from now on, with the <a href="{{link:contract}}">contract generator</a> and the <a href="{{link:invoice}}">invoice generator</a>.</li>
+  </ul>
+  <p class="small muted">Information for guidance only, from the IRS and the U.S. Small Business Administration. State rules and fees vary; it doesn't replace advice from a tax professional.</p>
+</section>

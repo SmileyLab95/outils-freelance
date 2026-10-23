@@ -515,6 +515,21 @@ const tests = {
     await page.uncheck("#i-employees");
     await page.selectOption("#i-state", "CA");
   },
+  async "us/sole-proprietor-to-llc/"(page) {
+    const t = async (id) => (await page.textContent(`#${id}`)).replace(/\s+/g, " ").trim();
+    const box = (id) => `#checklist li[data-id="${id}"]:not([hidden]) input`;
+    check((await t("cl-score")) === "0 of 5 steps" && (await t("checklist")).includes("Check your EIN") && !(await page.isVisible(box("form2553"))),
+      "Passage en LLC US : 5 étapes par défaut, EIN conservé, S corp masquée");
+    await page.check("#cl-filters input[name=scorp]");
+    check((await t("cl-score")) === "0 of 7 steps" && (await page.isVisible(box("form2553"))) && (await page.textContent('#checklist li[data-id="ein"]:not([hidden]) strong')).includes("new EIN"),
+      "Passage en LLC US : S corp → formulaire 2553, salaire et nouvel EIN");
+    await page.check(box("ein"));
+    await page.uncheck("#cl-filters input[name=scorp]");
+    check((await page.isChecked(box("ein"))) && (await t("cl-score")) === "1 of 5 steps", "Passage en LLC US : étape EIN cochée pour ses deux variantes");
+    await accessible(page, "Passage en LLC US (EIN coché)");
+    await page.uncheck(box("ein"));
+    check((await t("cl-score")) === "0 of 5 steps", "Passage en LLC US : situation par défaut rétablie");
+  },
   async "us/invoice-generator/"(page) {
     await page.fill("#iv-me-name", "Alex Morgan Design LLC");
     await page.fill("#iv-client-name", "Northwind Inc.");
@@ -745,6 +760,26 @@ const tests = {
     await page.reload({ waitUntil: "networkidle" });
     check((await page.inputValue("#i-structure")) === "limited" && (await text("i-verdict")) === "Some points to check", "assurance UK : situation mémorisée après rechargement");
     await page.selectOption("#i-structure", "sole_trader");
+  },
+  async "uk/sole-trader-to-limited-company/"(page) {
+    const t = async (id) => (await page.textContent(`#${id}`)).replace(/\s+/g, " ").trim();
+    const box = (id) => `#checklist li[data-id="${id}"]:not([hidden]) input`;
+    check((await t("cl-score")) === "0 of 6 steps" && (await page.isVisible(box("paye"))) && !(await page.isVisible('#checklist li[data-id="vat"] input')),
+      "Passage en société UK : 6 étapes par défaut, PAYE montré, TVA masquée");
+    await page.check("#cl-filters input[name=vat]");
+    await page.check("#cl-filters input[name=staff]");
+    await page.check(box("incorporate"));
+    await page.check(box("ct"));
+    check((await t("cl-score")) === "2 of 8 steps" && (await t("cl-msg")) === "6 steps left.", "Passage en société UK : TVA et salariés, deux étapes faites");
+    await accessible(page, "Passage en société UK (situation et cases cochées)");
+    await page.reload({ waitUntil: "networkidle" });
+    check((await page.isChecked(box("ct"))) && (await t("cl-score")) === "2 of 8 steps", "Passage en société UK : progression retrouvée après rechargement");
+    for (const li of await page.$$("#checklist li[data-id]:not([hidden]) input")) await li.check();
+    check((await t("cl-msg")) === "All done: your company is ready!", "Passage en société UK : toutes les étapes faites");
+    await page.$$eval("#checklist li[data-id] input", (boxes) => boxes.forEach((b) => { if (b.checked) b.click(); }));
+    await page.uncheck("#cl-filters input[name=vat]");
+    await page.uncheck("#cl-filters input[name=staff]");
+    check((await t("cl-score")) === "0 of 6 steps", "Passage en société UK : situation par défaut rétablie");
   },
   async "uk/payment-reminder-letter/"(page) {
     const due = new Date(Date.now() - 50 * 86400000).toISOString().slice(0, 10);
@@ -1711,6 +1746,33 @@ const tests = {
     await page.uncheck("#i-construction");
     await page.selectOption("#i-province", "QC");
   },
+  async "ca/incorporate-sole-proprietorship/"(page) {
+    const t = async (id) => (await page.textContent(`#${id}`)).replace(/\s+/g, " ").trim();
+    const box = (id) => `#checklist li[data-id="${id}"]:not([hidden]) input`;
+    check((await t("cl-score")) === "0 of 6 steps" && (await t("checklist")).includes("Incorporate federally") && (await page.isVisible(box("payroll"))),
+      "Constitution CA : 6 étapes par défaut, constitution fédérale et paie");
+    await page.selectOption("#cl-where", "ontario");
+    await page.uncheck("#cl-filters input[name=salary]");
+    check((await t("cl-score")) === "0 of 5 steps" && (await t("checklist")).includes("Incorporate in Ontario") && !(await page.isVisible(box("payroll"))),
+      "Constitution CA : Ontario sans salaire → 5 étapes");
+    await page.check("#cl-filters input[name=gst]");
+    await page.check("#cl-filters input[name=assets]");
+    check((await t("cl-score")) === "0 of 7 steps" && (await page.isVisible(box("s85"))), "Constitution CA : TPS/TVH et biens → article 85");
+    await accessible(page, "Constitution CA (Ontario, TPS/TVH, biens)");
+    await page.selectOption("#cl-where", "federal");
+    await page.check("#cl-filters input[name=salary]");
+    await page.uncheck("#cl-filters input[name=gst]");
+    await page.uncheck("#cl-filters input[name=assets]");
+    check((await t("cl-score")) === "0 of 6 steps", "Constitution CA : situation par défaut rétablie");
+  },
+  async "ca/fr/constituer-societe/"(page) {
+    const t = async (id) => (await page.textContent(`#${id}`)).replace(/\s+/g, " ").trim();
+    const box = (id) => `#checklist li[data-id="${id}"]:not([hidden]) input`;
+    check((await t("cl-score")) === "0 étapes sur 6" && (await t("checklist")).includes("Constituer la société au fédéral"), "Constitution CA-FR : 6 étapes par défaut");
+    await page.check("#cl-filters input[name=assets]");
+    check((await t("cl-score")) === "0 étapes sur 7" && (await t("checklist")).includes("article 85"), "Constitution CA-FR : transfert de biens → article 85");
+    await page.uncheck("#cl-filters input[name=assets]");
+  },
   async "ca/freelance-email-templates/"() {},
   async "ca/legal-notice/"() {},
   async "ca/privacy-policy/"() {},
@@ -1809,6 +1871,26 @@ const tests = {
     check((await page.textContent("#d-due")).trim() === "9 mai 2026" && (await page.getAttribute("#d-notice", "class")).includes("ok"), "échéance : 60 jours, conforme");
     await page.fill("#d-date", "");
     await page.selectOption("#d-terms", "30");
+  },
+  async "fr/passer-en-societe/"(page) {
+    const t = async (id) => (await page.textContent(`#${id}`)).replace(/\s+/g, " ").trim();
+    const box = (id) => `#checklist li[data-id="${id}"]:not([hidden]) input`;
+    check((await t("cl-score")) === "0 étapes sur 9" && (await t("checklist")).includes("50 %") && !(await page.isVisible(box("apport"))),
+      "Passage en société FR : 9 étapes par défaut (SASU, cessation)");
+    await page.selectOption("#cl-forme", "eurl");
+    await page.selectOption("#cl-transfert", "apport");
+    await page.check("#cl-filters input[name=tva]");
+    check((await t("cl-score")) === "0 étapes sur 11" && (await t("checklist")).includes("20 %") && (await page.isVisible(box("apport"))) &&
+      (await t("checklist")).includes("45 jours"), "Passage en société FR : EURL, apport et TVA → 11 étapes");
+    await page.check(box("fin"));
+    await accessible(page, "Passage en société FR (EURL, apport, TVA)");
+    await page.reload({ waitUntil: "networkidle" });
+    check((await page.inputValue("#cl-transfert")) === "apport" && (await page.isChecked(box("fin"))), "Passage en société FR : situation et progression retrouvées");
+    await page.uncheck(box("fin"));
+    await page.selectOption("#cl-forme", "sasu");
+    await page.selectOption("#cl-transfert", "cessation");
+    await page.uncheck("#cl-filters input[name=tva]");
+    check((await t("cl-score")) === "0 étapes sur 9", "Passage en société FR : situation par défaut rétablie");
   },
   async "fr/comparateur-statuts/"(page) {
     // Micro libérale : 60 000 − 5 000 − 15 480 − 4 983,99 = 34 536 € (voir tests unitaires)

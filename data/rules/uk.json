@@ -1776,6 +1776,117 @@
       "confidence": "medium",
       "verified_on": "2026-10-23",
       "note": "Read through search excerpts. Public liability is needed by almost all businesses, especially if you deal with the public or a contract requires it; professional indemnity if you give clients legal, financial or other professional advice or services, or if your regulator or industry requires it. Tell your insurers if you use your home or your car for the business."
+    },
+    "uk_companies_house_incorporation_fee": {
+      "value": {
+        "online": 100,
+        "software": 100,
+        "paper": 124,
+        "same_day_software": 156,
+        "since": "2026-02-01"
+      },
+      "unit": "object",
+      "label": "Companies House fee to register a private limited company (GBP)",
+      "source": "https://www.gov.uk/government/publications/companies-house-fees/companies-house-fees",
+      "source_title": "Companies House fees - GOV.UK",
+      "more_sources": [
+        {
+          "source": "https://www.gov.uk/government/publications/register-a-private-or-public-company-in01",
+          "source_title": "Register a private or public company (IN01) - GOV.UK"
+        }
+      ],
+      "confidence": "medium",
+      "verified_on": "2026-10-23",
+      "note": "Read through search excerpts: fees updated on 1 February 2026; same-day incorporation only through software; payment online by card or PayPal."
+    },
+    "uk_corporation_tax_registration": {
+      "value": {
+        "within_months_of_starting_business": 3,
+        "utr_posted_within_days": 14
+      },
+      "unit": "object",
+      "label": "Register a new limited company for Corporation Tax",
+      "source": "https://www.gov.uk/limited-company-formation/set-up-your-company-for-corporation-tax",
+      "source_title": "Set up a private limited company: Register for Corporation Tax - GOV.UK",
+      "confidence": "medium",
+      "verified_on": "2026-10-23",
+      "note": "Read through search excerpts. Starting to do business includes buying, selling, advertising, renting a property and employing someone; a penalty may apply if you register late. HMRC posts the 10-digit UTR to the company address within 14 days of incorporation."
+    },
+    "uk_stop_self_employment": {
+      "value": "Tell HMRC you've stopped trading as a sole trader (online service) and send your final Self Assessment tax return by the deadline.",
+      "unit": "text",
+      "label": "Stopping self-employment when the business becomes a limited company",
+      "source": "https://www.gov.uk/stop-being-self-employed",
+      "source_title": "Stop being self-employed - GOV.UK",
+      "more_sources": [
+        {
+          "source": "https://www.gov.uk/tell-hmrc-changed-business-details/change-to-your-business",
+          "source_title": "Tell HMRC about a change to your business - GOV.UK"
+        }
+      ],
+      "confidence": "medium",
+      "verified_on": "2026-10-23",
+      "note": "Read through search excerpts. You must tell HMRC if you change the legal structure of your business, for example if you become a limited company."
+    },
+    "uk_paye_registration": {
+      "value": {
+        "before_first_payday": true,
+        "earliest_months_before_first_payday": 2,
+        "applies_to_sole_director": true
+      },
+      "unit": "object",
+      "label": "Register as an employer (PAYE) before the first payday",
+      "source": "https://www.gov.uk/register-employer",
+      "source_title": "Register as an employer - GOV.UK",
+      "confidence": "medium",
+      "verified_on": "2026-10-23",
+      "note": "Read through search excerpts: you must register even if you're only employing yourself, for example as the only director of a limited company; you can't register more than 2 months before you start paying people."
+    },
+    "uk_vat_registration_transfer": {
+      "value": {
+        "form": "VAT68",
+        "with_new_registration": true,
+        "new_entity_takes_vat_debts": true,
+        "alternative_cancel_form": "VAT7"
+      },
+      "unit": "object",
+      "label": "Keeping a VAT number when a sole trader becomes a limited company",
+      "source": "https://www.gov.uk/register-for-vat/transfer-your-registration",
+      "source_title": "Register for VAT: Transfer your VAT registration - GOV.UK",
+      "more_sources": [
+        {
+          "source": "https://www.gov.uk/government/publications/vat-request-for-transfer-of-a-registration-number-vat68",
+          "source_title": "Request transfer of a VAT registration number (VAT68) - GOV.UK"
+        }
+      ],
+      "confidence": "medium",
+      "verified_on": "2026-10-23",
+      "note": "Read through search excerpts. Ask as soon as the business transfers and before the previous registration is cancelled; the transfer can't be undone and the company takes on VAT the sole trader still owes; Direct Debits don't transfer. Otherwise cancel (VAT7) and register the company."
+    },
+    "uk_company_registration_requirements": {
+      "value": [
+        "a company name that follows the rules",
+        "a UK registered office address (published) and a registered email address (not published)",
+        "at least one director (no company secretary needed)",
+        "at least one shareholder, who can be a director",
+        "a SIC code describing what the company does",
+        "its people with significant control",
+        "identity verification with Companies House for every director and person with significant control",
+        "a memorandum and articles of association (created automatically online)"
+      ],
+      "unit": "list",
+      "label": "What you need to register a private limited company",
+      "source": "https://www.gov.uk/limited-company-formation/register-your-company",
+      "source_title": "Set up a private limited company: Register your company - GOV.UK",
+      "more_sources": [
+        {
+          "source": "https://www.gov.uk/set-up-limited-company",
+          "source_title": "Set up a limited company: step by step - GOV.UK"
+        }
+      ],
+      "confidence": "medium",
+      "verified_on": "2026-10-23",
+      "note": "Read through search excerpts. Identity verification with GOV.UK One Login, once per person; PO Boxes not accepted as registered office."
     }
   },
   "open_questions": [

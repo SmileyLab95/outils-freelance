@@ -1,7 +1,7 @@
 # 26. Guide de changement de statut (4 pays)
 
 Besoin P2 de [02](02-besoins-clients.md), § 10 : « Changer de statut », comparateur (fait dans les quatre pays) puis
-**guide de passage**. Spécification du 23/10/2026, avant tout code (charte qualité). Pas de conseil personnalisé (D8) :
+**guide de passage**. Spécification du 23/10/2026, avant tout code (charte qualité) ; **réalisé le même jour (§ 4)**. Pas de conseil personnalisé (D8) :
 le guide liste les démarches officielles et renvoie vers un comptable pour les choix fiscaux (apport, *rollover*).
 
 ## 1. Ce que les sources officielles établissent (lu par extraits de recherche le 23/10/2026)
@@ -77,3 +77,20 @@ conseil personnalisé).
 - Canada : frais de constitution des provinces autres que l'Ontario (non repris, renvoi vers la province).
 - États-Unis : frais de création de LLC propres à chaque État (non repris, renvoi vers l’État).
 - France : effets fiscaux de la cessation (fiche F38564), à résumer sans chiffrer (renvoi vers un comptable).
+
+## 4. Réalisation (23/10/2026)
+
+- Pages `/uk/sole-trader-to-limited-company/`, `/us/sole-proprietor-to-llc/`, `/ca/incorporate-sole-proprietorship/`,
+  `/ca/fr/constituer-societe/` et `/fr/passer-en-societe/` (identifiant `switch`, dans le menu après le comparateur
+  de statuts, qui renvoie vers elles) : listes d'étapes cochables et mémorisées (`tools/checklist.js`), selon la
+  situation (TVA, salaire, salariés ; option S corporation ; lieu de constitution, TPS/TVH, transfert de biens ; SASU
+  ou EURL, cessation ou apport, TVA).
+- Choix de prudence : le Canada propose la constitution fédérale ou en Ontario (les seuls frais vérifiés), avec un
+  renvoi vers le registre provincial ailleurs ; aux États-Unis, ni les frais ni les règles des États ; en France,
+  l'apport est signalé sans chiffrer ses effets fiscaux (expert-comptable).
+- Dix-sept règles nouvelles (uk.json, us.json, ca.json, fr.json), dont le traitement fiscal par défaut d'une LLC à
+  un membre (IRS) ; règles existantes réutilisées (salaire raisonnable, registres, date limite des travailleurs
+  autonomes, numéro d'entreprise, compte de la société).
+- Tests : `switch.test.mjs` (chaque étape sourcée, une variante par situation, nombre d'étapes, chiffres repris des
+  règles, mêmes étapes en anglais et en français au Canada) ; parcours navigateur des cinq pages ; 12 erreurs
+  réintroduites, toutes détectées. Revue : une phrase sur l'effet fiscal d'une LLC reformulée et sourcée.

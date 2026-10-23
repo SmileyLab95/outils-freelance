@@ -1,0 +1,101 @@
+<!--{
+  "id": "switch",
+  "slug": "passer-en-societe/",
+  "title": "Passer de micro-entrepreneur à société : les étapes",
+  "description": "Créer une EURL ou une SASU et fermer sa micro-entreprise : statuts, capital, annonce légale, guichet unique, apport, cessation, déclarations. Liste à cocher.",
+  "menu": "Passer en société",
+  "icon": "🔁",
+  "blurb": "Les étapes pour quitter la micro-entreprise pour une EURL ou une SASU.",
+  "scripts": ["tools/checklist.js"],
+  "rules": "fr",
+  "sources": ["creation_societe_etapes", "apport_ei_societe", "micro_cessation", "micro_declaration_ca", "tva_cessation_delais", "option_regime_reel"],
+  "priority": 0.7,
+  "faq": [
+    ["Comment passer de micro-entrepreneur à société ?", "Créez la société (statuts, dépôt du capital, annonce légale, déclaration au guichet unique), transférez-lui votre activité, puis mettez fin à la micro-entreprise : déclaration au guichet unique, dernière déclaration de chiffre d'affaires et déclaration 2042-C PRO dans les 60 jours."],
+    ["Faut-il fermer sa micro-entreprise ?", "Oui. En cas de cessation, la déclaration se fait au guichet unique dans les 30 jours suivant l'arrêt de l'activité. En cas d'apport de l'entreprise individuelle à la société, la fin de l'entreprise individuelle se déclare dans les 45 jours suivant l'annonce légale."],
+    ["Quel capital pour une SASU ou une EURL ?", "Il n'y a pas de capital minimum. À la constitution, au moins 50 % du capital doit être versé dans une SASU et au moins 20 % dans une EURL ; le solde est libéré dans les 5 ans."],
+    ["Peut-on quitter le régime micro sans créer de société ?", "Oui, en restant en entreprise individuelle et en optant pour un régime réel d'imposition. L'option vaut un an et se renouvelle tacitement ; ses dates limites sont rappelées en bas de cette page."]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Liste à cocher · sources officielles</span>
+    <h1>Passer de micro-entrepreneur à société</h1>
+    <p class="lead">Toutes les étapes pour créer votre EURL ou votre SASU et fermer votre micro-entreprise, dans l'ordre. Cochez celles qui sont faites : votre progression reste sur cet appareil.</p>
+    <ul class="trust"><li>De la création à la dernière déclaration</li><li>Chaque étape sourcée (Service-public, impots.gouv)</li><li>Progression mémorisée</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout wide-left">
+    <div class="card">
+      <form id="cl-filters" onsubmit="return false" style="margin-bottom: 4px; padding-bottom: 16px; border-bottom: 1px solid var(--line);">
+        <h2 style="margin: 0 0 10px; font-size: 1.1rem;">Votre situation</h2>
+        <div class="fields">
+          <div class="field full"><label for="cl-forme">Vous créez</label>
+            <select id="cl-forme" name="forme" data-save>
+              <option value="sasu" selected>Une SASU</option>
+              <option value="eurl">Une EURL</option>
+            </select></div>
+          <div class="field full"><label for="cl-transfert">Votre micro-entreprise</label>
+            <select id="cl-transfert" name="transfert" aria-describedby="cl-transfert-hint" data-save>
+              <option value="cessation" selected>Je la ferme et je repars en société</option>
+              <option value="apport">Je l'apporte à la société</option>
+            </select>
+            <span class="hint" id="cl-transfert-hint">L'apport transfère à la société votre patrimoine professionnel, biens et dettes, sauf les dettes de cotisations sociales.</span></div>
+          <div class="field full"><label class="check"><input type="checkbox" name="tva" data-save><span>Je facture la TVA</span></label></div>
+        </div>
+      </form>
+      <ul class="checklist" id="checklist" data-persist="passer-societe" data-score="{done} étapes sur {total}"
+        data-all="Tout est fait : bonne route à votre société !" data-none="Cochez les étapes déjà faites."
+        data-missing-one="Il reste {missing} étape." data-missing-many="Il reste {missing} étapes.">
+        <li class="cl-group"><h3>Créer la société</h3></li>
+        <li data-id="forme" data-rule="creation_societe_etapes"><label><input type="checkbox"><div><strong>Choisir la forme, la dénomination et le siège</strong><span>EURL ou SASU : le <a href="{{link:structure}}">comparateur de statuts</a> chiffre la différence avec votre micro-entreprise.</span></div></label></li>
+        <li data-id="statuts" data-rule="creation_societe_etapes"><label><input type="checkbox"><div><strong>Rédiger et signer les statuts</strong><span>Le dépôt du capital et l'annonce légale viennent ensuite.</span></div></label></li>
+        <li data-id="capital" data-rule="creation_societe_etapes" data-when="forme=sasu"><label><input type="checkbox"><div><strong>Déposer le capital sur un compte bloqué</strong><span>Il n'y a pas de capital minimum. Dans une SASU, au moins 50 % du capital est versé à la constitution, le solde dans les 5 ans ; la banque délivre l'attestation de dépôt des fonds.</span></div></label></li>
+        <li data-id="capital" data-rule="creation_societe_etapes" data-when="forme=eurl"><label><input type="checkbox"><div><strong>Déposer le capital sur un compte bloqué</strong><span>Il n'y a pas de capital minimum. Dans une EURL, au moins 20 % du capital est versé à la constitution, le solde dans les 5 ans ; la banque délivre l'attestation de dépôt des fonds.</span></div></label></li>
+        <li data-id="annonce" data-rule="creation_societe_etapes"><label><input type="checkbox"><div><strong>Publier l'annonce légale de constitution</strong><span>Après la signature des statuts et avant la demande d'immatriculation, dans un support habilité du département du siège ; vous recevez une attestation de parution.</span></div></label></li>
+        <li data-id="guichet" data-rule="creation_societe_etapes"><label><input type="checkbox"><div><strong>Déclarer la société au guichet unique</strong><span>Sur formalites.entreprises.gouv.fr, avec les statuts, l'attestation de parution, l'attestation de dépôt des fonds, le justificatif de domiciliation et les pièces du dirigeant.</span></div></label></li>
+        <li class="cl-group" data-when="transfert=apport"><h3>Transférer l'activité</h3></li>
+        <li data-id="apport" data-rule="apport_ei_societe" data-when="transfert=apport"><label><input type="checkbox"><div><strong>Apporter votre entreprise individuelle à la société</strong><span>L'apport transfère l'actif et le passif professionnels, sauf les dettes de cotisations sociales. Marié sous un régime de communauté, il vous faut l'accord de votre conjoint. Faites-vous accompagner pour l'évaluation et la fiscalité de l'apport.</span></div></label></li>
+        <li class="cl-group"><h3>Fermer la micro-entreprise</h3></li>
+        <li data-id="fin" data-rule="micro_cessation" data-when="transfert=cessation"><label><input type="checkbox"><div><strong>Déclarer la cessation au guichet unique</strong><span>Dans les 30 jours suivant l'arrêt de l'activité.</span></div></label></li>
+        <li data-id="fin" data-rule="apport_ei_societe" data-when="transfert=apport"><label><input type="checkbox"><div><strong>Déclarer la fin de l'entreprise individuelle au guichet unique</strong><span>Dans les 45 jours suivant l'annonce légale de l'apport.</span></div></label></li>
+        <li data-id="ca" data-rule="micro_cessation micro_declaration_ca"><label><input type="checkbox"><div><strong>Faire la dernière déclaration de chiffre d'affaires et payer les cotisations</strong><span>Sur autoentrepreneur.urssaf.fr : dans les 30 jours en déclaration mensuelle, le mois suivant le trimestre en déclaration trimestrielle.</span></div></label></li>
+        <li data-id="impot" data-rule="micro_cessation"><label><input type="checkbox"><div><strong>Déclarer le chiffre d'affaires de l'année jusqu'à la cessation</strong><span>Sur la déclaration complémentaire 2042-C PRO, dans les 60 jours.</span></div></label></li>
+        <li data-id="tva" data-rule="tva_cessation_delais" data-when="tva"><label><input type="checkbox"><div><strong>Déposer la dernière déclaration de TVA</strong><span>En ligne, dans les 60 jours au régime simplifié (CA12) ou dans les 30 jours au régime normal (CA3).</span></div></label></li>
+        <li class="cl-group"><h3>Démarrer en société</h3></li>
+        <li data-id="factures" data-rule="apport_ei_societe"><label><input type="checkbox"><div><strong>Facturer au nom de la société</strong><span>Avec son propre numéro SIREN et ses mentions : la <a href="{{link:invoice-rules}}">liste des mentions obligatoires</a> les rappelle.</span></div></label></li>
+      </ul>
+    </div>
+    <div class="results">
+      <div class="card">
+        <div class="label" style="margin-bottom: 8px;">Vos étapes</div>
+        <div class="progress"><div id="cl-bar"></div></div>
+        <div role="status" aria-atomic="true">
+          <p style="margin: 12px 0 0; font-weight: 700;" id="cl-score">0 étapes sur 9</p>
+          <p class="notice warn" id="cl-msg" style="margin: 12px 0 0;">Cochez les étapes déjà faites.</p>
+        </div>
+        <p class="small muted" style="margin: 12px 0 0;">Vos réponses et vos cases restent sur cet appareil : rien n'est envoyé.</p>
+      </div>
+      <a class="btn btn-primary btn-block" href="{{link:structure}}" style="margin-top: 14px;">Comparer micro-entreprise, EURL et SASU</a>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>Autre solution : rester en entreprise individuelle, au régime réel</h2>
+  <p>Vous pouvez quitter le régime micro sans créer de société, en optant pour un régime réel d'imposition :</p>
+  <ul>
+    <li><strong>Activité commerciale ou artisanale (BIC)</strong> : jusqu'à la date limite de dépôt de la déclaration des revenus de l'année précédente ; l'année de la création, jusqu'au dernier jour du 3e mois qui suit.</li>
+    <li><strong>Activité libérale (BNC)</strong> : jusqu'à la date de dépôt de la déclaration 2035 de l'année concernée.</li>
+  </ul>
+  <p>L'option vaut un an et se renouvelle tacitement.</p>
+  <h2>Bon à savoir</h2>
+  <ul>
+    <li><strong>Comparer d'abord</strong> : le <a href="{{link:structure}}">comparateur de statuts</a> estime ce qu'il vous resterait en micro-entreprise, en EURL et en SASU.</li>
+    <li><strong>Compte bancaire</strong> : le <a href="{{link:bank}}">guide du compte bancaire professionnel</a> rappelle les règles de chaque statut.</li>
+  </ul>
+  <p class="small muted">Informations générales, à jour des textes vérifiés le 23/10/2026 ; elles ne remplacent pas l'avis d'un expert-comptable pour votre situation, notamment pour l'apport et ses effets fiscaux.</p>
+</section>

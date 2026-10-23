@@ -1481,6 +1481,65 @@
       "confidence": "medium",
       "verified_on": "2026-10-23",
       "note": "Read through search excerpts. General liability: bodily injury, property damage, medical expenses, libel, slander, defending lawsuits and judgments. Professional liability: client claims of mistakes (malpractice), negligence or unfinished work. Home-based business insurance: added to homeowner's insurance as a rider, it can cover a small amount of business equipment and liability for third-party injuries."
+    },
+    "us_new_ein_rules": {
+      "value": {
+        "sole_prop_incorporates": true,
+        "sole_prop_forms_partnership": true,
+        "single_llc_keeps_owner_ein_unless": [
+          "it elects to be taxed as a corporation or S corporation",
+          "it has employees",
+          "it owes excise tax"
+        ],
+        "single_llc_default_tax_treatment": "disregarded entity (reported on the owner's return, Schedule C for an individual)"
+      },
+      "unit": "object",
+      "label": "When a business needs a new EIN",
+      "source": "https://www.irs.gov/businesses/small-businesses-self-employed/when-to-get-a-new-ein",
+      "source_title": "When to get a new EIN - IRS",
+      "more_sources": [
+        {
+          "source": "https://www.irs.gov/instructions/iss4",
+          "source_title": "Instructions for Form SS-4 (12/2025) - IRS"
+        },
+        {
+          "source": "https://www.irs.gov/faqs/small-business-self-employed-other-business/entities",
+          "source_title": "Entities - IRS frequently asked questions"
+        }
+      ],
+      "confidence": "medium",
+      "verified_on": "2026-10-23",
+      "note": "Read through search excerpts. By default, the IRS treats a single-member domestic LLC as a disregarded entity: its income and expenses go on the owner's return (Schedule C for an individual), unless it elects corporate or S corporation treatment (Instructions for Form SS-4, 12/2025; IRS entity FAQ)."
+    },
+    "us_s_election_deadline": {
+      "value": {
+        "months": 2,
+        "days": 15,
+        "or_during_preceding_year": true,
+        "late_relief_years": 3,
+        "late_relief_days": 75
+      },
+      "unit": "object",
+      "label": "Form 2553: deadline to elect S corporation status",
+      "source": "https://www.irs.gov/instructions/i2553",
+      "source_title": "Instructions for Form 2553 - IRS",
+      "confidence": "medium",
+      "verified_on": "2026-10-23",
+      "note": "Read through search excerpts. No more than 2 months and 15 days after the beginning of the tax year the election is to take effect, or at any time during the preceding tax year. An eligible entity that files Form 2553 doesn't also file Form 8832. Late election relief for reasonable cause, generally within 3 years and 75 days of the effective date."
+    },
+    "us_llc_formation": {
+      "value": {
+        "articles_of_organization": true,
+        "registered_agent_in_state": true,
+        "registration_cost_usually_below": 300
+      },
+      "unit": "object",
+      "label": "Forming an LLC with your state",
+      "source": "https://www.sba.gov/business-guide/launch-your-business/register-your-business",
+      "source_title": "Register your business - U.S. Small Business Administration",
+      "confidence": "medium",
+      "verified_on": "2026-10-23",
+      "note": "Read through search excerpts. Fees vary by state; many states require an annual report or biennial statement, with fees; converting from a sole proprietorship may require new business licenses depending on state and local law."
     }
   },
   "open_questions": [

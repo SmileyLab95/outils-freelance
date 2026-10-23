@@ -1,5 +1,19 @@
 # Journal des modifications
 
+## 2026-10-23 — Guide de changement de statut (4 pays)
+
+- Listes d'étapes cochables pour passer de l'entreprise individuelle à la société : « *Sole trader to limited
+  company* » (Companies House, impôt sur les sociétés, PAYE, transfert de TVA, prévenir HMRC), « *Sole proprietor to
+  LLC* » (statuts, EIN, compte, formulaire 2553 et salaire raisonnable pour une S corporation), « *Incorporating a
+  sole proprietorship* » et « Constituer son entreprise en société » au Canada (constitution fédérale ou en Ontario,
+  nouveaux comptes de l'ARC, article 85, déclaration T2) et « Passer de micro-entrepreneur à société » en France
+  (statuts, capital, annonce légale, guichet unique, apport ou cessation, dernières déclarations) ; l'option pour le
+  régime réel est rappelée comme autre solution.
+- Dix-sept règles nouvelles, chacune avec ses sources officielles ; spécification
+  [26](documentation/26-changement-de-statut.md). Les comparateurs de statuts renvoient vers les guides.
+- Tests : `switch.test.mjs` ; 12 erreurs réintroduites, toutes détectées ; suite complète (308 tests unitaires,
+  27 tests serveur, 2 777 vérifications navigateur du site public).
+
 ## 2026-10-23 — Assurances de l'activité : Royaume-Uni, États-Unis, Canada
 
 - Vérificateur « *Business insurance* » au Royaume-Uni, aux États-Unis et au Canada, et « Assurance d'entreprise » au

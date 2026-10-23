@@ -161,9 +161,12 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   de la SBA) et au Canada en anglais et en français (protection personnelle auprès des 13 organismes, construction en
   Ontario, employeur, domicile) ; exemption britannique non confirmée affichée « à vérifier » (D26). Le besoin P2
   « Assurance professionnelle » est couvert dans les quatre pays ([25](25-compte-et-assurance-hors-france.md), § 5).
-- **Prochaines actions de Claude** : guide de changement de statut (dernier besoin P2 ouvert hors recouvrement
-  français, [02](02-besoins-clients.md) § 10 ; spécification et recherches faites le 23/10/2026,
-  [26](26-changement-de-statut.md) : règles, listes d'étapes des quatre pays, tests) ; comptes : adaptateur
+- **Guide de changement de statut (23/10/2026)** : listes d'étapes cochables pour passer de l'entreprise individuelle
+  à la société au Royaume-Uni (*limited company*), aux États-Unis (LLC, option S corporation), au Canada (anglais et
+  français) et en France (EURL ou SASU, cessation ou apport) ; liens depuis les comparateurs de statuts
+  ([26](26-changement-de-statut.md)). Tous les besoins P2 sont couverts, sauf le guide du recouvrement en France.
+- **Prochaines actions de Claude** : besoins P3 ([02](02-besoins-clients.md) : bureau à domicile, proposition
+  commerciale, NDA, CGV, hausse de tarifs, sous-traitance), en commençant par le bureau à domicile (4 pays) ; comptes : adaptateur
   PostgreSQL et sauvegardes dès que l'hébergeur est choisi ; taux du crédit pour
   dividendes de la Saskatchewan et du Nunavut dès qu'ils sont publiés (formulaires 2026) ;
   trouver la cause du contrôle de contraste intermittent de l'Espace ; revérifier les grilles des prestataires de
@@ -240,6 +243,8 @@ Objectif : un site mesuré, sous sa propre marque, qui commence à rapporter, et
       [25](25-compte-et-assurance-hors-france.md) § 3
 - [x] Assurances de l'activité au Royaume-Uni, aux États-Unis et au Canada (anglais et français) :
       [25](25-compte-et-assurance-hors-france.md) § 4 et § 5
+- [x] Guide de changement de statut dans les 4 pays (de l'entreprise individuelle à la société) :
+      [26](26-changement-de-statut.md)
 - [ ] Guide du recouvrement judiciaire (injonction de payer, procédure simplifiée) une fois les règles 2026 vérifiées :
       étude et plan prêts ([14](14-etude-recouvrement.md)) ; deux textes de 2026 à lire en entier avant publication
 - [x] Guide « Compte bancaire professionnel » avec vérificateur (règle des 10 000 € sur deux ans, mention « EI »,

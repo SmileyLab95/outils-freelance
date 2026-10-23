@@ -1170,6 +1170,113 @@
       "source_title": "En tant que micro-entrepreneur, suis-je concerné par le prélèvement à la source ? - impots.gouv.fr",
       "confidence": "medium",
       "note": "Relevé le 21/10/2026 par recherche sur impots.gouv.fr, sans ouvrir la page. L'acompte porte sur le bénéfice après abattement forfaitaire (BOFiP BOI-IR-PAS-20-20-10) ; il est calculé par l'administration sur les revenus des années précédentes, puis régularisé : le calculateur « à mettre de côté » n'en donne qu'une estimation."
+    },
+    "micro_cessation": {
+      "value": {
+        "declaration_cessation_jours": 30,
+        "derniere_declaration_mensuelle_jours": 30,
+        "declaration_2042_c_pro_jours": 60
+      },
+      "unit": "object",
+      "label": "Cessation volontaire d'une micro-entreprise : délais",
+      "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F20678",
+      "source_title": "Cessation d'activité du micro-entrepreneur - Service-public.fr",
+      "more_sources": [
+        {
+          "source": "https://www.economie.gouv.fr/entreprises/gerer-sa-micro-entreprise/fermer-sa-micro-entreprise-les-demarches-suivre-en-cas-de-cessation-volontaire",
+          "source_title": "Fermer sa micro-entreprise - economie.gouv.fr"
+        }
+      ],
+      "confidence": "medium",
+      "verified_on": "2026-10-23",
+      "note": "Lu par extraits de recherche. Déclaration de cessation au guichet unique dans les 30 jours suivant l'arrêt ; dernière déclaration de chiffre d'affaires et paiement des cotisations (30 jours en déclaration mensuelle, mois suivant le trimestre en déclaration trimestrielle) ; 2042-C PRO dans les 60 jours."
+    },
+    "apport_ei_societe": {
+      "value": {
+        "declarations_jours_apres_annonce_legale": 45,
+        "dettes_cotisations_transferees": false,
+        "nouveau_siren": true,
+        "accord_conjoint_commun_en_biens": true
+      },
+      "unit": "object",
+      "label": "Apport d'une entreprise individuelle à une société",
+      "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F36954",
+      "source_title": "Transformation d'une entreprise individuelle par apport en société - Service-public.fr",
+      "confidence": "medium",
+      "verified_on": "2026-10-23",
+      "note": "Lu par extraits de recherche. Transfert universel du patrimoine professionnel, sauf les dettes de cotisations sociales ; déclarations au guichet unique dans les 45 jours suivant l'annonce légale ; nouveau SIREN pour la société ; effets fiscaux de la cessation (F38564) non chiffrés."
+    },
+    "option_regime_reel": {
+      "value": {
+        "bic_delai": "date limite de dépôt de la déclaration des revenus de l'année précédente",
+        "creation_delai": "dernier jour du 3e mois suivant la création",
+        "bnc_delai": "date de dépôt de la déclaration 2035",
+        "duree_ans": 1,
+        "renouvellement_tacite": true
+      },
+      "unit": "object",
+      "label": "Micro-entrepreneur : option pour un régime réel d'imposition",
+      "source": "https://www.impots.gouv.fr/particulier/les-regimes-dimposition",
+      "source_title": "Les régimes d'imposition - impots.gouv.fr",
+      "more_sources": [
+        {
+          "source": "https://bofip.impots.gouv.fr/bofip/1886-PGP.html/identifiant=BOI-BIC-DECLA-10-30-20220511",
+          "source_title": "BOI-BIC-DECLA-10-30 - BOFiP"
+        }
+      ],
+      "confidence": "medium",
+      "verified_on": "2026-10-23",
+      "note": "Lu par extraits de recherche, à relire sur la page avant publication (dates de l'année)."
+    },
+    "creation_societe_etapes": {
+      "value": {
+        "etapes": [
+          "choisir la forme (EURL ou SASU), la dénomination et le siège",
+          "rédiger et signer les statuts",
+          "déposer le capital sur un compte bloqué et obtenir l'attestation de dépôt des fonds",
+          "publier l'annonce légale de constitution et obtenir l'attestation de parution",
+          "déclarer la société au guichet unique des formalités des entreprises"
+        ],
+        "site": "formalites.entreprises.gouv.fr",
+        "capital_minimum": null,
+        "versement_min_sasu": 0.5,
+        "versement_min_eurl": 0.2,
+        "solde_ans": 5
+      },
+      "unit": "object",
+      "label": "Créer une société (EURL, SASU) : étapes et libération du capital",
+      "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F35934",
+      "source_title": "Création d'une société : formalités d'immatriculation - Service-public.fr",
+      "more_sources": [
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F32333",
+          "source_title": "Constitution et dépôt du capital social - Service-public.fr"
+        },
+        {
+          "source": "https://www.economie.gouv.fr/entreprises/creer-une-entreprise/creation-dentreprise-comment-publier-une-annonce-legale",
+          "source_title": "Création d'entreprise : comment publier une annonce légale ? - economie.gouv.fr"
+        },
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F35957",
+          "source_title": "Publier une annonce légale de constitution de société - Service-public.fr"
+        }
+      ],
+      "confidence": "medium",
+      "verified_on": "2026-10-23",
+      "note": "Lu par extraits de recherche. Pas de capital minimum pour une SASU ou une EURL ; versement initial d'au moins 50 % (SASU) ou 20 % (EURL), solde dans les 5 ans ; annonce légale après la signature des statuts et avant la demande d'immatriculation, dans un journal d'annonces légales ou un service de presse en ligne habilité du département du siège ; dossier : statuts, attestation de parution, attestation de dépôt des fonds, justificatif de domiciliation, pièces du dirigeant."
+    },
+    "tva_cessation_delais": {
+      "value": {
+        "ca12_jours": 60,
+        "ca3_jours": 30
+      },
+      "unit": "object",
+      "label": "Cessation d'activité : délai de la dernière déclaration de TVA",
+      "source": "https://www.impots.gouv.fr/professionnel/questions/quels-delais-dois-je-respecter",
+      "source_title": "Je déclare ma cessation d'activité, ai-je d'autres démarches à accomplir ? - impots.gouv.fr",
+      "confidence": "medium",
+      "verified_on": "2026-10-23",
+      "note": "Lu par extraits de recherche. Régime réel simplifié : déclaration CA12 télétransmise dans les 60 jours suivant la cessation ; régime réel normal (CA3) : 30 jours. Un micro-entrepreneur en franchise de TVA n'a pas de déclaration de TVA à déposer (non confirmé par cette page : l'étape n'est montrée qu'à qui facture la TVA)."
     }
   },
   "open_questions": [

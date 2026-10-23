@@ -1696,6 +1696,90 @@
       "confidence": "medium",
       "verified_on": "2026-10-23",
       "note": "Read through search excerpts. Home insurance generally won't cover claims related to a home-based business; it may cover some business equipment, only while in the home. If you have a home-based business, you must notify your insurer: using your home for purposes your insurer isn't aware of may cancel your policy. Consider business insurance. Canada.ca's Protecting your business page presents the main types of business insurance and the needs of home-based businesses."
+    },
+    "ca_federal_incorporation": {
+      "value": {
+        "online_fee": 200,
+        "express_extra_fee": 100,
+        "mail_fee": 250,
+        "bn_and_rc_account_included": true,
+        "provinces_registered_at_same_time": [
+          "ON",
+          "NS",
+          "NL"
+        ],
+        "ontario_registration_fee": 0
+      },
+      "unit": "object",
+      "label": "Federal incorporation with Corporations Canada (CAD)",
+      "source": "https://ised-isde.canada.ca/site/corporations-canada/en/services-fees-and-processing-times",
+      "source_title": "Services, fees and processing times - Corporations Canada",
+      "more_sources": [
+        {
+          "source": "https://ised-isde.canada.ca/site/corporations-canada/en/business-corporations/provincial-registration-federal-business-corporations",
+          "source_title": "Provincial registration of federal business corporations - Corporations Canada"
+        }
+      ],
+      "confidence": "medium",
+      "verified_on": "2026-10-23",
+      "note": "Read through search excerpts. Online: 1 business day; express in 4 hours for $100 more; by email or mail: $250, about 10 days."
+    },
+    "ca_ontario_incorporation_fee": {
+      "value": 300,
+      "unit": "CAD",
+      "label": "Ontario business corporation: incorporation fee",
+      "source": "https://www.ontario.ca/page/business/start/register-your-business-online",
+      "source_title": "Register your business online - Ontario.ca",
+      "confidence": "medium",
+      "verified_on": "2026-10-23",
+      "note": "Read through search excerpts. An Ontario name search report is needed unless a number name is used. Other provinces: not collected."
+    },
+    "ca_change_legal_status": {
+      "value": {
+        "close_old_bn_and_accounts": true,
+        "rt_rp_accounts_not_moved": true
+      },
+      "unit": "object",
+      "label": "CRA accounts when a sole proprietorship incorporates",
+      "source": "https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/business-registration/maintain-business/change-legal-status.html",
+      "source_title": "Change of legal status - Canada.ca",
+      "confidence": "medium",
+      "verified_on": "2026-10-23",
+      "note": "Read through search excerpts. In most cases, close the existing BN and CRA accounts and register for new ones; GST/HST (RT) and payroll (RP) accounts are not automatically associated with the new BN."
+    },
+    "ca_section_85_rollover": {
+      "value": {
+        "form": "T2057",
+        "partnership_form": "T2058",
+        "shares_required": true,
+        "max_late_penalty": 8000
+      },
+      "unit": "object",
+      "label": "Section 85 election: transferring the business's property to the corporation",
+      "source": "https://www.canada.ca/en/revenue-agency/services/forms-publications/publications/ic76-19/transfer-property-a-corporation-under-section-85.html",
+      "source_title": "Transfer of property to a corporation under section 85 (IC76-19R3) - Canada.ca",
+      "more_sources": [
+        {
+          "source": "https://www.canada.ca/en/revenue-agency/services/forms-publications/forms/t2057.html",
+          "source_title": "T2057 Election on disposition of property by a taxpayer to a taxable Canadian corporation - Canada.ca"
+        }
+      ],
+      "confidence": "medium",
+      "verified_on": "2026-10-23",
+      "note": "Read through search excerpts. The transferor must receive shares; deadline: the earliest date any party must file its income tax return for the year of the transfer; late or amended election penalty up to $8,000."
+    },
+    "ca_t2_filing_deadline": {
+      "value": {
+        "months_after_year_end": 6,
+        "first_year_max_weeks": 53
+      },
+      "unit": "object",
+      "label": "Corporation income tax return (T2): filing deadline",
+      "source": "https://www.canada.ca/en/revenue-agency/services/forms-publications/publications/t4012/t2-corporation-income-tax-guide-chapter-1-page-1-t2-return.html",
+      "source_title": "T2 Corporation Income Tax Guide, chapter 1 - Canada.ca",
+      "confidence": "medium",
+      "verified_on": "2026-10-23",
+      "note": "Read through search excerpts. Filed within six months of the end of the tax year even with no tax payable; first tax year not more than 53 weeks from incorporation; Schedule 24 with the first return."
     }
   },
   "provinces": {
