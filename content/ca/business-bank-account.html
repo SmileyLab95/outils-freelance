@@ -1,0 +1,112 @@
+<!--{
+  "id": "bank",
+  "slug": "business-bank-account/",
+  "title": "Business Bank Account in Canada: Do You Need One?",
+  "description": "Sole proprietor under your own name or a business name, or a corporation: find out when you need a separate bank account and how long to keep your records.",
+  "menu": "Business bank account",
+  "icon": "🏦",
+  "blurb": "When a separate account is needed, and how long to keep records.",
+  "app": "Canada Business Bank Account Checker",
+  "scripts": [
+    "engines/bank-intl.js",
+    "tools/intl-bank.js"
+  ],
+  "rules": "ca",
+  "sources": [
+    "ca_bank_account_own_name",
+    "ca_bank_account_business_name",
+    "ca_corporation_separate_entity",
+    "ca_provincial_registration",
+    "ca_records_retention"
+  ],
+  "priority": 0.7,
+  "faq": [
+    [
+      "Do I need a separate bank account as a sole proprietor?",
+      "Not if you operate under your own name: you can use an existing account, although the CRA strongly encourages keeping your business finances separate. If your business has a name other than your own, you'll need a separate account to process cheques payable to your business."
+    ],
+    [
+      "Does a corporation need its own bank account?",
+      "A corporation is a separate legal entity that owns property in its own name, separately from its owners: its money belongs to it, in an account in its name."
+    ],
+    [
+      "How long should I keep my bank statements?",
+      "Keep your records and supporting documents for six years from the end of the last tax year they relate to."
+    ]
+  ]
+}-->
+<script type="application/json" id="bank-data">
+{
+  "country": "ca",
+  "verdicts": {
+    "recommended": "Strongly encouraged",
+    "needed_for_cheques": "Needed",
+    "corporation_account": "The corporation's own account"
+  },
+  "subs": {
+    "recommended": "You can use an existing account, but separating is strongly encouraged.",
+    "needed_for_cheques": "To process cheques payable to your business name.",
+    "corporation_account": "The corporation's money is its own, not yours."
+  },
+  "reasons": {
+    "ca_own_name": "Under your own name, you can use an existing bank account, but the CRA strongly encourages keeping your business finances separate.",
+    "ca_business_name": "If your business has a name other than your own, you'll need a separate bank account to process cheques payable to your business.",
+    "ca_corporation": "A corporation is a separate legal entity that owns property in its own name, separately from its owners: its money belongs to it, in an account in its name."
+  },
+  "steps": {
+    "ca_records_keep": "Keep your statements and receipts for six years from the end of the last tax year they relate to."
+  }
+}
+</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · CRA guidance</span>
+    <h1>Do you need a business bank account?</h1>
+    <p class="lead">Sole proprietor under your own name or a business name, or a corporation: see when a separate account is needed and how long to keep your records.</p>
+    <ul class="trust"><li>Sole proprietors and corporations</li><li>CRA guidance</li><li>Record-keeping rules</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="bank-form" onsubmit="return false">
+      <h2>Your business</h2>
+      <div class="fields">
+        <div class="field full"><label for="k-structure">You operate as</label>
+          <select id="k-structure" name="structure" data-save>
+            <option value="own_name" selected>Sole proprietor, my own name</option>
+            <option value="business_name">Sole proprietor, business name</option>
+            <option value="corporation">Corporation</option>
+          </select></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <h2 class="sr-only">Result</h2>
+      <div class="result-hero" role="status" aria-atomic="true">
+        <div class="label">Business bank account</div>
+        <div class="big" id="k-verdict" style="font-size: clamp(1.7rem, 3.6vw, 2.3rem);">–</div>
+        <div class="sub" id="k-sub">–</div>
+      </div>
+      <div class="card" style="margin-top: 16px; padding: 18px;">
+        <h3 style="font-size: 1rem; margin-bottom: 8px;">Why</h3>
+        <ul id="k-reasons" style="margin: 0; padding-left: 18px;"></ul>
+      </div>
+      <div class="card" style="margin-top: 16px; padding: 18px;">
+        <h3 style="font-size: 1rem; margin-bottom: 8px;">What to do</h3>
+        <ul id="k-steps" style="margin: 0; padding-left: 18px;"></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>Good to know</h2>
+  <ul>
+    <li><strong>Your own name or a business name</strong>: using a name other than your own usually means registering it with your province; the <a href="{{link:start}}">checklist to start a business</a> lists every step.</li>
+    <li><strong>On your invoices</strong>: the <a href="{{link:invoice}}">invoice generator</a> adds your payment details.</li>
+    <li><strong>Sole proprietor or corporation?</strong> The <a href="{{link:structure}}">comparison calculator</a> shows the difference in tax.</li>
+  </ul>
+  <p class="small muted">Information for guidance only, from the Canada Revenue Agency. Your bank decides which documents it asks for.</p>
+</section>

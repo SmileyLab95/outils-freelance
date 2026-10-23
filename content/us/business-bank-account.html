@@ -1,0 +1,120 @@
+<!--{
+  "id": "bank",
+  "slug": "business-bank-account/",
+  "title": "Business Bank Account for Freelancers: Do You Need One?",
+  "description": "Sole proprietor, LLC or corporation: why the IRS says to open a business checking account first, whether you need an EIN, and how long to keep records.",
+  "menu": "Business bank account",
+  "icon": "🏦",
+  "blurb": "Why a separate account matters, and whether you need an EIN.",
+  "app": "US Business Bank Account Checker",
+  "scripts": [
+    "engines/bank-intl.js",
+    "tools/intl-bank.js"
+  ],
+  "rules": "us",
+  "sources": [
+    "us_business_bank_account_irs",
+    "us_business_bank_account",
+    "us_llc_separate_funds",
+    "us_ein",
+    "us_ein_entities",
+    "us_records_retention"
+  ],
+  "priority": 0.7,
+  "faq": [
+    [
+      "Do I need a business bank account as a sole proprietor?",
+      "It's not a legal requirement, but the IRS says opening a business checking account is one of the first things to do when you start: keep it separate from your personal account and deposit all your business receipts in it."
+    ],
+    [
+      "Do I need an EIN to open a business bank account?",
+      "Not as a sole proprietor: you can use your Social Security number. A single-member LLC with no employees doesn't need an EIN, but can get one to open the account. A partnership or a corporation, including an LLC with two or more members, must have one. An EIN is free."
+    ],
+    [
+      "Why does a separate account matter for an LLC?",
+      "Keeping business funds separate from personal funds is part of what protects your personal assets when you have an LLC or a corporation, according to the SBA."
+    ],
+    [
+      "How long should I keep bank statements?",
+      "Generally 3 years from the date you file your return, longer in some cases, such as 6 years if you left out income over 25% of the gross income you reported."
+    ]
+  ]
+}-->
+<script type="application/json" id="bank-data">
+{
+  "country": "us",
+  "verdicts": {
+    "recommended": "Strongly recommended",
+    "keep_separate": "Keep a separate account"
+  },
+  "subs": {
+    "recommended": "Not a legal requirement, but the first thing the IRS says to do.",
+    "keep_separate": "Your business money stays apart from your personal money."
+  },
+  "reasons": {
+    "us_irs_first": "The IRS says opening a business checking account is one of the first things to do when you start: keep it separate from your personal account, deposit all your business receipts in it and reconcile it every month.",
+    "us_no_separation": "As a sole proprietor, there's no legal separation between you and your business: a separate account is what keeps the two apart in your records.",
+    "us_llc_liability": "With an LLC or a corporation, keeping business funds separate from personal funds is part of what protects your personal assets, according to the SBA."
+  },
+  "steps": {
+    "us_ssn_ok": "You can open the account with your Social Security number: you don't need an EIN unless you hire an employee or file excise or pension plan returns. Getting one is free.",
+    "us_ein_single_llc": "A single-member LLC with no employees doesn't need an EIN, but can get one, free, to open the account.",
+    "us_ein_entity": "A partnership or a corporation, including an LLC with two or more members, must have an EIN. Register with your state first; the EIN is free.",
+    "us_records_keep": "Keep your statements with your records, generally 3 years from the date you file your return, longer in some cases."
+  }
+}
+</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · IRS and SBA guidance</span>
+    <h1>Do you need a business bank account?</h1>
+    <p class="lead">Sole proprietor, LLC or corporation: why a separate account matters, whether you need an EIN to open it and how long to keep your records.</p>
+    <ul class="trust"><li>Sole proprietors, LLCs, corporations</li><li>IRS and SBA guidance</li><li>EIN rules</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="bank-form" onsubmit="return false">
+      <h2>Your business</h2>
+      <div class="fields">
+        <div class="field full"><label for="k-structure">Your business is</label>
+          <select id="k-structure" name="structure" aria-describedby="k-structure-hint" data-save>
+            <option value="sole_prop" selected>A sole proprietorship</option>
+            <option value="single_llc">A single-member LLC</option>
+            <option value="entity">A partnership or a corporation</option>
+          </select>
+          <span class="hint" id="k-structure-hint">An LLC with two or more members is a partnership by default.</span></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <h2 class="sr-only">Result</h2>
+      <div class="result-hero" role="status" aria-atomic="true">
+        <div class="label">Business bank account</div>
+        <div class="big" id="k-verdict" style="font-size: clamp(1.7rem, 3.6vw, 2.3rem);">–</div>
+        <div class="sub" id="k-sub">–</div>
+      </div>
+      <div class="card" style="margin-top: 16px; padding: 18px;">
+        <h3 style="font-size: 1rem; margin-bottom: 8px;">Why</h3>
+        <ul id="k-reasons" style="margin: 0; padding-left: 18px;"></ul>
+      </div>
+      <div class="card" style="margin-top: 16px; padding: 18px;">
+        <h3 style="font-size: 1rem; margin-bottom: 8px;">What to do</h3>
+        <ul id="k-steps" style="margin: 0; padding-left: 18px;"></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>Good habits with a business account</h2>
+  <ul>
+    <li><strong>All business money in, all business expenses out</strong>: deposit every business receipt and pay business expenses from it.</li>
+    <li><strong>Paying yourself</strong>: the IRS suggests writing checks to yourself only when you take money out of the business for personal use.</li>
+    <li><strong>Reconcile every month</strong> with your records: it makes your <a href="{{link:estimated-tax}}">quarterly estimated taxes</a> much easier.</li>
+  </ul>
+  <p>Setting up? The <a href="{{link:start}}">freelance startup checklist</a> lists every step, and the <a href="{{link:structure}}">sole proprietor vs S corp calculator</a> compares the two.</p>
+  <p class="small muted">Information for guidance only, from the IRS and the U.S. Small Business Administration. Your bank decides which documents it asks for.</p>
+</section>

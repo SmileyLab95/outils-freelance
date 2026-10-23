@@ -1,0 +1,118 @@
+<!--{
+  "id": "bank",
+  "slug": "business-bank-account/",
+  "title": "Business Bank Account UK: Do Sole Traders Need One?",
+  "description": "Sole trader, partnership or limited company: find out whether you need a business bank account, what HMRC expects from your records and how long to keep them.",
+  "menu": "Business bank account",
+  "icon": "🏦",
+  "blurb": "Required or not, for a sole trader or a limited company.",
+  "app": "UK Business Bank Account Checker",
+  "scripts": [
+    "engines/bank-intl.js",
+    "tools/intl-bank.js"
+  ],
+  "rules": "uk",
+  "sources": [
+    "uk_business_bank_account",
+    "uk_limited_company_money",
+    "uk_records_retention"
+  ],
+  "priority": 0.7,
+  "faq": [
+    [
+      "Do I need a business bank account as a sole trader?",
+      "No. Sole traders and ordinary partnerships aren't legally required to have one. A separate account still makes your records simpler, and HMRC expects you to be able to identify your business transactions."
+    ],
+    [
+      "Can I use my personal bank account for my business?",
+      "You might be able to, but check with your bank first: its terms may not allow business transactions on a personal account. Keep business and personal spending easy to tell apart."
+    ],
+    [
+      "Does a limited company need a business bank account?",
+      "Yes. A limited company is a separate legal entity, and its money must be kept separate from the money of its owners and directors, in an account in the company's name."
+    ],
+    [
+      "How long should I keep my bank statements?",
+      "As a sole trader, keep your business records, bank statements included, for at least 5 years after the 31 January submission deadline of the tax year they relate to."
+    ]
+  ]
+}-->
+<script type="application/json" id="bank-data">
+{
+  "country": "uk",
+  "verdicts": {
+    "not_required": "Not required by law",
+    "company_account": "The company's own account"
+  },
+  "subs": {
+    "not_required": "But a separate account makes your records much simpler.",
+    "company_account": "The company's money must stay separate from yours."
+  },
+  "reasons": {
+    "uk_not_required": "Sole traders and ordinary partnerships aren't legally required to have a business bank account. Keeping business and personal money apart makes your accounting simpler.",
+    "uk_records_identify": "Your records must be accurate and let you identify your business transactions: easy with a separate account, harder when they're mixed with personal spending.",
+    "uk_company_separate": "A limited company is a separate legal entity: its money must be kept separate from the money of its owners and directors."
+  },
+  "steps": {
+    "uk_check_bank": "If you use a personal account, check with your bank that its terms allow business transactions.",
+    "uk_records_keep": "Keep your statements with your other records for at least 5 years after the 31 January submission deadline of the tax year they relate to.",
+    "uk_company_account": "Open the account in the company's name and use it only for the company's money."
+  }
+}
+</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · UK rules</span>
+    <h1>Do you need a business bank account?</h1>
+    <p class="lead">Sole trader, partnership or limited company: see whether a separate bank account is required, what HMRC expects from your records and how long to keep them.</p>
+    <ul class="trust"><li>Sole traders and companies</li><li>Official guidance</li><li>Record-keeping rules</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="bank-form" onsubmit="return false">
+      <h2>Your business</h2>
+      <div class="fields">
+        <div class="field full"><label for="k-structure">You're running your business as</label>
+          <select id="k-structure" name="structure" data-save>
+            <option value="sole_trader" selected>A sole trader</option>
+            <option value="partnership">An ordinary partnership</option>
+            <option value="limited">A limited company</option>
+          </select></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <h2 class="sr-only">Result</h2>
+      <div class="result-hero" role="status" aria-atomic="true">
+        <div class="label">Business bank account</div>
+        <div class="big" id="k-verdict" style="font-size: clamp(1.7rem, 3.6vw, 2.3rem);">–</div>
+        <div class="sub" id="k-sub">–</div>
+      </div>
+      <div class="card" style="margin-top: 16px; padding: 18px;">
+        <h3 style="font-size: 1rem; margin-bottom: 8px;">Why</h3>
+        <ul id="k-reasons" style="margin: 0; padding-left: 18px;"></ul>
+      </div>
+      <div class="card" style="margin-top: 16px; padding: 18px;">
+        <h3 style="font-size: 1rem; margin-bottom: 8px;">What to do</h3>
+        <ul id="k-steps" style="margin: 0; padding-left: 18px;"></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>Separate account or not?</h2>
+  <ul>
+    <li><strong>Sole trader or ordinary partnership</strong>: no legal requirement. A separate account is still the easiest way to keep accurate records and to see what the business earns.</li>
+    <li><strong>Limited company</strong>: the company is a separate legal entity, so its money stays in its own account, never mixed with yours.</li>
+  </ul>
+  <h2>Good to know</h2>
+  <ul>
+    <li><strong>On your invoices</strong>: the <a href="{{link:invoice}}">invoice generator</a> adds your payment details.</li>
+    <li><strong>Setting up</strong>: the <a href="{{link:start}}">sole trader checklist</a> lists every step, and the <a href="{{link:structure}}">sole trader vs limited company calculator</a> compares the two.</li>
+  </ul>
+  <p class="small muted">Information for guidance only, from GOV.UK and Business.gov.uk. Ask your bank which account it allows for business use.</p>
+</section>

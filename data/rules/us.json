@@ -1364,6 +1364,47 @@
       "confidence": "medium",
       "verified_on": "2026-10-23",
       "note": "Read through search excerpts of each state's court or legislature pages on 2026-10-22 and 2026-10-23 (details in documentation/24-recouvrement-uk-us-ca.md, § 3). Most limits exclude interest and costs (AK, AZ, CO, DC, FL, HI, IA, IL, KY, LA, MD, ME, MO, NH, OH, PA, RI, VA, WV); TX and UT count attorney fees; CT counts attorney fees and collection costs. CA: $12,500 for natural persons including sole proprietors (CCP 116.221), $6,250 for other parties (CCP 116.220); AB 1827 ($15,000) held in committee 13/08/2026. WA: $10,000 natural persons, $5,000 any other party (RCW 12.40.010). NY: $10,000 in New York City, $5,000 in City Courts, $3,000 in Town and Village Courts; corporations, partnerships and associations file commercial claims up to $10,000 in NYC and $5,000 in City Courts (not in Town and Village Courts). NC: limit set by county from $5,000 to $10,000 (magistrates). PA: $12,000 before magisterial district judges, $10,000 in Philadelphia Municipal Court. GA: $25,000 for actions filed on or after 1 January 2027 (HB 999, Act 707). WI: $15,000 from 1 January 2027 (2025 Act 105); tort and personal injury claims are capped at $5,000 now. ID: $15,000 since 1 July 2026 (S 1330, 2026 ch. 196). ME: $10,000 since 1 January 2026. WV: $20,000 since 7 July 2025 (HB 2761). AZ: $5,000 (SB 1022, Laws 2025 ch. 94). OR: $10,000; SB 484 ($20,000) died in committee in 2025. SC: $7,500; 2025-26 bills to raise it not enacted as of October 2026. TN: $25,000 in general sessions courts under present law (fiscal note of SB 572), other limits in a few larger counties by private act; HB 982 ($50,000) taken off notice on 18/03/2026. MN: $4,000 for consumer credit transactions. VT: $5,000 for consumer credit and medical debt. Representation: IL (corporation needs a lawyer), DC (a business plaintiff needs a lawyer), NJ (a corporation needs a lawyer above $5,000), IN (a corporation without a lawyer only up to $6,000), MI (no lawyers; MCL 600.8408), NE (no lawyers), VA (generally no lawyers), WA (lawyers only with the judge's permission)."
+    },
+    "us_business_bank_account_irs": {
+      "value": "One of the first things you should do when you start a business is open a business checking account, kept separate from your personal checking account; deposit all receipts in it and reconcile it each month.",
+      "unit": "text",
+      "label": "IRS: open a separate business checking account when you start",
+      "source": "https://www.irs.gov/publications/p583",
+      "source_title": "Publication 583 (12/2024), Starting a Business and Keeping Records - IRS",
+      "confidence": "high",
+      "verified_on": "2026-10-23",
+      "note": "Pub. 583 also says to write checks payable to yourself only when withdrawing money from the business for personal use. A recommendation, not a legal requirement."
+    },
+    "us_ein_entities": {
+      "value": {
+        "single_member_llc_without_employees_needs_ein": false,
+        "partnership_and_corporation_need_ein": true,
+        "multi_member_llc_default": "partnership",
+        "free": true
+      },
+      "unit": "object",
+      "label": "EIN: LLCs, partnerships and corporations",
+      "source": "https://www.irs.gov/businesses/small-businesses-self-employed/single-member-limited-liability-companies",
+      "source_title": "Single member limited liability companies - IRS",
+      "more_sources": [
+        {
+          "source": "https://www.irs.gov/instructions/iss4",
+          "source_title": "Instructions for Form SS-4 (12/2025) - IRS"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-10-23",
+      "note": "A single-member LLC with no employees and no excise tax filings doesn't need an EIN, but can get one to open a bank account. A partnership or corporation must use an EIN even without employees; an LLC with two or more members is a partnership by default. Applying is free. Register an LLC, partnership or corporation with the state before applying."
+    },
+    "us_llc_separate_funds": {
+      "value": "Keeping business funds separate from personal funds is part of the limited personal liability protection of an LLC or corporation.",
+      "unit": "text",
+      "label": "LLC or corporation: keep business funds separate",
+      "source": "https://www.sba.gov/business-guide/launch-your-business/open-business-bank-account",
+      "source_title": "Open a business bank account - U.S. Small Business Administration",
+      "confidence": "medium",
+      "verified_on": "2026-10-23",
+      "note": "SBA: a business bank account offers limited personal liability protection by keeping business funds separate from personal funds; banks commonly ask for an EIN (or the owner's Social Security number for a sole proprietorship), formation documents, ownership agreements and a business license. State law decides when a court disregards an LLC's liability protection: not covered here."
     }
   },
   "open_questions": [

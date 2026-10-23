@@ -1,8 +1,8 @@
 # 25. Compte professionnel et assurance hors de France (Royaume-Uni, États-Unis, Canada)
 
 Besoins P2 de [02](02-besoins-clients.md) : « Assurance professionnelle » et « Compte pro, encaissement », colonnes
-États-Unis, Royaume-Uni et Canada (la France est faite : [15](15-guides-gestion.md), § 1 et § 2). **Spécification en
-cours** (23/10/2026) : recherches faites, pages à construire. Mêmes identifiants que les pages françaises (`bank`,
+États-Unis, Royaume-Uni et Canada (la France est faite : [15](15-guides-gestion.md), § 1 et § 2). **Compte bancaire réalisé le
+23/10/2026 (§ 3) ; assurance en cours.** Mêmes identifiants que les pages françaises (`bank`,
 `insurance`) pour les liens de langue et de pays. Pas de partenaires ni d'affiliation (D4) ; pas de conseil personnalisé
 (D8).
 
@@ -39,6 +39,25 @@ démarches, chaque ligne liée à sa règle.
 - États-Unis : `/us/business-bank-account/`, `/us/business-insurance/`.
 - Canada : `/ca/business-bank-account/`, `/ca/business-insurance/` et leurs versions françaises.
 
-**À faire avant de construire** : relire les sources exactes ; vérifier, au Royaume-Uni, la conservation
-des registres et la règle du compte bancaire pour la TVA ; décider de ne rien afficher sur les prix des assurances
-(aucune source officielle).
+Pas de prix d'assurance (aucune source officielle) ; la règle du compte bancaire pour les remboursements de TVA
+britanniques n'est pas reprise (non vérifiée).
+
+## 3. Compte bancaire : réalisation (23/10/2026)
+
+- Pages `/uk/business-bank-account/`, `/us/business-bank-account/`, `/ca/business-bank-account/` et
+  `/ca/fr/compte-bancaire-entreprise/` (menu « *Getting paid* » / « Se faire payer », identifiant `bank` comme la page
+  française) : une question (la forme de l'activité), puis la réponse, ses raisons et les démarches.
+- Réponses : Royaume-Uni, *sole trader* ou *partnership* : pas d'obligation légale, registres qui permettent
+  d'identifier les opérations, vérifier les conditions de sa banque, registres gardés 5 ans après le 31 janvier ;
+  *limited company* : compte de la société. États-Unis, *sole proprietor* : fortement conseillé (IRS, Pub. 583), numéro
+  de sécurité sociale suffisant ; LLC à un membre : compte séparé, EIN facultatif ; société de personnes ou par actions
+  (LLC à plusieurs membres comprise) : compte séparé, EIN obligatoire ; registres 3 ans en général. Canada, sous son
+  nom : fortement encouragé ; sous un autre nom : compte nécessaire pour les chèques à ce nom ; société : son propre
+  compte (entité juridique distincte) ; registres 6 ans.
+- Moteur `engines/bank-intl.js`, outil commun `tools/intl-bank.js` ; sept règles nouvelles (uk.json, us.json, ca.json),
+  les règles existantes de conservation des registres et d'EIN réutilisées.
+- Tests : `bank-intl.test.mjs` (chaque forme des trois pays, textes des quatre pages, chiffres repris des règles) ;
+  parcours navigateur ; 6 erreurs réintroduites, toutes détectées. Revue des captures : libellés de la liste coupés
+  sur mobile (raccourcis ; aux États-Unis, une indication rappelle qu'une LLC à plusieurs membres est une société de
+  personnes par défaut).
+

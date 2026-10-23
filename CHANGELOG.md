@@ -1,5 +1,15 @@
 # Journal des modifications
 
+## 2026-10-23 — Compte bancaire d'entreprise : Royaume-Uni, États-Unis, Canada
+
+- Vérificateur « *Business bank account* » au Royaume-Uni, aux États-Unis et au Canada, et « Compte bancaire
+  d'entreprise » au Canada en français : selon la forme de l'activité, si un compte séparé est obligatoire, nécessaire
+  ou conseillé, pourquoi, et quoi faire (vérifier les conditions de sa banque, EIN aux États-Unis, durée de
+  conservation des registres). Sept règles nouvelles, une source officielle chacune (GOV.UK, Business.gov.uk, IRS,
+  SBA, ARC).
+- Tests : `bank-intl.test.mjs` ; 6 erreurs réintroduites, toutes détectées ; suite complète (278 tests unitaires,
+  27 tests serveur, 2 599 vérifications navigateur du site public).
+
 ## 2026-10-23 — Recouvrement en justice : États-Unis
 
 - `/us/small-claims-court/` : plafond des *small claims* dans les 50 États et le district de Columbia, selon que l'on

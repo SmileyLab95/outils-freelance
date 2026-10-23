@@ -1,0 +1,112 @@
+<!--{
+  "id": "bank",
+  "slug": "compte-bancaire-entreprise/",
+  "title": "Compte bancaire d'entreprise au Canada : obligatoire ?",
+  "description": "Travailleur autonome sous votre nom ou une raison sociale, ou société : quand un compte séparé est nécessaire, et combien de temps garder vos registres.",
+  "menu": "Compte bancaire d'entreprise",
+  "icon": "🏦",
+  "blurb": "Quand un compte séparé est nécessaire, et combien de temps garder vos registres.",
+  "app": "Vérificateur de compte bancaire d'entreprise (Canada)",
+  "scripts": [
+    "engines/bank-intl.js",
+    "tools/intl-bank.js"
+  ],
+  "rules": "ca",
+  "sources": [
+    "ca_bank_account_own_name",
+    "ca_bank_account_business_name",
+    "ca_corporation_separate_entity",
+    "ca_provincial_registration",
+    "ca_records_retention"
+  ],
+  "priority": 0.7,
+  "faq": [
+    [
+      "Un travailleur autonome doit-il avoir un compte bancaire séparé ?",
+      "Pas s'il exerce sous son propre nom : un compte existant peut servir, même si l'ARC encourage fortement à séparer ses finances d'entreprise. Si votre entreprise porte un autre nom que le vôtre, il vous faut un compte séparé pour encaisser les chèques faits à ce nom."
+    ],
+    [
+      "Une société par actions doit-elle avoir son propre compte ?",
+      "Une société est une entité juridique distincte, qui possède des biens en son propre nom, séparément de ses propriétaires : son argent lui appartient, dans un compte à son nom."
+    ],
+    [
+      "Combien de temps garder mes relevés bancaires ?",
+      "Gardez vos registres et pièces justificatives pendant six ans à partir de la fin de la dernière année d'imposition qu'ils concernent."
+    ]
+  ]
+}-->
+<script type="application/json" id="bank-data">
+{
+  "country": "ca",
+  "verdicts": {
+    "recommended": "Fortement encouragé",
+    "needed_for_cheques": "Nécessaire",
+    "corporation_account": "Le compte de la société"
+  },
+  "subs": {
+    "recommended": "Un compte existant peut servir, mais séparer est fortement encouragé.",
+    "needed_for_cheques": "Pour encaisser les chèques faits au nom de votre entreprise.",
+    "corporation_account": "L'argent de la société lui appartient, pas à vous."
+  },
+  "reasons": {
+    "ca_own_name": "Sous votre propre nom, un compte bancaire existant peut servir, mais l'ARC encourage fortement à séparer vos finances d'entreprise.",
+    "ca_business_name": "Si votre entreprise porte un autre nom que le vôtre, il vous faut un compte bancaire séparé pour encaisser les chèques faits au nom de votre entreprise.",
+    "ca_corporation": "Une société est une entité juridique distincte, qui possède des biens en son propre nom, séparément de ses propriétaires : son argent lui appartient, dans un compte à son nom."
+  },
+  "steps": {
+    "ca_records_keep": "Gardez vos relevés et vos pièces justificatives pendant six ans à partir de la fin de la dernière année d'imposition qu'ils concernent."
+  }
+}
+</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Gratuit · règles de l'ARC</span>
+    <h1>Faut-il un compte bancaire d'entreprise ?</h1>
+    <p class="lead">Entreprise individuelle sous votre nom ou sous une raison sociale, ou société par actions : voyez quand un compte séparé est nécessaire et combien de temps garder vos registres.</p>
+    <ul class="trust"><li>Travailleurs autonomes et sociétés</li><li>Règles de l'ARC</li><li>Conservation des registres</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="bank-form" onsubmit="return false">
+      <h2>Votre entreprise</h2>
+      <div class="fields">
+        <div class="field full"><label for="k-structure">Vous êtes</label>
+          <select id="k-structure" name="structure" data-save>
+            <option value="own_name" selected>Travailleur autonome, à mon nom</option>
+            <option value="business_name">Travailleur autonome, autre nom</option>
+            <option value="corporation">Société par actions</option>
+          </select></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <h2 class="sr-only">Résultat</h2>
+      <div class="result-hero" role="status" aria-atomic="true">
+        <div class="label">Compte bancaire d'entreprise</div>
+        <div class="big" id="k-verdict" style="font-size: clamp(1.7rem, 3.6vw, 2.3rem);">–</div>
+        <div class="sub" id="k-sub">–</div>
+      </div>
+      <div class="card" style="margin-top: 16px; padding: 18px;">
+        <h3 style="font-size: 1rem; margin-bottom: 8px;">Pourquoi</h3>
+        <ul id="k-reasons" style="margin: 0; padding-left: 18px;"></ul>
+      </div>
+      <div class="card" style="margin-top: 16px; padding: 18px;">
+        <h3 style="font-size: 1rem; margin-bottom: 8px;">À faire</h3>
+        <ul id="k-steps" style="margin: 0; padding-left: 18px;"></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>Bon à savoir</h2>
+  <ul>
+    <li><strong>Votre nom ou une raison sociale</strong> : exercer sous un autre nom que le vôtre demande en général de l'enregistrer auprès de votre province ; la <a href="{{link:start}}">liste des démarches pour démarrer</a> les reprend toutes.</li>
+    <li><strong>Sur vos factures</strong> : le <a href="{{link:invoice}}">générateur de facture</a> ajoute vos coordonnées de paiement.</li>
+    <li><strong>Entreprise individuelle ou société ?</strong> Le <a href="{{link:structure}}">comparateur</a> montre l'écart d'impôt.</li>
+  </ul>
+  <p class="small muted">Information générale, tirée des pages de l'Agence du revenu du Canada. Votre banque décide des documents qu'elle demande.</p>
+</section>

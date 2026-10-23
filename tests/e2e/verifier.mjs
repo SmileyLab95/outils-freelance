@@ -490,6 +490,17 @@ const tests = {
     await page.fill("#c-amount", "5,000");
     check((await text("c-verdict")) === "Small claims court", "small claims US : situation par défaut rétablie");
   },
+  async "us/business-bank-account/"(page) {
+    const text = (id) => page.textContent(`#${id}`).then((t) => t.trim());
+    check((await text("k-verdict")) === "Strongly recommended" && (await text("k-steps")).includes("Social Security number"),
+      `compte US : sole proprietor → fortement conseillé, numéro de sécurité sociale (obtenu : ${await text("k-verdict")})`);
+    await page.selectOption("#k-structure", "entity");
+    check((await text("k-verdict")) === "Keep a separate account" && (await text("k-steps")).includes("must have an EIN"), "compte US : société → compte séparé, EIN obligatoire");
+    await accessible(page, "compte US (société)");
+    await page.reload({ waitUntil: "networkidle" });
+    check((await page.inputValue("#k-structure")) === "entity", "compte US : situation mémorisée après rechargement");
+    await page.selectOption("#k-structure", "sole_prop");
+  },
   async "us/invoice-generator/"(page) {
     await page.fill("#iv-me-name", "Alex Morgan Design LLC");
     await page.fill("#iv-client-name", "Northwind Inc.");
@@ -688,6 +699,17 @@ const tests = {
     await page.fill("#c-due", daysAgo(60));
     await page.check("#c-interest");
     check((await text("c-fee")) === "£115.00", "small claims UK : situation par défaut rétablie");
+  },
+  async "uk/business-bank-account/"(page) {
+    const text = (id) => page.textContent(`#${id}`).then((t) => t.trim());
+    check((await text("k-verdict")) === "Not required by law" && (await text("k-reasons")).includes("aren't legally required") &&
+      (await text("k-steps")).includes("5 years after the 31 January"), `compte UK : sole trader → pas obligatoire, registres 5 ans (obtenu : ${await text("k-verdict")})`);
+    await page.selectOption("#k-structure", "limited");
+    check((await text("k-verdict")) === "The company's own account" && (await text("k-reasons")).includes("separate legal entity"), "compte UK : société → compte de la société");
+    await accessible(page, "compte UK (société)");
+    await page.reload({ waitUntil: "networkidle" });
+    check((await page.inputValue("#k-structure")) === "limited", "compte UK : situation mémorisée après rechargement");
+    await page.selectOption("#k-structure", "sole_trader");
   },
   async "uk/payment-reminder-letter/"(page) {
     const due = new Date(Date.now() - 50 * 86400000).toISOString().slice(0, 10);
@@ -1608,6 +1630,23 @@ const tests = {
     await page.selectOption("#c-province", "QC");
     await page.fill("#c-amount", "8 000");
     check((await text("c-verdict")) === "Petites créances", "petites créances CA-FR : situation par défaut rétablie");
+  },
+  async "ca/business-bank-account/"(page) {
+    const text = (id) => page.textContent(`#${id}`).then((t) => t.trim());
+    check((await text("k-verdict")) === "Strongly encouraged" && (await text("k-steps")).includes("six years"), "compte CA : sous son nom → fortement encouragé, registres 6 ans");
+    await page.selectOption("#k-structure", "business_name");
+    check((await text("k-verdict")) === "Needed" && (await text("k-reasons")).includes("cheques payable to your business"), "compte CA : raison sociale → compte nécessaire pour les chèques");
+    await page.selectOption("#k-structure", "corporation");
+    check((await text("k-verdict")) === "The corporation's own account", "compte CA : société → compte de la société");
+    await accessible(page, "compte CA (société)");
+    await page.selectOption("#k-structure", "own_name");
+  },
+  async "ca/fr/compte-bancaire-entreprise/"(page) {
+    const text = (id) => page.textContent(`#${id}`).then((t) => t.trim());
+    check((await text("k-verdict")) === "Fortement encouragé" && (await text("k-steps")).includes("six ans"), "compte CA-FR : sous son nom → fortement encouragé, registres 6 ans");
+    await page.selectOption("#k-structure", "business_name");
+    check((await text("k-verdict")) === "Nécessaire" && (await text("k-reasons")).includes("chèques faits au nom de votre entreprise"), "compte CA-FR : raison sociale → compte nécessaire");
+    await page.selectOption("#k-structure", "own_name");
   },
   async "ca/freelance-email-templates/"() {},
   async "ca/legal-notice/"() {},

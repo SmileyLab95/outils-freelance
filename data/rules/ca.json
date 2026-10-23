@@ -1516,6 +1516,36 @@
       "confidence": "medium",
       "verified_on": "2026-10-22",
       "note": "General rule only; other periods apply to some claims, and special rules (minors, acknowledgment, concealment) can change the deadline. ON, BC, AB, SK, MB (Act in force 30 September 2022), NS, NB: 2 years from the day the claim is discovered (when the claimant knew or ought to have known of it), with an ultimate period (15 years; 10 in Alberta). QC: 3 years for a personal right (C.c.Q. art. 2925). PE: 6 years after the cause of action arose (catch-all, s. 2(1)(g)). NL: 6 years after the right arose (s. 6 lists debt claims; s. 9 catch-all). YT: 6 years for money owed under a simple contract. NT: 6 years (older Act, catch-all; text partly garbled in the excerpt: medium confidence). NU: not checked (null). ON, BC, AB, SK, MB, NS, NB and QC confirmed on the statute or official summaries (high); PE, NL, YT, NT through statute excerpts (medium)."
+    },
+    "ca_bank_account_business_name": {
+      "value": "If your business has a name other than your own, you'll need a separate bank account to process cheques payable to your business.",
+      "unit": "text",
+      "label": "Sole proprietorship under a business name: separate bank account for cheques payable to the business",
+      "source": "https://www.canada.ca/en/revenue-agency/services/tax/businesses/small-businesses-self-employed-income/setting-your-business/sole-proprietorship.html",
+      "source_title": "Sole proprietorship - Canada.ca",
+      "confidence": "high",
+      "verified_on": "2026-10-23",
+      "note": "A sole proprietor can operate under their own name, a registered business name, or both."
+    },
+    "ca_bank_account_own_name": {
+      "value": "Operating under your own name, you can use an existing bank account, but the CRA strongly encourages keeping business finances separate.",
+      "unit": "text",
+      "label": "Sole proprietorship under your own name: separate account strongly encouraged",
+      "source": "https://www.canada.ca/en/revenue-agency/campaigns/life-events/starting-small-business.html",
+      "source_title": "Starting a small business - Canada.ca",
+      "confidence": "medium",
+      "verified_on": "2026-10-23",
+      "note": "Read through a search excerpt of the CRA's example (own name: existing account possible; separate finances strongly encouraged)."
+    },
+    "ca_corporation_separate_entity": {
+      "value": "A corporation is a separate legal entity: it can enter into contracts and own property in its own name, separately and distinctly from its owners.",
+      "unit": "text",
+      "label": "Corporation: separate legal entity",
+      "source": "https://www.canada.ca/en/revenue-agency/services/tax/businesses/small-businesses-self-employed-income/setting-your-business/corporation.html",
+      "source_title": "Corporation - Canada.ca",
+      "confidence": "high",
+      "verified_on": "2026-10-23",
+      "note": "The page doesn't speak of bank accounts: the tool infers only that the corporation's money is its own, held in its name."
     }
   },
   "provinces": {

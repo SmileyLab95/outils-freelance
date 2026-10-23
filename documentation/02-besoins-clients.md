@@ -108,7 +108,7 @@ Matrice revue le 22/10/2026 d'après les pages publiées (identifiants de `conte
 |---|---|---|---|---|---|---|
 | Assurance professionnelle | Guide + partenaires (affiliation) | ✅ guide | 🟡 | 🟡 | 🟡 | P2 |
 | Retraite | Calculateur d'épargne retraite (PER, SEP-IRA/Solo 401(k), SIPP, REER) | ✅ | ✅ | ✅ | ✅ | P3 |
-| Compte pro, encaissement | Guide, comparatif + partenaires (affiliation) | ✅ guide | 🟡 | 🟡 | 🟡 | P2 |
+| Compte pro, encaissement | Guide, comparatif + partenaires (affiliation) | ✅ guide | ✅ guide | ✅ guide | ✅ guide | P2 |
 
 ### 10. Évoluer
 
@@ -122,7 +122,7 @@ Matrice revue le 22/10/2026 d'après les pages publiées (identifiants de `conte
 - **P1** : Espace entrepreneur hors de France (après la plateforme française). Comparateur de statuts au Canada fait le 22/10/2026 (Saskatchewan et Nunavut en attente d'un taux officiel).
 - **P2** (convertisseur de tarifs, prix au forfait et « freelance ou salarié » faits le 22/10/2026) : checklist de
   création, jauges de seuils, client étranger et W-8BEN faits le 22/10/2026 ; recouvrement en justice fait au
-  Royaume-Uni, au Canada et aux États-Unis le 23/10/2026, à faire en France (textes de 2026 à lire) ; assurance et compte pro hors de France.
+  Royaume-Uni, au Canada et aux États-Unis le 23/10/2026, à faire en France (textes de 2026 à lire) ; compte pro hors de France fait le 23/10/2026 ; assurance hors de France.
 - **P3** : date d'échéance, proposition commerciale, NDA, CGV, bureau à domicile, hausse de tarifs (calculateur),
   sous-traitance, guide de changement de statut.
 

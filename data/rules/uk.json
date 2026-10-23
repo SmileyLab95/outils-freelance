@@ -1697,6 +1697,41 @@
       "confidence": "high",
       "verified_on": "2026-10-22",
       "note": "Defended claims allocated to the small claims track: a free one-hour telephone mediation appointment with HMCTS staff, who speak to each party separately. Since 22 May 2024, parties in money claims up to £10,000 must take part; if there's no agreement, the case goes to a judge; not attending can lead to sanctions (costs, or the claim decided against the absent party)."
+    },
+    "uk_business_bank_account": {
+      "value": {
+        "required_for_sole_traders": false,
+        "required_for_ordinary_partnerships": false
+      },
+      "unit": "object",
+      "label": "Business bank account: not a legal requirement for sole traders and ordinary partnerships",
+      "source": "https://www.business.gov.uk/support/accounting-tax-cashflow/getting-a-business-bank-account/",
+      "source_title": "Getting a business bank account - Business.gov.uk",
+      "more_sources": [
+        {
+          "source": "https://www.gov.uk/self-employed-records",
+          "source_title": "Business records if you're self-employed - GOV.UK"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-10-23",
+      "note": "Sole traders and ordinary partnerships are not legally required to have a business bank account; separating business and personal money makes accounting simpler. GOV.UK: records must be accurate and let you identify business transactions; you might be able to use a personal or a business bank account for your business, so check with your bank which type of account you can use for business transactions. Read through search excerpts."
+    },
+    "uk_limited_company_money": {
+      "value": "A limited company is a separate legal entity: its money must be kept separate from the money of its owners and directors.",
+      "unit": "text",
+      "label": "Limited company: company money kept separate (business bank account)",
+      "source": "https://www.gov.uk/running-a-limited-company/company-and-accounting-records",
+      "source_title": "Running a limited company: company and accounting records - GOV.UK",
+      "more_sources": [
+        {
+          "source": "https://www.business.gov.uk/support/business-tax-and-reporting/getting-a-business-bank-account/",
+          "source_title": "Getting a business bank account - Business.gov.uk"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-10-23",
+      "note": "Business.gov.uk: limited companies must have a business bank account."
     }
   },
   "open_questions": [

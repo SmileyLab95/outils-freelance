@@ -9,7 +9,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 
 ## Où en est-on ?
 
-*Mis à jour le 23/10/2026.*
+*Mis à jour le 23/10/2026 (soir).*
 
 - **Priorité (décision D10)** : le site et la plateforme d'abord ; noms de domaine, Gumroad et affiliation à la fin.
   Règle de qualité maximale pour tout produit ou service (D11, charte dans la [méthode](04-methode-de-travail.md#charte-qualité)).
@@ -152,8 +152,11 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 - **Recouvrement en justice aux États-Unis (23/10/2026)** : outil *Small claims court* des 50 États et du district
   de Columbia (plafond selon le statut, plafonds selon le tribunal ou le comté, hausses du 01/01/2027 en Géorgie et
   au Wisconsin, particularités de chaque État) ; le besoin P2 « Recouvrement en justice » est couvert hors de France.
-- **Prochaines actions de Claude** : assurance et compte professionnel hors de France (P2 ; recherches faites le
-  23/10/2026, spécification en cours : [25](25-compte-et-assurance-hors-france.md)) ; comptes : adaptateur
+- **Compte bancaire d'entreprise hors de France (23/10/2026)** : vérificateur au Royaume-Uni, aux États-Unis et au
+  Canada (anglais et français) : obligatoire ou conseillé selon la forme de l'activité, EIN, conservation des registres
+  ([25](25-compte-et-assurance-hors-france.md), § 3).
+- **Prochaines actions de Claude** : assurance hors de France (P2 ; recherches faites le 23/10/2026,
+  [25](25-compte-et-assurance-hors-france.md)) ; comptes : adaptateur
   PostgreSQL et sauvegardes dès que l'hébergeur est choisi ; taux du crédit pour
   dividendes de la Saskatchewan et du Nunavut dès qu'ils sont publiés (formulaires 2026) ;
   trouver la cause du contrôle de contraste intermittent de l'Espace ; revérifier les grilles des prestataires de
