@@ -458,6 +458,47 @@
   }
 
   /** Livre des recettes au format CSV (séparateur « ; », virgule décimale, pour Excel en français). */
+  // ----- Dépenses et registre des achats (documentation/36-depenses-et-registre-des-achats.md) ------------
+
+  /** Le registre des achats est obligatoire pour l'activité du profil (règle registre_achats). */
+  function purchasesRequired(profile, rule) {
+    return !!(profile && rule && (rule.activities || []).indexOf(profile.activity) > -1);
+  }
+
+  /**
+   * Dépenses de la période, dans l'ordre chronologique (date, puis création) : { rows, total, cash } ; cash : total
+   * réglé en espèces, à distinguer dans le registre des achats.
+   */
+  function expenseRows(expenses, from, to) {
+    var rows = (expenses || []).filter(function (e) { return e && e.date && (!from || e.date >= from) && (!to || e.date <= to); })
+      .map(function (e) {
+        return { id: e.id, date: e.date, supplier: e.supplier || "", label: e.label || "", method: METHODS[e.method] || e.method || "",
+                 cash: e.method === "especes", ref: e.ref || "", amount: round2(Number(e.amount) || 0), createdAt: e.createdAt || "" };
+      })
+      .sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : (a.createdAt < b.createdAt ? -1 : a.createdAt > b.createdAt ? 1 : (a.id < b.id ? -1 : 1)); });
+    var sum = function (list) { return round2(list.reduce(function (s, r) { return s + r.amount; }, 0)); };
+    return { rows: rows, total: sum(rows), cash: sum(rows.filter(function (r) { return r.cash; })) };
+  }
+
+  /** Contrôle d'une dépense saisie : messages d'erreur (vide si elle est valable). */
+  function checkExpense(e) {
+    var errors = [];
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(e.date || "")) errors.push("Indiquez la date de la dépense.");
+    if (!String(e.supplier || "").trim()) errors.push("Indiquez le fournisseur.");
+    if (!(isFinite(e.amount) && Number(e.amount) > 0)) errors.push("Indiquez un montant positif.");
+    if (!METHODS[e.method]) errors.push("Choisissez le moyen de paiement.");
+    return errors;
+  }
+
+  function expensesCSV(rows) {
+    var q = function (v) { return '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"'; };
+    var lines = ["Date;Fournisseur;Nature;Montant;Moyen de paiement;Référence de la pièce"];
+    rows.forEach(function (r) {
+      lines.push([r.date.split("-").reverse().join("/"), q(r.supplier), q(r.label), String(r.amount.toFixed(2)).replace(".", ","), q(r.method), q(r.ref)].join(";"));
+    });
+    return lines.join("\r\n");
+  }
+
   function ledgerCSV(rows) {
     var q = function (v) { return '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"'; };
     var lines = ["Date;Client;Nature;Montant;Moyen de paiement;Référence"];
@@ -474,5 +515,6 @@
            checkIssue: checkIssue, issue: issue, state: state, email: email, fromGenerator: fromGenerator,
            checkPayment: checkPayment, ledger: ledger, cashed: cashed, period: period, acreEnd: acreEnd, rates: rates,
            nextDeclaration: nextDeclaration, thresholds: thresholds, clientTotals: clientTotals,
-           invoiceFromQuote: invoiceFromQuote, creditFromInvoice: creditFromInvoice, duplicate: duplicate, ledgerCSV: ledgerCSV };
+           invoiceFromQuote: invoiceFromQuote, creditFromInvoice: creditFromInvoice, duplicate: duplicate, ledgerCSV: ledgerCSV,
+           purchasesRequired: purchasesRequired, expenseRows: expenseRows, checkExpense: checkExpense, expensesCSV: expensesCSV };
 });

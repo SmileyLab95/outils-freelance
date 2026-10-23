@@ -2,7 +2,8 @@
  * Espace entrepreneur (France, version locale) : application d'une page.
  * Spécification : documentation/09-specification-espace.md. Calculs : OFE.espaceFR et OFE.invoiceFR.
  * Stockage : window.EspaceStore (IndexedDB). Écrans : #/ (tableau de bord), #/documents, #/documents/<id>,
- * #/clients, #/clients/<id>, #/recettes, #/echeances, #/reglages, #/importer (document venu du générateur public).
+ * #/clients, #/clients/<id>, #/recettes, #/depenses, #/depenses/<id> (documentation/36-depenses-et-registre-des-achats.md),
+ * #/echeances, #/reglages, #/importer (document venu du générateur public).
  */
 (function () {
   "use strict";
@@ -124,7 +125,8 @@
     var nav = app.querySelector(".espace-nav"), current = nav && nav.querySelector('[aria-current="page"]');
     if (current && nav.scrollWidth > nav.clientWidth) nav.scrollLeft = current.offsetLeft - (nav.clientWidth - current.offsetWidth) / 2;
     var views = { accueil: viewWelcome, tableau: viewDashboard, documents: r.id ? viewDocument : viewDocuments,
-                  clients: r.id ? viewClientForm : viewClients, recettes: viewLedger, echeances: viewDeadlines, reglages: viewSettings,
+                  clients: r.id ? viewClientForm : viewClients, recettes: viewLedger, depenses: r.id ? viewExpenseForm : viewExpenses,
+                  echeances: viewDeadlines, reglages: viewSettings,
                   importer: viewImport };
     (views[name] || viewDashboard)(r);
     if (!keepFocus && r.key !== currentRoute) {
@@ -142,7 +144,7 @@
     view.innerHTML =
       '<div class="espace-welcome"><h2>Bienvenue dans votre espace</h2>' +
       (pendingImport() ? '<p class="notice">Le document préparé dans le générateur sera repris en brouillon dès que votre profil sera créé.</p>' : "") +
-      "<p>Clients, devis, factures, encaissements, livre des recettes et déclarations Urssaf : tout au même endroit. " +
+      "<p>Clients, devis, factures, encaissements, livre des recettes, dépenses et déclarations Urssaf : tout au même endroit. " +
       "Vos données restent <strong>sur cet appareil</strong> : rien n'est envoyé sur un serveur.</p>" +
       "<p>Commencez par décrire votre entreprise : 2 minutes, modifiable à tout moment.</p></div>" +
       profileForm(fromGenerator ? generatorProfile(fromGenerator) : { activity: "liberal_bnc", vatRegime: "franchise", periodicity: "quarterly" }, true) +
@@ -437,7 +439,7 @@
       '<div class="espace-quick espace-noprint"><a class="btn btn-primary btn-sm" href="#/documents/nouveau?type=facture">+ Facture</a>' +
       '<a class="btn btn-ghost btn-sm" href="#/documents/nouveau?type=devis">+ Devis</a>' +
       '<a class="btn btn-ghost btn-sm" href="#/clients/nouveau">+ Client</a></div></div>';
-    html += profileReminder() + backupReminder();
+    html += profileReminder() + purchasesReminder() + backupReminder();
     html += '<div class="kpis">' +
       kpi("Encaissé en " + YEAR, money(year), countText(E.ledger(data.documents, YEAR + "-01-01", YEAR + "-12-31").filter(function (x) { return x.amount > 0; }).length, "encaissement", "encaissements")) +
       kpi("À encaisser", money(openSum), open.length ? countText(open.length, "facture", "factures") + (late.length ? ", dont " + late.length + " en retard" : "") : "Aucune facture en attente", late.length ? "is-warn" : "") +
@@ -493,6 +495,14 @@
     if (!missing.length) return "";
     return '<p class="notice warn espace-noprint">Complétez votre profil (' + missing.join(", ") +
       ') : ces mentions sont obligatoires sur vos factures. <a href="#/reglages">Ouvrir les réglages</a></p>';
+  }
+
+  /** Vente de marchandises : registre des achats obligatoire (règle registre_achats) ; rappel tant que rien n'est saisi. */
+  function purchasesReminder() {
+    if (!E.purchasesRequired(profile(), R.registre_achats)) return "";
+    if (E.expenseRows(data.expenses, YEAR + "-01-01", YEAR + "-12-31").rows.length) return "";
+    return '<p class="notice espace-noprint">Vente de marchandises : tenez votre <b>registre des achats</b>, obligatoire avec le livre des recettes. ' +
+      '<a href="#/depenses">Saisir vos achats</a></p>';
   }
 
   function backupReminder() {
@@ -1153,6 +1163,89 @@
       document.body.classList.add("print-ledger");
       window.print();
       document.body.classList.remove("print-ledger");
+    });
+  }
+
+  // ----- Dépenses et registre des achats ----------------------------------------------------------------
+
+  function expense(id) { return data.expenses.filter(function (e) { return e.id === id; })[0] || null; }
+
+  function viewExpenses(r) {
+    var required = E.purchasesRequired(profile(), R.registre_achats);
+    var years = {};
+    years[YEAR] = true;
+    data.expenses.forEach(function (e) { years[e.date.slice(0, 4)] = true; });
+    var year = r.params.annee && years[r.params.annee] ? r.params.annee : YEAR;
+    var res = E.expenseRows(data.expenses, year + "-01-01", year + "-12-31");
+    var noun = required ? "achat" : "dépense";
+    view.innerHTML = '<div class="espace-head"><h2>' + (required ? "Registre des achats " : "Dépenses ") + esc(year) + '</h2><div class="espace-quick espace-noprint">' +
+      '<a class="btn btn-primary btn-sm" href="#/depenses/nouvelle">+ ' + (required ? "Achat" : "Dépense") + "</a>" +
+      '<button type="button" class="btn btn-ghost btn-sm" id="expenses-csv"' + (res.rows.length ? "" : " disabled") + ">Exporter (CSV)</button>" +
+      '<button type="button" class="btn btn-ghost btn-sm" id="expenses-print"' + (res.rows.length ? "" : " disabled") + ">Imprimer</button></div></div>" +
+      '<div class="card espace-card"><div class="espace-filters espace-noprint" role="group" aria-label="Année">' +
+      Object.keys(years).sort().reverse().map(function (y) { return '<a class="tab" href="#/depenses?annee=' + y + '"' + (y === year ? ' aria-current="true"' : "") + ">" + y + "</a>"; }).join("") + "</div>" +
+      (res.rows.length ? '<table class="ledger"><thead><tr><th>Date</th><th>Fournisseur</th><th>Nature</th><th>Moyen</th><th>Pièce</th><th class="num">Montant</th></tr></thead><tbody>' +
+        res.rows.map(function (x) {
+          return '<tr><td class="c-date">' + day(x.date) + '</td><td class="c-client"><a href="#/depenses/' + esc(x.id) + '">' + esc(x.supplier) + "</a></td><td>" +
+            esc(x.label) + '</td><td class="c-method">' + esc(x.method) + '</td><td class="c-ref">' + esc(x.ref) + '</td><td class="num">' + esc(money(x.amount)) + "</td></tr>";
+        }).join("") + '</tbody><tfoot><tr><td colspan="5">Total des ' + noun + "s en " + esc(year) + '</td><td class="num">' + esc(money(res.total)) + "</td></tr>" +
+        '<tr><td colspan="5">Dont réglé en espèces</td><td class="num">' + esc(money(res.cash)) + "</td></tr></tfoot></table>"
+        : '<p class="muted">Aucun' + (required ? " achat" : "e dépense") + " en " + esc(year) + '. <a href="#/depenses/nouvelle">' + (required ? "Saisir un achat" : "Saisir une dépense") + "</a></p>") +
+      (required
+        ? '<p class="small muted">Vente de marchandises ou fourniture de logement : ce registre des achats, récapitulé par année, est obligatoire avec le livre des recettes ; il se tient dans l\'ordre chronologique, en distinguant les règlements en espèces, avec la référence de chaque facture d\'achat.</p>'
+        : '<p class="small muted">Prestataire de services : ce suivi est facultatif. Le registre des achats n\'est obligatoire que pour la vente de marchandises ou la fourniture de logement.</p>') +
+      (isMicro() ? '<p class="small muted">En micro-entreprise, les dépenses ne se déduisent pas du chiffre d\'affaires déclaré : l\'abattement forfaitaire en tient lieu.</p>' : "") +
+      '<p class="small muted">Conservez les factures d\'achat pendant ' + R.conservation_pieces.commerce_annees + " ans.</p></div>";
+    if (!res.rows.length) return;
+    $("expenses-csv").addEventListener("click", function () {
+      OF.download("\ufeff" + E.expensesCSV(res.rows), (required ? "registre-des-achats-" : "depenses-") + year + ".csv", "text/csv;charset=utf-8");
+    });
+    $("expenses-print").addEventListener("click", function () {
+      document.body.classList.add("print-ledger");
+      window.print();
+      document.body.classList.remove("print-ledger");
+    });
+  }
+
+  function viewExpenseForm(r) {
+    var isNew = r.id === "nouvelle";
+    var x = isNew ? { date: TODAY, method: "carte" } : expense(r.id);
+    if (!x) { view.innerHTML = '<div class="espace-head"><h2>Dépense introuvable</h2></div><p><a href="#/depenses">Retour aux dépenses</a></p>'; return; }
+    var methods = Object.keys(E.METHODS).map(function (k) { return [k, E.METHODS[k]]; });
+    var required = E.purchasesRequired(profile(), R.registre_achats);
+    view.innerHTML = '<div class="espace-head"><h2>' + (isNew ? (required ? "Nouvel achat" : "Nouvelle dépense") : esc(x.supplier)) + "</h2></div>" +
+      '<form class="card espace-card" id="expense-form" novalidate><div class="fields">' +
+      field("date", "Date", x.date, { type: "date", half: true, required: true }) +
+      field("amount", "Montant payé", x.amount == null ? "" : Number(x.amount).toFixed(2).replace(".", ","), { half: true, required: true, inputmode: "decimal", placeholder: "24,90",
+        hint: "Toutes taxes comprises, en euros." }) +
+      field("supplier", "Fournisseur", x.supplier, { required: true, placeholder: "Papeterie du centre" }) +
+      field("label", "Nature de l'achat", x.label, { placeholder: "Ramettes de papier, marchandises…" }) +
+      field("method", "Moyen de paiement", x.method, { options: methods, half: true }) +
+      field("ref", "Référence de la pièce", x.ref, { half: true, placeholder: "N° de la facture du fournisseur" }) +
+      '</div><p class="form-error" id="expense-error" role="alert" hidden></p><div class="espace-actions">' +
+      '<button type="submit" class="btn btn-primary">Enregistrer</button><a class="btn btn-ghost" href="#/depenses?annee=' + esc(String(x.date).slice(0, 4)) + '">Annuler</a>' +
+      (isNew ? "" : '<button type="button" class="btn btn-ghost" id="expense-delete">Supprimer</button>') + "</div></form>";
+    var form = $("expense-form");
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var f = form.elements;
+      var next = { date: f.date.value, supplier: f.supplier.value.trim(), label: f.label.value.trim(), method: f.method.value,
+                   ref: f.ref.value.trim(), amount: OF.num(f.amount.value) };
+      var errors = E.checkExpense(next);
+      f.supplier.setAttribute("aria-invalid", String(!next.supplier));
+      f.amount.setAttribute("aria-invalid", String(!(next.amount > 0)));
+      if (errors.length) { showError("expense-error", errors.join(" ")); (next.supplier ? (next.amount > 0 ? f.date : f.amount) : f.supplier).focus(); return; }
+      showError("expense-error", "");
+      next.amount = Math.round(next.amount * 100) / 100;
+      var target = isNew ? { id: S.uid(), createdAt: now() } : x;
+      Object.assign(target, next, { updatedAt: now() });
+      if (isNew) data.expenses.push(target);
+      persist(isNew ? "Dépense enregistrée." : "Dépense modifiée.").then(function () { location.hash = "#/depenses?annee=" + next.date.slice(0, 4); });
+    });
+    if (!isNew) $("expense-delete").addEventListener("click", function () {
+      if (!confirm("Supprimer cette dépense ?")) return;
+      data.expenses = data.expenses.filter(function (e) { return e.id !== x.id; });
+      persist("Dépense supprimée.").then(function () { location.hash = "#/depenses?annee=" + x.date.slice(0, 4); });
     });
   }
 

@@ -202,8 +202,12 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 - **Comparatif des solutions de dons (23/10/2026)** : [35](35-offres-et-soutien.md) : pas de reçu fiscal ni de réduction d'impôt pour un don à une entreprise, aucune contrepartie ; Stripe recommandé s'il sert aussi au Pro, Liberapay en solution sans but lucratif ; TVA, impôt et cotisations des dons à valider avec l'expert-comptable.
 - **Pages Offres et Soutenir, en brouillon (23/10/2026)** : trois offres (Gratuit, Pro « bientôt », Soutenir) et page
   de don sans contrepartie ni reçu fiscal ; aucun lien de paiement avant les choix d'Ismail ([35](35-offres-et-soutien.md)).
-- **Prochaines actions de Claude** : refonte, suite ([31](31-vision-plateforme.md) § 5) : modules du compte gratuit
-  (prospects, temps passé, dépenses, trésorerie), en brouillon ; puis besoins P3 restants
+- **Dépenses et registre des achats (23/10/2026)** : nouvel onglet de l'Espace (public, données sur l'appareil) ;
+  registre des achats obligatoire pour la vente de marchandises (CGI, art. 50-0 ; Code de commerce, art. L123-28),
+  rappel au tableau de bord, export CSV, impression ; synchronisé avec les comptes ([36](36-depenses-et-registre-des-achats.md),
+  décision D34).
+- **Prochaines actions de Claude** : refonte, suite ([31](31-vision-plateforme.md) § 5) : modules suivants de l'Espace
+  (temps passé, prospects, trésorerie) ; puis besoins P3 restants
   ([02](02-besoins-clients.md) : CGV, sous-traitance, date d'échéance hors de France) ;
   comptes : adaptateur
   PostgreSQL et sauvegardes dès que l'hébergeur est choisi ; taux du crédit pour

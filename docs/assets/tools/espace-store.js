@@ -13,7 +13,7 @@
   var channel = "BroadcastChannel" in window ? new BroadcastChannel("of-espace-" + KEY) : null;
 
   function empty() {
-    return { schema: SCHEMA, profile: null, clients: [], documents: [], settings: { lastExport: null }, savedAt: null };
+    return { schema: SCHEMA, profile: null, clients: [], documents: [], expenses: [], settings: { lastExport: null }, savedAt: null };
   }
 
   // Une seule connexion à la base, ouverte au premier besoin puis réutilisée.
@@ -62,7 +62,10 @@
         !Array.isArray(d.lines) || (d.payments !== undefined && !Array.isArray(d.payments)) ||
         (d.payments || []).some(function (p) { return !p || !isDate(p.date) || !isFinite(Number(p.amount)); });
     });
-    return badClient || badDoc ? "Cette sauvegarde contient des éléments illisibles." : "";
+    // Dépenses : facultatives (sauvegardes antérieures au registre des achats).
+    if (data.expenses !== undefined && !Array.isArray(data.expenses)) return "Cette sauvegarde est incomplète.";
+    var badExpense = (data.expenses || []).some(function (e) { return !e || !isText(e.id) || !isDate(e.date) || !isFinite(Number(e.amount)); });
+    return badClient || badDoc || badExpense ? "Cette sauvegarde contient des éléments illisibles." : "";
   }
 
   var live = function (x) { return x && !x.deletedAt; };
@@ -75,6 +78,7 @@
     var out = Object.assign(empty(), data || {});
     out.settings = Object.assign({ lastExport: null }, out.settings || {});
     out.clients = out.clients.filter(live);
+    out.expenses = (Array.isArray(out.expenses) ? out.expenses : []).filter(live);
     out.documents = out.documents.filter(function (d) { return d && (!d.deletedAt || d.status !== "draft"); }).map(function (d) {
       var doc = Object.assign({ payments: [], lines: [], vat: { franchise: true, rate: 20, place: "fr" } }, d);
       delete doc.deletedAt;

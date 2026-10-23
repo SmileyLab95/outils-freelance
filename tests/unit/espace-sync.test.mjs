@@ -10,7 +10,7 @@ const E = require("../../src/assets/engines/espace-fr.js");
 
 const T = (n) => new Date(Date.UTC(2026, 9, 1, 8) + n * 60000).toISOString();
 const uidFrom = (prefix) => { let k = 0; return () => `${prefix}-${++k}`; };
-const state = (over = {}) => Object.assign({ schema: 2, profile: null, clients: [], documents: [], settings: { lastExport: null }, savedAt: null }, over);
+const state = (over = {}) => Object.assign({ schema: 2, profile: null, clients: [], documents: [], expenses: [], settings: { lastExport: null }, savedAt: null }, over);
 const client = (over = {}) => Object.assign({ id: "c1", name: "Studio Nova", email: "a@nova.example", pro: true, place: "fr", createdAt: T(0), updatedAt: T(0) }, over);
 const draft = (over = {}) => Object.assign({ id: "d1", type: "facture", status: "draft", date: "2026-10-05", clientId: "c1", terms: 30, nature: "services",
   lines: [{ desc: "Site", qty: 1, price: 1000 }], vat: { franchise: true, rate: 20, place: "fr" }, payments: [], createdAt: T(0), updatedAt: T(0) }, over);
@@ -491,4 +491,38 @@ test("simulation de 50 scénarios à trois appareils : convergence, documents é
   assert.ok(dups > 0, "des numéros en double apparaissent (appareils hors connexion) et sont signalés");
   // La simulation passe par chaque règle de conflit.
   ["field", "deleted-modified", "issued-draft", "issued-twice", "duplicate-number"].forEach((t) => assert.ok(seen.has(t), `cas « ${t} » simulé`));
+});
+
+// Dépenses (documentation/36-depenses-et-registre-des-achats.md) : fusionnées comme les fiches clients.
+const expense = (over = {}) => Object.assign({ id: "e1", date: "2026-10-03", supplier: "Papeterie du centre", label: "Ramettes", amount: 24.9,
+  method: "carte", ref: "F-881", createdAt: T(0), updatedAt: T(0) }, over);
+
+test("dépenses : ajoutées des deux côtés, modifiées sur des champs différents, conflit sur un même champ", () => {
+  const o = state({ expenses: [expense()] });
+  const a = state({ expenses: [expense({ label: "Ramettes A4", updatedAt: T(2) }), expense({ id: "e2", supplier: "Imprimeur", amount: 120, createdAt: T(1), updatedAt: T(1) })] });
+  const b = state({ expenses: [expense({ ref: "F-0881", updatedAt: T(3) }), expense({ id: "e3", supplier: "Transporteur", amount: 15, createdAt: T(1), updatedAt: T(1) })] });
+  let r = merge(o, a, b);
+  assert.deepEqual(r.data.expenses.map((e) => e.id), ["e1", "e2", "e3"]);
+  assert.deepEqual([r.data.expenses[0].label, r.data.expenses[0].ref, r.data.expenses[0].updatedAt], ["Ramettes A4", "F-0881", T(3)], "champs différents : les deux gardés");
+  assert.deepEqual(r.conflicts, []);
+  r = merge(o, state({ expenses: [expense({ amount: 25.9, updatedAt: T(2) })] }), state({ expenses: [expense({ amount: 29.9, updatedAt: T(4) })] }));
+  assert.equal(r.data.expenses[0].amount, 29.9, "même champ : la plus récente");
+  assert.deepEqual(r.conflicts.map((c) => [c.kind, c.type, c.fields]), [["expense", "field", ["amount"]]]);
+  assert.match(r.conflicts[0].message, /^Dépense modifiée sur deux appareils/);
+});
+
+test("dépenses : supprimée d'un côté (retirée, ou conservée si modifiée de l'autre) ; anciennes données sans liste", () => {
+  const o = state({ expenses: [expense()] });
+  let r = merge(o, state({ expenses: [] }), o);
+  assert.deepEqual(r.data.expenses, [], "supprimée d'un côté, inchangée de l'autre : retirée");
+  r = merge(o, state({ expenses: [] }), state({ expenses: [expense({ amount: 30, updatedAt: T(2) })] }));
+  assert.deepEqual([r.data.expenses.length, r.data.expenses[0].amount], [1, 30], "supprimée et modifiée : conservée");
+  assert.deepEqual(r.conflicts.map((c) => [c.kind, c.type]), [["expense", "removed-modified"]]);
+  assert.equal(r.conflicts[0].message, "Dépense effacée sur un appareil mais modifiée sur un autre : elle est conservée.");
+  const marked = merge(o, state({ expenses: [expense({ deletedAt: T(1), updatedAt: T(1) })] }), state({ expenses: [expense({ label: "Encre", updatedAt: T(2) })] }));
+  assert.equal(marked.data.expenses[0].deletedAt, undefined, "marquée supprimée et modifiée : conservée");
+  assert.deepEqual(marked.conflicts.map((c) => [c.kind, c.type]), [["expense", "deleted-modified"]]);
+  const old = { schema: 1, clients: [], documents: [] };
+  assert.deepEqual(S.migrate(old).expenses, [], "ancienne sauvegarde sans dépenses");
+  assert.deepEqual(merge(null, old, state({ expenses: [expense()] })).data.expenses.map((e) => e.id), ["e1"], "liste d'un seul côté");
 });

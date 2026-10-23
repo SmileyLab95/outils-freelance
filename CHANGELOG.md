@@ -1,5 +1,20 @@
 # Journal des modifications
 
+## 2026-10-23 — Dépenses et registre des achats (Espace entrepreneur)
+
+- Nouvel onglet **Dépenses** de l'Espace : saisie (date, fournisseur, nature, montant payé, moyen de paiement,
+  référence de la pièce), modification, suppression, tableau chronologique par année, total et total réglé en
+  espèces, export CSV, impression.
+- **Registre des achats** : pour une activité de vente de marchandises, la page devient le registre des achats,
+  obligatoire avec le livre des recettes (CGI, art. 50-0 ; Code de commerce, art. L123-28) ; rappel au tableau de bord
+  tant qu'aucun achat de l'année n'est saisi. Pour les services : suivi facultatif ; en micro-entreprise, la page
+  rappelle que les dépenses ne se déduisent pas (abattement forfaitaire).
+- Sauvegardes et synchronisation des comptes : la liste des dépenses est sauvegardée, contrôlée à l'import et
+  fusionnée entre appareils comme les clients ; messages de conflit accordés au féminin.
+- Spécification [36](documentation/36-depenses-et-registre-des-achats.md), décision D34. Tests : `depenses.test.mjs`
+  (5), 2 tests de synchronisation ; 17 erreurs réintroduites, toutes détectées ; parcours de l'Espace et des comptes ;
+  suite complète (393 tests unitaires, 29 tests serveur, 3 318 vérifications navigateur du site public).
+
 ## 2026-10-23 — Inscription au compte gratuit (brouillon)
 
 - Comptes, en brouillon jusqu'à leur ouverture : écran **Bienvenue** après la création du compte, avec une seule

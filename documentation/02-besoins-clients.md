@@ -100,6 +100,7 @@ Matrice revue le 23/10/2026 d'après les pages publiées (identifiants de `conte
 | Frais de déplacement | Calculateur d'indemnités kilométriques | ✅ barème | ✅ *standard mileage* | ✅ 45p/25p | ✅ taux ARC | P2 |
 | Bureau à domicile | Calculateur de déduction | ✅ | ✅ | ✅ | ✅ | P3 |
 | Devis, factures, encaissements, déclarations | Espace entrepreneur (gratuit, données sur l'appareil) | ✅ | 🟡 | 🟡 | 🟡 | P1 |
+| Dépenses et registre des achats | Espace entrepreneur : dépenses, registre des achats obligatoire pour la vente de marchandises | ✅ | — | — | — | P2 |
 | Suivi des factures et du chiffre d'affaires | Kit Excel (produit payant) | ✅ | ✅ (kit US) | 🟡 | 🟡 | — |
 | Temps facturable | Calculateur de jours / heures facturables | ✅ (dans le TJM) | ✅ (dans le taux horaire) | ✅ (dans le *day rate*) | ✅ (dans le taux horaire) | P3 |
 

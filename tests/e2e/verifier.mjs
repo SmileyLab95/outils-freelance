@@ -2736,6 +2736,70 @@ const tests = {
     const [csv] = await Promise.all([page.waitForEvent("download"), page.click("#ledger-csv")]);
     check(fs.readFileSync(await csv.path(), "utf8").includes('15/09/2026;"Studio Nova";"Site vitrine";800,00;"Virement";"F2026-001"'), "Espace : export CSV du livre des recettes");
 
+    // Dépenses et registre des achats (documentation/36-depenses-et-registre-des-achats.md).
+    await go("#/depenses");
+    check((await text("#espace-view h2")) === "Dépenses 2026" && (await text("#espace-view")).includes("Aucune dépense en 2026")
+      && (await text("#espace-view")).includes("ce suivi est facultatif") && (await text("#espace-view")).includes("abattement forfaitaire en tient lieu"),
+      "Espace : dépenses, prestataire de services (facultatif, pas de déduction en micro)");
+    await page.click('#espace-view a[href="#/depenses/nouvelle"]');
+    await page.waitForSelector("#expense-form");
+    await page.click("#expense-form button[type=submit]");
+    check((await text("#expense-error")).includes("Indiquez le fournisseur.") && (await text("#expense-error")).includes("Indiquez un montant positif.")
+      && (await page.getAttribute("#ep-supplier", "aria-invalid")) === "true" && (await page.evaluate(() => document.activeElement.id)) === "ep-supplier",
+      "Espace : dépense incomplète refusée, champ en erreur");
+    await accessible(page, "Espace : nouvelle dépense");
+    const addExpense = async (date, amount, supplier, label, method, ref) => {
+      await go("#/depenses/nouvelle");
+      await page.fill("#ep-date", date);
+      await page.fill("#ep-amount", amount);
+      await page.fill("#ep-supplier", supplier);
+      await page.fill("#ep-label", label);
+      await page.selectOption("#ep-method", method);
+      await page.fill("#ep-ref", ref);
+      await page.click("#expense-form button[type=submit]");
+      await page.waitForSelector("#espace-view .ledger");
+    };
+    await addExpense("2026-10-02", "24,90", "Papeterie du centre", "Ramettes", "especes", "F-881");
+    await addExpense("2026-09-15", "120", "Imprimeur", "Cartes de visite", "carte", "2026-0412");
+    let spent = await text("#espace-view .ledger");
+    check(spent.indexOf("15/09/2026") < spent.indexOf("02/10/2026") && spent.includes("Total des dépenses en 2026 144,90 €") && spent.includes("Dont réglé en espèces 24,90 €"),
+      "Espace : dépenses dans l'ordre chronologique, total et espèces");
+    await accessible(page, "Espace : dépenses");
+    const [spentCsv] = await Promise.all([page.waitForEvent("download"), page.click("#expenses-csv")]);
+    check(fs.readFileSync(await spentCsv.path(), "utf8").includes('02/10/2026;"Papeterie du centre";"Ramettes";24,90;"Espèces";"F-881"'), "Espace : export CSV des dépenses");
+    await page.click('#espace-view .ledger a:text("Imprimeur")');
+    await page.waitForSelector("#expense-form");
+    check((await text("#espace-view h2")) === "Imprimeur" && (await page.inputValue("#ep-amount")) === "120,00", "Espace : dépense ouverte pour modification (montant à deux décimales)");
+    await page.fill("#ep-amount", "130,5");
+    await page.click("#expense-form button[type=submit]");
+    await page.waitForSelector("#espace-view .ledger");
+    check((await text("#espace-view .ledger")).includes("Total des dépenses en 2026 155,40 €"), "Espace : dépense modifiée");
+    await page.click('#espace-view .ledger a:text("Imprimeur")');
+    await page.waitForSelector("#expense-delete");
+    await page.click("#expense-delete");
+    await page.waitForSelector("#espace-view .ledger");
+    check((await text("#espace-view .ledger")).includes("Total des dépenses en 2026 24,90 €"), "Espace : dépense supprimée");
+    // Vente de marchandises : registre des achats obligatoire, rappel au tableau de bord tant qu'aucun achat n'est saisi.
+    const setActivity = (activity) => page.evaluate((a) => window.EspaceStore.load().then((d) => { d.profile.activity = a; return window.EspaceStore.save(d); }), activity);
+    await setActivity("vente");
+    await go("#/depenses");
+    await page.reload({ waitUntil: "networkidle" });   // l'Espace relit ses données au chargement
+    check((await text("#espace-view h2")) === "Registre des achats 2026" && (await text("#espace-view")).includes("est obligatoire avec le livre des recettes")
+      && (await text("#espace-view .ledger")).includes("Total des achats en 2026"), "Espace : vente de marchandises → registre des achats");
+    await go("#/");
+    check(!(await text("#espace-view")).includes("tenez votre registre des achats"), "Espace : pas de rappel quand un achat de l'année est saisi");
+    await go("#/depenses");
+    await page.click('#espace-view .ledger a:text("Papeterie du centre")');
+    await page.waitForSelector("#expense-delete");
+    await page.click("#expense-delete");
+    await page.waitForTimeout(200);
+    await go("#/");
+    check((await text("#espace-view")).includes("tenez votre registre des achats") && await page.isVisible('#espace-view .notice a[href="#/depenses"]'),
+      "Espace : rappel du registre des achats au tableau de bord");
+    await setActivity("liberal_bnc");
+    await go("#/recettes");
+    await page.reload({ waitUntil: "networkidle" });
+
     await newInvoice("2026-08-01", "Maintenance", 200);
     await page.click("#d-issue");
     await page.waitForTimeout(200);

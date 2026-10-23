@@ -268,3 +268,7 @@ Rédigée le 20/10/2026 à partir de l'[étude](10-etude-factur-x.md), dont elle
 | A21 | Le fichier produit dans le navigateur est conforme : XSD et schematrons EN 16931 et BR-FR, PDF/A-3 et Factur-X validés par Mustang (veraPDF). |
 | A22 | Le XML seul est identique au XML joint au PDF ; le nom des fichiers reprend le numéro (`F2026-001-factur-x.pdf`). |
 | A23 | Une adresse de facturation électronique qui ne commence pas par le SIREN est refusée dans le profil et la fiche client. |
+
+## Modules ajoutés depuis la v1.1
+
+- **Dépenses et registre des achats** (23/10/2026) : [36](36-depenses-et-registre-des-achats.md).
