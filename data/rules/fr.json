@@ -1277,6 +1277,33 @@
       "confidence": "medium",
       "verified_on": "2026-10-23",
       "note": "Lu par extraits de recherche. Régime réel simplifié : déclaration CA12 télétransmise dans les 60 jours suivant la cessation ; régime réel normal (CA3) : 30 jours. Un micro-entrepreneur en franchise de TVA n'a pas de déclaration de TVA à déposer (non confirmé par cette page : l'étape n'est montrée qu'à qui facture la TVA)."
+    },
+    "micro_charges_reelles": {
+      "value": {
+        "charges_reelles_deductibles": false,
+        "abattement_couvre_local": true
+      },
+      "unit": "object",
+      "label": "Micro-entreprise : pas de déduction des charges réelles, l'abattement forfaitaire couvre les frais (local compris)",
+      "source": "https://www.impots.gouv.fr/professionnel/questions/je-suis-micro-entrepreneur-puis-je-deduire-des-charges",
+      "source_title": "Je suis micro-entrepreneur, puis-je déduire des charges ? - impots.gouv.fr",
+      "confidence": "medium",
+      "verified_on": "2026-10-23",
+      "note": "Lu par extraits de recherche. L'abattement forfaitaire (taux de la règle micro_abattements, minimum de 305 €) est censé couvrir les frais professionnels, notamment les charges liées au local professionnel ; si les charges réelles le dépassent, envisager l'option pour un régime réel."
+    },
+    "reel_local_mixte_prorata": {
+      "value": {
+        "regle": "superficie professionnelle / superficie totale",
+        "local_exclusivement_professionnel_hors_habitation": "déduction totale",
+        "justification": "à la charge de l'exploitant"
+      },
+      "unit": "object",
+      "label": "Régime réel : part déductible du loyer et des dépenses d'un logement à usage mixte",
+      "source": "https://bofip.impots.gouv.fr/bofip/4659-PGP.html/identifiant=BOI-BNC-BASE-40-60-30-20120912",
+      "source_title": "BOI-BNC-BASE-40-60-30 - Dépenses - Frais généraux - Loyers - BOFiP",
+      "confidence": "medium",
+      "verified_on": "2026-10-23",
+      "note": "Lu par extraits de recherche (version de 2012 du BOFiP, principe inchangé à notre connaissance). Pour des locaux affectés à la fois à l'activité et à l'habitation, la fraction du loyer déductible est, à titre de règle pratique, le rapport entre la superficie professionnelle et la superficie totale ; l'exploitant procède à la ventilation sous sa responsabilité et la justifie. Le texte vise les BNC ; l'outil l'applique aux autres dépenses du logement par la même règle de proportion, en le signalant."
     }
   },
   "open_questions": [

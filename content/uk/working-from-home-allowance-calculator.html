@@ -1,0 +1,93 @@
+<!--{
+  "id": "home-office",
+  "slug": "working-from-home-allowance-calculator/",
+  "title": "Working From Home Allowance: Flat Rate or Actual Costs",
+  "description": "Sole traders: compare HMRC's use-of-home flat rate (£10, £18 or £26 a month) with a share of your actual household costs, and claim the higher.",
+  "menu": "Working from home allowance",
+  "icon": "🏠",
+  "blurb": "Flat rate or a share of your bills: which is higher.",
+  "app": "Working From Home Allowance Calculator",
+  "scripts": ["engines/home-office.js", "tools/home-office.js"],
+  "rules": "uk",
+  "sources": ["use_of_home_flat_rates", "uk_use_of_home_actual_costs"],
+  "priority": 0.7,
+  "faq": [
+    ["How much can a sole trader claim for working from home?", "With simplified expenses, a flat rate each month you work at home for 25 hours or more: £10 for 25 to 50 hours, £18 for 51 to 100 hours and £26 for 101 hours or more. Or a reasonable share of your actual household costs."],
+    ["How do I work out a share of my actual costs?", "Use a reasonable method, for example the number of rooms you use for business and the time you spend working in them. GOV.UK's example: 4 rooms, one used only as an office, and £1,120 of electricity a year: £280; if the office is used one day a week: £40."],
+    ["Does the flat rate include my phone and broadband?", "No. Claim the business share of your phone and internet separately, on top of the flat rate."],
+    ["Can I use both methods?", "Not for the same costs: choose the flat rate or a share of your actual household costs. Limited companies can't use simplified expenses."]
+  ]
+}-->
+<script type="application/json" id="ho-data">
+{
+  "country": "uk",
+  "percent": "%",
+  "best": {
+    "flat": "With the flat rate: no bills to split.",
+    "actual": "With a share of your actual costs: keep your bills and how you worked it out.",
+    "none": "Nothing to claim with these figures: the flat rate needs 25 hours or more a month."
+  },
+  "flat_detail": "{months} months at {rate} a month",
+  "flat_none": "Needs 25 hours or more a month"
+}
+</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · HMRC flat rates</span>
+    <h1>Working from home allowance calculator</h1>
+    <p class="lead">Sole traders: enter the hours you work at home and your household bills. See your claim with HMRC's flat rate and with a share of your actual costs, and which is higher.</p>
+    <ul class="trust"><li>£10, £18 or £26 a month</li><li>Rooms and time method</li><li>GOV.UK examples</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="ho-form" onsubmit="return false">
+      <h2>Your work at home</h2>
+      <div class="fields">
+        <div class="field"><label for="ho-hours">Hours a month at home</label>
+          <input type="text" inputmode="numeric" id="ho-hours" name="hours" value="60" data-save></div>
+        <div class="field"><label for="ho-months">Months in the year</label>
+          <input type="text" inputmode="numeric" id="ho-months" name="months" value="12" data-save></div>
+        <div class="field full"><label for="ho-costs">Household costs for the year</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="ho-costs" name="costs" value="3,000" aria-describedby="ho-costs-hint" data-save><span>£</span></div>
+          <span class="hint" id="ho-costs-hint">Heating, electricity, Council Tax, mortgage interest or rent. Not phone or broadband.</span></div>
+        <div class="field"><label for="ho-rooms">Rooms in your home</label>
+          <input type="text" inputmode="numeric" id="ho-rooms" name="rooms" value="5" data-save></div>
+        <div class="field"><label for="ho-business-rooms">Rooms used for work</label>
+          <input type="text" inputmode="numeric" id="ho-business-rooms" name="business_rooms" value="1" data-save></div>
+        <div class="field full"><label for="ho-days">Days a week you work in them</label>
+          <input type="text" inputmode="numeric" id="ho-days" name="days" value="5" data-save></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <h2 class="sr-only">Result</h2>
+      <div class="result-hero" id="ho-hero" role="status" aria-atomic="true">
+        <div class="label">Your claim for the year</div>
+        <div class="big" id="ho-big">–</div>
+        <div class="sub" id="ho-sub">–</div>
+      </div>
+      <ul class="result-list card result-wrap" style="padding: 6px 18px; margin-top: 16px;">
+        <li><span>Flat rate<br><small class="muted" id="ho-flat-detail">–</small></span><b id="ho-flat">–</b></li>
+        <li><span>Share of actual costs<br><small class="muted">Rooms used for work, and days a week</small></span><b id="ho-actual">–</b></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>HMRC flat rates for working from home</h2>
+  <table>
+    <thead><tr><th>Hours at home in the month</th><th>Flat rate</th></tr></thead>
+    <tbody>
+      <tr><td>25 to 50</td><td>£10</td></tr>
+      <tr><td>51 to 100</td><td>£18</td></tr>
+      <tr><td>101 or more</td><td>£26</td></tr>
+    </tbody>
+  </table>
+  <p>The flat rate covers heating, lighting and power. Claim the business share of your phone and broadband on top. If you prefer actual costs, split your bills in a way you can explain, and keep your records. The flat rate is for sole traders and partnerships without a company as a partner.</p>
+  <p>Deduct your claim from your profit, then see the effect with the <a href="{{link:tax}}">self-employed tax calculator</a>; for travel, use the <a href="{{link:mileage}}">mileage allowance calculator</a>.</p>
+  <p class="small muted">An estimate based on GOV.UK's simplified expenses guidance. It doesn't replace advice from an accountant.</p>
+</section>

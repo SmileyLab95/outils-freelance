@@ -1,0 +1,94 @@
+<!--{
+  "id": "home-office",
+  "slug": "home-office-deduction-calculator/",
+  "title": "Home Office Deduction Calculator: Simplified vs Regular",
+  "description": "Compare the IRS simplified method ($5 a square foot, up to 300) with the regular method for your home office, limited to your business profit.",
+  "menu": "Home office deduction",
+  "icon": "🏠",
+  "blurb": "Simplified or regular method: which deducts more.",
+  "app": "Home Office Deduction Calculator",
+  "scripts": ["engines/home-office.js", "tools/home-office.js"],
+  "rules": "us",
+  "sources": ["home_office_simplified_method", "us_home_office_regular_method"],
+  "priority": 0.7,
+  "faq": [
+    ["Who can take the home office deduction?", "Self-employed people who use part of their home regularly and exclusively for their business, as their principal place of business or to meet clients or customers. Employees can't claim it."],
+    ["How does the simplified method work?", "You deduct $5 for each square foot of your home office, up to 300 square feet: $1,500 at most. You don't figure depreciation, and your mortgage interest and real estate taxes stay deductible as itemized deductions."],
+    ["How does the regular method work?", "You deduct your office's share of your home expenses, usually its share of your home's floor area, on Form 8829. If the deduction is more than your income limit, the excess carries over to the next year."],
+    ["Can I switch methods?", "Yes, you choose the method each year when you file your return. A carryover from the regular method can't be used in a year you use the simplified method."]
+  ]
+}-->
+<script type="application/json" id="ho-data">
+{
+  "country": "us",
+  "percent": "%",
+  "best": {
+    "simplified": "With the simplified method: $5 a square foot, up to 300 square feet.",
+    "regular": "With the regular method: your office's share of your home expenses.",
+    "none": "Nothing to deduct with these figures."
+  },
+  "simplified_detail": "{area} sq ft × $5",
+  "regular_detail": "{pct} of your home expenses"
+}
+</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · IRS methods</span>
+    <h1>Home office deduction calculator</h1>
+    <p class="lead">Enter your office and home sizes and your home expenses: see your deduction with the simplified method and the regular method, and which one gives you more.</p>
+    <ul class="trust"><li>Simplified vs regular method</li><li>Income limit and carryover</li><li>IRS Publication 587</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="ho-form" onsubmit="return false">
+      <h2>Your home office</h2>
+      <div class="fields">
+        <div class="field"><label for="ho-office">Office area</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="ho-office" name="office" value="150" data-save><span>sq ft</span></div></div>
+        <div class="field"><label for="ho-home">Home area</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="ho-home" name="home" value="1,500" data-save><span>sq ft</span></div></div>
+        <div class="field full"><label for="ho-expenses">Home expenses for the year</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="ho-expenses" name="expenses" value="24,000" aria-describedby="ho-expenses-hint" data-save><span>$</span></div>
+          <span class="hint" id="ho-expenses-hint">Rent or mortgage interest, real estate taxes, insurance, utilities, repairs. Not depreciation.</span></div>
+        <div class="field full"><label for="ho-profit">Business profit before this deduction (optional)</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="ho-profit" name="profit" placeholder="Leave empty" aria-describedby="ho-profit-hint" data-save><span>$</span></div>
+          <span class="hint" id="ho-profit-hint">The deduction can't be more than your business income: enter your profit to apply the limit.</span></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <h2 class="sr-only">Result</h2>
+      <div class="result-hero" id="ho-hero" role="status" aria-atomic="true">
+        <div class="label">Your best home office deduction</div>
+        <div class="big" id="ho-big">–</div>
+        <div class="sub" id="ho-sub">–</div>
+      </div>
+      <ul class="result-list card result-wrap" style="padding: 6px 18px; margin-top: 16px;">
+        <li><span>Simplified method<br><small class="muted" id="ho-simplified-detail">–</small></span><b id="ho-simplified">–</b></li>
+        <li><span>Regular method<br><small class="muted" id="ho-regular-detail">–</small></span><b id="ho-regular">–</b></li>
+        <li id="ho-carry-row" hidden><span>Carried over to next year (regular method)</span><b id="ho-carry">–</b></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>Do you qualify?</h2>
+  <p>The space must be used <strong>regularly and exclusively</strong> for your business, and be your principal place of business or a place where you meet clients or customers. A desk in the living room you also use as a family space doesn't qualify.</p>
+  <h2>Simplified or regular method</h2>
+  <div class="table-scroll">
+  <table>
+    <thead><tr><th></th><th>Simplified method</th><th>Regular method</th></tr></thead>
+    <tbody>
+      <tr><td>Deduction</td><td>$5 a square foot, up to 300 square feet ($1,500)</td><td>Your office's share of rent or mortgage interest, taxes, insurance, utilities and repairs, plus depreciation if you own</td></tr>
+      <tr><td>Paperwork</td><td>No Form 8829</td><td>Form 8829 and records of every expense</td></tr>
+      <tr><td>Over your income limit</td><td>Lost</td><td>Carried over to next year</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>This calculator doesn't figure depreciation, and it uses your profit as the income limit: Form 8829 works out the exact limit for the regular method. Deduct the result as a business expense, then see what it saves you with the <a href="{{link:tax}}">self-employment tax calculator</a>.</p>
+  <p class="small muted">An estimate for planning, based on IRS Publication 587 and the IRS simplified option page. It doesn't replace advice from a tax professional.</p>
+</section>

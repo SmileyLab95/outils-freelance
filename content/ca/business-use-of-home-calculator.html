@@ -1,0 +1,93 @@
+<!--{
+  "id": "home-office",
+  "slug": "business-use-of-home-calculator/",
+  "title": "Business-Use-of-Home Expenses Calculator (Canada)",
+  "description": "Self-employed in Canada: work out your business-use-of-home expenses for Form T2125, limited to your net business income, with the amount to carry forward.",
+  "menu": "Business-use-of-home expenses",
+  "icon": "🏠",
+  "blurb": "Your home office share, the income limit and the carryforward.",
+  "app": "Business-Use-of-Home Expenses Calculator",
+  "scripts": ["engines/home-office.js", "tools/home-office.js"],
+  "rules": "ca",
+  "sources": ["ca_business_use_of_home"],
+  "priority": 0.7,
+  "faq": [
+    ["Can I deduct my home office as a self-employed person?", "Yes, if the workspace is your principal place of business, or if you use it only to earn business income and regularly to meet clients, customers or patients."],
+    ["How do I calculate the business part?", "A reasonable way is the area of the workspace divided by the total finished area of your home. If you also use the space personally, apply the share of time it's used for the business."],
+    ["Which home expenses count?", "Rent, home insurance, property taxes, mortgage interest, heat, electricity, water, and maintenance and minor repairs. Furniture and computers are capital outlays, not business-use-of-home expenses."],
+    ["What if my business has a loss?", "Business-use-of-home expenses can't create or increase a loss: you deduct them up to your net business income before these expenses, and carry the rest forward to the next year."]
+  ]
+}-->
+<script type="application/json" id="ho-data">
+{
+  "country": "ca",
+  "percent": "%",
+  "sub": {
+    "all": "Fully deductible this year, on Form T2125.",
+    "carried": "Limited to your net business income: {carry} carried forward to next year.",
+    "not_eligible": "The workspace doesn't meet either condition: no business-use-of-home expenses."
+  }
+}
+</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · CRA rules</span>
+    <h1>Business-use-of-home expenses calculator</h1>
+    <p class="lead">Enter your workspace, your home and your expenses: see what you can deduct this year on Form T2125, and what carries forward to next year.</p>
+    <ul class="trust"><li>Area and time share</li><li>Income limit</li><li>Carryforward</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="ho-form" onsubmit="return false">
+      <h2>Your workspace</h2>
+      <div class="fields">
+        <label class="check full"><input type="checkbox" id="ho-eligible" name="eligible" checked data-save><span>It's my principal place of business, or I use it only for my business and meet clients there regularly</span></label>
+        <div class="field"><label for="ho-workspace">Workspace area</label>
+          <input type="text" inputmode="decimal" id="ho-workspace" name="workspace" value="150" aria-describedby="ho-area-hint" data-save></div>
+        <div class="field"><label for="ho-home">Total finished area</label>
+          <input type="text" inputmode="decimal" id="ho-home" name="home" value="1,500" aria-describedby="ho-area-hint" data-save>
+          <span class="hint" id="ho-area-hint">Square feet or square metres: the same unit for both.</span></div>
+        <div class="field full"><label for="ho-time">Share of time used for the business</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="ho-time" name="time" value="100" aria-describedby="ho-time-hint" data-save><span>%</span></div>
+          <span class="hint" id="ho-time-hint">100% if the space is used only for the business.</span></div>
+        <div class="field full"><label for="ho-expenses">Home expenses for the year</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="ho-expenses" name="expenses" value="18,000" aria-describedby="ho-expenses-hint" data-save><span>$</span></div>
+          <span class="hint" id="ho-expenses-hint">Rent, insurance, property taxes, mortgage interest, heat, electricity, water, maintenance.</span></div>
+        <div class="field full"><label for="ho-income">Net business income before these expenses</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="ho-income" name="income" value="40,000" data-save><span>$</span></div></div>
+        <div class="field full"><label for="ho-carry-in">Carried forward from last year</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="ho-carry-in" name="carry_in" value="0" data-save><span>$</span></div></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <h2 class="sr-only">Result</h2>
+      <div class="result-hero" id="ho-hero" role="status" aria-atomic="true">
+        <div class="label">Deductible this year</div>
+        <div class="big" id="ho-big">–</div>
+        <div class="sub" id="ho-sub">–</div>
+      </div>
+      <ul class="result-list card" style="padding: 6px 18px; margin-top: 16px;">
+        <li><span>Business part of your home</span><b id="ho-share">–</b></li>
+        <li><span>This year's business-use-of-home expenses</span><b id="ho-current">–</b></li>
+        <li><span>Limit: net business income</span><b id="ho-limit">–</b></li>
+        <li><span>Carried forward to next year</span><b id="ho-carry">–</b></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>The rules in short</h2>
+  <ul>
+    <li><strong>Who qualifies</strong>: your workspace is your principal place of business, or you use it only for the business and regularly meet clients, customers or patients there.</li>
+    <li><strong>The business part</strong>: the workspace's share of your home's finished area, and the share of time if you also use it personally.</li>
+    <li><strong>The limit</strong>: no more than your net business income before these expenses; the rest carries forward to the next year.</li>
+    <li><strong>Capital cost allowance</strong> on your home isn't included here: claiming it has consequences when you sell your home.</li>
+  </ul>
+  <p>Then see what the deduction saves you with the <a href="{{link:tax}}">self-employed tax calculator</a>.</p>
+  <p class="small muted">An estimate based on the CRA's guidance and Income Tax Folio S4-F2-C2. It doesn't replace advice from an accountant.</p>
+</section>

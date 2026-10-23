@@ -1,0 +1,93 @@
+<!--{
+  "id": "home-office",
+  "slug": "frais-bureau-a-domicile/",
+  "title": "Frais d'utilisation de la résidence aux fins de l'entreprise",
+  "description": "Travailleur autonome au Canada : calculez vos frais de bureau à domicile pour le formulaire T2125, limités au revenu net d'entreprise, et le montant reporté.",
+  "menu": "Frais de bureau à domicile",
+  "icon": "🏠",
+  "blurb": "La part de votre logement, la limite de revenu et le report.",
+  "app": "Calculateur des frais de bureau à domicile",
+  "scripts": ["engines/home-office.js", "tools/home-office.js"],
+  "rules": "ca",
+  "sources": ["ca_business_use_of_home"],
+  "priority": 0.7,
+  "faq": [
+    ["Puis-je déduire mon bureau à domicile comme travailleur autonome ?", "Oui, si l'espace de travail est votre principal lieu d'affaires, ou si vous l'utilisez uniquement pour gagner un revenu d'entreprise et de façon régulière pour rencontrer des clients ou des patients."],
+    ["Comment calculer la partie professionnelle ?", "Une méthode raisonnable : la superficie de l'espace de travail divisée par la superficie habitable totale. Si vous utilisez aussi l'espace pour vos besoins personnels, appliquez la part du temps consacrée à l'entreprise."],
+    ["Quelles dépenses du logement comptent ?", "Le loyer, l'assurance habitation, l'impôt foncier, les intérêts hypothécaires, le chauffage, l'électricité, l'eau, l'entretien et les petites réparations. Les meubles et les ordinateurs sont des dépenses en capital, pas des frais d'utilisation de la résidence."],
+    ["Et si mon entreprise est en perte ?", "Ces frais ne peuvent pas créer ni augmenter une perte : vous les déduisez jusqu'à votre revenu net d'entreprise avant ces frais, et vous reportez le reste à l'année suivante."]
+  ]
+}-->
+<script type="application/json" id="ho-data">
+{
+  "country": "ca",
+  "percent": " %",
+  "sub": {
+    "all": "Entièrement déductible cette année, dans le formulaire T2125.",
+    "carried": "Limité à votre revenu net d'entreprise : {carry} reportés à l'année suivante.",
+    "not_eligible": "L'espace ne remplit aucune des deux conditions : pas de frais d'utilisation de la résidence."
+  }
+}
+</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Gratuit · règles de l'ARC</span>
+    <h1>Calculateur des frais de bureau à domicile</h1>
+    <p class="lead">Indiquez votre espace de travail, votre logement et vos dépenses : voyez ce que vous pouvez déduire cette année dans le formulaire T2125, et ce qui est reporté à l'année suivante.</p>
+    <ul class="trust"><li>Part de superficie et de temps</li><li>Limite de revenu</li><li>Report</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="ho-form" onsubmit="return false">
+      <h2>Votre espace de travail</h2>
+      <div class="fields">
+        <label class="check full"><input type="checkbox" id="ho-eligible" name="eligible" checked data-save><span>C'est mon principal lieu d'affaires, ou je l'utilise uniquement pour l'entreprise et j'y reçois régulièrement des clients</span></label>
+        <div class="field"><label for="ho-workspace">Superficie de l'espace</label>
+          <input type="text" inputmode="decimal" id="ho-workspace" name="workspace" value="15" aria-describedby="ho-area-hint" data-save></div>
+        <div class="field"><label for="ho-home">Superficie habitable totale</label>
+          <input type="text" inputmode="decimal" id="ho-home" name="home" value="150" aria-describedby="ho-area-hint" data-save>
+          <span class="hint" id="ho-area-hint">En mètres carrés ou en pieds carrés : la même unité pour les deux.</span></div>
+        <div class="field full"><label for="ho-time">Part du temps consacrée à l'entreprise</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="ho-time" name="time" value="100" aria-describedby="ho-time-hint" data-save><span>%</span></div>
+          <span class="hint" id="ho-time-hint">100 % si l'espace ne sert qu'à l'entreprise.</span></div>
+        <div class="field full"><label for="ho-expenses">Dépenses du logement pour l'année</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="ho-expenses" name="expenses" value="18 000" aria-describedby="ho-expenses-hint" data-save><span>$</span></div>
+          <span class="hint" id="ho-expenses-hint">Loyer, assurance, impôt foncier, intérêts hypothécaires, chauffage, électricité, eau, entretien.</span></div>
+        <div class="field full"><label for="ho-income">Revenu net d'entreprise avant ces frais</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="ho-income" name="income" value="40 000" data-save><span>$</span></div></div>
+        <div class="field full"><label for="ho-carry-in">Report de l'année dernière</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="ho-carry-in" name="carry_in" value="0" data-save><span>$</span></div></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <h2 class="sr-only">Résultat</h2>
+      <div class="result-hero" id="ho-hero" role="status" aria-atomic="true">
+        <div class="label">Déductible cette année</div>
+        <div class="big" id="ho-big">–</div>
+        <div class="sub" id="ho-sub">–</div>
+      </div>
+      <ul class="result-list card" style="padding: 6px 18px; margin-top: 16px;">
+        <li><span>Partie professionnelle du logement</span><b id="ho-share">–</b></li>
+        <li><span>Frais d'utilisation de la résidence de l'année</span><b id="ho-current">–</b></li>
+        <li><span>Limite : revenu net d'entreprise</span><b id="ho-limit">–</b></li>
+        <li><span>Reporté à l'année suivante</span><b id="ho-carry">–</b></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>Les règles en bref</h2>
+  <ul>
+    <li><strong>Qui y a droit</strong> : votre espace de travail est votre principal lieu d'affaires, ou vous l'utilisez uniquement pour l'entreprise et y rencontrez régulièrement des clients ou des patients.</li>
+    <li><strong>La partie professionnelle</strong> : la part de l'espace dans la superficie habitable, et la part du temps si vous l'utilisez aussi pour vous.</li>
+    <li><strong>La limite</strong> : pas plus que votre revenu net d'entreprise avant ces frais ; le reste est reporté à l'année suivante.</li>
+    <li><strong>La déduction pour amortissement</strong> sur votre logement n'est pas comptée ici : la demander a des conséquences quand vous vendez votre logement.</li>
+  </ul>
+  <p>Voyez ensuite ce que la déduction vous fait économiser avec le <a href="{{link:tax}}">calculateur d'impôt du travailleur autonome</a>.</p>
+  <p class="small muted">Estimation fondée sur les indications de l'ARC et le folio de l'impôt sur le revenu S4-F2-C2. Elle ne remplace pas l'avis d'un comptable.</p>
+</section>

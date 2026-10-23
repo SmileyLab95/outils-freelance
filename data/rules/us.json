@@ -498,7 +498,18 @@
       "source": "https://www.irs.gov/businesses/small-businesses-self-employed/simplified-option-for-home-office-deduction",
       "source_title": "IRS - Simplified option for home office deduction",
       "confidence": "high",
-      "note": "Rate unchanged since Rev. Proc. 2013-13 and still on the IRS page. Space must be used regularly and exclusively for business. No depreciation; deduction limited to gross income from the business. Employees cannot claim it (only self-employed)."
+      "note": "Rate unchanged since Rev. Proc. 2013-13 and still on the IRS page. Space must be used regularly and exclusively for business. No depreciation; deduction limited to gross income from the business. Employees cannot claim it (only self-employed). Re-read on 2026-10-23 through search excerpts: the deduction can't exceed the gross income limit and the excess can't be carried over with the simplified method; prior regular-method carryovers can't be used in a simplified-method year. Mortgage interest and real estate taxes stay deductible as itemized deductions (Schedule A). The method is chosen each year.",
+      "more_sources": [
+        {
+          "source": "https://www.irs.gov/publications/p587",
+          "source_title": "Publication 587 (2025), Business Use of Your Home - IRS"
+        },
+        {
+          "source": "https://www.irs.gov/taxtopics/tc509",
+          "source_title": "Topic no. 509, Business use of home - IRS"
+        }
+      ],
+      "verified_on": "2026-10-23"
     },
     "states_no_individual_income_tax": {
       "value": [
@@ -1540,6 +1551,27 @@
       "confidence": "medium",
       "verified_on": "2026-10-23",
       "note": "Read through search excerpts. Fees vary by state; many states require an annual report or biennial statement, with fees; converting from a sole proprietorship may require new business licenses depending on state and local law."
+    },
+    "us_home_office_regular_method": {
+      "value": {
+        "business_percentage": "office area / home area",
+        "limited_to_gross_income_limit": true,
+        "carryover": true,
+        "form": "8829"
+      },
+      "unit": "object",
+      "label": "Home office deduction - regular method (actual expenses)",
+      "source": "https://www.irs.gov/publications/p587",
+      "source_title": "Publication 587 (2025), Business Use of Your Home - IRS",
+      "more_sources": [
+        {
+          "source": "https://www.irs.gov/taxtopics/tc509",
+          "source_title": "Topic no. 509, Business use of home - IRS"
+        }
+      ],
+      "confidence": "medium",
+      "verified_on": "2026-10-23",
+      "note": "Read through search excerpts. The space must be used regularly and exclusively as the principal place of business or to meet clients (exceptions: storage when the home is the only fixed location, daycare). Indirect home expenses are allocated by the share of floor space; direct expenses are deductible in full. The deduction can't exceed the gross income limitation (figured on Form 8829, which first takes the business part of mortgage interest, taxes and casualty losses, and other business expenses); the excess is carried over to the next year. The tool approximates the limit with the profit before the deduction and doesn't figure depreciation."
     }
   },
   "open_questions": [

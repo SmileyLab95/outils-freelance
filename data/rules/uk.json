@@ -508,7 +508,14 @@
       "source": "https://www.gov.uk/simpler-income-tax-simplified-expenses",
       "source_title": "Simplified expenses if you're self-employed: Overview - GOV.UK",
       "confidence": "high",
-      "note": "Only if at least 25 hours of business work at home in the month. Covers household running costs (heat, light, power) but not phone/broadband, which are claimed separately on actual business use. Available to sole traders and partnerships with no company partners, not to limited companies. Detailed page: https://www.gov.uk/simpler-income-tax-simplified-expenses/working-from-home"
+      "note": "Only if at least 25 hours of business work at home in the month. Covers household running costs (heat, light, power) but not phone/broadband, which are claimed separately on actual business use. Available to sole traders and partnerships with no company partners, not to limited companies. Detailed page: https://www.gov.uk/simpler-income-tax-simplified-expenses/working-from-home",
+      "verified_on": "2026-10-23",
+      "more_sources": [
+        {
+          "source": "https://www.gov.uk/simpler-income-tax-simplified-expenses/working-from-home",
+          "source_title": "Simplified expenses if you're self-employed: Working from home - GOV.UK"
+        }
+      ]
     },
     "cash_basis_default": {
       "value": "Since 2024/25 the cash basis is the default accounting basis for sole traders and partnerships of individuals (no turnover entry limit); accruals basis is by election.",
@@ -1887,6 +1894,30 @@
       "confidence": "medium",
       "verified_on": "2026-10-23",
       "note": "Read through search excerpts. Identity verification with GOV.UK One Login, once per person; PO Boxes not accepted as registered office."
+    },
+    "uk_use_of_home_actual_costs": {
+      "value": {
+        "example_rooms": 4,
+        "example_business_rooms": 1,
+        "example_annual_bill": 1120,
+        "example_claim": 280,
+        "example_days_per_week": 1,
+        "example_claim_one_day": 40,
+        "flat_rate_example_claim": 136
+      },
+      "unit": "object",
+      "label": "Working from home: a share of actual costs instead of the flat rate",
+      "source": "https://www.gov.uk/expenses-if-youre-self-employed",
+      "source_title": "Expenses if you're self-employed - GOV.UK",
+      "more_sources": [
+        {
+          "source": "https://www.gov.uk/simpler-income-tax-simplified-expenses/working-from-home",
+          "source_title": "Simplified expenses if you're self-employed: Working from home - GOV.UK"
+        }
+      ],
+      "confidence": "medium",
+      "verified_on": "2026-10-23",
+      "note": "Read through search excerpts. You can claim a proportion of costs such as heating, electricity, Council Tax, mortgage interest or rent, using a reasonable method, for example the number of rooms used for business and the time spent working from home. Official example: 4 rooms, one used only as an office, electricity £1,120 a year: £280; office used one day a week: £40 (£280 / 7). Flat-rate example: 40 hours a month for 10 months and 60 hours for 2 months: £100 + £36 = £136. You can't claim both the flat rate and actual costs for the same household costs; phone and internet are claimed separately on their business use."
     }
   },
   "open_questions": [

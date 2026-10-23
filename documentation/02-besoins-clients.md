@@ -97,7 +97,7 @@ Matrice revue le 22/10/2026 d'après les pages publiées (identifiants de `conte
 | Besoin | Outil ou contenu | FR | US | UK | CA | Priorité |
 |---|---|---|---|---|---|---|
 | Frais de déplacement | Calculateur d'indemnités kilométriques | ✅ barème | ✅ *standard mileage* | ✅ 45p/25p | ✅ taux ARC | P2 |
-| Bureau à domicile | Calculateur de déduction | 🟡 | 🟡 | 🟡 | 🟡 | P3 |
+| Bureau à domicile | Calculateur de déduction | ✅ | ✅ | ✅ | ✅ | P3 |
 | Devis, factures, encaissements, déclarations | Espace entrepreneur (gratuit, données sur l'appareil) | ✅ | 🟡 | 🟡 | 🟡 | P1 |
 | Suivi des factures et du chiffre d'affaires | Kit Excel (produit payant) | ✅ | ✅ (kit US) | 🟡 | 🟡 | — |
 | Temps facturable | Calculateur de jours / heures facturables | ✅ (dans le TJM) | ✅ (dans le taux horaire) | ✅ (dans le *day rate*) | ✅ (dans le taux horaire) | P3 |
@@ -123,8 +123,8 @@ Matrice revue le 22/10/2026 d'après les pages publiées (identifiants de `conte
 - **P2** (convertisseur de tarifs, prix au forfait et « freelance ou salarié » faits le 22/10/2026) : checklist de
   création, jauges de seuils, client étranger et W-8BEN faits le 22/10/2026 ; recouvrement en justice fait au
   Royaume-Uni, au Canada et aux États-Unis le 23/10/2026, à faire en France (textes de 2026 à lire) ; compte pro et assurance hors de France et guide de changement de statut faits le 23/10/2026.
-- **P3** : date d'échéance, proposition commerciale, NDA, CGV, bureau à domicile, hausse de tarifs (calculateur),
-  sous-traitance.
+- **P3** : date d'échéance, proposition commerciale, NDA, CGV, hausse de tarifs (calculateur), sous-traitance
+  (bureau à domicile fait le 23/10/2026).
 
 ## Les outils « moteurs » partagés
 

@@ -1,0 +1,85 @@
+<!--{
+  "id": "home-office",
+  "slug": "bureau-a-domicile/",
+  "title": "Bureau à domicile : que peut déduire un indépendant ?",
+  "description": "Micro-entrepreneur ou régime réel : ce que vous pouvez déduire pour votre bureau à domicile, avec le calcul au prorata de la surface professionnelle.",
+  "menu": "Bureau à domicile",
+  "icon": "🏠",
+  "blurb": "Micro ou réel : la part déductible de votre logement.",
+  "app": "Calculateur du bureau à domicile",
+  "scripts": ["engines/home-office.js", "tools/home-office.js"],
+  "rules": "fr",
+  "sources": ["micro_charges_reelles", "micro_abattements", "reel_local_mixte_prorata", "domiciliation_domicile"],
+  "priority": 0.7,
+  "faq": [
+    ["Un micro-entrepreneur peut-il déduire son loyer ?", "Non. En micro-entreprise, aucune charge réelle n'est déductible : l'abattement forfaitaire (71 %, 50 % ou 34 % selon l'activité) est censé couvrir vos frais, y compris ceux du local professionnel."],
+    ["Comment calculer la part déductible au régime réel ?", "Pour un logement qui sert aussi à l'activité, la règle pratique est le rapport entre la surface affectée à l'activité et la surface totale : par exemple 10 m² sur 50 m², soit 20 % du loyer et des dépenses du logement. Vous procédez à la ventilation sous votre responsabilité et devez pouvoir la justifier."],
+    ["Puis-je déclarer mon domicile comme adresse de mon entreprise ?", "Oui, en entreprise individuelle, vous pouvez déclarer l'adresse de votre logement et y exercer votre activité, sauf disposition législative ou clause contraire du bail ou du règlement de copropriété."],
+    ["Mes frais réels dépassent l'abattement : que faire ?", "Vous pouvez opter pour un régime réel d'imposition, qui permet de déduire les charges réelles. Comparez d'abord avec le comparateur de statuts."]
+  ]
+}-->
+<script type="application/json" id="ho-data">
+{
+  "country": "fr",
+  "percent": " %",
+  "sub": {
+    "abattement": "En micro-entreprise, aucune charge réelle n'est déductible : l'abattement forfaitaire (71 %, 50 % ou 34 % selon l'activité) couvre déjà vos frais, local compris.",
+    "prorata": "Au régime réel : la part de vos dépenses qui correspond à la surface professionnelle, à justifier."
+  }
+}
+</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Gratuit · règles vérifiées en 2026</span>
+    <h1>Bureau à domicile : que pouvez-vous déduire ?</h1>
+    <p class="lead">Indiquez votre régime, la surface de votre bureau et vos dépenses de logement : vous voyez ce qui est déductible, et pourquoi.</p>
+    <ul class="trust"><li>Micro-entreprise et régime réel</li><li>Prorata de surface</li><li>Sources officielles</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="ho-form" onsubmit="return false">
+      <h2>Votre situation</h2>
+      <div class="fields">
+        <div class="field full"><label for="ho-regime">Votre régime d'imposition</label>
+          <select id="ho-regime" name="regime" data-save>
+            <option value="micro" selected>Micro-entreprise</option>
+            <option value="reel">Régime réel (BIC ou BNC)</option>
+          </select></div>
+        <div class="field" data-reel><label for="ho-pro">Surface du bureau</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="ho-pro" name="pro" value="10" data-save><span>m²</span></div></div>
+        <div class="field" data-reel><label for="ho-total">Surface du logement</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="ho-total" name="total" value="60" data-save><span>m²</span></div></div>
+        <div class="field full" data-reel><label for="ho-expenses">Loyer et dépenses du logement pour l'année</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="ho-expenses" name="expenses" value="12 000" aria-describedby="ho-expenses-hint" data-save><span>€</span></div>
+          <span class="hint" id="ho-expenses-hint">Loyer et charges, électricité, chauffage, assurance habitation.</span></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <h2 class="sr-only">Résultat</h2>
+      <div class="result-hero" id="ho-hero" role="status" aria-atomic="true">
+        <div class="label">Montant déductible pour l'année</div>
+        <div class="big" id="ho-big">–</div>
+        <div class="sub" id="ho-sub">–</div>
+      </div>
+      <ul class="result-list card" style="padding: 6px 18px; margin-top: 16px;" data-reel>
+        <li><span>Part professionnelle du logement</span><b id="ho-share">–</b></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>Micro-entreprise ou régime réel</h2>
+  <ul>
+    <li><strong>Micro-entreprise</strong> : vous déclarez votre chiffre d'affaires, sans déduire vos charges réelles. L'abattement forfaitaire (71 % pour la vente, 50 % pour les services commerciaux et artisanaux, 34 % pour les activités libérales) tient compte de vos frais, y compris ceux du local.</li>
+    <li><strong>Régime réel</strong> : pour un logement qui sert aussi à l'activité, la part déductible du loyer est, en règle pratique, le rapport entre la surface professionnelle et la surface totale. L'outil applique ce même prorata aux autres dépenses du logement ; vous faites la ventilation sous votre responsabilité et la justifiez.</li>
+  </ul>
+  <h2>Exercer chez soi</h2>
+  <p>En entreprise individuelle, vous pouvez déclarer l'adresse de votre logement comme adresse de l'entreprise et y exercer, sauf disposition législative ou clause contraire du bail ou du règlement de copropriété. Pensez aussi à votre assurance : le <a href="{{link:insurance}}">guide de l'assurance de l'indépendant</a> fait le point.</p>
+  <p>Vos frais dépassent l'abattement ? Le <a href="{{link:structure}}">comparateur de statuts</a> chiffre la micro-entreprise et le régime réel.</p>
+  <p class="small muted">Informations générales, à jour des textes vérifiés le 23/10/2026 (impots.gouv.fr, BOFiP, Code de commerce) ; elles ne remplacent pas l'avis d'un expert-comptable.</p>
+</section>

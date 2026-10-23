@@ -25,6 +25,7 @@ Le site d'outils gratuits pour indépendants (France, États-Unis, Royaume-Uni, 
 | [19. Salarié ou freelance ?](19-freelance-ou-salarie.md) | Revenu d'un salarié et chiffre d'affaires équivalent en freelance (4 pays) |
 | [20. Checklist de création](20-checklist-creation.md) | Les démarches pour démarrer, étape par étape et sourcées (4 pays) |
 | [21. Jauges de seuils](21-jauges-de-seuils.md) | TVA, *Making Tax Digital*, petit fournisseur, acomptes, *wage base*, QBI dans les calculateurs d'impôt |
+| [27. Bureau à domicile](27-bureau-a-domicile.md) | Déduction du bureau à domicile dans les 4 pays : méthodes officielles, plafonds et reports (réalisé le 23/10/2026) |
 | [26. Changement de statut](26-changement-de-statut.md) | Passer de l'entreprise individuelle à la société dans les 4 pays : démarches sourcées et listes d'étapes des quatre pays (réalisé le 23/10/2026) |
 | [25. Compte pro et assurance hors de France](25-compte-et-assurance-hors-france.md) | Compte bancaire et assurances au Royaume-Uni, aux États-Unis et au Canada : ce qui est obligatoire, à vérifier et conseillé (réalisé le 23/10/2026) |
 | [24. Recouvrement en justice (Royaume-Uni, Canada, États-Unis)](24-recouvrement-uk-us-ca.md) | *Small claims* au Royaume-Uni (frais, circuit, démarches) et petites créances des 13 provinces et territoires ; *small claims* des 50 États et du district de Columbia |

@@ -1780,6 +1780,44 @@
       "confidence": "medium",
       "verified_on": "2026-10-23",
       "note": "Read through search excerpts. Filed within six months of the end of the tax year even with no tax payable; first tax year not more than 53 weeks from incorporation; Schedule 24 with the first return."
+    },
+    "ca_business_use_of_home": {
+      "value": {
+        "conditions": [
+          "principal place of business",
+          "used only to earn business income and on a regular and continuous basis to meet clients, customers or patients"
+        ],
+        "apportionment": "workspace area / total finished area of the home, and time share if also used personally",
+        "expenses": [
+          "rent",
+          "home insurance",
+          "property taxes",
+          "mortgage interest",
+          "heat",
+          "electricity",
+          "water",
+          "maintenance and minor repairs"
+        ],
+        "limited_to_net_income_before_these_expenses": true,
+        "carry_forward": true
+      },
+      "unit": "object",
+      "label": "Business-use-of-home expenses (self-employed)",
+      "source": "https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/sole-proprietorships-partnerships/report-business-income-expenses/completing-form-t2125/business-use-home-expenses.html",
+      "source_title": "Business-use-of-home expenses - Canada.ca",
+      "more_sources": [
+        {
+          "source": "https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/sole-proprietorships-partnerships/report-business-income-expenses/completing-form-t2125/calculating-business-use-home-expenses.html",
+          "source_title": "Calculating business-use-of-home expenses - Canada.ca"
+        },
+        {
+          "source": "https://www.canada.ca/en/revenue-agency/services/tax/technical-information/income-tax/income-tax-folios-index/series-4-businesses/series-4-businesses-folio-2-deducting-business-expenses/income-tax-folio-s4-f2-c2-business-use-home-expenses.html",
+          "source_title": "Income Tax Folio S4-F2-C2, Business Use of Home Expenses - Canada.ca"
+        }
+      ],
+      "confidence": "medium",
+      "verified_on": "2026-10-23",
+      "note": "Read through search excerpts. Can't be more than the business's net income before these expenses: no loss created or increased; unused amounts are carried forward to the next year. Capital outlays (computers, desks, chairs) aren't business-use-of-home expenses. Claiming capital cost allowance on the home triggers capital gain and recapture rules on sale: the tool doesn't include CCA. Principal-place space needn't be used exclusively; personal use is apportioned, for example by hours."
     }
   },
   "provinces": {

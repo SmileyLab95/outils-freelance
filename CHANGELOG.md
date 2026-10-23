@@ -1,5 +1,18 @@
 # Journal des modifications
 
+## 2026-10-23 — Bureau à domicile (4 pays)
+
+- Calculateurs du bureau à domicile : « *Home office deduction* » aux États-Unis (méthode simplifiée de l'IRS à 5 $ par
+  pied carré, 300 au plus, ou méthode réelle, la plus favorable, plafond et report), « *Working from home allowance* »
+  au Royaume-Uni (forfait de 10, 18 ou 26 £ par mois ou part des coûts réels selon les pièces et le temps),
+  « *Business-use-of-home expenses* » et « Frais de bureau à domicile » au Canada (part de surface et de temps,
+  plafond au revenu net d'entreprise, report) et « Bureau à domicile » en France (micro-entreprise : aucune
+  déduction, l'abattement couvre le local ; régime réel : prorata de surface).
+- Règles nouvelles ou complétées (IRS, GOV.UK, ARC, impots.gouv, BOFiP) ; spécification
+  [27](documentation/27-bureau-a-domicile.md).
+- Tests : `home-office.test.mjs` (exemples officiels) ; 15 erreurs réintroduites, toutes détectées ; suite complète
+  (321 tests unitaires, 27 tests serveur, 2 871 vérifications navigateur du site public).
+
 ## 2026-10-23 — Guide de changement de statut (4 pays)
 
 - Listes d'étapes cochables pour passer de l'entreprise individuelle à la société : « *Sole trader to limited

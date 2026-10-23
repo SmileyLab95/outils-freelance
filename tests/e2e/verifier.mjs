@@ -530,6 +530,23 @@ const tests = {
     await page.uncheck(box("ein"));
     check((await t("cl-score")) === "0 of 5 steps", "Passage en LLC US : situation par défaut rétablie");
   },
+  async "us/home-office-deduction-calculator/"(page) {
+    const t = async (id) => (await page.textContent(`#${id}`)).replace(/\s+/g, " ").trim();
+    check((await t("ho-big")) === "$2,400.00" && (await t("ho-sub")).includes("regular method") && (await t("ho-simplified")) === "$750.00" &&
+      (await t("ho-regular-detail")) === "10% of your home expenses", `bureau US : 150 sur 1 500 pieds carrés, 24 000 $ → méthode réelle (obtenu : ${await t("ho-big")})`);
+    await page.fill("#ho-profit", "1,000");
+    check((await t("ho-big")) === "$1,000.00" && (await page.isVisible("#ho-carry-row")) && (await t("ho-carry")) === "$1,400.00", "bureau US : bénéfice de 1 000 $ → plafond et report");
+    await accessible(page, "bureau US (plafond et report)");
+    await page.reload({ waitUntil: "networkidle" });
+    check((await page.inputValue("#ho-profit")) === "1,000" && (await t("ho-big")) === "$1,000.00", "bureau US : saisie mémorisée après rechargement");
+    await page.fill("#ho-profit", "");
+    await page.fill("#ho-office", "300");
+    await page.fill("#ho-expenses", "5,000");
+    check((await t("ho-big")) === "$1,500.00" && (await t("ho-sub")).includes("simplified method") && !(await page.isVisible("#ho-carry-row")),
+      "bureau US : 300 pieds carrés, faibles dépenses → méthode simplifiée, 1 500 $");
+    await page.fill("#ho-office", "150");
+    await page.fill("#ho-expenses", "24,000");
+  },
   async "us/invoice-generator/"(page) {
     await page.fill("#iv-me-name", "Alex Morgan Design LLC");
     await page.fill("#iv-client-name", "Northwind Inc.");
@@ -780,6 +797,18 @@ const tests = {
     await page.uncheck("#cl-filters input[name=vat]");
     await page.uncheck("#cl-filters input[name=staff]");
     check((await t("cl-score")) === "0 of 6 steps", "Passage en société UK : situation par défaut rétablie");
+  },
+  async "uk/working-from-home-allowance-calculator/"(page) {
+    const t = async (id) => (await page.textContent(`#${id}`)).replace(/\s+/g, " ").trim();
+    check((await t("ho-big")) === "£428.57" && (await t("ho-flat")) === "£216.00" && (await t("ho-flat-detail")) === "12 months at £18.00 a month",
+      `use of home UK : 60 heures, 3 000 £, 1 pièce sur 5, 5 jours → coûts réels (obtenu : ${await t("ho-big")})`);
+    await page.fill("#ho-costs", "1,000");
+    check((await t("ho-big")) === "£216.00" && (await t("ho-sub")).includes("flat rate"), "use of home UK : petites factures → forfait");
+    await page.fill("#ho-hours", "20");
+    check((await t("ho-flat")) === "£0.00" && (await t("ho-flat-detail")) === "Needs 25 hours or more a month" && (await t("ho-big")) === "£142.86", "use of home UK : moins de 25 heures → pas de forfait");
+    await accessible(page, "use of home UK (moins de 25 heures)");
+    await page.fill("#ho-hours", "60");
+    await page.fill("#ho-costs", "3,000");
   },
   async "uk/payment-reminder-letter/"(page) {
     const due = new Date(Date.now() - 50 * 86400000).toISOString().slice(0, 10);
@@ -1773,6 +1802,26 @@ const tests = {
     check((await t("cl-score")) === "0 étapes sur 7" && (await t("checklist")).includes("article 85"), "Constitution CA-FR : transfert de biens → article 85");
     await page.uncheck("#cl-filters input[name=assets]");
   },
+  async "ca/business-use-of-home-calculator/"(page) {
+    const t = async (id) => (await page.textContent(`#${id}`)).replace(/\s+/g, " ").trim();
+    check((await t("ho-big")) === "$1,800.00" && (await t("ho-share")) === "10%" && (await t("ho-sub")).includes("Fully deductible"),
+      `bureau CA : 150 sur 1 500, 18 000 $ → 1 800 $ déductibles (obtenu : ${await t("ho-big")})`);
+    await page.fill("#ho-income", "1,000");
+    check((await t("ho-big")) === "$1,000.00" && (await t("ho-carry")) === "$800.00" && (await t("ho-sub")).includes("$800.00 carried forward"), "bureau CA : revenu de 1 000 $ → 800 $ reportés");
+    await page.uncheck("#ho-eligible");
+    check((await t("ho-big")) === "$0.00" && (await page.$eval("#ho-hero", (el) => el.classList.contains("is-negative"))), "bureau CA : condition non remplie → rien");
+    await accessible(page, "bureau CA (condition non remplie)");
+    await page.check("#ho-eligible");
+    await page.fill("#ho-income", "40,000");
+  },
+  async "ca/fr/frais-bureau-a-domicile/"(page) {
+    const t = async (id) => (await page.textContent(`#${id}`)).replace(/\s+/g, " ").trim();
+    check((await t("ho-big")).replace(/\s/g, "") === "1800,00$" && (await t("ho-sub")).includes("Entièrement déductible"),
+      `bureau CA-FR : 15 sur 150 m², 18 000 $ → 1 800 $ (obtenu : ${await t("ho-big")})`);
+    await page.uncheck("#ho-eligible");
+    check((await t("ho-sub")).includes("aucune des deux conditions"), "bureau CA-FR : condition non remplie");
+    await page.check("#ho-eligible");
+  },
   async "ca/freelance-email-templates/"() {},
   async "ca/legal-notice/"() {},
   async "ca/privacy-policy/"() {},
@@ -1891,6 +1940,18 @@ const tests = {
     await page.selectOption("#cl-transfert", "cessation");
     await page.uncheck("#cl-filters input[name=tva]");
     check((await t("cl-score")) === "0 étapes sur 9", "Passage en société FR : situation par défaut rétablie");
+  },
+  async "fr/bureau-a-domicile/"(page) {
+    const t = async (id) => (await page.textContent(`#${id}`)).replace(/\s+/g, " ").trim();
+    check((await t("ho-big")).replace(/\s/g, "") === "0,00€" && (await t("ho-sub")).includes("aucune charge réelle") && !(await page.isVisible("#ho-pro")),
+      `bureau FR : micro → aucune déduction, surfaces masquées (obtenu : ${await t("ho-big")})`);
+    await page.selectOption("#ho-regime", "reel");
+    check((await t("ho-big")).replace(/\s/g, "") === "2000,00€" && (await t("ho-share")).replace(/\s/g, "") === "16,7%" && (await page.isVisible("#ho-pro")),
+      "bureau FR : réel, 10 m² sur 60 m², 12 000 € → 2 000 €");
+    await accessible(page, "bureau FR (régime réel)");
+    await page.reload({ waitUntil: "networkidle" });
+    check((await page.inputValue("#ho-regime")) === "reel", "bureau FR : régime mémorisé après rechargement");
+    await page.selectOption("#ho-regime", "micro");
   },
   async "fr/comparateur-statuts/"(page) {
     // Micro libérale : 60 000 − 5 000 − 15 480 − 4 983,99 = 34 536 € (voir tests unitaires)
