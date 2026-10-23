@@ -6,32 +6,22 @@
   "audience": "For freelancers and the self-employed in Canada",
   "nav": [
     {
-      "label": "Taxes",
+      "key": "start",
+      "label": "Get started",
+      "description": "Choose a business structure, set up and get equipped.",
       "items": [
         "start",
-        "insurance",
-        "tax",
-        "set-aside",
         "structure",
-        "switch",
         "employee-vs-freelance",
-        "salestax",
-        "calendar",
-        "retirement",
-        "mileage",
-        "home-office"
+        "switch",
+        "bank",
+        "insurance"
       ]
     },
     {
-      "label": "Invoicing",
-      "items": [
-        "invoice",
-        "invoice-rules",
-        "international"
-      ]
-    },
-    {
+      "key": "pricing",
       "label": "Pricing",
+      "description": "Work out a fair rate and raise it over time.",
       "items": [
         "rate",
         "rate-converter",
@@ -40,21 +30,41 @@
       ]
     },
     {
-      "label": "Getting paid",
-      "items": [
-        "reminder",
-        "latefee",
-        "court",
-        "bank"
-      ]
-    },
-    {
-      "label": "Templates",
+      "key": "sell",
+      "label": "Selling",
+      "description": "Win clients, put agreements in writing, write to clients.",
       "items": [
         "proposal",
         "contract",
         "nda",
         "templates"
+      ]
+    },
+    {
+      "key": "invoice",
+      "label": "Invoicing and getting paid",
+      "description": "Compliant invoices, paid on time.",
+      "items": [
+        "invoice",
+        "invoice-rules",
+        "salestax",
+        "international",
+        "reminder",
+        "latefee",
+        "court"
+      ]
+    },
+    {
+      "key": "manage",
+      "label": "Taxes and admin",
+      "description": "Tax, deadlines, expenses and retirement.",
+      "items": [
+        "tax",
+        "set-aside",
+        "calendar",
+        "mileage",
+        "home-office",
+        "retirement"
       ]
     }
   ],
@@ -85,6 +95,21 @@
     "disclaimer": "For information only: not tax, legal or accounting advice.",
     "logo_label": "Freelance Tools, home",
     "tools_count": "{n} free tools",
-    "breadcrumb": "Breadcrumb"
+    "breadcrumb": "Breadcrumb",
+    "tools": "Tools",
+    "search": "Search",
+    "search_label": "Search tools",
+    "search_placeholder": "Invoice, rate, tax, contract…",
+    "search_empty": "No tool matches. Try another word.",
+    "search_hint": "↑ ↓ to move, Enter to open, Esc to close",
+    "search_results": "{n} tools found",
+    "search_result": "1 tool found",
+    "stage_count": "{n} tools",
+    "stage_count_one": "1 tool",
+    "popular": "Most used"
+  },
+  "header_cta": {
+    "page": "invoice",
+    "label": "Create an invoice"
   }
 }

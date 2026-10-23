@@ -6,52 +6,67 @@
   "audience": "Pour les indépendants en France",
   "nav": [
     {
-      "label": "Facturer",
+      "key": "start",
+      "label": "Démarrer",
+      "description": "Choisir son statut, créer son activité, s'équiper.",
       "items": [
-        "espace",
-        "invoice",
-        "salestax",
-        "invoice-rules",
-        "international",
-        "einvoicing",
-        "duedate"
+        "start",
+        "structure",
+        "employee-vs-freelance",
+        "switch",
+        "bank",
+        "insurance"
       ]
     },
     {
-      "label": "Statut et revenus",
+      "key": "pricing",
+      "label": "Fixer ses prix",
+      "description": "Calculer un tarif juste et le faire évoluer.",
       "items": [
-        "start",
-        "tax",
-        "set-aside",
-        "calendar",
-        "structure",
-        "switch",
-        "employee-vs-freelance",
-        "bank",
-        "insurance",
         "rate",
         "rate-converter",
         "project-price",
-        "raise",
-        "mileage",
-        "home-office",
-        "retirement"
+        "raise"
       ]
     },
     {
-      "label": "Se faire payer",
-      "items": [
-        "reminder",
-        "latefee"
-      ]
-    },
-    {
-      "label": "Clients et contrats",
+      "key": "sell",
+      "label": "Vendre",
+      "description": "Convaincre, s'engager par écrit, écrire aux clients.",
       "items": [
         "proposal",
         "contract",
         "nda",
         "templates"
+      ]
+    },
+    {
+      "key": "invoice",
+      "label": "Facturer et encaisser",
+      "description": "Des factures conformes, payées à temps.",
+      "items": [
+        "espace",
+        "invoice",
+        "invoice-rules",
+        "salestax",
+        "international",
+        "einvoicing",
+        "duedate",
+        "reminder",
+        "latefee"
+      ]
+    },
+    {
+      "key": "manage",
+      "label": "Impôts et gestion",
+      "description": "Cotisations, impôts, échéances, frais et retraite.",
+      "items": [
+        "tax",
+        "set-aside",
+        "calendar",
+        "mileage",
+        "home-office",
+        "retirement"
       ]
     }
   ],
@@ -87,6 +102,21 @@
     "disclaimer": "Informations données à titre indicatif : elles ne remplacent pas l'avis d'un expert-comptable ou d'un avocat.",
     "logo_label": "Outils Freelance, accueil",
     "tools_count": "{n} outils gratuits",
-    "breadcrumb": "Fil d'Ariane"
+    "breadcrumb": "Fil d'Ariane",
+    "tools": "Outils",
+    "search": "Rechercher",
+    "search_label": "Rechercher un outil",
+    "search_placeholder": "Facture, TJM, Urssaf, contrat…",
+    "search_empty": "Aucun outil ne correspond. Essayez un autre mot.",
+    "search_hint": "↑ ↓ pour choisir, Entrée pour ouvrir, Échap pour fermer",
+    "search_results": "{n} outils trouvés",
+    "search_result": "1 outil trouvé",
+    "stage_count": "{n} outils",
+    "stage_count_one": "1 outil",
+    "popular": "Les plus utilisés"
+  },
+  "header_cta": {
+    "page": "espace",
+    "label": "Mon espace"
   }
 }

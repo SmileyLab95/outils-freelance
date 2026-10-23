@@ -13,14 +13,11 @@
 <section class="hero hero-home">
   <div class="wrap hero-grid">
   <div class="reveal">
-    <span class="pill"><span class="cc">FR</span> Pour les indépendants en France · 100 % gratuit</span>
-    <h1 style="margin-top: 18px;">Les outils des freelances qui veulent être payés, et à temps.</h1>
-    <p class="lead">Créez une facture conforme, fixez le bon tarif, relancez un client qui ne paie pas. En quelques secondes, directement dans votre navigateur.</p>
-    <div class="hero-cta">
-      <a class="btn btn-primary" href="{{link:invoice}}">Créer une facture gratuite</a>
-      <a class="btn btn-ghost" href="{{link:rate}}">Calculer mon TJM</a>
-    </div>
-    <ul class="trust"><li>Conforme aux règles françaises</li><li>Export PDF</li><li>Vos données restent sur votre appareil</li></ul>
+    <p class="eyebrow">{{icon:badge-check}}Pour les indépendants en France · gratuit, sans inscription</p>
+    <h1>Tout pour travailler à son <em>compte</em>.</h1>
+    <p class="lead">Démarrer, fixer ses prix, vendre, facturer, déclarer : des outils gratuits, vérifiés aux sources officielles, qui gardent vos données sur votre appareil.</p>
+    <button class="hero-search" type="button" data-search aria-haspopup="dialog">{{icon:search}}<span>Que cherchez-vous ? Facture, TJM, Urssaf, contrat…</span><kbd aria-hidden="true">/</kbd></button>
+    <p class="hero-quick"><span>Les plus utilisés :</span> <a href="{{link:invoice}}">Facture et devis</a> <a href="{{link:tax}}">Simulateur Urssaf</a> <a href="{{link:rate}}">TJM</a> <a href="{{link:espace}}">Mon espace</a></p>
   </div>
   <div class="hero-visual" aria-hidden="true">
     <div class="hv-invoice">
@@ -37,22 +34,17 @@
   </div>
 </section>
 
-<section class="section">
-  <h2>Les plus utilisés</h2>
-  {{featured}}
-</section>
-
-<section class="section">
-  <h2>Tous les outils</h2>
+<section class="section" id="outils">
+  <h2>Tous les outils, étape par étape</h2>
   {{tools_grid}}
 </section>
 
 <section class="section">
-  <h2>Pensés pour les indépendants</h2>
+  <div class="why-head"><h2>Pensés pour les indépendants</h2><span class="stamp" aria-hidden="true">Sources officielles<b>vérifiées</b></span></div>
   <div class="grid-why">
-    <div class="why"><span class="ico">⚡</span><h3>Immédiats</h3><p>Pas de compte, pas d'email demandé, pas de publicité intrusive. Vous ouvrez la page, l'outil est prêt.</p></div>
-    <div class="why"><span class="ico">⚖️</span><h3>Conformes</h3><p>Mentions obligatoires, franchise de TVA, pénalités et indemnité de 40 € : les règles françaises sont intégrées et sourcées.</p></div>
-    <div class="why"><span class="ico">🔒</span><h3>Privés</h3><p>Tout est calculé dans votre navigateur. Vos clients, vos montants et vos coordonnées ne quittent pas votre appareil.</p></div>
+      <div class="why"><span class="ico">{{icon:zap}}</span><h3>Immédiats</h3><p>Pas de compte, pas d'email demandé, pas de publicité. Vous ouvrez la page, l'outil est prêt.</p></div>
+      <div class="why"><span class="ico">{{icon:badge-check}}</span><h3>Sourcés</h3><p>Mentions obligatoires, franchise de TVA, cotisations, pénalités : chaque règle vient d'un texte officiel cité et daté.</p></div>
+      <div class="why"><span class="ico">{{icon:lock}}</span><h3>Privés</h3><p>Tout est calculé dans votre navigateur. Vos clients, vos montants et vos coordonnées ne quittent pas votre appareil.</p></div>
   </div>
 </section>
 

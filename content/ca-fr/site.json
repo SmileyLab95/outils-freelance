@@ -6,32 +6,22 @@
   "audience": "Pour les travailleurs autonomes au Canada et au Québec",
   "nav": [
     {
-      "label": "Impôts et taxes",
+      "key": "start",
+      "label": "Démarrer",
+      "description": "Choisir son statut, créer son activité, s'équiper.",
       "items": [
         "start",
-        "insurance",
-        "tax",
-        "set-aside",
         "structure",
-        "switch",
         "employee-vs-freelance",
-        "salestax",
-        "calendar",
-        "retirement",
-        "mileage",
-        "home-office"
+        "switch",
+        "bank",
+        "insurance"
       ]
     },
     {
-      "label": "Facturer",
-      "items": [
-        "invoice",
-        "invoice-rules",
-        "international"
-      ]
-    },
-    {
+      "key": "pricing",
       "label": "Tarifs",
+      "description": "Calculer un tarif juste et le faire évoluer.",
       "items": [
         "rate",
         "rate-converter",
@@ -40,21 +30,41 @@
       ]
     },
     {
-      "label": "Se faire payer",
-      "items": [
-        "reminder",
-        "latefee",
-        "court",
-        "bank"
-      ]
-    },
-    {
-      "label": "Modèles",
+      "key": "sell",
+      "label": "Vendre",
+      "description": "Convaincre, s'engager par écrit, écrire aux clients.",
       "items": [
         "proposal",
         "contract",
         "nda",
         "templates"
+      ]
+    },
+    {
+      "key": "invoice",
+      "label": "Facturer et se faire payer",
+      "description": "Des factures conformes, payées à temps.",
+      "items": [
+        "invoice",
+        "invoice-rules",
+        "salestax",
+        "international",
+        "reminder",
+        "latefee",
+        "court"
+      ]
+    },
+    {
+      "key": "manage",
+      "label": "Impôts et gestion",
+      "description": "Impôt, taxes, échéances, frais et retraite.",
+      "items": [
+        "tax",
+        "set-aside",
+        "calendar",
+        "mileage",
+        "home-office",
+        "retirement"
       ]
     }
   ],
@@ -85,6 +95,21 @@
     "disclaimer": "Information à titre indicatif seulement : ne remplace pas l'avis d'un fiscaliste, d'un comptable ou d'un avocat.",
     "logo_label": "Outils Freelance, accueil",
     "tools_count": "{n} outils gratuits",
-    "breadcrumb": "Fil d'Ariane"
+    "breadcrumb": "Fil d'Ariane",
+    "tools": "Outils",
+    "search": "Rechercher",
+    "search_label": "Rechercher un outil",
+    "search_placeholder": "Facture, impôt, TPS, contrat…",
+    "search_empty": "Aucun outil ne correspond. Essayez un autre mot.",
+    "search_hint": "↑ ↓ pour choisir, Entrée pour ouvrir, Échap pour fermer",
+    "search_results": "{n} outils trouvés",
+    "search_result": "1 outil trouvé",
+    "stage_count": "{n} outils",
+    "stage_count_one": "1 outil",
+    "popular": "Les plus utilisés"
+  },
+  "header_cta": {
+    "page": "invoice",
+    "label": "Créer une facture"
   }
 }

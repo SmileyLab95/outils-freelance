@@ -11,34 +11,27 @@
   ]
 }-->
 <section class="hero hero-home">
-  <div class="wrap reveal">
-    <span class="pill"><span class="cc">CA</span> Pour les travailleurs autonomes · 100 % gratuit</span>
-    <h1 style="margin-top: 18px;">Impôt, TPS/TVQ, factures : les bons calculs, au bon endroit.</h1>
-    <p class="lead">Des outils gratuits pour les travailleurs autonomes et pigistes : estimez votre impôt et votre RRQ, appliquez les bonnes taxes, envoyez une facture conforme et faites-vous payer à temps.</p>
-    <div class="hero-cta">
-      <a class="btn btn-primary" href="{{link:tax}}">Calculer mon impôt</a>
-      <a class="btn btn-ghost" href="{{link:salestax}}">Calculer la TPS et la TVQ</a>
-    </div>
-    <ul class="trust"><li>Taux 2026 de l'ARC et de Revenu Québec, sourcés</li><li>Québec et toutes les provinces</li><li>Vos données restent sur votre appareil</li></ul>
+  <div class="wrap hero-grid">
+  <div class="reveal">
+    <p class="eyebrow">{{icon:badge-check}}Pour les travailleurs autonomes au Canada · gratuit, sans inscription</p>
+    <h1>Tout pour travailler à son <em>compte</em>.</h1>
+    <p class="lead">Démarrer, fixer ses tarifs, décrocher des mandats, facturer, payer ses impôts dans chaque province : des outils gratuits, vérifiés aux sources officielles, qui gardent vos données sur votre appareil.</p>
+    <button class="hero-search" type="button" data-search aria-haspopup="dialog">{{icon:search}}<span>Que cherchez-vous ? Facture, impôt, TPS, contrat…</span><kbd aria-hidden="true">/</kbd></button>
+    <p class="hero-quick"><span>Les plus utilisés :</span> <a href="{{link:invoice}}">Générateur de facture</a> <a href="{{link:tax}}">Impôt</a> <a href="{{link:salestax}}">TPS et TVQ</a> <a href="{{link:contract}}">Contrat de service</a></p>
+  </div>
   </div>
 </section>
 
-<section class="section">
-  <h2>Les plus utilisés</h2>
-  {{featured}}
-</section>
-
-<section class="section">
-  <h2>Tous les outils</h2>
+<section class="section" id="outils">
+  <h2>Tous les outils, étape par étape</h2>
   {{tools_grid}}
 </section>
 
 <section class="section">
-  <h2>Pensés pour les travailleurs autonomes</h2>
+  <div class="why-head"><h2>Pensés pour les travailleurs autonomes</h2><span class="stamp" aria-hidden="true">Sources officielles<b>vérifiées</b></span></div>
   <div class="grid-why">
-    <div class="why"><span class="ico">⚡</span><h3>Immédiats</h3><p>Pas de compte, pas de courriel demandé. Vous ouvrez la page, l'outil est prêt.</p></div>
-    <div class="why"><span class="ico">📚</span><h3>Sourcés</h3><p>Chaque taux vient de l'ARC, de Revenu Québec, de Retraite Québec ou des provinces, avec sa date de vérification.</p></div>
-    <div class="why"><span class="ico">🔒</span><h3>Privés</h3><p>Tout est calculé dans votre navigateur. Vos clients et vos montants ne quittent pas votre appareil.</p></div>
+      <div class="why"><span class="ico">{{icon:zap}}</span><h3>Immédiats</h3><p>Pas de compte, pas de courriel demandé. Vous ouvrez la page, l'outil est prêt.</p></div>
+      <div class="why"><span class="ico">{{icon:badge-check}}</span><h3>Sourcés</h3><p>Chaque taux vient de l'ARC, de Revenu Québec, de Retraite Québec ou des provinces, avec sa date de vérification.</p></div>
+      <div class="why"><span class="ico">{{icon:lock}}</span><h3>Privés</h3><p>Tout est calculé dans votre navigateur. Vos clients et vos montants ne quittent pas votre appareil.</p></div>
   </div>
 </section>
-<p class="center small muted"><a href="{{base}}ca/" hreflang="en-CA" lang="en-CA">This site is also available in English</a></p>

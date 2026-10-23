@@ -181,8 +181,16 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   étapes avec durée et prix (tableau et total), options à part, acompte et solde, date de validité, prochaines étapes
   et « n'est pas un contrat » ; mention de franchise datée (CIBS au 1er janvier 2027), désormais aussi dans le contrat
   de prestation ([30](30-proposition-commerciale.md), décision D29).
-- **Prochaines actions de Claude** : besoins P3 restants ([02](02-besoins-clients.md) : CGV, sous-traitance, date
-  d'échéance hors de France), en commençant par les CGV (générateur, avec le moteur de rendu des contrats) ;
+- **Vision de la plateforme (23/10/2026)**, demandée par Ismail : compte gratuit (email confirmé, coordonnées), Pro,
+  dons, et tout ce dont un freelance a besoin, pas seulement la gestion, dont la recherche de noms de domaine
+  ([31](31-vision-plateforme.md), décision D30 : les outils restent ouverts sans compte).
+- **Refonte du design, première partie (23/10/2026)** : identité « le cachet », polices et icônes servies par le site,
+  panneau « Outils » en cinq étapes, recherche de tous les outils, nouvel accueil dans les cinq sections
+  ([32](32-design.md), décision D31).
+- **Prochaines actions de Claude** : refonte, suite ([31](31-vision-plateforme.md) § 5) : recherche de noms de domaine
+  (protocole RDAP), écrans d'inscription et tableau de bord du compte gratuit (brouillon), pages Offres et Soutenir
+  (brouillon, avec le comparatif des solutions de dons et leurs règles fiscales) ; puis besoins P3 restants
+  ([02](02-besoins-clients.md) : CGV, sous-traitance, date d'échéance hors de France) ;
   comptes : adaptateur
   PostgreSQL et sauvegardes dès que l'hébergeur est choisi ; taux du crédit pour
   dividendes de la Saskatchewan et du Nunavut dès qu'ils sont publiés (formulaires 2026) ;
@@ -192,7 +200,8 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   Z12-012 pour le BT-32 en franchise, la question 13 de [pays/ca.md](pays/ca.md) sur la TVQ, et le
   remplacement annoncé de la section 17 du *Victims and Prisoners Act 2024* sur les accords de confidentialité). La mise en ligne
   des comptes attend le choix de l'hébergeur et du domaine.
-- **En attente d'Ismail** (pas urgent) : structure juridique avec un comptable ; choix de l'hébergeur et budget pour
+- **En attente d'Ismail** (pas urgent) : choix de la solution de dons et inscription aux programmes d'affiliation
+  (registraires de noms de domaine d'abord), quand les comparatifs seront prêts ; structure juridique avec un comptable ; choix de l'hébergeur et budget pour
   les comptes en ligne (comparatif [13](13-comparatif-hebergeurs.md), § 6 ; reporté par Ismail le 22/10/2026, le
   serveur est prêt) ; nom de domaine à choisir avant la mise en ligne des comptes
   ([13](13-comparatif-hebergeurs.md), § 5) ; outil de mesure d'audience ([16](16-mesure-audience.md)) ; prix de l'offre « Pro » et prestataire de paiement

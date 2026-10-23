@@ -126,7 +126,39 @@ const tests = {
       check(res.status() === 200, `lien interne ${href} (${res.status()})`);
     }
     check(links.some((h) => h.includes("gumroad.com")), "accueil FR : lien vers le kit");
-    check((await page.$$(".grid-categories .nav-item")).length >= 8, "accueil FR : grille des outils par catégorie");
+    check((await page.$$(".grid-stages .stage")).length === 5 && (await page.$$(".grid-stages .nav-item")).length >= 25, "accueil FR : les cinq étapes et leurs outils");
+    check((await page.$$('.site-footer a[href$="#etape-start"]')).length === 1 && (await page.$("#etape-start")) !== null, "accueil FR : pied de page vers les étapes");
+    // Recherche (documentation/32-design.md, § 4) : touche « / », sans accents, clavier, Échap, Ctrl + K.
+    await page.focus("body");
+    await page.keyboard.press("/");
+    check(await page.isVisible("#search-dialog") && (await page.evaluate(() => document.activeElement.id)) === "search-input" &&
+      (await page.$$("#search-list li[role=option]")).length >= 3, "recherche : « / » ouvre la fenêtre, outils les plus utilisés proposés");
+    await page.keyboard.type("echeance");
+    await page.waitForTimeout(100);
+    check((await page.textContent("#search-list li[aria-selected=true]")).includes("Date d'échéance d'une facture") &&
+      (await page.getAttribute("#search-input", "aria-activedescendant")) === "search-r0", "recherche : sans accents, premier résultat choisi");
+    await page.fill("#search-input", "relance facture");
+    await page.waitForTimeout(100);
+    check((await page.textContent(".search-status")).length > 0 && (await page.textContent("#search-list li[role=option]")).includes("Relance de facture impayée"),
+      "recherche : plusieurs mots, message lu par les lecteurs d'écran");
+    await page.fill("#search-input", "zzqq");
+    await page.waitForTimeout(100);
+    check((await page.isVisible(".search-empty")) && !(await page.isVisible("#search-list")) && (await page.getAttribute("#search-input", "aria-expanded")) === "false",
+      "recherche : aucun résultat, message affiché");
+    await page.keyboard.press("Escape");
+    check(!(await page.isVisible("#search-dialog")), "recherche : Échap referme la fenêtre");
+    await page.keyboard.press("Control+k");
+    await page.keyboard.type("tjm");
+    await page.waitForTimeout(100);
+    await page.keyboard.press("ArrowDown");
+    const second = await page.textContent("#search-list li[aria-selected=true] b");
+    await Promise.all([page.waitForNavigation(), page.keyboard.press("Enter")]);
+    check(second === "Convertisseur de TJM" && page.url().endsWith("/fr/convertisseur-tjm/"), "recherche : Ctrl + K, flèche bas puis Entrée ouvre l'outil");
+    await page.goBack({ waitUntil: "networkidle" });
+    await page.click(".nav-search");
+    await page.click(".search-close");
+    check(!(await page.isVisible("#search-dialog")) && (await page.evaluate(() => document.activeElement.matches(".nav-search"))),
+      "recherche : le bouton de fermeture rend le focus au bouton de recherche");
     check((await page.getAttribute('link[hreflang="x-default"]', "href")) === "https://smileylab95.github.io/outils-freelance/", "accueil FR : hreflang x-default");
     // Menu déroulant et sélecteur de pays (ordinateur).
     await page.click(".nav .nav-group:first-child .nav-trigger");
@@ -2864,6 +2896,12 @@ for (const [url, run] of Object.entries(tests)) {
       await page.keyboard.press("Escape");
       check(!(await page.isVisible('.nav a[href$="/fr/generateur-facture/"]')) && (await page.evaluate(() => document.activeElement.matches(".menu-toggle"))),
         "menu mobile : Échap referme le panneau et rend le focus au bouton du menu");
+      await page.click(".search-mobile");
+      await page.keyboard.type("contrat");
+      await page.waitForTimeout(100);
+      check(await page.isVisible("#search-list li[role=option]") && (await page.textContent("#search-list li[aria-selected=true]")).includes("Contrat de prestation"),
+        "recherche mobile : bouton de l'en-tête, résultats");
+      await page.keyboard.press("Escape");
     }
     await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
     await page.screenshot({ path: path.join(shots, `${url.replace(/\/$/, "").replace(/\//g, "_") || "accueil"}-${label}.png`), fullPage: true });

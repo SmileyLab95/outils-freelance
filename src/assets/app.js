@@ -252,7 +252,7 @@
     if (group && !(event.relatedTarget && group.contains(event.relatedTarget))) closeMenus();
   });
   document.addEventListener("keydown", function (event) {
-    if (event.key !== "Escape") return;
+    if (event.key !== "Escape" || (searchDialog && searchDialog.open)) return;   // la recherche se ferme seule (dialog)
     var open = document.activeElement && document.activeElement.closest(".nav-group.open");
     closeMenus();
     if (open) open.querySelector(".nav-trigger").focus();
@@ -263,6 +263,113 @@
       if (toggle) { toggle.setAttribute("aria-expanded", "false"); toggle.focus(); }
     }
   });
+
+  // Recherche des outils (documentation/32-design.md, § 4) : les outils sont ceux du panneau « Outils » de la page
+  // (titre, accroche, description, étape) ; recherche sans accents ni majuscules, chaque mot doit se retrouver ; rien
+  // n'est envoyé à un serveur. Ouverture : bouton [data-search], touche « / », Ctrl ou ⌘ + K.
+  var searchDialog = document.getElementById("search-dialog");
+  if (searchDialog && typeof searchDialog.showModal === "function") {
+    var sInput = document.getElementById("search-input"), sList = document.getElementById("search-list");
+    var sStatus = searchDialog.querySelector(".search-status"), sTexts = JSON.parse(searchDialog.getAttribute("data-texts"));
+    var sEmpty = document.createElement("p");
+    sEmpty.className = "search-empty";
+    sEmpty.hidden = true;
+    sList.parentNode.insertBefore(sEmpty, sList.nextSibling);
+    var fold = function (text) { return String(text || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase(); };
+    var escHtml = function (text) { return String(text).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+    var tools = Array.prototype.map.call(document.querySelectorAll(".nav-mega .nav-item"), function (a, i) {
+      var col = a.closest(".mega-col"), stage = col ? col.querySelector(".mega-title span").textContent : "";
+      var title = a.querySelector("b").textContent, blurb = a.getAttribute("data-blurb") || "";
+      return { href: a.getAttribute("href"), title: title, blurb: blurb, stage: stage, popular: a.hasAttribute("data-popular"),
+               icon: a.querySelector(".ico").innerHTML, order: i,
+               t: fold(title), b: fold(blurb), d: fold(a.getAttribute("data-desc")), s: fold(stage) };
+    });
+    var found = [], current = -1, opener = null;
+    // Pertinence : début d'un mot du titre, puis titre, accroche, étape, description ; 0 si un mot manque.
+    var score = function (tool, words) {
+      var total = 0;
+      for (var i = 0; i < words.length; i++) {
+        var w = words[i];
+        var points = tool.t.indexOf(w) === 0 || tool.t.indexOf(" " + w) > -1 ? 6 : tool.t.indexOf(w) > -1 ? 4 :
+          tool.b.indexOf(w) > -1 ? 3 : tool.s.indexOf(w) > -1 ? 2 : tool.d.indexOf(w) > -1 ? 1 : 0;
+        if (!points) return 0;
+        total += points;
+      }
+      return total;
+    };
+    var select = function (i) {
+      current = i;
+      Array.prototype.forEach.call(sList.children, function (li, n) { li.setAttribute("aria-selected", String(n === i)); });
+      if (i > -1) { sInput.setAttribute("aria-activedescendant", "search-r" + i); sList.children[i].scrollIntoView({ block: "nearest" }); }
+      else sInput.removeAttribute("aria-activedescendant");
+    };
+    var searchRender = function () {
+      var words = fold(sInput.value).split(/[\s,;'’()-]+/).filter(Boolean);
+      found = words.length ? tools.map(function (t) { return { tool: t, score: score(t, words) }; })
+        .filter(function (x) { return x.score > 0; })
+        .sort(function (a, b) { return b.score - a.score || a.tool.order - b.tool.order; })
+        .slice(0, 8).map(function (x) { return x.tool; }) : tools.filter(function (t) { return t.popular; });
+      sList.innerHTML = found.map(function (t, i) {
+        return '<li role="option" id="search-r' + i + '" aria-selected="false"><span class="ico">' + t.icon + "</span><span><b>" +
+          escHtml(t.title) + '</b><small><span class="r-stage">' + escHtml(t.stage) + "</span> · " + escHtml(t.blurb) + "</small></span></li>";
+      }).join("");
+      sList.hidden = !found.length;
+      sEmpty.hidden = found.length > 0;
+      sEmpty.textContent = sTexts.search_empty;
+      sInput.setAttribute("aria-expanded", String(found.length > 0));
+      select(found.length ? 0 : -1);
+      sStatus.textContent = !words.length ? "" : found.length === 1 ? sTexts.search_result :
+        found.length ? sTexts.search_results.replace("{n}", found.length) : sTexts.search_empty;
+    };
+    var go = function (i) { if (found[i]) window.location.href = found[i].href; };
+    var openSearch = function (from) {
+      if (searchDialog.open) return;
+      opener = from || document.activeElement;
+      closeMenus();
+      sInput.value = "";
+      searchRender();
+      searchDialog.showModal();
+      sInput.focus();
+    };
+    sInput.addEventListener("input", searchRender);
+    sInput.addEventListener("keydown", function (event) {
+      if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+        event.preventDefault();
+        if (found.length) select((current + (event.key === "ArrowDown" ? 1 : -1) + found.length) % found.length);
+      } else if (event.key === "Enter") {
+        event.preventDefault();
+        go(current);
+      } else if (event.key === "Escape") {
+        // Dans un champ de recherche, Échap viderait d'abord le texte : ici, il ferme la fenêtre.
+        event.preventDefault();
+        searchDialog.close();
+      }
+    });
+    sList.addEventListener("click", function (event) {
+      var li = event.target.closest("li[role=option]");
+      if (li) go(Array.prototype.indexOf.call(sList.children, li));
+    });
+    searchDialog.querySelector(".search-close").addEventListener("click", function () { searchDialog.close(); });
+    // Clic sur le fond assombri (en dehors de la fenêtre) : fermeture.
+    searchDialog.addEventListener("click", function (event) {
+      if (event.target !== searchDialog) return;
+      var r = searchDialog.getBoundingClientRect();
+      if (event.clientX < r.left || event.clientX > r.right || event.clientY < r.top || event.clientY > r.bottom) searchDialog.close();
+    });
+    searchDialog.addEventListener("close", function () { if (opener && opener.focus) opener.focus(); });
+    document.addEventListener("click", function (event) {
+      var trigger = event.target.closest("[data-search]");
+      if (trigger) openSearch(trigger);
+    });
+    document.addEventListener("keydown", function (event) {
+      var target = event.target, typing = target.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName);
+      if ((event.key === "/" && !typing && !event.ctrlKey && !event.metaKey && !event.altKey) ||
+          ((event.ctrlKey || event.metaKey) && fold(event.key) === "k")) {
+        event.preventDefault();
+        openSearch(target);
+      }
+    });
+  }
 
   // Accueil mondial : met en avant le pays correspondant à la langue du navigateur.
   var langs = navigator.languages || [navigator.language || ""];

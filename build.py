@@ -37,11 +37,16 @@ BASE = SITE["base"]                       # ex. /outils-freelance/
 META_RE = re.compile(r"\A\s*<!--(.*?)-->\s*", re.S)
 LINK_RE = re.compile(r"\{\{link:(?:([a-z-]+)/)?([a-z0-9-]+)\}\}")   # {{link:id}} ou {{link:section/id}}
 LOGO_SVG = (
-    '<svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" '
-    'x2="1" y2="1"><stop offset="0" stop-color="#4f46e5"/><stop offset="1" stop-color="#7c3aed"/></linearGradient>'
-    '</defs><rect width="32" height="32" rx="9" fill="url(#lg)"/><path d="M10 9h12v3.2h-8.4v3.3h7.4v3.2h-7.4V23H10z" '
-    'fill="#fff"/></svg>'
+    '<svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#15171a"/>'
+    '<path d="M10 9h12v3.2h-8.4v3.3h7.4v3.2h-7.4V23H10z" fill="#fff"/><circle cx="23.5" cy="22.5" r="3" fill="#e8590c"/></svg>'
 )
+# Icônes (documentation/32-design.md) : jeu Lucide (licence ISC, src/icons/LICENSE-lucide.txt), une icône par page
+# (data/icons.json) ; chaque page contient un « sprite » avec les seules icônes qu'elle utilise.
+ICON_DIR = ROOT / "src" / "icons"
+ICONS = json.loads((ROOT / "data" / "icons.json").read_text(encoding="utf-8"))
+ICON_RE = re.compile(r"\{\{icon:([a-z0-9-]+)\}\}")
+SVG_INNER_RE = re.compile(r"<svg[^>]*>(.*)</svg>", re.S)
+USED_ICONS = set()
 GLOBAL = {
     "key": "global", "dir": "global", "path": "", "lang": "en", "country": "", "currency": "EUR",
     "name": "International", "language": "", "live": True,
@@ -148,32 +153,108 @@ def esc(text):
     return html.escape(text, quote=True)
 
 
-def nav_item(section, page_id, current_id):
+def icon(name, cls="i"):
+    """Icône décorative (le texte voisin porte le sens) ; son dessin est ajouté au sprite de la page."""
+    if not (ICON_DIR / f"{name}.svg").exists():
+        raise SystemExit(f"icône inconnue : {name} (src/icons/{name}.svg)")
+    USED_ICONS.add(name)
+    return f'<svg class="{cls}" aria-hidden="true" focusable="false"><use href="#i-{name}"></use></svg>'
+
+
+def page_icon(page_id, meta, cls="i"):
+    name = ICONS["pages"].get(page_id)
+    return icon(name, cls) if name else f'<span class="{cls} i-text" aria-hidden="true">{meta.get("icon", "•")}</span>'
+
+
+def sprite():
+    """Dessins des icônes utilisées par la page, une seule fois (balises <symbol>)."""
+    symbols = []
+    for name in sorted(USED_ICONS):
+        inner = SVG_INNER_RE.search((ICON_DIR / f"{name}.svg").read_text(encoding="utf-8")).group(1)
+        inner = re.sub(r"\s*\n\s*", "", inner)
+        symbols.append(f'<symbol id="i-{name}" viewBox="0 0 24 24">{inner}</symbol>')
+    return f'<svg class="sprite" aria-hidden="true" focusable="false"><defs>{"".join(symbols)}</defs></svg>' if symbols else ""
+
+
+def nav_item(section, page_id, current_id, blurb=True):
     meta = section["pages"][page_id]["meta"]
     current = ' aria-current="page"' if page_id == current_id else ""
+    small = f'<small>{esc(meta.get("blurb", ""))}</small>' if blurb else ""
     return (
         f'<a class="nav-item" href="{href(section, page_id)}"{current}>'
-        f'<span class="ico" aria-hidden="true">{meta.get("icon", "•")}</span>'
-        f'<span><b>{esc(meta.get("menu", meta["title"]))}</b><small>{esc(meta.get("blurb", ""))}</small></span></a>'
+        f'<span class="ico">{page_icon(page_id, meta)}</span>'
+        f'<span><b>{esc(meta.get("menu", meta["title"]))}</b>{small}</span></a>'
     )
 
 
+def search_item(section, page_id, current_id):
+    """Lien du panneau « Outils », avec ce qu'il faut à la recherche (accroche, description) dans ses attributs."""
+    meta = section["pages"][page_id]["meta"]
+    current = ' aria-current="page"' if page_id == current_id else ""
+    popular = ' data-popular=""' if page_id in section["site"].get("featured", []) or \
+        page_id == section["site"].get("header_cta", {}).get("page") else ""
+    return (
+        f'<a class="nav-item" href="{href(section, page_id)}"{current}{popular} data-blurb="{esc(meta.get("blurb", ""))}" '
+        f'data-desc="{esc(meta.get("description", ""))}"><span class="ico">{page_icon(page_id, meta)}</span>'
+        f'<span><b>{esc(meta.get("menu", meta["title"]))}</b></span></a>'
+    )
+
+
+def stage_icon(group):
+    return icon(ICONS["stages"].get(group.get("key", ""), "wrench"))
+
+
 def nav_html(section, current_id):
-    groups = []
+    """Panneau « Outils » (les étapes et leurs outils, tout visible d'un coup) et bouton de recherche."""
+    s = section["site"]["strings"]
+    cols, active = [], ""
     for group in section["site"].get("nav", []):
         items = [i for i in group["items"] if i in section["pages"]]
         if not items:
             continue
-        active = " is-active" if current_id in items else ""
-        links = "".join(nav_item(section, i, current_id) for i in items)
-        groups.append(
-            f'<div class="nav-group{active}"><button class="nav-trigger" type="button" aria-expanded="false">'
-            f'{esc(group["label"])}</button><div class="nav-menu">{links}</div></div>'
-        )
-    offer = section["site"].get("offer")
-    if offer:
-        groups.append(f'<a class="btn btn-kit nav-offer" href="{esc(offer["url"])}" rel="noopener">{esc(offer["button"])}</a>')
-    return "".join(groups)
+        if current_id in items:
+            active = " is-active"
+        links = "".join(search_item(section, i, current_id) for i in items)
+        cols.append(f'<div class="mega-col"><p class="mega-title">{stage_icon(group)}<span>{esc(group["label"])}</span></p>'
+                    f'<div class="mega-items">{links}</div></div>')
+    if not cols:
+        return ""
+    return (
+        f'<div class="nav-group nav-tools{active}"><button class="nav-trigger" type="button" aria-expanded="false">'
+        f'{esc(s["tools"])}</button><div class="nav-menu nav-mega">{"".join(cols)}</div></div>'
+        f'<button class="nav-search" type="button" data-search aria-haspopup="dialog">{icon("search")}'
+        f'<span>{esc(s["search_label"])}</span><kbd aria-hidden="true">/</kbd></button>'
+    )
+
+
+def search_dialog(section):
+    """Fenêtre de recherche (tools : app.js) : champ, liste des résultats au clavier, message lu par les lecteurs d'écran."""
+    s = section["site"]["strings"]
+    if not section["site"].get("nav"):
+        return ""
+    texts = {k: s[k] for k in ("search_empty", "search_results", "search_result")}
+    return (
+        f'<dialog class="search-dialog" id="search-dialog" aria-label="{esc(s["search_label"])}" '
+        f'data-texts="{esc(json.dumps(texts, ensure_ascii=False))}"><div class="search-field">{icon("search")}'
+        f'<input type="search" id="search-input" role="combobox" aria-expanded="false" aria-controls="search-list" '
+        f'aria-autocomplete="list" aria-label="{esc(s["search_label"])}" placeholder="{esc(s["search_placeholder"])}" '
+        f'autocomplete="off" spellcheck="false"><button type="button" class="search-close" aria-label="{esc(s["close"])}">'
+        f'{icon("x")}</button></div><ul class="search-list" id="search-list" role="listbox" aria-label="{esc(s["search_label"])}"></ul>'
+        f'<p class="search-status sr-only" role="status"></p><p class="search-hint">{esc(s["search_hint"])}</p></dialog>'
+    )
+
+
+def header_cta(section):
+    """Bouton de recherche pour mobile (le panneau « Outils » est replié) et bouton d'action de la section."""
+    s = section["site"]["strings"]
+    out = ""
+    if section["site"].get("nav"):
+        out += (f'<button class="search-mobile" type="button" data-search aria-haspopup="dialog" aria-label="{esc(s["search_label"])}">'
+                f'{icon("search")}</button>')
+    cta = section["site"].get("header_cta")
+    if cta and cta["page"] in section["pages"]:
+        out += f'<a class="btn btn-primary btn-sm header-cta" href="{href(section, cta["page"])}">{esc(cta["label"])}</a>'
+    return out
 
 
 def equivalents(sections, page_id):
@@ -224,14 +305,19 @@ def footer_html(sections, section):
         + (f'<p class="audience">{esc(section["site"]["audience"])}</p>' if section["site"].get("audience") else "")
         + f'<p>{esc(s["tagline"])}</p><p class="privacy-note">{esc(s["privacy_note"])}</p></div>'
     ]
-    for group in section["site"].get("nav", []):
-        items = [i for i in group["items"] if i in section["pages"]]
-        if items:
-            lis = "".join(
-                f'<li><a href="{href(section, i)}">{esc(section["pages"][i]["meta"].get("menu", ""))}</a></li>' for i in items
-            )
-            cols.append(f'<div><h2>{esc(group["label"])}</h2><ul>{lis}</ul></div>')
-    site_links = [
+    stages = [g for g in section["site"].get("nav", []) if any(i in section["pages"] for i in g["items"])]
+    if stages:
+        lis = "".join(f'<li><a href="{href(section, "home")}#etape-{esc(g.get("key", ""))}">{esc(g["label"])}</a></li>' for g in stages)
+        cols.append(f'<div><h2>{esc(s["tools"])}</h2><ul>{lis}</ul></div>')
+    popular = [i for i in [section["site"].get("header_cta", {}).get("page"), *section["site"].get("featured", [])]
+               if i and i in section["pages"]]
+    popular = list(dict.fromkeys(popular))
+    if popular:
+        lis = "".join(f'<li><a href="{href(section, i)}">{esc(section["pages"][i]["meta"].get("menu", ""))}</a></li>' for i in popular)
+        cols.append(f'<div><h2>{esc(s["popular"])}</h2><ul>{lis}</ul></div>')
+    offer = section["site"].get("offer")
+    site_links = [f'<li><a href="{esc(offer["url"])}" rel="noopener">{esc(offer["button"])}</a></li>'] if offer else []
+    site_links += [
         f'<li><a href="{href(section, i)}">{esc(section["pages"][i]["meta"].get("menu", i))}</a></li>'
         for i in section["site"].get("footer_links", []) if i in section["pages"]
     ]
@@ -251,9 +337,9 @@ def card(section, page_id, featured=False):
     meta = section["pages"][page_id]["meta"]
     cls = "tool-card featured" if featured else "tool-card"
     return (
-        f'<a class="{cls}" href="{href(section, page_id)}"><span class="ico" aria-hidden="true">{meta.get("icon", "•")}</span>'
+        f'<a class="{cls}" href="{href(section, page_id)}"><span class="ico">{page_icon(page_id, meta)}</span>'
         f'<h3>{esc(meta.get("menu", meta["title"]))}</h3><p>{esc(meta.get("blurb", ""))}</p>'
-        f'<span class="go" aria-hidden="true">→</span></a>'
+        f'<span class="go">{icon("arrow-right")}</span></a>'
     )
 
 
@@ -263,14 +349,23 @@ def featured_html(section):
 
 
 def tools_grid(section):
+    """Accueil : les étapes de la vie du freelance, chacune avec ses outils (ancre #etape-<clé> pour le pied de page)."""
+    s = section["site"]["strings"]
     panels = []
-    for group in section["site"].get("nav", []):
+    for n, group in enumerate(section["site"].get("nav", []), 1):
         items = [i for i in group["items"] if i in section["pages"]]
         if not items:
             continue
-        rows = "".join(nav_item(section, i, None) for i in items)
-        panels.append(f'<div class="category"><h3>{esc(group["label"])}</h3><div class="category-items">{rows}</div></div>')
-    return '<div class="grid-categories">' + "".join(panels) + "</div>"
+        count = s["stage_count_one"] if len(items) == 1 else s["stage_count"].replace("{n}", str(len(items)))
+        rows = "".join(nav_item(section, i, None, blurb=False) for i in items)
+        key = esc(group.get("key", ""))
+        panels.append(
+            f'<section class="stage" id="etape-{key}" aria-labelledby="etape-{key}-t"><div class="stage-intro">'
+            f'<div class="stage-head"><span class="stage-ico">{stage_icon(group)}</span><span class="stage-n">{n:02d}</span></div>'
+            f'<h3 id="etape-{key}-t">{esc(group["label"])}</h3><p class="stage-desc">{esc(group.get("description", ""))}</p>'
+            f'<p class="stage-count">{esc(count)}</p></div><div class="stage-items">{rows}</div></section>'
+        )
+    return '<div class="grid-stages">' + "".join(panels) + "</div>"
 
 
 def country_cards(sections):
@@ -334,7 +429,7 @@ def sources_html(section, meta, rules):
     lang = section["loc"]["lang"]
     shown = verified.strftime("%d/%m/%Y" if lang.startswith("fr") else "%-d %B %Y" if lang == "en-GB" else "%B %-d, %Y")
     return (
-        f'<section class="section sources"><h2>{esc(strings["sources"])}</h2><ul>{"".join(items)}</ul>'
+        f'<section class="section sources"><h2>{icon("badge-check")}{esc(strings["sources"])}</h2><ul>{"".join(items)}</ul>'
         f'<p class="small muted">{esc(strings["verified"])} {shown}.</p></section>'
     )
 
@@ -482,7 +577,9 @@ def render(layout, sections, section, page_id, rules, kit_cta):
     loc, site, strings = section["loc"], section["site"], section["site"]["strings"]
     path = page_path(section, page_id)
     url = absolute(path)
+    USED_ICONS.clear()
 
+    content = ICON_RE.sub(lambda m: icon(m.group(1)), content)
     content = (content.replace("{{breadcrumb}}", breadcrumb(section, page_id))
                .replace("{{tools_grid}}", tools_grid(section))
                .replace("{{featured}}", featured_html(section))
@@ -532,7 +629,8 @@ def render(layout, sections, section, page_id, rules, kit_cta):
         "brand_text": esc(" ".join(brand)),
         "nav": nav_html(section, page_id),
         "country_switch": country_switch(sections, section, page_id),
-        "offer_button": f'<a class="btn btn-kit header-offer" href="{esc(offer["url"])}" rel="noopener">{esc(offer["button"])}</a>' if offer else "",
+        "header_cta": header_cta(section),
+        "search_dialog": search_dialog(section),
         "menu_toggle": (f'<button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">'
                         f'<span class="bars" aria-hidden="true"></span>{esc(strings["menu"])}</button>') if site.get("nav") else "",
         "footer": footer_html(sections, section),
@@ -540,6 +638,7 @@ def render(layout, sections, section, page_id, rules, kit_cta):
         "year": str(date.today().year),
         "content": content,
     }
+    values["sprite"] = sprite()   # en dernier : toutes les icônes de la page sont connues
     out = layout
     for key, value in values.items():
         out = out.replace("{{" + key + "}}", value)

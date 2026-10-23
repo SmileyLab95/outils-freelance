@@ -16,15 +16,18 @@
 <meta property="og:url" content="{{canonical}}">
 <meta property="og:image" content="{{og_image}}">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="theme-color" content="#4f46e5">
+<meta name="theme-color" content="#15171a">
 <meta name="google-site-verification" content="{{gsv}}">
 <link rel="icon" href="{{base}}assets/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="{{base}}assets/fonts/atkinson-hyperlegible-next.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="{{base}}assets/fonts/bricolage-grotesque.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="{{css}}">
 {{jsonld}}
 {{rules}}
 {{scripts}}
 </head>
 <body data-currency="{{currency}}" data-section="{{section}}">
+{{sprite}}
 <a class="skip" href="#contenu">{{skip}}</a>
 <header class="site-header">
   <div class="wrap header-inner">
@@ -32,11 +35,12 @@
     <nav class="nav" id="site-nav" aria-label="{{brand_text}}">{{nav}}</nav>
     <div class="header-actions">
       {{country_switch}}
-      {{offer_button}}
+      {{header_cta}}
       {{menu_toggle}}
     </div>
   </div>
 </header>
+{{search_dialog}}
 
 <main id="contenu">
 {{content}}

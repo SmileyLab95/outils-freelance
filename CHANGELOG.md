@@ -1,5 +1,19 @@
 # Journal des modifications
 
+## 2026-10-23 — Nouveau design et vision de la plateforme
+
+- Vision de la plateforme complète ([31](documentation/31-vision-plateforme.md)) : outils ouverts sans compte, compte
+  gratuit pour tout garder, Pro, dons, carte de tous les besoins du freelance (nom et domaine, visibilité, protection
+  sociale, formation, outils du quotidien), revenus sans publicité ni résultats influencés.
+- Nouveau design ([32](documentation/32-design.md)) : identité « le cachet » (papier, encre, vermillon), polices
+  Bricolage Grotesque et Atkinson Hyperlegible Next servies par le site, icônes vectorielles à la place des emojis.
+- Navigation : panneau « Outils » en cinq étapes (Démarrer, Fixer ses prix, Vendre, Facturer et encaisser, Impôts et
+  gestion), recherche de tous les outils (« / », Ctrl ou ⌘ + K, sans accents, au clavier), bouton d'action par section,
+  pied de page court.
+- Accueil des cinq sections et accueil mondial : « Tout pour travailler à son compte », recherche, raccourcis, étapes.
+- Tests : recherche et pied de page ajoutés au parcours navigateur ; suite complète (369 tests unitaires, 27 tests
+  serveur, 3 190 vérifications navigateur du site public).
+
 ## 2026-10-23 — Proposition commerciale (4 pays)
 
 - Générateur de proposition commerciale : « Proposition commerciale » en France et au Canada en français,
