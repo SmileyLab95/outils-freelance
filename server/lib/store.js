@@ -2,6 +2,8 @@
  * Stockage du serveur des comptes : même interface (asynchrone) pour la mémoire (tests) et SQLite (serveur).
  * Documentation : documentation/23-serveur-et-connexion.md. Les jetons (lien, session) ne sont gardés que sous forme
  * d'empreinte ; le coffre et la clé enveloppée sont des blocs chiffrés sur l'appareil, que le serveur ne sait pas lire.
+ * Les préférences du compte (langue des emails, choix de la lettre d'information et sa preuve) sont en clair : le
+ * serveur en a besoin pour écrire et envoyer ses emails (documentation/34-inscription-compte-gratuit.md, § 2).
  * Contrat vérifié sur les deux implémentations par tests/server/store.test.mjs.
  */
 "use strict";
@@ -12,6 +14,7 @@ class MemoryStore {
   constructor() {
     this.accounts = new Map(); this.tokens = new Map(); this.sessionsById = new Map(); this.passkeysById = new Map();
     this.challenges = new Map(); this.keysByAccount = new Map(); this.vaults = new Map(); this.rate = new Map();
+    this.prefsByAccount = new Map();
   }
   async createAccount(a) {
     if ([...this.accounts.values()].some((x) => x.email === a.email)) throw new Error("email déjà utilisé");
@@ -21,7 +24,7 @@ class MemoryStore {
   async accountByEmail(email) { return clone([...this.accounts.values()].find((a) => a.email === email) || null); }
   async account(id) { return clone(this.accounts.get(id) || null); }
   async deleteAccount(id) {
-    this.accounts.delete(id); this.keysByAccount.delete(id); this.vaults.delete(id);
+    this.accounts.delete(id); this.keysByAccount.delete(id); this.vaults.delete(id); this.prefsByAccount.delete(id);
     for (const [k, s] of this.sessionsById) if (s.accountId === id) this.sessionsById.delete(k);
     for (const [k, p] of this.passkeysById) if (p.accountId === id) this.passkeysById.delete(k);
     for (const [k, c] of this.challenges) if (c.accountId === id) this.challenges.delete(k);
@@ -88,6 +91,9 @@ class MemoryStore {
     return { ok: true, version: version + 1 };
   }
 
+  async prefs(accountId) { return clone(this.prefsByAccount.get(accountId) || null); }
+  async putPrefs(accountId, prefs, now) { this.prefsByAccount.set(accountId, { ...clone(prefs), updatedAt: now }); }
+
   async hit(key, windowStart) {
     const k = key + "|" + windowStart, n = (this.rate.get(k) || 0) + 1;
     this.rate.set(k, n);
@@ -121,6 +127,8 @@ const SCHEMA = `
     data TEXT NOT NULL, version INTEGER NOT NULL, updatedAt INTEGER NOT NULL);
   CREATE TABLE IF NOT EXISTS vaults (accountId TEXT PRIMARY KEY REFERENCES accounts(id) ON DELETE CASCADE,
     iv TEXT NOT NULL, data TEXT NOT NULL, size INTEGER NOT NULL, version INTEGER NOT NULL, updatedAt INTEGER NOT NULL);
+  CREATE TABLE IF NOT EXISTS prefs (accountId TEXT PRIMARY KEY REFERENCES accounts(id) ON DELETE CASCADE,
+    data TEXT NOT NULL, updatedAt INTEGER NOT NULL);
   CREATE TABLE IF NOT EXISTS rate (key TEXT NOT NULL, windowStart INTEGER NOT NULL, count INTEGER NOT NULL,
     PRIMARY KEY (key, windowStart));
   CREATE INDEX IF NOT EXISTS sessions_account ON sessions(accountId);
@@ -206,6 +214,15 @@ class SqliteStore {
         accountId, blob.iv, blob.data, blob.size, version + 1, now);
       return { ok: true, version: version + 1 };
     });
+  }
+
+  async prefs(accountId) {
+    const r = this.row("SELECT data, updatedAt FROM prefs WHERE accountId = ?", accountId);
+    return r && { ...JSON.parse(r.data), updatedAt: r.updatedAt };
+  }
+  async putPrefs(accountId, prefs, now) {
+    this.run("INSERT INTO prefs (accountId, data, updatedAt) VALUES (?, ?, ?) " +
+      "ON CONFLICT(accountId) DO UPDATE SET data = excluded.data, updatedAt = excluded.updatedAt", accountId, JSON.stringify(prefs), now);
   }
 
   async hit(key, windowStart) {

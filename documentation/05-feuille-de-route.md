@@ -193,11 +193,17 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   vérifier (INPI, USPTO, UKIPO et Companies House, OPIC), listes officielles de registraires ; table des serveurs
   contrôlée chaque mois aux sources par GitHub Actions ; pages Confidentialité mises à jour ([33](33-noms-de-domaine.md),
   décision D32). Liens partenaires prêts à être ajoutés après l'inscription d'Ismail.
-- **Prochaines actions de Claude** : refonte, suite ([31](31-vision-plateforme.md) § 5) : écrans d'inscription et
-  premiers pas du compte gratuit, en brouillon, d'après la spécification [34](34-inscription-compte-gratuit.md)
-  (écrite le 23/10/2026 : informations facultatives chiffrées, lettre d'information par case non cochée avec preuve du
-  consentement, règles de la CNIL, de l'ICO, du CRTC et de la FTC), pages Offres et Soutenir
-  (brouillon, avec le comparatif des solutions de dons et leurs règles fiscales) ; puis besoins P3 restants
+- **Inscription au compte gratuit, en brouillon (23/10/2026)** : écran Bienvenue (lettre d'information par case non
+  cochée, choix daté avec la version du texte : preuve du consentement), carte « Premiers pas » dans « Votre compte »
+  (décrire son entreprise dans l'Espace, adresse et SIRET, premier devis ou facture, clé d'accès ; outils suggérés),
+  rubrique Emails pour se désinscrire ; serveur : préférences du compte ([34](34-inscription-compte-gratuit.md),
+  décision D33 : pas de second formulaire d'informations, l'accueil de l'Espace sert déjà à décrire l'entreprise).
+  Publié à l'ouverture des comptes.
+- **Comparatif des solutions de dons (23/10/2026)** : [35](35-offres-et-soutien.md) : pas de reçu fiscal ni de réduction d'impôt pour un don à une entreprise, aucune contrepartie ; Stripe recommandé s'il sert aussi au Pro, Liberapay en solution sans but lucratif ; TVA, impôt et cotisations des dons à valider avec l'expert-comptable.
+- **Pages Offres et Soutenir, en brouillon (23/10/2026)** : trois offres (Gratuit, Pro « bientôt », Soutenir) et page
+  de don sans contrepartie ni reçu fiscal ; aucun lien de paiement avant les choix d'Ismail ([35](35-offres-et-soutien.md)).
+- **Prochaines actions de Claude** : refonte, suite ([31](31-vision-plateforme.md) § 5) : modules du compte gratuit
+  (prospects, temps passé, dépenses, trésorerie), en brouillon ; puis besoins P3 restants
   ([02](02-besoins-clients.md) : CGV, sous-traitance, date d'échéance hors de France) ;
   comptes : adaptateur
   PostgreSQL et sauvegardes dès que l'hébergeur est choisi ; taux du crédit pour
@@ -208,7 +214,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   Z12-012 pour le BT-32 en franchise, la question 13 de [pays/ca.md](pays/ca.md) sur la TVQ, et le
   remplacement annoncé de la section 17 du *Victims and Prisoners Act 2024* sur les accords de confidentialité). La mise en ligne
   des comptes attend le choix de l'hébergeur et du domaine.
-- **En attente d'Ismail** (pas urgent) : envoyer ou non une lettre d'information aux inscrits, et à quelle fréquence au plus ([34](34-inscription-compte-gratuit.md)) ; choix de la solution de dons et inscription aux programmes d'affiliation
+- **En attente d'Ismail** (pas urgent) : envoyer ou non une lettre d'information aux inscrits, et à quelle fréquence au plus ([34](34-inscription-compte-gratuit.md)) ; choix de la solution de dons ([35](35-offres-et-soutien.md), après les questions à l'expert-comptable du § 1) et inscription aux programmes d'affiliation
   (registraires de noms de domaine d'abord), quand les comparatifs seront prêts ; structure juridique avec un comptable ; choix de l'hébergeur et budget pour
   les comptes en ligne (comparatif [13](13-comparatif-hebergeurs.md), § 6 ; reporté par Ismail le 22/10/2026, le
   serveur est prêt) ; nom de domaine à choisir avant la mise en ligne des comptes

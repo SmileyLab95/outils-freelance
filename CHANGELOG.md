@@ -1,5 +1,28 @@
 # Journal des modifications
 
+## 2026-10-23 — Inscription au compte gratuit (brouillon)
+
+- Comptes, en brouillon jusqu'à leur ouverture : écran **Bienvenue** après la création du compte, avec une seule
+  question facultative, la lettre d'information (case non cochée, désinscription en un clic) ; carte **Premiers pas**
+  dans « Votre compte » (décrire son entreprise dans l'Espace, adresse et SIRET, premier devis ou facture, clé
+  d'accès), cochée d'après l'Espace de l'appareil, avec des outils suggérés selon l'activité ; rubrique **Emails** pour
+  changer d'avis à tout moment.
+- Serveur des comptes : préférences (langue de l'inscription, choix de la lettre d'information daté avec la version
+  du texte affiché, comme preuve du consentement), `PUT /me/prefs`, export et suppression ; mémoire et SQLite.
+- Spécification [34](documentation/34-inscription-compte-gratuit.md) révisée avant le code (pas de second formulaire
+  d'informations : l'accueil de l'Espace sert déjà à décrire l'entreprise), décision D33.
+- Contrôle mensuel des registres : `actions/checkout` passe à la version 5 (Node.js 24 ; la version 4 utilisait
+  Node.js 20, en fin de vie).
+- Tests : `first-steps.test.mjs` (4), 2 tests serveur de plus ; 11 erreurs réintroduites dans le serveur, toutes
+  détectées ; parcours des brouillons (51 vérifications) ; suite complète (386 tests unitaires, 29 tests serveur,
+  3 306 vérifications navigateur du site public).
+- Pages **Offres** (Gratuit, Pro, Soutenir) et **Soutenir**, en brouillon : le Pro affiche « bientôt » pour ce qui
+  n'existe pas encore et son prix à l'ouverture ; un don n'est ni un achat ni un don à une association (pas de reçu
+  fiscal, pas de réduction d'impôt) ; aucun lien de paiement avant les choix d'Ismail.
+- Comparatif des solutions de dons ([35](documentation/35-offres-et-soutien.md)) : règles (BOFiP, CGI, arrêt *Tolsma*
+  de la Cour de justice), Stripe, Liberapay, Ko-fi, Buy Me a Coffee ; recommandation ; questions pour
+  l'expert-comptable.
+
 ## 2026-10-23 — Recherche de noms de domaine
 
 - Nouvel outil dans les cinq sections, étape « Démarrer » : « Recherche de nom de domaine » en France et au Canada en

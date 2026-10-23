@@ -2,14 +2,17 @@
  * Page « Mon compte » (documentation/23-serveur-et-connexion.md, § 5) : connexion par lien ou clé d'accès, code de
  * récupération et chiffrement sur le premier appareil, ouverture sur un nouvel appareil, synchronisation de l'Espace,
  * appareils connectés, clés d'accès, export et suppression. Appels au serveur et chiffrement : tools/compte-sync.js.
+ * Compte nouveau : écran Bienvenue (lettre d'information, case non cochée), puis premiers pas dans « Votre compte »
+ * (documentation/34-inscription-compte-gratuit.md).
  */
 (function () {
   "use strict";
-  var OF = window.OF, A = window.OFCompte, C = window.OFE && window.OFE.compteCrypto;
+  var OF = window.OF, A = window.OFCompte, C = window.OFE && window.OFE.compteCrypto, FS = window.OFE && window.OFE.firstSteps;
+  var RULES = window.OF_RULES || {};
   var card = document.querySelector(".account-card");
-  if (!card || !A || !C) return;
+  if (!card || !A || !C || !FS) return;
   var $ = function (id) { return document.getElementById(id); };
-  var SCREENS = ["s-loading", "s-signin", "s-sent", "s-setup", "s-unlock", "s-account"];
+  var SCREENS = ["s-loading", "s-signin", "s-sent", "s-welcome", "s-setup", "s-unlock", "s-account"];
   var me = null, code = null;
 
   var ERRORS = {
@@ -98,7 +101,8 @@
       // Le jeton ne reste ni dans l'adresse ni dans l'historique.
       history.replaceState(null, "", location.pathname + location.search);
       return A.call("POST", "/auth/verify", { token: token[1] }).then(function (r) {
-        message(r.created ? "Bienvenue : votre compte est créé." : "Vous êtes connecté.", "ok");
+        if (r.created) { me = r.account; message(""); show("s-welcome"); return; }
+        message("Vous êtes connecté.", "ok");
         return enter(r.account);
       }, function (e) { show("s-signin"); fail(e); });
     }
@@ -119,9 +123,28 @@
 
   function openAccount(syncNow) {
     $("acc-email").textContent = me.email;
+    $("acc-newsletter").checked = !!(me.prefs && me.prefs.newsletter && me.prefs.newsletter.value);
     show("s-account");
     refreshLists();
     return A.state().then(renderSync).then(function () { if (syncNow) return runSync(); });
+  }
+
+  /** Premiers pas, d'après l'Espace de l'appareil et les clés d'accès du compte (OFE.firstSteps). */
+  function renderSteps() {
+    return window.EspaceStore.load().then(function (data) {
+      var r = FS.steps({ profile: data.profile, documents: data.documents, passkeys: A.passkeysSupported() ? me.passkeys : null,
+                         microActivities: RULES.micro_activities });
+      var all = ["profile", "mentions", "document", "passkey"];
+      all.forEach(function (id) {
+        var step = r.steps.filter(function (x) { return x.id === id; })[0], item = $("step-" + id);
+        item.hidden = !step;
+        item.classList.toggle("is-done", !!(step && step.done));
+      });
+      card.querySelectorAll("#acc-steps-tools [data-tool]").forEach(function (t) { t.hidden = r.tools.indexOf(t.getAttribute("data-tool")) < 0; });
+      $("acc-steps-count").textContent = r.complete ? "Tout est prêt : " + r.total + " étapes sur " + r.total + "."
+        : r.done + (r.done > 1 ? " étapes faites" : " étape faite") + " sur " + r.total + ".";
+      $("acc-steps").hidden = false;
+    }, function () { $("acc-steps").hidden = true; });
   }
 
   /** Conflit nommé par l'élément concerné (« Studio Nova : fiche modifiée… »), d'après l'Espace de l'appareil. */
@@ -136,6 +159,7 @@
   }
 
   function renderSync(st, error) {
+    if (me) renderSteps();   // l'Espace a pu changer (synchronisation, autre appareil)
     return window.EspaceStore.load().then(function (data) { draw(st, error, data); }, function () { draw(st, error, null); });
   }
   function draw(st, error, data) {
@@ -174,6 +198,7 @@
     A.call("GET", "/passkeys").then(function (r) {
       var ul = $("acc-passkeys");
       ul.textContent = "";
+      if (me && me.passkeys !== r.passkeys.length) { me.passkeys = r.passkeys.length; renderSteps(); }
       if (!r.passkeys.length) ul.appendChild(li("Aucune clé d'accès", "", null));
       r.passkeys.forEach(function (p) {
         ul.appendChild(li(p.name, "Ajoutée le " + when(p.createdAt) + (p.lastUsed ? " · utilisée le " + when(p.lastUsed) : ""),
@@ -200,6 +225,20 @@
   $("b-other-email").addEventListener("click", function () { show("s-signin"); $("c-email").focus(); });
   $("b-passkey").addEventListener("click", function () {
     busy($("b-passkey"), A.signInWithPasskey()).then(function (r) { message("Vous êtes connecté.", "ok"); return enter(r.account); }, fail);
+  });
+
+  // ----- Compte nouveau : Bienvenue -----------------------------------------------------------------------------
+
+  /** Enregistre le choix de la lettre d'information (daté par le serveur, avec la version du texte affiché). */
+  function saveNewsletter(box) {
+    return A.call("PUT", "/me/prefs", { newsletter: { value: box.checked, wording: box.getAttribute("data-wording") } })
+      .then(function (r) { me.prefs = r.prefs; return r; });
+  }
+  $("f-welcome").addEventListener("submit", function () {
+    var box = $("c-newsletter");
+    // Case non cochée : rien à enregistrer, le compte n'a aucune lettre d'information par défaut.
+    var done = box.checked ? busy($("b-welcome"), saveNewsletter(box)) : Promise.resolve();
+    done.then(function () { message(box.checked ? "Inscription à la lettre d'information enregistrée." : "", "ok"); return enter(me); }, fail);
   });
 
   // ----- Premier appareil : code de récupération ----------------------------------------------------------------
@@ -267,6 +306,15 @@
   // ----- Compte -------------------------------------------------------------------------------------------------
 
   $("b-sync").addEventListener("click", runSync);
+  $("b-step-passkey").addEventListener("click", function () { $("b-add-passkey").click(); });
+  $("acc-newsletter").addEventListener("change", function () {
+    var box = $("acc-newsletter");
+    box.disabled = true;
+    saveNewsletter(box).then(function () {
+      box.disabled = false;
+      message(box.checked ? "Inscription à la lettre d'information enregistrée." : "Désinscription enregistrée : vous ne recevrez plus la lettre d'information.", "ok");
+    }, function (e) { box.disabled = false; box.checked = !box.checked; fail(e); });
+  });
   $("b-add-passkey").addEventListener("click", function () {
     busy($("b-add-passkey"), A.addPasskey(device(navigator.userAgent))).then(function () {
       message("Clé d'accès ajoutée : vous pourrez vous connecter sans email.", "ok");

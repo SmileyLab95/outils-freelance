@@ -85,6 +85,26 @@ const putEspace = (page, fn) => page.evaluate((src) => window.EspaceStore.load()
 
 const browser = await chromium.launch({ executablePath: "/opt/pw-browsers/chromium-1194/chrome-linux/chrome" });
 try {
+  // ----- Pages Offres et Soutenir (brouillons, documentation/35-offres-et-soutien.md) ---------------------------
+  for (const [slug, title] of [["offres", "Gratuit pour l'essentiel"], ["soutenir", "Soutenir Outils Freelance"]]) {
+    const { page } = await device(slug);
+    await page.goto(ORIGIN + `/outils-freelance/fr/${slug}/`, { waitUntil: "networkidle" });
+    const links = await page.$$eval("main a[href]", (as) => as.map((a) => a.href));
+    check((await text(page, "h1")).startsWith(title) && (await page.getAttribute("meta[name=robots]", "content")) === "noindex"
+      && !links.some((h) => /stripe|liberapay|ko-fi|buymeacoffee|paypal/i.test(h))
+      && !existsSync(path.join(root, "docs", "fr", slug)) && !readFileSync(path.join(root, "docs", "sitemap.xml"), "utf8").includes(`/fr/${slug}/`),
+      `${slug} : brouillon non indexé, absent du site public, aucun lien de paiement`);
+    await accessible(page, `${slug} (brouillon)`);
+    for (const [label, vp] of [["bureau", { width: 1280, height: 900 }], ["mobile", { width: 390, height: 844 }]]) {
+      await page.setViewportSize(vp);
+      await page.screenshot({ path: path.join(shots, `0-${slug}-${label}.png`), fullPage: true });
+    }
+    await page.context().close();
+  }
+  check((await (async () => { const { page } = await device("soutenir-texte"); await page.goto(ORIGIN + "/outils-freelance/fr/soutenir/", { waitUntil: "networkidle" });
+    const t = await text(page, "main"); await page.context().close(); return t; })()).includes("pas de reçu fiscal, pas de réduction d'impôt"),
+    "soutenir : la page dit qu'un don ne donne ni reçu fiscal ni réduction d'impôt");
+
   // ----- Premier appareil : Espace local existant, création du compte -----------------------------------------
   const A = await device("A");
   await A.page.goto(PAGE, { waitUntil: "networkidle" });
@@ -107,8 +127,20 @@ try {
   await shot(A.page, "2-lien-envoye");
 
   await A.page.goto(linkFor("camille@exemple.fr"), { waitUntil: "networkidle" });
+  await A.page.waitForSelector("#s-welcome:not([hidden])");
+  check(!A.page.url().includes("token") && (await A.page.evaluate(() => document.activeElement.textContent)).includes("votre compte est créé"),
+    "compte : lien vérifié, jeton retiré de l'adresse, compte créé → écran Bienvenue (titre au focus)");
+  const prefsOf = () => [...store.prefsByAccount.values()][0];
+  check(!(await A.page.isChecked("#c-newsletter")) && prefsOf().lang === "fr" && prefsOf().newsletter.value === false,
+    "compte : lettre d'information non cochée par défaut, aucune inscription sans choix");
+  await accessible(A.page, "compte, bienvenue");
+  await shot(A.page, "3a-bienvenue");
+  await A.page.check("#c-newsletter");
+  await A.page.click("#b-welcome");
   await A.page.waitForSelector("#s-setup:not([hidden])");
-  check(!A.page.url().includes("token") && (await text(A.page, "#c-msg")).includes("votre compte est créé"), "compte : lien vérifié, jeton retiré de l'adresse, compte créé");
+  check(prefsOf().newsletter.value === true && prefsOf().newsletter.wording === "fr-2026-10-23" && Number.isFinite(prefsOf().newsletter.at)
+    && (await text(A.page, "#c-msg")).includes("Inscription à la lettre d'information enregistrée"),
+    "compte : choix de la lettre d'information enregistré avec sa date et la version du texte");
   await A.page.click("#b-new-code");
   const code = await text(A.page, "#code-text");
   check(/^[0-9A-HJKMNP-TV-Z]{4}(-[0-9A-HJKMNP-TV-Z]{4}){6}$/.test(code), `compte : code de récupération affiché (${code.length} caractères)`);
@@ -127,6 +159,18 @@ try {
   check(vault && vault.version === 1 && !Buffer.from(vault.data, "base64url").toString("latin1").includes("Studio Nova"),
     "compte : Espace local envoyé chiffré (version 1, illisible par le serveur)");
   check((await text(A.page, "#acc-email")) === "camille@exemple.fr" && (await A.page.$$("#acc-sessions li")).length === 1, "compte : écran du compte, un appareil connecté");
+  // Premiers pas : profil décrit (Espace local), le reste à faire ; outils suggérés hors micro-entreprise.
+  await A.page.waitForSelector("#acc-steps:not([hidden])");
+  const stepState = () => A.page.$$eval(".steps-list li", (ls) => ls.map((l) => l.id.slice(5) + (l.hidden ? "?" : l.classList.contains("is-done") ? "+" : "-")).join(" "));
+  check((await stepState()) === "profile+ mentions- document- passkey-" && (await text(A.page, "#acc-steps-count")) === "1 étape faite sur 4.",
+    `compte : premiers pas d'après l'Espace (${await stepState()})`);
+  check(await A.page.isVisible('[data-tool="einvoicing"]') && !(await A.page.isVisible('[data-tool="tax"]')) && await A.page.isVisible('[data-tool="domain"]'),
+    "compte : outils suggérés selon l'activité");
+  check((await A.page.getAttribute("#step-mentions a", "href")).endsWith("/fr/espace/#/reglages"), "compte : lien vers les réglages de l'Espace");
+  check(await A.page.isChecked("#acc-newsletter"), "compte : choix de la lettre d'information affiché");
+  await A.page.uncheck("#acc-newsletter");
+  check(await serverUntil(() => prefsOf().newsletter.value === false, 3000) && (await until(A.page, () => /Désinscription enregistrée/.test(document.getElementById("c-msg").textContent))),
+    "compte : désinscription depuis le compte, datée sur le serveur");
   await accessible(A.page, "compte, écran du compte");
   await shot(A.page, "4-compte");
 
@@ -200,6 +244,7 @@ try {
   await A.page.click("#b-add-passkey");
   await A.page.waitForFunction(() => document.querySelectorAll("#acc-passkeys li button").length === 1);
   check((await text(A.page, "#c-msg")).includes("Clé d'accès ajoutée"), "compte : clé d'accès ajoutée");
+  check(await until(A.page, () => document.getElementById("step-passkey").classList.contains("is-done")), "compte : premier pas « clé d'accès » coché");
   await A.page.click("#b-logout");
   await A.page.waitForSelector("#s-signin:not([hidden])");
   check((await A.page.evaluate(() => window.EspaceStore.getMeta("compte"))) === null && (await espace(A.page)).clients.length === 3,

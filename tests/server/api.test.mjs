@@ -17,11 +17,11 @@ process.removeAllListeners("warning");
 const ORIGIN = "https://outils.example", RP_ID = "outils.example";
 const MIN = 60000, DAY = 24 * 60 * MIN;
 
-async function start(makeStore = () => new MemoryStore(), limits) {
+async function start(makeStore = () => new MemoryStore(), limits, accountPaths = { fr: "/fr/compte/", en: "/uk/account/" }) {
   const clock = { t: Date.UTC(2026, 9, 22, 12) };
   const store = makeStore(), mailer = new MemoryMailer();
   const app = createApp({ store, mailer, now: () => clock.t,
-    config: { rpId: RP_ID, origins: [ORIGIN], appUrl: ORIGIN, accountPaths: { fr: "/fr/compte/", en: "/uk/account/" }, limits } });
+    config: { rpId: RP_ID, origins: [ORIGIN], appUrl: ORIGIN, accountPaths, limits } });
   const server = http.createServer(app);
   await new Promise((r) => server.listen(0, "127.0.0.1", r));
   const port = server.address().port;
@@ -277,6 +277,51 @@ for (const [name, makeStore] of [["mémoire", () => new MemoryStore()], ["SQLite
       assert.notEqual(re.body.account.id, firstId);
       assert.equal(re.body.account.keysVersion, 0);
     } finally { await env.close(); }
+  });
+
+  test(`${name} : préférences : langue de l'inscription, lettre d'information choisie, datée, retirée ; export`, async () => {
+    const env = await start(makeStore);
+    try {
+      const phone = env.device(), other = env.device();
+      const created = await phone.signIn(env, "camille@exemple.fr");
+      assert.deepEqual(created.body.account.prefs, { lang: "fr", newsletter: { value: false, at: null, wording: null } },
+        "compte nouveau : langue de l'inscription, aucune lettre d'information sans choix");
+      const t0 = env.clock.t;
+      let r = await phone.req("PUT", "/me/prefs", { body: { newsletter: { value: true, wording: "fr-2026-10-23" } } });
+      assert.equal(r.status, 200);
+      assert.deepEqual(r.body.prefs, { lang: "fr", newsletter: { value: true, at: t0, wording: "fr-2026-10-23" } });
+      assert.deepEqual((await phone.req("GET", "/me")).body.prefs.newsletter, { value: true, at: t0, wording: "fr-2026-10-23" });
+      env.clock.t += DAY;
+      r = await phone.req("PUT", "/me/prefs", { body: { newsletter: { value: false, wording: "fr-2026-10-23" } } });
+      assert.deepEqual(r.body.prefs.newsletter, { value: false, at: t0 + DAY, wording: "fr-2026-10-23" }, "retrait daté");
+      r = await phone.req("PUT", "/me/prefs", { body: { lang: "en" } });
+      assert.deepEqual([r.status, r.body.prefs.lang, r.body.prefs.newsletter.value], [200, "en", false], "langue seule, choix gardé");
+
+      for (const body of [{}, { lang: "de" }, { lang: 3 }, { other: 1 }, { lang: "fr", other: 1 }, { newsletter: true },
+        { newsletter: { value: "oui", wording: "fr-2026-10-23" } }, { newsletter: { value: true } }, { newsletter: { value: true, wording: "Texte libre !" } },
+        { newsletter: { value: true, wording: "x".repeat(41) } }, { newsletter: null }]) {
+        assert.equal((await phone.req("PUT", "/me/prefs", { body })).status, 400, JSON.stringify(body));
+      }
+      assert.equal((await phone.req("GET", "/me")).body.prefs.lang, "en", "requêtes refusées sans effet");
+      assert.equal((await other.req("PUT", "/me/prefs", { body: { lang: "fr" } })).status, 401, "sans session");
+      assert.equal((await phone.req("PUT", "/me/prefs", { body: { lang: "fr" }, site: false })).status, 403, "sans l'en-tête du site");
+      assert.equal((await phone.req("PUT", "/me/prefs", { body: { lang: "fr" }, origin: "https://autre.example" })).status, 403, "autre site");
+
+      await other.signIn(env, "dominique@exemple.fr");
+      assert.equal((await other.req("GET", "/me")).body.prefs.newsletter.value, false, "préférences propres à chaque compte");
+      const exp = (await phone.req("GET", "/export")).body;
+      assert.deepEqual(exp.prefs, { lang: "en", newsletter: { value: false, at: t0 + DAY, wording: "fr-2026-10-23" } }, "export");
+
+      const again = await phone.signIn(env, "camille@exemple.fr");
+      assert.deepEqual([again.body.created, again.body.account.prefs.lang], [false, "en"], "reconnexion : préférences gardées");
+    } finally { await env.close(); }
+    // Langue sans page de compte sur ce serveur : refusée (les emails renverraient vers une page inexistante).
+    const frOnly = await start(makeStore, undefined, { fr: "/fr/compte/" });
+    try {
+      const d = frOnly.device();
+      await d.signIn(frOnly, "camille@exemple.fr");
+      assert.equal((await d.req("PUT", "/me/prefs", { body: { lang: "en" } })).status, 400);
+    } finally { await frOnly.close(); }
   });
 }
 

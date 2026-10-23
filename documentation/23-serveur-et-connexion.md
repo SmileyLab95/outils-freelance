@@ -60,7 +60,8 @@ quand l'hébergeur (comparatif [13](13-comparatif-hebergeurs.md)) et le domaine 
 | `POST /auth/verify` | Vérifier le jeton du lien `{ token }` → session ; compte créé s'il n'existait pas |
 | `POST /auth/logout` | Fermer la session en cours |
 | `POST /auth/passkey/options`, `POST /auth/passkey` | Connexion par clé d'accès |
-| `GET /me` | Compte connecté : adresse, date de création, clé enveloppée présente ou non, version du coffre |
+| `GET /me` | Compte connecté : adresse, date de création, clé enveloppée présente ou non, version du coffre, préférences |
+| `PUT /me/prefs` | Préférences `{ lang?, newsletter?: { value, wording } }` : langue des emails, lettre d'information datée avec la version du texte ([34](34-inscription-compte-gratuit.md)) |
 | `GET /sessions`, `DELETE /sessions/:id` | Appareils connectés |
 | `POST /passkeys/options`, `POST /passkeys`, `GET /passkeys`, `DELETE /passkeys/:id` | Clés d'accès du compte |
 | `GET /keys`, `PUT /keys` | Clé du compte enveloppée (écrite une fois ; remplacée seulement avec la version en cours) |

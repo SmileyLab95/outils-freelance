@@ -11,11 +11,17 @@ Aujourd'hui : adresse email → lien → code de récupération → page « Votr
 compte : ses coordonnées, ses choix d'emails et ses premiers pas. Cible :
 
 1. **Adresse email** (seule information obligatoire) → « Consultez votre boîte » (inchangé).
-2. **Le lien** ouvre la page, vérifie le jeton et, pour un compte nouveau, affiche **« Bienvenue »**.
-3. **Vos informations, en un écran, toutes facultatives** : prénom, pays et langue (préremplis par la section du
-   site), statut (liste propre au pays), activité, nom commercial ; puis les **choix d'emails**, cases non cochées.
-4. **Code de récupération** (écran existant de C4), qui chiffre ces informations avec le reste de l'Espace.
-5. **Tableau de bord** : l'accueil de l'Espace, avec une carte « Premiers pas » adaptée au pays et au statut.
+2. **Le lien** ouvre la page, vérifie le jeton et, pour un compte nouveau, affiche **« Bienvenue »** : une seule
+   question, facultative, la lettre d'information (case non cochée).
+3. **Code de récupération** (écran existant de C4), qui chiffre l'Espace.
+4. **« Votre compte »** avec une carte **« Premiers pas »** : décrire son entreprise, ajouter adresse et SIRET, créer
+   un premier devis ou une première facture, ajouter une clé d'accès ; et des outils suggérés selon l'activité.
+
+**Révision du 23/10/2026, avant le code** : la première version prévoyait un écran « Vos informations » (prénom,
+pays, statut, activité, nom commercial). L'Espace a déjà son accueil, où l'on décrit son entreprise (nom, activité,
+TVA, déclaration Urssaf) : un second formulaire ferait saisir deux fois la même chose, dans deux formats. La carte
+« Premiers pas » renvoie donc vers cet accueil ; le prénom n'est pas demandé (aucun usage aujourd'hui) et le pays est
+celui de la section.
 
 ## 2. Où va chaque donnée
 
@@ -24,16 +30,15 @@ compte : ses coordonnées, ses choix d'emails et ses premiers pas. Cible :
 | Adresse email | Serveur, en clair | Envoyer les liens de connexion ; seule donnée exigée |
 | Langue des emails | Serveur, en clair | Écrire les emails du service dans la langue du compte |
 | Choix d'emails (lettre d'information) et preuve du choix (date, version du texte affiché) | Serveur, en clair | Le serveur envoie ces emails ; le consentement doit pouvoir être démontré (RGPD, art. 7, § 1) |
-| Prénom, pays, statut, activité, nom commercial | **Profil de l'Espace**, chiffré sur l'appareil | Préremplir les outils ; le serveur n'en a pas besoin (minimisation, RGPD, art. 5, § 1, c) |
-| SIRET, adresse, IBAN | Profil de l'Espace, plus tard, quand un document en a besoin | Jamais demandés à l'inscription |
+| Nom de l'entreprise, activité, TVA (accueil de l'Espace), puis adresse, SIRET, IBAN (réglages de l'Espace) | **Profil de l'Espace**, chiffré sur l'appareil avant la synchronisation | Préremplir les documents ; le serveur n'en a pas besoin (minimisation, RGPD, art. 5, § 1, c) |
 
-Le pays n'est donc **pas** obligatoire au sens du serveur : il est prérempli par la section (France, États-Unis…) et
-sert au tableau de bord ; le visiteur peut le changer ou le laisser.
+Rien d'autre n'est demandé à l'inscription. Le pays est celui de la section du site (le compte n'existe pour
+l'instant qu'en France, comme l'Espace).
 
 ## 3. Choix d'emails
 
-- Emails **du service**, toujours envoyés, sans case : liens de connexion, alertes de sécurité (nouvel appareil,
-  suppression du compte). Ce ne sont pas des emails de prospection.
+- Emails **du service**, toujours envoyés, sans case : liens de connexion (et, plus tard, alertes de sécurité). Ce ne
+  sont pas des emails de prospection.
 - **Lettre d'information** (nouveaux outils, changements de règles) : case **non cochée**, séparée des conditions
   d'utilisation, modifiable à tout moment dans « Votre compte » et par un lien dans chaque lettre. Règles de la CNIL :
   le consentement à la prospection par email demande une action positive, une case pré-cochée est interdite, et
@@ -42,21 +47,22 @@ sert au tableau de bord ; le visiteur peut le changer ou le laisser.
   quatre pays). À relire avec les autres règles des quatre pays avant l'ouverture.
 - **Rappels d'échéances** (étape C5) : fonction du compte, activée dans les réglages, pas une case d'inscription.
 
-## 4. Écrans et textes (France ; mêmes écrans dans les autres sections)
+## 4. Écrans et textes (France)
 
-- **Bienvenue** : « Votre compte est créé. Deux minutes pour le préparer : tout est facultatif. »
-- **Vos informations** : Prénom ; Pays (liste des quatre pays et « Autre ») ; Statut (micro-entreprise, entreprise
-  individuelle au réel, société, je n'ai pas encore créé mon entreprise ; équivalents par pays) ; Activité ; Nom
-  commercial. Case : « Recevoir la lettre d'information d'Outils Freelance » (aide : « Au plus une par mois ;
-  désinscription en un clic. » — fréquence à décider par Ismail). Boutons : « Continuer », « Passer cette étape ».
-- **Code de récupération** : écran actuel de C4.
-- **Premiers pas** (carte du tableau de bord, cochée automatiquement quand c'est fait) : compléter le profil
-  d'entreprise ; créer un premier devis ou une première facture ; ajouter une clé d'accès ; selon le pays et le
-  statut, un outil clé (France, micro-entreprise : simulateur et calendrier des déclarations ; États-Unis : acomptes
-  trimestriels ; Royaume-Uni : *Making Tax Digital* ; Canada : TPS/TVH) ; chercher un nom de domaine si l'activité
-  n'a pas de site.
-- Accessibilité : un seul formulaire par écran, titre mis au focus à chaque écran (comme C4), erreurs reliées aux
-  champs, tout au clavier, cibles de 44 px sur mobile.
+- **Bienvenue** (titre au focus) : « Bienvenue : votre compte est créé » ; « Encore deux étapes : une question
+  facultative, puis le code qui protège vos données. » Case non cochée : « Recevoir la lettre d'information d'Outils
+  Freelance : nouveaux outils et changements de règles qui vous concernent » ; aide : « Facultatif. Désinscription à
+  tout moment, en un clic, depuis chaque lettre ou depuis votre compte. » Bouton « Continuer ». La fréquence des
+  lettres n'est pas annoncée tant qu'Ismail ne l'a pas fixée. Le texte affiché a une version (`fr-2026-10-23`),
+  enregistrée avec le choix ; un nouveau texte aura une nouvelle version.
+- **Premiers pas** (carte de « Votre compte », cochée automatiquement d'après l'Espace de l'appareil et le compte) :
+  décrire votre entreprise (accueil de l'Espace) ; ajouter votre adresse et votre SIRET (réglages) ; créer votre premier
+  devis ou votre première facture ; ajouter une clé d'accès (étape absente si l'appareil ne le permet pas). Compte
+  « 1 étape faite sur 4 », puis « Tout est prêt ». Outils suggérés : simulateur et calendrier des déclarations en
+  micro-entreprise (règle `micro_activities`), facturation électronique sinon, recherche de nom de domaine toujours.
+- **Emails** (rubrique de « Votre compte ») : la même case, pour s'inscrire ou se désinscrire à tout moment.
+- Accessibilité : titre mis au focus à chaque écran (comme C4), « Fait : » lu par les lecteurs d'écran devant chaque
+  étape faite, tout au clavier, cibles de taille suffisante sur mobile.
 
 ## 5. Serveur
 
@@ -70,10 +76,11 @@ sert au tableau de bord ; le visiteur peut le changer ou le laisser.
 
 ## 6. Tests
 
-- Tests serveur ci-dessus ; tests du moteur des premiers pas (selon le pays et le statut, état coché d'après les
-  données de l'Espace) ; parcours navigateur des brouillons (`tests/e2e/comptes.mjs`) : compte nouveau → Bienvenue →
-  informations → code → tableau de bord ; « Passer cette étape » ; compte existant qui se reconnecte (pas d'écran
-  Bienvenue) ; case non cochée par défaut ; accessibilité ; mobile.
+- Tests serveur ci-dessus ; tests du moteur des premiers pas (`engines/first-steps.js` : étapes cochées d'après
+  l'Espace et le compte, clé d'accès selon l'appareil, outils selon l'activité) ; parcours navigateur des brouillons
+  (`tests/e2e/comptes.mjs`) : compte nouveau → Bienvenue → code → « Votre compte » ; compte existant qui se reconnecte
+  (pas d'écran Bienvenue) ; case non cochée par défaut ; choix enregistré avec sa date et sa version ; désinscription
+  depuis le compte ; étape « clé d'accès » cochée après l'ajout ; accessibilité ; mobile.
 
 ## 7. Sources à relire avant l'ouverture
 
@@ -93,3 +100,13 @@ sert au tableau de bord ; le visiteur peut le changer ou le laisser.
 
 - **[Ismail]** Hébergeur et nom de domaine (déjà en attente) : ils décident de l'ouverture.
 - **[Ismail]** Envoyer ou non une lettre d'information, et à quelle fréquence au plus.
+
+## 9. Réalisation (23/10/2026, brouillon)
+
+- Serveur : préférences du compte (`prefs` : langue de l'inscription, lettre d'information avec date et version du
+  texte), `PUT /me/prefs`, export, suppression avec le compte ; mémoire et SQLite (table `prefs`). Tests : 2 nouveaux
+  (un par stockage) et le contrat du stockage ; 11 erreurs réintroduites, toutes détectées (une après l'ajout d'un test
+  avec une langue sans page de compte).
+- Page du compte (brouillon) : écran Bienvenue, carte Premiers pas, rubrique Emails ; moteur `engines/first-steps.js`
+  (4 tests) ; parcours navigateur des comptes : 46 vérifications, accessibilité comprise ; captures relues sur
+  ordinateur et mobile.

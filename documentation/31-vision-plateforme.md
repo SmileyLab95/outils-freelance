@@ -177,8 +177,10 @@ fuseaux horaires des clients, générateur de QR code, convertisseur de devises,
    nouvel accueil, appel à créer un compte gratuit dès que les comptes ouvrent.
 2. **Recherche de noms de domaine** (publique, sans partenaire au départ ; liens partenaires après l'inscription
    d'Ismail aux programmes) : publiée le 23/10/2026 ([33](33-noms-de-domaine.md)).
-3. **Inscription et tableau de bord du compte gratuit** (brouillon jusqu'au choix de l'hébergeur et du domaine).
-4. **Pages Offres et Soutenir** (brouillon jusqu'aux choix d'Ismail : prix du Pro, prestataire de paiement et de dons).
+3. **Inscription et tableau de bord du compte gratuit** (brouillon jusqu'au choix de l'hébergeur et du domaine) :
+   écran Bienvenue, lettre d'information et premiers pas prêts en brouillon le 23/10/2026 ([34](34-inscription-compte-gratuit.md)).
+4. **Pages Offres et Soutenir** (brouillon jusqu'aux choix d'Ismail : prix du Pro, prestataire de paiement et de dons) :
+   brouillons et comparatif des solutions de dons prêts le 23/10/2026 ([35](35-offres-et-soutien.md)).
 5. Modules du compte gratuit : prospects, temps passé, dépenses, trésorerie.
 6. Outils restants : CGV, sous-traitance, devises, jours ouvrés, signature d'email, guides de protection sociale.
 7. Pro : relances automatiques, signature en ligne, liens de paiement, page publique, plateforme agréée.

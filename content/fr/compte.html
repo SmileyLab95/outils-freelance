@@ -5,7 +5,8 @@
   "description": "Connectez-vous sans mot de passe et retrouvez votre Espace entrepreneur sur tous vos appareils, chiffré sur votre appareil avant d'être envoyé.",
   "draft": true,
   "api": true,
-  "scripts": ["engines/espace-sync.js", "engines/compte-crypto.js", "tools/espace-store.js", "tools/compte-sync.js", "tools/compte.js"]
+  "rules": "fr",
+  "scripts": ["engines/espace-sync.js", "engines/compte-crypto.js", "engines/first-steps.js", "tools/espace-store.js", "tools/compte-sync.js", "tools/compte.js"]
 }-->
 <section class="hero hero-tool">
   <div class="wrap">
@@ -42,6 +43,16 @@
         <h2 tabindex="-1">Consultez votre boîte de réception</h2>
         <p>Un lien de connexion a été envoyé à <b id="sent-email"></b>. Il est valable 15 minutes et ne sert qu'une fois. Pensez à regarder dans les courriers indésirables.</p>
         <button class="btn btn-ghost" type="button" id="b-other-email">Utiliser une autre adresse</button>
+      </div>
+
+      <div id="s-welcome" hidden>
+        <h2 tabindex="-1">Bienvenue : votre compte est créé</h2>
+        <p>Encore deux étapes : une question facultative, puis le code qui protège vos données.</p>
+        <form id="f-welcome" onsubmit="return false" novalidate>
+          <div class="field full"><label class="check"><input type="checkbox" id="c-newsletter" data-wording="fr-2026-10-23" aria-describedby="c-newsletter-hint"><span>Recevoir la lettre d'information d'Outils Freelance : nouveaux outils et changements de règles qui vous concernent</span></label>
+            <span class="hint" id="c-newsletter-hint">Facultatif. Désinscription à tout moment, en un clic, depuis chaque lettre ou depuis votre compte.</span></div>
+          <button class="btn btn-primary" type="submit" id="b-welcome">Continuer</button>
+        </form>
       </div>
 
       <div id="s-setup" hidden>
@@ -81,6 +92,17 @@
       <div id="s-account" hidden>
         <h2 tabindex="-1">Votre compte</h2>
         <p>Connecté avec <b id="acc-email"></b>.</p>
+        <section class="first-steps" id="acc-steps" aria-labelledby="acc-steps-title" hidden>
+          <h3 id="acc-steps-title">Premiers pas</h3>
+          <p class="small muted" id="acc-steps-count"></p>
+          <ol class="steps-list">
+            <li id="step-profile"><span class="step-mark" aria-hidden="true"></span><span><span class="step-done">Fait : </span><a href="{{link:espace}}">Décrire votre entreprise</a> dans votre Espace : nom, activité, TVA (2 minutes).</span></li>
+            <li id="step-mentions"><span class="step-mark" aria-hidden="true"></span><span><span class="step-done">Fait : </span><a href="{{link:espace}}#/reglages">Ajouter votre adresse et votre SIRET</a>, obligatoires sur vos factures.</span></li>
+            <li id="step-document"><span class="step-mark" aria-hidden="true"></span><span><span class="step-done">Fait : </span>Créer votre <a href="{{link:espace}}#/documents/nouveau?type=devis">premier devis</a> ou votre <a href="{{link:espace}}#/documents/nouveau?type=facture">première facture</a>.</span></li>
+            <li id="step-passkey"><span class="step-mark" aria-hidden="true"></span><span><span class="step-done">Fait : </span><button class="link-button" type="button" id="b-step-passkey">Ajouter une clé d'accès</button> pour vous connecter sans email, d'un geste.</span></li>
+          </ol>
+          <p class="small" id="acc-steps-tools">À découvrir : <span data-tool="tax"><a href="{{link:tax}}">simulateur auto-entrepreneur</a>, </span><span data-tool="calendar"><a href="{{link:calendar}}">calendrier des déclarations</a>, </span><span data-tool="einvoicing"><a href="{{link:einvoicing}}">facturation électronique</a>, </span><span data-tool="domain"><a href="{{link:domain}}">recherche de nom de domaine</a></span>.</p>
+        </section>
         <div class="notice ok" id="sync-status" role="status" aria-live="polite">–</div>
         <ul id="sync-conflicts" class="conflicts" hidden></ul>
         <div class="btn-row" style="margin-top: 12px;">
@@ -95,6 +117,10 @@
         <p class="small muted">Une clé d'accès (empreinte, visage, code de l'appareil) permet de vous connecter sans email.</p>
         <ul class="device-list" id="acc-passkeys"></ul>
         <button class="btn btn-ghost" type="button" id="b-add-passkey">Ajouter une clé d'accès</button>
+
+        <h3>Emails</h3>
+        <p class="small muted">Les emails nécessaires au service (liens de connexion) sont toujours envoyés.</p>
+        <label class="check"><input type="checkbox" id="acc-newsletter" data-wording="fr-2026-10-23"><span>Recevoir la lettre d'information d'Outils Freelance (nouveaux outils, changements de règles)</span></label>
 
         <h3>Vos données</h3>
         <div class="btn-row">

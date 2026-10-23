@@ -61,12 +61,18 @@ for (const [name, make] of [["mémoire", () => new MemoryStore()], ["SQLite", ()
     const v = await s.vault("a1");
     assert.deepEqual([v.iv, v.data, v.size, v.version, v.updatedAt], ["j", "d2", 2, 2, 9]);
 
+    assert.equal(await s.prefs("a1"), null);
+    await s.putPrefs("a1", { lang: "fr", newsletter: { value: true, at: 3, wording: "fr-1" } }, 10);
+    await s.putPrefs("a1", { lang: "en", newsletter: { value: true, at: 3, wording: "fr-1" } }, 11);
+    assert.deepEqual(await s.prefs("a1"), { lang: "en", newsletter: { value: true, at: 3, wording: "fr-1" }, updatedAt: 11 });
+
     // Suppression du compte : tout part avec lui.
     await s.createSession({ id: "1", hash: "s1", accountId: "a1", createdAt: 1, lastSeen: 1, expiresAt: 1000, authAt: 1, method: "link", userAgent: "" });
     await s.deleteAccount("a1");
     assert.equal(await s.vault("a1"), null);
     assert.equal(await s.keys("a1"), null);
     assert.equal(await s.sessionByHash("s1"), null);
+    assert.equal(await s.prefs("a1"), null);
     s.close();
   });
 

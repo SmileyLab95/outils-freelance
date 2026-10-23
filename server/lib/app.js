@@ -1,6 +1,7 @@
 /*
  * Serveur des comptes : API JSON /api/v1 (connexion par lien envoyé par email et par clé d'accès, sessions, clé du
- * compte enveloppée, coffre chiffré, export et suppression). Spécification : documentation/23-serveur-et-connexion.md.
+ * compte enveloppée, coffre chiffré, préférences, export et suppression). Spécifications :
+ * documentation/23-serveur-et-connexion.md et 34-inscription-compte-gratuit.md (préférences).
  * createApp() renvoie un gestionnaire de requêtes node:http ; le stockage, l'envoi d'emails et l'horloge sont fournis
  * par l'appelant (tests : MemoryStore, MemoryMailer, horloge réglable).
  */
@@ -128,10 +129,18 @@ function createApp({ store, mailer, now = Date.now, config }) {
     return cookie(value, C.sessionTtl);
   }
 
+  /** Préférences du compte : langue des emails, lettre d'information (choix, date, version du texte affiché). */
+  const NO_NEWSLETTER = { value: false, at: null, wording: null };
+  async function prefsOf(account) {
+    const p = (await store.prefs(account.id)) || {};
+    return { lang: p.lang || null, newsletter: p.newsletter || NO_NEWSLETTER };
+  }
+
   async function me(account) {
-    const [keys, vault, passkeys] = await Promise.all([store.keys(account.id), store.vault(account.id), store.passkeys(account.id)]);
+    const [keys, vault, passkeys, prefs] = await Promise.all([store.keys(account.id), store.vault(account.id),
+      store.passkeys(account.id), prefsOf(account)]);
     return { id: account.id, email: account.email, createdAt: account.createdAt, keysVersion: keys ? keys.version : 0,
-             vaultVersion: vault ? vault.version : 0, passkeys: passkeys.length };
+             vaultVersion: vault ? vault.version : 0, passkeys: passkeys.length, prefs };
   }
 
   /** Version lue par l'appareil (If-Match, entier ≥ 0), exigée pour écrire la clé ou le coffre. */
@@ -181,6 +190,8 @@ function createApp({ store, mailer, now = Date.now, config }) {
         // Deux liens vérifiés en même temps pour une nouvelle adresse : le second retrouve le compte créé par le premier.
         try { account = await store.createAccount({ id: crypto.randomUUID(), email: link.email, createdAt: now() }); created = true; }
         catch (e) { account = await store.accountByEmail(link.email); if (!account) throw e; }
+        // Les emails du compte sont écrits dans la langue de l'inscription ; aucune lettre d'information sans choix.
+        if (created) await store.putPrefs(account.id, { lang: link.lang, newsletter: NO_NEWSLETTER }, now());
       }
       const setCookie = await openSession(res, account, "link", req);
       return [200, { account: await me(account), created }, { "Set-Cookie": setCookie }];
@@ -219,6 +230,29 @@ function createApp({ store, mailer, now = Date.now, config }) {
     "GET /me": async (req) => {
       const { account } = await auth(req);
       return [200, await me(account)];
+    },
+
+    // Préférences : { lang?, newsletter?: { value, wording } } ; le choix est daté par le serveur et garde la version
+    // du texte affiché (preuve du consentement, RGPD art. 7, § 1) ; un retrait est daté de la même façon.
+    "PUT /me/prefs": async (req) => {
+      const { account } = await auth(req);
+      const body = await json(req);
+      const keys = Object.keys(body);
+      if (!keys.length || keys.some((k) => k !== "lang" && k !== "newsletter")) throw new HttpError(400, "invalid");
+      const prefs = await prefsOf(account);
+      if ("lang" in body) {
+        if (!LANGS.includes(body.lang) || !C.accountPaths[body.lang]) throw new HttpError(400, "invalid");
+        prefs.lang = body.lang;
+      }
+      if ("newsletter" in body) {
+        const n = body.newsletter;
+        if (!n || typeof n.value !== "boolean" || typeof n.wording !== "string" || !/^[a-z0-9-]{1,40}$/.test(n.wording)) {
+          throw new HttpError(400, "invalid");
+        }
+        prefs.newsletter = { value: n.value, at: now(), wording: n.wording };
+      }
+      await store.putPrefs(account.id, prefs, now());
+      return [200, { prefs }];
     },
 
     "GET /sessions": async (req) => {
@@ -323,13 +357,13 @@ function createApp({ store, mailer, now = Date.now, config }) {
 
     "GET /export": async (req) => {
       const { account } = await auth(req);
-      const [sessions, passkeys, keys, vault] = await Promise.all([store.sessions(account.id), store.passkeys(account.id),
-        store.keys(account.id), store.vault(account.id)]);
+      const [sessions, passkeys, keys, vault, prefs] = await Promise.all([store.sessions(account.id), store.passkeys(account.id),
+        store.keys(account.id), store.vault(account.id), prefsOf(account)]);
       return [200, {
         account: { id: account.id, email: account.email, createdAt: account.createdAt },
         sessions: sessions.map((s) => ({ id: s.id, createdAt: s.createdAt, lastSeen: s.lastSeen, method: s.method, userAgent: s.userAgent })),
         passkeys: passkeys.map((p) => ({ id: p.id, name: p.name, createdAt: p.createdAt, lastUsed: p.lastUsed })),
-        keys, vault
+        prefs, keys, vault
       }, { "Content-Disposition": 'attachment; filename="compte-export.json"' }];
     },
 

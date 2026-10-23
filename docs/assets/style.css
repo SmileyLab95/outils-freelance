@@ -650,6 +650,19 @@ a.country-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg)
 .device-list li:last-child { border-bottom: 0; }
 .device-list .muted { display: block; font-size: .82rem; }
 .conflicts { margin: 10px 0 0; padding-left: 18px; font-size: .9rem; }
+/* Compte : premiers pas (documentation/34-inscription-compte-gratuit.md, § 4). « Fait : » est lu par les lecteurs
+   d'écran ; la coche le montre à l'écran. */
+.first-steps { margin: 16px 0 4px; padding: 16px 18px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--tint); }
+.account-card .first-steps h3 { margin: 0 0 2px; }
+.steps-list { list-style: none; margin: 10px 0; padding: 0; }
+.steps-list li { display: flex; gap: 10px; align-items: flex-start; padding: 7px 0; font-size: .93rem; }
+.step-mark { flex: none; width: 20px; height: 20px; margin-top: 2px; border-radius: 50%; border: 2px solid var(--field); background: #fff; }
+.steps-list li.is-done .step-mark { border-color: var(--ok); background: var(--ok) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E") center / 12px no-repeat; }
+.steps-list li.is-done > span:last-child { color: var(--muted); }
+.step-done { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; }
+.steps-list li:not(.is-done) .step-done { display: none; }
+.link-button { font: inherit; color: var(--brand-2); background: none; border: 0; padding: 0; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.link-button:hover { color: var(--ink); }
 .danger-zone summary { cursor: pointer; color: var(--danger); font-weight: 700; }
 .espace-sync { margin: 0 0 12px; font-size: .86rem; color: var(--muted); }
 .espace-sync.is-ok::before { content: "✓ "; color: var(--ok); }
