@@ -25,6 +25,7 @@ Le site d'outils gratuits pour indépendants (France, États-Unis, Royaume-Uni, 
 | [19. Salarié ou freelance ?](19-freelance-ou-salarie.md) | Revenu d'un salarié et chiffre d'affaires équivalent en freelance (4 pays) |
 | [20. Checklist de création](20-checklist-creation.md) | Les démarches pour démarrer, étape par étape et sourcées (4 pays) |
 | [21. Jauges de seuils](21-jauges-de-seuils.md) | TVA, *Making Tax Digital*, petit fournisseur, acomptes, *wage base*, QBI dans les calculateurs d'impôt |
+| [25. Compte pro et assurance hors de France](25-compte-et-assurance-hors-france.md) | Royaume-Uni, États-Unis, Canada : ce qui est obligatoire et conseillé (spécification en cours) |
 | [24. Recouvrement en justice (Royaume-Uni, Canada, États-Unis)](24-recouvrement-uk-us-ca.md) | *Small claims* au Royaume-Uni (frais, circuit, démarches) et petites créances des 13 provinces et territoires ; *small claims* des 50 États et du district de Columbia |
 | [23. Serveur et connexion](23-serveur-et-connexion.md) | Comptes en ligne : connexion par lien et par clé d'accès, coffre chiffré de bout en bout, écrans et synchronisation (en brouillon jusqu'à l'ouverture) |
 | [22. Client étranger (États-Unis) et W-8BEN](22-client-etranger-us-et-w8ben.md) | Taxe du pays du client, revenu en dollars, retenue étrangère, FBAR ; W-8BEN pour un client américain (France, Royaume-Uni, Canada) |
