@@ -1,0 +1,136 @@
+<!--{
+  "id": "proposal",
+  "slug": "business-proposal-template/",
+  "title": "Free Business Proposal Template for Freelancers",
+  "description": "Write a freelance business proposal: the client's need, your approach, steps and fees, optional extras, deposit and next steps. PDF or Word.",
+  "menu": "Proposal template",
+  "icon": "💼",
+  "blurb": "A clear project proposal in minutes, as a PDF or Word file.",
+  "app": "Business proposal generator",
+  "scripts": [
+    "engines/proposal.js",
+    "engines/contract-doc.js",
+    "tools/proposal.js"
+  ],
+  "rules": "us",
+  "priority": 0.7,
+  "faq": [
+    [
+      "What's the difference between a proposal and an estimate?",
+      "A proposal explains the client's need, your approach, the steps and the price: it is there to win the project and agree on the scope. An estimate lists the work and the price. Once the client says yes, send the <a href=\"{{link:contract}}\">freelance contract</a> and the deposit invoice from the <a href=\"{{link:invoice}}\">invoice generator</a>."
+    ],
+    [
+      "Is the proposal binding?",
+      "The template says so plainly: it is not a contract, and you will both be bound once the contract is signed. Until then, the scope and the price can still be discussed; the contract then sets the terms."
+    ],
+    [
+      "Why add a validity date?",
+      "It tells the client how long your price and your availability hold, and gives a natural reason to decide. After that date, update the proposal before accepting the project."
+    ],
+    [
+      "Do I add sales tax?",
+      "The proposal uses the same wording as the freelance contract: fees do not include sales tax, which will be added where applicable. Whether your service is taxed depends on your state's rules, so check them before invoicing."
+    ],
+    [
+      "How do I price each step?",
+      "Estimate the time each task takes and add a margin for the unexpected with the <a href=\"{{link:project-price}}\">project price calculator</a>, starting from a rate worked out with the <a href=\"{{link:rate}}\">rate calculator</a>. One or two optional extras, such as maintenance or training, let the client adjust the budget: they are shown apart and are not counted in the fee."
+    ]
+  ]
+}-->
+<script type="application/json" id="proposal-data">{"doc_title": "PROJECT PROPOSAL", "file": "Project proposal", "article": "{n}. {title}", "reset_confirm": "Clear everything you entered?", "hints": {"p_name": "your name", "c_name": "client name", "context": "the client's situation and need", "approach": "what you propose", "phases": "steps, timing and fees", "total": "fee", "valid_until": "date", "terms": "30", "deposit_amount": "amount", "balance": "balance", "today": "date"}, "preamble": ["Prepared for: {c_name}[[c_rep|, for the attention of {c_rep}]]", "Prepared by: {p_name}[[p_status|, {p_status}]][[p_email| · {p_email}]][[p_phone| · {p_phone}]][[p_site| · {p_site}]]", "{today} · Valid until {valid_until}"], "clauses": [{"title": "Your project", "paras": ["{context}"]}, {"title": "Your goals", "when": {"has_goals": ["on"]}, "paras": ["{goals}"]}, {"title": "What I propose", "paras": ["{approach}"]}, {"title": "Steps and timeline", "paras": [{"when": {"has_phases": ["on"]}, "table": "phases"}, {"when": {"has_phases": ["off"]}, "text": "{phases}"}, {"when": {"has_start": ["on"]}, "text": "I can start on {start}."}]}, {"title": "Investment", "paras": ["The project fee is {total}.", "Fees do not include sales tax, which will be added where applicable.", {"when": {"has_deposit": ["on"]}, "text": "A {deposit}% deposit ({deposit_amount}) is invoiced when the project starts; the balance ({balance}) is invoiced on delivery."}, {"when": {"has_deposit": ["off"]}, "text": "The fee is invoiced on delivery."}, "Invoices are due within {terms} days.", {"when": {"has_options": ["on"]}, "text": "Optional extras, not included in the fee:"}, {"when": {"has_options": ["on"]}, "table": "options"}]}, {"title": "Why work with me", "when": [{"has_why": ["on"]}, {"has_references": ["on"]}], "paras": [{"when": {"has_why": ["on"]}, "text": "{why}"}, {"when": {"has_references": ["on"]}, "text": "References: {references}"}]}, {"title": "Next steps", "paras": ["If this proposal works for you, I'll send you the contract to sign[[deposit|, with the deposit invoice]]. Work starts once it is signed[[deposit| and the deposit is paid]][[start|, on {start} at the earliest]].", "This proposal is valid until {valid_until}. It is not a contract: we will both be bound once the contract is signed."]}], "closing": ["I'm happy to talk it through and adjust this proposal if needed."], "signatures": [], "ui": {"phases": {"name": "Step", "duration": "Timing", "price": "Fee", "remove": "Remove step {n}", "head": ["Step", "Timing", "Fee"], "examples": [["Discovery workshops and wireframes", "2 weeks", "1,800"], ["Website build", "3 weeks", "3,200"], ["Launch and training", "1 week", "800"]]}, "options": {"name": "Option", "price": "Fee", "remove": "Remove option {n}", "head": ["Option", "Fee"], "examples": [["Monthly maintenance (12 months)", "600"]]}, "total": "Total", "invalid": "Fee not understood: {list}. Enter an amount, for example 1,500."}}</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · PDF and Word</span>
+    <h1>Business proposal template</h1>
+    <p class="lead">Describe the client's need, your approach and the steps with their fees: your proposal writes itself as you type, with the total, the deposit and the next steps. Download it as a PDF to send, or as Word to edit.</p>
+    <ul class="trust"><li>Steps, fees and options</li><li>Ready to send as PDF or Word</li><li>Your data stays on your device</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout wide-left">
+    <form class="card form-card" id="proposal-form" autocomplete="off" onsubmit="return false">
+      <h3>You</h3>
+      <div class="fields">
+        <div class="field full"><label for="pr-p-name">Name or business name</label>
+          <input type="text" id="pr-p-name" name="p_name" placeholder="Alex Morgan Design" value="" data-save></div>
+        <div class="field full"><label for="pr-p-status">What you do (optional)</label>
+          <input type="text" id="pr-p-status" name="p_status" placeholder="Web designer and developer" value="" data-save></div>
+        <div class="field"><label for="pr-p-email">Email</label>
+          <input type="text" id="pr-p-email" name="p_email" placeholder="hello@example.com" value="" data-save></div>
+        <div class="field"><label for="pr-p-phone">Phone (optional)</label>
+          <input type="text" id="pr-p-phone" name="p_phone" value="" data-save></div>
+        <div class="field full"><label for="pr-p-site">Website or portfolio (optional)</label>
+          <input type="text" id="pr-p-site" name="p_site" value="" data-save></div>
+      </div>
+      <h3>Your client</h3>
+      <div class="fields">
+        <div class="field full"><label for="pr-c-name">Name or business name</label>
+          <input type="text" id="pr-c-name" name="c_name" placeholder="Northwind Studio" value="" data-save></div>
+        <div class="field full"><label for="pr-c-rep">For the attention of (optional)</label>
+          <input type="text" id="pr-c-rep" name="c_rep" placeholder="Jordan Lee, Marketing Director" value="" data-save></div>
+      </div>
+      <h3>The project</h3>
+      <div class="fields">
+        <div class="field full"><label for="pr-title">Project title</label>
+          <input type="text" id="pr-title" name="title" placeholder="Website redesign" value="" data-save></div>
+        <div class="field full"><label for="pr-context">The client's situation and need</label>
+          <textarea id="pr-context" name="context" rows="3" placeholder="Northwind Studio wants to modernize its website, which does not work well on phones and brings in few inquiries." data-save></textarea></div>
+        <div class="field full"><label for="pr-goals">Goals (optional)</label>
+          <textarea id="pr-goals" name="goals" rows="3" placeholder="A fast, mobile-friendly site that turns more visits into inquiries" data-save></textarea></div>
+        <div class="field full"><label for="pr-approach">What you propose</label>
+          <textarea id="pr-approach" name="approach" rows="3" placeholder="A five-page website built from workshops with your team, with a contact form and simple editing." data-save></textarea></div>
+      </div>
+      <h3>Steps and fees</h3>
+      <div id="pr-phases"></div>
+      <button type="button" class="btn btn-ghost btn-sm" id="pr-add-phase">+ Add a step</button>
+      <h3>Optional extras</h3>
+      <div id="pr-options"></div>
+      <button type="button" class="btn btn-ghost btn-sm" id="pr-add-option">+ Add an option</button>
+      <p class="notice warn" id="pr-notice" role="status" hidden></p>
+      <h3>Terms</h3>
+      <div class="fields">
+        <div class="field"><label for="pr-deposit">Deposit</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="pr-deposit" name="deposit" value="30" data-save><span>%</span></div></div>
+        <div class="field"><label for="pr-terms">Payment terms</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="pr-terms" name="terms" value="30" data-save><span>days</span></div></div>
+        <div class="field"><label for="pr-start">Earliest start date (optional)</label>
+          <input type="date" id="pr-start" name="start" data-save></div>
+        <div class="field"><label for="pr-validity">Proposal valid for</label>
+          <select id="pr-validity" name="validity" data-save><option value="15">15 days</option><option value="30" selected>30 days</option><option value="60">60 days</option><option value="90">90 days</option></select></div>
+      </div>
+      <h3>Stand out (optional)</h3>
+      <div class="fields">
+        <div class="field full"><label for="pr-why">Why you</label>
+          <textarea id="pr-why" name="why" rows="3" placeholder="Eight years building websites for local businesses; I handle design and development myself." data-save></textarea></div>
+        <div class="field full"><label for="pr-references">References</label>
+          <textarea id="pr-references" name="references" rows="3" placeholder="Atelier Lumen (redesign, 2025), Martin Bakery (online ordering)" data-save></textarea></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="preview-actions">
+        <button type="button" class="btn btn-primary" id="pr-print">Download PDF</button>
+        <button type="button" class="btn btn-ghost" id="pr-word">Download Word</button>
+        <button type="button" class="btn btn-ghost" id="pr-copy">Copy text</button>
+      </div>
+      <p class="small muted print-hint">PDF: choose “Save as PDF” in the print window. Word: the file opens in Word, LibreOffice or Google Docs for editing.</p>
+      <div class="paper-wrap"><article class="paper" id="pr-preview" aria-label="Proposal preview"></article></div>
+      <button type="button" class="btn btn-ghost btn-sm" id="pr-reset">Clear everything</button>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>What a winning proposal covers</h2>
+  <ul>
+    <li><strong>The client's situation, in their words:</strong> show that you understood the need before talking about yourself.</li>
+    <li><strong>What you propose:</strong> the approach and the result, not a list of technologies.</li>
+    <li><strong>Steps, timing and fees:</strong> a clear table, a total, the deposit and the payment terms.</li>
+    <li><strong>Optional extras:</strong> they let the client adjust the budget without reopening the whole project.</li>
+    <li><strong>Next steps and a validity date:</strong> the client knows what to do and by when.</li>
+  </ul>
+  <p>Price each step with the <a href="{{link:project-price}}">project price calculator</a>. When the client says yes, send the <a href="{{link:contract}}">freelance contract</a> and the deposit invoice from the <a href="{{link:invoice}}">invoice generator</a>.</p>
+  <p class="small muted">Template provided for information. It is not legal advice.</p>
+</section>

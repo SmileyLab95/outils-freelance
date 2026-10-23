@@ -48,6 +48,7 @@
     {
       "label": "Clients et contrats",
       "items": [
+        "proposal",
         "contract",
         "nda",
         "templates"

@@ -280,6 +280,15 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--b
   .line-row { grid-template-columns: 64px minmax(0, 1fr) 34px; }
   .line-row .line-desc { grid-column: 1 / -1; }
 }
+/* Proposition commerciale : étapes (intitulé, durée, prix) et options (intitulé, prix). */
+.pr-phases { grid-template-columns: minmax(0, 1fr) 110px 110px 34px; }
+.pr-options { grid-template-columns: minmax(0, 1fr) 110px 34px; }
+#pr-add-option { margin-bottom: 4px; }
+@media (max-width: 520px) {
+  .pr-phases { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 34px; }
+  .pr-options { grid-template-columns: minmax(0, 1fr) 34px; }
+  .pr-line .line-name { grid-column: 1 / -1; }
+}
 /* Calculateur de prix au forfait : tâches (intitulé, durée, suppression). */
 .pp-subtitle { font-size: .95rem; margin: 18px 0 8px; }
 .pp-line { grid-template-columns: minmax(0, 1fr) 96px 34px; }
@@ -331,6 +340,11 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--b
 .k-sign-note { font-size: 10px; color: #6d6a8a; }
 .k-blank { font-size: 11px; }
 .k-witness { margin-top: 12px; }
+.k-table { width: 100%; border-collapse: collapse; margin: 4px 0 10px; font-size: 11.5px; }
+.k-table th { text-align: left; font-size: 10px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: #4b4868; border-bottom: 1px solid #c7c4f0; padding: 5px 6px; }
+.k-table td { border-bottom: 1px solid #ecebf3; padding: 6px; vertical-align: top; }
+.k-table tfoot td { font-weight: 700; border-bottom: 0; }
+.k-table .num { text-align: right; white-space: nowrap; }
 .k-witness-line { margin: 28px 0 0; border-top: 1px solid #c7c4f0; padding-top: 2px; font-size: 10px; color: #6d6a8a; }
 .k-witness .k-witness-line:nth-child(2) { margin-top: 46px; }   /* place pour la signature du témoin */
 @media (max-width: 520px) { .k-signs { grid-template-columns: 1fr; } }
@@ -338,7 +352,7 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--b
 @media print {
   @page { size: A4; margin: 14mm; }
   body { background: #fff; }
-  .site-header, .site-footer, .hero, .kit-cta, .espace-cta, .prose, .faq, .skip, .sources, .related, .breadcrumb, #facture-form, #invoice-form, #contract-form, .preview-actions, .print-hint, #f-reset, #iv-reset, #k-reset { display: none !important; }
+  .site-header, .site-footer, .hero, .kit-cta, .espace-cta, .prose, .faq, .skip, .sources, .related, .breadcrumb, #facture-form, #invoice-form, #contract-form, #proposal-form, .preview-actions, .print-hint, #f-reset, #iv-reset, #k-reset, #pr-reset { display: none !important; }
   main > .section { padding: 0 !important; max-width: none !important; }
   .tool-layout { display: block; }
   .results { position: static; }
@@ -346,7 +360,8 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--b
   .paper { box-shadow: none; border-radius: 0; padding: 0; min-height: 0; font-size: 11pt; }
   .p-empty { color: transparent; }
   .k-blank { display: inline-block; min-width: 140px; border-bottom: 1px solid #17152f; line-height: 1; }
-  .k-signs > div { break-inside: avoid; }   /* une signature (et son témoin) jamais coupée entre deux pages */
+  .k-signs > div { break-inside: avoid; }
+  .k-table tr { break-inside: avoid; }   /* une signature (et son témoin) jamais coupée entre deux pages */
 }
 
 /* ---------- Modèles d'emails et accueil ---------- */

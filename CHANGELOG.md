@@ -1,5 +1,21 @@
 # Journal des modifications
 
+## 2026-10-23 — Proposition commerciale (4 pays)
+
+- Générateur de proposition commerciale : « Proposition commerciale » en France et au Canada en français,
+  « *Business proposal template* » aux États-Unis, au Royaume-Uni et au Canada. Besoin du client, objectifs,
+  approche, étapes avec durée et prix (tableau et total), options non comprises dans le prix, TVA ou taxes, acompte et
+  solde, délai de paiement, date de début, validité de 15 à 90 jours, « pourquoi moi » et références, prochaines
+  étapes ; la proposition précise qu'elle n'est pas un contrat. PDF, Word (avec les tableaux) et copie.
+- France : mention de franchise datée, celle des factures (« TVA non applicable, art. 293 B du CGI », puis l'article
+  du CIBS à partir du 1er janvier 2027) ; le contrat de prestation l'utilise aussi, au lieu d'une mention figée.
+  Règle nouvelle : offre et invitation à négocier (Code civil, art. 1113 à 1117).
+- Moteur de rendu des documents étendu aux tableaux et au fichier Word commun ; une ligne de tableau n'est pas coupée
+  à l'impression.
+- Spécification [30](documentation/30-proposition-commerciale.md), décision D29. Tests : `proposal.test.mjs` ;
+  29 erreurs réintroduites, 28 détectées (une sans effet) ; suite complète (369 tests unitaires, 27 tests serveur,
+  3 156 vérifications navigateur du site public).
+
 ## 2026-10-23 — Accord de confidentialité (4 pays)
 
 - Générateur d'accord de confidentialité : « Accord de confidentialité » en France, « *NDA template* » aux

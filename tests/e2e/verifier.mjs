@@ -2250,6 +2250,89 @@ const tests = {
     await page.selectOption("#k-direction", "mutual");
     await page.selectOption("#k-law", "QC");
   },
+  async "fr/proposition-commerciale/"(page) {
+    const preview = async () => (await page.textContent("#pr-preview")).replace(/\s+/g, " ");
+    let text = await preview();
+    check(text.includes("PROPOSITION COMMERCIALE") && text.includes("étapes, durées et prix") && !text.includes("Pourquoi travailler"),
+      "proposition FR : document vide, étapes à compléter, sections facultatives masquées");
+    await page.fill("#pr-p-name", "Camille Martin EI");
+    await page.fill("#pr-c-name", "Studio Nova");
+    await page.fill("#pr-context", "Le site actuel n'est pas adapté au mobile.");
+    await page.fill("#pr-approach", "Un site de cinq pages.");
+    await page.fill("#pr-phases-name-0", "Ateliers");
+    await page.fill("#pr-phases-duration-0", "2 semaines");
+    await page.fill("#pr-phases-price-0", "1800");
+    await page.fill("#pr-phases-name-1", "Développement");
+    await page.fill("#pr-phases-price-1", "3200,50");
+    await page.fill("#pr-options-name-0", "Maintenance");
+    await page.fill("#pr-options-price-0", "600");
+    text = await preview();
+    check(text.includes("Ateliers2 semaines1 800,00 €") && text.includes("Total5 000,50 €") && text.includes("Le prix du projet est de 5 000,50 € hors taxes."),
+      "proposition FR : tableau des étapes et total de 5 000,50 €");
+    check(text.includes("Un acompte de 30 % (1 500,15 €)") && text.includes("le solde (3 500,35 €)") && text.includes("Maintenance600,00 €"),
+      "proposition FR : acompte de 30 %, solde et option à part");
+    check(text.includes("TVA non applicable, art. 293 B du CGI.") && text.includes("Elle ne constitue pas un contrat"), "proposition FR : mention de franchise et « pas un contrat »");
+    const validity = (t) => /Cette proposition est valable jusqu'au ([^.]+)\./.exec(t)[1];
+    const before = validity(text);
+    await page.selectOption("#pr-validity", "60");
+    const after = validity(await preview());
+    check(before !== after && /^\d{1,2}(er)? \S+ \d{4}$/.test(after.trim()), `proposition FR : validité de 60 jours (${after.trim()})`);
+    await page.selectOption("#pr-vat", "vat");
+    check((await preview()).includes("majoré de la TVA") && !(await preview()).includes("293 B"), "proposition FR : prix soumis à la TVA");
+    await page.selectOption("#pr-vat", "franchise");
+    await page.fill("#pr-phases-price-2", "abc");
+    check((await page.isVisible("#pr-notice")) && (await page.textContent("#pr-notice")).includes("Étape 3") &&
+      (await page.getAttribute("#pr-phases-price-2", "aria-invalid")) === "true" && (await preview()).includes("Total5 000,50 €"),
+      "proposition FR : prix illisible signalé, total inchangé");
+    await page.fill("#pr-phases-price-2", "");
+    check(!(await page.isVisible("#pr-notice")), "proposition FR : message retiré une fois le prix corrigé");
+    await page.click("#pr-add-phase");
+    check((await page.$$eval(".pr-phases", (r) => r.length)) === 4 && (await page.evaluate(() => document.activeElement.id)) === "pr-phases-name-3",
+      "proposition FR : étape ajoutée, curseur dans la nouvelle ligne");
+    await page.click('[aria-label="Retirer l\'étape 4"]');
+    check((await page.$$eval(".pr-phases", (r) => r.length)) === 3, "proposition FR : étape retirée");
+    await page.fill("#pr-why", "Huit ans d'expérience.");
+    check((await preview()).includes("Pourquoi travailler avec moiHuit ans d'expérience."), "proposition FR : section « pourquoi moi »");
+    const [download] = await Promise.all([page.waitForEvent("download"), page.click("#pr-word")]);
+    const doc = (await import("fs")).readFileSync(await download.path(), "utf8");
+    check(download.suggestedFilename() === "Proposition commerciale.doc" && doc.includes("PROPOSITION COMMERCIALE") && doc.includes('<table class="k-table">'),
+      "proposition FR : téléchargement Word avec les tableaux");
+    await page.click("#pr-copy");
+    check(await copied(page, "#pr-copy"), "proposition FR : bouton Copier");
+    await page.reload({ waitUntil: "networkidle" });
+    check((await page.inputValue("#pr-phases-name-1")) === "Développement" && (await page.inputValue("#pr-c-name")) === "Studio Nova" &&
+      (await page.inputValue("#pr-validity")) === "60", "proposition FR : étapes et saisie mémorisées");
+    await page.selectOption("#pr-validity", "30");
+    await page.fill("#pr-why", "");
+  },
+  async "us/business-proposal-template/"(page) {
+    await page.fill("#pr-phases-name-0", "Discovery");
+    await page.fill("#pr-phases-price-0", "1,800");
+    await page.fill("#pr-phases-name-1", "Build");
+    await page.fill("#pr-phases-price-1", "3,200.50");
+    const text = await page.textContent("#pr-preview");
+    check(text.includes("PROJECT PROPOSAL") && text.includes("Total$5,000.50") && text.includes("A 30% deposit ($1,500.15)"), "US proposal: total $5,000.50 and 30% deposit");
+    check(text.includes("Fees do not include sales tax, which will be added where applicable.") && text.includes("It is not a contract"), "US proposal: sales tax and not a contract");
+  },
+  async "uk/business-proposal-template/"(page) {
+    let text = await page.textContent("#pr-preview");
+    check(text.includes("I am not registered for VAT, so no VAT is charged."), "UK proposal: not VAT registered by default");
+    await page.selectOption("#pr-vat", "vat");
+    await page.fill("#pr-phases-price-0", "1,000");
+    text = await page.textContent("#pr-preview");
+    check(text.includes("Fees are exclusive of VAT, which will be added at the applicable rate.") && text.includes("£1,000.00"), "UK proposal: VAT registered, pounds");
+    await page.selectOption("#pr-vat", "novat");
+  },
+  async "ca/business-proposal-template/"(page) {
+    await page.fill("#pr-phases-price-0", "1,000");
+    const text = await page.textContent("#pr-preview");
+    check(text.includes("exclusive of GST/HST") && text.includes("$1,000.00"), "CA proposal: GST/HST wording, dollars");
+  },
+  async "ca/fr/proposition-commerciale/"(page) {
+    await page.fill("#pr-phases-price-0", "1000");
+    const text = (await page.textContent("#pr-preview")).replace(/\s+/g, " ");
+    check(text.includes("Ce prix exclut la TPS/TVH") && text.includes("1 000,00 $") && text.includes("le contrat de service à signer"), "proposition CA-FR : taxes, dollars, contrat de service");
+  },
   async "us/how-much-to-set-aside-for-taxes/"(page) {
     // $7,000/mo − $500 expenses: profit $78,000, tax $16,186 = 19.3% of revenue → 20% (see engine tests)
     check((await page.textContent("#s-share")).trim() === "20%", "set aside: 20% of every payment at $7,000/month");

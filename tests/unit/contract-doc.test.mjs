@@ -228,7 +228,7 @@ test("contrats de prestation : rendus par le moteur, clé d'enregistrement d'ori
   for (const [path, first] of Object.entries(pages)) {
     const page = load(path);
     assert.equal(page.D.store, undefined, `${path} : clé « contract » par défaut`);
-    assert.deepEqual(page.front.scripts, ["engines/contract-doc.js", "tools/contract.js"], path);
+    assert.deepEqual(page.front.scripts.slice(-2), ["engines/contract-doc.js", "tools/contract.js"], path);
     const html = K.render(page.D, values(page));
     assert.ok(plain(html).includes(first), `${path} : premier article`);
     assert.equal(count(html, 'class="p-label"'), 2, `${path} : deux signatures`);

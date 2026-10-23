@@ -177,9 +177,13 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   témoins pour un accord à sens unique en Angleterre, au pays de Galles et en Irlande du Nord ; avis du *Defend Trade
   Secrets Act* aux États-Unis ; règle québécoise des contrats d'adhésion ; moteur de rendu commun avec le contrat de
   prestation, rendu à l'identique ([29](29-accord-de-confidentialite.md), décision D28).
-- **Prochaines actions de Claude** : besoins P3 restants ([02](02-besoins-clients.md) : proposition commerciale, CGV,
-  sous-traitance, date d'échéance hors de France), en commençant par la proposition commerciale (générateur, avec le
-  moteur de rendu des contrats et accords) ; comptes : adaptateur
+- **Proposition commerciale (23/10/2026)** : générateur dans les 4 pays (cinq pages) : besoin du client, approche,
+  étapes avec durée et prix (tableau et total), options à part, acompte et solde, date de validité, prochaines étapes
+  et « n'est pas un contrat » ; mention de franchise datée (CIBS au 1er janvier 2027), désormais aussi dans le contrat
+  de prestation ([30](30-proposition-commerciale.md), décision D29).
+- **Prochaines actions de Claude** : besoins P3 restants ([02](02-besoins-clients.md) : CGV, sous-traitance, date
+  d'échéance hors de France), en commençant par les CGV (générateur, avec le moteur de rendu des contrats) ;
+  comptes : adaptateur
   PostgreSQL et sauvegardes dès que l'hébergeur est choisi ; taux du crédit pour
   dividendes de la Saskatchewan et du Nunavut dès qu'ils sont publiés (formulaires 2026) ;
   trouver la cause du contrôle de contraste intermittent de l'Espace ; revérifier les grilles des prestataires de

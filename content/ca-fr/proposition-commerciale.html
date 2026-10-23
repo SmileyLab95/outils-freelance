@@ -1,0 +1,136 @@
+<!--{
+  "id": "proposal",
+  "slug": "proposition-commerciale/",
+  "title": "Proposition commerciale : modèle gratuit (Canada)",
+  "description": "Rédigez votre proposition : besoin du client, démarche, étapes et prix, options, taxes, acompte et suite. En PDF et Word.",
+  "menu": "Proposition commerciale",
+  "icon": "💼",
+  "blurb": "Une proposition claire en quelques minutes, en PDF ou en Word.",
+  "app": "Générateur de proposition commerciale",
+  "scripts": [
+    "engines/proposal.js",
+    "engines/contract-doc.js",
+    "tools/proposal.js"
+  ],
+  "rules": "ca",
+  "priority": 0.7,
+  "faq": [
+    [
+      "Quelle différence entre une proposition et une soumission ?",
+      "La proposition explique le besoin du client, votre approche, les étapes et le prix : elle sert à décrocher le mandat et à s'entendre sur son contenu. La soumission détaille les travaux et le prix. Une fois la proposition acceptée, envoyez le <a href=\"{{link:contract}}\">contrat de service</a> et la facture d'acompte du <a href=\"{{link:invoice}}\">générateur de facture</a>."
+    ],
+    [
+      "La proposition m'engage-t-elle ?",
+      "Le modèle le dit clairement : il ne constitue pas un contrat, et vous serez liés par la signature du contrat. D'ici là, le contenu et le prix peuvent encore être discutés ; le contrat fixe ensuite les conditions."
+    ],
+    [
+      "À quoi sert la date de validité ?",
+      "Elle indique jusqu'à quand votre prix et vos disponibilités tiennent, et donne au client une raison de se décider. Passé cette date, mettez la proposition à jour avant d'accepter le mandat."
+    ],
+    [
+      "Faut-il ajouter la TPS/TVH et la TVQ ?",
+      "La proposition précise que le prix exclut la TPS/TVH et, le cas échéant, la TVQ ou la TVP, qui s'ajoutent aux taux applicables. Le <a href=\"{{link:salestax}}\">calculateur de TPS et de TVQ</a> donne le taux de la province de votre client."
+    ],
+    [
+      "Comment fixer le prix de chaque étape ?",
+      "Estimez le temps de chaque tâche et ajoutez une marge pour les imprévus avec le <a href=\"{{link:project-price}}\">calculateur de prix forfaitaire</a>, à partir d'un tarif calculé avec le <a href=\"{{link:rate}}\">calculateur de taux horaire</a>. Une ou deux options (entretien, formation) laissent le client ajuster son budget : elles s'affichent à part et ne comptent pas dans le prix."
+    ]
+  ]
+}-->
+<script type="application/json" id="proposal-data">{"doc_title": "PROPOSITION COMMERCIALE", "file": "Proposition commerciale", "article": "{n}. {title}", "reset_confirm": "Effacer toutes les informations saisies ?", "hints": {"p_name": "votre nom", "c_name": "nom du client", "context": "contexte et besoin du client", "approach": "ce que vous proposez", "phases": "étapes, durées et prix", "total": "prix", "valid_until": "date", "terms": "30", "deposit_amount": "montant", "balance": "solde", "today": "date"}, "preamble": ["Pour : {c_name}[[c_rep|, à l'attention de {c_rep}]]", "De : {p_name}[[p_status|, {p_status}]][[p_email| · {p_email}]][[p_phone| · {p_phone}]][[p_site| · {p_site}]]", "Le {today} · Proposition valable jusqu'au {valid_until}"], "clauses": [{"title": "Votre projet", "paras": ["{context}"]}, {"title": "Vos objectifs", "when": {"has_goals": ["on"]}, "paras": ["{goals}"]}, {"title": "Ce que je propose", "paras": ["{approach}"]}, {"title": "Étapes et calendrier", "paras": [{"when": {"has_phases": ["on"]}, "table": "phases"}, {"when": {"has_phases": ["off"]}, "text": "{phases}"}, {"when": {"has_start": ["on"]}, "text": "Démarrage possible à partir du {start}."}]}, {"title": "Investissement", "paras": ["Le prix du projet est de {total}.", "Ce prix exclut la TPS/TVH et, le cas échéant, la TVQ ou la TVP, qui s'ajoutent aux taux applicables.", {"when": {"has_deposit": ["on"]}, "text": "Un acompte de {deposit} % ({deposit_amount}) est facturé au lancement du projet ; le solde ({balance}) est facturé à la livraison."}, {"when": {"has_deposit": ["off"]}, "text": "Le prix est facturé à la livraison."}, "Les factures sont payables dans un délai de {terms} jours.", {"when": {"has_options": ["on"]}, "text": "Options, non comprises dans ce prix :"}, {"when": {"has_options": ["on"]}, "table": "options"}]}, {"title": "Pourquoi travailler avec moi", "when": [{"has_why": ["on"]}, {"has_references": ["on"]}], "paras": [{"when": {"has_why": ["on"]}, "text": "{why}"}, {"when": {"has_references": ["on"]}, "text": "Références : {references}"}]}, {"title": "Prochaines étapes", "paras": ["Si cette proposition vous convient, je vous envoie le contrat de service à signer[[deposit|, avec la facture d'acompte]]. Le projet démarre à la signature[[deposit| et au paiement de l'acompte]][[start|, au plus tôt le {start}]].", "Cette proposition est valable jusqu'au {valid_until}. Elle ne constitue pas un contrat : nous serons liés par la signature du contrat."]}], "closing": ["Je reste à votre disposition pour en discuter et adapter cette proposition si besoin."], "signatures": [], "ui": {"phases": {"name": "Étape", "duration": "Durée", "price": "Prix", "remove": "Retirer l'étape {n}", "head": ["Étape", "Durée", "Prix"], "examples": [["Ateliers et maquettes", "2 semaines", "1 800"], ["Développement du site", "3 semaines", "3 200"], ["Mise en ligne et formation", "1 semaine", "800"]]}, "options": {"name": "Option", "price": "Prix", "remove": "Retirer l'option {n}", "head": ["Option", "Prix"], "examples": [["Entretien mensuel (12 mois)", "600"]]}, "total": "Total", "invalid": "Prix illisible : {list}. Indiquez un montant, par exemple 1 500."}}</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Gratuit · PDF et Word</span>
+    <h1>Proposition commerciale</h1>
+    <p class="lead">Décrivez le besoin du client, votre démarche et les étapes avec leur prix : la proposition se rédige en direct, avec le total, l'acompte et la suite. Téléchargez-la en PDF pour l'envoyer, ou en Word pour l'adapter.</p>
+    <ul class="trust"><li>Étapes, prix et options</li><li>Prête à envoyer en PDF ou en Word</li><li>Vos données restent sur votre appareil</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout wide-left">
+    <form class="card form-card" id="proposal-form" autocomplete="off" onsubmit="return false">
+      <h3>Vous</h3>
+      <div class="fields">
+        <div class="field full"><label for="pr-p-name">Nom ou raison sociale</label>
+          <input type="text" id="pr-p-name" name="p_name" placeholder="Camille Tremblay Design" value="" data-save></div>
+        <div class="field full"><label for="pr-p-status">Activité (facultatif)</label>
+          <input type="text" id="pr-p-status" name="p_status" placeholder="Designer Web autonome" value="" data-save></div>
+        <div class="field"><label for="pr-p-email">Courriel</label>
+          <input type="text" id="pr-p-email" name="p_email" placeholder="bonjour@exemple.ca" value="" data-save></div>
+        <div class="field"><label for="pr-p-phone">Téléphone (facultatif)</label>
+          <input type="text" id="pr-p-phone" name="p_phone" value="" data-save></div>
+        <div class="field full"><label for="pr-p-site">Site ou portfolio (facultatif)</label>
+          <input type="text" id="pr-p-site" name="p_site" value="" data-save></div>
+      </div>
+      <h3>Votre client</h3>
+      <div class="fields">
+        <div class="field full"><label for="pr-c-name">Nom ou raison sociale</label>
+          <input type="text" id="pr-c-name" name="c_name" placeholder="Studio Boréal inc." value="" data-save></div>
+        <div class="field full"><label for="pr-c-rep">À l'attention de (facultatif)</label>
+          <input type="text" id="pr-c-rep" name="c_rep" placeholder="Léa Gagnon, directrice du marketing" value="" data-save></div>
+      </div>
+      <h3>Le projet</h3>
+      <div class="fields">
+        <div class="field full"><label for="pr-title">Intitulé du projet</label>
+          <input type="text" id="pr-title" name="title" placeholder="Refonte du site Web" value="" data-save></div>
+        <div class="field full"><label for="pr-context">Le contexte et le besoin du client</label>
+          <textarea id="pr-context" name="context" rows="3" placeholder="Studio Boréal souhaite moderniser son site, mal adapté au mobile, qui génère peu de demandes." data-save></textarea></div>
+        <div class="field full"><label for="pr-goals">Objectifs (facultatif)</label>
+          <textarea id="pr-goals" name="goals" rows="3" placeholder="Un site rapide, adapté au mobile, qui transforme davantage de visites en demandes" data-save></textarea></div>
+        <div class="field full"><label for="pr-approach">Ce que vous proposez</label>
+          <textarea id="pr-approach" name="approach" rows="3" placeholder="Un site vitrine de cinq pages conçu à partir d'ateliers avec votre équipe, avec un formulaire de contact et une gestion simple des contenus." data-save></textarea></div>
+      </div>
+      <h3>Étapes et prix</h3>
+      <div id="pr-phases"></div>
+      <button type="button" class="btn btn-ghost btn-sm" id="pr-add-phase">+ Ajouter une étape</button>
+      <h3>Options (facultatif)</h3>
+      <div id="pr-options"></div>
+      <button type="button" class="btn btn-ghost btn-sm" id="pr-add-option">+ Ajouter une option</button>
+      <p class="notice warn" id="pr-notice" role="status" hidden></p>
+      <h3>Conditions</h3>
+      <div class="fields">
+        <div class="field"><label for="pr-deposit">Acompte</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="pr-deposit" name="deposit" value="30" data-save><span>%</span></div></div>
+        <div class="field"><label for="pr-terms">Délai de paiement</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="pr-terms" name="terms" value="30" data-save><span>jours</span></div></div>
+        <div class="field"><label for="pr-start">Début possible (facultatif)</label>
+          <input type="date" id="pr-start" name="start" data-save></div>
+        <div class="field"><label for="pr-validity">Validité de la proposition</label>
+          <select id="pr-validity" name="validity" data-save><option value="15">15 jours</option><option value="30" selected>30 jours</option><option value="60">60 jours</option><option value="90">90 jours</option></select></div>
+      </div>
+      <h3>Vous démarquer (facultatif)</h3>
+      <div class="fields">
+        <div class="field full"><label for="pr-why">Pourquoi vous</label>
+          <textarea id="pr-why" name="why" rows="3" placeholder="Huit ans de sites pour des commerces de proximité ; je m'occupe moi-même de la conception et du développement." data-save></textarea></div>
+        <div class="field full"><label for="pr-references">Références</label>
+          <textarea id="pr-references" name="references" rows="3" placeholder="Atelier Lumen (refonte, 2025), Boulangerie Martin (commande en ligne)" data-save></textarea></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="preview-actions">
+        <button type="button" class="btn btn-primary" id="pr-print">Télécharger en PDF</button>
+        <button type="button" class="btn btn-ghost" id="pr-word">Télécharger en Word</button>
+        <button type="button" class="btn btn-ghost" id="pr-copy">Copier le texte</button>
+      </div>
+      <p class="small muted print-hint">PDF : choisissez « Enregistrer au format PDF » dans la fenêtre d'impression. Word : le fichier s'ouvre dans Word, LibreOffice ou Google Docs pour être modifié.</p>
+      <div class="paper-wrap"><article class="paper" id="pr-preview" aria-label="Aperçu de la proposition"></article></div>
+      <button type="button" class="btn btn-ghost btn-sm" id="pr-reset">Tout effacer</button>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>Ce que contient une bonne proposition</h2>
+  <ul>
+    <li><strong>La situation du client, avec ses mots :</strong> montrez que vous avez compris le besoin avant de parler de vous.</li>
+    <li><strong>Ce que vous proposez :</strong> la démarche et le résultat, pas une liste de technologies.</li>
+    <li><strong>Les étapes, les délais et le prix :</strong> un tableau clair, un total, l'acompte et le délai de paiement.</li>
+    <li><strong>Les options :</strong> elles permettent au client d'ajuster son budget sans tout renégocier.</li>
+    <li><strong>La suite et la date de validité :</strong> le client sait quoi faire, et avant quand.</li>
+  </ul>
+  <p>Fixez le prix de chaque étape avec le <a href="{{link:project-price}}">calculateur de prix forfaitaire</a>. Quand le client accepte, envoyez le <a href="{{link:contract}}">contrat de service</a> et la facture d'acompte du <a href="{{link:invoice}}">générateur de facture</a>.</p>
+  <p class="small muted">Modèle fourni à titre indicatif. Il ne constitue pas un avis juridique.</p>
+</section>

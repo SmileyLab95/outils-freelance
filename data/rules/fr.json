@@ -1354,6 +1354,30 @@
       "confidence": "high",
       "verified_on": "2026-10-23",
       "note": "Loi n° 2018-670 du 30 juillet 2018. L151-8 : à l'occasion d'une instance relative à une atteinte au secret des affaires, le secret n'est pas opposable dans les trois cas listés ; version en vigueur depuis le 1er septembre 2022. Un accord de confidentialité est l'une des mesures de protection qu'un détenteur peut prendre ; la loi ne dresse pas de liste de ces mesures. Lu par extraits de recherche."
+    },
+    "offre_et_acceptation": {
+      "value": {
+        "offre": "comprend les éléments essentiels du contrat envisagé et exprime la volonté de son auteur d'être lié en cas d'acceptation ; à défaut, il y a seulement invitation à entrer en négociation",
+        "retractation": "impossible avant l'expiration du délai fixé par son auteur ou, à défaut, l'issue d'un délai raisonnable",
+        "caducite": "à l'expiration du délai fixé par son auteur ou, à défaut, à l'issue d'un délai raisonnable"
+      },
+      "unit": "object",
+      "label": "Offre et invitation à entrer en négociation ; délai de l'offre",
+      "source": "https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000032040891/",
+      "source_title": "Code civil, art. 1114 - Légifrance",
+      "more_sources": [
+        {
+          "source": "https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000032040881",
+          "source_title": "Code civil, art. 1116 - Légifrance"
+        },
+        {
+          "source": "https://www.legifrance.gouv.fr/codes/id/LEGISCTA000032007103",
+          "source_title": "Code civil, art. 1113 à 1122 (l'offre et l'acceptation, dont l'art. 1117) - Légifrance"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-10-23",
+      "note": "Ordonnance n° 2016-131 du 10 février 2016. Art. 1113 : le contrat est formé par la rencontre d'une offre et d'une acceptation. Art. 1116 : la rétractation de l'offre pendant le délai empêche la conclusion du contrat et engage la responsabilité extracontractuelle de son auteur. Art. 1117 : l'offre est aussi caduque en cas d'incapacité ou de décès de son auteur, ou de décès de son destinataire (loi du 20 avril 2018). Lu par extraits de recherche."
     }
   },
   "open_questions": [

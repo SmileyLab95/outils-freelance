@@ -48,7 +48,7 @@ Matrice revue le 22/10/2026 d'après les pages publiées (identifiants de `conte
 | Écrire à un prospect | Modèles d'emails de prospection | ✅ | ✅ | ✅ | ✅ | P1 |
 | Relancer un devis | Générateur de relance de devis | ✅ (modèles) | ✅ (modèles) | ✅ (modèles) | ✅ (modèles) | P2 |
 | Répondre aux objections (« trop cher ») | Modèles de réponses | ✅ (modèles) | ✅ (modèles) | ✅ (modèles) | ✅ (modèles) | P2 |
-| Rédiger une proposition commerciale | Modèle de proposition | 🟡 | 🟡 | 🟡 | 🟡 | P3 |
+| Rédiger une proposition commerciale | Générateur de proposition (étapes, prix, options, suite) | ✅ | ✅ | ✅ | ✅ | P3 |
 
 ### 4. Devis et contrats
 
@@ -123,8 +123,8 @@ Matrice revue le 22/10/2026 d'après les pages publiées (identifiants de `conte
 - **P2** (convertisseur de tarifs, prix au forfait et « freelance ou salarié » faits le 22/10/2026) : checklist de
   création, jauges de seuils, client étranger et W-8BEN faits le 22/10/2026 ; recouvrement en justice fait au
   Royaume-Uni, au Canada et aux États-Unis le 23/10/2026, à faire en France (textes de 2026 à lire) ; compte pro et assurance hors de France et guide de changement de statut faits le 23/10/2026.
-- **P3** : date d'échéance, proposition commerciale, CGV, sous-traitance (bureau à domicile, hausse de tarifs et
-  accord de confidentialité faits le 23/10/2026).
+- **P3** : date d'échéance hors de France, CGV, sous-traitance (bureau à domicile, hausse de tarifs, accord de
+  confidentialité et proposition commerciale faits le 23/10/2026).
 
 ## Les outils « moteurs » partagés
 

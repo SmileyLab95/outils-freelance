@@ -51,6 +51,7 @@
     {
       "label": "Templates",
       "items": [
+        "proposal",
         "contract",
         "nda",
         "templates"
