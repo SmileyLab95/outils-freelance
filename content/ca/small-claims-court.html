@@ -1,0 +1,169 @@
+<!--{
+  "id": "court",
+  "slug": "small-claims-court/",
+  "title": "Small Claims Court in Canada: Limits and Time to Sue",
+  "description": "Find the small claims court, its limit and the time limit to sue a client over an unpaid invoice, in every province and territory. Free and up to date.",
+  "menu": "Small claims court",
+  "icon": "⚖️",
+  "blurb": "The court, its limit and the time to sue, province by province.",
+  "app": "Canada Small Claims Court Finder",
+  "scripts": ["engines/court-ca.js", "tools/ca-court.js"],
+  "rules": "ca",
+  "sources": ["ca_small_claims_limits", "ca_limitation_periods"],
+  "priority": 0.8,
+  "faq": [
+    ["Where do I sue a client for an unpaid invoice in Canada?", "In the small claims court of a province or territory, usually where your client lives or does business, or where the events took place: each court's rules say where you can file. Each has its own limit, from $15,000 in Québec to $100,000 in Alberta."],
+    ["What is the small claims limit in each province?", "Ontario $50,000; Québec $15,000; British Columbia $35,000, with claims up to $5,000 going first to the Civil Resolution Tribunal; Alberta $100,000; Saskatchewan $50,000; Manitoba $20,000; Nova Scotia $25,000; New Brunswick $20,000; Prince Edward Island $16,000; Newfoundland and Labrador $25,000; Yukon $25,000; Northwest Territories $35,000. In most provinces, interest and costs don't count towards the limit."],
+    ["Do I need a lawyer for small claims court?", "No: small claims courts are designed for people who represent themselves. In Québec, the parties represent themselves, and a company is represented by an officer or an employee, not by a lawyer."],
+    ["How long do I have to sue for an unpaid invoice?", "Generally 2 years from when you knew, or ought to have known, about the claim in Ontario, British Columbia, Alberta, Saskatchewan, Manitoba, Nova Scotia and New Brunswick; 3 years in Québec; 6 years in Prince Edward Island, Newfoundland and Labrador, Yukon and the Northwest Territories. Don't wait: count from the invoice due date to be safe."],
+    ["What if my client owes more than the limit?", "In most provinces, you can give up the amount above the limit to stay in small claims court, and you can't claim it later. Otherwise, sue for the full amount in a higher court, where a lawyer is usually worth it."]
+  ]
+}-->
+<script type="application/json" id="court-ca-data">
+{
+  "courts": {
+    "ON": "Small Claims Court (Superior Court of Justice)",
+    "QC": "Court of Québec, Small Claims Division",
+    "BC": "Provincial Court of British Columbia, Small Claims",
+    "AB": "Alberta Court of Justice, Civil",
+    "SK": "Provincial Court of Saskatchewan, Small Claims",
+    "MB": "Court of King's Bench of Manitoba, Small Claims",
+    "NS": "Small Claims Court of Nova Scotia",
+    "NB": "Small Claims Court of New Brunswick",
+    "PE": "Supreme Court of Prince Edward Island, Small Claims Section",
+    "NL": "Provincial Court of Newfoundland and Labrador, Small Claims",
+    "YT": "Small Claims Court of Yukon",
+    "NT": "Territorial Court of the Northwest Territories, Civil Claims",
+    "NU": "Nunavut Court of Justice"
+  },
+  "tribunal": "Civil Resolution Tribunal (online)",
+  "notes": {
+    "ON": "The limit doesn't count interest and costs. Above $50,000, you can give up the excess to stay in Small Claims Court, or sue in the Superior Court of Justice. You can file online, except in Toronto.",
+    "QC": "Interest doesn't count towards the limit, and a larger claim can't be split. The parties represent themselves, without a lawyer; a corporation, partnership or association can sue only if it had no more than 10 employees in the 12 months before the claim. Send a formal demand (mise en demeure) first: 10 days is normally a reasonable deadline. Once defended, claims of $5,000 or less go to mandatory mediation.",
+    "BC": "Claims up to $5,000 go first to the Civil Resolution Tribunal, online; from $5,001 to $35,000, to the Provincial Court. Interest and expenses don't count. Above $35,000, you can abandon the excess (and can't claim it later) or sue in the Supreme Court.",
+    "AB": "You can claim up to $100,000 plus interest and costs. Above that, you can abandon the excess or sue in the Court of King's Bench.",
+    "SK": "Above $50,000, you can give up the excess to stay in Small Claims Court, or sue in the Court of King's Bench.",
+    "MB": "The limit doesn't count interest, costs and disbursements.",
+    "NS": "The limit doesn't count interest and costs. You don't need a lawyer.",
+    "NB": "A claim above $20,000 is accepted only if you abandon the excess.",
+    "PE": "Above $16,000, you can abandon the excess to stay in the Small Claims Section.",
+    "NL": "The limit covers every claim on your statement of claim, before interest and costs, and a claim can't be split. Above $25,000, give up the excess or sue in the Supreme Court.",
+    "YT": "Above $25,000, you can give up the excess, but you can't split a larger debt into several claims.",
+    "NT": "The limit doesn't count interest and expenses. Every civil claim goes to a mandatory mediation session with a judge.",
+    "NU": "We couldn't confirm the current small claims limit from an official source: check with the court before you file."
+  },
+  "verdicts": {
+    "tribunal": "Civil Resolution Tribunal",
+    "small_claims": "Small claims court",
+    "above_limit": "Above the limit",
+    "unknown": "Check with the court"
+  },
+  "subs": {
+    "tribunal": "Claims up to {tribunal} go first to the Civil Resolution Tribunal, online.",
+    "small_claims": "Your claim fits under the {limit} limit.",
+    "above_limit": "The limit is {limit}: see below how to proceed.",
+    "unknown": "The current limit isn't confirmed here."
+  },
+  "limitation": {
+    "discovery": "Generally {years} years from when you knew, or ought to have known, about the claim. Don't wait: count from the invoice due date to be safe.",
+    "right_of_action": "Generally {years} years from when the right to sue arose, usually the invoice due date.",
+    "unknown": "Not confirmed here: ask the court or a lawyer."
+  },
+  "links": {
+    "ON": "https://www.ontario.ca/page/suing-someone-small-claims-court",
+    "QC": "https://www.quebec.ca/en/justice-and-civil-status/small-claims",
+    "BC": "https://provincialcourt.bc.ca/navigating-court-case/small-claims",
+    "AB": "https://albertacourts.ca/cj/areas-of-law/civil",
+    "SK": "https://sasklawcourts.ca/provincial-court/small-claims-court/",
+    "MB": "https://residents.gov.mb.ca/reference.html?d=details&program_id=115",
+    "NS": "https://www.courts.ns.ca/courts/small-claims-court",
+    "NB": "https://www.courtsnb-coursnb.ca/content/cour/en/small-claims-court.html",
+    "PE": "https://www.courts.pe.ca/index.php/supreme-court",
+    "NL": "https://www.court.nl.ca/provincial/courts/small-claims-court/",
+    "YT": "https://www.yukoncourts.ca/en/small-claims-court",
+    "NT": "https://www.nwtcourts.ca/en/courts/territorial-court/civil-claims/",
+    "NU": "https://www.nunavutcourts.ca/"
+  }
+}
+</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · Every province and territory</span>
+    <h1>Small claims court for an unpaid invoice</h1>
+    <p class="lead">Your client still hasn't paid after your reminders? Find the court where you can claim, its limit, how long you have to sue, and how a small claim works.</p>
+    <ul class="trust"><li>13 provinces and territories</li><li>Limits checked in October 2026</li><li>Official court links</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="court-form" onsubmit="return false">
+      <h2>Your claim</h2>
+      <div class="fields">
+        <div class="field full"><label for="c-province">Province or territory where you'll file</label>
+          <select id="c-province" name="province" aria-describedby="c-province-hint" data-save>
+            <option value="ON" selected>Ontario</option>
+            <option value="QC">Québec</option>
+            <option value="BC">British Columbia</option>
+            <option value="AB">Alberta</option>
+            <option value="SK">Saskatchewan</option>
+            <option value="MB">Manitoba</option>
+            <option value="NS">Nova Scotia</option>
+            <option value="NB">New Brunswick</option>
+            <option value="PE">Prince Edward Island</option>
+            <option value="NL">Newfoundland and Labrador</option>
+            <option value="YT">Yukon</option>
+            <option value="NT">Northwest Territories</option>
+            <option value="NU">Nunavut</option>
+          </select>
+          <span class="hint" id="c-province-hint">Usually where your client lives or does business, or where the events took place.</span></div>
+        <div class="field full"><label for="c-amount">Amount you're claiming</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="c-amount" name="amount" value="8,000" aria-describedby="c-amount-hint" data-save><span>$</span></div>
+          <span class="hint" id="c-amount-hint">The unpaid invoice, taxes included, without interest or costs.</span></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <h2 class="sr-only">Result</h2>
+      <div class="result-hero" role="status" aria-atomic="true">
+        <div class="label">Where to claim</div>
+        <div class="big" id="c-verdict" style="font-size: clamp(1.7rem, 3.6vw, 2.3rem);">–</div>
+        <div class="sub" id="c-sub">–</div>
+      </div>
+      <ul class="result-list result-wrap card" style="padding: 6px 18px;">
+        <li><span>Court</span><b id="c-court">–</b></li>
+        <li><span>Small claims limit</span><b id="c-limit">–</b></li>
+      </ul>
+      <div class="card" style="margin-top: 16px; padding: 18px;">
+        <h3 style="font-size: 1rem; margin-bottom: 8px;">Good to know in <span id="c-name">Ontario</span></h3>
+        <p id="c-note" style="margin: 0;">–</p>
+        <p class="small" style="margin: 10px 0 0;"><a id="c-link" href="https://www.ontario.ca/page/suing-someone-small-claims-court" rel="noopener">Official small claims page</a></p>
+      </div>
+      <div class="card" style="margin-top: 16px; padding: 18px;">
+        <h3 style="font-size: 1rem; margin-bottom: 8px;">Time limit to sue</h3>
+        <p id="c-time" style="margin: 0;">–</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>How a small claim works</h2>
+  <ol>
+    <li><strong>Demand letter.</strong> Send a final written demand with the amount, a deadline and what you'll do next: the <a href="{{link:reminder}}">payment reminder generator</a> writes it. In Québec, the formal demand (mise en demeure) is recommended and sometimes required.</li>
+    <li><strong>Choose the court.</strong> Usually in the province or territory where your client lives or does business, or where the events took place: each court's rules say where you can file.</li>
+    <li><strong>File your claim</strong> and pay the filing fee, which depends on the province and the amount. Some courts take claims online, such as Ontario's Small Claims Court Submissions Online portal and British Columbia's Civil Resolution Tribunal.</li>
+    <li><strong>Serve your client.</strong> The claim must reach your client in the way the court's rules require; your client then has a set time to file a defence.</li>
+    <li><strong>Settlement or mediation.</strong> Some courts hold a settlement conference or a mediation before the trial; it's mandatory in Québec for claims of $5,000 or less and in the Northwest Territories.</li>
+    <li><strong>Trial and judgment.</strong> A judge hears both sides and decides.</li>
+    <li><strong>Collect.</strong> If your client still doesn't pay, ask the court to enforce the judgment, for example by garnishing wages or a bank account, or by seizing property.</li>
+  </ol>
+  <h2>Good to know</h2>
+  <ul>
+    <li><strong>Interest</strong>: claim the rate your contract provides, if any. The <a href="{{link:latefee}}">late fee calculator</a> works it out.</li>
+    <li><strong>Keep your evidence</strong>: the contract or accepted quote, the invoice, your reminders and any reply from your client.</li>
+    <li><strong>Don't wait</strong>: in most provinces, you have only 2 years to sue.</li>
+  </ul>
+  <p class="small muted">Information for guidance only, from each court's official pages and each province's limitations law. For a large or complex claim, talk to a lawyer or your province's legal information service.</p>
+</section>

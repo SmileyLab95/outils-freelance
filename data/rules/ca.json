@@ -1295,6 +1295,227 @@
       "confidence": "high",
       "note": "Yukon is the only province or territory with its own Canada employment amount (Form YT428, line 58310: lesser of federal line 31260 and the cap; 2025 cap $1,471). Maximum Yukon credit 2026: $96.06 (6.4%).",
       "verified_on": "2026-10-22"
+    },
+    "ca_small_claims_limits": {
+      "value": {
+        "ON": {
+          "limit": 50000,
+          "since": "2025-10-01"
+        },
+        "QC": {
+          "limit": 15000,
+          "legal_person_max_employees": 10,
+          "mandatory_mediation_up_to": 5000,
+          "demand_letter_days": 10
+        },
+        "BC": {
+          "limit": 35000,
+          "tribunal_limit": 5000
+        },
+        "AB": {
+          "limit": 100000
+        },
+        "SK": {
+          "limit": 50000,
+          "since": "2024-04-01"
+        },
+        "MB": {
+          "limit": 20000,
+          "since": "2025-01-01"
+        },
+        "NS": {
+          "limit": 25000
+        },
+        "NB": {
+          "limit": 20000
+        },
+        "PE": {
+          "limit": 16000
+        },
+        "NL": {
+          "limit": 25000
+        },
+        "YT": {
+          "limit": 25000
+        },
+        "NT": {
+          "limit": 35000
+        },
+        "NU": {
+          "limit": null
+        }
+      },
+      "unit": "object",
+      "label": "Small claims court limit by province and territory (CAD)",
+      "source": "https://www.ontario.ca/page/suing-someone-small-claims-court",
+      "source_title": "Small claims court: suing someone - Ontario.ca",
+      "more_sources": [
+        {
+          "source": "https://www.quebec.ca/en/justice-and-civil-status/small-claims/filing-claim/plaintiff",
+          "source_title": "Plaintiff in small claims - Québec.ca"
+        },
+        {
+          "source": "https://www.quebec.ca/en/justice-and-civil-status/small-claims/mediation-arbitration-small-claims/compulsory-mediation",
+          "source_title": "Compulsory mediation in small claims - Québec.ca"
+        },
+        {
+          "source": "https://www.quebec.ca/justice-et-etat-civil/petites-creances/poursuivre/etapes-demande/mise-en-demeure/redaction-envoi-mise-demeure",
+          "source_title": "Rédaction et envoi de la mise en demeure - Québec.ca"
+        },
+        {
+          "source": "https://provincialcourt.bc.ca/navigating-court-case/small-claims/claims-5001-35000",
+          "source_title": "Claims from $5,001 to $35,000 - Provincial Court of British Columbia"
+        },
+        {
+          "source": "https://provincialcourt.bc.ca/navigating-court-case/small-claims/claims-5000",
+          "source_title": "Claims up to $5,000 - Provincial Court of British Columbia"
+        },
+        {
+          "source": "https://albertacourts.ca/cj/areas-of-law/civil",
+          "source_title": "Civil - Alberta Court of Justice"
+        },
+        {
+          "source": "https://sasklawcourts.ca/provincial-court/small-claims-court/",
+          "source_title": "Small Claims Court - Saskatchewan Law Courts"
+        },
+        {
+          "source": "https://www.manitobacourts.mb.ca/site/assets/files/2044/small_claims_limit_increase_and_limit_on_filing_material_2024_dec_9.pdf",
+          "source_title": "Notice: small claims limit increase - Court of King's Bench of Manitoba"
+        },
+        {
+          "source": "https://www.courts.ns.ca/courts/small-claims-court",
+          "source_title": "Small Claims Court - Courts of Nova Scotia"
+        },
+        {
+          "source": "https://laws.gnb.ca/en/document/cr/2012-103",
+          "source_title": "N.B. Reg. 2012-103 under the Small Claims Act - Laws of New Brunswick"
+        },
+        {
+          "source": "https://www.courts.pe.ca/sites/www.courts.pe.ca/files/Forms%20and%20Rules/2023%20Small%20Claims%20Rules%20only%20for%20Web.pdf",
+          "source_title": "Small Claims Section Rules (Rule 74) - Courts of Prince Edward Island"
+        },
+        {
+          "source": "https://www.court.nl.ca/provincial/courts/small-claims-court/small-claims-court-faq/",
+          "source_title": "Small Claims Court FAQ - Provincial Court of Newfoundland and Labrador"
+        },
+        {
+          "source": "https://www.yukoncourts.ca/en/small-claims-court",
+          "source_title": "Small Claims Court - Yukon Courts"
+        },
+        {
+          "source": "https://www.nwtcourts.ca/en/courts/territorial-court/civil-claims/",
+          "source_title": "Civil Claims - Courts of the Northwest Territories"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-10-22",
+      "note": "Read through search excerpts of each court's or government's official page on 2026-10-22. ON: $50,000 since 1 October 2025, not counting interest and costs; the excess can be waived to stay in Small Claims Court. QC: $15,000 or less, interest not included; a legal person, partnership or association can sue only if it had no more than 10 people bound to it by an employment contract in the 12 months before the claim; parties represent themselves (no lawyer); a claim above $15,000 can't be split; mediation is mandatory for eligible claims of $5,000 or less (not counting interest) once the claim is contested; a demand letter (mise en demeure) is recommended before filing and required in some cases, with a deadline of normally 10 days, sent by registered mail. BC: Civil Resolution Tribunal for most claims up to $5,000 (excluding interest and certain expenses); Provincial Court $5,001 to $35,000 (excluding interest and expenses); an abandoned excess can't be claimed later. AB: up to $100,000 plus interest and costs (Alta Reg 176/2018); excess can be abandoned or claimed in the Court of King's Bench. SK: $50,000 since 1 April 2024; excess can be waived. MB: $20,000 since 1 January 2025, excluding interest, costs and disbursements. NS: $25,000, interest and costs not counted; general damages capped at $100. NB: $20,000 (Reg. 2012-103); larger claims not accepted unless the excess is abandoned. PE: $16,000 since 8 July 2017 (Judicature Act; excess can be abandoned). NL: $25,000 before interest and costs, all claims on the statement of claim, can't be split. YT: $25,000 since 1 April 2006; can't be split. NT: under $35,000, excluding interest and expenses; mandatory mediation session with a judge. NU: limit not confirmed by an official source (secondary sources say $20,000, $5,000 or $50,000): null, the tool sends users to the court."
+    },
+    "ca_limitation_periods": {
+      "value": {
+        "ON": {
+          "years": 2,
+          "from": "discovery"
+        },
+        "QC": {
+          "years": 3,
+          "from": "right_of_action"
+        },
+        "BC": {
+          "years": 2,
+          "from": "discovery"
+        },
+        "AB": {
+          "years": 2,
+          "from": "discovery"
+        },
+        "SK": {
+          "years": 2,
+          "from": "discovery"
+        },
+        "MB": {
+          "years": 2,
+          "from": "discovery"
+        },
+        "NS": {
+          "years": 2,
+          "from": "discovery"
+        },
+        "NB": {
+          "years": 2,
+          "from": "discovery"
+        },
+        "PE": {
+          "years": 6,
+          "from": "right_of_action"
+        },
+        "NL": {
+          "years": 6,
+          "from": "right_of_action"
+        },
+        "YT": {
+          "years": 6,
+          "from": "right_of_action"
+        },
+        "NT": {
+          "years": 6,
+          "from": "right_of_action"
+        },
+        "NU": null
+      },
+      "unit": "object",
+      "label": "General limitation period for a contract debt claim, by province and territory",
+      "source": "https://www.ontario.ca/laws/statute/02l24",
+      "source_title": "Limitations Act, 2002 (Ontario) - Ontario.ca",
+      "more_sources": [
+        {
+          "source": "https://www.legisquebec.gouv.qc.ca/en/document/cs/CCQ-1991",
+          "source_title": "Civil Code of Québec, art. 2925 - Légis Québec"
+        },
+        {
+          "source": "https://www.bclaws.gov.bc.ca/civix/document/id/complete/statreg/12013_01",
+          "source_title": "Limitation Act, s. 6 (British Columbia) - BC Laws"
+        },
+        {
+          "source": "https://kings-printer.alberta.ca/documents/acts/l12.pdf",
+          "source_title": "Limitations Act, s. 3 (Alberta) - Alberta King's Printer"
+        },
+        {
+          "source": "https://publications.saskatchewan.ca/api/v1/products/9667/formats/14685/download",
+          "source_title": "The Limitations Act, s. 5 (Saskatchewan) - Publications Saskatchewan"
+        },
+        {
+          "source": "https://web2.gov.mb.ca/laws/statutes/ccsm/l150.php",
+          "source_title": "The Limitations Act, C.C.S.M. c. L150 (Manitoba)"
+        },
+        {
+          "source": "https://nslegislature.ca/sites/default/files/legc/statutes/limitation%20of%20actions.pdf",
+          "source_title": "Limitation of Actions Act, s. 8 (Nova Scotia) - Nova Scotia Legislature"
+        },
+        {
+          "source": "https://laws.gnb.ca/en/document/cs/L-8.5",
+          "source_title": "Limitation of Actions Act, s. 5 (New Brunswick) - Laws of New Brunswick"
+        },
+        {
+          "source": "https://www.princeedwardisland.ca/sites/default/files/legislation/s-07-statute_of_limitations.pdf",
+          "source_title": "Statute of Limitations, s. 2 (Prince Edward Island)"
+        },
+        {
+          "source": "https://www.assembly.nl.ca/legislation/sr/statutes/l16-1.htm",
+          "source_title": "Limitations Act, ss. 6 and 9 (Newfoundland and Labrador) - House of Assembly"
+        },
+        {
+          "source": "https://laws.yukon.ca/cms/images/LEGISLATION/acts/liac.pdf",
+          "source_title": "Limitation of Actions Act (Yukon) - Yukon Laws"
+        },
+        {
+          "source": "https://www.justice.gov.nt.ca/en/files/legislation/limitation-of-actions/limitation-of-actions.a.pdf",
+          "source_title": "Limitation of Actions Act (Northwest Territories) - NWT Justice"
+        }
+      ],
+      "confidence": "medium",
+      "verified_on": "2026-10-22",
+      "note": "General rule only; other periods apply to some claims, and special rules (minors, acknowledgment, concealment) can change the deadline. ON, BC, AB, SK, MB (Act in force 30 September 2022), NS, NB: 2 years from the day the claim is discovered (when the claimant knew or ought to have known of it), with an ultimate period (15 years; 10 in Alberta). QC: 3 years for a personal right (C.c.Q. art. 2925). PE: 6 years after the cause of action arose (catch-all, s. 2(1)(g)). NL: 6 years after the right arose (s. 6 lists debt claims; s. 9 catch-all). YT: 6 years for money owed under a simple contract. NT: 6 years (older Act, catch-all; text partly garbled in the excerpt: medium confidence). NU: not checked (null). ON, BC, AB, SK, MB, NS, NB and QC confirmed on the statute or official summaries (high); PE, NL, YT, NT through statute excerpts (medium)."
     }
   },
   "provinces": {
@@ -1843,6 +2064,8 @@
     "Charter of the French language: may an invoice of a Québec business be bilingual (section 89: French with another language), and does section 57 apply to a supplier outside Québec invoicing a Québec client? The site only states that invoices of businesses in Québec are drawn up in French.",
     "Comparator sole proprietor vs corporation: Saskatchewan and Nunavut non-eligible dividend tax credit rates for 2026 were not found on an official page (secondary sources give 2.519% for Saskatchewan from 2024, after the cancellation of the planned change). The comparator does not compute these two until an official figure is read (Forms SK428 and NU428).",
     "Comparator: confirm on 2026 forms the Nova Scotia (1.5%), Northwest Territories (6%) and Alberta (2.18%) non-eligible dividend tax credit rates, the order surtax / dividend tax credit on Form ON428, and the day-based proration of the Ontario rate cut of 2026-07-01. For 2027: Ontario dividend credit 1.9863% (proposed), Québec 2.69%, Newfoundland and Labrador lower rate 1.5%.",
-    "Québec: read Schedule R (QPIP deduction on self-employment income) and confirm that the Northwest Territories payroll tax is not deductible for income tax."
+    "Québec: read Schedule R (QPIP deduction on self-employment income) and confirm that the Northwest Territories payroll tax is not deductible for income tax.",
+    "Nunavut small claims: monetary limit and limitation period not confirmed by an official source (secondary sources give $5,000, $20,000 or $50,000); the small claims tool sends users to the court.",
+    "Small claims filing fees by province: not collected (they depend on the amount, the number of claims filed and, in several provinces, changed in 2026)."
   ]
 }

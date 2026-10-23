@@ -1,0 +1,187 @@
+<!--{
+  "id": "court",
+  "slug": "small-claims-court/",
+  "title": "Small Claims Court for Unpaid Invoices UK: Fees and Steps",
+  "description": "Take a client to court over an unpaid invoice in England and Wales: the court fee, the interest you can add, the track and every step. Free calculator.",
+  "menu": "Small claims court",
+  "icon": "⚖️",
+  "blurb": "Court fee, interest and every step to claim an unpaid invoice.",
+  "app": "UK Small Claims Court Calculator",
+  "scripts": ["engines/brackets.js", "engines/tax-uk.js", "engines/court-uk.js", "tools/uk-court.js"],
+  "rules": "uk",
+  "sources": ["uk_money_claim_issue_fee", "uk_small_claims_hearing_fee", "uk_civil_tracks", "uk_mcol_conditions", "uk_debt_pre_action_protocol", "uk_pre_action_conduct", "uk_claim_response_deadlines", "uk_small_claims_mediation", "uk_enforcement_options", "uk_limitation_simple_contract", "uk_court_interest_other_debts", "late_payment_statutory_interest_margin", "late_payment_reference_rates", "late_payment_fixed_compensation", "uk_scotland_simple_procedure", "uk_ni_small_claims"],
+  "priority": 0.8,
+  "faq": [
+    ["Can I take a client to court for an unpaid invoice?", "Yes. In England and Wales, you can make a money claim in the County Court, online for fixed amounts under £100,000. Claims of £10,000 or less, not counting interest, normally go to the small claims track, designed for people who don't use a solicitor. Send a letter before claim first: the court expects it."],
+    ["How much does it cost to make a court claim for money?", "The court fee depends on the amount you claim, interest included: £35 up to £300, £115 from £1,500.01 to £3,000, £455 from £5,000.01 to £10,000, then 5% of the claim up to £200,000. If your client defends the claim and it goes to a small claims hearing, there's a hearing fee of £27 to £346. If you win, your client normally pays the court fees back."],
+    ["Do I need a solicitor for a small claim?", "No. The small claims track is designed for people representing themselves, and each side usually pays its own legal costs, so a solicitor's fees are rarely recovered. Above £10,000, legal costs and hearing fees are higher: legal advice is worth getting."],
+    ["How long do I have to claim an unpaid invoice?", "In England and Wales, 6 years from the date your right to sue arose, usually when payment was due (Limitation Act 1980). A part payment, or an acknowledgment of the debt in writing and signed by your client, restarts the clock. Scotland and Northern Ireland have their own time limits."],
+    ["What happens if my client ignores the claim?", "Your client has 14 days after the claim is served to respond, or 28 days if they acknowledge it first. If they don't respond in time, you can ask the court for judgment. If they still don't pay, you can ask the court to enforce the judgment, for example by sending enforcement agents or taking money from their wages."]
+  ]
+}-->
+<script type="application/json" id="court-uk-data">
+{
+  "tracks": {
+    "small_claims": "Small claims track",
+    "fast_track": "Fast track",
+    "intermediate_track": "Intermediate track",
+    "multi_track": "Multi-track"
+  },
+  "track_notes": {
+    "small_claims": "Claims of £10,000 or less, not counting interest and costs. Designed for people without a solicitor; each side usually pays its own legal costs. If your client defends the claim, you'll both first have to take part in a free one-hour mediation by phone.",
+    "fast_track": "Claims of £10,000.01 to £25,000: higher hearing fees, and fixed legal costs the losing side may have to pay. Legal advice is worth getting.",
+    "intermediate_track": "Claims of £25,000.01 to £100,000: higher hearing fees, and fixed legal costs the losing side may have to pay. Get legal advice before you claim.",
+    "multi_track": "Claims above £100,000: get legal advice before you claim."
+  },
+  "pre_action": {
+    "debt_protocol": "Your client is an individual or a sole trader: follow the Pre-Action Protocol for Debt Claims. Send a Letter of Claim with the protocol's Information Sheet, Reply Form and Financial Statement, and give your client 30 days to reply before you claim.",
+    "pre_action_conduct": "Your client is a company or an LLP: send a letter before claim setting out the amount, how you worked it out and a deadline to pay. The court expects a reply within a reasonable time: 14 days in a straightforward case."
+  },
+  "routes": {
+    "online": "Claim online on GOV.UK. Money Claim Online takes fixed amounts under £100,000, from one claimant against up to two defendants with an address in England or Wales, and works out the fee for you.",
+    "paper": "From £100,000, the claim can't be made online: use the paper claim form N1, and get legal advice first.",
+    "scotland": "Scotland has its own courts and rules: claims of £5,000 or less use the simple procedure in the sheriff court; above that, an ordinary cause action. The fees and time limits on this page don't apply.",
+    "northern_ireland": "Northern Ireland has its own courts and rules: claims of £5,000 or less go to the small claims court. The fees and time limits on this page don't apply.",
+    "abroad": "Your client has no address in the UK: Money Claim Online can't be used, and you may have to sue in your client's country. Get legal advice before you start."
+  },
+  "route_titles": {
+    "online": "Claim online",
+    "paper": "Paper claim form",
+    "scotland": "Different procedure",
+    "northern_ireland": "Different procedure",
+    "abroad": "Get legal advice"
+  },
+  "interest": {
+    "late_payment_act": "Statutory interest under the Late Payment Act, at {rate} a year from the day after the due date, and fixed compensation.",
+    "court_rate": "Interest at 8% a year, the usual rate for debts the Late Payment Act doesn't cover, from the due date.",
+    "none": "No interest added.",
+    "not_late": "The due date isn't past yet: no interest to add."
+  }
+}
+</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · England and Wales</span>
+    <h1>Small claims for unpaid invoices</h1>
+    <p class="lead">Your client still hasn't paid after your reminders? See what you can claim, the court fee, the track your claim will follow, and every step before and after you go to court.</p>
+    <ul class="trust"><li>2026 court fees</li><li>Interest included</li><li>Letter before claim to judgment</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="court-form" onsubmit="return false">
+      <h2>Your unpaid invoice</h2>
+      <div class="fields">
+        <div class="field full"><label for="c-amount">Amount owed</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="c-amount" name="amount" value="2,500" aria-describedby="c-amount-hint" data-save><span>£</span></div>
+          <span class="hint" id="c-amount-hint">Including VAT if you charged it.</span></div>
+        <div class="field full"><label for="c-due">Due date</label>
+          <input type="date" id="c-due" name="due" data-save></div>
+        <div class="field full"><label for="c-client">Your client is</label>
+          <select id="c-client" name="client" data-save>
+            <option value="company">A limited company or an LLP</option>
+            <option value="sole_trader">A sole trader</option>
+            <option value="consumer">A private individual</option>
+          </select></div>
+        <div class="field full"><label for="c-place">Your client's address is in</label>
+          <select id="c-place" name="place" data-save>
+            <option value="england_wales">England or Wales</option>
+            <option value="scotland">Scotland</option>
+            <option value="northern_ireland">Northern Ireland</option>
+            <option value="abroad">Outside the UK</option>
+          </select></div>
+        <label class="check full"><input type="checkbox" id="c-interest" name="interest" checked aria-describedby="c-interest-hint" data-save>
+          <span>Add interest to the claim</span></label>
+        <span class="hint full" id="c-interest-hint">Statutory interest and compensation for a business client, 8% a year for a private individual. If your contract sets a late payment rate, that rate applies instead.</span>
+      </div>
+    </form>
+
+    <div class="results">
+      <h2 class="sr-only">Result</h2>
+      <div class="result-hero" role="status" aria-atomic="true">
+        <div class="label" id="c-hero-label">Court fee to start your claim</div>
+        <div class="big" id="c-fee">–</div>
+        <div class="sub" id="c-sub">–</div>
+      </div>
+      <ul class="result-list card" id="c-figures" style="padding: 6px 18px;">
+        <li><span>Amount owed</span><b id="c-owed">–</b></li>
+        <li><span>Interest to today</span><b id="c-int">–</b></li>
+        <li><span>Fixed compensation</span><b id="c-comp">–</b></li>
+        <li><span>Total you can claim</span><b id="c-claimed">–</b></li>
+        <li><span>Hearing fee, if your client defends</span><b id="c-hearing">–</b></li>
+        <li><span>Track</span><b id="c-track">–</b></li>
+      </ul>
+      <p class="small muted" id="c-interest-note" style="margin-top: 10px;">–</p>
+      <div class="card" style="margin-top: 16px; padding: 18px;" id="c-before-card">
+        <h3 style="font-size: 1rem; margin-bottom: 8px;">Before you claim</h3>
+        <p id="c-before" style="margin: 0;">–</p>
+        <p class="small" style="margin: 10px 0 0;">The <a href="{{link:reminder}}">payment reminder generator</a> writes the letter before action.</p>
+      </div>
+      <div class="card" style="margin-top: 16px; padding: 18px;">
+        <h3 style="font-size: 1rem; margin-bottom: 8px;" id="c-route-title">Where to claim</h3>
+        <p id="c-route" style="margin: 0;">–</p>
+        <p class="small" id="c-track-note" style="margin: 10px 0 0;">–</p>
+      </div>
+      <div class="card" style="margin-top: 16px; padding: 18px;" id="c-limit-card">
+        <h3 style="font-size: 1rem; margin-bottom: 8px;">Time limit</h3>
+        <p id="c-limit" style="margin: 0;">–</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>From letter before claim to judgment</h2>
+  <ol>
+    <li><strong>Letter before claim.</strong> To an individual or a sole trader, follow the Pre-Action Protocol for Debt Claims: a Letter of Claim with the protocol's Information Sheet, Reply Form and Financial Statement, then 30 days for your client to reply. To a company, a letter with the amount, how you worked it out and a deadline: 14 days is reasonable in a straightforward case.</li>
+    <li><strong>Make your claim.</strong> Online on GOV.UK for a fixed amount under £100,000 against up to two defendants with an address in England or Wales. Pay the court fee: if you win, your client normally pays it back.</li>
+    <li><strong>Your client responds.</strong> They have 14 days after the claim is served to pay, admit or defend it, or 28 days if they first acknowledge the claim.</li>
+    <li><strong>No response?</strong> Ask the court for judgment as soon as the deadline has passed.</li>
+    <li><strong>A defence?</strong> For claims up to £10,000, both of you must first take part in a free one-hour mediation by phone with the Small Claims Mediation Service. Without an agreement, a judge decides the claim at a hearing, after you pay the hearing fee.</li>
+    <li><strong>Still not paid after judgment?</strong> Ask the court to enforce it: a warrant of control (enforcement agents), an attachment of earnings order (from wages), a charging order (on property) or a third party debt order (from a bank account). Each has its own court fee.</li>
+  </ol>
+
+  <h2>Court fees in England and Wales</h2>
+  <p>The fee to start a claim depends on the amount you claim, <strong>interest included</strong>. It's the same online and on paper.</p>
+  <div class="table-scroll">
+  <table>
+    <thead><tr><th scope="col">Amount claimed</th><th scope="col">Court fee</th></tr></thead>
+    <tbody>
+      <tr><td>Up to £300</td><td>£35</td></tr>
+      <tr><td>£300.01 to £500</td><td>£50</td></tr>
+      <tr><td>£500.01 to £1,000</td><td>£70</td></tr>
+      <tr><td>£1,000.01 to £1,500</td><td>£80</td></tr>
+      <tr><td>£1,500.01 to £3,000</td><td>£115</td></tr>
+      <tr><td>£3,000.01 to £5,000</td><td>£205</td></tr>
+      <tr><td>£5,000.01 to £10,000</td><td>£455</td></tr>
+      <tr><td>£10,000.01 to £200,000</td><td>5% of the claim</td></tr>
+      <tr><td>More than £200,000</td><td>£10,000</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>If your client defends a small claim and it goes to a hearing, you pay a hearing fee:</p>
+  <div class="table-scroll">
+  <table>
+    <thead><tr><th scope="col">Amount claimed</th><th scope="col">Hearing fee</th></tr></thead>
+    <tbody>
+      <tr><td>Up to £300</td><td>£27</td></tr>
+      <tr><td>£300.01 to £500</td><td>£59</td></tr>
+      <tr><td>£500.01 to £1,000</td><td>£85</td></tr>
+      <tr><td>£1,000.01 to £1,500</td><td>£123</td></tr>
+      <tr><td>£1,500.01 to £3,000</td><td>£181</td></tr>
+      <tr><td>More than £3,000</td><td>£346</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>If you win, the judge normally orders your client to pay these fees back. On a low income, you may be able to get help with fees.</p>
+
+  <h2>Good to know</h2>
+  <ul>
+    <li><strong>Interest</strong>: between businesses, the Late Payment Act lets you add statutory interest and £40 to £100 of compensation per invoice: see the <a href="{{link:latefee}}">late payment interest calculator</a>. For other debts, 8% a year is usual.</li>
+    <li><strong>Keep your evidence</strong>: the contract or accepted quote, the invoice, your reminders and any reply from your client.</li>
+    <li><strong>Time limit</strong>: 6 years from when payment was due, in England and Wales. Don't wait that long: the older the debt, the harder it is to recover.</li>
+  </ul>
+  <p class="small muted">Information for guidance only, based on GOV.UK, the Civil Procedure Rules and their pre-action protocols, and the Limitation Act 1980. For a large or disputed claim, get advice from a solicitor or Citizens Advice.</p>
+</section>

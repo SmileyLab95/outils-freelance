@@ -627,6 +627,41 @@ const tests = {
     await page.check("#l-b2b");
     check((await page.textContent("#l-claim")).includes("Late Payment of Commercial Debts"), "UK retard : phrase pour la relance");
   },
+  async "uk/small-claims-court/"(page) {
+    const text = (id) => page.textContent(`#${id}`).then((t) => t.trim());
+    const daysAgo = (n) => new Date(Date.now() - n * 86400000).toISOString().slice(0, 10);
+    // Par défaut : 2 500 £ dus depuis 60 jours par une société ; 2 500 × 11,75 % × 60 ÷ 365 = 48,29 + 70 = 2 618,29 £.
+    check((await text("c-fee")) === "£115.00" && (await text("c-claimed")) === "£2,618.29" && (await text("c-hearing")) === "£181.00" &&
+      (await text("c-track")) === "Small claims track", `small claims UK : 2 618,29 £ réclamés → 115 £ de frais, 181 £ d'audience (obtenu : ${await text("c-fee")}, ${await text("c-claimed")})`);
+    check((await text("c-before")).includes("14 days") && (await text("c-route")).includes("Money Claim Online") &&
+      (await text("c-limit")).includes("until about"), "small claims UK : société → lettre et 14 jours, dépôt en ligne, prescription");
+    await page.selectOption("#c-client", "sole_trader");
+    check((await text("c-before")).includes("Pre-Action Protocol for Debt Claims") && (await text("c-before")).includes("30 days") &&
+      (await text("c-claimed")) === "£2,618.29", "small claims UK : sole trader → protocole des créances (30 jours), mêmes intérêts");
+    await page.selectOption("#c-client", "consumer");
+    check((await text("c-claimed")) === "£2,532.88" && (await text("c-comp")) === "£0.00" && (await text("c-interest-note")).includes("8%"),
+      "small claims UK : particulier → 8 % par an, sans indemnité");
+    await page.uncheck("#c-interest");
+    check((await text("c-claimed")) === "£2,500.00" && (await text("c-interest-note")) === "No interest added.", "small claims UK : sans intérêts");
+    await page.fill("#c-amount", "12,000");
+    check((await text("c-fee")) === "£600.00" && (await text("c-track")) === "Fast track" && (await text("c-hearing")).startsWith("Higher"),
+      "small claims UK : 12 000 £ → 5 % = 600 £, fast track");
+    await page.fill("#c-due", daysAgo(7 * 365));
+    check((await text("c-limit")).includes("probably out of time"), "small claims UK : échéance de plus de 6 ans → prescription signalée");
+    await page.selectOption("#c-place", "scotland");
+    check((await text("c-fee")) === "Different procedure" && !(await page.isVisible("#c-figures")) && !(await page.isVisible("#c-limit-card")) &&
+      (await text("c-route")).includes("simple procedure"), "small claims UK : Écosse → autre procédure, chiffres masqués");
+    await accessible(page, "small claims UK (Écosse)");
+    await page.reload({ waitUntil: "networkidle" });
+    check((await page.inputValue("#c-place")) === "scotland" && (await text("c-fee")) === "Different procedure", "small claims UK : situation mémorisée après rechargement");
+    // Retour à la situation par défaut pour les formats suivants (tablette, mobile).
+    await page.selectOption("#c-place", "england_wales");
+    await page.selectOption("#c-client", "company");
+    await page.fill("#c-amount", "2,500");
+    await page.fill("#c-due", daysAgo(60));
+    await page.check("#c-interest");
+    check((await text("c-fee")) === "£115.00", "small claims UK : situation par défaut rétablie");
+  },
   async "uk/payment-reminder-letter/"(page) {
     const due = new Date(Date.now() - 50 * 86400000).toISOString().slice(0, 10);
     await page.fill("#rm-due", due);
@@ -1505,6 +1540,47 @@ const tests = {
     await page.fill("#rm-due", due);
     await page.fill("#rm-amount", "2000");
     check((await page.getAttribute('[data-stage="3"]', "aria-selected")) === "true" && (await page.textContent("#rm-subject")).includes("Demand for payment"), "relance CA : lettre de mise en demeure après 50 jours");
+  },
+  async "ca/small-claims-court/"(page) {
+    const text = (id) => page.textContent(`#${id}`).then((t) => t.trim());
+    check((await text("c-verdict")) === "Small claims court" && (await text("c-limit")) === "$50,000" && (await text("c-court")).startsWith("Small Claims Court") &&
+      (await text("c-time")).includes("2 years") && (await page.getAttribute("#c-link", "href")).includes("ontario.ca"),
+      `petites créances CA : Ontario, 8 000 $ → petites créances, plafond 50 000 $, 2 ans (obtenu : ${await text("c-verdict")}, ${await text("c-limit")})`);
+    await page.selectOption("#c-province", "BC");
+    await page.fill("#c-amount", "4,000");
+    check((await text("c-verdict")) === "Civil Resolution Tribunal" && (await text("c-court")) === "Civil Resolution Tribunal (online)" &&
+      (await text("c-sub")).includes("$5,000") && (await text("c-name")) === "British Columbia", "petites créances CA : C.-B., 4 000 $ → Tribunal de résolution civile");
+    await page.fill("#c-amount", "40,000");
+    check((await text("c-verdict")) === "Above the limit" && (await text("c-limit")) === "$35,000" && (await text("c-note")).includes("abandon the excess"),
+      "petites créances CA : C.-B., 40 000 $ → au-delà du plafond de 35 000 $");
+    await page.selectOption("#c-province", "QC");
+    check((await text("c-limit")) === "$15,000" && (await text("c-time")).includes("3 years") && (await text("c-note")).includes("mise en demeure"),
+      "petites créances CA : Québec → 15 000 $, 3 ans, mise en demeure");
+    await page.selectOption("#c-province", "NU");
+    check((await text("c-verdict")) === "Check with the court" && (await text("c-limit")) === "Check with the court" && (await text("c-time")).startsWith("Not confirmed"),
+      "petites créances CA : Nunavut → plafond et délai non confirmés, renvoi au tribunal");
+    await accessible(page, "petites créances CA (Nunavut)");
+    await page.reload({ waitUntil: "networkidle" });
+    check((await page.inputValue("#c-province")) === "NU" && (await page.inputValue("#c-amount")) === "40,000", "petites créances CA : situation mémorisée après rechargement");
+    await page.selectOption("#c-province", "ON");
+    await page.fill("#c-amount", "8,000");
+    check((await text("c-verdict")) === "Small claims court", "petites créances CA : situation par défaut rétablie");
+  },
+  async "ca/fr/petites-creances/"(page) {
+    const text = (id) => page.textContent(`#${id}`).then((t) => t.trim());
+    check((await text("c-verdict")) === "Petites créances" && (await text("c-limit")) === "15 000 $" && (await text("c-time")).includes("3 ans") &&
+      (await text("c-name")) === "Québec" && (await page.getAttribute("#c-link", "href")).includes("quebec.ca/justice-et-etat-civil"),
+      `petites créances CA-FR : Québec, 8 000 $ → petites créances, 15 000 $, 3 ans (obtenu : ${await text("c-verdict")}, ${await text("c-limit")})`);
+    await page.selectOption("#c-province", "AB");
+    await page.fill("#c-amount", "120 000");
+    check((await text("c-verdict")) === "Au-delà du plafond" && (await text("c-limit")) === "100 000 $" && (await text("c-sub")).includes("100 000 $") &&
+      (await text("c-time")).includes("2 ans"), "petites créances CA-FR : Alberta, 120 000 $ → au-delà du plafond de 100 000 $, 2 ans");
+    await page.selectOption("#c-province", "BC");
+    await page.fill("#c-amount", "3 000");
+    check((await text("c-verdict")) === "Tribunal de résolution civile" && (await text("c-sub")).includes("5 000 $"), "petites créances CA-FR : C.-B., 3 000 $ → Tribunal de résolution civile");
+    await page.selectOption("#c-province", "QC");
+    await page.fill("#c-amount", "8 000");
+    check((await text("c-verdict")) === "Petites créances", "petites créances CA-FR : situation par défaut rétablie");
   },
   async "ca/freelance-email-templates/"() {},
   async "ca/legal-notice/"() {},

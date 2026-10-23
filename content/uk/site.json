@@ -40,7 +40,8 @@
       "label": "Getting paid",
       "items": [
         "reminder",
-        "latefee"
+        "latefee",
+        "court"
       ]
     },
     {

@@ -39,7 +39,8 @@
       "label": "Se faire payer",
       "items": [
         "reminder",
-        "latefee"
+        "latefee",
+        "court"
       ]
     },
     {

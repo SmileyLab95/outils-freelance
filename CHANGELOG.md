@@ -1,5 +1,24 @@
 # Journal des modifications
 
+## 2026-10-23 — Recouvrement en justice : Royaume-Uni et Canada
+
+- Spécification [24](documentation/24-recouvrement-uk-us-ca.md) (Royaume-Uni, Canada, puis États-Unis) et décision
+  D26 : n'afficher que ce qu'une source officielle confirme.
+- Royaume-Uni, `/uk/small-claims-court/` : ce que l'on peut réclamer (facture, intérêts du *Late Payment Act* et
+  indemnité, ou 8 % pour un particulier), frais de dépôt et d'audience 2026, circuit (*small claims* jusqu'à
+  10 000 £), lettre avant procès (protocole des créances : 30 jours ; société : 14 jours dans un cas simple), dépôt en
+  ligne, médiation obligatoire, exécution, prescription de 6 ans ; Écosse et Irlande du Nord renvoyées vers leurs
+  procédures. La page des relances renvoie vers l'outil.
+- Canada, `/ca/small-claims-court/` et `/ca/fr/petites-creances/` : tribunal, plafond et prescription des 13
+  provinces et territoires, Tribunal de résolution civile de la Colombie-Britannique, particularités du Québec
+  (sans avocat, 10 employés au plus pour une personne morale, mise en demeure, médiation) ; plafond du Nunavut non
+  confirmé, donc non affiché. Les pages de relances renvoient vers l'outil.
+- Règles : douze nouvelles dans uk.json, deux dans ca.json (une source officielle par province), cinq questions
+  ouvertes.
+- Tests : `court-uk.test.mjs`, `court-ca.test.mjs` ; 17 erreurs réintroduites, toutes détectées ; parcours
+  navigateur des trois pages ; suite complète (265 tests unitaires, 27 tests serveur, 2 502 vérifications
+  navigateur du site public).
+
 ## 2026-10-22 — Site publié : scripts des comptes retirés
 
 - Les scripts utilisés seulement par les brouillons (page du compte, synchronisation, chiffrement, moteur de fusion)

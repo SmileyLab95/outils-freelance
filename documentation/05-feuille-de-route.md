@@ -9,7 +9,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 
 ## Où en est-on ?
 
-*Mis à jour le 22/10/2026.*
+*Mis à jour le 23/10/2026.*
 
 - **Priorité (décision D10)** : le site et la plateforme d'abord ; noms de domaine, Gumroad et affiliation à la fin.
   Règle de qualité maximale pour tout produit ou service (D11, charte dans la [méthode](04-methode-de-travail.md#charte-qualité)).
@@ -143,8 +143,15 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   de l'Espace, à l'ouverture et après chaque modification ; construits **en brouillon** (`OF_DRAFTS=1`, D25) et
   vérifiés par un parcours navigateur de 37 contrôles contre un serveur de test. **Rien n'est en ligne** : il manque
   l'hébergeur, le domaine et le service d'envoi d'emails (décisions d'Ismail, puis étape C5).
-- **Prochaines actions de Claude** : recouvrement en justice au Royaume-Uni, aux États-Unis et au Canada (besoin P2,
-  spécification d'abord) ; assurance et compte professionnel hors de France (P2) ; comptes : adaptateur
+- **Recouvrement en justice au Royaume-Uni et au Canada (23/10/2026)** : spécification
+  [24](24-recouvrement-uk-us-ca.md) ; outil *Small claims* du Royaume-Uni (frais de dépôt et d'audience 2026, intérêts
+  du *Late Payment Act* ou 8 %, circuit, protocole avant le procès, dépôt en ligne, médiation, exécution,
+  prescription de 6 ans ; Écosse et Irlande du Nord renvoyées) et outil « Petites créances » du Canada en anglais et
+  en français (tribunal, plafond et prescription des 13 provinces et territoires, particularités du Québec ; plafond
+  du Nunavut non confirmé, donc non affiché). Quatorze règles nouvelles, chacune avec sa source officielle (D26).
+- **Prochaines actions de Claude** : recouvrement en justice aux États-Unis (plafonds des 51 juridictions déjà
+  recherchés le 23/10/2026, [24](24-recouvrement-uk-us-ca.md) § 3 ; reste à relire la source exacte de chacun, puis
+  l'outil) ; assurance et compte professionnel hors de France (P2) ; comptes : adaptateur
   PostgreSQL et sauvegardes dès que l'hébergeur est choisi ; taux du crédit pour
   dividendes de la Saskatchewan et du Nunavut dès qu'ils sont publiés (formulaires 2026) ;
   trouver la cause du contrôle de contraste intermittent de l'Espace ; revérifier les grilles des prestataires de
@@ -213,6 +220,10 @@ Objectif : un site mesuré, sous sa propre marque, qui commence à rapporter, et
       revues le 20/10/2026, mots-clés en tête)
 - [ ] Veille de décembre 2026 : barèmes 2027 des 4 pays, PASS 2027, taux d'intérêt légal du 1er semestre 2027,
       numéro définitif de la mention de franchise (L. 233-3 du CIBS), calendriers 2027-2028 (`scripts/calendriers.py`)
+- [x] Recouvrement en justice au Royaume-Uni (*small claims* : frais, circuit, démarches) et au Canada (petites
+      créances des 13 provinces et territoires, anglais et français) : spécification [24](24-recouvrement-uk-us-ca.md)
+- [ ] Recouvrement en justice aux États-Unis (*small claims* des 50 États et du district de Columbia) :
+      [24](24-recouvrement-uk-us-ca.md) § 3
 - [ ] Guide du recouvrement judiciaire (injonction de payer, procédure simplifiée) une fois les règles 2026 vérifiées :
       étude et plan prêts ([14](14-etude-recouvrement.md)) ; deux textes de 2026 à lire en entier avant publication
 - [x] Guide « Compte bancaire professionnel » avec vérificateur (règle des 10 000 € sur deux ans, mention « EI »,

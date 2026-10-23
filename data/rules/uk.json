@@ -1422,6 +1422,281 @@
       "source_title": "Defer your National Insurance - GOV.UK",
       "confidence": "medium",
       "note": "Read on 21/10/2026 through search results, page not opened. The annual maximum formula (SSCR 2001 reg. 100) is not modelled by the calculators: they may overstate Class 4 for people with a salary above the primary threshold."
+    },
+    "uk_money_claim_issue_fee": {
+      "value": [
+        {
+          "to": 300,
+          "fee": 35
+        },
+        {
+          "to": 500,
+          "fee": 50
+        },
+        {
+          "to": 1000,
+          "fee": 70
+        },
+        {
+          "to": 1500,
+          "fee": 80
+        },
+        {
+          "to": 3000,
+          "fee": 115
+        },
+        {
+          "to": 5000,
+          "fee": 205
+        },
+        {
+          "to": 10000,
+          "fee": 455
+        },
+        {
+          "to": 200000,
+          "rate": 0.05
+        },
+        {
+          "to": null,
+          "fee": 10000
+        }
+      ],
+      "unit": "brackets",
+      "label": "County Court fee to issue a money claim (England and Wales), by amount claimed including interest",
+      "source": "https://www.gov.uk/make-court-claim-for-money/court-fees",
+      "source_title": "Make a court claim for money: Court fees - GOV.UK",
+      "more_sources": [
+        {
+          "source": "https://www.legislation.gov.uk/uksi/2008/1053/schedule/1",
+          "source_title": "The Civil Proceedings Fees Order 2008, Schedule 1 (fee 1.1) - legislation.gov.uk"
+        }
+      ],
+      "confidence": "medium",
+      "verified_on": "2026-10-22",
+      "note": "Each band includes its upper limit ('up to £300', '£300.01 to £500'...). 5% band: amount claimed x 0.05, rounded down to the nearest penny. Over £200,000: £10,000 (paper claims only). Fee 1.1 is calculated on the total of the claim and the interest claimed (Civil Proceedings Fees Order 2008). The 2021 amendment removed the separate Money Claim Online fees, so online and paper fees are the same. The fee increases of 13 July 2026 (Court and Tribunal Fees (Miscellaneous Amendments) Order 2026, SI 2026/642) left money claim issue fees unchanged according to the published summaries. Read through search excerpts on 2026-10-22 (GOV.UK not reachable directly)."
+    },
+    "uk_small_claims_hearing_fee": {
+      "value": [
+        {
+          "to": 300,
+          "fee": 27
+        },
+        {
+          "to": 500,
+          "fee": 59
+        },
+        {
+          "to": 1000,
+          "fee": 85
+        },
+        {
+          "to": 1500,
+          "fee": 123
+        },
+        {
+          "to": 3000,
+          "fee": 181
+        },
+        {
+          "to": null,
+          "fee": 346
+        }
+      ],
+      "unit": "brackets",
+      "label": "Small claims track hearing fee (England and Wales), by amount claimed",
+      "source": "https://www.gov.uk/government/publications/fees-in-the-civil-and-family-courts-main-fees-ex50",
+      "source_title": "Civil and family court fees (EX50) - GOV.UK",
+      "confidence": "medium",
+      "verified_on": "2026-10-22",
+      "note": "Paid by the claimant when a defended small claim is listed for a hearing (fee 2.1). Figures from leaflet EX50 / EX50A as updated in 2025; the July 2026 EX50A excerpt shows the same amounts and the 13 July 2026 increase left trial fees unchanged according to the published summaries. Fast track and intermediate/multi-track hearing fees are higher and are not used by the tool. Read through search excerpts on 2026-10-22."
+    },
+    "uk_civil_tracks": {
+      "value": {
+        "small_claims": 10000,
+        "fast_track": 25000,
+        "intermediate_track": 100000
+      },
+      "unit": "object",
+      "label": "Normal track by financial value of a claim (England and Wales, claims issued from 1 October 2023)",
+      "source": "https://www.justice.gov.uk/courts/procedure-rules/civil/rules/part26",
+      "source_title": "Civil Procedure Rules, Part 26 - justice.gov.uk",
+      "more_sources": [
+        {
+          "source": "https://www.legislation.gov.uk/uksi/1998/3132/rule/26.13",
+          "source_title": "The Civil Procedure Rules 1998, rule 26.13 - legislation.gov.uk"
+        }
+      ],
+      "confidence": "medium",
+      "verified_on": "2026-10-22",
+      "note": "Small claims track: not more than £10,000; fast track: up to £25,000; intermediate track: £25,000 to £100,000 (trial of up to 3 days, limited expert evidence); multi-track above. In assessing the financial value, the court disregards any amount not in dispute, any claim for interest, costs and contributory negligence (CPR 26.13(2)); complexity and other factors can move a claim to another track."
+    },
+    "uk_mcol_conditions": {
+      "value": {
+        "max_claim_below": 100000,
+        "max_claimants": 1,
+        "max_defendants": 2,
+        "defendant_address": "England or Wales",
+        "amount": "fixed (specified) sum"
+      },
+      "unit": "object",
+      "label": "Money Claim Online: conditions for issuing a claim online",
+      "source": "https://www.gov.uk/government/publications/money-claim-online-user-guide/money-claim-online-mcol-user-guide",
+      "source_title": "Money Claim Online (MCOL) user guide - GOV.UK",
+      "more_sources": [
+        {
+          "source": "https://www.justice.gov.uk/courts/procedure-rules/civil/rules/part07/pd_part07e",
+          "source_title": "Practice Direction 7E - Money Claim Online - justice.gov.uk"
+        }
+      ],
+      "confidence": "medium",
+      "verified_on": "2026-10-22",
+      "note": "Fixed amount of money less than £100,000, one claimant, no more than two defendants, each with an address for service in England or Wales. Not available to under-18s, people eligible for legal aid or applying for help with fees. If you don't know the exact amount, use the paper claim form N1. Whether interest counts towards the £100,000 was not confirmed: the tool compares the total claimed, interest included (the cautious reading). The guide also mentions a newer HMCTS money claims service (Online Civil Money Claims); GOV.UK's 'Make a court claim for money' service directs claimants to the right one."
+    },
+    "uk_debt_pre_action_protocol": {
+      "value": {
+        "reply_days": 30,
+        "applies_when_debtor": "an individual, including a sole trader",
+        "enclosures": [
+          "Information Sheet",
+          "Reply Form",
+          "Financial Statement"
+        ]
+      },
+      "unit": "object",
+      "label": "Pre-Action Protocol for Debt Claims: scope and time to reply to the Letter of Claim",
+      "source": "https://www.justice.gov.uk/courts/procedure-rules/civil/protocol/pre-action-protocol-for-debt-claims",
+      "source_title": "Pre-Action Protocol for Debt Claims - justice.gov.uk",
+      "more_sources": [
+        {
+          "source": "https://www.justice.gov.uk/courts/procedure-rules/civil/pdf/protocols/debt-pap.pdf",
+          "source_title": "Pre-Action Protocol for Debt Claims (PDF) - justice.gov.uk"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-10-22",
+      "note": "Applies to any business, sole traders included, claiming a debt from an individual, sole traders included; not to business-to-business debts unless the debtor is a sole trader. The Letter of Claim encloses the Information Sheet and Reply Form (Annex 1) and a Financial Statement form (Annex 2). If the debtor does not reply within 30 days of the date of the Letter of Claim, the creditor may start proceedings; a debtor who says they are seeking debt advice should be given a reasonable time, and proceedings should not start until at least 30 days after the Reply Form or requested documents are provided. In force since 1 October 2017."
+    },
+    "uk_pre_action_conduct": {
+      "value": {
+        "straightforward_reply_days": 14,
+        "complex_reply_max_months": 3
+      },
+      "unit": "object",
+      "label": "Practice Direction - Pre-Action Conduct and Protocols: time for the defendant to respond (no specific protocol)",
+      "source": "https://www.justice.gov.uk/courts/procedure-rules/civil/rules/pd_pre-action_conduct",
+      "source_title": "Practice Direction - Pre-Action Conduct and Protocols - justice.gov.uk",
+      "confidence": "medium",
+      "verified_on": "2026-10-22",
+      "note": "Paragraph 6: the claimant writes to the defendant with concise details of the claim; the defendant responds within a reasonable time: 14 days in a straightforward case and no more than 3 months in a very complex one. Applies to claims against a company or LLP (no specific protocol). Wording confirmed through a 2025 costs judgment ([2025] EWHC 984 (SCCO)) and practitioner summaries; the PD page itself was only read in part."
+    },
+    "uk_claim_response_deadlines": {
+      "value": {
+        "respond_days": 14,
+        "with_acknowledgment_days": 28
+      },
+      "unit": "object",
+      "label": "Time for the defendant to respond to a money claim after service (England and Wales)",
+      "source": "https://www.gov.uk/respond-to-court-claim-for-money",
+      "source_title": "Respond to a court claim for money - GOV.UK",
+      "more_sources": [
+        {
+          "source": "https://www.justice.gov.uk/courts/procedure-rules/civil/rules/part10",
+          "source_title": "Civil Procedure Rules, Part 10 (acknowledgment of service) - justice.gov.uk"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-10-22",
+      "note": "The defendant has 14 days after service to respond (pay, admit, defend); with an acknowledgment of service, 28 days after service to file a defence. If the defendant doesn't respond in time, the claimant can request judgment (default judgment)."
+    },
+    "uk_enforcement_options": {
+      "value": [
+        "warrant of control",
+        "attachment of earnings order",
+        "charging order",
+        "third party debt order"
+      ],
+      "unit": "list",
+      "label": "Ways to enforce a County Court judgment for money (England and Wales)",
+      "source": "https://www.gov.uk/make-court-claim-for-money/enforce-a-judgment",
+      "source_title": "Make a court claim for money: Enforce a judgment - GOV.UK",
+      "confidence": "high",
+      "verified_on": "2026-10-22",
+      "note": "Each method has its own court fee. Enforcement fees are not used by the tool: the figures found after the 13 July 2026 fee changes disagree between sources."
+    },
+    "uk_limitation_simple_contract": {
+      "value": {
+        "years": 6
+      },
+      "unit": "object",
+      "label": "Limitation Act 1980, s.5: time limit for an action founded on simple contract (England and Wales)",
+      "source": "https://www.legislation.gov.uk/ukpga/1980/58/section/5",
+      "source_title": "Limitation Act 1980, section 5 - legislation.gov.uk",
+      "more_sources": [
+        {
+          "source": "https://www.legislation.gov.uk/ukpga/1980/58/section/29",
+          "source_title": "Limitation Act 1980, section 29 - legislation.gov.uk"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-10-22",
+      "note": "'An action founded on simple contract shall not be brought after the expiration of six years from the date on which the cause of action accrued.' For an unpaid invoice, the cause of action usually accrues when payment falls due. A part payment, or an acknowledgment in writing signed by the debtor, restarts the period from its date (s.29(5) and s.30(1)); a period can be extended repeatedly, but a right once barred is not revived (s.29(7)). Scotland and Northern Ireland have their own rules (not used by the tool)."
+    },
+    "uk_court_interest_other_debts": {
+      "value": 0.08,
+      "unit": "rate",
+      "label": "Interest usually claimed on a money claim when the Late Payment Act doesn't apply (simple interest, a year)",
+      "source": "https://www.gov.uk/make-court-claim-for-money/work-out-interest",
+      "source_title": "Make a court claim for money: Work out interest - GOV.UK",
+      "confidence": "medium",
+      "verified_on": "2026-10-22",
+      "note": "GOV.UK: for a late commercial payment (business to business), claim statutory interest under the Late Payment Act; for other types of debt, the rate is usually 8%. Daily interest = amount x 0.08 / 365, multiplied by the days the debt has been overdue. A rate agreed in the contract applies instead. Read through search excerpts."
+    },
+    "uk_scotland_simple_procedure": {
+      "value": {
+        "limit": 5000
+      },
+      "unit": "object",
+      "label": "Scotland: simple procedure in the sheriff court, for money claims of £5,000 or less",
+      "source": "https://www.scotcourts.gov.uk/taking-action/simple-procedure/how-to-make-a-claim-with-simple-procedure/",
+      "source_title": "How to make a claim with simple procedure - Scottish Courts and Tribunals",
+      "confidence": "high",
+      "verified_on": "2026-10-22",
+      "note": "Simple procedure (since 28 November 2016) covers money claims up to £5,000; above £5,000, an ordinary cause action in the sheriff court."
+    },
+    "uk_ni_small_claims": {
+      "value": {
+        "limit": 5000,
+        "since": "2022-10-03"
+      },
+      "unit": "object",
+      "label": "Northern Ireland: small claims limit in the county court",
+      "source": "https://www.justice-ni.gov.uk/news/long-increases-small-claims-court-limit",
+      "source_title": "Long increases small claims court limit - Department of Justice (Northern Ireland)",
+      "confidence": "high",
+      "verified_on": "2026-10-22",
+      "note": "Raised from £3,000 to £5,000 on 3 October 2022 (County Courts (Financial Limits) Order (Northern Ireland) 2022). Some claims are excluded (personal injury, defamation, title to land). Fees not used by the tool (the published fee table predates the increase)."
+    },
+    "uk_small_claims_mediation": {
+      "value": {
+        "claims_up_to": 10000,
+        "session_hours": 1,
+        "free": true,
+        "required_since": "2024-05-22"
+      },
+      "unit": "object",
+      "label": "Small Claims Mediation Service: required free mediation for defended money claims up to £10,000 (England and Wales)",
+      "source": "https://www.gov.uk/guidance/small-claims-mediation-service",
+      "source_title": "Small claims mediation service - GOV.UK",
+      "more_sources": [
+        {
+          "source": "https://www.gov.uk/government/news/faster-resolution-for-small-claims-as-mediation-baked-into-courts-process",
+          "source_title": "Faster resolution for small claims as mediation baked into courts process - GOV.UK"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-10-22",
+      "note": "Defended claims allocated to the small claims track: a free one-hour telephone mediation appointment with HMCTS staff, who speak to each party separately. Since 22 May 2024, parties in money claims up to £10,000 must take part; if there's no agreement, the case goes to a judge; not attending can lead to sanctions (costs, or the claim decided against the absent party)."
     }
   },
   "open_questions": [
@@ -1438,6 +1713,9 @@
     "Payments on account, source deduction test: GOV.UK and SALF303 say 'more than 80%', SAM121490 says '80 per cent or more'. The engine applies >= 0.8 (same result except at exactly 80%); to confirm on the legislation (TMA 1970 s59A and the 1996 regulations).",
     "National Insurance annual maximum (employed and self-employed): formula of SSCR 2001 reg. 100 to source and model in tax-uk.js (Class 4 overstated today for people with a salary above the primary threshold).",
     "Schedule 4A paragraph 16 'similar services': do design, copywriting, translation or software development supplied to a private client outside the UK count as consultancy-type services (outside the scope) or follow the general rule (UK VAT)? The overseas assistant answers 'it depends' for these services.",
-    "Flat Rate Scheme (VAT Notice 733): are supplies outside the scope of UK VAT part of flat rate turnover? Exempt and zero-rated supplies are included; outside-the-scope supplies were not confirmed. The overseas assistant tells flat rate users to check Notice 733."
+    "Flat Rate Scheme (VAT Notice 733): are supplies outside the scope of UK VAT part of flat rate turnover? Exempt and zero-rated supplies are included; outside-the-scope supplies were not confirmed. The overseas assistant tells flat rate users to check Notice 733.",
+    "Money Claim Online: does the 'less than £100,000' condition count interest? The small claims tool compares the total claimed, interest included (the cautious reading); to confirm on PD 7E.",
+    "Small claims hearing fee (fee 2.1): is the band based on the amount claimed including interest, like the issue fee? The tool uses the total claimed; to confirm on the Civil Proceedings Fees Order 2008.",
+    "County Court enforcement fees after the 13 July 2026 increase (warrant of control, attachment of earnings, charging order, third party debt order): secondary sources disagree; not shown until the EX50 can be read."
   ]
 }

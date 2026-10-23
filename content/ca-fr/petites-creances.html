@@ -1,0 +1,169 @@
+<!--{
+  "id": "court",
+  "slug": "petites-creances/",
+  "title": "Petites créances au Canada : plafonds et délais par province",
+  "description": "Trouvez le tribunal des petites créances, son plafond et le délai pour poursuivre un client qui ne paie pas sa facture, dans chaque province et territoire.",
+  "menu": "Petites créances",
+  "icon": "⚖️",
+  "blurb": "Le tribunal, son plafond et le délai pour poursuivre, province par province.",
+  "app": "Petites créances au Canada : tribunal et plafond",
+  "scripts": ["engines/court-ca.js", "tools/ca-court.js"],
+  "rules": "ca",
+  "sources": ["ca_small_claims_limits", "ca_limitation_periods"],
+  "priority": 0.8,
+  "faq": [
+    ["Où poursuivre un client qui ne paie pas sa facture ?", "Aux petites créances d'une province ou d'un territoire, en général là où votre client habite ou exerce ses activités, ou là où les faits se sont produits : les règles de chaque tribunal précisent où déposer. Chacun a son plafond, de 15 000 $ au Québec à 100 000 $ en Alberta."],
+    ["Quel est le plafond des petites créances dans chaque province ?", "Ontario 50 000 $ ; Québec 15 000 $ ; Colombie-Britannique 35 000 $, les réclamations jusqu'à 5 000 $ allant d'abord au Tribunal de résolution civile ; Alberta 100 000 $ ; Saskatchewan 50 000 $ ; Manitoba 20 000 $ ; Nouvelle-Écosse 25 000 $ ; Nouveau-Brunswick 20 000 $ ; Île-du-Prince-Édouard 16 000 $ ; Terre-Neuve-et-Labrador 25 000 $ ; Yukon 25 000 $ ; Territoires du Nord-Ouest 35 000 $. Dans la plupart des provinces, les intérêts et les frais ne comptent pas dans le plafond."],
+    ["Faut-il un avocat aux petites créances ?", "Non : les petites créances sont conçues pour que chacun se représente seul. Au Québec, les parties se représentent elles-mêmes, et une entreprise est représentée par un dirigeant ou un employé, pas par un avocat."],
+    ["Combien de temps ai-je pour poursuivre un client ?", "En général, 2 ans à partir du moment où vous avez connu, ou auriez dû connaître, la réclamation en Ontario, en Colombie-Britannique, en Alberta, en Saskatchewan, au Manitoba, en Nouvelle-Écosse et au Nouveau-Brunswick ; 3 ans au Québec ; 6 ans à l'Île-du-Prince-Édouard, à Terre-Neuve-et-Labrador, au Yukon et dans les Territoires du Nord-Ouest. N'attendez pas : par prudence, comptez à partir de l'échéance de la facture."],
+    ["Et si mon client me doit plus que le plafond ?", "Dans la plupart des provinces, vous pouvez renoncer à la partie qui dépasse le plafond pour rester aux petites créances, et vous ne pourrez plus la réclamer ensuite. Sinon, poursuivez pour le montant complet devant un tribunal supérieur, où un avocat est en général utile."]
+  ]
+}-->
+<script type="application/json" id="court-ca-data">
+{
+  "courts": {
+    "ON": "Cour des petites créances (Cour supérieure de justice)",
+    "QC": "Cour du Québec, Division des petites créances",
+    "BC": "Cour provinciale de la Colombie-Britannique, petites créances",
+    "AB": "Cour de justice de l'Alberta, division civile",
+    "SK": "Cour provinciale de la Saskatchewan, petites créances",
+    "MB": "Cour du Banc du Roi du Manitoba, petites créances",
+    "NS": "Cour des petites créances de la Nouvelle-Écosse",
+    "NB": "Cour des petites créances du Nouveau-Brunswick",
+    "PE": "Cour suprême de l'Île-du-Prince-Édouard, section des petites créances",
+    "NL": "Cour provinciale de Terre-Neuve-et-Labrador, petites créances",
+    "YT": "Cour des petites créances du Yukon",
+    "NT": "Cour territoriale des Territoires du Nord-Ouest, réclamations civiles",
+    "NU": "Cour de justice du Nunavut"
+  },
+  "tribunal": "Tribunal de résolution civile (en ligne)",
+  "notes": {
+    "ON": "Le plafond ne compte ni les intérêts ni les frais. Au-delà de 50 000 $, vous pouvez renoncer à l'excédent pour rester à la Cour des petites créances, ou poursuivre devant la Cour supérieure de justice. La demande peut se déposer en ligne, sauf à Toronto.",
+    "QC": "Les intérêts ne comptent pas dans le plafond, et une créance plus élevée ne peut pas être divisée. Les parties se représentent elles-mêmes, sans avocat ; une personne morale, une société ou une association ne peut poursuivre que si elle a eu au plus 10 employés dans les 12 mois précédant la demande. Envoyez d'abord une mise en demeure : un délai de 10 jours est normalement raisonnable. Une fois contestées, les demandes de 5 000 $ ou moins passent par une médiation obligatoire.",
+    "BC": "Les réclamations jusqu'à 5 000 $ vont d'abord au Tribunal de résolution civile, en ligne ; de 5 001 $ à 35 000 $, à la Cour provinciale. Les intérêts et les frais ne comptent pas. Au-delà de 35 000 $, vous pouvez abandonner l'excédent (sans pouvoir le réclamer ensuite) ou poursuivre devant la Cour suprême.",
+    "AB": "Vous pouvez réclamer jusqu'à 100 000 $, plus les intérêts et les frais. Au-delà, vous pouvez abandonner l'excédent ou poursuivre devant la Cour du Banc du Roi.",
+    "SK": "Au-delà de 50 000 $, vous pouvez renoncer à l'excédent pour rester aux petites créances, ou poursuivre devant la Cour du Banc du Roi.",
+    "MB": "Le plafond ne compte ni les intérêts, ni les frais, ni les débours.",
+    "NS": "Le plafond ne compte ni les intérêts ni les frais. Vous n'avez pas besoin d'avocat.",
+    "NB": "Une réclamation de plus de 20 000 $ n'est acceptée que si vous abandonnez l'excédent.",
+    "PE": "Au-delà de 16 000 $, vous pouvez abandonner l'excédent pour rester à la section des petites créances.",
+    "NL": "Le plafond vise toutes les réclamations de votre demande, avant intérêts et frais, et une créance ne peut pas être divisée. Au-delà de 25 000 $, renoncez à l'excédent ou poursuivez devant la Cour suprême.",
+    "YT": "Au-delà de 25 000 $, vous pouvez renoncer à l'excédent, mais pas diviser une dette plus élevée en plusieurs demandes.",
+    "NT": "Le plafond ne compte ni les intérêts ni les frais. Chaque réclamation civile passe par une séance de médiation obligatoire avec un juge.",
+    "NU": "Nous n'avons pas pu confirmer le plafond actuel auprès d'une source officielle : vérifiez-le auprès du tribunal avant de déposer votre demande."
+  },
+  "verdicts": {
+    "tribunal": "Tribunal de résolution civile",
+    "small_claims": "Petites créances",
+    "above_limit": "Au-delà du plafond",
+    "unknown": "À vérifier auprès du tribunal"
+  },
+  "subs": {
+    "tribunal": "Les réclamations jusqu'à {tribunal} vont d'abord au Tribunal de résolution civile, en ligne.",
+    "small_claims": "Votre réclamation tient sous le plafond de {limit}.",
+    "above_limit": "Le plafond est de {limit} : voyez ci-dessous comment procéder.",
+    "unknown": "Le plafond actuel n'est pas confirmé ici."
+  },
+  "limitation": {
+    "discovery": "En général, {years} ans à partir du moment où vous avez connu, ou auriez dû connaître, la réclamation. N'attendez pas : par prudence, comptez à partir de l'échéance de la facture.",
+    "right_of_action": "En général, {years} ans à partir de la naissance du droit d'agir, d'ordinaire l'échéance de la facture.",
+    "unknown": "Non confirmé ici : renseignez-vous auprès du tribunal ou d'un avocat."
+  },
+  "links": {
+    "ON": "https://www.ontario.ca/page/suing-someone-small-claims-court",
+    "QC": "https://www.quebec.ca/justice-et-etat-civil/petites-creances",
+    "BC": "https://provincialcourt.bc.ca/navigating-court-case/small-claims",
+    "AB": "https://albertacourts.ca/cj/areas-of-law/civil",
+    "SK": "https://sasklawcourts.ca/provincial-court/small-claims-court/",
+    "MB": "https://residents.gov.mb.ca/reference.html?d=details&program_id=115",
+    "NS": "https://www.courts.ns.ca/courts/small-claims-court",
+    "NB": "https://www.courtsnb-coursnb.ca/content/cour/en/small-claims-court.html",
+    "PE": "https://www.courts.pe.ca/index.php/supreme-court",
+    "NL": "https://www.court.nl.ca/provincial/courts/small-claims-court/",
+    "YT": "https://www.yukoncourts.ca/en/small-claims-court",
+    "NT": "https://www.nwtcourts.ca/en/courts/territorial-court/civil-claims/",
+    "NU": "https://www.nunavutcourts.ca/"
+  }
+}
+</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Gratuit · Toutes les provinces et territoires</span>
+    <h1>Petites créances : réclamer une facture impayée</h1>
+    <p class="lead">Votre client ne paie toujours pas malgré vos relances ? Trouvez le tribunal où réclamer, son plafond, le délai pour poursuivre et le déroulement d'une demande aux petites créances.</p>
+    <ul class="trust"><li>13 provinces et territoires</li><li>Plafonds vérifiés en octobre 2026</li><li>Liens vers les tribunaux</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="court-form" onsubmit="return false">
+      <h2>Votre réclamation</h2>
+      <div class="fields">
+        <div class="field full"><label for="c-province">Province ou territoire où vous déposez</label>
+          <select id="c-province" name="province" aria-describedby="c-province-hint" data-save>
+            <option value="ON">Ontario</option>
+            <option value="QC" selected>Québec</option>
+            <option value="BC">Colombie-Britannique</option>
+            <option value="AB">Alberta</option>
+            <option value="SK">Saskatchewan</option>
+            <option value="MB">Manitoba</option>
+            <option value="NS">Nouvelle-Écosse</option>
+            <option value="NB">Nouveau-Brunswick</option>
+            <option value="PE">Île-du-Prince-Édouard</option>
+            <option value="NL">Terre-Neuve-et-Labrador</option>
+            <option value="YT">Yukon</option>
+            <option value="NT">Territoires du Nord-Ouest</option>
+            <option value="NU">Nunavut</option>
+          </select>
+          <span class="hint" id="c-province-hint">En général, là où votre client habite ou exerce ses activités, ou là où les faits se sont produits.</span></div>
+        <div class="field full"><label for="c-amount">Montant réclamé</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="c-amount" name="amount" value="8 000" aria-describedby="c-amount-hint" data-save><span>$</span></div>
+          <span class="hint" id="c-amount-hint">La facture impayée, taxes comprises, sans les intérêts ni les frais.</span></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <h2 class="sr-only">Résultat</h2>
+      <div class="result-hero" role="status" aria-atomic="true">
+        <div class="label">Où réclamer</div>
+        <div class="big" id="c-verdict" style="font-size: clamp(1.7rem, 3.6vw, 2.3rem);">–</div>
+        <div class="sub" id="c-sub">–</div>
+      </div>
+      <ul class="result-list result-wrap card" style="padding: 6px 18px;">
+        <li><span>Tribunal</span><b id="c-court">–</b></li>
+        <li><span>Plafond des petites créances</span><b id="c-limit">–</b></li>
+      </ul>
+      <div class="card" style="margin-top: 16px; padding: 18px;">
+        <h3 style="font-size: 1rem; margin-bottom: 8px;">Bon à savoir : <span id="c-name">Québec</span></h3>
+        <p id="c-note" style="margin: 0;">–</p>
+        <p class="small" style="margin: 10px 0 0;"><a id="c-link" href="https://www.quebec.ca/justice-et-etat-civil/petites-creances" rel="noopener">Page officielle des petites créances</a></p>
+      </div>
+      <div class="card" style="margin-top: 16px; padding: 18px;">
+        <h3 style="font-size: 1rem; margin-bottom: 8px;">Délai pour poursuivre</h3>
+        <p id="c-time" style="margin: 0;">–</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>Le déroulement d'une demande</h2>
+  <ol>
+    <li><strong>Mise en demeure.</strong> Envoyez une dernière demande écrite avec le montant, un délai et la suite que vous donnerez : le <a href="{{link:reminder}}">générateur de relances</a> la rédige. Au Québec, elle est recommandée, et parfois obligatoire.</li>
+    <li><strong>Choisir le tribunal.</strong> En général, dans la province ou le territoire où votre client habite ou exerce ses activités, ou là où les faits se sont produits : les règles de chaque tribunal précisent où déposer.</li>
+    <li><strong>Déposer la demande</strong> et payer les frais, qui dépendent de la province et du montant. Certains tribunaux acceptent les demandes en ligne, comme le portail de dépôt électronique des petites créances de l'Ontario et le Tribunal de résolution civile de la Colombie-Britannique.</li>
+    <li><strong>Signifier la demande.</strong> La demande doit être remise à votre client de la façon prévue par les règles du tribunal ; il a ensuite un délai fixé pour se défendre.</li>
+    <li><strong>Règlement ou médiation.</strong> Certains tribunaux tiennent une conférence de règlement ou une médiation avant le procès ; elle est obligatoire au Québec pour les demandes de 5 000 $ ou moins et dans les Territoires du Nord-Ouest.</li>
+    <li><strong>Audience et jugement.</strong> Un juge entend les deux parties et tranche.</li>
+    <li><strong>Exécution.</strong> Si votre client ne paie toujours pas, demandez au tribunal de faire exécuter le jugement, par exemple par une saisie sur salaire, sur un compte bancaire ou sur des biens.</li>
+  </ol>
+  <h2>Bon à savoir</h2>
+  <ul>
+    <li><strong>Intérêts</strong> : réclamez le taux prévu à votre contrat, s'il y en a un. Le <a href="{{link:latefee}}">calculateur d'intérêts de retard</a> fait le calcul.</li>
+    <li><strong>Gardez vos preuves</strong> : le contrat ou la soumission acceptée, la facture, vos relances et les réponses de votre client.</li>
+    <li><strong>N'attendez pas</strong> : dans la plupart des provinces, vous n'avez que 2 ans pour poursuivre.</li>
+  </ul>
+  <p class="small muted">Information générale, tirée des pages officielles de chaque tribunal et des lois sur la prescription de chaque province. Pour une réclamation importante ou complexe, consultez un avocat ou le service d'information juridique de votre province.</p>
+</section>
