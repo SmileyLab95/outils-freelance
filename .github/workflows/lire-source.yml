@@ -1,0 +1,35 @@
+# Lecture d'une source officielle (CNIL, Légifrance, BOFiP…) inaccessible depuis l'environnement de travail, pour
+# vérifier une règle avant de la publier (documentation/04-methode-de-travail.md). Résultat dans le journal.
+name: Lire une source officielle
+
+on:
+  workflow_dispatch:
+    inputs:
+      adresse:
+        description: "Adresse https d'une page ou d'un PDF officiel"
+        type: string
+        required: true
+      chercher:
+        description: "Mots à chercher (facultatif, séparés par |)"
+        type: string
+        default: ""
+
+permissions:
+  contents: read
+
+jobs:
+  lire:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Installer la lecture des PDF
+        run: python -m pip install --quiet pypdf==5.4.0
+      - name: Lire
+        env:
+          ADRESSE: ${{ inputs.adresse }}
+          CHERCHER: ${{ inputs.chercher }}
+        run: python scripts/lire_source.py "$ADRESSE" "$CHERCHER"
