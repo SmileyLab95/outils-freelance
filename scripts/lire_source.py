@@ -113,6 +113,8 @@ def main():
         sys.exit(f"Lecture impossible : {e}")
     if not autorise(final):
         sys.exit(f"Redirection vers une adresse non officielle refusée : {final}")
+    if statut != 200 or not contenu.strip():
+        sys.exit(f"Réponse {statut} sans contenu lisible pour {url} (le site filtre peut-être les lectures automatiques).")
     txt = texte(contenu, type_contenu.lower())
     print(f"Source : {url}")
     if final != url:
