@@ -73,18 +73,24 @@ def texte(contenu, type_contenu):
     return re.sub(r"\n{3,}", "\n\n", "\n".join(lignes)).strip()
 
 
+def _motif(mot):
+    """Motif d'un mot cherché : majuscules ignorées, apostrophe droite ou typographique indifférente."""
+    return re.compile("".join("['’]" if c in "'’" else re.escape(c) for c in mot), flags=re.IGNORECASE)
+
+
 def passages(txt, mots):
-    """Passages autour de chaque mot cherché (sans tenir compte des majuscules), chevauchements fusionnés."""
+    """Passages autour de chaque mot cherché, chevauchements fusionnés."""
     out = []
     for mot in mots:
+        motif = _motif(mot)
         zones = []
-        for m in re.finditer(re.escape(mot), txt, flags=re.IGNORECASE):
+        for m in motif.finditer(txt):
             debut, fin = max(0, m.start() - PASSAGE), min(len(txt), m.end() + PASSAGE)
             if zones and debut <= zones[-1][1]:
                 zones[-1][1] = fin
             else:
                 zones.append([debut, fin])
-        out.append((mot, len(re.findall(re.escape(mot), txt, flags=re.IGNORECASE)), [txt[a:b] for a, b in zones[:PASSAGES_PAR_MOT]]))
+        out.append((mot, len(motif.findall(txt)), [txt[a:b] for a, b in zones[:PASSAGES_PAR_MOT]]))
     return out
 
 
