@@ -1,5 +1,26 @@
 # Journal des modifications
 
+## 2026-10-28 — Livre des recettes totalisé par trimestre ; lecture des sources officielles
+
+- Espace, **livre des recettes** : total à la fin de chaque trimestre (le trimestre en cours est signalé) et de
+  l'année, comme le demande le BOFiP (BOI-BIC-DECLA-30-30, § 30 : « totalisé à la fin du trimestre et de l'année »).
+  Un trimestre sans encaissement affiche 0,00 € ; les trimestres finis avant le début de l'activité sont omis.
+- Nouvel outil de travail **« Lire une source officielle »** (GitHub Actions, à la demande) : lit une page ou un PDF
+  d'un site officiel que l'environnement de travail n'atteint pas (CNIL, BOFiP…) et affiche les passages cherchés,
+  avec la date et l'empreinte du fichier ; sites officiels seulement, lecture seule. Légifrance et EUR-Lex refusent
+  les lectures automatiques : on lit alors la fiche officielle qui cite le texte.
+- Règles relues en entier avec cet outil : livre des recettes et registre des achats (BOFiP) ; nouvelles règles pour
+  le module Prospects à venir : durée de conservation des données d'un prospect (référentiel de la CNIL : 3 ans après
+  la collecte ou le dernier contact émanant du prospect) et prospection par email (fiche de la CNIL du 10 juin 2026).
+  Spécification du module ([38](documentation/38-prospects.md)) : étapes, relances, échanges, conversion en client et
+  en devis ; liste d'opposition qui ne garde que des empreintes (fiche de la CNIL sur la liste repoussoir) ; règles de
+  la prospection par téléphone en vigueur depuis le 11 août 2026.
+- L'outil de lecture liste aussi les liens de la page dont le texte contient un mot cherché (pour trouver l'adresse
+  d'une fiche citée) ; tests du script.
+- Décision D36. Tests : un test unitaire de plus (7 cas, dont l'arrondi au centime et le début d'activité), toutes
+  les erreurs réintroduites détectées ; suite complète (409 tests unitaires, 29 tests serveur, 3 362 vérifications
+  navigateur, dont le livre des recettes totalisé par trimestre).
+
 ## 2026-10-23 — Temps passé (Espace entrepreneur)
 
 - Nouvel onglet **Temps** de l'Espace : saisie rapide en heures ou en jours (« 1h30 », « 1:30 », « 45 min », « 0,5 »),

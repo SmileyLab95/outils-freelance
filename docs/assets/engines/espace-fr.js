@@ -226,6 +226,24 @@
     return rows.sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : (a.ref < b.ref ? -1 : 1); });
   }
 
+  /**
+   * Totaux du livre des recettes à la fin de chaque trimestre de l'année (BOFiP, BOI-BIC-DECLA-30-30, § 30 : le livre
+   * est totalisé à la fin du trimestre et de l'année). Trimestres commencés à la date du jour, sauf ceux finis avant le
+   * début d'activité ; un trimestre qui a des encaissements est toujours compté. open : trimestre en cours.
+   */
+  function ledgerQuarters(rows, year, today, startDate) {
+    var out = [];
+    for (var n = 1; n <= 4; n++) {
+      var p = period(year + "-T" + n);
+      var list = (rows || []).filter(function (r) { return r.date >= p.start && r.date <= p.end; });
+      var started = today >= p.start && !(startDate && startDate > p.end);
+      if (!list.length && !started) continue;
+      out.push({ key: p.key, label: p.label, start: p.start, end: p.end, count: list.length, open: today >= p.start && today <= p.end,
+                 total: round2(list.reduce(function (s, r) { return s + r.amount; }, 0)) });
+    }
+    return out;
+  }
+
   function cashed(documents, from, to) {
     return round2(ledger(documents, from, to).reduce(function (s, r) { return s + r.amount; }, 0));
   }
@@ -660,7 +678,7 @@
            total: total, payments: payments, paidAmount: paidAmount, credited: credited, balance: balance, dueDate: dueDate,
            series: series, seriesPrefix: seriesPrefix, nextNumber: nextNumber, continuation: continuation,
            checkIssue: checkIssue, issue: issue, state: state, email: email, fromGenerator: fromGenerator,
-           checkPayment: checkPayment, ledger: ledger, cashed: cashed, period: period, acreEnd: acreEnd, rates: rates,
+           checkPayment: checkPayment, ledger: ledger, ledgerQuarters: ledgerQuarters, cashed: cashed, period: period, acreEnd: acreEnd, rates: rates,
            nextDeclaration: nextDeclaration, thresholds: thresholds, clientTotals: clientTotals,
            invoiceFromQuote: invoiceFromQuote, creditFromInvoice: creditFromInvoice, duplicate: duplicate, ledgerCSV: ledgerCSV,
            purchasesRequired: purchasesRequired, expenseRows: expenseRows, checkExpense: checkExpense, expensesCSV: expensesCSV,

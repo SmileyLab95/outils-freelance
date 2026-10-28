@@ -764,6 +764,8 @@ a.country-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg)
 .ledger th { font-size: .75rem; text-transform: uppercase; letter-spacing: .06em; color: var(--faint); }
 .ledger .num { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
 .ledger tfoot td { font-weight: 750; border-bottom: 0; }
+.ledger tr.ledger-subtotal { background: var(--bg); }
+.ledger .ledger-subtotal td { font-weight: 700; }
 .espace .gauge-head { flex-wrap: wrap; }
 /* Temps passé (documentation/37-temps-passe.md) */
 .time-billable { align-self: end; padding-bottom: 10px; }
@@ -798,6 +800,7 @@ a.country-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg)
   .ledger .c-method, .ledger .c-ref { font-size: .82rem; color: var(--muted); }
   .ledger .c-ref { grid-column: 2; text-align: right; }
   .ledger tfoot tr { border-bottom: 0; }
+  .ledger tr.ledger-subtotal { padding: 10px 8px; }
   .ledger tfoot td[colspan] { grid-column: 1; }
 }
 .espace-editor .form-card h3 { margin-top: 18px; }

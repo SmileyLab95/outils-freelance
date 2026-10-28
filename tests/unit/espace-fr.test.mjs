@@ -227,3 +227,22 @@ test("schéma 2 : un encaissement marqué supprimé (synchronisation) ne compte 
   assert.equal(E.state(credit, "2026-10-31", docs), "refunded");
   assert.match(E.email("send", credit, docs, { name: "Camille" }, "2026-10-31", fmt).body, /remboursée le 27\/10\/2026\./);
 });
+
+test("livre des recettes : totaux à la fin de chaque trimestre (BOFiP, BOI-BIC-DECLA-30-30, § 30)", () => {
+  const rows = [{ date: "2026-01-01", amount: 100 }, { date: "2026-03-31", amount: 20 }, { date: "2026-04-01", amount: 0.1 },
+                { date: "2026-06-30", amount: 0.2 }, { date: "2026-09-30", amount: 50 }, { date: "2026-12-31", amount: 7 }];
+  const q = E.ledgerQuarters(rows, "2026", "2026-10-20");
+  assert.deepEqual(q.map((x) => [x.label, x.count, x.total, x.open]),
+    [["1er trimestre 2026", 2, 120, false], ["2e trimestre 2026", 2, 0.3, false], ["3e trimestre 2026", 1, 50, false], ["4e trimestre 2026", 1, 7, true]],
+    "0,1 + 0,2 = 0,30 € au centime");
+  assert.deepEqual([q[0].start, q[0].end, q[3].end], ["2026-01-01", "2026-03-31", "2026-12-31"]);
+  assert.deepEqual(E.ledgerQuarters([], "2026", "2026-05-10").map((x) => [x.key, x.total, x.open]), [["2026-T1", 0, false], ["2026-T2", 0, true]],
+    "trimestres commencés, même sans encaissement ; trimestres à venir omis");
+  assert.deepEqual(E.ledgerQuarters([], "2026", "2026-11-02", "2026-07-15").map((x) => x.key), ["2026-T3", "2026-T4"], "trimestres finis avant le début d'activité omis");
+  assert.deepEqual(E.ledgerQuarters([{ date: "2026-02-01", amount: 5 }], "2026", "2026-11-02", "2026-07-15").map((x) => x.key), ["2026-T1", "2026-T3", "2026-T4"],
+    "un trimestre qui a des encaissements est toujours compté");
+  assert.deepEqual(E.ledgerQuarters([{ date: "2026-11-01", amount: 5 }], "2026", "2026-05-10").map((x) => [x.key, x.open]),
+    [["2026-T1", false], ["2026-T2", true], ["2026-T4", false]], "trimestre à venir avec un encaissement : compté, pas en cours");
+  assert.deepEqual(E.ledgerQuarters([], "2025", "2026-10-20").map((x) => x.open), [false, false, false, false], "année passée : quatre trimestres clos");
+  assert.deepEqual(E.ledgerQuarters([], "2026", "2026-07-01").map((x) => x.key).pop(), "2026-T3", "premier jour du trimestre");
+});

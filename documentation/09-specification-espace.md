@@ -49,7 +49,7 @@ connexion bancaire, autres pays.
 | Numérotation unique, chronologique et continue, séries possibles | Numéro attribué **à l'émission** seulement : `{préfixe}{année}-{rang sur 3 chiffres}` (F2026-001, D2026-001, A2026-001), une série par type et par année. La date d'un document émis ne peut pas être antérieure à celle du dernier document émis de la même série. | CGI, ann. II, art. 242 nonies A |
 | Une facture émise ne se modifie ni ne se supprime | Document émis verrouillé ; correction par **avoir** ; suppression possible des brouillons uniquement. | Même source ; pratique administrative |
 | Mentions obligatoires | Moteur commun `engines/invoice-fr.js` (le même que le générateur public). Les coordonnées de l'émetteur et du client sont **figées à l'émission**. | `data/rules/fr.json` (`mentions_obligatoires_facture`, `mention_franchise_tva`…) |
-| Livre des recettes du micro-entrepreneur | Chronologique, par date d'encaissement : date, client, nature, montant, moyen de paiement, référence de la facture. | CGI, art. 50-0 et 102 ter ; `livre_recettes_micro` |
+| Livre des recettes du micro-entrepreneur | Chronologique, par date d'encaissement : date, client, nature, montant, moyen de paiement, référence de la facture ; **total à la fin de chaque trimestre** (trimestre en cours signalé) **et de l'année** (ajouté le 24/10/2026). | CGI, art. 50-0 et 102 ter ; BOFiP, BOI-BIC-DECLA-30-30, § 30 ; `livre_recettes_micro` |
 | Déclaration Urssaf sur le chiffre d'affaires encaissé | Période mensuelle ou trimestrielle selon le profil ; montant = encaissements de la période ; cotisations = montant × (taux + formation professionnelle), versement libératoire en plus si choisi ; taux ACRE pendant la période d'ACRE. Date limite lue dans le calendrier fiscal (report au jour ouvré). | `micro_activities`, `acre_conditions`, `data/calendars/fr.json` |
 | Plafond de chiffre d'affaires | Encaissements de l'année civile comparés au plafond de l'activité. | `micro_activities` |
 | Franchise en base de TVA | Encaissements de l'année comparés au seuil et au seuil majoré de l'activité (si le profil est en franchise). | `micro_activities`, `tva_franchise_seuils` |
@@ -105,7 +105,7 @@ navigateur fonctionnel).
 | Documents `#/documents` | Liste filtrable (tous, factures, devis, avoirs, brouillons, à encaisser) et recherche ; numéro, date, client, montant, statut | Ouvrir, créer |
 | Document `#/documents/<id>` | Formulaire à gauche, aperçu à droite (identique au PDF) | Enregistrer, émettre, PDF, dupliquer, supprimer (brouillon), paiement, avoir, conversion du devis, accepté/refusé, relancer |
 | Clients `#/clients` | Liste avec chiffre d'affaires encaissé et reste à encaisser par client | Créer, modifier, archiver, nouvelle facture pour ce client |
-| Recettes `#/recettes` | Livre des recettes de l'année choisie, total | Export CSV, impression |
+| Recettes `#/recettes` | Livre des recettes de l'année choisie, total de chaque trimestre et de l'année | Export CSV, impression |
 | Échéances `#/echeances` | Échéances des 12 prochains mois selon le profil | Lien vers le calendrier complet et l'export agenda |
 | Réglages `#/reglages` | Profil, numérotation, valeurs par défaut ; sauvegarde | Enregistrer, exporter, importer, tout effacer |
 
@@ -141,7 +141,7 @@ navigateur fonctionnel).
 | A3 | Une facture émise ne peut plus être modifiée ni supprimée ; un brouillon peut l'être. |
 | A4 | Émettre un document daté avant le dernier document émis de sa série est refusé avec un message clair. |
 | A5 | Un paiement partiel puis le solde font passer la facture de « à payer » à « payée partiellement » puis « payée ». |
-| A6 | Le livre des recettes liste chaque encaissement par date, avec client, nature, montant, moyen, référence ; un remboursement d'avoir apparaît en négatif. |
+| A6 | Le livre des recettes liste chaque encaissement par date, avec client, nature, montant, moyen, référence ; un remboursement d'avoir apparaît en négatif ; un total suit chaque trimestre écoulé ou en cours depuis le début de l'activité (0,00 € sans encaissement), le trimestre en cours étant signalé, puis le total de l'année. |
 | A7 | Déclaration : encaissements de la période et cotisations estimées exacts (taux de l'activité + formation professionnelle, ACRE et versement libératoire inclus) ; date limite issue du calendrier. |
 | A8 | Jauges : plafond et seuil de TVA calculés sur les encaissements de l'année civile. |
 | A9 | Un devis accepté se convertit en facture brouillon liée, avec les mêmes lignes. |

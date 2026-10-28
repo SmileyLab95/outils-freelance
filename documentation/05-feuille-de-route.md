@@ -9,7 +9,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 
 ## Où en est-on ?
 
-*Mis à jour le 23/10/2026 (nuit).*
+*Mis à jour le 28/10/2026.*
 
 - **Priorité (décision D10)** : le site et la plateforme d'abord ; noms de domaine, Gumroad et affiliation à la fin.
   Règle de qualité maximale pour tout produit ou service (D11, charte dans la [méthode](04-methode-de-travail.md#charte-qualité)).
@@ -211,8 +211,18 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   tâche ou par saisie), temps verrouillé une fois la facture émise ; lignes de facture avec unité (« 1,5 h », « 2 j »,
   codes HUR et DAY dans le Factur-X, validés) ; correction du moteur commun : une ligne commencée sans prix bloque
   l'émission ([37](37-temps-passe.md), décision D35).
+- **Sources officielles et livre des recettes (28/10/2026)** : nouvel outil de travail « Lire une source officielle »
+  (GitHub Actions, à la demande : CNIL, BOFiP… ; Légifrance et EUR-Lex refusent les lectures automatiques) ; la lecture
+  complète du BOFiP a montré que le livre des recettes doit être **totalisé à la fin de chaque trimestre et de
+  l'année** : ajouté dans l'Espace ; règles de la CNIL sur la conservation des données des prospects et la prospection
+  par email et par téléphone (nouvelles règles du 11/08/2026) et sur la liste d'opposition lues en entier : spécification
+  du module Prospects ([38](38-prospects.md), décision D36).
 - **Prochaines actions de Claude** : refonte, suite ([31](31-vision-plateforme.md) § 5) : modules suivants de l'Espace
-  (prospects, trésorerie) ; puis besoins P3 restants
+  (prospects : spécification [38](38-prospects.md) écrite d'après les fiches de la CNIL lues en entier, réalisation
+  en cours ; trésorerie) ;
+  activité mixte de l'Espace à spécifier (le profil n'a qu'une activité : deux plafonds, déclaration et livre des
+  recettes distinguant ventes et prestations, BOFiP BOI-BIC-DECLA-30-30) ; questions ouvertes de `data/rules/` à relire
+  avec l'outil de lecture des sources (taux de l'intérêt légal du second semestre 2026, ACRE) ; puis besoins P3 restants
   ([02](02-besoins-clients.md) : CGV, sous-traitance, date d'échéance hors de France) ;
   comptes : adaptateur
   PostgreSQL et sauvegardes dès que l'hébergeur est choisi ; taux du crédit pour
@@ -418,7 +428,7 @@ Objectif : un compte gratuit qui rend service dès le premier jour.
 - [ ] Devis, factures et avoirs enregistrés dans le cloud (comptes en ligne)
 - [ ] Devis accepté en ligne par le client (lien sécurisé)
 - [x] Tableau de bord : chiffre d'affaires encaissé, déclaration Urssaf estimée, plafonds, seuil de TVA, impayés *(version locale)*
-- [x] Livre des recettes tenu automatiquement (micro-entrepreneurs), export CSV *(version locale)*
+- [x] Livre des recettes tenu automatiquement (micro-entrepreneurs), totalisé par trimestre et par année (BOFiP), export CSV *(version locale)*
 - [x] Échéances selon le profil *(version locale)*
 - [ ] Rappels d'échéances par email (comptes en ligne)
 - [x] Reprise des informations du générateur de facture ; import et export d'une sauvegarde *(version locale)*

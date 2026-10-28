@@ -1017,14 +1017,22 @@
           "référence de la facture ou de la pièce justificative"
         ],
         "ordre": "chronologique, par date d'encaissement",
+        "totaux": "à la fin de chaque trimestre et de l'année",
         "registre_achats": "obligatoire en plus pour la vente de marchandises et la fourniture de logement"
       },
       "unit": "object",
       "label": "Livre des recettes du micro-entrepreneur",
       "source": "https://www.legifrance.gouv.fr/codes/id/LEGITEXT000006069577",
       "source_title": "Code général des impôts, art. 50-0 (BIC) et 102 ter (BNC) - Légifrance",
+      "more_sources": [
+        {
+          "source": "https://bofip.impots.gouv.fr/bofip/6970-PGP.html/identifiant=BOI-BIC-DECLA-30-30-20120912",
+          "source_title": "BOFiP, BOI-BIC-DECLA-30-30 (obligations comptables des micro-entreprises), § 10 à 40"
+        }
+      ],
       "confidence": "medium",
-      "note": "Livre-journal présentant le détail des recettes professionnelles, tenu au jour le jour. Liste des mentions recoupée sur plusieurs guides professionnels (L'Expert-Comptable.com, Le Coin des Entrepreneurs) ; texte officiel à relire lors de la veille de décembre."
+      "verified_on": "2026-10-24",
+      "note": "Livre-journal présentant le détail des recettes professionnelles, tenu au jour le jour. BOFiP lu en entier le 24/10/2026 (outil « Lire une source officielle ») : recettes inscrites suivant leur date d'encaissement, règlements en espèces distingués des autres modes, références des pièces justificatives, tenue chronologique, totaux à la fin du trimestre et de l'année ; en cas d'activité mixte, ventes et prestations de services distinctes. Client et nature de la prestation : recoupés sur des guides professionnels (L'Expert-Comptable.com, Le Coin des Entrepreneurs), d'où la confiance moyenne."
     },
     "compte_dedie_micro": {
       "value": {
@@ -1422,7 +1430,37 @@
       ],
       "confidence": "medium",
       "verified_on": "2026-10-23",
-      "note": "Lu par extraits de Légifrance et du BOFiP le 23/10/2026. Activité de l'Espace « vente » : vente de marchandises, objets, fournitures et denrées à emporter ou à consommer sur place, ou fourniture de logement (catégorie BIC vente). Les prestataires de services n'ont pas cette obligation (BOFiP). Contenu réglementaire (ordre chronologique, espèces distinguées, références des pièces) d'après les sommaires de Légifrance : à relire en entier lors de la veille de décembre."
+      "note": "BOFiP lu en entier le 24/10/2026 (outil « Lire une source officielle ») : registre des achats récapitulé par année pour le commerce principal de vente de marchandises, objets, fournitures et denrées à emporter ou à consommer sur place ou de fourniture de logement, « à l'exclusion donc des prestataires de services ». Légifrance lu par extraits le 23/10/2026. Activité de l'Espace « vente » : vente de marchandises, objets, fournitures et denrées à emporter ou à consommer sur place, ou fourniture de logement (catégorie BIC vente). Les prestataires de services n'ont pas cette obligation (BOFiP). Contenu réglementaire (ordre chronologique, espèces distinguées, références des pièces) d'après les sommaires de Légifrance : à relire en entier lors de la veille de décembre."
+    },
+    "prospects_conservation": {
+      "value": {
+        "annees": 3,
+        "depart": "collecte des données ou dernier contact émanant du prospect",
+        "contact": "par exemple une demande de documentation ou un clic sur un lien d'un courriel ; la simple ouverture d'un courriel n'en est pas un",
+        "ensuite": "reprendre contact pour savoir si la personne souhaite continuer à être sollicitée ; sans réponse positive et explicite, supprimer les données ou les archiver pour une durée conforme aux dispositions en vigueur"
+      },
+      "unit": "object",
+      "label": "Durée de conservation des données d'un prospect non client",
+      "source": "https://www.cnil.fr/sites/cnil/files/atoms/files/referentiel_traitements-donnees-caractere-personnel_gestion-activites-commerciales.pdf",
+      "source_title": "CNIL, Référentiel relatif aux traitements de données à caractère personnel mis en œuvre aux fins de gestion des activités commerciales (durées de conservation)",
+      "confidence": "high",
+      "verified_on": "2026-10-24",
+      "note": "Lu en entier le 24/10/2026 (PDF de 295 501 octets, SHA-256 3b70f8a6…e6e7) avec l'outil « Lire une source officielle ». Référentiel de la CNIL : une recommandation, à appliquer dans son contexte. Le même texte rappelle que l'opposition à la prospection doit être prise en compte systématiquement (RGPD, art. 21)."
+    },
+    "prospection_email": {
+      "value": {
+        "particuliers": "consentement préalable : action positive et spécifique, case non pré-cochée ; l'acceptation des conditions générales ne suffit pas",
+        "professionnels": "information de la personne et opposition simple et gratuite ; possible sur le fondement de l'intérêt légitime si l'objet de la sollicitation est en rapport avec la profession de la personne démarchée",
+        "donnees_acquises": "données déjà détenues ou acquises auprès de tiers : s'assurer que la personne a été informée de l'utilisation possible de son adresse pour de la prospection et peut s'y opposer",
+        "droits": "répondre aux demandes d'exercice des droits sous un mois au plus, sauf exceptions"
+      },
+      "unit": "object",
+      "label": "Prospection commerciale par courrier électronique",
+      "source": "https://www.cnil.fr/fr/la-prospection-commerciale-par-courrier-electronique-sms-mms-et-automate-dappel",
+      "source_title": "CNIL, « La prospection commerciale par courrier électronique, SMS, MMS et automate d'appel » (fiche du 10 juin 2026 ; CPCE, art. L34-5 ; RGPD, art. 6, 7 et 21)",
+      "confidence": "high",
+      "verified_on": "2026-10-28",
+      "note": "Lu le 24/10/2026 et relu le 28/10/2026 avec l'outil « Lire une source officielle » (adresse finale de la fiche, SHA-256 fd74ac87…b8cc). Légifrance refusant les lectures automatiques, l'article L34-5 du CPCE est lu à travers cette fiche. Les adresses génériques d'une société (info@, contact@…), qui concernent des personnes morales, ne sont pas soumises à ces règles."
     }
   },
   "open_questions": [

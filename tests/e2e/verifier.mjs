@@ -2732,6 +2732,9 @@ const tests = {
     await go("#/recettes");
     const ledger = await text(".ledger");
     check(ledger.includes("15/09/2026") && ledger.includes("20/09/2026") && ledger.includes("F2026-001") && ledger.includes("Total encaissé en 2026 1 800,00 €"), "Espace : livre des recettes (A6)");
+    check(ledger.includes("Total du 1er trimestre 2026 0,00 €") && ledger.indexOf("20/09/2026") < ledger.indexOf("Total du 3e trimestre 2026 1 800,00 €") &&
+      ledger.includes("Total du 4e trimestre 2026 (en cours) 0,00 €") && !ledger.includes("Total du 1er trimestre 2027"),
+      "Espace : livre des recettes totalisé à la fin de chaque trimestre (BOFiP)");
     await accessible(page, "Espace : livre des recettes");
     const [csv] = await Promise.all([page.waitForEvent("download"), page.click("#ledger-csv")]);
     check(fs.readFileSync(await csv.path(), "utf8").includes('15/09/2026;"Studio Nova";"Site vitrine";800,00;"Virement";"F2026-001"'), "Espace : export CSV du livre des recettes");

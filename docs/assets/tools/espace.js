@@ -1160,13 +1160,15 @@
       '<div class="card espace-card"><div class="espace-filters espace-noprint" role="group" aria-label="Année">' +
       Object.keys(years).sort().reverse().map(function (y) { return '<a class="tab" href="#/recettes?annee=' + y + '"' + (y === year ? ' aria-current="true"' : "") + ">" + y + "</a>"; }).join("") + "</div>" +
       (rows.length ? '<table class="ledger"><thead><tr><th>Date</th><th>Client</th><th>Nature</th><th>Moyen</th><th>Référence</th><th class="num">Montant</th></tr></thead><tbody>' +
-        rows.map(function (x) {
-          return '<tr><td class="c-date">' + day(x.date) + '</td><td class="c-client">' + esc(x.client) + '</td><td class="c-nature">' + esc(x.nature) +
-            '</td><td class="c-method">' + esc(x.method) + '</td><td class="c-ref"><a href="#/documents/' + esc(x.docId) + '">' + esc(x.ref) +
-            '</a></td><td class="num">' + esc(money(x.amount)) + "</td></tr>";
+        E.ledgerQuarters(rows, year, TODAY, profile().startDate).map(function (q) {
+          return rows.filter(function (x) { return x.date >= q.start && x.date <= q.end; }).map(function (x) {
+            return '<tr><td class="c-date">' + day(x.date) + '</td><td class="c-client">' + esc(x.client) + '</td><td class="c-nature">' + esc(x.nature) +
+              '</td><td class="c-method">' + esc(x.method) + '</td><td class="c-ref"><a href="#/documents/' + esc(x.docId) + '">' + esc(x.ref) +
+              '</a></td><td class="num">' + esc(money(x.amount)) + "</td></tr>";
+          }).join("") + '<tr class="ledger-subtotal"><td colspan="5">Total du ' + esc(q.label) + (q.open ? " (en cours)" : "") + '</td><td class="num">' + esc(money(q.total)) + "</td></tr>";
         }).join("") + '</tbody><tfoot><tr><td colspan="5">Total encaissé en ' + esc(year) + '</td><td class="num">' + esc(money(sum)) + "</td></tr></tfoot></table>"
         : '<p class="muted">Aucun encaissement en ' + esc(year) + ". Les encaissements enregistrés sur vos factures apparaissent ici automatiquement.</p>") +
-      '<p class="small muted">Tenu par date d\'encaissement : date, client, nature, montant, moyen de paiement et référence de la facture. ' +
+      '<p class="small muted">Tenu par date d\'encaissement : date, client, nature, montant, moyen de paiement et référence de la facture ; totalisé à la fin de chaque trimestre et de l\'année. ' +
       "Conservez-le avec vos factures pendant " + R.conservation_pieces.commerce_annees + " ans.</p></div>";
     if (!rows.length) return;
     $("ledger-csv").addEventListener("click", function () {
