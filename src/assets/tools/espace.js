@@ -4,6 +4,7 @@
  * Stockage : window.EspaceStore (IndexedDB). Écrans : #/ (tableau de bord), #/documents, #/documents/<id>,
  * #/clients, #/clients/<id>, #/recettes, #/depenses, #/depenses/<id> (documentation/36-depenses-et-registre-des-achats.md),
  * #/temps, #/temps/<id>, #/temps/facturer?client=<id> (documentation/37-temps-passe.md),
+ * #/prospects, #/prospects/<id> (documentation/38-prospects.md),
  * #/echeances, #/reglages, #/importer (document venu du générateur public).
  */
 (function () {
@@ -128,6 +129,7 @@
     var views = { accueil: viewWelcome, tableau: viewDashboard, documents: r.id ? viewDocument : viewDocuments,
                   clients: r.id ? viewClientForm : viewClients, recettes: viewLedger, depenses: r.id ? viewExpenseForm : viewExpenses,
                   temps: r.id === "facturer" ? viewTimeInvoice : r.id ? viewTimeForm : viewTime,
+                  prospects: r.id ? viewProspectForm : viewProspects,
                   echeances: viewDeadlines, reglages: viewSettings,
                   importer: viewImport };
     (views[name] || viewDashboard)(r);
@@ -249,6 +251,7 @@
     else if (opts.textarea) ctrl = '<textarea id="' + id + '" name="' + name + '" rows="2" placeholder="' + esc(opts.placeholder || "") + '">' + esc(value || "") + "</textarea>";
     else ctrl = '<input id="' + id + '" name="' + name + '" type="' + (opts.type || "text") + '"' + (opts.inputmode ? ' inputmode="' + opts.inputmode + '"' : "") +
       ' value="' + esc(value == null ? "" : value) + '" placeholder="' + esc(opts.placeholder || "") + '"' + (opts.required ? " required" : "") +
+      (opts.list ? ' list="' + opts.list + '"' : "") +
       (opts.disabled ? " disabled" : "") + (opts.hint ? ' aria-describedby="' + id + '-hint"' : "") + ">";
     return '<div class="field' + (opts.half ? "" : " full") + '"><label for="' + id + '">' + esc(label) + "</label>" + ctrl +
       (opts.hint ? '<span class="hint" id="' + id + '-hint">' + opts.hint + "</span>" : "") + "</div>";
@@ -441,7 +444,7 @@
       '<div class="espace-quick espace-noprint"><a class="btn btn-primary btn-sm" href="#/documents/nouveau?type=facture">+ Facture</a>' +
       '<a class="btn btn-ghost btn-sm" href="#/documents/nouveau?type=devis">+ Devis</a>' +
       '<a class="btn btn-ghost btn-sm" href="#/clients/nouveau">+ Client</a></div></div>';
-    html += profileReminder() + purchasesReminder() + timeReminder() + backupReminder();
+    html += profileReminder() + purchasesReminder() + timeReminder() + prospectsReminder() + backupReminder();
     html += '<div class="kpis">' +
       kpi("Encaissé en " + YEAR, money(year), countText(E.ledger(data.documents, YEAR + "-01-01", YEAR + "-12-31").filter(function (x) { return x.amount > 0; }).length, "encaissement", "encaissements")) +
       kpi("À encaisser", money(openSum), open.length ? countText(open.length, "facture", "factures") + (late.length ? ", dont " + late.length + " en retard" : "") : "Aucune facture en attente", late.length ? "is-warn" : "") +
@@ -628,6 +631,7 @@
     if (r.id === "nouveau") {
       if (!draftInMemory || draftInMemory.routeKey !== r.key) {
         draftInMemory = newDraft(r.params.type, r.params.client);
+        if (draftInMemory.type === "devis" && prospect(r.params.piste)) draftInMemory.prospectId = r.params.piste;
         draftInMemory.routeKey = r.key;
       }
       d = draftInMemory;
@@ -654,6 +658,8 @@
     var clients = data.clients.filter(function (c) { return !c.archived || c.id === d.clientId; });
     var html = '<div class="espace-head"><h2>' + esc(doc(d.id) ? TYPES[d.type] + " (brouillon)" : NEW_TITLES[d.type]) +
       "</h2>" + stateBadge(d) + "</div>" + profileReminder() +
+      (d.prospectId && prospect(d.prospectId) ? '<p class="small muted espace-noprint">Devis pour la piste <a href="#/prospects/' + esc(d.prospectId) + '">' +
+        esc(prospect(d.prospectId).name) + "</a> : son étape suivra ce devis.</p>" : "") +
       '<div class="tool-layout wide-left espace-editor"><form class="card form-card espace-noprint" id="doc-form" novalidate>' +
       '<div class="fields">' +
       '<div class="field full"><label for="d-client">Client</label><select id="d-client" name="clientId"><option value="">Choisir un client…</option>' +
@@ -1086,6 +1092,12 @@
     var c = isNew ? { id: S.uid(), name: "", pro: true, place: "fr" } : client(r.id);
     if (!c) { view.innerHTML = '<div class="espace-head"><h2>Client introuvable</h2></div><p><a href="#/clients">Retour aux clients</a></p>'; return; }
     var back = r.params.retour;
+    // Client créé depuis une piste (documentation/38-prospects.md) : fiche préremplie, piste liée à l'enregistrement.
+    var lead = isNew ? prospect(r.params.piste) : null;
+    if (lead) {
+      Object.assign(c, { name: lead.name, pro: lead.pro !== false, email: lead.email || "",
+        notes: [lead.contact ? "Interlocuteur : " + lead.contact : "", lead.phone ? "Téléphone : " + lead.phone : ""].filter(Boolean).join("\n") });
+    }
     var docs = isNew ? [] : data.documents.filter(function (d) { return d.clientId === c.id; });
     view.innerHTML = '<div class="espace-head"><h2>' + (isNew ? "Nouveau client" : esc(c.name)) + "</h2></div>" +
       '<form class="card espace-card" id="client-form" novalidate><div class="fields">' +
@@ -1131,8 +1143,10 @@
       if (back && draftInMemory && draftInMemory.id === back) { draftInMemory.clientId = c.id; draftInMemory.vat = vatFor(c); }
       var target = back && doc(back) ? doc(back) : null;
       if (target) { target.clientId = c.id; target.vat = Object.assign(vatFor(c), { rate: target.vat.rate }); }
+      if (lead) { lead.clientId = c.id; lead.updatedAt = c.updatedAt; }
       persist(isNew ? "Client créé." : "Client enregistré.").then(function () {
-        if (!back) location.hash = "#/clients";
+        if (lead) location.hash = r.params.devis === "1" ? "#/documents/nouveau?type=devis&client=" + c.id + "&piste=" + lead.id : "#/prospects/" + lead.id;
+        else if (!back) location.hash = "#/clients";
         else if (target) location.hash = "#/documents/" + back;
         else if (draftInMemory && draftInMemory.routeKey) location.hash = "#" + draftInMemory.routeKey;
         else location.hash = "#/documents";
@@ -1528,6 +1542,301 @@
         persist("Sauvegarde restaurée.").then(function () { location.hash = "#/"; render(); });
       };
       reader.readAsText(file);
+    });
+  }
+
+  // ----- Prospects (documentation/38-prospects.md) -------------------------------------------------------------
+
+  var STAGE_CLASSES = { new: "st-draft", talks: "st-unpaid", quote: "st-partial", won: "st-paid", lost: "st-draft" };
+  var SOURCES = ["Recommandation", "Réseau", "Site web", "Réseaux sociaux", "Salon ou évènement", "Plateforme de freelances", "Prospection directe"];
+  var CNIL = {
+    email: "https://www.cnil.fr/fr/la-prospection-commerciale-par-courrier-electronique-sms-mms-et-automate-dappel",
+    phone: "https://www.cnil.fr/fr/prospection-commerciale-par-telephone-hors-automate-dappel-quelles-sont-les-regles",
+    optout: "https://www.cnil.fr/fr/comment-utiliser-une-liste-repoussoir-pour-respecter-lopposition-la-prospection"
+  };
+  function prospect(id) { return data.prospects.filter(function (p) { return p.id === id; })[0] || null; }
+  function stageBadge(s) { return '<span class="st ' + STAGE_CLASSES[s] + '">' + esc(E.STAGE_LABELS[s]) + "</span>"; }
+  var byNextDate = function (a, b) {
+    var x = a.nextDate || "9999", y = b.nextDate || "9999";
+    return x < y ? -1 : x > y ? 1 : String(a.name || "").localeCompare(String(b.name || ""), "fr");
+  };
+
+  /** Empreintes SHA-256 des clés de la liste d'opposition ("e:", "t:" ou "n:" suivi de l'empreinte en hexadécimal). */
+  function optoutHashes(p) {
+    if (!window.crypto || !crypto.subtle || !window.TextEncoder) return Promise.reject(new Error("crypto"));
+    return Promise.all(E.optoutKeys(p).map(function (key) {
+      return crypto.subtle.digest("SHA-256", new TextEncoder().encode(key)).then(function (buf) {
+        return key.slice(0, 2) + Array.prototype.map.call(new Uint8Array(buf), function (b) { return ("0" + b.toString(16)).slice(-2); }).join("");
+      });
+    }));
+  }
+  /** Oppositions dont une empreinte correspond : [{ optout, kinds }] (kinds : "e", "t", "n"). */
+  function optoutMatches(hashes) {
+    return data.optouts.map(function (o) {
+      var kinds = (o.hashes || []).filter(function (h) { return hashes.indexOf(h) > -1; }).map(function (h) { return h.charAt(0); });
+      return kinds.length ? { optout: o, kinds: kinds } : null;
+    }).filter(Boolean);
+  }
+
+  /** Rappels du tableau de bord : relances dues et durée de conservation atteinte. */
+  function prospectsReminder() {
+    var due = E.followUps(data.prospects, data.documents, TODAY);
+    var old = E.retentionDue(data.prospects, data.documents, TODAY, R.prospects_conservation.annees);
+    return (due.length ? '<p class="notice espace-noprint">' + (due.length > 1 ? "Prospects à relancer : <b>" + due.length + "</b>" : "Un prospect à relancer : <b>" + esc(due[0].name) + "</b>") +
+        (due[0].nextDate < TODAY ? " (relance prévue depuis le " + day(due[0].nextDate) + ")" : "") + '. <a href="#/prospects">Voir les relances</a></p>' : "") +
+      (old.length ? '<p class="notice warn espace-noprint">' + esc(countText(old.length, "prospect", "prospects")) + " sans contact de leur part depuis " +
+        R.prospects_conservation.annees + ' ans : demandez-leur s\'ils souhaitent continuer à recevoir vos messages, sinon supprimez leur fiche. <a href="#/prospects">Voir la liste</a></p>' : "");
+  }
+
+  /** Règles de la CNIL, en bref, selon le type de prospect (pro : vrai, faux, ou indéfini pour les deux). */
+  function prospectRules(pro) {
+    var t = R.prospection_telephone;
+    var both = pro === undefined;
+    var items = [];
+    if (both || pro) items.push("<li><b>Professionnel</b> : par email ou par téléphone, si le message est en rapport avec son métier ; il doit être informé et pouvoir s'y opposer simplement et gratuitement.</li>");
+    if (both || !pro) {
+      items.push("<li><b>Particulier</b> : par email, seulement avec son accord préalable (case non cochée d'avance ; des conditions générales acceptées ne suffisent pas).</li>");
+      items.push("<li><b>Particulier, par téléphone</b> (depuis le " + esc(longDay(t.depuis)) + ") : seulement avec son accord préalable, valable " +
+        "un an au plus, sauf appel en rapport avec un contrat en cours ; du lundi au vendredi, de 10 h à 13 h et de 14 h à 20 h. Un particulier qui demande à être rappelé l'est dans les 5 jours ouvrables, sur ce qu'il a demandé.</li>");
+    }
+    items.push("<li>Chaque message dit qui vous êtes et permet de refuser les suivants par un moyen simple. Un refus n'a pas à être justifié et vaut pour la suite : utilisez « Ne plus contacter ».</li>");
+    items.push("<li>Les données d'un prospect se gardent " + R.prospects_conservation.annees + " ans au plus après leur collecte ou après son dernier contact avec vous ; ensuite, demandez-lui s'il souhaite continuer à recevoir vos messages, sinon supprimez sa fiche.</li>");
+    return '<ul class="small prospect-rules">' + items.join("") + '</ul><p class="small muted">Règles générales de la CNIL : ' +
+      '<a href="' + CNIL.email + '" rel="noopener">prospection par email</a>, <a href="' + CNIL.phone + '" rel="noopener">par téléphone</a>, ' +
+      '<a href="' + CNIL.optout + '" rel="noopener">respect de l\'opposition</a>. Pour écrire : <a href="/fr/modeles-emails-freelance/">modèles d\'emails</a>.</p>';
+  }
+
+  function prospectItem(p) {
+    var v = E.prospectValue(p, data.documents);
+    return '<li><a href="#/prospects/' + esc(p.id) + '"><span class="dl-main"><b>' + esc(p.name) + '</b><span class="small muted">' +
+      esc([p.contact, p.nextDate ? "relance le " + day(p.nextDate) : ""].filter(Boolean).join(" · ") || (p.pro === false ? "Particulier" : "Professionnel")) +
+      '</span></span><span class="dl-side"><b>' + (v === null ? "–" : esc(money(v))) + "</b></span></a></li>";
+  }
+
+  function viewProspects() {
+    var docs = data.documents, list = data.prospects.slice().sort(byNextDate);
+    var pipe = E.pipeline(list, docs), due = E.followUps(list, docs, TODAY);
+    var old = E.retentionDue(list, docs, TODAY, R.prospects_conservation.annees);
+    var groups = {};
+    Object.keys(E.STAGE_LABELS).forEach(function (s) { groups[s] = []; });
+    list.forEach(function (p) { groups[E.prospectStage(p, docs)].push(p); });
+    var html = '<div class="espace-head"><h2>Prospects</h2><div class="espace-quick espace-noprint">' +
+      '<a class="btn btn-primary btn-sm" href="#/prospects/nouveau">+ Prospect</a>' +
+      '<button type="button" class="btn btn-ghost btn-sm" id="prospects-csv"' + (list.length ? "" : " disabled") + ">Exporter (CSV)</button></div></div>";
+    if (!list.length) {
+      html += '<div class="card espace-card"><p class="muted">Pas encore de prospect. Notez vos pistes commerciales pour savoir qui relancer et quand, ' +
+        "puis transformez une piste gagnée en client et en devis sans rien recopier.</p>" +
+        '<a class="btn btn-primary btn-sm" href="#/prospects/nouveau">Ajouter un prospect</a></div>';
+    } else {
+      html += '<section class="card espace-card"><ul class="time-totals"><li><span>Pistes ouvertes</span><b>' + pipe.open.count + "</b></li>" +
+        "<li><span>Valeur estimée</span><b>" + esc(money(pipe.open.value)) + "</b></li><li><span>À relancer</span><b>" + due.length + "</b></li></ul>" +
+        (due.length ? '<h3>À relancer</h3><ul class="doc-list">' + due.map(function (p) {
+          return '<li><a href="#/prospects/' + esc(p.id) + '"><span class="dl-main"><b>' + esc(p.name) + '</b><span class="small muted">' +
+            esc(p.nextAction || "Relance prévue") + '</span></span><span class="dl-side"><b>' + day(p.nextDate) + "</b>" +
+            (p.nextDate < TODAY ? '<span class="st st-overdue">En retard</span>' : '<span class="st st-unpaid">Aujourd\'hui</span>') + "</span></a></li>";
+        }).join("") + "</ul>" : '<p class="small muted">Aucune relance prévue aujourd\'hui.</p>') + "</section>";
+      html += '<div class="pipeline">' + E.OPEN_STAGES.map(function (s) {
+        return '<section class="card espace-card" aria-labelledby="stage-' + s + '"><div class="pipeline-head"><h3 id="stage-' + s + '">' + esc(E.STAGE_LABELS[s]) +
+          '</h3><span class="small muted">' + esc(countText(pipe[s].count, "piste", "pistes")) + " · " + esc(money(pipe[s].value)) + "</span></div>" +
+          (groups[s].length ? '<ul class="doc-list">' + groups[s].map(prospectItem).join("") + "</ul>" : '<p class="small muted">Aucune piste.</p>') + "</section>";
+      }).join("") + "</div>";
+      html += ["won", "lost"].map(function (s) {
+        return groups[s].length ? '<details class="card details-card"><summary><span><b>' + esc(s === "won" ? "Gagnés" : "Perdus") + "</b> · " +
+          esc(countText(pipe[s].count, "piste", "pistes")) + (s === "won" ? " · " + esc(money(pipe[s].value)) : "") + '</span></summary><ul class="doc-list">' +
+          groups[s].map(prospectItem).join("") + "</ul></details>" : "";
+      }).join("");
+    }
+    if (old.length) {
+      html += '<section class="card espace-card" id="prospects-retention"><h3>Conservation des données</h3><p class="small">Ces prospects ne vous ont pas contacté depuis ' +
+        R.prospects_conservation.annees + " ans (ou depuis la création de leur fiche) : demandez-leur s'ils souhaitent continuer à recevoir vos messages ; " +
+        "sans réponse positive et explicite, supprimez leur fiche (référentiel de la CNIL).</p><ul class=\"time-due\">" + old.map(function (x) {
+          return '<li><span class="dl-main"><a href="#/prospects/' + esc(x.prospect.id) + '"><b>' + esc(x.prospect.name) + '</b></a><span class="small muted">' +
+            (E.lastContactFrom(x.prospect) ? "Dernier contact de sa part : " : "Fiche créée le ") + day(x.since) + "</span></span>" +
+            '<button type="button" class="btn btn-ghost btn-sm" data-forget="' + esc(x.prospect.id) + '" aria-label="Supprimer la fiche de ' + esc(x.prospect.name) + '">Supprimer</button></li>';
+        }).join("") + "</ul></section>";
+    }
+    html += '<section class="card espace-card"><h3>Liste d\'opposition</h3><p class="small">' +
+      (data.optouts.length ? esc(countText(data.optouts.length, "personne a", "personnes ont")) + " demandé à ne plus être sollicitée" + (data.optouts.length > 1 ? "s" : "") + ". "
+        : "Personne n'a encore demandé à ne plus être sollicité. ") +
+      "Quand un prospect le demande, « Ne plus contacter » supprime sa fiche et ne garde qu'une empreinte de son email, de son téléphone et de son nom, " +
+      "qui ne permet pas de les retrouver mais vous avertit si vous l'ajoutez de nouveau. La CNIL recommande de garder ces informations au moins " +
+      R.prospects_opposition.conservation_min_annees + " ans.</p></section>" +
+      '<section class="card espace-card"><h3>Prospecter dans les règles</h3>' + prospectRules() + "</section>";
+    view.innerHTML = html;
+    view.querySelectorAll("[data-forget]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        var p = prospect(b.getAttribute("data-forget"));
+        if (!p || !confirm("Supprimer la fiche « " + p.name + " » et ses échanges ?")) return;
+        data.prospects = data.prospects.filter(function (x) { return x.id !== p.id; });
+        persist("Fiche « " + p.name + " » supprimée.").then(function () { render(true); });
+      });
+    });
+    if (!list.length) return;
+    $("prospects-csv").addEventListener("click", function () {
+      OF.download("﻿" + E.prospectsCSV(list, docs), "prospects-" + TODAY + ".csv", "text/csv;charset=utf-8");
+    });
+  }
+
+  function viewProspectForm(r) {
+    var isNew = r.id === "nouveau";
+    var p = isNew ? { id: S.uid(), name: "", contact: "", email: "", phone: "", pro: true, source: "", stage: "new", value: null, nextDate: "", nextAction: "",
+                      notes: "", clientId: "", exchanges: [] } : prospect(r.id);
+    if (!p) { view.innerHTML = '<div class="espace-head"><h2>Prospect introuvable</h2></div><p><a href="#/prospects">Retour aux prospects</a></p>'; return; }
+    var docs = data.documents, stage = E.prospectStage(p, docs), min = E.minStage(p, docs), rank = E.OPEN_STAGES.concat(["won"]);
+    var stageOptions = Object.keys(E.STAGE_LABELS).map(function (s) {
+      var locked = s !== "lost" && rank.indexOf(s) < rank.indexOf(min);
+      return '<option value="' + s + '"' + (s === stage ? " selected" : "") + (locked ? " disabled" : "") + ">" + esc(E.STAGE_LABELS[s]) + "</option>";
+    }).join("");
+    var c = p.clientId ? client(p.clientId) : null, quotes = E.prospectQuotes(p, docs), last = E.lastContactFrom(p);
+    var html = '<div class="espace-head"><h2>' + (isNew ? "Nouveau prospect" : esc(p.name)) + "</h2>" + (isNew ? "" : stageBadge(stage)) + "</div>" +
+      '<form class="card espace-card" id="prospect-form" novalidate><div class="fields">' +
+      field("name", "Nom", p.name, { required: true, placeholder: "Atelier Lumen", hint: "Entreprise ou personne." }) +
+      field("contact", "Interlocuteur", p.contact, { half: true, placeholder: "Inès Moreau" }) +
+      field("pro", "Type", p.pro === false ? "0" : "1", { options: [["1", "Professionnel"], ["0", "Particulier"]], half: true }) +
+      field("email", "Email", p.email, { type: "email", half: true }) +
+      field("phone", "Téléphone", p.phone, { type: "tel", half: true }) +
+      field("source", "Origine", p.source, { half: true, list: "prospect-sources", placeholder: "Recommandation" }) +
+      '<datalist id="prospect-sources">' + SOURCES.map(function (s) { return '<option value="' + esc(s) + '">'; }).join("") + "</datalist>" +
+      '<div class="field"><label for="ep-stage">Étape</label><select id="ep-stage" name="stage"' + (min !== "new" ? ' aria-describedby="ep-stage-hint"' : "") + ">" + stageOptions + "</select>" +
+      (min !== "new" ? '<span class="hint" id="ep-stage-hint">' + esc(min === "talks" ? "Au moins « En discussion » : un échange est noté." :
+        min === "quote" ? "Au moins « Devis envoyé » : un devis a été émis." : "« Gagné » : le devis a été accepté.") + "</span>" : "") + "</div>" +
+      field("value", "Valeur estimée HT", p.value === null || p.value === undefined ? "" : rateText(p.value), { half: true, inputmode: "decimal", placeholder: "1 500",
+        hint: "En euros, facultatif. Le montant du devis la remplace dès qu'il est émis." }) +
+      field("nextDate", "Prochaine relance", p.nextDate, { type: "date", half: true }) +
+      field("nextAction", "Action prévue", p.nextAction, { half: true, placeholder: "Rappeler pour le devis" }) +
+      field("notes", "Notes", p.notes, { textarea: true }) +
+      '</div><div id="prospect-optout" class="notice warn" role="alert" hidden></div><p class="form-error" id="prospect-error" role="alert" hidden></p>' +
+      '<div class="espace-actions"><button type="submit" class="btn btn-primary">' + (isNew ? "Créer le prospect" : "Enregistrer") + "</button>" +
+      '<a class="btn btn-ghost" href="#/prospects">Annuler</a></div></form>';
+    if (!isNew) {
+      html += '<section class="card espace-card"><h3>Échanges</h3><p class="small muted" id="prospect-last">' + (last ? "Dernier contact de sa part : " + day(last) + "."
+          : "Aucun contact de sa part noté.") + (stage === "won" ? "" : " La durée de conservation de ses données (" + R.prospects_conservation.annees + " ans) part de " +
+          (last ? "cette date" : "la création de la fiche, le " + day(String(p.createdAt || "").slice(0, 10))) + ".") + "</p>" +
+        ((p.exchanges || []).length ? '<ul class="time-due exchanges">' + p.exchanges.slice().sort(function (a, b) { return a.date < b.date ? 1 : a.date > b.date ? -1 : 0; }).map(function (x) {
+          return '<li><span class="dl-main"><b>' + day(x.date) + " · " + (x.from === "them" ? "De sa part" : "De ma part") + '</b><span class="small">' + esc(x.text) + "</span></span>" +
+            '<button type="button" class="btn btn-ghost btn-sm" data-exchange="' + esc(x.id) + '" aria-label="Supprimer l\'échange du ' + day(x.date) + '">Supprimer</button></li>';
+        }).join("") + "</ul>" : "") +
+        '<form id="exchange-form" class="espace-noprint" novalidate><div class="fields">' +
+        field("xdate", "Date", TODAY, { type: "date", half: true }) +
+        field("xfrom", "Qui a pris contact ?", "me", { options: [["me", "Moi"], ["them", "Le prospect"]], half: true,
+          hint: "« Le prospect » : il vous a appelé, écrit, demandé un document… (une simple ouverture d'email ne compte pas)." }) +
+        field("xtext", "Résumé", "", { placeholder: "Appel : intéressé, devis à envoyer avant vendredi" }) +
+        '</div><p class="form-error" id="exchange-error" role="alert" hidden></p><div class="espace-actions"><button type="submit" class="btn btn-ghost">Noter l\'échange</button></div></form></section>' +
+        '<section class="card espace-card"><h3>Client et devis</h3>' +
+        (c ? '<p>Client : <a href="#/clients/' + esc(c.id) + '">' + esc(c.name) + "</a></p>"
+          : '<p class="small muted">Créez le client à partir de cette fiche, ou liez la piste à un client existant.</p><div class="espace-actions">' +
+            '<a class="btn btn-ghost" href="#/clients/nouveau?piste=' + esc(p.id) + '">Créer le client</a></div>' +
+            (data.clients.some(function (x) { return !x.archived; }) ? '<div class="fields link-client"><div class="field"><label for="pr-client">Client existant</label><select id="pr-client">' +
+              options([["", "Choisir un client…"]].concat(data.clients.filter(function (x) { return !x.archived; })
+                .sort(function (a, b) { return String(a.name).localeCompare(String(b.name), "fr"); }).map(function (x) { return [x.id, x.name]; })), "") +
+              '</select></div><div class="field"><button type="button" class="btn btn-ghost" id="pr-link">Lier ce client</button></div></div>' : "")) +
+        '<div class="espace-actions"><a class="btn btn-primary" href="' + (c ? "#/documents/nouveau?type=devis&client=" + esc(c.id) + "&piste=" + esc(p.id)
+          : "#/clients/nouveau?piste=" + esc(p.id) + "&devis=1") + '">Faire un devis</a></div>' +
+        (quotes.length ? docTable(quotes) : "") + "</section>" +
+        '<section class="card espace-card"><h3>Règles pour ' + (p.pro === false ? "un particulier" : "un professionnel") + "</h3>" + prospectRules(p.pro !== false) +
+        '<div class="espace-actions">' + (p.email ? '<a class="btn btn-ghost" href="mailto:' + esc(encodeURIComponent(p.email).replace(/%40/g, "@")) + '">Écrire</a>' : "") +
+        '<button type="button" class="btn btn-ghost" id="prospect-optout-btn">Ne plus contacter</button>' +
+        '<button type="button" class="btn btn-ghost" id="prospect-delete">Supprimer</button></div><p class="form-error" id="prospect-action-error" role="alert" hidden></p></section>';
+    }
+    view.innerHTML = html;
+    bindProspectForm(p, isNew);
+    if (!isNew) bindProspectSheet(p);
+  }
+
+  function bindProspectForm(p, isNew) {
+    var form = $("prospect-form"), f = form.elements, notice = $("prospect-optout"), confirmed = false;
+    var identity = function (x) { return E.optoutKeys(x).join("|"); };
+    form.addEventListener("input", function () { confirmed = false; notice.hidden = true; });
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var value = f.value.value.trim();
+      var next = { name: f.name.value.trim(), contact: f.contact.value.trim(), pro: f.pro.value === "1", email: f.email.value.trim(), phone: f.phone.value.trim(),
+                   source: f.source.value.trim(), stage: f.stage.value, value: value ? OF.num(value) : null, nextDate: f.nextDate.value,
+                   nextAction: f.nextAction.value.trim(), notes: f.notes.value.trim() };
+      var errors = E.prospectErrors(next), bad = {};
+      errors.forEach(function (x) { bad[x.field] = true; });
+      ["name", "email", "value", "nextDate", "stage"].forEach(function (k) { f[k].setAttribute("aria-invalid", String(!!bad[k])); });
+      showError("prospect-error", errors.map(function (x) { return x.message; }).join(" "));
+      if (errors.length) { f[errors[0].field].focus(); return; }
+      if (next.value !== null) next.value = Math.round(next.value * 100) / 100;
+      var save = function () {
+        Object.assign(p, next, { updatedAt: now() });
+        if (isNew) { p.createdAt = p.updatedAt; data.prospects.push(p); }
+        persist(isNew ? "Prospect créé." : "Prospect enregistré.").then(function () { location.hash = isNew ? "#/prospects/" + p.id : "#/prospects"; });
+      };
+      // Liste d'opposition : vérifiée à la création et quand le nom, l'email ou le téléphone changent.
+      if (confirmed || !data.optouts.length || (!isNew && identity(next) === identity(p))) { save(); return; }
+      optoutHashes(next).then(function (hashes) {
+        var matches = optoutMatches(hashes);
+        if (!matches.length) { save(); return; }
+        var direct = matches.filter(function (m) { return m.kinds.some(function (k) { return k !== "n"; }); });
+        var since = matches.map(function (m) { return m.optout.date; }).sort()[0];
+        notice.innerHTML = "<p>" + (direct.length ? "Cette personne a demandé le " + day(since) + " à ne plus être sollicitée (même " +
+            (direct[0].kinds.indexOf("e") > -1 ? "email" : "téléphone") + " dans votre liste d'opposition). Ne la prospectez pas ; si c'est elle qui vous recontacte, vous pouvez lui répondre."
+          : "Un prospect du même nom figure dans votre liste d'opposition (depuis le " + day(since) + ") : vérifiez qu'il ne s'agit pas de la même personne.") + "</p>" +
+          '<div class="espace-actions"><button type="button" class="btn btn-ghost btn-sm" id="optout-save">Enregistrer quand même</button>' +
+          (direct.length ? '<button type="button" class="btn btn-ghost btn-sm" id="optout-remove">Elle a de nouveau donné son accord : retirer de la liste</button>' : "") + "</div>";
+        notice.hidden = false;
+        $("optout-save").focus();
+        $("optout-save").addEventListener("click", function () { confirmed = true; save(); });
+        if ($("optout-remove")) $("optout-remove").addEventListener("click", function () {
+          var gone = direct.map(function (m) { return m.optout.id; });
+          data.optouts = data.optouts.filter(function (o) { return gone.indexOf(o.id) < 0; });
+          confirmed = true;
+          save();
+        });
+      }, function () {
+        showError("prospect-error", "Votre navigateur ne permet pas de vérifier la liste d'opposition : mettez-le à jour.");
+      });
+    });
+  }
+
+  function bindProspectSheet(p) {
+    var xf = $("exchange-form").elements;
+    $("exchange-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      var x = { date: xf.xdate.value, from: xf.xfrom.value, text: xf.xtext.value.trim() };
+      var errors = E.exchangeErrors(x, TODAY), names = { date: "xdate", from: "xfrom", text: "xtext" }, bad = {};
+      errors.forEach(function (err) { bad[err.field] = true; });
+      ["date", "from", "text"].forEach(function (k) { xf[names[k]].setAttribute("aria-invalid", String(!!bad[k])); });
+      showError("exchange-error", errors.map(function (err) { return err.message; }).join(" "));
+      if (errors.length) { xf[names[errors[0].field]].focus(); return; }
+      x.id = S.uid();
+      x.createdAt = x.updatedAt = p.updatedAt = now();
+      p.exchanges = (p.exchanges || []).concat([x]);
+      persist("Échange noté.").then(function () { render(true); $("ep-xtext").focus(); });
+    });
+    view.querySelectorAll("[data-exchange]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        if (!confirm("Supprimer cet échange ?")) return;
+        p.exchanges = p.exchanges.filter(function (x) { return x.id !== b.getAttribute("data-exchange"); });
+        p.updatedAt = now();
+        persist("Échange supprimé.").then(function () { render(true); $("ep-xtext").focus(); });
+      });
+    });
+    if ($("pr-link")) $("pr-link").addEventListener("click", function () {
+      var id = $("pr-client").value;
+      if (!id) { $("pr-client").focus(); return; }
+      p.clientId = id;
+      p.updatedAt = now();
+      persist("Piste liée au client " + clientName(id) + ".").then(function () { render(true); });
+    });
+    $("prospect-delete").addEventListener("click", function () {
+      if (!confirm("Supprimer la fiche « " + p.name + " » et ses échanges ?")) return;
+      data.prospects = data.prospects.filter(function (x) { return x.id !== p.id; });
+      persist("Fiche « " + p.name + " » supprimée.").then(function () { location.hash = "#/prospects"; });
+    });
+    $("prospect-optout-btn").addEventListener("click", function () {
+      if (!confirm("« " + p.name + " » ne souhaite plus être sollicité : la fiche et ses échanges sont supprimés. L'Espace garde seulement une empreinte de son email, " +
+        "de son téléphone et de son nom, qui ne permet pas de les retrouver, pour vous avertir si vous l'ajoutez de nouveau. Continuer ?")) return;
+      optoutHashes(p).then(function (hashes) {
+        var stamp = now();
+        data.optouts.push({ id: S.uid(), date: TODAY, hashes: hashes, createdAt: stamp, updatedAt: stamp });
+        data.prospects = data.prospects.filter(function (x) { return x.id !== p.id; });
+        persist("Opposition enregistrée : la fiche « " + p.name + " » est supprimée.").then(function () { location.hash = "#/prospects"; });
+      }, function () {
+        showError("prospect-action-error", "Votre navigateur ne permet pas de calculer les empreintes de la liste d'opposition : mettez-le à jour.");
+      });
     });
   }
 

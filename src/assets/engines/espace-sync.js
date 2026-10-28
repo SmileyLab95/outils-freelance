@@ -24,7 +24,9 @@
                  depositPct: "acompte", prefixes: "préfixes", numbering: "numérotation", endpoint: "adresse électronique",
                  amount: "montant", method: "moyen de paiement", note: "note", invoiceId: "facture liée", pro: "type de client", logo: "logo",
                  supplier: "fournisseur", label: "nature", ref: "référence de la pièce",
-                 task: "tâche", unit: "unité", quantity: "durée", rate: "taux", billable: "facturable" };
+                 task: "tâche", unit: "unité", quantity: "durée", rate: "taux", billable: "facturable",
+                 contact: "interlocuteur", source: "origine", stage: "étape", value: "valeur estimée", nextDate: "date de relance",
+                 nextAction: "prochaine action", prospectId: "piste", from: "sens de l'échange", text: "résumé", hashes: "empreintes" };
   var labels = function (fields) { return fields.map(function (k) { return LABELS[k] || k; }).join(", "); };
 
   // ----- Comparaison et copie ------------------------------------------------------------------
@@ -79,6 +81,9 @@
     out.documents = (Array.isArray(out.documents) ? out.documents : []).filter(Boolean);
     out.expenses = (Array.isArray(out.expenses) ? out.expenses : []).filter(Boolean);
     out.timeEntries = (Array.isArray(out.timeEntries) ? out.timeEntries : []).filter(Boolean);
+    out.prospects = (Array.isArray(out.prospects) ? out.prospects : []).filter(Boolean);
+    out.optouts = (Array.isArray(out.optouts) ? out.optouts : []).filter(Boolean);
+    out.prospects.forEach(function (p) { p.exchanges = (Array.isArray(p.exchanges) ? p.exchanges : []).filter(Boolean); });
     out.documents.forEach(function (d) {
       d.payments = (Array.isArray(d.payments) ? d.payments : []).filter(Boolean);
       d.payments.forEach(function (pay, i) { if (typeof pay.id !== "string" || !pay.id) pay.id = d.id + "-p" + (i + 1); });
@@ -130,7 +135,10 @@
                   document: "Brouillon effacé sur un appareil mais modifié sur un autre : il est conservé.",
                   payment: "Encaissement effacé sur un appareil mais modifié sur un autre : il est conservé.",
                   expense: "Dépense effacée sur un appareil mais modifiée sur un autre : elle est conservée.",
-                  time: "Temps passé effacé sur un appareil mais modifié sur un autre : il est conservé." };
+                  time: "Temps passé effacé sur un appareil mais modifié sur un autre : il est conservé.",
+                  prospect: "Prospect effacé sur un appareil mais modifié sur un autre : il est conservé.",
+                  exchange: "Échange effacé sur un appareil mais modifié sur un autre : il est conservé.",
+                  optout: "Opposition effacée sur un appareil mais modifiée sur un autre : elle est conservée." };
   var byId = function (list) { var m = {}; (list || []).forEach(function (x) { m[x.id] = x; }); return m; };
 
   /**
@@ -286,10 +294,13 @@
     return doc;
   }
 
-  /** Fiche client, dépense ou temps passé : fusion champ par champ ; même règle de suppression et de modification croisées. */
-  function mergeRecord(kind, deleted, changed) {
+  /**
+   * Fiche client, dépense, temps passé, prospect ou opposition : fusion champ par champ ; même règle de suppression et
+   * de modification croisées. skip : champs fusionnés à part (échanges d'un prospect).
+   */
+  function mergeRecord(kind, deleted, changed, skip) {
     return function (o, a, b, ctx) {
-      var res = mergeFields(o, a, b);
+      var res = mergeFields(o, a, b, skip);
       if (resurrect(o, a, b, res.value)) ctx.conflicts.push({ kind: kind, id: res.value.id, type: "deleted-modified", message: deleted });
       if (res.conflicts.length) ctx.conflicts.push({ kind: kind, id: res.value.id, type: "field", fields: res.conflicts,
         message: changed + " (" + labels(res.conflicts) + ")." });
@@ -302,6 +313,25 @@
     "Dépense modifiée sur deux appareils : la version la plus récente est gardée");
   var mergeTime = mergeRecord("time", "Temps passé supprimé sur un appareil mais modifié sur un autre : il est conservé.",
     "Temps passé modifié sur deux appareils : la version la plus récente est gardée");
+  var mergeOptout = mergeRecord("optout", "Opposition supprimée sur un appareil mais modifiée sur un autre : elle est conservée.",
+    "Opposition modifiée sur deux appareils : la version la plus récente est gardée");
+  var mergeFiche = mergeRecord("prospect", "Prospect supprimé sur un appareil mais modifié sur un autre : il est conservé.",
+    "Prospect modifié sur deux appareils : la version la plus récente est gardée", ["exchanges"]);
+  var mergeExchange = mergeRecord("exchange", "Échange supprimé sur un appareil mais modifié sur un autre : il est conservé.",
+    "Échange modifié sur deux appareils : la version la plus récente est gardée");
+
+  /** Prospect : fiche fusionnée champ par champ, échanges réunis par identifiant (comme les encaissements d'un document). */
+  function mergeProspect(o, a, b, ctx) {
+    var merged = mergeFiche(o, a, b, ctx), where = { prospectId: a.id };
+    var mergeOne = function (xo, xa, xb) {
+      var from = ctx.conflicts.length, value = mergeExchange(xo, xa, xb, ctx);
+      ctx.conflicts.slice(from).forEach(function (c) { Object.assign(c, where); });
+      return value;
+    };
+    merged.exchanges = mergeList("exchange", o && o.exchanges, a.exchanges, b.exchanges, ctx, mergeOne, null, where)
+      .sort(function (x, y) { return x.date === y.date ? (x.id < y.id ? -1 : 1) : (x.date < y.date ? -1 : 1); });
+    return merged;
+  }
 
   /**
    * Liens entre devis et factures après fusion : un devis pointe vers une facture émise qui le reprend (la première
@@ -360,6 +390,8 @@
     var clients = mergeList("client", base.clients, local.clients, remote.clients, ctx, mergeClient);
     var expenses = mergeList("expense", base.expenses, local.expenses, remote.expenses, ctx, mergeExpense);
     var timeEntries = mergeList("time", base.timeEntries, local.timeEntries, remote.timeEntries, ctx, mergeTime);
+    var prospects = mergeList("prospect", base.prospects, local.prospects, remote.prospects, ctx, mergeProspect);
+    var optouts = mergeList("optout", base.optouts, local.optouts, remote.optouts, ctx, mergeOptout);
     var documents = mergeList("document", base.documents, local.documents, remote.documents, ctx, mergeDocument, issued);
     // Versions d'un appareil qui n'avait pas encore reçu une copie : reportées sur cette copie (fusion depuis la même base).
     for (var guard = 0; ctx.rebase.length && guard < 1000; guard++) {
@@ -376,6 +408,7 @@
     });
     return {
       data: { schema: SCHEMA, profile: profile.value, clients: clients, documents: documents, expenses: expenses, timeEntries: timeEntries,
+              prospects: prospects, optouts: optouts,
               settings: clone(local.settings) || { lastExport: null }, savedAt: local.savedAt || null },
       conflicts: ctx.conflicts
     };

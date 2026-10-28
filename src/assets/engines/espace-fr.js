@@ -1,6 +1,7 @@
 /*
  * Moteur : Espace entrepreneur (France). Fonctions pures sur les données de l'Espace (voir documentation/09).
- * Numérotation et émission, statuts, encaissements, livre des recettes, déclaration Urssaf, plafonds.
+ * Numérotation et émission, statuts, encaissements, livre des recettes, déclaration Urssaf, plafonds ; dépenses,
+ * temps passé et prospects (documentation/36 à 38).
  * Les montants des documents viennent du moteur de facture commun (OFE.invoiceFR).
  */
 (function (root, factory) {
@@ -346,7 +347,8 @@
 
   /** Copie modifiable d'un document (nouveau brouillon daté d'aujourd'hui). */
   function duplicate(doc, today, id) {
-    var extra = doc.type === "avoir" ? ["originId", "origin"] : [];
+    // Avoir : la facture d'origine ; devis : la piste (documentation/38-prospects.md), pour qu'un devis revu la suive.
+    var extra = doc.type === "avoir" ? ["originId", "origin"] : doc.type === "devis" ? ["prospectId"] : [];
     return Object.assign(copyFrom(doc, COPY_FIELDS.concat(["validity", "depositPct"], extra)), { id: id, type: doc.type, status: "draft",
       date: today, serviceDate: today, payments: [] });
   }
@@ -664,6 +666,146 @@
     return lines.join("\r\n");
   }
 
+  // ----- Prospects (documentation/38-prospects.md) ------------------------------------------------------------
+
+  var STAGE_LABELS = { new: "À contacter", talks: "En discussion", quote: "Devis envoyé", won: "Gagné", lost: "Perdu" };
+  var STAGE_RANK = { new: 0, talks: 1, quote: 2, won: 3 };
+  var OPEN_STAGES = ["new", "talks", "quote"];
+  var has = function (o, k) { return Object.prototype.hasOwnProperty.call(o, k); };
+  var isDay = function (d) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(d || "");
+    return !!m && +m[2] >= 1 && +m[2] <= 12 && +m[3] >= 1 && +m[3] <= lastDay(+m[1], +m[2]);
+  };
+  var blank = function (v) { return v === null || v === undefined || v === ""; };
+
+  /** Erreurs de saisie d'une fiche, avec le champ concerné : name, email, value, nextDate, stage. */
+  function prospectErrors(p) {
+    var errors = [], add = function (field, message) { errors.push({ field: field, message: message }); };
+    if (!String(p.name || "").trim()) add("name", "Indiquez le nom du prospect : entreprise ou personne.");
+    if (String(p.email || "").trim() && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(String(p.email).trim())) add("email", "L'email n'est pas valide.");
+    if (!blank(p.value) && !(isFinite(Number(p.value)) && Number(p.value) >= 0)) add("value", "La valeur estimée doit être un montant positif, en euros.");
+    if (!blank(p.nextDate) && !isDay(p.nextDate)) add("nextDate", "La date de relance n'est pas valide.");
+    if (!has(STAGE_LABELS, p.stage)) add("stage", "Choisissez une étape.");
+    return errors;
+  }
+
+  /** Erreurs d'un échange noté : date (aujourd'hui au plus), sens (me ou them), résumé. */
+  function exchangeErrors(x, today) {
+    var errors = [], add = function (field, message) { errors.push({ field: field, message: message }); };
+    if (!isDay(x.date)) add("date", "Indiquez la date de l'échange.");
+    else if (x.date > today) add("date", "Un échange ne peut pas être daté dans le futur.");
+    if (x.from !== "me" && x.from !== "them") add("from", "Indiquez qui a pris contact.");
+    if (!String(x.text || "").trim()) add("text", "Résumez l'échange en quelques mots.");
+    return errors;
+  }
+
+  /** Devis faits depuis une piste (brouillons compris), les plus anciens d'abord. */
+  function prospectQuotes(p, documents) {
+    return (documents || []).filter(function (d) { return d && d.type === "devis" && d.prospectId && d.prospectId === p.id; })
+      .sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : String(a.issuedAt || "") < String(b.issuedAt || "") ? -1 : 1; });
+  }
+
+  /** Étape que les devis et les échanges imposent, sans tenir compte du choix de l'utilisateur. */
+  function minStage(p, documents) {
+    var quotes = prospectQuotes(p, documents).filter(function (d) { return d.status !== "draft"; });
+    if (quotes.some(function (d) { return d.status === "accepted" || d.invoiceId; })) return "won";
+    if (quotes.length) return "quote";
+    return (p.exchanges || []).some(function (x) { return x && !x.deletedAt; }) ? "talks" : "new";
+  }
+
+  /** Étape affichée : « Perdu » choisi reste ; sinon la plus avancée du choix et de minStage (« Gagné » choisi l'est déjà). */
+  function prospectStage(p, documents) {
+    if (p.stage === "lost") return "lost";
+    var auto = minStage(p, documents), chosen = has(STAGE_RANK, p.stage) ? p.stage : "new";
+    return STAGE_RANK[auto] > STAGE_RANK[chosen] ? auto : chosen;
+  }
+
+  /** Valeur : montant HT du dernier devis émis, sinon le montant estimé (ou null). */
+  function prospectValue(p, documents) {
+    var quotes = prospectQuotes(p, documents).filter(function (d) { return d.status !== "draft"; });
+    if (quotes.length) return INV.compute(quotes[quotes.length - 1]).ht; // déjà arrondi au centime
+    return blank(p.value) || !isFinite(Number(p.value)) ? null : round2(Number(p.value));
+  }
+
+  /** Nombre et valeur des pistes par étape, et des pistes ouvertes. */
+  function pipeline(prospects, documents) {
+    var out = { open: { count: 0, value: 0 } };
+    Object.keys(STAGE_LABELS).forEach(function (k) { out[k] = { count: 0, value: 0 }; });
+    (prospects || []).forEach(function (p) {
+      var s = prospectStage(p, documents), v = prospectValue(p, documents) || 0;
+      out[s].count++;
+      out[s].value = round2(out[s].value + v);
+      if (OPEN_STAGES.indexOf(s) > -1) { out.open.count++; out.open.value = round2(out.open.value + v); }
+    });
+    return out;
+  }
+
+  /** Pistes ouvertes dont la relance est due (aujourd'hui ou avant), la plus ancienne d'abord, puis par nom. */
+  function followUps(prospects, documents, today) {
+    return (prospects || []).filter(function (p) {
+      return p.nextDate && p.nextDate <= today && OPEN_STAGES.indexOf(prospectStage(p, documents)) > -1;
+    }).sort(function (a, b) {
+      return a.nextDate < b.nextDate ? -1 : a.nextDate > b.nextDate ? 1 : String(a.name || "").localeCompare(String(b.name || ""), "fr");
+    });
+  }
+
+  /** Date du dernier échange de sa part (le plus récent), ou "". */
+  function lastContactFrom(p) {
+    return (p.exchanges || []).reduce(function (last, x) {
+      return x && !x.deletedAt && x.from === "them" && isDay(x.date) && x.date > last ? x.date : last;
+    }, "");
+  }
+
+  /** Même jour n années plus tard ; un 29 février donne le 28 février d'une année non bissextile. */
+  function addYears(date, n) {
+    var y = +date.slice(0, 4) + n, m = +date.slice(5, 7), d = Math.min(+date.slice(8, 10), lastDay(y, m));
+    return iso(y, m, d);
+  }
+
+  /**
+   * Pistes non gagnées dont la durée de conservation est atteinte (CNIL : years ans après la collecte ou le dernier
+   * contact émanant du prospect) : { prospect, since, due }.
+   */
+  function retentionDue(prospects, documents, today, years) {
+    var out = [];
+    (prospects || []).forEach(function (p) {
+      if (prospectStage(p, documents) === "won") return;
+      var since = lastContactFrom(p) || String(p.createdAt || "").slice(0, 10);
+      if (!isDay(since)) return;
+      var due = addYears(since, years);
+      if (due <= today) out.push({ prospect: p, since: since, due: due });
+    });
+    return out;
+  }
+
+  /** Textes normalisés à hacher pour la liste d'opposition : "e:" email, "t:" téléphone, "n:" nom. */
+  function optoutKeys(p) {
+    var keys = [], email = String(p.email || "").trim().toLowerCase();
+    if (/^[^@\s]+@[^@\s]+$/.test(email)) keys.push("e:" + email);
+    var raw = String(p.phone || "").trim(), digits = raw.replace(/\(0\)/g, "").replace(/\D/g, ""), phone = "";
+    if (digits.length >= 6) {
+      var intl = raw.charAt(0) === "+" ? digits : digits.slice(0, 2) === "00" ? digits.slice(2) : null;
+      phone = intl === null ? digits : intl.slice(0, 2) === "33" ? "0" + intl.slice(2) : "+" + intl;
+      keys.push("t:" + phone);
+    }
+    var name = String(p.name || "").toLowerCase().replace(/œ/g, "oe").replace(/æ/g, "ae").normalize("NFD").replace(/[̀-ͯ]/g, "")
+      .replace(/[^a-z0-9]+/g, " ").trim();
+    if (name) keys.push("n:" + name);
+    return keys;
+  }
+
+  function prospectsCSV(prospects, documents) {
+    var q = function (v) { return '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"'; };
+    var lines = ["Nom;Interlocuteur;Type;Email;Téléphone;Origine;Étape;Valeur HT;Prochaine relance;Prochaine action;Dernier contact de sa part;Créé le"];
+    (prospects || []).forEach(function (p) {
+      var v = prospectValue(p, documents);
+      lines.push([q(p.name), q(p.contact), p.pro === false ? "Particulier" : "Professionnel", q(p.email), q(p.phone), q(p.source),
+                  STAGE_LABELS[prospectStage(p, documents)], v === null ? "" : v.toFixed(2).replace(".", ","), frDay(p.nextDate), q(p.nextAction),
+                  frDay(lastContactFrom(p)), frDay(String(p.createdAt || "").slice(0, 10))].join(";"));
+    });
+    return lines.join("\r\n");
+  }
+
   function ledgerCSV(rows) {
     var q = function (v) { return '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"'; };
     var lines = ["Date;Client;Nature;Montant;Moyen de paiement;Référence"];
@@ -684,5 +826,8 @@
            purchasesRequired: purchasesRequired, expenseRows: expenseRows, checkExpense: checkExpense, expensesCSV: expensesCSV,
            parseDuration: parseDuration, durationLabel: durationLabel, checkTime: checkTime, timeErrors: timeErrors, timeState: timeState, lastRate: lastRate,
            timeInvoiceLines: timeInvoiceLines, timeInvoice: timeInvoice, timeSummary: timeSummary, unbilledByClient: unbilledByClient,
-           timeCSV: timeCSV };
+           timeCSV: timeCSV,
+           STAGE_LABELS: STAGE_LABELS, OPEN_STAGES: OPEN_STAGES, prospectErrors: prospectErrors, exchangeErrors: exchangeErrors, prospectQuotes: prospectQuotes,
+           minStage: minStage, prospectStage: prospectStage, prospectValue: prospectValue, pipeline: pipeline, followUps: followUps,
+           lastContactFrom: lastContactFrom, addYears: addYears, retentionDue: retentionDue, optoutKeys: optoutKeys, prospectsCSV: prospectsCSV };
 });

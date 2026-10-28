@@ -217,9 +217,12 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   l'année** : ajouté dans l'Espace ; règles de la CNIL sur la conservation des données des prospects et la prospection
   par email et par téléphone (nouvelles règles du 11/08/2026) et sur la liste d'opposition lues en entier : spécification
   du module Prospects ([38](38-prospects.md), décision D36).
+- **Prospects (28/10/2026)** : nouvel onglet de l'Espace : pistes par étape, relances du jour, échanges, piste
+  transformée en client et en devis (l'étape suit le devis) ; règles de la CNIL : conservation de 3 ans avec rappel,
+  « Ne plus contacter » qui ne garde que des empreintes (liste d'opposition), prospection par email et par téléphone
+  ([38](38-prospects.md), décision D37).
 - **Prochaines actions de Claude** : refonte, suite ([31](31-vision-plateforme.md) § 5) : modules suivants de l'Espace
-  (prospects : spécification [38](38-prospects.md) écrite d'après les fiches de la CNIL lues en entier, réalisation
-  en cours ; trésorerie) ;
+  (trésorerie) ;
   activité mixte de l'Espace à spécifier (le profil n'a qu'une activité : deux plafonds, déclaration et livre des
   recettes distinguant ventes et prestations, BOFiP BOI-BIC-DECLA-30-30) ; questions ouvertes de `data/rules/` à relire
   avec l'outil de lecture des sources (taux de l'intérêt légal du second semestre 2026, ACRE) ; puis besoins P3 restants
@@ -423,6 +426,8 @@ Objectif : un compte gratuit qui rend service dès le premier jour.
       depuis l'environnement de travail (format des réponses et appels depuis le navigateur à vérifier) ; la recherche
       ne partira qu'à la demande de l'utilisateur, mentionnée dans la politique de confidentialité
 - [x] Clients : fiche, pays, historique et totaux *(version locale)*
+- [x] Prospects : pistes par étape, relances, échanges, conversion en client et en devis, conservation et liste d'opposition (CNIL) *(version locale)*
+- [x] Temps passé facturé et dépenses avec registre des achats *(version locale)*
 - [ ] Clients : SIREN et numéro de TVA vérifiés (API Recherche d'entreprises, VIES)
 - [x] Devis, factures et avoirs : numérotation continue, PDF, duplication, avoirs, devis transformé en facture *(version locale)*
 - [ ] Devis, factures et avoirs enregistrés dans le cloud (comptes en ligne)

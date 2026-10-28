@@ -13,7 +13,8 @@
   var channel = "BroadcastChannel" in window ? new BroadcastChannel("of-espace-" + KEY) : null;
 
   function empty() {
-    return { schema: SCHEMA, profile: null, clients: [], documents: [], expenses: [], timeEntries: [], settings: { lastExport: null }, savedAt: null };
+    return { schema: SCHEMA, profile: null, clients: [], documents: [], expenses: [], timeEntries: [], prospects: [], optouts: [],
+             settings: { lastExport: null }, savedAt: null };
   }
 
   // Une seule connexion à la base, ouverte au premier besoin puis réutilisée.
@@ -70,7 +71,18 @@
     var badTime = (data.timeEntries || []).some(function (t) {
       return !t || !isText(t.id) || !isDate(t.date) || ["hour", "day"].indexOf(t.unit) < 0 || !isFinite(Number(t.quantity));
     });
-    return badClient || badDoc || badExpense || badTime ? "Cette sauvegarde contient des éléments illisibles." : "";
+    // Prospects et liste d'opposition : facultatifs (sauvegardes antérieures au module).
+    if ((data.prospects !== undefined && !Array.isArray(data.prospects)) || (data.optouts !== undefined && !Array.isArray(data.optouts))) {
+      return "Cette sauvegarde est incomplète.";
+    }
+    var badProspect = (data.prospects || []).some(function (p) {
+      return !p || !isText(p.id) || !isText(p.name) || (p.exchanges !== undefined && !Array.isArray(p.exchanges)) ||
+        (p.exchanges || []).some(function (x) { return !x || !isText(x.id) || !isDate(x.date) || ["me", "them"].indexOf(x.from) < 0; });
+    });
+    var badOptout = (data.optouts || []).some(function (o) {
+      return !o || !isText(o.id) || !isDate(o.date) || !Array.isArray(o.hashes) || !o.hashes.length || !o.hashes.every(isText);
+    });
+    return badClient || badDoc || badExpense || badTime || badProspect || badOptout ? "Cette sauvegarde contient des éléments illisibles." : "";
   }
 
   var live = function (x) { return x && !x.deletedAt; };
@@ -85,6 +97,10 @@
     out.clients = out.clients.filter(live);
     out.expenses = (Array.isArray(out.expenses) ? out.expenses : []).filter(live);
     out.timeEntries = (Array.isArray(out.timeEntries) ? out.timeEntries : []).filter(live);
+    out.optouts = (Array.isArray(out.optouts) ? out.optouts : []).filter(live);
+    out.prospects = (Array.isArray(out.prospects) ? out.prospects : []).filter(live).map(function (p) {
+      return Object.assign({}, p, { exchanges: (Array.isArray(p.exchanges) ? p.exchanges : []).filter(live) });
+    });
     out.documents = out.documents.filter(function (d) { return d && (!d.deletedAt || d.status !== "draft"); }).map(function (d) {
       var doc = Object.assign({ payments: [], lines: [], vat: { franchise: true, rate: 20, place: "fr" } }, d);
       delete doc.deletedAt;

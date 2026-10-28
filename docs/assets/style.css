@@ -784,6 +784,17 @@ a.country-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg)
 .time-facts { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 6px 16px; margin: 0; }
 .time-facts dt { color: var(--muted); }
 .time-facts dd { margin: 0; }
+/* Prospects (documentation/38-prospects.md) */
+.pipeline { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-bottom: 16px; }
+.espace .details-card { margin-bottom: 16px; }
+.espace .details-card .doc-list { padding: 0 14px 8px; }
+.pipeline .espace-card { margin: 0; }
+.pipeline-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 10px; margin-bottom: 6px; }
+.pipeline-head h3 { margin: 0; }
+.prospect-rules { margin: 0 0 10px; padding-left: 1.2em; }
+.prospect-rules li { margin-bottom: 6px; }
+.exchanges .dl-main .small { overflow-wrap: anywhere; }
+.link-client { align-items: end; margin-top: 10px; }
 @media (max-width: 560px) {
   .time-totals { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
   .time-totals li:last-child { grid-column: 1 / -1; }
@@ -814,6 +825,7 @@ a.country-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg)
   .espace-nav::-webkit-scrollbar { display: none; }
   .espace-nav a { padding: 8px 12px; font-size: .9rem; }
   .espace-cols { grid-template-columns: minmax(0, 1fr); }
+  .pipeline { grid-template-columns: minmax(0, 1fr); gap: 14px; }
 }
 @media (max-width: 560px) {
   .kpis { grid-template-columns: minmax(0, 1fr); }

@@ -1461,6 +1461,39 @@
       "confidence": "high",
       "verified_on": "2026-10-28",
       "note": "Lu le 24/10/2026 et relu le 28/10/2026 avec l'outil « Lire une source officielle » (adresse finale de la fiche, SHA-256 fd74ac87…b8cc). Légifrance refusant les lectures automatiques, l'article L34-5 du CPCE est lu à travers cette fiche. Les adresses génériques d'une société (info@, contact@…), qui concernent des personnes morales, ne sont pas soumises à ces règles."
+    },
+    "prospects_opposition": {
+      "value": {
+        "principe": "droit absolu de s'opposer, simplement et gratuitement, à la prospection, sans avoir à se justifier ; une personne opposée ne doit pas être sollicitée à nouveau",
+        "liste_repoussoir": "liste qui permet de prendre en compte l'opposition dans la durée, quelle que soit la source des données ; elle ne sert à aucune autre finalité et ne garde que les données nécessaires",
+        "minimisation": "possible de ne garder que les empreintes (hachage) de l'adresse ou du numéro utilisé pour la prospection, sans liste nominative",
+        "conservation_min_annees": 3
+      },
+      "unit": "object",
+      "label": "Opposition à la prospection et liste repoussoir",
+      "source": "https://www.cnil.fr/fr/comment-utiliser-une-liste-repoussoir-pour-respecter-lopposition-la-prospection",
+      "source_title": "CNIL, « Comment utiliser une liste repoussoir pour respecter l'opposition à la prospection ? » (10 juin 2026 ; RGPD, art. 21)",
+      "confidence": "high",
+      "verified_on": "2026-10-28",
+      "note": "Lu en entier le 28/10/2026 avec l'outil « Lire une source officielle ». Durée : « La CNIL recommande que les informations permettant de prendre en compte l'opposition d'une personne soient conservées au minimum 3 ans » (recommandation). Le référentiel « gestion des activités commerciales » (§ 9) rappelle que l'opposition à la prospection doit être prise en compte systématiquement."
+    },
+    "prospection_telephone": {
+      "value": {
+        "depuis": "2026-08-11",
+        "particuliers": "consentement préalable, libre, spécifique, éclairé et univoque (case non pré-cochée ; les conditions générales ne suffisent pas), sauf appel en rapport avec un contrat en cours",
+        "consentement_validite": "un an au plus ; retrait possible à tout moment",
+        "preuve_conservation_min_annees": 3,
+        "horaires": "du lundi au vendredi, de 10 h à 13 h et de 14 h à 20 h, sauf accord du consommateur ; pas les samedis, dimanches et jours fériés",
+        "rappel_sur_demande": "réponse à une demande explicite d'information du consommateur : dans les 5 jours ouvrables, sur les seuls biens ou services demandés",
+        "professionnels": "information lors de la collecte du numéro et opposition simple et gratuite ; possible sur le fondement de l'intérêt légitime si l'objet est en rapport avec la profession de la personne démarchée"
+      },
+      "unit": "object",
+      "label": "Prospection commerciale par téléphone (hors automate d'appel)",
+      "source": "https://www.cnil.fr/fr/prospection-commerciale-par-telephone-hors-automate-dappel-quelles-sont-les-regles",
+      "source_title": "CNIL, « Prospection commerciale par téléphone (hors automate d'appel) : quelles sont les règles ? » (10 juin 2026 ; Code de la consommation, art. L223-1, loi du 30 juin 2025 ; décret n° 2026-662 du 23 juillet 2026)",
+      "confidence": "high",
+      "verified_on": "2026-10-28",
+      "note": "Lu en entier le 28/10/2026 avec l'outil « Lire une source officielle ». Règles en vigueur depuis le 11 août 2026. Démarchage téléphonique totalement interdit pour la rénovation énergétique, l'adaptation du logement à la perte d'autonomie et le compte personnel de formation. Le décret n° 2026-662 (Légifrance, JORFTEXT000054483939) n'est pas lisible depuis l'outil : lu à travers cette fiche."
     }
   },
   "open_questions": [

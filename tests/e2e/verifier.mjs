@@ -3126,6 +3126,172 @@ const tests = {
     await go("#/temps");
     check((await text("#espace-view")).includes("Aucun temps saisi en octobre 2026") && (await page.$$eval(".doc-list li, .time-due li", (l) => l.length)) === 0,
       "Temps : sauvegarde antérieure au module acceptée (aucun temps)");
+
+    // Prospects (documentation/38-prospects.md) : fiche, erreurs, échanges, étapes, relance, client et devis créés depuis
+    // la piste, devis accepté, opposition (empreintes seules), avertissement et retrait, conservation, CSV, sauvegarde.
+    const store = () => page.evaluate(() => window.EspaceStore.load());
+    await go("#/prospects");
+    check((await text("#espace-view h2")) === "Prospects" && (await text("#espace-view")).includes("Pas encore de prospect"), "Prospects : liste vide");
+    await accessible(page, "Espace : prospects (vide)");
+    await page.click('#espace-view a[href="#/prospects/nouveau"]');
+    await page.waitForSelector("#prospect-form");
+    await page.click("#prospect-form button[type=submit]");
+    check((await text("#prospect-error")).startsWith("Indiquez le nom du prospect") && (await page.getAttribute("#ep-name", "aria-invalid")) === "true",
+      "Prospects : nom obligatoire, champ signalé");
+    await page.fill("#ep-name", "Maison Verdier");
+    await page.fill("#ep-email", "ines@verdier");
+    await page.fill("#ep-value", "-5");
+    await page.click("#prospect-form button[type=submit]");
+    check((await text("#prospect-error")) === "L'email n'est pas valide. La valeur estimée doit être un montant positif, en euros.", "Prospects : email et valeur contrôlés");
+    await page.fill("#ep-contact", "Inès Moreau");
+    await page.fill("#ep-email", "ines@verdier.example");
+    await page.fill("#ep-phone", "06 12 34 56 78");
+    await page.fill("#ep-source", "Recommandation");
+    await page.fill("#ep-value", "1 500");
+    await page.fill("#ep-nextDate", "2026-10-20");
+    await page.fill("#ep-nextAction", "Rappeler pour le devis");
+    await accessible(page, "Espace : nouveau prospect");
+    await page.click("#prospect-form button[type=submit]");
+    await page.waitForSelector("#exchange-form");
+    check((await text("#espace-view h2")) === "Maison Verdier" && (await text(".espace-head .st")) === "À contacter", "Prospects : fiche créée, à contacter");
+    await page.fill("#ep-xdate", "2026-10-21");
+    await page.fill("#ep-xtext", "Appel");
+    await page.click("#exchange-form button[type=submit]");
+    check((await text("#exchange-error")) === "Un échange ne peut pas être daté dans le futur.", "Prospects : échange daté dans le futur refusé");
+    await page.fill("#ep-xdate", "2026-10-18");
+    await page.selectOption("#ep-xfrom", "them");
+    await page.fill("#ep-xtext", "Demande de devis par téléphone");
+    await page.click("#exchange-form button[type=submit]");
+    await page.waitForSelector(".exchanges");
+    check((await text(".espace-head .st")) === "En discussion" && (await text("#prospect-last")).startsWith("Dernier contact de sa part : 18/10/2026") &&
+      (await page.$eval('#ep-stage option[value="new"]', (o) => o.disabled)) && (await page.evaluate(() => document.activeElement.id)) === "ep-xtext",
+      "Prospects : échange de sa part noté, piste en discussion, étape « À contacter » grisée");
+    await accessible(page, "Espace : fiche d'un prospect");
+    const verdier = await page.evaluate(() => location.hash.split("/")[2]);
+    await go("#/");
+    check((await text("#espace-view")).includes("Un prospect à relancer : Maison Verdier."), "Prospects : relance du jour au tableau de bord");
+    await go("#/prospects");
+    check((await text("#espace-view")).includes("Pistes ouvertes 1 Valeur estimée 1 500,00 € À relancer 1") &&
+      (await text("#espace-view .doc-list")).includes("Maison Verdier Rappeler pour le devis 20/10/2026 Aujourd'hui") &&
+      (await text("#stage-talks + span")) === "1 piste · 1 500,00 €", "Prospects : relance due, piste dans « En discussion » avec sa valeur");
+    await go("#/prospects/" + verdier);
+    await page.click('#espace-view a:text("Faire un devis")');
+    await page.waitForSelector("#client-form");
+    check((await page.inputValue("#ep-name")) === "Maison Verdier" && (await page.inputValue("#ep-email")) === "ines@verdier.example" &&
+      (await page.inputValue("#ep-notes")) === "Interlocuteur : Inès Moreau\nTéléphone : 06 12 34 56 78", "Prospects : client prérempli depuis la piste");
+    await page.click("#client-form button[type=submit]");
+    await page.waitForSelector("#doc-form");
+    check((await text("#espace-view h2")) === "Nouveau devis" && (await text("#espace-view")).includes("Devis pour la piste Maison Verdier") &&
+      (await page.$eval("#d-client", (el) => el.options[el.selectedIndex].text)) === "Maison Verdier", "Prospects : devis en brouillon pour le client créé, lié à la piste");
+    await page.fill("#ln-desc-0", "Identité visuelle");
+    await page.fill("#ln-price-0", "1800");
+    await page.waitForTimeout(600);
+    await go("#/prospects/" + verdier);
+    check((await text(".espace-head .st")) === "En discussion" && (await text("#espace-view")).includes("Client : Maison Verdier"),
+      "Prospects : un brouillon de devis ne change pas l'étape ; client lié");
+    await page.click('#espace-view .doc-list a');
+    await page.waitForSelector("#d-issue");
+    await page.click("#d-issue");
+    await page.waitForFunction(() => /^Devis D2026-/.test(document.querySelector("#espace-view h2").textContent));
+    await go("#/prospects/" + verdier);
+    check((await text(".espace-head .st")) === "Devis envoyé" && (await text("#espace-view .doc-list")).includes("Envoyé") &&
+      (await page.$eval('#ep-stage option[value="talks"]', (o) => o.disabled)), "Prospects : devis émis, piste à « Devis envoyé »");
+    await go("#/prospects");
+    check((await text("#stage-quote + span")) === "1 piste · 1 800,00 €", "Prospects : valeur = montant HT du devis émis");
+    await go("#/prospects/" + verdier);
+    await page.click('#espace-view .doc-list a');
+    await page.waitForSelector('[data-quote="accepted"]');
+    await page.click('[data-quote="accepted"]');
+    await page.waitForTimeout(300);
+    await go("#/prospects");
+    check((await text("#espace-view details")).startsWith("Gagnés · 1 piste · 1 800,00 €") && (await text("#espace-view")).includes("Pistes ouvertes 0"),
+      "Prospects : devis accepté, piste gagnée");
+
+    // Opposition : la fiche est remplacée par des empreintes ; avertissement si la personne est ajoutée de nouveau.
+    const createProspect = async (fields) => {
+      await go("#/prospects/nouveau");
+      for (const [k, v] of Object.entries(fields)) {
+        if (k === "pro") await page.selectOption("#ep-pro", v); else await page.fill("#ep-" + k, v);
+      }
+      await page.click("#prospect-form button[type=submit]");
+    };
+    await createProspect({ name: "Studio Ébène", pro: "0", email: "contact@ebene.example", phone: "+33 7 00 00 00 01" });
+    await page.waitForSelector("#prospect-optout-btn");
+    check((await text("#espace-view")).includes("Règles pour un particulier") && (await text("#espace-view")).includes("seulement avec son accord préalable"),
+      "Prospects : règles de la CNIL pour un particulier");
+    await page.click("#prospect-optout-btn");
+    await page.waitForFunction(() => location.hash === "#/prospects");
+    let kept = await store();
+    check(kept.prospects.length === 1 && kept.optouts.length === 1 && kept.optouts[0].date === "2026-10-20" && kept.optouts[0].hashes.length === 3 &&
+      kept.optouts[0].hashes.every((h) => /^[etn]:[0-9a-f]{64}$/.test(h)) && !/ebene|Ébène|0700/i.test(JSON.stringify(kept.optouts)),
+      "Prospects : « Ne plus contacter » : fiche supprimée, seules la date et trois empreintes gardées");
+    check((await text("#espace-view")).includes("1 personne a demandé à ne plus être sollicitée"), "Prospects : liste d'opposition comptée, sans identité");
+    await createProspect({ name: "STUDIO EBENE" });
+    await page.waitForSelector("#prospect-optout:not([hidden])");
+    check((await text("#prospect-optout")).startsWith("Un prospect du même nom figure dans votre liste d'opposition (depuis le 20/10/2026)") && !(await page.$("#optout-remove")),
+      "Prospects : même nom, sans accent ni majuscule : avertissement, sans retrait possible");
+    await page.click("#optout-save");
+    await page.waitForSelector("#exchange-form");
+    await createProspect({ name: "Ébène", phone: "07 00 00 00 01" });
+    await page.waitForSelector("#prospect-optout:not([hidden])");
+    check((await text("#prospect-optout")).includes("Cette personne a demandé le 20/10/2026 à ne plus être sollicitée (même téléphone"), "Prospects : même téléphone dans un autre format : avertissement");
+    await accessible(page, "Espace : avertissement d'opposition");
+    await page.click("#optout-remove");
+    await page.waitForSelector("#exchange-form");
+    kept = await store();
+    check(kept.optouts.length === 0 && kept.prospects.length === 3, "Prospects : accord de nouveau donné, opposition retirée et fiche créée");
+    await page.selectOption("#pr-client", { label: "Atelier Lumen" });
+    await page.click("#pr-link");
+    await page.waitForSelector("#pr-link", { state: "detached" });
+    check((await text("#espace-view")).includes("Client : Atelier Lumen"), "Prospects : piste liée à un client existant");
+    await page.selectOption("#ep-stage", "lost");
+    await page.click("#prospect-form button[type=submit]");
+    await page.waitForFunction(() => location.hash === "#/prospects");
+    check((await page.$$eval("#espace-view details summary", (l) => l.map((x) => x.textContent.replace(/\s+/g, " ").trim()))).includes("Perdus · 1 piste"), "Prospects : piste perdue");
+
+    // Conservation : 3 ans sans contact de sa part ; rappel au tableau de bord et suppression.
+    await page.evaluate(async () => {
+      const d = await window.EspaceStore.load();
+      d.prospects.push({ id: "old-1", name: "Ancienne piste", pro: true, stage: "lost", exchanges: [{ id: "x-old", date: "2023-10-20", from: "them", text: "Appel" }],
+        createdAt: "2023-09-01T08:00:00Z", updatedAt: "2023-10-20T08:00:00Z" });
+      await window.EspaceStore.save(d);
+    });
+    await page.reload({ waitUntil: "networkidle" });
+    await go("#/");
+    check((await text("#espace-view")).includes("1 prospect sans contact de leur part depuis 3 ans"), "Prospects : rappel de conservation au tableau de bord");
+    await go("#/prospects");
+    check((await text("#prospects-retention")).includes("Ancienne piste Dernier contact de sa part : 20/10/2023"), "Prospects : piste à supprimer (3 ans après son dernier contact)");
+    await shot("prospects");
+    const [prospectsCsv] = await Promise.all([page.waitForEvent("download"), page.click("#prospects-csv")]);
+    const csvText = fs.readFileSync(await prospectsCsv.path(), "utf8");
+    check(csvText.startsWith("\ufeffNom;Interlocuteur;Type;Email") && csvText.includes('"Maison Verdier";"Inès Moreau";Professionnel;"ines@verdier.example";"06 12 34 56 78";"Recommandation";Gagné;1800,00'),
+      "Prospects : export CSV");
+    await page.click('[data-forget="old-1"]');
+    await page.waitForTimeout(300);
+    check(!(await page.$("#prospects-retention")) && !(await store()).prospects.some((x) => x.id === "old-1"), "Prospects : piste ancienne supprimée");
+    await go("#/prospects/" + verdier);
+    await page.waitForSelector("#exchange-form");
+    await shot("prospect-fiche");
+
+    // Sauvegarde : prospects et opposition compris ; éléments illisibles refusés ; sauvegarde antérieure acceptée.
+    await go("#/reglages");
+    const [prospectBackup] = await Promise.all([page.waitForEvent("download"), page.click("#export-btn")]);
+    const withProspects = JSON.parse(fs.readFileSync(await prospectBackup.path(), "utf8"));
+    check(withProspects.prospects.length === 3 && withProspects.prospects.find((x) => x.name === "Maison Verdier").exchanges.length === 1 && Array.isArray(withProspects.optouts),
+      "Prospects : compris dans la sauvegarde, avec les échanges");
+    await restore("illisible.json", Object.assign({}, withProspects, { prospects: withProspects.prospects.concat([{ id: "y", name: "X", exchanges: [{ id: "z", date: "2026-10-20", from: "lui" }] }]) }));
+    await page.waitForFunction(() => !document.getElementById("import-error").hidden);
+    check((await text("#import-error")) === "Cette sauvegarde contient des éléments illisibles.", "Prospects : échange illisible refusé");
+    await restore("illisible.json", Object.assign({}, withProspects, { optouts: [{ id: "o", date: "2026-10-20", hashes: [] }] }));
+    await page.waitForFunction(() => !document.getElementById("import-error").hidden);
+    check((await text("#import-error")) === "Cette sauvegarde contient des éléments illisibles.", "Prospects : opposition sans empreinte refusée");
+    const noProspects = Object.assign({}, withProspects);
+    delete noProspects.prospects;
+    delete noProspects.optouts;
+    await restore("ancienne.json", noProspects);
+    await page.waitForSelector(".kpis");
+    await go("#/prospects");
+    check((await text("#espace-view")).includes("Pas encore de prospect"), "Prospects : sauvegarde antérieure au module acceptée");
     await go("#/");
   },
   async "fr/recherche-nom-de-domaine/"(page) {

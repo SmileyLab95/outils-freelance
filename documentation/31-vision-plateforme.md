@@ -58,7 +58,7 @@ le Pro vend du temps gagné, pas l'accès à la conformité.
 
 ## 3. La carte des besoins : tout ce dont un freelance a besoin
 
-État au 23/10/2026 : ✅ publié (4 pays sauf mention), 🧱 brouillon prêt, ⬜ à faire. « Accès » : V visiteur,
+État au 28/10/2026 : ✅ publié (4 pays sauf mention), 🧱 brouillon prêt, ⬜ à faire. « Accès » : V visiteur,
 G compte gratuit, P Pro, ⇄ partenaire signalé.
 
 ### 3.1 Démarrer
@@ -81,7 +81,7 @@ G compte gratuit, P Pro, ⇄ partenaire signalé.
 |---|---|---|---|
 | Écrire aux prospects | Modèles d'emails (prospection, relance de devis, objections, hausse) | ✅ | V |
 | Convaincre | Proposition commerciale | ✅ | V |
-| Suivre ses prospects | Mini-CRM : prospects, étapes (contact, proposition, devis, gagné, perdu), rappels | ⬜ | G |
+| Suivre ses prospects | Mini-CRM : prospects, étapes (contact, proposition, devis, gagné, perdu), rappels ([38](38-prospects.md)) | ✅ (France) | G |
 | Se rendre visible | Page publique, guide LinkedIn et plateformes ; comparatif des plateformes de freelances (frais, paiement) | ⬜ | P, V |
 | Réseau | Annuaire et entraide entre freelances (plus tard, modération) | ⬜ | G |
 
@@ -115,14 +115,14 @@ G compte gratuit, P Pro, ⇄ partenaire signalé.
 | Relances et pénalités | Modèles, calculateurs ; relances automatiques | ✅ / ⬜ | V, P |
 | Être payé en ligne | Liens de paiement (prestataire de paiement choisi par Ismail) | ⬜ | P, ⇄ |
 | Recouvrement en justice | Guides (France en attente des textes) | ✅ | V |
-| Suivre le temps passé | Chronomètre et feuilles de temps, transformés en facture | ⬜ | G |
+| Suivre le temps passé | Chronomètre et feuilles de temps, transformés en facture ([37](37-temps-passe.md)) | ✅ (France, saisie ; chronomètre ⬜) | G |
 
 ### 3.6 Gérer
 
 | Besoin | Outil | État | Accès |
 |---|---|---|---|
 | Recettes et encaissements | Livre des recettes, Espace | ✅ | G |
-| Dépenses et justificatifs | Saisie, photo du justificatif, registre des achats | ⬜ | G, P |
+| Dépenses et justificatifs | Saisie, photo du justificatif, registre des achats ([36](36-depenses-et-registre-des-achats.md)) | ✅ (France, saisie et registre ; justificatifs ⬜) | G, P |
 | Frais | Barème kilométrique, bureau à domicile | ✅ | V |
 | Trésorerie | Prévision : encaissements attendus, charges, part à mettre de côté | ⬜ | G |
 | Matériel | Registre des immobilisations et amortissement (régimes réels) | ⬜ | G |

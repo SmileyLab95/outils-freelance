@@ -10,7 +10,7 @@ const E = require("../../src/assets/engines/espace-fr.js");
 
 const T = (n) => new Date(Date.UTC(2026, 9, 1, 8) + n * 60000).toISOString();
 const uidFrom = (prefix) => { let k = 0; return () => `${prefix}-${++k}`; };
-const state = (over = {}) => Object.assign({ schema: 2, profile: null, clients: [], documents: [], expenses: [], timeEntries: [], settings: { lastExport: null }, savedAt: null }, over);
+const state = (over = {}) => Object.assign({ schema: 2, profile: null, clients: [], documents: [], expenses: [], timeEntries: [], prospects: [], optouts: [], settings: { lastExport: null }, savedAt: null }, over);
 const client = (over = {}) => Object.assign({ id: "c1", name: "Studio Nova", email: "a@nova.example", pro: true, place: "fr", createdAt: T(0), updatedAt: T(0) }, over);
 const draft = (over = {}) => Object.assign({ id: "d1", type: "facture", status: "draft", date: "2026-10-05", clientId: "c1", terms: 30, nature: "services",
   lines: [{ desc: "Site", qty: 1, price: 1000 }], vat: { franchise: true, rate: 20, place: "fr" }, payments: [], createdAt: T(0), updatedAt: T(0) }, over);
@@ -96,6 +96,9 @@ test("encaissements réunis ; un encaissement supprimé reste supprimé ; un ém
   let r = merge(o, a, b);
   assert.deepEqual(r.data.documents[0].payments.map((p) => p.id), ["p1", "p2"]);
   sym(o, a, b);
+  const early = { id: "p9", date: "2026-10-05", amount: 100, method: "especes" };
+  r = merge(o, a, state({ documents: [Object.assign({}, inv, { payments: [early], updatedAt: T(4) })] }));
+  assert.deepEqual(r.data.documents[0].payments.map((p) => p.id), ["p9", "p1"], "par date d'encaissement, pas par identifiant");
 
   const both = state({ documents: [Object.assign({}, inv, { payments: [p1, p2] })] });
   const removed = state({ documents: [Object.assign({}, inv, { payments: [Object.assign({}, p1, { deletedAt: T(6) }), p2], updatedAt: T(6) })] });
@@ -558,4 +561,56 @@ test("temps passé : supprimé d'un côté (retiré, ou conservé si modifié de
   assert.deepEqual(marked.conflicts.map((c) => [c.kind, c.type]), [["time", "deleted-modified"]]);
   assert.deepEqual(S.migrate({ schema: 1, clients: [], documents: [] }).timeEntries, [], "ancienne sauvegarde sans temps");
   assert.deepEqual(merge(null, { schema: 2, clients: [], documents: [] }, state({ timeEntries: [entry()] })).data.timeEntries.map((e) => e.id), ["t1"]);
+});
+
+// Prospects (documentation/38-prospects.md) : fiche fusionnée champ par champ, échanges réunis par identifiant ;
+// liste d'opposition fusionnée comme les dépenses.
+const prospect = (over = {}) => Object.assign({ id: "p1", name: "Atelier Lumen", contact: "Inès", email: "ines@lumen.fr", pro: true, stage: "new",
+  value: 1200, nextDate: "", exchanges: [{ id: "x1", date: "2026-10-02", from: "them", text: "Demande de devis" }], createdAt: T(0), updatedAt: T(0) }, over);
+const exchange = (id, date, from, text) => ({ id, date, from, text });
+
+test("prospects : échanges ajoutés sur deux appareils réunis et triés ; fiche fusionnée champ par champ", () => {
+  const o = state({ prospects: [prospect()] });
+  const a = state({ prospects: [prospect({ stage: "talks", exchanges: [...prospect().exchanges, exchange("x2", "2026-10-05", "me", "Appel")], updatedAt: T(2) })] });
+  const b = state({ prospects: [prospect({ nextDate: "2026-11-02", exchanges: [...prospect().exchanges, exchange("x3", "2026-10-04", "them", "Rappel")], updatedAt: T(3) }),
+    prospect({ id: "p2", name: "Studio Nova", exchanges: [], createdAt: T(1), updatedAt: T(1) })] });
+  let r = merge(o, a, b);
+  assert.deepEqual(r.data.prospects.map((p) => p.id), ["p1", "p2"]);
+  assert.deepEqual([r.data.prospects[0].stage, r.data.prospects[0].nextDate], ["talks", "2026-11-02"], "champs différents : les deux gardés");
+  assert.deepEqual(r.data.prospects[0].exchanges.map((x) => x.id), ["x1", "x3", "x2"], "échanges des deux appareils, par date");
+  assert.deepEqual(r.conflicts, []);
+  r = merge(o, state({ prospects: [prospect({ value: 1500, stage: "quote", updatedAt: T(2) })] }), state({ prospects: [prospect({ value: 1800, stage: "lost", updatedAt: T(4) })] }));
+  assert.deepEqual([r.data.prospects[0].value, r.data.prospects[0].stage], [1800, "lost"], "même champ : la plus récente");
+  assert.equal(r.conflicts[0].message, "Prospect modifié sur deux appareils : la version la plus récente est gardée (étape, valeur estimée).");
+  r = merge(o, state({ prospects: [prospect({ exchanges: [{ ...exchange("x1", "2026-10-02", "them", "Demande de devis (site)"), updatedAt: T(2) }], updatedAt: T(2) })] }),
+    state({ prospects: [prospect({ exchanges: [{ ...exchange("x1", "2026-10-02", "them", "Demande de devis (salon)"), updatedAt: T(3) }], updatedAt: T(3) })] }));
+  assert.equal(r.data.prospects[0].exchanges[0].text, "Demande de devis (salon)");
+  assert.equal(r.conflicts[0].message, "Échange modifié sur deux appareils : la version la plus récente est gardée (résumé).");
+  assert.equal(r.conflicts[0].prospectId, "p1", "le prospect de l'échange est indiqué");
+});
+
+test("prospects : suppressions croisées (fiche, échange) ; opposition ; devis lié à une piste ; anciennes données", () => {
+  const o = state({ prospects: [prospect()] });
+  assert.deepEqual(merge(o, state({ prospects: [] }), o).data.prospects, [], "supprimé d'un côté, inchangé de l'autre : retiré");
+  let r = merge(o, state({ prospects: [] }), state({ prospects: [prospect({ exchanges: [...prospect().exchanges, exchange("x2", "2026-10-06", "them", "Relance")], updatedAt: T(2) })] }));
+  assert.deepEqual(r.data.prospects.map((p) => p.exchanges.length), [2], "supprimé et échange ajouté de l'autre côté : conservé");
+  assert.deepEqual(r.conflicts.map((c) => [c.kind, c.type, c.message]),
+    [["prospect", "removed-modified", "Prospect effacé sur un appareil mais modifié sur un autre : il est conservé."]]);
+  r = merge(o, state({ prospects: [prospect({ deletedAt: T(1), updatedAt: T(1) })] }),
+    state({ prospects: [prospect({ exchanges: [...prospect().exchanges, exchange("x2", "2026-10-06", "them", "Relance")], updatedAt: T(2) })] }));
+  assert.equal(r.data.prospects[0].deletedAt, undefined, "marqué supprimé, échange ajouté ailleurs : conservé");
+  assert.deepEqual(r.conflicts.map((c) => [c.kind, c.type]), [["prospect", "deleted-modified"]]);
+  r = merge(o, state({ prospects: [prospect({ exchanges: [], updatedAt: T(1) })] }), o);
+  assert.deepEqual(r.data.prospects[0].exchanges, [], "échange effacé d'un côté, inchangé de l'autre : retiré");
+  const opt = { id: "o1", date: "2026-10-20", hashes: ["e:aa", "t:bb"], createdAt: T(1), updatedAt: T(1) };
+  r = merge(o, state({ prospects: [], optouts: [opt] }), o);
+  assert.deepEqual([r.data.prospects, r.data.optouts.map((x) => x.id)], [[], ["o1"]], "« Ne plus contacter » : fiche retirée, opposition ajoutée");
+  r = merge(state(), state({ optouts: [opt] }), state({ optouts: [{ ...opt, id: "o2", hashes: ["n:cc"] }] }));
+  assert.deepEqual(r.data.optouts.map((x) => x.id), ["o1", "o2"], "oppositions ajoutées sur deux appareils : toutes gardées");
+  const q = draft({ id: "q1", type: "devis", prospectId: "p1" });
+  r = merge(state({ documents: [draft({ id: "q1", type: "devis" })] }), state({ documents: [q] }), state({ documents: [draft({ id: "q1", type: "devis" })] }));
+  assert.equal(r.data.documents[0].prospectId, "p1", "devis lié à la piste");
+  assert.deepEqual(S.migrate({ schema: 1, clients: [], documents: [] }).prospects, [], "ancienne sauvegarde sans prospects");
+  assert.deepEqual(S.migrate({ schema: 1, clients: [], documents: [] }).optouts, []);
+  assert.deepEqual(S.migrate({ schema: 2, clients: [], documents: [], prospects: [{ id: "p1", name: "X" }] }).prospects[0].exchanges, [], "échanges absents : liste vide");
 });

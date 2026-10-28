@@ -1,5 +1,24 @@
 # Journal des modifications
 
+## 2026-10-28 — Prospects (Espace entrepreneur)
+
+- Nouvel onglet **Prospects** de l'Espace : pistes par étape (À contacter, En discussion, Devis envoyé, Gagné, Perdu)
+  avec leur nombre et leur valeur, relances du jour (rappelées au tableau de bord), échanges notés « de ma part » ou
+  « de sa part », export CSV.
+- Une piste devient un **client** (fiche préremplie) puis un **devis** en brouillon sans rien recopier ; l'étape suit
+  le devis (émis : « Devis envoyé » ; accepté : « Gagné ») et la valeur devient son montant hors taxes.
+- Règles de la **CNIL**, lues en entier : données d'un prospect gardées 3 ans après la collecte ou son dernier contact
+  (rappel des fiches concernées, avec « Supprimer ») ; **« Ne plus contacter »** supprime la fiche et ne garde que des
+  empreintes de l'email, du téléphone et du nom (liste d'opposition, au moins 3 ans), qui avertissent si la personne
+  est ajoutée de nouveau ; prospection par email et par téléphone rappelée selon le type de prospect (professionnel ou
+  particulier ; règles du téléphone en vigueur depuis le 11 août 2026).
+- Sauvegardes et synchronisation des comptes : prospects (échanges réunis entre appareils) et liste d'opposition.
+- Spécification [38](documentation/38-prospects.md), décision D37. Tests : `prospects.test.mjs` (10), 2 tests de
+  synchronisation et un test qui manquait (ordre des encaissements fusionnés) ; une soixantaine d'erreurs réintroduites,
+  toutes détectées ; suite complète (421 tests unitaires, 29 tests serveur, 3 402 vérifications navigateur ; parcours
+  de l'Espace, 182 vérifications, et des comptes, 51, repassés après le dernier changement : un devis dupliqué reste lié
+  à sa piste).
+
 ## 2026-10-28 — Livre des recettes totalisé par trimestre ; lecture des sources officielles
 
 - Espace, **livre des recettes** : total à la fin de chaque trimestre (le trimestre en cours est signalé) et de

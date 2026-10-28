@@ -50,6 +50,7 @@ Matrice revue le 23/10/2026 d'après les pages publiées (identifiants de `conte
 | Relancer un devis | Générateur de relance de devis | ✅ (modèles) | ✅ (modèles) | ✅ (modèles) | ✅ (modèles) | P2 |
 | Répondre aux objections (« trop cher ») | Modèles de réponses | ✅ (modèles) | ✅ (modèles) | ✅ (modèles) | ✅ (modèles) | P2 |
 | Rédiger une proposition commerciale | Générateur de proposition (étapes, prix, options, suite) | ✅ | ✅ | ✅ | ✅ | P3 |
+| Suivre ses prospects et ses relances | Espace entrepreneur : pistes par étape, relances, échanges, conversion en client et en devis, règles de la CNIL | ✅ | — | — | — | P2 |
 
 ### 4. Devis et contrats
 

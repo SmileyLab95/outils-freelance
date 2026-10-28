@@ -116,3 +116,32 @@ schéma 2 inchangé (D34). Sauvegarde : listes facultatives, contrôlées à l'i
   devis fait et émis (étape « Devis envoyé »), accepté (« Gagné »), perte, opposition (fiche supprimée, empreintes
   seules dans les données, avertissement sur une nouvelle fiche, retrait), conservation, export CSV, accessibilité,
   mobile.
+
+## 6. Réalisation (28/10/2026)
+
+- Règles : `prospects_opposition` et `prospection_telephone` ajoutées à `data/rules/fr.json` (fiches de la CNIL lues en
+  entier) ; adresse finale de la fiche sur l'email corrigée (la CNIL l'a renommée « … SMS, MMS et automate d'appel »).
+- Moteur `espace-fr.js` : `prospectErrors`, `exchangeErrors`, `prospectQuotes`, `minStage`, `prospectStage`,
+  `prospectValue`, `pipeline`, `followUps`, `lastContactFrom`, `addYears`, `retentionDue`, `optoutKeys`, `prospectsCSV`.
+  Stockage : listes `prospects` et `optouts`, facultatives et contrôlées à l'import. Synchronisation : prospects
+  fusionnés champ par champ, échanges réunis par identifiant (les conflits d'un échange nomment son prospect),
+  opposition fusionnée comme les dépenses. Écrans « Prospects » et fiche, client prérempli depuis une piste, devis lié
+  (`prospectId`), rappels du tableau de bord, onglet de navigation, mention sur la page de l'Espace.
+- Choix faits en réalisant :
+  - « Gagné » choisi n'a pas besoin d'une règle à part : c'est l'étape la plus avancée ; « Perdu » choisi reste.
+  - Le lien du devis à sa piste n'entre pas dans le « contenu » d'un document pour la synchronisation : il est posé à
+    la création du brouillon et ne change plus ; il est fusionné comme un champ ordinaire.
+  - Une correspondance par le seul nom avertit sans proposer de retirer l'opposition (homonymes possibles) ; le retrait
+    n'est proposé que si l'email ou le téléphone correspond.
+  - Pour une piste gagnée, la fiche ne parle plus de la durée de conservation des prospects : ce sont désormais les
+    données d'un client.
+  - Un devis dupliqué (pour le revoir après un refus) reste lié à la piste ; la facture tirée d'un devis ne l'est pas.
+- Tests : `prospects.test.mjs` (10 tests), 2 tests de synchronisation, et un test qui manquait sur l'ordre des
+  encaissements fusionnés (trouvé en réintroduisant des erreurs) ; une soixantaine d'erreurs réintroduites dans le moteur
+  et la synchronisation, toutes détectées après renforcement des tests (deux lignes de code inutiles retirées) ; parcours
+  navigateur de l'Espace (création, erreurs, échanges, étapes, relance du jour, client et devis créés depuis la piste,
+  devis émis puis accepté, piste liée à un client existant, perte, opposition avec empreintes seules, avertissements par
+  le nom et par le téléphone écrit autrement, retrait, conservation de 3 ans, CSV, sauvegarde, accessibilité, mobile) ;
+  parcours des comptes.
+- Relecture des captures : sections collées les unes aux autres sous les colonnes, formulation « la fiche de Ancienne
+  piste », règle de conservation affichée sur une piste gagnée : corrigées.
