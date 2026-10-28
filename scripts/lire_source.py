@@ -17,9 +17,10 @@ import urllib.parse
 import urllib.request
 from datetime import datetime, timezone
 
-# Sites officiels (et leurs sous-domaines) des quatre pays et de l'Union européenne.
+# Sites officiels (et leurs sous-domaines) des quatre pays et de l'Union européenne. « gouv.fr » est réservé aux
+# services de l'État (Légifrance, impots.gouv.fr, entreprendre.service-public.gouv.fr…).
 OFFICIELS = (
-    "cnil.fr", "legifrance.gouv.fr", "impots.gouv.fr", "service-public.fr", "urssaf.fr", "economie.gouv.fr",
+    "gouv.fr", "cnil.fr", "service-public.fr", "urssaf.fr",
     "inpi.fr", "banque-france.fr", "europa.eu", "gov.uk", "legislation.gov.uk", "ico.org.uk", "irs.gov", "ftc.gov",
     "canada.ca", "gc.ca", "revenuquebec.ca", "iana.org", "fnfe-mpe.org",
 )
