@@ -27,6 +27,7 @@ LIMITE = 20_000_000          # octets lus au plus
 PASSAGE = 600                # caractères affichés de part et d'autre d'un mot trouvé
 PASSAGES_PAR_MOT = 8
 DEBUT = 8000                 # caractères affichés quand aucun mot n'est cherché
+LIENS = 20                   # liens affichés au plus
 
 
 def autorise(url):
@@ -42,26 +43,36 @@ class _Texte(html.parser.HTMLParser):
     def __init__(self):
         super().__init__(convert_charrefs=True)
         self.parts, self.cache = [], 0
+        self.liens, self.lien = [], None  # liens : [adresse, texte] ; lien : celui en cours de lecture
 
     def handle_starttag(self, tag, attrs):
         if tag in ("script", "style", "noscript", "svg"):
             self.cache += 1
+        elif tag == "a" and dict(attrs).get("href"):
+            self.lien = [dict(attrs)["href"], ""]
+            self.liens.append(self.lien)
         elif tag in self.BLOCS:
             self.parts.append("\n")
 
     def handle_endtag(self, tag):
         if tag in ("script", "style", "noscript", "svg"):
             self.cache = max(0, self.cache - 1)
+        elif tag == "a":
+            self.lien = None
         elif tag in self.BLOCS:
             self.parts.append("\n")
 
     def handle_data(self, data):
         if not self.cache:
             self.parts.append(data)
+            if self.lien is not None:
+                self.lien[1] += data
 
 
-def texte(contenu, type_contenu):
-    """Texte lisible d'une page HTML ou d'un PDF ; espaces et lignes vides resserrés."""
+def texte(contenu, type_contenu, base=""):
+    """Texte lisible d'une page HTML ou d'un PDF, espaces et lignes vides resserrés, et liens de la page (adresse
+    complète, texte) : un PDF n'en a pas ici."""
+    liens = []
     if "pdf" in type_contenu or contenu[:5] == b"%PDF-":
         from pypdf import PdfReader  # installé par le workflow
         brut = "\n".join(page.extract_text() or "" for page in PdfReader(io.BytesIO(contenu)).pages)
@@ -69,8 +80,9 @@ def texte(contenu, type_contenu):
         parser = _Texte()
         parser.feed(contenu.decode("utf-8", errors="replace"))
         brut = "".join(parser.parts)
+        liens = [(urllib.parse.urljoin(base, href), " ".join(t.split())) for href, t in parser.liens]
     lignes = [" ".join(ligne.split()) for ligne in brut.splitlines()]
-    return re.sub(r"\n{3,}", "\n\n", "\n".join(lignes)).strip()
+    return re.sub(r"\n{3,}", "\n\n", "\n".join(lignes)).strip(), liens
 
 
 def _motif(mot):
@@ -94,6 +106,16 @@ def passages(txt, mots):
     return out
 
 
+def liens_trouves(liens, mots):
+    """Liens dont le texte contient un des mots cherchés (sans doublon), pour trouver l'adresse d'une page citée."""
+    vus, out = set(), []
+    for adresse, txt in liens:
+        if adresse not in vus and any(_motif(mot).search(txt) for mot in mots):
+            vus.add(adresse)
+            out.append((txt, adresse))
+    return out[:LIENS]
+
+
 def main():
     if len(sys.argv) < 2:
         sys.exit(__doc__)
@@ -115,7 +137,7 @@ def main():
         sys.exit(f"Redirection vers une adresse non officielle refusée : {final}")
     if statut != 200 or not contenu.strip():
         sys.exit(f"Réponse {statut} sans contenu lisible pour {url} (le site filtre peut-être les lectures automatiques).")
-    txt = texte(contenu, type_contenu.lower())
+    txt, liens = texte(contenu, type_contenu.lower(), final)
     print(f"Source : {url}")
     if final != url:
         print(f"Adresse finale : {final}")
@@ -128,6 +150,11 @@ def main():
         print(f"\n===== « {mot} » : {total} occurrence(s)" + (f", {len(extraits)} passage(s) affiché(s)" if total else ""))
         for extrait in extraits:
             print("\n…" + extrait + "…")
+    trouves = liens_trouves(liens, mots)
+    if trouves:
+        print("\n===== Liens dont le texte contient un mot cherché")
+        for txt_lien, adresse in trouves:
+            print(f"- {txt_lien} : {adresse}")
 
 
 if __name__ == "__main__":

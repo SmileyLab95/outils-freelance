@@ -99,7 +99,7 @@ Une page n'est terminée que si :
 | `node tests/e2e/verifier.mjs /tmp/captures` | Tests navigateur, accessibilité (axe-core) et captures d'écran |
 | `sh tests/e2e/installer-axe.sh` | Installe axe-core 4.14.0 dans `~/.cache/axe-core` (ou le dossier donné, alors indiqué par `AXE_CORE`) |
 | `python3 -m json.tool data/rules/us.json` | Vérifie qu'un fichier de règles est valide |
-| Workflow « Lire une source officielle » (GitHub Actions, à la demande) | Lit une page ou un PDF d'un site officiel inaccessible depuis l'environnement de travail (CNIL, Légifrance, BOFiP…) et affiche le texte ou les passages autour des mots cherchés, avec la date et l'empreinte du fichier (`scripts/lire_source.py` ; sites officiels seulement, lecture seule). Une règle lue ainsi en entier n'est plus « lue par extraits ». Légifrance (réponse 403) et EUR-Lex (réponse 202 vide) refusent ces lectures automatiques : lire alors la fiche officielle qui cite le texte (CNIL, service-public.fr, BOFiP) |
+| Workflow « Lire une source officielle » (GitHub Actions, à la demande) | Lit une page ou un PDF d'un site officiel inaccessible depuis l'environnement de travail (CNIL, Légifrance, BOFiP…) et affiche le texte ou les passages autour des mots cherchés, les liens de la page dont le texte contient un de ces mots (pour trouver l'adresse d'une fiche citée), la date et l'empreinte du fichier (`scripts/lire_source.py`, testé par `python3 -m unittest discover -s tests/scripts` ; sites officiels seulement, lecture seule). Une règle lue ainsi en entier n'est plus « lue par extraits ». Légifrance (réponse 403) et EUR-Lex (réponse 202 vide) refusent ces lectures automatiques : lire alors la fiche officielle qui cite le texte (CNIL, service-public.fr, BOFiP) |
 
 ## Journal des modifications
 
