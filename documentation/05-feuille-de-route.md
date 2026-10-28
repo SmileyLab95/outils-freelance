@@ -222,7 +222,8 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   « Ne plus contacter » qui ne garde que des empreintes (liste d'opposition), prospection par email et par téléphone
   ([38](38-prospects.md), décision D37).
 - **Prochaines actions de Claude** : refonte, suite ([31](31-vision-plateforme.md) § 5) : modules suivants de l'Espace
-  (trésorerie) ;
+  (trésorerie : brouillon de spécification prêt ; lire d'abord en entier les fiches officielles de la TVA,
+  entreprendre.service-public.gouv.fr F23566 (régime réel simplifié, acomptes) et F31412 (exigibilité)) ;
   activité mixte de l'Espace à spécifier (le profil n'a qu'une activité : deux plafonds, déclaration et livre des
   recettes distinguant ventes et prestations, BOFiP BOI-BIC-DECLA-30-30) ; questions ouvertes de `data/rules/` à relire
   avec l'outil de lecture des sources (taux de l'intérêt légal du second semestre 2026, ACRE) ; puis besoins P3 restants

@@ -35,7 +35,8 @@
   en devis ; liste d'opposition qui ne garde que des empreintes (fiche de la CNIL sur la liste repoussoir) ; règles de
   la prospection par téléphone en vigueur depuis le 11 août 2026.
 - L'outil de lecture liste aussi les liens de la page dont le texte contient un mot cherché (pour trouver l'adresse
-  d'une fiche citée) ; tests du script.
+  d'une fiche citée) et accepte tous les sites de l'État en gouv.fr (entreprendre.service-public.fr redirige désormais
+  vers entreprendre.service-public.gouv.fr) ; tests du script.
 - Décision D36. Tests : un test unitaire de plus (7 cas, dont l'arrondi au centime et le début d'activité), toutes
   les erreurs réintroduites détectées ; suite complète (409 tests unitaires, 29 tests serveur, 3 362 vérifications
   navigateur, dont le livre des recettes totalisé par trimestre).
