@@ -332,6 +332,23 @@ const tests = {
     check(await copied(page, "#r-copy"), "bouton Copier : confirmation");
     check((await page.evaluate(() => navigator.clipboard.readText())).includes("Mise en demeure"), "bouton Copier : objet et message dans le presse-papiers");
   },
+  async "uk/working-days-calculator/"(page) {
+    const t = async (sel) => (await page.textContent(sel)).replace(/[\u00a0\u202f]/g, " ").replace(/\s+/g, " ").trim();
+    await page.fill("#jo-year", "2026");
+    check((await t("#jo-billable")) === "253" && (await t("#jo-off")) === "8 days" && (await page.$$("#jo-list tbody tr")).length === 8 &&
+      (await t("#jo-list tbody")).includes("Boxing Day"), "UK working days: 253 in England and Wales in 2026, 8 bank holidays");
+    await page.selectOption("#jo-zone", "scotland");
+    check((await t("#jo-billable")) === "251" && (await t("#jo-list tbody")).includes("World Cup bank holiday"), "Scotland 2026: 251 days, World Cup bank holiday");
+    await page.fill("#jo-year", "2029");
+    check((await t("#jo-billable")) === "–" && (await t("#jo-sub")).includes("up to 2028"), "UK: years GOV.UK has not published yet are refused");
+    await page.fill("#jo-year", "2026");
+    await page.selectOption("#jo-zone", "england-and-wales");
+    await page.fill("#jo-start", "2026-12-15");
+    await page.fill("#jo-n", "10");
+    await page.selectOption("#jo-mode", "ouvre");
+    check((await t("#jo-due")) === "31 December 2026" && (await t("#jo-explain")).includes("; "), "UK: 10 working days after 15 December 2026 → 31 December");
+    check((await page.$$('#jo-mode option[value="franc"]')).length === 0, "UK: no French « jours francs »");
+  },
   async "fr/calcul-jours-ouvres/"(page) {
     const t = async (sel) => (await page.textContent(sel)).replace(/[\u00a0\u202f]/g, " ").replace(/\s+/g, " ").trim();
     check((await page.inputValue("#jo-year")) === String(new Date().getFullYear()) && (await page.inputValue("#jo-period")) === "year",
@@ -832,6 +849,9 @@ const tests = {
     await page.click('[data-salary="12570"]');
   },
   async "uk/day-rate-calculator/"(page) {
+    const year = new Date().getFullYear();
+    check(new RegExp(`^In ${year}: \\d+ bank holidays on weekdays in England and Wales\\.`).test((await page.textContent("#d-bank-hint")).trim()) &&
+      (await page.getAttribute("#d-bank-hint a", "href")).endsWith("/uk/working-days-calculator/"), "UK day rate: bank holidays of the year as a hint, link to working days");
     // 260 − 25 − 8 = 227 jours × 80 % = 182 jours facturables
     check((await page.textContent("#d-days")).includes("182 days"), "UK : 182 jours facturables");
     const ok = await page.evaluate(() => {

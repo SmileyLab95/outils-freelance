@@ -163,3 +163,78 @@ test("page : chiffres de la FAQ = moteur et règles", () => {
   }
   assert.ok(html.includes("2000 à 2100") && D.MIN_YEAR === 2000 && D.MAX_YEAR === 2100);
 });
+
+// ------------------------------------------------------------------------------------------------------------
+// Royaume-Uni : liste publiée par GOV.UK (data/rules/uk.json, bank_holidays)
+
+const UK = ruleValues("uk");
+const uk = (zone) => ({ rules: UK, zone });
+const ukHtml = readFileSync(new URL("../../content/uk/working-days-calculator.html", import.meta.url), "utf8");
+const ukFront = JSON.parse(/<!--(\{[\s\S]*?\})-->/.exec(ukHtml)[1]);
+const ukFaq = ukFront.faq.flat().join(" ");
+
+test("Royaume-Uni : années et régions de la liste, 2026 = GOV.UK pour les trois régions", () => {
+  assert.deepEqual(D.years(UK), { min: 2024, max: 2028 });
+  assert.deepEqual(D.zones(UK), ["england-and-wales", "scotland", "northern-ireland"]);
+  assert.deepEqual(D.years(R), { min: 2000, max: 2100 });
+  assert.deepEqual(dates(D.holidays(2026, UK, "england-and-wales")), ["2026-01-01", "2026-04-03", "2026-04-06", "2026-05-04", "2026-05-25",
+    "2026-08-31", "2026-12-25", "2026-12-28"]);
+  assert.deepEqual(dates(D.holidays(2026, UK, "scotland")), ["2026-01-01", "2026-01-02", "2026-04-03", "2026-05-04", "2026-05-25",
+    "2026-06-15", "2026-08-03", "2026-11-30", "2026-12-25", "2026-12-28"]);
+  assert.deepEqual(dates(D.holidays(2026, UK, "northern-ireland")), ["2026-01-01", "2026-03-17", "2026-04-03", "2026-04-06", "2026-05-04",
+    "2026-05-25", "2026-07-13", "2026-08-31", "2026-12-25", "2026-12-28"]);
+  assert.equal(D.holidays(2026, UK, "scotland").find((h) => h.date === "2026-06-15").name, "World Cup bank holiday");
+  assert.ok(UK.bank_holidays["england-and-wales"]["2026"].find((h) => h.date === "2026-12-28").substitute, "Boxing Day : jour de remplacement");
+  for (const [zone, years] of Object.entries(UK.bank_holidays)) {
+    for (const [y, list] of Object.entries(years)) {
+      assert.ok(list.every((h) => h.date.startsWith(y) && D.weekday(D.day(h.date)) >= 1 && D.weekday(D.day(h.date)) <= 5), `${zone} ${y} : en semaine`);
+      assert.deepEqual(list.map((h) => h.date), list.map((h) => h.date).slice().sort(), `${zone} ${y} : dans l'ordre`);
+      assert.ok(list.some((h) => h.title === "Good Friday" && h.date === D.iso(D.day(D.easter(Number(y))) - 2)), `${zone} ${y} : Vendredi saint = Pâques − 2`);
+    }
+  }
+  assert.deepEqual(D.holidays(2029, UK, "scotland"), [], "année pas encore publiée");
+  assert.deepEqual(D.years({ bank_holidays: { a: { 2027: [], 2025: [], 2026: [] } } }), { min: 2025, max: 2027 }, "années dans le désordre");
+  assert.equal(D.years({}), null, "sans jours fériés dans les règles");
+  assert.equal(D.count("2026-01-01", "2026-01-31", { rules: {} }), null);
+});
+
+test("Royaume-Uni : jours ouvrés 2026 (253, 251, 251), années non couvertes refusées, délais", () => {
+  assert.equal(D.count("2026-01-01", "2026-12-31", uk("england-and-wales")).ouvres, 253);
+  assert.equal(D.count("2026-01-01", "2026-12-31", uk("scotland")).ouvres, 251);
+  assert.equal(D.count("2026-01-01", "2026-12-31", uk("northern-ireland")).ouvres, 251);
+  assert.equal(D.count("2026-01-01", "2026-12-31", { rules: UK }).ouvres, 253, "Angleterre et pays de Galles par défaut");
+  assert.equal(D.count("2028-12-01", "2029-01-31", uk("scotland")), null, "2029 pas encore publié");
+  assert.equal(D.addDays("2026-12-15", 10, "ouvre", uk("england-and-wales")).date, "2026-12-31", "Noël et Boxing Day (lundi 28) sautés");
+  assert.equal(D.addDays("2026-12-24", 1, "ouvre", uk("england-and-wales")).date, "2026-12-29");
+  assert.equal(D.addDays("2028-12-20", 20, "ouvre", uk("england-and-wales")), null, "sort de 2028");
+  assert.equal(D.count("2023-12-01", "2024-01-31", uk("scotland")), null, "2023 pas dans la liste");
+  assert.equal(D.addDays("2028-12-29", 3, "franc", uk("england-and-wales")), null, "report examiné en 2029 : non couvert");
+  assert.equal(D.addDays("2100-12-31", 1, "calendaire", o), null, "au-delà de 2100");
+  assert.equal(D.addDays("2028-12-20", 20, "calendaire", uk("england-and-wales")).date, "2029-01-09", "jours calendaires : pas besoin des jours fériés");
+});
+
+test("Royaume-Uni : page, menu, chiffres de la FAQ = règles, aide du day rate", () => {
+  assert.equal(ukFront.id, "workdays");
+  assert.deepEqual(ukFront.scripts, ["engines/jours.js", "tools/jours.js"]);
+  assert.equal(ukFront.rules, "uk");
+  assert.deepEqual(ukFront.sources, ["bank_holidays"]);
+  assert.ok(ukFront.title.length <= 60 && ukFront.description.length <= 160);
+  const nav = JSON.parse(readFileSync(new URL("../../content/uk/site.json", import.meta.url), "utf8")).nav;
+  assert.ok(nav.find((g) => g.key === "pricing").items.includes("workdays"));
+  const options = [...ukHtml.matchAll(/<option value="([\w-]+)">/g)].map((m) => m[1]);
+  for (const zone of D.zones(UK)) assert.ok(options.includes(zone), zone);
+  assert.deepEqual([...ukHtml.matchAll(/<select id="jo-mode"[\s\S]*?<\/select>/g)][0][0].match(/value="(\w+)"/g), ['value="ouvre"', 'value="calendaire"'], "pas de jours francs ni ouvrables");
+  assert.match(ukHtml, /id="jo-year" name="year" min="2024" max="2028"/);
+  const ew = D.count("2026-01-01", "2026-12-31", uk("england-and-wales"));
+  assert.ok(ukFaq.includes(`${ew.ouvres} working days`) && ukFaq.includes(`minus ${ew.holidays.length} bank holidays`) &&
+    ukFaq.includes(`${D.holidays(2026, UK, "scotland").length} bank holidays in 2026`) && ukFaq.includes("Monday 28 December") && ukFaq.includes("Monday 15 June 2026"));
+  const data = JSON.parse(/id="jours-data">([\s\S]*?)<\/script>/.exec(ukHtml)[1]);
+  const frData = JSON.parse(/id="jours-data">([\s\S]*?)<\/script>/.exec(html)[1]);
+  assert.deepEqual(Object.keys(data).filter((k) => !["store", "sep", "explain_postponed", "explain_not_postponed"].includes(k)).sort(),
+    Object.keys(frData).filter((k) => !["explain_postponed", "explain_not_postponed"].includes(k)).sort(), "mêmes textes dans les deux langues");
+  assert.deepEqual(Object.keys(data.modes), ["ouvre", "calendaire"]);
+  const rate = readFileSync(new URL("../../content/uk/day-rate-calculator.html", import.meta.url), "utf8");
+  assert.match(rate, /"engines\/jours\.js", "tools\/uk-rate\.js"\]/);
+  assert.match(rate, /href="\{\{link:workdays\}\}"/);
+  assert.match(rate, /id="d-bank" name="bank" value="8"/);
+});

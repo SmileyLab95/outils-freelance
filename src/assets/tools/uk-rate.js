@@ -34,6 +34,14 @@
     set("d-days", OF.fmt(days) + " days (" + OF.fmt(Math.round(days / 52 * 10) / 10) + " a week)");
   }
 
+  // Jours fériés de l'année tombant en semaine en Angleterre et au pays de Galles (moteur des jours ouvrés), en aide du champ.
+  var D = window.OFE && window.OFE.days, year = OF.today().slice(0, 4);
+  var count = D && R ? D.count(year + "-01-01", year + "-12-31", { rules: R, zone: "england-and-wales" }) : null;
+  if (count) {
+    var off = count.holidays.filter(function (h) { return h.off; }).length;
+    $("d-bank-year").textContent = "In " + year + ": " + off + " bank holidays on weekdays in England and Wales.";
+  }
+
   OF.persistForm(form, "rate");
   form.addEventListener("input", compute);
   form.addEventListener("change", compute);

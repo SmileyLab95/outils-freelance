@@ -253,13 +253,19 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   échéance d'un délai en jours ouvrés, ouvrables, francs ou calendaires ; fiches F2405 et F35697 lues en entier, leurs
   exemples refaits par les tests ; le calculateur de TJM affiche le nombre de jours fériés de l'année
   ([42](42-jours-ouvres.md), décision D42).
+- **Jours ouvrés au Royaume-Uni (29/10/2026)** : même calculateur en anglais (*Working days and bank holidays*, menu
+  *Pricing*) : *bank holidays* officiels de GOV.UK pour 2024 à 2028 (Angleterre et pays de Galles, Écosse avec le
+  jour férié de la Coupe du monde du 15 juin 2026, Irlande du Nord), jours de remplacement, jours ouvrés et
+  facturables, délais en *working days* ou *calendar days* ; aide du calculateur de *day rate* ; un seul script pour
+  les deux pays ([42](42-jours-ouvres.md) § 6 et 7, décision D43).
 - **Prochaines actions de Claude** : refonte, suite ([31](31-vision-plateforme.md) § 5) : les quatre modules du compte
   gratuit sont faits (étape 5) ; étape 6, outils restants (CGV hors de France, après la lecture des sources de chaque
-  pays ; jours ouvrés hors de France : Royaume-Uni d'abord, calendrier officiel de gov.uk déjà lu ; sous-traitance,
+  pays ; jours ouvrés aux États-Unis (jours fériés fédéraux, opm.gov désormais lisible) et au Canada ; sous-traitance,
   devises, signature d'email, guides de protection sociale) ;
   ajouter les taux du 1er semestre 2027 dès leur publication
   (fin décembre 2026 : intérêt légal par arrêté, taux de la BCE en vigueur au 1er janvier ; tables `taux_interet_legal`
-  et `taux_bce_refinancement`, utilisées par le calculateur de pénalités et les CGV) ;
+  et `taux_bce_refinancement`, utilisées par le calculateur de pénalités et les CGV) ; *bank holidays* de 2029 dès que
+  GOV.UK les publie (`bank_holidays`, `data/rules/uk.json`) ;
   activité mixte de l'Espace à spécifier (le profil n'a qu'une activité : deux plafonds, déclaration et livre des
   recettes distinguant ventes et prestations, BOFiP BOI-BIC-DECLA-30-30) ; questions ouvertes de `data/rules/` à relire
   avec l'outil de lecture des sources (ACRE) ; puis besoins P3 restants

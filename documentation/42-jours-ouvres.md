@@ -84,3 +84,42 @@ remplace pas la règle propre à chaque délai.
   réintroduites dans le moteur, 23 détectées au premier passage, les 4 autres après ajout de tests ; parcours navigateur
   (année, mois, Alsace-Moselle, dates, congés, délais francs et ouvrés) sur ordinateur, tablette et mobile, audit
   d'accessibilité sans erreur.
+
+## 6. Royaume-Uni (spécification, 29/10/2026)
+
+Même outil, en anglais : *Working days and bank holidays calculator* (menu *Pricing*, après le *day rate*).
+
+| Règle | Source | Usage |
+|---|---|---|
+| Jours fériés (*bank holidays*) de 2024 à 2028 pour l'Angleterre et le pays de Galles (8 par an), l'Écosse (9 ou 10 : 2nd January, St Andrew's Day, *Summer bank holiday* début août, pas d'*Easter Monday*) et l'Irlande du Nord (10 : St Patrick's Day, Battle of the Boyne) ; jours de remplacement (*substitute day*) quand la fête tombe un week-end ; jours exceptionnels (Écosse : *World Cup bank holiday* le 15 juin 2026) | gov.uk, liste officielle (`bank-holidays.json`, lue le 29/10/2026) ; `bank_holidays` (nouvelle, `data/rules/uk.json`) | Liste des jours fériés ; jours ouvrés |
+
+- **Pas de calcul** : les jours fériés britanniques comportent des jours exceptionnels décidés chaque année ; l'outil
+  reprend la liste publiée, et seulement les années qu'elle couvre (2024 à 2028) ; au-delà, un message le dit.
+- **Modes de délai** : *working days* (du lundi au vendredi, ou les jours cochés, sauf *bank holidays*) et *calendar
+  days*. Pas de jours francs ni ouvrables (notions françaises) ; aucune définition légale n'est affirmée : la page
+  rappelle qu'un délai fixé par un contrat ou un texte se compte selon ses propres règles.
+- **Régions** : *England and Wales* (par défaut), *Scotland*, *Northern Ireland*.
+- **Calculateur de *day rate*** : aide « In 2026: 8 bank holidays in England and Wales » et lien ; valeur par défaut
+  inchangée (8).
+- **Moteur** : `engines/jours.js` lit soit les règles françaises (calcul à partir de Pâques), soit une liste publiée
+  (`bank_holidays`) ; années couvertes données par les règles ; script `tools/jours.js` commun, textes dans la page.
+- **Tests** : 2026 = liste de gov.uk pour les trois régions (8, 10, 10 jours) ; jours de remplacement (Boxing Day
+  2026 le lundi 28 décembre) ; jours ouvrés 2026 (253 en Angleterre, 251 en Écosse et en Irlande du Nord) ; années non
+  couvertes refusées ; la version française inchangée.
+
+## 7. Réalisation, Royaume-Uni (29/10/2026)
+
+- Règle `bank_holidays` (`data/rules/uk.json`) : liste de GOV.UK pour 2024 à 2028, trois régions, avec le nom de chaque
+  jour férié et les jours de remplacement ; recopiée depuis la lecture du 29/10/2026 (`bank-holidays.json`), le site
+  gov.uk n'étant pas joignable directement depuis l'environnement de travail ; contrôles automatiques : chaque date en
+  semaine, dans l'ordre, Good Friday = Pâques − 2 (même calcul que la France).
+- Moteur : liste publiée ou calcul selon les règles, années couvertes données par les règles (`years`), lieux
+  (`zones`), recherche des jours fériés année par année ; un délai qui tombe une année non couverte est refusé.
+- Script `tools/jours.js` commun aux deux pays : textes, pluriels (« 0 jour » en français, « 0 days » en anglais),
+  séparateur de liste (« ; » en anglais, les dates abrégées contenant une virgule), saisie enregistrée par pays.
+- Page `content/uk/working-days-calculator.html` (menu *Pricing*) ; calculateur de *day rate* : aide « In 2026: 8 bank
+  holidays on weekdays in England and Wales » et lien, valeur par défaut inchangée (8).
+- Tests : 3 tests de plus (13 au total) ; erreurs réintroduites dans les parties nouvelles du moteur : 17, dont 12
+  détectées au premier passage ; 3 tests ajoutés ; 2 se sont révélées équivalentes (lieu par défaut choisi deux fois,
+  tri d'années déjà dans l'ordre) et le code redondant a été retiré ; parcours navigateur britannique sur ordinateur,
+  tablette et mobile, audit d'accessibilité sans erreur.

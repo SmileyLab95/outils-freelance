@@ -1,7 +1,8 @@
 /*
  * Moteur : jours fériés, jours ouvrés et ouvrables d'une période, échéance d'un délai (documentation/42-jours-ouvres.md).
- * France : fêtes légales, Alsace-Moselle et outre-mer lues dans les règles (rules.jours_feries, fiche F2405) ; quatre
- * façons de compter (fiche F35697) : jours calendaires, francs, ouvrables, ouvrés. Fonctions pures, sans DOM.
+ * Jours fériés lus dans les règles : France, fêtes légales calculées à partir de Pâques, Alsace-Moselle et outre-mer
+ * (rules.jours_feries, fiche F2405) ; Royaume-Uni, liste publiée par région et par année (rules.bank_holidays, gov.uk).
+ * Quatre façons de compter (fiche F35697) : jours calendaires, francs, ouvrables, ouvrés. Fonctions pures, sans DOM.
  * Testé par tests/unit/jours.test.mjs.
  */
 (function (root, factory) {
@@ -34,13 +35,33 @@
     return year + "-" + String(month).padStart(2, "0") + "-" + String(date).padStart(2, "0");
   }
 
+  /** Années couvertes par les règles : { min, max } (liste publiée : ses années ; calcul : 2000 à 2100), ou null. */
+  function years(rules) {
+    if (rules.bank_holidays) {
+      var list = Object.keys(rules.bank_holidays[zones(rules)[0]]).map(Number);   // clés numériques : ordre croissant
+      return { min: list[0], max: list[list.length - 1] };
+    }
+    return rules.jours_feries ? { min: MIN_YEAR, max: MAX_YEAR } : null;
+  }
+
+  /** Lieux des règles : régions de la liste publiée, ou « metropole » et les lieux français. */
+  function zones(rules) {
+    if (rules.bank_holidays) return Object.keys(rules.bank_holidays);
+    return ["metropole", "alsace_moselle"].concat(Object.keys(rules.jours_feries.abolition_esclavage));
+  }
+
   /**
-   * Jours fériés d'une année pour un lieu (« metropole », « alsace_moselle » ou un territoire d'outre-mer des règles) :
-   * [{ date, name }] triés par date ; [] si l'année n'est pas couverte.
+   * Jours fériés d'une année pour un lieu (France : « metropole », « alsace_moselle » ou un territoire d'outre-mer ;
+   * Royaume-Uni : une région de la liste) : [{ date, name }] triés par date ; [] si l'année n'est pas couverte.
    */
   function holidays(year, rules, zone) {
+    var span = years(rules);
+    if (!span || !(year >= span.min && year <= span.max)) return [];
+    if (rules.bank_holidays) {
+      var region = rules.bank_holidays[zone] || rules.bank_holidays[zones(rules)[0]];
+      return (region[year] || []).map(function (h) { return { date: h.date, name: h.title }; });
+    }
     var R = rules.jours_feries;
-    if (!(year >= MIN_YEAR && year <= MAX_YEAR) || !R) return [];
     var paques = day(easter(year));
     var at = function (h) { return h.date ? year + "-" + h.date : iso(paques + h.paques); };
     var list = R.fetes_legales.slice();
@@ -51,13 +72,21 @@
       .sort(function (x, y) { return x.date < y.date ? -1 : x.date > y.date ? 1 : 0; });
   }
 
-  /** Jours fériés de toutes les années d'une plage de numéros de jours, indexés par date ISO. */
-  function holidayIndex(a, b, rules, zone) {
-    var out = {};
-    for (var y = Number(iso(a).slice(0, 4)); y <= Number(iso(b).slice(0, 4)); y++) {
-      holidays(y, rules, zone).forEach(function (h) { out[h.date] = h.name; });
-    }
-    return out;
+  /**
+   * Recherche des jours fériés, année par année : nom du jour férié, "" pour un autre jour, undefined si l'année n'est
+   * pas couverte par les règles.
+   */
+  function lookup(rules, zone) {
+    var span = years(rules), cache = {};
+    return function (n) {
+      var date = iso(n), y = Number(date.slice(0, 4));
+      if (!span || y < span.min || y > span.max) return undefined;
+      if (!cache[y]) {
+        cache[y] = {};
+        holidays(y, rules, zone).forEach(function (h) { cache[y][h.date] = h.name; });
+      }
+      return cache[y][date] || "";
+    };
   }
 
   /**
@@ -66,21 +95,22 @@
    */
   function settings(opts) {
     var work = opts.workdays && opts.workdays.length ? opts.workdays : [1, 2, 3, 4, 5];
-    return { rules: opts.rules, zone: opts.zone || "metropole", work: work, workHolidays: !!opts.workHolidays };
+    return { rules: opts.rules, zone: opts.zone, work: work, workHolidays: !!opts.workHolidays };   // sans lieu : le premier des règles
   }
 
   /**
    * Jours d'une période, bornes comprises : { calendar, ouvrables, ouvres, holidays: [{ date, name, weekday, off }] }.
    * ouvrables : du lundi au samedi, sauf les jours fériés ; ouvres : les jours travaillés, sauf les jours fériés (sauf
    * workHolidays) ; holidays : jours fériés de la période, off = tombe un jour travaillé et n'est pas travaillé.
-   * null si une date est illisible ou si la fin précède le début.
+   * null si une date est illisible, si la fin précède le début ou si une année n'est pas couverte par les règles.
    */
   function count(from, to, opts) {
     var a = day(from), b = day(to), o = settings(opts);
     if (isNaN(a) || isNaN(b) || b < a) return null;
-    var index = holidayIndex(a, b, o.rules, o.zone), out = { calendar: b - a + 1, ouvrables: 0, ouvres: 0, holidays: [] };
+    var look = lookup(o.rules, o.zone), out = { calendar: b - a + 1, ouvrables: 0, ouvres: 0, holidays: [] };
     for (var n = a; n <= b; n++) {
-      var date = iso(n), w = weekday(n), name = index[date], works = o.work.indexOf(w) >= 0;
+      var date = iso(n), w = weekday(n), name = look(n), works = o.work.indexOf(w) >= 0;
+      if (name === undefined) return null;
       if (name) out.holidays.push({ date: date, name: name, weekday: w, off: works && !o.workHolidays });
       if (w !== 0 && !name) out.ouvrables++;
       if (works && (!name || o.workHolidays)) out.ouvres++;
@@ -93,37 +123,37 @@
    * { date, postponed, skipped } ; mode « calendaire » (tous les jours), « franc » (tous les jours, fin reportée au
    * premier jour qui n'est ni un samedi, ni un dimanche, ni un jour férié), « ouvrable » (du lundi au samedi, sauf
    * fériés), « ouvre » (jours travaillés, sauf fériés). skipped : jours non comptés (ouvrables, ouvrés) ou sautés par le
-   * report (franc). null si la date est illisible, n n'est pas un entier de 0 à 3 650 ou le résultat sort des années.
+   * report (franc). null si la date est illisible, si n n'est pas un entier de 0 à 3 650, si le mode est inconnu, si le
+   * résultat sort des années lisibles ou si un jour à examiner tombe une année que les règles ne couvrent pas.
    */
   function addDays(start, n, mode, opts) {
     var a = day(start), o = settings(opts);
-    if (isNaN(a) || !(n >= 0 && n <= 3650 && Math.floor(n) === n)) return null;
-    var limit = a + n * 7 + 400;   // borne large : 7 jours pour 1 dans le pire cas, plus une année de jours fériés
-    if (isNaN(day(iso(limit)))) return null;
-    var index = holidayIndex(a, limit, o.rules, o.zone), skipped = [];
-    var counts = function (d) {
-      var w = weekday(d), name = index[iso(d)];
-      if (mode === "ouvrable") return w !== 0 && !name;
-      return o.work.indexOf(w) >= 0 && (!name || o.workHolidays);
-    };
-    var d = a, postponed = false;
+    if (isNaN(a) || !(n >= 0 && n <= 3650 && Math.floor(n) === n) || ["calendaire", "franc", "ouvrable", "ouvre"].indexOf(mode) < 0) return null;
+    var look = lookup(o.rules, o.zone), skipped = [], d = a, postponed = false, name;
     if (mode === "calendaire" || mode === "franc") {
       d = a + n;
-      while (mode === "franc" && n > 0 && (weekday(d) === 0 || weekday(d) === 6 || index[iso(d)])) {
+      while (mode === "franc" && n > 0) {
+        name = look(d);
+        if (name === undefined) return null;
+        if (weekday(d) !== 0 && weekday(d) !== 6 && !name) break;
         skipped.push(iso(d));
         d++;
         postponed = true;
       }
-    } else if (mode === "ouvrable" || mode === "ouvre") {
+    } else {
       for (var k = 0; k < n;) {
         d++;
-        if (counts(d)) k++;
+        name = look(d);
+        if (name === undefined) return null;
+        var w = weekday(d);
+        if (mode === "ouvrable" ? w !== 0 && !name : o.work.indexOf(w) >= 0 && (!name || o.workHolidays)) k++;
         else skipped.push(iso(d));
       }
-    } else return null;
+    }
+    if (isNaN(day(iso(d)))) return null;
     return { date: iso(d), postponed: postponed, skipped: skipped };
   }
 
-  return { MIN_YEAR: MIN_YEAR, MAX_YEAR: MAX_YEAR, day: day, iso: iso, weekday: weekday, easter: easter,
-    holidays: holidays, count: count, addDays: addDays };
+  return { MIN_YEAR: MIN_YEAR, MAX_YEAR: MAX_YEAR, day: day, iso: iso, weekday: weekday, easter: easter, years: years,
+    zones: zones, holidays: holidays, count: count, addDays: addDays };
 });

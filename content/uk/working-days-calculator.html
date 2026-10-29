@@ -1,0 +1,158 @@
+<!--{
+  "id": "workdays",
+  "slug": "working-days-calculator/",
+  "title": "Working Days and Bank Holidays Calculator UK",
+  "description": "Count the working and billable days in a month or year, see the bank holidays in England and Wales, Scotland or Northern Ireland, and find a deadline.",
+  "menu": "Working days and bank holidays",
+  "icon": "📆",
+  "blurb": "Billable days in a month or year, bank holidays and deadlines.",
+  "app": "UK Working Days Calculator",
+  "scripts": ["engines/jours.js", "tools/jours.js"],
+  "rules": "uk",
+  "sources": ["bank_holidays"],
+  "priority": 0.8,
+  "faq": [
+    ["How many working days are there in 2026?", "In England and Wales, 253 working days from Monday to Friday: 261 weekdays minus 8 bank holidays, which all fall on weekdays in 2026. Scotland and Northern Ireland have 10 bank holidays in 2026, so 251 working days. Take off your holidays to get your billable days."],
+    ["What are the bank holidays in England and Wales in 2026?", "New Year’s Day (1 January), Good Friday (3 April), Easter Monday (6 April), the early May bank holiday (4 May), the spring bank holiday (25 May), the summer bank holiday (31 August), Christmas Day (25 December) and Boxing Day, moved to Monday 28 December."],
+    ["Is there an extra bank holiday in Scotland in 2026?", "Yes. GOV.UK lists a World Cup bank holiday in Scotland on Monday 15 June 2026, on top of 2 January and St Andrew’s Day (Monday 30 November). Scotland has no Easter Monday bank holiday and its summer bank holiday is on 3 August."],
+    ["What is a substitute day?", "When a bank holiday falls on a weekend, a weekday becomes the bank holiday instead, usually the following Monday. In 2026, Boxing Day falls on a Saturday, so the bank holiday is Monday 28 December."],
+    ["Does the calculator count bank holidays as days off?", "Yes, by default. As a freelancer, you choose: tick “I work on bank holidays” to count them as working days."]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · official bank holidays</span>
+    <h1>Working days and bank holidays</h1>
+    <p class="lead">How many days can you bill this month or this year? When does a deadline of 10 working days fall? The calculator uses the official bank holidays for your part of the UK and your working week.</p>
+    <ul class="trust"><li>Official GOV.UK bank holidays</li><li>England and Wales, Scotland, Northern Ireland</li><li>Billable days and deadlines</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="jo-form" onsubmit="return false">
+      <h2>The period</h2>
+      <div class="fields">
+        <div class="field"><label for="jo-year">Year</label>
+          <input type="number" id="jo-year" name="year" min="2024" max="2028" step="1" inputmode="numeric" data-save></div>
+        <div class="field"><label for="jo-period">Period</label>
+          <select id="jo-period" name="period" data-save>
+            <option value="year">Whole year</option>
+            <option value="q1">January to March</option>
+            <option value="q2">April to June</option>
+            <option value="q3">July to September</option>
+            <option value="q4">October to December</option>
+            <option value="m1">January</option>
+            <option value="m2">February</option>
+            <option value="m3">March</option>
+            <option value="m4">April</option>
+            <option value="m5">May</option>
+            <option value="m6">June</option>
+            <option value="m7">July</option>
+            <option value="m8">August</option>
+            <option value="m9">September</option>
+            <option value="m10">October</option>
+            <option value="m11">November</option>
+            <option value="m12">December</option>
+            <option value="dates">Specific dates</option>
+          </select></div>
+        <div class="field" data-when="dates" hidden><label for="jo-from">From</label>
+          <input type="date" id="jo-from" name="from" data-save></div>
+        <div class="field" data-when="dates" hidden><label for="jo-to">To (included)</label>
+          <input type="date" id="jo-to" name="to" data-save></div>
+        <div class="field full"><label for="jo-zone">Where you work</label>
+          <select id="jo-zone" name="zone" data-save>
+            <option value="england-and-wales">England and Wales</option>
+            <option value="scotland">Scotland</option>
+            <option value="northern-ireland">Northern Ireland</option>
+          </select></div>
+      </div>
+      <h3>Your working week</h3>
+      <fieldset class="weekdays">
+        <legend class="sr-only">Days you work</legend>
+        <label class="check"><input type="checkbox" name="w1" checked data-save><span>Monday</span></label>
+        <label class="check"><input type="checkbox" name="w2" checked data-save><span>Tuesday</span></label>
+        <label class="check"><input type="checkbox" name="w3" checked data-save><span>Wednesday</span></label>
+        <label class="check"><input type="checkbox" name="w4" checked data-save><span>Thursday</span></label>
+        <label class="check"><input type="checkbox" name="w5" checked data-save><span>Friday</span></label>
+        <label class="check"><input type="checkbox" name="w6" data-save><span>Saturday</span></label>
+        <label class="check"><input type="checkbox" name="w0" data-save><span>Sunday</span></label>
+      </fieldset>
+      <div class="fields">
+        <label class="check full"><input type="checkbox" id="jo-work-holidays" name="workHolidays" data-save>
+          <span>I work on bank holidays</span></label>
+        <div class="field full"><label for="jo-leave">Holiday in the period</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="jo-leave" name="leave" value="0" aria-describedby="jo-leave-hint" data-save><span>days</span></div>
+          <span class="hint" id="jo-leave-hint">In working days: 5 weeks = 25 days if you work 5 days a week.</span></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="result-hero" role="status" aria-atomic="true">
+        <div class="label">Billable days</div>
+        <div class="big" id="jo-billable">–</div>
+        <div class="sub" id="jo-sub">–</div>
+      </div>
+      <ul class="result-list card" style="padding: 6px 18px; margin-top: 16px;">
+        <li><span>Calendar days</span><b id="jo-calendar">–</b></li>
+        <li><span>Working days (your working week)</span><b id="jo-ouvres">–</b></li>
+        <li><span>Bank holidays on a working day</span><b id="jo-off">–</b></li>
+      </ul>
+      <p class="notice warn" id="jo-warn" aria-live="polite" hidden style="margin-top: 16px;"></p>
+      <table class="mini-table holiday-table" id="jo-list" style="margin-top: 8px;">
+        <caption id="jo-list-title">Bank holidays in the period</caption>
+        <thead><tr><th scope="col" class="text">Date</th><th scope="col" class="text">Bank holiday</th><th scope="col" class="text">For you</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="jo-delay-form" onsubmit="return false">
+      <h2>Find a deadline</h2>
+      <p class="small muted">Same part of the UK and working week as above.</p>
+      <div class="fields">
+        <div class="field"><label for="jo-start">Starting from</label>
+          <input type="date" id="jo-start" name="start" aria-describedby="jo-start-hint">
+          <span class="hint" id="jo-start-hint">This day is not counted.</span></div>
+        <div class="field"><label for="jo-n">Number of days</label>
+          <input type="number" id="jo-n" name="n" value="10" min="0" max="3650" step="1" inputmode="numeric" data-save></div>
+        <div class="field full"><label for="jo-mode">Type of days</label>
+          <select id="jo-mode" name="mode" data-save>
+            <option value="ouvre">Working days (your working week)</option>
+            <option value="calendaire">Calendar days (every day)</option>
+          </select></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="result-hero" role="status" aria-atomic="true">
+        <div class="label">Deadline</div>
+        <div class="big" id="jo-due">–</div>
+        <div class="sub" id="jo-due-sub">–</div>
+      </div>
+      <p class="formula" id="jo-explain" style="margin-top: 16px;">–</p>
+    </div>
+  </div>
+</section>
+
+<script type="application/json" id="jours-data">{"store": "jours-uk", "sep": "; ", "days": ["{n} day", "{n} days"], "period": ["{from} to {to}: {n} working day", "{from} to {to}: {n} working days"], "period_off": [" ({n} bank holiday off)", " ({n} bank holidays off)"], "period_leave": [", minus {n} day of leave.", ", minus {n} days of leave."], "end": ".", "status": ["Day off", "Worked", "Not a working day"], "no_holiday": "No bank holiday in this period.", "no_workday": "Tick at least one working day: with none ticked, the calculator uses Monday to Friday.", "leave_range": "Leave must be between 0 and {max} (the working days in the period).", "choose_year": "Choose a year from {min} to {max}: GOV.UK has published bank holidays up to {max}.", "choose_dates": "Choose two dates from {min} to {max}, the second after the first.", "delay_invalid": "Enter a whole number of days from 0 to 3,650. Working days can only be counted from {min} to {max}, the years GOV.UK has published.", "due": "{date}: {n} {noun} after {start}.", "modes": {"ouvre": ["working day", "working days"], "calendaire": ["calendar day", "calendar days"]}, "explain_calendar": "Every day counts, including weekends and bank holidays.", "explain_skipped": ["{n} day not counted (rest day or bank holiday): {list}", "{n} days not counted (rest days or bank holidays): {list}"], "etc": ", etc.", "explain_none": "No day skipped."}</script>
+
+{{kit_cta}}
+
+<section class="section prose">
+  <h2>Working days, bank holidays and deadlines</h2>
+  <ul>
+    <li><strong>Working days:</strong> the days you work, Monday to Friday by default, minus the bank holidays you take off.</li>
+    <li><strong>Bank holidays:</strong> the official list published by GOV.UK for England and Wales, Scotland and Northern Ireland, including substitute days and one-off bank holidays.</li>
+    <li><strong>Calendar days:</strong> every day, weekends and bank holidays included.</li>
+  </ul>
+  <h3>Your billable days</h3>
+  <p>To set your rate, start from the working days in the year, take off your holidays and the time you can't bill (finding work, admin, training): the <a href="{{link:rate}}">day rate calculator</a> does it for you.</p>
+  <h3>What the calculator does not count</h3>
+  <p>Local holidays and days your clients close are not included. A deadline set by a contract or by law is counted according to its own rules: check them for any deadline that affects your rights.</p>
+  <p class="small muted">GOV.UK publishes bank holidays a few years ahead, currently up to 2028; we add each new year when it is published. For information only.</p>
+</section>

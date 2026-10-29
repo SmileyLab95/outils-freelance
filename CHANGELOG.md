@@ -1,5 +1,17 @@
 # Journal des modifications
 
+## 2026-10-29 — Jours ouvrés au Royaume-Uni
+
+- Nouveau ***Working days and bank holidays calculator*** (menu *Pricing*) : jours ouvrés et facturables d'un mois,
+  d'un trimestre, d'une année ou entre deux dates ; *bank holidays* officiels de GOV.UK de 2024 à 2028 pour
+  l'Angleterre et le pays de Galles (253 jours ouvrés en 2026), l'Écosse (dont le *World Cup bank holiday* du 15 juin
+  2026) et l'Irlande du Nord, jours de remplacement compris ; délais en *working days* ou *calendar days*.
+- Calculateur de *day rate* : nombre de *bank holidays* de l'année en aide du champ, avec un lien.
+- Même moteur et même script que la version française (textes dans chaque page).
+- Spécification [42](documentation/42-jours-ouvres.md) § 6 et 7, décision D43. Tests : 13 tests du moteur et des deux
+  pages ; erreurs réintroduites toutes détectées ou équivalentes (code redondant retiré) ; parcours navigateur ;
+  suite complète (498 tests unitaires, 29 tests serveur, 5 tests des scripts, 3 519 vérifications navigateur).
+
 ## 2026-10-29 — Jours ouvrés, jours fériés et délais (France)
 
 - Nouveau **calculateur de jours ouvrés** (menu « Fixer ses prix ») : jours ouvrés et **jours facturables** d'une année,

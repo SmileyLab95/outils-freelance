@@ -7,7 +7,7 @@
   "icon": "💷",
   "blurb": "The day rate to charge for the take-home pay you want, tax included.",
   "app": "UK Freelance Day Rate Calculator",
-  "scripts": ["engines/brackets.js", "engines/tax-uk.js", "tools/uk-rate.js"],
+  "scripts": ["engines/brackets.js", "engines/tax-uk.js", "engines/jours.js", "tools/uk-rate.js"],
   "rules": "uk",
   "sources": ["personal_allowance", "income_tax_bands_ruk", "class4_main_rate"],
   "priority": 0.9,
@@ -48,7 +48,8 @@
         <div class="field"><label for="d-holidays">Holiday weeks per year</label>
           <input type="number" id="d-holidays" name="holidays" value="5" min="0" max="20" data-save></div>
         <div class="field"><label for="d-bank">Bank holidays</label>
-          <input type="number" id="d-bank" name="bank" value="8" min="0" max="15" data-save></div>
+          <input type="number" id="d-bank" name="bank" value="8" min="0" max="15" aria-describedby="d-bank-hint" data-save>
+          <span class="hint" id="d-bank-hint"><span id="d-bank-year"></span> <a href="{{link:workdays}}">See other years and nations</a>.</span></div>
         <div class="field"><label for="d-unbilled">Unbillable time</label>
           <div class="input-suffix"><input type="text" inputmode="decimal" id="d-unbilled" name="unbilled" value="20" data-save><span>%</span></div>
           <span class="hint">Finding work, admin, training, sick days.</span></div>
