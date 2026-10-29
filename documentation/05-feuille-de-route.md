@@ -225,9 +225,22 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   encore payées, TVA selon le régime), disponible, prévision sur 6 mois (factures attendues, cotisations et TVA aux
   dates du calendrier, charges régulières), mois négatif signalé au tableau de bord ; règles de la TVA (exigibilité,
   acomptes du réel simplifié) lues en entier ([39](39-tresorerie.md), décision D38).
+- **Conditions générales de vente (29/10/2026)** : générateur de CGV de prestations de services pour la France
+  (menu « Vendre ») : clients professionnels, particuliers ou les deux ; contrats à distance, hors établissement ou sur
+  le site ; mentions obligatoires, rétractation de 14 jours avec le modèle officiel de formulaire en annexe,
+  rétractation en ligne (obligatoire depuis le 19/06/2026), 7 jours sans paiement chez le client, médiateur, pénalités
+  du semestre, aucune clause abusive envers un particulier ; avertissements sur la saisie (délai de plus de 60 jours,
+  taux sous le minimum, médiateur manquant…). Treize pages officielles lues en entier ; deux questions ouvertes
+  résolues : **taux de l'intérêt légal du 2nd semestre 2026** (2,75 % et 6,84 %, minimum des pénalités 8,25 %) et **taux
+  de la BCE au 1er juillet 2026** (2,40 %, pénalités par défaut 12,40 %). Outil de lecture des sources : option « * »
+  (texte entier) ([40](40-cgv.md), décision D39).
 - **Prochaines actions de Claude** : refonte, suite ([31](31-vision-plateforme.md) § 5) : les quatre modules du compte
-  gratuit sont faits (étape 5) ; étape 6, outils restants (CGV, sous-traitance, devises, jours ouvrés, signature d'email,
-  guides de protection sociale) ;
+  gratuit sont faits (étape 5) ; étape 6, outils restants (CGV hors de France, après la lecture des sources de chaque
+  pays ; sous-traitance, devises, jours ouvrés, signature d'email, guides de protection sociale) ; préremplir le taux
+  légal et le taux de la BCE du semestre dans le calculateur de pénalités de retard (règles désormais disponibles) ;
+  vérifier la clause « supports connus ou à venir » du contrat de prestation (cession pour des formes d'exploitation non
+  prévisibles, Code de la propriété intellectuelle) ; ajouter les taux du 1er semestre 2027 dès leur publication
+  (fin décembre 2026) ;
   activité mixte de l'Espace à spécifier (le profil n'a qu'une activité : deux plafonds, déclaration et livre des
   recettes distinguant ventes et prestations, BOFiP BOI-BIC-DECLA-30-30) ; questions ouvertes de `data/rules/` à relire
   avec l'outil de lecture des sources (taux de l'intérêt légal du second semestre 2026, ACRE) ; puis besoins P3 restants
@@ -241,7 +254,9 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   Z12-012 pour le BT-32 en franchise, la question 13 de [pays/ca.md](pays/ca.md) sur la TVQ, et le
   remplacement annoncé de la section 17 du *Victims and Prisoners Act 2024* sur les accords de confidentialité). La mise en ligne
   des comptes attend le choix de l'hébergeur et du domaine.
-- **En attente d'Ismail** (pas urgent) : envoyer ou non une lettre d'information aux inscrits, et à quelle fréquence au plus ([34](34-inscription-compte-gratuit.md)) ; choix de la solution de dons ([35](35-offres-et-soutien.md), après les questions à l'expert-comptable du § 1) et inscription aux programmes d'affiliation
+- **En attente d'Ismail** (pas urgent) : question à poser à l'expert-comptable ou à l'avocat : l'indemnité forfaitaire
+  de 40 € s'applique-t-elle aux factures des professions libérales et des prestataires non commerçants (la fiche
+  officielle F23211 la réserve aux « actes de commerce ») ? ; envoyer ou non une lettre d'information aux inscrits, et à quelle fréquence au plus ([34](34-inscription-compte-gratuit.md)) ; choix de la solution de dons ([35](35-offres-et-soutien.md), après les questions à l'expert-comptable du § 1) et inscription aux programmes d'affiliation
   (registraires de noms de domaine d'abord), quand les comparatifs seront prêts ; structure juridique avec un comptable ; choix de l'hébergeur et budget pour
   les comptes en ligne (comparatif [13](13-comparatif-hebergeurs.md), § 6 ; reporté par Ismail le 22/10/2026, le
   serveur est prêt) ; nom de domaine à choisir avant la mise en ligne des comptes

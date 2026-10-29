@@ -33,11 +33,12 @@
     {
       "key": "sell",
       "label": "Vendre",
-      "description": "Convaincre, s'engager par écrit, écrire aux clients.",
+      "description": "Convaincre, s'engager par écrit, fixer ses conditions, écrire aux clients.",
       "items": [
         "proposal",
         "contract",
         "nda",
+        "cgv",
         "templates"
       ]
     },

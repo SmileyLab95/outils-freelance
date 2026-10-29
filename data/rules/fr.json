@@ -520,41 +520,99 @@
       "value": {
         "delai_defaut_jours": 30,
         "delai_max_date_facture_jours": 60,
-        "delai_max_fin_de_mois_jours": 45
+        "delai_max_fin_de_mois_jours": 45,
+        "delai_max_facture_periodique_jours": 45
       },
       "unit": "object",
       "label": "Délais de paiement entre professionnels (art. L441-10 C. com.)",
-      "source": "https://www.legifrance.gouv.fr/codes/id/LEGITEXT000005634379",
-      "source_title": "Code de commerce, art. L441-10 - Légifrance",
+      "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F23211",
+      "source_title": "Entreprendre.service-public.gouv.fr, « Délais de paiement entre professionnels et pénalités de retard » (vérifié le 7 août 2026)",
       "confidence": "high",
-      "note": "Sans stipulation : 30 jours après la réception des marchandises ou l'exécution de la prestation. Délai convenu : 60 jours au plus après la date d'émission de la facture, ou 45 jours fin de mois s'il est expressément stipulé et n'est pas manifestement abusif. Règle stable ; texte non relu en ligne pendant cette session."
+      "note": "Sans stipulation : 30 jours après la réception des marchandises ou l'exécution de la prestation. Délai convenu : 60 jours au plus après la date d'émission de la facture, ou 45 jours fin de mois s'il est expressément convenu et ne constitue pas un abus ; facture périodique : 45 jours au plus après son émission. Le délai doit figurer sur la facture et dans les CGV. Délais propres à certains secteurs (transport, alimentaire…) non repris. Lu en entier le 29/10/2026 avec l'outil « Lire une source officielle » (SHA-256 4168948d…e096).",
+      "more_sources": [
+        {
+          "source": "https://www.legifrance.gouv.fr/codes/id/LEGISCTA000038411055",
+          "source_title": "Code de commerce, art. L441-10 à L441-16 - Légifrance"
+        }
+      ],
+      "verified_on": "2026-10-29"
     },
     "penalites_retard_regle": {
       "value": "Pénalités dues de plein droit, sans rappel, dès le lendemain de l'échéance. Taux fixé dans les CGV, au moins égal à 3 fois le taux d'intérêt légal ; à défaut, taux de refinancement de la BCE majoré de 10 points. Le taux BCE applicable est celui en vigueur au 1er janvier pour le 1er semestre et au 1er juillet pour le 2nd semestre. Calcul : montant TTC x taux annuel x jours de retard / 365.",
       "unit": "text",
       "label": "Pénalités de retard entre professionnels (art. L441-10 II C. com.)",
-      "source": "https://www.legifrance.gouv.fr/codes/id/LEGITEXT000005634379",
-      "source_title": "Code de commerce, art. L441-10 - Légifrance",
+      "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F23211",
+      "source_title": "Entreprendre.service-public.gouv.fr, « Délais de paiement entre professionnels et pénalités de retard » (vérifié le 7 août 2026)",
       "confidence": "high",
-      "note": "Ne s'applique pas aux clients particuliers : seuls les intérêts au taux légal (taux « autres créanciers ») après mise en demeure. Texte non relu en ligne pendant cette session."
+      "note": "Ne s'applique pas aux clients particuliers : seuls les intérêts au taux légal après mise en demeure. Les conditions d'application et le taux des pénalités doivent figurer dans les CGV ; amende administrative jusqu'à 75 000 € (entreprise individuelle) ou 2 millions € (société) si les CGV ne les indiquent pas ou prévoient un taux non conforme (art. L441-16). Lu en entier le 29/10/2026 avec l'outil « Lire une source officielle » (SHA-256 4168948d…e096).",
+      "more_sources": [
+        {
+          "source": "https://www.legifrance.gouv.fr/codes/id/LEGISCTA000038411055",
+          "source_title": "Code de commerce, art. L441-10 - Légifrance"
+        }
+      ],
+      "verified_on": "2026-10-29"
     },
     "indemnite_forfaitaire_recouvrement": {
       "value": 40,
       "unit": "EUR",
       "label": "Indemnité forfaitaire pour frais de recouvrement (par facture payée en retard)",
-      "source": "https://www.legifrance.gouv.fr/codes/id/LEGITEXT000005634379",
-      "source_title": "Code de commerce, art. L441-10 II et D441-5 - Légifrance",
+      "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F23211",
+      "source_title": "Entreprendre.service-public.gouv.fr, « Délais de paiement entre professionnels et pénalités de retard » (vérifié le 7 août 2026)",
       "confidence": "high",
-      "note": "Due de plein droit entre professionnels ; une indemnité complémentaire peut être demandée sur justificatifs si les frais réels sont plus élevés. Montant inchangé depuis 2013."
+      "note": "Due de plein droit entre professionnels pour chaque facture payée en retard (une seule fois, même en cas de paiement partiel), non soumise à la TVA ; à mentionner dans les CGV et sur les factures. Une indemnisation complémentaire peut être demandée sur justificatifs si les frais réels sont plus élevés, mais elle ne doit pas être mentionnée sur les factures ni dans les CGV. La fiche ajoute que l'indemnité « ne peut s'appliquer que sur des actes de commerce (par exemple, l'achat-revente) » et pas aux baux commerciaux ni à la location avec option d'achat : portée exacte pour les professions libérales à confirmer (question ouverte). Lu en entier le 29/10/2026 avec l'outil « Lire une source officielle » (SHA-256 4168948d…e096).",
+      "more_sources": [
+        {
+          "source": "https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000043197457",
+          "source_title": "Code de commerce, art. D441-5 - Légifrance"
+        }
+      ],
+      "verified_on": "2026-10-29"
     },
     "taux_bce_refinancement_2026_01_01": {
       "value": 0.0215,
       "unit": "rate",
       "label": "Taux de refinancement principal de la BCE au 1er janvier 2026",
-      "source": "https://www.ecb.europa.eu/stats/policy_and_exchange_rates/key_ecb_interest_rates/html/index.en.html",
-      "source_title": "Key ECB interest rates - Banque centrale européenne",
-      "confidence": "medium",
-      "note": "2,15 % depuis le 11/06/2025, inchangé jusqu'à fin 2025 d'après mes connaissances, non revérifié en ligne pendant cette session. Pénalités par défaut au 1er semestre 2026 : 12,15 %. Le taux au 1er juillet 2026 (2nd semestre) n'a pas pu être vérifié : voir open_questions."
+      "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F23211",
+      "source_title": "Entreprendre.service-public.gouv.fr, « Délais de paiement entre professionnels et pénalités de retard » (vérifié le 7 août 2026)",
+      "confidence": "high",
+      "note": "« Pour le 1er semestre 2026, le taux de refinancement en vigueur au 1er janvier est de 2,15 % (inchangé depuis le 2e semestre 2025), ce qui conduit à un taux de pénalités de 12,15 % ». Lu en entier le 29/10/2026 avec l'outil « Lire une source officielle » (SHA-256 4168948d…e096).",
+      "verified_on": "2026-10-29"
+    },
+    "taux_bce_refinancement_2026_07_01": {
+      "value": 0.024,
+      "unit": "rate",
+      "label": "Taux de refinancement principal de la BCE au 1er juillet 2026",
+      "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F23211",
+      "source_title": "Entreprendre.service-public.gouv.fr, « Délais de paiement entre professionnels et pénalités de retard » (vérifié le 7 août 2026)",
+      "confidence": "high",
+      "verified_on": "2026-10-29",
+      "note": "« Pour le 2e semestre 2026, le taux de refinancement en vigueur au 1er juillet est de 2,40 %, ce qui conduit à un taux de pénalités de 12,40 % ». Le taux applicable est celui du 1er janvier pour le 1er semestre et du 1er juillet pour le 2nd. Lu en entier le 29/10/2026 avec l'outil « Lire une source officielle » (SHA-256 4168948d…e096)."
+    },
+    "taux_interet_legal": {
+      "value": {
+        "2026-S1": {
+          "particuliers": 0.0667,
+          "autres": 0.0262
+        },
+        "2026-S2": {
+          "particuliers": 0.0684,
+          "autres": 0.0275
+        }
+      },
+      "unit": "object",
+      "label": "Taux de l'intérêt légal par semestre : créancier particulier n'agissant pas pour des besoins professionnels ; autres cas (notamment créancier professionnel)",
+      "source": "https://www.service-public.gouv.fr/particuliers/vosdroits/F783",
+      "source_title": "Service-public.gouv.fr, « Calcul de l'intérêt légal » (vérifié le 1er juillet 2026)",
+      "more_sources": [
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F33527",
+          "source_title": "Entreprendre.service-public.gouv.fr, « Conditions générales de vente (CGV) » : pénalités d'au moins 3 fois le taux de l'intérêt légal, « ce qui correspond à 8,25 % »"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-10-29",
+      "note": "Taux simples du tableau officiel : 2e semestre 2026, 6,84 % et 2,75 % ; 1er semestre 2026, 6,67 % et 2,62 %. Le minimum des pénalités de retard entre professionnels (3 fois le taux « autres cas ») vaut 8,25 % au 2nd semestre 2026, chiffre repris par les fiches F33527 et F23211. Taux du 1er semestre 2027 : arrêté attendu fin décembre 2026, à ajouter. Lu en entier le 29/10/2026 avec l'outil « Lire une source officielle » (SHA-256 f923f144…ab08)."
     },
     "mentions_obligatoires_facture": {
       "value": [
@@ -1515,13 +1573,319 @@
       "confidence": "high",
       "verified_on": "2026-10-29",
       "note": "Lu en entier le 29/10/2026 (outil « Lire une source officielle », SHA-256 6b1a1329…b236)."
+    },
+    "cgv_professionnels": {
+      "value": {
+        "obligation": "facultatives ; communiquées à tout acheteur professionnel qui en fait la demande",
+        "contenu": [
+          "conditions de vente ou d'exécution de la prestation (date d'exécution)",
+          "éléments de détermination du prix : barème des prix unitaires (de préférence hors taxes) ou méthode de calcul, réductions de prix",
+          "conditions de règlement : délai de paiement, conditions d'application et taux des pénalités de retard, indemnité forfaitaire de 40 € pour frais de recouvrement, conditions d'escompte si elles sont proposées"
+        ],
+        "categories": "CGV distinctes possibles par catégorie de clients ; chaque catégorie ne peut demander que les siennes",
+        "amende_ei": 15000,
+        "amende_societe": 75000
+      },
+      "unit": "object",
+      "label": "Conditions générales de vente entre professionnels : communication et contenu (Code de commerce, art. L441-1)",
+      "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F33527",
+      "source_title": "Entreprendre.service-public.gouv.fr, « Conditions générales de vente (CGV) » (vérifié le 1er juillet 2026)",
+      "more_sources": [
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F23455",
+          "source_title": "Entreprendre.service-public.gouv.fr, « Faire du commerce en ligne (e-commerce) : règles à respecter » (vérifié le 19 juin 2026)"
+        },
+        {
+          "source": "https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000038414469",
+          "source_title": "Code de commerce, art. L441-1 - Légifrance"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-10-29",
+      "note": "Mentions facultatives citées : mode de paiement, garantie commerciale, confidentialité, données personnelles, résiliation, force majeure, réserve de propriété, limitation de responsabilité. Sans CGV régulières, le vendeur « perd le bénéfice de ses principales protections contractuelles » (délais de paiement, clauses limitatives de responsabilité, réserve de propriété). Lu en entier le 29/10/2026 avec l'outil « Lire une source officielle » (SHA-256 3d641adb…df3a)."
+    },
+    "cgv_particuliers": {
+      "value": {
+        "obligation": "obligatoires et communiquées avant la conclusion du contrat (information précontractuelle), sur un support durable ; sur le site internet pour un contrat à distance",
+        "informations": [
+          "caractéristiques essentielles du service",
+          "prix toutes taxes comprises, modalités de paiement et d'exécution",
+          "date ou délai d'exécution",
+          "identité et coordonnées postales, téléphoniques et électroniques du professionnel",
+          "garanties légales et, le cas échéant, commerciales",
+          "possibilité de recourir à un médiateur de la consommation"
+        ],
+        "services": [
+          "forme juridique",
+          "coordonnées pour un contact rapide et direct",
+          "numéro d'immatriculation (RCS ou RNE)",
+          "autorité ayant délivré une autorisation d'exercer, le cas échéant",
+          "numéro de TVA intracommunautaire si l'entreprise est assujettie",
+          "profession réglementée : titre, État où il a été octroyé, ordre ou organisme d'inscription",
+          "loi applicable et juridiction compétente",
+          "assurance de responsabilité professionnelle ou garantie financière : assureur ou garant, couverture géographique"
+        ],
+        "distance": [
+          "numéro SIREN",
+          "droit de rétractation de 14 jours, modalités d'exercice et formulaire type",
+          "modalités de résiliation",
+          "modalités d'exécution",
+          "modes de règlement des litiges (loi et juridiction)",
+          "coût de la communication à distance, codes de bonne conduite",
+          "assurances et garanties financières"
+        ],
+        "amende_ei": 3000,
+        "amende_societe": 15000
+      },
+      "unit": "object",
+      "label": "Conditions générales de vente pour des clients particuliers : informations obligatoires (Code de la consommation, art. L111-1, L111-2, R111-1 et R111-2, L221-5)",
+      "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F33527",
+      "source_title": "Entreprendre.service-public.gouv.fr, « Conditions générales de vente (CGV) » (vérifié le 1er juillet 2026)",
+      "more_sources": [
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F23455",
+          "source_title": "Entreprendre.service-public.gouv.fr, « Faire du commerce en ligne (e-commerce) : règles à respecter » (vérifié le 19 juin 2026) : amende de 3 000 € (entreprise individuelle) ou 15 000 € (société)"
+        },
+        {
+          "source": "https://europa.eu/youreurope/business/selling-in-eu/selling-goods-services/ecommerce-distance-selling/index_fr.htm",
+          "source_title": "Your Europe, « Commerce électronique B2C, vente à distance et vente hors établissement » (vérifié le 12 juillet 2026) : confirmation du contrat sur un support durable, au plus tard avant le début de la prestation"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-10-29",
+      "note": "Les fiches F33527 et F23455 n'indiquent pas la même amende pour un défaut de CGV : 15 000 € / 75 000 € (F33527, sanctions de l'art. L441-1, entre professionnels) et 3 000 € / 15 000 € (F23455, clients particuliers). Lu en entier le 29/10/2026 avec l'outil « Lire une source officielle » (SHA-256 3d641adb…df3a)."
+    },
+    "retractation_consommateur": {
+      "value": {
+        "delai_jours": 14,
+        "depart_services": "lendemain de la conclusion du contrat",
+        "report_jour_ouvrable": true,
+        "prolongation_mois": 12,
+        "remboursement_jours": 14,
+        "remboursement": "même moyen de paiement, sauf accord exprès pour un autre, sans frais",
+        "execution_anticipee": "à la demande expresse du client, recueillie sur papier ou sur un support durable ; s'il se rétracte ensuite, il paie un montant proportionnel au service fourni jusqu'à sa rétractation",
+        "exclusion_services": "service pleinement exécuté avant la fin du délai, dont l'exécution a commencé après accord préalable exprès du consommateur et renoncement exprès à son droit de rétractation",
+        "amende_ei": 15000,
+        "amende_societe": 75000
+      },
+      "unit": "object",
+      "label": "Droit de rétractation du consommateur (contrats conclus à distance ou hors établissement)",
+      "source": "https://www.service-public.gouv.fr/particuliers/vosdroits/F10485",
+      "source_title": "Service-public.gouv.fr, « Achat à distance : droit de rétractation » (vérifié le 1er janvier 2026)",
+      "more_sources": [
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F23455",
+          "source_title": "Entreprendre.service-public.gouv.fr, « Faire du commerce en ligne (e-commerce) : règles à respecter » (vérifié le 19 juin 2026)"
+        },
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F23224",
+          "source_title": "Entreprendre.service-public.gouv.fr, « Démarchage à domicile : règles à respecter » (vérifié le 11 août 2026)"
+        },
+        {
+          "source": "https://europa.eu/youreurope/business/selling-in-eu/selling-goods-services/ecommerce-distance-selling/index_fr.htm",
+          "source_title": "Your Europe, « Commerce électronique B2C, vente à distance et vente hors établissement » (vérifié le 12 juillet 2026)"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-10-29",
+      "note": "Le délai court le lendemain de la conclusion du contrat de services (exemple officiel : contrat du 5 août, rétractation possible jusqu'au 19 août inclus) ; s'il expire un samedi, un dimanche ou un jour férié, il est prolongé jusqu'au premier jour ouvrable suivant. Sans information sur ce droit, délai prolongé de 12 mois. Le professionnel ne peut pas imposer une forme (par exemple une lettre recommandée). Sans demande expresse recueillie sur un support durable, ou sans information sur les frais dus, le consommateur qui se rétracte ne paie rien pour le service déjà fourni. Lu en entier le 29/10/2026 avec l'outil « Lire une source officielle » (SHA-256 3dfcd58d…6b88)."
+    },
+    "retractation_modeles": {
+      "value": {
+        "formulaire": [
+          "(Veuillez compléter et renvoyer le présent formulaire uniquement si vous souhaitez vous rétracter du contrat)",
+          "À l'attention de [le professionnel insère ici son nom, son adresse géographique et, lorsqu'ils sont disponibles, son numéro de télécopieur et son adresse électronique] :",
+          "Je/Nous (*) vous notifie/notifions (*) par la présente ma/notre (*) rétractation du contrat portant sur la vente du bien (*)/pour la prestation de service (*) ci-dessous",
+          "Commandé le (*)/reçu le (*)",
+          "Nom du (des) consommateur(s)",
+          "Adresse du (des) consommateur(s)",
+          "Signature du (des) consommateur(s) (uniquement en cas de notification du présent formulaire sur papier)",
+          "Date",
+          "(*) Biffez la mention inutile."
+        ],
+        "information_services": "Si vous avez demandé de commencer la prestation de services pendant le délai de rétractation, vous devrez nous payer un montant proportionnel à ce qui vous a été fourni jusqu'au moment où vous nous avez informé de votre rétractation du présent contrat, par rapport à l'ensemble des prestations prévues par le contrat."
+      },
+      "unit": "object",
+      "label": "Modèle de formulaire de rétractation et informations types sur la rétractation (directive 2011/83/UE, annexe I)",
+      "source": "https://publications.europa.eu/resource/cellar/6c8e7593-7a75-4b58-b709-542f06ee7a28.0017.03/DOC_1",
+      "source_title": "Directive 2011/83/UE relative aux droits des consommateurs, JO L 304 du 22.11.2011, annexe I (Office des publications de l'Union européenne)",
+      "more_sources": [
+        {
+          "source": "https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000006069565/LEGISCTA000032807114/",
+          "source_title": "Code de la consommation, art. R221-1 et son annexe (formulaire type) - Légifrance"
+        }
+      ],
+      "confidence": "medium",
+      "verified_on": "2026-10-29",
+      "note": "Texte de 2011 lu en entier le 29/10/2026 (SHA-256 dd27f961…2bc3). Les États membres ne peuvent ajouter aucune exigence de forme au modèle (art. 11). Le texte français de l'annexe de l'article R221-1 n'a pas pu être lu (Légifrance refuse les lectures automatiques), ni la version consolidée de la directive : la mention du télécopieur a pu en être retirée depuis. Le générateur remplit lui-même les coordonnées du professionnel (nom, adresse, email), sans télécopieur, ce qui convient aux deux versions."
+    },
+    "retractation_en_ligne": {
+      "value": {
+        "depuis": "2026-06-19",
+        "mention": "renoncer au contrat ici",
+        "confirmation": "confirmer la rétractation",
+        "texte_cgv": "Vous pouvez également exercer votre droit de rétractation en ligne sur [insérer l'adresse du site internet ou une autre référence adéquate indiquant où se trouve la fonctionnalité de rétractation]. Si vous utilisez cette fonctionnalité en ligne, nous vous enverrons, dans les meilleurs délais, un accusé de réception de la rétractation sur un support durable (par exemple, par courriel), y compris son contenu ainsi que la date et l'heure de sa soumission.",
+        "amende_ei": 15000,
+        "amende_societe": 75000
+      },
+      "unit": "object",
+      "label": "Fonctionnalité de rétractation en ligne pour les contrats conclus à distance via une interface en ligne (depuis le 19 juin 2026)",
+      "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F23455",
+      "source_title": "Entreprendre.service-public.gouv.fr, « Faire du commerce en ligne (e-commerce) : règles à respecter » (vérifié le 19 juin 2026 ; Code de la consommation, art. L221-21, D221-5 et R221-3)",
+      "more_sources": [
+        {
+          "source": "https://www.francenum.gouv.fr/guides-et-conseils/developpement-commercial/gestion-de-la-relation-client/la-retractation-en-1-clic",
+          "source_title": "France Num, « La rétractation en 1 clic, une nouvelle obligation pour les e-commerçants » (mis à jour le 2 octobre 2026 ; ordonnance du 5 janvier 2026, décret n° 2026-3, art. L242-13)"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-10-29",
+      "note": "La fonctionnalité, gratuite, visible et disponible pendant tout le délai, permet de renseigner ou confirmer son nom, le contrat concerné et le moyen de recevoir l'accusé de réception ; les CGV mentionnent son existence et son emplacement. Concerne les contrats conclus via une interface en ligne du professionnel (site, application, place de marché). Lu en entier le 29/10/2026 avec l'outil « Lire une source officielle » (SHA-256 4412a299…1a21)."
+    },
+    "hors_etablissement": {
+      "value": {
+        "paiement_interdit_jours": 7,
+        "contrat": "exemplaire daté, signé par les deux parties, remis sur un support durable avec le formulaire type de rétractation",
+        "exceptions": "abonnement à un journal d'information politique, services à la personne (organisme agréé), réunion organisée par le vendeur à son domicile ou chez un client, travaux de réparation urgents demandés par le client"
+      },
+      "unit": "object",
+      "label": "Contrat conclu hors établissement (démarchage, contrat signé chez le client) : aucun paiement ni prestation avant 7 jours (Code de la consommation, art. L221-10)",
+      "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F23224",
+      "source_title": "Entreprendre.service-public.gouv.fr, « Démarchage à domicile : règles à respecter » (vérifié le 11 août 2026)",
+      "confidence": "high",
+      "verified_on": "2026-10-29",
+      "note": "« Le vendeur à domicile ne peut recevoir aucun paiement ou aucune contrepartie de la part du client avant l'expiration d'un délai de 7 jours, à compter de la conclusion du contrat » ; « Il lui est également interdit d'effectuer une prestation de service avant l'expiration de ce délai. » Sanction : 2 ans de prison et 150 000 € d'amende. Lu en entier le 29/10/2026 avec l'outil « Lire une source officielle » (SHA-256 c3db8954…50a1)."
+    },
+    "petits_professionnels_hors_etablissement": {
+      "value": {
+        "salaries_max": 5,
+        "conditions": [
+          "contrat conclu hors établissement",
+          "objet hors du champ de l'activité principale du client professionnel",
+          "5 salariés au plus"
+        ]
+      },
+      "unit": "object",
+      "label": "Client professionnel de 5 salariés au plus : droit de rétractation et information des consommateurs pour un contrat hors établissement hors de son activité principale (Code de la consommation, art. L221-3)",
+      "source": "https://www.francenum.gouv.fr/guides-et-conseils/pilotage-de-lentreprise/tpe-de-moins-de-5-salaries-quelles-sont-les-conditions",
+      "source_title": "France Num, « TPE de moins de 5 salariés : quelles sont les conditions pour faire jouer votre droit de rétractation ? » (mis à jour le 11 décembre 2025)",
+      "more_sources": [
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F33527",
+          "source_title": "Entreprendre.service-public.gouv.fr, « Conditions générales de vente (CGV) » (vérifié le 1er juillet 2026)"
+        },
+        {
+          "source": "https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000032226882",
+          "source_title": "Code de la consommation, art. L221-3 - Légifrance"
+        }
+      ],
+      "confidence": "medium",
+      "verified_on": "2026-10-29",
+      "note": "France Num : « Le professionnel ne bénéficie pas de droit de rétractation s'il a conclu un contrat par internet ou par téléphone. » La fiche F33527 écrit « conclue à distance ou hors établissement » : les deux fiches citent l'art. L221-3, qui vise les contrats hors établissement ; le générateur suit cette lecture et signale l'écart. Lu en entier le 29/10/2026 (SHA-256 154abec7…370c)."
+    },
+    "mediation_consommation": {
+      "value": {
+        "obligatoire": "tout professionnel qui vend à des consommateurs, quels que soient sa taille et son secteur ; pas pour les litiges entre professionnels",
+        "mentions": [
+          "nom du médiateur",
+          "adresse postale",
+          "adresse du site internet"
+        ],
+        "supports": "site internet, CGV et bons de commande (à défaut, tout moyen approprié) ; informer avant la conclusion du contrat et après une réclamation restée sans réponse satisfaisante",
+        "reclamation_ecrite_prealable": true,
+        "saisine_delai_ans": 1,
+        "gratuit_consommateur": true,
+        "mediation_prealable_obligatoire_interdite": true,
+        "amende_ei": 3000,
+        "amende_societe": 15000
+      },
+      "unit": "object",
+      "label": "Médiation de la consommation (Code de la consommation, art. L612-1, L612-2, L612-4, L616-1, R616-1, L641-1)",
+      "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F33338",
+      "source_title": "Entreprendre.service-public.gouv.fr, « Médiation des litiges de la consommation » (vérifié le 16 octobre 2026)",
+      "confidence": "high",
+      "verified_on": "2026-10-29",
+      "note": "Le professionnel choisit un médiateur référencé par la CECMC et adhère au dispositif (convention) avant d'en communiquer les coordonnées ; il ne suffit pas de le choisir dans une liste. Le consommateur saisit le médiateur dans l'année qui suit sa réclamation écrite au professionnel ; toute clause qui l'oblige à une médiation avant de saisir le juge est interdite. Lu en entier le 29/10/2026 avec l'outil « Lire une source officielle » (SHA-256 2fce4481…ecc9)."
+    },
+    "clauses_abusives": {
+      "value": {
+        "interdites": [
+          "clauses que le client n'a pas pu lire avant de s'engager",
+          "clauses qui annulent les engagements des représentants du professionnel",
+          "modification unilatérale du prix, de la durée ou des caractéristiques",
+          "professionnel seul juge de la conformité ou de l'interprétation",
+          "résiliation à la discrétion du professionnel",
+          "conservation des sommes versées quand le professionnel met fin au contrat",
+          "exécution imposée au client malgré les manquements du professionnel",
+          "suppression ou réduction du droit à réparation du client",
+          "impossibilité de résilier malgré un manquement du professionnel",
+          "préavis plus long ou indemnité de résiliation à la seule charge du client",
+          "renversement de la charge de la preuve"
+        ],
+        "presumees": [
+          "engagement ferme du client, prestation incertaine du professionnel",
+          "conservation des sommes versées sans réciprocité",
+          "pénalités excessives ou disproportionnées",
+          "résiliation sans préavis raisonnable",
+          "cession du contrat sans l'accord du client",
+          "date d'exécution seulement indicative",
+          "résiliation plus difficile pour le client",
+          "limitation des moyens de preuve du client",
+          "restriction des actions en justice ou des recours"
+        ]
+      },
+      "unit": "object",
+      "label": "Clauses abusives dans les contrats avec des consommateurs (Code de la consommation, art. R212-1 à R212-5)",
+      "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F33527",
+      "source_title": "Entreprendre.service-public.gouv.fr, « Conditions générales de vente (CGV) » (vérifié le 1er juillet 2026)",
+      "more_sources": [
+        {
+          "source": "https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000006069565/LEGISCTA000032807194/",
+          "source_title": "Code de la consommation, art. R212-1 à R212-5 - Légifrance"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-10-29",
+      "note": "Résumé de la fiche officielle (clauses interdites, puis clauses présumées abusives dont le professionnel doit prouver qu'elles ne le sont pas). Lu en entier le 29/10/2026 avec l'outil « Lire une source officielle » (SHA-256 3d641adb…df3a)."
+    },
+    "cgv_opposabilite": {
+      "value": {
+        "support": "support durable (lettre, courriel, compte personnel sécurisé) ; un simple lien vers une page du site est à éviter",
+        "moment": "avant tout engagement du client, par exemple sur le devis ou le bon de commande",
+        "acceptation": "expresse : devis signé contenant les CGV, ou case non pré-cochée en ligne ; copie des CGV avec la confirmation de commande",
+        "version": "les CGV applicables sont celles du jour de l'achat",
+        "langue": "français obligatoire pour des consommateurs ou utilisateurs finaux (loi du 4 août 1994, art. 2) ; pas entre professionnels"
+      },
+      "unit": "object",
+      "label": "Rendre les CGV opposables : support durable, communication préalable, acceptation expresse, langue",
+      "source": "https://www.francenum.gouv.fr/guides-et-conseils/developpement-commercial/site-e-commerce/rediger-des-conditions-generales-de",
+      "source_title": "France Num, « Rédiger des conditions générales de vente (CGV) pour son site internet » (mis à jour le 13 juillet 2026)",
+      "confidence": "high",
+      "verified_on": "2026-10-29",
+      "note": "France Num recommande de faire relire ses CGV par un juriste ou un avocat. Lu en entier le 29/10/2026 (SHA-256 f865f639…b255)."
+    },
+    "garantie_legale_conformite": {
+      "value": {
+        "contrats": [
+          "vente de biens matériels neufs ou d'occasion",
+          "vente de biens et de services numériques",
+          "fourniture de biens à fabriquer ou à produire"
+        ],
+        "duree_ans": 2,
+        "encadre_numerique": "pour un produit ou un service numérique, les CGV mentionnent en plus, dans un encadré, l'identité du professionnel qui répond des garanties, la durée de vie prévisible et la durée des mises à jour"
+      },
+      "unit": "object",
+      "label": "Garantie légale de conformité : contrats concernés (consommateurs)",
+      "source": "https://www.service-public.gouv.fr/particuliers/vosdroits/F11094",
+      "source_title": "Service-public.gouv.fr, « Garantie légale de conformité » (vérifié le 17 août 2026)",
+      "confidence": "high",
+      "verified_on": "2026-10-29",
+      "note": "Ne concerne pas une prestation de services sans bien ni contenu ou service numérique fourni ; s'applique uniquement entre un acheteur non professionnel et un vendeur professionnel. Lu en entier le 29/10/2026 avec l'outil « Lire une source officielle » (SHA-256 d34f483f…5361)."
     }
   },
   "open_questions": [
     "Limite de vérification : la recherche web partagée de cette session a été épuisée en cours de travail et WebFetch ne résout aucun domaine officiel. Les sections micro-entreprise et barème IR ont été recoupées par recherche ; les sections sociétés, facturation électronique, retard de paiement et mentions reposent sur des connaissances antérieures (confiance medium ou low).",
     "ACRE Cipav avant le 01/07/2026 : l'Urssaf et economie.gouv.fr publient 13,4 % (avec astérisque), pas 11,6 % (23,2 % x 50 %). Quel est le texte de l'astérisque ? Le taux s'applique-t-il aussi aux créations Cipav de 2025 encore en ACRE en 2026 ?",
-    "Taux d'intérêt légal du 2nd semestre 2026 (créanciers professionnels et autres créanciers) : non trouvé. Arrêté publié au JO fin juin 2026 ; à lire sur service-public.fr (F783) ou banque-france.fr.",
-    "Taux de refinancement principal de la BCE en vigueur au 1er juillet 2026 : non vérifié (2,15 % s'il n'a pas changé depuis juin 2025). À confirmer sur ecb.europa.eu.",
     "Prélèvements sociaux 2026 sur les dividendes : confirmer 18,6 % (hausse de 1,4 point de CSG par la LFSS 2026, loi n° 2025-1403) et la liste exacte des revenus exclus (assurance-vie, PEL, CEL, plus-values immobilières, revenus fonciers ?).",
     "Barème de l'IR qui s'appliquera aux revenus 2026 : il sera fixé par la loi de finances pour 2027 (PLF déposé à l'automne 2026, adoption en décembre au plus tôt). Pas encore publié.",
     "Recodification de la TVA : un guide commercial affirme que l'art. 293 B du CGI est abrogé au 01/09/2026 par l'ordonnance n° 2025-1247 du 17/12/2025, qui transférerait la TVA dans le code des impositions sur les biens et services. Non confirmé ; si c'est vrai, la mention « TVA non applicable, art. 293 B du CGI » doit citer le nouvel article.",
@@ -1531,6 +1895,8 @@
     "Facturation électronique : nombre exact de plateformes agréées sur la liste impots.gouv.fr ; URL exacte de la page de la liste ; montants des amendes après les LF 2025 et 2026 (amende pour défaut de plateforme, hausse éventuelle des 15 EUR par facture) ; date d'effet des 4 nouvelles mentions (01/09/2026 pour toutes les entreprises, ou date d'émission de chaque entreprise ?).",
     "Smic 2026 : confirmer 12,02 EUR / h au 01/01/2026 et l'absence de revalorisation en cours d'année.",
     "Compte dédié du micro-entrepreneur (CSS, art. L613-10) : le texte ne fixe ni délai d'ouverture après le second dépassement, ni prorata la première année, ni sortie de l'obligation quand le chiffre d'affaires repasse sous 10 000 € ; le guide le signale sans interpréter.",
-    "Assurance : la liste des professions soumises à une responsabilité civile professionnelle obligatoire n'est pas exhaustive dans le guide (renvoi vers les textes et ordres de chaque profession) ; sanction du défaut de mention de l'assurance (Code de l'artisanat, art. L132-1) non relevée."
+    "Assurance : la liste des professions soumises à une responsabilité civile professionnelle obligatoire n'est pas exhaustive dans le guide (renvoi vers les textes et ordres de chaque profession) ; sanction du défaut de mention de l'assurance (Code de l'artisanat, art. L132-1) non relevée.",
+    "Indemnité forfaitaire de 40 € : la fiche F23211 (vérifiée le 07/08/2026) dit qu'elle « ne peut s'appliquer que sur des actes de commerce (par exemple, l'achat-revente) ». S'applique-t-elle aux factures des professions libérales et des prestataires non commerçants ? Le générateur de factures et de CGV la mentionne toujours entre professionnels (mention obligatoire selon les fiches F23211 et F33527) ; à confirmer avec l'expert-comptable ou l'avocat.",
+    "Formulaire type de rétractation : texte de l'annexe de l'article R221-1 du Code de la consommation à relire sur Légifrance (inaccessible aux lectures automatiques) ; le générateur de CGV reprend le modèle de la directive 2011/83/UE (annexe I, partie B)."
   ]
 }

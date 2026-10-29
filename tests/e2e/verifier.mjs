@@ -2269,6 +2269,79 @@ const tests = {
     await page.fill("#k-start", "");
     await page.uncheck("#k-personal");
   },
+  async "fr/conditions-generales-de-vente/"(page) {
+    const preview = async () => (await page.textContent("#cg-preview")).replace(/\s+/g, " ");
+    const notices = async () => (await page.textContent("#cg-notices")).replace(/\s+/g, " ");
+    const s2026 = new Date() < new Date(2027, 0, 1);   // taux du 2nd semestre 2026 dans les règles
+    let text = await preview();
+    check(text.includes("CONDITIONS GÉNÉRALES DE VENTE") && text.includes("Article 1 – Objet et champ d'application") && !text.includes("Droit de rétractation") &&
+      !text.includes("Annexe"), "CGV : clients professionnels à distance par défaut, sans rétractation ni annexe");
+    check(text.includes("indemnité forfaitaire pour frais de recouvrement de 40 €") && text.includes("dans un délai de 30 jours à compter de leur date d'émission"),
+      "CGV : pénalités, indemnité de 40 € et délai de paiement");
+    check(s2026 ? text.includes("soit 12,40 % par an au second semestre 2026") : (await notices()).includes("ne sont pas encore dans nos règles"), "CGV : taux par défaut du semestre (BCE + 10 points)");
+    check((await notices()).includes("Indiquez votre nom ou votre raison sociale") && (await page.getAttribute("#cg-p-name", "aria-invalid")) === "true",
+      "CGV : avertissement et champ signalé sans nom");
+    check(await page.isHidden("#cg-med-name") && await page.isHidden("#cg-online"), "CGV : médiateur et commande en ligne masqués sans clients particuliers");
+    await page.fill("#cg-p-name", "Camille Martin EI");
+    await page.fill("#cg-p-address", "12 rue de la République, 69002 Lyon");
+    await page.fill("#cg-p-siren", "123 456 789");
+    await page.fill("#cg-p-email", "contact@exemple.fr");
+    await page.fill("#cg-p-privacy", "https://www.exemple.fr/confidentialite");
+    check((await page.textContent("#cg-notices")).trim() === "", "CGV : plus aucun avertissement avec une saisie complète");
+    await page.fill("#cg-terms", "75");
+    check((await notices()).includes("ne peut pas dépasser 60 jours") && (await preview()).includes("Les factures sont payables délai de paiement"),
+      "CGV : délai de 75 jours refusé, laissé à compléter");
+    await page.fill("#cg-terms", "30");
+    await page.selectOption("#cg-penalty", "custom");
+    await page.fill("#cg-penalty-rate", "5");
+    check(!s2026 || (await notices()).includes("ne peut pas être inférieur à trois fois le taux de l'intérêt légal, soit 8,25 %"), "CGV : taux de 5 % refusé (minimum 8,25 %)");
+    await page.fill("#cg-penalty-rate", "15");
+    check((await preview()).includes("au taux de 15 % par an"), "CGV : taux choisi");
+    await page.selectOption("#cg-penalty", "bce");
+    // Clients particuliers : médiateur, rétractation, annexe, pas de limitation de responsabilité.
+    await page.selectOption("#cg-clients", "both");
+    check((await notices()).includes("un médiateur de la consommation est obligatoire") && await page.isVisible("#cg-med-name"), "CGV : médiateur exigé avec des particuliers");
+    await page.fill("#cg-med-name", "Médiateur Exemple");
+    await page.fill("#cg-med-address", "1 rue de Paris, 75001 Paris");
+    await page.fill("#cg-med-site", "https://mediateur.exemple.fr");
+    text = await preview();
+    check(text.includes("Article 8 – Droit de rétractation") && text.includes("dispose d'un délai de 14 jours pour se rétracter") && text.includes("Annexe – Modèle de formulaire de rétractation") &&
+      text.includes("À l'attention de Camille Martin EI, 12 rue de la République, 69002 Lyon, contact@exemple.fr :") && text.includes("(*) Biffez la mention inutile."),
+      "CGV : rétractation de 14 jours et formulaire officiel rempli");
+    check(text.includes("Clients professionnels : la responsabilité du Prestataire est limitée") && text.includes("Clients particuliers : aucune stipulation des présentes CGV ne limite"),
+      "CGV : limitation de responsabilité pour les seuls professionnels");
+    check(text.includes("Médiateur Exemple, 1 rue de Paris, 75001 Paris, https://mediateur.exemple.fr") && text.includes("dans un délai d'un an"), "CGV : coordonnées du médiateur");
+    await page.check("#cg-offsite");
+    check((await notices()).includes("aucun paiement ni acompte ne peut être reçu avant 7 jours") &&
+      (await preview()).includes("aucun paiement ni acompte ne peut être reçu avant l'expiration d'un délai de 7 jours"), "CGV : contrat chez le client, 7 jours sans paiement");
+    check((await preview()).includes("emploie 5 salariés au plus"), "CGV : petits professionnels (art. L221-3)");
+    await page.check("#cg-online");
+    check((await notices()).includes("Indiquez l'adresse de la fonctionnalité de rétractation en ligne"), "CGV : adresse de la rétractation en ligne exigée");
+    await page.fill("#cg-online-url", "https://www.exemple.fr/retractation");
+    check((await preview()).includes("en ligne, à l'adresse https://www.exemple.fr/retractation") && (await preview()).includes("la date et l'heure de sa soumission"),
+      "CGV : rétractation en ligne");
+    // Un avertissement mène à son champ.
+    await page.fill("#cg-deposit", "0");
+    await page.fill("#cg-p-siren", "");
+    await page.click('#cg-notices a[data-focus="cg-p-siren"]');
+    check(await page.evaluate(() => document.activeElement.id === "cg-p-siren"), "CGV : l'avertissement donne le focus au champ");
+    await page.fill("#cg-p-siren", "123 456 789");
+    const [download] = await Promise.all([page.waitForEvent("download"), page.click("#cg-word")]);
+    const doc = (await import("fs")).readFileSync(await download.path(), "utf8");
+    check(download.suggestedFilename() === "Conditions générales de vente.doc" && doc.includes("CONDITIONS GÉNÉRALES DE VENTE") && doc.includes("Annexe"), "CGV : téléchargement Word");
+    await page.click("#cg-copy");
+    check(await copied(page, "#cg-copy"), "CGV : bouton Copier");
+    await page.reload({ waitUntil: "networkidle" });
+    check((await page.inputValue("#cg-clients")) === "both" && (await page.inputValue("#cg-med-name")) === "Médiateur Exemple" && await page.isChecked("#cg-offsite"),
+      "CGV : saisie mémorisée");
+    check(await page.evaluate(() => !(localStorage.getItem("of:contract") || "").includes("Médiateur Exemple")), "CGV : saisie séparée de celle du contrat");
+    await page.screenshot({ path: path.join(shots, "cgv-particuliers.png"), fullPage: true });
+    await accessible(page, "CGV (clients particuliers, avertissements)");
+    // Retour à la situation par défaut pour les formats suivants (tablette, mobile).
+    page.once("dialog", (d) => d.accept());
+    await Promise.all([page.waitForNavigation(), page.click("#cg-reset")]);
+    check((await page.inputValue("#cg-clients")) === "pro" && (await page.inputValue("#cg-p-name")) === "", "CGV : tout effacer");
+  },
   async "us/nda-template/"(page) {
     let text = await page.textContent("#k-preview");
     check(text.includes("MUTUAL NON-DISCLOSURE AGREEMENT") && text.includes("In consideration of their mutual promises") && text.includes("laws of the State of New York"),

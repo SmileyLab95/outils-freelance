@@ -1,5 +1,26 @@
 # Journal des modifications
 
+## 2026-10-29 — Conditions générales de vente (France)
+
+- Nouveau **générateur de CGV** de prestations de services (menu « Vendre ») : clients professionnels, particuliers ou
+  les deux ; contrats conclus à distance, chez le client ou sur votre site ; PDF, Word, copie, saisie gardée sur
+  l'appareil.
+- Avec des **particuliers** : prix toutes taxes comprises, droit de rétractation de 14 jours avec le **modèle officiel
+  de formulaire** en annexe (coordonnées remplies), rétractation en ligne obligatoire depuis le 19 juin 2026, aucun
+  paiement ni début de prestation avant 7 jours pour un contrat signé chez le client, médiateur de la consommation,
+  aucune limitation de leur droit à réparation ni démarche amiable imposée.
+- Avec des **professionnels** : délai de paiement (60 jours au plus), pénalités de retard du semestre (BCE + 10 points,
+  soit 12,40 % ; minimum 8,25 %), indemnité de 40 €, vérification des livrables, limitation de responsabilité au choix.
+- **Avertissements** sur la saisie : délai ou taux illégal (laissé en blanc dans le document), médiateur manquant,
+  adresse de rétractation manquante, acompte demandé chez un particulier, SIREN, numéro de TVA, politique de
+  confidentialité.
+- Règles lues en entier sur treize pages officielles ; les **taux du 2nd semestre 2026** sont désormais confirmés :
+  intérêt légal 2,75 % (créanciers professionnels) et 6,84 % (particuliers), BCE 2,40 % au 1er juillet.
+- Outil de lecture des sources : option « * » pour lire une fiche en entier.
+- Spécification [40](documentation/40-cgv.md), décision D39. Tests : `cgv-fr.test.mjs` (38 tests, toutes les
+  combinaisons de clientèle et de mode de conclusion), moteur de rendu (annexes) ; erreurs réintroduites, toutes
+  détectées après renforcement des tests ; suite complète (470 tests unitaires, 29 tests serveur, 5 tests des scripts, 3 463 vérifications navigateur).
+
 ## 2026-10-29 — Trésorerie (Espace entrepreneur)
 
 - Nouvel onglet **Trésorerie** de l'Espace : solde du compte professionnel, **déjà dû** (cotisations des périodes pas

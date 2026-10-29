@@ -48,6 +48,26 @@ test("rendu : articles numérotés sans les articles masqués, signatures condit
   assert.ok(on.includes('<p class="k-sign-note">Autre</p>') && on.includes('<p class="k-witness-line">L1</p><p class="k-witness-line">L2</p>'));
 });
 
+test("annexes : après les signatures, sans numéro d'article, conditionnelles ; lignes à remplir et blocs", () => {
+  const D = { doc_title: "T", article: "{n}. {title}", annex: "Annexe – {title}", preamble: [], closing: ["C"],
+    clauses: [{ title: "Un", paras: ["a"] }],
+    signatures: [{ title: "A", name: "A" }],
+    annexes: [{ title: "Formulaire", when: { x: ["on"] }, paras: [{ block: "form" }, { field: "Nom :" }, { field: "" }] }, { title: "Toujours", paras: ["z"] }] };
+  const v = (x) => ({ raw: { x }, text: { p: "Pat" }, blocks: { form: ["À {p}", { field: "Date :" }, { when: { x: ["off"] }, text: "jamais" }] } });
+  const on = K.render(D, v("on"));
+  assert.ok(on.indexOf('<div class="k-signs">') < on.indexOf('<section class="k-annex">'), "annexes après les signatures");
+  assert.ok(on.includes('<section class="k-annex"><h3>Annexe – Formulaire</h3><p>À Pat</p><p class="k-field">Date :</p><p class="k-field">Nom :</p><p class="k-field"></p></section>'));
+  assert.ok(on.includes('<section class="k-annex"><h3>Annexe – Toujours</h3><p>z</p></section>'));
+  assert.ok(!on.includes("jamais"), "conditions dans un bloc");
+  assert.equal((on.match(/<h3>\d+\. /g) || []).length, 1, "une annexe n'est pas un article numéroté");
+  const off = K.render(D, v("off"));
+  assert.ok(!off.includes("Formulaire") && off.includes("Annexe – Toujours"));
+  // Sans signatures ni clôture ; titre d'annexe par défaut ; bloc absent.
+  const bare = K.render({ doc_title: "T", article: "{n}. {title}", preamble: [], clauses: [], annexes: [{ title: "B", paras: [{ block: "nope" }] }] }, { raw: {}, text: {} });
+  assert.ok(bare.endsWith('<div class="k-closing"></div><section class="k-annex"><h3>Annexe – B</h3></section>'));
+  assert.ok(K.word("T", "<p>x</p>").includes(".k-annex{page-break-before:always}"), "Word : annexe sur une nouvelle page");
+});
+
 // ------------------------------------------------------------------------------------------------------------
 // Pages : formulaire lu comme le fait tools/contract.js (valeurs par défaut, libellé de l'option choisie).
 
