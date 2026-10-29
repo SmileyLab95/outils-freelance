@@ -23,6 +23,11 @@ class LireSource(unittest.TestCase):
         self.assertTrue(L.autorise("https://bofip.impots.gouv.fr/bofip/1.html"))
         self.assertTrue(L.autorise("https://cnil.fr/"))
         self.assertTrue(L.autorise("https://entreprendre.service-public.gouv.fr/vosdroits/F23566"), "sites de l'État en gouv.fr")
+        for url in ("https://www.opm.gov/policy-data-oversight/pay-leave/federal-holidays/", "https://www.senat.fr/",
+                    "https://www.assemblee-nationale.fr/dyn/17/textes", "https://www.bankofengland.co.uk/boeapps/database/Bank-Rate.asp",
+                    "https://www.bankofcanada.ca/rates/"):
+            self.assertTrue(L.autorise(url), url)
+        self.assertFalse(L.autorise("https://www2.opm.gov.exemple.com/"), "faux sous-domaine")
         self.assertFalse(L.autorise("https://gouv.fr.exemple.com/"))
         self.assertFalse(L.autorise("https://fauxgouv.fr/"))
         self.assertFalse(L.autorise("http://www.cnil.fr/"), "https seulement")
