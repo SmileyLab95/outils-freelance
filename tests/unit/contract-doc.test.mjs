@@ -255,3 +255,16 @@ test("contrats de prestation : rendus par le moteur, clé d'enregistrement d'ori
     assert.match(page.html, /href="\{\{link:nda\}\}"/, `${path} : lien vers l'accord de confidentialité`);
   }
 });
+
+test("contrat FR : cession pour les formes connues, formes non prévisibles renvoyées à un accord écrit (art. L131-6)", () => {
+  const page = load("fr/contrat-de-prestation.html");
+  const text = plain(K.render(page.D, values(page)));
+  assert.ok(text.includes("par tout moyen connus à la date du présent contrat"), "formes connues seulement");
+  assert.ok(!/à venir|inconnus/.test(text), "pas de cession forfaitaire des formes futures");
+  assert.ok(text.includes("forme non prévisible ou non prévue à la date du présent contrat fera l'objet d'un accord écrit distinct, qui en fixera la rémunération"));
+  const rule = JSON.parse(readFileSync(new URL("../../data/rules/fr.json", import.meta.url), "utf8")).values.cession_droits_auteur;
+  assert.match(rule.value, /L131-6/);
+  assert.match(rule.note, /préférable de renvoyer à un avenant ultérieur/);
+  assert.ok(page.front.sources.includes("cession_droits_auteur"));
+  assert.ok(page.front.faq.flat().join(" ").includes("article L131-6"));
+});

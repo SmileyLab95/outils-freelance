@@ -241,11 +241,16 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   lecture) ; « trois fois le taux d'intérêt légal » par défaut, comme sur nos factures ; taux des conditions sous le
   minimum signalé ; indemnité lue dans les règles ; moteur commun avec les CGV ([41](41-penalites-de-retard.md),
   décision D40).
+- **Contrat de prestation, cession des droits (29/10/2026)** : la cession vaut pour les supports et moyens « connus à
+  la date du présent contrat » ; une exploitation sous une forme non prévisible est renvoyée à un accord écrit qui en
+  fixe la rémunération (article L131-6 du Code de la propriété intellectuelle : clause expresse et rémunération ; le
+  guide du ministère de la Culture, lu en entier, conseille de renvoyer à un avenant) ; FAQ et sources de la page
+  complétées ; texte en vigueur des articles L131-3, L131-4 et L131-6 à relire (Légifrance inaccessible, question
+  ouverte) (décision D41).
 - **Prochaines actions de Claude** : refonte, suite ([31](31-vision-plateforme.md) § 5) : les quatre modules du compte
   gratuit sont faits (étape 5) ; étape 6, outils restants (CGV hors de France, après la lecture des sources de chaque
   pays ; sous-traitance, devises, jours ouvrés, signature d'email, guides de protection sociale) ;
-  vérifier la clause « supports connus ou à venir » du contrat de prestation (cession pour des formes d'exploitation non
-  prévisibles, Code de la propriété intellectuelle) ; ajouter les taux du 1er semestre 2027 dès leur publication
+  ajouter les taux du 1er semestre 2027 dès leur publication
   (fin décembre 2026 : intérêt légal par arrêté, taux de la BCE en vigueur au 1er janvier ; tables `taux_interet_legal`
   et `taux_bce_refinancement`, utilisées par le calculateur de pénalités et les CGV) ;
   activité mixte de l'Espace à spécifier (le profil n'a qu'une activité : deux plafonds, déclaration et livre des

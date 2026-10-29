@@ -1,5 +1,17 @@
 # Journal des modifications
 
+## 2026-10-29 — Contrat de prestation : cession des droits pour les formes connues
+
+- La clause de cession des droits d'auteur du **contrat de prestation** (France) vaut pour les supports et moyens
+  connus à la date du contrat ; une exploitation sous une forme non prévisible fera l'objet d'un accord écrit qui en
+  fixera la rémunération (article L131-6 du Code de la propriété intellectuelle). Avant : « connus ou à venir », sans
+  rémunération prévue pour les formes futures.
+- Source : guide de bonnes pratiques du ministère de la Culture, lu en entier ; nouvelle règle `cession_droits_auteur`,
+  citée dans les sources de la page ; FAQ complétée ; question ouverte sur le texte en vigueur des articles L131-3,
+  L131-4 et L131-6 (Légifrance refuse les lectures automatiques).
+- Décision D41. Tests : nouveau test du contrat (3 erreurs réintroduites, toutes détectées), vérification ajoutée au
+  parcours navigateur ; suite complète (485 tests unitaires, 29 tests serveur, 5 tests des scripts, 3 471 vérifications navigateur).
+
 ## 2026-10-29 — Pénalités de retard : taux officiels de chaque semestre
 
 - Le **calculateur de pénalités de retard** applique seul le taux officiel : plus besoin de chercher le taux de

@@ -2208,6 +2208,8 @@ const tests = {
     check(/prix forfaitaire de 4\s?500,00\s?€/.test(text) && text.includes("TVA non applicable"), "contrat FR : forfait de 4 500 € en franchise de TVA");
     check(/acompte de 30 % du prix, soit 1\s?350,00\s?€/.test(text), "contrat FR : acompte de 30 % = 1 350 €");
     check(text.includes("Article 1 – Objet") && text.includes("cède au Client, à titre exclusif"), "contrat FR : articles numérotés et cession de droits");
+    check(text.includes("connus à la date du présent contrat") && text.includes("fera l'objet d'un accord écrit distinct, qui en fixera la rémunération"),
+      "contrat FR : formes d'exploitation non prévisibles renvoyées à un accord écrit (art. L131-6)");
     await page.selectOption("#k-price-type", "daily");
     await page.fill("#k-price", "500");
     await page.fill("#k-qty", "10");

@@ -1973,6 +1973,22 @@
       "verified_on": "2026-10-29",
       "note": "France Num recommande de faire relire ses CGV par un juriste ou un avocat. Lu en entier le 29/10/2026 (SHA-256 f865f639…b255)."
     },
+    "cession_droits_auteur": {
+      "value": "Cession écrite : chaque droit cédé mentionné distinctement, domaine d'exploitation délimité quant à son étendue, sa destination, son lieu et sa durée (CPI, art. L131-3). Exploitation sous une forme non prévisible ou non prévue à la date du contrat : clause expresse prévoyant la rémunération de l'auteur pour ces exploitations (art. L131-6) ; il est préférable de renvoyer à un avenant ultérieur. Rémunération proportionnelle aux recettes en principe, forfait dans les cas prévus par l'art. L131-4 (notamment base de calcul de la participation proportionnelle impossible à déterminer en pratique) ; cession gratuite possible si elle est indiquée sans ambiguïté.",
+      "unit": "text",
+      "label": "Cession des droits d'auteur : mentions, formes d'exploitation non prévisibles, rémunération",
+      "source": "https://www.culture.gouv.fr/Media/Thematiques/Innovation-numerique/Folder/Livrables-GT-Numerisation/Guide-de-bonnes-pratiques-en-matiere-de-propriete-litteraire-et-artistique",
+      "source_title": "Ministère de la Culture, « Guide de bonnes pratiques en matière de propriété littéraire et artistique » (version 1, 2017)",
+      "more_sources": [
+        {
+          "source": "https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000006278960",
+          "source_title": "Code de la propriété intellectuelle, art. L131-6 - Légifrance"
+        }
+      ],
+      "confidence": "medium",
+      "verified_on": "2026-10-29",
+      "note": "Guide lu en entier le 29/10/2026 avec l'outil « Lire une source officielle » (PDF, SHA-256 05699483…8be5) : « Pour que cette clause soit valable, deux conditions doivent être remplies : la clause doit être expresse ; en cas de rémunération : il faut prévoir les modalités de rémunération de l'auteur pour ces exploitations non prévues ou imprévisibles. En pratique, cela reste par hypothèse particulièrement complexe, et il est préférable de renvoyer à un avenant ultérieur. » Confiance moyenne : guide de 2017 ; Légifrance refuse les lectures automatiques, le texte en vigueur des articles L131-3, L131-4 et L131-6 n'a pas pu être relu (question ouverte)."
+    },
     "garantie_legale_conformite": {
       "value": {
         "contrats": [
@@ -2007,6 +2023,7 @@
     "Assurance : la liste des professions soumises à une responsabilité civile professionnelle obligatoire n'est pas exhaustive dans le guide (renvoi vers les textes et ordres de chaque profession) ; sanction du défaut de mention de l'assurance (Code de l'artisanat, art. L132-1) non relevée.",
     "Indemnité forfaitaire de 40 € : la fiche F23211 (vérifiée le 07/08/2026) dit qu'elle « ne peut s'appliquer que sur des actes de commerce (par exemple, l'achat-revente) ». S'applique-t-elle aux factures des professions libérales et des prestataires non commerçants ? Le générateur de factures et de CGV la mentionne toujours entre professionnels (mention obligatoire selon les fiches F23211 et F33527) ; à confirmer avec l'expert-comptable ou l'avocat.",
     "Formulaire type de rétractation : texte de l'annexe de l'article R221-1 du Code de la consommation à relire sur Légifrance (inaccessible aux lectures automatiques) ; le générateur de CGV reprend le modèle de la directive 2011/83/UE (annexe I, partie B).",
-    "Pénalités de retard sur plusieurs semestres : le calculateur applique à chaque semestre son taux (art. L441-10 : « le taux applicable pendant le premier semestre de l'année concernée est le taux en vigueur au 1er janvier » ; fiche F783 : intérêt légal « au taux applicable sur la période ») ; une autre lecture garde le taux du semestre où le retard commence. À confirmer par l'avocat lors de la relecture des modèles ; le calculateur permet de saisir un taux unique."
+    "Pénalités de retard sur plusieurs semestres : le calculateur applique à chaque semestre son taux (art. L441-10 : « le taux applicable pendant le premier semestre de l'année concernée est le taux en vigueur au 1er janvier » ; fiche F783 : intérêt légal « au taux applicable sur la période ») ; une autre lecture garde le taux du semestre où le retard commence. À confirmer par l'avocat lors de la relecture des modèles ; le calculateur permet de saisir un taux unique.",
+    "Cession des droits d'auteur : le texte en vigueur des articles L131-3, L131-4 et L131-6 du Code de la propriété intellectuelle n'a pas pu être relu (Légifrance refuse les lectures automatiques ; la règle s'appuie sur le guide du ministère de la Culture de 2017). Une recherche indique une version de l'article L131-4 (rémunération forfaitaire) en vigueur jusqu'au 17/02/2024, donc une modification à cette date : à relire avant toute mention des cas de forfait dans le contrat."
   ]
 }
