@@ -1,7 +1,10 @@
 """Tests de scripts/lire_source.py (python3 -m unittest discover -s tests/scripts)."""
+import contextlib
+import io
 import os
 import sys
 import unittest
+from unittest import mock
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "..", "scripts"))
 import lire_source as L  # noqa: E402
@@ -49,6 +52,44 @@ class LireSource(unittest.TestCase):
         self.assertTrue(extraits[0].startswith("a") and extraits[0].endswith("c"))
         self.assertEqual(len(extraits[0]), L.PASSAGE * 2 + len(" opposition " + "b" * 100 + " Opposition ") - 2)
         self.assertEqual(L.passages("rien", ["opposition"]), [("opposition", 0, [])])
+
+    def test_liens_sources(self):
+        liens = [("https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000038414258", "Code de commerce : article L441-1"),
+                 ("https://entreprendre.service-public.gouv.fr/vosdroits/F31412", "Fiche voisine"),
+                 ("https://exemple.com/", "Site privé"),
+                 ("https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000038414258", "Doublon"),
+                 ("https://eur-lex.europa.eu/eli/dir/2011/83/oj", "Directive 2011/83/UE")]
+        self.assertEqual(L.liens_sources(liens, "https://entreprendre.service-public.gouv.fr/vosdroits/F33527"), [
+            ("Code de commerce : article L441-1", "https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000038414258"),
+            ("Directive 2011/83/UE", "https://eur-lex.europa.eu/eli/dir/2011/83/oj")],
+            "autres sites officiels seulement, sans la page lue ni site privé ni doublon")
+
+    def test_main_tout_le_texte(self):
+        long = "<p>" + "x" * (L.DEBUT + 10) + " fin du texte</p>"
+        page = ("<html><body>" + long + '<a href="https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI1">Article L441-1</a>'
+                "</body></html>").encode("utf-8")
+
+        class Reponse(io.BytesIO):
+            status, headers = 200, {"Content-Type": "text/html"}
+
+            def geturl(self):
+                return "https://www.cnil.fr/fr/page"
+
+        def lire(mots):
+            sortie = io.StringIO()
+            with mock.patch.object(L.urllib.request, "urlopen", lambda *a, **k: Reponse(page)), \
+                    mock.patch.object(sys, "argv", ["lire_source.py", "https://www.cnil.fr/fr/page", mots]), \
+                    contextlib.redirect_stdout(sortie):
+                L.main()
+            return sortie.getvalue()
+
+        tout = lire("*")
+        self.assertIn("fin du texte", tout, "« * » : tout le texte, au-delà du début")
+        self.assertIn("- Article L441-1 : https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI1", tout)
+        debut = lire("")
+        self.assertNotIn("fin du texte", debut, "sans mot : le début seulement")
+        self.assertIn("[…]", debut)
+        self.assertNotIn("Liens vers d'autres sites officiels", debut)
 
 
 if __name__ == "__main__":

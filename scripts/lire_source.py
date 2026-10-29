@@ -5,7 +5,7 @@ L'environnement de travail habituel n'a pas accès à plusieurs de ces sites (CN
 GitHub Actions (.github/workflows/lire-source.yml), à la demande, et son résultat se lit dans le journal de l'exécution.
 Il ne lit que les sites officiels de la liste OFFICIELS et n'écrit rien dans le dépôt.
 
-Usage : python3 scripts/lire_source.py <adresse> [mots à chercher, séparés par |]
+Usage : python3 scripts/lire_source.py <adresse> [mots à chercher, séparés par |, ou « * » pour tout le texte]
 """
 import hashlib
 import html.parser
@@ -28,7 +28,9 @@ LIMITE = 20_000_000          # octets lus au plus
 PASSAGE = 600                # caractères affichés de part et d'autre d'un mot trouvé
 PASSAGES_PAR_MOT = 8
 DEBUT = 8000                 # caractères affichés quand aucun mot n'est cherché
+TOUT = 200_000               # caractères affichés au plus quand on demande tout le texte (« * »)
 LIENS = 20                   # liens affichés au plus
+LIENS_SOURCES = 60           # liens vers d'autres sites officiels affichés au plus avec « * »
 
 
 def autorise(url):
@@ -117,6 +119,18 @@ def liens_trouves(liens, mots):
     return out[:LIENS]
 
 
+def liens_sources(liens, base):
+    """Liens vers un autre site officiel que la page lue (Légifrance, EUR-Lex…), sans doublon : les textes qu'une
+    fiche cite, pour en noter l'adresse exacte."""
+    hote = (urllib.parse.urlsplit(base).hostname or "").lower()
+    vus, out = set(), []
+    for adresse, txt in liens:
+        if autorise(adresse) and (urllib.parse.urlsplit(adresse).hostname or "").lower() != hote and adresse not in vus:
+            vus.add(adresse)
+            out.append((txt, adresse))
+    return out[:LIENS_SOURCES]
+
+
 def main():
     if len(sys.argv) < 2:
         sys.exit(__doc__)
@@ -144,8 +158,15 @@ def main():
         print(f"Adresse finale : {final}")
     print(f"Lue le : {datetime.now(timezone.utc):%d/%m/%Y à %H:%M} UTC · réponse {statut} · {type_contenu or 'type inconnu'}")
     print(f"Taille : {len(contenu)} octets · texte : {len(txt)} caractères · SHA-256 : {hashlib.sha256(contenu).hexdigest()}")
-    if not mots:
-        print("\n" + txt[:DEBUT] + ("\n[…]" if len(txt) > DEBUT else ""))
+    if not mots or mots == ["*"]:
+        limite = TOUT if mots else DEBUT
+        print("\n" + txt[:limite] + ("\n[…]" if len(txt) > limite else ""))
+        if mots:
+            sources = liens_sources(liens, final)
+            if sources:
+                print("\n===== Liens vers d'autres sites officiels")
+                for txt_lien, adresse in sources:
+                    print(f"- {txt_lien} : {adresse}")
         return
     for mot, total, extraits in passages(txt, mots):
         print(f"\n===== « {mot} » : {total} occurrence(s)" + (f", {len(extraits)} passage(s) affiché(s)" if total else ""))
