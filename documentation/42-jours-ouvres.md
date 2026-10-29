@@ -2,7 +2,8 @@
 
 Outil de l'étape 6 de [31](31-vision-plateforme.md) § 5 (« jours ouvrés ») et de la boîte à outils du § 4 (« calculateur
 de jours ouvrés et de délais »). Spécification avant le code, 29/10/2026. La France d'abord ; le Royaume-Uni (calendrier
-officiel de gov.uk, déjà lu), les États-Unis et le Canada suivront, chacun après la lecture de ses sources.
+officiel de gov.uk, déjà lu), les États-Unis et le Canada suivront, chacun après la lecture de ses sources. Fait le
+29/10/2026 pour le Royaume-Uni (§ 6 et 7) et les États-Unis (§ 8 et 9) ; le Canada reste à faire.
 
 ## 1. Besoin
 
@@ -91,7 +92,7 @@ Même outil, en anglais : *Working days and bank holidays calculator* (menu *Pri
 
 | Règle | Source | Usage |
 |---|---|---|
-| Jours fériés (*bank holidays*) de 2024 à 2028 pour l'Angleterre et le pays de Galles (8 par an), l'Écosse (9 ou 10 : 2nd January, St Andrew's Day, *Summer bank holiday* début août, pas d'*Easter Monday*) et l'Irlande du Nord (10 : St Patrick's Day, Battle of the Boyne) ; jours de remplacement (*substitute day*) quand la fête tombe un week-end ; jours exceptionnels (Écosse : *World Cup bank holiday* le 15 juin 2026) | gov.uk, liste officielle (`bank-holidays.json`, lue le 29/10/2026) ; `bank_holidays` (nouvelle, `data/rules/uk.json`) | Liste des jours fériés ; jours ouvrés |
+| Jours fériés (*bank holidays*) de 2024 à 2028 pour l'Angleterre et le pays de Galles (8 par an), l'Écosse (9 ou 10 : 2nd January, St Andrew's Day, *Summer bank holiday* début août, pas d'*Easter Monday*) et l'Irlande du Nord (10 : St Patrick's Day, Battle of the Boyne) ; jours de remplacement (*substitute day*) quand la fête tombe un week-end ; jours exceptionnels (Écosse : *World Cup bank holiday* le 15 juin 2026) | gov.uk, liste officielle (`bank-holidays.json`, lue le 29/10/2026) ; `bank_holidays` (nouvelle, `data/rules/uk.json`), renommée `public_holidays` le même jour (§ 8) | Liste des jours fériés ; jours ouvrés |
 
 - **Pas de calcul** : les jours fériés britanniques comportent des jours exceptionnels décidés chaque année ; l'outil
   reprend la liste publiée, et seulement les années qu'elle couvre (2024 à 2028) ; au-delà, un message le dit.
@@ -109,7 +110,7 @@ Même outil, en anglais : *Working days and bank holidays calculator* (menu *Pri
 
 ## 7. Réalisation, Royaume-Uni (29/10/2026)
 
-- Règle `bank_holidays` (`data/rules/uk.json`) : liste de GOV.UK pour 2024 à 2028, trois régions, avec le nom de chaque
+- Règle `bank_holidays` (`data/rules/uk.json`, renommée `public_holidays` au § 9) : liste de GOV.UK pour 2024 à 2028, trois régions, avec le nom de chaque
   jour férié et les jours de remplacement ; recopiée depuis la lecture du 29/10/2026 (`bank-holidays.json`), le site
   gov.uk n'étant pas joignable directement depuis l'environnement de travail ; contrôles automatiques : chaque date en
   semaine, dans l'ordre, Good Friday = Pâques − 2 (même calcul que la France).
@@ -123,3 +124,46 @@ Même outil, en anglais : *Working days and bank holidays calculator* (menu *Pri
   détectées au premier passage ; 3 tests ajoutés ; 2 se sont révélées équivalentes (lieu par défaut choisi deux fois,
   tri d'années déjà dans l'ordre) et le code redondant a été retiré ; parcours navigateur britannique sur ordinateur,
   tablette et mobile, audit d'accessibilité sans erreur.
+
+## 8. États-Unis (spécification, 29/10/2026)
+
+Même outil, en anglais américain : *Business days and federal holidays calculator* (menu *Pricing*, après le taux
+horaire).
+
+| Règle | Source | Usage |
+|---|---|---|
+| Jours fériés fédéraux (5 U.S.C. 6103) : New Year's Day, Birthday of Martin Luther King, Jr., Washington's Birthday, Memorial Day, Juneteenth National Independence Day, Independence Day, Labor Day, Columbus Day, Veterans Day, Thanksgiving Day, Christmas Day (11 par an) ; tombant un samedi, jour observé le vendredi précédent ; un dimanche, le lundi suivant (« for most Federal employees ») ; Inauguration Day réservé à la région de Washington ; les États et les entreprises peuvent observer d'autres jours | OPM, *Federal Holidays* (tableaux par année, de 2011 à 2030, lus le 29/10/2026) ; `public_holidays` (nouvelle, `data/rules/us.json`) | Liste des jours fériés ; jours ouvrés (*business days*) |
+
+- **Liste publiée, dates observées** : l'outil reprend les dates du tableau d'OPM (jour observé), de 2024 à 2030 ; une
+  date observée peut tomber l'année précédente (New Year's Day 2028 observé le vendredi 31 décembre 2027) : elle est
+  rangée à sa vraie date. Inauguration Day n'est pas compté (région de Washington seulement, et seulement pour les
+  employés fédéraux).
+- **Une seule zone** (*Federal holidays*) ; la page rappelle que les États, les clients et les banques peuvent fermer
+  d'autres jours.
+- **Modes** : *business days* et *calendar days*.
+- **Calculateur de taux horaire** : aide « In 2026: 11 federal holidays on weekdays » et lien ; valeur par défaut
+  inchangée (10).
+- **Même règle pour les deux pays** : la liste publiée s'appelle désormais `public_holidays` (Royaume-Uni compris), lue
+  par le moteur commun.
+- **Tests** : 2026 = tableau d'OPM (11 jours, Independence Day observé le vendredi 3 juillet) ; 2027 (Juneteenth le 18
+  juin, Independence Day le 5 juillet, Christmas Day le 24 décembre, New Year's Day 2028 le 31 décembre 2027) ; jours
+  ouvrés 2026 (250) ; jours de la semaine des dates (vendredi ou lundi pour les dates déplacées).
+
+## 9. Réalisation, États-Unis (29/10/2026)
+
+- Règle `public_holidays` (`data/rules/us.json`) : tableaux d'OPM de 2024 à 2030 (11 jours par an, Inauguration Day
+  retiré), rangés à l'année de la date observée (2027 : 12 jours ; 2028 : 10) ; `substitute` = jour observé à une autre
+  date que la date légale (samedi → vendredi, dimanche → lundi). La règle britannique `bank_holidays` porte désormais le
+  même nom : le moteur lit une seule forme de liste publiée.
+- Moteur : chaque jour férié porte `substitute` (toujours faux en France) ; la page ajoute son libellé : « (substitute
+  day) » au Royaume-Uni (celui de GOV.UK), « (observed) » aux États-Unis. Une seule zone (`federal`), dans un champ
+  caché : pas de liste à un seul choix ; une phrase sous la période rappelle que l'État, les clients et la banque
+  peuvent fermer d'autres jours.
+- Page `content/us/business-days-calculator.html` (menu *Pricing*, après le taux horaire), FAQ dont chaque date est
+  vérifiée par les tests ; calculateur de taux horaire : aide « In 2026: 11 federal holidays on weekdays » et lien,
+  valeur par défaut inchangée (10). Tableau des jours fériés : date sur une ligne (mobile).
+- Tests : 4 tests de plus (17 au total), dont un contrôle de la transcription : les 77 dates sont recalculées à partir
+  des règles de 5 U.S.C. 6103 (dates fixes avec report, n-ième lundi ou jeudi du mois) et comparées à la liste ; erreurs
+  réintroduites dans le moteur (5) et dans les données (4) : toutes détectées ; libellé « (observed) » retiré du script :
+  détecté par le parcours navigateur ; parcours américain sur ordinateur, tablette et mobile, audit d'accessibilité
+  sans erreur.

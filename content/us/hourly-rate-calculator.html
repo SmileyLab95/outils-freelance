@@ -7,7 +7,7 @@
   "icon": "💵",
   "blurb": "The rate to charge to take home the income you want, taxes included.",
   "app": "Freelance Hourly Rate Calculator",
-  "scripts": ["engines/brackets.js", "engines/tax-us.js", "tools/us-rate.js"],
+  "scripts": ["engines/brackets.js", "engines/tax-us.js", "engines/jours.js", "tools/us-rate.js"],
   "rules": "us",
   "sources": ["se_tax_total_rate", "federal_brackets_single", "standard_deduction_2026", "qbi_deduction_rate"],
   "priority": 0.95,
@@ -54,7 +54,8 @@
           <input type="number" id="h-weeks" name="weeks" value="4" min="0" max="26" data-save>
           <span class="hint">Vacation and sick days.</span></div>
         <div class="field"><label for="h-holidays">Holidays (days)</label>
-          <input type="number" id="h-holidays" name="holidays" value="10" min="0" max="30" data-save></div>
+          <input type="number" id="h-holidays" name="holidays" value="10" min="0" max="30" aria-describedby="h-holidays-hint" data-save>
+          <span class="hint" id="h-holidays-hint"><span id="h-holidays-year"></span> <a href="{{link:workdays}}">See other years</a>.</span></div>
         <div class="field"><label for="h-hours">Hours worked per week</label>
           <input type="number" id="h-hours" name="hours" value="40" min="1" max="80" data-save></div>
         <div class="field"><label for="h-unbilled">Unbillable time</label>

@@ -1,0 +1,152 @@
+<!--{
+  "id": "workdays",
+  "slug": "business-days-calculator/",
+  "title": "Business Days Calculator with US Federal Holidays",
+  "description": "Count the business days and billable days in a month or year, see the federal holidays on their observed dates and find a deadline in business days.",
+  "menu": "Business days and holidays",
+  "icon": "📆",
+  "blurb": "Billable days in a month or year, federal holidays and deadlines.",
+  "app": "US Business Days Calculator",
+  "scripts": ["engines/jours.js", "tools/jours.js"],
+  "rules": "us",
+  "sources": ["public_holidays"],
+  "priority": 0.8,
+  "faq": [
+    ["How many business days are there in 2026?", "250 business days from Monday to Friday: 261 weekdays minus 11 federal holidays. Independence Day falls on a Saturday, so it is observed on Friday, July 3. Take off your vacation days to get your billable days."],
+    ["What are the federal holidays in 2026?", "New Year’s Day (January 1), Birthday of Martin Luther King, Jr. (January 19), Washington’s Birthday (February 16), Memorial Day (May 25), Juneteenth National Independence Day (June 19), Independence Day (observed Friday, July 3), Labor Day (September 7), Columbus Day (October 12), Veterans Day (November 11), Thanksgiving Day (November 26) and Christmas Day (December 25)."],
+    ["What happens when a federal holiday falls on a weekend?", "For most federal employees, a holiday that falls on a Saturday is observed on the Friday before, and one that falls on a Sunday on the Monday after. In 2027, Juneteenth is observed on Friday, June 18, Independence Day on Monday, July 5, and Christmas Day on Friday, December 24. New Year’s Day 2028 is observed on Friday, December 31, 2027."],
+    ["Is Inauguration Day a federal holiday?", "Only for federal employees in the Washington, DC, area, on January 20 every four years. The calculator does not count it."],
+    ["Does the calculator count federal holidays as days off?", "Yes, by default. As a freelancer, you choose: check “I work on federal holidays” to count them as working days."]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · official federal holidays</span>
+    <h1>Business days and federal holidays</h1>
+    <p class="lead">How many days can you bill this month or this year? When is a deadline of 10 business days? The calculator uses the federal holidays published by the U.S. Office of Personnel Management and your own working week.</p>
+    <ul class="trust"><li>Official OPM holiday schedule</li><li>Observed dates for weekend holidays</li><li>Billable days and deadlines</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="jo-form" onsubmit="return false">
+      <h2>The period</h2>
+      <div class="fields">
+        <div class="field"><label for="jo-year">Year</label>
+          <input type="number" id="jo-year" name="year" min="2024" max="2030" step="1" inputmode="numeric" data-save></div>
+        <div class="field"><label for="jo-period">Period</label>
+          <select id="jo-period" name="period" data-save>
+            <option value="year">Whole year</option>
+            <option value="q1">January to March</option>
+            <option value="q2">April to June</option>
+            <option value="q3">July to September</option>
+            <option value="q4">October to December</option>
+            <option value="m1">January</option>
+            <option value="m2">February</option>
+            <option value="m3">March</option>
+            <option value="m4">April</option>
+            <option value="m5">May</option>
+            <option value="m6">June</option>
+            <option value="m7">July</option>
+            <option value="m8">August</option>
+            <option value="m9">September</option>
+            <option value="m10">October</option>
+            <option value="m11">November</option>
+            <option value="m12">December</option>
+            <option value="dates">Specific dates</option>
+          </select></div>
+        <div class="field" data-when="dates" hidden><label for="jo-from">From</label>
+          <input type="date" id="jo-from" name="from" data-save></div>
+        <div class="field" data-when="dates" hidden><label for="jo-to">To (included)</label>
+          <input type="date" id="jo-to" name="to" data-save></div>
+      </div>
+      <input type="hidden" id="jo-zone" name="zone" value="federal">
+      <p class="small muted" style="margin: 12px 0 0;">Federal holidays only: your state, your clients and your bank may close on other days.</p>
+      <h3>Your working week</h3>
+      <fieldset class="weekdays">
+        <legend class="sr-only">Days you work</legend>
+        <label class="check"><input type="checkbox" name="w1" checked data-save><span>Monday</span></label>
+        <label class="check"><input type="checkbox" name="w2" checked data-save><span>Tuesday</span></label>
+        <label class="check"><input type="checkbox" name="w3" checked data-save><span>Wednesday</span></label>
+        <label class="check"><input type="checkbox" name="w4" checked data-save><span>Thursday</span></label>
+        <label class="check"><input type="checkbox" name="w5" checked data-save><span>Friday</span></label>
+        <label class="check"><input type="checkbox" name="w6" data-save><span>Saturday</span></label>
+        <label class="check"><input type="checkbox" name="w0" data-save><span>Sunday</span></label>
+      </fieldset>
+      <div class="fields">
+        <label class="check full"><input type="checkbox" id="jo-work-holidays" name="workHolidays" data-save>
+          <span>I work on federal holidays</span></label>
+        <div class="field full"><label for="jo-leave">Vacation in the period</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="jo-leave" name="leave" value="0" aria-describedby="jo-leave-hint" data-save><span>days</span></div>
+          <span class="hint" id="jo-leave-hint">In working days: 4 weeks = 20 days if you work 5 days a week.</span></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="result-hero" role="status" aria-atomic="true">
+        <div class="label">Billable days</div>
+        <div class="big" id="jo-billable">–</div>
+        <div class="sub" id="jo-sub">–</div>
+      </div>
+      <ul class="result-list card" style="padding: 6px 18px; margin-top: 16px;">
+        <li><span>Calendar days</span><b id="jo-calendar">–</b></li>
+        <li><span>Business days (your working week)</span><b id="jo-ouvres">–</b></li>
+        <li><span>Federal holidays on a working day</span><b id="jo-off">–</b></li>
+      </ul>
+      <p class="notice warn" id="jo-warn" aria-live="polite" hidden style="margin-top: 16px;"></p>
+      <table class="mini-table holiday-table" id="jo-list" style="margin-top: 8px;">
+        <caption id="jo-list-title">Federal holidays in the period</caption>
+        <thead><tr><th scope="col" class="text">Date</th><th scope="col" class="text">Federal holiday</th><th scope="col" class="text">For you</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="jo-delay-form" onsubmit="return false">
+      <h2>Find a deadline</h2>
+      <p class="small muted">Same holidays and working week as above.</p>
+      <div class="fields">
+        <div class="field"><label for="jo-start">Starting from</label>
+          <input type="date" id="jo-start" name="start" aria-describedby="jo-start-hint">
+          <span class="hint" id="jo-start-hint">This day is not counted.</span></div>
+        <div class="field"><label for="jo-n">Number of days</label>
+          <input type="number" id="jo-n" name="n" value="10" min="0" max="3650" step="1" inputmode="numeric" data-save></div>
+        <div class="field full"><label for="jo-mode">Type of days</label>
+          <select id="jo-mode" name="mode" data-save>
+            <option value="ouvre">Business days (your working week)</option>
+            <option value="calendaire">Calendar days (every day)</option>
+          </select></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="result-hero" role="status" aria-atomic="true">
+        <div class="label">Deadline</div>
+        <div class="big" id="jo-due">–</div>
+        <div class="sub" id="jo-due-sub">–</div>
+      </div>
+      <p class="formula" id="jo-explain" style="margin-top: 16px;">–</p>
+    </div>
+  </div>
+</section>
+
+<script type="application/json" id="jours-data">{"store": "jours-us", "sep": "; ", "substitute": " (observed)", "days": ["{n} day", "{n} days"], "period": ["{from} to {to}: {n} business day", "{from} to {to}: {n} business days"], "period_off": [" ({n} federal holiday off)", " ({n} federal holidays off)"], "period_leave": [", minus {n} vacation day.", ", minus {n} vacation days."], "end": ".", "status": ["Day off", "Worked", "Not a working day"], "no_holiday": "No federal holiday in this period.", "no_workday": "Check at least one working day: with none checked, the calculator uses Monday to Friday.", "leave_range": "Vacation must be between 0 and {max} (the business days in the period).", "choose_year": "Choose a year from {min} to {max}: OPM has published federal holidays up to {max}.", "choose_dates": "Choose two dates from {min} to {max}, the second after the first.", "delay_invalid": "Enter a whole number of days from 0 to 3,650. Business days can only be counted from {min} to {max}, the years OPM has published.", "due": "{date}: {n} {noun} after {start}.", "modes": {"ouvre": ["business day", "business days"], "calendaire": ["calendar day", "calendar days"]}, "explain_calendar": "Every day counts, including weekends and federal holidays.", "explain_skipped": ["{n} day not counted (day off or federal holiday): {list}", "{n} days not counted (days off or federal holidays): {list}"], "etc": ", etc.", "explain_none": "No day skipped."}</script>
+
+<section class="section prose">
+  <h2>Business days, federal holidays and deadlines</h2>
+  <ul>
+    <li><strong>Business days:</strong> the days you work, Monday to Friday by default, minus the federal holidays you take off.</li>
+    <li><strong>Federal holidays:</strong> the 11 holidays set by federal law (5 U.S.C. 6103), on the dates the U.S. Office of Personnel Management lists for most federal employees. A holiday that falls on a Saturday is observed on the Friday before, one that falls on a Sunday on the Monday after: the calculator marks these days “observed.”</li>
+    <li><strong>Calendar days:</strong> every day, weekends and federal holidays included.</li>
+  </ul>
+  <h3>Your billable days</h3>
+  <p>To set your rate, start from the business days in the year, take off your vacation and the time you can't bill (finding clients, admin, learning): the <a href="{{link:rate}}">hourly rate calculator</a> does it for you.</p>
+  <h3>What the calculator does not count</h3>
+  <p>Federal holidays apply to federal employees. Your state, your clients and your bank may close on other days, or stay open on some of these: check their calendars. A deadline set by a contract or by law is counted according to its own rules: check them for any deadline that affects your rights.</p>
+  <p class="small muted">OPM publishes federal holidays several years ahead, currently up to 2030; we add each new year when it is published. For information only.</p>
+</section>

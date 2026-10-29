@@ -1,5 +1,21 @@
 # Journal des modifications
 
+## 2026-10-29 — Jours ouvrés aux États-Unis
+
+- Nouveau ***Business days calculator with US federal holidays*** (menu *Pricing*) : jours ouvrés et facturables d'un
+  mois, d'un trimestre, d'une année ou entre deux dates ; les 11 jours fériés fédéraux publiés par OPM de 2024 à 2030,
+  aux dates observées (Independence Day 2026 le vendredi 3 juillet ; New Year's Day 2028 le vendredi 31 décembre 2027),
+  sans Inauguration Day ; 250 jours ouvrés en 2026 ; délais en *business days* ou *calendar days*.
+- Jours de remplacement signalés dans le tableau : « (observed) » aux États-Unis, « (substitute day) » au Royaume-Uni ;
+  dates du tableau sur une seule ligne sur mobile.
+- Calculateur de taux horaire : nombre de jours fériés fédéraux de l'année en aide du champ, avec un lien (valeur par
+  défaut inchangée : 10).
+- La liste publiée des jours fériés s'appelle désormais `public_holidays` dans les règles des deux pays.
+- Spécification [42](documentation/42-jours-ouvres.md) § 8 et 9, décision D44. Tests : 17 tests du moteur et des trois
+  pages, dont le recalcul des 77 dates à partir de 5 U.S.C. 6103 ; erreurs réintroduites toutes détectées ; parcours
+  navigateur ; suite complète (502 tests unitaires, 29 tests serveur, 5 tests des scripts, 3 541 vérifications
+  navigateur).
+
 ## 2026-10-29 — Jours ouvrés au Royaume-Uni
 
 - Nouveau ***Working days and bank holidays calculator*** (menu *Pricing*) : jours ouvrés et facturables d'un mois,

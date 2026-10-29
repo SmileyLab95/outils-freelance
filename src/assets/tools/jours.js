@@ -1,6 +1,6 @@
-/* Jours ouvrés, jours fériés et délais (France, Royaume-Uni) : période (année, trimestre, mois ou dates), lieu, semaine
-   de travail, congés ; échéance d'un délai. Moteur OFE.days, jours fériés lus dans les règles ; textes de la page
-   (<script type="application/json" id="jours-data">). Spécification : documentation/42-jours-ouvres.md. */
+/* Jours ouvrés, jours fériés et délais (France, Royaume-Uni, États-Unis) : période (année, trimestre, mois ou dates),
+   lieu, semaine de travail, congés ; échéance d'un délai. Moteur OFE.days, jours fériés lus dans les règles ; textes de
+   la page (<script type="application/json" id="jours-data">). Spécification : documentation/42-jours-ouvres.md. */
 (function () {
   "use strict";
   var OF = window.OF, OFE = window.OFE, R = window.OF_RULES;
@@ -67,7 +67,7 @@
         (leave ? count(L.period_leave, leave) : L.end));
       var rows = c.holidays.map(function (h) {
         var tr = document.createElement("tr");
-        [upper(short(h.date)), h.name, h.off ? L.status[0] : o.workHolidays && o.workdays.indexOf(h.weekday) >= 0 ? L.status[1] : L.status[2]]
+        [upper(short(h.date)), h.name + (h.substitute ? L.substitute : ""), h.off ? L.status[0] : o.workHolidays && o.workdays.indexOf(h.weekday) >= 0 ? L.status[1] : L.status[2]]
           .forEach(function (text) { var td = document.createElement("td"); td.className = "text"; td.textContent = text; tr.appendChild(td); });
         return tr;
       });

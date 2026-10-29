@@ -336,7 +336,7 @@ const tests = {
     const t = async (sel) => (await page.textContent(sel)).replace(/[\u00a0\u202f]/g, " ").replace(/\s+/g, " ").trim();
     await page.fill("#jo-year", "2026");
     check((await t("#jo-billable")) === "253" && (await t("#jo-off")) === "8 days" && (await page.$$("#jo-list tbody tr")).length === 8 &&
-      (await t("#jo-list tbody")).includes("Boxing Day"), "UK working days: 253 in England and Wales in 2026, 8 bank holidays");
+      (await page.$$eval("#jo-list tbody tr", (trs) => trs.map((tr) => [...tr.cells].map((c) => c.textContent).join(" | ")))).includes("Mon, 28 Dec | Boxing Day (substitute day) | Day off"), "UK working days: 253 in England and Wales in 2026, 8 bank holidays, Boxing Day substitute day");
     await page.selectOption("#jo-zone", "scotland");
     check((await t("#jo-billable")) === "251" && (await t("#jo-list tbody")).includes("World Cup bank holiday"), "Scotland 2026: 251 days, World Cup bank holiday");
     await page.fill("#jo-year", "2029");
@@ -348,6 +348,26 @@ const tests = {
     await page.selectOption("#jo-mode", "ouvre");
     check((await t("#jo-due")) === "31 December 2026" && (await t("#jo-explain")).includes("; "), "UK: 10 working days after 15 December 2026 → 31 December");
     check((await page.$$('#jo-mode option[value="franc"]')).length === 0, "UK: no French « jours francs »");
+  },
+  async "us/business-days-calculator/"(page) {
+    const t = async (sel) => (await page.textContent(sel)).replace(/[\u00a0\u202f]/g, " ").replace(/\s+/g, " ").trim();
+    check((await page.inputValue("#jo-year")) === String(new Date().getFullYear()) && (await page.inputValue("#jo-zone")) === "federal",
+      "US business days: current year and federal holidays by default");
+    await page.fill("#jo-year", "2026");
+    check((await t("#jo-billable")) === "250" && (await t("#jo-off")) === "11 days" && (await page.$$("#jo-list tbody tr")).length === 11 &&
+      (await page.$$eval("#jo-list tbody tr", (trs) => trs.map((tr) => [...tr.cells].map((c) => c.textContent).join(" | ")))).includes("Fri, Jul 3 | Independence Day (observed) | Day off"), "US business days: 250 in 2026, 11 federal holidays, Independence Day observed on Friday, July 3");
+    await page.fill("#jo-year", "2027");
+    check((await t("#jo-billable")) === "249" && (await page.$$("#jo-list tbody tr")).length === 12 &&
+      (await page.$$eval("#jo-list tbody tr", (trs) => trs.map((tr) => [...tr.cells].map((c) => c.textContent).join(" | ")))).includes("Fri, Dec 31 | New Year’s Day (observed) | Day off"), "US 2027: 249 business days, New Year's Day 2028 observed on December 31, 2027");
+    await page.fill("#jo-year", "2031");
+    check((await t("#jo-billable")) === "–" && (await t("#jo-sub")).includes("up to 2030"), "US: years OPM has not published yet are refused");
+    await page.fill("#jo-year", "2026");
+    await page.fill("#jo-start", "2026-06-26");
+    await page.fill("#jo-n", "10");
+    await page.selectOption("#jo-mode", "ouvre");
+    check((await t("#jo-due")) === "July 13, 2026" && (await t("#jo-explain")).includes("Fri, Jul 3; Sat, Jul 4"),
+      "US: 10 business days after June 26, 2026 → July 13 (Independence Day observed on July 3 skipped)");
+    check((await page.$$('#jo-mode option[value="franc"]')).length === 0, "US: no French « jours francs »");
   },
   async "fr/calcul-jours-ouvres/"(page) {
     const t = async (sel) => (await page.textContent(sel)).replace(/[\u00a0\u202f]/g, " ").replace(/\s+/g, " ").trim();
@@ -572,6 +592,9 @@ const tests = {
     check(download.suggestedFilename() === "estimated-tax-2026.ics" && (ics.match(/BEGIN:VEVENT/g) || []).length === 4 && ics.includes("DTSTART;VALUE=DATE:20260415"), "acomptes : export agenda .ics avec 4 échéances");
   },
   async "us/hourly-rate-calculator/"(page) {
+    const year = new Date().getFullYear();
+    check(new RegExp(`^In ${year}: \\d+ federal holidays on weekdays\\.`).test((await page.textContent("#h-holidays-hint")).trim()) &&
+      (await page.getAttribute("#h-holidays-hint a", "href")).endsWith("/us/business-days-calculator/"), "US hourly rate: federal holidays of the year as a hint, link to business days");
     // 52 − 4 semaines − 10 jours fériés = 46 semaines × 40 h × 70 % = 1 288 h facturables
     check((await page.textContent("#h-billable")).includes("1,288"), "taux horaire : 1 288 heures facturables");
     const ok = await page.evaluate(() => {

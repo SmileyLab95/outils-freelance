@@ -9,7 +9,7 @@
   "app": "UK Working Days Calculator",
   "scripts": ["engines/jours.js", "tools/jours.js"],
   "rules": "uk",
-  "sources": ["bank_holidays"],
+  "sources": ["public_holidays"],
   "priority": 0.8,
   "faq": [
     ["How many working days are there in 2026?", "In England and Wales, 253 working days from Monday to Friday: 261 weekdays minus 8 bank holidays, which all fall on weekdays in 2026. Scotland and Northern Ireland have 10 bank holidays in 2026, so 251 working days. Take off your holidays to get your billable days."],
@@ -139,7 +139,7 @@
   </div>
 </section>
 
-<script type="application/json" id="jours-data">{"store": "jours-uk", "sep": "; ", "days": ["{n} day", "{n} days"], "period": ["{from} to {to}: {n} working day", "{from} to {to}: {n} working days"], "period_off": [" ({n} bank holiday off)", " ({n} bank holidays off)"], "period_leave": [", minus {n} day of leave.", ", minus {n} days of leave."], "end": ".", "status": ["Day off", "Worked", "Not a working day"], "no_holiday": "No bank holiday in this period.", "no_workday": "Tick at least one working day: with none ticked, the calculator uses Monday to Friday.", "leave_range": "Leave must be between 0 and {max} (the working days in the period).", "choose_year": "Choose a year from {min} to {max}: GOV.UK has published bank holidays up to {max}.", "choose_dates": "Choose two dates from {min} to {max}, the second after the first.", "delay_invalid": "Enter a whole number of days from 0 to 3,650. Working days can only be counted from {min} to {max}, the years GOV.UK has published.", "due": "{date}: {n} {noun} after {start}.", "modes": {"ouvre": ["working day", "working days"], "calendaire": ["calendar day", "calendar days"]}, "explain_calendar": "Every day counts, including weekends and bank holidays.", "explain_skipped": ["{n} day not counted (rest day or bank holiday): {list}", "{n} days not counted (rest days or bank holidays): {list}"], "etc": ", etc.", "explain_none": "No day skipped."}</script>
+<script type="application/json" id="jours-data">{"store": "jours-uk", "sep": "; ", "substitute": " (substitute day)", "days": ["{n} day", "{n} days"], "period": ["{from} to {to}: {n} working day", "{from} to {to}: {n} working days"], "period_off": [" ({n} bank holiday off)", " ({n} bank holidays off)"], "period_leave": [", minus {n} day of leave.", ", minus {n} days of leave."], "end": ".", "status": ["Day off", "Worked", "Not a working day"], "no_holiday": "No bank holiday in this period.", "no_workday": "Tick at least one working day: with none ticked, the calculator uses Monday to Friday.", "leave_range": "Leave must be between 0 and {max} (the working days in the period).", "choose_year": "Choose a year from {min} to {max}: GOV.UK has published bank holidays up to {max}.", "choose_dates": "Choose two dates from {min} to {max}, the second after the first.", "delay_invalid": "Enter a whole number of days from 0 to 3,650. Working days can only be counted from {min} to {max}, the years GOV.UK has published.", "due": "{date}: {n} {noun} after {start}.", "modes": {"ouvre": ["working day", "working days"], "calendaire": ["calendar day", "calendar days"]}, "explain_calendar": "Every day counts, including weekends and bank holidays.", "explain_skipped": ["{n} day not counted (rest day or bank holiday): {list}", "{n} days not counted (rest days or bank holidays): {list}"], "etc": ", etc.", "explain_none": "No day skipped."}</script>
 
 {{kit_cta}}
 

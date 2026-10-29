@@ -933,3 +933,4 @@ a.country-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg)
 .weekdays { border: 0; margin: 0 0 14px; padding: 0; min-width: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px 14px; }
 @media (max-width: 520px) { .weekdays { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .holiday-table td { vertical-align: top; }
+.holiday-table td:first-child { white-space: nowrap; }   /* date sur une ligne : « Mon, Jan 19 » */

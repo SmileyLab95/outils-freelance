@@ -258,14 +258,22 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   jour férié de la Coupe du monde du 15 juin 2026, Irlande du Nord), jours de remplacement, jours ouvrés et
   facturables, délais en *working days* ou *calendar days* ; aide du calculateur de *day rate* ; un seul script pour
   les deux pays ([42](42-jours-ouvres.md) § 6 et 7, décision D43).
+- **Jours ouvrés aux États-Unis (29/10/2026)** : même calculateur en anglais américain (*Business days and federal
+  holidays*, menu *Pricing*) : jours fériés fédéraux d'OPM pour 2024 à 2030, aux dates observées (un jour férié tombant
+  un samedi est chômé le vendredi, un dimanche le lundi ; New Year's Day 2028 le vendredi 31 décembre 2027),
+  Inauguration Day exclu ; jours de remplacement signalés dans les deux pays (« (observed) », « (substitute day) ») ;
+  aide du calculateur de taux horaire ; les 77 dates recalculées par les tests à partir de 5 U.S.C. 6103
+  ([42](42-jours-ouvres.md) § 8 et 9, décision D44).
 - **Prochaines actions de Claude** : refonte, suite ([31](31-vision-plateforme.md) § 5) : les quatre modules du compte
   gratuit sont faits (étape 5) ; étape 6, outils restants (CGV hors de France, après la lecture des sources de chaque
-  pays ; jours ouvrés aux États-Unis (jours fériés fédéraux, opm.gov désormais lisible) et au Canada ; sous-traitance,
+  pays ; jours ouvrés au Canada (jours fériés fédéraux et provinciaux) : en attente de l'accès à canada.ca, refusé
+  depuis l'environnement de travail et sans réponse depuis l'outil de lecture des sources le 29/10/2026 ; sous-traitance,
   devises, signature d'email, guides de protection sociale) ;
   ajouter les taux du 1er semestre 2027 dès leur publication
   (fin décembre 2026 : intérêt légal par arrêté, taux de la BCE en vigueur au 1er janvier ; tables `taux_interet_legal`
   et `taux_bce_refinancement`, utilisées par le calculateur de pénalités et les CGV) ; *bank holidays* de 2029 dès que
-  GOV.UK les publie (`bank_holidays`, `data/rules/uk.json`) ;
+  GOV.UK les publie et jours fériés fédéraux de 2031 dès qu'OPM les publie (`public_holidays`, `data/rules/uk.json` et
+  `data/rules/us.json`) ;
   activité mixte de l'Espace à spécifier (le profil n'a qu'une activité : deux plafonds, déclaration et livre des
   recettes distinguant ventes et prestations, BOFiP BOI-BIC-DECLA-30-30) ; questions ouvertes de `data/rules/` à relire
   avec l'outil de lecture des sources (ACRE) ; puis besoins P3 restants
@@ -279,7 +287,9 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   Z12-012 pour le BT-32 en franchise, la question 13 de [pays/ca.md](pays/ca.md) sur la TVQ, et le
   remplacement annoncé de la section 17 du *Victims and Prisoners Act 2024* sur les accords de confidentialité). La mise en ligne
   des comptes attend le choix de l'hébergeur et du domaine.
-- **En attente d'Ismail** (pas urgent) : questions à poser à l'expert-comptable ou à l'avocat : l'indemnité forfaitaire
+- **En attente d'Ismail** (pas urgent) : autoriser `www.canada.ca` (et `canada.ca`) dans les réglages réseau de
+  l'environnement cloud (*Network access*, *Allowed domains*) : nécessaire pour lire les sources canadiennes (jours
+  fériés, mises à jour des règles) ; questions à poser à l'expert-comptable ou à l'avocat : l'indemnité forfaitaire
   de 40 € s'applique-t-elle aux factures des professions libérales et des prestataires non commerçants (la fiche
   officielle F23211 la réserve aux « actes de commerce ») ? Pour un retard sur plusieurs semestres, faut-il appliquer à
   chaque semestre son taux (choix du calculateur, lecture littérale de l'article L441-10) ou garder le taux du semestre

@@ -2005,7 +2005,7 @@
       "note": "Read through search excerpts on 2026-10-23.",
       "verified_on": "2026-10-23"
     },
-    "bank_holidays": {
+    "public_holidays": {
       "value": {
         "england-and-wales": {
           "2024": [

@@ -44,6 +44,14 @@
       OF.money(tryResult.total, 0) + " in taxes.";
   }
 
+  // Jours fériés fédéraux de l'année tombant en semaine (moteur des jours ouvrés), en aide du champ.
+  var D = OFE.days, year = OF.today().slice(0, 4);
+  var count = D ? D.count(year + "-01-01", year + "-12-31", { rules: R, zone: "federal" }) : null;
+  if (count) {
+    var off = count.holidays.filter(function (h) { return h.off; }).length;
+    $("h-holidays-year").textContent = "In " + year + ": " + off + " federal holidays on weekdays.";
+  }
+
   OF.persistForm(form, "rate");
   document.addEventListener("input", compute);
   document.addEventListener("change", compute);

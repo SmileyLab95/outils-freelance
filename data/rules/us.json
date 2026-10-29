@@ -1625,6 +1625,418 @@
       "confidence": "medium",
       "note": "Read through search excerpts on 2026-10-23.",
       "verified_on": "2026-10-23"
+    },
+    "public_holidays": {
+      "value": {
+        "federal": {
+          "2024": [
+            {
+              "date": "2024-01-01",
+              "title": "New Year’s Day",
+              "substitute": false
+            },
+            {
+              "date": "2024-01-15",
+              "title": "Birthday of Martin Luther King, Jr.",
+              "substitute": false
+            },
+            {
+              "date": "2024-02-19",
+              "title": "Washington’s Birthday",
+              "substitute": false
+            },
+            {
+              "date": "2024-05-27",
+              "title": "Memorial Day",
+              "substitute": false
+            },
+            {
+              "date": "2024-06-19",
+              "title": "Juneteenth National Independence Day",
+              "substitute": false
+            },
+            {
+              "date": "2024-07-04",
+              "title": "Independence Day",
+              "substitute": false
+            },
+            {
+              "date": "2024-09-02",
+              "title": "Labor Day",
+              "substitute": false
+            },
+            {
+              "date": "2024-10-14",
+              "title": "Columbus Day",
+              "substitute": false
+            },
+            {
+              "date": "2024-11-11",
+              "title": "Veterans Day",
+              "substitute": false
+            },
+            {
+              "date": "2024-11-28",
+              "title": "Thanksgiving Day",
+              "substitute": false
+            },
+            {
+              "date": "2024-12-25",
+              "title": "Christmas Day",
+              "substitute": false
+            }
+          ],
+          "2025": [
+            {
+              "date": "2025-01-01",
+              "title": "New Year’s Day",
+              "substitute": false
+            },
+            {
+              "date": "2025-01-20",
+              "title": "Birthday of Martin Luther King, Jr.",
+              "substitute": false
+            },
+            {
+              "date": "2025-02-17",
+              "title": "Washington’s Birthday",
+              "substitute": false
+            },
+            {
+              "date": "2025-05-26",
+              "title": "Memorial Day",
+              "substitute": false
+            },
+            {
+              "date": "2025-06-19",
+              "title": "Juneteenth National Independence Day",
+              "substitute": false
+            },
+            {
+              "date": "2025-07-04",
+              "title": "Independence Day",
+              "substitute": false
+            },
+            {
+              "date": "2025-09-01",
+              "title": "Labor Day",
+              "substitute": false
+            },
+            {
+              "date": "2025-10-13",
+              "title": "Columbus Day",
+              "substitute": false
+            },
+            {
+              "date": "2025-11-11",
+              "title": "Veterans Day",
+              "substitute": false
+            },
+            {
+              "date": "2025-11-27",
+              "title": "Thanksgiving Day",
+              "substitute": false
+            },
+            {
+              "date": "2025-12-25",
+              "title": "Christmas Day",
+              "substitute": false
+            }
+          ],
+          "2026": [
+            {
+              "date": "2026-01-01",
+              "title": "New Year’s Day",
+              "substitute": false
+            },
+            {
+              "date": "2026-01-19",
+              "title": "Birthday of Martin Luther King, Jr.",
+              "substitute": false
+            },
+            {
+              "date": "2026-02-16",
+              "title": "Washington’s Birthday",
+              "substitute": false
+            },
+            {
+              "date": "2026-05-25",
+              "title": "Memorial Day",
+              "substitute": false
+            },
+            {
+              "date": "2026-06-19",
+              "title": "Juneteenth National Independence Day",
+              "substitute": false
+            },
+            {
+              "date": "2026-07-03",
+              "title": "Independence Day",
+              "substitute": true
+            },
+            {
+              "date": "2026-09-07",
+              "title": "Labor Day",
+              "substitute": false
+            },
+            {
+              "date": "2026-10-12",
+              "title": "Columbus Day",
+              "substitute": false
+            },
+            {
+              "date": "2026-11-11",
+              "title": "Veterans Day",
+              "substitute": false
+            },
+            {
+              "date": "2026-11-26",
+              "title": "Thanksgiving Day",
+              "substitute": false
+            },
+            {
+              "date": "2026-12-25",
+              "title": "Christmas Day",
+              "substitute": false
+            }
+          ],
+          "2027": [
+            {
+              "date": "2027-01-01",
+              "title": "New Year’s Day",
+              "substitute": false
+            },
+            {
+              "date": "2027-01-18",
+              "title": "Birthday of Martin Luther King, Jr.",
+              "substitute": false
+            },
+            {
+              "date": "2027-02-15",
+              "title": "Washington’s Birthday",
+              "substitute": false
+            },
+            {
+              "date": "2027-05-31",
+              "title": "Memorial Day",
+              "substitute": false
+            },
+            {
+              "date": "2027-06-18",
+              "title": "Juneteenth National Independence Day",
+              "substitute": true
+            },
+            {
+              "date": "2027-07-05",
+              "title": "Independence Day",
+              "substitute": true
+            },
+            {
+              "date": "2027-09-06",
+              "title": "Labor Day",
+              "substitute": false
+            },
+            {
+              "date": "2027-10-11",
+              "title": "Columbus Day",
+              "substitute": false
+            },
+            {
+              "date": "2027-11-11",
+              "title": "Veterans Day",
+              "substitute": false
+            },
+            {
+              "date": "2027-11-25",
+              "title": "Thanksgiving Day",
+              "substitute": false
+            },
+            {
+              "date": "2027-12-24",
+              "title": "Christmas Day",
+              "substitute": true
+            },
+            {
+              "date": "2027-12-31",
+              "title": "New Year’s Day",
+              "substitute": true
+            }
+          ],
+          "2028": [
+            {
+              "date": "2028-01-17",
+              "title": "Birthday of Martin Luther King, Jr.",
+              "substitute": false
+            },
+            {
+              "date": "2028-02-21",
+              "title": "Washington’s Birthday",
+              "substitute": false
+            },
+            {
+              "date": "2028-05-29",
+              "title": "Memorial Day",
+              "substitute": false
+            },
+            {
+              "date": "2028-06-19",
+              "title": "Juneteenth National Independence Day",
+              "substitute": false
+            },
+            {
+              "date": "2028-07-04",
+              "title": "Independence Day",
+              "substitute": false
+            },
+            {
+              "date": "2028-09-04",
+              "title": "Labor Day",
+              "substitute": false
+            },
+            {
+              "date": "2028-10-09",
+              "title": "Columbus Day",
+              "substitute": false
+            },
+            {
+              "date": "2028-11-10",
+              "title": "Veterans Day",
+              "substitute": true
+            },
+            {
+              "date": "2028-11-23",
+              "title": "Thanksgiving Day",
+              "substitute": false
+            },
+            {
+              "date": "2028-12-25",
+              "title": "Christmas Day",
+              "substitute": false
+            }
+          ],
+          "2029": [
+            {
+              "date": "2029-01-01",
+              "title": "New Year’s Day",
+              "substitute": false
+            },
+            {
+              "date": "2029-01-15",
+              "title": "Birthday of Martin Luther King, Jr.",
+              "substitute": false
+            },
+            {
+              "date": "2029-02-19",
+              "title": "Washington’s Birthday",
+              "substitute": false
+            },
+            {
+              "date": "2029-05-28",
+              "title": "Memorial Day",
+              "substitute": false
+            },
+            {
+              "date": "2029-06-19",
+              "title": "Juneteenth National Independence Day",
+              "substitute": false
+            },
+            {
+              "date": "2029-07-04",
+              "title": "Independence Day",
+              "substitute": false
+            },
+            {
+              "date": "2029-09-03",
+              "title": "Labor Day",
+              "substitute": false
+            },
+            {
+              "date": "2029-10-08",
+              "title": "Columbus Day",
+              "substitute": false
+            },
+            {
+              "date": "2029-11-12",
+              "title": "Veterans Day",
+              "substitute": true
+            },
+            {
+              "date": "2029-11-22",
+              "title": "Thanksgiving Day",
+              "substitute": false
+            },
+            {
+              "date": "2029-12-25",
+              "title": "Christmas Day",
+              "substitute": false
+            }
+          ],
+          "2030": [
+            {
+              "date": "2030-01-01",
+              "title": "New Year’s Day",
+              "substitute": false
+            },
+            {
+              "date": "2030-01-21",
+              "title": "Birthday of Martin Luther King, Jr.",
+              "substitute": false
+            },
+            {
+              "date": "2030-02-18",
+              "title": "Washington’s Birthday",
+              "substitute": false
+            },
+            {
+              "date": "2030-05-27",
+              "title": "Memorial Day",
+              "substitute": false
+            },
+            {
+              "date": "2030-06-19",
+              "title": "Juneteenth National Independence Day",
+              "substitute": false
+            },
+            {
+              "date": "2030-07-04",
+              "title": "Independence Day",
+              "substitute": false
+            },
+            {
+              "date": "2030-09-02",
+              "title": "Labor Day",
+              "substitute": false
+            },
+            {
+              "date": "2030-10-14",
+              "title": "Columbus Day",
+              "substitute": false
+            },
+            {
+              "date": "2030-11-11",
+              "title": "Veterans Day",
+              "substitute": false
+            },
+            {
+              "date": "2030-11-28",
+              "title": "Thanksgiving Day",
+              "substitute": false
+            },
+            {
+              "date": "2030-12-25",
+              "title": "Christmas Day",
+              "substitute": false
+            }
+          ]
+        }
+      },
+      "unit": "object",
+      "label": "Federal holidays (5 U.S.C. 6103), observed dates, 2024 to 2030",
+      "source": "https://www.opm.gov/policy-data-oversight/pay-leave/federal-holidays/",
+      "source_title": "U.S. Office of Personnel Management (OPM), \"Federal Holidays\" (holiday schedule for each year)",
+      "confidence": "high",
+      "verified_on": "2026-10-29",
+      "note": "Read in full on 29/10/2026 with the « Lire une source officielle » tool (SHA-256 37973681…2e92). 11 federal holidays a year (5 U.S.C. 6103(a)); the dates are the days OPM lists, i.e. the days observed by most federal employees: a holiday on a Saturday is observed on the preceding Friday (5 U.S.C. 6103(b)), on a Sunday on the following Monday (Executive Order 11582, section 3(a)); substitute = observed on another day than the legal date. Each holiday is stored under the year of its observed date: New Year’s Day 2028 (a Saturday) is observed on Friday 31 December 2027, so 2027 lists 12 days and 2028 lists 10. Inauguration Day (5 U.S.C. 6103(c), Washington, DC, area only, every fourth year) is left out. OPM publishes the schedule up to 2030; add 2031 when it is published. States, local governments and private businesses may observe other days or use other names."
     }
   },
   "open_questions": [

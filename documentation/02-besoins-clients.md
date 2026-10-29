@@ -106,7 +106,7 @@ Matrice revue le 23/10/2026 d'après les pages publiées (identifiants de `conte
 | Savoir ce qui est vraiment disponible et prévoir sa trésorerie | Espace entrepreneur : déjà dû (cotisations, TVA), disponible, prévision sur 6 mois, charges régulières | ✅ | — | — | — | P2 |
 | Suivi des factures et du chiffre d'affaires | Kit Excel (produit payant) | ✅ | ✅ (kit US) | 🟡 | 🟡 | — |
 | Temps facturable | Calculateur de jours / heures facturables | ✅ (dans le TJM ; jours ouvrés et fériés, [42](42-jours-ouvres.md)) | ✅ (dans le taux horaire) | ✅ (dans le *day rate*) | ✅ (dans le taux horaire) | P3 |
-| Jours fériés et délais | Calculateur de jours ouvrés, jours fériés et délais (jours ouvrés, ouvrables, francs) | ✅ | 🟡 | ✅ *bank holidays* (3 régions) | 🟡 | P3 |
+| Jours fériés et délais | Calculateur de jours ouvrés, jours fériés et délais (jours ouvrés, ouvrables, francs) | ✅ | ✅ *federal holidays* (OPM) | ✅ *bank holidays* (3 régions) | 🟡 | P3 |
 
 ### 9. Se protéger
 
