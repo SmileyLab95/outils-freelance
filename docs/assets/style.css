@@ -795,6 +795,25 @@ a.country-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg)
 .prospect-rules li { margin-bottom: 6px; }
 .exchanges .dl-main .small { overflow-wrap: anywhere; }
 .link-client { align-items: end; margin-top: 10px; }
+/* Trésorerie (documentation/39-tresorerie.md) */
+.treasury-owed { margin: 0 0 8px; padding-left: 1.2em; }
+.treasury-owed li { margin-bottom: 4px; }
+.treasury-table tr.is-negative td:first-child, .treasury-table tr.is-negative td:last-child { color: var(--danger); font-weight: 700; }
+.treasury-month { border-top: 1px solid var(--line); padding: 8px 0; }
+.treasury-month summary { cursor: pointer; font-weight: 650; }
+.treasury-month ul { list-style: none; margin: 8px 0 0; padding: 0; }
+.treasury-month li { display: grid; grid-template-columns: 6.5em minmax(0, 1fr) auto; gap: 4px 12px; padding: 4px 0; }
+.treasury-month li span:nth-child(2) { overflow-wrap: anywhere; }
+@media (max-width: 640px) {
+  .ledger.treasury-table tr { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .ledger.treasury-table tbody .c-date { grid-column: 1 / -1; }
+  .ledger.treasury-table tbody .num { grid-column: auto; grid-row: 2; text-align: left; font-weight: 650; }
+  .ledger.treasury-table tbody .num::before { content: attr(data-label); display: block; font-size: .72rem; font-weight: 600; color: var(--muted); }
+}
+@media (max-width: 560px) {
+  .treasury-month li { grid-template-columns: minmax(0, 1fr) auto; }
+  .treasury-month li .c-date { grid-column: 1 / -1; color: var(--muted); font-size: .85rem; }
+}
 @media (max-width: 560px) {
   .time-totals { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
   .time-totals li:last-child { grid-column: 1 / -1; }

@@ -10,7 +10,7 @@ const E = require("../../src/assets/engines/espace-fr.js");
 
 const T = (n) => new Date(Date.UTC(2026, 9, 1, 8) + n * 60000).toISOString();
 const uidFrom = (prefix) => { let k = 0; return () => `${prefix}-${++k}`; };
-const state = (over = {}) => Object.assign({ schema: 2, profile: null, clients: [], documents: [], expenses: [], timeEntries: [], prospects: [], optouts: [], settings: { lastExport: null }, savedAt: null }, over);
+const state = (over = {}) => Object.assign({ schema: 2, profile: null, clients: [], documents: [], expenses: [], timeEntries: [], prospects: [], optouts: [], charges: [], settings: { lastExport: null }, savedAt: null }, over);
 const client = (over = {}) => Object.assign({ id: "c1", name: "Studio Nova", email: "a@nova.example", pro: true, place: "fr", createdAt: T(0), updatedAt: T(0) }, over);
 const draft = (over = {}) => Object.assign({ id: "d1", type: "facture", status: "draft", date: "2026-10-05", clientId: "c1", terms: 30, nature: "services",
   lines: [{ desc: "Site", qty: 1, price: 1000 }], vat: { franchise: true, rate: 20, place: "fr" }, payments: [], createdAt: T(0), updatedAt: T(0) }, over);
@@ -613,4 +613,26 @@ test("prospects : suppressions croisées (fiche, échange) ; opposition ; devis 
   assert.deepEqual(S.migrate({ schema: 1, clients: [], documents: [] }).prospects, [], "ancienne sauvegarde sans prospects");
   assert.deepEqual(S.migrate({ schema: 1, clients: [], documents: [] }).optouts, []);
   assert.deepEqual(S.migrate({ schema: 2, clients: [], documents: [], prospects: [{ id: "p1", name: "X" }] }).prospects[0].exchanges, [], "échanges absents : liste vide");
+});
+
+// Trésorerie (documentation/39-tresorerie.md) : charges régulières fusionnées comme les dépenses ; solde et TVA de
+// l'année précédente dans le profil, fusionnés champ par champ.
+const charge = (over = {}) => Object.assign({ id: "ch1", label: "Logiciel", amount: 30, every: "month", start: "2026-01-31", createdAt: T(0), updatedAt: T(0) }, over);
+
+test("trésorerie : charges ajoutées, modifiées et supprimées sur deux appareils ; solde du profil", () => {
+  const o = state({ charges: [charge()] });
+  let r = merge(o, state({ charges: [charge({ amount: 35, updatedAt: T(2) }), charge({ id: "ch2", label: "Loyer", amount: 500, createdAt: T(1), updatedAt: T(1) })] }),
+    state({ charges: [charge({ end: "2026-12-31", updatedAt: T(3) })] }));
+  assert.deepEqual(r.data.charges.map((c) => [c.id, c.amount, c.end]), [["ch1", 35, "2026-12-31"], ["ch2", 500, undefined]]);
+  assert.deepEqual(r.conflicts, []);
+  r = merge(o, state({ charges: [charge({ every: "quarter", updatedAt: T(2) })] }), state({ charges: [charge({ every: "year", updatedAt: T(4) })] }));
+  assert.equal(r.conflicts[0].message, "Charge modifiée sur deux appareils : la version la plus récente est gardée (fréquence).");
+  r = merge(o, state({ charges: [] }), state({ charges: [charge({ amount: 40, updatedAt: T(2) })] }));
+  assert.deepEqual(r.conflicts.map((c) => [c.kind, c.type, c.message]), [["charge", "removed-modified", "Charge effacée sur un appareil mais modifiée sur un autre : elle est conservée."]]);
+  const p = { name: "Camille", cashBalance: 1000, cashDate: "2026-10-01", updatedAt: T(0) };
+  r = merge(state({ profile: p }), state({ profile: { ...p, cashBalance: 1200, cashDate: "2026-10-20", updatedAt: T(2) } }),
+    state({ profile: { ...p, cashBalance: 900, cashDate: "2026-10-19", updatedAt: T(1) } }));
+  assert.deepEqual([r.data.profile.cashBalance, r.data.profile.cashDate], [1200, "2026-10-20"]);
+  assert.equal(r.conflicts[0].message, "Profil modifié sur deux appareils : la version la plus récente est gardée (solde du compte, date du solde).");
+  assert.deepEqual(S.migrate({ schema: 1, clients: [], documents: [] }).charges, [], "ancienne sauvegarde sans charges");
 });

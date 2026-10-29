@@ -26,7 +26,9 @@
                  supplier: "fournisseur", label: "nature", ref: "référence de la pièce",
                  task: "tâche", unit: "unité", quantity: "durée", rate: "taux", billable: "facturable",
                  contact: "interlocuteur", source: "origine", stage: "étape", value: "valeur estimée", nextDate: "date de relance",
-                 nextAction: "prochaine action", prospectId: "piste", from: "sens de l'échange", text: "résumé", hashes: "empreintes" };
+                 nextAction: "prochaine action", prospectId: "piste", from: "sens de l'échange", text: "résumé", hashes: "empreintes",
+                 every: "fréquence", start: "première échéance", end: "dernière échéance", cashBalance: "solde du compte",
+                 cashDate: "date du solde", vatLastYear: "TVA de l'année précédente" };
   var labels = function (fields) { return fields.map(function (k) { return LABELS[k] || k; }).join(", "); };
 
   // ----- Comparaison et copie ------------------------------------------------------------------
@@ -83,6 +85,7 @@
     out.timeEntries = (Array.isArray(out.timeEntries) ? out.timeEntries : []).filter(Boolean);
     out.prospects = (Array.isArray(out.prospects) ? out.prospects : []).filter(Boolean);
     out.optouts = (Array.isArray(out.optouts) ? out.optouts : []).filter(Boolean);
+    out.charges = (Array.isArray(out.charges) ? out.charges : []).filter(Boolean);
     out.prospects.forEach(function (p) { p.exchanges = (Array.isArray(p.exchanges) ? p.exchanges : []).filter(Boolean); });
     out.documents.forEach(function (d) {
       d.payments = (Array.isArray(d.payments) ? d.payments : []).filter(Boolean);
@@ -138,7 +141,8 @@
                   time: "Temps passé effacé sur un appareil mais modifié sur un autre : il est conservé.",
                   prospect: "Prospect effacé sur un appareil mais modifié sur un autre : il est conservé.",
                   exchange: "Échange effacé sur un appareil mais modifié sur un autre : il est conservé.",
-                  optout: "Opposition effacée sur un appareil mais modifiée sur un autre : elle est conservée." };
+                  optout: "Opposition effacée sur un appareil mais modifiée sur un autre : elle est conservée.",
+                  charge: "Charge effacée sur un appareil mais modifiée sur un autre : elle est conservée." };
   var byId = function (list) { var m = {}; (list || []).forEach(function (x) { m[x.id] = x; }); return m; };
 
   /**
@@ -313,6 +317,8 @@
     "Dépense modifiée sur deux appareils : la version la plus récente est gardée");
   var mergeTime = mergeRecord("time", "Temps passé supprimé sur un appareil mais modifié sur un autre : il est conservé.",
     "Temps passé modifié sur deux appareils : la version la plus récente est gardée");
+  var mergeCharge = mergeRecord("charge", "Charge supprimée sur un appareil mais modifiée sur un autre : elle est conservée.",
+    "Charge modifiée sur deux appareils : la version la plus récente est gardée");
   var mergeOptout = mergeRecord("optout", "Opposition supprimée sur un appareil mais modifiée sur un autre : elle est conservée.",
     "Opposition modifiée sur deux appareils : la version la plus récente est gardée");
   var mergeFiche = mergeRecord("prospect", "Prospect supprimé sur un appareil mais modifié sur un autre : il est conservé.",
@@ -392,6 +398,7 @@
     var timeEntries = mergeList("time", base.timeEntries, local.timeEntries, remote.timeEntries, ctx, mergeTime);
     var prospects = mergeList("prospect", base.prospects, local.prospects, remote.prospects, ctx, mergeProspect);
     var optouts = mergeList("optout", base.optouts, local.optouts, remote.optouts, ctx, mergeOptout);
+    var charges = mergeList("charge", base.charges, local.charges, remote.charges, ctx, mergeCharge);
     var documents = mergeList("document", base.documents, local.documents, remote.documents, ctx, mergeDocument, issued);
     // Versions d'un appareil qui n'avait pas encore reçu une copie : reportées sur cette copie (fusion depuis la même base).
     for (var guard = 0; ctx.rebase.length && guard < 1000; guard++) {
@@ -408,7 +415,7 @@
     });
     return {
       data: { schema: SCHEMA, profile: profile.value, clients: clients, documents: documents, expenses: expenses, timeEntries: timeEntries,
-              prospects: prospects, optouts: optouts,
+              prospects: prospects, optouts: optouts, charges: charges,
               settings: clone(local.settings) || { lastExport: null }, savedAt: local.savedAt || null },
       conflicts: ctx.conflicts
     };

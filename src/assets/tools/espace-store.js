@@ -13,7 +13,7 @@
   var channel = "BroadcastChannel" in window ? new BroadcastChannel("of-espace-" + KEY) : null;
 
   function empty() {
-    return { schema: SCHEMA, profile: null, clients: [], documents: [], expenses: [], timeEntries: [], prospects: [], optouts: [],
+    return { schema: SCHEMA, profile: null, clients: [], documents: [], expenses: [], timeEntries: [], prospects: [], optouts: [], charges: [],
              settings: { lastExport: null }, savedAt: null };
   }
 
@@ -82,7 +82,12 @@
     var badOptout = (data.optouts || []).some(function (o) {
       return !o || !isText(o.id) || !isDate(o.date) || !Array.isArray(o.hashes) || !o.hashes.length || !o.hashes.every(isText);
     });
-    return badClient || badDoc || badExpense || badTime || badProspect || badOptout ? "Cette sauvegarde contient des éléments illisibles." : "";
+    // Charges régulières (trésorerie) : facultatives (sauvegardes antérieures au module).
+    if (data.charges !== undefined && !Array.isArray(data.charges)) return "Cette sauvegarde est incomplète.";
+    var badCharge = (data.charges || []).some(function (c) {
+      return !c || !isText(c.id) || !isText(c.label) || ["month", "quarter", "year"].indexOf(c.every) < 0 || !isDate(c.start) || !isFinite(Number(c.amount));
+    });
+    return badClient || badDoc || badExpense || badTime || badProspect || badOptout || badCharge ? "Cette sauvegarde contient des éléments illisibles." : "";
   }
 
   var live = function (x) { return x && !x.deletedAt; };
@@ -98,6 +103,7 @@
     out.expenses = (Array.isArray(out.expenses) ? out.expenses : []).filter(live);
     out.timeEntries = (Array.isArray(out.timeEntries) ? out.timeEntries : []).filter(live);
     out.optouts = (Array.isArray(out.optouts) ? out.optouts : []).filter(live);
+    out.charges = (Array.isArray(out.charges) ? out.charges : []).filter(live);
     out.prospects = (Array.isArray(out.prospects) ? out.prospects : []).filter(live).map(function (p) {
       return Object.assign({}, p, { exchanges: (Array.isArray(p.exchanges) ? p.exchanges : []).filter(live) });
     });

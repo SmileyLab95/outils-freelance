@@ -104,6 +104,7 @@ navigateur fonctionnel).
 | Tableau de bord `#/` | Encaissé cette année ; prochaine déclaration (période, montant, cotisations, date limite) ; impayés et retards ; jauges plafond et TVA ; 4 prochaines échéances ; derniers documents | Nouvelle facture, nouveau devis, nouveau client |
 | Documents `#/documents` | Liste filtrable (tous, factures, devis, avoirs, brouillons, à encaisser) et recherche ; numéro, date, client, montant, statut | Ouvrir, créer |
 | Document `#/documents/<id>` | Formulaire à gauche, aperçu à droite (identique au PDF) | Enregistrer, émettre, PDF, dupliquer, supprimer (brouillon), paiement, avoir, conversion du devis, accepté/refusé, relancer |
+| Trésorerie `#/tresorerie` | Solde du compte, déjà dû (cotisations, TVA), disponible, prévision sur 6 mois, charges régulières ([39](39-tresorerie.md)) | Enregistrer le solde, ajouter, modifier, supprimer une charge |
 | Prospects `#/prospects` | Pistes par étape, relances dues, conservation, liste d'opposition ([38](38-prospects.md)) | Créer, noter un échange, créer le client, faire un devis, ne plus contacter, exporter |
 | Clients `#/clients` | Liste avec chiffre d'affaires encaissé et reste à encaisser par client | Créer, modifier, archiver, nouvelle facture pour ce client |
 | Recettes `#/recettes` | Livre des recettes de l'année choisie, total de chaque trimestre et de l'année | Export CSV, impression |

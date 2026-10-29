@@ -1,7 +1,7 @@
 /*
  * Moteur : Espace entrepreneur (France). Fonctions pures sur les données de l'Espace (voir documentation/09).
  * Numérotation et émission, statuts, encaissements, livre des recettes, déclaration Urssaf, plafonds ; dépenses,
- * temps passé et prospects (documentation/36 à 38).
+ * temps passé, prospects et trésorerie (documentation/36 à 39).
  * Les montants des documents viennent du moteur de facture commun (OFE.invoiceFR).
  */
 (function (root, factory) {
@@ -806,6 +806,207 @@
     return lines.join("\r\n");
   }
 
+  // ----- Trésorerie (documentation/39-tresorerie.md) ----------------------------------------------------------
+
+  var EVERY = { month: 1, quarter: 3, year: 12 };
+  var CHARGE_LABELS = { month: "Chaque mois", quarter: "Chaque trimestre", year: "Chaque année" };
+  /** Même jour n mois plus tard ; un jour qui n'existe pas devient le dernier jour du mois. */
+  function addMonths(date, n) {
+    var m = +date.slice(5, 7) - 1 + n, y = +date.slice(0, 4) + Math.floor(m / 12);
+    m = ((m % 12) + 12) % 12 + 1;
+    return iso(y, m, Math.min(+date.slice(8, 10), lastDay(y, m)));
+  }
+  var monthStart = function (d) { return d.slice(0, 8) + "01"; };
+  var monthEnd = function (d) { return iso(+d.slice(0, 4), +d.slice(5, 7), lastDay(+d.slice(0, 4), +d.slice(5, 7))); };
+
+  /** Échéances d'une charge régulière comprises entre from et to (bornes comprises). */
+  function chargeDates(c, from, to) {
+    var step = has(EVERY, c.every) ? EVERY[c.every] : 0, out = [];
+    if (!step || !isDay(c.start)) return out;
+    // Saute directement près de from (charge ancienne) sans dériver : chaque date part de la première échéance.
+    var skip = Math.max(0, Math.floor(((+from.slice(0, 4) - +c.start.slice(0, 4)) * 12 + (+from.slice(5, 7) - +c.start.slice(5, 7))) / step) - 1);
+    for (var i = skip; ; i++) {
+      var d = addMonths(c.start, i * step);
+      if (d > to || (c.end && d > c.end)) break;
+      if (d >= from) out.push(d);
+    }
+    return out;
+  }
+
+  /** Erreurs de saisie d'une charge régulière : label, amount, every, start, end. */
+  function chargeErrors(c) {
+    var errors = [], add = function (field, message) { errors.push({ field: field, message: message }); };
+    if (!String(c.label || "").trim()) add("label", "Indiquez la charge : loyer, logiciel, assurance…");
+    if (!(isFinite(Number(c.amount)) && Number(c.amount) > 0)) add("amount", "Indiquez un montant positif, en euros.");
+    if (!has(EVERY, c.every)) add("every", "Choisissez la fréquence.");
+    if (!isDay(c.start)) add("start", "Indiquez la date de la prochaine échéance.");
+    else if (!blank(c.end) && (!isDay(c.end) || c.end < c.start)) add("end", "La dernière échéance doit être une date après la première.");
+    return errors;
+  }
+
+  /** Factures émises non soldées, à leur échéance (en retard : aujourd'hui) ; avoirs à rembourser (sortie aujourd'hui). */
+  function expectedReceipts(documents, today) {
+    var out = [];
+    (documents || []).forEach(function (d) {
+      if (!d || d.status === "draft" || (d.type !== "facture" && d.type !== "avoir")) return;
+      var st = state(d, today, documents);
+      if (d.type === "facture" && (st === "unpaid" || st === "overdue" || st === "partial")) {
+        var due = dueDate(d);
+        out.push({ doc: d, amount: balance(d, documents), date: due < today ? today : due, late: due < today });
+      } else if (d.type === "avoir" && st === "refund") {
+        out.push({ doc: d, amount: -balance(d, documents), date: today, late: false });
+      }
+    });
+    return out.sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : order(a.doc) < order(b.doc) ? -1 : 1; });
+  }
+
+  /** Part de TVA d'un montant encaissé sur ce document (TVA / TTC) ; 0 en franchise ou sans TVA française. */
+  function vatPart(doc) {
+    var c = INV.compute(doc);
+    return c.ttc > 0 ? c.vat / c.ttc : 0;
+  }
+  /** TVA exigible à l'encaissement (prestations de services sans option pour les débits), sinon à la date de la facture. */
+  var onCash = function (doc) { return doc.nature === "services" && !(doc.vat && doc.vat.debits); };
+
+  /** TVA collectée exigible entre from et to : encaissements des services, factures de biens, mixtes ou au débit ; avoirs déduits. */
+  function vatExigible(documents, from, to) {
+    var sum = 0;
+    (documents || []).forEach(function (d) {
+      if (!d || d.status === "draft" || (d.type !== "facture" && d.type !== "avoir")) return;
+      var sign = d.type === "avoir" ? -1 : 1;
+      if (onCash(d)) {
+        var part = vatPart(d);
+        payments(d).forEach(function (p) { if (p.date >= from && p.date <= to) sum += sign * Number(p.amount) * part; });
+      } else if (d.date >= from && d.date <= to) {
+        sum += sign * INV.compute(d).vat;
+      }
+    });
+    return round2(sum);
+  }
+
+  /** Déclarations Urssaf du profil (périodicité), avec leur période, dans l'ordre des dates limites. */
+  function declarations(profile, events) {
+    var periodicity = profile.periodicity === "monthly" ? "monthly" : "quarterly";
+    return (events || []).filter(function (e) {
+      return e.period && e.when && e.when.periodicity && e.when.periodicity.indexOf(periodicity) > -1;
+    }).sort(function (a, b) { return a.date < b.date ? -1 : 1; }).map(function (e) { return { due: e.date, period: period(e.period) }; });
+  }
+  /** Taux total d'une période (cotisations, formation professionnelle, versement libératoire) ; null hors micro-entreprise. */
+  function totalRate(profile, rules, end) {
+    var r = rates(profile, rules, end);
+    return r ? r.social + r.cfp + r.vl : null;
+  }
+  var vatEvents = function (events, regime) {
+    return (events || []).filter(function (e) { return e.when && e.when.vat && e.when.vat.indexOf(regime) > -1; });
+  };
+  /** Acomptes du réel simplifié : juillet 55 %, décembre 40 % de la TVA due l'année précédente ; aucun sous 1 000 €. */
+  var ADVANCES = { "07": 0.55, "12": 0.40 };
+  var advanceAmount = function (month, vatLastYear) {
+    return has(ADVANCES, month) && Number(vatLastYear) >= 1000 ? round2(Number(vatLastYear) * ADVANCES[month]) : 0;
+  };
+
+  /**
+   * Déjà dû à la date du jour : cotisations sur l'encaissé des périodes dont la date limite n'est pas passée ; TVA
+   * exigible non encore déclarée (réel normal) ou depuis le 1er janvier moins les acomptes échus (réel simplifié).
+   */
+  function owed(input) {
+    var p = input.profile || {}, today = input.today, docs = input.documents || [];
+    var urssaf = { total: 0, periods: [], computed: false };
+    if (totalRate(p, input.rules, today) !== null) {
+      urssaf.computed = true;
+      declarations(p, input.events).forEach(function (d) {
+        if (d.due < today || d.period.start > today) return;
+        var cash = cashed(docs, d.period.start, d.period.end);
+        var amount = round2(cash * totalRate(p, input.rules, d.period.end));
+        urssaf.periods.push({ period: d.period, due: d.due, cashed: cash, amount: amount });
+        urssaf.total = round2(urssaf.total + amount);
+      });
+    }
+    var vat = { total: 0, regime: p.vatRegime || "franchise", advances: 0, advancesUnknown: false, previousYearDue: null };
+    if (p.vatRegime === "normal") {
+      // Mois dont la déclaration (CA3, le mois suivant) n'est pas encore passée : le mois en cours et peut-être le précédent.
+      var prev = addMonths(monthStart(today), -1);
+      var ca3 = vatEvents(input.events, "normal").filter(function (e) { return e.date.slice(0, 7) === today.slice(0, 7); })[0];
+      var from = ca3 && ca3.date < today ? monthStart(today) : prev;
+      vat.total = vatExigible(docs, from, today);
+    } else if (p.vatRegime === "simplified") {
+      var year = today.slice(0, 4), collected = vatExigible(docs, year + "-01-01", today);
+      if (blank(p.vatLastYear) || !isFinite(Number(p.vatLastYear))) vat.advancesUnknown = true;
+      else {
+        Object.keys(ADVANCES).forEach(function (m) {
+          if (today > monthEnd(year + "-" + m + "-01")) vat.advances = round2(vat.advances + advanceAmount(m, p.vatLastYear));
+        });
+      }
+      vat.total = round2(Math.max(0, collected - vat.advances));
+      // Solde de l'année précédente, payé avec la déclaration annuelle (CA12) de mai : signalé, non estimé.
+      var ca12 = vatEvents(input.events, "simplified").filter(function (e) { return /CA12/.test(e.title || "") && e.date.slice(0, 4) === year; })[0];
+      var ca12Date = ca12 ? ca12.date : year + "-05-01";
+      vat.previousYearDue = today <= ca12Date ? ca12Date : null;
+    }
+    return { urssaf: urssaf, vat: vat, total: round2(urssaf.total + vat.total) };
+  }
+
+  /**
+   * Prévision sur input.months mois (mois en cours compris) : encaissements attendus, cotisations et TVA aux dates du
+   * calendrier, charges régulières ; solde de fin de chaque mois à partir du solde saisi (profile.cashBalance).
+   */
+  function forecast(input) {
+    var p = input.profile || {}, today = input.today, docs = input.documents || [], n = input.months || 6;
+    var until = monthEnd(addMonths(monthStart(today), n - 1)), items = [];
+    var receipts = expectedReceipts(docs, today).filter(function (r) { return r.date <= until; });
+    receipts.forEach(function (r) {
+      var who = (r.doc.snapshot && r.doc.snapshot.client && r.doc.snapshot.client.name) || "";
+      items.push({ date: r.date, kind: r.amount < 0 ? "refund" : "receipt", amount: r.amount, late: r.late, docId: r.doc.id,
+                   label: (r.doc.type === "avoir" ? "Remboursement de l'avoir " : "Facture ") + r.doc.number + (who ? " (" + who + ")" : "") });
+    });
+    // Cotisations : encaissé de la période + encaissements attendus dans la période, à la date limite.
+    if (totalRate(p, input.rules, today) !== null) {
+      declarations(p, input.events).forEach(function (d) {
+        if (d.due < today || d.due > until) return;
+        var expected = receipts.filter(function (r) { return r.date >= d.period.start && r.date <= d.period.end; })
+          .reduce(function (s, r) { return s + r.amount; }, 0);
+        var amount = round2((cashed(docs, d.period.start, d.period.end) + expected) * totalRate(p, input.rules, d.period.end));
+        if (amount) items.push({ date: d.due, kind: "urssaf", amount: -amount, label: "Cotisations Urssaf " + (d.period.key.indexOf("T") > -1 ? "du " : "de ") + d.period.label });
+      });
+    }
+    // TVA : réel normal, TVA du mois (exigible + attendue à l'encaissement) au calendrier du mois suivant ; réel simplifié, acomptes.
+    if (p.vatRegime === "normal") {
+      vatEvents(input.events, "normal").forEach(function (e) {
+        if (e.date < today || e.date > until) return;
+        var m = addMonths(monthStart(e.date), -1), end = monthEnd(m);
+        var expected = receipts.filter(function (r) { return r.date >= m && r.date <= end && onCash(r.doc); })
+          .reduce(function (s, r) { return s + r.amount * vatPart(r.doc); }, 0); // un remboursement d'avoir est déjà négatif
+        var amount = round2(vatExigible(docs, m, end) + expected);
+        if (amount > 0) items.push({ date: e.date, kind: "vat", amount: -amount, label: e.title.replace(/^Déclaration de /, "") });
+      });
+    } else if (p.vatRegime === "simplified" && !blank(p.vatLastYear)) {
+      vatEvents(input.events, "simplified").forEach(function (e) {
+        if (e.date < today || e.date > until) return;
+        var amount = advanceAmount(e.date.slice(5, 7), p.vatLastYear); // 0 hors juillet et décembre (déclaration CA12 de mai)
+        if (amount) items.push({ date: e.date, kind: "vat", amount: -amount, label: e.title });
+      });
+    }
+    (input.charges || []).forEach(function (c) {
+      chargeDates(c, today, until).forEach(function (d) {
+        items.push({ date: d, kind: "charge", amount: -round2(Number(c.amount)), label: c.label, chargeId: c.id });
+      });
+    });
+    items.sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : 0; });
+    var start = blank(p.cashBalance) || !isFinite(Number(p.cashBalance)) ? null : round2(Number(p.cashBalance));
+    var bal = start, months = [], negative = null;
+    for (var i = 0; i < n; i++) {
+      var ms = addMonths(monthStart(today), i), me = monthEnd(ms);
+      var list = items.filter(function (x) { return x.date >= ms && x.date <= me; });
+      var inflow = round2(list.reduce(function (s, x) { return s + (x.amount > 0 ? x.amount : 0); }, 0));
+      var outflow = round2(list.reduce(function (s, x) { return s - (x.amount < 0 ? x.amount : 0); }, 0));
+      if (bal !== null) bal = round2(bal + inflow - outflow);
+      if (bal !== null && bal < 0 && negative === null) negative = ms.slice(0, 7);
+      months.push({ key: ms.slice(0, 7), label: period(ms.slice(0, 7)).label, start: ms, end: me, items: list, in: inflow, out: outflow, balance: bal });
+    }
+    var lastEvent = (input.events || []).reduce(function (m, e) { return e.date > m ? e.date : m; }, "");
+    return { start: start, until: until, items: items, months: months, negative: negative, calendarShort: lastEvent < until };
+  }
+
   function ledgerCSV(rows) {
     var q = function (v) { return '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"'; };
     var lines = ["Date;Client;Nature;Montant;Moyen de paiement;Référence"];
@@ -829,5 +1030,7 @@
            timeCSV: timeCSV,
            STAGE_LABELS: STAGE_LABELS, OPEN_STAGES: OPEN_STAGES, prospectErrors: prospectErrors, exchangeErrors: exchangeErrors, prospectQuotes: prospectQuotes,
            minStage: minStage, prospectStage: prospectStage, prospectValue: prospectValue, pipeline: pipeline, followUps: followUps,
-           lastContactFrom: lastContactFrom, addYears: addYears, retentionDue: retentionDue, optoutKeys: optoutKeys, prospectsCSV: prospectsCSV };
+           lastContactFrom: lastContactFrom, addYears: addYears, retentionDue: retentionDue, optoutKeys: optoutKeys, prospectsCSV: prospectsCSV,
+           CHARGE_LABELS: CHARGE_LABELS, chargeDates: chargeDates, chargeErrors: chargeErrors, expectedReceipts: expectedReceipts, vatPart: vatPart,
+           vatExigible: vatExigible, owed: owed, forecast: forecast };
 });

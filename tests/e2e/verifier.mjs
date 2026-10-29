@@ -3292,6 +3292,107 @@ const tests = {
     await page.waitForSelector(".kpis");
     await go("#/prospects");
     check((await text("#espace-view")).includes("Pas encore de prospect"), "Prospects : sauvegarde antérieure au module acceptée");
+
+    // Trésorerie (documentation/39-tresorerie.md) : solde, déjà dû, prévision, charges régulières, mois négatif, TVA du
+    // réel simplifié, sauvegarde. Les montants attendus sont recalculés par le moteur dans la page (testé à part).
+    const engine = () => page.evaluate(async () => {
+      const d = await window.EspaceStore.load();
+      const input = { documents: d.documents, charges: d.charges, profile: d.profile, rules: window.OF_RULES, today: "2026-10-20", months: 6,
+        events: JSON.parse(document.getElementById("calendar-data").textContent).events };
+      const E = window.OFE.espaceFR, o = E.owed(input), f = E.forecast(input);
+      return { owed: window.OF.eur(o.total), available: f.start === null ? null : window.OF.eur(f.start - o.total), negative: f.negative,
+               months: f.months.map((m) => [m.label, window.OF.eur(m.in), window.OF.eur(m.out), m.balance === null ? "–" : window.OF.eur(m.balance)].join(" ")) };
+    });
+    const flat = (t) => t.replace(/[\u00a0\u202f]/g, " ");
+    await go("#/tresorerie");
+    let expected = await engine();
+    check((await text("#espace-view h2")) === "Trésorerie" && (await text("#espace-view .time-totals")).startsWith("Solde du compte – à indiquer") &&
+      flat(await text("#espace-view .time-totals")).includes("Déjà dû (estimé) " + flat(expected.owed)), "Trésorerie : déjà dû affiché sans solde");
+    check(flat(await text(".treasury-table tbody")) === flat(expected.months.join(" ")) && (await page.$$eval(".treasury-table tbody tr", (r) => r.length)) === 6,
+      "Trésorerie : prévision de 6 mois (octobre 2026 à mars 2027)");
+    await accessible(page, "Espace : trésorerie (sans solde)");
+    await page.fill("#ep-cashBalance", "abc");
+    await page.click("#cash-form button[type=submit]");
+    check((await text("#cash-error")).startsWith("Le solde doit être un montant") && (await page.getAttribute("#ep-cashBalance", "aria-invalid")) === "true",
+      "Trésorerie : solde illisible refusé");
+    await page.fill("#ep-cashBalance", "4 250");
+    await page.fill("#ep-cashDate", "2026-10-20");
+    await page.click("#cash-form button[type=submit]");
+    await page.waitForFunction(() => /4\s250,00/.test(document.querySelector("#espace-view .time-totals").textContent));
+    expected = await engine();
+    check(flat(await text("#espace-view .time-totals")).includes("Disponible " + flat(expected.available)) && flat(await text(".treasury-table tbody")) === flat(expected.months.join(" ")),
+      "Trésorerie : solde enregistré, disponible et soldes de fin de mois");
+    await page.click("#charge-form button[type=submit]");
+    check((await text("#charge-error")).startsWith("Indiquez la charge") && (await page.getAttribute("#ep-label", "aria-invalid")) === "true", "Trésorerie : charge sans libellé refusée");
+    await page.fill("#ep-label", "Loyer du bureau");
+    await page.fill("#ep-amount", "1 200");
+    await page.fill("#ep-start", "2026-10-25");
+    await page.click("#charge-form button[type=submit]");
+    await page.waitForSelector(".charges-list");
+    check((await text(".charges-list")).includes("Loyer du bureau Chaque mois · prochaine le 25/10/2026 1 200,00 €") && (await page.evaluate(() => document.activeElement.id)) === "ep-label",
+      "Trésorerie : charge ajoutée, prochaine échéance");
+    const october = (await page.$eval(".treasury-month", (el) => el.textContent)).replace(/\s+/g, " ");
+    check(october.startsWith("Détail de octobre 2026") && october.includes("Loyer du bureau") && october.includes("−1 200,00 €"), "Trésorerie : charge dans le détail d'octobre");
+    await page.fill("#ep-label", "Matériel");
+    await page.fill("#ep-amount", "100000");
+    await page.selectOption("#ep-every", "year");
+    await page.fill("#ep-start", "2026-11-10");
+    await page.click("#charge-form button[type=submit]");
+    await page.waitForFunction(() => document.querySelectorAll(".charges-list li").length === 2);
+    expected = await engine();
+    check(expected.negative === "2026-11" && (await text("#espace-view")).includes("Votre compte passerait sous zéro en novembre 2026") &&
+      (await page.$$eval(".treasury-table tr.is-negative", (r) => r.length)) === 5, "Trésorerie : mois négatif signalé (novembre et suivants)");
+    await shot("tresorerie");
+    await go("#/");
+    check((await text("#espace-view")).includes("Prévision de trésorerie : votre compte passerait sous zéro en novembre 2026"), "Trésorerie : rappel au tableau de bord");
+    await go("#/tresorerie");
+    await page.locator(".charges-list a", { hasText: "Matériel" }).click();
+    await page.waitForSelector("#charge-delete");
+    await page.fill("#ep-amount", "-5");
+    await page.click("#charge-form button[type=submit]");
+    check((await text("#charge-error")) === "Indiquez un montant positif, en euros.", "Trésorerie : montant négatif refusé à la modification");
+    await page.fill("#ep-amount", "1000");
+    await page.fill("#ep-end", "2026-01-01");
+    await page.click("#charge-form button[type=submit]");
+    check((await text("#charge-error")) === "La dernière échéance doit être une date après la première.", "Trésorerie : dernière échéance avant la première refusée");
+    await page.fill("#ep-end", "");
+    await page.click("#charge-form button[type=submit]");
+    await page.waitForSelector(".charges-list");
+    check((await text(".charges-list")).includes("Matériel Chaque année · prochaine le 10/11/2026 1 000,00 €"), "Trésorerie : charge modifiée");
+    await page.locator(".charges-list a", { hasText: "Matériel" }).click();
+    await page.waitForSelector("#charge-delete");
+    await page.click("#charge-delete");
+    await page.waitForFunction(() => document.querySelectorAll(".charges-list li").length === 1);
+    expected = await engine();
+    check(!(await text(".charges-list")).includes("Matériel") && expected.negative === "2027-02" && (await text("#espace-view")).includes("Votre compte passerait sous zéro en février 2027"),
+      "Trésorerie : charge supprimée ; le loyer seul fait passer le compte sous zéro en février (cotisations du 4e trimestre)");
+    // Réel simplifié : TVA de l'année précédente (acomptes) demandée et comptée.
+    await page.evaluate(async () => { const d = await window.EspaceStore.load(); d.profile.vatRegime = "simplified"; d.profile.vatRate = 20; await window.EspaceStore.save(d); });
+    await page.reload({ waitUntil: "networkidle" });
+    await go("#/tresorerie");
+    await page.fill("#ep-vatLastYear", "5000");
+    await page.click("#cash-form button[type=submit]");
+    await page.waitForTimeout(300);
+    check((await store()).profile.vatLastYear === 5000 && (await text(".treasury-owed")).includes("acomptes déjà versés déduits (2 750,00 €)"),
+      "Trésorerie : réel simplifié, acompte de juillet (55 % de 5 000 €) déduit");
+    await accessible(page, "Espace : trésorerie (réel simplifié)");
+    await page.evaluate(async () => { const d = await window.EspaceStore.load(); d.profile.vatRegime = "franchise"; delete d.profile.vatLastYear; await window.EspaceStore.save(d); });
+    await page.reload({ waitUntil: "networkidle" });
+    // Sauvegarde : charges et solde compris ; charge illisible refusée ; sauvegarde antérieure acceptée.
+    await go("#/reglages");
+    const [cashBackup] = await Promise.all([page.waitForEvent("download"), page.click("#export-btn")]);
+    const withCharges = JSON.parse(fs.readFileSync(await cashBackup.path(), "utf8"));
+    check(withCharges.charges.length === 1 && withCharges.profile.cashBalance === 4250 && withCharges.profile.cashDate === "2026-10-20",
+      "Trésorerie : charges et solde compris dans la sauvegarde");
+    await restore("illisible.json", Object.assign({}, withCharges, { charges: withCharges.charges.concat([{ id: "z", label: "X", amount: 5, every: "week", start: "2026-10-20" }]) }));
+    await page.waitForFunction(() => !document.getElementById("import-error").hidden);
+    check((await text("#import-error")) === "Cette sauvegarde contient des éléments illisibles.", "Trésorerie : charge illisible refusée");
+    const noCharges = Object.assign({}, withCharges);
+    delete noCharges.charges;
+    await restore("ancienne.json", noCharges);
+    await page.waitForSelector(".kpis");
+    await go("#/tresorerie");
+    check(!(await page.$(".charges-list")) && (await text("#espace-view")).includes("Loyer, logiciels, assurance"), "Trésorerie : sauvegarde antérieure au module acceptée");
     await go("#/");
   },
   async "fr/recherche-nom-de-domaine/"(page) {

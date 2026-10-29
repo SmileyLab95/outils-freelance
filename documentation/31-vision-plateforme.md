@@ -124,7 +124,7 @@ G compte gratuit, P Pro, ⇄ partenaire signalé.
 | Recettes et encaissements | Livre des recettes, Espace | ✅ | G |
 | Dépenses et justificatifs | Saisie, photo du justificatif, registre des achats ([36](36-depenses-et-registre-des-achats.md)) | ✅ (France, saisie et registre ; justificatifs ⬜) | G, P |
 | Frais | Barème kilométrique, bureau à domicile | ✅ | V |
-| Trésorerie | Prévision : encaissements attendus, charges, part à mettre de côté | ⬜ | G |
+| Trésorerie | Prévision : encaissements attendus, charges, part à mettre de côté ([39](39-tresorerie.md)) | ✅ (France) | G |
 | Matériel | Registre des immobilisations et amortissement (régimes réels) | ⬜ | G |
 | Comptable | Export pour l'expert-comptable, accès en lecture | ⬜ | P |
 
@@ -181,7 +181,8 @@ fuseaux horaires des clients, générateur de QR code, convertisseur de devises,
    écran Bienvenue, lettre d'information et premiers pas prêts en brouillon le 23/10/2026 ([34](34-inscription-compte-gratuit.md)).
 4. **Pages Offres et Soutenir** (brouillon jusqu'aux choix d'Ismail : prix du Pro, prestataire de paiement et de dons) :
    brouillons et comparatif des solutions de dons prêts le 23/10/2026 ([35](35-offres-et-soutien.md)).
-5. Modules du compte gratuit : prospects, temps passé, dépenses, trésorerie.
+5. Modules du compte gratuit : prospects, temps passé, dépenses, trésorerie : faits du 23 au 29/10/2026
+   ([36](36-depenses-et-registre-des-achats.md) à [39](39-tresorerie.md)).
 6. Outils restants : CGV, sous-traitance, devises, jours ouvrés, signature d'email, guides de protection sociale.
 7. Pro : relances automatiques, signature en ligne, liens de paiement, page publique, plateforme agréée.
 

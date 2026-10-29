@@ -1,5 +1,21 @@
 # Journal des modifications
 
+## 2026-10-29 — Trésorerie (Espace entrepreneur)
+
+- Nouvel onglet **Trésorerie** de l'Espace : solde du compte professionnel, **déjà dû** (cotisations des périodes pas
+  encore payées, versement libératoire et ACRE compris ; TVA selon le régime), **disponible**, et **prévision sur
+  6 mois** : factures attendues à leur échéance, cotisations et TVA aux dates du calendrier fiscal, charges régulières
+  (mois, trimestre, année) ; un mois qui finirait sous zéro est signalé, aussi au tableau de bord.
+- TVA lue en entier sur les fiches officielles : due à l'encaissement pour les prestations de services, à la livraison
+  pour les biens (ou avec l'option pour les débits) ; réel simplifié : acomptes de 55 % en juillet et 40 % en décembre,
+  aucun sous 1 000 € ; montants affichés avant déduction de la TVA des achats.
+- Sauvegardes et synchronisation des comptes : charges régulières, solde et TVA de l'année précédente.
+- Spécification [39](documentation/39-tresorerie.md), décision D38. Tests : `tresorerie.test.mjs` (9), 1 test de
+  synchronisation ; une soixantaine d'erreurs réintroduites ; la relecture du code a trouvé une erreur de signe (avoir
+  à rembourser qui augmentait la TVA prévue), corrigée et testée ; suite complète (431 tests unitaires, 29 tests
+  serveur, 3 424 vérifications navigateur ; parcours de l'Espace, 204 vérifications, et des comptes, 51, repassés sur
+  la version publiée).
+
 ## 2026-10-28 — Prospects (Espace entrepreneur)
 
 - Nouvel onglet **Prospects** de l'Espace : pistes par étape (À contacter, En discussion, Devis envoyé, Gagné, Perdu)

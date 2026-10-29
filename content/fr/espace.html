@@ -11,7 +11,7 @@
   "draft_scripts": ["engines/espace-sync.js", "engines/compte-crypto.js", "tools/compte-sync.js", "tools/espace-compte.js"],
   "lazy_scripts": ["engines/pdf-fonts.js", "engines/pdf-srgb.js", "engines/pdfa.js", "engines/facturx-fr.js", "engines/facturx-pdf.js"],
   "rules": "fr",
-  "sources": ["mentions_obligatoires_facture", "livre_recettes_micro", "conservation_pieces", "micro_activities", "acre_conditions", "mention_franchise_tva", "calendrier_urssaf_declarations", "prospects_conservation", "prospects_opposition", "prospection_email", "prospection_telephone"],
+  "sources": ["mentions_obligatoires_facture", "livre_recettes_micro", "conservation_pieces", "micro_activities", "acre_conditions", "mention_franchise_tva", "calendrier_urssaf_declarations", "prospects_conservation", "prospects_opposition", "prospection_email", "prospection_telephone", "tva_exigibilite", "tva_rsi_calendrier"],
   "priority": 1.0,
   "faq": [
     ["L'Espace entrepreneur est-il vraiment gratuit ?", "Oui. Il n'y a ni inscription ni abonnement : vous créez votre profil et vous commencez. Une version avec compte en ligne, pour retrouver vos données sur tous vos appareils, est en préparation."],
@@ -42,6 +42,7 @@
       <a href="#/temps" data-route="temps"><span aria-hidden="true">⏱️</span>Temps</a>
       <a href="#/recettes" data-route="recettes"><span aria-hidden="true">📒</span>Recettes</a>
       <a href="#/depenses" data-route="depenses"><span aria-hidden="true">🧮</span>Dépenses</a>
+      <a href="#/tresorerie" data-route="tresorerie"><span aria-hidden="true">💶</span>Trésorerie</a>
       <a href="#/echeances" data-route="echeances"><span aria-hidden="true">🗓️</span>Échéances</a>
       <a href="#/reglages" data-route="reglages"><span aria-hidden="true">⚙️</span>Réglages</a>
     </nav>
@@ -66,6 +67,7 @@
     <li><strong>Temps passé</strong> : saisie rapide en heures ou en jours, temps à facturer par client, facture créée en brouillon en un clic (une ligne par tâche ou par saisie).</li>
     <li><strong>Livre des recettes</strong> tenu automatiquement, totalisé par trimestre et par année, exportable.</li>
     <li><strong>Dépenses et registre des achats</strong> : obligatoire si vous vendez des marchandises, en ordre chronologique avec les règlements en espèces distingués ; exportable.</li>
+    <li><strong>Trésorerie</strong> : ce qui est déjà dû sur votre compte (cotisations, TVA), ce qui reste vraiment disponible, et la prévision des six prochains mois avec vos factures attendues et vos charges régulières.</li>
     <li><strong>Urssaf</strong> : chiffre d'affaires de la période, cotisations estimées et date limite ; jauges du plafond et du seuil de TVA.</li>
     <li><strong>Échéances</strong> : votre calendrier fiscal, selon votre situation.</li>
   </ul>

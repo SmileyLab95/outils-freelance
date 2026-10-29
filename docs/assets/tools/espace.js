@@ -4,7 +4,7 @@
  * Stockage : window.EspaceStore (IndexedDB). Écrans : #/ (tableau de bord), #/documents, #/documents/<id>,
  * #/clients, #/clients/<id>, #/recettes, #/depenses, #/depenses/<id> (documentation/36-depenses-et-registre-des-achats.md),
  * #/temps, #/temps/<id>, #/temps/facturer?client=<id> (documentation/37-temps-passe.md),
- * #/prospects, #/prospects/<id> (documentation/38-prospects.md),
+ * #/prospects, #/prospects/<id> (documentation/38-prospects.md), #/tresorerie, #/tresorerie/<id> (documentation/39-tresorerie.md),
  * #/echeances, #/reglages, #/importer (document venu du générateur public).
  */
 (function () {
@@ -130,6 +130,7 @@
                   clients: r.id ? viewClientForm : viewClients, recettes: viewLedger, depenses: r.id ? viewExpenseForm : viewExpenses,
                   temps: r.id === "facturer" ? viewTimeInvoice : r.id ? viewTimeForm : viewTime,
                   prospects: r.id ? viewProspectForm : viewProspects,
+                  tresorerie: r.id ? viewChargeForm : viewTreasury,
                   echeances: viewDeadlines, reglages: viewSettings,
                   importer: viewImport };
     (views[name] || viewDashboard)(r);
@@ -444,7 +445,7 @@
       '<div class="espace-quick espace-noprint"><a class="btn btn-primary btn-sm" href="#/documents/nouveau?type=facture">+ Facture</a>' +
       '<a class="btn btn-ghost btn-sm" href="#/documents/nouveau?type=devis">+ Devis</a>' +
       '<a class="btn btn-ghost btn-sm" href="#/clients/nouveau">+ Client</a></div></div>';
-    html += profileReminder() + purchasesReminder() + timeReminder() + prospectsReminder() + backupReminder();
+    html += profileReminder() + purchasesReminder() + timeReminder() + prospectsReminder() + treasuryReminder() + backupReminder();
     html += '<div class="kpis">' +
       kpi("Encaissé en " + YEAR, money(year), countText(E.ledger(data.documents, YEAR + "-01-01", YEAR + "-12-31").filter(function (x) { return x.amount > 0; }).length, "encaissement", "encaissements")) +
       kpi("À encaisser", money(openSum), open.length ? countText(open.length, "facture", "factures") + (late.length ? ", dont " + late.length + " en retard" : "") : "Aucune facture en attente", late.length ? "is-warn" : "") +
@@ -1837,6 +1838,158 @@
       }, function () {
         showError("prospect-action-error", "Votre navigateur ne permet pas de calculer les empreintes de la liste d'opposition : mettez-le à jour.");
       });
+    });
+  }
+
+  // ----- Trésorerie (documentation/39-tresorerie.md) -----------------------------------------------------------
+
+  var CHARGE_EVERY = [["month", "Chaque mois"], ["quarter", "Chaque trimestre"], ["year", "Chaque année"]];
+  function treasuryInput() {
+    return { documents: data.documents, charges: data.charges, profile: profile(), rules: R, events: CAL, today: TODAY, months: 6 };
+  }
+  var signed = function (n) { return (n < 0 ? "−" : "+") + OF.eur(Math.abs(n)).replace(/^-/, ""); };
+  function charge(id) { return data.charges.filter(function (c) { return c.id === id; })[0] || null; }
+
+  /** Rappel du tableau de bord : un mois de la prévision finit en négatif (seulement si un solde est saisi). */
+  function treasuryReminder() {
+    if (profile().cashBalance === undefined || profile().cashBalance === null || profile().cashBalance === "") return "";
+    var f = E.forecast(treasuryInput());
+    if (!f.negative) return "";
+    return '<p class="notice warn espace-noprint">Prévision de trésorerie : votre compte passerait sous zéro en <b>' + esc(E.period(f.negative).label) +
+      '</b>. <a href="#/tresorerie">Voir la prévision</a></p>';
+  }
+
+  function chargeFields(c) {
+    return field("label", "Charge", c.label, { required: true, placeholder: "Logiciel de comptabilité" }) +
+      field("amount", "Montant", rateText(c.amount), { half: true, inputmode: "decimal", placeholder: "30", hint: "En euros, ce qui sort du compte." }) +
+      field("every", "Fréquence", c.every || "month", { options: CHARGE_EVERY, half: true }) +
+      field("start", "Prochaine échéance", c.start || "", { type: "date", half: true }) +
+      field("end", "Dernière échéance (facultatif)", c.end || "", { type: "date", half: true });
+  }
+  function readCharge(form) {
+    var f = form.elements, amount = f.amount.value.trim();
+    return { label: f.label.value.trim(), amount: amount ? OF.num(amount) : NaN, every: f.every.value, start: f.start.value, end: f.end.value };
+  }
+  function showChargeErrors(form, c, errorId) {
+    var errors = E.chargeErrors(c), bad = {};
+    errors.forEach(function (e) { bad[e.field] = true; });
+    ["label", "amount", "every", "start", "end"].forEach(function (k) { form.elements[k].setAttribute("aria-invalid", String(!!bad[k])); });
+    showError(errorId, errors.map(function (e) { return e.message; }).join(" "));
+    if (errors.length) form.elements[errors[0].field].focus();
+    return !errors.length;
+  }
+
+  function viewTreasury() {
+    var p = profile(), input = treasuryInput(), o = E.owed(input), f = E.forecast(input);
+    var hasBalance = f.start !== null, stale = hasBalance && p.cashDate && (Date.parse(TODAY) - Date.parse(p.cashDate)) / 864e5 > 7;
+    var owedLines = o.urssaf.periods.filter(function (x) { return x.amount > 0; }).map(function (x) {
+      return "<li>Cotisations " + (x.period.key.indexOf("T") > -1 ? "du " : "de ") + esc(x.period.label) + " (sur " + esc(money(x.cashed)) + " encaissés, à payer au plus tard le " +
+        day(x.due) + ") : <b>" + esc(money(x.amount)) + "</b></li>";
+    });
+    if (p.vatRegime === "normal" && o.vat.total > 0) owedLines.push("<li>TVA collectée pas encore déclarée : <b>" + esc(money(o.vat.total)) + "</b></li>");
+    if (p.vatRegime === "simplified") {
+      owedLines.push("<li>TVA collectée depuis le 1er janvier" + (o.vat.advances ? ", acomptes déjà versés déduits (" + esc(money(o.vat.advances)) + ")" : "") +
+        " : <b>" + esc(money(o.vat.total)) + "</b></li>");
+    }
+    var notes = [];
+    if (o.vat.advancesUnknown) notes.push("Indiquez la TVA due au titre de l'année précédente pour déduire les acomptes de juillet et de décembre.");
+    if (o.vat.previousYearDue) notes.push("Le solde de la TVA de " + (+TODAY.slice(0, 4) - 1) + ", payé avec la déclaration annuelle (CA12) au plus tard le " + day(o.vat.previousYearDue) + ", n'est pas compté.");
+    if (!o.urssaf.computed) notes.push("Hors micro-entreprise, les cotisations sociales ne sont pas estimées ici.");
+    var html = '<div class="espace-head"><h2>Trésorerie</h2></div>' +
+      '<form class="card espace-card espace-noprint" id="cash-form" novalidate><h3>Votre compte professionnel</h3><div class="fields">' +
+      field("cashBalance", "Solde du compte", hasBalance ? rateText(f.start) : "", { half: true, inputmode: "decimal", placeholder: "4 250",
+        hint: "En euros, tel qu'affiché par votre banque." }) +
+      field("cashDate", "À la date du", p.cashDate || TODAY, { type: "date", half: true }) +
+      (p.vatRegime === "simplified" ? field("vatLastYear", "TVA due au titre de l'année précédente", rateText(p.vatLastYear), { half: true, inputmode: "decimal",
+        hint: "Montant de la déclaration annuelle (CA12) : il fixe les acomptes de juillet (55 %) et de décembre (40 %). Moins de 1 000 € : pas d'acompte." }) : "") +
+      '</div><p class="form-error" id="cash-error" role="alert" hidden></p><div class="espace-actions"><button type="submit" class="btn btn-primary">Enregistrer</button></div>' +
+      (stale ? '<p class="notice warn">Solde saisi le ' + day(p.cashDate) + " : mettez-le à jour pour une prévision juste.</p>" : "") + "</form>" +
+      '<section class="card espace-card"><ul class="time-totals"><li><span>Solde du compte</span><b>' + (hasBalance ? esc(money(f.start)) : "–") + "</b>" +
+      (hasBalance ? '<span class="small muted">au ' + day(p.cashDate || TODAY) + "</span>" : '<span class="small muted">à indiquer</span>') + "</li>" +
+      "<li><span>Déjà dû (estimé)</span><b>" + esc(money(o.total)) + "</b></li>" +
+      "<li><span>Disponible</span><b>" + (hasBalance ? esc(money(f.start - o.total)) : "–") + "</b>" +
+      (hasBalance && f.start - o.total < 0 ? '<span class="small">solde inférieur à ce qui est dû</span>' : "") + "</li></ul>" +
+      (owedLines.length ? '<ul class="small treasury-owed">' + owedLines.join("") + "</ul>" : '<p class="small muted">Rien n\'est dû pour l\'instant sur vos encaissements.</p>') +
+      (notes.length ? '<p class="small muted">' + notes.map(esc).join(" ") + "</p>" : "") + "</section>" +
+      '<section class="card espace-card"><h3>Prévision sur 6 mois</h3>' + (f.negative ? '<p class="notice warn">Votre compte passerait sous zéro en <b>' +
+        esc(E.period(f.negative).label) + "</b> : relancez les factures en retard, décalez une dépense ou prévoyez une réserve.</p>" : "") +
+      '<table class="ledger treasury-table"><thead><tr><th>Mois</th><th class="num">Entrées</th><th class="num">Sorties</th><th class="num">Solde en fin de mois</th></tr></thead><tbody>' +
+      f.months.map(function (m) {
+        return '<tr' + (m.balance !== null && m.balance < 0 ? ' class="is-negative"' : "") + '><td class="c-date">' + esc(m.label) + '</td><td class="num" data-label="Entrées">' + esc(money(m.in)) +
+          '</td><td class="num" data-label="Sorties">' + esc(money(m.out)) + '</td><td class="num" data-label="Solde en fin de mois">' + (m.balance === null ? "–" : esc(money(m.balance))) + "</td></tr>";
+      }).join("") + "</tbody></table>" +
+      (hasBalance ? "" : '<p class="small muted">Indiquez le solde de votre compte pour voir le solde de chaque mois.</p>') +
+      f.months.filter(function (m) { return m.items.length; }).map(function (m) {
+        return '<details class="treasury-month"><summary>Détail de ' + esc(m.label) + "</summary><ul>" + m.items.map(function (x) {
+          return '<li><span class="c-date">' + day(x.date) + "</span><span>" + esc(x.label) + (x.late ? " · en retard" : "") + '</span><b class="num">' + esc(signed(x.amount)) + "</b></li>";
+        }).join("") + "</ul></details>";
+      }).join("") +
+      (f.calendarShort ? '<p class="small muted">Le calendrier fiscal ne couvre pas encore toute la période : les dernières échéances fiscales peuvent manquer.</p>' : "") + "</section>" +
+      '<section class="card espace-card"><h3>Charges régulières</h3>' +
+      (data.charges.length ? '<ul class="time-due charges-list">' + data.charges.slice().sort(function (a, b) { return String(a.label).localeCompare(String(b.label), "fr"); }).map(function (c) {
+        var next = E.chargeDates(c, TODAY, "9999-12-31")[0];
+        return '<li><span class="dl-main"><a href="#/tresorerie/' + esc(c.id) + '"><b>' + esc(c.label) + '</b></a><span class="small muted">' + esc(E.CHARGE_LABELS[c.every] || "") +
+          (next ? " · prochaine le " + day(next) : " · terminée") + '</span></span><span class="dl-side"><b>' + esc(money(c.amount)) + "</b></span></li>";
+      }).join("") + "</ul>" : '<p class="small muted">Loyer, logiciels, assurance, téléphone : notez ce qui sort chaque mois, trimestre ou année.</p>') +
+      '<form id="charge-form" class="espace-noprint" novalidate><h4>Ajouter une charge</h4><div class="fields">' + chargeFields({ every: "month", start: TODAY }) + "</div>" +
+      '<p class="form-error" id="charge-error" role="alert" hidden></p><div class="espace-actions"><button type="submit" class="btn btn-ghost">Ajouter la charge</button></div></form></section>' +
+      '<section class="card espace-card"><h3>Hypothèses</h3><ul class="small prospect-rules">' +
+      "<li>Montants estimés à partir de vos factures, encaissements et charges ; les factures sont attendues à leur échéance, celles en retard aujourd'hui.</li>" +
+      (o.urssaf.computed ? "<li>Cotisations : chiffre d'affaires encaissé de chaque période × taux de votre activité (" +
+        (p.vl ? "formation professionnelle et versement libératoire compris" : "formation professionnelle comprise") + "), à la date limite de la déclaration.</li>" : "") +
+      (p.vatRegime && p.vatRegime !== "franchise" ? "<li>TVA : due à l'encaissement pour les prestations de services, à la facture pour les ventes de biens (ou avec l'option pour les débits) ; " +
+        "à sa date pour une facture mixte (biens et services) ; comptée <b>avant déduction</b> de la TVA de vos achats, donc un maximum.</li>" : "") +
+      "<li>L'impôt sur le revenu (hors versement libératoire) n'est pas compté : voyez <a href=\"/fr/combien-mettre-de-cote-auto-entrepreneur/\">combien mettre de côté</a>.</li></ul></section>";
+    view.innerHTML = html;
+    var cash = $("cash-form");
+    cash.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var f2 = cash.elements, raw = f2.cashBalance.value.trim(), bal = raw ? OF.num(raw) : null, date = f2.cashDate.value;
+      var vatRaw = f2.vatLastYear ? f2.vatLastYear.value.trim() : "", vatLast = vatRaw ? OF.num(vatRaw) : null;
+      var error = raw && !isFinite(bal) ? ["cashBalance", "Le solde doit être un montant en euros (il peut être négatif)."]
+        : !/^\d{4}-\d{2}-\d{2}$/.test(date) || date > TODAY ? ["cashDate", "Indiquez la date du solde : aujourd'hui ou avant."]
+        : vatRaw && !(isFinite(vatLast) && vatLast >= 0) ? ["vatLastYear", "La TVA de l'année précédente doit être un montant positif."] : null;
+      ["cashBalance", "cashDate", "vatLastYear"].forEach(function (k) { if (f2[k]) f2[k].setAttribute("aria-invalid", String(!!error && error[0] === k)); });
+      showError("cash-error", error ? error[1] : "");
+      if (error) { f2[error[0]].focus(); return; }
+      var pr = data.profile;
+      pr.cashBalance = bal === null ? null : Math.round(bal * 100) / 100;
+      pr.cashDate = date;
+      if (f2.vatLastYear) pr.vatLastYear = vatLast === null ? null : Math.round(vatLast * 100) / 100;
+      pr.updatedAt = now();
+      persist("Solde enregistré.").then(function () { render(true); });
+    });
+    var form = $("charge-form");
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var c = readCharge(form);
+      if (!showChargeErrors(form, c, "charge-error")) return;
+      c.amount = Math.round(c.amount * 100) / 100;
+      Object.assign(c, { id: S.uid(), createdAt: now(), updatedAt: now() });
+      data.charges.push(c);
+      persist("Charge ajoutée : " + c.label + ".").then(function () { render(true); $("ep-label").focus(); });
+    });
+  }
+
+  function viewChargeForm(r) {
+    var c = charge(r.id);
+    if (!c) { view.innerHTML = '<div class="espace-head"><h2>Charge introuvable</h2></div><p><a href="#/tresorerie">Retour à la trésorerie</a></p>'; return; }
+    view.innerHTML = '<div class="espace-head"><h2>' + esc(c.label) + '</h2></div><form class="card espace-card" id="charge-form" novalidate><div class="fields">' + chargeFields(c) + "</div>" +
+      '<p class="form-error" id="charge-error" role="alert" hidden></p><div class="espace-actions"><button type="submit" class="btn btn-primary">Enregistrer</button>' +
+      '<a class="btn btn-ghost" href="#/tresorerie">Annuler</a><button type="button" class="btn btn-ghost" id="charge-delete">Supprimer</button></div></form>';
+    var form = $("charge-form");
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var next = readCharge(form);
+      if (!showChargeErrors(form, next, "charge-error")) return;
+      next.amount = Math.round(next.amount * 100) / 100;
+      Object.assign(c, next, { updatedAt: now() });
+      persist("Charge enregistrée.").then(function () { location.hash = "#/tresorerie"; });
+    });
+    $("charge-delete").addEventListener("click", function () {
+      if (!confirm("Supprimer la charge « " + c.label + " » ?")) return;
+      data.charges = data.charges.filter(function (x) { return x.id !== c.id; });
+      persist("Charge supprimée.").then(function () { location.hash = "#/tresorerie"; });
     });
   }
 

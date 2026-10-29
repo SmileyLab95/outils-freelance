@@ -9,7 +9,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 
 ## Où en est-on ?
 
-*Mis à jour le 28/10/2026.*
+*Mis à jour le 29/10/2026.*
 
 - **Priorité (décision D10)** : le site et la plateforme d'abord ; noms de domaine, Gumroad et affiliation à la fin.
   Règle de qualité maximale pour tout produit ou service (D11, charte dans la [méthode](04-methode-de-travail.md#charte-qualité)).
@@ -221,9 +221,13 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   transformée en client et en devis (l'étape suit le devis) ; règles de la CNIL : conservation de 3 ans avec rappel,
   « Ne plus contacter » qui ne garde que des empreintes (liste d'opposition), prospection par email et par téléphone
   ([38](38-prospects.md), décision D37).
-- **Prochaines actions de Claude** : refonte, suite ([31](31-vision-plateforme.md) § 5) : modules suivants de l'Espace
-  (trésorerie : brouillon de spécification prêt ; lire d'abord en entier les fiches officielles de la TVA,
-  entreprendre.service-public.gouv.fr F23566 (régime réel simplifié, acomptes) et F31412 (exigibilité)) ;
+- **Trésorerie (29/10/2026)** : nouvel onglet de l'Espace : solde du compte, déjà dû (cotisations des périodes pas
+  encore payées, TVA selon le régime), disponible, prévision sur 6 mois (factures attendues, cotisations et TVA aux
+  dates du calendrier, charges régulières), mois négatif signalé au tableau de bord ; règles de la TVA (exigibilité,
+  acomptes du réel simplifié) lues en entier ([39](39-tresorerie.md), décision D38).
+- **Prochaines actions de Claude** : refonte, suite ([31](31-vision-plateforme.md) § 5) : les quatre modules du compte
+  gratuit sont faits (étape 5) ; étape 6, outils restants (CGV, sous-traitance, devises, jours ouvrés, signature d'email,
+  guides de protection sociale) ;
   activité mixte de l'Espace à spécifier (le profil n'a qu'une activité : deux plafonds, déclaration et livre des
   recettes distinguant ventes et prestations, BOFiP BOI-BIC-DECLA-30-30) ; questions ouvertes de `data/rules/` à relire
   avec l'outil de lecture des sources (taux de l'intérêt légal du second semestre 2026, ACRE) ; puis besoins P3 restants
@@ -474,7 +478,7 @@ micro-entreprises), et lancer l'offre Pro.
 - [ ] Dépenses et justificatifs (photo, PDF), lecture automatique des montants
 - [ ] **[Ismail]** Contrat avec un agrégateur bancaire agréé
 - [ ] Banque connectée : catégorisation, rapprochement avec les factures
-- [ ] Trésorerie et prévisions ; provisions pour impôts et cotisations
+- [x] Trésorerie et prévisions ; provisions pour cotisations et TVA *(version locale, France ; impôt sur le revenu hors versement libératoire : calculateur à part)*
 - [ ] Déclarations préparées : montant Urssaf, TVA, récapitulatif pour la 2042-C-PRO
 - [ ] Exports comptables (fichier des écritures comptables pour le régime réel, CSV) et accès invité pour le comptable
 - [ ] Application mobile installable (photo des reçus, notifications)

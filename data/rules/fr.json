@@ -732,10 +732,17 @@
       "value": "Régime réel simplifié : acomptes en juillet (55 %) et en décembre (40 %), déclaration annuelle CA12 au plus tard le 2e jour ouvré suivant le 1er mai. Régime réel normal : déclaration CA3 mensuelle entre le 15 et le 24 du mois suivant.",
       "unit": "text",
       "label": "Calendrier de la TVA",
-      "source": "https://www.impots.gouv.fr/professionnel/tva",
-      "source_title": "TVA - impots.gouv.fr (régimes d'imposition à la TVA)",
-      "confidence": "medium",
-      "note": "La date exacte (entre le 15 et le 24) dépend de l'entreprise : elle figure dans l'espace professionnel."
+      "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F23566",
+      "source_title": "Entreprendre.service-public.gouv.fr, « TVA : déclaration et paiement » (CGI, art. 287 et 302 septies A à 302 septies AA)",
+      "more_sources": [
+        {
+          "source": "https://www.impots.gouv.fr/professionnel/tva",
+          "source_title": "TVA - impots.gouv.fr (régimes d'imposition à la TVA)"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-10-29",
+      "note": "Lu en entier le 29/10/2026 (outil « Lire une source officielle », SHA-256 b63700cf…f5cd). Exercice clos au 31 décembre : acomptes de 55 % (juillet) et 40 % (décembre) de la taxe due l'année précédente, solde avec la CA12 ; dispense d'acomptes si la TVA versée l'année précédente est inférieure à 1 000 € ; déclarations mensuelles si la TVA de l'année précédente dépasse 15 000 € ; acompte modifiable si l'écart dépasse 10 %. Exercice clos à une autre date : CA12 dans les 3 mois suivant la clôture, acomptes selon la date de cette déclaration. Réel normal : la date exacte (entre le 15 et le 24) figure dans l'espace professionnel."
     },
     "versement_liberatoire_option": {
       "value": "Option à demander à l'Urssaf au plus tard le 30 septembre pour une application au 1er janvier suivant (ou dans les 3 mois de la création).",
@@ -1494,6 +1501,20 @@
       "confidence": "high",
       "verified_on": "2026-10-28",
       "note": "Lu en entier le 28/10/2026 avec l'outil « Lire une source officielle ». Règles en vigueur depuis le 11 août 2026. Démarchage téléphonique totalement interdit pour la rénovation énergétique, l'adaptation du logement à la perte d'autonomie et le compte personnel de formation. Le décret n° 2026-662 (Légifrance, JORFTEXT000054483939) n'est pas lisible depuis l'outil : lu à travers cette fiche."
+    },
+    "tva_exigibilite": {
+      "value": {
+        "services": "encaissement du prix, des acomptes ou des avances (option possible pour les débits)",
+        "biens": "livraison (débit, en général la date de la facture) ; un acompte encaissé avant la livraison rend la TVA exigible dès son encaissement",
+        "mixte": "chaque opération selon sa nature, ou option globale pour les débits ; pas d'option globale pour les encaissements"
+      },
+      "unit": "object",
+      "label": "Exigibilité de la TVA",
+      "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F31412",
+      "source_title": "Entreprendre.service-public.gouv.fr, « Quelles sont les dates d'exigibilité en matière de TVA ? »",
+      "confidence": "high",
+      "verified_on": "2026-10-29",
+      "note": "Lu en entier le 29/10/2026 (outil « Lire une source officielle », SHA-256 6b1a1329…b236)."
     }
   },
   "open_questions": [
