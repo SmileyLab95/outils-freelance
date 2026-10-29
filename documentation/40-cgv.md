@@ -135,8 +135,8 @@ générateur ne couvre pas ; questions fréquentes ; sources.
 - Tests : `cgv-fr.test.mjs` (38 tests : taux comparés aux chiffres des fiches, formulaire mot pour mot, contrôles,
   24 combinaisons de clientèle, de mode de conclusion et de commande en ligne rendues sans clé brute, sans clause
   interdite envers un particulier, avec les chiffres des règles) ; moteur de rendu (annexes, lignes, blocs) ; outil de
-  lecture des sources (lecture complète). Erreurs réintroduites : 66 dans le moteur, le rendu et le texte de la page ;
-  14 n'étaient pas détectées au premier passage (cas limites : un seul moyen de paiement, taux inconnu, escompte sans
+  lecture des sources (lecture complète). Erreurs réintroduites : 71 dans le moteur, le rendu et le texte de la page ;
+  16 n'étaient pas détectées au premier passage (cas limites : un seul moyen de paiement, taux inconnu, escompte sans
   délai, phrase en double pour une clientèle mixte…), toutes le sont après renforcement des tests. Parcours navigateur
   (saisie, avertissements et focus, rétractation, annexe, Word, copie, enregistrement, « Tout effacer »,
   accessibilité, trois formats) ; suite complète : 470 tests unitaires, 29 tests serveur, 3 463 vérifications
