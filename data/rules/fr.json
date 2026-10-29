@@ -2093,6 +2093,57 @@
       "confidence": "high",
       "verified_on": "2026-10-29",
       "note": "Ne concerne pas une prestation de services sans bien ni contenu ou service numérique fourni ; s'applique uniquement entre un acheteur non professionnel et un vendeur professionnel. Lu en entier le 29/10/2026 avec l'outil « Lire une source officielle » (SHA-256 d34f483f…5361)."
+    },
+    "email_signature": {
+      "value": {
+        "situations": {
+          "ei": {
+            "required": [
+              "name",
+              "siren",
+              "registration",
+              "address"
+            ],
+            "name_suffix": "EI"
+          },
+          "societe": {
+            "required": [
+              "business",
+              "form",
+              "capital",
+              "siren",
+              "registration",
+              "address"
+            ]
+          }
+        },
+        "siren_digits": 9,
+        "registration": {
+          "commerciale": "RCS suivi de la ville du greffe",
+          "autre": "RNE (activité artisanale, libérale ou agricole)"
+        }
+      },
+      "unit": "object",
+      "label": "Mentions d'identification sur les courriers et emails commerciaux (entreprise individuelle, société)",
+      "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F37370",
+      "source_title": "Documents commerciaux d'une entreprise individuelle - Entreprendre Service Public (vérifié le 08/12/2025)",
+      "more_sources": [
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F36008",
+          "source_title": "Documents commerciaux d'une micro-entreprise - Entreprendre Service Public"
+        },
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F37371",
+          "source_title": "Documents commerciaux d'une société - Entreprendre Service Public"
+        },
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F32135",
+          "source_title": "Comment obtenir un numéro Siren ou un Siret ? - Entreprendre Service Public (Siren : 9 chiffres)"
+        }
+      ],
+      "confidence": "medium",
+      "verified_on": "2026-10-29",
+      "note": "Fiches lues en entier le 29/10/2026 (« Lire une source officielle » ; SHA-256 b2347ef8…4759, fcb0491e…7a36, f86c8662…be8). Les fiches rangent les « courriers (papier ou emails commerciaux) » parmi les documents commerciaux qui « doivent comporter des mentions obligatoires » et renvoient au Code de commerce, art. R123-237 à R123-238. Identification de l'entreprise (documents publicitaires) : numéro Siren ; mention RCS suivie du nom de la ville du greffe (activité commerciale) ou mention RNE (activité artisanale, libérale ou agricole) ; lieu de domiciliation (entreprise individuelle) ou du siège social (société) ; société : capital pour les SARL et les sociétés par actions, forme juridique et capital social (identité sur les factures). Entrepreneur individuel : nom précédé ou suivi de « EI » ou « entrepreneur individuel » (règle mention_ei_documents, R526-27). Siren : 9 chiffres (F32135, vérifiée le 30/01/2025). Cas non repris par l'outil : liquidation, location-gérance, contrat d'appui au projet d'entreprise, siège à l'étranger. Le texte de R123-237 n'a pas pu être lu (Légifrance inaccessible) : voir open_questions."
     }
   },
   "open_questions": [
@@ -2111,6 +2162,7 @@
     "Indemnité forfaitaire de 40 € : la fiche F23211 (vérifiée le 07/08/2026) dit qu'elle « ne peut s'appliquer que sur des actes de commerce (par exemple, l'achat-revente) ». S'applique-t-elle aux factures des professions libérales et des prestataires non commerçants ? Le générateur de factures et de CGV la mentionne toujours entre professionnels (mention obligatoire selon les fiches F23211 et F33527) ; à confirmer avec l'expert-comptable ou l'avocat.",
     "Formulaire type de rétractation : texte de l'annexe de l'article R221-1 du Code de la consommation à relire sur Légifrance (inaccessible aux lectures automatiques) ; le générateur de CGV reprend le modèle de la directive 2011/83/UE (annexe I, partie B).",
     "Pénalités de retard sur plusieurs semestres : le calculateur applique à chaque semestre son taux (art. L441-10 : « le taux applicable pendant le premier semestre de l'année concernée est le taux en vigueur au 1er janvier » ; fiche F783 : intérêt légal « au taux applicable sur la période ») ; une autre lecture garde le taux du semestre où le retard commence. À confirmer par l'avocat lors de la relecture des modèles ; le calculateur permet de saisir un taux unique.",
-    "Cession des droits d'auteur : le texte en vigueur des articles L131-3, L131-4 et L131-6 du Code de la propriété intellectuelle n'a pas pu être relu (Légifrance refuse les lectures automatiques ; la règle s'appuie sur le guide du ministère de la Culture de 2017). Une recherche indique une version de l'article L131-4 (rémunération forfaitaire) en vigueur jusqu'au 17/02/2024, donc une modification à cette date : à relire avant toute mention des cas de forfait dans le contrat."
+    "Cession des droits d'auteur : le texte en vigueur des articles L131-3, L131-4 et L131-6 du Code de la propriété intellectuelle n'a pas pu être relu (Légifrance refuse les lectures automatiques ; la règle s'appuie sur le guide du ministère de la Culture de 2017). Une recherche indique une version de l'article L131-4 (rémunération forfaitaire) en vigueur jusqu'au 17/02/2024, donc une modification à cette date : à relire avant toute mention des cas de forfait dans le contrat.",
+    "Code de commerce, art. R123-237 : relire le texte en vigueur (Légifrance inaccessible le 29/10/2026) pour confirmer la liste des mentions sur « toutes correspondances », emails compris (signature d'email, règle email_signature)."
   ]
 }

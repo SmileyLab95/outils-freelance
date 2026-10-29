@@ -47,6 +47,7 @@ Matrice revue le 23/10/2026 d'après les pages publiées (identifiants de `conte
 | Besoin | Outil ou contenu | FR | US | UK | CA | Priorité |
 |---|---|---|---|---|---|---|
 | Écrire à un prospect | Modèles d'emails de prospection | ✅ | ✅ | ✅ | ✅ | P1 |
+| Signer ses emails avec les mentions de son statut | Générateur de signature d'email ([43](43-signature-email.md)) | ✅ | ✅ CAN-SPAM | ✅ | ✅ loi anti-pourriel | P3 |
 | Relancer un devis | Générateur de relance de devis | ✅ (modèles) | ✅ (modèles) | ✅ (modèles) | ✅ (modèles) | P2 |
 | Répondre aux objections (« trop cher ») | Modèles de réponses | ✅ (modèles) | ✅ (modèles) | ✅ (modèles) | ✅ (modèles) | P2 |
 | Rédiger une proposition commerciale | Générateur de proposition (étapes, prix, options, suite) | ✅ | ✅ | ✅ | ✅ | P3 |

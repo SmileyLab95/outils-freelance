@@ -349,6 +349,83 @@ const tests = {
     check((await t("#jo-due")) === "31 December 2026" && (await t("#jo-explain")).includes("; "), "UK: 10 working days after 15 December 2026 → 31 December");
     check((await page.$$('#jo-mode option[value="franc"]')).length === 0, "UK: no French « jours francs »");
   },
+  async "fr/signature-email-professionnelle/"(page) {
+    const t = async (sel) => (await page.textContent(sel)).replace(/[  ]/g, " ").replace(/\s+/g, " ").trim();
+    const checks = () => page.$$eval("#sg-checks li", (l) => l.map((x) => x.className));
+    check(JSON.stringify(await checks()) === JSON.stringify(["is-todo", "is-todo", "is-todo", "is-todo"]) && (await t("#sg-summary")).startsWith("4 mentions"),
+      "signature : 4 mentions à compléter pour un entrepreneur individuel");
+    await page.fill("#sg-name", "Camille Martin");
+    await page.fill("#sg-role", "Développeuse web");
+    await page.fill("#sg-siren", "123 456 789");
+    await page.fill("#sg-city", "Lyon");
+    await page.fill("#sg-address", "12 rue des Lilas, 69003 Lyon");
+    await page.fill("#sg-email", "camille@exemple.fr");
+    await page.fill("#sg-linkedin", "linkedin.com/in/camille");
+    const preview = await t("#sg-preview");
+    check((await checks()).every((c) => c === "is-ok") && preview.includes("Camille Martin EI · SIREN 123 456 789 · RCS Lyon") &&
+      (await t("#sg-summary")).includes("Toutes les mentions"), "signature : « EI », Siren, RCS et adresse présents");
+    await page.click("#sg-copy");
+    const rich = await page.evaluate(async () => { const it = (await navigator.clipboard.read())[0]; return await (await it.getType("text/html")).text(); });
+    check(await copied(page, "#sg-copy") && /^<table/.test(rich) && rich.includes("Camille Martin EI") && !rich.includes(" "),
+      "signature : copiée avec la mise en forme (HTML), sans espace fine");
+    await page.click("#sg-copy-text");
+    const plain = await page.evaluate(() => navigator.clipboard.readText());
+    check(plain.includes("LinkedIn : https://linkedin.com/in/camille") && plain.includes("SIREN 123 456 789 · RCS Lyon"),
+      "signature : texte brut avec les mêmes mentions");
+    await page.selectOption("#sg-status", "societe");
+    check(JSON.stringify(await checks()) === JSON.stringify(["is-todo", "is-ok", "is-todo", "is-ok", "is-ok", "is-ok"]) && await page.isVisible("#sg-capital"),
+      "signature : société, dénomination et capital à compléter");
+    await page.fill("#sg-business", "Atelier Martin");
+    await page.fill("#sg-capital", "1000");
+    await page.selectOption("#sg-activity", "autre");
+    check((await t("#sg-preview")).includes("Atelier Martin SAS au capital de 1 000 € · SIREN 123 456 789 · RNE") && await page.isHidden("#sg-city") &&
+      (await t("#sg-preview")).includes("Siège : 12 rue des Lilas"), "signature : société au RNE, capital et siège");
+    const [download] = await Promise.all([page.waitForEvent("download"), page.click("#sg-download")]);
+    const file = await (await import("fs")).promises.readFile(await download.path(), "utf8");
+    check(download.suggestedFilename() === "signature-email.html" && file.includes('<html lang="fr">') && file.includes("Atelier Martin SAS"),
+      "signature : fichier .html téléchargé");
+    await page.reload({ waitUntil: "networkidle" });
+    check((await page.inputValue("#sg-name")) === "Camille Martin" && (await page.inputValue("#sg-status")) === "societe", "signature : saisie gardée après rechargement");
+  },
+  async "uk/email-signature-generator/"(page) {
+    const t = async (sel) => (await page.textContent(sel)).replace(/\s+/g, " ").trim();
+    check((await t("#sg-checks")).startsWith("Nothing required") && await page.isHidden("#sg-summary") && await page.isHidden("#sg-business"),
+      "UK signature: nothing required under your own name");
+    await page.selectOption("#sg-status", "limited");
+    await page.fill("#sg-name", "Sam Taylor");
+    await page.fill("#sg-business", "Taylor Studio");
+    await page.fill("#sg-company-number", "01234567");
+    await page.selectOption("#sg-uk-part", "scotland");
+    await page.fill("#sg-address", "10 High Street, Bristol BS1 4ST");
+    check((await t("#sg-preview")).includes("Taylor Studio (a limited company) · Registered in Scotland · Company number 01234567") &&
+      (await t("#sg-summary")).startsWith("Your signature shows every detail"), "UK signature: limited company details, limited status stated");
+  },
+  async "us/email-signature-generator/"(page) {
+    const t = async (sel) => (await page.textContent(sel)).replace(/\s+/g, " ").trim();
+    await page.fill("#sg-name", "Jordan Lee");
+    check((await t("#sg-checks")).startsWith("Nothing required") && !(await t("#sg-preview")).includes("unsubscribe"), "US signature: client emails, no opt-out line");
+    await page.selectOption("#sg-status", "marketing");
+    check((await t("#sg-summary")).startsWith("1 detail to add"), "US signature: marketing emails need a postal address");
+    await page.fill("#sg-address", "123 Main St, Austin, TX 78701");
+    check((await t("#sg-preview")).includes("To stop receiving marketing emails from me, reply with “unsubscribe.”"), "US signature: CAN-SPAM opt-out line");
+  },
+  async "ca/email-signature-generator/"(page) {
+    const t = async (sel) => (await page.textContent(sel)).replace(/\s+/g, " ").trim();
+    await page.fill("#sg-name", "Alex Tremblay");
+    await page.fill("#sg-address", "200 Queen St W, Toronto ON");
+    check((await t("#sg-summary")).startsWith("1 detail to add"), "CA signature: email needed for unsubscribe requests");
+    await page.fill("#sg-email", "alex@tremblayweb.ca");
+    check((await t("#sg-preview")).includes("reply “unsubscribe” or write to alex@tremblayweb.ca."), "CA signature: CASL unsubscribe line with an email address");
+  },
+  async "ca/fr/signature-courriel/"(page) {
+    const t = async (sel) => (await page.textContent(sel)).replace(/[  ]/g, " ").replace(/\s+/g, " ").trim();
+    await page.fill("#sg-name", "Alex Tremblay");
+    await page.fill("#sg-business", "Studio <b>Web</b>");
+    await page.fill("#sg-address", "1000, rue Sherbrooke Ouest, Montréal");
+    await page.fill("#sg-email", "alex@studiotremblay.ca");
+    check((await t("#sg-preview")).includes("répondez « désabonnement » ou écrivez à alex@studiotremblay.ca.") &&
+      (await t("#sg-preview")).includes("Studio <b>Web</b>") && (await page.$$("#sg-preview b")).length === 0, "signature (CA-FR) : désabonnement, texte échappé");
+  },
   async "us/business-days-calculator/"(page) {
     const t = async (sel) => (await page.textContent(sel)).replace(/[\u00a0\u202f]/g, " ").replace(/\s+/g, " ").trim();
     check((await page.inputValue("#jo-year")) === String(new Date().getFullYear()) && (await page.inputValue("#jo-zone")) === "federal",

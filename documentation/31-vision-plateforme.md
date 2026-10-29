@@ -70,7 +70,7 @@ G compte gratuit, P Pro, ⇄ partenaire signalé.
 | Trouver un nom | Idées de noms et vérification : registres officiels (INPI, Companies House, registres provinciaux), marques | ⬜ | V |
 | **Nom de domaine et email pro** | Recherche de disponibilité (protocole RDAP, norme de l'IETF), idées de variantes, marques à vérifier, listes officielles de registraires ([33](33-noms-de-domaine.md)) ; liens partenaires après l'inscription d'Ismail | ✅ (partenaires ⬜) | V, ⇄ |
 | Site ou portfolio | Page publique hébergée sur la plateforme (carte de visite, réalisations, contact) ; comparatif des créateurs de sites | ⬜ | P, ⇄ |
-| Identité visuelle | Générateur de signature d'email, carte de visite avec QR code, palette et logo simple | ⬜ | V |
+| Identité visuelle | Générateur de signature d'email (fait le 29/10/2026, [43](43-signature-email.md)), carte de visite avec QR code, palette et logo simple | 🟡 | V |
 | Banque pro | Vérificateurs du compte obligatoire ; comparatif des banques en ligne | ✅ / ⬜ | V, ⇄ |
 | Assurance | Vérificateurs d'obligations ; comparatif d'assureurs | ✅ / ⬜ | V, ⇄ |
 | Adresse | Guide domicile, domiciliation, adresse commerciale | ⬜ | V, ⇄ |
@@ -184,7 +184,7 @@ fuseaux horaires des clients, générateur de QR code, convertisseur de devises,
 5. Modules du compte gratuit : prospects, temps passé, dépenses, trésorerie : faits du 23 au 29/10/2026
    ([36](36-depenses-et-registre-des-achats.md) à [39](39-tresorerie.md)).
 6. Outils restants : CGV (France faite le 29/10/2026, [40](40-cgv.md)), sous-traitance, devises, jours ouvrés (France, Royaume-Uni et États-Unis
-   faits le 29/10/2026, [42](42-jours-ouvres.md)), signature d'email,
+   faits le 29/10/2026, [42](42-jours-ouvres.md)), signature d'email (faite le 29/10/2026, [43](43-signature-email.md)),
    guides de protection sociale.
 7. Pro : relances automatiques, signature en ligne, liens de paiement, page publique, plateforme agréée.
 

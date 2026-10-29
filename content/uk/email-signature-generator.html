@@ -1,0 +1,120 @@
+<!--{
+  "id": "signature",
+  "slug": "email-signature-generator/",
+  "title": "Email Signature Generator for Sole Traders and Ltd Companies",
+  "description": "Create a professional email signature with the details UK law asks for: company number and registered office for a Ltd, name and address for a trading name.",
+  "menu": "Email signature",
+  "icon": "✍️",
+  "blurb": "A clean signature with the details your business must show.",
+  "app": "UK Email Signature Generator",
+  "scripts": ["engines/signature.js", "tools/signature.js"],
+  "rules": "uk",
+  "sources": ["email_signature"],
+  "priority": 0.7,
+  "faq": [
+    ["What must a limited company put in its email signature?", "Its registered name, its company number, the part of the UK where it is registered (England and Wales, Scotland or Northern Ireland) and its registered office address. The 2015 Trading Disclosures Regulations apply to business letters in electronic form, so emails are covered."],
+    ["Do sole traders need anything in their email signature?", "Only if you trade under a business name, meaning a name other than your surname with your first name or initial. The Companies Act then asks for your name and a UK address where documents can be served on business letters, written orders, invoices, receipts and payment demands."],
+    ["Do I have to list all the directors?", "Only if a business letter names a director other than in the text or as the signatory. Signing your own email as a director does not mean you have to list them all."],
+    ["Can I show my share capital?", "You don't have to. If you do, it must be the paid-up share capital."],
+    ["Is the information I type sent anywhere?", "No. The signature is created in your browser and what you type is saved on this device only."]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · UK trading disclosures</span>
+    <h1>Email signature generator</h1>
+    <p class="lead">A clean, professional signature with the details UK law asks your business to show: company number and registered office for a limited company, your name and address if you trade under a business name. Copy it into Gmail, Outlook or Apple Mail in one click.</p>
+    <ul class="trust"><li>Details for your business type</li><li>Gmail, Outlook, Apple Mail</li><li>Nothing is sent</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="sg-form" onsubmit="return false">
+      <h2>You</h2>
+      <div class="fields">
+        <div class="field"><label for="sg-name">Full name</label>
+          <input type="text" id="sg-name" name="name" autocomplete="name" placeholder="Sam Taylor" data-save></div>
+        <div class="field"><label for="sg-role">Job title</label>
+          <input type="text" id="sg-role" name="role" autocomplete="organization-title" placeholder="Brand designer" data-save></div>
+        <div class="field full"><label for="sg-status">Business type</label>
+          <select id="sg-status" name="status" data-save>
+            <option value="sole_own_name">Sole trader, under my own name</option>
+            <option value="sole_trading_name">Sole trader, with a business name</option>
+            <option value="limited">Limited company</option>
+          </select></div>
+        <div class="field full" data-for="sole_trading_name limited" hidden><label for="sg-business">Business name or registered company name</label>
+          <input type="text" id="sg-business" name="business" autocomplete="organization" placeholder="Taylor Studio Ltd" aria-describedby="sg-business-hint" data-save>
+          <span class="hint" id="sg-business-hint">For a limited company, the name exactly as registered at Companies House.</span></div>
+        <div class="field" data-for="limited" hidden><label for="sg-company-number">Company number</label>
+          <input type="text" id="sg-company-number" name="company_number" placeholder="01234567" data-save></div>
+        <div class="field" data-for="limited" hidden><label for="sg-uk-part">Registered in</label>
+          <select id="sg-uk-part" name="uk_part" data-save>
+            <option value="england-and-wales">England and Wales</option>
+            <option value="scotland">Scotland</option>
+            <option value="northern-ireland">Northern Ireland</option>
+          </select></div>
+        <div class="field full"><label for="sg-address">Address</label>
+          <input type="text" id="sg-address" name="address" autocomplete="street-address" placeholder="10 High Street, Bristol BS1 4ST" aria-describedby="sg-address-hint" data-save>
+          <span class="hint" id="sg-address-hint">Limited company: the registered office. Business name: a UK address where documents can be served on you.</span></div>
+      </div>
+      <h3>Contact details</h3>
+      <div class="fields">
+        <div class="field"><label for="sg-phone">Phone</label>
+          <input type="tel" id="sg-phone" name="phone" autocomplete="tel" placeholder="07700 900123" data-save></div>
+        <div class="field"><label for="sg-email">Email</label>
+          <input type="email" id="sg-email" name="email" autocomplete="email" placeholder="sam@taylorstudio.co.uk" data-save></div>
+        <div class="field"><label for="sg-website">Website</label>
+          <input type="text" inputmode="url" id="sg-website" name="website" placeholder="taylorstudio.co.uk" data-save></div>
+        <div class="field"><label for="sg-linkedin">LinkedIn profile</label>
+          <input type="text" inputmode="url" id="sg-linkedin" name="linkedin" placeholder="linkedin.com/in/samtaylor" data-save></div>
+        <div class="field full"><span class="label">Colour</span>
+          <div class="rate-chips" role="radiogroup" aria-label="Signature colour">
+            <label><input type="radio" name="accent" value="brand" checked data-save><span>Orange</span></label>
+            <label><input type="radio" name="accent" value="blue" data-save><span>Blue</span></label>
+            <label><input type="radio" name="accent" value="green" data-save><span>Green</span></label>
+            <label><input type="radio" name="accent" value="ink" data-save><span>Black</span></label>
+          </div></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="card signature-card">
+        <h2 class="signature-title">Preview</h2>
+        <div class="signature-preview" id="sg-preview" aria-label="Signature preview"></div>
+      </div>
+      <div class="preview-actions">
+        <button type="button" class="btn btn-primary" id="sg-copy">Copy signature</button>
+        <button type="button" class="btn btn-ghost" id="sg-copy-text">Copy plain text</button>
+        <button type="button" class="btn btn-ghost" id="sg-copy-html">Copy HTML code</button>
+        <button type="button" class="btn btn-ghost" id="sg-download">Download (.html)</button>
+      </div>
+      <p class="small muted" id="sg-message" role="status" aria-live="polite"></p>
+      <div class="card" style="padding: 16px 18px;">
+        <h2 class="signature-title">Details your business must show</h2>
+        <p class="small muted" id="sg-explain"></p>
+        <ul class="mention-checks" id="sg-checks"></ul>
+        <p class="notice" id="sg-summary" hidden></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script type="application/json" id="signature-data">{"store": "signature-uk", "lang": "en-GB", "file": "email-signature", "file_title": "Email signature", "colon": ": ", "linkedin": "LinkedIn", "uk_parts": {"england-and-wales": "England and Wales", "scotland": "Scotland", "northern-ireland": "Northern Ireland"}, "limited_note": " (a limited company)", "tpl": {"sole_own_name": [], "sole_trading_name": [["{business} is a trading name of {name}"], ["Address for service of documents: {address}"]], "limited": [["{business}[{limited_note}]", "Registered in {uk_part}", "Company number {company_number}"], ["Registered office: {address}"]]}, "explain": {"sole_own_name": "Trading under your own surname, with your first name or initial, is not trading under a business name.", "sole_trading_name": "Business name: your name and a UK address where documents can be served, on business letters, written orders, invoices, receipts and payment demands (Companies Act 2006, ss. 1201 and 1202). The Act does not say whether an email is a business letter: putting them in your signature covers both readings.", "limited": "Limited company: registered name, part of the UK where registered, company number and registered office address (Trading Disclosures Regulations 2015, regs. 24 and 25, which apply to electronic documents)."}, "items": {"business": "Business name or registered company name", "name": "Your full name", "address": "Address", "company_number": "Company number", "uk_part": "Part of the UK where registered"}, "ok": "✓", "todo": "To add:", "none": {"sole_own_name": "Nothing required: the business name disclosure rules apply only when you trade under another name."}, "missing": ["{n} detail to add before you use this signature.", "{n} details to add before you use this signature."], "complete": "Your signature shows every detail your business type requires.", "empty": "Your signature will appear here.", "copied": "Signature copied: paste it into your email app's signature settings.", "copied_button": "Copied ✓", "copied_text": "Plain text copied.", "copied_html": "HTML code copied.", "copy_failed": "This browser could not copy: select the preview and copy it.", "downloaded": "email-signature.html downloaded."}</script>
+
+{{kit_cta}}
+
+<section class="section prose">
+  <h2>What a UK business email signature must show</h2>
+  <ul>
+    <li><strong>Limited company:</strong> its registered name on all business correspondence, and on business letters its company number, registered office address and the part of the UK where it is registered. The 2015 regulations treat a document in electronic form as a document, so emails count. The name usually shows it is a limited company with "Limited" or "Ltd"; the generator says so if your name does not.</li>
+    <li><strong>Sole trader with a business name:</strong> your own name and a UK address where documents can be served on you, on business letters, written orders, invoices, receipts and demands for payment.</li>
+    <li><strong>Sole trader under your own name:</strong> no particular details are required.</li>
+  </ul>
+  <h3>Directors and share capital</h3>
+  <p>If a business letter names a director other than in the text or as the signatory, it must name every director. Showing your share capital is optional; if you show it, it must be the paid-up capital.</p>
+  <h3>A signature that works everywhere</h3>
+  <p>The signature is a simple table, with no image or web font to download, so it looks the same in most email apps and stays readable when images are blocked. For your first messages to a prospect, the <a href="{{link:templates}}">email templates</a> are ready to use.</p>
+  <p class="small muted">For information only: this tool is not legal advice.</p>
+</section>

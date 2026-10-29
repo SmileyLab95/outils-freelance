@@ -1,0 +1,136 @@
+<!--{
+  "id": "signature",
+  "slug": "signature-email-professionnelle/",
+  "title": "Signature d'email professionnelle avec mentions légales",
+  "description": "Créez votre signature d'email d'indépendant avec les mentions demandées (EI, Siren, RCS ou RNE, adresse) et copiez-la dans Gmail, Outlook ou Apple Mail.",
+  "menu": "Signature d'email",
+  "icon": "✍️",
+  "blurb": "Une signature soignée, avec les mentions de votre statut.",
+  "app": "Générateur de signature d'email",
+  "scripts": ["engines/signature.js", "tools/signature.js"],
+  "rules": "fr",
+  "sources": ["email_signature", "mention_ei_documents"],
+  "priority": 0.7,
+  "faq": [
+    ["Quelles mentions mettre dans la signature d'un micro-entrepreneur ?", "Les fiches officielles rangent les emails commerciaux parmi les documents commerciaux. Pour un entrepreneur individuel, micro-entrepreneur compris : votre nom suivi de « EI » (ou « entrepreneur individuel »), votre numéro Siren, la mention RCS suivie de la ville du greffe pour une activité commerciale, ou la mention RNE pour une activité artisanale, libérale ou agricole, et l'adresse de domiciliation de l'entreprise."],
+    ["Et pour une société (SARL, SAS, EURL…) ?", "La dénomination sociale, la forme juridique et le capital social, le numéro Siren, la mention RCS suivie de la ville du greffe (ou la mention RNE) et l'adresse du siège social."],
+    ["Qu'est-ce que le numéro Siren ?", "Le numéro qui identifie votre entreprise : il compte 9 chiffres. Le Siret, de 14 chiffres, y ajoute 5 chiffres propres à chaque établissement."],
+    ["Comment ajouter la signature à ma messagerie ?", "Cliquez sur « Copier la signature », puis collez-la dans les réglages de signature de votre messagerie (Gmail, Outlook, Apple Mail…). Si la mise en forme ne passe pas, utilisez le fichier .html téléchargé ou le texte brut."],
+    ["Mes informations sont-elles envoyées quelque part ?", "Non. La signature est créée dans votre navigateur et votre saisie est enregistrée sur cet appareil seulement."]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Gratuit · mentions de votre statut</span>
+    <h1>Signature d'email professionnelle</h1>
+    <p class="lead">Une signature claire, avec les mentions que les fiches officielles demandent sur vos documents commerciaux, emails compris : « EI », numéro Siren, mention RCS ou RNE, adresse. À copier dans votre messagerie en un clic.</p>
+    <ul class="trust"><li>Mentions selon votre statut</li><li>Gmail, Outlook, Apple Mail</li><li>Rien n'est envoyé</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="sg-form" onsubmit="return false">
+      <h2>Vous</h2>
+      <div class="fields">
+        <div class="field"><label for="sg-name">Prénom et nom</label>
+          <input type="text" id="sg-name" name="name" autocomplete="name" placeholder="Camille Martin" data-save></div>
+        <div class="field"><label for="sg-role">Métier ou fonction</label>
+          <input type="text" id="sg-role" name="role" autocomplete="organization-title" placeholder="Développeuse web" data-save></div>
+        <div class="field full"><label for="sg-status">Statut</label>
+          <select id="sg-status" name="status" data-save>
+            <option value="ei">Entrepreneur individuel (dont micro-entrepreneur)</option>
+            <option value="societe">Société (SAS, SASU, SARL, EURL…)</option>
+          </select></div>
+        <div class="field full"><label for="sg-business">Nom commercial ou dénomination sociale</label>
+          <input type="text" id="sg-business" name="business" autocomplete="organization" placeholder="Atelier Martin" aria-describedby="sg-business-hint" data-save>
+          <span class="hint" id="sg-business-hint">Facultatif pour un entrepreneur individuel ; pour une société, sa dénomination.</span></div>
+        <div class="field" data-for="societe" hidden><label for="sg-form-type">Forme juridique</label>
+          <select id="sg-form-type" name="form" data-save>
+            <option value="SAS">SAS</option>
+            <option value="SASU">SASU</option>
+            <option value="SARL">SARL</option>
+            <option value="EURL">EURL</option>
+            <option value="SA">SA</option>
+            <option value="SNC">SNC</option>
+          </select></div>
+        <div class="field" data-for="societe" hidden><label for="sg-capital">Capital social</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="sg-capital" name="capital" placeholder="1 000" data-save><span>€</span></div></div>
+      </div>
+      <h3>Immatriculation</h3>
+      <div class="fields">
+        <div class="field"><label for="sg-siren">Numéro Siren</label>
+          <input type="text" inputmode="numeric" id="sg-siren" name="siren" placeholder="123 456 789" aria-describedby="sg-siren-hint" data-save>
+          <span class="hint" id="sg-siren-hint">9 chiffres (les 9 premiers du Siret).</span></div>
+        <div class="field full"><label for="sg-activity">Activité</label>
+          <select id="sg-activity" name="activity" data-save>
+            <option value="commerciale">Commerciale (RCS)</option>
+            <option value="autre">Artisanale, libérale ou agricole (RNE)</option>
+          </select></div>
+        <div class="field" data-activity="commerciale"><label for="sg-city">Ville du greffe</label>
+          <input type="text" id="sg-city" name="city" placeholder="Lyon" data-save></div>
+        <div class="field full"><label for="sg-address">Adresse de l'entreprise</label>
+          <input type="text" id="sg-address" name="address" autocomplete="street-address" placeholder="12 rue des Lilas, 69003 Lyon" aria-describedby="sg-address-hint" data-save>
+          <span class="hint" id="sg-address-hint">Domiciliation de l'entreprise individuelle, ou siège social de la société.</span></div>
+      </div>
+      <h3>Coordonnées</h3>
+      <div class="fields">
+        <div class="field"><label for="sg-phone">Téléphone</label>
+          <input type="tel" id="sg-phone" name="phone" autocomplete="tel" placeholder="06 12 34 56 78" data-save></div>
+        <div class="field"><label for="sg-email">Email</label>
+          <input type="email" id="sg-email" name="email" autocomplete="email" placeholder="camille@atelier-martin.fr" data-save></div>
+        <div class="field"><label for="sg-website">Site</label>
+          <input type="text" inputmode="url" id="sg-website" name="website" placeholder="atelier-martin.fr" data-save></div>
+        <div class="field"><label for="sg-linkedin">Profil LinkedIn</label>
+          <input type="text" inputmode="url" id="sg-linkedin" name="linkedin" placeholder="linkedin.com/in/camille-martin" data-save></div>
+        <div class="field full"><span class="label">Couleur</span>
+          <div class="rate-chips" role="radiogroup" aria-label="Couleur de la signature">
+            <label><input type="radio" name="accent" value="brand" checked data-save><span>Orange</span></label>
+            <label><input type="radio" name="accent" value="blue" data-save><span>Bleu</span></label>
+            <label><input type="radio" name="accent" value="green" data-save><span>Vert</span></label>
+            <label><input type="radio" name="accent" value="ink" data-save><span>Noir</span></label>
+          </div></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="card signature-card">
+        <h2 class="signature-title">Aperçu</h2>
+        <div class="signature-preview" id="sg-preview" aria-label="Aperçu de la signature"></div>
+      </div>
+      <div class="preview-actions">
+        <button type="button" class="btn btn-primary" id="sg-copy">Copier la signature</button>
+        <button type="button" class="btn btn-ghost" id="sg-copy-text">Copier le texte brut</button>
+        <button type="button" class="btn btn-ghost" id="sg-copy-html">Copier le code HTML</button>
+        <button type="button" class="btn btn-ghost" id="sg-download">Télécharger (.html)</button>
+      </div>
+      <p class="small muted" id="sg-message" role="status" aria-live="polite"></p>
+      <div class="card" style="padding: 16px 18px;">
+        <h2 class="signature-title">Mentions de votre statut</h2>
+        <p class="small muted" id="sg-explain"></p>
+        <ul class="mention-checks" id="sg-checks"></ul>
+        <p class="notice" id="sg-summary" hidden></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script type="application/json" id="signature-data">{"store": "signature", "lang": "fr", "file": "signature-email", "file_title": "Signature d'email", "colon": " : ", "linkedin": "LinkedIn", "registration": {"rcs": "RCS {city}", "rne": "RNE"}, "tpl": {"ei": [["{name}", "SIREN {siren}", "{registration}"], ["{address}"]], "societe": [["{business} {form}[ au capital de {capital}]", "SIREN {siren}", "{registration}"], ["Siège : {address}"]]}, "explain": {"ei": "Entrepreneur individuel : votre nom suivi de « EI », votre numéro Siren, la mention d'immatriculation et l'adresse de domiciliation (fiches F37370 et F36008).", "societe": "Société : dénomination, forme et capital social, numéro Siren, mention d'immatriculation et adresse du siège social (fiche F37371)."}, "items": {"name": "Prénom et nom (suivis de « EI »)", "business": "Dénomination sociale", "form": "Forme juridique", "capital": "Capital social", "siren": "Numéro Siren (9 chiffres)", "registration": "Mention RCS et ville du greffe, ou RNE", "address": "Adresse de l'entreprise"}, "ok": "✓", "todo": "À compléter :", "none": {}, "missing": ["{n} mention à compléter avant d'utiliser la signature.", "{n} mentions à compléter avant d'utiliser la signature."], "complete": "Toutes les mentions de votre statut sont présentes.", "empty": "Votre signature apparaîtra ici.", "copied": "Signature copiée : collez-la dans les réglages de signature de votre messagerie.", "copied_button": "Copié ✓", "copied_text": "Texte brut copié.", "copied_html": "Code HTML copié.", "copy_failed": "Copie impossible dans ce navigateur : sélectionnez l'aperçu et copiez-le.", "downloaded": "Fichier signature-email.html téléchargé."}</script>
+
+{{kit_cta}}
+
+<section class="section prose">
+  <h2>Les mentions d'une signature d'email professionnelle</h2>
+  <p>Les fiches officielles rangent les courriers, papier ou emails commerciaux, parmi les documents commerciaux de l'entreprise, qui comportent des mentions obligatoires. Elles renvoient aux articles R123-237 et R123-238 du Code de commerce.</p>
+  <ul>
+    <li><strong>Entrepreneur individuel</strong> (micro-entrepreneur compris) : votre nom précédé ou suivi de « EI » ou « entrepreneur individuel », votre numéro Siren, la mention d'immatriculation et l'adresse de domiciliation de l'entreprise.</li>
+    <li><strong>Société</strong> : la dénomination sociale, la forme juridique et le capital social, le numéro Siren, la mention d'immatriculation et l'adresse du siège social.</li>
+    <li><strong>Mention d'immatriculation</strong> : « RCS » suivi du nom de la ville du greffe pour une activité commerciale ; « RNE » pour une activité artisanale, libérale ou agricole.</li>
+  </ul>
+  <h3>Cas particuliers</h3>
+  <p>Une entreprise en liquidation, en location-gérance ou accompagnée par un contrat d'appui au projet d'entreprise ajoute d'autres mentions : voyez les fiches officielles citées plus bas. Vos factures ont leurs propres mentions : la <a href="{{link:invoice-rules}}">liste des mentions obligatoires d'une facture</a> les détaille.</p>
+  <h3>Une signature lisible partout</h3>
+  <p>La signature est un tableau simple, sans image ni police à télécharger : elle s'affiche de la même façon dans la plupart des messageries et reste lisible si les images sont bloquées. Pour vos premiers messages à un prospect, les <a href="{{link:templates}}">modèles d'emails</a> sont prêts à l'emploi.</p>
+  <p class="small muted">Pour information : cet outil ne remplace pas un conseil juridique.</p>
+</section>

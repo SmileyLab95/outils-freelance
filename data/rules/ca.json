@@ -1884,6 +1884,44 @@
       "confidence": "medium",
       "note": "Read through search excerpts on 2026-10-23.",
       "verified_on": "2026-10-23"
+    },
+    "email_signature": {
+      "value": {
+        "situations": {
+          "commercial": {
+            "required": [
+              "name_or_business",
+              "address",
+              "email"
+            ]
+          }
+        }
+      },
+      "unit": "object",
+      "label": "CASL: identification and unsubscribe mechanism in a commercial electronic message",
+      "source": "https://laws-lois.justice.gc.ca/eng/regulations/SOR-2012-36/FullText.html",
+      "source_title": "Electronic Commerce Protection Regulations (CRTC), SOR/2012-36 - Justice Laws Website",
+      "more_sources": [
+        {
+          "source": "https://laws-lois.justice.gc.ca/fra/reglements/DORS-2012-36/TexteComplet.html",
+          "source_title": "Règlement sur la protection du commerce électronique (CRTC), DORS/2012-36 - Site Web de la législation"
+        },
+        {
+          "source": "https://laws-lois.justice.gc.ca/eng/acts/E-1.6/section-6.html",
+          "source_title": "S.C. 2010, c. 23 (CASL), section 6 - Justice Laws Website"
+        },
+        {
+          "source": "https://laws-lois.justice.gc.ca/eng/acts/E-1.6/section-11.html",
+          "source_title": "S.C. 2010, c. 23 (CASL), section 11 - Justice Laws Website"
+        },
+        {
+          "source": "https://laws-lois.justice.gc.ca/eng/acts/E-1.6/section-1.html",
+          "source_title": "S.C. 2010, c. 23 (CASL), section 1 - Justice Laws Website"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-10-29",
+      "note": "Read in full on 29/10/2026 with the « Lire une source officielle » tool (Act and Regulations current to 2026-09-30; SHA-256 47ce0643…202d, ea4d05c3…01a7, 4c7c1a3c…62cf, 58d4fd5a…c8a5, 48686af5…030b). A commercial electronic message is one that has as its purpose, or one of its purposes, to encourage participation in a commercial activity, including offers to sell a service, advertising and promoting a person as doing so (s. 1(2)). It must identify the sender and enable the recipient to readily contact them, and set out an unsubscribe mechanism (s. 6(2)); prescribed information (Regs s. 2(1)): the name by which the sender carries on business (or their name), the mailing address, and either a telephone number (agent or voice messaging), an email address or a web address; clear and prominent (Regs s. 3). Unsubscribe mechanism (s. 11): at no cost, by the same electronic means (or another electronic means if not practicable), specifying an electronic address or a web link; valid for 60 days; given effect within 10 business days. Messages that solely provide a requested quote or estimate, facilitate, complete or confirm a transaction the person agreed to, or deliver a service they are entitled to, are exempt only from the consent requirement (s. 6(6)): identification and unsubscribe still apply. The tool therefore always includes them (one situation, « commercial »). canada.ca and crtc.gc.ca guidance pages were not reachable on 29/10/2026."
     }
   },
   "provinces": {

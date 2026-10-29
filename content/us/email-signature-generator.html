@@ -1,0 +1,106 @@
+<!--{
+  "id": "signature",
+  "slug": "email-signature-generator/",
+  "title": "Free Email Signature Generator for Freelancers (US)",
+  "description": "Create a professional email signature for Gmail, Outlook or Apple Mail. For marketing emails, it adds what CAN-SPAM requires: postal address and opt-out.",
+  "menu": "Email signature",
+  "icon": "✍️",
+  "blurb": "A clean signature, ready for client and marketing emails.",
+  "app": "Email Signature Generator",
+  "scripts": ["engines/signature.js", "tools/signature.js"],
+  "rules": "us",
+  "sources": ["email_signature"],
+  "priority": 0.7,
+  "faq": [
+    ["Does CAN-SPAM apply to my emails to clients?", "Not to emails whose primary purpose is to carry out work a client has agreed to: confirming the order, delivering the work, invoicing. CAN-SPAM calls these transactional or relationship messages. It applies to commercial emails, whose primary purpose is to advertise or promote your services, such as prospecting emails and newsletters."],
+    ["What must a marketing email include?", "A valid physical postal address, a clear way to opt out of future marketing emails (for example by replying), and, unless the person agreed to receive them, a clear statement that the email is an advertisement or solicitation."],
+    ["Can I use a reply as the opt-out?", "Yes. CAN-SPAM accepts a functioning return email address that the recipient can use, in the way the message explains, to ask you to stop. It must keep working for at least 30 days after you send the email."],
+    ["How do I add the signature to my email app?", "Click “Copy signature” and paste it into your email app's signature settings (Gmail, Outlook, Apple Mail…). If the formatting does not come through, use the downloaded .html file or the plain text."],
+    ["Is the information I type sent anywhere?", "No. The signature is created in your browser and what you type is saved on this device only."]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · CAN-SPAM ready</span>
+    <h1>Email signature generator</h1>
+    <p class="lead">A clean, professional signature for your client emails. Sending marketing emails too? The generator adds what CAN-SPAM requires: your postal address and a way to opt out. Copy it into Gmail, Outlook or Apple Mail in one click.</p>
+    <ul class="trust"><li>Client and marketing emails</li><li>Gmail, Outlook, Apple Mail</li><li>Nothing is sent</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="sg-form" onsubmit="return false">
+      <h2>You</h2>
+      <div class="fields">
+        <div class="field"><label for="sg-name">Full name</label>
+          <input type="text" id="sg-name" name="name" autocomplete="name" placeholder="Jordan Lee" data-save></div>
+        <div class="field"><label for="sg-role">Job title</label>
+          <input type="text" id="sg-role" name="role" autocomplete="organization-title" placeholder="Freelance copywriter" data-save></div>
+        <div class="field full"><label for="sg-business">Business name</label>
+          <input type="text" id="sg-business" name="business" autocomplete="organization" placeholder="Lee Copy Studio LLC" aria-describedby="sg-business-hint" data-save>
+          <span class="hint" id="sg-business-hint">Optional.</span></div>
+        <div class="field full"><label for="sg-status">I use this signature for</label>
+          <select id="sg-status" name="status" data-save>
+            <option value="everyday">Emails to clients about their projects</option>
+            <option value="marketing">Marketing emails too (prospecting, newsletters)</option>
+          </select></div>
+        <div class="field full"><label for="sg-address">Postal address</label>
+          <input type="text" id="sg-address" name="address" autocomplete="street-address" placeholder="123 Main St, Austin, TX 78701" aria-describedby="sg-address-hint" data-save>
+          <span class="hint" id="sg-address-hint">Required in marketing emails: a valid physical postal address.</span></div>
+      </div>
+      <h3>Contact details</h3>
+      <div class="fields">
+        <div class="field"><label for="sg-phone">Phone</label>
+          <input type="tel" id="sg-phone" name="phone" autocomplete="tel" placeholder="(512) 555-0142" data-save></div>
+        <div class="field"><label for="sg-email">Email</label>
+          <input type="email" id="sg-email" name="email" autocomplete="email" placeholder="jordan@leecopy.com" data-save></div>
+        <div class="field"><label for="sg-website">Website</label>
+          <input type="text" inputmode="url" id="sg-website" name="website" placeholder="leecopy.com" data-save></div>
+        <div class="field"><label for="sg-linkedin">LinkedIn profile</label>
+          <input type="text" inputmode="url" id="sg-linkedin" name="linkedin" placeholder="linkedin.com/in/jordanlee" data-save></div>
+        <div class="field full"><span class="label">Color</span>
+          <div class="rate-chips" role="radiogroup" aria-label="Signature color">
+            <label><input type="radio" name="accent" value="brand" checked data-save><span>Orange</span></label>
+            <label><input type="radio" name="accent" value="blue" data-save><span>Blue</span></label>
+            <label><input type="radio" name="accent" value="green" data-save><span>Green</span></label>
+            <label><input type="radio" name="accent" value="ink" data-save><span>Black</span></label>
+          </div></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="card signature-card">
+        <h2 class="signature-title">Preview</h2>
+        <div class="signature-preview" id="sg-preview" aria-label="Signature preview"></div>
+      </div>
+      <div class="preview-actions">
+        <button type="button" class="btn btn-primary" id="sg-copy">Copy signature</button>
+        <button type="button" class="btn btn-ghost" id="sg-copy-text">Copy plain text</button>
+        <button type="button" class="btn btn-ghost" id="sg-copy-html">Copy HTML code</button>
+        <button type="button" class="btn btn-ghost" id="sg-download">Download (.html)</button>
+      </div>
+      <p class="small muted" id="sg-message" role="status" aria-live="polite"></p>
+      <div class="card" style="padding: 16px 18px;">
+        <h2 class="signature-title">What your emails must include</h2>
+        <p class="small muted" id="sg-explain"></p>
+        <ul class="mention-checks" id="sg-checks"></ul>
+        <p class="notice" id="sg-summary" hidden></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script type="application/json" id="signature-data">{"store": "signature-us", "lang": "en-US", "file": "email-signature", "file_title": "Email signature", "colon": ": ", "linkedin": "LinkedIn", "tpl": {"everyday": [], "marketing": [["{address}"]]}, "optout": {"marketing": "To stop receiving marketing emails from me, reply with “unsubscribe.”"}, "explain": {"everyday": "Emails whose primary purpose is to carry out work a client has agreed to (confirming, delivering, invoicing) are transactional or relationship messages: CAN-SPAM's rules for commercial emails do not apply to them.", "marketing": "Marketing emails: a valid physical postal address and a clear way to opt out, which the signature adds. Unless the person agreed to receive them, also say clearly in the email that it is an advertisement or solicitation (CAN-SPAM Act, sec. 5(a)(3) and 5(a)(5))."}, "items": {"address": "Valid physical postal address"}, "ok": "✓", "todo": "To add:", "none": {"everyday": "Nothing required for these emails."}, "missing": ["{n} detail to add before you use this signature.", "{n} details to add before you use this signature."], "complete": "The signature includes the postal address and the opt-out line. Stop sending marketing emails to anyone who opts out.", "empty": "Your signature will appear here.", "copied": "Signature copied: paste it into your email app's signature settings.", "copied_button": "Copied ✓", "copied_text": "Plain text copied.", "copied_html": "HTML code copied.", "copy_failed": "This browser could not copy: select the preview and copy it.", "downloaded": "email-signature.html downloaded."}</script>
+
+<section class="section prose">
+  <h2>Email signatures and CAN-SPAM</h2>
+  <ul>
+    <li><strong>Client emails:</strong> an email whose primary purpose is to facilitate, complete or confirm a transaction your client agreed to, or to deliver the work they are entitled to, is a transactional or relationship message. A link to your website in the signature does not, by itself, make it a commercial email.</li>
+    <li><strong>Marketing emails:</strong> an email whose primary purpose is to advertise or promote your services is a commercial email. It must include a valid physical postal address and a clear way to opt out that keeps working for at least 30 days, and, unless the person agreed to receive it, say clearly that it is an advertisement or solicitation.</li>
+  </ul>
+  <h3>A signature that works everywhere</h3>
+  <p>The signature is a simple table, with no image or web font to download, so it looks the same in most email apps and stays readable when images are blocked. For your first messages to a prospect, the <a href="{{link:templates}}">email templates</a> are ready to use.</p>
+  <p class="small muted">For information only: this tool is not legal advice.</p>
+</section>

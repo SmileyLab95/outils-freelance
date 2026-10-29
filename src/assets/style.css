@@ -934,3 +934,12 @@ a.country-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg)
 @media (max-width: 520px) { .weekdays { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .holiday-table td { vertical-align: top; }
 .holiday-table td:first-child { white-space: nowrap; }   /* date sur une ligne : « Mon, Jan 19 » */
+/* Signature d'email : aperçu sur fond blanc (comme dans une messagerie), mentions cochées ou à compléter. */
+.signature-card { padding: 16px 18px; margin-bottom: 14px; }
+.signature-title { font-size: 1rem; margin: 0 0 10px; }
+.signature-preview { background: #fff; border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 16px; overflow-x: auto; color: #1f2328; min-height: 72px; }
+.mention-checks { list-style: none; padding: 0; margin: 10px 0 12px; display: grid; gap: 6px; font-size: .92rem; }
+.mention-checks li { padding-left: 0; }
+.mention-checks .is-ok { color: var(--ok); }
+.mention-checks .is-todo { color: #7c2d12; font-weight: 600; }
+.mention-checks .is-none { color: var(--muted); }

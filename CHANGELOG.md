@@ -1,5 +1,22 @@
 # Journal des modifications
 
+## 2026-10-29 — Signature d'email professionnelle (4 pays)
+
+- Nouveau **générateur de signature d'email** (menu « Vendre ») en France, au Royaume-Uni, aux États-Unis et au Canada
+  (anglais et français) : signature claire à copier dans Gmail, Outlook ou Apple Mail avec la mise en forme, en texte
+  brut, en code HTML ou en fichier .html ; aperçu, couleur au choix ; rien n'est envoyé.
+- **Mentions selon le statut**, cochées ou à compléter : France, nom suivi de « EI », Siren (9 chiffres), mention RCS
+  et ville du greffe ou RNE, adresse ; société : dénomination, forme et capital, siège. Royaume-Uni : société (nom,
+  numéro, partie du Royaume-Uni, *registered office*) ou nom commercial (nom et adresse). États-Unis : adresse postale
+  et ligne de refus pour les emails de prospection (CAN-SPAM). Canada : nom, adresse postale, contact et ligne de
+  désabonnement dans chaque message (loi anti-pourriel).
+- Sources lues en entier : fiches F37370, F36008, F37371, F32135 ; GOV.UK, règlement de 2015 sur les *trading
+  disclosures*, Companies Act 2006 (ss. 1200 à 1206) ; CAN-SPAM Act ; loi canadienne et règlement du CRTC (anglais et
+  français). Texte de l'article R123-237 à relire (Légifrance inaccessible) : question ouverte.
+- Spécification [43](documentation/43-signature-email.md), décision D45. Tests : 8 tests du moteur et des 5 pages,
+  20 erreurs réintroduites toutes détectées, parcours navigateur des 5 pages ; suite complète (510 tests unitaires,
+  29 tests serveur, 5 tests des scripts, 3 632 vérifications navigateur).
+
 ## 2026-10-29 — Jours ouvrés aux États-Unis
 
 - Nouveau ***Business days calculator with US federal holidays*** (menu *Pricing*) : jours ouvrés et facturables d'un

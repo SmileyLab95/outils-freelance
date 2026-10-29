@@ -2037,6 +2037,27 @@
       "confidence": "high",
       "verified_on": "2026-10-29",
       "note": "Read in full on 29/10/2026 with the « Lire une source officielle » tool (SHA-256 37973681…2e92). 11 federal holidays a year (5 U.S.C. 6103(a)); the dates are the days OPM lists, i.e. the days observed by most federal employees: a holiday on a Saturday is observed on the preceding Friday (5 U.S.C. 6103(b)), on a Sunday on the following Monday (Executive Order 11582, section 3(a)); substitute = observed on another day than the legal date. Each holiday is stored under the year of its observed date: New Year’s Day 2028 (a Saturday) is observed on Friday 31 December 2027, so 2027 lists 12 days and 2028 lists 10. Inauguration Day (5 U.S.C. 6103(c), Washington, DC, area only, every fourth year) is left out. OPM publishes the schedule up to 2030; add 2031 when it is published. States, local governments and private businesses may observe other days or use other names."
+    },
+    "email_signature": {
+      "value": {
+        "situations": {
+          "everyday": {
+            "required": []
+          },
+          "marketing": {
+            "required": [
+              "address"
+            ]
+          }
+        }
+      },
+      "unit": "object",
+      "label": "CAN-SPAM: what a commercial email must contain (physical postal address, opt-out)",
+      "source": "https://www.ftc.gov/sites/default/files/documents/cases/2007/11/canspam.pdf",
+      "source_title": "Controlling the Assault of Non-Solicited Pornography and Marketing Act of 2003 (CAN-SPAM Act), Public Law 108-187 (FTC)",
+      "confidence": "high",
+      "verified_on": "2026-10-29",
+      "note": "Read in full on 29/10/2026 with the « Lire une source officielle » tool (enacted text, SHA-256 a16513fc…4e88). Sec. 3(2): a « commercial electronic mail message » is one whose primary purpose is the commercial advertisement or promotion of a commercial product or service; it does not include a transactional or relationship message; a reference to a company or a link to its website does not by itself make a message commercial. Sec. 5(a)(3): a functioning return email address or other Internet-based mechanism, clearly and conspicuously displayed, that the recipient may use, in a manner specified in the message, to ask not to receive future commercial emails, working for at least 30 days. Sec. 5(a)(5)(A): clear identification that the message is an advertisement or solicitation (not needed with prior affirmative consent, 5(a)(5)(B)), clear notice of the opportunity to decline further commercial emails, and « a valid physical postal address of the sender ». The FTC compliance guide page was not reachable (404 to the reading tool); later FTC rules (16 CFR part 316) were not read."
     }
   },
   "open_questions": [

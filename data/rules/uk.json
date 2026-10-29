@@ -2731,6 +2731,52 @@
       "confidence": "high",
       "verified_on": "2026-10-29",
       "note": "Read in full on 29/10/2026 with the « Lire une source officielle » tool (https://www.gov.uk/bank-holidays.json, SHA-256 538b3482…cde6). England and Wales: 8 bank holidays a year. Scotland: 2nd January and St Andrew's Day, Summer bank holiday on the first Monday of August, no Easter Monday; one-off World Cup bank holiday on 15 June 2026 (10 bank holidays in 2026). Northern Ireland: St Patrick's Day and Battle of the Boyne (Orangemen's Day), 10 a year. When a bank holiday falls on a weekend, a substitute weekday is listed (\"Substitute day\"), e.g. Boxing Day 2026 on Monday 28 December. The list covers 2019 to 2028; 2024 to 2028 are kept. Add 2029 when GOV.UK publishes it."
+    },
+    "email_signature": {
+      "value": {
+        "situations": {
+          "sole_own_name": {
+            "required": []
+          },
+          "sole_trading_name": {
+            "required": [
+              "business",
+              "name",
+              "address"
+            ]
+          },
+          "limited": {
+            "required": [
+              "business",
+              "company_number",
+              "uk_part",
+              "address"
+            ]
+          }
+        },
+        "uk_parts": [
+          "england-and-wales",
+          "scotland",
+          "northern-ireland"
+        ]
+      },
+      "unit": "object",
+      "label": "Information required on business letters and emails: limited company, sole trader using a business name",
+      "source": "https://www.gov.uk/running-a-limited-company/signs-stationery-and-promotional-material",
+      "source_title": "Running a limited company: your responsibilities: Signs, stationery and promotional material - GOV.UK",
+      "more_sources": [
+        {
+          "source": "https://www.legislation.gov.uk/uksi/2015/17/part/6",
+          "source_title": "The Company, Limited Liability Partnership and Business (Names and Trading Disclosures) Regulations 2015, Part 6 (Trading Disclosures)"
+        },
+        {
+          "source": "https://www.legislation.gov.uk/ukpga/2006/46/part/41/chapter/2",
+          "source_title": "Companies Act 2006, Part 41, Chapter 2 (Disclosure required in case of individual or partnership)"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-10-29",
+      "note": "Read in full on 29/10/2026 with the « Lire une source officielle » tool (SHA-256 73b0f14d…9d95, f4e2c7d8…40da, b4320038…7100). Limited company: registered name on business letters and « all other forms of its business correspondence and documentation » (reg. 24); on business letters, order forms and websites: part of the UK where registered, registered number, registered office address, and the fact that it is a limited company where the name is exempt from « limited » (reg. 25); a document « in hard copy, electronic or any other form » (reg. 29(c)); if a business letter names a director other than in the text or as a signatory, all directors (reg. 26); share capital, if shown, as paid up (reg. 25(3)). GOV.UK: the fact that it is a limited company, usually by spelling out the full name including « Limited » or « Ltd ». Sole trader using a business name (a name other than their surname, with forename or initial allowed): their name and a UK address where documents can be served, in legible characters, on business letters, written orders, invoices and receipts, and written demands for payment (Companies Act 2006, ss. 1200 to 1202); the Act does not say whether an email is a business letter. Sole trader trading under their own name: no disclosure under this Chapter."
     }
   },
   "open_questions": [

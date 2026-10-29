@@ -1,0 +1,103 @@
+<!--{
+  "id": "signature",
+  "slug": "email-signature-generator/",
+  "title": "Email Signature Generator for Freelancers (Canada, CASL)",
+  "description": "Create a professional email signature with what CASL requires in commercial emails: your name, mailing address, contact details and an unsubscribe line.",
+  "menu": "Email signature",
+  "icon": "✍️",
+  "blurb": "A clean signature with what CASL requires in commercial emails.",
+  "app": "Email Signature Generator (Canada)",
+  "scripts": ["engines/signature.js", "tools/signature.js"],
+  "rules": "ca",
+  "sources": ["email_signature"],
+  "priority": 0.7,
+  "faq": [
+    ["Which of my emails does CASL cover?", "Commercial electronic messages: emails that have as their purpose, or one of their purposes, to encourage participation in a commercial activity, such as offering your services, advertising or promoting yourself as someone who offers them. Even an email that only sends a quote the person asked for, confirms a transaction or delivers a service they are entitled to is exempt from consent only: it still needs the identification details and the unsubscribe mechanism. That is why the generator always includes them."],
+    ["What must a commercial email include?", "The name you do business under (or your own name), your mailing address and a phone number, email address or website, plus an unsubscribe mechanism. They must be clear and prominent."],
+    ["Does a quote count?", "Yes: a quote is an offer. If the person asked for it, you don't need their consent to send it, but the identification details and the unsubscribe mechanism still apply."],
+    ["What does the unsubscribe mechanism need?", "A free way to unsubscribe by the same electronic means, with an email address or web link to send the request to. It must stay valid for 60 days, and you must act on a request within 10 business days."],
+    ["Is the information I type sent anywhere?", "No. The signature is created in your browser and what you type is saved on this device only."]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · CASL ready</span>
+    <h1>Email signature generator</h1>
+    <p class="lead">A clean, professional signature that includes what Canada's anti-spam legislation (CASL) requires in commercial emails: the name you do business under, your mailing address, how to reach you and a way to unsubscribe. Copy it into Gmail, Outlook or Apple Mail in one click.</p>
+    <ul class="trust"><li>CASL identification and unsubscribe</li><li>Gmail, Outlook, Apple Mail</li><li>Nothing is sent</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="sg-form" onsubmit="return false">
+      <h2>You</h2>
+      <div class="fields">
+        <div class="field"><label for="sg-name">Full name</label>
+          <input type="text" id="sg-name" name="name" autocomplete="name" placeholder="Alex Tremblay" data-save></div>
+        <div class="field"><label for="sg-role">Job title</label>
+          <input type="text" id="sg-role" name="role" autocomplete="organization-title" placeholder="Web developer" data-save></div>
+        <div class="field full"><label for="sg-business">Business name</label>
+          <input type="text" id="sg-business" name="business" autocomplete="organization" placeholder="Tremblay Web Studio" aria-describedby="sg-business-hint" data-save>
+          <span class="hint" id="sg-business-hint">The name you carry on business under, if it is not your own name.</span></div>
+        <div class="field full"><label for="sg-address">Mailing address</label>
+          <input type="text" id="sg-address" name="address" autocomplete="street-address" placeholder="200 Queen St W, Toronto ON M5V 2L4" data-save></div>
+      </div>
+      <input type="hidden" id="sg-status" name="status" value="commercial">
+      <h3>Contact details</h3>
+      <div class="fields">
+        <div class="field"><label for="sg-phone">Phone</label>
+          <input type="tel" id="sg-phone" name="phone" autocomplete="tel" placeholder="416-555-0123" data-save></div>
+        <div class="field"><label for="sg-email">Email</label>
+          <input type="email" id="sg-email" name="email" autocomplete="email" placeholder="alex@tremblayweb.ca" data-save></div>
+        <div class="field"><label for="sg-website">Website</label>
+          <input type="text" inputmode="url" id="sg-website" name="website" placeholder="tremblayweb.ca" data-save></div>
+        <div class="field"><label for="sg-linkedin">LinkedIn profile</label>
+          <input type="text" inputmode="url" id="sg-linkedin" name="linkedin" placeholder="linkedin.com/in/alextremblay" data-save></div>
+        <div class="field full"><span class="label">Colour</span>
+          <div class="rate-chips" role="radiogroup" aria-label="Signature colour">
+            <label><input type="radio" name="accent" value="brand" checked data-save><span>Orange</span></label>
+            <label><input type="radio" name="accent" value="blue" data-save><span>Blue</span></label>
+            <label><input type="radio" name="accent" value="green" data-save><span>Green</span></label>
+            <label><input type="radio" name="accent" value="ink" data-save><span>Black</span></label>
+          </div></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="card signature-card">
+        <h2 class="signature-title">Preview</h2>
+        <div class="signature-preview" id="sg-preview" aria-label="Signature preview"></div>
+      </div>
+      <div class="preview-actions">
+        <button type="button" class="btn btn-primary" id="sg-copy">Copy signature</button>
+        <button type="button" class="btn btn-ghost" id="sg-copy-text">Copy plain text</button>
+        <button type="button" class="btn btn-ghost" id="sg-copy-html">Copy HTML code</button>
+        <button type="button" class="btn btn-ghost" id="sg-download">Download (.html)</button>
+      </div>
+      <p class="small muted" id="sg-message" role="status" aria-live="polite"></p>
+      <div class="card" style="padding: 16px 18px;">
+        <h2 class="signature-title">What CASL requires</h2>
+        <p class="small muted" id="sg-explain"></p>
+        <ul class="mention-checks" id="sg-checks"></ul>
+        <p class="notice" id="sg-summary" hidden></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script type="application/json" id="signature-data">{"store": "signature-ca", "lang": "en-CA", "file": "email-signature", "file_title": "Email signature", "colon": ": ", "linkedin": "LinkedIn", "tpl": {"commercial": [["{address}"]]}, "optout": {"commercial": "To unsubscribe from my commercial emails, reply “unsubscribe” or write to {email}."}, "explain": {"commercial": "Commercial emails: the name you do business under, your mailing address and a phone number, email address or website, plus an unsubscribe mechanism with an email address to write to (Electronic Commerce Protection Regulations, s. 2; CASL, ss. 6 and 11). Act on unsubscribe requests within 10 business days."}, "items": {"name_or_business": "Your name or business name", "address": "Mailing address", "email": "Email address (for unsubscribe requests)"}, "ok": "✓", "todo": "To add:", "none": {}, "missing": ["{n} detail to add before you use this signature.", "{n} details to add before you use this signature."], "complete": "The signature includes everything CASL requires in a commercial email.", "empty": "Your signature will appear here.", "copied": "Signature copied: paste it into your email app's signature settings.", "copied_button": "Copied ✓", "copied_text": "Plain text copied.", "copied_html": "HTML code copied.", "copy_failed": "This browser could not copy: select the preview and copy it.", "downloaded": "email-signature.html downloaded."}</script>
+
+<section class="section prose">
+  <h2>Email signatures and Canada's anti-spam legislation</h2>
+  <ul>
+    <li><strong>Commercial electronic message:</strong> an email that has as its purpose, or one of its purposes, to encourage participation in a commercial activity, including offering to sell a service, advertising, or promoting a person as someone who does so. The Act looks at the content, the links and the contact information in the message.</li>
+    <li><strong>Identification:</strong> the name you carry on business under (or your name if you do not use another), your mailing address, and a phone number, an email address or a website, set out clearly and prominently.</li>
+    <li><strong>Unsubscribe:</strong> a free way to unsubscribe by the same electronic means, with an email address or web link to send the request to, valid for 60 days. Requests must take effect within 10 business days.</li>
+    <li><strong>Consent:</strong> commercial emails also need the recipient's consent, express or implied. Emails that only send a quote the person asked for, facilitate, complete or confirm a transaction they agreed to, or deliver a service they are entitled to are exempt from consent, but not from identification and unsubscribe: the generator includes both in every signature.</li>
+  </ul>
+  <h3>A signature that works everywhere</h3>
+  <p>The signature is a simple table, with no image or web font to download, so it looks the same in most email apps and stays readable when images are blocked. For your first messages to a prospect, the <a href="{{link:templates}}">email templates</a> are ready to use.</p>
+  <p class="small muted">For information only: this tool is not legal advice.</p>
+</section>

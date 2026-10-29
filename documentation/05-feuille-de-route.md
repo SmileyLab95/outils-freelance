@@ -264,16 +264,24 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   Inauguration Day exclu ; jours de remplacement signalés dans les deux pays (« (observed) », « (substitute day) ») ;
   aide du calculateur de taux horaire ; les 77 dates recalculées par les tests à partir de 5 U.S.C. 6103
   ([42](42-jours-ouvres.md) § 8 et 9, décision D44).
+- **Signature d'email professionnelle (29/10/2026)** : nouvel outil dans les 4 pays (menu « Vendre ») : signature
+  soignée à copier dans Gmail, Outlook ou Apple Mail (mise en forme, texte brut, HTML, fichier), avec les mentions
+  demandées selon le statut : France, nom suivi de « EI », Siren, RCS ou RNE, adresse (société : forme et capital) ;
+  Royaume-Uni, numéro de société et *registered office* (ou nom et adresse sous un nom commercial) ; États-Unis,
+  adresse postale et refus pour les emails de prospection (CAN-SPAM) ; Canada, identification et désabonnement dans
+  chaque message (loi anti-pourriel) ; sources lues en entier ([43](43-signature-email.md), décision D45).
 - **Prochaines actions de Claude** : refonte, suite ([31](31-vision-plateforme.md) § 5) : les quatre modules du compte
   gratuit sont faits (étape 5) ; étape 6, outils restants (CGV hors de France, après la lecture des sources de chaque
   pays ; jours ouvrés au Canada (jours fériés fédéraux et provinciaux) : en attente de l'accès à canada.ca, refusé
   depuis l'environnement de travail et sans réponse depuis l'outil de lecture des sources le 29/10/2026 ; sous-traitance,
-  devises, signature d'email, guides de protection sociale) ;
+  devises, guides de protection sociale) ;
   ajouter les taux du 1er semestre 2027 dès leur publication
   (fin décembre 2026 : intérêt légal par arrêté, taux de la BCE en vigueur au 1er janvier ; tables `taux_interet_legal`
   et `taux_bce_refinancement`, utilisées par le calculateur de pénalités et les CGV) ; *bank holidays* de 2029 dès que
   GOV.UK les publie et jours fériés fédéraux de 2031 dès qu'OPM les publie (`public_holidays`, `data/rules/uk.json` et
   `data/rules/us.json`) ;
+  texte de l'article R123-237 du Code de commerce à relire dès que Légifrance est lisible (mentions sur les
+  correspondances, signature d'email) ;
   activité mixte de l'Espace à spécifier (le profil n'a qu'une activité : deux plafonds, déclaration et livre des
   recettes distinguant ventes et prestations, BOFiP BOI-BIC-DECLA-30-30) ; questions ouvertes de `data/rules/` à relire
   avec l'outil de lecture des sources (ACRE) ; puis besoins P3 restants

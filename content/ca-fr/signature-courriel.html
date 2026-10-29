@@ -1,0 +1,103 @@
+<!--{
+  "id": "signature",
+  "slug": "signature-courriel/",
+  "title": "Signature de courriel pour travailleur autonome (LCAP)",
+  "description": "Créez votre signature de courriel avec ce que la loi anti-pourriel exige dans les messages commerciaux : nom, adresse postale, coordonnées et désabonnement.",
+  "menu": "Signature de courriel",
+  "icon": "✍️",
+  "blurb": "Une signature soignée, avec ce que la loi anti-pourriel exige.",
+  "app": "Générateur de signature de courriel",
+  "scripts": ["engines/signature.js", "tools/signature.js"],
+  "rules": "ca",
+  "sources": ["email_signature"],
+  "priority": 0.7,
+  "faq": [
+    ["Quels courriels la loi anti-pourriel vise-t-elle ?", "Les messages électroniques commerciaux : ceux qui ont pour but, ou l'un de leurs buts, d'encourager la participation à une activité commerciale, par exemple offrir vos services, faire de la publicité ou vous présenter comme quelqu'un qui les offre. Même un courriel qui envoie seulement un devis demandé, confirme une transaction ou fournit un service convenu n'est dispensé que du consentement : l'identification et le mécanisme d'exclusion restent dus. C'est pourquoi le générateur les ajoute toujours."],
+    ["Que doit contenir un message commercial ?", "Le nom sous lequel vous exercez vos activités commerciales (ou votre nom), votre adresse postale et un numéro de téléphone, une adresse de courriel ou un site Web, ainsi qu'un mécanisme d'exclusion, énoncés en termes clairs et facilement lisibles."],
+    ["Que doit permettre le mécanisme d'exclusion ?", "Se désabonner sans frais, par le même moyen électronique, en indiquant une adresse électronique ou un lien vers une page Web. Il reste valide 60 jours et la demande doit prendre effet au plus tard 10 jours ouvrables après son envoi."],
+    ["Comment ajouter la signature à ma messagerie ?", "Cliquez sur « Copier la signature », puis collez-la dans les réglages de signature de votre messagerie (Gmail, Outlook, Apple Mail…). Si la mise en forme ne passe pas, utilisez le fichier .html téléchargé ou le texte brut."],
+    ["Mes informations sont-elles envoyées quelque part ?", "Non. La signature est créée dans votre navigateur et votre saisie est enregistrée sur cet appareil seulement."]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Gratuit · loi anti-pourriel</span>
+    <h1>Signature de courriel</h1>
+    <p class="lead">Une signature claire et professionnelle, avec ce que la loi canadienne anti-pourriel exige dans les messages commerciaux : le nom sous lequel vous exercez, votre adresse postale, un moyen de vous joindre et un moyen de se désabonner. À copier dans votre messagerie en un clic.</p>
+    <ul class="trust"><li>Identification et désabonnement</li><li>Gmail, Outlook, Apple Mail</li><li>Rien n'est envoyé</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="sg-form" onsubmit="return false">
+      <h2>Vous</h2>
+      <div class="fields">
+        <div class="field"><label for="sg-name">Prénom et nom</label>
+          <input type="text" id="sg-name" name="name" autocomplete="name" placeholder="Alex Tremblay" data-save></div>
+        <div class="field"><label for="sg-role">Métier ou fonction</label>
+          <input type="text" id="sg-role" name="role" autocomplete="organization-title" placeholder="Développeur Web" data-save></div>
+        <div class="field full"><label for="sg-business">Nom d'entreprise</label>
+          <input type="text" id="sg-business" name="business" autocomplete="organization" placeholder="Studio Web Tremblay" aria-describedby="sg-business-hint" data-save>
+          <span class="hint" id="sg-business-hint">Le nom sous lequel vous exercez vos activités, s'il diffère du vôtre.</span></div>
+        <div class="field full"><label for="sg-address">Adresse postale</label>
+          <input type="text" id="sg-address" name="address" autocomplete="street-address" placeholder="1000, rue Sherbrooke Ouest, Montréal (Québec) H3A 3G4" data-save></div>
+      </div>
+      <input type="hidden" id="sg-status" name="status" value="commercial">
+      <h3>Coordonnées</h3>
+      <div class="fields">
+        <div class="field"><label for="sg-phone">Téléphone</label>
+          <input type="tel" id="sg-phone" name="phone" autocomplete="tel" placeholder="514 555-0123" data-save></div>
+        <div class="field"><label for="sg-email">Courriel</label>
+          <input type="email" id="sg-email" name="email" autocomplete="email" placeholder="alex@studiotremblay.ca" data-save></div>
+        <div class="field"><label for="sg-website">Site Web</label>
+          <input type="text" inputmode="url" id="sg-website" name="website" placeholder="studiotremblay.ca" data-save></div>
+        <div class="field"><label for="sg-linkedin">Profil LinkedIn</label>
+          <input type="text" inputmode="url" id="sg-linkedin" name="linkedin" placeholder="linkedin.com/in/alextremblay" data-save></div>
+        <div class="field full"><span class="label">Couleur</span>
+          <div class="rate-chips" role="radiogroup" aria-label="Couleur de la signature">
+            <label><input type="radio" name="accent" value="brand" checked data-save><span>Orange</span></label>
+            <label><input type="radio" name="accent" value="blue" data-save><span>Bleu</span></label>
+            <label><input type="radio" name="accent" value="green" data-save><span>Vert</span></label>
+            <label><input type="radio" name="accent" value="ink" data-save><span>Noir</span></label>
+          </div></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="card signature-card">
+        <h2 class="signature-title">Aperçu</h2>
+        <div class="signature-preview" id="sg-preview" aria-label="Aperçu de la signature"></div>
+      </div>
+      <div class="preview-actions">
+        <button type="button" class="btn btn-primary" id="sg-copy">Copier la signature</button>
+        <button type="button" class="btn btn-ghost" id="sg-copy-text">Copier le texte brut</button>
+        <button type="button" class="btn btn-ghost" id="sg-copy-html">Copier le code HTML</button>
+        <button type="button" class="btn btn-ghost" id="sg-download">Télécharger (.html)</button>
+      </div>
+      <p class="small muted" id="sg-message" role="status" aria-live="polite"></p>
+      <div class="card" style="padding: 16px 18px;">
+        <h2 class="signature-title">Ce que la loi exige</h2>
+        <p class="small muted" id="sg-explain"></p>
+        <ul class="mention-checks" id="sg-checks"></ul>
+        <p class="notice" id="sg-summary" hidden></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script type="application/json" id="signature-data">{"store": "signature-ca-fr", "lang": "fr-CA", "file": "signature-courriel", "file_title": "Signature de courriel", "colon": " : ", "linkedin": "LinkedIn", "tpl": {"commercial": [["{address}"]]}, "optout": {"commercial": "Pour ne plus recevoir mes courriels commerciaux, répondez « désabonnement » ou écrivez à {email}."}, "explain": {"commercial": "Messages commerciaux : le nom sous lequel vous exercez vos activités, votre adresse postale et un téléphone, un courriel ou un site Web, ainsi qu'un mécanisme d'exclusion qui indique une adresse électronique (Règlement sur la protection du commerce électronique, art. 2 ; Loi, art. 6 et 11). Une demande de désabonnement prend effet au plus tard 10 jours ouvrables après son envoi."}, "items": {"name_or_business": "Votre nom ou nom d'entreprise", "address": "Adresse postale", "email": "Adresse de courriel (pour les désabonnements)"}, "ok": "✓", "todo": "À compléter :", "none": {}, "missing": ["{n} élément à compléter avant d'utiliser la signature.", "{n} éléments à compléter avant d'utiliser la signature."], "complete": "La signature contient tout ce que la loi exige dans un message commercial.", "empty": "Votre signature apparaîtra ici.", "copied": "Signature copiée : collez-la dans les réglages de signature de votre messagerie.", "copied_button": "Copié ✓", "copied_text": "Texte brut copié.", "copied_html": "Code HTML copié.", "copy_failed": "Copie impossible dans ce navigateur : sélectionnez l'aperçu et copiez-le.", "downloaded": "Fichier signature-courriel.html téléchargé."}</script>
+
+<section class="section prose">
+  <h2>Signature de courriel et loi canadienne anti-pourriel</h2>
+  <ul>
+    <li><strong>Message électronique commercial</strong> : un message qui a pour but, ou l'un de ses buts, d'encourager la participation à une activité commerciale, notamment offrir de vendre un service, en faire la publicité ou présenter une personne comme quelqu'un qui le fait. La Loi tient compte du contenu, des liens et des coordonnées du message.</li>
+    <li><strong>Identification</strong> : le nom sous lequel vous exercez vos activités commerciales (ou votre nom), votre adresse postale et soit un numéro de téléphone, soit une adresse de courriel ou de site Web, en termes clairs et facilement lisibles.</li>
+    <li><strong>Désabonnement</strong> : un moyen gratuit de se désabonner, par le même moyen électronique, avec une adresse électronique ou un lien vers une page Web, valide pendant 60 jours ; la demande prend effet au plus tard 10 jours ouvrables après son envoi.</li>
+    <li><strong>Consentement</strong> : un message commercial demande aussi le consentement, exprès ou tacite, du destinataire. Un devis demandé, la confirmation d'une transaction convenue ou la fourniture d'un service prévu en sont dispensés, mais pas de l'identification ni du désabonnement : le générateur ajoute les deux à chaque signature.</li>
+  </ul>
+  <h3>Une signature lisible partout</h3>
+  <p>La signature est un tableau simple, sans image ni police à télécharger : elle s'affiche de la même façon dans la plupart des messageries et reste lisible si les images sont bloquées. Pour vos premiers messages à un client potentiel, les <a href="{{link:templates}}">modèles de courriels</a> sont prêts à l'emploi.</p>
+  <p class="small muted">À titre informatif : cet outil ne remplace pas un conseil juridique.</p>
+</section>
