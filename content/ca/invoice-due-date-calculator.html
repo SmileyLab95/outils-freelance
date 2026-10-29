@@ -1,0 +1,75 @@
+<!--{
+  "id": "duedate",
+  "slug": "invoice-due-date-calculator/",
+  "title": "Invoice Due Date Calculator (Net 30, EOM) for Canada",
+  "description": "Find the due date of an invoice from your payment terms: due on receipt, Net 15, Net 30, Net 30 EOM and more, with the days left until it is due.",
+  "menu": "Invoice due date",
+  "icon": "📅",
+  "blurb": "Net 30, EOM, on receipt: the exact due date of an invoice.",
+  "app": "Invoice Due Date Calculator (Canada)",
+  "scripts": ["engines/echeance.js", "tools/echeance.js"],
+  "rules": "ca",
+  "priority": 0.6,
+  "faq": [
+    ["What does Net 30 mean?", "The invoice is due 30 days after its date. Net 15 and Net 60 work the same way with 15 or 60 days."],
+    ["What does Net 30 EOM mean?", "EOM means end of month: the 30 days count from the end of the month in which the invoice is dated. An invoice dated March 10 on Net 30 EOM is due April 30."],
+    ["Who sets the payment terms?", "You and your client. Put them in your quote or contract and repeat them on every invoice, with any late payment interest you agreed."],
+    ["What should I do once an invoice is late?", "Send a polite reminder first. If your contract provides for late payment interest, the late fee calculator works it out."]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · Net 30, EOM, on receipt</span>
+    <h1>Invoice due date calculator</h1>
+    <p class="lead">Pick the invoice date and your payment terms to get the exact due date, its day of the week and the days left until it is due.</p>
+    <ul class="trust"><li>Net terms and EOM</li><li>Day of the week</li><li>Days left until the due date</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="ec-form" onsubmit="return false">
+      <div class="fields">
+        <div class="field"><label for="ec-date">Invoice date</label>
+          <input type="date" id="ec-date" name="date" data-save></div>
+        <div class="field"><label for="ec-terms">Payment terms</label>
+          <select id="ec-terms" name="terms" data-save>
+            <option value="receipt">Due on receipt</option>
+            <option value="15">Net 15</option>
+            <option value="30" selected>Net 30</option>
+            <option value="45">Net 45</option>
+            <option value="60">Net 60</option>
+            <option value="90">Net 90</option>
+            <option value="eom30">Net 30 EOM</option>
+          </select></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="result-hero" role="status" aria-atomic="true">
+        <div class="label">Due date</div>
+        <div class="big" id="ec-due">–</div>
+        <div class="sub" id="ec-sub">–</div>
+      </div>
+      <ul class="result-list card" style="padding: 6px 18px; margin-top: 16px;">
+        <li><span>Late from</span><b id="ec-late">–</b></li>
+        <li><span>Days after the invoice</span><b id="ec-span">–</b></li>
+      </ul>
+      <p class="notice" id="ec-notice" aria-live="polite" hidden style="margin-top: 16px;"></p>
+    </div>
+  </div>
+</section>
+
+<script type="application/json" id="echeance-data">{"country": "ca", "lang": "en-CA", "store": "echeance-ca", "days": ["{n} day", "{n} days"], "in_days": ["in {n} day", "in {n} days"], "days_ago": ["{n} day ago", "{n} days ago"], "before_invoice": ["{n} day before the invoice", "{n} days before the invoice"], "today": "today", "terms_note": "Put this date on the invoice, with the payment terms you agreed with your client."}</script>
+
+<section class="section prose">
+  <h2>Payment terms on Canadian invoices</h2>
+  <ul>
+    <li><strong>Net terms:</strong> Net 30 means 30 days after the invoice date; Net 30 EOM means 30 days after the end of the month of the invoice.</li>
+    <li><strong>In writing:</strong> agree the terms in your quote or contract, then repeat them on every invoice, with any late payment interest you agreed.</li>
+  </ul>
+  <h3>After the due date</h3>
+  <p>Send a polite <a href="{{link:reminder}}">payment reminder</a>, then work out any agreed <a href="{{link:latefee}}">late payment interest</a>.</p>
+  <p class="small muted">For information only: this tool is not legal advice.</p>
+</section>

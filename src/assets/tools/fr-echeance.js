@@ -1,38 +1,21 @@
-/* Date d'échéance d'une facture : délais en jours, fin de mois (deux méthodes) et maximum légal (art. L441-10). */
+/* Date d'échéance d'une facture : délais en jours, fin de mois (deux méthodes) et maximum légal (art. L441-10).
+   Calculs : moteur commun OFE.dueDate (engines/echeance.js, documentation/44-date-echeance-international.md). */
 (function () {
   "use strict";
-  var OF = window.OF, R = window.OF_RULES;
+  var OF = window.OF, R = window.OF_RULES, E = window.OFE && window.OFE.dueDate;
   var form = document.getElementById("echeance-form");
-  if (!form || !R) return;
+  if (!form || !R || !E) return;
   var $ = function (id) { return document.getElementById(id); };
   var set = function (id, text) { $(id).textContent = text; };
   var long = function (iso) { return OF.date(iso, { weekday: "long", day: "numeric", month: "long", year: "numeric" }); };
-  var D = R.retard_paiement_delais;
-
-  /** Dernier jour du mois d'une date ISO. */
-  function endOfMonth(iso) {
-    var d = OF.parseDate(iso);
-    var last = new Date(d.getFullYear(), d.getMonth() + 1, 0);
-    return last.getFullYear() + "-" + String(last.getMonth() + 1).padStart(2, "0") + "-" + String(last.getDate()).padStart(2, "0");
-  }
-
-  function dueDate(date, terms) {
-    if (terms === "30fdm") return endOfMonth(OF.addDays(date, 30));
-    if (terms === "45fdm") return endOfMonth(OF.addDays(date, 45));
-    if (terms === "fdm45") return OF.addDays(endOfMonth(date), 45);
-    return OF.addDays(date, Number(terms) || 0);
-  }
-
   function compute() {
     var date = $("d-date").value || OF.today();
+    if (isNaN(E.day(date))) date = OF.today();
     var terms = $("d-terms").value;
-    var due = dueDate(date, terms);
-    var span = OF.daysBetween(date, due);
-    var left = OF.daysBetween(OF.today(), due);
-    var max60 = OF.addDays(date, D.delai_max_date_facture_jours);
-    var max45 = endOfMonth(OF.addDays(date, D.delai_max_fin_de_mois_jours));
-    var max45b = OF.addDays(endOfMonth(date), D.delai_max_fin_de_mois_jours);
-    var latest = [max60, max45, max45b].sort().pop();
+    var due = E.due(date, terms) || date;
+    var span = E.between(date, due);
+    var left = E.between(OF.today(), due);
+    var limits = E.frLimits(date, R), max60 = limits.max60, max45 = limits.max45, max45b = limits.max45b, latest = limits.latest;
 
     set("d-due", OF.date(due, { day: "numeric", month: "long", year: "numeric" }));
     set("d-sub", long(due).replace(/^./, function (c) { return c.toUpperCase(); }) +

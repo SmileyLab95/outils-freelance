@@ -1,5 +1,20 @@
 # Journal des modifications
 
+## 2026-10-29 — Date d'échéance d'une facture hors de France
+
+- Nouveau **calculateur de date d'échéance** au Royaume-Uni, aux États-Unis et au Canada (anglais et français), menu
+  de la facturation : date d'échéance, jour de la semaine, jours restants, début du retard.
+- **Royaume-Uni** (*Late Payment Act 1998*, s. 4, lue en entier) : sans date convenue, dernier jour d'une période de
+  30 jours qui commence le jour de la prestation ou de la facture (le plus tardif), retard le lendemain ; au-delà de
+  60 jours entre entreprises, signalement (sauf délai non manifestement abusif) ; autorité publique : 30 jours.
+- **États-Unis** : Net 7 à Net 90, Net 30 EOM, à réception ; sans date au contrat, 30 jours après la fin du travail à
+  New York (ville et État) et dans l'Illinois (lois *Freelance Isn't Free*).
+- **Canada** : échéance selon les conditions convenues.
+- Moteur commun `engines/echeance.js`, aussi utilisé par la page française (mêmes résultats).
+- Spécification [44](documentation/44-date-echeance-international.md), décision D46. Tests : 7 tests, erreurs
+  réintroduites détectées (une équivalente, code retiré), parcours navigateur ; suite complète (517 tests unitaires,
+  29 tests serveur, 5 tests des scripts, 3 703 vérifications navigateur).
+
 ## 2026-10-29 — Signature d'email professionnelle (4 pays)
 
 - Nouveau **générateur de signature d'email** (menu « Vendre ») en France, au Royaume-Uni, aux États-Unis et au Canada

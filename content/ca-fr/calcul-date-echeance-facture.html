@@ -1,0 +1,75 @@
+<!--{
+  "id": "duedate",
+  "slug": "calcul-date-echeance-facture/",
+  "title": "Date d'échéance d'une facture : 30 jours, fin de mois",
+  "description": "Calculez la date d'échéance d'une facture selon vos conditions de paiement : sur réception, net 30 jours, fin de mois + 30 jours, avec les jours restants.",
+  "menu": "Date d'échéance d'une facture",
+  "icon": "📅",
+  "blurb": "Sur réception, 30 jours, fin de mois : la date exacte de l'échéance.",
+  "app": "Calculateur de date d'échéance",
+  "scripts": ["engines/echeance.js", "tools/echeance.js"],
+  "rules": "ca",
+  "priority": 0.6,
+  "faq": [
+    ["Que veut dire « net 30 jours » ?", "La facture est payable 30 jours après sa date. « Net 15 » et « net 60 » fonctionnent de la même façon, avec 15 ou 60 jours."],
+    ["Que veut dire « fin de mois + 30 jours » ?", "Les 30 jours se comptent à partir de la fin du mois de la facture : une facture datée du 10 mars est payable le 30 avril."],
+    ["Qui fixe les conditions de paiement ?", "Vous et votre client. Inscrivez-les dans votre devis ou votre contrat, puis sur chaque facture, avec les intérêts de retard convenus, s'il y en a."],
+    ["Que faire quand une facture est en retard ?", "Envoyez d'abord un rappel courtois. Si votre contrat prévoit des intérêts de retard, le calculateur d'intérêts les calcule."]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Gratuit · sur réception, 30 jours, fin de mois</span>
+    <h1>Date d'échéance d'une facture</h1>
+    <p class="lead">Choisissez la date de la facture et vos conditions de paiement : la date d'échéance s'affiche, avec le jour de la semaine et le nombre de jours restants.</p>
+    <ul class="trust"><li>Délais nets et fin de mois</li><li>Jour de la semaine</li><li>Jours restants</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="ec-form" onsubmit="return false">
+      <div class="fields">
+        <div class="field"><label for="ec-date">Date de la facture</label>
+          <input type="date" id="ec-date" name="date" data-save></div>
+        <div class="field"><label for="ec-terms">Conditions de paiement</label>
+          <select id="ec-terms" name="terms" data-save>
+            <option value="receipt">Sur réception</option>
+            <option value="15">Net 15 jours</option>
+            <option value="30" selected>Net 30 jours</option>
+            <option value="45">Net 45 jours</option>
+            <option value="60">Net 60 jours</option>
+            <option value="90">Net 90 jours</option>
+            <option value="eom30">Fin de mois + 30 jours</option>
+          </select></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="result-hero" role="status" aria-atomic="true">
+        <div class="label">Date d'échéance</div>
+        <div class="big" id="ec-due">–</div>
+        <div class="sub" id="ec-sub">–</div>
+      </div>
+      <ul class="result-list card" style="padding: 6px 18px; margin-top: 16px;">
+        <li><span>En retard à partir du</span><b id="ec-late">–</b></li>
+        <li><span>Jours après la facture</span><b id="ec-span">–</b></li>
+      </ul>
+      <p class="notice" id="ec-notice" aria-live="polite" hidden style="margin-top: 16px;"></p>
+    </div>
+  </div>
+</section>
+
+<script type="application/json" id="echeance-data">{"country": "ca", "lang": "fr-CA", "store": "echeance-ca-fr", "days": ["{n} jour", "{n} jours"], "in_days": ["dans {n} jour", "dans {n} jours"], "days_ago": ["il y a {n} jour", "il y a {n} jours"], "before_invoice": ["{n} jour avant la facture", "{n} jours avant la facture"], "today": "aujourd'hui", "terms_note": "Inscrivez cette date sur la facture, avec les conditions de paiement convenues avec votre client."}</script>
+
+<section class="section prose">
+  <h2>Les conditions de paiement sur une facture</h2>
+  <ul>
+    <li><strong>Délais nets</strong> : « net 30 jours » signifie 30 jours après la date de la facture ; « fin de mois + 30 jours », 30 jours après la fin du mois de la facture.</li>
+    <li><strong>Par écrit</strong> : convenez des conditions dans votre devis ou votre contrat, puis répétez-les sur chaque facture, avec les intérêts de retard convenus, s'il y en a.</li>
+  </ul>
+  <h3>Après l'échéance</h3>
+  <p>Envoyez un <a href="{{link:reminder}}">rappel de paiement</a> courtois, puis calculez les <a href="{{link:latefee}}">intérêts de retard</a> convenus.</p>
+  <p class="small muted">À titre informatif : cet outil ne remplace pas un conseil juridique.</p>
+</section>

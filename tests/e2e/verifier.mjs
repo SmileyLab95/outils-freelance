@@ -349,6 +349,54 @@ const tests = {
     check((await t("#jo-due")) === "31 December 2026" && (await t("#jo-explain")).includes("; "), "UK: 10 working days after 15 December 2026 → 31 December");
     check((await page.$$('#jo-mode option[value="franc"]')).length === 0, "UK: no French « jours francs »");
   },
+  async "uk/invoice-due-date-calculator/"(page) {
+    const t = async (sel) => (await page.textContent(sel)).replace(/\s+/g, " ").trim();
+    check((await page.inputValue("#ec-date")) === new Date().toISOString().slice(0, 10) || (await page.inputValue("#ec-date")).length === 10,
+      "UK due date: invoice date prefilled");
+    await page.fill("#ec-date", "2026-03-05");
+    await page.fill("#ec-done", "2026-03-01");
+    await page.selectOption("#ec-terms", "none");
+    check((await t("#ec-due")) === "3 April 2026" && (await t("#ec-late")) === "4 April 2026" && (await t("#ec-notice")).includes("30-day period beginning on 5 March 2026"),
+      "UK due date: no agreed date, last day of the 30-day period (3 April), late from 4 April");
+    await page.fill("#ec-done", "");
+    await page.fill("#ec-date", "2026-03-01");
+    await page.selectOption("#ec-terms", "90");
+    check((await t("#ec-due")) === "29 April 2026" && (await page.getAttribute("#ec-notice", "class")).includes("warn") && (await t("#ec-notice")).includes("grossly unfair"),
+      "UK due date: 90 days capped at the end of the 60-day period unless not grossly unfair");
+    await page.selectOption("#ec-client", "public");
+    await page.selectOption("#ec-terms", "60");
+    check((await t("#ec-due")) === "30 March 2026" && (await t("#ec-late")) === "31 March 2026", "UK due date: public authority, 30-day limit");
+    await page.selectOption("#ec-client", "business");
+    await page.selectOption("#ec-terms", "30");
+    check((await t("#ec-due")) === "31 March 2026" && (await t("#ec-span")) === "30 days" && (await page.getAttribute("#ec-notice", "class")).includes("ok"),
+      "UK due date: 30 days, agreed terms");
+  },
+  async "us/invoice-due-date-calculator/"(page) {
+    const t = async (sel) => (await page.textContent(sel)).replace(/\s+/g, " ").trim();
+    await page.fill("#ec-date", "2026-03-10");
+    await page.selectOption("#ec-terms", "eom30");
+    check((await t("#ec-due")) === "April 30, 2026" && await page.isHidden("#ec-done"), "US due date: Net 30 EOM from March 10 → April 30");
+    await page.selectOption("#ec-terms", "none");
+    await page.fill("#ec-done", "2026-10-15");
+    check((await t("#ec-due")) === "–" && (await t("#ec-notice")).includes("do not apply here"), "US due date: no date, outside New York and Illinois");
+    await page.selectOption("#ec-place", "illinois");
+    check((await t("#ec-due")) === "November 14, 2026" && (await t("#ec-notice")).includes("Illinois Freelance Worker Protection Act"),
+      "US due date: Illinois, 30 days after the work (October 15 → November 14)");
+    await page.reload({ waitUntil: "networkidle" });
+    check((await page.inputValue("#ec-place")) === "illinois" && (await t("#ec-due")) === "November 14, 2026", "US due date: kept after reload");
+  },
+  async "ca/invoice-due-date-calculator/"(page) {
+    const t = async (sel) => (await page.textContent(sel)).replace(/\s+/g, " ").trim();
+    await page.fill("#ec-date", "2026-03-10");
+    await page.selectOption("#ec-terms", "45");
+    check((await t("#ec-due")) === "April 24, 2026" && (await t("#ec-span")) === "45 days", "CA due date: Net 45 from March 10 → April 24");
+  },
+  async "ca/fr/calcul-date-echeance-facture/"(page) {
+    const t = async (sel) => (await page.textContent(sel)).replace(/[  ]/g, " ").replace(/\s+/g, " ").trim();
+    await page.fill("#ec-date", "2026-03-10");
+    await page.selectOption("#ec-terms", "eom30");
+    check((await t("#ec-due")) === "30 avril 2026" && (await t("#ec-span")) === "51 jours", "échéance (CA-FR) : fin de mois + 30 jours → 30 avril");
+  },
   async "fr/signature-email-professionnelle/"(page) {
     const t = async (sel) => (await page.textContent(sel)).replace(/[  ]/g, " ").replace(/\s+/g, " ").trim();
     const checks = () => page.$$eval("#sg-checks li", (l) => l.map((x) => x.className));
@@ -365,10 +413,16 @@ const tests = {
     check((await checks()).every((c) => c === "is-ok") && preview.includes("Camille Martin EI · SIREN 123 456 789 · RCS Lyon") &&
       (await t("#sg-summary")).includes("Toutes les mentions"), "signature : « EI », Siren, RCS et adresse présents");
     await page.click("#sg-copy");
-    const rich = await page.evaluate(async () => { const it = (await navigator.clipboard.read())[0]; return await (await it.getType("text/html")).text(); });
-    check(await copied(page, "#sg-copy") && /^<table/.test(rich) && rich.includes("Camille Martin EI") && !rich.includes(" "),
+    // La copie est asynchrone : lire le presse-papiers une fois la confirmation affichée (sinon, le contenu précédent).
+    const richDone = await copied(page, "#sg-copy");
+    const rich = await page.evaluate(async () => {
+      const it = (await navigator.clipboard.read())[0];
+      return it.types.includes("text/html") ? await (await it.getType("text/html")).text() : "";
+    });
+    check(richDone && /^<table/.test(rich) && rich.includes("Camille Martin EI") && !rich.includes(" "),
       "signature : copiée avec la mise en forme (HTML), sans espace fine");
     await page.click("#sg-copy-text");
+    await copied(page, "#sg-copy-text");
     const plain = await page.evaluate(() => navigator.clipboard.readText());
     check(plain.includes("LinkedIn : https://linkedin.com/in/camille") && plain.includes("SIREN 123 456 789 · RCS Lyon"),
       "signature : texte brut avec les mêmes mentions");

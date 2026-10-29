@@ -1109,13 +1109,26 @@
       "note": "'amount' is a fixed GBP sum, not a rate. Up to 999.99: 40; 1,000 to 9,999.99: 70; 10,000 or more: 100. Can be claimed once per late payment; reasonable recovery costs above the fixed sum can also be claimed (section 5A of the Act)."
     },
     "late_payment_default_due_period": {
-      "value": "If no payment date is agreed, payment is late 30 days after the later of receipt of the invoice or delivery of the goods/service. Public authorities: 30 days. B2B agreed terms over 60 days must be expressly agreed and not grossly unfair.",
-      "unit": "text",
-      "label": "Default payment period under the Late Payment Act",
-      "source": "https://www.gov.uk/late-commercial-payments-interest-debt-recovery",
-      "source_title": "Late commercial payments: charging interest and debt recovery - GOV.UK",
-      "confidence": "medium",
-      "note": "Standard GOV.UK guidance; the 30-day public authority rule was confirmed, the 60-day rule was not re-read on the live page in this session."
+      "value": {
+        "default_period_days": 30,
+        "public_authority_max_days": 30,
+        "business_max_days": 60,
+        "period_starts": "later of performance and notice of the debt (day included)",
+        "interest_from": "day after the relevant day"
+      },
+      "unit": "object",
+      "label": "Late Payment Act: when a payment becomes late (relevant day, 30-day default, 30 and 60-day limits)",
+      "source": "https://www.legislation.gov.uk/ukpga/1998/20/section/4",
+      "source_title": "Late Payment of Commercial Debts (Interest) Act 1998, section 4 (revised, up to date) - legislation.gov.uk",
+      "more_sources": [
+        {
+          "source": "https://www.gov.uk/late-commercial-payments-interest-debt-recovery",
+          "source_title": "Late commercial payments: charging interest and debt recovery: When a payment becomes late - GOV.UK"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-10-29",
+      "note": "Read in full on 29/10/2026 with the « Lire une source officielle » tool (SHA-256 3def2bd6…bc3b and 9f5b2167…6dac). Statutory interest starts the day after the « relevant day » (s. 4(2)). Relevant day: the agreed payment day; without one, the last day of the relevant 30-day period (s. 4(2A)), which begins with the later of the day the supplier performs and the day the purchaser has notice of the amount of the debt (s. 4(2H)), so the last day is the 30th day counting that day. Public authority: if the 30-day period ends earlier than the agreed day, its last day is the relevant day (s. 4(2D)). Other purchaser: if the relevant 60-day period ends earlier than the agreed day, its last day is the relevant day (s. 4(2E)), unless the agreed payment day is not grossly unfair to the supplier (s. 4(2F)), judged on all the circumstances (s. 4(7A)). Advance payments and acceptance or verification procedures have their own rules (s. 4(2G), (5A) to (5D)), not handled by the tools. GOV.UK: « If you agree a payment date, it must usually be within 30 days for public authorities or 60 days for business transactions » and, without an agreed date, payment is late 30 days after the customer gets the invoice or the goods or service are provided, if later."
     },
     "commercial_payments_bill_status": {
       "value": "Commercial Payments Bill [HL] (Government bill, session 2026-27): 1st reading Lords 19 May 2026, 2nd reading 9 June 2026, Committee 21 July 2026, Report 15 September 2026, 3rd reading in the Lords scheduled 20 October 2026; Commons stages still to come. NOT yet law.",

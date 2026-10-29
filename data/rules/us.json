@@ -2058,6 +2058,38 @@
       "confidence": "high",
       "verified_on": "2026-10-29",
       "note": "Read in full on 29/10/2026 with the « Lire une source officielle » tool (enacted text, SHA-256 a16513fc…4e88). Sec. 3(2): a « commercial electronic mail message » is one whose primary purpose is the commercial advertisement or promotion of a commercial product or service; it does not include a transactional or relationship message; a reference to a company or a link to its website does not by itself make a message commercial. Sec. 5(a)(3): a functioning return email address or other Internet-based mechanism, clearly and conspicuously displayed, that the recipient may use, in a manner specified in the message, to ask not to receive future commercial emails, working for at least 30 days. Sec. 5(a)(5)(A): clear identification that the message is an advertisement or solicitation (not needed with prior affirmative consent, 5(a)(5)(B)), clear notice of the opportunity to decline further commercial emails, and « a valid physical postal address of the sender ». The FTC compliance guide page was not reachable (404 to the reading tool); later FTC rules (16 CFR part 316) were not read."
+    },
+    "freelance_default_payment": {
+      "value": {
+        "places": [
+          "nyc",
+          "new_york_state",
+          "illinois"
+        ],
+        "days_after_completion": 30,
+        "laws": {
+          "nyc": "freelance_law_nyc",
+          "new_york_state": "freelance_law_new_york_state",
+          "illinois": "freelance_law_illinois"
+        }
+      },
+      "unit": "object",
+      "label": "Freelance Isn't Free laws: payment due by the contract date or, if none, no later than 30 days after completion (New York City, New York State, Illinois)",
+      "source": "https://dol.ny.gov/freelance-isnt-free-act",
+      "source_title": "NYS Department of Labor - Freelance Isn't Free Act",
+      "more_sources": [
+        {
+          "source": "https://www.nyc.gov/assets/dca/downloads/pdf/workers/Protecting-Freelance-Workers.pdf",
+          "source_title": "NYC DCWP - Protecting Freelance Workers (flyer)"
+        },
+        {
+          "source": "https://labor.illinois.gov/laws-rules/legal/freelance-worker-protection-act.html",
+          "source_title": "Illinois Department of Labor - Freelance Worker Protection Act"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-10-29",
+      "note": "Groups the payment deadline of the rules freelance_law_nyc, freelance_law_new_york_state and freelance_law_illinois (each: « Date in the contract; if none, no later than 30 days after completion »), for the due date calculator; their scope (contract thresholds, exclusions, effective dates) is in each rule. Laws with medium or low confidence in this file (California, Los Angeles, Columbus, Seattle) are not used for calculations."
     }
   },
   "open_questions": [

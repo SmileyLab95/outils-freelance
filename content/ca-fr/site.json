@@ -51,6 +51,7 @@
         "invoice-rules",
         "salestax",
         "international",
+        "duedate",
         "reminder",
         "latefee",
         "court"

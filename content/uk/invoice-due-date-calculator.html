@@ -1,0 +1,88 @@
+<!--{
+  "id": "duedate",
+  "slug": "invoice-due-date-calculator/",
+  "title": "Invoice Due Date Calculator UK (Late Payment Act)",
+  "description": "Work out when an invoice is due and when it becomes late: your payment terms, the 30-day default and the 60-day limit of the Late Payment Act.",
+  "menu": "Invoice due date",
+  "icon": "📅",
+  "blurb": "When an invoice is due, and when it becomes late.",
+  "app": "UK Invoice Due Date Calculator",
+  "scripts": ["engines/echeance.js", "tools/echeance.js"],
+  "rules": "uk",
+  "sources": ["late_payment_default_due_period"],
+  "priority": 0.7,
+  "faq": [
+    ["When is an invoice due if no payment date was agreed?", "The Late Payment Act gives your client a period of 30 days beginning with the day you provided the service or, if later, the day they received the invoice. The last day of that period is the due date; the payment is late from the next day, when statutory interest starts."],
+    ["Can I agree payment terms longer than 60 days?", "With a business client, yes, but if the agreed date falls after the end of a 60-day period, that period's last day applies instead, unless the longer term is not grossly unfair to you. All the circumstances are taken into account."],
+    ["What about public sector clients?", "If your client is a public authority and the agreed date falls after the end of the 30-day period, the payment is due on the last day of that period."],
+    ["What can I claim once an invoice is late?", "Statutory interest and a fixed sum for debt recovery costs, unless you agreed a different, substantial remedy in your contract. The late payment interest calculator works them out."]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · Late Payment Act 1998</span>
+    <h1>Invoice due date calculator</h1>
+    <p class="lead">When does your client have to pay, and from when is the payment late? Enter the invoice date and your payment terms: the calculator applies them, with the 30-day default and the 60-day limit set by the Late Payment Act.</p>
+    <ul class="trust"><li>Late Payment Act rules</li><li>30 and 60-day limits</li><li>Business or public sector clients</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="ec-form" onsubmit="return false">
+      <div class="fields">
+        <div class="field"><label for="ec-date">Invoice date</label>
+          <input type="date" id="ec-date" name="date" aria-describedby="ec-date-hint" data-save>
+          <span class="hint" id="ec-date-hint">The day your client received it.</span></div>
+        <div class="field"><label for="ec-done">Work delivered on</label>
+          <input type="date" id="ec-done" name="done" aria-describedby="ec-done-hint" data-save>
+          <span class="hint" id="ec-done-hint">Optional, if later than the invoice.</span></div>
+        <div class="field full"><label for="ec-terms">Payment terms</label>
+          <select id="ec-terms" name="terms" data-save>
+            <option value="receipt">On receipt</option>
+            <option value="7">7 days</option>
+            <option value="14">14 days</option>
+            <option value="30" selected>30 days</option>
+            <option value="30eom">30 days end of month</option>
+            <option value="60">60 days</option>
+            <option value="90">90 days</option>
+            <option value="none">No payment date agreed</option>
+          </select></div>
+        <div class="field full"><label for="ec-client">Your client</label>
+          <select id="ec-client" name="client" data-save>
+            <option value="business">A business</option>
+            <option value="public">A public authority</option>
+          </select></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="result-hero" role="status" aria-atomic="true">
+        <div class="label">Payment due by</div>
+        <div class="big" id="ec-due">–</div>
+        <div class="sub" id="ec-sub">–</div>
+      </div>
+      <ul class="result-list card" style="padding: 6px 18px; margin-top: 16px;">
+        <li><span>Late from (interest starts)</span><b id="ec-late">–</b></li>
+        <li><span>Days after the invoice</span><b id="ec-span">–</b></li>
+      </ul>
+      <p class="notice" id="ec-notice" aria-live="polite" hidden style="margin-top: 16px;"></p>
+    </div>
+  </div>
+</section>
+
+<script type="application/json" id="echeance-data">{"country": "uk", "lang": "en-GB", "store": "echeance-uk", "days": ["{n} day", "{n} days"], "in_days": ["in {n} day", "in {n} days"], "days_ago": ["{n} day ago", "{n} days ago"], "before_invoice": ["{n} day before the invoice", "{n} days before the invoice"], "today": "today", "need_date": "Enter the invoice date.", "uk": {"ok": "These are the agreed terms: the payment is late from the day after the due date, when statutory interest starts.", "default": "No payment date agreed: the payment is due by the last day of a 30-day period beginning on {start} (the later of the invoice and the delivery), and late from {late}.", "60": "Your terms give {agreed}, more than 60 days after {start}. Unless this longer period is not grossly unfair to you, the payment is late from {late}, the day after the end of the 60-day period.", "30": "With a public authority, the agreed date ({agreed}) cannot fall after the 30-day period beginning on {start}: the payment is late from {late}."}}</script>
+
+<section class="section prose">
+  <h2>When a UK invoice becomes late</h2>
+  <ul>
+    <li><strong>Agreed payment date:</strong> the invoice is due on the date you agreed, for example 30 days after the invoice. Statutory interest starts the day after.</li>
+    <li><strong>No agreed date:</strong> the due date is the last day of a period of 30 days beginning with the day you provided the service or, if later, the day your client had notice of the amount (usually when they received the invoice).</li>
+    <li><strong>More than 60 days:</strong> with a business client, if the agreed date falls after the end of a 60-day period, the end of that period applies, unless the agreed date is not grossly unfair to you.</li>
+    <li><strong>Public authorities:</strong> the agreed date cannot fall after the end of the 30-day period.</li>
+  </ul>
+  <h3>After the due date</h3>
+  <p>Unless you agreed a different, substantial remedy in your contract, you can claim statutory interest and a fixed sum for recovery costs: the <a href="{{link:latefee}}">late payment interest calculator</a> works them out, and a <a href="{{link:reminder}}">payment reminder letter</a> helps you ask for payment.</p>
+  <p class="small muted">Advance payments and contracts with an acceptance or verification procedure have their own rules, not covered here. For information only: this tool is not legal advice.</p>
+</section>

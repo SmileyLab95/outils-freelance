@@ -1,0 +1,88 @@
+<!--{
+  "id": "duedate",
+  "slug": "invoice-due-date-calculator/",
+  "title": "Invoice Due Date Calculator (Net 30, EOM) for Freelancers",
+  "description": "Find the due date of an invoice: Net 15, Net 30, Net 30 EOM and more. With no date in the contract, New York and Illinois laws set 30 days after the work.",
+  "menu": "Invoice due date",
+  "icon": "📅",
+  "blurb": "Net 30, EOM, on receipt: the exact due date of an invoice.",
+  "app": "Invoice Due Date Calculator",
+  "scripts": ["engines/echeance.js", "tools/echeance.js"],
+  "rules": "us",
+  "sources": ["freelance_default_payment"],
+  "priority": 0.7,
+  "faq": [
+    ["What does Net 30 mean?", "The invoice is due 30 days after its date. Net 15 and Net 60 work the same way with 15 or 60 days."],
+    ["What does Net 30 EOM mean?", "EOM means end of month: the 30 days count from the end of the month in which the invoice is dated. An invoice dated March 10 on Net 30 EOM is due April 30."],
+    ["When must a client pay if the contract has no date?", "In New York City, New York State and Illinois, the Freelance Isn't Free laws require payment by the date in the contract or, if there is none, no later than 30 days after you complete the work. They apply above a contract value threshold ($800 in New York, $500 in Illinois)."]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · Net 30, EOM, on receipt</span>
+    <h1>Invoice due date calculator</h1>
+    <p class="lead">Pick the invoice date and your payment terms to get the exact due date. No date in your contract? In New York and Illinois, the Freelance Isn't Free laws set one for you: 30 days after you complete the work.</p>
+    <ul class="trust"><li>Net terms and EOM</li><li>New York and Illinois default</li><li>Days left until the due date</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="ec-form" onsubmit="return false">
+      <div class="fields">
+        <div class="field"><label for="ec-date">Invoice date</label>
+          <input type="date" id="ec-date" name="date" data-save></div>
+        <div class="field"><label for="ec-terms">Payment terms</label>
+          <select id="ec-terms" name="terms" data-save>
+            <option value="receipt">Due on receipt</option>
+            <option value="7">Net 7</option>
+            <option value="10">Net 10</option>
+            <option value="15">Net 15</option>
+            <option value="30" selected>Net 30</option>
+            <option value="45">Net 45</option>
+            <option value="60">Net 60</option>
+            <option value="90">Net 90</option>
+            <option value="eom30">Net 30 EOM</option>
+            <option value="none">No date in the contract</option>
+          </select></div>
+        <div class="field full"><label for="ec-place">Where you work or your client is based</label>
+          <select id="ec-place" name="place" data-save>
+            <option value="nyc">New York City</option>
+            <option value="new_york_state">New York State (outside NYC)</option>
+            <option value="illinois">Illinois</option>
+            <option value="other" selected>Somewhere else</option>
+          </select></div>
+        <div class="field full" data-when-none hidden><label for="ec-done">Date you completed the work</label>
+          <input type="date" id="ec-done" name="done" data-save></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="result-hero" role="status" aria-atomic="true">
+        <div class="label">Due date</div>
+        <div class="big" id="ec-due">–</div>
+        <div class="sub" id="ec-sub">–</div>
+      </div>
+      <ul class="result-list card" style="padding: 6px 18px; margin-top: 16px;">
+        <li><span>Late from</span><b id="ec-late">–</b></li>
+        <li><span>Days after the invoice</span><b id="ec-span">–</b></li>
+      </ul>
+      <p class="notice" id="ec-notice" aria-live="polite" hidden style="margin-top: 16px;"></p>
+    </div>
+  </div>
+</section>
+
+<script type="application/json" id="echeance-data">{"country": "us", "lang": "en-US", "store": "echeance-us", "days": ["{n} day", "{n} days"], "in_days": ["in {n} day", "in {n} days"], "days_ago": ["{n} day ago", "{n} days ago"], "before_invoice": ["{n} day before the invoice", "{n} days before the invoice"], "today": "today", "laws": {"nyc": "NYC Freelance Isn't Free Act", "new_york_state": "New York State Freelance Isn't Free Act", "illinois": "Illinois Freelance Worker Protection Act"}, "terms_note": "Put this date on the invoice and in your contract.", "us_terms_law": "Under the {law}, your client must pay by the date in your contract (if the law applies to it).", "us_default": "No date in the contract: under the {law}, your client must pay no later than 30 days after you completed the work ({done}), if the law applies to your contract.", "us_no_default": "The New York and Illinois laws do not apply here: agree a payment date in writing. Other states and cities have their own laws: see the Freelance Isn't Free guide.", "need_done": "Enter the date you completed the work."}</script>
+
+<section class="section prose">
+  <h2>Invoice due dates in the US</h2>
+  <ul>
+    <li><strong>Net terms:</strong> Net 30 means 30 days after the invoice date; Net 30 EOM means 30 days after the end of the month of the invoice.</li>
+    <li><strong>No date in the contract:</strong> the New York City, New York State and Illinois laws require payment no later than 30 days after you complete the work. Contract value thresholds and exclusions apply: the <a href="{{link:freelance-law}}">Freelance Isn't Free guide</a> covers them, along with other states and cities.</li>
+    <li><strong>Always in writing:</strong> put the due date in your contract and on every invoice, with any late fee you agreed.</li>
+  </ul>
+  <h3>After the due date</h3>
+  <p>Send a polite <a href="{{link:reminder}}">payment reminder</a>, then work out any agreed <a href="{{link:latefee}}">late fee</a>.</p>
+  <p class="small muted">For information only: this tool is not legal advice.</p>
+</section>

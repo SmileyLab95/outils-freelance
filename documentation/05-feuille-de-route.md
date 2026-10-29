@@ -270,6 +270,11 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   Royaume-Uni, numéro de société et *registered office* (ou nom et adresse sous un nom commercial) ; États-Unis,
   adresse postale et refus pour les emails de prospection (CAN-SPAM) ; Canada, identification et désabonnement dans
   chaque message (loi anti-pourriel) ; sources lues en entier ([43](43-signature-email.md), décision D45).
+- **Date d'échéance hors de France (29/10/2026)** : calculateur au Royaume-Uni (*Late Payment Act* : 30 jours à
+  compter de la prestation ou de la facture, plafonds de 60 jours entre entreprises et de 30 jours avec une autorité
+  publique, loi lue en entier), aux États-Unis (Net 30, EOM ; sans date au contrat, 30 jours après le travail à New
+  York et dans l'Illinois) et au Canada (anglais et français) ; moteur commun avec la page française
+  ([44](44-date-echeance-international.md), décision D46).
 - **Prochaines actions de Claude** : refonte, suite ([31](31-vision-plateforme.md) § 5) : les quatre modules du compte
   gratuit sont faits (étape 5) ; étape 6, outils restants (CGV hors de France, après la lecture des sources de chaque
   pays ; jours ouvrés au Canada (jours fériés fédéraux et provinciaux) : en attente de l'accès à canada.ca, refusé
@@ -285,7 +290,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   activité mixte de l'Espace à spécifier (le profil n'a qu'une activité : deux plafonds, déclaration et livre des
   recettes distinguant ventes et prestations, BOFiP BOI-BIC-DECLA-30-30) ; questions ouvertes de `data/rules/` à relire
   avec l'outil de lecture des sources (ACRE) ; puis besoins P3 restants
-  ([02](02-besoins-clients.md) : CGV, sous-traitance, date d'échéance hors de France) ;
+  ([02](02-besoins-clients.md) : CGV hors de France, sous-traitance) ;
   comptes : adaptateur
   PostgreSQL et sauvegardes dès que l'hébergeur est choisi ; taux du crédit pour
   dividendes de la Saskatchewan et du Nunavut dès qu'ils sont publiés (formulaires 2026) ;
