@@ -246,6 +246,9 @@ const tests = {
     check(page.url().endsWith("/fr/generateur-facture/"), "ancienne adresse → redirection vers /fr/");
   },
   async "fr/calculateur-tjm/"(page) {
+    const year = new Date().getFullYear();
+    check(new RegExp(`^En ${year} : \\d+ jours fériés du lundi au vendredi \\(métropole\\)\\.`).test((await page.textContent("#t-public-hint")).replace(/[\u00a0\u202f]/g, " ")) &&
+      (await page.getAttribute('#t-public-hint a', "href")).endsWith("/fr/calcul-jours-ouvres/"), "TJM : jours fériés de l'année en aide, lien vers les jours ouvrés");
     const tjm = await page.textContent("#r-tjm");
     check(/^407\s?€$/.test(tjm.trim()), `TJM conseillé par défaut = 407 € (obtenu : ${tjm})`);
     check(/354\s?€/.test(await page.textContent("#r-tjm-min")), "TJM minimum par défaut : 39 000 € ÷ 0,744 ÷ 148 j ≈ 354 €");
@@ -328,6 +331,39 @@ const tests = {
     await page.click("#r-copy");
     check(await copied(page, "#r-copy"), "bouton Copier : confirmation");
     check((await page.evaluate(() => navigator.clipboard.readText())).includes("Mise en demeure"), "bouton Copier : objet et message dans le presse-papiers");
+  },
+  async "fr/calcul-jours-ouvres/"(page) {
+    const t = async (sel) => (await page.textContent(sel)).replace(/[\u00a0\u202f]/g, " ").replace(/\s+/g, " ").trim();
+    check((await page.inputValue("#jo-year")) === String(new Date().getFullYear()) && (await page.inputValue("#jo-period")) === "year",
+      "jours ouvrés : année en cours par défaut");
+    await page.fill("#jo-year", "2026");
+    check((await t("#jo-billable")) === "252" && (await t("#jo-off")) === "9 jours" && (await t("#jo-calendar")) === "365 jours" &&
+      (await page.$$("#jo-list tbody tr")).length === 11, "2026 : 252 jours ouvrés, 9 jours fériés en semaine, 11 jours fériés listés");
+    await page.selectOption("#jo-period", "m5");
+    check((await t("#jo-billable")) === "17", "mai 2026 : 17 jours ouvrés");
+    await page.selectOption("#jo-zone", "alsace_moselle");
+    await page.selectOption("#jo-period", "q2");
+    check((await t("#jo-list tbody")).includes("Vendredi saint"), "Alsace-Moselle : Vendredi saint");
+    await page.selectOption("#jo-zone", "metropole");
+    await page.selectOption("#jo-period", "dates");
+    check(await page.isVisible("#jo-from"), "dates précises : champs affichés");
+    await page.fill("#jo-from", "2026-07-13");
+    await page.fill("#jo-to", "2026-07-17");
+    check((await t("#jo-ouvres")) === "4 jours", "F35697 : congés du 13 au 17 juillet 2026 = 4 jours ouvrés");
+    await page.fill("#jo-leave", "9");
+    check(await page.isVisible("#jo-warn") && (await t("#jo-billable")) === "0", "congés supérieurs aux jours ouvrés : signalés");
+    await page.fill("#jo-leave", "1");
+    check((await t("#jo-billable")) === "3" && await page.isHidden("#jo-warn"), "4 jours ouvrés moins 1 jour de congés = 3");
+    await page.fill("#jo-start", "2026-12-15");
+    await page.fill("#jo-n", "10");
+    await page.selectOption("#jo-mode", "franc");
+    check((await t("#jo-due")) === "28 décembre 2026" && (await t("#jo-explain")).includes("reporté de 3 jours"),
+      "F35697 : 10 jours francs à compter du 15 décembre 2026 → 28 décembre 2026");
+    await page.selectOption("#jo-mode", "ouvre");
+    check((await t("#jo-due")) === "30 décembre 2026", "10 jours ouvrés à compter du 15 décembre 2026 → 30 décembre (Noël sauté)");
+    await page.fill("#jo-n", "");
+    check((await t("#jo-due")) === "–", "nombre de jours vide : pas de date");
+    await page.fill("#jo-n", "10");
   },
   async "fr/penalites-de-retard/"(page) {
     const t = async (sel) => (await page.textContent(sel)).replace(/[\u00a0\u202f]/g, " ").trim();

@@ -105,7 +105,8 @@ Matrice revue le 23/10/2026 d'après les pages publiées (identifiants de `conte
 | Temps passé et facturation du temps | Espace entrepreneur : saisie en heures ou en jours, temps à facturer par client, facture créée en brouillon | ✅ | — | — | — | P2 |
 | Savoir ce qui est vraiment disponible et prévoir sa trésorerie | Espace entrepreneur : déjà dû (cotisations, TVA), disponible, prévision sur 6 mois, charges régulières | ✅ | — | — | — | P2 |
 | Suivi des factures et du chiffre d'affaires | Kit Excel (produit payant) | ✅ | ✅ (kit US) | 🟡 | 🟡 | — |
-| Temps facturable | Calculateur de jours / heures facturables | ✅ (dans le TJM) | ✅ (dans le taux horaire) | ✅ (dans le *day rate*) | ✅ (dans le taux horaire) | P3 |
+| Temps facturable | Calculateur de jours / heures facturables | ✅ (dans le TJM ; jours ouvrés et fériés, [42](42-jours-ouvres.md)) | ✅ (dans le taux horaire) | ✅ (dans le *day rate*) | ✅ (dans le taux horaire) | P3 |
+| Jours fériés et délais | Calculateur de jours ouvrés, jours fériés et délais (jours ouvrés, ouvrables, francs) | ✅ | 🟡 | 🟡 | 🟡 | P3 |
 
 ### 9. Se protéger
 

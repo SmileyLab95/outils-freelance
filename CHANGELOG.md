@@ -1,5 +1,19 @@
 # Journal des modifications
 
+## 2026-10-29 — Jours ouvrés, jours fériés et délais (France)
+
+- Nouveau **calculateur de jours ouvrés** (menu « Fixer ses prix ») : jours ouvrés et **jours facturables** d'une année,
+  d'un trimestre, d'un mois ou entre deux dates, selon votre semaine de travail et vos congés ; jours fériés de la
+  période (métropole, Alsace-Moselle avec le Vendredi saint et le 26 décembre, outre-mer avec la commémoration de
+  l'abolition de l'esclavage) ; en 2026 : 252 jours ouvrés en métropole.
+- **Délais** en jours ouvrés, ouvrables, francs (report après un week-end ou un jour férié) ou calendaires, avec les
+  jours sautés.
+- Sources : fiches officielles F2405 (jours fériés) et F35697 (jours ouvrables, ouvrés, francs, calendaires) lues en
+  entier ; leurs exemples sont refaits par les tests (10 jours francs à compter du 15 décembre 2026 → 28 décembre).
+- Calculateur de TJM : nombre de jours fériés de l'année en aide du champ, avec un lien.
+- Spécification [42](documentation/42-jours-ouvres.md), décision D42. Tests : `jours.test.mjs` (10 tests), 27 erreurs
+  réintroduites toutes détectées après renforcement ; parcours navigateur ; suite complète (495 tests unitaires, 29 tests serveur, 5 tests des scripts, 3 498 vérifications navigateur).
+
 ## 2026-10-29 — Contrat de prestation : cession des droits pour les formes connues
 
 - La clause de cession des droits d'auteur du **contrat de prestation** (France) vaut pour les supports et moyens

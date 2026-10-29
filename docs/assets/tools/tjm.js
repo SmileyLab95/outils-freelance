@@ -42,6 +42,14 @@
       : "Saisissez un TJM et un nombre de jours.";
   }
 
+  // Jours fériés de l'année tombant du lundi au vendredi en métropole (moteur des jours ouvrés), en aide du champ.
+  var D = window.OFE && window.OFE.days, R = window.OF_RULES, year = OF.today().slice(0, 4);
+  var count = D && R ? D.count(year + "-01-01", year + "-12-31", { rules: R }) : null;
+  if (count) {
+    var off = count.holidays.filter(function (h) { return h.off; }).length;
+    $("t-public-year").textContent = "En " + year + " : " + off + " jours fériés du lundi au vendredi (métropole).";
+  }
+
   OF.persistForm(form, "tjm");
   document.addEventListener("input", compute);
   document.addEventListener("change", compute);

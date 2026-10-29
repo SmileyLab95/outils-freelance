@@ -1989,6 +1989,93 @@
       "verified_on": "2026-10-29",
       "note": "Guide lu en entier le 29/10/2026 avec l'outil « Lire une source officielle » (PDF, SHA-256 05699483…8be5) : « Pour que cette clause soit valable, deux conditions doivent être remplies : la clause doit être expresse ; en cas de rémunération : il faut prévoir les modalités de rémunération de l'auteur pour ces exploitations non prévues ou imprévisibles. En pratique, cela reste par hypothèse particulièrement complexe, et il est préférable de renvoyer à un avenant ultérieur. » Confiance moyenne : guide de 2017 ; Légifrance refuse les lectures automatiques, le texte en vigueur des articles L131-3, L131-4 et L131-6 n'a pas pu être relu (question ouverte)."
     },
+    "jours_feries": {
+      "value": {
+        "fetes_legales": [
+          {
+            "name": "Jour de l'An",
+            "date": "01-01"
+          },
+          {
+            "name": "Lundi de Pâques",
+            "paques": 1
+          },
+          {
+            "name": "Fête du Travail",
+            "date": "05-01"
+          },
+          {
+            "name": "Victoire 1945",
+            "date": "05-08"
+          },
+          {
+            "name": "Ascension",
+            "paques": 39
+          },
+          {
+            "name": "Lundi de Pentecôte",
+            "paques": 50
+          },
+          {
+            "name": "Fête nationale",
+            "date": "07-14"
+          },
+          {
+            "name": "Assomption",
+            "date": "08-15"
+          },
+          {
+            "name": "Toussaint",
+            "date": "11-01"
+          },
+          {
+            "name": "Armistice 1918",
+            "date": "11-11"
+          },
+          {
+            "name": "Noël",
+            "date": "12-25"
+          }
+        ],
+        "alsace_moselle": [
+          {
+            "name": "Vendredi saint",
+            "paques": -2
+          },
+          {
+            "name": "2e jour de Noël",
+            "date": "12-26"
+          }
+        ],
+        "abolition_nom": "Abolition de l'esclavage",
+        "abolition_esclavage": {
+          "guadeloupe": "05-27",
+          "guyane": "06-10",
+          "martinique": "05-22",
+          "mayotte": "04-27",
+          "reunion": "12-20",
+          "saint_barthelemy": "10-09",
+          "saint_martin": "05-27"
+        }
+      },
+      "unit": "object",
+      "label": "Jours fériés (fêtes légales) : liste nationale, Alsace-Moselle, commémoration de l'abolition de l'esclavage outre-mer",
+      "source": "https://www.service-public.gouv.fr/particuliers/vosdroits/F2405",
+      "source_title": "Service-public.gouv.fr, « Jours fériés et ponts dans le secteur privé » (vérifié le 1er janvier 2026)",
+      "confidence": "high",
+      "verified_on": "2026-10-29",
+      "note": "Fêtes légales : Jour de l'An, lundi de Pâques, 1er mai, 8 mai, Ascension, lundi de Pentecôte, 14 juillet, 15 août, 1er novembre, 11 novembre, Noël ; dates mobiles exprimées en jours après Pâques (lundi de Pâques +1, Ascension +39, lundi de Pentecôte +50, Vendredi saint −2). Alsace-Moselle : Vendredi saint « dans les communes ayant un temple protestant ou une église mixte » et 2e jour de Noël (26 décembre). Outre-mer : abolition de l'esclavage le 27 mai (Guadeloupe, Saint-Martin), 10 juin (Guyane), 22 mai (Martinique), 27 avril (Mayotte), 20 décembre (La Réunion), 9 octobre (Saint-Barthélemy). Seul le 1er mai est obligatoirement chômé pour les salariés ; fêtes locales ou professionnelles (Saint-Éloi, Sainte-Barbe, mi-carême) non comptées. Dates 2026 et 2027 de la fiche identiques au calcul (tests). La fiche nomme le 1er mai « Journée internationale des travailleurs » (2026) puis « Fête du Travail » (2027). Lu en entier le 29/10/2026 avec l'outil « Lire une source officielle » (SHA-256 9c56aa98…aa9b)."
+    },
+    "jours_decompte": {
+      "value": "Jour ouvrable : tous les jours qui peuvent être légalement travaillés, sauf le jour de repos hebdomadaire (généralement le dimanche) et les jours fériés habituellement non travaillés (6 par semaine). Jour ouvré : jours effectivement travaillés (généralement du lundi au vendredi), sauf les jours fériés habituellement non travaillés (5 par semaine). Jour franc : de 0 h à 24 h, sans le jour de départ ; fin un samedi, un dimanche ou un jour férié : reportée au premier jour suivant qui n'en est pas un. Jour calendaire : tous les jours, jours fériés compris.",
+      "unit": "text",
+      "label": "Façons de compter un délai : jours ouvrables, ouvrés, francs, calendaires",
+      "source": "https://www.service-public.gouv.fr/particuliers/vosdroits/F35697",
+      "source_title": "Service-public.gouv.fr, « Jour ouvrable, jour ouvré, jour franc, jour calendaire : quelles sont les différences ? » (vérifié le 30 avril 2026)",
+      "confidence": "high",
+      "verified_on": "2026-10-29",
+      "note": "Exemples officiels refaits par les tests : 10 jours francs à compter du mardi 15 décembre 2026 → fin en principe le vendredi 25 décembre (férié), reportée au lundi 28 décembre 2026 ; délai de 7 jours commençant un lundi avec un mercredi férié : calendaire jusqu'au dimanche, franc jusqu'au lundi suivant, ouvrable jusqu'au mardi suivant, ouvré jusqu'au mercredi suivant ; congés du 13 au 17 juillet 2026 = 4 jours ouvrés (14 juillet chômé). La fiche dit aussi que le jour franc ne tient pas compte « du jour de l'échéance », mais son exemple compte 10 jours du 16 au 25 décembre : le calcul suit l'exemple. Lu en entier le 29/10/2026 avec l'outil « Lire une source officielle » (SHA-256 be7422ec…8977)."
+    },
     "garantie_legale_conformite": {
       "value": {
         "contrats": [

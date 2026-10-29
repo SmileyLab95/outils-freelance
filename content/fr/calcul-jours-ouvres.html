@@ -1,0 +1,167 @@
+<!--{
+  "id": "workdays",
+  "slug": "calcul-jours-ouvres/",
+  "title": "Jours ouvrés, jours fériés et délais : calculateur",
+  "description": "Jours ouvrés et facturables d'un mois ou d'une année, jours fériés (métropole, Alsace-Moselle, outre-mer) et date d'un délai en jours ouvrés ou francs.",
+  "menu": "Jours ouvrés et fériés",
+  "icon": "📆",
+  "blurb": "Jours facturables du mois ou de l'année, jours fériés et date d'un délai.",
+  "app": "Calculateur de jours ouvrés et de délais",
+  "scripts": ["engines/jours.js", "tools/jours.js"],
+  "rules": "fr",
+  "sources": ["jours_feries", "jours_decompte"],
+  "priority": 0.8,
+  "faq": [
+    ["Combien y a-t-il de jours ouvrés en 2026 ?", "En métropole, 252 jours ouvrés du lundi au vendredi : 261 jours de semaine, moins les 9 jours fériés qui tombent en semaine (l'Assomption tombe un samedi et la Toussaint un dimanche). Retirez ensuite vos congés pour obtenir vos jours facturables."],
+    ["Quelle différence entre jours ouvrés et jours ouvrables ?", "Un jour ouvrable est un jour qui peut être légalement travaillé : tous les jours sauf le jour de repos hebdomadaire (généralement le dimanche) et les jours fériés habituellement non travaillés, soit 6 par semaine. Un jour ouvré est un jour effectivement travaillé, généralement du lundi au vendredi, sauf les jours fériés non travaillés, soit 5 par semaine."],
+    ["Comment compter un délai en jours francs ?", "Le jour de départ ne compte pas ; si le délai s'achève un samedi, un dimanche ou un jour férié, il est reporté au premier jour suivant qui n'en est pas un. Exemple officiel : 10 jours francs à compter du mardi 15 décembre 2026 s'achèvent en principe le vendredi 25 décembre, jour férié, et sont donc reportés au lundi 28 décembre 2026."],
+    ["Quels jours fériés en plus en Alsace-Moselle et outre-mer ?", "En Alsace-Moselle, le Vendredi saint (dans les communes ayant un temple protestant ou une église mixte) et le 26 décembre. Outre-mer, la commémoration de l'abolition de l'esclavage : 27 avril à Mayotte, 22 mai en Martinique, 27 mai en Guadeloupe et à Saint-Martin, 10 juin en Guyane, 9 octobre à Saint-Barthélemy, 20 décembre à La Réunion."],
+    ["Les jours fériés sont-ils chômés ?", "Pour les salariés, seul le 1er mai est obligatoirement chômé ; les autres jours fériés le sont si un accord ou l'usage le prévoit. Le calculateur compte par défaut tous les jours fériés comme non travaillés : cochez « Je travaille les jours fériés » si ce n'est pas votre cas."]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Gratuit · jours fériés officiels</span>
+    <h1>Jours ouvrés, jours fériés et délais</h1>
+    <p class="lead">Combien de jours pouvez-vous facturer ce mois-ci ou cette année ? Quand tombe un délai de 10 jours ouvrés ? L'outil compte les jours fériés de votre région et vos jours de travail.</p>
+    <ul class="trust"><li>Jours fériés officiels</li><li>Métropole, Alsace-Moselle, outre-mer</li><li>Jours ouvrés, ouvrables, francs</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="jo-form" onsubmit="return false">
+      <h2>La période</h2>
+      <div class="fields">
+        <div class="field"><label for="jo-year">Année</label>
+          <input type="number" id="jo-year" name="year" min="2000" max="2100" step="1" inputmode="numeric" data-save></div>
+        <div class="field"><label for="jo-period">Période</label>
+          <select id="jo-period" name="period" data-save>
+            <option value="year">Toute l'année</option>
+            <option value="q1">1er trimestre</option>
+            <option value="q2">2e trimestre</option>
+            <option value="q3">3e trimestre</option>
+            <option value="q4">4e trimestre</option>
+            <option value="m1">Janvier</option>
+            <option value="m2">Février</option>
+            <option value="m3">Mars</option>
+            <option value="m4">Avril</option>
+            <option value="m5">Mai</option>
+            <option value="m6">Juin</option>
+            <option value="m7">Juillet</option>
+            <option value="m8">Août</option>
+            <option value="m9">Septembre</option>
+            <option value="m10">Octobre</option>
+            <option value="m11">Novembre</option>
+            <option value="m12">Décembre</option>
+            <option value="dates">Dates précises</option>
+          </select></div>
+        <div class="field" data-when="dates" hidden><label for="jo-from">Du</label>
+          <input type="date" id="jo-from" name="from" data-save></div>
+        <div class="field" data-when="dates" hidden><label for="jo-to">Au (inclus)</label>
+          <input type="date" id="jo-to" name="to" data-save></div>
+        <div class="field full"><label for="jo-zone">Lieu</label>
+          <select id="jo-zone" name="zone" data-save>
+            <option value="metropole">Métropole</option>
+            <option value="alsace_moselle">Alsace-Moselle</option>
+            <option value="guadeloupe">Guadeloupe</option>
+            <option value="guyane">Guyane</option>
+            <option value="martinique">Martinique</option>
+            <option value="mayotte">Mayotte</option>
+            <option value="reunion">La Réunion</option>
+            <option value="saint_barthelemy">Saint-Barthélemy</option>
+            <option value="saint_martin">Saint-Martin</option>
+          </select></div>
+      </div>
+      <h3>Votre semaine de travail</h3>
+      <fieldset class="weekdays">
+        <legend class="sr-only">Jours travaillés</legend>
+        <label class="check"><input type="checkbox" name="w1" checked data-save><span>Lundi</span></label>
+        <label class="check"><input type="checkbox" name="w2" checked data-save><span>Mardi</span></label>
+        <label class="check"><input type="checkbox" name="w3" checked data-save><span>Mercredi</span></label>
+        <label class="check"><input type="checkbox" name="w4" checked data-save><span>Jeudi</span></label>
+        <label class="check"><input type="checkbox" name="w5" checked data-save><span>Vendredi</span></label>
+        <label class="check"><input type="checkbox" name="w6" data-save><span>Samedi</span></label>
+        <label class="check"><input type="checkbox" name="w0" data-save><span>Dimanche</span></label>
+      </fieldset>
+      <div class="fields">
+        <label class="check full"><input type="checkbox" id="jo-work-holidays" name="workHolidays" data-save>
+          <span>Je travaille les jours fériés</span></label>
+        <div class="field full"><label for="jo-leave">Congés sur la période</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="jo-leave" name="leave" value="0" aria-describedby="jo-leave-hint" data-save><span>jours</span></div>
+          <span class="hint" id="jo-leave-hint">En jours de travail : 5 semaines = 25 jours si vous travaillez 5 jours par semaine.</span></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="result-hero" role="status" aria-atomic="true">
+        <div class="label">Jours facturables</div>
+        <div class="big" id="jo-billable">–</div>
+        <div class="sub" id="jo-sub">–</div>
+      </div>
+      <ul class="result-list card" style="padding: 6px 18px; margin-top: 16px;">
+        <li><span>Jours calendaires</span><b id="jo-calendar">–</b></li>
+        <li><span>Jours ouvrables (du lundi au samedi)</span><b id="jo-ouvrables">–</b></li>
+        <li><span>Jours ouvrés (vos jours de travail)</span><b id="jo-ouvres">–</b></li>
+        <li><span>Jours fériés un jour de travail</span><b id="jo-off">–</b></li>
+      </ul>
+      <p class="notice warn" id="jo-warn" aria-live="polite" hidden style="margin-top: 16px;"></p>
+      <table class="mini-table holiday-table" id="jo-list" style="margin-top: 8px;">
+        <caption id="jo-list-title">Jours fériés de la période</caption>
+        <thead><tr><th scope="col" class="text">Date</th><th scope="col" class="text">Fête</th><th scope="col" class="text">Pour vous</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="jo-delay-form" onsubmit="return false">
+      <h2>Calculer un délai</h2>
+      <p class="small muted">Même lieu et même semaine de travail que ci-dessus.</p>
+      <div class="fields">
+        <div class="field"><label for="jo-start">À compter du</label>
+          <input type="date" id="jo-start" name="start" aria-describedby="jo-start-hint">
+          <span class="hint" id="jo-start-hint">Ce jour-là ne compte pas.</span></div>
+        <div class="field"><label for="jo-n">Nombre de jours</label>
+          <input type="number" id="jo-n" name="n" value="10" min="0" max="3650" step="1" inputmode="numeric" data-save></div>
+        <div class="field full"><label for="jo-mode">Type de jours</label>
+          <select id="jo-mode" name="mode" aria-describedby="jo-mode-hint" data-save>
+            <option value="ouvre">Jours ouvrés (vos jours de travail)</option>
+            <option value="ouvrable">Jours ouvrables (lundi au samedi)</option>
+            <option value="franc">Jours francs (avec report)</option>
+            <option value="calendaire">Jours calendaires (tous)</option>
+          </select>
+          <span class="hint" id="jo-mode-hint">Jours francs : un délai qui finit un samedi, un dimanche ou un jour férié est reporté au jour suivant.</span></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="result-hero" role="status" aria-atomic="true">
+        <div class="label">Fin du délai</div>
+        <div class="big" id="jo-due">–</div>
+        <div class="sub" id="jo-due-sub">–</div>
+      </div>
+      <p class="formula" id="jo-explain" style="margin-top: 16px;">–</p>
+    </div>
+  </div>
+</section>
+
+{{kit_cta}}
+
+<section class="section prose">
+  <h2>Jours ouvrés, ouvrables, francs, calendaires</h2>
+  <ul>
+    <li><strong>Jour ouvrable :</strong> un jour qui peut être légalement travaillé, sauf le jour de repos hebdomadaire (généralement le dimanche) et les jours fériés habituellement non travaillés : 6 par semaine.</li>
+    <li><strong>Jour ouvré :</strong> un jour effectivement travaillé, généralement du lundi au vendredi, sauf les jours fériés non travaillés : 5 par semaine. Le calculateur suit vos jours de travail.</li>
+    <li><strong>Jour franc :</strong> une journée entière, de 0 h à 24 h ; le jour de départ ne compte pas, et un délai qui s'achève un samedi, un dimanche ou un jour férié est reporté au premier jour suivant qui n'en est pas un.</li>
+    <li><strong>Jour calendaire :</strong> tous les jours du calendrier, jours fériés compris.</li>
+  </ul>
+  <h3>Vos jours facturables</h3>
+  <p>Pour fixer votre tarif, partez des jours ouvrés de l'année, retirez vos congés, puis le temps que vous ne facturez pas (prospection, gestion, formation) : le <a href="{{link:rate}}">calculateur de TJM</a> le fait pour vous.</p>
+  <h3>Ce que l'outil ne compte pas</h3>
+  <p>Les fêtes locales ou professionnelles (Saint-Éloi dans certaines conventions de la métallurgie, Sainte-Barbe dans les mines, mi-carême dans certains départements d'outre-mer) ne sont pas comptées. Un délai fixé par un texte (procédure, rétractation, paiement) se compte selon les règles de ce texte : vérifiez-les pour un délai qui engage vos droits.</p>
+  <p class="small muted">Jours fériés des années 2000 à 2100 selon la liste en vigueur aujourd'hui. Informations données à titre indicatif.</p>
+</section>

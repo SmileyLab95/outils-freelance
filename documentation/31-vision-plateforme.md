@@ -183,7 +183,8 @@ fuseaux horaires des clients, générateur de QR code, convertisseur de devises,
    brouillons et comparatif des solutions de dons prêts le 23/10/2026 ([35](35-offres-et-soutien.md)).
 5. Modules du compte gratuit : prospects, temps passé, dépenses, trésorerie : faits du 23 au 29/10/2026
    ([36](36-depenses-et-registre-des-achats.md) à [39](39-tresorerie.md)).
-6. Outils restants : CGV (France faite le 29/10/2026, [40](40-cgv.md)), sous-traitance, devises, jours ouvrés, signature d'email,
+6. Outils restants : CGV (France faite le 29/10/2026, [40](40-cgv.md)), sous-traitance, devises, jours ouvrés (France faite le
+   29/10/2026, [42](42-jours-ouvres.md)), signature d'email,
    guides de protection sociale.
 7. Pro : relances automatiques, signature en ligne, liens de paiement, page publique, plateforme agréée.
 

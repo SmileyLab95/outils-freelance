@@ -22,9 +22,10 @@
     {
       "key": "pricing",
       "label": "Fixer ses prix",
-      "description": "Calculer un tarif juste et le faire évoluer.",
+      "description": "Calculer un tarif juste, ses jours facturables, et le faire évoluer.",
       "items": [
         "rate",
+        "workdays",
         "rate-converter",
         "project-price",
         "raise"

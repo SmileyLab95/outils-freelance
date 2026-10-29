@@ -7,7 +7,8 @@
   "icon": "💶",
   "blurb": "Le tarif journalier à facturer pour atteindre le revenu que vous visez.",
   "app": "Calculateur de TJM freelance",
-  "scripts": ["tools/tjm.js"],
+  "scripts": ["engines/jours.js", "tools/tjm.js"],
+  "rules": "fr",
   "priority": 0.9,
   "faq": [
     ["Comment calculer son TJM en freelance ?", "Additionnez le revenu net que vous voulez garder et vos frais professionnels, divisez par (1 − taux de cotisations) pour obtenir le chiffre d'affaires nécessaire, puis divisez ce chiffre d'affaires par votre nombre de jours réellement facturables (souvent 130 à 150 par an)."],
@@ -49,7 +50,8 @@
         <div class="field"><label for="t-holidays">Semaines de congés</label>
           <input type="number" id="t-holidays" name="holidays" value="5" min="0" max="20" data-save></div>
         <div class="field"><label for="t-public">Jours fériés chômés</label>
-          <input type="number" id="t-public" name="publicHolidays" value="8" min="0" max="15" data-save></div>
+          <input type="number" id="t-public" name="publicHolidays" value="8" min="0" max="15" aria-describedby="t-public-hint" data-save>
+          <span class="hint" id="t-public-hint"><span id="t-public-year"></span> <a href="{{link:workdays}}">Calculer pour une autre année ou région</a>.</span></div>
         <div class="field"><label for="t-unbilled">Temps non facturable</label>
           <div class="input-suffix"><input type="text" inputmode="decimal" id="t-unbilled" name="unbilled" value="35" data-save><span>%</span></div>
           <span class="hint">Prospection, administratif, formation.</span></div>

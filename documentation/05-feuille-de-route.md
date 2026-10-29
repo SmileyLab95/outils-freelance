@@ -247,9 +247,16 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   guide du ministère de la Culture, lu en entier, conseille de renvoyer à un avenant) ; FAQ et sources de la page
   complétées ; texte en vigueur des articles L131-3, L131-4 et L131-6 à relire (Légifrance inaccessible, question
   ouverte) (décision D41).
+- **Jours ouvrés, jours fériés et délais (29/10/2026)** : nouveau calculateur (France, menu « Fixer ses prix ») : jours
+  ouvrés et facturables d'une année, d'un trimestre, d'un mois ou de deux dates, selon le lieu (métropole,
+  Alsace-Moselle, sept territoires d'outre-mer) et la semaine de travail, congés retirés ; liste des jours fériés ;
+  échéance d'un délai en jours ouvrés, ouvrables, francs ou calendaires ; fiches F2405 et F35697 lues en entier, leurs
+  exemples refaits par les tests ; le calculateur de TJM affiche le nombre de jours fériés de l'année
+  ([42](42-jours-ouvres.md), décision D42).
 - **Prochaines actions de Claude** : refonte, suite ([31](31-vision-plateforme.md) § 5) : les quatre modules du compte
   gratuit sont faits (étape 5) ; étape 6, outils restants (CGV hors de France, après la lecture des sources de chaque
-  pays ; sous-traitance, devises, jours ouvrés, signature d'email, guides de protection sociale) ;
+  pays ; jours ouvrés hors de France : Royaume-Uni d'abord, calendrier officiel de gov.uk déjà lu ; sous-traitance,
+  devises, signature d'email, guides de protection sociale) ;
   ajouter les taux du 1er semestre 2027 dès leur publication
   (fin décembre 2026 : intérêt légal par arrêté, taux de la BCE en vigueur au 1er janvier ; tables `taux_interet_legal`
   et `taux_bce_refinancement`, utilisées par le calculateur de pénalités et les CGV) ;
