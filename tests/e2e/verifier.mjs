@@ -330,12 +330,35 @@ const tests = {
     check((await page.evaluate(() => navigator.clipboard.readText())).includes("Mise en demeure"), "bouton Copier : objet et message dans le presse-papiers");
   },
   async "fr/penalites-de-retard/"(page) {
-    await page.fill("#p-rate", "12");
-    const total = await page.textContent("#p-total");
-    check(/66,63\s?€/.test(total), `pénalités : 1 800 € × 12 % × 45 j ÷ 365 + 40 € = 66,63 € (obtenu : ${total})`);
+    const t = async (sel) => (await page.textContent(sel)).replace(/[\u00a0\u202f]/g, " ").trim();
+    const dates = async (due, paid) => { await page.fill("#p-due", due); await page.fill("#p-paid", paid); };
+    check((await page.inputValue("#p-method")) === "legal" && (await t("#p-legal-hint")).startsWith("Laissez vide"),
+      "pénalités : trois fois le taux légal par défaut (comme nos factures), taux officiel automatique");
+    await dates("2026-09-14", "2026-10-29");
+    check((await t("#p-r-rate")) === "8,25 % par an" && (await t("#p-total")) === "58,31 €" && (await t("#p-legal-hint")).includes("2,75 % au second semestre 2026"),
+      `pénalités : taux officiel du semestre, 1 800 € × 8,25 % × 45 j ÷ 365 + 40 € = 58,31 € (obtenu : ${await t("#p-total")})`);
     await page.selectOption("#p-method", "bce");
+    await dates("2026-06-20", "2026-07-10");
+    check((await t("#p-r-rate")) === "12,15 % puis 12,40 %" && (await t("#p-r-pen")) === "12,11 €" && (await page.$$("#p-formula .formula-line")).length === 3,
+      "BCE + 10 points : un taux par semestre (5,99 € + 6,12 €), une ligne par semestre et le total");
     await page.fill("#p-bce", "2");
-    check((await page.textContent("#p-r-rate")).includes("12 %"), "méthode BCE + 10 points : 12 %");
+    check((await t("#p-r-rate")) === "12 % par an" && (await t("#p-bce-hint")).startsWith("Taux saisi"), "taux de la BCE saisi : 12 % sur tout le retard");
+    await page.fill("#p-bce", "");
+    await page.selectOption("#p-method", "legal");
+    await dates("2039-12-15", "2040-01-10");
+    check((await t("#p-sub")).includes("pas encore dans nos règles") && (await t("#p-total")) === "40,00 €", "semestre pas encore publié : taux demandé, indemnité seule");
+    await page.fill("#p-legal", "3");
+    check((await t("#p-r-rate")) === "9 % par an", "taux légal saisi pour ce semestre : 9 %");
+    await page.fill("#p-legal", "");
+    await page.selectOption("#p-method", "cgv");
+    await dates("2026-09-14", "2026-10-29");
+    await page.fill("#p-rate", "5");
+    check(await page.isVisible("#p-warn") && (await t("#p-warn")).includes("8,25 % au second semestre 2026"), "taux des conditions de 5 % : sous le minimum légal, signalé");
+    await page.fill("#p-rate", "12");
+    check((await t("#p-total")) === "66,63 €" && await page.isHidden("#p-warn"), "taux des conditions : 1 800 € × 12 % × 45 j ÷ 365 + 40 € = 66,63 €");
+    await page.fill("#p-rate", "douze");
+    check((await page.getAttribute("#p-rate", "aria-invalid")) === "true" && (await t("#p-sub")).includes("illisible"), "taux illisible : champ signalé");
+    await page.fill("#p-rate", "12");
   },
   async "fr/mentions-obligatoires-facture/"(page) {
     const boxes = await page.$$("#checklist input");

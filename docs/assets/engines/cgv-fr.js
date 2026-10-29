@@ -1,50 +1,21 @@
 /*
  * Moteur : conditions générales de vente d'un prestataire de services établi en France (documentation/40-cgv.md).
- * Taux du semestre lus dans les règles (intérêt légal, BCE), repères des articles selon la clientèle et la façon de
- * conclure les contrats, textes calculés et contrôles de la saisie (codes ; les messages sont dans la page).
+ * Taux du semestre lus dans les règles par OFE.retardFR (intérêt légal, BCE), repères des articles selon la clientèle et
+ * la façon de conclure les contrats, textes calculés et contrôles de la saisie (codes ; les messages sont dans la page).
  * Le texte des CGV est dans la page (#cgv-data), rendu par OFE.contractDoc. Fonctions pures, sans DOM.
  * Testé par tests/unit/cgv-fr.test.mjs.
  */
 (function (root, factory) {
-  var api = factory();
+  var api = factory(root.OFE ? root.OFE.retardFR : require("./retard-fr.js"));
   if (typeof module === "object" && module.exports) module.exports = api;
   else (root.OFE = root.OFE || {}).cgvFR = api;
-})(typeof self !== "undefined" ? self : this, function () {
+})(typeof self !== "undefined" ? self : this, function (late) {
   "use strict";
 
   var round = function (x) { return Math.round(x * 1e6) / 1e6; };
   var on = function (x) { return x === "on"; };
   var flag = function (b) { return b ? "on" : "off"; };
   var str = function (x) { return String(x == null ? "" : x).trim(); };
-
-  /** Semestre d'une date ISO : « 2026-S1 » (janvier à juin) ou « 2026-S2 ». */
-  function semester(iso) {
-    return iso.slice(0, 4) + (Number(iso.slice(5, 7)) <= 6 ? "-S1" : "-S2");
-  }
-
-  /**
-   * Taux du semestre de la date : intérêt légal (créancier professionnel : taux « autres cas »), minimum des pénalités
-   * de retard entre professionnels (3 fois ce taux), taux de refinancement de la BCE au 1er janvier ou au 1er juillet et
-   * taux des pénalités par défaut (BCE + 10 points). Chaque taux vaut null si le semestre n'est pas dans les règles.
-   */
-  function rates(rules, iso) {
-    var s = semester(iso);
-    var legal = rules.taux_interet_legal && rules.taux_interet_legal[s];
-    var bce = rules["taux_bce_refinancement_" + s.slice(0, 4) + (s.slice(-1) === "1" ? "_01_01" : "_07_01")];
-    var hasBce = typeof bce === "number";
-    return {
-      semester: s,
-      legal: legal ? legal.autres : null,
-      minPenalty: legal ? round(3 * legal.autres) : null,
-      bce: hasBce ? bce : null,
-      defaultPenalty: hasBce ? round(bce + 0.10) : null
-    };
-  }
-
-  /** « premier semestre 2026 » ou « second semestre 2026 ». */
-  function semesterLabel(s) {
-    return (s.slice(-1) === "1" ? "premier" : "second") + " semestre " + s.slice(0, 4);
-  }
 
   /** Nombre entier saisi (« 30 », « 30,0 ») ; NaN si illisible, null si vide. */
   function int(value) {
@@ -88,7 +59,7 @@
     var offsite = on(raw.offsite);
     var retract = hasPart && (distance || offsite);
     var smallPro = hasPro && offsite;                      // art. L221-3 : hors établissement seulement
-    var r = rates(rules, today);
+    var r = late.rates(rules, today);
     var rc = rules.retractation_consommateur || {};
     var he = rules.hors_etablissement || {};
     var med = rules.mediation_consommation || {};
@@ -112,21 +83,21 @@
     var penaltyText;
     if (penalty === "bce") {
       penaltyText = "au taux de refinancement de la Banque centrale européenne en vigueur au 1er janvier (premier semestre) ou au 1er juillet (second semestre), majoré de 10 points" +
-        (r.defaultPenalty !== null ? ", soit " + fmt.pct(r.defaultPenalty) + " par an au " + semesterLabel(r.semester) : "");
+        (r.defaultPenalty !== null ? ", soit " + fmt.pct(r.defaultPenalty) + " par an au " + late.semesterLabel(r.semester) : "");
     } else if (penalty === "legal") {
       penaltyText = "à trois fois le taux de l'intérêt légal en vigueur" +
-        (r.minPenalty !== null ? ", soit " + fmt.pct(r.minPenalty) + " par an au " + semesterLabel(r.semester) : "");
+        (r.minPenalty !== null ? ", soit " + fmt.pct(r.minPenalty) + " par an au " + late.semesterLabel(r.semester) : "");
     } else {
       penaltyText = custom !== null && !isNaN(custom) && custom > 0 ? "au taux de " + fmt.pct(custom / 100) + " par an" : "";
     }
     if (hasPro) {
       if (penalty === "custom" && (custom === null || isNaN(custom) || custom <= 0)) check("penalty_invalid", "penalty_rate", "error");
       else if (penalty === "custom" && r.minPenalty !== null && round(custom / 100) < r.minPenalty) {
-        check("penalty_min", "penalty_rate", "error", { min: fmt.pct(r.minPenalty), semester: semesterLabel(r.semester) });
+        check("penalty_min", "penalty_rate", "error", { min: fmt.pct(r.minPenalty), semester: late.semesterLabel(r.semester) });
         penaltyText = "";   // un taux illégal n'est pas écrit dans les CGV : la case reste à remplir
       }
       if ((penalty === "bce" && r.defaultPenalty === null) || (penalty !== "bce" && r.minPenalty === null)) {
-        check("rates_unknown", "penalty", "warn", { semester: semesterLabel(r.semester) });
+        check("rates_unknown", "penalty", "warn", { semester: late.semesterLabel(r.semester) });
       }
     }
 
@@ -205,5 +176,5 @@
     return { flags: flags, text: text, blocks: { form: withdrawalForm(rules) }, checks: checks };
   }
 
-  return { semester: semester, rates: rates, semesterLabel: semesterLabel, withdrawalForm: withdrawalForm, prepare: prepare };
+  return { withdrawalForm: withdrawalForm, prepare: prepare };
 });

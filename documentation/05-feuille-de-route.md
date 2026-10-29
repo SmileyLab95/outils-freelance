@@ -234,16 +234,23 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   résolues : **taux de l'intérêt légal du 2nd semestre 2026** (2,75 % et 6,84 %, minimum des pénalités 8,25 %) et **taux
   de la BCE au 1er juillet 2026** (2,40 %, pénalités par défaut 12,40 %). Outil de lecture des sources : option « * »
   (texte entier) ([40](40-cgv.md), décision D39).
+- **Pénalités de retard (29/10/2026)** : le calculateur applique seul les **taux officiels de chaque semestre**
+  (intérêt légal et taux de la BCE au 1er janvier ou au 1er juillet, tables complètes de 2015 à 2026 lues en entier sur
+  la fiche F783 et sur le site de la BCE, 2026 recoupé avec F23211) ; retard sur plusieurs semestres découpé, chaque
+  semestre à son taux, calcul détaillé ligne par ligne ; taux saisi possible (un semestre pas encore publié, une autre
+  lecture) ; « trois fois le taux d'intérêt légal » par défaut, comme sur nos factures ; taux des conditions sous le
+  minimum signalé ; indemnité lue dans les règles ; moteur commun avec les CGV ([41](41-penalites-de-retard.md),
+  décision D40).
 - **Prochaines actions de Claude** : refonte, suite ([31](31-vision-plateforme.md) § 5) : les quatre modules du compte
   gratuit sont faits (étape 5) ; étape 6, outils restants (CGV hors de France, après la lecture des sources de chaque
-  pays ; sous-traitance, devises, jours ouvrés, signature d'email, guides de protection sociale) ; préremplir le taux
-  légal et le taux de la BCE du semestre dans le calculateur de pénalités de retard (règles désormais disponibles) ;
+  pays ; sous-traitance, devises, jours ouvrés, signature d'email, guides de protection sociale) ;
   vérifier la clause « supports connus ou à venir » du contrat de prestation (cession pour des formes d'exploitation non
   prévisibles, Code de la propriété intellectuelle) ; ajouter les taux du 1er semestre 2027 dès leur publication
-  (fin décembre 2026) ;
+  (fin décembre 2026 : intérêt légal par arrêté, taux de la BCE en vigueur au 1er janvier ; tables `taux_interet_legal`
+  et `taux_bce_refinancement`, utilisées par le calculateur de pénalités et les CGV) ;
   activité mixte de l'Espace à spécifier (le profil n'a qu'une activité : deux plafonds, déclaration et livre des
   recettes distinguant ventes et prestations, BOFiP BOI-BIC-DECLA-30-30) ; questions ouvertes de `data/rules/` à relire
-  avec l'outil de lecture des sources (taux de l'intérêt légal du second semestre 2026, ACRE) ; puis besoins P3 restants
+  avec l'outil de lecture des sources (ACRE) ; puis besoins P3 restants
   ([02](02-besoins-clients.md) : CGV, sous-traitance, date d'échéance hors de France) ;
   comptes : adaptateur
   PostgreSQL et sauvegardes dès que l'hébergeur est choisi ; taux du crédit pour
@@ -254,9 +261,11 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   Z12-012 pour le BT-32 en franchise, la question 13 de [pays/ca.md](pays/ca.md) sur la TVQ, et le
   remplacement annoncé de la section 17 du *Victims and Prisoners Act 2024* sur les accords de confidentialité). La mise en ligne
   des comptes attend le choix de l'hébergeur et du domaine.
-- **En attente d'Ismail** (pas urgent) : question à poser à l'expert-comptable ou à l'avocat : l'indemnité forfaitaire
+- **En attente d'Ismail** (pas urgent) : questions à poser à l'expert-comptable ou à l'avocat : l'indemnité forfaitaire
   de 40 € s'applique-t-elle aux factures des professions libérales et des prestataires non commerçants (la fiche
-  officielle F23211 la réserve aux « actes de commerce ») ? ; envoyer ou non une lettre d'information aux inscrits, et à quelle fréquence au plus ([34](34-inscription-compte-gratuit.md)) ; choix de la solution de dons ([35](35-offres-et-soutien.md), après les questions à l'expert-comptable du § 1) et inscription aux programmes d'affiliation
+  officielle F23211 la réserve aux « actes de commerce ») ? Pour un retard sur plusieurs semestres, faut-il appliquer à
+  chaque semestre son taux (choix du calculateur, lecture littérale de l'article L441-10) ou garder le taux du semestre
+  où le retard commence ? ; envoyer ou non une lettre d'information aux inscrits, et à quelle fréquence au plus ([34](34-inscription-compte-gratuit.md)) ; choix de la solution de dons ([35](35-offres-et-soutien.md), après les questions à l'expert-comptable du § 1) et inscription aux programmes d'affiliation
   (registraires de noms de domaine d'abord), quand les comparatifs seront prêts ; structure juridique avec un comptable ; choix de l'hébergeur et budget pour
   les comptes en ligne (comparatif [13](13-comparatif-hebergeurs.md), § 6 ; reporté par Ismail le 22/10/2026, le
   serveur est prêt) ; nom de domaine à choisir avant la mise en ligne des comptes

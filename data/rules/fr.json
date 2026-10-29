@@ -569,28 +569,137 @@
       ],
       "verified_on": "2026-10-29"
     },
-    "taux_bce_refinancement_2026_01_01": {
-      "value": 0.0215,
-      "unit": "rate",
-      "label": "Taux de refinancement principal de la BCE au 1er janvier 2026",
-      "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F23211",
-      "source_title": "Entreprendre.service-public.gouv.fr, « Délais de paiement entre professionnels et pénalités de retard » (vérifié le 7 août 2026)",
-      "confidence": "high",
-      "note": "« Pour le 1er semestre 2026, le taux de refinancement en vigueur au 1er janvier est de 2,15 % (inchangé depuis le 2e semestre 2025), ce qui conduit à un taux de pénalités de 12,15 % ». Lu en entier le 29/10/2026 avec l'outil « Lire une source officielle » (SHA-256 4168948d…e096).",
-      "verified_on": "2026-10-29"
-    },
-    "taux_bce_refinancement_2026_07_01": {
-      "value": 0.024,
-      "unit": "rate",
-      "label": "Taux de refinancement principal de la BCE au 1er juillet 2026",
-      "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F23211",
-      "source_title": "Entreprendre.service-public.gouv.fr, « Délais de paiement entre professionnels et pénalités de retard » (vérifié le 7 août 2026)",
+    "taux_bce_refinancement": {
+      "value": {
+        "2015-S1": 0.0005,
+        "2015-S2": 0.0005,
+        "2016-S1": 0.0005,
+        "2016-S2": 0.0,
+        "2017-S1": 0.0,
+        "2017-S2": 0.0,
+        "2018-S1": 0.0,
+        "2018-S2": 0.0,
+        "2019-S1": 0.0,
+        "2019-S2": 0.0,
+        "2020-S1": 0.0,
+        "2020-S2": 0.0,
+        "2021-S1": 0.0,
+        "2021-S2": 0.0,
+        "2022-S1": 0.0,
+        "2022-S2": 0.0,
+        "2023-S1": 0.025,
+        "2023-S2": 0.04,
+        "2024-S1": 0.045,
+        "2024-S2": 0.0425,
+        "2025-S1": 0.0315,
+        "2025-S2": 0.0215,
+        "2026-S1": 0.0215,
+        "2026-S2": 0.024
+      },
+      "unit": "object",
+      "label": "Taux de refinancement principal de la BCE retenu pour chaque semestre : taux en vigueur au 1er janvier (1er semestre) ou au 1er juillet (2nd semestre)",
+      "source": "https://www.ecb.europa.eu/stats/policy_and_exchange_rates/key_ecb_interest_rates/html/index.en.html",
+      "source_title": "Banque centrale européenne, « Official interest rates » (taux des opérations principales de refinancement, par date d'effet)",
+      "more_sources": [
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F23211",
+          "source_title": "Entreprendre.service-public.gouv.fr, « Délais de paiement entre professionnels et pénalités de retard » (vérifié le 7 août 2026) : 2,15 % au 1er janvier 2026 et 2,40 % au 1er juillet 2026"
+        }
+      ],
       "confidence": "high",
       "verified_on": "2026-10-29",
-      "note": "« Pour le 2e semestre 2026, le taux de refinancement en vigueur au 1er juillet est de 2,40 %, ce qui conduit à un taux de pénalités de 12,40 % ». Le taux applicable est celui du 1er janvier pour le 1er semestre et du 1er juillet pour le 2nd. Lu en entier le 29/10/2026 avec l'outil « Lire une source officielle » (SHA-256 4168948d…e096)."
+      "note": "Taux en vigueur au 1er janvier et au 1er juillet de chaque année d'après le tableau officiel de la BCE (dates d'effet) : 0,05 % depuis le 10/09/2014, 0 % depuis le 16/03/2016, 2,50 % depuis le 21/12/2022, 4,00 % depuis le 21/06/2023, 4,50 % depuis le 20/09/2023, 4,25 % depuis le 12/06/2024, 3,15 % depuis le 18/12/2024, 2,15 % depuis le 11/06/2025, 2,40 % depuis le 17/06/2026, 2,65 % depuis le 16/09/2026 (sans effet sur le 2nd semestre 2026, qui retient le taux du 1er juillet). Recoupé avec la fiche F23211 : « pour le 1er semestre 2026, le taux de refinancement en vigueur au 1er janvier est de 2,15 % (inchangé depuis le 2e semestre 2025), ce qui conduit à un taux de pénalités de 12,15 % » ; « pour le 2e semestre 2026 [...] 2,40 %, ce qui conduit à un taux de pénalités de 12,40 % ». Taux du 1er semestre 2027 : celui en vigueur au 1er janvier 2027, à ajouter. Lu en entier le 29/10/2026 avec l'outil « Lire une source officielle » (SHA-256 0a263971…27cd) ; la page de la Banque de France refuse les lectures automatiques."
     },
     "taux_interet_legal": {
       "value": {
+        "2015-S1": {
+          "particuliers": 0.0406,
+          "autres": 0.0093
+        },
+        "2015-S2": {
+          "particuliers": 0.0429,
+          "autres": 0.0099
+        },
+        "2016-S1": {
+          "particuliers": 0.0454,
+          "autres": 0.0101
+        },
+        "2016-S2": {
+          "particuliers": 0.0435,
+          "autres": 0.0093
+        },
+        "2017-S1": {
+          "particuliers": 0.0416,
+          "autres": 0.009
+        },
+        "2017-S2": {
+          "particuliers": 0.0394,
+          "autres": 0.009
+        },
+        "2018-S1": {
+          "particuliers": 0.0373,
+          "autres": 0.0089
+        },
+        "2018-S2": {
+          "particuliers": 0.036,
+          "autres": 0.0088
+        },
+        "2019-S1": {
+          "particuliers": 0.034,
+          "autres": 0.0086
+        },
+        "2019-S2": {
+          "particuliers": 0.0326,
+          "autres": 0.0087
+        },
+        "2020-S1": {
+          "particuliers": 0.0315,
+          "autres": 0.0087
+        },
+        "2020-S2": {
+          "particuliers": 0.0311,
+          "autres": 0.0084
+        },
+        "2021-S1": {
+          "particuliers": 0.0314,
+          "autres": 0.0079
+        },
+        "2021-S2": {
+          "particuliers": 0.0312,
+          "autres": 0.0076
+        },
+        "2022-S1": {
+          "particuliers": 0.0313,
+          "autres": 0.0076
+        },
+        "2022-S2": {
+          "particuliers": 0.0315,
+          "autres": 0.0077
+        },
+        "2023-S1": {
+          "particuliers": 0.0447,
+          "autres": 0.0206
+        },
+        "2023-S2": {
+          "particuliers": 0.0682,
+          "autres": 0.0422
+        },
+        "2024-S1": {
+          "particuliers": 0.0801,
+          "autres": 0.0507
+        },
+        "2024-S2": {
+          "particuliers": 0.0816,
+          "autres": 0.0492
+        },
+        "2025-S1": {
+          "particuliers": 0.0721,
+          "autres": 0.0371
+        },
+        "2025-S2": {
+          "particuliers": 0.0665,
+          "autres": 0.0276
+        },
         "2026-S1": {
           "particuliers": 0.0667,
           "autres": 0.0262
@@ -612,7 +721,7 @@
       ],
       "confidence": "high",
       "verified_on": "2026-10-29",
-      "note": "Taux simples du tableau officiel : 2e semestre 2026, 6,84 % et 2,75 % ; 1er semestre 2026, 6,67 % et 2,62 %. Le minimum des pénalités de retard entre professionnels (3 fois le taux « autres cas ») vaut 8,25 % au 2nd semestre 2026, chiffre repris par les fiches F33527 et F23211. Taux du 1er semestre 2027 : arrêté attendu fin décembre 2026, à ajouter. Lu en entier le 29/10/2026 avec l'outil « Lire une source officielle » (SHA-256 f923f144…ab08)."
+      "note": "Taux simples du tableau officiel, du 1er semestre 2015 au 2nd semestre 2026 (« autres cas » : 2,75 % au 2nd semestre 2026, 2,62 % au 1er, 2,76 % et 3,71 % en 2025, 4,92 % et 5,07 % en 2024…). Le minimum des pénalités de retard entre professionnels (3 fois le taux « autres cas ») vaut 8,25 % au 2nd semestre 2026, chiffre repris par les fiches F33527 et F23211. Le calcul des intérêts applique « le taux d'intérêt légal applicable sur la période ». Taux du 1er semestre 2027 : arrêté attendu fin décembre 2026, à ajouter. Lu en entier le 29/10/2026 avec l'outil « Lire une source officielle » (SHA-256 f923f144…ab08)."
     },
     "mentions_obligatoires_facture": {
       "value": [
@@ -1897,6 +2006,7 @@
     "Compte dédié du micro-entrepreneur (CSS, art. L613-10) : le texte ne fixe ni délai d'ouverture après le second dépassement, ni prorata la première année, ni sortie de l'obligation quand le chiffre d'affaires repasse sous 10 000 € ; le guide le signale sans interpréter.",
     "Assurance : la liste des professions soumises à une responsabilité civile professionnelle obligatoire n'est pas exhaustive dans le guide (renvoi vers les textes et ordres de chaque profession) ; sanction du défaut de mention de l'assurance (Code de l'artisanat, art. L132-1) non relevée.",
     "Indemnité forfaitaire de 40 € : la fiche F23211 (vérifiée le 07/08/2026) dit qu'elle « ne peut s'appliquer que sur des actes de commerce (par exemple, l'achat-revente) ». S'applique-t-elle aux factures des professions libérales et des prestataires non commerçants ? Le générateur de factures et de CGV la mentionne toujours entre professionnels (mention obligatoire selon les fiches F23211 et F33527) ; à confirmer avec l'expert-comptable ou l'avocat.",
-    "Formulaire type de rétractation : texte de l'annexe de l'article R221-1 du Code de la consommation à relire sur Légifrance (inaccessible aux lectures automatiques) ; le générateur de CGV reprend le modèle de la directive 2011/83/UE (annexe I, partie B)."
+    "Formulaire type de rétractation : texte de l'annexe de l'article R221-1 du Code de la consommation à relire sur Légifrance (inaccessible aux lectures automatiques) ; le générateur de CGV reprend le modèle de la directive 2011/83/UE (annexe I, partie B).",
+    "Pénalités de retard sur plusieurs semestres : le calculateur applique à chaque semestre son taux (art. L441-10 : « le taux applicable pendant le premier semestre de l'année concernée est le taux en vigueur au 1er janvier » ; fiche F783 : intérêt légal « au taux applicable sur la période ») ; une autre lecture garde le taux du semestre où le retard commence. À confirmer par l'avocat lors de la relecture des modèles ; le calculateur permet de saisir un taux unique."
   ]
 }

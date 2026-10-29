@@ -1,5 +1,23 @@
 # Journal des modifications
 
+## 2026-10-29 — Pénalités de retard : taux officiels de chaque semestre
+
+- Le **calculateur de pénalités de retard** applique seul le taux officiel : plus besoin de chercher le taux de
+  l'intérêt légal ou le taux de la BCE. Tables complètes **de 2015 à 2026** (intérêt légal des créanciers
+  professionnels, taux de la BCE au 1er janvier et au 1er juillet), lues en entier sur la fiche officielle F783 et sur
+  le site de la Banque centrale européenne, 2026 recoupé avec la fiche F23211.
+- Un retard qui couvre **plusieurs semestres** est découpé : chaque semestre à son taux (« 12,15 % puis 12,40 % »),
+  calcul détaillé ligne par ligne ; un taux saisi s'applique à tout le retard (semestre pas encore publié, autre
+  lecture du texte, signalée).
+- « Trois fois le taux d'intérêt légal » proposé par défaut, comme sur nos factures ; taux de vos conditions inférieur
+  au minimum légal signalé ; indemnité de 40 € lue dans les règles ; retards de plus de 999 jours écrits « 1 338 jours ».
+- Un seul moteur des taux (`engines/retard-fr.js`) pour le calculateur et le générateur de CGV ; les deux règles de la
+  BCE de 2026 deviennent une table par semestre.
+- Spécification [41](documentation/41-penalites-de-retard.md), décision D40. Tests : `retard-fr.test.mjs` (14 tests :
+  tables officielles, découpage, années bissextiles, exemple officiel refait, cas d'erreur) ; 37 erreurs réintroduites,
+  toutes détectées après renforcement ; parcours navigateur réécrit ; suite complète (484 tests unitaires, 29 tests
+  serveur, 5 tests des scripts, 3 470 vérifications navigateur).
+
 ## 2026-10-29 — Conditions générales de vente (France)
 
 - Nouveau **générateur de CGV** de prestations de services (menu « Vendre ») : clients professionnels, particuliers ou

@@ -9,6 +9,7 @@ import { ruleValues, ruleEntries } from "./regles.mjs";
 
 const require = createRequire(import.meta.url);
 const C = require("../../src/assets/engines/cgv-fr.js");
+const LATE = require("../../src/assets/engines/retard-fr.js");
 const K = require("../../src/assets/engines/contract-doc.js");
 const INV = require("../../src/assets/engines/invoice-fr.js");
 const R = ruleValues("fr");
@@ -34,18 +35,18 @@ const OK = {
 // Moteur
 
 test("semestres et taux : chiffres des fiches officielles (8,25 %, 12,40 %, 12,15 %)", () => {
-  assert.equal(C.semester("2026-06-30"), "2026-S1");
-  assert.equal(C.semester("2026-07-01"), "2026-S2");
-  assert.deepEqual(C.rates(R, "2026-10-29"), { semester: "2026-S2", legal: 0.0275, minPenalty: 0.0825, bce: 0.024, defaultPenalty: 0.124 });
-  assert.deepEqual(C.rates(R, "2026-01-15"), { semester: "2026-S1", legal: 0.0262, minPenalty: 0.0786, bce: 0.0215, defaultPenalty: 0.1215 });
-  assert.deepEqual(C.rates(R, "2027-02-01"), { semester: "2027-S1", legal: null, minPenalty: null, bce: null, defaultPenalty: null }, "semestre pas encore publié");
-  assert.equal(C.semesterLabel("2026-S2"), "second semestre 2026");
-  assert.equal(C.semesterLabel("2027-S1"), "premier semestre 2027");
+  assert.equal(LATE.semester("2026-06-30"), "2026-S1");
+  assert.equal(LATE.semester("2026-07-01"), "2026-S2");
+  assert.deepEqual(LATE.rates(R, "2026-10-29"), { semester: "2026-S2", legal: 0.0275, minPenalty: 0.0825, bce: 0.024, defaultPenalty: 0.124 });
+  assert.deepEqual(LATE.rates(R, "2026-01-15"), { semester: "2026-S1", legal: 0.0262, minPenalty: 0.0786, bce: 0.0215, defaultPenalty: 0.1215 });
+  assert.deepEqual(LATE.rates(R, "2027-02-01"), { semester: "2027-S1", legal: null, minPenalty: null, bce: null, defaultPenalty: null }, "semestre pas encore publié");
+  assert.equal(LATE.semesterLabel("2026-S2"), "second semestre 2026");
+  assert.equal(LATE.semesterLabel("2027-S1"), "premier semestre 2027");
   // Les fiches F33527 et F23211 citent ces chiffres : la règle et le calcul doivent les retrouver.
   const E = ruleEntries("fr");
   assert.match(E.taux_interet_legal.note, /8,25 %/);
-  assert.match(E.taux_bce_refinancement_2026_07_01.note, /12,40 %/);
-  assert.match(E.taux_bce_refinancement_2026_01_01.note, /12,15 %/);
+  assert.match(E.taux_bce_refinancement.note, /12,40 %/);
+  assert.match(E.taux_bce_refinancement.note, /12,15 %/);
 });
 
 test("formulaire de rétractation : modèle officiel mot pour mot, coordonnées du Prestataire, lignes à remplir", () => {
@@ -204,7 +205,7 @@ const plain = (h) => h.replace(/<[^>]+>/g, " ").replace(/&quot;/g, '"').replace(
 
 test("page : en-tête, scripts, sources, menu, messages de tous les contrôles", () => {
   assert.equal(front.id, "cgv");
-  assert.deepEqual(front.scripts, ["engines/invoice-fr.js", "engines/contract-doc.js", "engines/cgv-fr.js", "tools/cgv.js"]);
+  assert.deepEqual(front.scripts, ["engines/invoice-fr.js", "engines/contract-doc.js", "engines/retard-fr.js", "engines/cgv-fr.js", "tools/cgv.js"]);
   assert.ok(front.title.length <= 60 && front.description.length <= 160, "titre et description");
   assert.ok(front.faq.length >= 3 && front.faq.length <= 6);
   for (const key of front.sources) assert.ok(key in R, `source ${key}`);
@@ -219,7 +220,7 @@ test("page : en-tête, scripts, sources, menu, messages de tous les contrôles",
 
 test("page : chiffres de la FAQ et des explications = règles", () => {
   const faq = JSON.stringify(front.faq);
-  const r = C.rates(R, TODAY);
+  const r = LATE.rates(R, TODAY);
   assert.ok(faq.includes(fmt.pct(r.minPenalty)) && faq.includes(fmt.pct(r.defaultPenalty)), "8,25 % et 12,40 %");
   assert.ok(faq.includes(`${R.retractation_consommateur.delai_jours} jours`));
   assert.ok(faq.includes(`${R.indemnite_forfaitaire_recouvrement} €`));

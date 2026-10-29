@@ -259,6 +259,8 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--b
 .prose th, .prose td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
 .prose th { background: var(--brand-soft); color: var(--brand-ink); }
 .formula { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; background: var(--tint); border-radius: 8px; padding: 10px 12px; font-size: .9rem; }
+.formula-line { display: block; }
+.formula-line + .formula-line { margin-top: 8px; }
 
 /* ---------- FAQ ---------- */
 .faq-item { background: #fff; border: 1px solid var(--line); border-radius: var(--radius-sm); margin-bottom: 10px; box-shadow: var(--shadow); }
