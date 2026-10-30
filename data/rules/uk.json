@@ -2790,6 +2790,266 @@
       "confidence": "high",
       "verified_on": "2026-10-29",
       "note": "Read in full on 29/10/2026 with the « Lire une source officielle » tool (SHA-256 73b0f14d…9d95, f4e2c7d8…40da, b4320038…7100). Limited company: registered name on business letters and « all other forms of its business correspondence and documentation » (reg. 24); on business letters, order forms and websites: part of the UK where registered, registered number, registered office address, and the fact that it is a limited company where the name is exempt from « limited » (reg. 25); a document « in hard copy, electronic or any other form » (reg. 29(c)); if a business letter names a director other than in the text or as a signatory, all directors (reg. 26); share capital, if shown, as paid up (reg. 25(3)). GOV.UK: the fact that it is a limited company, usually by spelling out the full name including « Limited » or « Ltd ». Sole trader using a business name (a name other than their surname, with forename or initial allowed): their name and a UK address where documents can be served, in legible characters, on business letters, written orders, invoices and receipts, and written demands for payment (Companies Act 2006, ss. 1200 to 1202); the Act does not say whether an email is a business letter. Sole trader trading under their own name: no disclosure under this Chapter."
+    },
+    "uk_service_provider_information": {
+      "value": {
+        "contact_details": [
+          "a postal address, fax number or e-mail address",
+          "a telephone number",
+          "the official address, if the provider has one"
+        ],
+        "information": [
+          "name",
+          "legal status and form",
+          "geographic address where established, and details for rapid and direct contact (including e-mail where the provider can be contacted electronically)",
+          "trade or similar public register and registration number",
+          "competent authority, if the activity is subject to an authorisation scheme",
+          "VAT registration number",
+          "professional body and professional title, for a regulated profession",
+          "general terms and conditions, if any",
+          "contract terms on the applicable law or the competent courts, if any",
+          "after-sales guarantee not imposed by law, if any",
+          "price, where pre-determined for a given type of service",
+          "main features of the service, if not apparent from the context",
+          "insurer contact details and territorial coverage, where professional liability insurance is compulsory"
+        ],
+        "timing": "clear and unambiguous, in good time before the contract is concluded (or before the service is provided if there is no written contract)",
+        "complaints": "respond to complaints as quickly as possible and make best efforts to find a satisfactory solution (except vexatious complaints)"
+      },
+      "unit": "object",
+      "label": "Provision of Services Regulations 2009: contact details, information to make available, complaints",
+      "source": "https://www.legislation.gov.uk/uksi/2009/2999/part/2",
+      "source_title": "The Provision of Services Regulations 2009 (SI 2009/2999), Part 2 (revised, up to date) - legislation.gov.uk",
+      "confidence": "high",
+      "verified_on": "2026-10-30",
+      "note": "Read in full on 30/10/2026 with the « Lire une source officielle » tool (SHA-256 5688b45b…44a1). Reg. 7: contact details for complaints and requests (postal address, fax or e-mail; telephone; official address). Reg. 8: information made available to every recipient (on the provider's initiative, at the place of service, electronically at an address supplied, or in an information document). Reg. 9: on request (price or method, professional rules, linked activities, codes of conduct). Reg. 10: if a code of conduct, trade association or professional body provides non-judicial dispute resolution, inform the recipient. Reg. 11: timing. Reg. 12: complaints."
+    },
+    "uk_consumer_contract_information": {
+      "value": {
+        "consumer": "an individual acting for purposes which are wholly or mainly outside that individual's trade, business, craft or profession",
+        "contract_types": {
+          "on_premises": "Schedule 1 information, if not apparent from the context",
+          "off_premises": "Schedule 2 information on paper (or another durable medium if the consumer agrees), with the cancellation form; copy or confirmation before the service begins",
+          "distance": "Schedule 2 information in a way appropriate to the means used, with the cancellation form; confirmation on a durable medium before the service begins"
+        },
+        "off_premises_min_payment": 42,
+        "price": "total price inclusive of taxes, or the manner in which it is calculated",
+        "durable_medium": "paper or e-mail, or any other medium that allows information to be addressed personally to the recipient, stored for future reference and reproduced unchanged",
+        "order_button": "order with obligation to pay"
+      },
+      "unit": "object",
+      "label": "Consumer Contracts Regulations 2013: definitions, information before the contract, confirmation",
+      "source": "https://www.legislation.gov.uk/uksi/2013/3134/part/2",
+      "source_title": "The Consumer Contracts (Information, Cancellation and Additional Charges) Regulations 2013, Part 2 (revised, up to date) - legislation.gov.uk",
+      "more_sources": [
+        {
+          "source": "https://www.legislation.gov.uk/uksi/2013/3134/part/1",
+          "source_title": "SI 2013/3134, Part 1 (definitions) - legislation.gov.uk"
+        },
+        {
+          "source": "https://www.legislation.gov.uk/uksi/2013/3134/schedule/2",
+          "source_title": "SI 2013/3134, Schedule 2 (information for distance and off-premises contracts) - legislation.gov.uk"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-10-30",
+      "note": "Read in full on 30/10/2026 with the « Lire une source officielle » tool (Part 2: SHA-256 537d42f0…a2b0; Part 1: 3a7d199a…430c; Schedule 2: 31d87d64…6286). Reg. 4: consumer and trader; reg. 5: distance, off-premises and on-premises contracts, durable medium, service contract. Part 2 does not apply to off-premises contracts where the consumer pays £42 or less (reg. 7(4)). Regs. 9, 10, 13: information; 12, 16: copy or confirmation before performance of a service begins; 14: order button and payment means on a website; 17: burden of proof on the trader. Schedule 2 lists 24 items (a) to (x), including the total price inclusive of taxes (f), arrangements for payment and performance (j), the complaint handling policy (k), cancellation conditions (l) and the costs payable if the consumer asked for early performance (n). Changes not yet in force: reg. 7(4A) inserted by the Digital Markets, Competition and Consumers Act 2024, s. 279."
+    },
+    "uk_consumer_cancellation": {
+      "value": {
+        "period_days": 14,
+        "period_ends": "at the end of 14 days after the day on which the service contract is entered into",
+        "extended_if_no_information_months": 12,
+        "how": "any clear statement, or a form following the model cancellation form; sending it before the period ends is enough",
+        "refund_days": 14,
+        "refund": "all payments, without undue delay and no later than 14 days after the trader is informed, using the same means of payment unless the consumer agrees otherwise, without any fee",
+        "early_start": "the trader must not begin the service during the cancellation period unless the consumer expressly requests it (on a durable medium for an off-premises contract)",
+        "proportionate_payment": "if the consumer asked for early performance and cancels, an amount in proportion to what has been supplied, based on the total price (or the market value if the price is excessive)",
+        "lost_when": "the service has been fully performed, after the consumer's request and acknowledgement that the right would be lost",
+        "off_premises_min_payment": 42
+      },
+      "unit": "object",
+      "label": "Consumer Contracts Regulations 2013: right to cancel a distance or off-premises service contract",
+      "source": "https://www.legislation.gov.uk/uksi/2013/3134/part/3",
+      "source_title": "SI 2013/3134, Part 3 (right to cancel, revised, up to date) - legislation.gov.uk",
+      "confidence": "high",
+      "verified_on": "2026-10-30",
+      "note": "Read in full on 30/10/2026 with the « Lire une source officielle » tool (SHA-256 bf93cf71…76d5). Regs. 27 (scope: not off-premises contracts of £42 or less), 28 (exceptions, e.g. urgent repairs requested by the consumer, leisure services for a specific date), 29 (cancel without reason), 30(2) (14 days after the day of the contract), 31 (extension to 12 months if the cancellation information is missing), 32 (how to cancel; burden of proof on the consumer), 34 (refund), 36 (services during the cancellation period: express request; proportionate payment; nothing payable if the information required by Schedule 2 (l) or (n) was not given). Change not yet in force: reg. 27(3A) inserted by the Digital Markets, Competition and Consumers Act 2024, s. 279."
+    },
+    "uk_cancellation_model_form": {
+      "value": {
+        "form": [
+          "To [here the trader’s name, geographical address and, where available, fax number and e-mail address are to be inserted by the trader]:",
+          "I/We [*] hereby give notice that I/We [*] cancel my/our [*] contract of sale of the following goods [*]/for the provision of the following service [*],",
+          "Ordered on [*]/received on [*],",
+          "Name of consumer(s),",
+          "Address of consumer(s),",
+          "Signature of consumer(s) (only if this form is notified on paper),",
+          "Date",
+          "[*] Delete as appropriate."
+        ],
+        "service_payment": "If you requested to begin the performance of services during the cancellation period, you shall pay us an amount which is in proportion to what has been performed until you have communicated us your cancellation from this contract, in comparison with the full coverage of the contract."
+      },
+      "unit": "object",
+      "label": "Consumer Contracts Regulations 2013, Schedule 3: model cancellation form (part B) and model instruction for services (part A, note 6)",
+      "source": "https://assets.publishing.service.gov.uk/media/5a7caae9ed915d7c983bc2bc/bis-13-1111-the-consumer-contracts-information-cancellation-and-additional-payments-regulations-2013.pdf",
+      "source_title": "The Consumer Contracts Regulations 2013, Schedule 3, as published by the Department for Business, Innovation and Skills (BIS/13/1111) - GOV.UK",
+      "more_sources": [
+        {
+          "source": "https://www.legislation.gov.uk/uksi/2013/3134/schedule/3",
+          "source_title": "SI 2013/3134, Schedule 3 (revised; the form is published as an image) - legislation.gov.uk"
+        },
+        {
+          "source": "https://www.legislation.gov.uk/eudr/2011/83/annexes",
+          "source_title": "Directive 2011/83/EU, Annex I (model withdrawal form, as it stood on exit day) - legislation.gov.uk"
+        }
+      ],
+      "confidence": "medium",
+      "verified_on": "2026-10-30",
+      "note": "On legislation.gov.uk, the text of Schedule 3 is published as an image: the revised page, its XML version (SHA-256 d65b58e8…93b0) and the PDF of the regulations as made (9c397b8a…3ee9) carry no text for it. The text above was read on 30/10/2026 in the department's publication of the regulations (BIS/13/1111, as laid; its title then said « Additional Payments ») and checked against Annex I(B) of Directive 2011/83/EU, which it implements (same wording, « cancel » for « withdraw »). The only recorded amendment to Schedule 3 replaced « EUR » by « £ » in para. 5(b) of part A (SI 2018/1326), which does not concern the form. The consumer may use the form or any other clear statement (reg. 32(3)); the trader must give it for distance and off-premises contracts (regs. 10(1)(b), 13(1)(b)). The generator fills in the trader's name, address and e-mail (no fax)."
+    },
+    "uk_consumer_service_rights": {
+      "value": {
+        "reasonable_care_and_skill": true,
+        "information_binding": "anything said or written to the consumer about the trader or the service that the consumer takes into account, and the information given under the Consumer Contracts Regulations",
+        "reasonable_price_if_not_fixed": true,
+        "reasonable_time_if_not_fixed": true,
+        "remedies": [
+          "repeat performance",
+          "price reduction"
+        ],
+        "refund_days": 14,
+        "death_or_personal_injury_negligence": "cannot be excluded or restricted"
+      },
+      "unit": "object",
+      "label": "Consumer Rights Act 2015: consumer's statutory rights under a services contract",
+      "source": "https://www.legislation.gov.uk/ukpga/2015/15/part/1/chapter/4",
+      "source_title": "Consumer Rights Act 2015, Part 1, Chapter 4 (services, revised, up to date) - legislation.gov.uk",
+      "more_sources": [
+        {
+          "source": "https://www.legislation.gov.uk/ukpga/2015/15/section/2",
+          "source_title": "Consumer Rights Act 2015, section 2 (trader, consumer) - legislation.gov.uk"
+        },
+        {
+          "source": "https://www.legislation.gov.uk/ukpga/2015/15/part/2",
+          "source_title": "Consumer Rights Act 2015, Part 2 (unfair terms; s. 65 negligence) - legislation.gov.uk"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-10-30",
+      "note": "Read in full on 30/10/2026 with the « Lire une source officielle » tool (Chapter 4: SHA-256 8789c5dd…90cd). S. 49: reasonable care and skill; s. 50: information binding (changes only if expressly agreed); s. 51: reasonable price; s. 52: reasonable time; ss. 54 to 56: repeat performance, then price reduction (refund within 14 days beginning with the day the trader agrees, same means of payment, no fee); s. 57: these rights cannot be excluded, nor restricted so as to prevent recovering the price. S. 2(3): consumer; s. 2(4): a trader who claims an individual is not a consumer must prove it. S. 65: no exclusion of liability for death or personal injury resulting from negligence."
+    },
+    "uk_unfair_terms": {
+      "value": {
+        "unfair_if": "contrary to the requirement of good faith, it causes a significant imbalance in the parties' rights and obligations to the detriment of the consumer",
+        "not_binding": true,
+        "transparent": "plain and intelligible language and, if written, legible",
+        "most_favourable_meaning": true,
+        "grey_list_items": 20,
+        "guidance": {
+          "prepayments": "a substantial prepayment kept whatever the circumstances is more likely to be unfair; a genuine deposit is normally a small percentage of the price; otherwise keep only the unavoidable net costs or the net loss of profit caused by the consumer's default",
+          "jurisdiction": "consumers must not be prevented from bringing proceedings in their local courts (the part of the UK where they live)",
+          "transfer": "the trader may transfer the contract only with the consumer's agreement",
+          "price": "the price is the one confirmed when the order is placed",
+          "terms_updates": "not terms « as updated from time to time »"
+        }
+      },
+      "unit": "object",
+      "label": "Consumer Rights Act 2015: unfair terms in consumer contracts, and the CMA's guidance",
+      "source": "https://www.legislation.gov.uk/ukpga/2015/15/part/2",
+      "source_title": "Consumer Rights Act 2015, Part 2 (unfair terms, revised, up to date) - legislation.gov.uk",
+      "more_sources": [
+        {
+          "source": "https://www.legislation.gov.uk/ukpga/2015/15/schedule/2",
+          "source_title": "Consumer Rights Act 2015, Schedule 2 (terms which may be regarded as unfair) - legislation.gov.uk"
+        },
+        {
+          "source": "https://www.gov.uk/government/publications/unfair-contract-terms-cma37",
+          "source_title": "Unfair contract terms guidance (CMA37), Competition and Markets Authority, updated 22 July 2026 - GOV.UK"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-10-30",
+      "note": "Read in full on 30/10/2026 with the « Lire une source officielle » tool (Part 2: SHA-256 d8cfa036…293f; Schedule 2: 8bda2c92…be82; CMA37 PDF: 61d75a11…7a85, searched for jurisdiction and prepayments). Ss. 62 (unfair terms not binding), 64 (price and main subject matter not assessed if transparent and prominent), 67 (rest of the contract continues), 68 (transparency), 69 (meaning most favourable to the consumer), 71 (court considers fairness of its own motion), 74 (UK law applies despite a foreign choice if the contract is closely connected with the UK). Schedule 2, Part 1: 20 terms that may be unfair (e.g. 4 keeping sums without reciprocity, 5 and 6 disproportionate sums, 7 discretionary termination, 11 and 13 unilateral changes, 14 and 15 price set or raised after the consumer is bound, 19 transfer, 20 hindering legal action). CMA37, paras. 6.59 to 6.62 (prepayments and deposits) and 6.89 to 6.92 (jurisdiction: Civil Jurisdiction and Judgments Act 1982, s. 15B; « more likely to be fair » wording reused)."
+    },
+    "uk_business_exclusion_clauses": {
+      "value": {
+        "death_or_personal_injury_negligence": "cannot be excluded or restricted",
+        "other_loss_negligence": "only if the term satisfies the requirement of reasonableness",
+        "written_standard_terms": "excluding or restricting liability for breach, or claiming to render a substantially different performance or none, only if reasonable",
+        "reasonableness": "fair and reasonable having regard to the circumstances known to or contemplated by the parties when the contract was made",
+        "specified_sum": "regard to the resources available to meet the liability and how far insurance was available",
+        "burden_of_proof": "on the party claiming that the term is reasonable",
+        "implied_terms": [
+          "reasonable care and skill",
+          "reasonable time, if not fixed",
+          "reasonable charge, if not fixed"
+        ]
+      },
+      "unit": "object",
+      "label": "Unfair Contract Terms Act 1977 and Supply of Goods and Services Act 1982: business-to-business services",
+      "source": "https://www.legislation.gov.uk/ukpga/1977/50/part/I",
+      "source_title": "Unfair Contract Terms Act 1977, Part I (England and Wales, Northern Ireland; revised, up to date) - legislation.gov.uk",
+      "more_sources": [
+        {
+          "source": "https://www.legislation.gov.uk/ukpga/1977/50/part/II",
+          "source_title": "Unfair Contract Terms Act 1977, Part II (Scotland) - legislation.gov.uk"
+        },
+        {
+          "source": "https://www.legislation.gov.uk/ukpga/1977/50/schedule/2",
+          "source_title": "Unfair Contract Terms Act 1977, Schedule 2 (guidelines for the reasonableness test) - legislation.gov.uk"
+        },
+        {
+          "source": "https://www.legislation.gov.uk/ukpga/1982/29/part/II",
+          "source_title": "Supply of Goods and Services Act 1982, Part II (supply of services) - legislation.gov.uk"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-10-30",
+      "note": "Read in full on 30/10/2026 with the « Lire une source officielle » tool (Part I: SHA-256 21b28658…822f; Part II: de6f788e…fe4f; Schedule 2: 56ea5767…24c3; SGSA Part II: 22c9b925…6a0a). UCTA ss. 2 (negligence), 3 (written standard terms), 11 (reasonableness; s. 11(4) limits to a specified sum; s. 11(5) burden), 13 (varieties of exemption clause; arbitration is not an exclusion), 14 (business includes a profession); in Scotland ss. 16, 17, 24 and 25 lay down equivalent rules. Not applicable to consumer contracts (Consumer Rights Act 2015, ss. 62 and 65). SGSA ss. 13 to 15 (England and Wales, Northern Ireland): implied terms, which can be varied by express agreement subject to UCTA (s. 16)."
+    },
+    "late_payment_substantial_remedy": {
+      "value": {
+        "substantial_unless": "the remedy is insufficient to compensate the supplier or deter late payment, and it would not be fair or reasonable to let it oust or vary statutory interest",
+        "factors": [
+          "the benefits of commercial certainty",
+          "the strength of the bargaining positions of the parties",
+          "whether the term was imposed by one party (standard terms or otherwise)",
+          "whether the supplier received an inducement to agree to it"
+        ]
+      },
+      "unit": "object",
+      "label": "Late Payment Act 1998: meaning of « substantial remedy » (a contractual remedy replacing statutory interest)",
+      "source": "https://www.legislation.gov.uk/ukpga/1998/20/section/9",
+      "source_title": "Late Payment of Commercial Debts (Interest) Act 1998, section 9 (revised, up to date) - legislation.gov.uk",
+      "confidence": "high",
+      "verified_on": "2026-10-30",
+      "note": "Read in full on 30/10/2026 with the « Lire une source officielle » tool (SHA-256 100d8a7e…56f7). All relevant circumstances at the time the terms are agreed are taken into account (s. 9(2)). A contractual rate lower than statutory interest is not automatically insufficient: the generator only flags it."
+    },
+    "uk_complaints_adr": {
+      "value": {
+        "trader_duty": "when communicating the outcome of a consumer's complaint, inform the consumer about any ADR or other arrangement available if they are dissatisfied, where the trader is obliged to take part in it (by legislation, the terms of the consumer contract or other contractual arrangements)",
+        "in_force": "2026-04-06",
+        "general_duty_to_join": false,
+        "trade_association": "a provider bound by a code of conduct, or a member of a trade association or professional body, offering non-judicial dispute resolution must tell recipients and say how to access the details"
+      },
+      "unit": "object",
+      "label": "Complaints and alternative dispute resolution (ADR) for consumers, since 6 April 2026",
+      "source": "https://www.legislation.gov.uk/ukpga/2024/13/part/4/chapter/4",
+      "source_title": "Digital Markets, Competition and Consumers Act 2024, Part 4, Chapter 4 (alternative dispute resolution) - legislation.gov.uk",
+      "more_sources": [
+        {
+          "source": "https://www.legislation.gov.uk/uksi/2015/542/regulation/19",
+          "source_title": "The Alternative Dispute Resolution for Consumer Disputes (Competent Authorities and Information) Regulations 2015 (revoked) - legislation.gov.uk"
+        },
+        {
+          "source": "https://www.legislation.gov.uk/uksi/2009/2999/part/2",
+          "source_title": "The Provision of Services Regulations 2009, reg. 10 - legislation.gov.uk"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-10-30",
+      "note": "Read in full on 30/10/2026 with the « Lire une source officielle » tool (Chapter 4: SHA-256 5f8f48dc…c3f4; SI 2015/542 reg. 19: ef088194…6b56). S. 308 in force on 6 April 2026 (SI 2026/284); the 2015 ADR Regulations were revoked the same day (2024 c. 13, s. 339(1), Sch. 27 para. 10). Chapter 4 (ss. 291 to 310) regulates ADR providers (accreditation, no fees to consumers) and contains no general duty for traders to join a scheme."
     }
   },
   "open_questions": [

@@ -1,26 +1,30 @@
-/* Conditions générales de vente (France) : formulaire, champs affichés selon la situation, contrôles, aperçu en
-   direct, PDF, Word et copie. Repères, textes calculés et contrôles par le moteur OFE.cgvFR ; rendu par
-   OFE.contractDoc (même syntaxe que le contrat) ; texte des CGV et messages dans la page (#cgv-data).
-   Spécification : documentation/40-cgv.md. */
+/* Conditions générales de vente (France) et terms and conditions (Royaume-Uni) : formulaire, champs affichés selon
+   la situation, contrôles, aperçu en direct, PDF, Word et copie. Repères, textes calculés et contrôles par le moteur
+   du pays (OFE.cgvFR ou OFE.cgvUK, selon D.country) ; rendu par OFE.contractDoc (même syntaxe que le contrat) ; texte
+   des CGV et messages dans la page (#cgv-data). Spécification : documentation/40-cgv.md et 45-cgv-royaume-uni.md. */
 (function () {
   "use strict";
   var OF = window.OF, OFE = window.OFE, R = window.OF_RULES;
   var form = document.getElementById("cgv-form"), dataEl = document.getElementById("cgv-data");
-  if (!form || !dataEl || !OFE || !OFE.cgvFR || !OFE.contractDoc || !R) return;
-  var D = JSON.parse(dataEl.textContent), L = D.ui, K = "cgv";
+  if (!form || !dataEl || !OFE || !OFE.contractDoc || !R) return;
+  var D = JSON.parse(dataEl.textContent), L = D.ui, K = D.store || "cgv";
+  var engine = D.country === "uk" ? OFE.cgvUK : OFE.cgvFR;
+  if (!engine) return;
   var $ = function (id) { return document.getElementById(id); };
   var esc = OFE.contractDoc.esc;
   var preview = $("cg-preview"), notices = $("cg-notices");
   var longDate = function (iso) { return OF.date(iso, { day: "numeric", month: "long", year: "numeric" }); };
   var fillIn = function (text, vars) { return text.replace(/\{(\w+)\}/g, function (m, k) { return vars[k] != null ? vars[k] : m; }); };
-  // Taux à deux décimales s'il n'est pas entier (« 12,40 % », « 8,25 % », « 15 % »), comme les fiches officielles.
-  var pct2 = new Intl.NumberFormat("fr-FR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  // Taux à deux décimales s'il n'est pas entier (« 12,40 % », « 11.75% », « 15 % »), comme les textes officiels.
+  var pct2 = new Intl.NumberFormat(D.lang || "fr-FR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   var fmt = {
     pct: function (rate) {
       var n = Math.round(rate * 10000) / 100;
-      return (n === Math.round(n) ? OF.fmt(n) : pct2.format(n)) + " %";
+      return (n === Math.round(n) ? OF.fmt(n) : pct2.format(n)) + (D.country === "uk" ? "%" : " %");
     },
-    num: function (n) { return OF.fmt(n); }
+    num: function (n) { return OF.fmt(n); },
+    money: function (n) { return OF.money(n, n === Math.round(n) ? 0 : 2); },
+    date: longDate
   };
 
   /** Valeurs du formulaire : `raw` pour les conditions et le moteur, `text` pour l'affichage. */
@@ -33,7 +37,7 @@
       text[el.name] = el.tagName === "SELECT" ? el.options[el.selectedIndex].text : el.value.trim();
     });
     var today = OF.today();
-    var p = OFE.cgvFR.prepare(raw, R, today, fmt);
+    var p = engine.prepare(raw, R, today, fmt);
     Object.keys(p.text).forEach(function (k) { text[k] = p.text[k]; });
     text.contacts = [raw.p_email, raw.p_phone].filter(Boolean).join(", ");
     text.today = longDate(today);
@@ -51,7 +55,8 @@
     has_part: function (v) { return v.raw.has_part === "on"; },
     online: function (v) { return v.raw.has_part === "on" && form.elements.online.checked; },
     escompte: function (v) { return v.raw.escompte === "on"; },
-    penalty_custom: function (v) { return v.raw.has_pro === "on" && v.raw.penalty === "custom"; }
+    penalty_custom: function (v) { return v.raw.has_pro === "on" && v.raw.penalty === "custom"; },
+    limited: function (v) { return v.raw.status === "limited"; }
   };
 
   function showFields(v) {

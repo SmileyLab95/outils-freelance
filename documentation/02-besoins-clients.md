@@ -60,7 +60,7 @@ Matrice revue le 23/10/2026 d'après les pages publiées (identifiants de `conte
 | Faire un devis | Générateur de devis (PDF) | ✅ | ✅ *estimate* | ✅ *quote* | ✅ *estimate* / soumission | P1 |
 | Un contrat de prestation | Générateur de contrat (clauses à choisir) | ✅ | ✅ | ✅ | ✅ | P2 |
 | Protéger un secret | Générateur d'accord de confidentialité (mutuel ou à sens unique) | ✅ | ✅ | ✅ (*deed* si besoin) | ✅ | P3 |
-| Conditions générales de vente | Générateur de CGV / *terms of service* (clients professionnels ou particuliers, rétractation, médiateur) | ✅ | 🟡 | 🟡 | 🟡 | P3 |
+| Conditions générales de vente | Générateur de CGV / *terms of service* (clients professionnels ou particuliers, rétractation, médiateur) | ✅ | 🟡 | ✅ | 🟡 | P3 |
 | Lois de protection des freelances | Guide *Freelance Isn't Free* (New York) et équivalents | — | ✅ | — | — | P2 |
 
 ### 5. Facturer
@@ -130,7 +130,7 @@ Matrice revue le 23/10/2026 d'après les pages publiées (identifiants de `conte
 - **P2** (convertisseur de tarifs, prix au forfait et « freelance ou salarié » faits le 22/10/2026) : checklist de
   création, jauges de seuils, client étranger et W-8BEN faits le 22/10/2026 ; recouvrement en justice fait au
   Royaume-Uni, au Canada et aux États-Unis le 23/10/2026, à faire en France (textes de 2026 à lire) ; compte pro et assurance hors de France et guide de changement de statut faits le 23/10/2026.
-- **P3** : CGV hors de France (France faite le 29/10/2026), sous-traitance (bureau à
+- **P3** : CGV aux États-Unis et au Canada (France faite le 29/10/2026, Royaume-Uni le 30/10/2026), sous-traitance (bureau à
   domicile, hausse de tarifs, accord de confidentialité et proposition commerciale faits le 23/10/2026).
 
 ## Les outils « moteurs » partagés

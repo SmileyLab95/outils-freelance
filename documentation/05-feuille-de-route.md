@@ -9,7 +9,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 
 ## Où en est-on ?
 
-*Mis à jour le 29/10/2026.*
+*Mis à jour le 30/10/2026.*
 
 - **Priorité (décision D10)** : le site et la plateforme d'abord ; noms de domaine, Gumroad et affiliation à la fin.
   Règle de qualité maximale pour tout produit ou service (D11, charte dans la [méthode](04-methode-de-travail.md#charte-qualité)).
@@ -275,22 +275,33 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   publique, loi lue en entier), aux États-Unis (Net 30, EOM ; sans date au contrat, 30 jours après le travail à New
   York et dans l'Illinois) et au Canada (anglais et français) ; moteur commun avec la page française
   ([44](44-date-echeance-international.md), décision D46).
+- **Conditions générales au Royaume-Uni (30/10/2026)** : générateur de *terms and conditions* pour les prestations de
+  services (menu *Selling*, liens de langue avec les CGV françaises) : informations obligatoires du prestataire
+  (règlement de 2009 : adresse, téléphone, email, numéro de société et de TVA) ; avec des particuliers, droit
+  d'annulation de 14 jours pour un contrat à distance ou hors établissement, avec le formulaire type officiel en annexe,
+  rappel des droits de la loi de 2015, juridiction de leur lieu de résidence et aucune clause de la liste grise ; entre
+  entreprises, intérêt légal du *Late Payment Act* (11,75 % pour les dettes échues en 2026) et indemnités de 40, 70 ou
+  100 £, plafond de responsabilité signalé comme devant être raisonnable ; ADR facultatif (loi de 2024, en vigueur
+  depuis le 6 avril 2026, les règlements ADR de 2015 étant abrogés). Seize textes officiels lus en entier, et le guide
+  CMA37 de juillet 2026 ; le formulaire type, publié en image sur legislation.gov.uk, lu dans la publication du
+  ministère ; script commun avec la France ([45](45-cgv-royaume-uni.md), décision D47).
 - **Prochaines actions de Claude** : refonte, suite ([31](31-vision-plateforme.md) § 5) : les quatre modules du compte
-  gratuit sont faits (étape 5) ; étape 6, outils restants (CGV hors de France, après la lecture des sources de chaque
-  pays ; jours ouvrés au Canada (jours fériés fédéraux et provinciaux) : en attente de l'accès à canada.ca, refusé
+  gratuit sont faits (étape 5) ; étape 6, outils restants (CGV aux États-Unis puis au Canada, après la lecture des
+  sources de chaque pays ; jours ouvrés au Canada (jours fériés fédéraux et provinciaux) : en attente de l'accès à canada.ca, refusé
   depuis l'environnement de travail et sans réponse depuis l'outil de lecture des sources le 29/10/2026 ; sous-traitance,
   devises, guides de protection sociale) ;
   ajouter les taux du 1er semestre 2027 dès leur publication
   (fin décembre 2026 : intérêt légal par arrêté, taux de la BCE en vigueur au 1er janvier ; tables `taux_interet_legal`
   et `taux_bce_refinancement`, utilisées par le calculateur de pénalités et les CGV) ; *bank holidays* de 2029 dès que
   GOV.UK les publie et jours fériés fédéraux de 2031 dès qu'OPM les publie (`public_holidays`, `data/rules/uk.json` et
-  `data/rules/us.json`) ;
+  `data/rules/us.json`) ; taux de la Banque d'Angleterre au 31 décembre 2026, après la décision du 17 décembre
+  (`late_payment_reference_rates` : intérêt légal du calculateur britannique et des *terms and conditions* en 2027) ;
   texte de l'article R123-237 du Code de commerce à relire dès que Légifrance est lisible (mentions sur les
   correspondances, signature d'email) ;
   activité mixte de l'Espace à spécifier (le profil n'a qu'une activité : deux plafonds, déclaration et livre des
   recettes distinguant ventes et prestations, BOFiP BOI-BIC-DECLA-30-30) ; questions ouvertes de `data/rules/` à relire
   avec l'outil de lecture des sources (ACRE) ; puis besoins P3 restants
-  ([02](02-besoins-clients.md) : CGV hors de France, sous-traitance) ;
+  ([02](02-besoins-clients.md) : CGV aux États-Unis et au Canada, sous-traitance) ;
   comptes : adaptateur
   PostgreSQL et sauvegardes dès que l'hébergeur est choisi ; taux du crédit pour
   dividendes de la Saskatchewan et du Nunavut dès qu'ils sont publiés (formulaires 2026) ;

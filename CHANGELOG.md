@@ -1,5 +1,29 @@
 # Journal des modifications
 
+## 2026-10-30 — Conditions générales au Royaume-Uni (*terms and conditions*)
+
+- Nouveau **générateur de *terms and conditions*** pour les prestations de services au Royaume-Uni (menu *Selling*,
+  liens de langue avec les CGV françaises) : clients entreprises, particuliers ou les deux ; contrats à distance, chez
+  le client ou dans les locaux ; aperçu en direct, PDF, Word, copie ; saisie enregistrée sur l'appareil.
+- **Informations du prestataire** (règlement de 2009) : nom, statut (*sole trader*, société avec son numéro, *partnership*),
+  adresse, téléphone, email, numéro de TVA, organisme professionnel, assurance ; avertissements quand il en manque.
+- **Particuliers** : droit d'annulation de 14 jours pour un contrat à distance ou hors établissement, remboursement
+  sous 14 jours, prestation pendant le délai seulement à leur demande, avec le **formulaire type officiel** en annexe ;
+  rappel des droits de la loi de 2015 ; prix TVA comprise ; tribunaux de leur lieu de résidence ; aucune limitation de
+  responsabilité, réception tacite ni « entire agreement » ; acompte restitué hors travail fait (guide CMA37).
+- **Entreprises** : intérêt légal du *Late Payment Act* (8 % au-dessus du taux de référence, 11,75 % pour les dettes
+  échues en 2026) et indemnités de 40, 70 ou 100 £ ; délai de plus de 60 jours et taux contractuel plus bas signalés ;
+  plafond de responsabilité, à justifier comme raisonnable (loi de 1977).
+- **Réclamations** : réponse rapide ; ADR facultatif, mentionné s'il y en a un (loi de 2024, en vigueur depuis le
+  6 avril 2026 ; règlements ADR de 2015 abrogés).
+- Seize textes lus en entier sur legislation.gov.uk et le guide CMA37 (juillet 2026) ; neuf nouvelles règles dans
+  `data/rules/uk.json`. Le formulaire type, publié en image, est repris de la publication du ministère (confiance
+  moyenne, signalé).
+- Moteur `engines/cgv-uk.js` ; script `tools/cgv.js` commun avec les CGV françaises (comportement français inchangé).
+- Spécification [45](documentation/45-cgv-royaume-uni.md), décision D47. Tests : 27 tests, 67 erreurs réintroduites
+  toutes détectées après renforcement, parcours navigateur ; suite complète (544 tests unitaires, 29 tests serveur,
+  5 tests des scripts, 3 742 vérifications navigateur).
+
 ## 2026-10-29 — Date d'échéance d'une facture hors de France
 
 - Nouveau **calculateur de date d'échéance** au Royaume-Uni, aux États-Unis et au Canada (anglais et français), menu

@@ -1,0 +1,195 @@
+<!--{
+  "id": "cgv",
+  "slug": "terms-and-conditions-generator/",
+  "title": "Terms and Conditions Generator for UK Freelancers",
+  "description": "Write your terms and conditions for services: business or consumer customers, the 14-day cancellation right, late payment interest. Free, PDF and Word.",
+  "menu": "Terms and conditions",
+  "icon": "📜",
+  "blurb": "Clear terms and conditions for your business and consumer customers.",
+  "app": "Terms and conditions generator",
+  "scripts": [
+    "engines/contract-doc.js",
+    "engines/cgv-uk.js",
+    "tools/cgv.js"
+  ],
+  "rules": "uk",
+  "sources": [
+    "uk_service_provider_information",
+    "uk_consumer_contract_information",
+    "uk_consumer_cancellation",
+    "uk_cancellation_model_form",
+    "uk_consumer_service_rights",
+    "uk_unfair_terms",
+    "uk_business_exclusion_clauses",
+    "late_payment_statutory_interest_margin",
+    "late_payment_reference_rates",
+    "late_payment_fixed_compensation",
+    "late_payment_default_due_period",
+    "late_payment_substantial_remedy",
+    "uk_complaints_adr"
+  ],
+  "priority": 0.9,
+  "faq": [
+    [
+      "Do freelancers need terms and conditions?",
+      "There is no general duty to have them, but if you use general terms and conditions you must make them available to your customers before the contract (Provision of Services Regulations 2009). With consumers, you must also give key information before they are bound: your identity and address, the total price including any VAT, payment and timing, and, where it applies, their right to cancel."
+    ],
+    [
+      "Can consumers cancel a contract for services?",
+      "Yes, within 14 days after the day the contract is made, if it was made at a distance (email, phone, video call, online) or away from your business premises. You must not start during that period unless they expressly ask you to; if they then cancel, they pay for what you have done in proportion to the whole contract."
+    ],
+    [
+      "Can I limit my liability in my terms?",
+      "With business customers, yes, if the limit is reasonable (Unfair Contract Terms Act 1977), and never for death or personal injury caused by negligence. With consumers, you cannot exclude their rights under the Consumer Rights Act 2015, and a term that unfairly limits them is not binding."
+    ],
+    [
+      "What can I charge when a business pays late?",
+      "Statutory interest at 8% a year above the Bank of England reference rate, plus fixed compensation of £40, £70 or £100 depending on the debt, under the Late Payment of Commercial Debts (Interest) Act 1998. A different contractual rate replaces statutory interest only if it is a substantial remedy."
+    ],
+    [
+      "Do I have to join an ADR scheme?",
+      "There is no general duty to join one. If you are obliged to take part in an alternative dispute resolution scheme, for example because you belong to one, you must tell consumers about it when you reply to their complaint (Digital Markets, Competition and Consumers Act 2024, since 6 April 2026)."
+    ]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · PDF and Word</span>
+    <h1>Terms and conditions generator</h1>
+    <p class="lead">Answer a few questions about your customers and how you work: your terms and conditions for services are written as you type, with the information the law requires and the consumer cancellation rules, ready to send with your quotes.</p>
+    <ul class="trust"><li>Business and consumer customers</li><li>Rules read on legislation.gov.uk and GOV.UK</li><li>Your data stays on your device</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout wide-left">
+    <form class="card form-card" id="cgv-form" autocomplete="off" onsubmit="return false">
+      <h3>About you</h3>
+      <div class="fields">
+        <div class="field full"><label for="cg-p-name">Your name or company name</label>
+          <input type="text" id="cg-p-name" name="p_name" placeholder="Jane Smith" data-save></div>
+        <div class="field full"><label for="cg-p-trading">Trading name (optional)</label>
+          <input type="text" id="cg-p-trading" name="p_trading" placeholder="Smith Design" data-save></div>
+        <div class="field full"><label for="cg-status">Business structure</label>
+          <select id="cg-status" name="status" data-save><option value="sole" selected>Sole trader</option><option value="limited">Limited company</option><option value="partnership">Partnership</option></select></div>
+        <div class="field" data-when="limited"><label for="cg-p-company">Company number</label>
+          <input type="text" id="cg-p-company" name="p_company" placeholder="12345678" data-save></div>
+        <div class="field" data-when="limited"><label for="cg-registered">Registered in</label>
+          <select id="cg-registered" name="registered" data-save><option value="ew" selected>England and Wales</option><option value="sc">Scotland</option><option value="ni">Northern Ireland</option></select></div>
+        <div class="field full" data-when="limited"><label for="cg-p-registered">Registered office (if different from your address)</label>
+          <input type="text" id="cg-p-registered" name="p_registered" placeholder="1 High Street, Manchester M1 1AA" data-save></div>
+        <div class="field full"><label for="cg-p-address">Address</label>
+          <input type="text" id="cg-p-address" name="p_address" placeholder="12 Station Road, Leeds LS1 4AB" data-save>
+          <span class="hint">The geographic address where you are established.</span></div>
+        <div class="field"><label for="cg-vat">VAT</label>
+          <select id="cg-vat" name="vat" data-save><option value="none" selected>Not VAT registered</option><option value="vat">VAT registered</option></select></div>
+        <div class="field" data-when="vat"><label for="cg-p-vat">VAT registration number</label>
+          <input type="text" id="cg-p-vat" name="p_vat" placeholder="GB123456789" data-save></div>
+        <div class="field"><label for="cg-p-email">Email</label>
+          <input type="email" id="cg-p-email" name="p_email" placeholder="hello@example.co.uk" data-save></div>
+        <div class="field"><label for="cg-p-phone">Telephone</label>
+          <input type="tel" id="cg-p-phone" name="p_phone" placeholder="07700 900123" data-save></div>
+        <div class="field full"><label for="cg-p-privacy">Address of your privacy notice</label>
+          <input type="text" inputmode="url" id="cg-p-privacy" name="p_privacy" placeholder="https://www.example.co.uk/privacy" data-save></div>
+        <div class="field full"><label for="cg-p-body">Professional body and title (optional)</label>
+          <input type="text" id="cg-p-body" name="p_body" placeholder="For a regulated profession" data-save></div>
+        <div class="field full"><label for="cg-p-insurance">Professional liability insurance (optional)</label>
+          <input type="text" id="cg-p-insurance" name="p_insurance" placeholder="Insurer, contact details, territorial cover: UK" data-save></div>
+        <div class="field full"><label for="cg-activity">Your services</label>
+          <textarea id="cg-activity" name="activity" rows="2" placeholder="Graphic design, website development and training" data-save></textarea></div>
+      </div>
+      <h3>Your customers</h3>
+      <div class="fields">
+        <div class="field full"><label for="cg-clients">You work for</label>
+          <select id="cg-clients" name="clients" data-save><option value="pro" selected>Businesses only</option><option value="part">Consumers only</option><option value="both">Businesses and consumers</option></select></div>
+        <label class="check full"><input type="checkbox" id="cg-distance" name="distance" checked data-save><span>Contracts made at a distance (email, phone, video call, online)</span></label>
+        <label class="check full"><input type="checkbox" id="cg-offsite" name="offsite" data-save><span>Contracts agreed at the customer’s home or away from your premises</span></label>
+        <div class="field" data-when="has_part"><label for="cg-adr-name">ADR scheme you belong to (optional)</label>
+          <input type="text" id="cg-adr-name" name="adr_name" placeholder="Name of the scheme" data-save></div>
+        <div class="field" data-when="has_part"><label for="cg-adr-site">Website of the scheme</label>
+          <input type="text" inputmode="url" id="cg-adr-site" name="adr_site" placeholder="https://…" data-save></div>
+      </div>
+      <h3>Prices and payment</h3>
+      <div class="fields">
+        <div class="field full"><label for="cg-pricing">Your prices</label>
+          <select id="cg-pricing" name="pricing" data-save><option value="quote" selected>By quote (fixed price or time spent)</option><option value="daily">Day rate</option><option value="hourly">Hourly rate</option></select></div>
+        <div class="field full"><label for="cg-rates">Your rates (optional)</label>
+          <input type="text" id="cg-rates" name="rates" placeholder="Day rate: £450 excluding VAT" data-save></div>
+        <div class="field"><label for="cg-validity">Quotes valid for</label>
+          <div class="input-suffix"><input type="text" inputmode="numeric" id="cg-validity" name="validity" value="30" data-save><span>days</span></div></div>
+        <div class="field"><label for="cg-deposit">Advance payment</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="cg-deposit" name="deposit" placeholder="0" data-save><span>%</span></div></div>
+        <div class="field"><label for="cg-terms">Payment terms</label>
+          <div class="input-suffix"><input type="text" inputmode="numeric" id="cg-terms" name="terms" value="30" aria-describedby="cg-terms-hint" data-save><span>days</span></div>
+          <span class="hint" id="cg-terms-hint">0 for payment on receipt.</span></div>
+        <div class="field"><span class="label" id="cg-pay-label">Payment methods</span>
+          <div class="checks" role="group" aria-labelledby="cg-pay-label">
+            <label class="check"><input type="checkbox" id="cg-pay-transfer" name="pay_transfer" checked data-save><span>Bank transfer</span></label>
+            <label class="check"><input type="checkbox" id="cg-pay-card" name="pay_card" data-save><span>Card</span></label>
+            <label class="check"><input type="checkbox" id="cg-pay-link" name="pay_link" data-save><span>Online payment link</span></label>
+          </div></div>
+        <div class="field full" data-when="has_pro"><label for="cg-penalty">Late payment (business customers)</label>
+          <select id="cg-penalty" name="penalty" data-save><option value="statutory" selected>Statutory interest and compensation (Late Payment Act)</option><option value="custom">A contractual interest rate</option></select></div>
+        <div class="field" data-when="penalty_custom"><label for="cg-penalty-rate">Annual interest rate</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="cg-penalty-rate" name="penalty_rate" placeholder="12" data-save><span>%</span></div></div>
+      </div>
+      <h3>Work and terms</h3>
+      <div class="fields">
+        <div class="field" data-when="has_pro"><label for="cg-acceptance">Checking deliverables (business customers)</label>
+          <div class="input-suffix"><input type="text" inputmode="numeric" id="cg-acceptance" name="acceptance" value="10" data-save><span>days</span></div></div>
+        <div class="field"><label for="cg-notice">Notice to end the contract</label>
+          <div class="input-suffix"><input type="text" inputmode="numeric" id="cg-notice" name="notice" value="14" data-save><span>days</span></div></div>
+        <div class="field full"><label for="cg-ip">Intellectual property in the deliverables</label>
+          <select id="cg-ip" name="ip" data-save><option value="assign" selected>Assigned to the customer after full payment</option><option value="license">Kept by you, with a licence to the customer</option></select></div>
+        <label class="check full"><input type="checkbox" id="cg-portfolio" name="portfolio" checked data-save><span>Show the work in my portfolio</span></label>
+        <label class="check full"><input type="checkbox" id="cg-conf" name="conf" checked data-save><span>Confidentiality</span></label>
+        <label class="check full" data-when="has_pro"><input type="checkbox" id="cg-liability" name="liability" checked data-save><span>Limit my liability to the price of the project (business customers only)</span></label>
+        <label class="check full"><input type="checkbox" id="cg-subcontract" name="subcontract" data-save><span>Allow me to use subcontractors</span></label>
+        <div class="field full"><label for="cg-law">Governing law</label>
+          <select id="cg-law" name="law" data-save><option value="ew" selected>England and Wales</option><option value="sc">Scotland</option><option value="ni">Northern Ireland</option></select></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="preview-actions">
+        <button type="button" class="btn btn-primary" id="cg-print">Download as PDF</button>
+        <button type="button" class="btn btn-ghost" id="cg-word">Download as Word</button>
+        <button type="button" class="btn btn-ghost" id="cg-copy">Copy the text</button>
+      </div>
+      <p class="small muted print-hint">PDF: choose “Save as PDF” in the print window. Word: the file opens in Word, LibreOffice or Google Docs for editing.</p>
+      <div class="cgv-notices" id="cg-notices" role="status" aria-live="polite"></div>
+      <div class="paper-wrap"><article class="paper" id="cg-preview" aria-label="Preview of the terms and conditions"></article></div>
+      <button type="button" class="btn btn-ghost btn-sm" id="cg-reset">Clear everything</button>
+    </div>
+  </div>
+</section>
+
+<script type="application/json" id="cgv-data">{"country": "uk", "lang": "en-GB", "store": "cgv-uk", "doc_title": "TERMS AND CONDITIONS", "file": "Terms and conditions", "article": "{n}. {title}", "annex": "Annex – {title}", "reset_confirm": "Clear everything you have entered?", "hints": {"p_name": "your name", "p_address": "your address", "p_email": "email", "p_vat": "VAT number", "contacts": "email and phone", "status_text": "status", "validity": "30", "deposit": "advance payment", "terms_text": "payment terms", "payment_methods": "payment methods", "interest_text": "interest", "fixed_sums": "£40, £70 or £100", "acceptance": "10", "notice": "14", "adr_name": "ADR scheme", "today": "date", "law_name": "England and Wales"}, "preamble": ["Effective from {today}."], "clauses": [{"title": "About these terms", "paras": ["These terms and conditions (the “Terms”) apply to the services provided by {p_name}[[p_trading| trading as {p_trading}]] (“we”, “us”, “our”) to our customers (“you”, “your”)[[activity|: {activity}]].", {"when": {"both": ["on"]}, "text": "They apply to business customers, who act for purposes relating to their trade, business, craft or profession, and to consumers, who act for purposes wholly or mainly outside their trade, business, craft or profession. Where a term applies only to one of these groups, it says so."}, {"when": {"pro_only": ["on"]}, "text": "They apply to business customers, who act for purposes relating to their trade, business, craft or profession."}, {"when": {"part_only": ["on"]}, "text": "They apply to consumers, who act for purposes wholly or mainly outside their trade, business, craft or profession."}, "Our quote, once you accept it, and these Terms form the contract between us. If the quote and these Terms conflict, the quote applies."]}, {"title": "About us", "paras": ["{p_name} is {status_text}. Address: {p_address}.", "Contact: {contacts}.", {"when": {"vat": ["vat"]}, "text": "VAT registration number: {p_vat}."}, {"when": {"has_p_body": ["on"]}, "text": "Professional body and title: {p_body}."}, {"when": {"has_p_insurance": ["on"]}, "text": "Professional liability insurance: {p_insurance}."}]}, {"title": "Quotes and the contract", "paras": ["Before you order, we give you a written quote describing the services, the price and the timescale. A quote is valid for {validity} days from its date.", "The contract is formed when you accept the quote in writing, for example by signing it or by email. We confirm the contract on a durable medium, such as email, before we start the services.", {"when": {"offsite_part": ["on"]}, "text": "If you are a consumer and we agree the contract in your presence away from our business premises, for example at your home, we give you the information about the services and your right to cancel, with the cancellation form, on paper or, if you agree, by email, and a copy or confirmation of the contract before we start."}]}, {"title": "Prices", "paras": [{"when": {"pricing": ["quote"]}, "text": "Our prices are set out in the quote, as a fixed price or based on the time spent."}, {"when": {"pricing": ["daily"]}, "text": "Our prices are based on a day rate, set out in the quote with the estimated number of days."}, {"when": {"pricing": ["hourly"]}, "text": "Our prices are based on an hourly rate, set out in the quote with the estimated number of hours."}, {"when": {"has_rates": ["on"]}, "text": "Our current rates: {rates}."}, {"when": {"part_vat": ["on"]}, "text": "Prices quoted to consumers include VAT."}, {"when": {"pro_vat": ["on"]}, "text": "Prices quoted to business customers exclude VAT, which is added at the applicable rate."}, {"when": {"vat": ["none"]}, "text": "We are not registered for VAT, so no VAT is charged."}, "The price in the accepted quote is fixed. If you ask for changes or extra work, we give you a new quote, and the price only changes if you accept it in writing.", "Expenses, such as travel, are charged only if the quote says so."]}, {"title": "Invoices and payment", "paras": [{"when": {"has_deposit": ["on"]}, "text": "We may ask for an advance payment of {deposit}% of the price when you accept the quote. It is deducted from our final invoice."}, "Invoices are payable {terms_text}, by {payment_methods}.", {"when": {"has_pro": ["on"], "penalty": ["statutory"]}, "text": "Business customers: if you pay late, we may claim {interest_text}, fixed compensation of {fixed_sums} depending on the size of the debt, and our reasonable costs of recovering the debt beyond that sum."}, {"when": {"has_pro": ["on"], "penalty": ["custom"]}, "text": "Business customers: if you pay late, we may claim {interest_text} on the overdue amount, from the day after the due date until payment."}, {"when": {"has_pro": ["on"]}, "text": "Business customers: we may suspend the services while an invoice is overdue, after giving you 7 days’ written notice."}]}, {"title": "Carrying out the services", "paras": ["We perform the services with reasonable care and skill, within the timescale set out in the quote or, if none is agreed, within a reasonable time.", "You give us the information, materials, access and feedback we need on time. If they arrive late, the timescale is extended accordingly.", {"when": {"has_pro": ["on"]}, "text": "Business customers: you have {acceptance} days after we deliver each deliverable to tell us in writing if it does not match the quote; we then correct it. After that period, the deliverable is treated as accepted."}, {"when": {"subcontract": ["on"]}, "text": "We may use subcontractors for part of the services; we remain responsible for their work."}]}, {"title": "Cancellation (consumers)", "when": {"retract": ["on"]}, "paras": ["If you are a consumer and the contract was made {where}, you have the right to cancel it within {cancel_days} days without giving any reason. The cancellation period ends {cancel_days} days after the day the contract is entered into.", "To cancel, tell us of your decision by a clear statement, for example a letter sent by post to {p_address} or an email to {p_email}. You may use the model cancellation form in the annex, but you do not have to. To meet the deadline, it is enough to send your message before the cancellation period ends.", "If you cancel, we refund all payments received from you without undue delay and no later than {refund_days} days after the day we are told of your decision, using the same means of payment as you used (unless you agree otherwise), without any fee.", {"when": {"offsite_part": ["off"]}, "text": "We do not start the services during the cancellation period unless you expressly ask us to."}, {"when": {"offsite_part": ["on"]}, "text": "We do not start the services during the cancellation period unless you expressly ask us to (on paper or by email, if the contract was made away from our business premises)."}, "{service_payment}", "If, at your request, the services are fully performed within the cancellation period and you acknowledged that you would then lose your right to cancel, you can no longer cancel the contract."]}, {"title": "Your rights as a consumer", "when": {"has_part": ["on"]}, "paras": ["If you are a consumer, the Consumer Rights Act 2015 gives you rights: we must perform the services with reasonable care and skill, and what we tell you or write to you about us or the services, including in our quote, is binding on us. If the services are not performed as agreed, you can ask us to perform them again or, in some cases, ask for a price reduction, refunded within {rights_refund_days} days of our agreeing to it. Nothing in these Terms affects these rights."]}, {"title": "Intellectual property", "paras": [{"when": {"ip": ["assign"]}, "text": "Once you have paid in full, we assign to you, with full title guarantee, all intellectual property rights in the final deliverables created specifically for you, and we will sign any document reasonably needed to record this assignment. Until then, you may use the deliverables for review only."}, {"when": {"ip": ["assign"]}, "text": "We keep ownership of our pre-existing materials, tools, templates and know-how. Where they are included in the deliverables, we grant you a non-exclusive, perpetual, worldwide licence to use them as part of the deliverables."}, {"when": {"ip": ["license"]}, "text": "We keep all intellectual property rights in the deliverables. Once you have paid in full, we grant you a non-exclusive, perpetual, worldwide licence to use them for the purposes described in the quote. Any other use requires our written consent."}, {"when": {"portfolio": ["on"], "has_pro": ["on"]}, "text": "Unless a business customer objects in writing, we may mention its name and show the deliverables in our portfolio."}, {"when": {"portfolio": ["on"], "has_part": ["on"]}, "text": "We show work done for a consumer in our portfolio only with their agreement."}]}, {"title": "Confidentiality", "when": {"conf": ["on"]}, "paras": ["Each of us keeps confidential the non-public information received from the other, uses it only to perform the contract and discloses it only to people who need to know it. This lasts during the contract and for two years after it ends. It does not apply to information that is public, already known to the recipient, or that must be disclosed by law."]}, {"title": "Liability", "paras": ["Nothing in these Terms limits or excludes our liability for death or personal injury caused by our negligence, or any other liability that cannot be limited or excluded by law.", {"when": {"has_part": ["on"]}, "text": "If you are a consumer, these Terms do not limit our liability to you or your legal rights."}, {"when": {"liability": ["on"]}, "text": "Business customers: subject to the first paragraph of this clause, our total liability arising out of or in connection with the contract is limited to the total price payable under the quote, and we are not liable for loss of profits, loss of business or indirect or consequential loss."}]}, {"title": "Events outside our control", "paras": ["Neither of us is responsible for a delay or failure caused by events outside our reasonable control. The party affected tells the other promptly. If the delay lasts more than 30 days, either of us may end the contract in writing; you then pay for the work done, and we refund any payment for work not done."]}, {"title": "Ending the contract", "paras": ["Either of us may end the contract by giving {notice} days’ written notice. Either of us may end it immediately in writing if the other seriously breaks it and does not put this right within 14 days of being asked to.", "When the contract ends, you pay for the work done up to the end date and for the costs we have reasonably incurred and cannot recover; we refund any payment received for work not done, including the balance of any advance payment.", {"when": {"retract": ["on"]}, "text": "If you are a consumer, this clause does not affect your right to cancel described above."}]}, {"title": "Personal data", "paras": ["We use your personal data only to perform the contract and to meet our legal obligations, as explained in our privacy notice[[p_privacy|: {p_privacy}]]."]}, {"title": "Complaints", "paras": ["If you are unhappy with our services, please contact us: {contacts}. We reply as quickly as possible and do our best to find a satisfactory solution.", {"when": {"adr": ["on"]}, "text": "If you are a consumer and are not satisfied with our response, you can refer the dispute to {adr_name}[[adr_site| ({adr_site})]], the alternative dispute resolution scheme we belong to."}]}, {"title": "Governing law and courts", "paras": ["These Terms and the contract are governed by the law of {law_name}.", {"when": {"pro_only": ["on"]}, "text": "The courts of {law_name} have exclusive jurisdiction."}, {"when": {"has_part": ["on"]}, "text": "If you are a consumer, you keep the protection of the mandatory rules of the law of the part of the UK where you live. If you want to take court proceedings, you may do so in the courts of the part of the UK where you live or, if you live in a different part of the UK from us, in the courts of the part of the UK where we are located."}, {"when": {"both": ["on"]}, "text": "Business customers: the courts of {law_name} have exclusive jurisdiction."}]}, {"title": "General", "paras": ["We may update these Terms from time to time. The version in force on the day you accept a quote applies to that contract.", "We may transfer our rights and obligations under the contract to someone else only with your agreement.", "If a court finds part of these Terms unenforceable, the rest remains in effect.", {"when": {"has_pro": ["on"]}, "text": "Business customers: the accepted quote and these Terms are the entire agreement between us on their subject and replace any earlier discussions."}]}], "annexes": [{"title": "Model cancellation form", "when": {"retract": ["on"]}, "paras": [{"block": "form"}]}], "ui": {"title_prefix": "Terms and conditions", "errors": "To fix", "notes": "Good to know", "checks": {"name_missing": "Enter your name or business name.", "address_missing": "Enter your geographic address: it must be given to every customer (Provision of Services Regulations 2009, reg. 8).", "phone_missing": "Add a telephone number: customers must be able to reach you by phone with a complaint or a request (reg. 7).", "email_missing": "Add an email address: if customers can contact you electronically, it must be given (reg. 8), and consumers can use it to cancel.", "company_number_missing": "Add your company number, as registered at Companies House.", "vat_number_missing": "Add your VAT registration number.", "privacy_missing": "Add the address of your privacy notice, or give the notice to customers with your quotes.", "terms_invalid": "Enter the payment period in whole days (0 for payment on receipt).", "terms_over_max": "With a business customer, a payment period over {max} days is cut back to {max} days for statutory interest, unless it is not grossly unfair to you (Late Payment Act, s. 4).", "penalty_invalid": "Enter the contractual interest rate (a number above 0).", "penalty_low": "This rate is below statutory interest ({rate}): a contractual rate replaces statutory interest only if it is a substantial remedy (Late Payment Act, s. 9).", "rates_unknown": "The Bank of England reference rate for this half-year is not in our rules yet: the terms give the formula without the current rate.", "deposit_invalid": "Enter the advance payment as a percentage from 0 to 100.", "payment_none": "Choose at least one payment method.", "acceptance_invalid": "Enter the number of days business customers have to check deliverables.", "notice_invalid": "Enter the notice period in days.", "validity_invalid": "Enter how many days a quote stays valid.", "premises_only": "Consumers have no right to cancel a contract made at your premises: the cancellation clause and form only appear for contracts made at a distance or away from your premises.", "adr_incomplete": "Add the website of your ADR scheme, so consumers can find out how to use it (reg. 10).", "liability_reasonable": "With business customers, a limit of liability is valid only if it is reasonable (Unfair Contract Terms Act 1977): courts look in particular at your resources and whether you could insure against the risk."}}}</script>
+
+<section class="section prose">
+  <h2>What these terms cover</h2>
+  <ul>
+    <li><strong>For all your customers:</strong> who you are and how to contact you, how the contract is formed from your quote, prices and payment, how you carry out the services, intellectual property, liability, ending the contract, complaints and the governing law.</li>
+    <li><strong>With business customers:</strong> statutory interest and fixed compensation for late payment under the Late Payment Act, a period to check deliverables, and a limit of liability, which must be reasonable.</li>
+    <li><strong>With consumers:</strong> prices including any VAT, the 14-day right to cancel a contract made at a distance or away from your premises, with the official model cancellation form in an annex, and a reminder of their rights under the Consumer Rights Act 2015. No limit of liability, deemed acceptance or “entire agreement” term applies to them.</li>
+  </ul>
+  <h2>How to use them</h2>
+  <ul>
+    <li>Send your terms with every quote, as a PDF, <strong>before</strong> the customer accepts it, and ask them to accept the quote in writing: this is what makes the terms part of the contract. Prepare your quotes with the <a href="{{link:invoice}}">quote and invoice generator</a>.</li>
+    <li>Describe in each quote the services, the price, the timescale and, if you keep the intellectual property, how the customer may use the deliverables.</li>
+    <li>Keep each dated version: the terms in force on the day a quote is accepted apply to that contract.</li>
+    <li>For a large project, add a <a href="{{link:contract}}">freelance contract</a> signed by both parties.</li>
+  </ul>
+  <h2>With consumers, also</h2>
+  <ul>
+    <li><strong>Before they are bound</strong>, give them the key information: who you are, your address and contact details, the services, the total price including any VAT, payment and timing, how you handle complaints and, where it applies, their right to cancel. Your quote and these terms together cover it.</li>
+    <li><strong>Confirm the contract</strong> on a durable medium, such as email, before you start; for a contract agreed at their home, give the information and the cancellation form on paper (or by email if they agree).</li>
+    <li><strong>Do not start during the 14 days</strong> unless they expressly ask you to, and ask them to acknowledge that they will lose the right to cancel once the work is complete. If they cancel after asking you to start, they pay for the work done in proportion to the whole contract.</li>
+    <li><strong>If they order on your website</strong>, the order button must say “order with obligation to pay” or something equally clear, and your site must show the accepted payment methods from the start of the ordering process.</li>
+    <li><strong>Complaints:</strong> reply as quickly as possible. There is no general duty to join an alternative dispute resolution (ADR) scheme; if you belong to one, tell consumers about it when you reply to their complaint.</li>
+  </ul>
+  <h2>What this generator does not cover</h2>
+  <p>These terms are for services provided by a business established in the UK. They do not suit the sale of goods or digital content, subscriptions and contracts that renew automatically, financial services, the specific rules of a regulated profession, or customers based outside the UK. Have your terms reviewed by a solicitor if your work carries significant risks.</p>
+  <p class="small muted">Template provided for information only; it is not legal advice.</p>
+</section>

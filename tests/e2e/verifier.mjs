@@ -2577,6 +2577,74 @@ const tests = {
     await Promise.all([page.waitForNavigation(), page.click("#cg-reset")]);
     check((await page.inputValue("#cg-clients")) === "pro" && (await page.inputValue("#cg-p-name")) === "", "CGV : tout effacer");
   },
+  async "uk/terms-and-conditions-generator/"(page) {
+    const preview = async () => (await page.textContent("#cg-preview")).replace(/\s+/g, " ");
+    const notices = async () => (await page.textContent("#cg-notices")).replace(/\s+/g, " ");
+    const in2026 = new Date() < new Date(2027, 0, 1);   // taux de référence de 2026 dans les règles
+    let text = await preview();
+    check(text.includes("TERMS AND CONDITIONS") && text.includes("1. About these terms") && !text.includes("Cancellation (consumers)") && !text.includes("Annex"),
+      "T&Cs UK : clients professionnels à distance par défaut, sans annulation ni annexe");
+    check(text.includes("fixed compensation of £40, £70 or £100") && text.includes("Invoices are payable within 30 days of the invoice date, by bank transfer."),
+      "T&Cs UK : indemnités 40/70/100 £ et délai de paiement");
+    check(in2026 ? text.includes("(11.75% a year for debts that become overdue between 1 July 2026 and 31 December 2026)") : (await notices()).includes("not in our rules yet"),
+      "T&Cs UK : intérêt légal du semestre");
+    check((await notices()).includes("Enter your name or business name.") && (await page.getAttribute("#cg-p-name", "aria-invalid")) === "true" &&
+      (await notices()).includes("Add a telephone number"), "T&Cs UK : avertissements et champ signalé sans nom ni téléphone");
+    check(await page.isHidden("#cg-adr-name") && await page.isHidden("#cg-p-company"), "T&Cs UK : ADR et numéro de société masqués");
+    await page.fill("#cg-p-name", "Jane Smith");
+    await page.fill("#cg-p-address", "12 Station Road, Leeds LS1 4AB");
+    await page.fill("#cg-p-email", "hello@example.co.uk");
+    await page.fill("#cg-p-phone", "07700 900123");
+    await page.fill("#cg-p-privacy", "https://www.example.co.uk/privacy");
+    check((await notices()).includes("a limit of liability is valid only if it is reasonable") && !(await notices()).includes("To fix"),
+      "T&Cs UK : plus rien à corriger, rappel du plafond de responsabilité");
+    await page.selectOption("#cg-status", "limited");
+    check(await page.isVisible("#cg-p-company") && (await notices()).includes("Add your company number"), "T&Cs UK : société, numéro demandé");
+    await page.fill("#cg-p-company", "12345678");
+    check((await preview()).includes("Jane Smith is a limited company registered in England and Wales under company number 12345678."), "T&Cs UK : société identifiée");
+    await page.fill("#cg-terms", "90");
+    check((await notices()).includes("a payment period over 60 days is cut back to 60 days"), "T&Cs UK : délai de 90 jours signalé (Late Payment Act, s. 4)");
+    await page.fill("#cg-terms", "30");
+    await page.selectOption("#cg-penalty", "custom");
+    await page.fill("#cg-penalty-rate", "5");
+    check(!in2026 || (await notices()).includes("This rate is below statutory interest (11.75%)"), "T&Cs UK : taux contractuel plus bas signalé");
+    check((await preview()).includes("we may claim interest at 5% a year on the overdue amount"), "T&Cs UK : taux contractuel");
+    await page.selectOption("#cg-penalty", "statutory");
+    // Particuliers : annulation de 14 jours, formulaire officiel, droits, juridiction de leur lieu de résidence.
+    await page.selectOption("#cg-clients", "both");
+    text = await preview();
+    check(text.includes("Cancellation (consumers)") && text.includes("you have the right to cancel it within 14 days without giving any reason") &&
+      text.includes("Annex – Model cancellation form") && text.includes("To Jane Smith, 12 Station Road, Leeds LS1 4AB, hello@example.co.uk:") &&
+      text.includes("[*] Delete as appropriate."), "T&Cs UK : annulation de 14 jours et formulaire officiel rempli");
+    check(text.includes("Your rights as a consumer") && text.includes("these Terms do not limit our liability to you or your legal rights") &&
+      text.includes("Business customers: subject to the first paragraph of this clause"), "T&Cs UK : plafond pour les seules entreprises");
+    check(text.includes("in the courts of the part of the UK where you live"), "T&Cs UK : juridiction du lieu de résidence du consommateur");
+    await page.check("#cg-offsite");
+    check((await preview()).includes("on paper or by email, if the contract was made away from our business premises"), "T&Cs UK : contrat chez le client");
+    await page.fill("#cg-adr-name", "Example ADR");
+    check((await notices()).includes("Add the website of your ADR scheme"), "T&Cs UK : site de l'ADR demandé");
+    await page.fill("#cg-adr-site", "https://adr.example.org.uk");
+    check((await preview()).includes("refer the dispute to Example ADR (https://adr.example.org.uk)"), "T&Cs UK : ADR");
+    // Un avertissement mène à son champ.
+    await page.fill("#cg-p-phone", "");
+    await page.click('#cg-notices a[data-focus="cg-p-phone"]');
+    check(await page.evaluate(() => document.activeElement.id === "cg-p-phone"), "T&Cs UK : l'avertissement donne le focus au champ");
+    await page.fill("#cg-p-phone", "07700 900123");
+    const [download] = await Promise.all([page.waitForEvent("download"), page.click("#cg-word")]);
+    const doc = (await import("fs")).readFileSync(await download.path(), "utf8");
+    check(download.suggestedFilename() === "Terms and conditions.doc" && doc.includes("TERMS AND CONDITIONS") && doc.includes("Annex"), "T&Cs UK : téléchargement Word");
+    await page.click("#cg-copy");
+    check(await copied(page, "#cg-copy"), "T&Cs UK : bouton Copier");
+    await page.reload({ waitUntil: "networkidle" });
+    check((await page.inputValue("#cg-clients")) === "both" && (await page.inputValue("#cg-adr-name")) === "Example ADR" && await page.isChecked("#cg-offsite"),
+      "T&Cs UK : saisie mémorisée");
+    check(await page.evaluate(() => !(localStorage.getItem("of:cgv") || "").includes("Example ADR")), "T&Cs UK : saisie séparée de celle des CGV françaises");
+    await page.screenshot({ path: path.join(shots, "cgv-uk-consumers.png"), fullPage: true });
+    await accessible(page, "T&Cs UK (consumers, notices)");
+    page.once("dialog", (d) => d.accept());
+    await Promise.all([page.waitForNavigation(), page.click("#cg-reset")]);
+    check((await page.inputValue("#cg-clients")) === "pro" && (await page.inputValue("#cg-p-name")) === "", "T&Cs UK : tout effacer");
+  },
   async "us/nda-template/"(page) {
     let text = await page.textContent("#k-preview");
     check(text.includes("MUTUAL NON-DISCLOSURE AGREEMENT") && text.includes("In consideration of their mutual promises") && text.includes("laws of the State of New York"),
