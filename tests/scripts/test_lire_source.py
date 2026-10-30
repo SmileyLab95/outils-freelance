@@ -29,12 +29,16 @@ class LireSource(unittest.TestCase):
                     "https://uscode.house.gov/view.xhtml", "https://www.nysenate.gov/legislation/laws/GBS/1411",
                     "https://dol.ny.gov/freelance-isnt-free-act", "https://www.nyc.gov/site/dca/index.page",
                     "https://www.ilga.gov/legislation/ilcs/ilcs3.asp", "https://labor.illinois.gov/",
-                    "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml"):
+                    "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml",
+                    "https://www.ontario.ca/laws/statute/02c30", "https://www.legisquebec.gouv.qc.ca/fr/document/lc/P-40.1",
+                    "https://www.bclaws.gov.bc.ca/civix/document/id/complete/statreg/04002_00", "https://kings-printer.alberta.ca/"):
             self.assertTrue(L.autorise(url), url)
         self.assertFalse(L.autorise("https://www.nyc.gov.exemple.com/"), "faux sous-domaine")
         self.assertFalse(L.autorise("https://notny.gov/"), "nom qui se termine par un site officiel")
         self.assertFalse(L.autorise("https://www.canada.ca.gov.exemple.com/"), "faux sous-domaine")
         self.assertFalse(L.autorise("https://notca.gov/"), "nom qui se termine par un site officiel")
+        self.assertFalse(L.autorise("https://www.ontario.ca.exemple.com/"), "faux sous-domaine")
+        self.assertFalse(L.autorise("https://fauxgouv.qc.ca/"), "nom qui se termine par un site officiel")
         self.assertFalse(L.autorise("https://www2.opm.gov.exemple.com/"), "faux sous-domaine")
         self.assertFalse(L.autorise("https://gouv.fr.exemple.com/"))
         self.assertFalse(L.autorise("https://fauxgouv.fr/"))
