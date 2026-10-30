@@ -1,7 +1,8 @@
-# 48. Contrat de sous-traitance (4 pays) — en préparation
+# 48. Contrat de sous-traitance (4 pays)
 
 Besoin P3 de [02](02-besoins-clients.md) (« Sous-traiter : modèle de contrat de sous-traitance »), étape 6 de
-[31](31-vision-plateforme.md) § 5. **Document de travail** : sources lues à ce jour, avant la spécification.
+[31](31-vision-plateforme.md) § 5. Spécification écrite le 30/10/2026 pour le Royaume-Uni, les États-Unis et le Canada
+(décision D51) ; France en attente (D50).
 
 ## Besoin
 
@@ -31,7 +32,61 @@ les marchés publics. Action préparée pour Ismail dans la feuille de route : a
 | Royaume-Uni : *What is the Construction Industry Scheme* (GOV.UK) | Passages lus (empreinte à relever) | Le régime s'applique aux travaux de construction au Royaume-Uni, y compris pour une entreprise établie hors du Royaume-Uni ; ne sont pas couverts notamment l'architecture et le métré, la location d'échafaudages sans main-d'œuvre, la pose de moquette, la fabrication et la livraison de matériaux, le travail sans lien avec la construction sur un chantier : la construction est hors du champ du générateur |
 | États-Unis : formulaire 1099-NEC (règle `form_1099_nec_threshold_2026`) | Déjà lue | Déclaration par le payeur à partir de 2 000 $ par bénéficiaire et par an pour les paiements faits après le 31/12/2025 : l'indépendant qui paie un sous-traitant américain la remplit (formulaire W-9 à demander au sous-traitant) |
 
-## Reste à lire avant la spécification
+## Spécification (Royaume-Uni, États-Unis, Canada en anglais et en français)
+
+**Pages** : `/uk/subcontractor-agreement/`, `/us/subcontractor-agreement/`, `/ca/subcontractor-agreement/` et
+`/ca/fr/contrat-de-sous-traitance/`, identifiant `subcontract` (liens de langue), menu « Selling » / « Vendre » après le
+contrat de prestation. Script commun `tools/contract.js` et rendu `engines/contract-doc.js`, comme l'entente de
+confidentialité ; texte et conditions des articles dans la page (`#contract-data`) ; saisie enregistrée sur l'appareil
+(clé `subcontract`, une par section) ; PDF, Word, copie.
+
+**Parties** : l'indépendant qui confie le travail (« Contractor » / « l'Entrepreneur ») et le sous-traitant
+(« Subcontractor » / « le Sous-traitant ») ; nom du client final et du projet facultatifs (confidentiels si l'option de
+confidentialité est cochée).
+
+**Formulaire** : coordonnées des deux parties (nom, statut, adresse postale, email) ; client final et projet
+(facultatifs) ; travail confié et livrables ; dates de début et de fin ; prix (forfait, jour, heure, estimation) et
+frais ; délai de paiement à compter de la facture du sous-traitant et date à laquelle il remet sa facture ; intérêts de
+retard (selon le pays) ; acompte ; cession des droits après paiement (ou licence) ; confidentialité ; non-sollicitation
+du client final (facultative, décochée par défaut) ; plafond de responsabilité ; préavis ; droit applicable (nation,
+État ou province, choix obligatoire).
+
+**Articles** : objet et contrat principal ; exécution (le sous-traitant suit les exigences du contrat principal qui lui
+sont communiquées par écrit : délais, qualité, sécurité ; il travaille lui-même et ne sous-traite pas à son tour sans
+accord écrit, l'Entrepreneur restant responsable envers son client) ; livrables et réception ; prix et frais ; factures
+et paiement (**le paiement ne dépend pas du paiement de l'Entrepreneur par son client**) ; indépendance (pas de lien de
+subordination, impôts et cotisations à la charge du sous-traitant) ; propriété intellectuelle (cession à l'Entrepreneur
+après paiement, avec le droit de la céder à son client ; renonciation aux droits moraux au Canada ; cession par écrit
+signé) ; confidentialité ; non-sollicitation (si cochée) ; responsabilité et assurance ; fin du contrat (préavis ; fin
+anticipée si le contrat principal prend fin : paiement du travail fait et des frais engagés ; au Québec, résiliation selon
+les art. 2125 à 2129 du Code civil, comme le contrat de prestation) ; données personnelles ; droit applicable et
+différends ; dispositions générales.
+
+**Par pays** :
+- *Royaume-Uni* : intérêts légaux de retard et indemnité forfaitaire entre entreprises (règles existantes de la loi de
+  1998) ; avertissement sur les règles IR35 si le sous-traitant travaille par sa propre société (le client final
+  décide du statut, sauf petite entreprise privée) ; construction hors champ (*Construction Industry Scheme*).
+- *États-Unis* : contenu exigé par les lois *Freelance Isn't Free* (noms et adresses postales, services détaillés,
+  valeur, taux et mode de paiement, date de paiement, date de remise de la facture) : l'indépendant qui sous-traite à
+  New York est lui-même une *hiring party* ; formulaire W-9 à demander avant le premier paiement et 1099-NEC dès
+  2 000 $ par an (règles existantes) ; cession du droit d'auteur par écrit signé (17 U.S.C. 204).
+- *Canada* : taux d'intérêt annuel (Loi sur l'intérêt, art. 4) ; Québec : art. 2101 (l'Entrepreneur reste responsable
+  envers son client), résiliation des art. 2125 à 2129, version française d'abord pour un contrat d'adhésion ; cession
+  écrite et renonciation aux droits moraux (*Copyright Act*, art. 13(4) et 14.1).
+
+**Hors champ** (signalé) : construction, sous-traitance de marchés publics, travail temporaire et agences de
+placement, sous-traitants établis à l'étranger, données personnelles traitées pour le compte d'un client (contrat de
+traitement à prévoir), France (en attente de la loi de 1975).
+
+**Choix de rédaction** : pas de clause « payé quand je suis payé » (contraire au paiement à la date convenue des lois
+de New York, et risquée ailleurs) ; non-sollicitation décochée par défaut, limitée au client final et à 12 mois, avec un
+avertissement (validité variable selon le droit applicable) ; contrat entre professionnels seulement.
+
+**Tests** : rendu de chaque combinaison (prix, options, droit applicable) sans repère brut dans les quatre pages ;
+clauses propres à chaque pays présentes et seulement là ; chiffres lus dans les règles ; parcours navigateur (saisie,
+Word, copie, enregistrement, accessibilité, ordinateur, tablette, mobile) ; captures relues.
+
+## Reste à lire
 
 - Royaume-Uni : définition de la petite entreprise pour les règles IR35 (page détaillée de GOV.UK).
 - Canada : déclarations de paiements aux sous-traitants hors construction (feuillet T4A) : sources de canada.ca, en
