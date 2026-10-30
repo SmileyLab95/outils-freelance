@@ -2852,6 +2852,65 @@ const tests = {
     check(await page.evaluate(() => (localStorage.getItem("of:ca-fr:cgv-ca") || "").includes("Sherbrooke") && !(localStorage.getItem("of:ca:cgv-ca") || "").includes("Sherbrooke")),
       "CG CA-FR : saisie séparée de la page anglaise");
   },
+  async "us/subcontractor-agreement/"(page) {
+    const preview = async () => (await page.textContent("#k-preview")).replace(/\s+/g, " ");
+    let text = await preview();
+    check(text.includes("SUBCONTRACTOR AGREEMENT") && text.includes("Payment does not depend on Contractor being paid by the Client.") &&
+      text.includes("Form W-9") && text.includes("laws of the State of New York") && !text.includes("Non-solicitation"), "sous-traitance US : texte par défaut");
+    await page.fill("#k-p-name", "Alex Morgan Design");
+    await page.fill("#k-s-name", "Sam Rivera");
+    await page.fill("#k-end-client", "Northwind Studio");
+    await page.fill("#k-scope", "Front-end development of the page templates");
+    await page.selectOption("#k-price-type", "hourly");
+    await page.fill("#k-price", "80");
+    await page.fill("#k-qty", "25");
+    await page.fill("#k-invoice-by", "the 5th day of each month");
+    await page.check("#k-nonsolicit");
+    text = await preview();
+    check(text.includes("its client Northwind Studio (the “Client”)") && text.includes("$80.00 per hour of work") && text.includes("for a total of $2,000") &&
+      text.includes("submit its invoices by the 5th day of each month") && text.includes("Non-solicitation of the Client"), "sous-traitance US : saisie, total, date de facture, non-sollicitation");
+    const [download] = await Promise.all([page.waitForEvent("download"), page.click("#k-word")]);
+    check(download.suggestedFilename().startsWith("Subcontractor agreement") && download.suggestedFilename().endsWith(".doc"), "sous-traitance US : Word");
+    await page.click("#k-copy");
+    check(await copied(page, "#k-copy"), "sous-traitance US : bouton Copier");
+    await page.reload({ waitUntil: "networkidle" });
+    check((await page.inputValue("#k-s-name")) === "Sam Rivera" && await page.isChecked("#k-nonsolicit"), "sous-traitance US : saisie mémorisée");
+    check(await page.evaluate(() => (localStorage.getItem("of:us:subcontract") || "").includes("Sam Rivera") && !(localStorage.getItem("of:us:contract") || "").includes("Sam Rivera")),
+      "sous-traitance US : saisie séparée de celle du contrat");
+    await page.screenshot({ path: path.join(shots, "subcontract-us.png"), fullPage: true });
+    await accessible(page, "Subcontractor agreement US");
+  },
+  async "uk/subcontractor-agreement/"(page) {
+    let text = (await page.textContent("#k-preview")).replace(/\s+/g, " ");
+    check(text.includes("SUBCONTRACTOR AGREEMENT") && text.includes("Late Payment of Commercial Debts") && text.includes("IR35") &&
+      text.includes("law of England and Wales") && !text.includes("Form W-9"), "sous-traitance UK : intérêts légaux, IR35, Angleterre et pays de Galles");
+    await page.selectOption("#k-law", "SC");
+    text = (await page.textContent("#k-preview")).replace(/\s+/g, " ");
+    check(text.includes("law of Scotland"), "sous-traitance UK : droit écossais");
+    await page.selectOption("#k-law", "EW");
+  },
+  async "ca/subcontractor-agreement/"(page) {
+    let text = (await page.textContent("#k-preview")).replace(/\s+/g, " ");
+    check(text.includes("laws in force in Ontario") && text.includes("waives its moral rights") && text.includes("per year") &&
+      text.includes("Either party may terminate this Agreement with 14 days’ written notice."), "sous-traitance CA : Ontario par défaut, droits moraux, taux annuel");
+    await page.selectOption("#k-law", "QC");
+    text = (await page.textContent("#k-preview")).replace(/\s+/g, " ");
+    check(text.includes("In accordance with articles 2125 to 2129 of the Civil Code of Québec, Contractor may terminate") &&
+      !text.includes("Either party may terminate this Agreement with"), "sous-traitance CA : résiliation du Code civil sous le droit du Québec");
+    await page.selectOption("#k-law", "ON");
+  },
+  async "ca/fr/contrat-de-sous-traitance/"(page) {
+    let text = (await page.textContent("#k-preview")).replace(/\s+/g, " ");
+    check(text.includes("CONTRAT DE SOUS-TRAITANCE") && text.includes("lois en vigueur au Québec") && text.includes("articles 2125 à 2129 du Code civil du Québec") &&
+      text.includes("Le paiement ne dépend pas du paiement de l’Entrepreneur par le Client."), "sous-traitance CA-FR : Québec par défaut");
+    await page.fill("#k-late-rate", "12");
+    await page.selectOption("#k-law", "ON");
+    text = (await page.textContent("#k-preview")).replace(/\s+/g, " ");
+    check(text.includes("tribunaux compétents en Ontario") && text.includes("taux annuel de 12 %") && !text.includes("2125"), "sous-traitance CA-FR : droit de l'Ontario");
+    await page.screenshot({ path: path.join(shots, "subcontract-ca-fr.png"), fullPage: true });
+    await accessible(page, "Contrat de sous-traitance CA-FR");
+    await page.selectOption("#k-law", "QC");
+  },
   async "ca/nda-template/"(page) {
     let text = await page.textContent("#k-preview");
     check(text.includes("laws in force in Ontario") && text.includes("No licence and no obligation"), "CA NDA: Ontario law, Canadian spelling");

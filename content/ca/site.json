@@ -37,6 +37,7 @@
       "items": [
         "proposal",
         "contract",
+        "subcontract",
         "nda",
         "cgv",
         "templates",

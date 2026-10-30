@@ -122,7 +122,7 @@ Matrice revue le 23/10/2026 d'après les pages publiées (identifiants de `conte
 | Besoin | Outil ou contenu | FR | US | UK | CA | Priorité |
 |---|---|---|---|---|---|---|
 | Changer de statut | Comparateur (étape 1) + guide de passage | ✅ | ✅ | ✅ | ✅ | P2 |
-| Sous-traiter | Modèle de contrat de sous-traitance | 🟡 | 🟡 | 🟡 | 🟡 | P3 |
+| Sous-traiter | Modèle de contrat de sous-traitance | 🟡 | ✅ | ✅ | ✅ | P3 |
 
 ### Besoins encore ouverts (23/10/2026)
 
@@ -130,7 +130,7 @@ Matrice revue le 23/10/2026 d'après les pages publiées (identifiants de `conte
 - **P2** (convertisseur de tarifs, prix au forfait et « freelance ou salarié » faits le 22/10/2026) : checklist de
   création, jauges de seuils, client étranger et W-8BEN faits le 22/10/2026 ; recouvrement en justice fait au
   Royaume-Uni, au Canada et aux États-Unis le 23/10/2026, à faire en France (textes de 2026 à lire) ; compte pro et assurance hors de France et guide de changement de statut faits le 23/10/2026.
-- **P3** : sous-traitance (CGV faites : France le 29/10/2026, Royaume-Uni, États-Unis et Canada le 30/10/2026 ; bureau à
+- **P3** : sous-traitance en France (faite au Royaume-Uni, aux États-Unis et au Canada le 30/10/2026 ; France en attente de Légifrance, D50) (CGV faites : France le 29/10/2026, Royaume-Uni, États-Unis et Canada le 30/10/2026 ; bureau à
   domicile, hausse de tarifs, accord de confidentialité et proposition commerciale faits le 23/10/2026).
 
 ## Les outils « moteurs » partagés

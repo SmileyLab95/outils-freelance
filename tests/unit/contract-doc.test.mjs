@@ -85,7 +85,7 @@ function load(path) {
 function fields(html) {
   const form = /<form[^>]*id="contract-form"[\s\S]*?<\/form>/.exec(html)[0];
   const out = {};
-  for (const m of form.matchAll(/<input type="(\w+)" id="([\w-]+)" name="(\w+)"([^>]*)>/g)) {
+  for (const m of form.matchAll(/<input type="(\w+)"(?: inputmode="\w+")? id="([\w-]+)" name="(\w+)"([^>]*)>/g)) {
     out[m[3]] = { id: m[2], type: m[1], value: (/ value="([^"]*)"/.exec(m[4]) || [, ""])[1], checked: / checked/.test(m[4]) };
   }
   for (const m of form.matchAll(/<textarea id="([\w-]+)" name="(\w+)"/g)) out[m[2]] = { id: m[1], type: "textarea", value: "" };
@@ -273,4 +273,71 @@ test("contrat FR : cession pour les formes connues, formes non prévisibles renv
   assert.match(rule.note, /préférable de renvoyer à un avenant ultérieur/);
   assert.ok(page.front.sources.includes("cession_droits_auteur"));
   assert.ok(page.front.faq.flat().join(" ").includes("article L131-6"));
+});
+
+// Contrat de sous-traitance (documentation/48-sous-traitance.md) : Royaume-Uni, États-Unis, Canada (anglais et français).
+const SUB = {
+  "uk/subcontractor-agreement.html": { rules: "uk", pay: "Payment does not depend on Contractor being paid by the Client.", notice: "Either party may terminate this Agreement with" },
+  "us/subcontractor-agreement.html": { rules: "us", pay: "Payment does not depend on Contractor being paid by the Client.", notice: "Either party may terminate this Agreement with" },
+  "ca/subcontractor-agreement.html": { rules: "ca", pay: "Payment does not depend on Contractor being paid by the Client.", notice: "Either party may terminate this Agreement with" },
+  "ca-fr/contrat-de-sous-traitance.html": { rules: "ca", pay: "Le paiement ne dépend pas du paiement de l’Entrepreneur par le Client.", notice: "moyennant un préavis écrit" },
+};
+const SUB_OPTIONAL = ["p_status", "p_address", "p_email", "s_status", "s_address", "s_id", "s_email", "end_client", "project", "deliverables", "end", "invoice_by"];
+
+for (const [path, L] of Object.entries(SUB)) {
+  test(`${path} : formulaire, clés des textes, sources et FAQ`, () => {
+    const page = load(path), f = fields(page.html), R = rules(L.rules);
+    assert.equal(page.front.id, "subcontract");
+    assert.equal(page.D.store, "subcontract", "saisie séparée de celle du contrat");
+    assert.deepEqual(page.front.scripts, ["engines/contract-doc.js", "tools/contract.js"]);
+    assert.ok(page.front.title.length <= 60 && page.front.description.length <= 160, "titre et description");
+    assert.ok(page.front.faq.length >= 3 && page.front.faq.length <= 6, "FAQ de 3 à 6 questions");
+    for (const key of page.front.sources) assert.ok(R[key], `source ${key}`);
+    for (const name of ["p_name", "s_name", "scope", "start", "price_type", "price", "qty", "deposit", "terms", "pay_method", "acceptance", "notice", "law", "ip", "conf", "liability", "further", "nonsolicit"])
+      assert.ok(f[name], name);
+    assert.equal(f.nonsolicit.checked, false, "non-sollicitation décochée par défaut (D51)");
+    assert.equal(f.ip.checked && f.conf.checked, true, "cession et confidentialité cochées");
+    const keys = new Set([...JSON.stringify(page.D).matchAll(/\{(\w+)\}/g)].map((m) => m[1]).filter((k) => !["n", "title"].includes(k)));
+    for (const k of keys) {
+      assert.ok(f[k] || ["today", "total", "deposit_amount"].includes(k), `clé {${k}} sans champ`);
+      if (!SUB_OPTIONAL.includes(k)) assert.ok(page.D.hints[k], `repère de {${k}}`);
+    }
+    for (const [, id] of Object.entries(f).map(([n, x]) => [n, x.id])) assert.match(page.html, new RegExp(`<label for="${id}"|<input type="checkbox" id="${id}"`), `libellé de ${id}`);
+    assert.match(page.html, /href="\{\{link:contract\}\}"/, "lien vers le contrat");
+  });
+
+  test(`${path} : clauses selon les options, le droit applicable et le pays`, () => {
+    const page = load(path), f = fields(page.html);
+    const laws = f.law.options ? f.law.options.map((o) => o.value) : [f.law.value];
+    for (const law of laws) for (const price_type of ["fixed", "daily", "hourly"]) for (const opt of ["on", "off"]) {
+      const set = { law, price_type, price: "500", qty: "10", deposit: opt === "on" ? "20" : "", scope: "Développement X", start: "2026-11-02",
+        ip: opt, conf: opt, liability: opt, further: opt, nonsolicit: opt, end_client: opt === "on" ? "Northwind" : "" };
+      const text = plain(K.render(page.D, values(page, set)));
+      const where = `${law} ${price_type} ${opt}`;
+      assert.ok(!/\{\w+\}|\[\[/.test(text), `${where} : aucune clé brute`);
+      assert.ok(text.includes(L.pay), `${where} : paiement indépendant du client final`);
+      assert.ok(text.includes("Développement X"), `${where} : services`);
+      const qc = law === "QC";
+      assert.equal(/articles 2125 (to|à) 2129/.test(text), qc, `${where} : résiliation du Code civil du Québec`);
+      assert.equal(text.includes(L.notice), !qc, `${where} : préavis hors Québec`);
+      assert.equal(/Non-solicitation of the Client|Non-sollicitation du Client/.test(text), opt === "on", `${where} : non-sollicitation`);
+      assert.equal(/total liability|responsabilité totale/.test(text), opt === "on", `${where} : plafond`);
+      assert.equal(/Northwind/.test(text), opt === "on", `${where} : client final facultatif`);
+      assert.equal(/moral rights|droits moraux/.test(text), opt === "on" && path !== "us/subcontractor-agreement.html", `${where} : droits moraux (hors États-Unis)`);
+    }
+    const t = plain(K.render(page.D, values(page, { scope: "x", start: "2026-11-02", invoice_by: "the 5th day of each month" })));
+    const us = path.startsWith("us/"), uk = path.startsWith("uk/");
+    assert.equal(/Form W-9/.test(t) && /1099-NEC/.test(t), us, "W-9 et 1099-NEC aux États-Unis");
+    assert.equal(/submit its invoices by the 5th day of each month/.test(t), us, "date de remise de la facture (lois de New York)");
+    assert.equal(/Late Payment of Commercial Debts/.test(t) && /IR35/.test(t), uk, "intérêts légaux et IR35 au Royaume-Uni");
+    assert.equal(/per year|taux annuel/.test(t), path.startsWith("ca"), "taux annuel au Canada (Loi sur l'intérêt)");
+  });
+}
+
+test("sous-traitance : orthographe de chaque pays", () => {
+  assert.doesNotMatch(JSON.stringify(load("uk/subcontractor-agreement.html").D), /\blicense\b|willful/, "Royaume-Uni : licence, wilful");
+  assert.doesNotMatch(JSON.stringify(load("ca/subcontractor-agreement.html").D), /\blicense\b/, "Canada : licence");
+  assert.doesNotMatch(JSON.stringify(load("us/subcontractor-agreement.html").D), /\blicence\b|wilful/, "États-Unis : license, willful");
+  assert.doesNotMatch(JSON.stringify(load("ca-fr/contrat-de-sous-traitance.html").D), /\b(the|and|Contractor|Subcontractor)\b/, "français sans anglais");
+  assert.match(rules("ca").qc_subcontracting_2101.value, /responsibility for the performance/);
 });

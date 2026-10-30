@@ -1,7 +1,7 @@
 # Outils Freelance · Freelance Tools
 
 Site d'outils gratuits pour les indépendants, par pays : France, États-Unis, Royaume-Uni, Canada (anglais et français).
-177 pages indexables, toutes en ligne : factures, impôts, statuts, contrats, CGV, calendriers fiscaux, relances, retraite.
+181 pages indexables, toutes en ligne : factures, impôts, statuts, contrats, CGV, calendriers fiscaux, relances, retraite.
 Publié avec GitHub Pages : https://smileylab95.github.io/outils-freelance/
 
 Toute la conception est dans [documentation/](documentation/README.md) : vision, besoins des clients, architecture,

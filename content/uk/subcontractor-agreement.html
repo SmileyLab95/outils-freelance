@@ -1,0 +1,164 @@
+<!--{
+  "id": "subcontract",
+  "slug": "subcontractor-agreement/",
+  "title": "Subcontractor Agreement Template for UK Freelancers",
+  "description": "Write a subcontractor agreement when you hand part of a project to another freelancer: work, fees, late payment, IP, confidentiality. Free, PDF and Word.",
+  "menu": "Subcontractor agreement",
+  "icon": "🤝",
+  "blurb": "A clear agreement when you hand part of a project to another freelancer.",
+  "app": "Subcontractor agreement generator",
+  "scripts": [
+    "engines/contract-doc.js",
+    "tools/contract.js"
+  ],
+  "rules": "uk",
+  "sources": [
+    "late_payment_statutory_interest_margin",
+    "late_payment_fixed_compensation",
+    "late_payment_substantial_remedy",
+    "ir35_summary",
+    "ir35_small_company_thresholds"
+  ],
+  "priority": 0.8,
+  "faq": [
+    [
+      "Do I need a written agreement with a subcontractor?",
+      "It is not a legal requirement for most services, but it is the only way to make sure the requirements of your client contract (deadlines, quality, confidentiality, ownership of the work) bind your subcontractor too, and to set out who owns what they create so that you can pass it on to your client."
+    ],
+    [
+      "Can I pay my subcontractor only when my client pays me?",
+      "This template does not do that: the subcontractor is paid on the agreed date whatever your client does. Between businesses, late payment gives a right to statutory interest at 8% a year above the Bank of England base rate and fixed compensation under the Late Payment of Commercial Debts (Interest) Act 1998, unless the contract provides a substantial remedy instead."
+    ],
+    [
+      "Does IR35 apply to my subcontractor?",
+      "The off-payroll working rules (IR35) can apply when a subcontractor works through their own limited company and would have been an employee if engaged directly. In most cases the client decides their status; if the client is a small business outside the public sector, the worker’s own company decides. Check the GOV.UK guidance before you start."
+    ],
+    [
+      "Is construction work covered?",
+      "No. Construction work in the UK falls under the Construction Industry Scheme (CIS), with deductions from payments to subcontractors and its own rules: this template is for services such as design, development, writing or consulting."
+    ]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · PDF and Word</span>
+    <h1>Subcontractor agreement generator</h1>
+    <p class="lead">Handing part of a project to another freelancer? Fill in the form: your subcontractor agreement is written as you type, with the requirements of your client contract passed on, payment that does not depend on your client, and the copyright assigned to you so you can pass it on.</p>
+    <ul class="trust"><li>For services between businesses</li><li>Late payment and IR35 rules from GOV.UK</li><li>Your data stays on your device</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout wide-left">
+    <form class="card form-card" id="contract-form" autocomplete="off" onsubmit="return false">
+      <h3>Contractor (who gives the work)</h3>
+      <div class="fields">
+        <div class="field full"><label for="k-p-name">Name or business name</label>
+          <input type="text" id="k-p-name" name="p_name" placeholder="Alex Morgan Design" value="" data-save></div>
+        <div class="field full"><label for="k-p-status">Legal form (optional)</label>
+          <input type="text" id="k-p-status" name="p_status" placeholder="" value="" data-save></div>
+        <div class="field full"><label for="k-p-address">Mailing address</label>
+          <input type="text" id="k-p-address" name="p_address" placeholder="1 King’s Road, London SW3 4AA" value="" data-save></div>
+        <div class="field full"><label for="k-p-email">Email</label>
+          <input type="email" id="k-p-email" name="p_email" placeholder="hello@example.com" value="" data-save></div>
+      </div>
+      <h3>Subcontractor (who does the work)</h3>
+      <div class="fields">
+        <div class="field full"><label for="k-s-name">Name or business name</label>
+          <input type="text" id="k-s-name" name="s_name" placeholder="Sam Rivera" value="" data-save></div>
+        <div class="field full"><label for="k-s-status">Legal form (optional)</label>
+          <input type="text" id="k-s-status" name="s_status" placeholder="" value="" data-save></div>
+        <div class="field full"><label for="k-s-address">Mailing address</label>
+          <input type="text" id="k-s-address" name="s_address" placeholder="20 High Street, Bristol BS1 2AW" value="" data-save></div>
+        <div class="field"><label for="k-s-id">Tax or business number (optional)</label>
+          <input type="text" id="k-s-id" name="s_id" placeholder="" value="" data-save></div>
+        <div class="field"><label for="k-s-email">Email</label>
+          <input type="email" id="k-s-email" name="s_email" placeholder="sam@example.com" value="" data-save></div>
+      </div>
+      <h3>The main contract</h3>
+      <div class="fields">
+        <div class="field"><label for="k-end-client">Your client (optional)</label>
+          <input type="text" id="k-end-client" name="end_client" placeholder="Northwind Studio" value="" data-save></div>
+        <div class="field"><label for="k-project">Project (optional)</label>
+          <input type="text" id="k-project" name="project" placeholder="Website redesign" value="" data-save></div>
+      </div>
+      <h3>The work</h3>
+      <div class="fields">
+        <div class="field full"><label for="k-scope">Description of the services</label>
+          <textarea id="k-scope" name="scope" rows="3" placeholder="Front-end development of the 5 page templates from the approved designs, responsive and accessible" data-save></textarea></div>
+        <div class="field full"><label for="k-deliverables">Deliverables (optional)</label>
+          <textarea id="k-deliverables" name="deliverables" rows="2" placeholder="Source code in the project repository, deployment notes" data-save></textarea></div>
+        <div class="field"><label for="k-start">Start date</label>
+          <input type="date" id="k-start" name="start" data-save></div>
+        <div class="field"><label for="k-end">End date (optional)</label>
+          <input type="date" id="k-end" name="end" data-save></div>
+      </div>
+      <h3>Fees and payment</h3>
+      <div class="fields">
+        <div class="field full"><label for="k-price-type">Pricing</label>
+          <select id="k-price-type" name="price_type" data-save><option value="fixed" selected>Fixed fee</option><option value="daily">Day rate</option><option value="hourly">Hourly rate</option></select></div>
+        <div class="field"><label for="k-price">Amount (fixed fee, day rate or hourly rate)</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="k-price" name="price" placeholder="2,500" value="" data-save><span>£</span></div></div>
+        <div class="field"><label for="k-qty">Estimated days or hours</label>
+          <input type="text" inputmode="decimal" id="k-qty" name="qty" placeholder="10" value="" aria-describedby="k-qty-hint" data-save>
+          <span class="hint" id="k-qty-hint">For day or hourly rates.</span></div>
+        <div class="field"><label for="k-deposit">Deposit on signing</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="k-deposit" name="deposit" placeholder="" value="" data-save><span>%</span></div></div>
+        <div class="field"><label for="k-terms">Payment terms (from receipt of invoice)</label>
+          <div class="input-suffix"><input type="text" inputmode="numeric" id="k-terms" name="terms" placeholder="" value="30" data-save><span>days</span></div></div>
+        <div class="field"><label for="k-pay-method">Payment method</label>
+          <input type="text" id="k-pay-method" name="pay_method" placeholder="" value="bank transfer" data-save></div>
+        <div class="field"><label for="k-acceptance">Days to check deliverables</label>
+          <div class="input-suffix"><input type="text" inputmode="numeric" id="k-acceptance" name="acceptance" placeholder="" value="10" data-save><span>days</span></div></div>
+        <div class="field"><label for="k-notice">Termination notice</label>
+          <div class="input-suffix"><input type="text" inputmode="numeric" id="k-notice" name="notice" placeholder="" value="14" data-save><span>days</span></div></div>
+        <div class="field"><label for="k-law">Governing law</label>
+          <select id="k-law" name="law" data-save><option value="EW" selected>England and Wales</option><option value="SC">Scotland</option><option value="NI">Northern Ireland</option></select></div>
+      </div>
+      <h3>Clauses</h3>
+      <div class="fields">
+        <label class="check full"><input type="checkbox" id="k-ip" name="ip" checked data-save><span>Subcontractor assigns the copyright once paid in full (so you can pass it to your client)</span></label>
+        <label class="check full"><input type="checkbox" id="k-conf" name="conf" checked data-save><span>Confidentiality (client, project and this agreement)</span></label>
+        <label class="check full"><input type="checkbox" id="k-liability" name="liability" checked data-save><span>Limit each party’s liability to the fees</span></label>
+        <label class="check full"><input type="checkbox" id="k-further" name="further" data-save><span>Allow the subcontractor to subcontract in turn</span></label>
+        <label class="check full"><input type="checkbox" id="k-nonsolicit" name="nonsolicit" aria-describedby="k-nonsolicit-hint" data-save><span>Non-solicitation of your client (12 months)</span></label>
+        <p class="hint full" id="k-nonsolicit-hint">Whether this is enforceable depends on the governing law: have it reviewed before relying on it.</p>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="preview-actions">
+        <button type="button" class="btn btn-primary" id="k-print">Download PDF</button>
+        <button type="button" class="btn btn-ghost" id="k-word">Download Word</button>
+        <button type="button" class="btn btn-ghost" id="k-copy">Copy text</button>
+      </div>
+      <p class="small muted print-hint">PDF: choose “Save as PDF” in the print window. Word: the file opens in Word, LibreOffice or Google Docs for editing.</p>
+      <div class="paper-wrap"><article class="paper" id="k-preview" aria-label="Agreement preview"></article></div>
+      <button type="button" class="btn btn-ghost btn-sm" id="k-reset">Clear everything</button>
+    </div>
+  </div>
+</section>
+
+<script type="application/json" id="contract-data">{"store": "subcontract", "doc_title": "SUBCONTRACTOR AGREEMENT", "file": "Subcontractor agreement", "article": "{n}. {title}", "reset_confirm": "Clear everything you entered?", "hints": {"p_name": "contractor name", "s_name": "subcontractor name", "scope": "description of the services", "deliverables": "deliverables", "start": "start date", "end": "end date", "price": "amount", "qty": "estimate", "total": "total", "deposit": "deposit", "deposit_amount": "deposit amount", "terms": "30", "pay_method": "payment method", "acceptance": "10", "notice": "14", "late_rate": "rate", "law": "governing law", "today": "date"}, "preamble": ["This Agreement is made on {today} between:", "{p_name}[[p_status|, {p_status}]][[p_address|, of {p_address}]][[p_email|, {p_email}]] (“Contractor”), and", "{s_name}[[s_status|, {s_status}]][[s_address|, of {s_address}]][[s_id|, {s_id}]][[s_email|, {s_email}]] (“Subcontractor”).", "The parties agree as follows."], "clauses": [{"title": "Background", "paras": ["Contractor has agreed to provide services to its client[[end_client| {end_client}]] (the “Client”)[[project| for the project “{project}”]] under a separate contract (the “Client Contract”). Contractor engages Subcontractor to perform part of that work on the terms of this Agreement.", "Subcontractor is engaged as a business, not as a consumer or an employee."]}, {"title": "Services", "paras": ["Subcontractor will provide the following services (the “Services”): {scope}", {"when": {"has_deliverables": ["on"]}, "text": "Subcontractor will deliver: {deliverables}"}, "The Services will begin on {start}.", {"when": {"has_end": ["on"]}, "text": "Subcontractor will complete the Services by {end}, provided Contractor supplies the information and approvals Subcontractor needs on time."}]}, {"title": "Performance", "paras": ["Subcontractor will perform the Services with reasonable care and skill and in accordance with the requirements of the Client Contract that Contractor communicates to it in writing, including deadlines, quality standards and security and confidentiality rules.", {"when": {"further": ["off"]}, "text": "Subcontractor will perform the Services itself and will not engage another person to perform them without Contractor’s prior written consent."}, {"when": {"further": ["on"]}, "text": "Subcontractor may engage other people to perform part of the Services, and remains responsible for their work and for their compliance with this Agreement."}, "Contractor remains responsible to the Client for the work. Subcontractor will not discuss the price, scope or payment of the work with the Client without Contractor’s consent."]}, {"title": "Delivery and acceptance", "paras": ["Contractor has {acceptance} days after each delivery to tell Subcontractor in writing of any way in which a deliverable does not meet this Agreement. Subcontractor will correct it within a reasonable time at no extra cost. If Contractor does not report a defect within that period, the deliverable is treated as accepted."]}, {"title": "Fees", "paras": [{"when": {"price_type": ["fixed"]}, "text": "Contractor will pay Subcontractor a fixed fee of {price} for the Services."}, {"when": {"price_type": ["daily"]}, "text": "Contractor will pay Subcontractor {price} per day of work. The parties estimate {qty} days, for a total of {total}. Subcontractor will not exceed this estimate without Contractor’s written approval."}, {"when": {"price_type": ["hourly"]}, "text": "Contractor will pay Subcontractor {price} per hour of work. The parties estimate {qty} hours, for a total of {total}. Subcontractor will not exceed this estimate without Contractor’s written approval."}, "Fees exclude VAT, which Subcontractor adds at the applicable rate if it is VAT-registered.", "Expenses are reimbursed at cost, with receipts, only if Contractor approved them in writing in advance."]}, {"title": "Invoicing and payment", "paras": [{"when": {"has_deposit": ["on"]}, "text": "Contractor will pay a deposit of {deposit}% ({deposit_amount}) on signing; the Services begin when it is received, and it is deducted from the final invoice."}, {"when": {"price_type": ["fixed"]}, "text": "Subcontractor will invoice the fee on delivery of the Services."}, {"when": {"price_type": ["daily", "hourly"]}, "text": "Subcontractor will invoice at the end of each month for the time worked, with a summary of the Services performed."}, "Contractor will pay each invoice within {terms} days of receiving it, by {pay_method}.", "Payment does not depend on Contractor being paid by the Client.", "If Contractor pays late, Subcontractor may claim statutory interest at 8% a year above the Bank of England base rate and fixed compensation under the Late Payment of Commercial Debts (Interest) Act 1998."]}, {"title": "Independent contractor", "paras": ["Subcontractor is an independent contractor, not an employee, partner or agent of Contractor or of the Client. Subcontractor controls the manner, means and hours of its work, uses its own equipment, may work for other clients, and is responsible for its own taxes and contributions.", "If Subcontractor provides the Services through its own company, the parties will give each other the information reasonably needed to apply the off-payroll working rules (IR35) where they apply."]}, {"title": "Intellectual property", "paras": [{"when": {"ip": ["on"]}, "text": "Upon full payment, Subcontractor assigns to Contractor all right, title and interest, including copyright, in the deliverables created under this Agreement and waives any moral rights in them, so that Contractor can transfer them to the Client. Until full payment, Contractor may use the deliverables only to review them. Subcontractor will sign any document reasonably needed to confirm the assignment."}, {"when": {"ip": ["off"]}, "text": "Subcontractor keeps the intellectual property rights in the deliverables. Upon full payment, Subcontractor grants Contractor and the Client a non-exclusive, perpetual, worldwide, transferable licence to use, adapt and reproduce them for the Client’s purposes."}, "Subcontractor keeps the rights in its pre-existing materials, tools and know-how. Where they are included in the deliverables, Subcontractor grants Contractor and the Client a non-exclusive, perpetual, worldwide licence to use them as part of the deliverables.", "Subcontractor confirms that the deliverables will be its original work, or that it has the right to use any third-party material they contain."]}, {"title": "Confidentiality", "when": {"conf": ["on"]}, "paras": ["Subcontractor will keep confidential all non-public information about Contractor, the Client and the project, including the terms of this Agreement, use it only to perform the Services and disclose it only to people who need to know it and are bound by the same obligation. This obligation continues for two years after this Agreement ends. It does not apply to information that is public, already known to Subcontractor or that must be disclosed by law.", "When this Agreement ends, Subcontractor will return or delete the information and materials received for the project, except copies it must keep by law."]}, {"title": "Non-solicitation of the Client", "when": {"nonsolicit": ["on"]}, "paras": ["During this Agreement and for 12 months after it ends, Subcontractor will not solicit the Client to obtain, directly, services of the same kind as the Services, without Contractor’s written consent."]}, {"title": "Liability", "when": {"liability": ["on"]}, "paras": ["Each party’s total liability under this Agreement is limited to the total fees payable under it, and neither party is liable for indirect or consequential loss, including loss of profits. These limits do not apply to fraud, wilful misconduct or gross negligence, to a breach of confidentiality or to any liability that cannot be limited by law."]}, {"title": "Term and termination", "paras": ["This Agreement starts on signing and ends when the Services are completed and paid for.", "Either party may terminate this Agreement with {notice} days’ written notice.", "Either party may terminate it immediately in writing if the other materially breaches it and does not remedy the breach within 14 days of written notice.", "If the Client Contract ends or the Client cancels the work, Contractor may terminate this Agreement immediately by written notice.", "On termination, Contractor will pay for the Services performed and the expenses incurred up to the termination date; any deposit is credited against these amounts. The clauses on payment, intellectual property, confidentiality and liability continue to apply."]}, {"title": "Personal data", "paras": ["If the Services involve processing personal data on behalf of Contractor or the Client, the parties will agree in writing, before that processing starts, the data processing terms required by law as required by the UK GDPR, and Subcontractor will process the data only on documented instructions."]}, {"title": "Governing law and disputes", "paras": ["This Agreement is governed by the law of {law}. The parties will first try in good faith to resolve any dispute informally; if they cannot within 30 days, the courts of {law} have exclusive jurisdiction."]}, {"title": "General", "paras": ["This Agreement is the entire agreement between the parties on its subject and replaces any prior discussions. Any change must be in writing and signed by both parties. If any provision is found unenforceable, the rest remains in effect. Neither party may assign this Agreement without the other’s written consent. Notices may be sent by email to the addresses above. This Agreement may be signed electronically and in counterparts. No one other than the parties has any right to enforce any of its terms."]}], "closing": ["Signed by the parties on the dates below."], "signatures": [{"title": "Contractor", "name": "{p_name}"}, {"title": "Subcontractor", "name": "{s_name}"}], "sign_note": "Signature, name and date"}</script>
+
+<section class="section prose">
+  <h2>What this agreement covers</h2>
+  <ul>
+    <li><strong>The work and the main contract:</strong> what you hand over, the deliverables and dates, and the requirements of your client contract that you pass on in writing (deadlines, quality, security, confidentiality). You stay responsible to your client.</li>
+    <li><strong>Payment:</strong> a fixed fee or a day or hourly rate, paid within the agreed days of the invoice, <strong>whether or not your client has paid you</strong>.</li>
+    <li><strong>Ownership:</strong> the copyright is assigned to you once you have paid, so that you can assign it to your client.</li>
+    <li><strong>Confidentiality and your client:</strong> the subcontractor keeps your client’s information confidential and, if you tick the option, does not approach your client for 12 months.</li>
+    <li><strong>Ending early:</strong> if your client ends the main contract, you can end this one and pay for the work done.</li>
+  </ul>
+  <h2>Before you subcontract</h2>
+  <ul>
+    <li>Check that your client contract allows you to subcontract, and whether your client must approve the subcontractor.</li>
+    <li>If your subcontractor works through their own limited company, read the <a href="https://www.gov.uk/guidance/understanding-off-payroll-working-ir35" rel="noopener">off-payroll working (IR35) guidance</a>: the rules depend on the size of the end client.</li>
+    <li>If the subcontractor will handle personal data for your client, put data processing terms in writing first, as the UK GDPR requires.</li>
+    <li>Prepare your own contract with your client with the <a href="{{link:contract}}">freelance contract</a>.</li>
+  </ul>
+  <h2>What this template does not cover</h2>
+  <p>Construction work (Construction Industry Scheme), public sector contracts, recruitment agencies and staffing, and subcontractors based outside the UK. Have it reviewed by a solicitor for a large or risky project.</p>
+  <p class="small muted">Template provided for information only; it is not legal advice.</p>
+</section>

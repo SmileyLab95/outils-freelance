@@ -102,7 +102,7 @@ G compte gratuit, P Pro, ⇄ partenaire signalé.
 | Contrat de prestation | Générateur | ✅ | V |
 | Accord de confidentialité | Générateur | ✅ | V |
 | CGV / *terms of service* | Générateur ([40](40-cgv.md), [45](45-cgv-royaume-uni.md), [46](46-cgv-etats-unis.md), [47](47-cgv-canada.md)) | ✅ (France, Royaume-Uni, États-Unis, Canada en anglais et en français) | V |
-| Sous-traitance, avenant, bon de commande | Générateurs | ⬜ | V |
+| Sous-traitance, avenant, bon de commande | Générateurs ([48](48-sous-traitance.md)) | 🟡 Sous-traitance au Royaume-Uni, aux États-Unis et au Canada (France en attente de Légifrance) ; ⬜ avenant, bon de commande | V |
 | Signature du client | Devis ou contrat accepté en ligne (lien sécurisé, preuve horodatée) | ⬜ | P |
 
 ### 3.5 Facturer et encaisser

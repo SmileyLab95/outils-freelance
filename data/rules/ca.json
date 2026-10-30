@@ -2196,6 +2196,16 @@
           "source_title": "Copyright Act (R.S.C., 1985, c. C-42), section 14.1"
         }
       ]
+    },
+    "qc_subcontracting_2101": {
+      "value": "Unless the contract was made in consideration of the provider's personal qualities or this is incompatible with its nature, a contractor or service provider may engage a third person to perform it; the provider nevertheless keeps the direction of and responsibility for the performance.",
+      "unit": "text",
+      "label": "Québec: a service provider may engage a third person (subcontractor) but stays responsible (Civil Code art. 2101)",
+      "source": "https://www.legisquebec.gouv.qc.ca/fr/document/lc/CCQ-1991",
+      "source_title": "Code civil du Québec, art. 2098 à 2103 - LégisQuébec",
+      "confidence": "high",
+      "verified_on": "2026-10-30",
+      "note": "Read on 30/10/2026 with the « Lire une source officielle » tool (LégisQuébec, CCQ-1991), art. 2101 word for word: « À moins que le contrat n'ait été conclu en considération de ses qualités personnelles ou que cela ne soit incompatible avec la nature même du contrat, l'entrepreneur ou le prestataire de services peut s'adjoindre un tiers pour l'exécuter; il conserve néanmoins la direction et la responsabilité de l'exécution. » Also art. 2098 (contract for services), 2099 (free choice of means, no subordination), 2100 (act in the client's best interest, with prudence and diligence, according to the rules of the art), 2102 (information before the contract)."
     }
   },
   "provinces": {

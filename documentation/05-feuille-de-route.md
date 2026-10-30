@@ -306,14 +306,20 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   l'intérêt, art. 4) sous le taux criminel ; cession écrite du droit d'auteur et renonciation aux droits moraux ;
   contrat conclu chez le particulier signalé hors champ. Treize règles nouvelles, lues aux sources ; outil de lecture des
   sources : option « mot +N » ([47](47-cgv-canada.md), décision D49).
+- **Contrat de sous-traitance, Royaume-Uni, États-Unis et Canada (30/10/2026)** : générateur (menus *Selling* et
+  « Vendre ») pour confier une partie d'un projet à un autre indépendant : exigences du contrat principal reprises par
+  écrit, l'Entrepreneur restant responsable envers son client ; paiement dans le délai convenu, **que le client final
+  ait payé ou non** ; cession du droit d'auteur après paiement (droits moraux au Canada et au Royaume-Uni) ;
+  confidentialité ; non-sollicitation du client facultative ; fin anticipée si le contrat principal s'arrête ; par
+  pays : intérêts légaux et IR35 au Royaume-Uni, contenu exigé par les lois *Freelance Isn't Free* (date de remise des
+  factures, moyen de paiement), W-9 et 1099-NEC aux États-Unis, taux annuel et Code civil du Québec (art. 2101,
+  2125 à 2129) au Canada ; France en attente de la loi de 1975 sur Légifrance ([48](48-sous-traitance.md), D50, D51).
 - **Prochaines actions de Claude** : refonte, suite ([31](31-vision-plateforme.md) § 5) : les quatre modules du compte
   gratuit sont faits (étape 5) ; étape 6, outils restants (CGV : faites dans les quatre pays ;
   lois des autres provinces sur la protection du consommateur à lire pour les détailler ; le règlement albertain sur les
   contrats Internet expire le 30/09/2028 : à revérifier) ; jours ouvrés au Canada (jours fériés fédéraux et provinciaux) : en attente de l'accès à canada.ca, refusé
   depuis l'environnement de travail et sans réponse depuis l'outil de lecture des sources le 29/10/2026 ; sous-traitance
-  (spécification [48](48-sous-traitance.md), décision D51 : pages du Royaume-Uni, des États-Unis et du Canada à réaliser ; France en attente de la lecture de la loi du 31 décembre 1975 sur Légifrance, décision D50 ; Royaume-Uni,
-  États-Unis et Canada d'abord : contrat entre indépendants, clauses reprises du contrat principal, paiement, lois
-  *Freelance Isn't Free* pour l'indépendant qui sous-traite, formulaire 1099-NEC, art. 2101 du Code civil du Québec),
+  (Royaume-Uni, États-Unis et Canada faits le 30/10/2026, [48](48-sous-traitance.md) ; France en attente de la lecture de la loi du 31 décembre 1975 sur Légifrance, décision D50),
   devises (convertisseur aux taux de référence officiels), guides de protection sociale) ;
   ajouter les taux du 1er semestre 2027 dès leur publication
   (fin décembre 2026 : intérêt légal par arrêté, taux de la BCE en vigueur au 1er janvier ; tables `taux_interet_legal`

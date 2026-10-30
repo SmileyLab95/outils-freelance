@@ -1,5 +1,20 @@
 # Journal des modifications
 
+## 2026-10-30 — Contrat de sous-traitance (Royaume-Uni, États-Unis, Canada)
+
+- Nouveau **générateur de contrat de sous-traitance** pour confier une partie d'un projet à un autre indépendant, au
+  Royaume-Uni, aux États-Unis et au Canada (anglais et français), menus *Selling* et « Vendre » : exigences du contrat
+  principal reprises, paiement indépendant du paiement du client final, cession du droit d'auteur après paiement,
+  confidentialité, non-sollicitation facultative, fin anticipée si le contrat principal s'arrête ; aperçu en direct,
+  PDF, Word, copie ; saisie enregistrée sur l'appareil.
+- Par pays : intérêts légaux de retard et règles IR35 au Royaume-Uni ; date de remise des factures et moyen de
+  paiement exigés par les lois *Freelance Isn't Free*, formulaires W-9 et 1099-NEC aux États-Unis ; taux annuel (Loi
+  sur l'intérêt), renonciation aux droits moraux et Code civil du Québec (art. 2101, 2125 à 2129) au Canada.
+- Règle nouvelle : art. 2101 du Code civil du Québec, lu mot pour mot. France en attente de la loi du 31 décembre 1975
+  (Légifrance inaccessible, D50).
+- Tests : formulaire et rendu des quatre pages pour chaque combinaison, mutants, parcours navigateur (3 915
+  vérifications au total).
+
 ## 2026-10-30 — Sous-traitance : sources françaises en attente
 
 - Sous-traitance en France suspendue tant que la loi du 31 décembre 1975 ne peut pas être lue sur Légifrance (réponse

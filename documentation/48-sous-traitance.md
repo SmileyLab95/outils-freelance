@@ -86,6 +86,19 @@ avertissement (validité variable selon le droit applicable) ; contrat entre pro
 clauses propres à chaque pays présentes et seulement là ; chiffres lus dans les règles ; parcours navigateur (saisie,
 Word, copie, enregistrement, accessibilité, ordinateur, tablette, mobile) ; captures relues.
 
+## Réalisation (30/10/2026)
+
+Pages `/uk/subcontractor-agreement/`, `/us/subcontractor-agreement/`, `/ca/subcontractor-agreement/` et
+`/ca/fr/contrat-de-sous-traitance/` (menu « Selling » / « Vendre » après le contrat de prestation), écrites par un script
+puis relues ; script commun `tools/contract.js`, rendu `engines/contract-doc.js`, saisie enregistrée sous la clé
+`subcontract` de chaque section. 14 ou 15 articles selon le pays ; champs ajoutés à la relecture : moyen de paiement
+(tous les pays) et date de remise des factures (États-Unis), exigés par la loi de l'État de New York. Règle nouvelle
+`qc_subcontracting_2101` (art. 2101 du Code civil du Québec, lu mot pour mot). Tests : formulaire, clés, sources et
+FAQ de chaque page ; rendu de chaque combinaison (droit applicable × prix × options) ; orthographe de chaque pays
+(*licence* et *wilful* au Royaume-Uni et au Canada, *license* et *willful* aux États-Unis, aucun mot anglais dans la
+version française) ; 7 mutants des conditions d'articles détectés ; parcours navigateur des quatre pages (saisie,
+total, Word, copie, enregistrement séparé du contrat, accessibilité, ordinateur, tablette, mobile) ; captures relues.
+
 ## Reste à lire
 
 - Royaume-Uni : définition de la petite entreprise pour les règles IR35 (page détaillée de GOV.UK).

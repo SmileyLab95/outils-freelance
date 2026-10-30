@@ -1,0 +1,160 @@
+<!--{
+  "id": "subcontract",
+  "slug": "contrat-de-sous-traitance/",
+  "title": "Contrat de sous-traitance : modèle gratuit (Canada)",
+  "description": "Rédigez un contrat de sous-traitance quand vous confiez une partie d’un projet à un autre travailleur autonome : prix, droits d’auteur, Québec. PDF, Word.",
+  "menu": "Contrat de sous-traitance",
+  "icon": "🤝",
+  "blurb": "Un contrat clair quand vous confiez une partie d’un projet à un autre travailleur autonome.",
+  "app": "Générateur de contrat de sous-traitance",
+  "scripts": [
+    "engines/contract-doc.js",
+    "tools/contract.js"
+  ],
+  "rules": "ca",
+  "sources": [
+    "qc_subcontracting_2101",
+    "qc_service_contract_resiliation",
+    "interest_act_s4",
+    "ca_copyright_assignment",
+    "qc_adhesion_contract_french"
+  ],
+  "priority": 0.8,
+  "faq": [
+    [
+      "Puis-je sous-traiter une partie d’un contrat ?",
+      "En général oui, si votre contrat avec le client le permet. Au Québec, le prestataire de services peut s’adjoindre un tiers pour exécuter le contrat, sauf si celui-ci a été conclu en considération de ses qualités personnelles ou si cela est incompatible avec sa nature ; il conserve néanmoins la direction et la responsabilité de l’exécution (Code civil du Québec, art. 2101)."
+    ],
+    [
+      "Comment écrire le taux des intérêts de retard ?",
+      "Par an : selon l’article 4 de la Loi sur l’intérêt, un intérêt fixé seulement par mois dans un contrat écrit est limité à 5 % par an si le taux annuel équivalent n’est pas indiqué."
+    ],
+    [
+      "À qui appartient le travail du sous-traitant ?",
+      "À lui, sauf s’il cède le droit d’auteur par un écrit qu’il signe (Loi sur le droit d’auteur, art. 13(4)). Les droits moraux ne se cèdent pas, mais on peut y renoncer. Ce contrat cède le droit d’auteur et y renonce une fois le prix payé en entier, pour que vous puissiez transmettre les droits à votre client."
+    ]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Gratuit · PDF et Word</span>
+    <h1>Générateur de contrat de sous-traitance</h1>
+    <p class="lead">Vous confiez une partie d’un projet à un autre travailleur autonome ? Remplissez le formulaire : votre contrat de sous-traitance s’écrit au fur et à mesure, avec les exigences de votre contrat avec le client, un paiement qui ne dépend pas de votre client et le droit d’auteur cédé à vous, droits moraux compris.</p>
+    <ul class="trust"><li>Pour les services entre entreprises</li><li>Règles lues sur LégisQuébec et le site des lois du Canada</li><li>Vos données restent sur votre appareil</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout wide-left">
+    <form class="card form-card" id="contract-form" autocomplete="off" onsubmit="return false">
+      <h3>Entrepreneur (qui confie le travail)</h3>
+      <div class="fields">
+        <div class="field full"><label for="k-p-name">Nom ou raison sociale</label>
+          <input type="text" id="k-p-name" name="p_name" placeholder="Alex Tremblay Design" value="" data-save></div>
+        <div class="field full"><label for="k-p-status">Forme juridique (facultatif)</label>
+          <input type="text" id="k-p-status" name="p_status" placeholder="" value="" data-save></div>
+        <div class="field full"><label for="k-p-address">Adresse postale</label>
+          <input type="text" id="k-p-address" name="p_address" placeholder="1000, rue Sherbrooke Ouest, Montréal (Québec) H3A 3G4" value="" data-save></div>
+        <div class="field full"><label for="k-p-email">Courriel</label>
+          <input type="email" id="k-p-email" name="p_email" placeholder="bonjour@exemple.ca" value="" data-save></div>
+      </div>
+      <h3>Sous-traitant (qui fait le travail)</h3>
+      <div class="fields">
+        <div class="field full"><label for="k-s-name">Nom ou raison sociale</label>
+          <input type="text" id="k-s-name" name="s_name" placeholder="Sam Gagnon" value="" data-save></div>
+        <div class="field full"><label for="k-s-status">Forme juridique (facultatif)</label>
+          <input type="text" id="k-s-status" name="s_status" placeholder="" value="" data-save></div>
+        <div class="field full"><label for="k-s-address">Adresse postale</label>
+          <input type="text" id="k-s-address" name="s_address" placeholder="200, rue Saint-Paul, Québec (Québec) G1K 3W2" value="" data-save></div>
+        <div class="field"><label for="k-s-id">Numéro d’entreprise ou de taxes (facultatif)</label>
+          <input type="text" id="k-s-id" name="s_id" placeholder="" value="" data-save></div>
+        <div class="field"><label for="k-s-email">Courriel</label>
+          <input type="email" id="k-s-email" name="s_email" placeholder="sam@exemple.ca" value="" data-save></div>
+      </div>
+      <h3>Le contrat principal</h3>
+      <div class="fields">
+        <div class="field"><label for="k-end-client">Votre client (facultatif)</label>
+          <input type="text" id="k-end-client" name="end_client" placeholder="Studio Nordvent" value="" data-save></div>
+        <div class="field"><label for="k-project">Projet (facultatif)</label>
+          <input type="text" id="k-project" name="project" placeholder="Refonte du site Web" value="" data-save></div>
+      </div>
+      <h3>Le travail confié</h3>
+      <div class="fields">
+        <div class="field full"><label for="k-scope">Description des services</label>
+          <textarea id="k-scope" name="scope" rows="3" placeholder="Intégration des 5 gabarits de pages à partir des maquettes approuvées, adaptée aux mobiles et accessible" data-save></textarea></div>
+        <div class="field full"><label for="k-deliverables">Livrables (facultatif)</label>
+          <textarea id="k-deliverables" name="deliverables" rows="2" placeholder="Code source dans le dépôt du projet, notes de mise en ligne" data-save></textarea></div>
+        <div class="field"><label for="k-start">Date de début</label>
+          <input type="date" id="k-start" name="start" data-save></div>
+        <div class="field"><label for="k-end">Date de fin (facultatif)</label>
+          <input type="date" id="k-end" name="end" data-save></div>
+      </div>
+      <h3>Prix et paiement</h3>
+      <div class="fields">
+        <div class="field full"><label for="k-price-type">Tarification</label>
+          <select id="k-price-type" name="price_type" data-save><option value="fixed" selected>Forfait</option><option value="daily">Tarif à la journée</option><option value="hourly">Tarif horaire</option></select></div>
+        <div class="field"><label for="k-price">Montant (forfait, tarif journalier ou horaire)</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="k-price" name="price" placeholder="2 500" value="" data-save><span>$</span></div></div>
+        <div class="field"><label for="k-qty">Nombre estimé de jours ou d’heures</label>
+          <input type="text" inputmode="decimal" id="k-qty" name="qty" placeholder="10" value="" aria-describedby="k-qty-hint" data-save>
+          <span class="hint" id="k-qty-hint">Pour un tarif à la journée ou à l’heure.</span></div>
+        <div class="field"><label for="k-deposit">Acompte à la signature</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="k-deposit" name="deposit" placeholder="" value="" data-save><span>%</span></div></div>
+        <div class="field"><label for="k-terms">Délai de paiement (à la réception de la facture)</label>
+          <div class="input-suffix"><input type="text" inputmode="numeric" id="k-terms" name="terms" placeholder="" value="30" data-save><span>jours</span></div></div>
+        <div class="field"><label for="k-pay-method">Moyen de paiement</label>
+          <input type="text" id="k-pay-method" name="pay_method" placeholder="" value="virement bancaire ou virement Interac" data-save></div>
+        <div class="field"><label for="k-late-rate">Intérêts de retard</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="k-late-rate" name="late_rate" placeholder="" value="12" data-save><span>%/an</span></div></div>
+        <div class="field"><label for="k-acceptance">Jours pour vérifier les livrables</label>
+          <div class="input-suffix"><input type="text" inputmode="numeric" id="k-acceptance" name="acceptance" placeholder="" value="10" data-save><span>jours</span></div></div>
+        <div class="field"><label for="k-notice">Préavis de résiliation</label>
+          <div class="input-suffix"><input type="text" inputmode="numeric" id="k-notice" name="notice" placeholder="" value="14" data-save><span>jours</span></div></div>
+        <div class="field"><label for="k-law">Droit applicable</label>
+          <select id="k-law" name="law" data-save><option value="QC" selected>Québec</option><option value="ON">Ontario</option><option value="NB">Nouveau-Brunswick</option><option value="MB">Manitoba</option><option value="AB">Alberta</option><option value="BC">Colombie-Britannique</option><option value="SK">Saskatchewan</option><option value="NS">Nouvelle-Écosse</option><option value="NL">Terre-Neuve-et-Labrador</option><option value="PE">Île-du-Prince-Édouard</option><option value="YT">Yukon</option><option value="NT">Territoires du Nord-Ouest</option><option value="NU">Nunavut</option></select></div>
+      </div>
+      <h3>Clauses</h3>
+      <div class="fields">
+        <label class="check full"><input type="checkbox" id="k-ip" name="ip" checked data-save><span>Le sous-traitant cède le droit d’auteur une fois payé (pour que vous puissiez le céder à votre client)</span></label>
+        <label class="check full"><input type="checkbox" id="k-conf" name="conf" checked data-save><span>Confidentialité (client, projet et présent contrat)</span></label>
+        <label class="check full"><input type="checkbox" id="k-liability" name="liability" checked data-save><span>Limiter la responsabilité de chaque partie au prix</span></label>
+        <label class="check full"><input type="checkbox" id="k-further" name="further" data-save><span>Permettre au sous-traitant de sous-traiter à son tour</span></label>
+        <label class="check full"><input type="checkbox" id="k-nonsolicit" name="nonsolicit" aria-describedby="k-nonsolicit-hint" data-save><span>Non-sollicitation de votre client (12 mois)</span></label>
+        <p class="hint full" id="k-nonsolicit-hint">Sa validité dépend du droit applicable : faites-la relire avant de vous y fier.</p>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="preview-actions">
+        <button type="button" class="btn btn-primary" id="k-print">Télécharger en PDF</button>
+        <button type="button" class="btn btn-ghost" id="k-word">Télécharger en Word</button>
+        <button type="button" class="btn btn-ghost" id="k-copy">Copier le texte</button>
+      </div>
+      <p class="small muted print-hint">PDF : choisissez « Enregistrer au format PDF » dans la fenêtre d’impression. Word : le fichier s’ouvre dans Word, LibreOffice ou Google Docs pour être modifié.</p>
+      <div class="paper-wrap"><article class="paper" id="k-preview" aria-label="Aperçu du contrat"></article></div>
+      <button type="button" class="btn btn-ghost btn-sm" id="k-reset">Tout effacer</button>
+    </div>
+  </div>
+</section>
+
+<script type="application/json" id="contract-data">{"store": "subcontract", "doc_title": "CONTRAT DE SOUS-TRAITANCE", "file": "Contrat de sous-traitance", "article": "{n}. {title}", "reset_confirm": "Effacer tout ce que vous avez saisi ?", "hints": {"p_name": "nom de l’entrepreneur", "s_name": "nom du sous-traitant", "scope": "description des services", "deliverables": "livrables", "start": "date de début", "end": "date de fin", "price": "montant", "qty": "estimation", "total": "total", "deposit": "acompte", "deposit_amount": "montant de l’acompte", "terms": "30", "pay_method": "moyen de paiement", "acceptance": "10", "notice": "14", "late_rate": "taux", "law": "dans votre province", "today": "date"}, "preamble": ["Le présent contrat est conclu le {today} entre :", "{p_name}[[p_status|, {p_status}]][[p_address|, dont l’adresse est {p_address}]][[p_email|, {p_email}]] (l’« Entrepreneur »), et", "{s_name}[[s_status|, {s_status}]][[s_address|, dont l’adresse est {s_address}]][[s_id|, {s_id}]][[s_email|, {s_email}]] (le « Sous-traitant »).", "Les parties conviennent de ce qui suit."], "clauses": [{"title": "Contexte", "paras": ["L’Entrepreneur s’est engagé à fournir des services à son client[[end_client| {end_client}]] (le « Client »)[[project| pour le projet « {project} »]] en vertu d’un contrat distinct (le « Contrat principal »). Il confie au Sous-traitant une partie de ces travaux aux conditions du présent contrat.", "Le Sous-traitant est engagé à titre d’entreprise, et non de consommateur ou de salarié."]}, {"title": "Services", "paras": ["Le Sous-traitant fournit les services suivants (les « Services ») : {scope}", {"when": {"has_deliverables": ["on"]}, "text": "Le Sous-traitant remet les livrables suivants : {deliverables}"}, "Les Services débutent le {start}.", {"when": {"has_end": ["on"]}, "text": "Le Sous-traitant termine les Services au plus tard le {end}, pourvu que l’Entrepreneur lui fournisse à temps les renseignements et approbations nécessaires."}]}, {"title": "Exécution", "paras": ["Le Sous-traitant fournit les Services avec prudence et diligence, selon les règles de l’art et les exigences du Contrat principal que l’Entrepreneur lui communique par écrit, notamment les délais, les normes de qualité et les règles de sécurité et de confidentialité.", {"when": {"further": ["off"]}, "text": "Le Sous-traitant fournit les Services lui-même et ne les confie pas à une autre personne sans l’accord écrit préalable de l’Entrepreneur."}, {"when": {"further": ["on"]}, "text": "Le Sous-traitant peut confier une partie des Services à d’autres personnes ; il demeure responsable de leur travail et du respect du présent contrat."}, "L’Entrepreneur demeure responsable des travaux envers le Client. Le Sous-traitant ne discute pas du prix, de l’étendue ou du paiement des travaux avec le Client sans l’accord de l’Entrepreneur."]}, {"title": "Livraison et acceptation", "paras": ["L’Entrepreneur dispose de {acceptance} jours après chaque livraison pour signaler par écrit au Sous-traitant tout défaut de conformité au présent contrat. Le Sous-traitant le corrige dans un délai raisonnable, sans frais supplémentaires. À défaut de signalement dans ce délai, le livrable est réputé accepté."]}, {"title": "Prix", "paras": [{"when": {"price_type": ["fixed"]}, "text": "L’Entrepreneur verse au Sous-traitant un prix forfaitaire de {price} pour les Services."}, {"when": {"price_type": ["daily"]}, "text": "L’Entrepreneur verse au Sous-traitant {price} par jour de travail. Les parties estiment le travail à {qty} jours, soit un total de {total}. Le Sous-traitant ne dépasse pas cette estimation sans l’accord écrit de l’Entrepreneur."}, {"when": {"price_type": ["hourly"]}, "text": "L’Entrepreneur verse au Sous-traitant {price} par heure de travail. Les parties estiment le travail à {qty} heures, soit un total de {total}. Le Sous-traitant ne dépasse pas cette estimation sans l’accord écrit de l’Entrepreneur."}, "Les prix n’incluent pas la TPS/TVH ni, le cas échéant, la TVQ ou la TVP, que le Sous-traitant ajoute aux taux applicables s’il est inscrit.", "Les frais sont remboursés au coût réel, sur pièces justificatives, seulement si l’Entrepreneur les a approuvés par écrit à l’avance."]}, {"title": "Facturation et paiement", "paras": [{"when": {"has_deposit": ["on"]}, "text": "Un acompte de {deposit} % du prix, soit {deposit_amount}, est versé à la signature ; les Services débutent à sa réception, et il est déduit de la facture finale."}, {"when": {"price_type": ["fixed"]}, "text": "Le Sous-traitant facture le prix à la remise des Services."}, {"when": {"price_type": ["daily", "hourly"]}, "text": "Le Sous-traitant facture à la fin de chaque mois le temps passé, avec un relevé des Services fournis."}, "L’Entrepreneur paie chaque facture dans les {terms} jours suivant sa réception, par {pay_method}.", "Le paiement ne dépend pas du paiement de l’Entrepreneur par le Client.", "Toute somme impayée à l’échéance porte intérêt au taux annuel de {late_rate} %, de la date d’échéance jusqu’au paiement complet."]}, {"title": "Indépendance", "paras": ["Le Sous-traitant est un entrepreneur indépendant, et non un salarié, un associé ou un mandataire de l’Entrepreneur ou du Client. Il choisit librement les moyens d’exécution des Services, sans lien de subordination, utilise son propre matériel, peut travailler pour d’autres clients et assume ses propres impôts et cotisations."]}, {"title": "Propriété intellectuelle", "paras": [{"when": {"ip": ["on"]}, "text": "Dès le paiement complet, le Sous-traitant cède à l’Entrepreneur tous ses droits, dont le droit d’auteur, sur les livrables créés en vertu du présent contrat et renonce à ses droits moraux sur ceux-ci en faveur de l’Entrepreneur, du Client et de leurs ayants cause, afin que l’Entrepreneur puisse les céder au Client. D’ici là, l’Entrepreneur ne peut utiliser les livrables que pour les examiner. Le Sous-traitant signe tout document raisonnablement nécessaire pour confirmer la cession."}, {"when": {"ip": ["off"]}, "text": "Le Sous-traitant conserve les droits de propriété intellectuelle sur les livrables. Dès le paiement complet, il accorde à l’Entrepreneur et au Client une licence non exclusive, perpétuelle, mondiale et cessible pour les utiliser, les adapter et les reproduire aux fins du Client."}, "Le Sous-traitant conserve les droits sur ses éléments préexistants, outils et savoir-faire. Lorsqu’ils sont intégrés aux livrables, il accorde à l’Entrepreneur et au Client une licence non exclusive, perpétuelle et mondiale pour les utiliser avec ces livrables.", "Le Sous-traitant garantit que les livrables sont son œuvre originale, ou qu’il a le droit d’utiliser les éléments de tiers qu’ils contiennent."]}, {"title": "Confidentialité", "when": {"conf": ["on"]}, "paras": ["Le Sous-traitant garde confidentiels tous les renseignements non publics concernant l’Entrepreneur, le Client et le projet, y compris les conditions du présent contrat ; il ne les utilise que pour fournir les Services et ne les communique qu’aux personnes qui ont besoin de les connaître et qui sont tenues à la même obligation. Cette obligation dure deux ans après la fin du contrat. Elle ne vise pas les renseignements publics, déjà connus du Sous-traitant ou dont la loi exige la communication.", "À la fin du contrat, le Sous-traitant remet ou détruit les renseignements et documents reçus pour le projet, sauf les copies qu’il doit conserver selon la loi."]}, {"title": "Non-sollicitation du Client", "when": {"nonsolicit": ["on"]}, "paras": ["Pendant le contrat et 12 mois après sa fin, le Sous-traitant ne sollicite pas le Client pour lui fournir directement des services de même nature que les Services, sans l’accord écrit de l’Entrepreneur."]}, {"title": "Responsabilité", "when": {"liability": ["on"]}, "paras": ["La responsabilité totale de chaque partie découlant du présent contrat est limitée au prix total payable en vertu de celui-ci, et aucune partie n’est responsable des préjudices indirects, notamment des pertes de profits. Ces limites ne s’appliquent pas en cas de fraude, de faute intentionnelle ou de faute lourde, de préjudice corporel ou moral, de manquement à la confidentialité ni à toute responsabilité que la loi ne permet pas de limiter."]}, {"title": "Durée et résiliation", "paras": ["Le contrat prend effet à sa signature et prend fin à l’achèvement des Services et au paiement complet du prix.", {"when": {"law": ["QC"]}, "text": "Conformément aux articles 2125 à 2129 du Code civil du Québec, l’Entrepreneur peut résilier le contrat à tout moment par avis écrit ; il paie alors, en proportion du prix convenu, les Services fournis et les frais engagés jusqu’à la résiliation ; l’acompte s’impute sur ces sommes, et le Sous-traitant restitue toute avance qui les dépasse. Le Sous-traitant ne peut résilier le contrat que pour un motif sérieux et jamais à contretemps, en donnant un préavis écrit de {notice} jours lorsque c’est possible."}, {"when": {"law": ["ON", "BC", "AB", "MB", "SK", "NS", "NB", "NL", "PE", "YT", "NT", "NU"]}, "text": "Chaque partie peut mettre fin au contrat moyennant un préavis écrit de {notice} jours."}, "En cas de manquement grave d’une partie, l’autre peut résilier le contrat immédiatement par écrit si le manquement n’est pas corrigé dans les 14 jours suivant un avis écrit.", "Si le Contrat principal prend fin ou si le Client annule les travaux, l’Entrepreneur peut résilier le présent contrat immédiatement par avis écrit.", "À la fin du contrat, l’Entrepreneur paie les Services fournis et les frais engagés jusqu’à la date de fin ; l’acompte s’impute sur ces sommes. Les clauses sur le paiement, la propriété intellectuelle, la confidentialité et la responsabilité continuent de s’appliquer."]}, {"title": "Renseignements personnels", "paras": ["Si les Services comportent le traitement de renseignements personnels pour le compte de l’Entrepreneur ou du Client, les parties conviennent par écrit, avant ce traitement, des conditions que la loi exige, et le Sous-traitant ne traite ces renseignements que selon des instructions écrites."]}, {"title": "Droit applicable et différends", "paras": ["Le présent contrat est régi par les lois en vigueur {law}. Les parties tentent d’abord de bonne foi de régler tout différend à l’amiable ; à défaut d’entente dans les 30 jours, chacune peut s’adresser aux tribunaux compétents {law}."]}, {"title": "Dispositions générales", "paras": ["Le présent contrat constitue l’entente complète des parties sur son objet et remplace toute discussion antérieure. Toute modification doit être faite par écrit et signée par les deux parties. Si une clause est jugée inapplicable, les autres demeurent en vigueur. Aucune partie ne peut céder le contrat sans l’accord écrit de l’autre. Les avis peuvent être envoyés par courriel aux adresses indiquées ci-dessus. Le contrat peut être signé électroniquement et en plusieurs exemplaires."]}], "closing": ["Signé par les parties aux dates indiquées ci-dessous."], "signatures": [{"title": "L’Entrepreneur", "name": "{p_name}"}, {"title": "Le Sous-traitant", "name": "{s_name}"}], "sign_note": "Signature, nom et date", "option_text": {"law": {"QC": "au Québec", "ON": "en Ontario", "NB": "au Nouveau-Brunswick", "MB": "au Manitoba", "AB": "en Alberta", "BC": "en Colombie-Britannique", "SK": "en Saskatchewan", "NS": "en Nouvelle-Écosse", "NL": "à Terre-Neuve-et-Labrador", "PE": "à l'Île-du-Prince-Édouard", "YT": "au Yukon", "NT": "dans les Territoires du Nord-Ouest", "NU": "au Nunavut"}}}</script>
+
+<section class="section prose">
+  <h2>Ce que contient ce contrat</h2>
+  <ul>
+    <li><strong>Le travail et le contrat principal :</strong> ce que vous confiez, les livrables et les dates, et les exigences de votre contrat avec le client que vous transmettez par écrit. Vous demeurez responsable envers votre client (au Québec, art. 2101 du Code civil).</li>
+    <li><strong>Le paiement :</strong> un forfait ou un tarif à la journée ou à l’heure, payé dans le délai convenu après la facture, <strong>que votre client vous ait payé ou non</strong>, avec des intérêts de retard exprimés par an comme l’exige la Loi sur l’intérêt.</li>
+    <li><strong>Les droits :</strong> le droit d’auteur vous est cédé une fois le prix payé, avec renonciation aux droits moraux, pour que vous puissiez transmettre les droits à votre client.</li>
+    <li><strong>La fin anticipée :</strong> si votre client met fin au contrat principal, vous pouvez mettre fin à celui-ci en payant le travail fait ; sous le droit du Québec, les articles 2125 à 2129 du Code civil s’appliquent.</li>
+  </ul>
+  <h2>Avant de sous-traiter</h2>
+  <ul>
+    <li>Vérifiez que votre contrat avec le client permet la sous-traitance et si le client doit approuver le sous-traitant.</li>
+    <li>Si le sous-traitant traite des renseignements personnels pour votre client, convenez d’abord par écrit des conditions requises.</li>
+    <li>Préparez votre propre contrat avec le client avec le <a href="{{link:contract}}">contrat de service</a>.</li>
+  </ul>
+  <h2>Ce que ce modèle ne couvre pas</h2>
+  <p>Les travaux de construction, les contrats publics, les agences de placement et les sous-traitants établis hors du Canada. La validité d’une clause de non-sollicitation dépend du droit applicable : faites-la relire par un avocat ou un notaire avant de vous y fier.</p>
+  <p class="small muted">Modèle fourni à titre informatif ; il ne constitue pas un avis juridique.</p>
+</section>
