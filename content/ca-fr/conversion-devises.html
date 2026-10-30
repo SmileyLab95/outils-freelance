@@ -1,0 +1,178 @@
+<!--{
+  "id": "currency",
+  "slug": "conversion-devises/",
+  "title": "Devises : conversion au taux de la Banque du Canada",
+  "description": "Payé en dollars américains ou en euros ? Convertissez au taux de la Banque du Canada du jour, comme le veut la Loi de l'impôt, avec une ligne pour vos livres.",
+  "menu": "Conversion de devises",
+  "icon": "💱",
+  "blurb": "Le taux de la Banque du Canada du jour, comme le prévoit la Loi de l'impôt.",
+  "app": "Conversion de devises au taux de la Banque du Canada",
+  "scripts": [
+    "engines/currency.js",
+    "tools/currency.js"
+  ],
+  "rules": "ca",
+  "sources": [
+    "ca_currency_conversion_income_tax"
+  ],
+  "priority": 0.8,
+  "faq": [
+    [
+      "Quel taux de change utiliser pour l'impôt sur le revenu ?",
+      "La Loi de l'impôt sur le revenu convertit un montant exprimé dans une autre monnaie au taux de change au comptant du jour où le montant est survenu : le taux publié par la Banque du Canada ce jour-là (article 261)."
+    ],
+    [
+      "Et s'il n'y a pas de taux de la Banque du Canada ce jour-là ?",
+      "Une fin de semaine ou un jour férié, la Loi retient le jour précédent le plus proche pour lequel la Banque du Canada a publié un taux. L'outil fait de même et affiche la date retenue."
+    ],
+    [
+      "Puis-je utiliser le taux de ma banque ?",
+      "La Loi permet aussi un autre taux de change que le ministre juge acceptable. L'ARC précise les taux qu'elle accepte sur canada.ca, que nous n'avons pas pu lire : vérifiez auprès de l'ARC ou de votre comptable avant d'utiliser un autre taux."
+    ],
+    [
+      "L'outil couvre-t-il la TPS/TVH ?",
+      "Non : il suit la règle de l'impôt sur le revenu. La conversion des montants de TPS/TVH n'est pas couverte."
+    ]
+  ]
+}-->
+<script type="application/json" id="currency-data">
+{
+ "source": "boc",
+ "source_name": "Banque du Canada",
+ "official_per": "foreign",
+ "manual_per": "foreign",
+ "rate_line": {
+  "foreign": "1 {cur} = {rate} $ CA",
+  "home": "1 $ CA = {rate} {cur}"
+ },
+ "label_rate": {
+  "foreign": "Taux : 1 {cur} = … $ CA"
+ },
+ "named_official": "taux de la Banque du Canada du {date}",
+ "named_manual": "taux du {date}",
+ "label_amount_to_home": "Montant en devise",
+ "label_amount_to_foreign": "Montant en dollars canadiens",
+ "big_to_home": "Montant en dollars canadiens",
+ "big_to_foreign": "Montant en devise",
+ "label_date": {
+  "default": "Date à laquelle le montant est survenu"
+ },
+ "sub": "{rate_line}, {named}.",
+ "rows": {
+  "net": "Montant",
+  "vat": "",
+  "amount": "Montant"
+ },
+ "mention": {
+  "novat": "Converti au taux de {rate_line} ({named}) : {home}."
+ },
+ "msg": {
+  "enter_amount": "Indiquez un montant.",
+  "bad_amount": "Vérifiez le montant : saisissez seulement des chiffres, par exemple 1250,50.",
+  "bad_date": "Indiquez une date.",
+  "enter_rate": "Saisissez le taux de change : le nombre de dollars canadiens pour 1 {cur}, par exemple 1,3960. La Loi de l'impôt sur le revenu n'admet un autre taux que s'il est acceptable pour le ministre.",
+  "bad_rate": "Vérifiez le taux : un nombre positif, avec une virgule ou un point et sans espace, par exemple 1,3960.",
+  "click": "Cliquez sur « Obtenir le taux de la {source} » pour lire le taux de cette date.",
+  "fetching": "Lecture du taux de la {source}…",
+  "future": "La Banque du Canada ne publie pas de taux à l'avance : choisissez la date d'aujourd'hui ou une date passée, ou saisissez un taux.",
+  "none": "La Banque du Canada n'a publié aucun taux {cur} entre le {start} et le {date}. Vérifiez la date, ou saisissez un taux.",
+  "format": "La réponse de la Banque du Canada n'a pas le format attendu : saisissez le taux publié sur la page des taux de change quotidiens de la Banque du Canada.",
+  "network": "Le taux n'a pas pu être lu (connexion interrompue ou service de la Banque du Canada indisponible). Réessayez, ou saisissez le taux publié par la Banque du Canada.",
+  "unpublished": "Aucun taux publié pour cette date.",
+  "earlier": "Pas de taux pour ce jour-là (fin de semaine, jour férié, ou taux du jour pas encore publié : il paraît au plus tard à 16 h 30, heure de l'Est) : la Loi de l'impôt sur le revenu retient alors le jour précédent le plus proche, le {date}.",
+  "cash_due": "",
+  "no_vat": "",
+  "always": "La conversion des montants de TPS/TVH n'est pas couverte. Votre banque convertit à son propre taux, frais en plus."
+ }
+}
+</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Gratuit · taux de la Banque du Canada</span>
+    <h1>Devises : conversion au taux de la Banque du Canada</h1>
+    <p class="lead">Payé en dollars américains, en euros ou en livres ? Obtenez le taux de la Banque du Canada du jour où le montant est survenu, le montant en dollars canadiens et une ligne pour vos livres.</p>
+    <ul class="trust"><li>Taux de la Banque du Canada du jour</li><li>Jour précédent les jours fériés</li><li>Ligne pour vos livres</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="cx-form" onsubmit="return false">
+      <h2>Votre montant</h2>
+      <div class="fields">
+        <div class="field full"><label for="cx-direction">Je convertis</label>
+          <select id="cx-direction" name="direction" data-save>
+            <option value="to_home" selected>un montant en devise, en dollars canadiens</option>
+            <option value="to_foreign">un montant en dollars canadiens, en devise (soumission)</option>
+          </select></div>
+        <div class="field"><label for="cx-amount" id="cx-amount-label">Montant en devise</label>
+          <input type="text" inputmode="decimal" id="cx-amount" name="amount" value="1000" autocomplete="off" data-save></div>
+        <div class="field"><label for="cx-currency">Devise</label>
+          <select id="cx-currency" name="currency" data-save>
+            <option value="EUR">Euro (EUR)</option>
+            <option value="USD" selected>Dollar américain (USD)</option>
+            <option value="GBP">Livre sterling (GBP)</option>
+            <option value="CHF">Franc suisse (CHF)</option>
+            <option value="AUD">Dollar australien (AUD)</option>
+            <option value="JPY">Yen japonais (JPY)</option>
+            <option value="CNY">Yuan chinois (CNY)</option>
+            <option value="HKD">Dollar de Hong Kong (HKD)</option>
+            <option value="INR">Roupie indienne (INR)</option>
+            <option value="MXN">Peso mexicain (MXN)</option>
+            <option value="NZD">Dollar néo-zélandais (NZD)</option>
+            <option value="NOK">Couronne norvégienne (NOK)</option>
+            <option value="SEK">Couronne suédoise (SEK)</option>
+            <option value="SGD">Dollar de Singapour (SGD)</option>
+            <option value="ZAR">Rand sud-africain (ZAR)</option>
+            <option value="BRL">Réal brésilien (BRL)</option>
+            <option value="KRW">Won sud-coréen (KRW)</option>
+          </select></div>
+        <div class="field full"><label for="cx-date" id="cx-date-label">Date à laquelle le montant est survenu</label>
+          <input type="date" id="cx-date" name="date" aria-describedby="cx-date-hint">
+          <span class="hint" id="cx-date-hint">Le jour où le montant est survenu (Loi de l'impôt sur le revenu, art. 261(2)b)). La Banque du Canada publie un taux chaque jour ouvrable.</span></div>
+        <div class="field full"><label for="cx-method">Taux de change</label>
+          <select id="cx-method" name="method" data-save>
+            <option value="official" selected>Taux de la Banque du Canada</option>
+            <option value="manual">Je saisis un autre taux</option>
+          </select></div>
+        <div class="field full" id="cx-fetch-field"><button type="button" class="btn btn-primary" id="cx-fetch">Obtenir le taux de la Banque du Canada</button></div>
+        <div class="field full" id="cx-rate-field" hidden><label for="cx-rate" id="cx-rate-label">Taux : 1 USD = … $ CA</label>
+          <input type="text" inputmode="decimal" id="cx-rate" name="rate" autocomplete="off"></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="result-hero" role="status" aria-atomic="true">
+        <div class="label" id="cx-big-label">Montant en dollars canadiens</div>
+        <div class="big" id="cx-big">–</div>
+        <div class="sub" id="cx-sub">–</div>
+      </div>
+      <div class="card" id="cx-table" style="margin-top: 16px; padding: 18px;" hidden>
+        <table class="mini-table compare-table">
+          <caption class="sr-only">Montants dans les deux monnaies</caption>
+          <thead><tr><th scope="col"><span class="sr-only">Montant</span></th><th scope="col" id="cx-col-foreign">USD</th><th scope="col">CAD</th></tr></thead>
+          <tbody>
+            <tr><th scope="row" id="cx-row-net-label">–</th><td id="cx-net-foreign">–</td><td id="cx-net-home">–</td></tr>
+            <tr id="cx-row-vat" hidden><th scope="row" id="cx-row-vat-label">–</th><td id="cx-vat-foreign">–</td><td id="cx-vat-home">–</td></tr>
+            <tr id="cx-row-total" hidden><th scope="row">Total</th><td id="cx-total-foreign">–</td><td id="cx-total-home">–</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card" id="cx-mention-box" style="margin-top: 16px; padding: 18px;" hidden>
+        <h2 style="font-size: 1.05rem; margin: 0 0 8px;">Ligne pour vos livres</h2>
+        <p id="cx-mention" style="margin: 0 0 12px;">–</p>
+        <button type="button" class="btn btn-ghost" id="cx-copy">Copier la ligne</button>
+      </div>
+      <p class="notice" id="cx-notice" aria-live="polite" style="margin-top: 16px;">–</p>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>La règle : le taux de la Banque du Canada du jour</h2>
+  <p>Pour l'impôt sur le revenu, un montant exprimé dans une autre monnaie est converti en dollars canadiens au <strong>taux de change au comptant du jour où il est survenu</strong> : le <strong>taux publié par la Banque du Canada</strong> ce jour-là ou, faute de taux ce jour-là, le jour précédent le plus proche pour lequel un taux est publié. Un autre taux n'est admis que s'il est acceptable pour le ministre (Loi de l'impôt sur le revenu, article 261).</p>
+  <p>Un client à l'étranger soulève d'autres questions (TPS/TVH, lieu de la fourniture, retenues) : voyez <a href="{{link:international}}">facturer un client étranger</a>.</p>
+  <h2>D'où vient le taux</h2>
+  <p>Quand vous cliquez sur « Obtenir le taux de la Banque du Canada », votre navigateur interroge directement le service Valet de la Banque du Canada, sans passer par nos serveurs ; le montant n'est jamais envoyé (<a href="{{link:privacy}}">confidentialité</a>). Si le service ne répond pas, saisissez le taux publié sur la <a href="https://www.bankofcanada.ca/rates/exchange/daily-exchange-rates/" rel="noopener">page des taux de change quotidiens de la Banque du Canada</a> (en anglais).</p>
+</section>

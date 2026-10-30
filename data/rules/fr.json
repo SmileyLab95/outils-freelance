@@ -1698,6 +1698,10 @@
         {
           "source": "https://bofip.impots.gouv.fr/bofip/1475-PGP.html/identifiant=BOI-TVA-BASE-10-20-40-20-20120912",
           "source_title": "BOFiP, BOI-TVA-BASE-10-20-40-20, § 190 (opérations libellées en devises)"
+        },
+        {
+          "source": "https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html",
+          "source_title": "Taux de change de référence de l'euro, Banque centrale européenne (page en anglais)"
         }
       ],
       "confidence": "high",

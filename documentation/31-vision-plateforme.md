@@ -92,7 +92,7 @@ G compte gratuit, P Pro, ⇄ partenaire signalé.
 | Tarif journalier ou horaire | Calculateurs de TJM et de taux horaire | ✅ | V |
 | Prix d'un projet | Prix au forfait, convertisseur de tarifs | ✅ | V |
 | Augmenter ses tarifs | Calculateur et modèle d'annonce | ✅ | V |
-| Clients en devises | Convertisseur aux taux de référence officiels (BCE, Banque d'Angleterre, Banque du Canada, Réserve fédérale) | ⬜ | V |
+| Clients en devises | Convertisseur aux taux de référence officiels (BCE, HMRC, Banque du Canada ; taux saisi aux États-Unis), [49](49-devises.md) | ✅ | V |
 
 ### 3.4 Vendre et contractualiser
 
@@ -183,7 +183,7 @@ fuseaux horaires des clients, générateur de QR code, convertisseur de devises,
    brouillons et comparatif des solutions de dons prêts le 23/10/2026 ([35](35-offres-et-soutien.md)).
 5. Modules du compte gratuit : prospects, temps passé, dépenses, trésorerie : faits du 23 au 29/10/2026
    ([36](36-depenses-et-registre-des-achats.md) à [39](39-tresorerie.md)).
-6. Outils restants : CGV (France faite le 29/10/2026, [40](40-cgv.md) ; Royaume-Uni, États-Unis et Canada le 30/10/2026, [45](45-cgv-royaume-uni.md), [46](46-cgv-etats-unis.md) et [47](47-cgv-canada.md)), sous-traitance, devises, jours ouvrés (France, Royaume-Uni et États-Unis
+6. Outils restants : CGV (France faite le 29/10/2026, [40](40-cgv.md) ; Royaume-Uni, États-Unis et Canada le 30/10/2026, [45](45-cgv-royaume-uni.md), [46](46-cgv-etats-unis.md) et [47](47-cgv-canada.md)), sous-traitance (Royaume-Uni, États-Unis et Canada le 30/10/2026, [48](48-sous-traitance.md)), devises (le 30/10/2026, [49](49-devises.md)), jours ouvrés (France, Royaume-Uni et États-Unis
    faits le 29/10/2026, [42](42-jours-ouvres.md)), signature d'email (faite le 29/10/2026, [43](43-signature-email.md)),
    guides de protection sociale.
 7. Pro : relances automatiques, signature en ligne, liens de paiement, page publique, plateforme agréée.

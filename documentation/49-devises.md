@@ -94,12 +94,13 @@ page officielle et saisie manuelle.
 
 **Résultat** : montant converti (arrondi au centime), taux utilisé avec sa date et sa source (lien), TVA et total dans
 la monnaie du pays (France, Royaume-Uni), **mention à reporter sur la facture** (copie en un clic) :
-- France, exigibilité au débit ou à la livraison : « Taux de change : 1 € = 1,1130 $ US (taux de référence de la BCE
-  du 29/10/2026). Montant hors taxe : 898,47 € ; TVA (20 %) : 179,69 €. »
-- France, exigibilité à l'encaissement : la conversion au taux du jour est indicative ; mention « Le montant de la TVA
-  en euros sera déterminé au taux de référence de la BCE du jour de l'encaissement. »
-- Royaume-Uni : « Exchange rate: £1 = $1.3456 (HMRC period rate, October 2026). Net value: £743.16. VAT at 20%:
-  £148.63. »
+- France, exigibilité au débit ou à la livraison : « Taux de change : 1 € = 1,1130 USD (taux de référence de la BCE
+  du 29 octobre 2026). Montant hors taxe : 898,47 € ; TVA (20 %) : 179,69 € ; total TTC : 1 078,16 €. »
+- France, exigibilité à l'encaissement : la TVA au taux de la date choisie (celle de l'encaissement) est affichée ;
+  mention « Le montant de la TVA en euros sera déterminé au taux de référence de la BCE du jour de l'encaissement des
+  acomptes ou du prix. »
+- Royaume-Uni : « Exchange rate: £1 = 1.3456 USD (HMRC period rate for October 2026). Net value: £743.16. VAT at
+  20%: £148.63. Total: £891.79. »
 - États-Unis et Canada : ligne pour les livres (« Converted at… ») ; pas de mention obligatoire sur la facture.
 
 **Avertissements** : taux d'information, pas celui de la banque (l'écart et les frais bancaires sont des écarts de
@@ -126,7 +127,22 @@ chaque devise de la liste : une source qui change d'adresse ou de format fait é
 
 ## 5. Réalisation
 
-À compléter.
+Fait le 30/10/2026. Pages `/fr/conversion-devises/`, `/uk/foreign-currency-invoices/`, `/us/foreign-currency-income/`,
+`/ca/foreign-currency-conversion/` et `/ca/fr/conversion-devises/` (menus « Facturer et encaisser » et *Invoicing*,
+après la page « client étranger », qui renvoie désormais à l'outil), écrites par un script puis relues ; moteur
+`engines/currency.js`, script `tools/currency.js`, règles `fx_reference_sources` (partagée), `tva_conversion_devises`,
+`uk_vat_foreign_currency`, `ca_currency_conversion_income_tax`, règle américaine `us_foreign_currency_translation`
+relue mot pour mot et corrigée (la moyenne annuelle de l'IRS n'est plus suggérée, page « international clients »
+comprise). Taux de la BCE affiché avec les décimales publiées (colonne `DECIMALS` : 1,1130). Pages Confidentialité des
+cinq sections : paragraphe sur la conversion de devises ; phrase de la recherche de noms de domaine précisée (le nom
+du site accompagne toute demande d'un site à un autre ; seule l'adresse de la page n'est pas transmise).
+
+Tests : moteur (14 tests, dont la cohérence des cinq pages avec les règles), 12 mutants du moteur et 6 du script de
+page détectés (l'outil de mutation lance désormais la vraie commande, après avoir vérifié qu'elle réussit sans
+mutant) ; script de contrôle (5 tests) et premier contrôle réel dans GitHub Actions (3 sources, 17 devises, aucun
+problème) ; parcours navigateur des cinq pages avec réponses simulées (taux du jour, jour sans taux, date future,
+réseau coupé, réponse 404, format inconnu, taux saisi, sens inverse, copie, enregistrement, accessibilité,
+ordinateur, tablette, mobile) ; captures relues.
 
 ## Annexe : sources lues (30/10/2026, outil « Lire une source officielle »)
 

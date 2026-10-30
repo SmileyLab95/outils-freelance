@@ -2213,9 +2213,15 @@
       "label": "Income tax: converting foreign-currency amounts at the Bank of Canada rate of the day",
       "source": "https://laws-lois.justice.gc.ca/eng/acts/I-3.3/section-261.html",
       "source_title": "Income Tax Act, section 261 (Justice Laws Website)",
+      "more_sources": [
+        {
+          "source": "https://www.bankofcanada.ca/rates/exchange/daily-exchange-rates/",
+          "source_title": "Daily exchange rates - Bank of Canada"
+        }
+      ],
       "confidence": "high",
       "verified_on": "2026-10-30",
-      "note": "Read on 30/10/2026 with the « Lire une source officielle » tool (page modified 2026-10-15, SHA-256 e7948664…8a88). French term: taux de change au comptant. CRA administrative practice (yearly average rate, GST/HST conversion) is on canada.ca, not readable from the work environment: not covered. Excise Tax Act s. 159 read (SHA-256 9c4682eb…3b26): no currency conversion rule there."
+      "note": "Read on 30/10/2026 with the « Lire une source officielle » tool (page modified 2026-10-15, SHA-256 e7948664…8a88). French term: taux de change au comptant. CRA administrative practice (yearly average rate, GST/HST conversion) is on canada.ca, not readable from the work environment: not covered. Excise Tax Act s. 159 read (SHA-256 9c4682eb…3b26): no currency conversion rule there. Bank of Canada daily exchange rates page read on 30/10/2026: daily average rates published once each business day by 16:30 ET, expressed as 1 unit of foreign currency in Canadian dollars, indicative rates only."
     }
   },
   "provinces": {

@@ -1,0 +1,199 @@
+<!--{
+  "id": "currency",
+  "slug": "conversion-devises/",
+  "title": "Facture en devises : conversion au taux de la BCE",
+  "description": "Convertissez une facture en dollars, livres ou francs suisses au taux de référence de la BCE du jour de l'exigibilité : montant en euros, TVA et mention.",
+  "menu": "Conversion de devises",
+  "icon": "💱",
+  "blurb": "Le taux officiel de la BCE, la TVA en euros et la mention pour la facture.",
+  "app": "Conversion de devises au taux de la BCE",
+  "scripts": [
+    "engines/currency.js",
+    "tools/currency.js"
+  ],
+  "rules": "fr",
+  "sources": [
+    "tva_conversion_devises",
+    "tva_exigibilite"
+  ],
+  "priority": 0.8,
+  "faq": [
+    [
+      "Quel taux de change utiliser pour une facture en dollars ?",
+      "Pour la TVA, le dernier taux de référence publié par la Banque centrale européenne connu au jour où la TVA devient exigible (article 266 du code général des impôts, selon le BOFiP). Pour une prestation de services, c'est en général le jour de l'encaissement, sauf option pour les débits."
+    ],
+    [
+      "Puis-je facturer un client en dollars ou en livres ?",
+      "Oui : la facture peut être établie dans toute monnaie, à condition que le montant de la TVA à payer soit déterminé en euros."
+    ],
+    [
+      "Que faut-il écrire sur la facture ?",
+      "Pour éviter les litiges, le BOFiP conseille d'indiquer le taux de change applicable quand la TVA est exigible au débit ou à la livraison, et, quand elle est exigible à l'encaissement, de préciser que le montant de la TVA dépendra du taux de change du jour de l'encaissement. L'outil prépare la mention."
+    ],
+    [
+      "Le taux de la BCE est-il publié tous les jours ?",
+      "Chaque jour ouvré, vers 16 h (heure d'Europe centrale), sauf les jours de fermeture du système de paiement TARGET. Un jour sans taux, c'est le dernier taux publié avant qui est connu : l'outil le retient et affiche sa date."
+    ],
+    [
+      "Pourquoi ma banque ne m'a-t-elle pas versé ce montant en euros ?",
+      "La BCE publie ses taux de référence à titre d'information : votre banque convertit à son propre taux et peut prélever des frais."
+    ]
+  ]
+}-->
+<script type="application/json" id="currency-data">
+{
+ "source": "ecb",
+ "source_name": "BCE",
+ "official_per": "home",
+ "manual_per": "home",
+ "rate_line": {
+  "home": "1 € = {rate} {cur}",
+  "foreign": "1 {cur} = {rate} €"
+ },
+ "label_rate": {
+  "home": "Taux : 1 € = … {cur}"
+ },
+ "named_official": "taux de référence de la BCE du {date}",
+ "named_manual": "taux du {date}",
+ "label_amount_to_home": "Montant hors taxe en devise",
+ "label_amount_to_foreign": "Montant hors taxe en euros",
+ "big_to_home": "Montant hors taxe en euros",
+ "big_to_foreign": "Montant hors taxe en devise",
+ "label_date": {
+  "encaissement": "Date de l'encaissement",
+  "debit": "Date du débit ou de la livraison"
+ },
+ "sub": "{rate_line}, {named}.",
+ "rows": {
+  "net": "Hors taxe",
+  "vat": "TVA ({vat} %)",
+  "amount": "Montant"
+ },
+ "mention": {
+  "vat": "Taux de change : {rate_line} ({named}). Montant hors taxe : {home} ; TVA ({vat} %) : {home_vat} ; total TTC : {home_total}.",
+  "cash": "Le montant de la TVA en euros sera déterminé au taux de référence de la BCE du jour de l'encaissement des acomptes ou du prix.",
+  "novat": "Taux de change : {rate_line} ({named}). Contre-valeur : {home}."
+ },
+ "msg": {
+  "enter_amount": "Indiquez un montant.",
+  "bad_amount": "Vérifiez le montant : saisissez seulement des chiffres, par exemple 1250,50.",
+  "bad_date": "Indiquez une date.",
+  "enter_rate": "Saisissez le taux de change : le nombre de {cur} pour 1 €, par exemple 1,1130.",
+  "bad_rate": "Vérifiez le taux : un nombre positif, avec une virgule ou un point et sans espace, par exemple 1,1130.",
+  "click": "Cliquez sur « Obtenir le taux de la {source} » pour lire le taux de cette date.",
+  "fetching": "Lecture du taux de référence de la {source}…",
+  "future": "La BCE ne publie pas de taux à l'avance : choisissez la date d'aujourd'hui ou une date passée, ou saisissez un taux.",
+  "none": "La BCE n'a publié aucun taux {cur} entre le {start} et le {date}. Vérifiez la date, ou saisissez un taux.",
+  "format": "La réponse de la BCE n'a pas le format attendu : saisissez le taux publié sur le site de la BCE.",
+  "network": "Le taux n'a pas pu être lu (connexion interrompue ou service de la BCE indisponible). Réessayez, ou saisissez le taux publié sur le site de la BCE.",
+  "unpublished": "Aucun taux publié pour cette date.",
+  "earlier": "Pas de taux publié pour ce jour-là (fin de semaine, jour férié, ou taux du jour pas encore publié : il paraît vers 16 h) : c'est le dernier taux publié avant, celui du {date}.",
+  "cash_due": "TVA exigible à l'encaissement : au taux de ce jour, elle s'élève à {home_vat}. Sur la facture, reportez la mention ci-dessous.",
+  "no_vat": "Sans TVA française (franchise en base, client à l'étranger…) : la règle de conversion du BOFiP vise la TVA. Pour vos recettes et votre chiffre d'affaires, nous n'avons pas trouvé de texte officiel lisible : demandez à votre expert-comptable quel montant inscrire.",
+  "always": "La BCE publie ses taux à titre d'information : votre banque convertit à son propre taux, frais en plus."
+ }
+}
+</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Gratuit · taux officiel de la BCE</span>
+    <h1>Facture en devises : conversion au taux de la BCE</h1>
+    <p class="lead">Un client vous paie en dollars, en livres ou en francs suisses ? Obtenez le taux de référence de la Banque centrale européenne de la bonne date, le montant en euros, la TVA en euros et la mention à reporter sur la facture.</p>
+    <ul class="trust"><li>Taux de la BCE de la date choisie</li><li>TVA calculée en euros</li><li>Mention prête à copier</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="cx-form" onsubmit="return false">
+      <h2>Votre montant</h2>
+      <div class="fields">
+        <div class="field full"><label for="cx-direction">Je convertis</label>
+          <select id="cx-direction" name="direction" data-save>
+            <option value="to_home" selected>un montant en devise, en euros</option>
+            <option value="to_foreign">un montant en euros, en devise (devis)</option>
+          </select></div>
+        <div class="field"><label for="cx-amount" id="cx-amount-label">Montant hors taxe en devise</label>
+          <input type="text" inputmode="decimal" id="cx-amount" name="amount" value="1000" autocomplete="off" data-save></div>
+        <div class="field"><label for="cx-currency">Devise</label>
+          <select id="cx-currency" name="currency" data-save>
+            <option value="USD" selected>Dollar américain (USD)</option>
+            <option value="GBP">Livre sterling (GBP)</option>
+            <option value="CAD">Dollar canadien (CAD)</option>
+            <option value="CHF">Franc suisse (CHF)</option>
+            <option value="AUD">Dollar australien (AUD)</option>
+            <option value="JPY">Yen japonais (JPY)</option>
+            <option value="CNY">Yuan chinois (CNY)</option>
+            <option value="HKD">Dollar de Hong Kong (HKD)</option>
+            <option value="INR">Roupie indienne (INR)</option>
+            <option value="MXN">Peso mexicain (MXN)</option>
+            <option value="NZD">Dollar néo-zélandais (NZD)</option>
+            <option value="NOK">Couronne norvégienne (NOK)</option>
+            <option value="SEK">Couronne suédoise (SEK)</option>
+            <option value="SGD">Dollar de Singapour (SGD)</option>
+            <option value="ZAR">Rand sud-africain (ZAR)</option>
+            <option value="BRL">Réal brésilien (BRL)</option>
+            <option value="KRW">Won sud-coréen (KRW)</option>
+          </select></div>
+        <div class="field full"><label for="cx-moment">La TVA est exigible</label>
+          <select id="cx-moment" name="moment" data-save>
+            <option value="encaissement" selected>à l'encaissement (services, cas général)</option>
+            <option value="debit">au débit (sur option) ou à la livraison</option>
+          </select></div>
+        <div class="field"><label for="cx-date" id="cx-date-label">Date de l'encaissement</label>
+          <input type="date" id="cx-date" name="date" aria-describedby="cx-date-hint">
+          <span class="hint" id="cx-date-hint">La BCE publie un taux chaque jour ouvré vers 16 h ; un jour sans taux, l'outil retient le dernier taux publié avant.</span></div>
+        <div class="field"><label for="cx-vat">TVA</label>
+          <select id="cx-vat" name="vat" data-save>
+            <option value="tva_taux_metropole.normal" data-label="Taux normal ({rate} %)" selected>Taux normal</option>
+            <option value="tva_taux_metropole.intermediaire" data-label="Taux intermédiaire ({rate} %)">Taux intermédiaire</option>
+            <option value="tva_taux_metropole.reduit" data-label="Taux réduit ({rate} %)">Taux réduit</option>
+            <option value="tva_taux_metropole.particulier" data-label="Taux particulier ({rate} %)">Taux particulier</option>
+            <option value="">Pas de TVA française (franchise, client à l'étranger…)</option>
+          </select></div>
+        <div class="field full"><label for="cx-method">Taux de change</label>
+          <select id="cx-method" name="method" data-save>
+            <option value="official" selected>Taux de référence de la BCE</option>
+            <option value="manual">Je saisis le taux</option>
+          </select></div>
+        <div class="field full" id="cx-fetch-field"><button type="button" class="btn btn-primary" id="cx-fetch">Obtenir le taux de la BCE</button></div>
+        <div class="field full" id="cx-rate-field" hidden><label for="cx-rate" id="cx-rate-label">Taux : 1 € = … USD</label>
+          <input type="text" inputmode="decimal" id="cx-rate" name="rate" autocomplete="off"></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="result-hero" role="status" aria-atomic="true">
+        <div class="label" id="cx-big-label">Montant hors taxe en euros</div>
+        <div class="big" id="cx-big">–</div>
+        <div class="sub" id="cx-sub">–</div>
+      </div>
+      <div class="card" id="cx-table" style="margin-top: 16px; padding: 18px;" hidden>
+        <table class="mini-table compare-table">
+          <caption class="sr-only">Montants dans les deux monnaies</caption>
+          <thead><tr><th scope="col"><span class="sr-only">Montant</span></th><th scope="col" id="cx-col-foreign">USD</th><th scope="col">EUR</th></tr></thead>
+          <tbody>
+            <tr><th scope="row" id="cx-row-net-label">–</th><td id="cx-net-foreign">–</td><td id="cx-net-home">–</td></tr>
+            <tr id="cx-row-vat"><th scope="row" id="cx-row-vat-label">–</th><td id="cx-vat-foreign">–</td><td id="cx-vat-home">–</td></tr>
+            <tr id="cx-row-total"><th scope="row">Total TTC</th><td id="cx-total-foreign">–</td><td id="cx-total-home">–</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card" id="cx-mention-box" style="margin-top: 16px; padding: 18px;" hidden>
+        <h2 style="font-size: 1.05rem; margin: 0 0 8px;">Mention à reporter sur la facture</h2>
+        <p id="cx-mention" style="margin: 0 0 12px;">–</p>
+        <button type="button" class="btn btn-ghost" id="cx-copy">Copier la mention</button>
+      </div>
+      <p class="notice" id="cx-notice" aria-live="polite" style="margin-top: 16px;">–</p>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>La règle : le taux de la BCE du jour où la TVA est exigible</h2>
+  <p>Quand un élément du prix est exprimé dans une autre monnaie que l'euro, la TVA se calcule sur sa contre-valeur en euros, au <strong>dernier taux de référence publié par la Banque centrale européenne connu au jour de l'exigibilité de la TVA</strong> (article 266 du code général des impôts, présenté au BOFiP ; la Banque de France reprend ces taux). Pour une prestation de services, la TVA est en général exigible à l'<strong>encaissement</strong> du prix ou des acomptes, sauf option pour les débits ; pour une livraison de biens, à la livraison.</p>
+  <p>Vous pouvez donc facturer en dollars ou en livres : la facture peut être établie dans toute monnaie, à condition que le montant de la TVA à payer soit déterminé en euros. Le BOFiP conseille d'indiquer sur la facture le taux de change applicable (exigibilité au débit ou à la livraison), ou de préciser que le montant de la TVA dépendra du taux du jour de l'encaissement (exigibilité à l'encaissement). Les autres mentions de la facture restent obligatoires : voyez les <a href="{{link:invoice-rules}}">mentions obligatoires</a> et, pour un client à l'étranger, le guide <a href="{{link:international}}">facturer un client étranger</a> (autoliquidation, TVA non applicable).</p>
+  <h2>D'où vient le taux</h2>
+  <p>Quand vous cliquez sur « Obtenir le taux de la BCE », votre navigateur demande le taux directement au <a href="https://data-api.ecb.europa.eu/" rel="noopener">portail de données de la BCE</a>, sans passer par nos serveurs ; le montant n'est jamais envoyé (<a href="{{link:privacy}}">confidentialité</a>). Si le service ne répond pas, saisissez le taux publié sur la <a href="https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html" rel="noopener">page des taux de référence de la BCE</a>.</p>
+</section>

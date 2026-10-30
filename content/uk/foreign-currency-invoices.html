@@ -1,0 +1,186 @@
+<!--{
+  "id": "currency",
+  "slug": "foreign-currency-invoices/",
+  "title": "Foreign Currency Invoices: Convert to Sterling for VAT",
+  "description": "Invoicing in dollars or euros? Convert at the HMRC period rate or the UK market rate and get the sterling net value, VAT and invoice wording.",
+  "menu": "Foreign currency invoices",
+  "icon": "💱",
+  "blurb": "HMRC's monthly rate, the sterling VAT and the wording for your invoice.",
+  "app": "Foreign Currency Invoice Converter (HMRC rates)",
+  "scripts": [
+    "engines/currency.js",
+    "tools/currency.js"
+  ],
+  "rules": "uk",
+  "sources": [
+    "uk_vat_foreign_currency"
+  ],
+  "priority": 0.8,
+  "faq": [
+    [
+      "Which exchange rate do I use for VAT?",
+      "One of two standard rates: the UK market selling rate at the time of supply (rates published in national newspapers are acceptable), or the HMRC period rate of exchange, which stays the same for a whole period, usually a calendar month. Any other rate needs HMRC's approval, and forward rates can't be used."
+    ],
+    [
+      "Can I invoice in euros or dollars?",
+      "Yes, in any currency. If UK VAT is due, the invoice must also show in sterling the total net value and the VAT at each rate. You don't need sterling figures for each line."
+    ],
+    [
+      "Can I switch between the market rate and the HMRC period rate?",
+      "You can use the period rate for all your supplies or just for one type of supply. If you use it for one type only, note the details in your records; you don't need to tell HMRC. If you change your mind later, you need HMRC's agreement."
+    ],
+    [
+      "What if I invoice before the work is done?",
+      "An invoice issued before the supply must be in sterling for VAT purposes. You can show the foreign amounts too, as long as it's clear that the value for VAT is the sterling figure."
+    ]
+  ]
+}-->
+<script type="application/json" id="currency-data">
+{
+ "source": "hmrc",
+ "source_name": "HMRC",
+ "official_per": "home",
+ "manual_per": "home",
+ "rate_line": {
+  "home": "£1 = {rate} {cur}",
+  "foreign": "1 {cur} = £{rate}"
+ },
+ "label_rate": {
+  "home": "Rate: £1 = … {cur}"
+ },
+ "named_official": "HMRC period rate for {month}",
+ "named_manual": "UK market selling rate on {date}",
+ "label_amount_to_home": "Net amount in the foreign currency",
+ "label_amount_to_foreign": "Net amount in pounds",
+ "big_to_home": "Net value in sterling",
+ "big_to_foreign": "Net amount in the foreign currency",
+ "label_date": {
+  "default": "Date of supply (time of supply)"
+ },
+ "sub": "{rate_line}, {named}.",
+ "rows": {
+  "net": "Net",
+  "vat": "VAT at {vat}%",
+  "amount": "Amount"
+ },
+ "mention": {
+  "vat": "Exchange rate: {rate_line} ({named}). Net value: {home}. VAT at {vat}%: {home_vat}. Total: {home_total}.",
+  "novat": "Exchange rate: {rate_line} ({named}). Sterling value: {home}."
+ },
+ "msg": {
+  "enter_amount": "Enter an amount.",
+  "bad_amount": "Check the amount: use numbers only, for example 1250.50.",
+  "bad_date": "Enter a date.",
+  "enter_rate": "Enter the UK market selling rate: how many {cur} for £1, for example 1.3456.",
+  "bad_rate": "Check the rate: a positive number with a decimal point and no spaces, for example 1.3456.",
+  "click": "Click “Get the HMRC rate” to read the period rate for this month.",
+  "fetching": "Reading the HMRC period rate…",
+  "future": "No rate for this date.",
+  "none": "No HMRC rate for {cur} for this month.",
+  "format": "HMRC's rates file isn't in the expected format, or doesn't have {cur}: enter the rate from HMRC's exchange rates page.",
+  "network": "The rate couldn't be read (connection lost or HMRC service unavailable). Try again, or enter the rate from HMRC's exchange rates page.",
+  "unpublished": "HMRC hasn't published its rates for {month} yet. Choose another date, or enter the UK market selling rate.",
+  "earlier": "",
+  "cash_due": "",
+  "no_vat": "No UK VAT on this invoice: the sterling figure is for your records. Converting income for Self Assessment isn't covered here.",
+  "always": "Your bank converts at its own rate, plus fees: what you receive can differ from this sterling figure."
+ }
+}
+</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · HMRC exchange rates</span>
+    <h1>Foreign currency invoices: convert to sterling for VAT</h1>
+    <p class="lead">Invoicing a client in dollars, euros or Swiss francs? Get HMRC's period rate for the month, the sterling net value and VAT, and the wording to put on your invoice.</p>
+    <ul class="trust"><li>HMRC period rate for the month</li><li>VAT in sterling</li><li>Invoice wording to copy</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="cx-form" onsubmit="return false">
+      <h2>Your amount</h2>
+      <div class="fields">
+        <div class="field full"><label for="cx-direction">I'm converting</label>
+          <select id="cx-direction" name="direction" data-save>
+            <option value="to_home" selected>a foreign currency amount into pounds</option>
+            <option value="to_foreign">an amount in pounds into a foreign currency (quote)</option>
+          </select></div>
+        <div class="field"><label for="cx-amount" id="cx-amount-label">Net amount in the foreign currency</label>
+          <input type="text" inputmode="decimal" id="cx-amount" name="amount" value="1000" autocomplete="off" data-save></div>
+        <div class="field"><label for="cx-currency">Currency</label>
+          <select id="cx-currency" name="currency" data-save>
+            <option value="EUR">Euro (EUR)</option>
+            <option value="USD" selected>US dollar (USD)</option>
+            <option value="CAD">Canadian dollar (CAD)</option>
+            <option value="CHF">Swiss franc (CHF)</option>
+            <option value="AUD">Australian dollar (AUD)</option>
+            <option value="JPY">Japanese yen (JPY)</option>
+            <option value="CNY">Chinese yuan (CNY)</option>
+            <option value="HKD">Hong Kong dollar (HKD)</option>
+            <option value="INR">Indian rupee (INR)</option>
+            <option value="MXN">Mexican peso (MXN)</option>
+            <option value="NZD">New Zealand dollar (NZD)</option>
+            <option value="NOK">Norwegian krone (NOK)</option>
+            <option value="SEK">Swedish krona (SEK)</option>
+            <option value="SGD">Singapore dollar (SGD)</option>
+            <option value="ZAR">South African rand (ZAR)</option>
+            <option value="BRL">Brazilian real (BRL)</option>
+            <option value="KRW">South Korean won (KRW)</option>
+          </select></div>
+        <div class="field"><label for="cx-date" id="cx-date-label">Date of supply (time of supply)</label>
+          <input type="date" id="cx-date" name="date" aria-describedby="cx-date-hint">
+          <span class="hint" id="cx-date-hint">The HMRC period rate applies to the whole calendar month of this date.</span></div>
+        <div class="field"><label for="cx-vat">UK VAT</label>
+          <select id="cx-vat" name="vat" data-save>
+            <option value="vat_standard_rate" data-label="Standard rate ({rate}%)" selected>Standard rate</option>
+            <option value="vat_reduced_rate" data-label="Reduced rate ({rate}%)">Reduced rate</option>
+            <option value="vat_zero_rate" data-label="Zero rate ({rate}%)">Zero rate</option>
+            <option value="">No UK VAT (not registered, or outside the scope)</option>
+          </select></div>
+        <div class="field full"><label for="cx-method">Exchange rate</label>
+          <select id="cx-method" name="method" data-save>
+            <option value="official" selected>HMRC period rate (monthly)</option>
+            <option value="manual">UK market selling rate (I'll enter it)</option>
+          </select></div>
+        <div class="field full" id="cx-fetch-field"><button type="button" class="btn btn-primary" id="cx-fetch">Get the HMRC rate</button></div>
+        <div class="field full" id="cx-rate-field" hidden><label for="cx-rate" id="cx-rate-label">Rate: £1 = … USD</label>
+          <input type="text" inputmode="decimal" id="cx-rate" name="rate" autocomplete="off"></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="result-hero" role="status" aria-atomic="true">
+        <div class="label" id="cx-big-label">Net value in sterling</div>
+        <div class="big" id="cx-big">–</div>
+        <div class="sub" id="cx-sub">–</div>
+      </div>
+      <div class="card" id="cx-table" style="margin-top: 16px; padding: 18px;" hidden>
+        <table class="mini-table compare-table">
+          <caption class="sr-only">Amounts in both currencies</caption>
+          <thead><tr><th scope="col"><span class="sr-only">Amount</span></th><th scope="col" id="cx-col-foreign">USD</th><th scope="col">GBP</th></tr></thead>
+          <tbody>
+            <tr><th scope="row" id="cx-row-net-label">–</th><td id="cx-net-foreign">–</td><td id="cx-net-home">–</td></tr>
+            <tr id="cx-row-vat"><th scope="row" id="cx-row-vat-label">–</th><td id="cx-vat-foreign">–</td><td id="cx-vat-home">–</td></tr>
+            <tr id="cx-row-total"><th scope="row">Total</th><td id="cx-total-foreign">–</td><td id="cx-total-home">–</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card" id="cx-mention-box" style="margin-top: 16px; padding: 18px;" hidden>
+        <h2 style="font-size: 1.05rem; margin: 0 0 8px;">Wording for your invoice</h2>
+        <p id="cx-mention" style="margin: 0 0 12px;">–</p>
+        <button type="button" class="btn btn-ghost" id="cx-copy">Copy the wording</button>
+      </div>
+      <p class="notice" id="cx-notice" aria-live="polite" style="margin-top: 16px;">–</p>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>The rule: sterling figures for VAT</h2>
+  <p>You can invoice in any currency, but sales must be converted into sterling for VAT, when you record them. If UK VAT is due, your invoice must also show in sterling the <strong>total net value at each VAT rate</strong> and the <strong>VAT at each rate</strong> (not each line). There are two standard ways to convert: the <strong>UK market selling rate at the time of supply</strong> (newspaper rates are acceptable), or the <strong>HMRC period rate of exchange</strong>, the same rate for a whole period, usually a calendar month. Using another rate needs HMRC's approval.</p>
+  <p>The rest of the invoice still has to meet the usual rules: see <a href="{{link:invoice-rules}}">what to put on an invoice</a> and, for a client abroad, <a href="{{link:international}}">invoicing overseas clients</a> (reverse charge, outside the scope of UK VAT).</p>
+  <h2>Where the rate comes from</h2>
+  <p>When you click “Get the HMRC rate”, your browser downloads the month's rates file straight from <a href="https://www.trade-tariff.service.gov.uk/exchange_rates" rel="noopener">HMRC's exchange rates service</a>, without going through our servers; the amount is never sent (<a href="{{link:privacy}}">privacy</a>). If the service doesn't answer, enter the rate from that page, or the UK market selling rate.</p>
+</section>

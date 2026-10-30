@@ -1,0 +1,178 @@
+<!--{
+  "id": "currency",
+  "slug": "foreign-currency-conversion/",
+  "title": "Foreign Currency: Bank of Canada Rate Converter",
+  "description": "Paid in US dollars or euros? Convert to Canadian dollars at the Bank of Canada rate for the day, as the Income Tax Act requires, with a line for your books.",
+  "menu": "Foreign currency converter",
+  "icon": "💱",
+  "blurb": "The Bank of Canada rate of the day, as the Income Tax Act asks.",
+  "app": "Bank of Canada Exchange Rate Converter",
+  "scripts": [
+    "engines/currency.js",
+    "tools/currency.js"
+  ],
+  "rules": "ca",
+  "sources": [
+    "ca_currency_conversion_income_tax"
+  ],
+  "priority": 0.8,
+  "faq": [
+    [
+      "Which exchange rate do I use for income tax?",
+      "The Income Tax Act converts an amount in another currency using the relevant spot rate for the day on which the amount arose: the rate quoted by the Bank of Canada on that day (section 261)."
+    ],
+    [
+      "What if there's no Bank of Canada rate that day?",
+      "On a weekend or a holiday, the Act uses the closest preceding day for which the Bank of Canada quoted a rate. The converter does the same and shows the date it used."
+    ],
+    [
+      "Can I use my bank's rate instead?",
+      "The Act also allows another rate of exchange that is acceptable to the Minister. The CRA explains which rates it accepts on canada.ca, which we could not read: check with the CRA or your accountant before using another rate."
+    ],
+    [
+      "Does this cover GST/HST?",
+      "No: the converter follows the income tax rule. Converting GST/HST amounts isn't covered."
+    ]
+  ]
+}-->
+<script type="application/json" id="currency-data">
+{
+ "source": "boc",
+ "source_name": "Bank of Canada",
+ "official_per": "foreign",
+ "manual_per": "foreign",
+ "rate_line": {
+  "foreign": "1 {cur} = {rate} CAD",
+  "home": "C$1 = {rate} {cur}"
+ },
+ "label_rate": {
+  "foreign": "Rate: 1 {cur} = … CAD"
+ },
+ "named_official": "Bank of Canada rate for {date}",
+ "named_manual": "rate for {date}",
+ "label_amount_to_home": "Amount in the foreign currency",
+ "label_amount_to_foreign": "Amount in Canadian dollars",
+ "big_to_home": "Amount in Canadian dollars",
+ "big_to_foreign": "Amount in the foreign currency",
+ "label_date": {
+  "default": "Date the amount arose"
+ },
+ "sub": "{rate_line}, {named}.",
+ "rows": {
+  "net": "Amount",
+  "vat": "",
+  "amount": "Amount"
+ },
+ "mention": {
+  "novat": "Converted at {rate_line} ({named}): {home}."
+ },
+ "msg": {
+  "enter_amount": "Enter an amount.",
+  "bad_amount": "Check the amount: use numbers only, for example 1250.50.",
+  "bad_date": "Enter a date.",
+  "enter_rate": "Enter the exchange rate: how many Canadian dollars for 1 {cur}, for example 1.3960. The Income Tax Act allows another rate only if it is acceptable to the Minister.",
+  "bad_rate": "Check the rate: a positive number with a decimal point and no spaces, for example 1.3960.",
+  "click": "Click “Get the Bank of Canada rate” to read the rate for this date.",
+  "fetching": "Reading the Bank of Canada rate…",
+  "future": "The Bank of Canada doesn't publish rates in advance: choose today or a past date, or enter a rate.",
+  "none": "No Bank of Canada rate for {cur} between {start} and {date}. Check the date, or enter a rate.",
+  "format": "The Bank of Canada's answer isn't in the expected format: enter the rate from the Bank of Canada's daily exchange rates page.",
+  "network": "The rate couldn't be read (connection lost or Bank of Canada service unavailable). Try again, or enter the rate from the Bank of Canada's daily exchange rates page.",
+  "unpublished": "No rate for this date.",
+  "earlier": "No rate for that day (weekend, holiday, or today's rate not out yet: it is published by 4:30 p.m. ET): the Income Tax Act then uses the closest preceding day with a rate, {date}.",
+  "cash_due": "",
+  "no_vat": "",
+  "always": "Converting GST/HST amounts isn't covered here. Your bank converts at its own rate, plus fees."
+ }
+}
+</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · Bank of Canada rates</span>
+    <h1>Foreign currency: convert at the Bank of Canada rate</h1>
+    <p class="lead">Paid in US dollars, euros or pounds? Get the Bank of Canada rate for the day the amount arose, the amount in Canadian dollars and a line for your books.</p>
+    <ul class="trust"><li>Bank of Canada rate of the day</li><li>Closest preceding day on holidays</li><li>Line for your records</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="cx-form" onsubmit="return false">
+      <h2>Your amount</h2>
+      <div class="fields">
+        <div class="field full"><label for="cx-direction">I'm converting</label>
+          <select id="cx-direction" name="direction" data-save>
+            <option value="to_home" selected>a foreign currency amount into Canadian dollars</option>
+            <option value="to_foreign">an amount in Canadian dollars into a foreign currency (quote)</option>
+          </select></div>
+        <div class="field"><label for="cx-amount" id="cx-amount-label">Amount in the foreign currency</label>
+          <input type="text" inputmode="decimal" id="cx-amount" name="amount" value="1000" autocomplete="off" data-save></div>
+        <div class="field"><label for="cx-currency">Currency</label>
+          <select id="cx-currency" name="currency" data-save>
+            <option value="EUR">Euro (EUR)</option>
+            <option value="USD" selected>US dollar (USD)</option>
+            <option value="GBP">Pound sterling (GBP)</option>
+            <option value="CHF">Swiss franc (CHF)</option>
+            <option value="AUD">Australian dollar (AUD)</option>
+            <option value="JPY">Japanese yen (JPY)</option>
+            <option value="CNY">Chinese yuan (CNY)</option>
+            <option value="HKD">Hong Kong dollar (HKD)</option>
+            <option value="INR">Indian rupee (INR)</option>
+            <option value="MXN">Mexican peso (MXN)</option>
+            <option value="NZD">New Zealand dollar (NZD)</option>
+            <option value="NOK">Norwegian krone (NOK)</option>
+            <option value="SEK">Swedish krona (SEK)</option>
+            <option value="SGD">Singapore dollar (SGD)</option>
+            <option value="ZAR">South African rand (ZAR)</option>
+            <option value="BRL">Brazilian real (BRL)</option>
+            <option value="KRW">South Korean won (KRW)</option>
+          </select></div>
+        <div class="field full"><label for="cx-date" id="cx-date-label">Date the amount arose</label>
+          <input type="date" id="cx-date" name="date" aria-describedby="cx-date-hint">
+          <span class="hint" id="cx-date-hint">The day on which the amount arose (Income Tax Act, s. 261(2)(b)). The Bank of Canada publishes a rate each business day.</span></div>
+        <div class="field full"><label for="cx-method">Exchange rate</label>
+          <select id="cx-method" name="method" data-save>
+            <option value="official" selected>Bank of Canada rate</option>
+            <option value="manual">I'll enter another rate</option>
+          </select></div>
+        <div class="field full" id="cx-fetch-field"><button type="button" class="btn btn-primary" id="cx-fetch">Get the Bank of Canada rate</button></div>
+        <div class="field full" id="cx-rate-field" hidden><label for="cx-rate" id="cx-rate-label">Rate: 1 USD = … CAD</label>
+          <input type="text" inputmode="decimal" id="cx-rate" name="rate" autocomplete="off"></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="result-hero" role="status" aria-atomic="true">
+        <div class="label" id="cx-big-label">Amount in Canadian dollars</div>
+        <div class="big" id="cx-big">–</div>
+        <div class="sub" id="cx-sub">–</div>
+      </div>
+      <div class="card" id="cx-table" style="margin-top: 16px; padding: 18px;" hidden>
+        <table class="mini-table compare-table">
+          <caption class="sr-only">Amounts in both currencies</caption>
+          <thead><tr><th scope="col"><span class="sr-only">Amount</span></th><th scope="col" id="cx-col-foreign">USD</th><th scope="col">CAD</th></tr></thead>
+          <tbody>
+            <tr><th scope="row" id="cx-row-net-label">–</th><td id="cx-net-foreign">–</td><td id="cx-net-home">–</td></tr>
+            <tr id="cx-row-vat" hidden><th scope="row" id="cx-row-vat-label">–</th><td id="cx-vat-foreign">–</td><td id="cx-vat-home">–</td></tr>
+            <tr id="cx-row-total" hidden><th scope="row">Total</th><td id="cx-total-foreign">–</td><td id="cx-total-home">–</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card" id="cx-mention-box" style="margin-top: 16px; padding: 18px;" hidden>
+        <h2 style="font-size: 1.05rem; margin: 0 0 8px;">Line for your records</h2>
+        <p id="cx-mention" style="margin: 0 0 12px;">–</p>
+        <button type="button" class="btn btn-ghost" id="cx-copy">Copy the line</button>
+      </div>
+      <p class="notice" id="cx-notice" aria-live="polite" style="margin-top: 16px;">–</p>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>The rule: the Bank of Canada rate of the day</h2>
+  <p>For income tax, an amount in another currency is converted into Canadian dollars using the <strong>relevant spot rate for the day on which the amount arose</strong>: the <strong>rate quoted by the Bank of Canada</strong> on that day or, if none was quoted that day, on the closest preceding day with a rate. Another rate of exchange can be used only if it is acceptable to the Minister (Income Tax Act, section 261).</p>
+  <p>A client abroad raises other questions (GST/HST, place of supply, withholding): see <a href="{{link:international}}">invoicing clients outside Canada</a>.</p>
+  <h2>Where the rate comes from</h2>
+  <p>When you click “Get the Bank of Canada rate”, your browser asks the Bank of Canada's Valet service directly, without going through our servers; the amount is never sent (<a href="{{link:privacy}}">privacy</a>). If the service doesn't answer, enter the rate from the <a href="https://www.bankofcanada.ca/rates/exchange/daily-exchange-rates/" rel="noopener">Bank of Canada's daily exchange rates</a>.</p>
+</section>

@@ -314,13 +314,22 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   pays : intérêts légaux et IR35 au Royaume-Uni, contenu exigé par les lois *Freelance Isn't Free* (date de remise des
   factures, moyen de paiement), W-9 et 1099-NEC aux États-Unis, taux annuel et Code civil du Québec (art. 2101,
   2125 à 2129) au Canada ; France en attente de la loi de 1975 sur Légifrance ([48](48-sous-traitance.md), D50, D51).
+- **Clients en devises, quatre pays (30/10/2026)** : outil de conversion (menus « Facturer et encaisser » et
+  *Invoicing*) : taux de référence de la BCE du jour de l'exigibilité de la TVA (France, mention selon l'encaissement ou
+  le débit, d'après le BOFiP), taux mensuel du HMRC ou taux du marché (Royaume-Uni, totaux en livres), taux de la
+  Banque du Canada du jour (Loi de l'impôt sur le revenu, art. 261), taux saisi du jour du paiement (États-Unis) ; le
+  navigateur lit le taux à la source au clic, sans cookie ni adresse de la page ; contrôle mensuel des sources ; page
+  américaine « international clients » corrigée (moyenne annuelle de l'IRS non prévue par les pages lues) ; pages
+  Confidentialité précisées ([49](49-devises.md), D52).
 - **Prochaines actions de Claude** : refonte, suite ([31](31-vision-plateforme.md) § 5) : les quatre modules du compte
   gratuit sont faits (étape 5) ; étape 6, outils restants (CGV : faites dans les quatre pays ;
   lois des autres provinces sur la protection du consommateur à lire pour les détailler ; le règlement albertain sur les
   contrats Internet expire le 30/09/2028 : à revérifier) ; jours ouvrés au Canada (jours fériés fédéraux et provinciaux) : en attente de l'accès à canada.ca, refusé
   depuis l'environnement de travail et sans réponse depuis l'outil de lecture des sources le 29/10/2026 ; sous-traitance
   (Royaume-Uni, États-Unis et Canada faits le 30/10/2026, [48](48-sous-traitance.md) ; France en attente de la lecture de la loi du 31 décembre 1975 sur Légifrance, décision D50),
-  devises (convertisseur aux taux de référence officiels), guides de protection sociale) ;
+  devises (faites le 30/10/2026, [49](49-devises.md) ; à étudier : taux H.10 de la Réserve fédérale lisible depuis un
+  navigateur pour les États-Unis ; conversion pour l'impôt sur le revenu au Royaume-Uni ; pratiques de l'ARC, taux
+  moyen annuel et TPS/TVH, dès que canada.ca est lisible), guides de protection sociale) ;
   ajouter les taux du 1er semestre 2027 dès leur publication
   (fin décembre 2026 : intérêt légal par arrêté, taux de la BCE en vigueur au 1er janvier ; tables `taux_interet_legal`
   et `taux_bce_refinancement`, utilisées par le calculateur de pénalités et les CGV) ; *bank holidays* de 2029 dès que
@@ -348,7 +357,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   `www.economie.gouv.fr` dans les réglages réseau de l'environnement cloud (menu de l'environnement dans la barre de
   titre de la session, *Edit*, *Network access*, *Allowed domains*, en laissant cochée l'autorisation des gestionnaires
   de paquets ; mode d'emploi : https://code.claude.com/docs/en/cloud-environments#network-access) : nécessaire pour
-  lire les sources canadiennes (jours fériés, mises à jour des règles) et la loi du 31 décembre 1975 sur la
+  lire les sources canadiennes (jours fériés, mises à jour des règles, pratiques de l'ARC sur la conversion des devises) et la loi du 31 décembre 1975 sur la
   sous-traitance (Légifrance et le ministère de l'Économie refusent l'outil de lecture des sources, réponse 403 le
   30/10/2026), ainsi que les articles R123-237 et L131-3 à L131-6 en attente ; questions à poser à l'expert-comptable ou à l'avocat : l'indemnité forfaitaire
   de 40 € s'applique-t-elle aux factures des professions libérales et des prestataires non commerçants (la fiche

@@ -53,12 +53,22 @@ test("BCE : lecture du CSV (virgules entre guillemets), tri par date, une seule 
   const usd = C.parseEcb(ECB, "USD");
   assert.deepEqual(usd.map((o) => o.date), ["2026-10-23", "2026-10-26", "2026-10-29"]);
   assert.equal(usd[2].value, 1.113);
-  assert.equal(usd[2].text, "1.113", "valeur gardée telle que publiée");
+  assert.equal(usd[2].text, "1.1130", "décimales publiées par la BCE (colonne DECIMALS = 4)");
+  assert.equal(usd[1].text, "1.1188");
   assert.equal(C.parseEcb(ECB, "GBP").length, 1);
   assert.deepEqual(C.parseEcb(ECB, "JPY"), [], "devise absente : aucune observation");
   assert.equal(C.parseEcb("date,valeur\n2026-10-29,1.1", "USD"), null, "format inconnu");
   assert.equal(C.parseEcb("", "USD"), null);
   assert.deepEqual(C.parseEcb(ECB_HEAD + "\n" + ecbRow("USD", "2026-10-29", "NaN"), "USD"), [], "valeur illisible ignorée");
+  const noDecimals = "CURRENCY,TIME_PERIOD,OBS_VALUE\nUSD,2026-10-29,1.113\n";
+  assert.equal(C.parseEcb(noDecimals, "USD")[0].text, "1.113", "sans colonne DECIMALS : valeur telle que publiée");
+  const jpy = ECB_HEAD + "\n" + ecbRow("JPY", "2026-10-26", "176.15").replace(",,,4,,4F0", ",,,2,,4F0");
+  assert.equal(C.parseEcb(jpy, "JPY")[0].text, "176.15", "yen : 2 décimales");
+  const more = ECB_HEAD + "\n" + ecbRow("USD", "2026-10-26", "1.1188").replace(",,,4,,4F0", ",,,2,,4F0");
+  assert.equal(C.parseEcb(more, "USD")[0].text, "1.1188", "plus de décimales que la colonne DECIMALS : valeur jamais tronquée");
+  for (const bad of ["1e3", "Infinity", "0x10", " "]) {
+    assert.deepEqual(C.parseEcb(ECB_HEAD + "\n" + ecbRow("USD", "2026-10-26", bad), "USD"), [], `valeur « ${bad} » refusée`);
+  }
 });
 
 test("dernier taux publié au plus tard à la date : fin de semaine et jour sans taux → jour ouvré précédent", () => {
@@ -148,4 +158,34 @@ test("taux saisi : virgule ou point décimal, sans séparateur de milliers ; zé
 test("remplissage des textes : clés connues remplacées, clés absentes laissées visibles", () => {
   assert.equal(C.fill("1 € = {rate} {cur}", { rate: "1,1130", cur: "USD" }), "1 € = 1,1130 USD");
   assert.equal(C.fill("{a} {b}", { a: "x" }), "x {b}");
+});
+
+// Pages de l'outil : mêmes devises que la règle (sans la monnaie du pays), textes complets, sources de la page.
+import { readFileSync } from "node:fs";
+const PAGES = { fr: ["conversion-devises", "EUR", "fr"], uk: ["foreign-currency-invoices", "GBP", "uk"], us: ["foreign-currency-income", "USD", "us"],
+  ca: ["foreign-currency-conversion", "CAD", "ca"], "ca-fr": ["conversion-devises", "CAD", "ca"] };
+
+test("pages : devises de la règle, textes sans repère non rempli, règles citées existantes", () => {
+  for (const [section, [slug, home, country]] of Object.entries(PAGES)) {
+    const html = readFileSync(new URL(`../../content/${section}/${slug}.html`, import.meta.url), "utf8");
+    const front = JSON.parse(html.slice(4, html.indexOf("}-->") + 1));
+    assert.equal(front.id, "currency", section);
+    const select = html.slice(html.indexOf('id="cx-currency"'), html.indexOf("</select>", html.indexOf('id="cx-currency"')));
+    const codes = [...select.matchAll(/<option value="([A-Z]{3})"/g)].map((m) => m[1]);
+    assert.deepEqual(codes, SOURCES.currencies.filter((c) => c !== home), `${section} : devises proposées`);
+    const L = JSON.parse(html.slice(html.indexOf('id="currency-data">') + 19, html.indexOf("</script>")));
+    const vars = { rate_line: "x", named: "x", cur: "USD", home: "x", home_vat: "x", home_total: "x", foreign: "x", foreign_vat: "x",
+      foreign_total: "x", vat: "20", date: "x", month: "x", source: "x", start: "x", rate: "1" };
+    const texts = [...Object.values(L.mention), ...Object.values(L.msg), L.sub, L.named_manual, ...Object.values(L.rate_line), ...Object.values(L.label_rate)];
+    if (L.source) texts.push(L.named_official);
+    for (const text of texts) assert.ok(!/\{\w+\}/.test(C.fill(text, vars)), `${section} : « ${text} »`);
+    assert.ok(L.rate_line[L.manual_per] && L.label_rate[L.manual_per], `${section} : texte du taux saisi`);
+    if (L.source) assert.ok(L.rate_line[L.official_per] && ["ecb", "hmrc", "boc"].includes(L.source), `${section} : source officielle`);
+    const rules = ruleValues(country);
+    for (const key of front.sources) assert.ok(key in rules, `${section} : règle ${key}`);
+    for (const m of html.matchAll(/<option value="([a-z_.]+)" data-label=/g)) {
+      const v = m[1].split(".").reduce((o, k) => o?.[k], rules);
+      assert.ok(typeof v === "number" && v >= 0 && v < 1, `${section} : taux de TVA ${m[1]}`);
+    }
+  }
 });

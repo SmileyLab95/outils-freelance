@@ -1,0 +1,174 @@
+<!--{
+  "id": "currency",
+  "slug": "foreign-currency-income/",
+  "title": "Foreign Currency Income: Convert to US Dollars",
+  "description": "Paid in euros, pounds or Canadian dollars? Convert each payment to US dollars at the rate on the day you got it, as the IRS asks, with a line for your books.",
+  "menu": "Foreign currency income",
+  "icon": "💱",
+  "blurb": "Each foreign payment in US dollars, at the rate on the day you got it.",
+  "app": "Foreign Currency Income Converter",
+  "scripts": [
+    "engines/currency.js",
+    "tools/currency.js"
+  ],
+  "rules": "us",
+  "sources": [
+    "us_foreign_currency_translation"
+  ],
+  "priority": 0.7,
+  "faq": [
+    [
+      "Which exchange rate does the IRS want?",
+      "There's no official IRS exchange rate. If your functional currency is the US dollar, as for a US sole proprietor, translate each amount at the exchange rate prevailing when you receive, pay or accrue it; if there's more than one rate, use the one that most properly reflects your income. The IRS generally accepts any posted exchange rate that is used consistently."
+    ],
+    [
+      "Where do I find a posted rate?",
+      "From your bank, or from the government sources the IRS points to, such as the Treasury Department and the Federal Reserve. Use the same source every time."
+    ],
+    [
+      "Can I use the IRS yearly average rates instead?",
+      "The IRS publishes yearly average rates, but the IRS pages we read don't say when a yearly average can replace the rate of the day for business income. Ask your tax professional before using them for your Schedule C."
+    ],
+    [
+      "Can I pay my US taxes in another currency?",
+      "No: payments of US tax must be made to the IRS in US dollars."
+    ]
+  ]
+}-->
+<script type="application/json" id="currency-data">
+{
+ "source": null,
+ "source_name": "",
+ "official_per": "foreign",
+ "manual_per": "foreign",
+ "rate_line": {
+  "foreign": "1 {cur} = {rate} USD",
+  "home": "$1 = {rate} {cur}"
+ },
+ "label_rate": {
+  "foreign": "Rate: 1 {cur} = … USD"
+ },
+ "named_official": "",
+ "named_manual": "rate on {date}",
+ "label_amount_to_home": "Amount in the foreign currency",
+ "label_amount_to_foreign": "Amount in US dollars",
+ "big_to_home": "Amount in US dollars",
+ "big_to_foreign": "Amount in the foreign currency",
+ "label_date": {
+  "default": "Date you received the payment"
+ },
+ "sub": "{rate_line}, {named}.",
+ "rows": {
+  "net": "Amount",
+  "vat": "",
+  "amount": "Amount"
+ },
+ "mention": {
+  "novat": "Converted at {rate_line} ({named}): {home}."
+ },
+ "msg": {
+  "enter_amount": "Enter an amount.",
+  "bad_amount": "Check the amount: use numbers only, for example 1250.50.",
+  "bad_date": "Enter a date.",
+  "enter_rate": "Enter the exchange rate on the day you were paid: how many US dollars for 1 {cur}, for example 1.1612. Use a posted rate, such as your bank's or the Federal Reserve's, and the same source every time.",
+  "bad_rate": "Check the rate: a positive number with a decimal point and no spaces, for example 1.1612.",
+  "click": "",
+  "fetching": "",
+  "future": "",
+  "none": "",
+  "format": "",
+  "network": "",
+  "unpublished": "",
+  "earlier": "",
+  "cash_due": "",
+  "no_vat": "",
+  "always": "Report this amount on Schedule C in US dollars. The IRS has no official exchange rate and generally accepts any posted rate that is used consistently."
+ }
+}
+</script>
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · IRS rules</span>
+    <h1>Foreign currency income: convert to US dollars</h1>
+    <p class="lead">Paid in euros, pounds or Canadian dollars? Convert each payment to US dollars at the exchange rate on the day you received it, as the IRS asks, and get a line for your books.</p>
+    <ul class="trust"><li>Rate of the day you were paid</li><li>Both directions</li><li>Line for your records</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="cx-form" onsubmit="return false">
+      <h2>Your payment</h2>
+      <div class="fields">
+        <div class="field full"><label for="cx-direction">I'm converting</label>
+          <select id="cx-direction" name="direction" data-save>
+            <option value="to_home" selected>a foreign currency amount into US dollars</option>
+            <option value="to_foreign">an amount in US dollars into a foreign currency (quote)</option>
+          </select></div>
+        <div class="field"><label for="cx-amount" id="cx-amount-label">Amount in the foreign currency</label>
+          <input type="text" inputmode="decimal" id="cx-amount" name="amount" value="1000" autocomplete="off" data-save></div>
+        <div class="field"><label for="cx-currency">Currency</label>
+          <select id="cx-currency" name="currency" data-save>
+            <option value="EUR" selected>Euro (EUR)</option>
+            <option value="GBP">Pound sterling (GBP)</option>
+            <option value="CAD">Canadian dollar (CAD)</option>
+            <option value="CHF">Swiss franc (CHF)</option>
+            <option value="AUD">Australian dollar (AUD)</option>
+            <option value="JPY">Japanese yen (JPY)</option>
+            <option value="CNY">Chinese yuan (CNY)</option>
+            <option value="HKD">Hong Kong dollar (HKD)</option>
+            <option value="INR">Indian rupee (INR)</option>
+            <option value="MXN">Mexican peso (MXN)</option>
+            <option value="NZD">New Zealand dollar (NZD)</option>
+            <option value="NOK">Norwegian krone (NOK)</option>
+            <option value="SEK">Swedish krona (SEK)</option>
+            <option value="SGD">Singapore dollar (SGD)</option>
+            <option value="ZAR">South African rand (ZAR)</option>
+            <option value="BRL">Brazilian real (BRL)</option>
+            <option value="KRW">South Korean won (KRW)</option>
+          </select></div>
+        <div class="field full"><label for="cx-date" id="cx-date-label">Date you received the payment</label>
+          <input type="date" id="cx-date" name="date" aria-describedby="cx-date-hint">
+          <span class="hint" id="cx-date-hint">Use the exchange rate prevailing that day, from a posted source you use consistently.</span></div>
+        <input type="hidden" id="cx-method" name="method" value="manual">
+        <div class="field full" id="cx-fetch-field" hidden><button type="button" class="btn btn-primary" id="cx-fetch">–</button></div>
+        <div class="field full" id="cx-rate-field"><label for="cx-rate" id="cx-rate-label">Rate: 1 EUR = … USD</label>
+          <input type="text" inputmode="decimal" id="cx-rate" name="rate" autocomplete="off"></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="result-hero" role="status" aria-atomic="true">
+        <div class="label" id="cx-big-label">Amount in US dollars</div>
+        <div class="big" id="cx-big">–</div>
+        <div class="sub" id="cx-sub">–</div>
+      </div>
+      <div class="card" id="cx-table" style="margin-top: 16px; padding: 18px;" hidden>
+        <table class="mini-table compare-table">
+          <caption class="sr-only">Amounts in both currencies</caption>
+          <thead><tr><th scope="col"><span class="sr-only">Amount</span></th><th scope="col" id="cx-col-foreign">EUR</th><th scope="col">USD</th></tr></thead>
+          <tbody>
+            <tr><th scope="row" id="cx-row-net-label">–</th><td id="cx-net-foreign">–</td><td id="cx-net-home">–</td></tr>
+            <tr id="cx-row-vat" hidden><th scope="row" id="cx-row-vat-label">–</th><td id="cx-vat-foreign">–</td><td id="cx-vat-home">–</td></tr>
+            <tr id="cx-row-total" hidden><th scope="row">Total</th><td id="cx-total-foreign">–</td><td id="cx-total-home">–</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card" id="cx-mention-box" style="margin-top: 16px; padding: 18px;" hidden>
+        <h2 style="font-size: 1.05rem; margin: 0 0 8px;">Line for your records</h2>
+        <p id="cx-mention" style="margin: 0 0 12px;">–</p>
+        <button type="button" class="btn btn-ghost" id="cx-copy">Copy the line</button>
+      </div>
+      <p class="notice" id="cx-notice" aria-live="polite" style="margin-top: 16px;">–</p>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>The rule: the rate on the day you receive it</h2>
+  <p>Everything on your US return is in US dollars. If your functional currency is the US dollar, as for a US sole proprietor, translate each item you receive, pay or accrue in a foreign currency <strong>at the exchange rate prevailing at that time</strong>. The IRS has <strong>no official exchange rate</strong>: it generally accepts any posted rate that is used consistently, from your bank or from the government sources <a href="https://www.irs.gov/individuals/international-taxpayers/foreign-currency-and-currency-exchange-rates" rel="noopener">the IRS lists</a>, such as the Treasury Department and the Federal Reserve.</p>
+  <p>Foreign clients come with other questions (Form 1099, foreign tax withheld, FBAR): see <a href="{{link:international}}">invoicing international clients</a>.</p>
+  <h2>Why there's no “get the rate” button</h2>
+  <p>The tools on this site run in your browser and only call official services that allow it. We haven't yet found a US government source of daily rates that a browser can read directly, so you enter the rate yourself; nothing you type is sent anywhere (<a href="{{link:privacy}}">privacy</a>).</p>
+</section>

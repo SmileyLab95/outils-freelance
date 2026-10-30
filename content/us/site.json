@@ -53,6 +53,7 @@
       "items": [
         "invoice",
         "international",
+        "currency",
         "duedate",
         "reminder",
         "latefee",

@@ -54,6 +54,7 @@
         "invoice-rules",
         "salestax",
         "international",
+        "currency",
         "einvoicing",
         "duedate",
         "reminder",

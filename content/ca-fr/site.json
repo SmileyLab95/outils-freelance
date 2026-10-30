@@ -53,6 +53,7 @@
         "invoice-rules",
         "salestax",
         "international",
+        "currency",
         "duedate",
         "reminder",
         "latefee",

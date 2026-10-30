@@ -77,6 +77,35 @@ async function mockRdap(page, answers, delay = 30) {
   });
   return reqs;
 }
+// Conversion de devises : réponses de la BCE (CSV), du HMRC (CSV mensuel) et de la Banque du Canada (JSON de Valet)
+// simulées au format et avec des valeurs lus le 30/10/2026. fx.mode : "ok", "abort" (réseau), 404, ou un corps de remplacement.
+const FX_ECB = "KEY,FREQ,CURRENCY,CURRENCY_DENOM,EXR_TYPE,EXR_SUFFIX,TIME_PERIOD,OBS_VALUE,OBS_STATUS,DECIMALS,TITLE_COMPL\r\n" +
+  [["USD", "2026-10-26", "1.1188", 4], ["USD", "2026-10-29", "1.113", 4], ["GBP", "2026-10-26", "0.8382", 5]]
+    .map(([c, d, v, n]) => `EXR.D.${c}.EUR.SP00.A,D,${c},EUR,SP00,A,${d},${v},A,${n},"ECB reference exchange rate, ${c}/Euro, 2.15 pm (C.E.T.)"`).join("\r\n") + "\r\n";
+const FX_HMRC = "Country/Territories,Currency,Currency Code,Currency Units per £1,Start date,End date\n" +
+  "Switzerland,Franc,CHF,1.1020,01/10/2026,31/10/2026\nUSA,Dollar,USD,1.3456,01/10/2026,31/10/2026\n";
+const FX_BOC = JSON.stringify({ observations: [{ d: "2026-10-29", FXUSDCAD: { v: "1.3985" }, FXEURCAD: { v: "1.5601" } },
+  { d: "2026-10-30", FXUSDCAD: { v: "1.3960" }, FXEURCAD: { v: "1.5582" } }] });
+async function mockFx(page) {
+  const fx = { list: [], mode: "ok" };
+  await page.route((url) => url.hostname !== "127.0.0.1", async (route) => {
+    const req = route.request(), url = req.url();
+    fx.list.push({ url, headers: await req.allHeaders() });
+    if (fx.mode === "abort") return route.abort("failed");
+    const headers = { "Access-Control-Allow-Origin": "*" };
+    if (typeof fx.mode === "number") return route.fulfill({ status: fx.mode, headers, body: "No results found." });
+    const body = fx.mode !== "ok" ? fx.mode : url.includes("data-api.ecb.europa.eu") ? FX_ECB : url.includes("trade-tariff") ? FX_HMRC : FX_BOC;
+    return route.fulfill({ status: 200, headers: { ...headers, "Content-Type": url.includes("bankofcanada") ? "application/json" : "text/csv" }, body });
+  });
+  return fx;
+}
+// Attend la fin d'une lecture de taux (bouton de nouveau actif) ; renvoie les textes normalisés de la page.
+async function fxFetch(page) {
+  await page.click("#cx-fetch");
+  await page.waitForFunction(() => !document.querySelector("#cx-fetch").disabled, null, { timeout: 5000 });
+}
+const fxText = async (page, id) => (await page.textContent(`#${id}`)).replace(/\s+/g, " ").trim();
+const fxTomorrow = () => { const d = new Date(); d.setDate(d.getDate() + 1); return d.toISOString().slice(0, 10).replace(/^(\d{4}-\d{2}-\d{2}).*/, "$1"); };
 const rdapTaken = (registrar, status = ["active"]) => ({
   objectClassName: "domain", status,
   entities: [{ objectClassName: "entity", roles: ["registrant"], vcardArray: ["vcard", [["fn", {}, "text", "REDACTED FOR PRIVACY"]]] },
@@ -4006,6 +4035,135 @@ const tests = {
     await go("#/tresorerie");
     check(!(await page.$(".charges-list")) && (await text("#espace-view")).includes("Loyer, logiciels, assurance"), "Trésorerie : sauvegarde antérieure au module acceptée");
     await go("#/");
+  },
+  async "fr/conversion-devises/"(page) {
+    // documentation/49-devises.md : taux de la BCE (simulé), TVA en euros, mention selon l'exigibilité.
+    const fx = await mockFx(page), t = (id) => fxText(page, id);
+    check((await t("cx-big")) === "–" && (await t("cx-notice")).includes("Obtenir le taux de la BCE") && fx.list.length === 0,
+      "devises FR : rien n'est demandé avant le clic");
+    await page.fill("#cx-date", "2026-10-28");
+    await fxFetch(page);
+    check(fx.list.length === 1 && fx.list[0].url === "https://data-api.ecb.europa.eu/service/data/EXR/D.USD.EUR.SP00.A?startPeriod=2026-10-14&endPeriod=2026-10-28&format=csvdata" &&
+      !fx.list[0].headers.referer && !fx.list[0].headers.cookie, "devises FR : une demande à la BCE (fenêtre de 14 jours), sans page d'origine ni cookie");
+    check((await t("cx-big")) === "893,81 €" && (await t("cx-sub")) === "1 € = 1,1188 USD, taux de référence de la BCE du 26 octobre 2026." &&
+      (await t("cx-notice")).includes("celui du 26 octobre 2026") && (await t("cx-notice")).includes("elle s'élève à 178,76 €"),
+      "devises FR : 1 000 $ au dernier taux publié avant la date (26/10) → 893,81 € ; TVA à l'encaissement 178,76 €");
+    check((await t("cx-mention")) === "Le montant de la TVA en euros sera déterminé au taux de référence de la BCE du jour de l'encaissement des acomptes ou du prix.",
+      "devises FR : mention de l'exigibilité à l'encaissement (BOFiP)");
+    await page.selectOption("#cx-moment", "debit");
+    check((await t("cx-date-label")) === "Date du débit ou de la livraison", "devises FR : libellé de la date selon l'exigibilité");
+    await page.fill("#cx-date", "2026-10-29");
+    check((await t("cx-big")) === "–" && (await t("cx-notice")).includes("Obtenir le taux de la BCE"), "devises FR : nouvelle date → le taux précédent ne sert plus");
+    await fxFetch(page);
+    check((await t("cx-big")) === "898,47 €" && (await t("cx-mention")) ===
+      "Taux de change : 1 € = 1,1130 USD (taux de référence de la BCE du 29 octobre 2026). Montant hors taxe : 898,47 € ; TVA (20 %) : 179,69 € ; total TTC : 1 078,16 €.",
+      "devises FR : exigibilité au débit → taux indiqué sur la facture, décimales publiées (1,1130), TVA 179,69 €");
+    check((await t("cx-net-foreign")).includes("1 000,00") && (await t("cx-total-home")) === "1 078,16 €" && await page.isVisible("#cx-row-vat"),
+      "devises FR : tableau hors taxe, TVA et TTC dans les deux monnaies");
+    await page.click("#cx-copy");
+    check(await copied(page, "#cx-copy"), "devises FR : copie de la mention");
+    await page.screenshot({ path: path.join(shots, "devises-fr.png"), fullPage: true });
+    await accessible(page, "Conversion de devises FR");
+    await page.selectOption("#cx-vat", "");
+    check((await t("cx-mention")) === "Taux de change : 1 € = 1,1130 USD (taux de référence de la BCE du 29 octobre 2026). Contre-valeur : 898,47 €." &&
+      !(await page.isVisible("#cx-row-vat")) && (await t("cx-notice")).includes("demandez à votre expert-comptable"), "devises FR : sans TVA, contre-valeur et avertissement");
+    await page.selectOption("#cx-direction", "to_foreign");
+    await page.fill("#cx-amount", "500");
+    check((await t("cx-amount-label")) === "Montant hors taxe en euros" && (await t("cx-big")).startsWith("556,50"), "devises FR : sens inverse, 500 € → 556,50 $ US");
+    await page.selectOption("#cx-direction", "to_home");
+    await page.fill("#cx-amount", "1000");
+    await page.selectOption("#cx-method", "manual");
+    check(!(await page.isVisible("#cx-fetch")) && (await t("cx-rate-label")) === "Taux : 1 € = … USD" && (await t("cx-notice")).includes("le nombre de USD pour 1 €"),
+      "devises FR : taux saisi, bouton masqué, consigne");
+    await page.fill("#cx-rate", "1 2");
+    check((await page.getAttribute("#cx-rate", "aria-invalid")) === "true" && (await t("cx-big")) === "–", "devises FR : taux illisible refusé");
+    await page.fill("#cx-rate", "1,25");
+    check((await t("cx-big")) === "800,00 €" && (await t("cx-mention")).includes("1 € = 1,25 USD (taux du 29 octobre 2026)"), "devises FR : taux saisi 1,25 → 800,00 €");
+    await page.selectOption("#cx-method", "official");
+    await page.fill("#cx-date", fxTomorrow());
+    const before = fx.list.length;
+    await fxFetch(page);
+    check(fx.list.length === before && (await t("cx-notice")).includes("ne publie pas de taux à l'avance"), "devises FR : date future refusée sans demande");
+    await page.fill("#cx-date", "2026-10-29");
+    fx.mode = "abort";
+    await fxFetch(page);
+    check((await t("cx-big")) === "–" && (await t("cx-notice")).includes("n'a pas pu être lu"), "devises FR : réseau coupé → message et saisie proposée");
+    fx.mode = 404;
+    await fxFetch(page);
+    check((await t("cx-notice")).includes("aucun taux USD entre le 15 octobre 2026 et le 29 octobre 2026"), "devises FR : aucun taux publié (404) → message daté");
+    fx.mode = "date,valeur\n2026-10-29,1.1\n";
+    await fxFetch(page);
+    check((await t("cx-notice")).includes("n'a pas le format attendu"), "devises FR : format inconnu → message");
+    fx.mode = "ok";
+    await page.reload();
+    check((await page.inputValue("#cx-moment")) === "debit" && (await page.inputValue("#cx-vat")) === "" && (await page.inputValue("#cx-date")) === new Date().toLocaleDateString("sv-SE"),
+      "devises FR : choix enregistrés, date du jour au retour");
+    await page.selectOption("#cx-moment", "encaissement");
+    await page.selectOption("#cx-vat", "tva_taux_metropole.normal");
+  },
+  async "uk/foreign-currency-invoices/"(page) {
+    const fx = await mockFx(page), t = (id) => fxText(page, id);
+    await page.fill("#cx-date", "2026-10-15");
+    await fxFetch(page);
+    check(fx.list.length === 1 && fx.list[0].url === "https://www.trade-tariff.service.gov.uk/uk/api/exchange_rates/files/monthly_csv_2026-10.csv" &&
+      !fx.list[0].headers.referer && !fx.list[0].headers.cookie, "devises UK : fichier du mois du HMRC, sans page d'origine ni cookie");
+    check((await t("cx-big")) === "£743.16" && (await t("cx-sub")) === "£1 = 1.3456 USD, HMRC period rate for October 2026." &&
+      (await t("cx-mention")) === "Exchange rate: £1 = 1.3456 USD (HMRC period rate for October 2026). Net value: £743.16. VAT at 20%: £148.63. Total: £891.79.",
+      "devises UK : 1 000 $ au taux du HMRC d'octobre → £743.16, TVA £148.63, mention");
+    await page.fill("#cx-date", "2026-10-30");
+    check((await t("cx-big")) === "£743.16", "devises UK : même mois → même taux, sans nouvelle demande");
+    await page.selectOption("#cx-currency", "CHF");
+    await fxFetch(page);
+    check((await t("cx-sub")).startsWith("£1 = 1.1020 CHF"), "devises UK : franc suisse lu dans le même fichier");
+    await page.screenshot({ path: path.join(shots, "devises-uk.png"), fullPage: true });
+    await accessible(page, "Foreign currency invoices UK");
+    fx.mode = 404;
+    await page.fill("#cx-date", "2026-12-15");
+    await fxFetch(page);
+    check((await t("cx-notice")).includes("hasn't published its rates for December 2026"), "devises UK : mois pas encore publié → message");
+    fx.mode = "ok";
+    await page.selectOption("#cx-method", "manual");
+    await page.fill("#cx-rate", "1.10");
+    check((await t("cx-mention")).includes("£1 = 1.1 CHF (UK market selling rate on 15 December 2026)"), "devises UK : taux du marché saisi");
+    await page.selectOption("#cx-method", "official");
+    await page.selectOption("#cx-currency", "USD");
+  },
+  async "us/foreign-currency-income/"(page) {
+    const fx = await mockFx(page), t = (id) => fxText(page, id);
+    check(!(await page.isVisible("#cx-fetch")) && (await page.isVisible("#cx-rate")) && (await t("cx-notice")).includes("how many US dollars for 1 EUR"),
+      "devises US : taux saisi seulement, consigne");
+    await page.fill("#cx-date", "2026-10-15");
+    await page.fill("#cx-rate", "1.1612");
+    check((await t("cx-big")) === "$1,161.20" && (await t("cx-mention")) === "Converted at 1 EUR = 1.1612 USD (rate on October 15, 2026): $1,161.20." &&
+      (await t("cx-notice")).includes("no official exchange rate") && fx.list.length === 0, "devises US : 1 000 € à 1.1612 → $1,161.20, aucune demande");
+    await accessible(page, "Foreign currency income US");
+  },
+  async "ca/foreign-currency-conversion/"(page) {
+    const fx = await mockFx(page), t = (id) => fxText(page, id);
+    await page.fill("#cx-date", "2026-10-30");
+    await fxFetch(page);
+    check(fx.list[0].url === "https://www.bankofcanada.ca/valet/observations/FXUSDCAD/json?start_date=2026-10-16&end_date=2026-10-30" && !fx.list[0].headers.referer,
+      "devises CA : demande à Valet (fenêtre de 14 jours), sans page d'origine");
+    check((await t("cx-big")) === "$1,396.00" && (await t("cx-mention")) === "Converted at 1 USD = 1.3960 CAD (Bank of Canada rate for October 30, 2026): $1,396.00.",
+      "devises CA : 1 000 $ US au taux de la Banque du Canada → 1 396,00 $ CA");
+    fx.mode = JSON.stringify({ observations: [{ d: "2026-10-29", FXUSDCAD: { v: "1.3985" } }] });
+    await fxFetch(page);
+    check((await t("cx-big")) === "$1,398.50" && (await t("cx-notice")).includes("closest preceding day with a rate, October 29, 2026"),
+      "devises CA : pas de taux ce jour-là → jour précédent le plus proche (art. 261)");
+    fx.mode = "ok";
+    await accessible(page, "Foreign currency CA");
+  },
+  async "ca/fr/conversion-devises/"(page) {
+    const fx = await mockFx(page), t = (id) => fxText(page, id);
+    await page.fill("#cx-date", "2026-10-29");
+    await page.selectOption("#cx-currency", "EUR");
+    await fxFetch(page);
+    check((await t("cx-sub")) === "1 EUR = 1,5601 $ CA, taux de la Banque du Canada du 29 octobre 2026." && (await t("cx-big")) === "1 560,10 $" &&
+      (await t("cx-mention")) === "Converti au taux de 1 EUR = 1,5601 $ CA (taux de la Banque du Canada du 29 octobre 2026) : 1 560,10 $." && fx.list.length === 1,
+      "devises CA-FR : 1 000 € au taux de la Banque du Canada → 1 560,10 $");
+    await page.screenshot({ path: path.join(shots, "devises-ca-fr.png"), fullPage: true });
+    await accessible(page, "Conversion de devises CA-FR");
+    await page.selectOption("#cx-currency", "USD");
   },
   async "fr/recherche-nom-de-domaine/"(page) {
     const reqs = await mockRdap(page, {

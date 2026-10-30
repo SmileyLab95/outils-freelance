@@ -96,13 +96,19 @@
     return validDate(date) && value > 0 ? { date: date, value: value, text: text } : null;
   }
 
-  /** CSV du portail de données de la BCE : observations de la devise, par date croissante. Format inconnu : null. */
+  /** CSV du portail de données de la BCE : observations de la devise, par date croissante. Format inconnu : null.
+   *  La valeur est écrite avec le nombre de décimales publié (colonne DECIMALS : « 1.113 » → « 1.1130 »). */
   function parseEcb(text, currency) {
     var rows = csvRows(text), head = rows[0] || [];
     var cur = head.indexOf("CURRENCY"), date = head.indexOf("TIME_PERIOD"), value = head.indexOf("OBS_VALUE");
+    var decimals = head.indexOf("DECIMALS");
     if (cur < 0 || date < 0 || value < 0) return null;
     return rows.slice(1).filter(function (r) { return r[cur] === currency; })
-      .map(function (r) { return observation(r[date], String(r[value]).trim()); })
+      .map(function (r) {
+        var o = observation(r[date], String(r[value]).trim()), d = decimals < 0 ? NaN : Number(r[decimals]);
+        if (o && d >= 0 && d <= 10 && Math.floor(d) === d && (o.text.split(".")[1] || "").length < d) o.text = o.value.toFixed(d);
+        return o;
+      })
       .filter(Boolean).sort(function (a, b) { return a.date < b.date ? -1 : 1; });
   }
 

@@ -1,5 +1,26 @@
 # Journal des modifications
 
+## 2026-10-30 — Clients en devises : conversion aux taux officiels (4 pays)
+
+- Nouvel outil de **conversion de devises** (menus « Facturer et encaisser » et *Invoicing*), dans les cinq sections :
+  taux de référence de la **BCE** du jour de l'exigibilité de la TVA (France), **taux mensuel du HMRC** ou taux du
+  marché saisi (Royaume-Uni), taux de la **Banque du Canada** du jour où le montant est survenu (Canada, anglais et
+  français), taux publié saisi du jour du paiement (États-Unis). Montant converti, TVA en euros ou en livres, et
+  **mention à reporter sur la facture** (selon l'exigibilité à l'encaissement ou au débit en France), copiable ;
+  sens inverse pour un devis ; 17 devises.
+- Le taux n'est demandé qu'au clic, directement par le navigateur aux sources officielles, sans cookie ni adresse de
+  la page ; le montant n'est jamais envoyé. Pages Confidentialité mises à jour (et précisées : le nom du site
+  accompagne toute demande d'un site à un autre).
+- Règles nouvelles lues aux sources : BOFiP (TVA en France), GOV.UK et manuel du HMRC (Royaume-Uni), Loi de
+  l'impôt sur le revenu, art. 261 (Canada), sources de taux lisibles depuis un navigateur. Contrôle mensuel des sources
+  (`scripts/verifier_taux.py`, GitHub Actions ; premier passage : 3 sources, aucun problème).
+- **Correction** : la page américaine « international clients » suggérait la moyenne annuelle de l'IRS pour des
+  revenus reçus régulièrement ; aucune page de l'IRS lue ne le prévoit : remplacée par le taux du jour du paiement.
+- Outil « Lire une source officielle » : option `@entetes` (en-têtes de la réponse, dont l'autorisation de lecture
+  par un autre site).
+- Tests : moteur (14 tests, 12 mutants détectés), script de contrôle (5 tests), parcours navigateur des cinq pages
+  (réponses simulées, erreurs réseau, accessibilité, trois largeurs ; 6 mutants du script de page détectés).
+
 ## 2026-10-30 — Contrat de sous-traitance (Royaume-Uni, États-Unis, Canada)
 
 - Nouveau **générateur de contrat de sous-traitance** pour confier une partie d'un projet à un autre indépendant, au
