@@ -311,7 +311,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   lois des autres provinces sur la protection du consommateur à lire pour les détailler ; le règlement albertain sur les
   contrats Internet expire le 30/09/2028 : à revérifier) ; jours ouvrés au Canada (jours fériés fédéraux et provinciaux) : en attente de l'accès à canada.ca, refusé
   depuis l'environnement de travail et sans réponse depuis l'outil de lecture des sources le 29/10/2026 ; sous-traitance
-  (France en attente de la lecture de la loi du 31 décembre 1975 sur Légifrance, décision D50 ; Royaume-Uni,
+  (document de travail [48](48-sous-traitance.md) ; France en attente de la lecture de la loi du 31 décembre 1975 sur Légifrance, décision D50 ; Royaume-Uni,
   États-Unis et Canada d'abord : contrat entre indépendants, clauses reprises du contrat principal, paiement, lois
   *Freelance Isn't Free* pour l'indépendant qui sous-traite, formulaire 1099-NEC, art. 2101 du Code civil du Québec),
   devises (convertisseur aux taux de référence officiels), guides de protection sociale) ;
