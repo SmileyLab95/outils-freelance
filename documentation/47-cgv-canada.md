@@ -109,8 +109,9 @@ particulier, autres provinces) ; questions fréquentes ; sources.
 
 ## 5. Réalisation
 
-Règles : faites le 30/10/2026 (treize règles nouvelles dans `data/rules/ca.json`, taux criminel vérifié). À venir :
-moteur, pages anglaise et française, tests.
+Règles : faites le 30/10/2026 (treize règles nouvelles dans `data/rules/ca.json`, taux criminel vérifié). Moteur
+`engines/cgv-ca.js` : fait le 30/10/2026 (`annualRate`, `consumerProvinces`, `prepare` en anglais et en français, 19
+contrôles), 11 tests unitaires, 25 mutants détectés. À venir : pages anglaise et française, parcours navigateur.
 
 ## Annexe : sources lues (30/10/2026, outil « Lire une source officielle »)
 
