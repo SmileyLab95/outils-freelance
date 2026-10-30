@@ -25,8 +25,13 @@ class LireSource(unittest.TestCase):
         self.assertTrue(L.autorise("https://entreprendre.service-public.gouv.fr/vosdroits/F23566"), "sites de l'État en gouv.fr")
         for url in ("https://www.opm.gov/policy-data-oversight/pay-leave/federal-holidays/", "https://www.senat.fr/",
                     "https://www.assemblee-nationale.fr/dyn/17/textes", "https://www.bankofengland.co.uk/boeapps/database/Bank-Rate.asp",
-                    "https://www.bankofcanada.ca/rates/"):
+                    "https://www.bankofcanada.ca/rates/", "https://www.ecfr.gov/current/title-16/part-429",
+                    "https://uscode.house.gov/view.xhtml", "https://www.nysenate.gov/legislation/laws/GBS/1411",
+                    "https://dol.ny.gov/freelance-isnt-free-act", "https://www.nyc.gov/site/dca/index.page",
+                    "https://www.ilga.gov/legislation/ilcs/ilcs3.asp", "https://labor.illinois.gov/"):
             self.assertTrue(L.autorise(url), url)
+        self.assertFalse(L.autorise("https://www.nyc.gov.exemple.com/"), "faux sous-domaine")
+        self.assertFalse(L.autorise("https://notny.gov/"), "nom qui se termine par un site officiel")
         self.assertFalse(L.autorise("https://www2.opm.gov.exemple.com/"), "faux sous-domaine")
         self.assertFalse(L.autorise("https://gouv.fr.exemple.com/"))
         self.assertFalse(L.autorise("https://fauxgouv.fr/"))

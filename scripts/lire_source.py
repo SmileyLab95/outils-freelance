@@ -19,11 +19,15 @@ from datetime import datetime, timezone
 
 # Sites officiels (et leurs sous-domaines) des quatre pays et de l'Union européenne. « gouv.fr » est réservé aux
 # services de l'État (Légifrance, impots.gouv.fr, entreprendre.service-public.gouv.fr…) ; Assemblée nationale et Sénat
-# pour les textes de loi ; banques centrales pour les taux ; opm.gov pour les jours fériés fédéraux des États-Unis.
+# pour les textes de loi ; banques centrales pour les taux ; opm.gov pour les jours fériés fédéraux des États-Unis ;
+# textes des lois américaines : eCFR et govinfo (règlements fédéraux), Code des États-Unis (Chambre des représentants),
+# lois et sites officiels de l'État et de la ville de New York, lois et sites officiels de l'Illinois.
 OFFICIELS = (
     "gouv.fr", "cnil.fr", "service-public.fr", "urssaf.fr", "assemblee-nationale.fr", "senat.fr",
     "inpi.fr", "banque-france.fr", "europa.eu", "gov.uk", "legislation.gov.uk", "ico.org.uk", "bankofengland.co.uk",
-    "irs.gov", "ftc.gov", "opm.gov", "canada.ca", "gc.ca", "revenuquebec.ca", "bankofcanada.ca", "iana.org", "fnfe-mpe.org",
+    "irs.gov", "ftc.gov", "opm.gov", "ecfr.gov", "govinfo.gov", "uscode.house.gov", "nysenate.gov", "ny.gov", "nyc.gov",
+    "ilga.gov", "illinois.gov",
+    "canada.ca", "gc.ca", "revenuquebec.ca", "bankofcanada.ca", "iana.org", "fnfe-mpe.org",
 )
 LIMITE = 20_000_000          # octets lus au plus
 PASSAGE = 600                # caractères affichés de part et d'autre d'un mot trouvé
