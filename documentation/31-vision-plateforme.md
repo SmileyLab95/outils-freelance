@@ -101,7 +101,7 @@ G compte gratuit, P Pro, ⇄ partenaire signalé.
 | Devis | Générateur et Espace | ✅ | V, G |
 | Contrat de prestation | Générateur | ✅ | V |
 | Accord de confidentialité | Générateur | ✅ | V |
-| CGV / *terms of service* | Générateur ([40](40-cgv.md), [45](45-cgv-royaume-uni.md)) | ✅ (France, Royaume-Uni) ; ⬜ États-Unis, Canada | V |
+| CGV / *terms of service* | Générateur ([40](40-cgv.md), [45](45-cgv-royaume-uni.md), [46](46-cgv-etats-unis.md)) | ✅ (France, Royaume-Uni, États-Unis) ; ⬜ Canada | V |
 | Sous-traitance, avenant, bon de commande | Générateurs | ⬜ | V |
 | Signature du client | Devis ou contrat accepté en ligne (lien sécurisé, preuve horodatée) | ⬜ | P |
 
@@ -183,7 +183,7 @@ fuseaux horaires des clients, générateur de QR code, convertisseur de devises,
    brouillons et comparatif des solutions de dons prêts le 23/10/2026 ([35](35-offres-et-soutien.md)).
 5. Modules du compte gratuit : prospects, temps passé, dépenses, trésorerie : faits du 23 au 29/10/2026
    ([36](36-depenses-et-registre-des-achats.md) à [39](39-tresorerie.md)).
-6. Outils restants : CGV (France faite le 29/10/2026, [40](40-cgv.md) ; Royaume-Uni le 30/10/2026, [45](45-cgv-royaume-uni.md)), sous-traitance, devises, jours ouvrés (France, Royaume-Uni et États-Unis
+6. Outils restants : CGV (France faite le 29/10/2026, [40](40-cgv.md) ; Royaume-Uni et États-Unis le 30/10/2026, [45](45-cgv-royaume-uni.md) et [46](46-cgv-etats-unis.md)), sous-traitance, devises, jours ouvrés (France, Royaume-Uni et États-Unis
    faits le 29/10/2026, [42](42-jours-ouvres.md)), signature d'email (faite le 29/10/2026, [43](43-signature-email.md)),
    guides de protection sociale.
 7. Pro : relances automatiques, signature en ligne, liens de paiement, page publique, plateforme agréée.

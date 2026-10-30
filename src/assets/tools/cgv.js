@@ -1,26 +1,28 @@
-/* Conditions générales de vente (France) et terms and conditions (Royaume-Uni) : formulaire, champs affichés selon
-   la situation, contrôles, aperçu en direct, PDF, Word et copie. Repères, textes calculés et contrôles par le moteur
-   du pays (OFE.cgvFR ou OFE.cgvUK, selon D.country) ; rendu par OFE.contractDoc (même syntaxe que le contrat) ; texte
-   des CGV et messages dans la page (#cgv-data). Spécification : documentation/40-cgv.md et 45-cgv-royaume-uni.md. */
+/* Conditions générales de vente (France) et terms and conditions (Royaume-Uni, États-Unis) : formulaire, champs
+   affichés selon la situation, contrôles, aperçu en direct, PDF, Word et copie. Repères, textes calculés et contrôles
+   par le moteur du pays (OFE.cgvFR, OFE.cgvUK ou OFE.cgvUS, selon D.country) ; rendu par OFE.contractDoc (même syntaxe
+   que le contrat) ; texte des CGV et messages dans la page (#cgv-data). Spécification : documentation/40-cgv.md,
+   45-cgv-royaume-uni.md et 46-cgv-etats-unis.md. */
 (function () {
   "use strict";
   var OF = window.OF, OFE = window.OFE, R = window.OF_RULES;
   var form = document.getElementById("cgv-form"), dataEl = document.getElementById("cgv-data");
   if (!form || !dataEl || !OFE || !OFE.contractDoc || !R) return;
   var D = JSON.parse(dataEl.textContent), L = D.ui, K = D.store || "cgv";
-  var engine = D.country === "uk" ? OFE.cgvUK : OFE.cgvFR;
+  var engine = D.country === "uk" ? OFE.cgvUK : D.country === "us" ? OFE.cgvUS : OFE.cgvFR;
+  var english = D.country === "uk" || D.country === "us";
   if (!engine) return;
   var $ = function (id) { return document.getElementById(id); };
   var esc = OFE.contractDoc.esc;
   var preview = $("cg-preview"), notices = $("cg-notices");
   var longDate = function (iso) { return OF.date(iso, { day: "numeric", month: "long", year: "numeric" }); };
   var fillIn = function (text, vars) { return text.replace(/\{(\w+)\}/g, function (m, k) { return vars[k] != null ? vars[k] : m; }); };
-  // Taux à deux décimales s'il n'est pas entier (« 12,40 % », « 11.75% », « 15 % »), comme les textes officiels.
+  // Taux à deux décimales s'il n'est pas entier (« 12,40 % », « 11.75% », « 1.50% », « 15 % »), comme les textes officiels.
   var pct2 = new Intl.NumberFormat(D.lang || "fr-FR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   var fmt = {
     pct: function (rate) {
       var n = Math.round(rate * 10000) / 100;
-      return (n === Math.round(n) ? OF.fmt(n) : pct2.format(n)) + (D.country === "uk" ? "%" : " %");
+      return (n === Math.round(n) ? OF.fmt(n) : pct2.format(n)) + (english ? "%" : " %");
     },
     num: function (n) { return OF.fmt(n); },
     money: function (n) { return OF.money(n, n === Math.round(n) ? 0 : 2); },
@@ -56,7 +58,10 @@
     online: function (v) { return v.raw.has_part === "on" && form.elements.online.checked; },
     escompte: function (v) { return v.raw.escompte === "on"; },
     penalty_custom: function (v) { return v.raw.has_pro === "on" && v.raw.penalty === "custom"; },
-    limited: function (v) { return v.raw.status === "limited"; }
+    limited: function (v) { return v.raw.status === "limited"; },
+    organized: function (v) { return v.raw.status === "llc" || v.raw.status === "corp"; },
+    offsite_part: function (v) { return v.raw.offsite_part === "on"; },
+    late: function (v) { return v.raw.late === "on"; }
   };
 
   function showFields(v) {

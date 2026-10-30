@@ -4,7 +4,8 @@
  * {champ} insère une valeur, [[champ|texte]] n'apparaît que si le champ est rempli, et "when" n'affiche un titre, un
  * article, un paragraphe ou une signature que pour certaines valeurs du formulaire ; { "table": "nom" } place le tableau
  * v.tables.nom calculé par l'outil (proposition commerciale), { "block": "nom" } les paragraphes v.blocks.nom fournis par
- * l'outil (formulaire de rétractation des CGV) et { "field": "texte" } une ligne à remplir à la main. Les annexes
+ * l'outil (formulaire de rétractation des CGV) et { "field": "texte" } une ligne à remplir à la main ; "bold" met un
+ * paragraphe ou une annexe en gras (formulaire d'annulation américain, documentation/46-cgv-etats-unis.md). Les annexes
  * (D.annexes) suivent les articles et les signatures, sans numéro d'article (documentation/40-cgv.md).
  * Fonctions pures, sans DOM.
  * Testé par tests/unit/contract-doc.test.mjs.
@@ -63,14 +64,15 @@
       if (p.table) return table(v.tables && v.tables[p.table]);
       if (p.block) return paragraphs((v.blocks && v.blocks[p.block]) || [], v, hints);
       if (typeof p.field === "string") return '<p class="k-field">' + fill(p.field, v, hints) + "</p>";
-      return "<p>" + fill(typeof p === "string" ? p : p.text, v, hints) + "</p>";
+      if (typeof p === "string") return "<p>" + fill(p, v, hints) + "</p>";   // (une chaîne a une méthode « bold »)
+      return (p.bold === true ? '<p class="k-bold">' : "<p>") + fill(p.text, v, hints) + "</p>";
     }).join("");
   }
 
   /** Annexes : après les articles et les signatures, titre « Annexe – … » (D.annex), sans numéro d'article. */
   function annexes(D, v, hints) {
     return (D.annexes || []).filter(function (a) { return matches(a.when, v.raw); }).map(function (a) {
-      return '<section class="k-annex"><h3>' + esc((D.annex || "Annexe – {title}").replace("{title}", a.title)) + "</h3>" +
+      return '<section class="k-annex' + (a.bold === true ? " k-bold" : "") + '"><h3>' + esc((D.annex || "Annexe – {title}").replace("{title}", a.title)) + "</h3>" +
         paragraphs(a.paras, v, hints) + "</section>";
     }).join("");
   }
@@ -112,7 +114,7 @@
       "body{font-family:Calibri,Arial,sans-serif;font-size:11pt;line-height:1.45}h2{text-align:center;font-size:15pt}" +
       "h3{font-size:11.5pt;margin:14pt 0 4pt}.k-subtitle{text-align:center;font-style:italic}" +
       ".p-label{font-weight:bold;text-transform:uppercase;font-size:9pt}.k-blank{color:#999}" +
-      ".k-signs div{margin-top:18pt}.p-sign-box{height:60pt}.k-annex{page-break-before:always}.k-field{border-bottom:1px dotted #999;padding-bottom:12pt}.k-witness-line{border-top:1px solid #999;margin-top:20pt;font-size:9pt}.k-witness .k-witness-line:nth-child(2){margin-top:34pt}" +
+      ".k-signs div{margin-top:18pt}.p-sign-box{height:60pt}.k-annex{page-break-before:always}.k-field{border-bottom:1px dotted #999;padding-bottom:12pt}.k-witness-line{border-top:1px solid #999;margin-top:20pt;font-size:9pt}.k-witness .k-witness-line:nth-child(2){margin-top:34pt}.k-bold,.k-bold p{font-weight:bold}" +
       "table{border-collapse:collapse;width:100%}th,td{border-bottom:1px solid #ccc;padding:3pt 5pt;text-align:left}th.num,td.num{text-align:right}" +
       "</style></head><body>" + body + "</body></html>";
   }

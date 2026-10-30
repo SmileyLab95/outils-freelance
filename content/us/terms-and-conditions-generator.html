@@ -1,0 +1,189 @@
+<!--{
+  "id": "cgv",
+  "slug": "terms-and-conditions-generator/",
+  "title": "Terms and Conditions Generator for US Freelancers",
+  "description": "Write terms and conditions for your services: business or consumer clients, the FTC 3-day cancellation rule, Freelance Isn't Free contracts. Free, PDF, Word.",
+  "menu": "Terms and conditions",
+  "icon": "📜",
+  "blurb": "Clear terms and conditions for your business and consumer clients.",
+  "app": "Terms and conditions generator",
+  "scripts": [
+    "engines/contract-doc.js",
+    "engines/jours.js",
+    "engines/cgv-us.js",
+    "tools/cgv.js"
+  ],
+  "rules": "us",
+  "sources": [
+    "freelance_written_contract_contents",
+    "freelance_law_new_york_state",
+    "freelance_law_nyc",
+    "freelance_law_illinois",
+    "us_ftc_cooling_off",
+    "us_ftc_cancellation_notice",
+    "public_holidays",
+    "us_esign",
+    "us_copyright_transfer_writing",
+    "late_fees_federal_rule"
+  ],
+  "priority": 0.9,
+  "faq": [
+    [
+      "Do freelancers need terms and conditions in the US?",
+      "No federal law requires them, but some states and cities require a written contract with a freelancer: in New York State and New York City from $800 (alone or with the same client over 120 days) and in Illinois from $500 over 120 days. Your accepted quote and your terms can form that contract."
+    ],
+    [
+      "Are terms accepted by email or e-signature binding?",
+      "Yes. Under the federal E-SIGN Act, a contract or signature cannot be denied legal effect just because it is electronic. If a law requires you to give a consumer information in writing, you can give it electronically only with their prior consent."
+    ],
+    [
+      "Can my clients cancel a contract?",
+      "Consumers who agree to buy at their home ($25 or more) or at another place that is not your place of business ($130 or more) can cancel until midnight of the third business day under the FTC Cooling-Off Rule, and you must refund them within 10 business days. Business clients and sales made entirely by mail or phone are not covered; state laws may add rights."
+    ],
+    [
+      "Can I charge interest on late invoices?",
+      "Only if your contract says so: no federal law sets a late payment rate between private businesses, and the rate must respect your state’s usury and late-fee rules. In New York State and New York City, a client who pays late can also owe you double damages under the Freelance Isn’t Free Act."
+    ],
+    [
+      "Who owns the work I create for a client?",
+      "You do, unless you transfer the copyright: a transfer is valid only in a writing signed by you (17 U.S.C. 204(a)). These terms assign the rights once you are paid in full; sign the quote or contract that refers to them."
+    ]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · PDF and Word</span>
+    <h1>Terms and conditions generator</h1>
+    <p class="lead">Answer a few questions about your clients and how you work: your terms and conditions for services are written as you type, with what freelance protection laws expect in your contract and the FTC rule for sales made at a client’s home, ready to send with your quotes.</p>
+    <ul class="trust"><li>Business and consumer clients</li><li>Rules read on eCFR, govinfo and state websites</li><li>Your data stays on your device</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout wide-left">
+    <form class="card form-card" id="cgv-form" autocomplete="off" onsubmit="return false">
+      <h3>About you</h3>
+      <div class="fields">
+        <div class="field full"><label for="cg-p-name">Your name or business name</label>
+          <input type="text" id="cg-p-name" name="p_name" placeholder="Jane Smith" data-save></div>
+        <div class="field full"><label for="cg-p-trading">Doing business as (DBA, optional)</label>
+          <input type="text" id="cg-p-trading" name="p_trading" placeholder="Smith Design" data-save></div>
+        <div class="field"><label for="cg-status">Business structure</label>
+          <select id="cg-status" name="status" data-save><option value="sole" selected>Sole proprietor</option><option value="llc">LLC</option><option value="corp">Corporation</option><option value="partnership">Partnership</option></select></div>
+        <div class="field" data-when="organized"><label for="cg-org-state">State of formation (optional)</label>
+          <select id="cg-org-state" name="org_state" data-save><option value="" selected>Not stated</option><option value="AL">Alabama</option><option value="AK">Alaska</option><option value="AZ">Arizona</option><option value="AR">Arkansas</option><option value="CA">California</option><option value="CO">Colorado</option><option value="CT">Connecticut</option><option value="DE">Delaware</option><option value="DC">District of Columbia</option><option value="FL">Florida</option><option value="GA">Georgia</option><option value="HI">Hawaii</option><option value="ID">Idaho</option><option value="IL">Illinois</option><option value="IN">Indiana</option><option value="IA">Iowa</option><option value="KS">Kansas</option><option value="KY">Kentucky</option><option value="LA">Louisiana</option><option value="ME">Maine</option><option value="MD">Maryland</option><option value="MA">Massachusetts</option><option value="MI">Michigan</option><option value="MN">Minnesota</option><option value="MS">Mississippi</option><option value="MO">Missouri</option><option value="MT">Montana</option><option value="NE">Nebraska</option><option value="NV">Nevada</option><option value="NH">New Hampshire</option><option value="NJ">New Jersey</option><option value="NM">New Mexico</option><option value="NY">New York</option><option value="NC">North Carolina</option><option value="ND">North Dakota</option><option value="OH">Ohio</option><option value="OK">Oklahoma</option><option value="OR">Oregon</option><option value="PA">Pennsylvania</option><option value="RI">Rhode Island</option><option value="SC">South Carolina</option><option value="SD">South Dakota</option><option value="TN">Tennessee</option><option value="TX">Texas</option><option value="UT">Utah</option><option value="VT">Vermont</option><option value="VA">Virginia</option><option value="WA">Washington</option><option value="WV">West Virginia</option><option value="WI">Wisconsin</option><option value="WY">Wyoming</option></select></div>
+        <div class="field full"><label for="cg-p-address">Mailing address</label>
+          <input type="text" id="cg-p-address" name="p_address" placeholder="123 Main Street, Springfield, IL 62701" data-save></div>
+        <div class="field"><label for="cg-p-email">Email</label>
+          <input type="email" id="cg-p-email" name="p_email" placeholder="hello@example.com" data-save></div>
+        <div class="field"><label for="cg-p-phone">Phone (optional)</label>
+          <input type="tel" id="cg-p-phone" name="p_phone" placeholder="(555) 123-4567" data-save></div>
+        <div class="field full"><label for="cg-p-privacy">Address of your privacy policy (optional)</label>
+          <input type="text" inputmode="url" id="cg-p-privacy" name="p_privacy" placeholder="https://www.example.com/privacy" data-save></div>
+        <div class="field full"><label for="cg-p-insurance">Professional liability insurance (optional)</label>
+          <input type="text" id="cg-p-insurance" name="p_insurance" placeholder="Insurer and policy number" data-save></div>
+        <div class="field full"><label for="cg-activity">Your services</label>
+          <textarea id="cg-activity" name="activity" rows="2" placeholder="Graphic design, website development and training" data-save></textarea></div>
+      </div>
+      <h3>Your clients</h3>
+      <div class="fields">
+        <div class="field full"><label for="cg-clients">You work for</label>
+          <select id="cg-clients" name="clients" data-save><option value="pro" selected>Businesses only</option><option value="part">Consumers only</option><option value="both">Businesses and consumers</option></select></div>
+        <label class="check full" data-when="has_part"><input type="checkbox" id="cg-offsite" name="offsite" data-save><span>Consumers sometimes agree to buy at their home or elsewhere away from my place of business</span></label>
+        <div class="field" data-when="offsite_part"><label for="cg-tx-date">Date of a sale (optional)</label>
+          <input type="date" id="cg-tx-date" name="tx_date" aria-describedby="cg-tx-date-hint" data-save>
+          <span class="hint" id="cg-tx-date-hint">Fills in the date and the deadline on the notice of cancellation.</span></div>
+      </div>
+      <h3>Prices and payment</h3>
+      <div class="fields">
+        <div class="field full"><label for="cg-pricing">Your prices</label>
+          <select id="cg-pricing" name="pricing" data-save><option value="quote" selected>By quote (fixed price or time spent)</option><option value="daily">Day rate</option><option value="hourly">Hourly rate</option></select></div>
+        <div class="field full"><label for="cg-rates">Your rates (optional)</label>
+          <input type="text" id="cg-rates" name="rates" placeholder="$95 an hour" data-save></div>
+        <div class="field"><label for="cg-validity">Quotes valid for</label>
+          <div class="input-suffix"><input type="text" inputmode="numeric" id="cg-validity" name="validity" value="30" data-save><span>days</span></div></div>
+        <div class="field"><label for="cg-deposit">Advance payment</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="cg-deposit" name="deposit" placeholder="0" data-save><span>%</span></div></div>
+        <div class="field"><label for="cg-terms">Payment terms</label>
+          <div class="input-suffix"><input type="text" inputmode="numeric" id="cg-terms" name="terms" value="30" aria-describedby="cg-terms-hint" data-save><span>days</span></div>
+          <span class="hint" id="cg-terms-hint">0 for payment on receipt.</span></div>
+        <div class="field"><span class="label" id="cg-pay-label">Payment methods</span>
+          <div class="checks" role="group" aria-labelledby="cg-pay-label">
+            <label class="check"><input type="checkbox" id="cg-pay-ach" name="pay_ach" checked data-save><span>Bank transfer (ACH or wire)</span></label>
+            <label class="check"><input type="checkbox" id="cg-pay-card" name="pay_card" data-save><span>Card</span></label>
+            <label class="check"><input type="checkbox" id="cg-pay-check" name="pay_check" data-save><span>Check</span></label>
+            <label class="check"><input type="checkbox" id="cg-pay-link" name="pay_link" data-save><span>Online payment link</span></label>
+          </div></div>
+        <label class="check full"><input type="checkbox" id="cg-late" name="late" data-save><span>Charge interest on late payments</span></label>
+        <div class="field" data-when="late"><label for="cg-late-rate">Interest rate</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="cg-late-rate" name="late_rate" placeholder="1.5" data-save><span>% a month</span></div></div>
+      </div>
+      <h3>Work and terms</h3>
+      <div class="fields">
+        <div class="field" data-when="has_pro"><label for="cg-acceptance">Checking deliverables (business clients)</label>
+          <div class="input-suffix"><input type="text" inputmode="numeric" id="cg-acceptance" name="acceptance" value="10" data-save><span>days</span></div></div>
+        <div class="field"><label for="cg-notice">Notice to end the contract</label>
+          <div class="input-suffix"><input type="text" inputmode="numeric" id="cg-notice" name="notice" value="14" data-save><span>days</span></div></div>
+        <div class="field full"><label for="cg-ip">Copyright in the deliverables</label>
+          <select id="cg-ip" name="ip" data-save><option value="assign" selected>Assigned to the client after full payment</option><option value="license">Kept by you, with a license to the client</option></select></div>
+        <label class="check full"><input type="checkbox" id="cg-portfolio" name="portfolio" checked data-save><span>Show the work in my portfolio</span></label>
+        <label class="check full"><input type="checkbox" id="cg-conf" name="conf" checked data-save><span>Confidentiality</span></label>
+        <label class="check full" data-when="has_pro"><input type="checkbox" id="cg-liability" name="liability" checked data-save><span>Limit my liability to the price of the project (business clients only)</span></label>
+        <label class="check full"><input type="checkbox" id="cg-subcontract" name="subcontract" data-save><span>Allow me to use subcontractors</span></label>
+        <div class="field full"><label for="cg-law">Governing law</label>
+          <select id="cg-law" name="law" data-save><option value="" selected>Choose a state</option><option value="AL">Alabama</option><option value="AK">Alaska</option><option value="AZ">Arizona</option><option value="AR">Arkansas</option><option value="CA">California</option><option value="CO">Colorado</option><option value="CT">Connecticut</option><option value="DE">Delaware</option><option value="DC">District of Columbia</option><option value="FL">Florida</option><option value="GA">Georgia</option><option value="HI">Hawaii</option><option value="ID">Idaho</option><option value="IL">Illinois</option><option value="IN">Indiana</option><option value="IA">Iowa</option><option value="KS">Kansas</option><option value="KY">Kentucky</option><option value="LA">Louisiana</option><option value="ME">Maine</option><option value="MD">Maryland</option><option value="MA">Massachusetts</option><option value="MI">Michigan</option><option value="MN">Minnesota</option><option value="MS">Mississippi</option><option value="MO">Missouri</option><option value="MT">Montana</option><option value="NE">Nebraska</option><option value="NV">Nevada</option><option value="NH">New Hampshire</option><option value="NJ">New Jersey</option><option value="NM">New Mexico</option><option value="NY">New York</option><option value="NC">North Carolina</option><option value="ND">North Dakota</option><option value="OH">Ohio</option><option value="OK">Oklahoma</option><option value="OR">Oregon</option><option value="PA">Pennsylvania</option><option value="RI">Rhode Island</option><option value="SC">South Carolina</option><option value="SD">South Dakota</option><option value="TN">Tennessee</option><option value="TX">Texas</option><option value="UT">Utah</option><option value="VT">Vermont</option><option value="VA">Virginia</option><option value="WA">Washington</option><option value="WV">West Virginia</option><option value="WI">Wisconsin</option><option value="WY">Wyoming</option></select></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="preview-actions">
+        <button type="button" class="btn btn-primary" id="cg-print">Download as PDF</button>
+        <button type="button" class="btn btn-ghost" id="cg-word">Download as Word</button>
+        <button type="button" class="btn btn-ghost" id="cg-copy">Copy the text</button>
+      </div>
+      <p class="small muted print-hint">PDF: choose “Save as PDF” in the print window. Word: the file opens in Word, LibreOffice or Google Docs for editing.</p>
+      <div class="cgv-notices" id="cg-notices" role="status" aria-live="polite"></div>
+      <div class="paper-wrap"><article class="paper" id="cg-preview" aria-label="Preview of the terms and conditions"></article></div>
+      <button type="button" class="btn btn-ghost btn-sm" id="cg-reset">Clear everything</button>
+    </div>
+  </div>
+</section>
+
+<script type="application/json" id="cgv-data">{"country": "us", "lang": "en-US", "store": "cgv-us", "doc_title": "TERMS AND CONDITIONS", "file": "Terms and conditions", "article": "{n}. {title}", "annex": "Annex – {title}", "reset_confirm": "Clear everything you entered?", "hints": {"p_name": "your name", "p_address": "your mailing address", "p_email": "email", "contacts": "email and phone", "status_text": "business structure", "validity": "30", "deposit": "advance payment", "terms_text": "payment terms", "payment_methods": "payment methods", "late_text": "interest", "acceptance": "10", "notice": "14", "today": "date", "law_name": "your state", "home_min": "$25", "other_min": "$130", "refund_days": "10", "statement": "cancellation statement"}, "preamble": ["Effective from {today}."], "clauses": [{"title": "About these terms", "paras": ["These terms and conditions (the “Terms”) apply to the services provided by {p_name}[[p_trading| doing business as {p_trading}]] (“we”, “us”, “our”) to our clients (“you”, “your”)[[activity|: {activity}]].", {"when": {"both": ["on"]}, "text": "They apply to business clients, who buy our services for their business, and to consumers, who buy them primarily for personal, family or household purposes. Where a term applies only to one of these groups, it says so."}, {"when": {"pro_only": ["on"]}, "text": "They apply to business clients, who buy our services for their business."}, {"when": {"part_only": ["on"]}, "text": "They apply to consumers, who buy our services primarily for personal, family or household purposes."}, "Our quote or proposal, once you accept it, and these Terms form the contract between us. If the quote and these Terms conflict, the quote applies.", {"when": {"has_part": ["on"]}, "text": "If you are a consumer, nothing in these Terms limits any right you have under the consumer protection laws of the state where you live."}]}, {"title": "About us", "paras": ["We are {status_text}. Our mailing address is {p_address}.", "You can contact us at {contacts}.", {"when": {"has_p_insurance": ["on"]}, "text": "Professional liability insurance: {p_insurance}."}]}, {"title": "Quotes and the contract", "paras": ["Each quote describes the services, the price, the payment terms and the timetable. It is valid for {validity} days from its date, unless it says otherwise.", "The contract is formed when you accept our quote in writing, by signing it (an electronic signature is valid) or by confirming your acceptance by email. The version of these Terms in force on that day applies.", "Each of us keeps a copy of the accepted quote and of these Terms.", "Any change to the services, the price or the timetable must be agreed in writing, for example by email, before it takes effect."]}, {"title": "Prices", "paras": [{"when": {"pricing": ["quote"]}, "text": "Our prices are set in each quote, as a fixed price or based on the time spent[[rates|. Our current rates: {rates}]]."}, {"when": {"pricing": ["daily"]}, "text": "We charge a day rate[[rates|: {rates}]]. Each quote gives an estimate of the number of days, and we will not exceed it without your written agreement."}, {"when": {"pricing": ["hourly"]}, "text": "We charge an hourly rate[[rates|: {rates}]]. Each quote gives an estimate of the number of hours, and we will not exceed it without your written agreement."}, "Our prices do not include sales tax. Where sales tax applies to our services, we add it to the invoice at the applicable rate.", "Expenses, such as travel, materials or third-party fees, are charged only if the quote provides for them or you agree to them in writing in advance."]}, {"title": "Invoices and payment", "paras": [{"when": {"has_deposit": ["on"]}, "text": "When you accept the quote, we will invoice an advance payment of {deposit}% of the price. Work begins when we receive it, and it is deducted from the final invoice."}, "We invoice when the services are completed or, for work charged by time or lasting more than a month, at the end of each month, unless the quote says otherwise.", "If you need our invoice by a particular date to meet your internal payment processing deadlines, tell us in writing before the work starts, and we will send it by that date.", "Invoices are payable {terms_text}, by {payment_methods}.", {"when": {"late_on": ["on"]}, "text": "If an invoice is not paid on time, we may charge {late_text}."}, {"when": {"has_pro": ["on"]}, "text": "Business clients: if an invoice is still unpaid 14 days after we have reminded you in writing, we may suspend the services until it is paid, and the timetable is extended accordingly."}]}, {"title": "Freelance protection laws", "paras": ["If a freelance worker protection law applies to our contract, such as the Freelance Isn’t Free Act in New York State or New York City or the Freelance Worker Protection Act in Illinois, the accepted quote and these Terms together are intended to be the written contract it requires.", "You will pay each invoice by its due date and will not require us, as a condition of timely payment, to accept less than the agreed price."]}, {"title": "Carrying out the services", "paras": ["We will perform the services with reasonable care and skill, in a professional and workmanlike manner, within the timetable in the quote.", "You will give us, in good time, the information, materials, access and decisions we need. If they are late or inaccurate, we are not responsible for the resulting delay, and the timetable is extended accordingly.", {"when": {"subcontract": ["on"]}, "text": "We may use subcontractors for part of the services, and we remain responsible for their work."}, {"when": {"subcontract": ["off"]}, "text": "We perform the services ourselves and will not subcontract them without your written consent."}, {"when": {"has_pro": ["on"]}, "text": "Business clients: you have {acceptance} days after delivery to check each deliverable and tell us in writing of any defect. If you do not, or if you use the deliverable in your business, it is treated as accepted."}, {"when": {"has_part": ["on"]}, "text": "If you are a consumer and a deliverable does not match what we agreed, tell us as soon as you can and we will put it right."}]}, {"title": "Cancelling a sale made away from our place of business", "when": {"offsite_part": ["on"]}, "paras": ["If you are a consumer and you agree to buy our services at your home for {home_min} or more, or at another place that is not our place of business (such as your workplace, a hotel, a convention center or a fair) for {other_min} or more, you may cancel the contract without any penalty or obligation.", {"text": "{statement}", "bold": true}, "Business days are all days except Sundays and federal holidays. To cancel, mail or deliver to us at {p_address} a signed and dated copy of the notice of cancellation, or any other written notice[[p_email|, or send it by email to {p_email}]].", "When you agree to buy, we tell you about your right to cancel and give you a copy of the contract and two completed copies of the notice of cancellation, in the language we used to present our services.", "If you cancel, we will refund all your payments within {refund_days} business days after we receive your notice. We will not start the services until the cancellation period has ended."]}, {"title": "Intellectual property", "paras": [{"when": {"ip": ["assign"]}, "text": "Once you have paid the full price, we assign to you the copyright and other intellectual property rights in the final deliverables created for you under the contract, worldwide and for the full duration of those rights. Until then, you may use the deliverables only to review them. On request, we will sign a separate document confirming the assignment."}, {"when": {"ip": ["assign"]}, "text": "We keep the rights in our pre-existing materials, tools, templates and know-how, and in drafts and options you did not choose. Where they are included in a deliverable, we grant you a non-exclusive, perpetual, worldwide license to use them as part of that deliverable."}, {"when": {"ip": ["license"]}, "text": "We keep the copyright and other intellectual property rights in the deliverables. Once you have paid the full price, we grant you a non-exclusive, perpetual, worldwide license to use them for the purposes set out in the quote or, if it says nothing, for your own business or personal use. Any other use needs our written consent."}, "You confirm that you have the right to use the materials you give us, and that we may use them to perform the services.", {"when": {"portfolio": ["on"], "has_pro": ["on"]}, "text": "Business clients: unless you object in writing, we may show the deliverables and mention your name in our portfolio and marketing once they are public."}, {"when": {"portfolio": ["on"], "has_part": ["on"]}, "text": "If you are a consumer, we show your project in our portfolio only with your consent."}]}, {"title": "Confidentiality", "when": {"conf": ["on"]}, "paras": ["Each of us keeps confidential the non-public information received from the other, uses it only to perform the contract and discloses it only to people who need to know it. This lasts during the contract and for two years after it ends. It does not apply to information that is public, already known to the recipient or that must be disclosed by law."]}, {"title": "Warranties and liability", "paras": [{"when": {"has_pro": ["on"]}, "text": "Business clients: except as stated in these Terms or in the quote, and to the extent permitted by law, we make no other warranties, express or implied, about the services."}, {"when": {"liability": ["on"]}, "text": "Business clients: our total liability under or in connection with the contract is limited to the price paid or payable for the services concerned, and we are not liable for indirect or consequential loss, or for loss of profits, revenue or data. These limits do not apply to fraud, gross negligence or willful misconduct, or to any liability that cannot be limited by law."}, {"when": {"has_part": ["on"]}, "text": "If you are a consumer, these Terms do not limit our liability to you or exclude any warranty the law gives you."}]}, {"title": "Events outside our control", "paras": ["Neither of us is responsible for a delay or failure caused by an event outside our reasonable control, such as illness, accident, natural disaster or a failure of public utilities. The party affected tells the other promptly and does its best to limit the effects. If the event lasts more than 30 days, either of us may end the contract in writing, and you pay only for the work done."]}, {"title": "Ending the contract", "paras": ["Either of us may end the contract by giving {notice} days’ written notice.", "Either of us may end it at once, in writing, if the other seriously breaches the contract and does not put it right within 14 days of being asked to in writing.", "When the contract ends, you pay for the work done up to that date and for the expenses we have incurred and cannot recover. Any advance payment is deducted, and we refund any amount you have paid above that.", "The terms on payment, intellectual property, confidentiality and liability continue to apply after the contract ends."]}, {"title": "Personal data", "paras": ["We use the personal information you give us only to perform the contract, manage our relationship with you and meet our legal obligations, and we keep it secure.", {"when": {"has_p_privacy": ["on"]}, "text": "Our privacy policy explains how we handle it: {p_privacy}."}]}, {"title": "Disputes, governing law and courts", "paras": ["If a dispute arises, we will first try to resolve it with you informally and in good faith. If we cannot within 30 days, either of us may take the matter further.", "These Terms and the contract are governed by the laws of {law_name}.", {"when": {"has_pro": ["on"]}, "text": "Business clients: the state and federal courts located in {law_name} have exclusive jurisdiction."}, {"when": {"has_part": ["on"]}, "text": "If you are a consumer, you may also bring a claim in the courts of the state where you live."}, "Either of us may bring a claim in a small claims court where the claim qualifies."]}, {"title": "General", "paras": [{"when": {"has_pro": ["on"]}, "text": "Business clients: the accepted quote and these Terms are the entire agreement between us on their subject and replace any earlier discussions or proposals."}, "We may update these Terms for future quotes. The version in force on the day you accept a quote applies to that contract.", "Neither of us may transfer the contract to someone else without the other’s written consent.", "If a court finds any part of these Terms unenforceable, the rest remains in effect. If we delay enforcing a right, we do not give it up.", "Notices under the contract may be sent by email to the addresses we use for the project. The contract may be signed electronically and in counterparts."]}], "annexes": [{"title": "NOTICE OF CANCELLATION", "when": {"offsite_part": ["on"]}, "bold": true, "paras": [{"block": "notice"}]}], "ui": {"title_prefix": "Terms and conditions", "errors": "To fix", "notes": "Good to know", "checks": {"name_missing": "Enter your name or business name: it must appear on the contract and on the notice of cancellation.", "address_missing": "Enter your mailing address: the New York freelance law and the FTC Cooling-Off Rule require it in the contract.", "email_missing": "Add an email address: these terms let clients send notices by email.", "law_missing": "Choose the state whose law governs your contracts, for example the state where your business is based.", "terms_invalid": "Enter the payment period in whole days (0 for payment on receipt).", "late_invalid": "Enter the monthly interest rate for late payments (a number above 0), or untick the option.", "late_state_law": "No federal law sets a late payment rate between private businesses: the rate in your terms must stay within your state’s usury and late-fee limits. Check your state’s law before you choose it.", "deposit_invalid": "Enter the advance payment as a percentage from 0 to 100.", "payment_none": "Choose at least one payment method.", "acceptance_invalid": "Enter the number of days business clients have to check deliverables.", "notice_invalid": "Enter the notice period in days.", "validity_invalid": "Enter how many days a quote stays valid.", "offsite_steps": "Sales to consumers at their home ({home} or more) or elsewhere away from your place of business ({other} or more): when they agree to buy, tell them about the right to cancel, give them a copy of the contract with the cancellation statement in bold next to their signature, and two completed copies of the notice of cancellation, in the language you used to present your services, on paper unless they agreed to electronic copies (E-SIGN Act). Do not start before the deadline. Your state may give consumers more rights.", "tx_date_invalid": "Enter the date of the sale.", "holidays_unknown": "Federal holidays for that period are not in our rules yet: write the deadline on the notice yourself (midnight of the third business day after the sale, not counting Sundays and federal holidays).", "contract_items": "In New York State and New York City (contracts of {ny} or more, alone or with the same client over 120 days) and in Illinois ({il} or more over 120 days), the written contract must include both parties’ names and mailing addresses, the services, their value, the rate and method of payment, the payment date and, in Illinois, the dates of the services: put them in your quote.", "ip_signed": "A transfer of copyright is valid only in a writing signed by you (17 U.S.C. 204(a)): sign the quote or contract that refers to these terms (an electronic signature works).", "liability_review": "The generator does not check whether a limit of liability is enforceable in your state: have a lawyer review it if your work carries significant risks."}}}</script>
+
+<section class="section prose">
+  <h2>What these terms cover</h2>
+  <ul>
+    <li><strong>For all your clients:</strong> who you are and how to reach you, how the contract is formed from your quote, prices and payment, the date by which a client needs your invoice, freelance protection laws, how you carry out the services, copyright, liability, ending the contract, disputes and the governing law.</li>
+    <li><strong>With business clients:</strong> a period to check deliverables, the right to pause work on an unpaid invoice, a warranty disclaimer and a limit of liability, and the courts of your state.</li>
+    <li><strong>With consumers:</strong> a reminder that their rights under their state’s consumer protection laws are not limited, and no limit of liability, warranty disclaimer, deemed acceptance, “entire agreement” term or exclusive choice of courts. For sales made at their home or elsewhere away from your place of business, the three-day right to cancel, with the official notice of cancellation in an annex.</li>
+  </ul>
+  <h2>How to use them</h2>
+  <ul>
+    <li>Send your terms with every quote, as a PDF, <strong>before</strong> the client accepts it, and ask them to sign the quote or confirm their acceptance by email: this is what makes the terms part of the contract. An electronic signature is valid under the federal E-SIGN Act. Prepare your quotes with the <a href="{{link:invoice}}">invoice and estimate generator</a>.</li>
+    <li>Describe in each quote the services, their price, how you charge, the payment date and the timetable.</li>
+    <li>Keep each dated version of your terms and a copy of every accepted quote: the terms in force on the day a quote is accepted apply to that contract.</li>
+    <li>For a large project, add a <a href="{{link:contract}}">freelance contract</a> signed by both parties.</li>
+  </ul>
+  <h2>Freelance Isn’t Free: what your quote must say</h2>
+  <p>Some states and cities require a written contract when a client hires a freelancer. The duty is the client’s, but your accepted quote and these terms can be that contract if they contain what the law asks for:</p>
+  <ul>
+    <li><strong>New York State</strong> (General Business Law, article 44-A, contracts of $800 or more, alone or with the same client over the previous 120 days): both parties’ names and mailing addresses, an itemized list of the services, their value, the rate and method of pay, the payment date (or how it is set) and the date by which you must send your list of services or invoice for the client’s processing deadlines.</li>
+    <li><strong>New York City</strong> ($800 or more, counting contracts with the same client over 120 days): the work, the pay and the payment date.</li>
+    <li><strong>Illinois</strong> ($500 or more over 120 days): both parties’ names and contact information, the products and services, the rate and method of pay, the payment date and the dates of the services.</li>
+  </ul>
+  <p>In these places, a client must pay by the date in the contract or, if there is none, within 30 days after you finish, and must not retaliate against you for using your rights; in New York State, a client cannot make you accept less to be paid on time. Other states and cities have adopted similar laws: see the <a href="{{link:freelance-law}}">Freelance Isn’t Free guide</a>.</p>
+  <h2>Selling at a client’s home</h2>
+  <p>The Federal Trade Commission’s Cooling-Off Rule (16 CFR Part 429) applies when a consumer agrees to buy your services at their home for $25 or more, or at another place that is not your place of business (their workplace, a hotel, a convention center, a fair) for $130 or more, after you have presented your services in person, even at their invitation. It does not apply to business clients, to sales made entirely by mail or phone, or to a repair or maintenance visit they asked for, among other exceptions. When it applies:</p>
+  <ul>
+    <li><strong>When they agree to buy</strong>, tell them about their right to cancel and give them a copy of the contract or a receipt showing the date, your name and your address, with the cancellation statement in bold type of at least 10 points next to their signature.</li>
+    <li><strong>Give them the notice of cancellation in two copies</strong>, both completed: print the annex twice. Enter the date of the sale in the form (“Your clients”) to fill in its date and the deadline: midnight of the third business day, not counting Sundays and federal holidays.</li>
+    <li>Use <strong>the same language</strong> as your presentation (for example Spanish), and give paper copies unless they agreed to receive the documents electronically as the E-SIGN Act requires.</li>
+    <li><strong>Do not start the work before the deadline.</strong> If they cancel, refund every payment within 10 business days. Never ask them to waive the right.</li>
+    <li>Your state’s law on home sales still applies and may give consumers more rights.</li>
+  </ul>
+  <h2>What this generator does not cover</h2>
+  <p>These terms are for services provided by a business established in the United States. They do not suit the sale of goods, subscriptions and contracts that renew automatically, financial services, licensed professions, construction and home improvement work, or clients based outside the US, and they do not include each state’s own consumer protection rules. Have your terms reviewed by an attorney if your work carries significant risks. If a client does not pay, see the <a href="{{link:court}}">small claims court guide</a>.</p>
+  <p class="small muted">Template provided for information only; it is not legal advice.</p>
+</section>

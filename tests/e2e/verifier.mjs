@@ -2645,6 +2645,83 @@ const tests = {
     await Promise.all([page.waitForNavigation(), page.click("#cg-reset")]);
     check((await page.inputValue("#cg-clients")) === "pro" && (await page.inputValue("#cg-p-name")) === "", "T&Cs UK : tout effacer");
   },
+  async "us/terms-and-conditions-generator/"(page) {
+    const preview = async () => (await page.textContent("#cg-preview")).replace(/\s+/g, " ");
+    const notices = async () => (await page.textContent("#cg-notices")).replace(/\s+/g, " ");
+    let text = await preview();
+    check(text.includes("TERMS AND CONDITIONS") && text.includes("1. About these terms") && text.includes("Freelance protection laws") &&
+      !text.includes("Cancelling a sale") && !text.includes("Annex"), "T&Cs US : clients professionnels par défaut, sans annulation ni annexe");
+    check(text.includes("Invoices are payable within 30 days of the invoice date, by bank transfer (ACH or wire).") && !text.includes("we may charge interest"),
+      "T&Cs US : délai de paiement, pas d'intérêts par défaut");
+    let n = await notices();
+    check(n.includes("Enter your name or business name") && n.includes("Choose the state whose law governs your contracts") &&
+      (await page.getAttribute("#cg-p-name", "aria-invalid")) === "true" && (await page.getAttribute("#cg-law", "aria-invalid")) === "true",
+      "T&Cs US : nom et droit applicable à saisir, champs signalés");
+    check(n.includes("contracts of $800 or more") && n.includes("Illinois ($500 or more over 120 days)"), "T&Cs US : contenu du contrat écrit (New York, Illinois)");
+    check(await page.isHidden("#cg-offsite") && await page.isHidden("#cg-org-state") && await page.isHidden("#cg-late-rate") && await page.isHidden("#cg-tx-date"),
+      "T&Cs US : champs conditionnels masqués");
+    await page.fill("#cg-p-name", "Jane Smith");
+    await page.fill("#cg-p-address", "123 Main Street, Springfield, IL 62701");
+    await page.fill("#cg-p-email", "hello@example.com");
+    await page.selectOption("#cg-law", "IL");
+    n = await notices();
+    check(!n.includes("To fix") && n.includes("does not check whether a limit of liability is enforceable"), "T&Cs US : plus rien à corriger, plafond à faire relire");
+    text = await preview();
+    check(text.includes("governed by the laws of Illinois.") && text.includes("the state and federal courts located in Illinois have exclusive jurisdiction"),
+      "T&Cs US : droit et tribunaux de l'État choisi");
+    await page.selectOption("#cg-status", "llc");
+    check(await page.isVisible("#cg-org-state"), "T&Cs US : État de constitution d'une LLC");
+    await page.selectOption("#cg-org-state", "DE");
+    check((await preview()).includes("We are a limited liability company organized in Delaware."), "T&Cs US : LLC du Delaware");
+    await page.check("#cg-late");
+    check(await page.isVisible("#cg-late-rate") && (await notices()).includes("Enter the monthly interest rate"), "T&Cs US : taux de retard demandé");
+    await page.fill("#cg-late-rate", "1.5");
+    check((await preview()).includes("we may charge interest at 1.50% per month on the overdue amount, or at the highest rate allowed by law if that is lower") &&
+      (await notices()).includes("No federal law sets a late payment rate"), "T&Cs US : intérêts de retard et loi de l'État à vérifier");
+    // Particuliers : droits de consommateur ; vente chez eux : annulation de trois jours ouvrés et formulaire officiel.
+    await page.selectOption("#cg-clients", "both");
+    text = await preview();
+    check(await page.isVisible("#cg-offsite") && text.includes("nothing in these Terms limits any right you have under the consumer protection laws") &&
+      text.includes("bring a claim in the courts of the state where you live") && !text.includes("Annex"), "T&Cs US : particuliers, sans annulation hors vente à domicile");
+    await page.check("#cg-offsite");
+    text = await preview();
+    check(text.includes("Cancelling a sale made away from our place of business") && text.includes("at your home for $25 or more") &&
+      text.includes("Annex – NOTICE OF CANCELLATION") && text.includes("NOT LATER THAN MIDNIGHT OF ________________."), "T&Cs US : annulation et formulaire à remplir");
+    check(await page.$eval("#cg-preview p.k-bold", (p) => p.textContent.startsWith("You, the buyer, may cancel this transaction") && getComputedStyle(p).fontWeight === "700") &&
+      await page.$eval("#cg-preview .k-annex.k-bold p", (p) => getComputedStyle(p).fontWeight === "700"), "T&Cs US : phrase et formulaire en gras (16 CFR 429.1)");
+    check((await notices()).includes("Sales to consumers at their home ($25 or more)"), "T&Cs US : étapes d'une vente à domicile");
+    await page.fill("#cg-tx-date", "2026-07-02");
+    text = await preview();
+    check(await page.$eval("#cg-preview .k-annex .k-field", (p) => p.textContent === "July 2, 2026") &&
+      text.includes("to Jane Smith, at 123 Main Street, Springfield, IL 62701 NOT LATER THAN MIDNIGHT OF July 8, 2026."),
+      "T&Cs US : date de la vente et date limite (4 juillet férié un samedi)");
+    await page.fill("#cg-tx-date", "2030-12-30");
+    check((await notices()).includes("Federal holidays for that period are not in our rules yet"), "T&Cs US : année non couverte signalée");
+    await page.fill("#cg-tx-date", "2026-07-02");
+    // Un avertissement mène à son champ.
+    await page.fill("#cg-p-email", "");
+    await page.click('#cg-notices a[data-focus="cg-p-email"]');
+    check(await page.evaluate(() => document.activeElement.id === "cg-p-email"), "T&Cs US : l'avertissement donne le focus au champ");
+    await page.fill("#cg-p-email", "hello@example.com");
+    const [download] = await Promise.all([page.waitForEvent("download"), page.click("#cg-word")]);
+    const doc = (await import("fs")).readFileSync(await download.path(), "utf8");
+    check(download.suggestedFilename() === "Terms and conditions.doc" && doc.includes("NOTICE OF CANCELLATION") && doc.includes(".k-bold,.k-bold p{font-weight:bold}"),
+      "T&Cs US : téléchargement Word, gras conservé");
+    await page.click("#cg-copy");
+    check(await copied(page, "#cg-copy"), "T&Cs US : bouton Copier");
+    await page.reload({ waitUntil: "networkidle" });
+    check((await page.inputValue("#cg-clients")) === "both" && await page.isChecked("#cg-offsite") && (await page.inputValue("#cg-tx-date")) === "2026-07-02" &&
+      (await page.inputValue("#cg-law")) === "IL", "T&Cs US : saisie mémorisée");
+    check(await page.evaluate(() => (localStorage.getItem("of:us:cgv-us") || "").includes("Springfield") &&
+      !(localStorage.getItem("of:cgv") || "").includes("Springfield") && !(localStorage.getItem("of:uk:cgv-uk") || "").includes("Springfield")),
+      "T&Cs US : saisie séparée de celles des CGV française et britannique");
+    await page.screenshot({ path: path.join(shots, "cgv-us-consumers.png"), fullPage: true });
+    await accessible(page, "T&Cs US (consumers, notice of cancellation)");
+    page.once("dialog", (d) => d.accept());
+    await Promise.all([page.waitForNavigation(), page.click("#cg-reset")]);
+    check((await page.inputValue("#cg-clients")) === "pro" && (await page.inputValue("#cg-p-name")) === "" && (await page.inputValue("#cg-law")) === "",
+      "T&Cs US : tout effacer");
+  },
   async "us/nda-template/"(page) {
     let text = await page.textContent("#k-preview");
     check(text.includes("MUTUAL NON-DISCLOSURE AGREEMENT") && text.includes("In consideration of their mutual promises") && text.includes("laws of the State of New York"),

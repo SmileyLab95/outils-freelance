@@ -1,5 +1,33 @@
 # Journal des modifications
 
+## 2026-10-30 — Conditions générales aux États-Unis (*terms and conditions*)
+
+- Nouveau **générateur de *terms and conditions*** pour les prestations de services aux États-Unis (menu *Selling*,
+  liens de langue avec les pages française et britannique) : clients entreprises, particuliers ou les deux ; droit
+  applicable au choix parmi les 50 États et le District de Columbia ; aperçu en direct, PDF, Word, copie ; saisie
+  enregistrée sur l'appareil.
+- **Lois *Freelance Isn't Free*** (État et ville de New York dès 800 $, Illinois dès 500 $) : le devis accepté et les
+  conditions forment le contrat écrit exigé ; liste de ce que le devis doit contenir ; date de remise de la facture
+  pour les délais internes du client ; paiement à la date convenue sans rabais exigé.
+- **Vente chez un particulier ou hors de l'établissement** (règle de la FTC, dès 25 $ au domicile, 130 $ ailleurs) :
+  droit d'annulation jusqu'à minuit du 3e jour ouvré, remboursement sous 10 jours ouvrés, pas de début des travaux
+  avant la fin du délai ; phrase officielle et formulaire « Notice of Cancellation » en gras en annexe, rempli avec le
+  nom, l'adresse, la date de la vente et la date limite, calculée avec les jours fériés fédéraux (un jour férié
+  observé un autre jour est aussi sauté à sa date légale).
+- **Particuliers** : leurs droits de consommateur dans leur État sont préservés ; ni plafond de responsabilité, ni
+  exclusion de garanties, ni réception tacite, ni « entire agreement », ni juridiction exclusive.
+- **Entreprises** : délai de vérification des livrables, suspension en cas d'impayé, exclusion des garanties et plafond
+  de responsabilité (à faire relire), tribunaux de l'État choisi.
+- Signature électronique valable (E-SIGN) ; cession du droit d'auteur par un écrit signé (17 U.S.C. 204) ; intérêts de
+  retard facultatifs, dans la limite de la loi de l'État.
+- Sources lues avec l'outil de lecture, étendu aux sites des lois américaines (eCFR, govinfo, Code des États-Unis, New
+  York, Illinois, Californie) ; cinq nouvelles règles dans `data/rules/us.json`, trois mises à jour (loi de New York lue
+  en entier). Loi californienne et loi de l'Illinois illisibles par l'outil le 30/10/2026 : signalé.
+- Moteur `engines/cgv-us.js` ; `tools/cgv.js` commun aux trois pays ; gras possible dans `engines/contract-doc.js`.
+- Spécification [46](documentation/46-cgv-etats-unis.md), décision D48. Tests : 19 tests, 91 erreurs réintroduites
+  (toutes détectées après renforcement, une sans effet), parcours navigateur ; suite complète (563 tests unitaires,
+  29 tests serveur, 5 tests des scripts, 3 781 vérifications navigateur).
+
 ## 2026-10-30 — Conditions générales au Royaume-Uni (*terms and conditions*)
 
 - Nouveau **générateur de *terms and conditions*** pour les prestations de services au Royaume-Uni (menu *Selling*,

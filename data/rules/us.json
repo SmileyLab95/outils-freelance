@@ -577,7 +577,8 @@
       "source": "https://www.nyc.gov/assets/dca/downloads/pdf/workers/Protecting-Freelance-Workers.pdf",
       "source_title": "NYC DCWP - Protecting Freelance Workers (flyer)",
       "confidence": "high",
-      "note": "Contract must state the work, the pay and the payment date. Hiring party must answer a DCWP complaint within 20 days."
+      "note": "Read in full on 30/10/2026 with the « Lire une source officielle » tool (DCWP flyer dated 09/2023, SHA-256 7c338a0f…74b801): contracts of $800 or more, alone or with the same hiring party over any 120-day period, must be in writing and state the work, the pay and the payment date; both parties keep a copy; payment by the contract date or, if none, within 30 days after completion; retaliation is illegal; DCWP complaint, to which the hiring party must respond within 20 days; double the unpaid amount, retaliation damages and attorneys' fees in court; certain sales representatives, attorneys and licensed medical professionals excluded; hiring party = anyone other than a government entity; DCWP model contracts. The Administrative Code itself is not published on nyc.gov.",
+      "verified_on": "2026-10-30"
     },
     "freelance_law_new_york_state": {
       "value": {
@@ -595,7 +596,14 @@
       "source": "https://dol.ny.gov/freelance-isnt-free-act",
       "source_title": "NYS Department of Labor - Freelance Isn't Free Act",
       "confidence": "high",
-      "note": "Original version (Labor Law 191-d, enforced by NYSDOL) was set for 2024-05-20; chapter amendment S8039 (https://www.nysenate.gov/legislation/bills/2023/S8039) moved it to GBL Art. 44-A with AG enforcement, effective 2024-08-28. Hiring party must keep contracts 6 years (secondary source). Penalty amounts not verified on an official page."
+      "note": "Read on 30/10/2026 with the « Lire une source officielle » tool: the DOL page (SHA-256 6c507e67…09fcf) states that the Act added Article 44-A to the General Business Law on 28 August 2024, with a DOL model contract and complaints to the Attorney General; the text of Article 44-A was read in full in bill S8039 (SHA-256 2ae208c7…78b9ee; no amended version S8039A is published). § 1410: freelance worker = a natural person or an organization of no more than one natural person, hired as an independent contractor for $800 or more alone or aggregated over the preceding 120 days (sales representatives, lawyers, licensed medical professionals and construction contractors excluded); hiring party = any person except the United States, New York State, municipalities and foreign governments. § 1411: pay by the contract date or, if none, no later than 30 days after completion; no requirement to accept less as a condition of timely payment. § 1412: written contract (contents: rule freelance_written_contract_contents), copy furnished by the hiring party, kept 6 years by the hiring party. § 1414: AG civil penalties up to $1,000, $2,000 and $3,000; actions within 2 years (§ 1412) or 6 years (§§ 1411, 1413); $250 statutory damages for § 1412 (if the contract was requested before the work began), double damages for § 1411, contract value for § 1413, up to $25,000 for a pattern or practice. § 1415: waivers void; NYC Administrative Code title 20 chapter 10 not overridden. The original version (Labor Law 191-d) was repealed by the same bill. nysenate.gov law pages refuse automated reads (403).",
+      "verified_on": "2026-10-30",
+      "more_sources": [
+        {
+          "source": "https://legislation.nysenate.gov/pdf/bills/2023/S8039",
+          "source_title": "New York State Senate - Bill S8039 of 2024 (chapter amendment adding General Business Law Article 44-A, §§ 1410-1415)"
+        }
+      ]
     },
     "freelance_law_illinois": {
       "value": {
@@ -612,7 +620,8 @@
       "source": "https://labor.illinois.gov/laws-rules/legal/freelance-worker-protection-act.html",
       "source_title": "Illinois Department of Labor - Freelance Worker Protection Act",
       "confidence": "high",
-      "note": "Applies to contracts taking effect after 2024-07-01, for work performed in Illinois or for an Illinois-based contracting entity. Excludes construction workers, government contracts, employees. Statute: https://www.ilga.gov/Legislation/ILCS/Articles?ActID=4441&ChapterID=68. Hiring party keeps contract 2 years. IDOL provides a model contract."
+      "note": "IDOL page read in full on 30/10/2026 with the « Lire une source officielle » tool (SHA-256 4cc24f5d…3c026): independent contractors who provide products or services in Illinois or work for a hiring entity located in Illinois, when the work is worth $500 or more in a 120-day period; written contract with name and contact information of both parties, itemization of products and services, rate and method of compensation, date of compensation due and dates of services; full payment by the contract date or, if none, within 30 days of completing the services; protection from retaliation; contracts taking effect after 1 July 2024; IDOL sample contracts in 11 languages. The statute (820 ILCS 193, https://www.ilga.gov/legislation/ilcs/ilcs3.asp?ActID=4441&ChapterID=68) could not be read: the tool refused the site's certificate chain on 30/10/2026; remedies, exclusions and record keeping in this rule come from the earlier check and are not shown by the site's tools.",
+      "verified_on": "2026-10-30"
     },
     "freelance_law_california_state": {
       "value": {
@@ -2090,6 +2099,147 @@
       "confidence": "high",
       "verified_on": "2026-10-29",
       "note": "Groups the payment deadline of the rules freelance_law_nyc, freelance_law_new_york_state and freelance_law_illinois (each: « Date in the contract; if none, no later than 30 days after completion »), for the due date calculator; their scope (contract thresholds, exclusions, effective dates) is in each rule. Laws with medium or low confidence in this file (California, Los Angeles, Columbus, Seattle) are not used for calculations."
+    },
+    "us_ftc_cooling_off": {
+      "value": {
+        "consumer": "goods or services purchased, leased, or rented primarily for personal, family, or household purposes, including courses of instruction or training regardless of the purpose for which they are taken",
+        "where": "the seller (or its representative) personally solicits the sale, including in response to or following an invitation by the buyer, and the buyer's agreement or offer to purchase is made at a place other than the seller's place of business (its main or permanent branch office or local address): for example the buyer's residence or workplace, or facilities rented on a temporary or short-term basis such as hotel or motel rooms, convention centers, fairgrounds and restaurants",
+        "home_min": 25,
+        "other_min": 130,
+        "price": "the total price paid or to be paid, including all interest and service charges, under single or multiple contracts",
+        "cancel_business_days": 3,
+        "deadline": "at any time prior to midnight of the third business day after the date of the transaction",
+        "business_day": "any calendar day except Sunday or any federal holiday",
+        "statement": "You, the buyer, may cancel this transaction at any time prior to midnight of the third business day after the date of this transaction. See the attached notice of cancellation form for an explanation of this right.",
+        "statement_format": "in immediate proximity to the space reserved for the buyer's signature (or on the front page of the receipt if no contract is used), in bold face type of a minimum size of 10 points; if the forms are not attached, the last sentence must give their actual location",
+        "at_signing": [
+          "a fully completed receipt or copy of the contract, in the same language as that principally used in the oral sales presentation, showing the date of the transaction and the seller's name and address",
+          "the completed notice of cancellation form, in duplicate, in the same language as the contract",
+          "oral information about the right to cancel"
+        ],
+        "refund_business_days": 10,
+        "refund": "within 10 business days after receiving a valid notice of cancellation: refund all payments, return any goods or property traded in, cancel and return any negotiable instrument and end any security interest",
+        "prohibited": [
+          "a confession of judgment or a waiver of the buyer's rights, including the right to cancel",
+          "misrepresenting the right to cancel",
+          "assigning a note or other evidence of indebtedness to a third party before midnight of the fifth business day after the contract was signed"
+        ],
+        "exclusions": [
+          "made pursuant to prior negotiations during a visit by the buyer to a retail business establishment with a fixed permanent location where the services are offered on a continuing basis",
+          "a right of rescission under the Consumer Credit Protection Act (15 U.S.C. 1635)",
+          "a bona fide immediate personal emergency, contact initiated by the buyer, with a dated and signed statement in the buyer's handwriting waiving the right to cancel",
+          "conducted and consummated entirely by mail or telephone, without any other contact before the services are performed",
+          "repair or maintenance of the buyer's personal property at the buyer's request (additional services sold during the visit are not excluded)",
+          "real property, insurance, or securities or commodities sold by a registered broker-dealer"
+        ],
+        "state_laws": "state laws and municipal ordinances on door-to-door sales still apply, except where directly inconsistent with the rule (for example a weaker right to cancel, a fee or penalty for cancelling, or no notice in substantially the same form)"
+      },
+      "unit": "object",
+      "label": "FTC Cooling-Off Rule: a consumer may cancel a purchase of services made at home ($25 or more) or at another place that is not the seller's place of business ($130 or more) until midnight of the third business day",
+      "source": "https://www.ecfr.gov/current/title-16/chapter-I/subchapter-D/part-429",
+      "source_title": "16 CFR Part 429, Rule Concerning Cooling-Off Period for Sales Made at Homes or at Certain Other Locations - eCFR",
+      "confidence": "high",
+      "verified_on": "2026-10-30",
+      "note": "Read in full on 30/10/2026 with the « Lire une source officielle » tool, through the eCFR renderer (https://www.ecfr.gov/api/renderer/v1/content/enhanced/current/title-16?chapter=I&subchapter=D&part=429, SHA-256 3565abb2…30fe): §§ 429.0 (definitions, as amended at 80 FR 1332, 9 January 2015), 429.1 (the rule), 429.2 (state laws), 429.3 (exemptions). The rule calls these sales « door-to-door sales »: no door-to-door canvassing is needed, a sale agreed at the buyer's home after the buyer invited the seller is covered. Business day: Sundays and federal holidays excluded (rule public_holidays: observed dates; the site also skips the legal date of a holiday observed on another day, so that the deadline is never earlier than the third business day). A sale agreed online without any in-person contact is not covered by this rule; state laws may add rights."
+    },
+    "us_ftc_cancellation_notice": {
+      "value": {
+        "title": "NOTICE OF CANCELLATION",
+        "form": [
+          "[enter date of transaction]",
+          "(Date)",
+          "You may CANCEL this transaction, without any Penalty or Obligation, within THREE BUSINESS DAYS from the above date.",
+          "If you cancel, any property traded in, any payments made by you under the contract or sale, and any negotiable instrument executed by you will be returned within TEN BUSINESS DAYS following receipt by the seller of your cancellation notice, and any security interest arising out of the transaction will be cancelled.",
+          "If you cancel, you must make available to the seller at your residence, in substantially as good condition as when received, any goods delivered to you under this contract or sale, or you may, if you wish, comply with the instructions of the seller regarding the return shipment of the goods at the seller's expense and risk.",
+          "If you do make the goods available to the seller and the seller does not pick them up within 20 days of the date of your Notice of Cancellation, you may retain or dispose of the goods without any further obligation. If you fail to make the goods available to the seller, or if you agree to return the goods to the seller and fail to do so, then you remain liable for performance of all obligations under the contract.",
+          "To cancel this transaction, mail or deliver a signed and dated copy of this Cancellation Notice or any other written notice, or send a telegram, to [Name of seller], at [address of seller's place of business] NOT LATER THAN MIDNIGHT OF [date].",
+          "I HEREBY CANCEL THIS TRANSACTION.",
+          "(Date)",
+          "(Buyer's signature)"
+        ],
+        "goods_only": [
+          4,
+          5
+        ],
+        "format": "captioned « NOTICE OF RIGHT TO CANCEL » or « NOTICE OF CANCELLATION », containing (where applicable) the statements above in ten point bold face type, in the same language as the contract; furnished in duplicate when the buyer signs; before giving it, the seller completes both copies with its name, the address of its place of business, the date of the transaction and the deadline (not earlier than the third business day after the transaction)"
+      },
+      "unit": "object",
+      "label": "FTC Cooling-Off Rule: text of the notice of cancellation form (16 CFR 429.1(b)) and how to complete it (429.1(c))",
+      "source": "https://www.ecfr.gov/current/title-16/chapter-I/subchapter-D/part-429",
+      "source_title": "16 CFR Part 429, Rule Concerning Cooling-Off Period for Sales Made at Homes or at Certain Other Locations - eCFR",
+      "confidence": "high",
+      "verified_on": "2026-10-30",
+      "note": "Read in full on 30/10/2026 with the « Lire une source officielle » tool, through the eCFR renderer (https://www.ecfr.gov/api/renderer/v1/content/enhanced/current/title-16?chapter=I&subchapter=D&part=429, SHA-256 3565abb2…30fe): §§ 429.0 (definitions, as amended at 80 FR 1332, 9 January 2015), 429.1 (the rule), 429.2 (state laws), 429.3 (exemptions). The form lines are copied word for word from § 429.1(b); goods_only lists the two paragraphs about delivered goods (indexes in form), left out for services since the form contains the statements « where applicable ». The bracketed items are completed by the seller (§ 429.1(c))."
+    },
+    "freelance_written_contract_contents": {
+      "value": {
+        "new_york_state": [
+          "the name and mailing address of both the hiring party and the freelance worker",
+          "an itemization of all services to be provided, the value of the services, and the rate and method of compensation",
+          "the date on which the hiring party must pay the contracted compensation or the mechanism by which that date will be determined",
+          "the date by which the freelance worker must submit a list of services rendered to meet the hiring party's internal processing deadlines for timely payment"
+        ],
+        "nyc": [
+          "the work to be performed",
+          "the pay for the work",
+          "the date of payment"
+        ],
+        "illinois": [
+          "the name and contact information of both the hiring entity and the freelance worker",
+          "an itemization of products and services",
+          "the rate and method of compensation",
+          "the date compensation is due",
+          "the dates of services to be provided"
+        ],
+        "laws": {
+          "new_york_state": "freelance_law_new_york_state",
+          "nyc": "freelance_law_nyc",
+          "illinois": "freelance_law_illinois"
+        }
+      },
+      "unit": "object",
+      "label": "Freelance protection laws: what the written contract must contain (New York State, New York City, Illinois)",
+      "source": "https://legislation.nysenate.gov/pdf/bills/2023/S8039",
+      "source_title": "New York State Senate - Bill S8039 of 2024 (General Business Law Article 44-A, § 1412(2))",
+      "more_sources": [
+        {
+          "source": "https://www.nyc.gov/assets/dca/downloads/pdf/workers/Protecting-Freelance-Workers.pdf",
+          "source_title": "NYC DCWP - Protecting Freelance Workers (flyer)"
+        },
+        {
+          "source": "https://labor.illinois.gov/laws-rules/legal/freelance-worker-protection-act.html",
+          "source_title": "Illinois Department of Labor - Freelance Worker Protection Act"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-10-30",
+      "note": "Read on 30/10/2026 with the « Lire une source officielle » tool: GBL § 1412(2) « at a minimum » (bill S8039, SHA-256 2ae208c7…78b9ee), the DCWP flyer (« spell out the work you will perform; the pay for the work; and the date you get paid », SHA-256 7c338a0f…74b801) and the IDOL page (SHA-256 4cc24f5d…3c026). Thresholds, scope and remedies are in the rules listed under laws. The written contract is the hiring party's duty under these laws; a freelancer's quote and terms can provide it."
+    },
+    "us_esign": {
+      "value": {
+        "validity": "a signature, contract or other record relating to a transaction in or affecting interstate or foreign commerce may not be denied legal effect, validity, or enforceability solely because it is in electronic form, or because an electronic signature or record was used in its formation",
+        "no_obligation": "no one is required to agree to use or accept electronic records or signatures",
+        "consumer_disclosures": "where a law requires information to be provided to a consumer in writing, an electronic record satisfies it only if the consumer has affirmatively consented, after a clear and conspicuous statement (right to paper, right to withdraw consent, scope, procedures, how to get a paper copy and any fee, hardware and software requirements), and consents electronically in a way that shows they can access the information",
+        "consumer_protections": "the content or timing of any disclosure owed to a consumer is not affected",
+        "retention": "an electronic record may be denied effect if it cannot be retained and accurately reproduced for later reference by all parties entitled to retain it"
+      },
+      "unit": "object",
+      "label": "E-SIGN Act: electronic signatures and contracts are valid; consumer consent before giving required written information electronically",
+      "source": "https://www.govinfo.gov/content/pkg/USCODE-2024-title15/pdf/USCODE-2024-title15-chap96-subchapI-sec7001.pdf",
+      "source_title": "15 U.S.C. 7001, Electronic Signatures in Global and National Commerce Act, General rule of validity - govinfo (United States Code, 2024 edition)",
+      "confidence": "high",
+      "verified_on": "2026-10-30",
+      "note": "Read in full on 30/10/2026 with the « Lire une source officielle » tool (https://www.govinfo.gov/link/uscode/15/7001, SHA-256 f32b8291…56775): § 7001(a), (b), (c) (consumer disclosures; (c)(3): a contract is not invalid solely for lack of the electronic consent), (d), (e); § 7002 (states may adopt the Uniform Electronic Transactions Act). § 7003 (exceptions, e.g. wills, family law, certain notices) was not read in full."
+    },
+    "us_copyright_transfer_writing": {
+      "value": "A transfer of copyright ownership, other than by operation of law, is not valid unless an instrument of conveyance, or a note or memorandum of the transfer, is in writing and signed by the owner of the rights conveyed or such owner's duly authorized agent (17 U.S.C. 204(a)); a certificate of acknowledgement is not required.",
+      "unit": "text",
+      "label": "Copyright: an assignment needs a writing signed by the owner",
+      "source": "https://www.govinfo.gov/content/pkg/USCODE-2024-title17/pdf/USCODE-2024-title17-chap2-sec204.pdf",
+      "source_title": "17 U.S.C. 204, Execution of transfers of copyright ownership - govinfo (United States Code, 2024 edition)",
+      "confidence": "high",
+      "verified_on": "2026-10-30",
+      "note": "Read on 30/10/2026 with the « Lire une source officielle » tool (https://www.govinfo.gov/link/uscode/17/204, SHA-256 d5b61ba7…aba5e): § 204(a) and (b). Consequence on the site: a freelancer who assigns copyright signs the quote or contract that refers to the terms; an electronic signature can be used (rule us_esign)."
     }
   },
   "open_questions": [

@@ -66,6 +66,12 @@ test("annexes : après les signatures, sans numéro d'article, conditionnelles ;
   const bare = K.render({ doc_title: "T", article: "{n}. {title}", preamble: [], clauses: [], annexes: [{ title: "B", paras: [{ block: "nope" }] }] }, { raw: {}, text: {} });
   assert.ok(bare.endsWith('<div class="k-closing"></div><section class="k-annex"><h3>Annexe – B</h3></section>'));
   assert.ok(K.word("T", "<p>x</p>").includes(".k-annex{page-break-before:always}"), "Word : annexe sur une nouvelle page");
+  // Gras exigé par la loi : un paragraphe, une annexe entière (formulaire d'annulation américain).
+  const bold = K.render({ doc_title: "T", article: "{n}. {title}", preamble: [], clauses: [{ title: "Un", paras: [{ text: "Gras {p}", bold: true }, "maigre"] }],
+    annexes: [{ title: "N", bold: true, paras: ["x"] }, { title: "M", paras: ["y"] }] }, { raw: {}, text: { p: "Pat" } });
+  assert.ok(bold.includes('<p class="k-bold">Gras Pat</p><p>maigre</p>'));
+  assert.ok(bold.includes('<section class="k-annex k-bold"><h3>Annexe – N</h3><p>x</p></section><section class="k-annex"><h3>Annexe – M</h3>'));
+  assert.ok(K.word("T", "").includes(".k-bold,.k-bold p{font-weight:bold}"), "Word : gras conservé");
 });
 
 // ------------------------------------------------------------------------------------------------------------

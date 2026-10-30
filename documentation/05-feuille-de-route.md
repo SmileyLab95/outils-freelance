@@ -285,9 +285,22 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   depuis le 6 avril 2026, les règlements ADR de 2015 étant abrogés). Seize textes officiels lus en entier, et le guide
   CMA37 de juillet 2026 ; le formulaire type, publié en image sur legislation.gov.uk, lu dans la publication du
   ministère ; script commun avec la France ([45](45-cgv-royaume-uni.md), décision D47).
+- **Conditions générales aux États-Unis (30/10/2026)** : générateur de *terms and conditions* pour les prestations
+  de services (menu *Selling*, liens de langue avec les pages française et britannique) : contrat écrit des lois
+  *Freelance Isn't Free* (État et ville de New York dès 800 $, Illinois dès 500 $ : liste de ce que le devis doit
+  contenir, date de remise de la facture, paiement à la date convenue sans rabais exigé) ; signature électronique
+  (E-SIGN) ; cession du droit d'auteur par un écrit signé (17 U.S.C. 204) ; intérêts de retard facultatifs, dans la
+  limite de la loi de l'État ; envers un particulier, ni plafond, ni exclusion de garanties, ni juridiction exclusive ;
+  vente chez lui ou hors de l'établissement (25 $ ou 130 $) : droit d'annulation jusqu'à minuit du 3e jour ouvré,
+  remboursement sous 10 jours ouvrés, phrase et formulaire officiels de la FTC en gras, date limite calculée avec les
+  jours fériés fédéraux. Règlement de la FTC, E-SIGN, 17 U.S.C. 204 et loi de New York lus en entier ; pages officielles
+  de la ville de New York et de l'Illinois ; outil de lecture étendu aux sites des lois américaines
+  ([46](46-cgv-etats-unis.md), décision D48).
 - **Prochaines actions de Claude** : refonte, suite ([31](31-vision-plateforme.md) § 5) : les quatre modules du compte
-  gratuit sont faits (étape 5) ; étape 6, outils restants (CGV aux États-Unis puis au Canada, après la lecture des
-  sources de chaque pays ; jours ouvrés au Canada (jours fériés fédéraux et provinciaux) : en attente de l'accès à canada.ca, refusé
+  gratuit sont faits (étape 5) ; étape 6, outils restants (CGV au Canada, après la lecture des lois provinciales de
+  protection du consommateur sur leurs sites officiels, désormais lisibles par l'outil de lecture des sources (essai du
+  30/10/2026 réussi : Ontario, *Consumer Protection Act, 2002* ; Québec, Loi sur la protection du consommateur, P-40.1 ;
+  Colombie-Britannique, *Business Practices and Consumer Protection Act* ; Alberta, *Consumer Protection Act*) ; jours ouvrés au Canada (jours fériés fédéraux et provinciaux) : en attente de l'accès à canada.ca, refusé
   depuis l'environnement de travail et sans réponse depuis l'outil de lecture des sources le 29/10/2026 ; sous-traitance,
   devises, guides de protection sociale) ;
   ajouter les taux du 1er semestre 2027 dès leur publication
@@ -301,7 +314,9 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   activité mixte de l'Espace à spécifier (le profil n'a qu'une activité : deux plafonds, déclaration et livre des
   recettes distinguant ventes et prestations, BOFiP BOI-BIC-DECLA-30-30) ; questions ouvertes de `data/rules/` à relire
   avec l'outil de lecture des sources (ACRE) ; puis besoins P3 restants
-  ([02](02-besoins-clients.md) : CGV aux États-Unis et au Canada, sous-traitance) ;
+  ([02](02-besoins-clients.md) : CGV au Canada, sous-traitance) ; loi californienne sur les freelances (SB 988) et
+  loi de l'Illinois (820 ILCS 193) à relire dès que leurs sites officiels sont lisibles par l'outil (refus le
+  30/10/2026), pour les détailler dans les CGV et le guide américains ;
   comptes : adaptateur
   PostgreSQL et sauvegardes dès que l'hébergeur est choisi ; taux du crédit pour
   dividendes de la Saskatchewan et du Nunavut dès qu'ils sont publiés (formulaires 2026) ;
