@@ -10,7 +10,7 @@ on:
         type: string
         required: true
       chercher:
-        description: "Mots à chercher (facultatif, séparés par |, « mot +N » pour N caractères après le mot)"
+        description: "Mots à chercher (facultatif, séparés par |, « mot +N » pour N caractères après le mot, « @entetes » pour les en-têtes)"
         type: string
         default: ""
 

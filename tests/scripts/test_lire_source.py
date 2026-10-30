@@ -118,6 +118,42 @@ class LireSource(unittest.TestCase):
         self.assertIn("[…]", debut)
         self.assertNotIn("Liens vers d'autres sites officiels", debut)
 
+    def test_entetes(self):
+        self.assertEqual(L.options(["@entetes", "taux"]), (True, ["taux"]))
+        self.assertEqual(L.options(["@Entetes"]), (True, []), "majuscules ignorées")
+        self.assertEqual(L.options(["taux", "entetes"]), (False, ["taux", "entetes"]), "sans @ : un mot cherché")
+        self.assertEqual(L.entetes_lisibles([("content-type", "text/csv"), ("Access-Control-Allow-Origin", "*")]),
+                         ["Access-Control-Allow-Origin : *", "content-type : text/csv"])
+
+        class Reponse(io.BytesIO):
+            status, headers = 200, {"Content-Type": "text/csv", "Access-Control-Allow-Origin": "*"}
+
+            def geturl(self):
+                return "https://data-api.ecb.europa.eu/service/data/EXR/D.USD.EUR.SP00.A"
+
+        envoyees = []
+
+        def ouvrir(request, **_):
+            envoyees.append(dict(request.header_items()))
+            return Reponse(b"KEY,TIME_PERIOD,OBS_VALUE\nEXR.D.USD.EUR.SP00.A,2026-10-30,1.1612\n")
+
+        def lire(mots):
+            sortie = io.StringIO()
+            with mock.patch.object(L.urllib.request, "urlopen", ouvrir), \
+                    mock.patch.object(sys, "argv", ["lire_source.py", "https://data-api.ecb.europa.eu/service/data/EXR/D.USD.EUR.SP00.A", mots]), \
+                    contextlib.redirect_stdout(sortie):
+                L.main()
+            return sortie.getvalue()
+
+        avec = lire("@entetes|OBS_VALUE")
+        self.assertEqual(envoyees[-1].get("Origin"), L.ORIGINE, "origine du site envoyée")
+        self.assertIn("Access-Control-Allow-Origin : *", avec)
+        self.assertIn("« OBS_VALUE » : 1 occurrence(s)", avec, "les autres mots restent cherchés")
+        self.assertNotIn("« @entetes »", avec)
+        sans = lire("OBS_VALUE")
+        self.assertNotIn("Origin", envoyees[-1], "sans l'option : pas d'origine envoyée")
+        self.assertNotIn("En-têtes de la réponse", sans)
+
 
 if __name__ == "__main__":
     unittest.main()

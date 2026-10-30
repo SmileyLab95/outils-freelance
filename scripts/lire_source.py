@@ -8,6 +8,8 @@ Il ne lit que les sites officiels de la liste OFFICIELS et n'écrit rien dans le
 Usage : python3 scripts/lire_source.py <adresse> [mots à chercher, séparés par |, ou « * » pour tout le texte]
 Un mot suivi de « +N » (par exemple « Disclosure of information +4000 ») affiche les N caractères qui suivent chaque
 occurrence (au plus SUITE_MAX), pour lire en une fois une liste longue : un article et ses paragraphes.
+« @entetes » parmi les mots envoie la demande avec l'origine du site (en-tête Origin) et affiche les en-têtes de la
+réponse : Access-Control-Allow-Origin dit si un navigateur peut lire la source depuis le site (taux de change…).
 """
 import hashlib
 import html.parser
@@ -41,6 +43,8 @@ DEBUT = 8000                 # caractères affichés quand aucun mot n'est cherc
 TOUT = 200_000               # caractères affichés au plus quand on demande tout le texte (« * »)
 LIENS = 20                   # liens affichés au plus
 LIENS_SOURCES = 60           # liens vers d'autres sites officiels affichés au plus avec « * »
+ORIGINE = "https://smileylab95.github.io"  # origine des pages du site, envoyée avec « @entetes »
+ENTETES = "@entetes"
 
 
 def autorise(url):
@@ -110,6 +114,17 @@ def _mot_et_suite(mot):
     return (m.group(1), min(int(m.group(2)), SUITE_MAX)) if m else (mot, PASSAGE)
 
 
+def options(mots):
+    """Sépare l'option « @entetes » (majuscules ignorées) des mots cherchés : (afficher les en-têtes, mots restants)."""
+    restants = [m for m in mots if m.lower() != ENTETES]
+    return len(restants) != len(mots), restants
+
+
+def entetes_lisibles(entetes):
+    """Lignes « Nom : valeur » des en-têtes d'une réponse, triées par nom (majuscules ignorées)."""
+    return [f"{nom} : {valeur}" for nom, valeur in sorted(entetes, key=lambda e: e[0].lower())]
+
+
 def passages(txt, mots):
     """Passages autour de chaque mot cherché, chevauchements fusionnés."""
     out = []
@@ -154,14 +169,19 @@ def main():
         sys.exit(__doc__)
     url = sys.argv[1].strip()
     mots = [m.strip() for m in (sys.argv[2] if len(sys.argv) > 2 else "").split("|") if m.strip()]
+    avec_entetes, mots = options(mots)
     if not autorise(url):
         sys.exit(f"Adresse refusée : seuls les sites officiels en https sont lus ({', '.join(OFFICIELS)}).")
-    request = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (outils-freelance, verification de sources)",
-                                                   "Accept-Language": "fr-FR,fr;q=0.9,en;q=0.8"})
+    demande = {"User-Agent": "Mozilla/5.0 (outils-freelance, verification de sources)",
+               "Accept-Language": "fr-FR,fr;q=0.9,en;q=0.8"}
+    if avec_entetes:
+        demande["Origin"] = ORIGINE
+    request = urllib.request.Request(url, headers=demande)
     try:
         with urllib.request.urlopen(request, timeout=60) as reponse:
             contenu = reponse.read(LIMITE)
             final, statut, type_contenu = reponse.geturl(), reponse.status, reponse.headers.get("Content-Type", "")
+            entetes = reponse.headers.items()
     except urllib.error.HTTPError as e:
         sys.exit(f"Réponse {e.code} pour {url}")
     except (urllib.error.URLError, TimeoutError) as e:
@@ -176,6 +196,9 @@ def main():
         print(f"Adresse finale : {final}")
     print(f"Lue le : {datetime.now(timezone.utc):%d/%m/%Y à %H:%M} UTC · réponse {statut} · {type_contenu or 'type inconnu'}")
     print(f"Taille : {len(contenu)} octets · texte : {len(txt)} caractères · SHA-256 : {hashlib.sha256(contenu).hexdigest()}")
+    if avec_entetes:
+        print(f"\n===== En-têtes de la réponse (demande envoyée avec Origin : {ORIGINE})")
+        print("\n".join(entetes_lisibles(entetes)))
     if not mots or mots == ["*"]:
         limite = TOUT if mots else DEBUT
         print("\n" + txt[:limite] + ("\n[…]" if len(txt) > limite else ""))
