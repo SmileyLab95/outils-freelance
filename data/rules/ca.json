@@ -2049,16 +2049,16 @@
           "source_title": "Internet Sales Contract Regulation, AR 81/2001 - Alberta King's Printer"
         }
       ],
-      "confidence": "medium",
+      "confidence": "high",
       "verified_on": "2026-10-30",
-      "note": "Read on 30/10/2026 with the « Lire une source officielle » tool. Common core of: O. Reg. 17/05 (050017_e.doc, SHA-256 26ef5e9a…ec39) s. 24 (future performance agreements, 16 items including the consumer's name and the date), s. 25 (express opportunity to accept, decline and correct errors), s. 32 (internet agreements, 14 items) and s. 33 (written copy within 15 days with the consumer's name and date), s. 37 (remote agreements); Québec Consumer Protection Act P-40.1 (SHA-256 8ee36350…130b) art. 54.4 (information before a distance contract, presented prominently and in a form easy to keep and print; opening words of para. a to be re-read word for word), 54.6 (written contract), 54.7 (copy within 15 days); BC BPCPA Part 4 (04002_04, current to 27/10/2026, SHA-256 bf483af7…9443) s. 18.2 (contract contents a to t), 18.3 (disclosure before the contract, free, clear, with an express opportunity to view the whole contract), 47 (electronic: accessible, retainable, printable, correct/accept/decline), 48 (copy within 15 days, email deemed received on the 3rd day); Alberta Internet Sales Contract Regulation AR 81/2001 (PDF, consolidated to 76/2023, SHA-256 e98c3f2f…1439; expires 30/09/2028) s. 4 and 5 (not read in full). Medium confidence until Québec art. 54.4 a) and Alberta s. 4 are read word for word."
+      "note": "Read on 30/10/2026 with the « Lire une source officielle » tool. Common core of: O. Reg. 17/05 (050017_e.doc, SHA-256 26ef5e9a…ec39) s. 24 (future performance agreements, 16 items including the consumer's name and the date), s. 25 (express opportunity to accept, decline and correct errors), s. 32 (internet agreements, 14 items) and s. 33 (written copy within 15 days with the consumer's name and date), s. 37 (remote agreements); Québec Consumer Protection Act P-40.1 (SHA-256 8ee36350…130b) art. 54.4 (information before a distance contract, presented prominently and in a form easy to keep and print; opening words of para. a to be re-read word for word), 54.6 (written contract), 54.7 (copy within 15 days); BC BPCPA Part 4 (04002_04, current to 27/10/2026, SHA-256 bf483af7…9443) s. 18.2 (contract contents a to t), 18.3 (disclosure before the contract, free, clear, with an express opportunity to view the whole contract), 47 (electronic: accessible, retainable, printable, correct/accept/decline), 48 (copy within 15 days, email deemed received on the 3rd day); Alberta Internet Sales Contract Regulation AR 81/2001 (PDF, consolidated to 76/2023, SHA-256 e98c3f2f…1439; expires 30/09/2028) s. 4(1)(a) (i) name and business name, (ii) business and mailing address, (iii) telephone and, if available, email, (iv) fair and accurate description with technical specifications, (v) itemized price and associated costs with taxes, (vi) additional charges that cannot be determined, (vii) total or periodic payments, (viii) currency, (ix) terms, conditions and method of payment, (x) date services begin, (xi) delivery arrangements, (xii) cancellation, return, exchange and refund policies, (xiii) other restrictions; s. 4(1)(b) express opportunity to accept, decline and correct errors; s. 4(2) prominently displayed, clear, accessed by the consumer, retainable and printable; s. 5 copy in writing or electronic form within 15 days, with the consumer's name and the date, by email to the address the consumer gave. Québec art. 54.4 a) re-read the same day: « son nom et tout autre nom qu'il utilise dans l'exploitation de son entreprise »."
     },
     "ca_consumer_copy_days": {
       "value": {
         "days": 15
       },
       "unit": "object",
-      "label": "Consumers at a distance: written copy of the contract within 15 days (Ontario internet agreements, Québec, British Columbia)",
+      "label": "Consumers at a distance: written copy of the contract within 15 days (Ontario internet agreements, Québec, British Columbia, Alberta)",
       "source": "https://www.ontario.ca/laws/regulation/050017",
       "source_title": "O. Reg. 17/05, s. 33 - e-Laws",
       "more_sources": [
@@ -2073,7 +2073,7 @@
       ],
       "confidence": "high",
       "verified_on": "2026-10-30",
-      "note": "Read on 30/10/2026 with the « Lire une source officielle » tool: O. Reg. 17/05 (050017_e.doc, SHA-256 26ef5e9a…ec39) s. 33(1) copy of an internet agreement in writing within 15 days; Québec Consumer Protection Act P-40.1 (SHA-256 8ee36350…130b) art. 54.7 copy within 15 days after the contract; BC BPCPA Part 4 (04002_04, current to 27/10/2026, SHA-256 bf483af7…9443) s. 48(1) copy within 15 days, by email deemed received on the 3rd day (s. 48(4)). Ontario remote agreements (s. 39) and Alberta (AR 81/2001 s. 5) periods not read."
+      "note": "Read on 30/10/2026 with the « Lire une source officielle » tool: O. Reg. 17/05 (050017_e.doc, SHA-256 26ef5e9a…ec39) s. 33(1) copy of an internet agreement in writing within 15 days; Québec Consumer Protection Act P-40.1 (SHA-256 8ee36350…130b) art. 54.7 copy within 15 days after the contract; BC BPCPA Part 4 (04002_04, current to 27/10/2026, SHA-256 bf483af7…9443) s. 48(1) copy within 15 days, by email deemed received on the 3rd day (s. 48(4)). Alberta Internet Sales Contract Regulation AR 81/2001 s. 5(1) (re-read on 30/10/2026): copy in writing or electronic form within 15 days. Ontario remote agreements (s. 39) period not read."
     },
     "ca_consumer_info_cancel_days": {
       "value": {

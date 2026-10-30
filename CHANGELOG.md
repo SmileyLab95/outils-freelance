@@ -17,7 +17,8 @@
 - **Intérêts de retard** écrits par mois et par an, comme l'exige la Loi sur l'intérêt (art. 4), et refusés au-delà du
   taux criminel (35 % par an, Code criminel, art. 347, vérifié à la source) ; cession du droit d'auteur par écrit signé
   et renonciation aux droits moraux (Loi sur le droit d'auteur, art. 13 et 14.1).
-- Treize règles nouvelles dans `data/rules/ca.json`, lues aux sources officielles avec leurs empreintes ; outil
+- Treize règles nouvelles dans `data/rules/ca.json`, lues aux sources officielles avec leurs empreintes (Québec, art. 54.3
+  et 54.4, et règlement albertain sur les contrats Internet, art. 4 et 5, relus mot pour mot : toutes en confiance haute) ; outil
   « Lire une source officielle » : option « mot +N » pour lire un article entier en une fois.
 - Tests : moteur et rendu des deux pages (36 combinaisons), mutants, parcours navigateur (accessibilité, ordinateur,
   tablette, mobile : 3 841 vérifications au total) ([47](documentation/47-cgv-canada.md), décision D49).

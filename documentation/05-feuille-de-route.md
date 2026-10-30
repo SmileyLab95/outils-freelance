@@ -308,9 +308,8 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   sources : option « mot +N » ([47](47-cgv-canada.md), décision D49).
 - **Prochaines actions de Claude** : refonte, suite ([31](31-vision-plateforme.md) § 5) : les quatre modules du compte
   gratuit sont faits (étape 5) ; étape 6, outils restants (CGV : faites dans les quatre pays ;
-  relire mot pour mot l'art. 54.4 a) de la loi québécoise et l'art. 4 du règlement albertain sur les contrats Internet,
-  puis passer `ca_consumer_distance_disclosure` en confiance haute ; lois des autres provinces sur la protection du
-  consommateur à lire pour les détailler ; le règlement albertain expire le 30/09/2028 : à revérifier) ; jours ouvrés au Canada (jours fériés fédéraux et provinciaux) : en attente de l'accès à canada.ca, refusé
+  lois des autres provinces sur la protection du consommateur à lire pour les détailler ; le règlement albertain sur les
+  contrats Internet expire le 30/09/2028 : à revérifier) ; jours ouvrés au Canada (jours fériés fédéraux et provinciaux) : en attente de l'accès à canada.ca, refusé
   depuis l'environnement de travail et sans réponse depuis l'outil de lecture des sources le 29/10/2026 ; sous-traitance,
   devises, guides de protection sociale) ;
   ajouter les taux du 1er semestre 2027 dès leur publication
