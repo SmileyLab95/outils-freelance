@@ -2206,6 +2206,16 @@
       "confidence": "high",
       "verified_on": "2026-10-30",
       "note": "Read on 30/10/2026 with the « Lire une source officielle » tool (LégisQuébec, CCQ-1991), art. 2101 word for word: « À moins que le contrat n'ait été conclu en considération de ses qualités personnelles ou que cela ne soit incompatible avec la nature même du contrat, l'entrepreneur ou le prestataire de services peut s'adjoindre un tiers pour l'exécuter; il conserve néanmoins la direction et la responsabilité de l'exécution. » Also art. 2098 (contract for services), 2099 (free choice of means, no subordination), 2100 (act in the client's best interest, with prudence and diligence, according to the rules of the art), 2102 (information before the contract)."
+    },
+    "ca_currency_conversion_income_tax": {
+      "value": "Amounts in another currency are converted into Canadian dollars using the relevant spot rate for the day on which the amount arose (Income Tax Act, s. 261(2)(b)): the rate quoted by the Bank of Canada on that day, or, if no rate is quoted that day, on the closest preceding day for which a rate is quoted, or another rate of exchange that is acceptable to the Minister (s. 261(1)).",
+      "unit": "text",
+      "label": "Income tax: converting foreign-currency amounts at the Bank of Canada rate of the day",
+      "source": "https://laws-lois.justice.gc.ca/eng/acts/I-3.3/section-261.html",
+      "source_title": "Income Tax Act, section 261 (Justice Laws Website)",
+      "confidence": "high",
+      "verified_on": "2026-10-30",
+      "note": "Read on 30/10/2026 with the « Lire une source officielle » tool (page modified 2026-10-15, SHA-256 e7948664…8a88). French term: taux de change au comptant. CRA administrative practice (yearly average rate, GST/HST conversion) is on canada.ca, not readable from the work environment: not covered. Excise Tax Act s. 159 read (SHA-256 9c4682eb…3b26): no currency conversion rule there."
     }
   },
   "provinces": {

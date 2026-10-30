@@ -922,14 +922,20 @@
       "note": "Read on 2026-10-22 through search excerpts of SSA publications (benefits based on the highest 35 years of indexed earnings). A lower S corp salary therefore means lower earnings on the owner's record."
     },
     "us_foreign_currency_translation": {
-      "value": "Report every amount in US dollars. Translate a foreign-currency payment at the exchange rate in effect when you receive it (spot rate); income received evenly through the year can be translated at the IRS yearly average rate. The IRS has no official exchange rate and generally accepts any posted rate used consistently.",
+      "value": "Report every amount in US dollars. When your functional currency is the US dollar (the case of a US sole proprietor), translate each item you receive, pay or accrue in a foreign currency at the exchange rate prevailing at that time; if there is more than one exchange rate, use the one that most properly reflects your income. The IRS has no official exchange rate and generally accepts any posted exchange rate that is used consistently.",
       "unit": "text",
       "label": "Foreign-currency income: translation into US dollars",
       "source": "https://www.irs.gov/individuals/international-taxpayers/foreign-currency-and-currency-exchange-rates",
       "source_title": "Foreign currency and currency exchange rates - IRS",
+      "more_sources": [
+        {
+          "source": "https://www.irs.gov/individuals/international-taxpayers/yearly-average-currency-exchange-rates",
+          "source_title": "Yearly average currency exchange rates - IRS"
+        }
+      ],
       "confidence": "high",
-      "note": "Read on 2026-10-22 through search excerpts (irs.gov not reachable directly). Yearly averages: https://www.irs.gov/individuals/international-taxpayers/yearly-average-currency-exchange-rates. A self-employed person with a foreign qualified business unit (QBU) can have another functional currency: not covered by the site.",
-      "verified_on": "2026-10-22"
+      "note": "Read on 30/10/2026 with the « Lire une source officielle » tool (page reviewed 22-May-2026, SHA-256 de3059dd…d616): functional currency, translation at the rate prevailing when the item is received, paid or accrued, exchange rates from banks and US Embassies, government resources (Treasury, Federal Reserve). The yearly average page (reviewed 17-Sep-2026, SHA-256 2cab9172…c6e) repeats that the IRS has no official rate and accepts any posted rate used consistently; neither page says when a yearly average may replace the rate of the day for business income, so the site no longer suggests it (corrected on 30/10/2026; the 22/10/2026 reading through search excerpts had added it). A self-employed person with a foreign qualified business unit (QBU) can have another functional currency: not covered by the site.",
+      "verified_on": "2026-10-30"
     },
     "us_form_6166": {
       "value": "To claim a reduced rate of foreign withholding under a US income tax treaty, a US resident can ask the IRS for Form 6166 (certification of US residency) with Form 8802, then send it to the foreign payer or withholding agent.",

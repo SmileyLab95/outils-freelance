@@ -1683,6 +1683,27 @@
       "verified_on": "2026-10-29",
       "note": "Lu en entier le 29/10/2026 (outil « Lire une source officielle », SHA-256 6b1a1329…b236)."
     },
+    "tva_conversion_devises": {
+      "value": {
+        "regle": "Montants exprimés dans une autre monnaie que l'euro : conversion au dernier taux publié par la Banque centrale européenne connu au jour de l'exigibilité de la TVA (CGI, art. 266-1 bis)",
+        "facture": "La facture peut être établie dans toute monnaie, à condition que le montant de la taxe à payer soit déterminé en euros",
+        "mention_debit": "Exigibilité à la délivrance ou au débit : indiquer sur la facture le taux de change applicable",
+        "mention_encaissement": "Exigibilité à l'encaissement : préciser que le montant de la TVA sera fonction du taux de change fixé lors de l'encaissement des acomptes ou du prix"
+      },
+      "unit": "object",
+      "label": "TVA : conversion des montants en devises (taux de la BCE au jour de l'exigibilité)",
+      "source": "https://bofip.impots.gouv.fr/bofip/140-PGP.html/identifiant=BOI-TVA-DECLA-30-20-20-10-20131018",
+      "source_title": "BOFiP, BOI-TVA-DECLA-30-20-20-10, § 380 à 400 (factures libellées en devises)",
+      "more_sources": [
+        {
+          "source": "https://bofip.impots.gouv.fr/bofip/1475-PGP.html/identifiant=BOI-TVA-BASE-10-20-40-20-20120912",
+          "source_title": "BOFiP, BOI-TVA-BASE-10-20-40-20, § 190 (opérations libellées en devises)"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-10-30",
+      "note": "Lu le 30/10/2026 avec l'outil « Lire une source officielle » (BOI-TVA-DECLA-30-20-20-10 du 18/10/2013, SHA-256 7e64e6cc…931c ; BOI-TVA-BASE-10-20-40-20, version en vigueur depuis le 12/09/2012, SHA-256 499e11ff…e466). La fiche de 2012 parle du « dernier taux déterminé par référence au cours publié par la Banque de France, à partir du cours fixé par la Banque centrale européenne » ; celle de 2013, du « dernier taux publié par la Banque centrale européenne » : les deux désignent le taux de référence de la BCE, que la Banque de France reprend. Entre entreprises françaises facturant en devises : cours indicatifs de la Banque de France publiés au Journal officiel (fiche de 2012). Le texte de l'article 266 du CGI n'a pas pu être lu sur Légifrance (D50). Le moment de l'exigibilité : règle tva_exigibilite."
+    },
     "cgv_professionnels": {
       "value": {
         "obligation": "facultatives ; communiquées à tout acheteur professionnel qui en fait la demande",

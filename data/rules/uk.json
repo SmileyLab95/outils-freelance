@@ -3050,6 +3050,35 @@
       "confidence": "high",
       "verified_on": "2026-10-30",
       "note": "Read in full on 30/10/2026 with the « Lire une source officielle » tool (Chapter 4: SHA-256 5f8f48dc…c3f4; SI 2015/542 reg. 19: ef088194…6b56). S. 308 in force on 6 April 2026 (SI 2026/284); the 2015 ADR Regulations were revoked the same day (2024 c. 13, s. 339(1), Sch. 27 para. 10). Chapter 4 (ss. 291 to 310) regulates ADR providers (accreditation, no fees to consumers) and contains no general duty for traders to join a scheme."
+    },
+    "uk_vat_foreign_currency": {
+      "value": {
+        "invoice": "You can invoice in any currency. If UK VAT is due, the invoice must also show in sterling the total net value at each VAT rate and the amount of VAT at each rate (not each line).",
+        "methods": [
+          "UK market selling rate at the time of supply (rates published in national newspapers are acceptable)",
+          "HMRC period rate of exchange: the same rate for a whole period, usually a calendar month (check for adjustments within the period)"
+        ],
+        "period_rate": "The period rate can be used for all supplies or for one type of supply (note it in your records; changing your mind later needs HMRC agreement).",
+        "other_methods": "Any other rate needs HMRC approval; forward rates cannot be used.",
+        "advance_invoices": "An invoice issued before the supply must be in sterling for VAT; foreign amounts may also be shown, making clear that the value for VAT is the sterling figure."
+      },
+      "unit": "object",
+      "label": "VAT: invoices in a foreign currency and conversion into sterling",
+      "source": "https://www.gov.uk/guidance/foreign-currency-transactions-vat-and-tour-operators",
+      "source_title": "Foreign currency transactions, VAT and tour operators - GOV.UK",
+      "more_sources": [
+        {
+          "source": "https://www.gov.uk/hmrc-internal-manuals/vat-trader-records/vatrec5060",
+          "source_title": "VATREC5060 - VAT invoice: invoicing in a foreign currency - HMRC internal manual"
+        },
+        {
+          "source": "https://www.trade-tariff.service.gov.uk/exchange_rates",
+          "source_title": "HMRC exchange rates - UK Trade Tariff"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-10-30",
+      "note": "Read on 30/10/2026 with the « Lire une source officielle » tool (GOV.UK guidance, SHA-256 da063a64…8829; VATREC5060, updated 16 January 2025, SHA-256 af133934…f60a: VAT Regulations 1995, regulation 14(1), amounts in any currency, total VAT in sterling). The guidance asks for the net value at each rate in sterling as well, and is followed here. Income tax (Self Assessment) conversion rules for sole traders not read: not covered."
     }
   },
   "open_questions": [

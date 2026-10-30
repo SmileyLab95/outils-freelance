@@ -163,6 +163,51 @@
       "note": "Read on 2026-10-23 by scripts/verifier_rdap.py in GitHub Actions (file published 2026-10-22T23:00:04Z). co.uk uses the entry of the longest matching label, uk (RFC 9224, section 4). Each server answered 200 for a registered name, 404 for a random name and sent Access-Control-Allow-Origin: *. .paris and .bzh also answered correctly but are not offered (their registration conditions were not checked). Not in the IANA file on that date: .eu, .us, .io, .co, .me, .be, .ch, .de. Checked again every month by .github/workflows/verifier-rdap.yml.",
       "verified_on": "2026-10-23"
     },
+    "fx_reference_sources": {
+      "value": {
+        "currencies": [
+          "EUR",
+          "USD",
+          "GBP",
+          "CAD",
+          "CHF",
+          "AUD",
+          "JPY",
+          "CNY",
+          "HKD",
+          "INR",
+          "MXN",
+          "NZD",
+          "NOK",
+          "SEK",
+          "SGD",
+          "ZAR",
+          "BRL",
+          "KRW"
+        ],
+        "ecb": "https://data-api.ecb.europa.eu/service/data/EXR/D.{currency}.EUR.SP00.A?startPeriod={start}&endPeriod={end}&format=csvdata",
+        "hmrc": "https://www.trade-tariff.service.gov.uk/uk/api/exchange_rates/files/monthly_csv_{year}-{month}.csv",
+        "boc": "https://www.bankofcanada.ca/valet/observations/FX{currency}CAD/json?start_date={start}&end_date={end}",
+        "window_days": 14
+      },
+      "unit": "object",
+      "label": "Official reference exchange rates readable from a browser: ECB (daily), HMRC (monthly period rates), Bank of Canada (daily)",
+      "source": "https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html",
+      "source_title": "Euro foreign exchange reference rates - European Central Bank",
+      "more_sources": [
+        {
+          "source": "https://www.trade-tariff.service.gov.uk/exchange_rates",
+          "source_title": "HMRC exchange rates (monthly, average and spot rates) - UK Trade Tariff"
+        },
+        {
+          "source": "https://www.bankofcanada.ca/rates/exchange/daily-exchange-rates/",
+          "source_title": "Daily exchange rates - Bank of Canada"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-10-30",
+      "note": "Checked on 30/10/2026 with the « Lire une source officielle » tool, request sent with the site's origin: the three addresses answer with Access-Control-Allow-Origin: * (ECB data portal CSV, SHA-256 7572091f…8b1b; HMRC monthly CSV for October 2026, 364161eb…a26e, also September 2026 with a month number without leading zero; Bank of Canada Valet JSON, 9fa55713…503e). The 17 other currencies of the list are quoted by the three sources (ECB and Bank of Canada read for all of them the same day). Conventions: ECB = units of currency per 1 euro, published around 16:00 CET each TARGET working day, for information purposes; HMRC = currency units per £1 for a calendar month (columns Country/Territories, Currency, Currency Code, Currency Units per £1, Start date, End date), the next month's file published in advance; Bank of Canada = Canadian dollars per unit of currency, daily average, business days. The ECB daily XML file (eurofxref-daily.xml) has no CORS header and is not used. Checked each month by scripts/verifier_taux.py (GitHub Actions)."
+    },
     "rdap_protocol": {
       "value": {
         "found": 200,

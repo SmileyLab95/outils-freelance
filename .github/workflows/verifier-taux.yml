@@ -1,0 +1,27 @@
+# Contrôle mensuel des sources de taux de change de la conversion de devises (documentation/49-devises.md) : BCE,
+# HMRC et Banque du Canada lisibles depuis un navigateur (Access-Control-Allow-Origin) et un taux pour chaque devise.
+name: Vérifier les sources de taux de change
+
+on:
+  schedule:
+    - cron: "23 6 2 * *"
+  workflow_dispatch:
+    inputs:
+      rapport:
+        description: "Afficher les résultats sans échouer"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  verifier:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - name: Vérifier
+        env:
+          RAPPORT: ${{ inputs.rapport && '--rapport' || '' }}
+        run: python3 scripts/verifier_taux.py $RAPPORT
