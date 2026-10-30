@@ -307,7 +307,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   gratuit sont faits (étape 5) ; étape 6, outils restants (CGV au Canada : spécification écrite
   ([47](47-cgv-canada.md), décision D49) ; réalisation : règles de `data/rules/ca.json`, moteur `engines/cgv-ca.js`,
   pages anglaise et française, tests ; avant la publication, relire mot pour mot l'art. 54.4 a) de la loi québécoise,
-  l'art. 4 du règlement albertain sur les contrats Internet et l'art. 14.1 de la *Copyright Act*) ; jours ouvrés au Canada (jours fériés fédéraux et provinciaux) : en attente de l'accès à canada.ca, refusé
+  l'art. 4 du règlement albertain sur les contrats Internet) ; jours ouvrés au Canada (jours fériés fédéraux et provinciaux) : en attente de l'accès à canada.ca, refusé
   depuis l'environnement de travail et sans réponse depuis l'outil de lecture des sources le 29/10/2026 ; sous-traitance,
   devises, guides de protection sociale) ;
   ajouter les taux du 1er semestre 2027 dès leur publication

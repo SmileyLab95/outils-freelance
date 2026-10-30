@@ -760,8 +760,9 @@
       "label": "Criminal rate of interest (Criminal Code s. 347): maximum annual percentage rate",
       "source": "https://laws-lois.justice.gc.ca/eng/acts/C-46/section-347.html",
       "source_title": "Criminal Code, section 347",
-      "confidence": "medium",
-      "note": "Lowered from 60% effective annual rate to 35% APR from 2025-01-01. Overdue-invoice charges in normal practice (1-2% per month) stay well below it. Not re-opened on 2026-10-20."
+      "confidence": "high",
+      "note": "Read on 30/10/2026 with the « Lire une source officielle » tool (https://laws-lois.justice.gc.ca/eng/acts/C-46/section-347.html, Act current to 2026-09-30, SHA-256 e3657f52…1fa7): s. 347(1) offence to enter into, offer, advertise or receive interest at a criminal rate; s. 347(2) criminal rate = an annual percentage rate of interest, calculated in accordance with generally accepted actuarial practices and principles, that exceeds 35 per cent on the credit advanced; interest includes all charges and expenses paid or payable for advancing credit. Lowered from 60% effective annual rate to 35% APR from 2025-01-01. Overdue-invoice charges in normal practice (1-2% per month) stay well below it.",
+      "verified_on": "2026-10-30"
     },
     "late_payment_interest_practice": {
       "value": "No federal or provincial law sets an automatic late-payment interest rate or fixed collection fee for business-to-business service invoices (no equivalent of the French 40 EUR indemnity). Interest is owed only if agreed: state it in the contract or quote and repeat it on the invoice, with an annual rate. Common practice: payment terms 'Net 30' and 1% to 2% per month on overdue balances, i.e. 12% to 24% per year (simple), or 12.68% to 26.82% if compounded monthly.",
@@ -1923,6 +1924,278 @@
       "confidence": "high",
       "verified_on": "2026-10-29",
       "note": "Read in full on 29/10/2026 with the « Lire une source officielle » tool (Act and Regulations current to 2026-09-30; SHA-256 47ce0643…202d, ea4d05c3…01a7, 4c7c1a3c…62cf, 58d4fd5a…c8a5, 48686af5…030b). A commercial electronic message is one that has as its purpose, or one of its purposes, to encourage participation in a commercial activity, including offers to sell a service, advertising and promoting a person as doing so (s. 1(2)). It must identify the sender and enable the recipient to readily contact them, and set out an unsubscribe mechanism (s. 6(2)); prescribed information (Regs s. 2(1)): the name by which the sender carries on business (or their name), the mailing address, and either a telephone number (agent or voice messaging), an email address or a web address; clear and prominent (Regs s. 3). Unsubscribe mechanism (s. 11): at no cost, by the same electronic means (or another electronic means if not practicable), specifying an electronic address or a web link; valid for 60 days; given effect within 10 business days. Messages that solely provide a requested quote or estimate, facilitate, complete or confirm a transaction the person agreed to, or deliver a service they are entitled to, are exempt only from the consent requirement (s. 6(6)): identification and unsubscribe still apply. The tool therefore always includes them (one situation, « commercial »). canada.ca and crtc.gc.ca guidance pages were not reachable on 29/10/2026."
+    },
+    "ca_consumer_definition": {
+      "value": "A consumer is an individual acting for personal, family or household purposes, not for business purposes.",
+      "unit": "text",
+      "label": "Consumer protection laws: who is a consumer (Ontario, Québec, Alberta)",
+      "source": "https://www.ontario.ca/laws/statute/02c30",
+      "source_title": "Consumer Protection Act, 2002, S.O. 2002, c. 30, Sched. A, s. 1 - e-Laws",
+      "more_sources": [
+        {
+          "source": "https://www.legisquebec.gouv.qc.ca/fr/document/lc/P-40.1",
+          "source_title": "Loi sur la protection du consommateur (RLRQ, c. P-40.1), art. 2 - LégisQuébec"
+        },
+        {
+          "source": "https://kings-printer.alberta.ca/documents/Acts/C26P3.pdf",
+          "source_title": "Consumer Protection Act, RSA 2000, c. C-26.3, s. 1 - Alberta King's Printer"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-10-30",
+      "note": "Read on 30/10/2026 with the « Lire une source officielle » tool: Ontario s. 1 (Ontario CPA 2002 (Word version 02c30_e.doc, SHA-256 67576a25…be25, consolidated from 11/12/2025; repealed on a day to be named by proclamation, so still in force)) defines a consumer as an individual acting for personal, family or household purposes, not a person acting for business purposes; Québec art. 2 (Québec Consumer Protection Act P-40.1 (SHA-256 8ee36350…130b)): the Act applies to every contract between a consumer and a merchant in the course of the merchant's business, for goods or services; Alberta s. 1 (Alberta CPA RSA 2000 c. C-26.3 (PDF, SHA-256 8f1d0dd3…d9b3)): goods or services for personal use."
+    },
+    "ca_consumer_unfair_terms": {
+      "value": {
+        "no_mandatory_arbitration": [
+          "ON s. 7(2)",
+          "QC art. 11.1",
+          "AB s. 16"
+        ],
+        "no_class_action_waiver": [
+          "ON s. 8",
+          "QC art. 11.1"
+        ],
+        "rights_cannot_be_waived": [
+          "ON s. 7(1)"
+        ],
+        "no_exclusion_of_own_liability": [
+          "QC art. 10"
+        ],
+        "no_fees_without_precise_amount": [
+          "QC art. 12"
+        ],
+        "no_predetermined_penalties_except_interest": [
+          "QC art. 13"
+        ],
+        "ambiguity_in_favour_of_consumer": [
+          "ON s. 11"
+        ]
+      },
+      "unit": "object",
+      "label": "Consumer contracts: terms that are invalid or unenforceable (Ontario, Québec, Alberta)",
+      "source": "https://www.ontario.ca/laws/statute/02c30",
+      "source_title": "Consumer Protection Act, 2002, ss. 7, 8 and 11 - e-Laws",
+      "more_sources": [
+        {
+          "source": "https://www.legisquebec.gouv.qc.ca/fr/document/lc/P-40.1",
+          "source_title": "Loi sur la protection du consommateur, art. 10 à 13 - LégisQuébec"
+        },
+        {
+          "source": "https://kings-printer.alberta.ca/documents/Acts/C26P3.pdf",
+          "source_title": "Consumer Protection Act, RSA 2000, c. C-26.3, s. 16 - Alberta King's Printer"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-10-30",
+      "note": "Read on 30/10/2026 with the « Lire une source officielle » tool. Ontario (Ontario CPA 2002 (Word version 02c30_e.doc, SHA-256 67576a25…be25, consolidated from 11/12/2025; repealed on a day to be named by proclamation, so still in force)): s. 7(1) rights apply despite any agreement or waiver; s. 7(2) a term requiring arbitration is invalid insofar as it prevents the consumer from going to court (arbitration only if the consumer agrees after the dispute arises, s. 7(3)-(5)); s. 8 class proceedings despite any term; s. 11 ambiguities interpreted to the consumer's benefit. Québec (Québec Consumer Protection Act P-40.1 (SHA-256 8ee36350…130b)): art. 10 no stipulation releasing the merchant from the consequences of its own act; art. 11.1 no mandatory arbitration or class-action waiver; art. 12 no costs unless their precise amount is in the contract; art. 13 no predetermined fees, penalties or damages for the consumer's non-performance other than accrued interest. Alberta (Alberta CPA RSA 2000 c. C-26.3 (PDF, SHA-256 8f1d0dd3…d9b3)): s. 16 an arbitration clause in a consumer transaction is void and unenforceable, except an arbitration agreement entered into voluntarily after a dispute arises (other exception in s. 16(3)(b) not read in full)."
+    },
+    "ca_on_estimate_tolerance": {
+      "value": 0.1,
+      "unit": "rate",
+      "label": "Ontario: a supplier may not charge a consumer more than 10% above an estimate",
+      "source": "https://www.ontario.ca/laws/statute/02c30",
+      "source_title": "Consumer Protection Act, 2002, s. 10 - e-Laws",
+      "confidence": "high",
+      "verified_on": "2026-10-30",
+      "note": "Read on 30/10/2026 with the « Lire une source officielle » tool: s. 10(1) (Ontario CPA 2002 (Word version 02c30_e.doc, SHA-256 67576a25…be25, consolidated from 11/12/2025; repealed on a day to be named by proclamation, so still in force)): if a consumer agreement includes an estimate, the supplier shall not charge an amount that exceeds it by more than 10 per cent; s. 10(2) the consumer may require the estimated price; s. 10(3) the parties may agree to amend the estimate or price if the consumer requires additional or different goods or services."
+    },
+    "ca_consumer_threshold": {
+      "value": 50,
+      "unit": "CAD",
+      "label": "Ontario and Alberta: amount above which the internet, remote and future performance agreement rules apply",
+      "source": "https://www.ontario.ca/laws/regulation/050017",
+      "source_title": "O. Reg. 17/05, ss. 23.1, 31, 34 and 36 - e-Laws",
+      "more_sources": [
+        {
+          "source": "https://kings-printer.alberta.ca/documents/Regs/2001_081.pdf",
+          "source_title": "Internet Sales Contract Regulation, AR 81/2001, s. 1 - Alberta King's Printer"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-10-30",
+      "note": "Read on 30/10/2026 with the « Lire une source officielle » tool: O. Reg. 17/05 (050017_e.doc, SHA-256 26ef5e9a…ec39): $50 for future performance agreements (s. 23.1), internet agreements (s. 31), direct agreements (s. 34) and remote agreements (s. 36); Alberta Internet Sales Contract Regulation AR 81/2001 (PDF, consolidated to 76/2023, SHA-256 e98c3f2f…1439; expires 30/09/2028): an Internet sales contract is a consumer contract over $50 formed by text-based Internet communications (s. 1). British Columbia's prescribed amounts (BPCPA regulation) not read: the tool applies the BC rules whatever the amount."
+    },
+    "ca_consumer_distance_disclosure": {
+      "value": [
+        "supplier name and business name",
+        "telephone, business address and other contact details such as email",
+        "fair, accurate and detailed description of the services, with any technical requirements",
+        "itemized prices, including taxes",
+        "other charges that apply or may apply, with their amount if it can be determined",
+        "total amount payable, or the amount and frequency of periodic payments",
+        "terms and methods of payment",
+        "currency, if not Canadian dollars",
+        "dates of commencement, performance and completion",
+        "place where the services are performed and method of performance, and the name of any other person performing them",
+        "cancellation, return, exchange and refund policies",
+        "any other restrictions, limitations and conditions"
+      ],
+      "unit": "list",
+      "label": "Consumers served at a distance or under a future performance agreement: information to give before the contract",
+      "source": "https://www.ontario.ca/laws/regulation/050017",
+      "source_title": "O. Reg. 17/05, ss. 24, 25, 32, 33 and 37 - e-Laws",
+      "more_sources": [
+        {
+          "source": "https://www.legisquebec.gouv.qc.ca/fr/document/lc/P-40.1",
+          "source_title": "Loi sur la protection du consommateur, art. 54.1 à 54.8 - LégisQuébec"
+        },
+        {
+          "source": "https://www.bclaws.gov.bc.ca/civix/document/id/complete/statreg/04002_04",
+          "source_title": "Business Practices and Consumer Protection Act, ss. 18.2, 18.3, 47 and 48 - BC Laws"
+        },
+        {
+          "source": "https://kings-printer.alberta.ca/documents/Regs/2001_081.pdf",
+          "source_title": "Internet Sales Contract Regulation, AR 81/2001 - Alberta King's Printer"
+        }
+      ],
+      "confidence": "medium",
+      "verified_on": "2026-10-30",
+      "note": "Read on 30/10/2026 with the « Lire une source officielle » tool. Common core of: O. Reg. 17/05 (050017_e.doc, SHA-256 26ef5e9a…ec39) s. 24 (future performance agreements, 16 items including the consumer's name and the date), s. 25 (express opportunity to accept, decline and correct errors), s. 32 (internet agreements, 14 items) and s. 33 (written copy within 15 days with the consumer's name and date), s. 37 (remote agreements); Québec Consumer Protection Act P-40.1 (SHA-256 8ee36350…130b) art. 54.4 (information before a distance contract, presented prominently and in a form easy to keep and print; opening words of para. a to be re-read word for word), 54.6 (written contract), 54.7 (copy within 15 days); BC BPCPA Part 4 (04002_04, current to 27/10/2026, SHA-256 bf483af7…9443) s. 18.2 (contract contents a to t), 18.3 (disclosure before the contract, free, clear, with an express opportunity to view the whole contract), 47 (electronic: accessible, retainable, printable, correct/accept/decline), 48 (copy within 15 days, email deemed received on the 3rd day); Alberta Internet Sales Contract Regulation AR 81/2001 (PDF, consolidated to 76/2023, SHA-256 e98c3f2f…1439; expires 30/09/2028) s. 4 and 5 (not read in full). Medium confidence until Québec art. 54.4 a) and Alberta s. 4 are read word for word."
+    },
+    "ca_consumer_copy_days": {
+      "value": {
+        "days": 15
+      },
+      "unit": "object",
+      "label": "Consumers at a distance: written copy of the contract within 15 days (Ontario internet agreements, Québec, British Columbia)",
+      "source": "https://www.ontario.ca/laws/regulation/050017",
+      "source_title": "O. Reg. 17/05, s. 33 - e-Laws",
+      "more_sources": [
+        {
+          "source": "https://www.legisquebec.gouv.qc.ca/fr/document/lc/P-40.1",
+          "source_title": "Loi sur la protection du consommateur, art. 54.7 - LégisQuébec"
+        },
+        {
+          "source": "https://www.bclaws.gov.bc.ca/civix/document/id/complete/statreg/04002_04",
+          "source_title": "Business Practices and Consumer Protection Act, s. 48 - BC Laws"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-10-30",
+      "note": "Read on 30/10/2026 with the « Lire une source officielle » tool: O. Reg. 17/05 (050017_e.doc, SHA-256 26ef5e9a…ec39) s. 33(1) copy of an internet agreement in writing within 15 days; Québec Consumer Protection Act P-40.1 (SHA-256 8ee36350…130b) art. 54.7 copy within 15 days after the contract; BC BPCPA Part 4 (04002_04, current to 27/10/2026, SHA-256 bf483af7…9443) s. 48(1) copy within 15 days, by email deemed received on the 3rd day (s. 48(4)). Ontario remote agreements (s. 39) and Alberta (AR 81/2001 s. 5) periods not read."
+    },
+    "ca_consumer_info_cancel_days": {
+      "value": {
+        "days": 7
+      },
+      "unit": "object",
+      "label": "Consumers at a distance: cancellation within 7 days of receiving the copy if the required information was not given",
+      "source": "https://www.ontario.ca/laws/statute/02c30",
+      "source_title": "Consumer Protection Act, 2002, ss. 40 and 47 - e-Laws",
+      "more_sources": [
+        {
+          "source": "https://www.legisquebec.gouv.qc.ca/fr/document/lc/P-40.1",
+          "source_title": "Loi sur la protection du consommateur, art. 54.8 - LégisQuébec"
+        },
+        {
+          "source": "https://www.bclaws.gov.bc.ca/civix/document/id/complete/statreg/04002_04",
+          "source_title": "Business Practices and Consumer Protection Act, s. 18.4 - BC Laws"
+        },
+        {
+          "source": "https://kings-printer.alberta.ca/documents/Regs/2001_081.pdf",
+          "source_title": "Internet Sales Contract Regulation, AR 81/2001, s. 6 - Alberta King's Printer"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-10-30",
+      "note": "Read on 30/10/2026 with the « Lire une source officielle » tool: Ontario CPA 2002 (Word version 02c30_e.doc, SHA-256 67576a25…be25, consolidated from 11/12/2025; repealed on a day to be named by proclamation, so still in force) s. 47(1) remote agreements (7 days after the copy if s. 45 not complied with; 1 year if s. 46 not complied with); internet agreements s. 40 (7 days; 30 days without a copy); Québec Consumer Protection Act P-40.1 (SHA-256 8ee36350…130b) art. 54.8 (7 days after receiving the copy); BC BPCPA Part 4 (04002_04, current to 27/10/2026, SHA-256 bf483af7…9443) s. 18.4(2)(c) (distance sales contract: 7 days after the copy); Alberta Internet Sales Contract Regulation AR 81/2001 (PDF, consolidated to 76/2023, SHA-256 e98c3f2f…1439; expires 30/09/2028) s. 6(1) (7 days after the copy; 30 days without a copy)."
+    },
+    "ca_consumer_start_delay_days": {
+      "value": {
+        "days": 30
+      },
+      "unit": "object",
+      "label": "Consumers: cancellation before the work starts if it has not started within 30 days of the agreed date",
+      "source": "https://www.ontario.ca/laws/statute/02c30",
+      "source_title": "Consumer Protection Act, 2002, s. 26 - e-Laws",
+      "more_sources": [
+        {
+          "source": "https://www.bclaws.gov.bc.ca/civix/document/id/complete/statreg/04002_04",
+          "source_title": "Business Practices and Consumer Protection Act, ss. 23 and 49 - BC Laws"
+        },
+        {
+          "source": "https://kings-printer.alberta.ca/documents/Regs/2001_081.pdf",
+          "source_title": "Internet Sales Contract Regulation, AR 81/2001, s. 6(2) and (3) - Alberta King's Printer"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-10-30",
+      "note": "Read on 30/10/2026 with the « Lire une source officielle » tool: Ontario CPA 2002 (Word version 02c30_e.doc, SHA-256 67576a25…be25, consolidated from 11/12/2025; repealed on a day to be named by proclamation, so still in force) s. 26(1) future performance agreement: cancellation at any time before commencement if the supplier does not begin within 30 days after the commencement date (or, s. 26(2), within 30 days after the agreement if no date is specified); BC BPCPA Part 4 (04002_04, current to 27/10/2026, SHA-256 bf483af7…9443) s. 23(5)(b) and 49(1)(c) (not supplied within 30 days of the supply date); Alberta Internet Sales Contract Regulation AR 81/2001 (PDF, consolidated to 76/2023, SHA-256 e98c3f2f…1439; expires 30/09/2028) s. 6(2)(c) and (3) (services not begun within 30 days of the commencement date)."
+    },
+    "ca_consumer_refund_days": {
+      "value": {
+        "days": 15
+      },
+      "unit": "object",
+      "label": "Consumers: refund within 15 days after a cancellation (Québec distance contracts, Alberta)",
+      "source": "https://www.legisquebec.gouv.qc.ca/fr/document/lc/P-40.1",
+      "source_title": "Loi sur la protection du consommateur, art. 54.13 - LégisQuébec",
+      "more_sources": [
+        {
+          "source": "https://kings-printer.alberta.ca/documents/Regs/2001_081.pdf",
+          "source_title": "Internet Sales Contract Regulation, AR 81/2001, s. 10 - Alberta King's Printer"
+        },
+        {
+          "source": "https://kings-printer.alberta.ca/documents/Acts/C26P3.pdf",
+          "source_title": "Consumer Protection Act, RSA 2000, c. C-26.3, s. 31 - Alberta King's Printer"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-10-30",
+      "note": "Read on 30/10/2026 with the « Lire une source officielle » tool: Québec Consumer Protection Act P-40.1 (SHA-256 8ee36350…130b) art. 54.13 (refund of all sums within 15 days after the resolution of a distance contract); Alberta Internet Sales Contract Regulation AR 81/2001 (PDF, consolidated to 76/2023, SHA-256 e98c3f2f…1439; expires 30/09/2028) s. 10(1) and 11 (refund within 15 days); Alberta CPA RSA 2000 c. C-26.3 (PDF, SHA-256 8f1d0dd3…d9b3) direct sales (refund within 15 days after cancellation)."
+    },
+    "qc_distance_no_prepayment": {
+      "value": "In a distance contract with a Québec consumer, the merchant may not collect payment before performing its principal obligation, unless the payment can be charged back (credit card).",
+      "unit": "text",
+      "label": "Québec: no payment before performance in a distance contract, except by a means that allows a chargeback",
+      "source": "https://www.legisquebec.gouv.qc.ca/fr/document/lc/P-40.1",
+      "source_title": "Loi sur la protection du consommateur, art. 54.3 - LégisQuébec",
+      "confidence": "medium",
+      "verified_on": "2026-10-30",
+      "note": "Read on 30/10/2026 with the « Lire une source officielle » tool: art. 54.1 (distance contract: parties not in each other's presence, preceded by the merchant's offer; a proposal with all the essential elements is an offer), 54.2 (deemed concluded at the consumer's address), 54.3 as summarised here (Québec Consumer Protection Act P-40.1 (SHA-256 8ee36350…130b)). Medium until art. 54.3 is quoted word for word in the specification."
+    },
+    "qc_service_contract_resiliation": {
+      "value": "Under the Civil Code of Québec, the client may resiliate a contract for services at any time and then pays, in proportion to the agreed price, the actual costs and expenses, the value of the work done and of any usable goods supplied; the provider may resiliate only for a serious reason and never at an inopportune time, and must return any advances exceeding what it has earned. A consumer cannot be deprived of articles 2125 and 2129.",
+      "unit": "text",
+      "label": "Québec: resiliation of a contract for services (Civil Code art. 2125 to 2129; Consumer Protection Act art. 11.3 and 11.4)",
+      "source": "https://www.legisquebec.gouv.qc.ca/fr/document/lc/CCQ-1991",
+      "source_title": "Code civil du Québec, art. 2125 à 2129 - LégisQuébec",
+      "more_sources": [
+        {
+          "source": "https://www.legisquebec.gouv.qc.ca/fr/document/lc/P-40.1",
+          "source_title": "Loi sur la protection du consommateur, art. 11.3 et 11.4 - LégisQuébec"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-10-30",
+      "note": "Read on 30/10/2026 with the « Lire une source officielle » tool: CCQ-1991 art. 2125 (client may resiliate unilaterally), 2126 (provider only for a serious reason, never at an inopportune time), 2127 to 2129 (payment in proportion to the agreed price, return of excess advances); Québec Consumer Protection Act P-40.1 (SHA-256 8ee36350…130b) art. 11.3 and 11.4 (no exclusion of art. 2125 and 2129 for a consumer). The existing Canadian contract generator already follows these articles."
+    },
+    "qc_liability_limits": {
+      "value": "In Québec, no clause can exclude or limit liability for material injury caused by an intentional or gross fault, nor any liability for bodily or moral injury; an external, illegible or abusive clause in a consumer contract or a contract of adhesion (including between businesses) may be null or reduced.",
+      "unit": "text",
+      "label": "Québec: limits on exclusion and limitation clauses (Civil Code art. 1435 to 1437 and 1474)",
+      "source": "https://www.legisquebec.gouv.qc.ca/fr/document/lc/CCQ-1991",
+      "source_title": "Code civil du Québec, art. 1435 à 1437, 1474 et 1475 - LégisQuébec",
+      "confidence": "high",
+      "verified_on": "2026-10-30",
+      "note": "Read on 30/10/2026 with the « Lire une source officielle » tool (CCQ-1991, fingerprint not recorded): art. 1435 external clause, 1436 illegible or incomprehensible clause, 1437 abusive clause in a consumer contract or contract of adhesion, null or reducible; art. 1474 no exclusion or limitation for material injury from intentional or gross fault, none for bodily or moral injury; art. 1475 a notice excluding liability binds only if known at formation; art. 1613 only foreseeable damages except intentional or gross fault."
+    },
+    "ca_copyright_assignment": {
+      "value": "An assignment of copyright, or the grant of an interest in it by licence, is valid only if it is in writing and signed by the owner of the right or the owner's duly authorized agent. Moral rights may not be assigned but may be waived in whole or in part; an assignment of copyright does not by itself waive them.",
+      "unit": "text",
+      "label": "Copyright Act, ss. 13(4) and 14.1: assignments in writing and signed; moral rights waived, never assigned",
+      "source": "https://laws-lois.justice.gc.ca/eng/acts/C-42/section-13.html",
+      "source_title": "Copyright Act (R.S.C., 1985, c. C-42), section 13",
+      "confidence": "high",
+      "verified_on": "2026-10-30",
+      "note": "Read on 30/10/2026 with the « Lire une source officielle » tool (https://laws-lois.justice.gc.ca/eng/acts/C-42/section-13.html, SHA-256 862e5479…b40a): s. 13(3) an employer is first owner of a work made by an employee in the course of employment, absent agreement to the contrary (a freelancer's client is not); s. 13(4) the owner may assign the right wholly or partially, or grant an interest by licence, but no assignment or grant is valid unless it is in writing signed by the owner or its duly authorized agent. Section 14.1 read the same day (https://laws-lois.justice.gc.ca/eng/acts/C-42/page-3.html, fingerprint not recorded): (1) rights to the integrity of the work and to be associated with it; (2) moral rights may not be assigned but may be waived in whole or in part; (3) an assignment of copyright does not by that act alone constitute a waiver of moral rights.",
+      "more_sources": [
+        {
+          "source": "https://laws-lois.justice.gc.ca/eng/acts/C-42/page-3.html",
+          "source_title": "Copyright Act (R.S.C., 1985, c. C-42), section 14.1"
+        }
+      ]
     }
   },
   "provinces": {
