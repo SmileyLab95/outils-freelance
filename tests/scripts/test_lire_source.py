@@ -70,6 +70,16 @@ class LireSource(unittest.TestCase):
         self.assertEqual(len(extraits[0]), L.PASSAGE * 2 + len(" opposition " + "b" * 100 + " Opposition ") - 2)
         self.assertEqual(L.passages("rien", ["opposition"]), [("opposition", 0, [])])
 
+    def test_passages_suite(self):
+        txt = "a" * 2000 + " opposition " + "b" * 3000
+        mot, total, extraits = L.passages(txt, ["opposition +2500"])[0]
+        self.assertEqual((mot, total), ("opposition", 1), "le suffixe « +N » ne fait pas partie du mot cherché")
+        self.assertEqual(extraits[0], "a" * (L.PASSAGE - 1) + " opposition" + " " + "b" * 2499, "N caractères après le mot")
+        self.assertEqual(L.passages(txt, ["opposition  +10"])[0][2][0][-10:], " " + "b" * 9, "plusieurs espaces")
+        long = L.passages("x" + "b" * 30000, ["x +99999"])[0][2][0]
+        self.assertEqual(len(long), 1 + L.SUITE_MAX, "au plus SUITE_MAX caractères")
+        self.assertEqual(L.passages("prix 3+4", ["3+4"])[0][:2], ("3+4", 1), "sans espace avant « + », le « + » fait partie du mot")
+
     def test_liens_sources(self):
         liens = [("https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000038414258", "Code de commerce : article L441-1"),
                  ("https://entreprendre.service-public.gouv.fr/vosdroits/F31412", "Fiche voisine"),

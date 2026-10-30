@@ -6,6 +6,8 @@ GitHub Actions (.github/workflows/lire-source.yml), à la demande, et son résul
 Il ne lit que les sites officiels de la liste OFFICIELS et n'écrit rien dans le dépôt.
 
 Usage : python3 scripts/lire_source.py <adresse> [mots à chercher, séparés par |, ou « * » pour tout le texte]
+Un mot suivi de « +N » (par exemple « Disclosure of information +4000 ») affiche les N caractères qui suivent chaque
+occurrence (au plus SUITE_MAX), pour lire en une fois une liste longue : un article et ses paragraphes.
 """
 import hashlib
 import html.parser
@@ -34,6 +36,7 @@ OFFICIELS = (
 LIMITE = 20_000_000          # octets lus au plus
 PASSAGE = 600                # caractères affichés de part et d'autre d'un mot trouvé
 PASSAGES_PAR_MOT = 8
+SUITE_MAX = 20_000           # caractères affichés au plus après un mot suivi de « +N »
 DEBUT = 8000                 # caractères affichés quand aucun mot n'est cherché
 TOUT = 200_000               # caractères affichés au plus quand on demande tout le texte (« * »)
 LIENS = 20                   # liens affichés au plus
@@ -100,14 +103,22 @@ def _motif(mot):
     return re.compile("".join("['’]" if c in "'’" else re.escape(c) for c in mot), flags=re.IGNORECASE)
 
 
+def _mot_et_suite(mot):
+    """« mot +N » (espace avant « + ») : le mot et le nombre de caractères à afficher après lui (PASSAGE sans suffixe,
+    SUITE_MAX au plus) ; « 3+4 » reste un mot."""
+    m = re.fullmatch(r"(.*\S)\s+\+(\d+)", mot)
+    return (m.group(1), min(int(m.group(2)), SUITE_MAX)) if m else (mot, PASSAGE)
+
+
 def passages(txt, mots):
     """Passages autour de chaque mot cherché, chevauchements fusionnés."""
     out = []
     for mot in mots:
+        mot, suite = _mot_et_suite(mot)
         motif = _motif(mot)
         zones = []
         for m in motif.finditer(txt):
-            debut, fin = max(0, m.start() - PASSAGE), min(len(txt), m.end() + PASSAGE)
+            debut, fin = max(0, m.start() - PASSAGE), min(len(txt), m.end() + suite)
             if zones and debut <= zones[-1][1]:
                 zones[-1][1] = fin
             else:
