@@ -2146,14 +2146,14 @@
       "note": "Read on 30/10/2026 with the « Lire une source officielle » tool: Québec Consumer Protection Act P-40.1 (SHA-256 8ee36350…130b) art. 54.13 (refund of all sums within 15 days after the resolution of a distance contract); Alberta Internet Sales Contract Regulation AR 81/2001 (PDF, consolidated to 76/2023, SHA-256 e98c3f2f…1439; expires 30/09/2028) s. 10(1) and 11 (refund within 15 days); Alberta CPA RSA 2000 c. C-26.3 (PDF, SHA-256 8f1d0dd3…d9b3) direct sales (refund within 15 days after cancellation)."
     },
     "qc_distance_no_prepayment": {
-      "value": "In a distance contract with a Québec consumer, the merchant may not collect payment before performing its principal obligation, unless the payment can be charged back (credit card).",
+      "value": "A merchant who offers to enter into, or enters into, a distance contract with a Québec consumer may not collect partial or full payment, or offer to collect it, before performing its principal obligation, unless the consumer can request a chargeback of that payment under the Act or a regulation (credit card).",
       "unit": "text",
       "label": "Québec: no payment before performance in a distance contract, except by a means that allows a chargeback",
       "source": "https://www.legisquebec.gouv.qc.ca/fr/document/lc/P-40.1",
       "source_title": "Loi sur la protection du consommateur, art. 54.3 - LégisQuébec",
-      "confidence": "medium",
+      "confidence": "high",
       "verified_on": "2026-10-30",
-      "note": "Read on 30/10/2026 with the « Lire une source officielle » tool: art. 54.1 (distance contract: parties not in each other's presence, preceded by the merchant's offer; a proposal with all the essential elements is an offer), 54.2 (deemed concluded at the consumer's address), 54.3 as summarised here (Québec Consumer Protection Act P-40.1 (SHA-256 8ee36350…130b)). Medium until art. 54.3 is quoted word for word in the specification."
+      "note": "Read on 30/10/2026 with the « Lire une source officielle » tool (SHA-256 8ee36350…130b), art. 54.3 word for word: « Le commerçant qui offre de conclure un contrat à distance ou qui conclut un tel contrat ne peut percevoir un paiement partiel ou total du consommateur ou lui offrir de percevoir un tel paiement avant d'exécuter son obligation principale, à moins qu'il ne s'agisse d'un paiement dont le consommateur peut demander la rétrofacturation en vertu de la présente loi ou d'un règlement. » Also art. 54.1 (distance contract: parties not in each other's presence, preceded by the merchant's offer; a proposal with all the essential elements is an offer) and 54.2 (deemed concluded at the consumer's address)."
     },
     "qc_service_contract_resiliation": {
       "value": "Under the Civil Code of Québec, the client may resiliate a contract for services at any time and then pays, in proportion to the agreed price, the actual costs and expenses, the value of the work done and of any usable goods supplied; the provider may resiliate only for a serious reason and never at an inopportune time, and must return any advances exceeding what it has earned. A consumer cannot be deprived of articles 2125 and 2129.",
