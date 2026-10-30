@@ -1,5 +1,12 @@
 # Journal des modifications
 
+## 2026-10-30 — Sous-traitance : sources françaises en attente
+
+- Sous-traitance en France suspendue tant que la loi du 31 décembre 1975 ne peut pas être lue sur Légifrance (réponse
+  403 à l'outil de lecture, site non autorisé dans l'environnement de travail) : action préparée pour Ismail
+  (autoriser `www.legifrance.gouv.fr` et `www.economie.gouv.fr`), décision D50 ; Royaume-Uni, États-Unis et Canada
+  d'abord.
+
 ## 2026-10-30 — Conditions générales au Canada (anglais et français)
 
 - Nouveau **générateur de conditions générales** pour les prestations de services au Canada, en anglais (*Terms and

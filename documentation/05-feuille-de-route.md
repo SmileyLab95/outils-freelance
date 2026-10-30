@@ -310,8 +310,11 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   gratuit sont faits (étape 5) ; étape 6, outils restants (CGV : faites dans les quatre pays ;
   lois des autres provinces sur la protection du consommateur à lire pour les détailler ; le règlement albertain sur les
   contrats Internet expire le 30/09/2028 : à revérifier) ; jours ouvrés au Canada (jours fériés fédéraux et provinciaux) : en attente de l'accès à canada.ca, refusé
-  depuis l'environnement de travail et sans réponse depuis l'outil de lecture des sources le 29/10/2026 ; sous-traitance,
-  devises, guides de protection sociale) ;
+  depuis l'environnement de travail et sans réponse depuis l'outil de lecture des sources le 29/10/2026 ; sous-traitance
+  (France en attente de la lecture de la loi du 31 décembre 1975 sur Légifrance, décision D50 ; Royaume-Uni,
+  États-Unis et Canada d'abord : contrat entre indépendants, clauses reprises du contrat principal, paiement, lois
+  *Freelance Isn't Free* pour l'indépendant qui sous-traite, formulaire 1099-NEC, art. 2101 du Code civil du Québec),
+  devises (convertisseur aux taux de référence officiels), guides de protection sociale) ;
   ajouter les taux du 1er semestre 2027 dès leur publication
   (fin décembre 2026 : intérêt légal par arrêté, taux de la BCE en vigueur au 1er janvier ; tables `taux_interet_legal`
   et `taux_bce_refinancement`, utilisées par le calculateur de pénalités et les CGV) ; *bank holidays* de 2029 dès que
@@ -335,9 +338,13 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   Z12-012 pour le BT-32 en franchise, la question 13 de [pays/ca.md](pays/ca.md) sur la TVQ, et le
   remplacement annoncé de la section 17 du *Victims and Prisoners Act 2024* sur les accords de confidentialité). La mise en ligne
   des comptes attend le choix de l'hébergeur et du domaine.
-- **En attente d'Ismail** (pas urgent) : autoriser `www.canada.ca` (et `canada.ca`) dans les réglages réseau de
-  l'environnement cloud (*Network access*, *Allowed domains*) : nécessaire pour lire les sources canadiennes (jours
-  fériés, mises à jour des règles) ; questions à poser à l'expert-comptable ou à l'avocat : l'indemnité forfaitaire
+- **En attente d'Ismail** (pas urgent) : autoriser `www.canada.ca` (et `canada.ca`), `www.legifrance.gouv.fr` et
+  `www.economie.gouv.fr` dans les réglages réseau de l'environnement cloud (menu de l'environnement dans la barre de
+  titre de la session, *Edit*, *Network access*, *Allowed domains*, en laissant cochée l'autorisation des gestionnaires
+  de paquets ; mode d'emploi : https://code.claude.com/docs/en/cloud-environments#network-access) : nécessaire pour
+  lire les sources canadiennes (jours fériés, mises à jour des règles) et la loi du 31 décembre 1975 sur la
+  sous-traitance (Légifrance et le ministère de l'Économie refusent l'outil de lecture des sources, réponse 403 le
+  30/10/2026), ainsi que les articles R123-237 et L131-3 à L131-6 en attente ; questions à poser à l'expert-comptable ou à l'avocat : l'indemnité forfaitaire
   de 40 € s'applique-t-elle aux factures des professions libérales et des prestataires non commerçants (la fiche
   officielle F23211 la réserve aux « actes de commerce ») ? Pour un retard sur plusieurs semestres, faut-il appliquer à
   chaque semestre son taux (choix du calculateur, lecture littérale de l'article L441-10) ou garder le taux du semestre
