@@ -1,0 +1,199 @@
+<!--{
+  "id": "cgv",
+  "slug": "terms-and-conditions-generator/",
+  "title": "Terms and Conditions Generator for Canadian Freelancers",
+  "description": "Write terms and conditions for your services in Canada: business or consumer clients, Quebec rules, the Interest Act. Free, in English or French, PDF and Word.",
+  "menu": "Terms and conditions",
+  "icon": "📜",
+  "blurb": "Clear terms and conditions for your business and consumer clients.",
+  "app": "Terms and conditions generator",
+  "scripts": [
+    "engines/contract-doc.js",
+    "engines/cgv-ca.js",
+    "tools/cgv.js"
+  ],
+  "rules": "ca",
+  "sources": [
+    "interest_act_s4",
+    "criminal_interest_rate",
+    "ca_consumer_definition",
+    "ca_consumer_unfair_terms",
+    "ca_on_estimate_tolerance",
+    "ca_consumer_threshold",
+    "ca_consumer_distance_disclosure",
+    "ca_consumer_copy_days",
+    "ca_consumer_info_cancel_days",
+    "ca_consumer_start_delay_days",
+    "ca_consumer_refund_days",
+    "qc_distance_no_prepayment",
+    "qc_service_contract_resiliation",
+    "qc_liability_limits",
+    "qc_adhesion_contract_french",
+    "ca_copyright_assignment"
+  ],
+  "priority": 0.9,
+  "faq": [
+    [
+      "Do I need terms and conditions as a freelancer in Canada?",
+      "No law requires a document with that name, but your contract must say what each party agreed. When you work for consumers, provincial laws require specific information before the contract (description, itemized price, total, payment terms, dates, your contact details) and a copy of the contract, often within 15 days. Your quote and your terms can carry it."
+    ],
+    [
+      "How do I write a late payment interest rate in Canada?",
+      "Write it per year, or per month with the equivalent yearly rate: under section 4 of the Interest Act, interest set only per month in a written contract is limited to 5% a year. “1.5% per month (18% per year)” is fine. The Criminal Code forbids rates above 35% a year."
+    ],
+    [
+      "Can a consumer cancel my contract?",
+      "Yes, in several cases: in Ontario, British Columbia and Alberta, a consumer can cancel if you have not started within 30 days of the agreed date, and within 7 days of receiving the copy if the required information was missing. In Quebec, a consumer can end a contract for services at any time and pays only for the work done and the expenses incurred."
+    ],
+    [
+      "Do my terms have to be in French in Quebec?",
+      "Yes, if they are a contract of adhesion, as standard terms usually are: they must first be given in French, and the client can be bound by an English version only if they expressly choose it after receiving the French one (Charter of the French language, s. 55). This generator writes both versions."
+    ],
+    [
+      "Who owns the work I create for a client?",
+      "You do, unless you assign the copyright: an assignment is valid only in writing signed by you (Copyright Act, s. 13(4)). Moral rights cannot be assigned, only waived. These terms assign the copyright and waive moral rights once you are paid in full."
+    ]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · PDF and Word</span>
+    <h1>Terms and conditions generator</h1>
+    <p class="lead">Answer a few questions about your clients and how you work: your terms and conditions for services are written as you type, with the rules of the Interest Act, the Civil Code of Québec and provincial consumer protection laws, ready to send with your quotes.</p>
+    <ul class="trust"><li>Business and consumer clients</li><li>Rules read on provincial and federal law websites</li><li>Your data stays on your device</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout wide-left">
+    <form class="card form-card" id="cgv-form" autocomplete="off" onsubmit="return false">
+      <h3>About you</h3>
+      <div class="fields">
+        <div class="field full"><label for="cg-p-name">Your name or business name</label>
+          <input type="text" id="cg-p-name" name="p_name" placeholder="Alex Tremblay" data-save></div>
+        <div class="field full"><label for="cg-p-trading">Operating name (optional)</label>
+          <input type="text" id="cg-p-trading" name="p_trading" placeholder="Tremblay Design" data-save></div>
+        <div class="field"><label for="cg-status">Business structure</label>
+          <select id="cg-status" name="status" data-save><option value="sole" selected>Sole proprietorship</option><option value="corp">Corporation</option></select></div>
+        <div class="field" data-when="corp"><label for="cg-incorp">Incorporated under (optional)</label>
+          <select id="cg-incorp" name="incorp" data-save><option value="" selected>Not stated</option><option value="CA">Federal law (CBCA)</option><option value="ON">Ontario</option><option value="QC">Quebec</option><option value="BC">British Columbia</option><option value="AB">Alberta</option><option value="MB">Manitoba</option><option value="SK">Saskatchewan</option><option value="NS">Nova Scotia</option><option value="NB">New Brunswick</option><option value="NL">Newfoundland and Labrador</option><option value="PE">Prince Edward Island</option><option value="YT">Yukon</option><option value="NT">Northwest Territories</option><option value="NU">Nunavut</option></select></div>
+        <div class="field full"><label for="cg-province">Province or territory where you are based</label>
+          <select id="cg-province" name="province" data-save><option value="" selected>Choose a province or territory</option><option value="ON">Ontario</option><option value="QC">Quebec</option><option value="BC">British Columbia</option><option value="AB">Alberta</option><option value="MB">Manitoba</option><option value="SK">Saskatchewan</option><option value="NS">Nova Scotia</option><option value="NB">New Brunswick</option><option value="NL">Newfoundland and Labrador</option><option value="PE">Prince Edward Island</option><option value="YT">Yukon</option><option value="NT">Northwest Territories</option><option value="NU">Nunavut</option></select></div>
+        <div class="field full"><label for="cg-p-address">Business address</label>
+          <input type="text" id="cg-p-address" name="p_address" placeholder="100 King Street West, Toronto, ON M5X 1A9" data-save></div>
+        <div class="field"><label for="cg-p-email">Email</label>
+          <input type="email" id="cg-p-email" name="p_email" placeholder="hello@example.com" data-save></div>
+        <div class="field"><label for="cg-p-phone">Phone</label>
+          <input type="tel" id="cg-p-phone" name="p_phone" placeholder="416-555-0100" aria-describedby="cg-p-phone-hint" data-save>
+          <span class="hint" id="cg-p-phone-hint">Required by consumer protection laws when you work for consumers.</span></div>
+        <div class="field"><label for="cg-p-gst">GST/HST number (optional)</label>
+          <input type="text" id="cg-p-gst" name="p_gst" placeholder="123456789 RT0001" data-save></div>
+        <div class="field"><label for="cg-p-qst">QST number (optional)</label>
+          <input type="text" id="cg-p-qst" name="p_qst" placeholder="1234567890 TQ0001" data-save></div>
+        <div class="field full"><label for="cg-p-privacy">Address of your privacy policy (optional)</label>
+          <input type="text" id="cg-p-privacy" name="p_privacy" placeholder="https://www.example.com/privacy" inputmode="url" data-save></div>
+        <div class="field full"><label for="cg-p-insurance">Professional liability insurance (optional)</label>
+          <input type="text" id="cg-p-insurance" name="p_insurance" placeholder="Insurer and policy number" data-save></div>
+        <div class="field full"><label for="cg-activity">Your services</label>
+          <textarea id="cg-activity" name="activity" rows="2" placeholder="Graphic design, website development and training" data-save></textarea></div>
+      </div>
+      <h3>Your clients</h3>
+      <div class="fields">
+        <div class="field full"><label for="cg-clients">You work for</label>
+          <select id="cg-clients" name="clients" data-save><option value="pro" selected>Businesses only</option><option value="part">Consumers only</option><option value="both">Businesses and consumers</option></select></div>
+        <div class="field full" data-when="has_part"><span class="label" id="cg-cons-label">Where your consumer clients live</span>
+          <div class="checks" role="group" aria-labelledby="cg-cons-label" aria-describedby="cg-cons-hint">
+            <label class="check"><input type="checkbox" id="cg-cons-on" name="cons_on" data-save><span>Ontario</span></label>
+            <label class="check"><input type="checkbox" id="cg-cons-qc" name="cons_qc" data-save><span>Quebec</span></label>
+            <label class="check"><input type="checkbox" id="cg-cons-bc" name="cons_bc" data-save><span>British Columbia</span></label>
+            <label class="check"><input type="checkbox" id="cg-cons-ab" name="cons_ab" data-save><span>Alberta</span></label>
+            <label class="check"><input type="checkbox" id="cg-cons-other" name="cons_other" data-save><span>Other provinces or territories</span></label>
+          </div>
+          <span class="hint" id="cg-cons-hint">If you tick nothing, your own province or territory is used.</span></div>
+        <label class="check full" data-when="has_part"><input type="checkbox" id="cg-at-home" name="at_home" data-save><span>I sometimes sign contracts with consumers in person at their home or elsewhere away from my place of business</span></label>
+      </div>
+      <h3>Prices and payment</h3>
+      <div class="fields">
+        <div class="field full"><label for="cg-pricing">Your prices</label>
+          <select id="cg-pricing" name="pricing" data-save><option value="quote" selected>By quote (fixed price or time spent)</option><option value="daily">Day rate</option><option value="hourly">Hourly rate</option></select></div>
+        <div class="field full"><label for="cg-rates">Your rates (optional)</label>
+          <input type="text" id="cg-rates" name="rates" placeholder="$95 an hour" data-save></div>
+        <div class="field"><label for="cg-validity">Quotes valid for</label>
+          <div class="input-suffix"><input type="text" inputmode="numeric" id="cg-validity" name="validity" value="30" data-save><span>days</span></div></div>
+        <div class="field"><label for="cg-deposit">Advance payment</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="cg-deposit" name="deposit" placeholder="0" data-save><span>%</span></div></div>
+        <div class="field"><label for="cg-terms">Payment terms</label>
+          <div class="input-suffix"><input type="text" inputmode="numeric" id="cg-terms" name="terms" value="30" aria-describedby="cg-terms-hint" data-save><span>days</span></div>
+          <span class="hint" id="cg-terms-hint">0 for payment on receipt.</span></div>
+        <div class="field"><span class="label" id="cg-pay-label">Payment methods</span>
+          <div class="checks" role="group" aria-labelledby="cg-pay-label">
+            <label class="check"><input type="checkbox" id="cg-pay-transfer" name="pay_transfer" checked data-save><span>Bank transfer (including Interac e-Transfer)</span></label>
+            <label class="check"><input type="checkbox" id="cg-pay-card" name="pay_card" data-save><span>Credit card</span></label>
+            <label class="check"><input type="checkbox" id="cg-pay-cheque" name="pay_cheque" data-save><span>Cheque</span></label>
+            <label class="check"><input type="checkbox" id="cg-pay-link" name="pay_link" data-save><span>Online payment link</span></label>
+          </div></div>
+        <label class="check full"><input type="checkbox" id="cg-late" name="late" data-save><span>Charge interest on late payments</span></label>
+        <div class="field" data-when="late"><label for="cg-late-rate">Interest rate</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="cg-late-rate" name="late_rate" placeholder="1.5" aria-describedby="cg-late-rate-hint" data-save><span>% a month</span></div>
+          <span class="hint" id="cg-late-rate-hint">The yearly rate is written next to it, as the Interest Act requires.</span></div>
+      </div>
+      <h3>Work and terms</h3>
+      <div class="fields">
+        <div class="field" data-when="has_pro"><label for="cg-acceptance">Checking deliverables (business clients)</label>
+          <div class="input-suffix"><input type="text" inputmode="numeric" id="cg-acceptance" name="acceptance" value="10" data-save><span>days</span></div></div>
+        <div class="field"><label for="cg-notice">Notice to end the contract</label>
+          <div class="input-suffix"><input type="text" inputmode="numeric" id="cg-notice" name="notice" value="14" data-save><span>days</span></div></div>
+        <div class="field full"><label for="cg-ip">Copyright in the deliverables</label>
+          <select id="cg-ip" name="ip" data-save><option value="assign" selected>Assigned to the client after full payment</option><option value="license">Kept by you, with a licence to the client</option></select></div>
+        <label class="check full"><input type="checkbox" id="cg-portfolio" name="portfolio" checked data-save><span>Show the work in my portfolio</span></label>
+        <label class="check full"><input type="checkbox" id="cg-conf" name="conf" checked data-save><span>Confidentiality</span></label>
+        <label class="check full" data-when="has_pro"><input type="checkbox" id="cg-liability" name="liability" checked data-save><span>Limit my liability to the price of the project (business clients only)</span></label>
+        <label class="check full"><input type="checkbox" id="cg-subcontract" name="subcontract" data-save><span>Allow me to use subcontractors</span></label>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="preview-actions">
+        <button type="button" class="btn btn-primary" id="cg-print">Download as PDF</button>
+        <button type="button" class="btn btn-ghost" id="cg-word">Download as Word</button>
+        <button type="button" class="btn btn-ghost" id="cg-copy">Copy the text</button>
+      </div>
+      <p class="small muted print-hint">PDF: choose “Save as PDF” in the print window. Word: the file opens in Word, LibreOffice or Google Docs for editing.</p>
+      <div class="cgv-notices" id="cg-notices" role="status" aria-live="polite"></div>
+      <div class="paper-wrap"><article class="paper" id="cg-preview" aria-label="Preview of the terms and conditions"></article></div>
+      <button type="button" class="btn btn-ghost btn-sm" id="cg-reset">Clear everything</button>
+    </div>
+  </div>
+</section>
+
+<script type="application/json" id="cgv-data">{"country": "ca", "lang": "en-CA", "store": "cgv-ca", "doc_title": "TERMS AND CONDITIONS", "file": "Terms and conditions", "article": "{n}. {title}", "annex": "Annex – {title}", "reset_confirm": "Clear everything you entered?", "hints": {"p_name": "your name", "p_address": "your business address", "p_email": "email", "contacts": "email and phone", "status_text": "business structure", "province_name": "your province", "province_of": "your province", "province_in": "in your province", "validity": "30", "deposit": "advance payment", "terms_text": "payment terms", "payment_methods": "payment methods", "late_text": "interest", "acceptance": "10", "notice": "14", "today": "date", "estimate_pct": "10%", "copy_days": "15", "start_days": "30", "info_cancel_days": "7", "refund_days": "15"}, "preamble": ["Effective from {today}."], "clauses": [{"title": "About these terms", "paras": ["These terms and conditions (the “Terms”) apply to the services provided by {p_name}[[p_trading| operating as {p_trading}]] (“we”, “us”, “our”) to our clients (“you”, “your”)[[activity|: {activity}]].", {"when": {"both": ["on"]}, "text": "They apply to business clients, who buy our services for their business, and to consumers, individuals who buy them for personal, family or household purposes. Where a term applies only to one of these groups, it says so."}, {"when": {"pro_only": ["on"]}, "text": "They apply to business clients, who buy our services for their business."}, {"when": {"part_only": ["on"]}, "text": "They apply to consumers, individuals who buy our services for personal, family or household purposes."}, "Our quote or proposal, once you accept it, and these Terms form the contract between us. If the quote and these Terms conflict, the quote applies.", {"when": {"has_part": ["on"]}, "text": "If you are a consumer, nothing in these Terms limits the rights you have under the consumer protection laws of your province or territory, and you cannot waive those rights."}, {"when": {"qc_any": ["on"]}, "text": "Clients in Quebec: a French version of these Terms is given to you first. By accepting the quote on the basis of this English version, you confirm that you have chosen to be bound by it."}]}, {"title": "About us", "paras": ["We are {status_text}, based {province_in}. Our business address is {p_address}.", "You can contact us at {contacts}.", {"when": {"has_p_gst": ["on"]}, "text": "GST/HST registration number: {p_gst}."}, {"when": {"has_p_qst": ["on"]}, "text": "QST registration number: {p_qst}."}, {"when": {"has_p_insurance": ["on"]}, "text": "Professional liability insurance: {p_insurance}."}]}, {"title": "Quotes and the contract", "paras": ["Each quote describes the services, the price, the payment terms and the timetable. It is valid for {validity} days from its date, unless it says otherwise.", "Before you accept, you can read the whole quote and these Terms, ask us to correct any error, and accept or decline them.", "The contract is formed when you accept our quote in writing, by signing it (an electronic signature is valid) or by confirming your acceptance by email. The version of these Terms in force on that day applies.", {"when": {"has_part": ["on"]}, "text": "If you are a consumer, we send you a copy of the accepted quote and of these Terms by email, in a form you can keep and print, within {copy_days} days of your acceptance."}, "Any change to the services, the price or the timetable must be agreed in writing, for example by email, before it takes effect."]}, {"title": "Prices", "paras": [{"when": {"pricing": ["quote"]}, "text": "Our prices are set in each quote, as a fixed price or based on the time spent[[rates|. Our current rates: {rates}]]."}, {"when": {"pricing": ["daily"]}, "text": "We charge a day rate[[rates|: {rates}]]. Each quote gives an estimate of the number of days, and we will not exceed it without your written agreement."}, {"when": {"pricing": ["hourly"]}, "text": "We charge an hourly rate[[rates|: {rates}]]. Each quote gives an estimate of the number of hours, and we will not exceed it without your written agreement."}, "Prices are in Canadian dollars, unless the quote states another currency. They do not include GST/HST, QST or PST, which we add at the applicable rates and show separately in the quote and the invoice.", {"when": {"has_pro": ["on"]}, "text": "Business clients: expenses, such as travel, materials or third-party fees, are charged only if the quote provides for them or you agree to them in writing in advance."}, {"when": {"has_part": ["on"]}, "text": "If you are a consumer, we charge only the expenses whose amount is stated in the quote."}, {"when": {"has_part": ["on"]}, "text": "If you are a consumer and the quote gives an estimate, we will not charge you more than {estimate_pct} above it. If you ask for additional or different services, we agree a new price with you in writing before doing them."}]}, {"title": "Invoices and payment", "paras": [{"when": {"has_deposit": ["on"]}, "text": "When you accept the quote, we will invoice an advance payment of {deposit}% of the price. Work begins when we receive it, and it is deducted from the final invoice."}, {"when": {"has_deposit": ["on"], "qc_cons": ["on"]}, "text": "If you are a consumer in Quebec and the contract is made at a distance, we accept an advance payment only by credit card."}, "We invoice when the services are completed or, for work charged by time or lasting more than a month, at the end of each month, unless the quote says otherwise.", "Invoices are payable {terms_text}, by {payment_methods}.", {"when": {"late_on": ["on"]}, "text": "If an invoice is not paid on time, we may charge {late_text}. Interest is not compounded."}, {"when": {"has_pro": ["on"]}, "text": "Business clients: if an invoice is still unpaid 14 days after we have reminded you in writing, we may suspend the services until it is paid, and the timetable is extended accordingly."}]}, {"title": "Information for consumers", "when": {"has_part": ["on"]}, "paras": ["If you are a consumer, before you accept, our quote gives you a detailed description of the services, the itemized price with taxes and any other charges, the total amount, the payment terms and methods, the dates on which the services start and end, and where they are performed. Our name, address, phone number and email are in the section “About us”; how the contract can be cancelled or ended, and how we refund you, is in the sections “Carrying out the services” and “Ending the contract”.", "If this information is missing, or if you do not receive your copy of the contract, the consumer protection law of your province may let you cancel the contract, for example within {info_cancel_days} days of receiving the copy."]}, {"title": "Carrying out the services", "paras": ["We will perform the services with reasonable care and skill, in a professional manner, within the timetable in the quote.", "You will give us, in good time, the information, materials, access and decisions we need. If they are late or inaccurate, we are not responsible for the resulting delay, and the timetable is extended accordingly.", {"when": {"subcontract": ["on"]}, "text": "We may use subcontractors for part of the services, and we remain responsible for their work."}, {"when": {"subcontract": ["off"]}, "text": "We perform the services ourselves and will not subcontract them without your written consent."}, {"when": {"has_pro": ["on"]}, "text": "Business clients: you have {acceptance} days after delivery to check each deliverable and tell us in writing of any defect. If you do not, or if you use the deliverable in your business, it is treated as accepted."}, {"when": {"has_part": ["on"]}, "text": "If you are a consumer, we start the services on the date set in the quote. If we have not started within {start_days} days of that date or, if the quote sets no date, within {start_days} days of your acceptance, you may cancel the contract at any time before we start, and we refund everything you have paid within {refund_days} days."}, {"when": {"has_part": ["on"]}, "text": "If you are a consumer and a deliverable does not match what we agreed, tell us as soon as you can and we will put it right."}]}, {"title": "Intellectual property", "paras": [{"when": {"ip": ["assign"]}, "text": "Once you have paid the full price, we assign to you the copyright and other intellectual property rights in the final deliverables created for you under the contract, worldwide and for the full duration of those rights, and we waive our moral rights in them in your favour. Until then, you may use the deliverables only to review them. On request, we will sign a separate document confirming the assignment."}, {"when": {"ip": ["assign"]}, "text": "We keep the rights in our pre-existing materials, tools, templates and know-how, and in drafts and options you did not choose. Where they are included in a deliverable, we grant you a non-exclusive, perpetual, worldwide licence to use them as part of that deliverable."}, {"when": {"ip": ["license"]}, "text": "We keep the copyright and other intellectual property rights in the deliverables. Once you have paid the full price, we grant you a non-exclusive, perpetual, worldwide licence to use them for the purposes set out in the quote or, if it says nothing, for your own business or personal use. Any other use needs our written consent."}, "You confirm that you have the right to use the materials you give us, and that we may use them to perform the services.", {"when": {"portfolio": ["on"], "has_pro": ["on"]}, "text": "Business clients: unless you object in writing, we may show the deliverables and mention your name in our portfolio and marketing once they are public."}, {"when": {"portfolio": ["on"], "has_part": ["on"]}, "text": "If you are a consumer, we show your project in our portfolio only with your consent."}]}, {"title": "Confidentiality", "when": {"conf": ["on"]}, "paras": ["Each of us keeps confidential the non-public information received from the other, uses it only to perform the contract and discloses it only to people who need to know it. This lasts during the contract and for two years after it ends. It does not apply to information that is public, already known to the recipient or that must be disclosed by law."]}, {"title": "Warranties and liability", "paras": [{"when": {"has_pro": ["on"]}, "text": "Business clients: except as stated in these Terms or in the quote, and to the extent permitted by law, we give no other warranty about the services."}, {"when": {"liability": ["on"]}, "text": "Business clients: our total liability under or in connection with the contract is limited to the price paid or payable for the services concerned, and we are not liable for indirect loss, or for loss of profits, revenue or data. These limits do not apply to fraud, wilful misconduct or gross negligence (in Quebec, intentional or gross fault), to bodily or moral injury, or to any liability that cannot be limited by law."}, {"when": {"has_part": ["on"]}, "text": "If you are a consumer, these Terms do not limit our liability to you or exclude any warranty the law gives you."}]}, {"title": "Events outside our control", "paras": ["Neither of us is responsible for a delay or failure caused by an event outside our reasonable control, such as illness, accident, natural disaster or a failure of public utilities. The party affected tells the other promptly and does its best to limit the effects. If the event lasts more than 30 days, either of us may end the contract in writing, and you pay only for the work done."]}, {"title": "Ending the contract", "paras": [{"when": {"qc_law": ["off"]}, "text": "Either of us may end the contract by giving {notice} days’ written notice."}, {"when": {"qc_law": ["on"]}, "text": "In accordance with articles 2125 to 2129 of the Civil Code of Québec, you may end the contract at any time by written notice. We may end it only for a serious reason and not at an inopportune time, and we then give you {notice} days’ written notice where possible."}, "Either of us may end it at once, in writing, if the other seriously breaches the contract and does not put it right within 14 days of being asked to in writing.", {"when": {"qc_law": ["off"]}, "text": "When the contract ends, you pay for the work done up to that date and for the expenses we have incurred and cannot recover. Any advance payment is deducted, and we refund any amount you have paid above that."}, {"when": {"qc_law": ["on"]}, "text": "When the contract ends, you pay, in proportion to the agreed price, for the work done and the expenses incurred before the end or before your notice. Any advance payment is deducted, and we return any amount you have paid above what we have earned."}, {"when": {"qc_cons_other_law": ["on"]}, "text": "If you are a consumer in Quebec, you may also end the contract at any time under articles 2125 and 2129 of the Civil Code of Québec: you then pay, in proportion to the agreed price, for the work done and the expenses incurred before your notice, and we return any amount you have paid above that."}, {"when": {"has_part": ["on"]}, "text": "If you are a consumer, we never charge a cancellation fee or a penalty: you pay only for the work done and the expenses incurred, as described above."}, "The terms on payment, intellectual property, confidentiality and liability continue to apply after the contract ends."]}, {"title": "Personal information", "paras": ["We use the personal information you give us only to perform the contract, manage our relationship with you and meet our legal obligations, and we keep it secure.", {"when": {"has_p_privacy": ["on"]}, "text": "Our privacy policy explains how we handle it: {p_privacy}."}]}, {"title": "Disputes, governing law and courts", "paras": ["If a dispute arises, we will first try to resolve it with you informally and in good faith. If we cannot within 30 days, either of us may take the matter further.", "These Terms and the contract are governed by the laws of {province_of} and the federal laws of Canada that apply there.", {"when": {"has_pro": ["on"]}, "text": "Business clients: the courts of {province_name} have exclusive jurisdiction."}, {"when": {"has_part": ["on"]}, "text": "If you are a consumer, you may also bring a claim in the courts of the province or territory where you live. These Terms do not require you to go to arbitration and do not prevent you from taking part in a class action."}, "Either of us may bring a claim in small claims court where the claim qualifies."]}, {"title": "General", "paras": [{"when": {"has_pro": ["on"]}, "text": "Business clients: the accepted quote and these Terms are the entire agreement between us on their subject and replace any earlier discussions or proposals."}, "We may update these Terms for future quotes. The version in force on the day you accept a quote applies to that contract; we will not change it during the contract without your written agreement.", "Neither of us may transfer the contract to someone else without the other’s written consent.", "If a court finds any part of these Terms unenforceable, the rest remains in effect. If we delay enforcing a right, we do not give it up.", "Notices under the contract may be sent by email to the addresses we use for the project. The contract may be signed electronically and in counterparts."]}], "ui": {"title_prefix": "Terms and conditions", "errors": "To fix", "notes": "Good to know", "checks": {"name_missing": "Enter your name or business name.", "address_missing": "Enter your business address: consumer protection laws require it in the information you give consumers, and it tells clients where to send notices.", "email_missing": "Add an email address: these terms send copies and notices by email.", "phone_missing": "Add a phone number: consumer protection laws require it in the information you give consumers before the contract.", "province_missing": "Choose the province or territory where you are based: its law governs your contracts with businesses.", "terms_invalid": "Enter the payment period in whole days (0 for payment on receipt).", "late_invalid": "Enter the monthly interest rate for late payments (a number above 0), or untick the option.", "late_criminal": "This rate is above the criminal rate of interest ({max} a year, Criminal Code, s. 347): choose a lower rate.", "deposit_invalid": "Enter the advance payment as a percentage from 0 to 100.", "payment_none": "Choose at least one payment method.", "qc_deposit_card": "Consumers in Quebec: in a contract made at a distance, you cannot collect payment before you perform the services, unless it can be charged back (credit card). Offer credit card payment for the advance, or do not ask consumers in Quebec for one.", "acceptance_invalid": "Enter the number of days business clients have to check deliverables.", "notice_invalid": "Enter the notice period in days.", "validity_invalid": "Enter how many days a quote stays valid.", "at_home_out_of_scope": "Contracts signed in person at a consumer’s home or away from your place of business follow special rules that this generator does not cover: a cancellation period of 10 days after the consumer receives a copy of the contract (Ontario, British Columbia, Alberta), a statement of the right to cancel in the form set by regulation and, in Quebec, an itinerant merchant permit and the official cancellation form. Use the official forms of the province, or have a lawyer prepare your contract.", "consumer_quote_items": "For consumers, put in each quote a detailed description of the services, the itemized price with taxes and any other charges, the total, the payment terms and the start and end dates; let them correct errors and accept or decline; and send them a copy within {days} days. In Ontario and Alberta, these rules apply above {amount}.", "other_provinces": "The consumer protection laws of provinces and territories other than Ontario, Quebec, British Columbia and Alberta are not detailed here: they also apply to your consumer clients who live there.", "french_first": "Quebec: a contract of adhesion, such as these terms, must first be given in French; the parties can be bound by the English version only if the client expressly chooses it after receiving the French one (Charter of the French language, s. 55). Use the French version of this generator and send it first.", "ip_signed": "An assignment of copyright is valid only in writing signed by you (Copyright Act, s. 13(4)): sign the quote or contract that refers to these terms (an electronic signature works).", "liability_review": "The generator does not check whether a limit of liability is enforceable in your situation (in Quebec, an abusive clause in a contract of adhesion can be annulled even between businesses): have a lawyer review it if your work carries significant risks."}}}</script>
+
+<section class="section prose">
+  <h2>What these terms cover</h2>
+  <ul>
+    <li><strong>For all your clients:</strong> who you are and how to reach you, how the contract is formed from your quote, prices in Canadian dollars with GST/HST, QST or PST added, payment and late interest written per month and per year, how you carry out the services, copyright and moral rights, liability, ending the contract, disputes and the law of your province.</li>
+    <li><strong>With business clients:</strong> a period to check deliverables, the right to pause work on an unpaid invoice, a warranty disclaimer and a limit of liability that excludes intentional or gross fault and bodily or moral injury, and the courts of your province.</li>
+    <li><strong>With consumers:</strong> the information their province requires before the contract, a copy by email within 15 days, a price that stays within 10% of an estimate, the right to cancel if the work has not started within 30 days, no cancellation fee or penalty, no limit of liability, no compulsory arbitration and no class action waiver.</li>
+    <li><strong>In Quebec:</strong> the client may end the contract at any time and pays only for the work done (Civil Code of Québec, art. 2125 to 2129), and consumers served at a distance pay an advance only by credit card.</li>
+  </ul>
+  <h2>How to use them</h2>
+  <ul>
+    <li>Send your terms with every quote, as a PDF, <strong>before</strong> the client accepts it, and ask them to sign the quote or confirm their acceptance by email: this is what makes the terms part of the contract. Prepare your quotes with the <a href="{{link:invoice}}">invoice and estimate generator</a>.</li>
+    <li>For consumers, put in each quote a detailed description of the services, the itemized price with taxes and other charges, the total, the payment terms and the start and end dates, then email them a copy of the accepted quote and of these terms within 15 days.</li>
+    <li>In Quebec, send the French version first (<a href="{{link:ca-fr/cgv}}">générateur de conditions générales</a>).</li>
+    <li>Keep each dated version of your terms and a copy of every accepted quote. For a large project, add a <a href="{{link:contract}}">freelance contract</a> signed by both parties.</li>
+  </ul>
+  <h2>Working for consumers</h2>
+  <p>Consumer protection laws apply when your client is an individual buying for personal, family or household purposes. The rules below come from the laws of Ontario, Quebec, British Columbia and Alberta, read on their official websites; the laws of other provinces and territories also protect consumers who live there.</p>
+  <ul>
+    <li><strong>Before the contract</strong>: give clear information they can keep and print, and let them correct errors and accept or decline (Ontario, above $50; Quebec; British Columbia; Alberta, above $50 for contracts made online).</li>
+    <li><strong>After the contract</strong>: give them a written copy, within 15 days in Ontario (online contracts), Quebec and British Columbia. If the information or the copy is missing, they can cancel, usually within 7 days of receiving the copy, or longer without one.</li>
+    <li><strong>Start on time</strong>: if you have not started within 30 days of the agreed date, they can cancel before you start (Ontario, British Columbia, Alberta).</li>
+    <li><strong>Estimates</strong>: in Ontario, you cannot charge more than 10% above an estimate.</li>
+    <li><strong>Terms you cannot use</strong>: compulsory arbitration (Ontario, Quebec, Alberta) or a class action waiver (Ontario, Quebec), a clause excluding your liability for your own acts, fees whose amount is not stated, and penalties other than interest (Quebec).</li>
+  </ul>
+  <h2>What this generator does not cover</h2>
+  <p>These terms are for services provided by a business established in Canada. They do not cover contracts signed in person at a consumer’s home or away from your place of business (10-day cancellation period, official statement of rights and, in Quebec, an itinerant merchant permit), the sale of goods, subscriptions that renew automatically, personal development services such as fitness, credit, regulated professions, construction work, or clients based outside Canada. Have your terms reviewed by a lawyer (or a notary in Quebec) if your work carries significant risks. If a client does not pay, see the <a href="{{link:latefee}}">late fee calculator</a> and the <a href="{{link:court}}">small claims court guide</a>.</p>
+  <p class="small muted">Template provided for information only; it is not legal advice.</p>
+</section>

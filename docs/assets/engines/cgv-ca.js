@@ -17,21 +17,21 @@
   var flag = function (b) { return b ? "on" : "off"; };
   var str = function (x) { return String(x == null ? "" : x).trim(); };
 
-  // Provinces et territoires : nom seul et forme « de … » (lois de l'Ontario, du Québec…).
+  // Provinces et territoires : nom seul, forme « de … » (lois de l'Ontario, du Québec…) et « en … » (établie au Québec…).
   var PROVINCES = {
-    ON: { en: "Ontario", fr: "l'Ontario", fr_of: "de l'Ontario" },
-    QC: { en: "Quebec", fr: "le Québec", fr_of: "du Québec" },
-    BC: { en: "British Columbia", fr: "la Colombie-Britannique", fr_of: "de la Colombie-Britannique" },
-    AB: { en: "Alberta", fr: "l'Alberta", fr_of: "de l'Alberta" },
-    MB: { en: "Manitoba", fr: "le Manitoba", fr_of: "du Manitoba" },
-    SK: { en: "Saskatchewan", fr: "la Saskatchewan", fr_of: "de la Saskatchewan" },
-    NS: { en: "Nova Scotia", fr: "la Nouvelle-Écosse", fr_of: "de la Nouvelle-Écosse" },
-    NB: { en: "New Brunswick", fr: "le Nouveau-Brunswick", fr_of: "du Nouveau-Brunswick" },
-    NL: { en: "Newfoundland and Labrador", fr: "Terre-Neuve-et-Labrador", fr_of: "de Terre-Neuve-et-Labrador" },
-    PE: { en: "Prince Edward Island", fr: "l'Île-du-Prince-Édouard", fr_of: "de l'Île-du-Prince-Édouard" },
-    YT: { en: "Yukon", fr: "le Yukon", fr_of: "du Yukon" },
-    NT: { en: "the Northwest Territories", fr: "les Territoires du Nord-Ouest", fr_of: "des Territoires du Nord-Ouest" },
-    NU: { en: "Nunavut", fr: "le Nunavut", fr_of: "du Nunavut" }
+    ON: { en: "Ontario", fr: "l'Ontario", fr_of: "de l'Ontario", fr_in: "en Ontario" },
+    QC: { en: "Quebec", fr: "le Québec", fr_of: "du Québec", fr_in: "au Québec" },
+    BC: { en: "British Columbia", fr: "la Colombie-Britannique", fr_of: "de la Colombie-Britannique", fr_in: "en Colombie-Britannique" },
+    AB: { en: "Alberta", fr: "l'Alberta", fr_of: "de l'Alberta", fr_in: "en Alberta" },
+    MB: { en: "Manitoba", fr: "le Manitoba", fr_of: "du Manitoba", fr_in: "au Manitoba" },
+    SK: { en: "Saskatchewan", fr: "la Saskatchewan", fr_of: "de la Saskatchewan", fr_in: "en Saskatchewan" },
+    NS: { en: "Nova Scotia", fr: "la Nouvelle-Écosse", fr_of: "de la Nouvelle-Écosse", fr_in: "en Nouvelle-Écosse" },
+    NB: { en: "New Brunswick", fr: "le Nouveau-Brunswick", fr_of: "du Nouveau-Brunswick", fr_in: "au Nouveau-Brunswick" },
+    NL: { en: "Newfoundland and Labrador", fr: "Terre-Neuve-et-Labrador", fr_of: "de Terre-Neuve-et-Labrador", fr_in: "à Terre-Neuve-et-Labrador" },
+    PE: { en: "Prince Edward Island", fr: "l'Île-du-Prince-Édouard", fr_of: "de l'Île-du-Prince-Édouard", fr_in: "à l'Île-du-Prince-Édouard" },
+    YT: { en: "Yukon", fr: "le Yukon", fr_of: "du Yukon", fr_in: "au Yukon" },
+    NT: { en: "the Northwest Territories", fr: "les Territoires du Nord-Ouest", fr_of: "des Territoires du Nord-Ouest", fr_in: "dans les Territoires du Nord-Ouest" },
+    NU: { en: "Nunavut", fr: "le Nunavut", fr_of: "du Nunavut", fr_in: "au Nunavut" }
   };
   // Provinces dont les règles sur les particuliers ont été lues (les autres : mention générale).
   var DETAILED = ["ON", "QC", "BC", "AB"];
@@ -40,13 +40,13 @@
     en: {
       sole: "a sole proprietor", corp: "a corporation", corp_in: "a corporation incorporated in ",
       on_receipt: "on receipt", within: "within {n} days of the invoice date", or: "or", and: "and",
-      transfer: "bank transfer or Interac e-Transfer", card: "credit card", cheque: "cheque", link: "online payment link",
+      transfer: "bank transfer (including Interac e-Transfer)", card: "credit card", cheque: "cheque", link: "online payment link",
       late: "interest at {m} per month ({y} per year) on the overdue amount, from the due date until paid"
     },
     fr: {
       sole: "une entreprise individuelle", corp: "une société par actions", corp_in: "une société par actions constituée sous le régime ",
       on_receipt: "à réception", within: "dans les {n} jours suivant la date de la facture", or: "ou", and: "et",
-      transfer: "virement bancaire ou virement Interac", card: "carte de crédit", cheque: "chèque", link: "lien de paiement en ligne",
+      transfer: "virement bancaire (y compris par Interac)", card: "carte de crédit", cheque: "chèque", link: "lien de paiement en ligne",
       late: "des intérêts de {m} par mois ({y} par an) sur la somme impayée, de la date d'échéance jusqu'au paiement"
     }
   };
@@ -164,6 +164,7 @@
     var flags = {
       clients: clients, has_pro: flag(hasPro), has_part: flag(hasPart), both: flag(hasPro && hasPart),
       pro_only: flag(!hasPart), part_only: flag(!hasPro), qc_law: flag(province === "QC"), qc_cons: flag(qcCons),
+      qc_any: flag(province === "QC" || qcCons), qc_cons_other_law: flag(qcCons && province !== "QC"),
       has_deposit: flag(hasDeposit), late_on: flag(lateOk), status: status, province: province,
       liability: flag(liability), ip: raw.ip === "license" ? "license" : "assign"
     };
@@ -171,6 +172,7 @@
       status_text: statusText,
       province_name: province ? PROVINCES[province][fr ? "fr" : "en"] : "",
       province_of: province ? (fr ? PROVINCES[province].fr_of : PROVINCES[province].en) : "",
+      province_in: province ? (fr ? PROVINCES[province].fr_in : "in " + PROVINCES[province].en) : "",
       terms_text: !termsOk ? "" : terms === 0 ? W.on_receipt : W.within.replace("{n}", fmt.num(terms)),
       payment_methods: join(methods, W.or),
       late_text: lateOk ? W.late.replace("{m}", fmt.pct(monthly / 100)).replace("{y}", fmt.pct(yearly / 100)) : "",

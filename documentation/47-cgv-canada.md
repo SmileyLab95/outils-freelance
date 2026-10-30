@@ -4,7 +4,7 @@ Besoin P3 de [02](02-besoins-clients.md), étape 6 de [31](31-vision-plateforme.
 ([40](40-cgv.md)), le Royaume-Uni ([45](45-cgv-royaume-uni.md)) et les États-Unis ([46](46-cgv-etats-unis.md)).
 Au Canada, le droit des contrats de consommation relève des **provinces** ; le Québec suit le droit civil (Code civil du
 Québec) et sa Loi sur la protection du consommateur. Spécification écrite le 30/10/2026 après la lecture des sources
-(annexe), décision D49.
+(annexe), décision D49 ; réalisé le même jour (§ 5).
 
 ## 1. Besoin
 
@@ -56,7 +56,7 @@ Pages `/ca/terms-and-conditions-generator/` (anglais) et `/ca/fr/conditions-gene
 (liens de langue avec la France, le Royaume-Uni et les États-Unis), menu « Selling » / « Vendre » après l'entente de
 confidentialité.
 
-**Formulaire** (enregistré sur l'appareil, clé `cgv-ca`, commune aux deux langues) : *About you* (nom, nom commercial,
+**Formulaire** (enregistré sur l'appareil, clé `cgv-ca`, une par langue comme pour tous les outils) : *About you* (nom, nom commercial,
 structure, province ou territoire, adresse, email, téléphone, numéros de TPS/TVH et de TVQ facultatifs, prestations) ;
 *Your clients* (entreprises, particuliers ou les deux ; provinces des particuliers : Ontario, Québec,
 Colombie-Britannique, Alberta, autres ; façon de conclure avec un particulier : à distance ou dans mon établissement,
@@ -67,7 +67,7 @@ sous-traitance).
 
 **Moteur** `engines/cgv-ca.js` (OFE.cgvCA, fonctions pures, testées) : `annualRate(monthly)` (taux annuel écrit,
 arrondi au centième) ; `prepare(raw, rules, today, fmt, lang)` → repères (`has_pro`, `has_part`, `qc_law`,
-`qc_consumer`, `on_consumer`…), textes calculés en anglais ou en français et **contrôles** (codes ; messages dans la
+`qc_cons`, `qc_any`, `qc_cons_other_law`…), textes calculés en anglais ou en français et **contrôles** (codes ; messages dans la
 page) : nom, adresse, email, province non choisie, délai, taux illisible ou au-delà du taux criminel, acompte d'un
 particulier du Québec par un autre moyen que la carte de crédit, contrat conclu chez le particulier (hors champ),
 version française d'abord (Québec), contenu du devis pour un particulier, copie dans les 15 jours, cession signée,
@@ -110,8 +110,16 @@ particulier, autres provinces) ; questions fréquentes ; sources.
 ## 5. Réalisation
 
 Règles : faites le 30/10/2026 (treize règles nouvelles dans `data/rules/ca.json`, taux criminel vérifié). Moteur
-`engines/cgv-ca.js` : fait le 30/10/2026 (`annualRate`, `consumerProvinces`, `prepare` en anglais et en français, 19
-contrôles), 11 tests unitaires, 25 mutants détectés. À venir : pages anglaise et française, parcours navigateur.
+`engines/cgv-ca.js` (`annualRate`, `consumerProvinces`, `prepare` en anglais et en français, 20 contrôles). Pages
+`/ca/terms-and-conditions-generator/` et `/ca/fr/conditions-generales/` (15 articles, menu « Selling » / « Vendre »),
+écrites par un script puis relues ; script commun `tools/cgv.js` (moteur choisi par pays, langue passée au moteur).
+Tests : 13 tests unitaires (moteur et rendu des deux pages pour 36 combinaisons de clientèle, province et options),
+26 mutants du moteur et 11 mutants des conditions d'articles détectés (un mutant équivalent : chiffre écrit en dur égal
+à la règle) ; parcours navigateur des deux pages (saisie, particuliers, Québec, taux criminel, Word, copie,
+enregistrement séparé par langue, accessibilité, ordinateur, tablette et mobile) ; captures relues. Choix faits à la
+réalisation : « virement bancaire (y compris par Interac) » pour éviter « ou … ou » dans la liste des moyens de
+paiement ; « tribunal des petites créances » (et non « division des petites créances », propre au Québec) ; la clause
+« version française remise d'abord » n'est que dans la version anglaise, pour les clients du Québec.
 
 ## Annexe : sources lues (30/10/2026, outil « Lire une source officielle »)
 

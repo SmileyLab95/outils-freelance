@@ -2752,6 +2752,106 @@ const tests = {
     await page.selectOption("#k-law", "EW");
     await page.selectOption("#k-direction", "mutual");
   },
+  async "ca/terms-and-conditions-generator/"(page) {
+    const preview = async () => (await page.textContent("#cg-preview")).replace(/\s+/g, " ");
+    const notices = async () => (await page.textContent("#cg-notices")).replace(/\s+/g, " ");
+    let text = await preview();
+    check(text.includes("TERMS AND CONDITIONS") && text.includes("1. About these terms") && !text.includes("Information for consumers") &&
+      text.includes("Business clients: the courts of"), "T&Cs CA : clients entreprises par défaut");
+    check(text.includes("Invoices are payable within 30 days of the invoice date, by bank transfer (including Interac e-Transfer).") &&
+      !text.includes("per year)"), "T&Cs CA : délai et moyen de paiement, pas d'intérêts par défaut");
+    let n = await notices();
+    check(n.includes("Enter your name or business name") && n.includes("Choose the province or territory where you are based") &&
+      (await page.getAttribute("#cg-province", "aria-invalid")) === "true", "T&Cs CA : nom et province à saisir, champ signalé");
+    check(await page.isHidden("#cg-cons-qc") && await page.isHidden("#cg-at-home") && await page.isHidden("#cg-incorp") && await page.isHidden("#cg-late-rate"),
+      "T&Cs CA : champs conditionnels masqués");
+    await page.fill("#cg-p-name", "Alex Tremblay");
+    await page.fill("#cg-p-address", "100 King Street West, Toronto, ON M5X 1A9");
+    await page.fill("#cg-p-email", "hello@example.com");
+    await page.selectOption("#cg-province", "ON");
+    n = await notices();
+    check(!n.includes("To fix") && n.includes("does not check whether a limit of liability is enforceable"), "T&Cs CA : plus rien à corriger, plafond à faire relire");
+    text = await preview();
+    check(text.includes("We are a sole proprietor, based in Ontario.") && text.includes("governed by the laws of Ontario and the federal laws of Canada") &&
+      text.includes("Either of us may end the contract by giving 14 days’ written notice."), "T&Cs CA : droit de l'Ontario, préavis");
+    await page.selectOption("#cg-status", "corp");
+    await page.selectOption("#cg-incorp", "CA");
+    check((await preview()).includes("We are a corporation incorporated under federal law, based in Ontario."), "T&Cs CA : société fédérale");
+    await page.check("#cg-late");
+    await page.fill("#cg-late-rate", "1.5");
+    check((await preview()).includes("interest at 1.50% per month (18% per year) on the overdue amount"), "T&Cs CA : taux mensuel et annuel (Loi sur l'intérêt)");
+    await page.fill("#cg-late-rate", "3");
+    check((await notices()).includes("above the criminal rate of interest (35% a year") && !(await preview()).includes("per year)"), "T&Cs CA : taux criminel refusé");
+    await page.fill("#cg-late-rate", "1.5");
+    // Particuliers : renseignements, exemplaire, 30 jours ; Québec : résiliation, acompte par carte, français d'abord.
+    await page.selectOption("#cg-clients", "both");
+    text = await preview();
+    check(await page.isVisible("#cg-cons-qc") && text.includes("Information for consumers") && text.includes("within 15 days of your acceptance") &&
+      text.includes("more than 10% above it") && text.includes("If we have not started within 30 days") && text.includes("do not require you to go to arbitration"),
+      "T&Cs CA : règles des particuliers");
+    check((await notices()).includes("In Ontario and Alberta, these rules apply above $50"), "T&Cs CA : contenu du devis, seuil de 50 $");
+    await page.check("#cg-at-home");
+    check((await notices()).includes("itinerant merchant permit"), "T&Cs CA : contrat chez le particulier hors champ");
+    await page.uncheck("#cg-at-home");
+    await page.check("#cg-cons-qc");
+    await page.fill("#cg-deposit", "30");
+    text = await preview();
+    n = await notices();
+    check(text.includes("consumer in Quebec, you may also end the contract at any time under articles 2125 and 2129") &&
+      text.includes("we accept an advance payment only by credit card") && text.includes("Clients in Quebec: a French version of these Terms is given to you first"),
+      "T&Cs CA : consommateur du Québec sous le droit de l'Ontario");
+    check(n.includes("must first be given in French") && n.includes("Offer credit card payment for the advance"), "T&Cs CA : français d'abord, acompte par carte");
+    await page.check("#cg-pay-card");
+    check(!(await notices()).includes("Offer credit card payment for the advance"), "T&Cs CA : carte de crédit proposée");
+    await page.selectOption("#cg-province", "QC");
+    check((await preview()).includes("In accordance with articles 2125 to 2129 of the Civil Code of Québec, you may end the contract at any time"),
+      "T&Cs CA : résiliation du Code civil sous le droit du Québec");
+    await page.fill("#cg-p-email", "");
+    await page.click('#cg-notices a[data-focus="cg-p-email"]');
+    check(await page.evaluate(() => document.activeElement.id === "cg-p-email"), "T&Cs CA : l'avertissement donne le focus au champ");
+    await page.fill("#cg-p-email", "hello@example.com");
+    const [download] = await Promise.all([page.waitForEvent("download"), page.click("#cg-word")]);
+    const doc = (await import("fs")).readFileSync(await download.path(), "utf8");
+    check(download.suggestedFilename() === "Terms and conditions.doc" && doc.includes("Information for consumers"), "T&Cs CA : téléchargement Word");
+    await page.click("#cg-copy");
+    check(await copied(page, "#cg-copy"), "T&Cs CA : bouton Copier");
+    await page.reload({ waitUntil: "networkidle" });
+    check((await page.inputValue("#cg-clients")) === "both" && await page.isChecked("#cg-cons-qc") && (await page.inputValue("#cg-province")) === "QC",
+      "T&Cs CA : saisie mémorisée");
+    check(await page.evaluate(() => (localStorage.getItem("of:ca:cgv-ca") || "").includes("King Street") && !(localStorage.getItem("of:us:cgv-us") || "").includes("King Street")),
+      "T&Cs CA : saisie séparée de celle des États-Unis");
+    await page.screenshot({ path: path.join(shots, "cgv-ca-consumers.png"), fullPage: true });
+    await accessible(page, "T&Cs CA (consumers, Quebec)");
+    page.once("dialog", (d) => d.accept());
+    await Promise.all([page.waitForNavigation(), page.click("#cg-reset")]);
+    check((await page.inputValue("#cg-clients")) === "pro" && (await page.inputValue("#cg-province")) === "", "T&Cs CA : tout effacer");
+  },
+  async "ca/fr/conditions-generales/"(page) {
+    const preview = async () => (await page.textContent("#cg-preview")).replace(/\s+/g, " ");
+    const notices = async () => (await page.textContent("#cg-notices")).replace(/\s+/g, " ");
+    let text = await preview();
+    check(text.includes("CONDITIONS GÉNÉRALES") && text.includes("1. Objet") && text.includes("Clients entreprises : les tribunaux"), "CG CA-FR : clients entreprises par défaut");
+    await page.fill("#cg-p-name", "Alex Tremblay");
+    await page.fill("#cg-p-address", "1000, rue Sherbrooke Ouest, Montréal (Québec) H3A 3G4");
+    await page.fill("#cg-p-email", "bonjour@exemple.ca");
+    await page.selectOption("#cg-province", "QC");
+    const n = await notices();
+    check(!n.includes("À corriger") && !n.includes("en français"), "CG CA-FR : plus rien à corriger, pas d'avertissement de langue");
+    text = await preview();
+    check(text.includes("Nous sommes une entreprise individuelle, établie au Québec.") && text.includes("régis par les lois du Québec") &&
+      text.includes("Conformément aux articles 2125 à 2129 du Code civil du Québec"), "CG CA-FR : droit du Québec et résiliation");
+    await page.check("#cg-late");
+    await page.fill("#cg-late-rate", "1,5");
+    check((await preview()).includes("des intérêts de 1,50 % par mois (18 % par an)"), "CG CA-FR : taux mensuel et annuel, virgule décimale");
+    await page.selectOption("#cg-clients", "part");
+    text = await preview();
+    check(text.includes("Renseignements pour les consommateurs") && text.includes("dans les 15 jours suivant votre acceptation") &&
+      text.includes("pas plus de 10 % au-delà") && !text.includes("Clients entreprises"), "CG CA-FR : consommateurs seulement");
+    await page.screenshot({ path: path.join(shots, "cgv-ca-fr.png"), fullPage: true });
+    await accessible(page, "CG CA-FR (consommateurs, Québec)");
+    check(await page.evaluate(() => (localStorage.getItem("of:ca-fr:cgv-ca") || "").includes("Sherbrooke") && !(localStorage.getItem("of:ca:cgv-ca") || "").includes("Sherbrooke")),
+      "CG CA-FR : saisie séparée de la page anglaise");
+  },
   async "ca/nda-template/"(page) {
     let text = await page.textContent("#k-preview");
     check(text.includes("laws in force in Ontario") && text.includes("No licence and no obligation"), "CA NDA: Ontario law, Canadian spelling");

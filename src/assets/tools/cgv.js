@@ -1,16 +1,16 @@
-/* Conditions générales de vente (France) et terms and conditions (Royaume-Uni, États-Unis) : formulaire, champs
+/* Conditions générales de vente (France, Canada) et terms and conditions (Royaume-Uni, États-Unis, Canada) : formulaire, champs
    affichés selon la situation, contrôles, aperçu en direct, PDF, Word et copie. Repères, textes calculés et contrôles
-   par le moteur du pays (OFE.cgvFR, OFE.cgvUK ou OFE.cgvUS, selon D.country) ; rendu par OFE.contractDoc (même syntaxe
+   par le moteur du pays (OFE.cgvFR, OFE.cgvUK, OFE.cgvUS ou OFE.cgvCA, selon D.country) ; rendu par OFE.contractDoc (même syntaxe
    que le contrat) ; texte des CGV et messages dans la page (#cgv-data). Spécification : documentation/40-cgv.md,
-   45-cgv-royaume-uni.md et 46-cgv-etats-unis.md. */
+   45-cgv-royaume-uni.md, 46-cgv-etats-unis.md et 47-cgv-canada.md. */
 (function () {
   "use strict";
   var OF = window.OF, OFE = window.OFE, R = window.OF_RULES;
   var form = document.getElementById("cgv-form"), dataEl = document.getElementById("cgv-data");
   if (!form || !dataEl || !OFE || !OFE.contractDoc || !R) return;
   var D = JSON.parse(dataEl.textContent), L = D.ui, K = D.store || "cgv";
-  var engine = D.country === "uk" ? OFE.cgvUK : D.country === "us" ? OFE.cgvUS : OFE.cgvFR;
-  var english = D.country === "uk" || D.country === "us";
+  var engine = { uk: OFE.cgvUK, us: OFE.cgvUS, ca: OFE.cgvCA }[D.country] || OFE.cgvFR;
+  var english = /^en/.test(D.lang || "");
   if (!engine) return;
   var $ = function (id) { return document.getElementById(id); };
   var esc = OFE.contractDoc.esc;
@@ -39,7 +39,7 @@
       text[el.name] = el.tagName === "SELECT" ? el.options[el.selectedIndex].text : el.value.trim();
     });
     var today = OF.today();
-    var p = engine.prepare(raw, R, today, fmt);
+    var p = engine.prepare(raw, R, today, fmt, D.lang);
     Object.keys(p.text).forEach(function (k) { text[k] = p.text[k]; });
     text.contacts = [raw.p_email, raw.p_phone].filter(Boolean).join(", ");
     text.today = longDate(today);
@@ -61,7 +61,8 @@
     limited: function (v) { return v.raw.status === "limited"; },
     organized: function (v) { return v.raw.status === "llc" || v.raw.status === "corp"; },
     offsite_part: function (v) { return v.raw.offsite_part === "on"; },
-    late: function (v) { return v.raw.late === "on"; }
+    late: function (v) { return v.raw.late === "on"; },
+    corp: function (v) { return v.raw.status === "corp"; }
   };
 
   function showFields(v) {

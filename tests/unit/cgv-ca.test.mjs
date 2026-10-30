@@ -1,8 +1,9 @@
 // Tests du générateur de conditions générales canadien (documentation/47-cgv-canada.md) : moteur engines/cgv-ca.js
-// (taux annuel, provinces des particuliers, repères, textes anglais et français, contrôles), valeurs lues dans les
-// règles officielles (data/rules/ca.json).
+// (taux annuel, provinces des particuliers, repères, textes anglais et français, contrôles), puis les deux pages rendues
+// par engines/contract-doc.js pour chaque clientèle et province, comparées aux règles officielles (data/rules/ca.json).
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import { ruleValues } from "./regles.mjs";
 
@@ -47,7 +48,7 @@ test("saisie valide (entreprises, Ontario) : seule la cession signée est signal
   assert.equal(p.flags.qc_law, "off");
   assert.equal(p.text.province_name, "Ontario");
   assert.equal(p.text.terms_text, "within 30 days of the invoice date");
-  assert.equal(p.text.payment_methods, "bank transfer or Interac e-Transfer");
+  assert.equal(p.text.payment_methods, "bank transfer (including Interac e-Transfer)");
   assert.equal(p.text.status_text, "a sole proprietor");
 });
 
@@ -135,6 +136,11 @@ test("Québec : acompte d'un particulier par carte de crédit, français d'abord
   assert.ok(codes(prep({ ...OK, clients: "part", cons_qc: "on" })).includes("french_first"), "client particulier au Québec");
   assert.ok(!codes(prep(OK)).includes("french_first"));
   assert.equal(prep(raw).flags.qc_law, "on");
+  assert.equal(prep(raw).flags.qc_any, "on");
+  assert.equal(prep(raw).flags.qc_cons_other_law, "off", "droit du Québec : résiliation dans l'article commun");
+  const onQc = prep({ ...OK, clients: "part", province: "ON", cons_qc: "on" });
+  assert.deepEqual([onQc.flags.qc_law, onQc.flags.qc_any, onQc.flags.qc_cons_other_law], ["off", "on", "on"]);
+  assert.equal(prep(OK).flags.qc_any, "off");
   assert.equal(prep(raw).flags.has_deposit, "on");
 });
 
@@ -143,8 +149,10 @@ test("textes en français : structure, province, délai, moyens de paiement", ()
   assert.equal(p.text.status_text, "une société par actions constituée sous le régime des lois du Québec");
   assert.equal(p.text.province_name, "le Québec");
   assert.equal(p.text.province_of, "du Québec");
+  assert.equal(p.text.province_in, "au Québec");
+  assert.equal(prep({ ...OK, province: "NT" }, "fr-CA").text.province_in, "dans les Territoires du Nord-Ouest");
   assert.equal(p.text.terms_text, "dans les 30 jours suivant la date de la facture");
-  assert.equal(p.text.payment_methods, "virement bancaire ou virement Interac, carte de crédit ou chèque");
+  assert.equal(p.text.payment_methods, "virement bancaire (y compris par Interac), carte de crédit ou chèque");
   assert.equal(prep({ ...OK, status: "corp", incorp: "CA" }, "fr-CA").text.status_text,
     "une société par actions constituée sous le régime de la Loi canadienne sur les sociétés par actions");
   assert.equal(prep({ ...OK, status: "corp", incorp: "CA" }).text.status_text, "a corporation incorporated under federal law");
@@ -168,8 +176,80 @@ test("cession, plafond entre entreprises seulement, licence", () => {
 test("treize provinces et territoires, noms anglais et français", () => {
   assert.equal(Object.keys(C.PROVINCES).length, 13);
   for (const [code, p] of Object.entries(C.PROVINCES)) {
-    assert.ok(p.en && p.fr && p.fr_of, code);
+    assert.ok(p.en && p.fr && p.fr_of && p.fr_in, code);
+    assert.equal(prep({ ...OK, province: code }).text.province_in, "in " + p.en);
+    assert.equal(prep({ ...OK, province: code }, "fr-CA").text.province_in, p.fr_in);
     assert.equal(prep({ ...OK, province: code }).text.province_name, p.en);
     assert.equal(prep({ ...OK, province: code }, "fr-CA").text.province_name, p.fr);
+  }
+});
+
+// Pages : chaque combinaison rendue par engines/contract-doc.js, dans les deux langues.
+const K = require("../../src/assets/engines/contract-doc.js");
+const PAGES = { en: "content/ca/terms-and-conditions-generator.html", fr: "content/ca-fr/conditions-generales.html" };
+const pageData = (lang) => JSON.parse(readFileSync(new URL("../../" + PAGES[lang], import.meta.url), "utf8")
+  .match(/<script type="application\/json" id="cgv-data">(.*?)<\/script>/s)[1]);
+const fmtFr = { ...fmt, pct: (r) => fmt.pct(r).replace(".", ",").replace("%", " %"), money: (n) => n + " $" };
+function renderDoc(lang, raw) {
+  const D = pageData(lang), f = lang === "fr" ? fmtFr : fmt;
+  const p = C.prepare(raw, R, TODAY, f, lang === "fr" ? "fr-CA" : "en-CA");
+  const text = { ...raw, ...p.text, contacts: [raw.p_email, raw.p_phone].filter(Boolean).join(", "), today: TODAY, title: "T" };
+  const html = K.render(D, { raw: { ...K.flags(raw), ...p.flags }, text, blocks: p.blocks });
+  return html.replace(/<[^>]+>/g, " ").replace(/&#39;/g, "'").replace(/&quot;/g, '"').replace(/&amp;/g, "&").replace(/\s+/g, " ");
+}
+const COMBOS = [];
+for (const clients of ["pro", "part", "both"]) for (const province of ["ON", "QC", "MB"]) for (const cons_qc of ["off", "on"])
+  for (const opt of ["on", "off"]) COMBOS.push({ ...OK, clients, province, cons_qc, late: opt, late_rate: "1.5", deposit: opt === "on" ? "30" : "",
+    liability: opt, conf: opt, portfolio: opt, subcontract: opt, ip: opt === "on" ? "assign" : "license", p_trading: opt === "on" ? "Tremblay Design" : "" });
+
+test("pages : chaque combinaison rendue sans repère brut, dans les deux langues", () => {
+  for (const lang of ["en", "fr"]) {
+    const D = pageData(lang);
+    assert.equal(D.country, "ca");
+    assert.equal(D.store, "cgv-ca");
+    for (const code of ["name_missing", "address_missing", "email_missing", "phone_missing", "province_missing", "terms_invalid",
+      "late_invalid", "late_criminal", "deposit_invalid", "payment_none", "qc_deposit_card", "acceptance_invalid", "notice_invalid",
+      "validity_invalid", "at_home_out_of_scope", "consumer_quote_items", "other_provinces", "ip_signed", "liability_review"])
+      assert.ok(D.ui.checks[code], `${lang} : message ${code}`);
+    assert.equal(Boolean(D.ui.checks.french_first), lang === "en", "message « français d'abord » sur la page anglaise seulement");
+    for (const raw of COMBOS) {
+      const t = renderDoc(lang, raw);
+      assert.doesNotMatch(t, /\{|\}|\[\[|\]\]/, `${lang} ${raw.clients} ${raw.province} : accolade restante`);
+      assert.ok(t.length > 4000, "document complet");
+    }
+  }
+});
+
+test("pages : clauses selon la clientèle et la province (règles lues)", () => {
+  const has = (lang, raw, re) => re.test(renderDoc(lang, raw));
+  for (const raw of COMBOS) {
+    const pro = raw.clients !== "part", part = raw.clients !== "pro", qcLaw = raw.province === "QC";
+    // Entre entreprises seulement : plafond, exclusion de garanties, juridiction exclusive, entente complète.
+    assert.equal(has("en", raw, /our total liability under or in connection/), pro && raw.liability === "on");
+    assert.equal(has("fr", raw, /notre responsabilité totale/), pro && raw.liability === "on");
+    assert.equal(has("en", raw, /have exclusive jurisdiction/), pro);
+    assert.equal(has("en", raw, /entire agreement/), pro);
+    assert.equal(has("en", raw, /Business clients:/), pro);
+    // Particuliers : renseignements, exemplaire sous 15 jours, estimation, 30 jours, arbitrage, pas de pénalité.
+    assert.equal(has("en", raw, /Information for consumers/), part);
+    assert.equal(has("en", raw, /within 15 days of your acceptance/), part);
+    assert.equal(has("fr", raw, /dans les 15 jours suivant votre acceptation/), part);
+    assert.equal(has("en", raw, /more than 10% above it/), part);
+    assert.equal(has("fr", raw, /pas plus de 10 % au-delà/), part);
+    assert.equal(has("en", raw, /not started within 30 days/), part);
+    assert.equal(has("en", raw, /do not require you to go to arbitration/), part);
+    assert.equal(has("en", raw, /never charge a cancellation fee/), part);
+    // Québec : résiliation du Code civil si son droit s'applique, ou pour un consommateur du Québec sous un autre droit.
+    assert.equal(has("en", raw, /articles 2125 to 2129 of the Civil Code/), qcLaw);
+    assert.equal(has("fr", raw, /articles 2125 à 2129 du Code civil/), qcLaw);
+    assert.equal(has("en", raw, /consumer in Quebec, you may also end/), part && raw.cons_qc === "on" && !qcLaw);
+    assert.equal(has("en", raw, /A French version of these Terms is given to you first/i), qcLaw || (part && raw.cons_qc === "on"));
+    assert.equal(has("fr", raw, /version française/), false, "pas de clause de langue dans la version française");
+    // Intérêts : taux mensuel et annuel (Loi sur l'intérêt, art. 4).
+    assert.equal(has("en", raw, /1\.50% per month \(18% per year\)/), raw.late === "on");
+    assert.equal(has("fr", raw, /1,50 % par mois \(18 % par an\)/), raw.late === "on");
+    // Acompte d'un consommateur du Québec : carte de crédit seulement.
+    const qcDeposit = raw.deposit !== "" && part && (raw.cons_qc === "on" || (raw.province === "QC"));
+    assert.equal(has("en", raw, /advance payment only by credit card/), qcDeposit);
   }
 });

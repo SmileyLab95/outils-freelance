@@ -296,18 +296,21 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   jours fériés fédéraux. Règlement de la FTC, E-SIGN, 17 U.S.C. 204 et loi de New York lus en entier ; pages officielles
   de la ville de New York et de l'Illinois ; outil de lecture étendu aux sites des lois américaines
   ([46](46-cgv-etats-unis.md), décision D48).
-- **CGV au Canada : sources lues et spécification (30/10/2026)** : Loi sur l'intérêt (taux annuel), lois de protection
-  du consommateur de l'Ontario (loi de 2002 toujours en vigueur et règlement 17/05 : informations obligatoires,
-  exécution différée, estimation dépassée de 10 % au plus, arbitrage et action collective), du Québec (contrat à
-  distance, commerçant itinérant, clauses interdites) et du Code civil du Québec (résiliation, clauses limitatives),
-  de la Colombie-Britannique (nouveaux art. 18.2 à 18.4 de 2025) et de l'Alberta (vente directe, arbitrage, règlement
-  sur les contrats Internet), *Copyright Act* (cession écrite) ; outil de lecture des sources : option « mot +N » pour
-  lire un article entier ([47](47-cgv-canada.md), décision D49).
+- **Conditions générales au Canada (30/10/2026)** : générateur en anglais (*Terms and conditions*, menu *Selling*) et en
+  français (« Conditions générales », menu « Vendre ») : droit de la province du travailleur autonome entre entreprises ;
+  particuliers servis à distance ou dans l'établissement, avec les règles lues de l'Ontario, du Québec, de la
+  Colombie-Britannique et de l'Alberta (renseignements avant le contrat, exemplaire sous 15 jours, début des services
+  dans les 30 jours, estimation dépassée de 10 % au plus, ni arbitrage imposé, ni renonciation à l'action collective, ni
+  plafond, ni frais d'annulation) ; Québec : résiliation du Code civil (art. 2125 à 2129), acompte d'un consommateur à
+  distance par carte de crédit seulement, version française d'abord ; intérêts écrits par mois et par an (Loi sur
+  l'intérêt, art. 4) sous le taux criminel ; cession écrite du droit d'auteur et renonciation aux droits moraux ;
+  contrat conclu chez le particulier signalé hors champ. Treize règles nouvelles, lues aux sources ; outil de lecture des
+  sources : option « mot +N » ([47](47-cgv-canada.md), décision D49).
 - **Prochaines actions de Claude** : refonte, suite ([31](31-vision-plateforme.md) § 5) : les quatre modules du compte
-  gratuit sont faits (étape 5) ; étape 6, outils restants (CGV au Canada : spécification écrite
-  ([47](47-cgv-canada.md), décision D49) ; réalisation : règles de `data/rules/ca.json`, moteur `engines/cgv-ca.js`,
-  pages anglaise et française, tests ; avant la publication, relire mot pour mot l'art. 54.4 a) de la loi québécoise,
-  l'art. 4 du règlement albertain sur les contrats Internet) ; jours ouvrés au Canada (jours fériés fédéraux et provinciaux) : en attente de l'accès à canada.ca, refusé
+  gratuit sont faits (étape 5) ; étape 6, outils restants (CGV : faites dans les quatre pays ;
+  relire mot pour mot l'art. 54.4 a) de la loi québécoise et l'art. 4 du règlement albertain sur les contrats Internet,
+  puis passer `ca_consumer_distance_disclosure` en confiance haute ; lois des autres provinces sur la protection du
+  consommateur à lire pour les détailler ; le règlement albertain expire le 30/09/2028 : à revérifier) ; jours ouvrés au Canada (jours fériés fédéraux et provinciaux) : en attente de l'accès à canada.ca, refusé
   depuis l'environnement de travail et sans réponse depuis l'outil de lecture des sources le 29/10/2026 ; sous-traitance,
   devises, guides de protection sociale) ;
   ajouter les taux du 1er semestre 2027 dès leur publication
@@ -321,7 +324,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   activité mixte de l'Espace à spécifier (le profil n'a qu'une activité : deux plafonds, déclaration et livre des
   recettes distinguant ventes et prestations, BOFiP BOI-BIC-DECLA-30-30) ; questions ouvertes de `data/rules/` à relire
   avec l'outil de lecture des sources (ACRE) ; puis besoins P3 restants
-  ([02](02-besoins-clients.md) : CGV au Canada, sous-traitance) ; loi californienne sur les freelances (SB 988) et
+  ([02](02-besoins-clients.md) : sous-traitance) ; loi californienne sur les freelances (SB 988) et
   loi de l'Illinois (820 ILCS 193) à relire dès que leurs sites officiels sont lisibles par l'outil (refus le
   30/10/2026), pour les détailler dans les CGV et le guide américains ;
   comptes : adaptateur

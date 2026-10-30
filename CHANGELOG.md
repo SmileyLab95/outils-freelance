@@ -1,13 +1,26 @@
 # Journal des modifications
 
-## 2026-10-30 — Conditions générales au Canada : sources et spécification
+## 2026-10-30 — Conditions générales au Canada (anglais et français)
 
-- Lois lues aux sources officielles pour le futur générateur canadien (anglais et français) : Loi sur l'intérêt
-  (art. 2 à 5, règle du taux annuel désormais en confiance haute), lois de protection du consommateur de l'Ontario, du
-  Québec, de la Colombie-Britannique et de l'Alberta, Code civil du Québec, *Copyright Act* (art. 13) ; spécification
-  ([47](documentation/47-cgv-canada.md), décision D49).
-- Outil « Lire une source officielle » : un mot cherché suivi de « +N » affiche les N caractères qui suivent (un
-  article et tous ses paragraphes en une lecture).
+- Nouveau **générateur de conditions générales** pour les prestations de services au Canada, en anglais (*Terms and
+  conditions*, menu *Selling*) et en français (« Conditions générales », menu « Vendre ») : clients entreprises,
+  consommateurs ou les deux ; province ou territoire du travailleur autonome (droit applicable entre entreprises) ;
+  provinces des consommateurs ; aperçu en direct, PDF, Word, copie ; saisie enregistrée sur l'appareil.
+- **Consommateurs** (règles lues de l'Ontario, du Québec, de la Colombie-Britannique et de l'Alberta) : renseignements
+  à donner avant le contrat, exemplaire sous 15 jours, début des services dans les 30 jours de la date prévue (sinon
+  annulation et remboursement sous 15 jours), estimation dépassée de 10 % au plus, ni arbitrage imposé, ni renonciation
+  à l'action collective, ni plafond de responsabilité, ni frais d'annulation ; contrat conclu chez le particulier
+  signalé hors champ (permis et formulaires propres à chaque province).
+- **Québec** : résiliation selon le Code civil (art. 2125 à 2129), limites des clauses de responsabilité (art. 1474),
+  acompte d'un consommateur servi à distance par carte de crédit seulement, version française remise d'abord (Charte
+  de la langue française, art. 55).
+- **Intérêts de retard** écrits par mois et par an, comme l'exige la Loi sur l'intérêt (art. 4), et refusés au-delà du
+  taux criminel (35 % par an, Code criminel, art. 347, vérifié à la source) ; cession du droit d'auteur par écrit signé
+  et renonciation aux droits moraux (Loi sur le droit d'auteur, art. 13 et 14.1).
+- Treize règles nouvelles dans `data/rules/ca.json`, lues aux sources officielles avec leurs empreintes ; outil
+  « Lire une source officielle » : option « mot +N » pour lire un article entier en une fois.
+- Tests : moteur et rendu des deux pages (36 combinaisons), mutants, parcours navigateur (accessibilité, ordinateur,
+  tablette, mobile : 3 841 vérifications au total) ([47](documentation/47-cgv-canada.md), décision D49).
 
 ## 2026-10-30 — Conditions générales aux États-Unis (*terms and conditions*)
 
