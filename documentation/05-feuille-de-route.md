@@ -296,11 +296,18 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   jours fériés fédéraux. Règlement de la FTC, E-SIGN, 17 U.S.C. 204 et loi de New York lus en entier ; pages officielles
   de la ville de New York et de l'Illinois ; outil de lecture étendu aux sites des lois américaines
   ([46](46-cgv-etats-unis.md), décision D48).
+- **CGV au Canada : sources lues et spécification (30/10/2026)** : Loi sur l'intérêt (taux annuel), lois de protection
+  du consommateur de l'Ontario (loi de 2002 toujours en vigueur et règlement 17/05 : informations obligatoires,
+  exécution différée, estimation dépassée de 10 % au plus, arbitrage et action collective), du Québec (contrat à
+  distance, commerçant itinérant, clauses interdites) et du Code civil du Québec (résiliation, clauses limitatives),
+  de la Colombie-Britannique (nouveaux art. 18.2 à 18.4 de 2025) et de l'Alberta (vente directe, arbitrage, règlement
+  sur les contrats Internet), *Copyright Act* (cession écrite) ; outil de lecture des sources : option « mot +N » pour
+  lire un article entier ([47](47-cgv-canada.md), décision D49).
 - **Prochaines actions de Claude** : refonte, suite ([31](31-vision-plateforme.md) § 5) : les quatre modules du compte
-  gratuit sont faits (étape 5) ; étape 6, outils restants (CGV au Canada : lecture des lois provinciales de
-  protection du consommateur en cours, document de travail [47](47-cgv-canada.md) ; Québec (P-40.1 et Code civil),
-  Colombie-Britannique, Ontario (version Word d'e-Laws, la page HTML n'ayant pas de texte) et Alberta (PDF) lus en
-  partie le 30/10/2026, articles restants listés au § « Reste à lire », puis spécification) ; jours ouvrés au Canada (jours fériés fédéraux et provinciaux) : en attente de l'accès à canada.ca, refusé
+  gratuit sont faits (étape 5) ; étape 6, outils restants (CGV au Canada : spécification écrite
+  ([47](47-cgv-canada.md), décision D49) ; réalisation : règles de `data/rules/ca.json`, moteur `engines/cgv-ca.js`,
+  pages anglaise et française, tests ; avant la publication, relire mot pour mot l'art. 54.4 a) de la loi québécoise,
+  l'art. 4 du règlement albertain sur les contrats Internet et l'art. 14.1 de la *Copyright Act*) ; jours ouvrés au Canada (jours fériés fédéraux et provinciaux) : en attente de l'accès à canada.ca, refusé
   depuis l'environnement de travail et sans réponse depuis l'outil de lecture des sources le 29/10/2026 ; sous-traitance,
   devises, guides de protection sociale) ;
   ajouter les taux du 1er semestre 2027 dès leur publication

@@ -1,5 +1,14 @@
 # Journal des modifications
 
+## 2026-10-30 — Conditions générales au Canada : sources et spécification
+
+- Lois lues aux sources officielles pour le futur générateur canadien (anglais et français) : Loi sur l'intérêt
+  (art. 2 à 5, règle du taux annuel désormais en confiance haute), lois de protection du consommateur de l'Ontario, du
+  Québec, de la Colombie-Britannique et de l'Alberta, Code civil du Québec, *Copyright Act* (art. 13) ; spécification
+  ([47](documentation/47-cgv-canada.md), décision D49).
+- Outil « Lire une source officielle » : un mot cherché suivi de « +N » affiche les N caractères qui suivent (un
+  article et tous ses paragraphes en une lecture).
+
 ## 2026-10-30 — Conditions générales aux États-Unis (*terms and conditions*)
 
 - Nouveau **générateur de *terms and conditions*** pour les prestations de services aux États-Unis (menu *Selling*,
