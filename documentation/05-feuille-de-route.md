@@ -297,11 +297,10 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   de la ville de New York et de l'Illinois ; outil de lecture étendu aux sites des lois américaines
   ([46](46-cgv-etats-unis.md), décision D48).
 - **Prochaines actions de Claude** : refonte, suite ([31](31-vision-plateforme.md) § 5) : les quatre modules du compte
-  gratuit sont faits (étape 5) ; étape 6, outils restants (CGV au Canada, après la lecture des lois provinciales de
-  protection du consommateur sur leurs sites officiels, ajoutés à l'outil de lecture des sources (essai du 30/10/2026 :
-  Québec, Loi sur la protection du consommateur, P-40.1, et Colombie-Britannique, *Business Practices and Consumer
-  Protection Act*, lisibles ; Ontario, *Consumer Protection Act, 2002* : la page d'e-Laws répond sans texte (affichage
-  par JavaScript), autre format à trouver ; Alberta : lire la loi en PDF) ; jours ouvrés au Canada (jours fériés fédéraux et provinciaux) : en attente de l'accès à canada.ca, refusé
+  gratuit sont faits (étape 5) ; étape 6, outils restants (CGV au Canada : lecture des lois provinciales de
+  protection du consommateur en cours, document de travail [47](47-cgv-canada.md) ; Québec (P-40.1 et Code civil),
+  Colombie-Britannique, Ontario (version Word d'e-Laws, la page HTML n'ayant pas de texte) et Alberta (PDF) lus en
+  partie le 30/10/2026, articles restants listés au § « Reste à lire », puis spécification) ; jours ouvrés au Canada (jours fériés fédéraux et provinciaux) : en attente de l'accès à canada.ca, refusé
   depuis l'environnement de travail et sans réponse depuis l'outil de lecture des sources le 29/10/2026 ; sous-traitance,
   devises, guides de protection sociale) ;
   ajouter les taux du 1er semestre 2027 dès leur publication

@@ -741,8 +741,9 @@
       "label": "Interest Act, R.S.C. 1985, c. I-15, s. 4: interest not expressed as an annual rate",
       "source": "https://laws-lois.justice.gc.ca/eng/acts/I-15/page-1.html",
       "source_title": "Interest Act (R.S.C., 1985, c. I-15)",
-      "confidence": "medium",
-      "note": "In practice, a freelancer writing '1.5% per month' must also write the annual equivalent (e.g. '18% per year'), or the claim is limited to 5% per year. Long-standing text; not re-opened on 2026-10-20."
+      "confidence": "high",
+      "note": "Read on 30/10/2026 with the « Lire une source officielle » tool (https://laws-lois.justice.gc.ca/eng/acts/I-15/page-1.html, SHA-256 991eb4ec…a4d0): s. 2 (any agreed rate, unless an Act of Parliament provides otherwise), s. 3 (5% a year when interest is payable and no rate is fixed), s. 4 (except mortgages on real property or hypothecs on immovables: interest set per day, week, month or any period shorter than a year in a written or printed contract is limited to 5% a year unless the contract expressly states the equivalent yearly rate), s. 5 (interest paid in excess may be recovered or deducted). In practice, a freelancer writing '1.5% per month' must also write the annual equivalent (e.g. '18% per year').",
+      "verified_on": "2026-10-30"
     },
     "interest_act_s3_legal_rate": {
       "value": 0.05,
