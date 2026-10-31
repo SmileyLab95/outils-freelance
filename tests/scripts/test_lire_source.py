@@ -23,6 +23,9 @@ class LireSource(unittest.TestCase):
         self.assertTrue(L.autorise("https://bofip.impots.gouv.fr/bofip/1.html"))
         self.assertTrue(L.autorise("https://cnil.fr/"))
         self.assertTrue(L.autorise("https://entreprendre.service-public.gouv.fr/vosdroits/F23566"), "sites de l'État en gouv.fr")
+        self.assertTrue(L.autorise("https://www.ameli.fr/assure/remboursements/indemnites-journalieres"), "Assurance maladie")
+        self.assertTrue(L.autorise("https://www.francetravail.fr/candidat/mes-droits-aux-aides-et-allocati.html"), "France Travail")
+        self.assertFalse(L.autorise("https://faux-ameli.fr/"), "nom qui se termine par un site officiel")
         for url in ("https://www.opm.gov/policy-data-oversight/pay-leave/federal-holidays/", "https://www.senat.fr/",
                     "https://www.assemblee-nationale.fr/dyn/17/textes", "https://www.bankofengland.co.uk/boeapps/database/Bank-Rate.asp",
                     "https://www.bankofcanada.ca/rates/", "https://www.ecfr.gov/current/title-16/part-429",
