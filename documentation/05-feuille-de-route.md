@@ -9,7 +9,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 
 ## Où en est-on ?
 
-*Mis à jour le 30/10/2026.*
+*Mis à jour le 31/10/2026.*
 
 - **Priorité (décision D10)** : le site et la plateforme d'abord ; noms de domaine, Gumroad et affiliation à la fin.
   Règle de qualité maximale pour tout produit ou service (D11, charte dans la [méthode](04-methode-de-travail.md#charte-qualité)).
@@ -321,6 +321,13 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   navigateur lit le taux à la source au clic, sans cookie ni adresse de la page ; contrôle mensuel des sources ; page
   américaine « international clients » corrigée (moyenne annuelle de l'IRS non prévue par les pages lues) ; pages
   Confidentialité précisées ([49](49-devises.md), D52).
+- **Protection sociale en France (31/10/2026)** : deux outils (menu « Impôts et gestion ») : **arrêt maladie** de
+  l'indépendant au réel (revenu ÷ 730, plafonds 2026 de 65,84 € et 197,50 € par jour, 3 jours de carence, 90 jours
+  au plus en libéral, 12 mois d'affiliation) et **chômage** (allocation des travailleurs indépendants : liquidation,
+  redressement ou activité non viable, chaque condition expliquée, 19,73 € à 26,30 € par jour pendant 182 jours,
+  date limite d'inscription indicative). La fiche officielle de l'arrêt maladie exclut le micro-entrepreneur et ses
+  règles n'ont pas pu être lues (Assurance maladie, Urssaf) : pas de montant pour lui, explication à la place
+  ([50](50-protection-sociale.md), D53).
 - **Prochaines actions de Claude** : refonte, suite ([31](31-vision-plateforme.md) § 5) : les quatre modules du compte
   gratuit sont faits (étape 5) ; étape 6, outils restants (CGV : faites dans les quatre pays ;
   lois des autres provinces sur la protection du consommateur à lire pour les détailler ; le règlement albertain sur les
@@ -329,7 +336,10 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   (Royaume-Uni, États-Unis et Canada faits le 30/10/2026, [48](48-sous-traitance.md) ; France en attente de la lecture de la loi du 31 décembre 1975 sur Légifrance, décision D50),
   devises (faites le 30/10/2026, [49](49-devises.md) ; à étudier : taux H.10 de la Réserve fédérale lisible depuis un
   navigateur pour les États-Unis ; conversion pour l'impôt sur le revenu au Royaume-Uni ; pratiques de l'ARC, taux
-  moyen annuel et TPS/TVH, dès que canada.ca est lisible), guides de protection sociale) ;
+  moyen annuel et TPS/TVH, dès que canada.ca est lisible), guides de protection sociale (France : arrêt maladie au
+  réel et chômage faits le 31/10/2026, [50](50-protection-sociale.md) ; arrêt maladie du micro-entrepreneur dès que ses
+  règles sont lues ; maternité, accident, prévoyance ; Royaume-Uni (*Employment and Support Allowance*, *Maternity
+  Allowance* sur GOV.UK), États-Unis, Canada)) ;
   ajouter les taux du 1er semestre 2027 dès leur publication
   (fin décembre 2026 : intérêt légal par arrêté, taux de la BCE en vigueur au 1er janvier ; tables `taux_interet_legal`
   et `taux_bce_refinancement`, utilisées par le calculateur de pénalités et les CGV) ; *bank holidays* de 2029 dès que
@@ -353,11 +363,12 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   Z12-012 pour le BT-32 en franchise, la question 13 de [pays/ca.md](pays/ca.md) sur la TVQ, et le
   remplacement annoncé de la section 17 du *Victims and Prisoners Act 2024* sur les accords de confidentialité). La mise en ligne
   des comptes attend le choix de l'hébergeur et du domaine.
-- **En attente d'Ismail** (pas urgent) : autoriser `www.canada.ca` (et `canada.ca`), `www.legifrance.gouv.fr` et
-  `www.economie.gouv.fr` dans les réglages réseau de l'environnement cloud (menu de l'environnement dans la barre de
+- **En attente d'Ismail** (pas urgent) : autoriser `www.canada.ca` (et `canada.ca`), `www.legifrance.gouv.fr`,
+  `www.economie.gouv.fr`, `www.ameli.fr`, `www.urssaf.fr` et `www.autoentrepreneur.urssaf.fr` dans les réglages réseau de l'environnement cloud (menu de l'environnement dans la barre de
   titre de la session, *Edit*, *Network access*, *Allowed domains*, en laissant cochée l'autorisation des gestionnaires
   de paquets ; mode d'emploi : https://code.claude.com/docs/en/cloud-environments#network-access) : nécessaire pour
-  lire les sources canadiennes (jours fériés, mises à jour des règles, pratiques de l'ARC sur la conversion des devises) et la loi du 31 décembre 1975 sur la
+  lire les sources canadiennes (jours fériés, mises à jour des règles, pratiques de l'ARC sur la conversion des devises), les règles
+  de l'arrêt maladie du micro-entrepreneur (Assurance maladie, Urssaf : refus ou échec de la lecture le 31/10/2026) et la loi du 31 décembre 1975 sur la
   sous-traitance (Légifrance et le ministère de l'Économie refusent l'outil de lecture des sources, réponse 403 le
   30/10/2026), ainsi que les articles R123-237 et L131-3 à L131-6 en attente ; questions à poser à l'expert-comptable ou à l'avocat : l'indemnité forfaitaire
   de 40 € s'applique-t-elle aux factures des professions libérales et des prestataires non commerçants (la fiche

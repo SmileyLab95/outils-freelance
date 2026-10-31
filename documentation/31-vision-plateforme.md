@@ -141,8 +141,8 @@ G compte gratuit, P Pro, ⇄ partenaire signalé.
 | Besoin | Outil | État | Accès |
 |---|---|---|---|
 | Retraite | Simulateurs PER, SEP-IRA et Solo 401(k), pension, REER | ✅ | V |
-| Arrêt maladie, maternité, accident | Guides des droits selon le statut et le pays | ⬜ | V |
-| Chômage et fin d'activité | Guides (allocation des travailleurs indépendants, équivalents) | ⬜ | V |
+| Arrêt maladie, maternité, accident | Guides des droits selon le statut et le pays (arrêt maladie, France, au réel : fait le 31/10/2026, [50](50-protection-sociale.md)) | 🧱 | V |
+| Chômage et fin d'activité | Guides (allocation des travailleurs indépendants : France, faite le 31/10/2026, [50](50-protection-sociale.md) ; équivalents) | 🧱 | V |
 | Prévoyance, mutuelle | Guides ; comparatif | ⬜ | V, ⇄ |
 | Congés et équilibre | Jours facturables dans les calculateurs ; planificateur de congés | ✅ / ⬜ | V, G |
 
@@ -185,7 +185,8 @@ fuseaux horaires des clients, générateur de QR code, convertisseur de devises,
    ([36](36-depenses-et-registre-des-achats.md) à [39](39-tresorerie.md)).
 6. Outils restants : CGV (France faite le 29/10/2026, [40](40-cgv.md) ; Royaume-Uni, États-Unis et Canada le 30/10/2026, [45](45-cgv-royaume-uni.md), [46](46-cgv-etats-unis.md) et [47](47-cgv-canada.md)), sous-traitance (Royaume-Uni, États-Unis et Canada le 30/10/2026, [48](48-sous-traitance.md)), devises (le 30/10/2026, [49](49-devises.md)), jours ouvrés (France, Royaume-Uni et États-Unis
    faits le 29/10/2026, [42](42-jours-ouvres.md)), signature d'email (faite le 29/10/2026, [43](43-signature-email.md)),
-   guides de protection sociale.
+   guides de protection sociale (France : arrêt maladie et chômage le 31/10/2026, [50](50-protection-sociale.md) ; maternité,
+   prévoyance et autres pays à suivre).
 7. Pro : relances automatiques, signature en ligne, liens de paiement, page publique, plateforme agréée.
 
 ## 6. Tâches d'Ismail

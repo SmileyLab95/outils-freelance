@@ -1,0 +1,91 @@
+<!--{
+  "id": "sick-pay",
+  "slug": "arret-maladie-independant/",
+  "title": "Arrêt maladie indépendant 2026 : calcul des indemnités",
+  "description": "Artisan, commerçant ou profession libérale au réel : estimez vos indemnités journalières d'arrêt maladie 2026, après la carence de 3 jours. Gratuit.",
+  "menu": "Arrêt maladie",
+  "icon": "🩺",
+  "blurb": "Vos indemnités journalières en cas d'arrêt maladie, carence comprise.",
+  "app": "Calcul des indemnités journalières maladie de l'indépendant",
+  "scripts": ["engines/protection-fr.js", "tools/fr-arret-maladie.js"],
+  "rules": "fr",
+  "sources": ["ij_maladie_independants", "pass_2026"],
+  "priority": 0.8,
+  "faq": [
+    ["Un indépendant est-il indemnisé en cas d'arrêt maladie ?", "Oui, s'il est affilié à la Sécurité sociale des indépendants depuis au moins 12 mois sans interruption. Rien n'est versé pour les 3 premiers jours d'arrêt, le délai de carence : un arrêt du 13 au 25 novembre est indemnisé du 16 au 25 novembre."],
+    ["Comment est calculée l'indemnité journalière ?", "Elle est égale au revenu d'activité annuel divisé par 730. En activité artisanale ou commerciale, le revenu est retenu dans la limite de 48 060 €, soit 65,84 € par jour au plus ; en activité libérale, c'est le revenu annuel moyen, dans la limite de 144 180 €, soit 197,50 € par jour au plus. Avec 36 500 € de revenu, l'indemnité est de 50 € par jour."],
+    ["Combien de temps dure l'indemnisation ?", "En activité libérale, la durée totale de l'arrêt ne peut pas dépasser 90 jours : l'outil compte donc au plus 87 jours indemnisés, après les 3 jours de carence. En activité artisanale ou commerciale, la fiche officielle ne donne pas de durée maximale : votre caisse d'assurance maladie vous la précise."],
+    ["Et pour un micro-entrepreneur ?", "La fiche officielle sur laquelle repose le calcul ne concerne que l'entrepreneur individuel au réel. Les règles propres au micro-entrepreneur (revenu retenu, conditions) n'ont pas pu être vérifiées à une source officielle : l'outil ne les chiffre pas. Votre caisse d'assurance maladie vous indique vos droits."]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Gratuit · plafonds 2026</span>
+    <h1>Arrêt maladie de l'indépendant : vos indemnités journalières</h1>
+    <p class="lead">Indiquez votre activité, votre revenu annuel et les dates de votre arrêt : voyez l'indemnité par jour, les jours payés après la carence de 3 jours et le total à attendre.</p>
+    <ul class="trust"><li>Artisan, commerçant, profession libérale</li><li>Plafonds 2026</li><li>Règles de service-public.fr</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="am-form" onsubmit="return false">
+      <h2>Votre situation</h2>
+      <div class="fields">
+        <div class="field full"><label for="am-situation">Votre activité</label>
+          <select id="am-situation" name="situation" data-save>
+            <option value="reel_artisan_commercant">Artisan ou commerçant, au réel</option>
+            <option value="reel_liberal">Profession libérale, au réel</option>
+            <option value="micro">Micro-entrepreneur</option>
+          </select></div>
+        <div class="field full" id="am-amount-field"><label for="am-amount" id="am-amount-label">Revenu d'activité annuel</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="am-amount" name="amount" value="36 500" aria-describedby="am-amount-hint" data-save><span>€</span></div>
+          <span class="hint" id="am-amount-hint">Revenu de votre activité indépendante sur une année.</span></div>
+        <div class="field" id="am-start-field"><label for="am-start">Premier jour de l'arrêt</label>
+          <input type="date" id="am-start" name="start" data-save></div>
+        <div class="field" id="am-end-field"><label for="am-end">Dernier jour de l'arrêt</label>
+          <input type="date" id="am-end" name="end" data-save></div>
+        <label class="check full" id="am-affiliated-field"><input type="checkbox" id="am-affiliated" name="affiliated" checked data-save><span>Je suis affilié(e) à la Sécurité sociale des indépendants depuis au moins 12 mois, sans interruption</span></label>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="result-hero">
+        <div class="label">Indemnités estimées pour cet arrêt</div>
+        <div class="big" id="am-total">–</div>
+        <div class="sub" id="am-sub">–</div>
+      </div>
+      <ul class="result-list card" style="padding: 6px 18px;" id="am-details">
+        <li><span>Revenu retenu</span><b id="am-income">–</b></li>
+        <li><span>Indemnité par jour</span><b id="am-daily">–</b></li>
+        <li><span>Durée de l'arrêt</span><b id="am-days">–</b></li>
+        <li><span>Délai de carence (non indemnisé)</span><b id="am-waiting">–</b></li>
+        <li><span>Jours indemnisés</span><b id="am-paid">–</b></li>
+        <li><span>Premier jour indemnisé</span><b id="am-first">–</b></li>
+        <li><span>Dernier jour indemnisé</span><b id="am-last">–</b></li>
+      </ul>
+      <p class="notice" id="am-notice" style="margin-top: 16px;">–</p>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>Comment l'indemnité est calculée</h2>
+  <ul>
+    <li><strong>Une condition :</strong> être affilié à la Sécurité sociale des indépendants depuis au moins 12 mois, sans interruption.</li>
+    <li><strong>3 jours de carence :</strong> les 3 premiers jours de l'arrêt ne sont pas indemnisés. Exemple de la fiche officielle : pour un arrêt du 13 au 25 novembre, les indemnités sont versées du 16 au 25 novembre.</li>
+    <li><strong>Artisan ou commerçant :</strong> revenu d'activité annuel divisé par 730, dans la limite de 48 060 € de revenu (le plafond annuel de la sécurité sociale 2026), soit <strong>65,84 €</strong> par jour au plus.</li>
+    <li><strong>Profession libérale :</strong> revenu d'activité annuel moyen divisé par 730, dans la limite de 144 180 € (trois fois ce plafond), soit <strong>197,50 €</strong> par jour au plus ; la durée totale de l'arrêt ne peut pas dépasser <strong>90 jours</strong>.</li>
+  </ul>
+  <p>Par exemple, avec 36 500 € de revenu d'activité, l'indemnité est de 36 500 ÷ 730 = 50 € par jour : un arrêt de 13 jours rapporte 10 jours × 50 € = 500 €.</p>
+  <h2>Ce que l'outil ne sait pas</h2>
+  <p>Le calcul suit la fiche « Tout savoir sur la protection sociale de l'entrepreneur individuel » de service-public.fr. Elle ne précise pas sur combien d'années est calculé le revenu, s'il existe un revenu minimum, ni la durée maximale d'indemnisation d'un artisan ou d'un commerçant. Elle ne concerne pas le micro-entrepreneur, dont les règles n'ont pas pu être vérifiées : les sites de l'Assurance maladie et de l'Urssaf n'ont pas pu être lus. Pour le montant exact et la marche à suivre, adressez-vous à votre caisse d'assurance maladie, sur <a href="https://www.ameli.fr/" rel="noopener">ameli.fr</a>.</p>
+  <h2>Se protéger au-delà</h2>
+  <ul>
+    <li><strong>Une prévoyance complémentaire</strong> peut compléter ces indemnités, couvrir les premiers jours ou l'invalidité : voyez le <a href="{{link:insurance}}">guide des assurances de l'indépendant</a>.</li>
+    <li><strong>Une réserve de trésorerie</strong> aide à passer un arrêt : calculez <a href="{{link:set-aside}}">combien mettre de côté</a>.</li>
+    <li><strong>Si votre activité doit cesser,</strong> vérifiez vos droits à l'<a href="{{link:unemployment}}">allocation chômage des indépendants (ATI)</a>.</li>
+  </ul>
+  <p class="small muted">Estimation à titre indicatif, qui ne remplace pas le calcul de votre caisse d'assurance maladie. Arrêt maladie seulement : la maternité, la paternité et l'accident ne sont pas traités. Code de la sécurité sociale, articles L621-1 à L623-4.</p>
+</section>

@@ -2169,6 +2169,64 @@
       "confidence": "medium",
       "verified_on": "2026-10-29",
       "note": "Fiches lues en entier le 29/10/2026 (« Lire une source officielle » ; SHA-256 b2347ef8…4759, fcb0491e…7a36, f86c8662…be8). Les fiches rangent les « courriers (papier ou emails commerciaux) » parmi les documents commerciaux qui « doivent comporter des mentions obligatoires » et renvoient au Code de commerce, art. R123-237 à R123-238. Identification de l'entreprise (documents publicitaires) : numéro Siren ; mention RCS suivie du nom de la ville du greffe (activité commerciale) ou mention RNE (activité artisanale, libérale ou agricole) ; lieu de domiciliation (entreprise individuelle) ou du siège social (société) ; société : capital pour les SARL et les sociétés par actions, forme juridique et capital social (identité sur les factures). Entrepreneur individuel : nom précédé ou suivi de « EI » ou « entrepreneur individuel » (règle mention_ei_documents, R526-27). Siren : 9 chiffres (F32135, vérifiée le 30/01/2025). Cas non repris par l'outil : liquidation, location-gérance, contrat d'appui au projet d'entreprise, siège à l'étranger. Le texte de R123-237 n'a pas pu être lu (Légifrance inaccessible) : voir open_questions."
+    },
+    "ij_maladie_independants": {
+      "value": {
+        "diviseur": 730,
+        "carence_jours": 3,
+        "affiliation_mois": 12,
+        "plafond_pass": {
+          "artisan_commercant": 1,
+          "liberal": 3
+        },
+        "ij_max": {
+          "artisan_commercant": 65.84,
+          "liberal": 197.5
+        },
+        "duree_max_jours": {
+          "liberal": 90
+        }
+      },
+      "unit": "object",
+      "label": "Arrêt maladie de l'indépendant : indemnités journalières (revenu ÷ 730, plafond, carence de 3 jours)",
+      "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F36708",
+      "source_title": "Entreprendre.service-public.gouv.fr, « Tout savoir sur la protection sociale de l'entrepreneur individuel » (F36708)",
+      "confidence": "high",
+      "verified_on": "2026-10-31",
+      "note": "Lu le 31/10/2026 avec l'outil « Lire une source officielle » (F36708, vérifiée le 08/01/2026, SHA-256 ba7787e6…38b9). La fiche indique ne concerner que les entrepreneurs individuels, pas les micro-entrepreneurs (« La page que vous consultez ne concerne pas les micro-entrepreneurs ») : le site ne chiffre donc pas l'arrêt maladie d'un micro-entrepreneur (D53). Affiliation à la Sécurité sociale des indépendants depuis au moins 12 mois sans interruption ; rien pour les 3 premiers jours (carence : arrêt du 13 au 25 novembre, indemnités du 16 au 25). Activité artisanale ou commerciale : revenu d'activité annuel ÷ 730 dans la limite de 48 060 € (plafond annuel de la sécurité sociale 2026), soit 65,84 € au plus. Activité libérale : revenu d'activité annuel moyen ÷ 730 dans la limite de 144 180 € (trois fois ce plafond), soit 197,50 € au plus ; « la durée totale de l'arrêt ne peut pas dépasser 90 jours ». Montants maximaux repris tels que publiés (144 180 ÷ 730 = 197,507). Non lus : années retenues pour le revenu, revenu minimum éventuel, durée maximale en artisanal ou commercial, règles du micro-entrepreneur (ameli.fr refuse l'outil de lecture, réponse 403 ; les sites de l'Urssaf ne répondent pas ; fiche « Arrêt maladie du commerçant ou de l'artisan » sur ameli.fr). Code de la sécurité sociale, art. L621-1 à L623-4 et D623-1 à D623-8 (non lus)."
+    },
+    "ati_independants": {
+      "value": {
+        "forfait_jour": 26.3,
+        "minimum_jour": 19.73,
+        "mayotte": {
+          "forfait_jour": 19.73,
+          "minimum_jour": 13.15
+        },
+        "duree_jours": 182,
+        "anciennete_ans": 2,
+        "revenu_minimum": 10000,
+        "ressources_max_mois": 651.69,
+        "inscription_mois": 12,
+        "baisse_non_viable": 0.3
+      },
+      "unit": "object",
+      "label": "Chômage de l'indépendant : allocation des travailleurs indépendants (ATI), conditions et montant",
+      "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F23994",
+      "source_title": "Entreprendre.service-public.gouv.fr, « Un travailleur indépendant a-t-il droit à une assurance chômage ? » (F23994)",
+      "more_sources": [
+        {
+          "source": "https://chomage-independant.francetravail.fr/duree-indemnite",
+          "source_title": "France Travail, Allocation des travailleurs indépendants : « Le montant d'indemnisation »"
+        },
+        {
+          "source": "https://chomage-independant.francetravail.fr/liste-des-activites",
+          "source_title": "France Travail, Allocation des travailleurs indépendants : liste des activités concernées"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-10-31",
+      "note": "Lu le 31/10/2026 avec l'outil « Lire une source officielle » (F23994, vérifiée le 01/04/2026, page qui vise les micro-entreprises et les entrepreneurs individuels ; empreinte SHA-256 différente à chaque lecture, la page contenant des éléments variables, texte de 20 510 caractères ; France Travail, © 1er juillet 2025, SHA-256 049f5b87…e887). Liquidation judiciaire et redressement judiciaire : activité non salariée sans interruption pendant au moins 2 ans dans une seule et même entreprise ; inscription à France Travail « dans un délai de 12 mois à partir de la date du redressement judiciaire » (ou de la liquidation) et recherche d'emploi ; revenu supérieur à 10 000 € sur l'une des 2 années d'activité non salariée ; ressources personnelles inférieures à 651,69 € par mois pour une seule personne. Activité non viable : mêmes conditions, sans délai d'inscription indiqué ; « baisse d'au moins 30 % de vos revenus », attestée par un tiers de confiance (nom, Siret, affiliation, durée de l'activité, revenus par année, baisse en montant et en pourcentage ; pour une société à l'IS, résultat fiscal des 2 derniers exercices). Demande auprès de France Travail avec la copie de la déclaration de cessation d'activité (et l'attestation). Forfait de 26,30 € par jour, diminué si le revenu moyen des 2 années civiles précédant la cessation est inférieur, sans descendre sous 19,73 € (Mayotte : 19,73 € et 13,15 €) ; 182 jours, non renouvelables, sans différé ni délai d'attente. Micro-entrepreneur : chiffre d'affaires moins l'abattement fiscal (commerciale 71 %, artisanale 50 %, libérale 34 %). Formule exacte de la diminution non publiée sur les pages lues. Code du travail, art. L5424-24 à L5424-28 et R5424-70 à D5424-76 (non lus)."
     }
   },
   "open_questions": [

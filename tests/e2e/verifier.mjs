@@ -3083,6 +3083,108 @@ const tests = {
     check((await page.textContent("#p-saving")).replace(/\s/g, "") === "0€", "PER : versement libératoire → pas d'économie sur l'activité");
     await page.uncheck("#p-vl");
   },
+  async "fr/arret-maladie-independant/"(page) {
+    // documentation/50-protection-sociale.md : revenu ÷ 730 plafonné, 3 jours de carence, 90 jours au plus en libéral.
+    const t = (id) => fxText(page, id);
+    await page.fill("#am-start", "2026-11-13");
+    await page.fill("#am-end", "2026-11-25");
+    check((await t("am-total")) === "500,00 €" && (await t("am-daily")) === "50,00 €" && (await t("am-paid")) === "10" && (await t("am-waiting")) === "3 jours" &&
+      (await t("am-first")) === "16 novembre 2026" && (await t("am-last")) === "25 novembre 2026" && (await t("am-sub")) === "10 jours indemnisés à 50,00 € par jour, après 3 jours de carence.",
+      "arrêt maladie : exemple officiel (13 au 25 novembre), 36 500 € → 10 jours à 50 €, 500 €");
+    await page.fill("#am-amount", "90 000");
+    check((await t("am-daily")) === "65,84 €" && (await t("am-income")) === "48 060 € (plafond)" && (await t("am-notice")).includes("plafonnée à 65,84 €"),
+      "arrêt maladie : artisan ou commerçant plafonné à 65,84 € par jour");
+    await page.selectOption("#am-situation", "reel_liberal");
+    await page.fill("#am-amount", "73 000");
+    await page.fill("#am-start", "2026-01-01");
+    await page.fill("#am-end", "2026-06-30");
+    check((await t("am-amount-label")) === "Revenu d'activité annuel moyen" && (await t("am-paid")) === "87" && (await t("am-total")) === "8 700,00 €" &&
+      (await t("am-first")) === "4 janvier 2026" && (await t("am-last")) === "31 mars 2026" && (await page.getAttribute("#am-notice", "class")).includes("warn") &&
+      (await t("am-notice")).includes("ne peut pas dépasser 90 jours : les 91 jours suivants ne sont pas indemnisés"),
+      "arrêt maladie : libéral, 181 jours d'arrêt → 87 jours indemnisés, 8 700 €, avertissement des 90 jours");
+    await page.screenshot({ path: path.join(shots, "arret-maladie-liberal.png"), fullPage: true });
+    await page.fill("#am-end", "2026-03-31");
+    check((await t("am-paid")) === "87" && !(await t("am-notice")).includes("90 jours"), "arrêt maladie : 90 jours d'arrêt exactement, pas d'avertissement");
+    await page.fill("#am-end", "2026-04-01");
+    check((await t("am-paid")) === "87" && (await t("am-notice")).includes("90 jours : le jour suivant n'est pas indemnisé."), "arrêt maladie : 91 jours, un jour non indemnisé (singulier)");
+    await page.fill("#am-end", "2026-01-03");
+    check((await t("am-total")) === "0,00 €" && (await t("am-sub")).startsWith("Rien n'est versé") && (await t("am-first")) === "–",
+      "arrêt maladie : 3 jours d'arrêt, rien n'est versé (carence)");
+    await page.fill("#am-end", "2025-12-31");
+    check((await t("am-total")) === "–" && (await page.getAttribute("#am-end", "aria-invalid")) === "true" && (await t("am-notice")).includes("doit suivre"),
+      "arrêt maladie : fin avant le début refusée");
+    await page.fill("#am-end", "2026-01-10");
+    await page.uncheck("#am-affiliated");
+    check((await t("am-total")) === "0,00 €" && (await t("am-sub")).includes("Pas d'indemnités sans 12 mois d'affiliation") && (await t("am-sub")).includes("100,00 €"),
+      "arrêt maladie : moins de 12 mois d'affiliation → rien, montant indicatif");
+    await page.check("#am-affiliated");
+    await page.fill("#am-amount", "abc");
+    check((await t("am-total")) === "–" && (await page.getAttribute("#am-amount", "aria-invalid")) === "true", "arrêt maladie : revenu illisible refusé");
+    await page.selectOption("#am-situation", "micro");
+    check((await t("am-total")) === "–" && !(await page.isVisible("#am-amount")) && !(await page.isVisible("#am-details")) &&
+      (await t("am-notice")).includes("l'outil ne donne pas de montant"), "arrêt maladie : micro-entrepreneur, pas de calcul, explication");
+    await accessible(page, "Arrêt maladie (micro-entrepreneur)");
+    // Retour à la situation par défaut pour les formats suivants (tablette, mobile).
+    await page.selectOption("#am-situation", "reel_artisan_commercant");
+    await page.fill("#am-amount", "36 500");
+    await page.fill("#am-start", "2026-11-13");
+    await page.fill("#am-end", "2026-11-25");
+    check((await t("am-total")) === "500,00 €", "arrêt maladie : situation par défaut rétablie");
+  },
+  async "fr/chomage-independant-ati/"(page) {
+    // documentation/50-protection-sociale.md : conditions de la fiche F23994, montant de 19,73 € à 26,30 € par jour.
+    const t = (id) => fxText(page, id);
+    const checks = () => page.$$eval("#ati-checks li", (li) => li.map((l) => [l.className, l.textContent.replace(/\s+/g, " ").trim()]));
+    let c = await checks();
+    check((await t("ati-big")) === "19,73 € à 26,30 €" && (await t("ati-sub")).startsWith("par jour pendant 182 jours, soit 3 590,86 € à 4 786,60 € au total") &&
+      c.length === 4 && c.every(([k]) => k === "is-ok") && c[2][1].includes("(19 800 € retenus)"),
+      "ATI : liquidation, micro libéral 24 000 € et 30 000 € de CA → 4 conditions remplies, 19,73 € à 26,30 € par jour");
+    check((await t("ati-step")).includes("joindre à votre demande la copie de votre déclaration de cessation d'activité"), "ATI : démarche sans date de jugement");
+    await page.fill("#ati-date", "2026-03-15");
+    check((await t("ati-step")) === "À faire : vous inscrire à France Travail avant le 15 mars 2027 (12 mois après le jugement), rechercher un emploi et joindre à votre demande la copie de votre déclaration de cessation d'activité.",
+      "ATI : date limite d'inscription, 12 mois après le jugement");
+    await page.screenshot({ path: path.join(shots, "ati-eligible.png"), fullPage: true });
+    await page.selectOption("#ati-cause", "non_viable");
+    c = await checks();
+    check(!(await page.isVisible("#ati-date")) && await page.isVisible("#ati-baisse") && (await t("ati-big")) === "Conditions non remplies" &&
+      (await t("ati-sub")) === "Une condition n'est pas remplie : voir ci-dessous." && c.length === 5 && c[4][0] === "is-todo",
+      "ATI : activité non viable sans baisse de 30 % attestée → non");
+    await page.check("#ati-baisse");
+    check((await t("ati-big")) === "19,73 € à 26,30 €" && (await t("ati-step")).includes("et l'attestation du tiers de confiance."), "ATI : activité non viable attestée → oui");
+    await page.selectOption("#ati-cause", "autre");
+    c = await checks();
+    check((await t("ati-big")) === "Conditions non remplies" && c[0][0] === "is-todo" && c[0][1].includes("liquidation ou un redressement judiciaire") && !(await page.isVisible("#ati-step")),
+      "ATI : autre cause de fin d'activité → non");
+    await page.selectOption("#ati-cause", "liquidation");
+    await page.fill("#ati-rev1", "15 151");
+    await page.fill("#ati-rev2", "");
+    c = await checks();
+    check(c[2][0] === "is-todo" && c[2][1].includes("le plus élevé retenu : 9 999,66 €"), "ATI : 15 151 € de CA en libéral → 9 999,66 €, au centime, refusé");
+    await page.fill("#ati-rev1", "15 152");
+    check((await checks())[2][0] === "is-ok", "ATI : 15 152 € → condition de revenu remplie");
+    await page.fill("#ati-resources", "651,69");
+    c = await checks();
+    check(c[3][0] === "is-todo" && (await t("ati-sub")).startsWith("Une condition"), "ATI : 651,69 € de ressources → refusé (il faut moins)");
+    await page.fill("#ati-resources", "0");
+    await page.uncheck("#ati-two-years");
+    await page.selectOption("#ati-situation", "reel_artisan_commercant");
+    await page.fill("#ati-rev1", "9 000");
+    check((await t("ati-rev1-label")) === "Revenu d'activité de la dernière année d'activité" && (await t("ati-sub")) === "2 conditions ne sont pas remplies : voir ci-dessous.",
+      "ATI : au réel, libellé « revenu », deux conditions manquantes");
+    await page.check("#ati-two-years");
+    await page.fill("#ati-rev1", "24 000");
+    await page.check("#ati-mayotte");
+    check((await t("ati-big")) === "13,15 € à 19,73 €", "ATI : Mayotte, 13,15 € à 19,73 € par jour");
+    await page.uncheck("#ati-mayotte");
+    await page.fill("#ati-rev2", "-5");
+    check((await t("ati-big")) === "–" && (await page.getAttribute("#ati-rev2", "aria-invalid")) === "true", "ATI : montant négatif refusé");
+    await accessible(page, "ATI (montant refusé)");
+    // Retour à la situation par défaut pour les formats suivants (tablette, mobile).
+    await page.selectOption("#ati-situation", "liberal_bnc");
+    await page.fill("#ati-rev2", "30 000");
+    await page.fill("#ati-date", "");
+    check((await t("ati-big")) === "19,73 € à 26,30 €", "ATI : situation par défaut rétablie");
+  },
   async "us/sep-ira-vs-solo-401k-calculator/"(page) {
     check((await page.textContent("#u-sep-max")).trim() === "$18,587" && (await page.textContent("#u-solo-max")).trim() === "$43,087", "retirement: $100k profit → SEP $18,587, solo 401(k) $43,087");
     check((await page.textContent("#u-solo-tax")).trim() === "$5,243", "retirement: tax saved at the solo 401(k) maximum (engine)");

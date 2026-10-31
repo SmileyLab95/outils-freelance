@@ -64,14 +64,16 @@
     {
       "key": "manage",
       "label": "Impôts et gestion",
-      "description": "Cotisations, impôts, échéances, frais et retraite.",
+      "description": "Cotisations, impôts, échéances, frais, retraite et protection sociale.",
       "items": [
         "tax",
         "set-aside",
         "calendar",
         "mileage",
         "home-office",
-        "retirement"
+        "retirement",
+        "sick-pay",
+        "unemployment"
       ]
     }
   ],

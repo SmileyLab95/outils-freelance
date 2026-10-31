@@ -1,0 +1,102 @@
+<!--{
+  "id": "unemployment",
+  "slug": "chomage-independant-ati/",
+  "title": "Chômage indépendant 2026 : avez-vous droit à l'ATI ?",
+  "description": "Liquidation, redressement ou activité non viable : vérifiez les conditions de l'allocation des travailleurs indépendants (ATI), son montant et sa durée.",
+  "menu": "Chômage (ATI)",
+  "icon": "🛟",
+  "blurb": "Vos droits à l'allocation chômage des indépendants, condition par condition.",
+  "app": "Vérificateur de droits à l'allocation des travailleurs indépendants",
+  "scripts": ["engines/protection-fr.js", "tools/fr-ati.js"],
+  "rules": "fr",
+  "sources": ["ati_independants", "micro_activities", "micro_abattement_minimum"],
+  "priority": 0.8,
+  "faq": [
+    ["Un indépendant a-t-il droit au chômage ?", "Oui, sous conditions : l'allocation des travailleurs indépendants (ATI) est versée quand l'activité cesse à cause d'une liquidation ou d'un redressement judiciaire, ou parce qu'elle n'était plus économiquement viable. Une fin d'activité pour une autre raison n'est pas couverte par l'ATI."],
+    ["Quelles sont les conditions de l'ATI ?", "Avoir exercé sans interruption pendant au moins 2 ans dans la même entreprise, avoir eu un revenu d'activité supérieur à 10 000 € sur l'une des 2 dernières années, avoir des ressources personnelles inférieures à 651,69 € par mois (personne seule), et s'inscrire à France Travail en recherchant un emploi. Après un jugement, l'inscription doit se faire dans les 12 mois."],
+    ["Quel est le montant de l'ATI ?", "26,30 € par jour au plus et 19,73 € au moins : le montant diminue quand le revenu moyen des 2 années civiles précédant la fin d'activité est faible. Il est versé pendant 182 jours (environ 6 mois), sans renouvellement, soit 3 590,86 € à 4 786,60 € au total."],
+    ["Un micro-entrepreneur peut-il toucher l'ATI ?", "Oui, aux mêmes conditions. Son revenu d'activité est son chiffre d'affaires moins l'abattement fiscal de son activité (71 % pour la vente, 50 % pour les services commerciaux ou artisanaux, 34 % pour une activité libérale). En activité libérale, il faut donc au moins 15 152 € de chiffre d'affaires sur une année pour dépasser 10 000 € de revenu."],
+    ["Qu'est-ce qu'une activité non viable ?", "Une activité dont les revenus ont baissé d'au moins 30 %. Un tiers de confiance doit l'attester ; l'attestation et la copie de la déclaration de cessation d'activité sont jointes à la demande d'allocation, faite auprès de France Travail."]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Gratuit · règles en vigueur en 2026</span>
+    <h1>Chômage de l'indépendant : avez-vous droit à l'ATI ?</h1>
+    <p class="lead">Indiquez pourquoi votre activité a cessé, depuis quand vous l'exerciez et vos revenus des 2 dernières années : voyez, condition par condition, si l'allocation des travailleurs indépendants peut vous être versée, et combien.</p>
+    <ul class="trust"><li>Liquidation, redressement, activité non viable</li><li>Micro-entreprise et réel</li><li>Conditions de service-public.fr</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="ati-form" onsubmit="return false">
+      <h2>Votre fin d'activité</h2>
+      <div class="fields">
+        <div class="field full"><label for="ati-cause">Pourquoi votre activité a-t-elle cessé ?</label>
+          <select id="ati-cause" name="cause" data-save>
+            <option value="liquidation">Liquidation judiciaire</option>
+            <option value="redressement">Redressement judiciaire</option>
+            <option value="non_viable">Activité économiquement non viable</option>
+            <option value="autre">Pour une autre raison</option>
+          </select></div>
+        <div class="field full" id="ati-date-field"><label for="ati-date">Date du jugement</label>
+          <input type="date" id="ati-date" name="date" aria-describedby="ati-date-hint" data-save>
+          <span class="hint" id="ati-date-hint">Facultatif : pour connaître la date limite d'inscription à France Travail.</span></div>
+        <label class="check full" id="ati-baisse-field"><input type="checkbox" id="ati-baisse" name="baisse" data-save><span>Mes revenus d'activité ont baissé d'au moins 30 %, et un tiers de confiance peut l'attester</span></label>
+        <label class="check full"><input type="checkbox" id="ati-two-years" name="two_years" checked data-save><span>J'ai exercé sans interruption pendant au moins 2 ans dans la même entreprise</span></label>
+        <div class="field full"><label for="ati-situation">Votre activité et votre régime</label>
+          <select id="ati-situation" name="situation" data-save>
+            <option value="vente">Micro-entreprise : vente</option>
+            <option value="services_bic">Micro-entreprise : services, artisanat</option>
+            <option value="liberal_bnc" selected>Micro-entreprise : libéral</option>
+            <option value="reel_artisan_commercant">Réel : artisan ou commerçant</option>
+            <option value="reel_liberal">Réel : profession libérale</option>
+          </select></div>
+        <div class="field"><label for="ati-rev1" id="ati-rev1-label">Chiffre d'affaires de la dernière année d'activité</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="ati-rev1" name="rev1" value="24 000" data-save><span>€</span></div></div>
+        <div class="field"><label for="ati-rev2" id="ati-rev2-label">Chiffre d'affaires de l'année précédente</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="ati-rev2" name="rev2" value="30 000" data-save><span>€</span></div></div>
+        <div class="field full"><label for="ati-resources">Vos ressources personnelles par mois</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="ati-resources" name="resources" value="0" aria-describedby="ati-resources-hint" data-save><span>€</span></div>
+          <span class="hint" id="ati-resources-hint">Seuil publié pour une personne seule. La fiche officielle ne détaille pas les ressources prises en compte.</span></div>
+        <label class="check full"><input type="checkbox" id="ati-mayotte" name="mayotte" data-save><span>J'habite à Mayotte</span></label>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="result-hero">
+        <div class="label">Allocation des travailleurs indépendants</div>
+        <div class="big" id="ati-big">–</div>
+        <div class="sub" id="ati-sub">–</div>
+      </div>
+      <div class="card" style="padding: 6px 18px 4px;">
+        <h2 class="small" style="margin: 12px 0 0;">Conditions</h2>
+        <ul class="mention-checks" id="ati-checks" aria-live="polite"></ul>
+      </div>
+      <p class="notice" id="ati-step" style="margin-top: 16px;" hidden></p>
+      <p class="notice" id="ati-notice" style="margin-top: 16px;">–</p>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>Les conditions de l'allocation, une par une</h2>
+  <ul>
+    <li><strong>Une fin d'activité involontaire :</strong> liquidation judiciaire, redressement judiciaire, ou activité qui n'était plus économiquement viable (revenus en baisse d'au moins 30 %, attestée par un tiers de confiance).</li>
+    <li><strong>2 ans d'activité :</strong> sans interruption, dans une seule et même entreprise.</li>
+    <li><strong>Un revenu de plus de 10 000 € :</strong> sur l'une des 2 dernières années d'activité. Pour un micro-entrepreneur, le revenu est le chiffre d'affaires moins l'abattement fiscal : 71 % (vente), 50 % (services commerciaux ou artisanaux) ou 34 % (activité libérale).</li>
+    <li><strong>Des ressources personnelles faibles :</strong> moins de 651,69 € par mois pour une personne seule.</li>
+    <li><strong>Une inscription à France Travail :</strong> avec une recherche d'emploi ; après une liquidation ou un redressement judiciaire, dans les 12 mois qui suivent le jugement.</li>
+  </ul>
+  <p>Le montant est de <strong>26,30 € par jour</strong>, diminué si le revenu moyen des 2 années civiles précédant la fin d'activité est faible, sans descendre sous <strong>19,73 €</strong> (à Mayotte : de 13,15 € à 19,73 €). Il est versé pendant <strong>182 jours</strong>, sans délai d'attente, et n'est pas renouvelable. La formule exacte de la diminution n'est pas publiée sur les pages officielles lues : l'outil donne la fourchette, France Travail calcule le montant exact.</p>
+  <h2>Avant de vous inscrire</h2>
+  <ul>
+    <li>Vérifiez que votre activité figure dans la <a href="https://chomage-independant.francetravail.fr/liste-des-activites" rel="noopener">liste des activités concernées</a>, publiée par France Travail.</li>
+    <li>Pour une activité non viable, demandez l'attestation au tiers de confiance : elle indique vos revenus par année et la baisse, en montant et en pourcentage.</li>
+    <li>Faites la demande dans votre espace personnel France Travail, avec la copie de votre déclaration de cessation d'activité. Le site de France Travail consacré à l'ATI détaille les conditions et le montant : <a href="https://chomage-independant.francetravail.fr/accueil_ati" rel="noopener">chomage-independant.francetravail.fr</a> ; la <a href="https://entreprendre.service-public.gouv.fr/vosdroits/F23994" rel="noopener">fiche officielle de service-public.fr</a> donne accès à un simulateur du montant.</li>
+  </ul>
+  <p>Si vous ne remplissez pas les conditions, une assurance privée peut couvrir la perte d'emploi : voyez le <a href="{{link:insurance}}">guide des assurances de l'indépendant</a>. Et en cas de maladie, estimez vos <a href="{{link:sick-pay}}">indemnités d'arrêt maladie</a>.</p>
+  <p class="small muted">Estimation à titre indicatif, à partir des conditions publiées par service-public.fr (fiche F23994) et France Travail. Elle ne remplace pas l'examen de votre dossier par France Travail. Code du travail, articles L5424-24 à L5424-28.</p>
+</section>

@@ -1,5 +1,22 @@
 # Journal des modifications
 
+## 2026-10-31 — Protection sociale en France : arrêt maladie et chômage de l'indépendant
+
+- Nouvel outil **« Arrêt maladie de l'indépendant »** (menu « Impôts et gestion ») : indemnités journalières de
+  l'artisan, du commerçant ou de la profession libérale au réel : revenu d'activité ÷ 730, plafonné (65,84 € ou
+  197,50 € par jour en 2026), 3 jours de carence, 90 jours d'arrêt au plus en libéral, 12 mois d'affiliation ; total,
+  jours indemnisés, premier et dernier jour. Pour un micro-entrepreneur, pas de montant : la fiche officielle ne le
+  concerne pas et ses règles n'ont pas pu être lues ; l'outil l'explique (décision D53).
+- Nouvel outil **« Chômage de l'indépendant : avez-vous droit à l'ATI ? »** : liquidation, redressement ou activité
+  non viable, chaque condition expliquée (2 ans dans la même entreprise, revenu de plus de 10 000 € sur l'une des
+  2 années, chiffre d'affaires moins l'abattement en micro-entreprise, ressources de moins de 651,69 € par mois, baisse
+  de 30 % attestée), montant de 19,73 € à 26,30 € par jour pendant 182 jours (Mayotte compris), date limite
+  indicative d'inscription à France Travail.
+- Règles nouvelles lues sur service-public.fr (fiches F36708 et F23994) et sur le site de France Travail consacré à
+  l'ATI ; spécification [50](documentation/50-protection-sociale.md) ; lien depuis le guide des assurances.
+- Tests : moteur (14 tests, 18 mutants sur 19 détectés, le dernier équivalent), cohérence des chiffres des pages avec
+  les règles, parcours navigateur des deux pages (accessibilité, trois largeurs, 6 mutants des scripts détectés).
+
 ## 2026-10-30 — Clients en devises : conversion aux taux officiels (4 pays)
 
 - Nouvel outil de **conversion de devises** (menus « Facturer et encaisser » et *Invoicing*), dans les cinq sections :
