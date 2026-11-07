@@ -9,7 +9,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 
 ## Où en est-on ?
 
-*Mis à jour le 07/11/2026.*
+*Mis à jour le 07/11/2026 (soir).*
 
 - **Priorité (décision D10)** : le site et la plateforme d'abord ; noms de domaine, Gumroad et affiliation à la fin.
   Règle de qualité maximale pour tout produit ou service (D11, charte dans la [méthode](04-methode-de-travail.md#charte-qualité)).
@@ -374,14 +374,8 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   Z12-012 pour le BT-32 en franchise, la question 13 de [pays/ca.md](pays/ca.md) sur la TVQ, et le
   remplacement annoncé de la section 17 du *Victims and Prisoners Act 2024* sur les accords de confidentialité). La mise en ligne
   des comptes attend le choix de l'hébergeur et du domaine.
-- **En attente d'Ismail** (pas urgent) : autoriser `www.canada.ca` (et `canada.ca`), `www.legifrance.gouv.fr`,
-  `www.economie.gouv.fr`, `www.ameli.fr`, `www.urssaf.fr` et `www.autoentrepreneur.urssaf.fr` dans les réglages réseau de l'environnement cloud (menu de l'environnement dans la barre de
-  titre de la session, *Edit*, *Network access*, *Allowed domains*, en laissant cochée l'autorisation des gestionnaires
-  de paquets ; mode d'emploi : https://code.claude.com/docs/en/cloud-environments#network-access) : nécessaire pour
-  lire les sources canadiennes (jours fériés, mises à jour des règles, pratiques de l'ARC sur la conversion des devises), les règles
-  de l'arrêt maladie du micro-entrepreneur (Assurance maladie, Urssaf : refus ou échec de la lecture le 31/10/2026) et la loi du 31 décembre 1975 sur la
-  sous-traitance (Légifrance et le ministère de l'Économie refusent l'outil de lecture des sources, réponse 403 le
-  30/10/2026), ainsi que les articles R123-237 et L131-3 à L131-6 en attente ; questions à poser à l'expert-comptable ou à l'avocat : l'indemnité forfaitaire
+- **Accès réseau (07/11/2026)** : environnement cloud « Outils Freelance (sources officielles) » créé et approuvé par Ismail (GOV.UK, legislation.gov.uk, canada.ca, Légifrance, economie.gouv.fr, ameli.fr, urssaf.fr, autoentrepreneur.urssaf.fr). GOV.UK et legislation.gov.uk se lisent désormais directement. Les autres sites refusent eux-mêmes la lecture automatisée (réponse 403 pour Légifrance, ameli et economie.gouv.fr ; connexion coupée pour canada.ca et l'Urssaf), comme depuis l'outil de lecture des sources : aucun contournement de ces protections.
+- **En attente d'Ismail** (pas urgent) : pour les textes encore illisibles, deux voies au choix : (1) créer un compte sur PISTE (portail officiel des API de l'État, piste.gouv.fr) et y souscrire à l'API Légifrance, puis me donner l'identifiant par le formulaire sécurisé de la session (je ne le demande qu'à ce moment-là) ; (2) enregistrer en PDF, depuis son navigateur, les pages voulues et les déposer dans le dépôt (dossier `sources/`) : loi n° 75-1334 du 31 décembre 1975 (sous-traitance), articles R123-237 et L131-3 à L131-6, pages de l'Assurance maladie et de l'Urssaf sur l'arrêt maladie du micro-entrepreneur, jours fériés et pratiques de l'ARC sur canada.ca ; questions à poser à l'expert-comptable ou à l'avocat : l'indemnité forfaitaire
   de 40 € s'applique-t-elle aux factures des professions libérales et des prestataires non commerçants (la fiche
   officielle F23211 la réserve aux « actes de commerce ») ? Pour un retard sur plusieurs semestres, faut-il appliquer à
   chaque semestre son taux (choix du calculateur, lecture littérale de l'article L441-10) ou garder le taux du semestre
