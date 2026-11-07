@@ -290,13 +290,14 @@
       "note": "Same in 2025/26."
     },
     "class2_status": {
-      "value": "Compulsory Class 2 abolished from 6 April 2024. Self-employed people with profits at or above the Small Profits Threshold are treated as having paid Class 2 (State Pension / contributory benefits record protected at no cost). Below the threshold, Class 2 can be paid voluntarily through Self Assessment.",
+      "value": "Compulsory Class 2 abolished from 6 April 2024. Self-employed people with profits at or above the Small Profits Threshold keep access to contributory benefits, including the State Pension, through a National Insurance credit, without paying. Below the threshold, Class 2 can be paid voluntarily through Self Assessment.",
       "unit": "text",
       "label": "Class 2 NIC status for the self-employed",
       "source": "https://www.gov.uk/government/publications/changes-to-national-insurance-contributions-from-6-january-2024/a-reduction-in-the-main-rates-of-primary-class-1-and-class-4-national-insurance-contributions-and-the-removal-of-the-requirement-to-pay-class-2-nation",
       "source_title": "A reduction in the main rates of Primary Class 1 and Class 4 National Insurance contributions and the removal of the requirement to pay Class 2 National Insurance contributions - GOV.UK",
       "confidence": "high",
-      "note": "From 6 April 2026, voluntary Class 2 can no longer be paid for periods abroad (only Class 3): https://www.gov.uk/government/publications/voluntary-national-insurance-contributions-for-periods-abroad-from-6-april-2026/voluntary-national-insurance-contributions-abroad-from-6-april-2026"
+      "note": "Read on 07/11/2026 with the « Lire une source officielle » tool. The policy paper (SHA-256 65957e2e…d2b3) says those with profits above the threshold 'will continue to get access to contributory benefits including the State Pension through a National Insurance credit without paying National Insurance contributions'; it does not use the words 'treated as paid' (wording corrected on 07/11/2026). It does not say how these credited weeks count for Maternity Allowance, whose GOV.UK pages speak of Class 2 contributions 'paid' (see uk_maternity_allowance). From 6 April 2026, voluntary Class 2 can no longer be paid for periods abroad (only Class 3): https://www.gov.uk/government/publications/voluntary-national-insurance-contributions-for-periods-abroad-from-6-april-2026/voluntary-national-insurance-contributions-abroad-from-6-april-2026",
+      "verified_on": "2026-11-07"
     },
     "class2_small_profits_threshold": {
       "value": 7105,
@@ -3079,6 +3080,97 @@
       "confidence": "high",
       "verified_on": "2026-10-30",
       "note": "Read on 30/10/2026 with the « Lire une source officielle » tool (GOV.UK guidance, SHA-256 da063a64…8829; VATREC5060, updated 16 January 2025, SHA-256 af133934…f60a: VAT Regulations 1995, regulation 14(1), amounts in any currency, total VAT in sterling). The guidance asks for the net value at each rate in sterling as well, and is followed here. Income tax (Self Assessment) conversion rules for sole traders not read: not covered."
+    },
+    "uk_statutory_sick_pay": {
+      "value": {
+        "weekly_max": 123.25,
+        "max_weeks": 28
+      },
+      "unit": "object",
+      "label": "Statutory Sick Pay 2026/27: up to £123.25 a week for up to 28 weeks, paid by an employer",
+      "source": "https://www.gov.uk/statutory-sick-pay",
+      "source_title": "Statutory Sick Pay (SSP): Overview - GOV.UK",
+      "confidence": "high",
+      "verified_on": "2026-11-07",
+      "note": "Read on 07/11/2026 with the « Lire une source officielle » tool. 'You can get up to £123.25 per week Statutory Sick Pay (SSP) if you're too ill to work. It's paid by your employer for up to 28 weeks.' More if the employer has an occupational sick pay scheme. No SSP for self-employed work: there is no employer to pay it. Eligibility details (earnings, notice) not read: the sick pay tool only says SSP comes from an employer."
+    },
+    "uk_new_style_esa": {
+      "value": {
+        "assessment_weeks": 13,
+        "assessment_rate": {
+          "under_25": 75.65,
+          "25_and_over": 95.55
+        },
+        "work_related_activity_group": 95.55,
+        "support_group": 145.9,
+        "pension_threshold_weekly": 85,
+        "pension_excess_deduction": 0.5
+      },
+      "unit": "object",
+      "label": "New Style Employment and Support Allowance 2026/27: weekly amounts (maximums)",
+      "source": "https://www.gov.uk/employment-support-allowance/what-youll-get",
+      "source_title": "Employment and Support Allowance (ESA): What you'll get - GOV.UK",
+      "more_sources": [
+        {
+          "source": "https://www.gov.uk/employment-support-allowance/eligibility",
+          "source_title": "Employment and Support Allowance (ESA): Eligibility - GOV.UK"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-11-07",
+      "note": "Read on 07/11/2026 with the « Lire une source officielle » tool. What you'll get (SHA-256 9b433063…a524): 'assessment rate' normally for 13 weeks while the claim is assessed, up to £75.65 a week under 25 and up to £95.55 a week at 25 or over; if the assessment takes longer, the assessment rate continues until a decision or until ESA is due to end, backdated if more is owed; then up to £95.55 a week in the work-related activity group or up to £145.90 a week in the support group; paid every 2 weeks; a private pension over £85 a week reduces ESA by half the excess; New Style ESA gives Class 1 National Insurance credits; income-related ESA is closed to new claims. Eligibility: under State Pension age, a disability or health condition that affects how much you can work, worked as an employee or have been self-employed, and paid enough National Insurance contributions, usually in the last 2 to 3 years (National Insurance credits also count); not with Jobseeker's Allowance or Statutory Sick Pay; Universal Credit can be paid at the same time, reduced by the ESA amount. The pages read do not give the number of contributions needed or a time limit for the work-related activity group: not shown."
+    },
+    "uk_maternity_allowance": {
+      "value": {
+        "max_weeks": 39,
+        "standard_rate": 194.32,
+        "lowest_rate": 27,
+        "test_period_weeks": 66,
+        "registered_weeks": 26,
+        "class2_weeks_for_max": 13,
+        "employee_earnings_threshold": 30,
+        "spouse_weeks": 14,
+        "claim_from_weeks_pregnant": 26,
+        "earliest_start_weeks_before_due": 11,
+        "claim_within_months": 3,
+        "decision_working_days": 20
+      },
+      "unit": "object",
+      "label": "Maternity Allowance 2026/27 for the self-employed: £27 to £194.32 a week for up to 39 weeks",
+      "source": "https://www.gov.uk/maternity-allowance/what-youll-get",
+      "source_title": "Maternity Allowance: What you'll get - GOV.UK",
+      "more_sources": [
+        {
+          "source": "https://www.gov.uk/maternity-allowance/eligibility",
+          "source_title": "Maternity Allowance: Eligibility - GOV.UK"
+        },
+        {
+          "source": "https://www.gov.uk/maternity-allowance/how-to-claim",
+          "source_title": "Maternity Allowance: How to claim - GOV.UK"
+        },
+        {
+          "source": "https://www.gov.uk/government/publications/maternity-benefits-technical-guidance/maternity-benefits-technical-guidance",
+          "source_title": "Maternity benefits: technical guidance - GOV.UK"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-11-07",
+      "note": "Read on 07/11/2026 with the « Lire une source officielle » tool. What you'll get (SHA-256 9567a081…44a6): self-employed, between £27 and £194.32 a week for up to 39 weeks, depending on how many Class 2 contributions were made in the 66 weeks before the baby is due; the maximum needs registration with HMRC for at least 26 weeks in those 66 weeks and Class 2 paid for at least 13 of them; with no Class 2 paid, £27 a week; with fewer than 13 weeks, the amount is 'calculated based on how many weeks of Class 2' were made (formula not published on the pages read: the tool gives the range only); after the claim, HMRC says how many more contributions to pay (Class 2 £3.65 a week) and payments are increased and backdated; employed: £194.32 or 90% of average weekly earnings, whichever is less; unpaid work for a self-employed spouse or civil partner: £27 a week for up to 14 weeks; paid every 2 or 4 weeks; reduces Universal Credit by the same amount, stops Jobseeker's Allowance. Eligibility (SHA-256 c69b7e54…ffa4): registered as self-employed (or employed) for at least 26 weeks in the 66 weeks before the due week; employees must earn £30 a week or more in at least 13 weeks. How to claim: apply once 26 weeks pregnant; payments start between the 11th week before the due week and the day after the birth; claim within 3 months of the chosen start date to get the full amount; MA1 form; decision within 20 working days. Technical guidance (written before 2024, rates of 2015): no Statutory Maternity Pay for the exclusively self-employed, MA only without SMP, test period of 66 weeks up to and including the week before the due week; not used for amounts. Since April 2024 people with profits at or above the Small Profits Threshold get a National Insurance credit instead of paying Class 2 (class2_status): the MA pages do not say how those weeks count; the tool says so and points to HMRC's letter after the claim."
+    },
+    "uk_new_style_jsa": {
+      "value": {
+        "class1_tax_years": 2,
+        "max_days": 182,
+        "min_age": 18,
+        "max_hours_weekly": 16
+      },
+      "unit": "object",
+      "label": "New Style Jobseeker's Allowance: needs Class 1 contributions as an employee (not open to Class 2-only self-employed)",
+      "source": "https://www.gov.uk/jobseekers-allowance/eligibility",
+      "source_title": "Jobseeker's Allowance (JSA): Eligibility - GOV.UK",
+      "confidence": "high",
+      "verified_on": "2026-11-07",
+      "note": "Read on 07/11/2026 with the « Lire une source officielle » tool. To be eligible you need to have worked as an employee and paid Class 1 National Insurance contributions, usually in the last 2 to 3 years; usually Class 1 for the previous 2 tax years, National Insurance credits counting for one of them; 'You will not be eligible if you were self-employed and only paid Class 2 National Insurance contributions, unless you were working as a share fisherman or a volunteer development worker.' Also: 18 or over, under State Pension age, in Great Britain, not working 16 hours or more a week, no illness or disability that stops you working (ESA instead); savings do not count; full entitlement 182 days; different rules in Northern Ireland; Universal Credit possible at the same time or instead (JSA counts as income). Weekly amounts not read: not shown (self-employed people with only Class 2 cannot get it)."
     }
   },
   "open_questions": [

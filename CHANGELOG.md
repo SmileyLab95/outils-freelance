@@ -1,5 +1,21 @@
 # Journal des modifications
 
+## 2026-11-07 — Protection sociale au Royaume-Uni : maladie, maternité, fin d'activité
+
+- Nouvel outil **« Self-employed sick pay, maternity and out-of-work benefits »** (menu *Tax and admin* du
+  Royaume-Uni) : selon la situation, ce que peut demander un *sole trader*, condition par condition (remplie, à
+  vérifier, non remplie) : *New Style ESA* en cas de maladie (jusqu'à £95.55 par semaine, £75.65 avant 25 ans, pendant
+  les 13 semaines d'évaluation, puis £95.55 ou £145.90) ; *Maternity Allowance* (£194.32 par semaine pendant
+  39 semaines avec 13 semaines de classe 2, £27 sans classe 2, fourchette entre les deux, coût du complément : £47.45 au
+  plus) ; pas de *Statutory Sick Pay* (versé par un employeur) ni de *New Style JSA* avec la seule classe 2. Démarches
+  et liens GOV.UK ; Universal Credit renvoyé à GOV.UK (décision D54).
+- Règles nouvelles lues sur GOV.UK le 07/11/2026 (`uk_new_style_esa`, `uk_maternity_allowance`, `uk_new_style_jsa`,
+  `uk_statutory_sick_pay`) ; libellé de `class2_status` corrigé selon sa source (crédit de cotisation au-dessus du
+  seuil, et non cotisation « réputée payée ») ; spécification [51](documentation/51-protection-sociale-royaume-uni.md).
+- La page française de l'arrêt maladie et la page britannique sont reliées (même identifiant, balises *hreflang*).
+- Tests : moteur (10 tests, 26 mutants sur 26 détectés), chiffres de la page égaux aux règles, parcours navigateur
+  (trois situations, accessibilité, trois largeurs, 7 mutants du script détectés).
+
 ## 2026-10-31 — Protection sociale en France : arrêt maladie et chômage de l'indépendant
 
 - Nouvel outil **« Arrêt maladie de l'indépendant »** (menu « Impôts et gestion ») : indemnités journalières de

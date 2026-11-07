@@ -64,7 +64,7 @@
     {
       "key": "manage",
       "label": "Tax and admin",
-      "description": "Tax, deadlines, expenses and pensions.",
+      "description": "Tax, deadlines, expenses, pensions and benefits.",
       "items": [
         "tax",
         "set-aside",
@@ -72,7 +72,8 @@
         "mtd",
         "mileage",
         "home-office",
-        "retirement"
+        "retirement",
+        "sick-pay"
       ]
     }
   ],

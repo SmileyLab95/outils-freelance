@@ -9,7 +9,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 
 ## Où en est-on ?
 
-*Mis à jour le 31/10/2026.*
+*Mis à jour le 07/11/2026.*
 
 - **Priorité (décision D10)** : le site et la plateforme d'abord ; noms de domaine, Gumroad et affiliation à la fin.
   Règle de qualité maximale pour tout produit ou service (D11, charte dans la [méthode](04-methode-de-travail.md#charte-qualité)).
@@ -328,6 +328,15 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   date limite d'inscription indicative). La fiche officielle de l'arrêt maladie exclut le micro-entrepreneur et ses
   règles n'ont pas pu être lues (Assurance maladie, Urssaf) : pas de montant pour lui, explication à la place
   ([50](50-protection-sociale.md), D53).
+- **Protection sociale au Royaume-Uni (07/11/2026)** : un outil (menu *Tax and admin*), **Self-employed sick pay,
+  maternity and out-of-work benefits** : maladie (*New Style ESA* : jusqu'à £95.55 par semaine, £75.65 avant 25 ans,
+  pendant les 13 semaines d'évaluation, puis £95.55 ou £145.90 ; pas de *Statutory Sick Pay*, versé par un employeur),
+  maternité (*Maternity Allowance* : £194.32 par semaine pendant 39 semaines avec 13 semaines de classe 2, £27 sans
+  classe 2, fourchette entre les deux, coût du complément : £47.45 au plus), fin d'activité (pas de *New Style JSA*
+  avec la seule classe 2 ; Universal Credit renvoyé à GOV.UK). Les pages de la *Maternity Allowance* ne disent pas
+  comment comptent les crédits de classe 2 accordés depuis avril 2024 au-dessus du seuil : signalé, non supposé ;
+  libellé de la règle `class2_status` corrigé (crédit, et non cotisation « réputée payée »)
+  ([51](51-protection-sociale-royaume-uni.md), D54).
 - **Prochaines actions de Claude** : refonte, suite ([31](31-vision-plateforme.md) § 5) : les quatre modules du compte
   gratuit sont faits (étape 5) ; étape 6, outils restants (CGV : faites dans les quatre pays ;
   lois des autres provinces sur la protection du consommateur à lire pour les détailler ; le règlement albertain sur les
@@ -338,8 +347,10 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   navigateur pour les États-Unis ; conversion pour l'impôt sur le revenu au Royaume-Uni ; pratiques de l'ARC, taux
   moyen annuel et TPS/TVH, dès que canada.ca est lisible), guides de protection sociale (France : arrêt maladie au
   réel et chômage faits le 31/10/2026, [50](50-protection-sociale.md) ; arrêt maladie du micro-entrepreneur dès que ses
-  règles sont lues ; maternité, accident, prévoyance ; Royaume-Uni (*Employment and Support Allowance*, *Maternity
-  Allowance* sur GOV.UK), États-Unis, Canada)) ;
+  règles sont lues ; maternité, accident, prévoyance ; Royaume-Uni fait le 07/11/2026,
+  [51](51-protection-sociale-royaume-uni.md) : à revoir si GOV.UK précise comment les crédits de classe 2 comptent pour
+  la *Maternity Allowance* ; États-Unis (assurance invalidité de quelques États), Canada (prestations spéciales de
+  l'assurance-emploi, dès que canada.ca est lisible))) ;
   ajouter les taux du 1er semestre 2027 dès leur publication
   (fin décembre 2026 : intérêt légal par arrêté, taux de la BCE en vigueur au 1er janvier ; tables `taux_interet_legal`
   et `taux_bce_refinancement`, utilisées par le calculateur de pénalités et les CGV) ; *bank holidays* de 2029 dès que

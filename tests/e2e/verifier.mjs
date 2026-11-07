@@ -3185,6 +3185,69 @@ const tests = {
     await page.fill("#ati-date", "");
     check((await t("ati-big")) === "19,73 € à 26,30 €", "ATI : situation par défaut rétablie");
   },
+  async "uk/self-employed-sick-pay/"(page) {
+    // documentation/51-protection-sociale-royaume-uni.md : New Style ESA, Maternity Allowance, New Style JSA (GOV.UK).
+    const t = (id) => fxText(page, id);
+    const checks = () => page.$$eval("#ben-checks li", (li) => li.map((l) => [l.className, l.textContent.replace(/\s+/g, " ").trim()]));
+    let c = await checks();
+    check((await t("ben-label")) === "New Style ESA while you're assessed" && (await t("ben-big")) === "Up to £95.55" &&
+      (await t("ben-sub")) === "a week for the first 13 weeks (£1,242.15) while your claim is assessed. Then up to £95.55 a week (work-related activity group) or £145.90 (support group)." &&
+      c.length === 3 && c.every(([k]) => k === "is-ok") && await page.isVisible("#ben-age") && !(await page.isVisible("#ben-class2")),
+      "benefits: ill, 25 or over → up to £95.55 a week, 13 weeks = £1,242.15");
+    check((await t("ben-notice")).startsWith("Statutory Sick Pay (up to £123.25 a week) is paid by an employer"), "benefits: SSP explained");
+    await page.screenshot({ path: path.join(shots, "benefits-ill.png"), fullPage: true });
+    await page.selectOption("#ben-age", "under_25");
+    check((await t("ben-big")) === "Up to £75.65" && (await t("ben-sub")).includes("(£983.45)"), "benefits: under 25 → £75.65, 13 weeks = £983.45");
+    await page.selectOption("#ben-ni", "unsure");
+    c = await checks();
+    check(c[2][0] === "is-check" && c[2][1].startsWith("? Check your National Insurance record") &&
+      (await t("ben-sub")).includes("while your claim is assessed, if you've paid enough National Insurance."), "benefits: unsure about NI → to check");
+    await page.uncheck("#ben-pension");
+    c = await checks();
+    check((await t("ben-big")) === "Not eligible" && (await t("ben-sub")) === "A condition isn't met: see below." && c[1][0] === "is-todo" &&
+      (await t("ben-step")).startsWith("Universal Credit may help instead"), "benefits: over State Pension age → not eligible");
+    await page.check("#ben-pension");
+    await page.selectOption("#ben-ni", "yes");
+    await page.selectOption("#ben-age", "25_and_over");
+
+    await page.selectOption("#ben-situation", "baby");
+    c = await checks();
+    check((await t("ben-label")) === "Maternity Allowance" && (await t("ben-big")) === "£194.32" && (await t("ben-sub")) === "a week for up to 39 weeks: £7,578.48 in total." &&
+      c.length === 3 && c.every(([k]) => k === "is-ok") && !(await page.isVisible("#ben-age")) && await page.isVisible("#ben-class2"),
+      "benefits: baby, 13 weeks of Class 2 → £194.32 a week, £7,578.48");
+    check((await t("ben-step")).startsWith("Next: apply with form MA1 once you've been pregnant for 26 weeks") && (await t("ben-step")).includes("from the 11th week before your baby is due"),
+      "benefits: how to claim MA");
+    await page.selectOption("#ben-class2", "none");
+    c = await checks();
+    check((await t("ben-big")) === "£27" && (await t("ben-sub")) === "a week for up to 39 weeks: £1,053 in total. Paying up to 13 more weeks of Class 2 (£47.45 at most) can raise it to £194.32 a week (£7,578.48)." &&
+      c[2][0] === "is-check" && (await t("ben-notice")).startsWith("Profits of at least £7,105 in 2026/27 (£6,845 in 2025/26)?"),
+      "benefits: no Class 2 → £27 a week, top-up of 13 weeks for £47.45, thresholds of both tax years");
+    await page.screenshot({ path: path.join(shots, "benefits-baby.png"), fullPage: true });
+    await page.selectOption("#ben-class2", "some");
+    check((await t("ben-big")) === "£27 to £194.32" && (await t("ben-sub")).includes("£1,053 to £7,578.48 in total") && (await t("ben-sub")).includes("up to 12 more weeks of Class 2 (£43.80 at most)"),
+      "benefits: 1 to 12 weeks → range, 12 weeks at most to top up");
+    await page.check("#ben-smp");
+    c = await checks();
+    check((await t("ben-big")) === "Not eligible" && c[0][0] === "is-todo", "benefits: SMP from an employer → no MA");
+    await page.uncheck("#ben-registered");
+    check((await t("ben-sub")) === "2 conditions aren't met: see below.", "benefits: SMP and under 26 weeks → 2 conditions");
+    await page.uncheck("#ben-smp");
+    await page.check("#ben-registered");
+    await page.selectOption("#ben-class2", "13");
+
+    await page.selectOption("#ben-situation", "stopped");
+    c = await checks();
+    check((await t("ben-label")) === "New Style Jobseeker's Allowance" && (await t("ben-big")) === "Not eligible" && c.length === 1 && c[0][0] === "is-todo" &&
+      c[0][1].includes("only paid Class 2 can't get New Style JSA") && !(await page.isVisible("#ben-notice")), "benefits: work stopped, Class 2 only → no JSA");
+    await page.check("#ben-class1");
+    check((await t("ben-big")) === "You may qualify" && (await t("ben-sub")).includes("up to 182 days") && (await page.isVisible("#ben-notice")) &&
+      (await t("ben-step")).includes("16 hours or more a week"), "benefits: with Class 1 as an employee → may qualify");
+    await accessible(page, "benefits (work stopped)");
+    // Retour à la situation par défaut pour les formats suivants (tablette, mobile).
+    await page.uncheck("#ben-class1");
+    await page.selectOption("#ben-situation", "ill");
+    check((await t("ben-big")) === "Up to £95.55", "benefits: default situation restored");
+  },
   async "us/sep-ira-vs-solo-401k-calculator/"(page) {
     check((await page.textContent("#u-sep-max")).trim() === "$18,587" && (await page.textContent("#u-solo-max")).trim() === "$43,087", "retirement: $100k profit → SEP $18,587, solo 401(k) $43,087");
     check((await page.textContent("#u-solo-tax")).trim() === "$5,243", "retirement: tax saved at the solo 401(k) maximum (engine)");

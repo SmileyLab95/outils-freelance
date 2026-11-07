@@ -1,0 +1,124 @@
+<!--{
+  "id": "sick-pay",
+  "slug": "self-employed-sick-pay/",
+  "title": "Self-Employed Sick Pay UK: ESA and Maternity Allowance",
+  "description": "Too ill to work, having a baby or out of work? See what a UK sole trader can claim in 2026/27: ESA, Maternity Allowance, and why SSP and JSA don't apply.",
+  "menu": "Sick pay and benefits",
+  "icon": "🩺",
+  "blurb": "What you can claim if you're ill, having a baby or out of work.",
+  "app": "UK Self-Employed Benefits Checker",
+  "scripts": ["engines/benefits-uk.js", "tools/uk-benefits.js"],
+  "rules": "uk",
+  "sources": ["uk_new_style_esa", "uk_maternity_allowance", "uk_new_style_jsa", "uk_statutory_sick_pay", "class2_status", "class2_voluntary_weekly_rate", "class2_small_profits_threshold", "class2_small_profits_threshold_2025_26"],
+  "priority": 0.8,
+  "faq": [
+    ["Can self-employed people get sick pay in the UK?", "Not Statutory Sick Pay: it's paid by an employer, up to £123.25 a week. If you're too ill to work, you may get New Style Employment and Support Allowance (ESA) if you've paid enough National Insurance, usually in the last 2 to 3 years: up to £95.55 a week (£75.65 if you're under 25) for the first 13 weeks while your claim is assessed."],
+    ["How much is Maternity Allowance for the self-employed?", "Between £27 and £194.32 a week for up to 39 weeks, depending on how many weeks of Class 2 National Insurance you've paid in the 66 weeks before your baby is due. With at least 13 weeks of Class 2 and 26 weeks registered as self-employed, you can get the maximum: £7,578.48 over 39 weeks. With no Class 2 paid, it's £27 a week."],
+    ["Can I increase my Maternity Allowance?", "Yes. After you apply, HMRC tells you how many more weeks of Class 2 to pay to get the maximum. Voluntary Class 2 costs £3.65 a week in 2026/27, so 13 weeks cost £47.45 at most. Your payments are then increased and backdated."],
+    ["Can I claim Jobseeker's Allowance if my business stops?", "Not New Style JSA if you were self-employed and only paid Class 2: it needs Class 1 contributions as an employee, usually for the previous 2 tax years. Share fishermen and volunteer development workers are the exceptions. You may be able to get Universal Credit instead."],
+    ["I don't pay Class 2 any more. Does that affect my benefits?", "Since April 2024, if your profits are at least the Small Profits Threshold (£7,105 in 2026/27), you get a National Insurance credit instead of paying Class 2, and keep access to contributory benefits, including the State Pension. The Maternity Allowance guide talks about Class 2 'paid' and doesn't say how these credits count: HMRC tells you after you apply if you need to pay more."],
+    ["Does this apply in Northern Ireland?", "This page follows GOV.UK guidance for England, Scotland and Wales. Northern Ireland has its own rules for these benefits: check nidirect."]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · 2026/27 rates</span>
+    <h1>Self-employed sick pay, maternity and out-of-work benefits</h1>
+    <p class="lead">Tell us what's happened: see which benefits a sole trader can claim, the conditions one by one, and the amounts published on GOV.UK.</p>
+    <ul class="trust"><li>ESA, Maternity Allowance, JSA</li><li>2026/27 rates</li><li>Rules from GOV.UK</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="ben-form" onsubmit="return false">
+      <h2>Your situation</h2>
+      <div class="fields">
+        <div class="field full"><label for="ben-situation">What's happened?</label>
+          <select id="ben-situation" name="situation" data-save>
+            <option value="ill">I'm too ill to work</option>
+            <option value="baby">I'm having a baby</option>
+            <option value="stopped">My work has stopped</option>
+          </select></div>
+
+        <div class="field full" id="ben-age-field"><label for="ben-age">Your age</label>
+          <select id="ben-age" name="age" data-save>
+            <option value="25_and_over">25 or over</option>
+            <option value="under_25">Under 25</option>
+          </select></div>
+        <div class="field full" id="ben-ni-field"><label for="ben-ni">Have you paid enough National Insurance in the last 2 to 3 years?</label>
+          <select id="ben-ni" name="ni" aria-describedby="ben-ni-hint" data-save>
+            <option value="yes">Yes</option>
+            <option value="unsure">I'm not sure</option>
+            <option value="no">No</option>
+          </select>
+          <span class="hint" id="ben-ni-hint">National Insurance credits count too. GOV.UK doesn't say how many contributions are needed: check your National Insurance record.</span></div>
+        <label class="check full" id="ben-pension-field"><input type="checkbox" id="ben-pension" name="pension" checked data-save><span>I'm under State Pension age</span></label>
+
+        <label class="check full" id="ben-registered-field"><input type="checkbox" id="ben-registered" name="registered" checked data-save><span>I've been registered as self-employed (or employed) for at least 26 weeks in the 66 weeks before my baby is due</span></label>
+        <div class="field full" id="ben-class2-field"><label for="ben-class2">Weeks of Class 2 National Insurance paid in those 66 weeks</label>
+          <select id="ben-class2" name="class2" aria-describedby="ben-class2-hint" data-save>
+            <option value="13">13 weeks or more</option>
+            <option value="some">1 to 12 weeks</option>
+            <option value="none">None</option>
+            <option value="unsure">I don't know</option>
+          </select>
+          <span class="hint" id="ben-class2-hint">Since April 2024 you only pay Class 2 if you choose to. Above the Small Profits Threshold you get a credit instead: see below.</span></div>
+        <label class="check full" id="ben-smp-field"><input type="checkbox" id="ben-smp" name="smp" data-save><span>I can get Statutory Maternity Pay from an employer</span></label>
+
+        <label class="check full" id="ben-class1-field"><input type="checkbox" id="ben-class1" name="class1" data-save><span>I've also worked as an employee and paid Class 1 National Insurance in the last 2 tax years</span></label>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="result-hero">
+        <div class="label" id="ben-label">–</div>
+        <div class="big" id="ben-big">–</div>
+        <div class="sub" id="ben-sub">–</div>
+      </div>
+      <div class="card" style="padding: 6px 18px 4px;">
+        <h2 class="small" style="margin: 12px 0 0;">Conditions</h2>
+        <ul class="mention-checks" id="ben-checks" aria-live="polite"></ul>
+      </div>
+      <p class="notice" id="ben-step" style="margin-top: 16px;">–</p>
+      <p class="notice" id="ben-notice" style="margin-top: 16px;">–</p>
+    </div>
+  </div>
+</section>
+
+<section class="section prose">
+  <h2>If you're too ill to work</h2>
+  <ul>
+    <li><strong>No Statutory Sick Pay for self-employed work:</strong> SSP (up to £123.25 a week for up to 28 weeks) is paid by an employer. If you also have a job, ask your employer.</li>
+    <li><strong>New Style Employment and Support Allowance (ESA):</strong> if you're under State Pension age, have a health condition or disability that affects how much you can work, and have paid enough National Insurance, usually in the last 2 to 3 years (credits count too). It's open to the self-employed.</li>
+    <li><strong>How much:</strong> the "assessment rate" for the first 13 weeks while your claim is assessed, up to £75.65 a week if you're under 25 and up to £95.55 if you're 25 or over. After the assessment: up to £95.55 a week in the work-related activity group, or up to £145.90 in the support group. A private pension over £85 a week reduces ESA by half of the amount above £85.</li>
+  </ul>
+
+  <h2>If you're having a baby</h2>
+  <ul>
+    <li><strong>Maternity Allowance, not Statutory Maternity Pay:</strong> SMP comes from an employer. If you're self-employed, you can get Maternity Allowance (MA) if you've been registered as self-employed (or employed) for at least 26 weeks in the 66 weeks before your baby is due.</li>
+    <li><strong>How much:</strong> between £27 and £194.32 a week for up to 39 weeks. You get the maximum if you've also paid Class 2 National Insurance for at least 13 of the 66 weeks: £7,578.48 over 39 weeks. With no Class 2 paid, it's £27 a week, or £1,053 over 39 weeks. In between, the amount depends on the number of weeks paid.</li>
+    <li><strong>Topping up:</strong> after you apply, HMRC tells you how many more weeks of Class 2 you need to pay. Voluntary Class 2 is £3.65 a week in 2026/27, so 13 weeks cost £47.45 at most (weeks in an earlier tax year are charged at that year's rate). Your MA is then increased and backdated.</li>
+    <li><strong>When to claim:</strong> once you've been pregnant for 26 weeks, with form MA1 and proof of your due date (MATB1 certificate or a letter from your doctor or midwife). Payments can start from the 11th week before your baby is due. Claim within 3 months of your chosen start date to get the full amount. You should get a decision within 20 working days.</li>
+    <li><strong>No tax:</strong> you don't pay income tax or National Insurance on Maternity Allowance. It reduces Universal Credit by the same amount.</li>
+  </ul>
+
+  <h2>If your work stops</h2>
+  <ul>
+    <li><strong>No New Style Jobseeker's Allowance on Class 2 alone:</strong> JSA needs Class 1 contributions as an employee, usually for the previous 2 tax years. Self-employed people who only paid Class 2 aren't eligible, unless they worked as a share fisherman or a volunteer development worker.</li>
+    <li><strong>Universal Credit:</strong> you may be able to get it instead, or alongside New Style JSA or ESA (which then reduce it). It isn't covered by this tool: <a href="https://www.gov.uk/universal-credit/eligibility" rel="noopener">check if you're eligible on GOV.UK</a>.</li>
+  </ul>
+
+  <h2>Class 2 National Insurance since April 2024</h2>
+  <p>You no longer have to pay Class 2. If your profits are at least the Small Profits Threshold (£7,105 in 2026/27, £6,845 in 2025/26), HMRC gives you a National Insurance credit instead, and you keep access to contributory benefits, including the State Pension. Below the threshold, you can pay Class 2 voluntarily (£3.65 a week). The Maternity Allowance guide on GOV.UK talks about weeks of Class 2 "paid" and doesn't say how these credits count: this tool doesn't assume they do. HMRC contacts you after you apply if you've paid less than 13 weeks.</p>
+
+  <h2>Before you claim</h2>
+  <ul>
+    <li>Check your National Insurance record for gaps: <a href="https://www.gov.uk/check-national-insurance-record" rel="noopener">Check your National Insurance record</a> on GOV.UK.</li>
+    <li>Read the official guides: <a href="https://www.gov.uk/employment-support-allowance" rel="noopener">ESA</a>, <a href="https://www.gov.uk/maternity-allowance" rel="noopener">Maternity Allowance</a> (with the test period calculator) and <a href="https://www.gov.uk/jobseekers-allowance" rel="noopener">Jobseeker's Allowance</a>.</li>
+    <li>In Northern Ireland, these benefits have their own rules: check <a href="https://www.nidirect.gov.uk/" rel="noopener">nidirect</a>.</li>
+  </ul>
+  <p>State benefits rarely replace your income. Insurance can cover the gap: see the <a href="{{link:insurance}}">business insurance guide</a>, and build a cash buffer with the <a href="{{link:set-aside}}">set-aside calculator</a>.</p>
+  <p class="small muted">Guidance only, based on the GOV.UK guides for England, Scotland and Wales read in November 2026 (2026/27 rates). It isn't a decision on your claim: the Department for Work and Pensions and HMRC decide. Universal Credit, the 14-week Maternity Allowance for a spouse or civil partner, and limited company directors aren't covered.</p>
+</section>

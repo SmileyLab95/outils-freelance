@@ -944,3 +944,4 @@ a.country-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg)
 .mention-checks .is-ok { color: var(--ok); }
 .mention-checks .is-todo { color: #7c2d12; font-weight: 600; }
 .mention-checks .is-none { color: var(--muted); }
+.mention-checks .is-check { color: var(--warn); font-weight: 600; }   /* condition à vérifier (protection sociale UK) */

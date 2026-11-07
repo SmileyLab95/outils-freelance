@@ -106,8 +106,8 @@ vérifié par le moteur ; parcours navigateur (accessibilité, trois largeurs), 
 - Relecture des captures : intitulés des listes raccourcis (coupés sur mobile), dates de la période indemnisée sur deux
   lignes (débordement à 390 px), montant de l'ATI sans « par jour » dans le gros chiffre.
 - À faire : arrêt maladie du micro-entrepreneur dès que ses règles sont lues (Assurance maladie, Urssaf) ; maternité,
-  paternité, accident ; prévoyance et mutuelle ; Royaume-Uni (*Employment and Support Allowance*, *Maternity
-  Allowance*), États-Unis, Canada.
+  paternité, accident ; prévoyance et mutuelle ; États-Unis, Canada. Royaume-Uni : fait le 07/11/2026
+  ([51](51-protection-sociale-royaume-uni.md)).
 
 ## Annexe : sources lues (31/10/2026, outil « Lire une source officielle »)
 
