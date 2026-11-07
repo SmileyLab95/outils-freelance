@@ -374,6 +374,11 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   Z12-012 pour le BT-32 en franchise, la question 13 de [pays/ca.md](pays/ca.md) sur la TVQ, et le
   remplacement annoncé de la section 17 du *Victims and Prisoners Act 2024* sur les accords de confidentialité). La mise en ligne
   des comptes attend le choix de l'hébergeur et du domaine.
+- **Règles britanniques revérifiées en direct (07/11/2026, soir)** : 161 règles sur 164 contrôlées sur leur page
+  officielle (GOV.UK, legislation.gov.uk ; Banque d'Angleterre par l'outil de lecture) et datées ; 8 sources corrigées ;
+  taux directeur à 4 % depuis le 5 novembre 2026 (intérêts du HMRC à 8 % au 24 novembre) ; erreur corrigée : le taux
+  vélo de 20p ne vaut que pour les salariés. Restent à lire : dates des prochaines réunions de la Banque d'Angleterre,
+  page du *Commercial Payments Bill*, preuves de l'activité d'un client étranger (VATPOSS06500).
 - **Accès réseau (07/11/2026)** : environnement cloud « Outils Freelance (sources officielles) » créé et approuvé par Ismail (GOV.UK, legislation.gov.uk, canada.ca, Légifrance, economie.gouv.fr, ameli.fr, urssaf.fr, autoentrepreneur.urssaf.fr). GOV.UK et legislation.gov.uk se lisent désormais directement. Les autres sites refusent eux-mêmes la lecture automatisée (réponse 403 pour Légifrance, ameli et economie.gouv.fr ; connexion coupée pour canada.ca et l'Urssaf), comme depuis l'outil de lecture des sources : aucun contournement de ces protections.
 - **En attente d'Ismail** (pas urgent) : pour les textes encore illisibles, deux voies au choix : (1) créer un compte sur PISTE (portail officiel des API de l'État, piste.gouv.fr) et y souscrire à l'API Légifrance, puis me donner l'identifiant par le formulaire sécurisé de la session (je ne le demande qu'à ce moment-là) ; (2) enregistrer en PDF, depuis son navigateur, les pages voulues et les déposer dans le dépôt (dossier `sources/`) : loi n° 75-1334 du 31 décembre 1975 (sous-traitance), articles R123-237 et L131-3 à L131-6, pages de l'Assurance maladie et de l'Urssaf sur l'arrêt maladie du micro-entrepreneur, jours fériés et pratiques de l'ARC sur canada.ca ; questions à poser à l'expert-comptable ou à l'avocat : l'indemnité forfaitaire
   de 40 € s'applique-t-elle aux factures des professions libérales et des prestataires non commerçants (la fiche

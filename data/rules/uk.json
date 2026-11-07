@@ -11,7 +11,8 @@
       "source": "https://www.gov.uk/guidance/rates-and-thresholds-for-employers-2026-to-2027",
       "source_title": "Rates and thresholds for employers 2026 to 2027 - GOV.UK",
       "confidence": "high",
-      "note": "UK tax year runs 6 April 2026 to 5 April 2027."
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page. UK tax year runs 6 April 2026 to 5 April 2027.",
+      "verified_on": "2026-11-07"
     },
     "tax_year_end": {
       "value": "2027-04-05",
@@ -20,7 +21,8 @@
       "source": "https://www.gov.uk/guidance/rates-and-thresholds-for-employers-2026-to-2027",
       "source_title": "Rates and thresholds for employers 2026 to 2027 - GOV.UK",
       "confidence": "high",
-      "note": ""
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page.",
+      "verified_on": "2026-11-07"
     },
     "personal_allowance": {
       "value": 12570,
@@ -29,7 +31,8 @@
       "source": "https://www.gov.uk/income-tax-rates",
       "source_title": "Income Tax rates and Personal Allowances: Current rates and allowances - GOV.UK",
       "confidence": "high",
-      "note": "Same in 2025/26. Applies UK-wide (England, Wales, Northern Ireland and Scotland). Frozen until 5 April 2031 (see thresholds_frozen_until)."
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page. Same in 2025/26. Applies UK-wide (England, Wales, Northern Ireland and Scotland). Frozen until 5 April 2031 (see thresholds_frozen_until).",
+      "verified_on": "2026-11-07"
     },
     "personal_allowance_taper_threshold": {
       "value": 100000,
@@ -38,7 +41,8 @@
       "source": "https://www.gov.uk/income-tax-rates",
       "source_title": "Income Tax rates and Personal Allowances: Current rates and allowances - GOV.UK",
       "confidence": "high",
-      "note": "Personal Allowance falls by GBP 1 for every GBP 2 of adjusted net income above GBP 100,000. Creates an effective 60% marginal band (rUK) between 100,000 and 125,140."
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page. Personal Allowance falls by GBP 1 for every GBP 2 of adjusted net income above GBP 100,000. Creates an effective 60% marginal band (rUK) between 100,000 and 125,140.",
+      "verified_on": "2026-11-07"
     },
     "personal_allowance_taper_rate": {
       "value": 0.5,
@@ -47,7 +51,8 @@
       "source": "https://www.gov.uk/income-tax-rates",
       "source_title": "Income Tax rates and Personal Allowances: Current rates and allowances - GOV.UK",
       "confidence": "high",
-      "note": "PA = max(0, 12570 - 0.5 * (adjusted_net_income - 100000))."
+      "note": "Checked on the live official page on 07/11/2026: 'goes down by £1 for every £2' of adjusted net income above £100,000. PA = max(0, 12570 - 0.5 * (adjusted_net_income - 100000)).",
+      "verified_on": "2026-11-07"
     },
     "personal_allowance_nil_at": {
       "value": 125140,
@@ -56,7 +61,8 @@
       "source": "https://www.gov.uk/income-tax-rates",
       "source_title": "Income Tax rates and Personal Allowances: Current rates and allowances - GOV.UK",
       "confidence": "high",
-      "note": "100,000 + 2 x 12,570 = 125,140."
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page. 100,000 + 2 x 12,570 = 125,140.",
+      "verified_on": "2026-11-07"
     },
     "thresholds_frozen_until": {
       "value": "2031-04-05",
@@ -65,7 +71,8 @@
       "source": "https://www.gov.uk/government/publications/maintaining-income-tax-and-equivalent-national-insurance-contributions-thresholds-until-5-april-2031/income-tax-maintaining-the-personal-allowance-and-the-basic-rate-limit-for-income-tax-and-equivalent-national-insurance-contributions-thresholds-unt",
       "source_title": "Income Tax: Maintaining the Personal Allowance and the basic rate limit for Income Tax, and equivalent National Insurance contributions thresholds until 5 April 2031 - GOV.UK",
       "confidence": "high",
-      "note": "Freeze extended at Budget 2025 (26 November 2025) from 5 April 2028 to 5 April 2031. Covers PA 12,570, basic rate limit 37,700, higher rate threshold 50,270, and the NIC primary threshold / LPL / UEL / UPL."
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page. Freeze extended at Budget 2025 (26 November 2025) from 5 April 2028 to 5 April 2031. Covers PA 12,570, basic rate limit 37,700, higher rate threshold 50,270, and the NIC primary threshold / LPL / UEL / UPL.",
+      "verified_on": "2026-11-07"
     },
     "income_tax_bands_ruk": {
       "value": [
@@ -90,7 +97,8 @@
       "source": "https://www.gov.uk/government/publications/rates-and-allowances-income-tax/income-tax-rates-and-allowances-current-and-past",
       "source_title": "Income Tax rates and allowances for current and previous tax years - GOV.UK",
       "confidence": "high",
-      "note": "Expressed on TAXABLE income, i.e. after deducting the (possibly tapered) Personal Allowance. Basic 20% on first 37,700; higher 40% from 37,701 to 125,140; additional 45% above 125,140. With a standard PA this equals gross bands 12,571-50,270 (20%), 50,271-125,140 (40%), over 125,140 (45%). Identical in 2025/26. Wales: Welsh rates of income tax set at 10p in each band for 2026/27, so totals are the same as England/NI (see income_tax_wales). Savings and dividend income use separate UK-wide rates."
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page. Expressed on TAXABLE income, i.e. after deducting the (possibly tapered) Personal Allowance. Basic 20% on first 37,700; higher 40% from 37,701 to 125,140; additional 45% above 125,140. With a standard PA this equals gross bands 12,571-50,270 (20%), 50,271-125,140 (40%), over 125,140 (45%). Identical in 2025/26. Wales: Welsh rates of income tax set at 10p in each band for 2026/27, so totals are the same as England/NI (see income_tax_wales). Savings and dividend income use separate UK-wide rates.",
+      "verified_on": "2026-11-07"
     },
     "basic_rate_limit": {
       "value": 37700,
@@ -99,7 +107,8 @@
       "source": "https://www.gov.uk/government/publications/rates-and-allowances-income-tax/income-tax-rates-and-allowances-current-and-past",
       "source_title": "Income Tax rates and allowances for current and previous tax years - GOV.UK",
       "confidence": "high",
-      "note": "Frozen until 5 April 2031."
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page. Frozen until 5 April 2031.",
+      "verified_on": "2026-11-07"
     },
     "higher_rate_threshold_gross": {
       "value": 50270,
@@ -108,7 +117,8 @@
       "source": "https://www.gov.uk/income-tax-rates",
       "source_title": "Income Tax rates and Personal Allowances: Current rates and allowances - GOV.UK",
       "confidence": "high",
-      "note": "= 12,570 + 37,700. Also equals the Class 4 upper profits limit and the Class 1 upper earnings limit."
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page. = 12,570 + 37,700. Also equals the Class 4 upper profits limit and the Class 1 upper earnings limit.",
+      "verified_on": "2026-11-07"
     },
     "additional_rate_threshold": {
       "value": 125140,
@@ -117,7 +127,8 @@
       "source": "https://www.gov.uk/income-tax-rates",
       "source_title": "Income Tax rates and Personal Allowances: Current rates and allowances - GOV.UK",
       "confidence": "high",
-      "note": "Same figure on taxable and gross income because the PA is nil at 125,140. Some GOV.UK pages write 'over 125,140', others '125,141 and above'; same rule."
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page. Same figure on taxable and gross income because the PA is nil at 125,140. Some GOV.UK pages write 'over 125,140', others '125,141 and above'; same rule.",
+      "verified_on": "2026-11-07"
     },
     "income_tax_wales": {
       "value": {
@@ -131,7 +142,8 @@
       "source": "https://www.gov.uk/welsh-income-tax",
       "source_title": "Income Tax in Wales - GOV.UK",
       "confidence": "high",
-      "note": "Welsh Government kept the Welsh rate at 10p in each band for 2026/27 (Draft Budget written statement 14 October 2025; Final Budget 20 January 2026: https://www.gov.wales/written-statement-draft-budget-2026-27-welsh-taxes). UK rates are reduced by 10p and the Welsh 10p added back, so Welsh taxpayers pay exactly the same as England/NI. Use income_tax_bands_ruk."
+      "note": "Checked on the live official page on 07/11/2026: the Welsh page shows the same bands and rates as England and Northern Ireland (20%, 40%, 45%); the 10p Welsh rate per band is not stated on it. Welsh Government kept the Welsh rate at 10p in each band for 2026/27 (Draft Budget written statement 14 October 2025; Final Budget 20 January 2026: https://www.gov.wales/written-statement-draft-budget-2026-27-welsh-taxes). UK rates are reduced by 10p and the Welsh 10p added back, so Welsh taxpayers pay exactly the same as England/NI. Use income_tax_bands_ruk.",
+      "verified_on": "2026-11-07"
     },
     "income_tax_bands_scotland": {
       "value": [
@@ -171,7 +183,8 @@
       "source": "https://www.gov.uk/scottish-income-tax",
       "source_title": "Income Tax in Scotland: Current rates - GOV.UK",
       "confidence": "high",
-      "note": "Expressed on TAXABLE income (after the UK Personal Allowance). Derived from the official gross bands for a standard PA of 12,570: starter 12,571-16,537 (19%), basic 16,538-29,526 (20%), intermediate 29,527-43,662 (21%), higher 43,663-75,000 (42%), advanced 75,001-125,140 (45%), top over 125,140 (48%). The starter band 'up to 3,967' on taxable income is confirmed on GOV.UK; the other taxable-income limits are computed by subtracting 12,570 (the advanced/top boundary stays at 125,140 because the PA is nil there). Set at the Scottish Budget of 13 January 2026 (basic and intermediate thresholds +7.4%, higher/advanced/top frozen). Gov.scot: https://www.gov.scot/publications/scottish-income-tax-rates-and-bands/pages/2026-to-2027/. Applies to Scottish taxpayers' earned income (salary, self-employed profits, pensions); savings and dividends use UK rates."
+      "note": "Checked on the live official page on 07/11/2026: bands on taxable income derived from the gross bands of the page (£12,571-£16,537 19%, £16,538-£29,526 20%, £29,527-£43,662 21%, £43,663-£75,000 42%, £75,001-£125,140 45%, over £125,140 48%) less the £12,570 Personal Allowance. Expressed on TAXABLE income (after the UK Personal Allowance). Derived from the official gross bands for a standard PA of 12,570: starter 12,571-16,537 (19%), basic 16,538-29,526 (20%), intermediate 29,527-43,662 (21%), higher 43,663-75,000 (42%), advanced 75,001-125,140 (45%), top over 125,140 (48%). The starter band 'up to 3,967' on taxable income is confirmed on GOV.UK; the other taxable-income limits are computed by subtracting 12,570 (the advanced/top boundary stays at 125,140 because the PA is nil there). Set at the Scottish Budget of 13 January 2026 (basic and intermediate thresholds +7.4%, higher/advanced/top frozen). Gov.scot: https://www.gov.scot/publications/scottish-income-tax-rates-and-bands/pages/2026-to-2027/. Applies to Scottish taxpayers' earned income (salary, self-employed profits, pensions); savings and dividends use UK rates.",
+      "verified_on": "2026-11-07"
     },
     "income_tax_bands_scotland_gross_standard_pa": {
       "value": [
@@ -211,7 +224,8 @@
       "source": "https://www.gov.uk/scottish-income-tax",
       "source_title": "Income Tax in Scotland: Current rates - GOV.UK",
       "confidence": "high",
-      "note": "Expressed on TOTAL (gross) income assuming the full 12,570 PA. Do not use for computation when income exceeds 100,000 (PA taper): use income_tax_bands_scotland on taxable income instead."
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page. Expressed on TOTAL (gross) income assuming the full 12,570 PA. Do not use for computation when income exceeds 100,000 (PA taper): use income_tax_bands_scotland on taxable income instead.",
+      "verified_on": "2026-11-07"
     },
     "income_tax_bands_scotland_2025_26": {
       "value": [
@@ -251,7 +265,8 @@
       "source": "https://www.gov.uk/scottish-income-tax/2025-to-2026-tax-year",
       "source_title": "Income Tax in Scotland: 2025 to 2026 tax year - GOV.UK",
       "confidence": "high",
-      "note": "TAXABLE income, computed from the official gross bands: starter 12,571-15,397, basic 15,398-27,491, intermediate 27,492-43,662, higher 43,663-75,000, advanced 75,001-125,140, top over 125,140."
+      "note": "Checked on the live official page on 07/11/2026: derived from the 2025 to 2026 gross bands (£12,571-£15,397 19%, £15,398-£27,491 20%, £27,492-£43,662 21%, then 42%, 45%, 48%). TAXABLE income, computed from the official gross bands: starter 12,571-15,397, basic 15,398-27,491, intermediate 27,492-43,662, higher 43,663-75,000, advanced 75,001-125,140, top over 125,140.",
+      "verified_on": "2026-11-07"
     },
     "class4_lower_profits_limit": {
       "value": 12570,
@@ -260,7 +275,8 @@
       "source": "https://www.gov.uk/government/publications/rates-and-allowances-national-insurance-contributions/rates-and-allowances-national-insurance-contributions",
       "source_title": "Rates and allowances: National Insurance contributions - GOV.UK",
       "confidence": "high",
-      "note": "Same in 2025/26. Frozen with the PA until 5 April 2031."
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page. Same in 2025/26. Frozen with the PA until 5 April 2031.",
+      "verified_on": "2026-11-07"
     },
     "class4_upper_profits_limit": {
       "value": 50270,
@@ -269,7 +285,8 @@
       "source": "https://www.gov.uk/government/publications/rates-and-allowances-national-insurance-contributions/rates-and-allowances-national-insurance-contributions",
       "source_title": "Rates and allowances: National Insurance contributions - GOV.UK",
       "confidence": "high",
-      "note": "Same in 2025/26."
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page. Same in 2025/26.",
+      "verified_on": "2026-11-07"
     },
     "class4_main_rate": {
       "value": 0.06,
@@ -278,7 +295,8 @@
       "source": "https://www.gov.uk/self-employed-national-insurance-rates",
       "source_title": "Self-employed National Insurance rates - GOV.UK",
       "confidence": "high",
-      "note": "6% since 6 April 2024 (was 9% to 2023/24, 8% planned then cut to 6%). Same in 2025/26. Class 4 is computed on taxable trading profits (no Scottish variation)."
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page. 6% since 6 April 2024 (was 9% to 2023/24, 8% planned then cut to 6%). Same in 2025/26. Class 4 is computed on taxable trading profits (no Scottish variation).",
+      "verified_on": "2026-11-07"
     },
     "class4_additional_rate": {
       "value": 0.02,
@@ -287,7 +305,8 @@
       "source": "https://www.gov.uk/self-employed-national-insurance-rates",
       "source_title": "Self-employed National Insurance rates - GOV.UK",
       "confidence": "high",
-      "note": "Same in 2025/26."
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page. Same in 2025/26.",
+      "verified_on": "2026-11-07"
     },
     "class2_status": {
       "value": "Compulsory Class 2 abolished from 6 April 2024. Self-employed people with profits at or above the Small Profits Threshold keep access to contributory benefits, including the State Pension, through a National Insurance credit, without paying. Below the threshold, Class 2 can be paid voluntarily through Self Assessment.",
@@ -306,16 +325,24 @@
       "source": "https://www.gov.uk/self-employed-national-insurance-rates",
       "source_title": "Self-employed National Insurance rates - GOV.UK",
       "confidence": "high",
-      "note": "Raised from 6,845 (2025/26) to 7,105 by the Social Security (Contributions) (Rates, Limits and Thresholds Amendments...) Regulations 2026, in force 6 April 2026: https://www.legislation.gov.uk/ukdsi/2026/9780348278415/pdfs/ukdsi_9780348278415_en.pdf"
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page. Raised from 6,845 (2025/26) to 7,105 by the Social Security (Contributions) (Rates, Limits and Thresholds Amendments...) Regulations 2026, in force 6 April 2026: https://www.legislation.gov.uk/ukdsi/2026/9780348278415/pdfs/ukdsi_9780348278415_en.pdf",
+      "verified_on": "2026-11-07"
     },
     "class2_small_profits_threshold_2025_26": {
       "value": 6845,
       "unit": "GBP",
       "label": "Class 2 Small Profits Threshold 2025/26",
-      "source": "https://www.gov.uk/self-employed-national-insurance-rates",
-      "source_title": "Self-employed National Insurance rates - GOV.UK",
+      "source": "https://www.gov.uk/government/publications/rates-and-allowances-national-insurance-contributions/rates-and-allowances-national-insurance-contributions",
+      "source_title": "Rates and allowances: National Insurance contributions - GOV.UK",
       "confidence": "high",
-      "note": ""
+      "note": "Checked on the live official page on 07/11/2026: table 3.1, Small Profits Threshold £6,845 for 2025 to 2026 (£7,105 for 2026 to 2027).",
+      "more_sources": [
+        {
+          "source": "https://www.gov.uk/self-employed-national-insurance-rates",
+          "source_title": "Self-employed National Insurance rates - GOV.UK"
+        }
+      ],
+      "verified_on": "2026-11-07"
     },
     "uk_register_sole_trader": {
       "value": {
@@ -421,16 +448,24 @@
       "source": "https://www.gov.uk/voluntary-national-insurance-contributions/rates",
       "source_title": "Voluntary National Insurance: Rates - GOV.UK",
       "confidence": "high",
-      "note": "Per week. 3.65 x 52 = 189.80 per year. Share fishermen 4.30/week, volunteer development workers 6.45/week."
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page. Per week. 3.65 x 52 = 189.80 per year. Share fishermen 4.30/week, volunteer development workers 6.45/week.",
+      "verified_on": "2026-11-07"
     },
     "class2_voluntary_weekly_rate_2025_26": {
       "value": 3.5,
       "unit": "GBP",
       "label": "Voluntary Class 2 rate 2025/26 (per week)",
-      "source": "https://www.gov.uk/self-employed-national-insurance-rates",
-      "source_title": "Self-employed National Insurance rates - GOV.UK",
+      "source": "https://www.gov.uk/government/publications/rates-and-allowances-national-insurance-contributions/rates-and-allowances-national-insurance-contributions",
+      "source_title": "Rates and allowances: National Insurance contributions - GOV.UK",
       "confidence": "high",
-      "note": "Per week. Payments for a past year are made at that year's rate."
+      "note": "Checked on the live official page on 07/11/2026: table 3.1, Class 2 rate £3.50 a week for 2025 to 2026 (£3.65 for 2026 to 2027). Per week. Payments for a past year are made at that year's rate.",
+      "more_sources": [
+        {
+          "source": "https://www.gov.uk/self-employed-national-insurance-rates",
+          "source_title": "Self-employed National Insurance rates - GOV.UK"
+        }
+      ],
+      "verified_on": "2026-11-07"
     },
     "class3_voluntary_weekly_rate": {
       "value": 18.4,
@@ -439,7 +474,8 @@
       "source": "https://www.gov.uk/voluntary-national-insurance-contributions/rates",
       "source_title": "Voluntary National Insurance: Rates - GOV.UK",
       "confidence": "high",
-      "note": "Per week. Builds State Pension entitlement only."
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page. Per week. Builds State Pension entitlement only.",
+      "verified_on": "2026-11-07"
     },
     "trading_allowance": {
       "value": 1000,
@@ -448,7 +484,8 @@
       "source": "https://www.gov.uk/guidance/tax-free-allowances-on-property-and-trading-income",
       "source_title": "Tax-free allowances on property and trading income - GOV.UK",
       "confidence": "high",
-      "note": "Gross trading income of 1,000 or less: no need to tell HMRC (unless registered for SA for other reasons). Above 1,000: either deduct the 1,000 allowance OR actual expenses, not both. Cannot create a loss. Covers all trades combined; separate 1,000 property allowance."
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page. Gross trading income of 1,000 or less: no need to tell HMRC (unless registered for SA for other reasons). Above 1,000: either deduct the 1,000 allowance OR actual expenses, not both. Cannot create a loss. Covers all trades combined; separate 1,000 property allowance.",
+      "verified_on": "2026-11-07"
     },
     "simplified_mileage_car_first_10000": {
       "value": 0.55,
@@ -457,7 +494,8 @@
       "source": "https://www.gov.uk/simpler-income-tax-simplified-expenses/vehicles",
       "source_title": "Simplified expenses if you're self-employed: Vehicles - GOV.UK",
       "confidence": "high",
-      "note": "Re-checked 2026-10-20: 45p to 55p for the first 10,000 business miles from 6 April 2026 (confirmed by the Chancellor in May 2026, backdated), reported by several payroll and accounting sources (Cintra, webexpenses, Clive Owen); GOV.UK page not opened. Per mile. Raised from 45p to 55p, announced 21 May 2026 and retrospective to 6 April 2026 (first change in about 15 years): https://www.gov.uk/government/publications/increase-to-approved-mileage-allowance-payments-amaps-and-self-employed-simplified-mileage-rates. Same figure is the employee AMAP rate. For periods of account not matching the tax year, HMRC guidance requires the rates for each tax year to be applied (exact apportionment wording not verified; see open_questions)."
+      "note": "Checked on the live official page on 07/11/2026: 55p (45p before 6 April 2026). Re-checked 2026-10-20: 45p to 55p for the first 10,000 business miles from 6 April 2026 (confirmed by the Chancellor in May 2026, backdated), reported by several payroll and accounting sources (Cintra, webexpenses, Clive Owen); GOV.UK page not opened. Per mile. Raised from 45p to 55p, announced 21 May 2026 and retrospective to 6 April 2026 (first change in about 15 years): https://www.gov.uk/government/publications/increase-to-approved-mileage-allowance-payments-amaps-and-self-employed-simplified-mileage-rates. Same figure is the employee AMAP rate. For periods of account not matching the tax year, HMRC guidance requires the rates for each tax year to be applied (exact apportionment wording not verified; see open_questions).",
+      "verified_on": "2026-11-07"
     },
     "simplified_mileage_car_after_10000": {
       "value": 0.25,
@@ -466,7 +504,8 @@
       "source": "https://www.gov.uk/simpler-income-tax-simplified-expenses/vehicles",
       "source_title": "Simplified expenses if you're self-employed: Vehicles - GOV.UK",
       "confidence": "high",
-      "note": "Per mile. Unchanged. GOV.UK example: 11,000 miles = 10,000 x 0.55 + 1,000 x 0.25 = 5,750."
+      "note": "Checked on the live official page on 07/11/2026: 25p. Per mile. Unchanged. GOV.UK example: 11,000 miles = 10,000 x 0.55 + 1,000 x 0.25 = 5,750.",
+      "verified_on": "2026-11-07"
     },
     "simplified_mileage_motorcycle": {
       "value": 0.24,
@@ -475,7 +514,24 @@
       "source": "https://www.gov.uk/simpler-income-tax-simplified-expenses/vehicles",
       "source_title": "Simplified expenses if you're self-employed: Vehicles - GOV.UK",
       "confidence": "high",
-      "note": "Per mile. Unchanged. Once flat rates are used for a vehicle, they must continue for as long as that vehicle is used in the business. Parking, tolls and congestion charges can be claimed on top."
+      "note": "Checked on the live official page on 07/11/2026: 24p. Per mile. Unchanged. Once flat rates are used for a vehicle, they must continue for as long as that vehicle is used in the business. Parking, tolls and congestion charges can be claimed on top.",
+      "verified_on": "2026-11-07"
+    },
+    "amap_bicycle_rate": {
+      "value": 0.2,
+      "unit": "GBP",
+      "label": "Approved mileage allowance payments 2026/27: bicycles, 20p per mile (employees; not a simplified expense for sole traders)",
+      "source": "https://www.gov.uk/government/publications/rates-and-allowances-travel-mileage-and-fuel-allowances/travel-mileage-and-fuel-rates-and-allowances",
+      "source_title": "Travel — mileage and fuel rates and allowances - GOV.UK",
+      "more_sources": [
+        {
+          "source": "https://www.gov.uk/simpler-income-tax-simplified-expenses/vehicles",
+          "source_title": "Simplified expenses if you're self-employed: Vehicles - GOV.UK"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-11-07",
+      "note": "Read directly on 07/11/2026 (page updated 21 May 2026, SHA-256 39c00514…): approved mileage rates from 2026 to 2027, cars and vans 55p then 25p, motor cycles 24p, bicycles 20p per mile (20p since 2011). The simplified expenses page for the self-employed (SHA-256 c7ace2d3…) lists flat rates for cars and goods vehicles and for motorcycles only: no bicycle rate for sole traders. Replaces the rule simplified_mileage_bicycle (07/11/2026), which wrongly presented 20p as a simplified expense and cited a broken address."
     },
     "simplified_mileage_car_first_10000_2025_26": {
       "value": 0.45,
@@ -484,7 +540,8 @@
       "source": "https://www.gov.uk/simpler-income-tax-simplified-expenses/vehicles",
       "source_title": "Simplified expenses if you're self-employed: Vehicles - GOV.UK",
       "confidence": "high",
-      "note": "Per mile. Applies to miles driven up to 5 April 2026."
+      "note": "Checked on the live official page on 07/11/2026: 45p before 6 April 2026. Per mile. Applies to miles driven up to 5 April 2026.",
+      "verified_on": "2026-11-07"
     },
     "use_of_home_flat_rates": {
       "value": [
@@ -524,8 +581,9 @@
       "label": "Default accounting basis for the self-employed",
       "source": "https://www.gov.uk/simpler-income-tax-cash-basis",
       "source_title": "Cash basis - GOV.UK",
-      "confidence": "medium",
-      "note": "Finance Act 2024 change. Not re-verified against the live page in this session (web search budget exhausted)."
+      "confidence": "high",
+      "note": "Checked on the live official page on 07/11/2026: 'Cash basis accounting is the standard way to record your income and expenses if you're a sole trader or partner'; 'You can choose to use traditional accounting instead'. Finance Act 2024 change. Not re-verified against the live page in this session (web search budget exhausted).",
+      "verified_on": "2026-11-07"
     },
     "sa_registration_deadline": {
       "value": "2027-10-05",
@@ -534,7 +592,8 @@
       "source": "https://www.gov.uk/self-assessment-tax-returns/deadlines",
       "source_title": "Self Assessment tax returns: Deadlines - GOV.UK",
       "confidence": "high",
-      "note": "Rule: 5 October following the end of the tax year. For 2025/26 income the deadline was 2026-10-05 (already passed). If registered late, HMRC sets a filing deadline 3 months from the date of its notice; payment is still due 31 January."
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page. Rule: 5 October following the end of the tax year. For 2025/26 income the deadline was 2026-10-05 (already passed). If registered late, HMRC sets a filing deadline 3 months from the date of its notice; payment is still due 31 January.",
+      "verified_on": "2026-11-07"
     },
     "sa_paper_return_deadline_2025_26": {
       "value": "2026-10-31",
@@ -543,7 +602,8 @@
       "source": "https://www.gov.uk/self-assessment-tax-returns/deadlines",
       "source_title": "Self Assessment tax returns: Deadlines - GOV.UK",
       "confidence": "high",
-      "note": "Must be received by 23:59 on 31 October."
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page. Must be received by 23:59 on 31 October.",
+      "verified_on": "2026-11-07"
     },
     "sa_online_return_deadline_2025_26": {
       "value": "2027-01-31",
@@ -552,7 +612,8 @@
       "source": "https://www.gov.uk/self-assessment-tax-returns/deadlines",
       "source_title": "Self Assessment tax returns: Deadlines - GOV.UK",
       "confidence": "high",
-      "note": "23:59 on 31 January 2027. Same day: balancing payment for 2025/26 and first payment on account for 2026/27."
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page. 23:59 on 31 January 2027. Same day: balancing payment for 2025/26 and first payment on account for 2026/27.",
+      "verified_on": "2026-11-07"
     },
     "sa_paper_return_deadline": {
       "value": "2027-10-31",
@@ -561,7 +622,8 @@
       "source": "https://www.gov.uk/self-assessment-tax-returns/deadlines",
       "source_title": "Self Assessment tax returns: Deadlines - GOV.UK",
       "confidence": "high",
-      "note": "Rule: 31 October after the end of the tax year. MTD ITSA participants file their final return through software (online deadline applies)."
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page. Rule: 31 October after the end of the tax year. MTD ITSA participants file their final return through software (online deadline applies).",
+      "verified_on": "2026-11-07"
     },
     "sa_online_return_deadline": {
       "value": "2028-01-31",
@@ -570,7 +632,8 @@
       "source": "https://www.gov.uk/self-assessment-tax-returns/deadlines",
       "source_title": "Self Assessment tax returns: Deadlines - GOV.UK",
       "confidence": "high",
-      "note": "Rule: 31 January after the end of the tax year. Also the MTD ITSA tax return deadline for 2026/27."
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page. Rule: 31 January after the end of the tax year. Also the MTD ITSA tax return deadline for 2026/27.",
+      "verified_on": "2026-11-07"
     },
     "sa_balancing_payment_deadline": {
       "value": "2028-01-31",
@@ -579,7 +642,8 @@
       "source": "https://www.gov.uk/self-assessment-tax-returns/deadlines",
       "source_title": "Self Assessment tax returns: Deadlines - GOV.UK",
       "confidence": "high",
-      "note": "Rule: 31 January after the end of the tax year."
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page. Rule: 31 January after the end of the tax year.",
+      "verified_on": "2026-11-07"
     },
     "payments_on_account_dates": {
       "value": [
@@ -591,7 +655,8 @@
       "source": "https://www.gov.uk/understand-self-assessment-bill/payments-on-account",
       "source_title": "Understand your Self Assessment tax bill: Payments on account - GOV.UK",
       "confidence": "high",
-      "note": "Rule: 31 January in the tax year and 31 July after it. For 2025/26 the dates were 2026-01-31 and 2026-07-31."
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page. Rule: 31 January in the tax year and 31 July after it. For 2025/26 the dates were 2026-01-31 and 2026-07-31.",
+      "verified_on": "2026-11-07"
     },
     "payments_on_account_fraction": {
       "value": 0.5,
@@ -600,7 +665,8 @@
       "source": "https://www.gov.uk/understand-self-assessment-bill/payments-on-account",
       "source_title": "Understand your Self Assessment tax bill: Payments on account - GOV.UK",
       "confidence": "high",
-      "note": "Two instalments of 50% of the previous year's income tax + Class 4 NIC bill; balance (or repayment) settled on 31 January after the year. Can be reduced if income falls."
+      "note": "Checked on the live official page on 07/11/2026: 'Each payment is half of the tax you owed last year'. Two instalments of 50% of the previous year's income tax + Class 4 NIC bill; balance (or repayment) settled on 31 January after the year. Can be reduced if income falls.",
+      "verified_on": "2026-11-07"
     },
     "payments_on_account_threshold": {
       "value": 1000,
@@ -609,7 +675,8 @@
       "source": "https://www.gov.uk/understand-self-assessment-bill/payments-on-account",
       "source_title": "Understand your Self Assessment tax bill: Payments on account - GOV.UK",
       "confidence": "high",
-      "note": "Payments on account are not required if last year's SA bill was under 1,000 OR if 80% or more of the total tax was already deducted at source (PAYE, bank interest). Tests apply to the previous year's figures. A June 2026 consultation ('Timely Payments in ITSA') discusses changes, including PAYE-based payments on account from April 2029."
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page. Payments on account are not required if last year's SA bill was under 1,000 OR if 80% or more of the total tax was already deducted at source (PAYE, bank interest). Tests apply to the previous year's figures. A June 2026 consultation ('Timely Payments in ITSA') discusses changes, including PAYE-based payments on account from April 2029.",
+      "verified_on": "2026-11-07"
     },
     "payments_on_account_source_deduction_test": {
       "value": 0.8,
@@ -618,7 +685,8 @@
       "source": "https://www.gov.uk/hmrc-internal-manuals/self-assessment-legal-framework/salf303",
       "source_title": "SALF303 - Payment of tax: payments on account - HMRC internal manual - GOV.UK",
       "confidence": "high",
-      "note": "80% or more of the previous year's total income tax assessed deducted at source."
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page. 80% or more of the previous year's total income tax assessed deducted at source.",
+      "verified_on": "2026-11-07"
     },
     "sa_late_filing_penalties": {
       "value": {
@@ -637,10 +705,12 @@
       },
       "unit": "GBP",
       "label": "Self Assessment late filing penalties (current, non-MTD regime)",
-      "source": "https://www.gov.uk/government/publications/self-assessment-appeal-against-penalties-for-late-filing-and-late-payment-sa370/self-assessment-how-to-appeal-against-penalties-for-late-filing-and-late-payment",
-      "source_title": "Self Assessment: how to appeal against penalties for late filing and late payment - GOV.UK",
+      "source": "https://www.gov.uk/self-assessment-tax-returns/penalties",
+      "source_title": "Self Assessment tax returns: Penalties - GOV.UK",
       "confidence": "medium",
-      "note": "100 immediately (even if no tax due or tax paid on time); after 3 months 10/day up to 90 days (900); after 6 months 5% of tax due or 300 if greater. The 12-month penalty (another 5% or 300, higher if information deliberately withheld) is standard GOV.UK guidance (https://www.gov.uk/self-assessment-tax-returns/penalties) but was not re-confirmed in this session. Taxpayers mandated into MTD ITSA from 6 April 2026 move to the points-based regime instead (see mtd_itsa_late_submission_penalty)."
+      "note": "Checked on the live official page on 07/11/2026: initial £100 penalty; after 3 months £10 per day up to £900; after 6 months 5% of the tax due or £300, whichever is greater; after 12 months another 5% or £300. The previous source (SA370 appeal guidance) did not show these amounts. 100 immediately (even if no tax due or tax paid on time); after 3 months 10/day up to 90 days (900); after 6 months 5% of tax due or 300 if greater. The 12-month penalty (another 5% or 300, higher if information deliberately withheld) is standard GOV.UK guidance (https://www.gov.uk/self-assessment-tax-returns/penalties) but was not re-confirmed in this session. Taxpayers mandated into MTD ITSA from 6 April 2026 move to the points-based regime instead (see mtd_itsa_late_submission_penalty).",
+      "more_sources": [],
+      "verified_on": "2026-11-07"
     },
     "sa_late_payment_penalties": {
       "value": [
@@ -659,28 +729,32 @@
       ],
       "unit": "list",
       "label": "Self Assessment late payment penalties (current, non-MTD regime): 5% of unpaid tax at each point",
-      "source": "https://www.gov.uk/government/publications/self-assessment-appeal-against-penalties-for-late-filing-and-late-payment-sa370/self-assessment-how-to-appeal-against-penalties-for-late-filing-and-late-payment",
-      "source_title": "Self Assessment: how to appeal against penalties for late filing and late payment - GOV.UK",
+      "source": "https://www.gov.uk/self-assessment-tax-returns/penalties",
+      "source_title": "Self Assessment tax returns: Penalties - GOV.UK",
       "confidence": "high",
-      "note": "Plus late payment interest (see hmrc_late_payment_interest_rate). MTD ITSA participants are on the new late payment regime (mtd_itsa_late_payment_penalties)."
+      "note": "Checked on the live official page on 07/11/2026: 5% of the tax unpaid at 30 days, 6 months and 12 months, plus interest. Plus late payment interest (see hmrc_late_payment_interest_rate). MTD ITSA participants are on the new late payment regime (mtd_itsa_late_payment_penalties).",
+      "more_sources": [],
+      "verified_on": "2026-11-07"
     },
     "hmrc_late_payment_interest_rate": {
-      "value": 0.0775,
+      "value": 0.08,
       "unit": "rate",
-      "label": "HMRC late payment interest rate (Self Assessment and most taxes) in force since 9 January 2026",
+      "label": "HMRC late payment interest rate from 24 November 2026 (Bank Rate + 4%)",
       "source": "https://www.gov.uk/government/publications/rates-and-allowances-hmrc-interest-rates-for-late-and-early-payments/rates-and-allowances-hmrc-interest-rates",
       "source_title": "HMRC interest rates for late and early payments - GOV.UK",
       "confidence": "high",
-      "note": "Rule: Bank of England Bank Rate + 4% (margin raised from 2.5% to 4% on 6 April 2025). 3.75% + 4% = 7.75% from 9 January 2026, after the 18 December 2025 Bank Rate cut. Still valid while Bank Rate stays at 3.75%."
+      "note": "Checked on the live official page on 07/11/2026: 8.00% from 24 November 2026, after the Bank Rate rise to 4% on 5 November 2026; 7.75% from 9 January to 23 November 2026. Rule: Bank Rate + 4% (margin raised from 2.5% on 6 April 2025).",
+      "verified_on": "2026-11-07"
     },
     "hmrc_repayment_interest_rate": {
-      "value": 0.0275,
+      "value": 0.03,
       "unit": "rate",
-      "label": "HMRC repayment interest rate since 9 January 2026",
+      "label": "HMRC repayment interest rate from 24 November 2026 (Bank Rate - 1%, minimum 0.5%)",
       "source": "https://www.gov.uk/government/publications/rates-and-allowances-hmrc-interest-rates-for-late-and-early-payments/rates-and-allowances-hmrc-interest-rates",
       "source_title": "HMRC interest rates for late and early payments - GOV.UK",
       "confidence": "high",
-      "note": "Rule: Bank Rate - 1%, minimum 0.5%."
+      "note": "Checked on the live official page on 07/11/2026: 3.00% from 24 November 2026 (2.75% from 9 January to 23 November 2026). Rule: Bank Rate - 1%, minimum 0.5%.",
+      "verified_on": "2026-11-07"
     },
     "mtd_itsa_threshold_2026": {
       "value": 50000,
@@ -689,25 +763,30 @@
       "source": "https://www.gov.uk/guidance/sign-up-for-making-tax-digital-for-income-tax",
       "source_title": "Sign up for Making Tax Digital for Income Tax - GOV.UK",
       "confidence": "high",
-      "note": "Qualifying income = gross (before expenses) self-employment + property income. For the April 2026 cohort it is measured on the 2024/25 return (2 years before). The threshold itself is confirmed; the 'measured two years earlier' detail comes from GOV.UK guidance that could not be re-read live."
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page. Qualifying income = gross (before expenses) self-employment + property income. For the April 2026 cohort it is measured on the 2024/25 return (2 years before). The threshold itself is confirmed; the 'measured two years earlier' detail comes from GOV.UK guidance that could not be re-read live.",
+      "verified_on": "2026-11-07"
     },
     "mtd_itsa_threshold_2027": {
       "value": 30000,
       "unit": "GBP",
       "label": "MTD for Income Tax mandatory from 6 April 2027 if qualifying income exceeds",
-      "source": "https://www.gov.uk/government/collections/making-tax-digital-for-income-tax-for-sole-traders-and-landlords-step-by-step",
-      "source_title": "Making Tax Digital for Income Tax for sole traders and landlords: step by step - GOV.UK",
+      "source": "https://www.gov.uk/guidance/check-if-youre-eligible-for-making-tax-digital-for-income-tax",
+      "source_title": "Check if you're eligible for Making Tax Digital for Income Tax - GOV.UK",
       "confidence": "high",
-      "note": "Based on the 2025/26 tax return."
+      "note": "Checked on the live official page on 07/11/2026: qualifying income over £30,000 for 2025 to 2026: use it from 6 April 2027. Based on the 2025/26 tax return.",
+      "more_sources": [],
+      "verified_on": "2026-11-07"
     },
     "mtd_itsa_threshold_2028": {
       "value": 20000,
       "unit": "GBP",
       "label": "MTD for Income Tax mandatory from 6 April 2028 if qualifying income exceeds",
-      "source": "https://www.gov.uk/government/collections/making-tax-digital-for-income-tax-for-sole-traders-and-landlords-step-by-step",
-      "source_title": "Making Tax Digital for Income Tax for sole traders and landlords: step by step - GOV.UK",
+      "source": "https://www.gov.uk/guidance/check-if-youre-eligible-for-making-tax-digital-for-income-tax",
+      "source_title": "Check if you're eligible for Making Tax Digital for Income Tax - GOV.UK",
       "confidence": "medium",
-      "note": "Confirmed on GOV.UK pages; one older GOV.UK page presented this tier as a plan subject to legislation. Based on the 2026/27 tax return."
+      "note": "Checked on the live official page on 07/11/2026: qualifying income over £20,000 for 2026 to 2027: use it from 6 April 2028. Confirmed on GOV.UK pages; one older GOV.UK page presented this tier as a plan subject to legislation. Based on the 2026/27 tax return.",
+      "more_sources": [],
+      "verified_on": "2026-11-07"
     },
     "mtd_itsa_quarterly_deadlines_2026_27": {
       "value": [
@@ -718,10 +797,17 @@
       ],
       "unit": "list",
       "label": "MTD for Income Tax quarterly update deadlines, tax year 2026/27",
-      "source": "https://www.gov.uk/guidance/use-making-tax-digital-for-income-tax/updates",
-      "source_title": "Updates - Use Making Tax Digital for Income Tax - Guidance - GOV.UK",
+      "source": "https://www.gov.uk/guidance/use-making-tax-digital-for-income-tax/send-quarterly-updates",
+      "source_title": "Use Making Tax Digital for Income Tax: Send quarterly updates - GOV.UK",
       "confidence": "high",
-      "note": "Standard quarters 6 Apr-5 Jul, 6 Jul-5 Oct, 6 Oct-5 Jan, 6 Jan-5 Apr; calendar quarters (1 Apr-30 Jun etc.) may be elected, same deadlines. Updates are cumulative. Tax return (final declaration) for 2026/27 due 2028-01-31. Next deadline from 2026-10-20: 2026-11-07."
+      "note": "Checked on the live official page on 07/11/2026: deadlines 7 August, 7 November, 7 February and 7 May (standard and calendar update periods). Standard quarters 6 Apr-5 Jul, 6 Jul-5 Oct, 6 Oct-5 Jan, 6 Jan-5 Apr; calendar quarters (1 Apr-30 Jun etc.) may be elected, same deadlines. Updates are cumulative. Tax return (final declaration) for 2026/27 due 2028-01-31. Next deadline from 2026-10-20: 2026-11-07.",
+      "more_sources": [
+        {
+          "source": "https://www.gov.uk/guidance/use-making-tax-digital-for-income-tax/updates",
+          "source_title": "Updates - Use Making Tax Digital for Income Tax - Guidance - GOV.UK"
+        }
+      ],
+      "verified_on": "2026-11-07"
     },
     "mtd_itsa_late_submission_penalty": {
       "value": {
@@ -735,7 +821,8 @@
       "source": "https://www.gov.uk/guidance/penalties-for-making-tax-digital-for-income-tax",
       "source_title": "Penalties for Making Tax Digital for Income Tax - GOV.UK",
       "confidence": "medium",
-      "note": "1 point per missed deadline (quarterly update or annual return); 200 penalty when 4 points reached and 200 for each further missed deadline. No points for late quarterly updates during 2026/27 (first year), but the annual return and payments remain penalised. Below threshold, points expire after 24 months. Volunteers have different thresholds."
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page. 1 point per missed deadline (quarterly update or annual return); 200 penalty when 4 points reached and 200 for each further missed deadline. No points for late quarterly updates during 2026/27 (first year), but the annual return and payments remain penalised. Below threshold, points expire after 24 months. Volunteers have different thresholds.",
+      "verified_on": "2026-11-07"
     },
     "mtd_itsa_late_payment_penalties": {
       "value": {
@@ -755,7 +842,8 @@
       "source": "https://www.gov.uk/guidance/penalties-for-making-tax-digital-for-income-tax",
       "source_title": "Penalties for Making Tax Digital for Income Tax - GOV.UK",
       "confidence": "medium",
-      "note": "No penalty if paid (or time-to-pay agreed) within 15 days; 16-30 days: % of tax unpaid at day 15; 31+ days: % at day 15 + % at day 30 + annual rate charged daily from day 31 (max 2 years). In the first year a 30-day grace period applies once. The 4% figures for 2027/28 come from the GOV.UK penalties page (corrected 30 March 2026) and should be re-checked."
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page. No penalty if paid (or time-to-pay agreed) within 15 days; 16-30 days: % of tax unpaid at day 15; 31+ days: % at day 15 + % at day 30 + annual rate charged daily from day 31 (max 2 years). In the first year a 30-day grace period applies once. The 4% figures for 2027/28 come from the GOV.UK penalties page (corrected 30 March 2026) and should be re-checked.",
+      "verified_on": "2026-11-07"
     },
     "vat_standard_rate": {
       "value": 0.2,
@@ -764,7 +852,8 @@
       "source": "https://www.gov.uk/vat-rates",
       "source_title": "VAT rates - GOV.UK",
       "confidence": "high",
-      "note": "Default rate for most goods and services."
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page. Default rate for most goods and services.",
+      "verified_on": "2026-11-07"
     },
     "vat_reduced_rate": {
       "value": 0.05,
@@ -773,7 +862,8 @@
       "source": "https://www.gov.uk/vat-rates",
       "source_title": "VAT rates - GOV.UK",
       "confidence": "high",
-      "note": "E.g. domestic energy, children's car seats."
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page. E.g. domestic energy, children's car seats.",
+      "verified_on": "2026-11-07"
     },
     "vat_zero_rate": {
       "value": 0,
@@ -782,7 +872,8 @@
       "source": "https://www.gov.uk/vat-rates",
       "source_title": "VAT rates - GOV.UK",
       "confidence": "high",
-      "note": "Zero-rated supplies are taxable at 0% (e.g. most food, children's clothes, books); different from exempt supplies."
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page. Zero-rated supplies are taxable at 0% (e.g. most food, children's clothes, books); different from exempt supplies.",
+      "verified_on": "2026-11-07"
     },
     "vat_registration_threshold": {
       "value": 90000,
@@ -791,7 +882,8 @@
       "source": "https://www.gov.uk/how-vat-works/vat-thresholds",
       "source_title": "How VAT works: VAT thresholds - GOV.UK",
       "confidence": "high",
-      "note": "In force since 1 April 2024 (was 85,000). Budget 2025 Annex A lists 90,000 for April 2026 (https://www.gov.uk/government/publications/budget-2025-overview-of-tax-legislation-and-rates-ootlar/annex-a-rates-and-allowances). Register if taxable turnover exceeded 90,000 in the last 12 months, or is expected to exceed it in the next 30 days alone. Voluntary registration possible below. No multi-year freeze commitment found."
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page. In force since 1 April 2024 (was 85,000). Budget 2025 Annex A lists 90,000 for April 2026 (https://www.gov.uk/government/publications/budget-2025-overview-of-tax-legislation-and-rates-ootlar/annex-a-rates-and-allowances). Register if taxable turnover exceeded 90,000 in the last 12 months, or is expected to exceed it in the next 30 days alone. Voluntary registration possible below. No multi-year freeze commitment found.",
+      "verified_on": "2026-11-07"
     },
     "vat_deregistration_threshold": {
       "value": 88000,
@@ -800,7 +892,8 @@
       "source": "https://www.gov.uk/government/publications/vat-notice-7001-should-i-be-registered-for-vat/vat-notice-7001-supplement--2",
       "source_title": "VAT Notice 700/1: supplement - GOV.UK",
       "confidence": "high",
-      "note": "In force since 1 April 2024 (was 83,000). Deregistration optional if taxable turnover expected below 88,000 in the next 12 months."
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page. In force since 1 April 2024 (was 83,000). Deregistration optional if taxable turnover expected below 88,000 in the next 12 months.",
+      "verified_on": "2026-11-07"
     },
     "vat_frs_join_threshold": {
       "value": 150000,
@@ -809,7 +902,8 @@
       "source": "https://www.gov.uk/vat-flat-rate-scheme",
       "source_title": "VAT Flat Rate Scheme: Overview - GOV.UK",
       "confidence": "high",
-      "note": "Next 12 months, excluding VAT."
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page. Next 12 months, excluding VAT.",
+      "verified_on": "2026-11-07"
     },
     "vat_frs_leave_threshold": {
       "value": 230000,
@@ -818,7 +912,8 @@
       "source": "https://www.gov.uk/vat-flat-rate-scheme/if-your-circumstances-change",
       "source_title": "VAT Flat Rate Scheme: If your circumstances change - GOV.UK",
       "confidence": "high",
-      "note": "Checked on each anniversary of joining (last 12 months or expected next 12 months, including VAT) or if income in the next 30 days alone is expected above 230,000. May stay with HMRC agreement if expected to fall below 191,500. Must wait 12 months before rejoining."
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page. Checked on each anniversary of joining (last 12 months or expected next 12 months, including VAT) or if income in the next 30 days alone is expected above 230,000. May stay with HMRC agreement if expected to fall below 191,500. Must wait 12 months before rejoining.",
+      "verified_on": "2026-11-07"
     },
     "vat_frs_limited_cost_trader_rate": {
       "value": 0.165,
@@ -827,7 +922,8 @@
       "source": "https://www.gov.uk/vat-flat-rate-scheme/how-much-you-pay",
       "source_title": "VAT Flat Rate Scheme: Work out your flat rate - GOV.UK",
       "confidence": "high",
-      "note": "Limited cost business = VAT-inclusive spend on relevant goods below 2% of VAT-inclusive turnover, or above 2% but below 1,000 a year. Excludes capital items, food/drink for the business or staff, vehicles, vehicle parts and fuel. Applied to VAT-inclusive turnover. Most service freelancers with low goods costs fall into this category, making the FRS rarely advantageous for them."
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page. Limited cost business = VAT-inclusive spend on relevant goods below 2% of VAT-inclusive turnover, or above 2% but below 1,000 a year. Excludes capital items, food/drink for the business or staff, vehicles, vehicle parts and fuel. Applied to VAT-inclusive turnover. Most service freelancers with low goods costs fall into this category, making the FRS rarely advantageous for them.",
+      "verified_on": "2026-11-07"
     },
     "vat_frs_first_year_discount": {
       "value": 0.01,
@@ -836,7 +932,8 @@
       "source": "https://www.gov.uk/vat-flat-rate-scheme/how-much-you-pay",
       "source_title": "VAT Flat Rate Scheme: Work out your flat rate - GOV.UK",
       "confidence": "high",
-      "note": "1 percentage point off the flat rate until the day before the first anniversary of VAT registration (limited cost business: 15.5%). Lost if joining the scheme late."
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page. 1 percentage point off the flat rate until the day before the first anniversary of VAT registration (limited cost business: 15.5%). Lost if joining the scheme late.",
+      "verified_on": "2026-11-07"
     },
     "vat_return_deadline": {
       "value": "1 calendar month and 7 days after the end of the VAT accounting period (usually quarterly), submitted through MTD-compatible software; payment due the same day.",
@@ -844,8 +941,9 @@
       "label": "VAT return and payment deadline",
       "source": "https://www.gov.uk/vat-returns/deadlines",
       "source_title": "VAT Returns: Deadlines - GOV.UK",
-      "confidence": "medium",
-      "note": "Standard rule, not re-verified against the live page in this session. MTD for VAT applies to all VAT-registered businesses since April 2022."
+      "confidence": "high",
+      "note": "Checked on the live official page on 07/11/2026: 'usually one calendar month and 7 days after the end of an accounting period. This is also the deadline for paying HMRC'. Standard rule, not re-verified against the live page in this session. MTD for VAT applies to all VAT-registered businesses since April 2022.",
+      "verified_on": "2026-11-07"
     },
     "invoice_requirements_all": {
       "value": [
@@ -864,7 +962,8 @@
       "source": "https://www.gov.uk/invoicing-and-taking-payment-from-customers/invoices-what-they-must-include",
       "source_title": "Invoicing and taking payment from customers: Invoices - what they must include - GOV.UK",
       "confidence": "high",
-      "note": "Non-VAT-registered businesses must not show VAT."
+      "note": "Checked on the live official page on 07/11/2026: list matches the page (unique identification number, supplier and customer details, description, supply date, invoice date, amounts, VAT, total owed). Non-VAT-registered businesses must not show VAT.",
+      "verified_on": "2026-11-07"
     },
     "invoice_requirements_sole_trader": {
       "value": [
@@ -877,7 +976,8 @@
       "source": "https://www.gov.uk/invoicing-and-taking-payment-from-customers/invoices-what-they-must-include",
       "source_title": "Invoicing and taking payment from customers: Invoices - what they must include - GOV.UK",
       "confidence": "high",
-      "note": "Legal basis: Companies Act 2006, Part 41 (business names), applicable to individuals trading under a name other than their own."
+      "note": "Checked on the live official page on 07/11/2026: 'your name and any business name being used; an address where any legal documents can be delivered to you if you are using a business name'. Legal basis: Companies Act 2006, Part 41 (business names), applicable to individuals trading under a name other than their own.",
+      "verified_on": "2026-11-07"
     },
     "invoice_requirements_limited_company": {
       "value": [
@@ -890,7 +990,8 @@
       "source": "https://www.gov.uk/running-a-limited-company/signs-stationery-and-promotional-material",
       "source_title": "Running a limited company: your responsibilities: Signs, stationery and promotional material - GOV.UK",
       "confidence": "medium",
-      "note": "Regulations: https://www.legislation.gov.uk/uksi/2015/17/contents (Company, Limited Liability Partnership and Business (Names and Trading Disclosures) Regulations 2015). GOV.UK's invoice checklist lists only the full company name; the registered number and office are formally required on business letters/order forms/websites, and an invoice sent as a letter or by email is commonly treated as such. Medium confidence on whether they are strictly mandatory on invoices themselves."
+      "note": "Checked on the live official page on 07/11/2026: business letters, order forms and websites must show the registered number, registered office address and where the company is registered; directors' names: all or none. Whether these are strictly mandatory on invoices stays an open question. Regulations: https://www.legislation.gov.uk/uksi/2015/17/contents (Company, Limited Liability Partnership and Business (Names and Trading Disclosures) Regulations 2015). GOV.UK's invoice checklist lists only the full company name; the registered number and office are formally required on business letters/order forms/websites, and an invoice sent as a letter or by email is commonly treated as such. Medium confidence on whether they are strictly mandatory on invoices themselves.",
+      "verified_on": "2026-11-07"
     },
     "vat_invoice_full_requirements": {
       "value": [
@@ -911,8 +1012,9 @@
       "label": "Full VAT invoice requirements",
       "source": "https://www.gov.uk/guidance/vat-guide-notice-700",
       "source_title": "VAT guide (VAT Notice 700) - GOV.UK",
-      "confidence": "medium",
-      "note": "Required for standard- or reduced-rated supplies to another VAT-registered business when the VAT-inclusive value exceeds 250 (or on request). A 'modified' invoice (VAT-inclusive values) may be used if the customer agrees. Items 1 to 11 re-checked on 2026-10-21 against search excerpts of VAT Notice 700 (section 16.3), HMRC manual VATREC5010 and the Value Added Tax Regulations 1995, regulation 14 (https://www.legislation.gov.uk/uksi/1995/2518/regulation/14): the discount item is the rate of any cash discount offered, and the invoice date is required where it differs from the time of supply. The time of supply (tax point) can differ from the date the goods or services were provided: an earlier invoice or payment, or an invoice issued soon after the supply, sets it (Notice 700, time of supply). Item 12 (reverse charge, zero-rate or exempt wording) not confirmed by those excerpts. A VAT invoice is normally issued within 30 days of the supply. See also https://www.gov.uk/guidance/record-keeping-for-vat-notice-70021 Amounts on a VAT invoice may be expressed in any currency (VAT Regulations 1995, regulation 14, as quoted in search excerpts), but the total VAT must be shown in sterling."
+      "confidence": "high",
+      "note": "Checked on the live official page on 07/11/2026: VAT Notice 700 section 16: sequential number, time of supply, supplier and customer details, description, unit price, rate of any cash discount, total VAT 'expressed in sterling'. Required for standard- or reduced-rated supplies to another VAT-registered business when the VAT-inclusive value exceeds 250 (or on request). A 'modified' invoice (VAT-inclusive values) may be used if the customer agrees. Items 1 to 11 re-checked on 2026-10-21 against search excerpts of VAT Notice 700 (section 16.3), HMRC manual VATREC5010 and the Value Added Tax Regulations 1995, regulation 14 (https://www.legislation.gov.uk/uksi/1995/2518/regulation/14): the discount item is the rate of any cash discount offered, and the invoice date is required where it differs from the time of supply. The time of supply (tax point) can differ from the date the goods or services were provided: an earlier invoice or payment, or an invoice issued soon after the supply, sets it (Notice 700, time of supply). Item 12 (reverse charge, zero-rate or exempt wording) not confirmed by those excerpts. A VAT invoice is normally issued within 30 days of the supply. See also https://www.gov.uk/guidance/record-keeping-for-vat-notice-70021 Amounts on a VAT invoice may be expressed in any currency (VAT Regulations 1995, regulation 14, as quoted in search excerpts), but the total VAT must be shown in sterling.",
+      "verified_on": "2026-11-07"
     },
     "vat_invoice_simplified_threshold": {
       "value": 250,
@@ -921,7 +1023,8 @@
       "source": "https://www.gov.uk/guidance/vat-guide-notice-700",
       "source_title": "VAT guide (VAT Notice 700) - GOV.UK",
       "confidence": "high",
-      "note": "Supply of 250 or less including VAT. A full invoice must still be issued if the customer asks for one."
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page. Supply of 250 or less including VAT. A full invoice must still be issued if the customer asks for one.",
+      "verified_on": "2026-11-07"
     },
     "vat_invoice_simplified_requirements": {
       "value": [
@@ -936,7 +1039,8 @@
       "source": "https://www.gov.uk/guidance/vat-guide-notice-700",
       "source_title": "VAT guide (VAT Notice 700) - GOV.UK",
       "confidence": "high",
-      "note": "Exempt supplies must not be included. Northern Ireland businesses cannot issue simplified invoices to EU customers for goods."
+      "note": "Checked on the live official page on 07/11/2026: VAT Notice 700, 16.6.1: supply of £250 or less; name, address and VAT registration number, time of supply, description, for each VAT rate the total including VAT and the rate. Exempt supplies must not be included. Northern Ireland businesses cannot issue simplified invoices to EU customers for goods.",
+      "verified_on": "2026-11-07"
     },
     "b2c_described_services_outside_uk": {
       "value": "Advertising, the services of consultants, engineers, lawyers, accountants and similar services, data processing and provision of information, and transfers of copyright and similar rights, supplied to a non-business customer who belongs outside the UK, are supplied where the customer belongs (outside the scope of UK VAT).",
@@ -944,8 +1048,9 @@
       "label": "Schedule 4A paragraph 16 VAT Act 1994: listed services to non-business customers outside the UK",
       "source": "https://www.gov.uk/hmrc-internal-manuals/vat-place-of-supply-services/vatposs13100",
       "source_title": "VATPOSS13100 - Other services to non-UK customers (B2C): Law - HMRC internal manual - GOV.UK",
-      "confidence": "medium",
-      "note": "Read on 2026-10-21 through search excerpts of the manual, which reproduces the statutory list (it also covers banking, financial and insurance services, the supply of staff and the hire of goods other than means of transport). Land-related services are excluded. Whether design or creative work counts as 'similar services' is not settled by the excerpts: the site lists only the categories above."
+      "confidence": "high",
+      "note": "Checked on the live official page on 07/11/2026: VATPOSS13100 reproduces VATA 1994 Schedule 4A paragraph 16: services (consultants, engineers, lawyers, accountants and similar, advertising, data processing, information, copyright transfers...) to a recipient who is not a taxable person and belongs outside the United Kingdom and the Isle of Man are supplied where the recipient belongs. Read on 2026-10-21 through search excerpts of the manual, which reproduces the statutory list (it also covers banking, financial and insurance services, the supply of staff and the hire of goods other than means of transport). Land-related services are excluded. Whether design or creative work counts as 'similar services' is not settled by the excerpts: the site lists only the categories above.",
+      "verified_on": "2026-11-07"
     },
     "digital_services_consumers": {
       "value": "Where the consumer belongs. EU VAT is due on all supplies of digital services by UK businesses to EU consumers, whatever their value: register for the non-Union scheme in one EU member state, or for VAT in each member state where you have consumers.",
@@ -953,8 +1058,9 @@
       "label": "Digital (electronically supplied) services to consumers: place of supply and EU VAT for UK businesses",
       "source": "https://www.gov.uk/guidance/the-vat-rules-if-you-supply-digital-services-to-private-consumers",
       "source_title": "VAT rules for supplies of digital services to consumers - GOV.UK",
-      "confidence": "medium",
-      "note": "Read on 2026-10-21 through search excerpts of GOV.UK pages (some withdrawn since 2021): the EU-wide threshold (£8,818 / EUR 10,000) no longer applies to UK businesses; UK VAT MOSS closed for supplies after 31 December 2020. Digital services are services supplied over the internet that are automated, with little or no human intervention. EU side: Directive 2006/112/EC (place of supply of electronically supplied services to non-taxable persons where they belong) and the non-Union scheme (rule eu_non_union_scheme). The site treats as digital services those delivered online with little or no human involvement, such as pre-recorded courses or downloads; live online teaching is not covered."
+      "confidence": "high",
+      "note": "Checked on the live official page on 07/11/2026: 'You must either: register for the Non-Union VAT MOSS scheme in an EU member state; register for VAT in each EU member state where you supply digital services to consumers'. Read on 2026-10-21 through search excerpts of GOV.UK pages (some withdrawn since 2021): the EU-wide threshold (£8,818 / EUR 10,000) no longer applies to UK businesses; UK VAT MOSS closed for supplies after 31 December 2020. Digital services are services supplied over the internet that are automated, with little or no human intervention. EU side: Directive 2006/112/EC (place of supply of electronically supplied services to non-taxable persons where they belong) and the non-Union scheme (rule eu_non_union_scheme). The site treats as digital services those delivered online with little or no human involvement, such as pre-recorded courses or downloads; live online teaching is not covered.",
+      "verified_on": "2026-11-07"
     },
     "vat_territory_isle_of_man": {
       "value": "The Isle of Man is treated as part of the UK for VAT; the Channel Islands and Gibraltar are outside the UK for VAT purposes.",
@@ -963,7 +1069,8 @@
       "source": "https://www.gov.uk/guidance/vat-place-of-supply-of-services-notice-741a",
       "source_title": "Place of supply of services (VAT Notice 741A) - GOV.UK",
       "confidence": "high",
-      "note": "Read on 2026-10-21 through search excerpts of Notice 741A and HMRC manual VATPOSS03500 (territory of the UK for VAT purposes). VAT in the Isle of Man is charged under Manx law, which largely mirrors UK rules."
+      "note": "Checked on the live official page on 07/11/2026: Notice 741A: the Isle of Man is treated as part of the UK for VAT; no VAT in the Channel Islands or Gibraltar, outside the UK for VAT purposes. Read on 2026-10-21 through search excerpts of Notice 741A and HMRC manual VATPOSS03500 (territory of the UK for VAT purposes). VAT in the Isle of Man is charged under Manx law, which largely mirrors UK rules.",
+      "verified_on": "2026-11-07"
     },
     "outside_scope_evidence": {
       "value": "Keep commercial evidence that the customer is in business and belongs outside the UK; a valid VAT number is the best evidence for an EU customer. Without a number or other evidence, treat the customer as a non-business customer.",
@@ -972,7 +1079,7 @@
       "source": "https://www.gov.uk/hmrc-internal-manuals/vat-place-of-supply-services/vatposs06300",
       "source_title": "VATPOSS06300 - General rule: Supplies to relevant business customers (B2B) - HMRC internal manual - GOV.UK",
       "confidence": "high",
-      "note": "Read on 2026-10-21 through search excerpts of VATPOSS06300 and Notice 741A (paragraphs on evidence): certificates from fiscal authorities or other commercial documents showing the customer's activity can be accepted when no VAT number is available."
+      "note": "Partly checked on 07/11/2026: VATPOSS06300 says UK suppliers treating services as outside the scope 'will be required to retain evidence that their customer is in business (see VATPOSS06500)'; the 'VAT number as best evidence' wording was not found on VATPOSS06300 or VATPOSS06500. Read on 2026-10-21 through search excerpts of VATPOSS06300 and Notice 741A (paragraphs on evidence): certificates from fiscal authorities or other commercial documents showing the customer's activity can be accepted when no VAT number is available."
     },
     "outside_scope_vat_return_box6": {
       "value": "Include supplies outside the scope of UK VAT (Notice 741A) in box 6 of the VAT Return, excluding any VAT.",
@@ -981,7 +1088,8 @@
       "source": "https://www.gov.uk/guidance/how-to-fill-in-and-submit-your-vat-return-vat-notice-70012",
       "source_title": "How to fill in and submit your VAT Return (VAT Notice 700/12) - GOV.UK",
       "confidence": "high",
-      "note": "Notice 700/12 section 3.7, read on 2026-10-21 through search excerpts."
+      "note": "Checked on the live official page on 07/11/2026: Notice 700/12, 3.7: box 6 includes supplies outside the scope of UK VAT as described in Notice 741A, excluding any VAT. Notice 700/12 section 3.7, read on 2026-10-21 through search excerpts.",
+      "verified_on": "2026-11-07"
     },
     "outside_scope_not_taxable_turnover": {
       "value": "A taxable supply is a supply made in the UK which is not exempt: supplies outside the scope of UK VAT don't count towards the VAT registration threshold. A UK business that only supplies customers outside the UK, with supplies that would be taxable in the UK, can register voluntarily.",
@@ -990,7 +1098,8 @@
       "source": "https://www.gov.uk/government/publications/vat-notice-7001-should-i-be-registered-for-vat/vat-notice-7001-should-i-be-registered-for-vat",
       "source_title": "Who should register for VAT (VAT Notice 700/1) - GOV.UK",
       "confidence": "medium",
-      "note": "Read on 2026-10-21 through search excerpts: the definition of a taxable supply and the voluntary registration rule are quoted from Notice 700/1; the exclusion of outside-the-scope supplies from taxable turnover follows from that definition."
+      "note": "Checked on the live official page on 07/11/2026: Notice 700/1, 2.3: 'A taxable supply is any supply made in the UK which is not exempt from VAT'; voluntary registration possible for 'specified supplies'. That outside-the-scope supplies don't count towards the threshold follows from this definition. Read on 2026-10-21 through search excerpts: the definition of a taxable supply and the voluntary registration rule are quoted from Notice 700/1; the exclusion of outside-the-scope supplies from taxable turnover follows from that definition.",
+      "verified_on": "2026-11-07"
     },
     "late_payment_statutory_interest_margin": {
       "value": 0.08,
@@ -999,7 +1108,8 @@
       "source": "https://www.gov.uk/late-commercial-payments-interest-debt-recovery/charging-interest-commercial-debt",
       "source_title": "Late commercial payments: charging interest and debt recovery: Interest on late commercial payments - GOV.UK",
       "confidence": "high",
-      "note": "Statutory interest = 8% + Bank of England reference rate, simple interest: debt x rate x days late / 365. Business-to-business only. Does not apply if the contract provides a substantial contractual remedy (another rate). Act: https://www.legislation.gov.uk/ukpga/1998/20 ; rate set by the Late Payment of Commercial Debts (Rate of Interest) (No. 3) Order 2002: https://www.legislation.gov.uk/uksi/2002/1675/made"
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page. Statutory interest = 8% + Bank of England reference rate, simple interest: debt x rate x days late / 365. Business-to-business only. Does not apply if the contract provides a substantial contractual remedy (another rate). Act: https://www.legislation.gov.uk/ukpga/1998/20 ; rate set by the Late Payment of Commercial Debts (Rate of Interest) (No. 3) Order 2002: https://www.legislation.gov.uk/uksi/2002/1675/made",
+      "verified_on": "2026-11-07"
     },
     "late_payment_reference_dates": {
       "value": [
@@ -1017,29 +1127,37 @@
       "source": "https://www.gov.uk/late-commercial-payments-interest-debt-recovery/charging-interest-commercial-debt",
       "source_title": "Late commercial payments: charging interest and debt recovery: Interest on late commercial payments - GOV.UK",
       "confidence": "high",
-      "note": "The reference rate is fixed for the half-year in which the debt became overdue and stays fixed for that debt (later Bank Rate changes do not alter it)."
+      "note": "Checked on the live official page on 07/11/2026: and on legislation.gov.uk: SI 2002/1675, article 4: 8% over the official dealing rate in force on 30th June (interest starting to run 1 July - 31 December) or 31st December (interest starting to run 1 January - 30 June) immediately before. The reference rate is fixed for the half-year in which the debt became overdue and stays fixed for that debt (later Bank Rate changes do not alter it).",
+      "verified_on": "2026-11-07",
+      "more_sources": [
+        {
+          "source": "https://www.legislation.gov.uk/uksi/2002/1675/article/4/made",
+          "source_title": "The Late Payment of Commercial Debts (Rate of Interest) (No. 3) Order 2002, article 4 - legislation.gov.uk"
+        }
+      ]
     },
     "boe_bank_rate": {
-      "value": 0.0375,
+      "value": 0.04,
       "unit": "rate",
       "label": "Bank of England Bank Rate (base rate) as of 2026-10-20",
       "source": "https://www.bankofengland.co.uk/monetary-policy/the-interest-rate-bank-rate",
       "source_title": "Interest rates and Bank Rate: our latest decision - Bank of England",
       "confidence": "high",
-      "note": "Cut from 4% to 3.75% at the MPC meeting ending 17 December 2025 (vote 5-4), announced and effective 18 December 2025 (https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2025/december-2025). Maintained at every 2026 meeting so far: Feb, Mar, Apr, Jun (7-2), Jul (6-3) and Sep 2026 (6-3, three members voted to raise to 4%: https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2026/september-2026). Next decisions: 2026-11-05 and 2026-12-17. Upside risk flagged by the MPC."
+      "note": "Raised from 3.75% to 4% at the MPC meeting ending 4 November 2026 (vote 8-1, one member for 4.25%), announced and effective 5 November 2026 (Bank of England database: '05 Nov 26 4.00'; read with the source reader on 07/11/2026). Previously 3.75% from 18 December 2025. Next decision: 17 December 2026; the Bank Rate on 31 December 2026 sets the Late Payment Act reference rate for debts overdue from 1 January to 30 June 2027.",
+      "verified_on": "2026-11-07"
     },
     "boe_bank_rate_effective_date": {
-      "value": "2025-12-18",
+      "value": "2026-11-05",
       "unit": "date",
       "label": "Date the current Bank Rate (3.75%) took effect",
-      "source": "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2025/december-2025",
+      "source": "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2026/november-2026",
       "source_title": "Bank Rate reduced to 3.75% - December 2025 Monetary Policy Summary and Minutes - Bank of England",
       "confidence": "high",
-      "note": "MPC meeting ended 17 December 2025; decision announced 18 December 2025."
+      "note": "MPC meeting ended 4 November 2026; decision announced 5 November 2026 (Monetary Policy Summary, November 2026, read on 07/11/2026).",
+      "verified_on": "2026-11-07"
     },
     "boe_next_mpc_dates": {
       "value": [
-        "2026-11-05",
         "2026-12-17",
         "2027-02-04",
         "2027-03-18",
@@ -1055,7 +1173,7 @@
       "source": "https://www.bankofengland.co.uk/monetary-policy/upcoming-mpc-dates",
       "source_title": "Monetary Policy Committee dates for 2026 and 2027 - Bank of England",
       "confidence": "high",
-      "note": "The 17 December 2026 decision determines the Bank Rate in force on 31 December 2026, i.e. the late payment reference rate for debts falling due 1 January - 30 June 2027."
+      "note": "Past dates removed on 07/11/2026 (5 November 2026: rise to 4%). Not re-read on the live page. The 17 December 2026 decision determines the Bank Rate in force on 31 December 2026, i.e. the late payment reference rate for debts falling due 1 January - 30 June 2027."
     },
     "late_payment_reference_rate_h1_2026": {
       "value": 0.0375,
@@ -1064,7 +1182,8 @@
       "source": "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2025/december-2025",
       "source_title": "Bank Rate reduced to 3.75% - December 2025 Monetary Policy Summary and Minutes - Bank of England",
       "confidence": "high",
-      "note": "Statutory interest for these debts = 11.75%."
+      "note": "Checked on the live official page on 07/11/2026: Bank of England database (read with the source reader on 07/11/2026): 3.75% from 18 December 2025 to 4 November 2026. Statutory interest for these debts = 11.75%.",
+      "verified_on": "2026-11-07"
     },
     "late_payment_reference_rate_current": {
       "value": 0.0375,
@@ -1073,7 +1192,8 @@
       "source": "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2026/june-2026",
       "source_title": "Bank Rate maintained at 3.75% - June 2026 Monetary Policy Summary and Minutes - Bank of England",
       "confidence": "high",
-      "note": "Bank Rate held at 3.75% at the 18 June 2026 decision and not changed before 30 June 2026 (next decision 30 July 2026, also a hold)."
+      "note": "Checked on the live official page on 07/11/2026: Bank of England database (read with the source reader on 07/11/2026): 3.75% on 30 June 2026. Bank Rate held at 3.75% at the 18 June 2026 decision and not changed before 30 June 2026 (next decision 30 July 2026, also a hold).",
+      "verified_on": "2026-11-07"
     },
     "late_payment_statutory_interest_rate_current": {
       "value": 0.1175,
@@ -1082,7 +1202,8 @@
       "source": "https://www.gov.uk/late-commercial-payments-interest-debt-recovery/charging-interest-commercial-debt",
       "source_title": "Late commercial payments: charging interest and debt recovery: Interest on late commercial payments - GOV.UK",
       "confidence": "high",
-      "note": "Applies to debts that became overdue between 1 January and 31 December 2026 (both half-years have a 3.75% reference rate). Example: 5,000 invoice paid 30 days late = 5,000 x 0.1175 x 30/365 = 48.29 interest, plus 70 fixed compensation. For debts falling due from 1 January 2027, recompute with the Bank Rate on 31 December 2026."
+      "note": "Checked on the live official page on 07/11/2026: 8% plus the reference rate of 3.75% (Bank Rate on 31 December 2025 and 30 June 2026, unchanged from 18 December 2025 to 4 November 2026 in the Bank of England database). Applies to debts that became overdue between 1 January and 31 December 2026 (both half-years have a 3.75% reference rate). Example: 5,000 invoice paid 30 days late = 5,000 x 0.1175 x 30/365 = 48.29 interest, plus 70 fixed compensation. For debts falling due from 1 January 2027, recompute with the Bank Rate on 31 December 2026.",
+      "verified_on": "2026-11-07"
     },
     "late_payment_fixed_compensation": {
       "value": [
@@ -1107,7 +1228,8 @@
       "source": "https://www.gov.uk/late-commercial-payments-interest-debt-recovery/claim-debt-recovery-costs",
       "source_title": "Late commercial payments: charging interest and debt recovery: Claim debt recovery costs on late payments - GOV.UK",
       "confidence": "high",
-      "note": "'amount' is a fixed GBP sum, not a rate. Up to 999.99: 40; 1,000 to 9,999.99: 70; 10,000 or more: 100. Can be claimed once per late payment; reasonable recovery costs above the fixed sum can also be claimed (section 5A of the Act)."
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page. 'amount' is a fixed GBP sum, not a rate. Up to 999.99: 40; 1,000 to 9,999.99: 70; 10,000 or more: 100. Can be claimed once per late payment; reasonable recovery costs above the fixed sum can also be claimed (section 5A of the Act).",
+      "verified_on": "2026-11-07"
     },
     "late_payment_default_due_period": {
       "value": {
@@ -1147,7 +1269,8 @@
       "source": "https://www.gov.uk/government/publications/rates-and-allowances-corporation-tax/rates-and-allowances-corporation-tax",
       "source_title": "Corporation Tax rates and allowances - GOV.UK",
       "confidence": "high",
-      "note": "Financial year 2026 = 1 April 2026 to 31 March 2027. Same as FY2025. Set by Finance Act 2025."
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page. Financial year 2026 = 1 April 2026 to 31 March 2027. Same as FY2025. Set by Finance Act 2025.",
+      "verified_on": "2026-11-07"
     },
     "corporation_tax_main_rate": {
       "value": 0.25,
@@ -1156,7 +1279,8 @@
       "source": "https://www.gov.uk/government/publications/rates-and-allowances-corporation-tax/rates-and-allowances-corporation-tax",
       "source_title": "Corporation Tax rates and allowances - GOV.UK",
       "confidence": "high",
-      "note": ""
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page.",
+      "verified_on": "2026-11-07"
     },
     "corporation_tax_lower_limit": {
       "value": 50000,
@@ -1165,7 +1289,8 @@
       "source": "https://www.gov.uk/guidance/corporation-tax-marginal-relief",
       "source_title": "Marginal Relief for Corporation Tax - GOV.UK",
       "confidence": "high",
-      "note": "Reduced proportionally for accounting periods under 12 months and divided by (1 + number of associated companies)."
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page. Reduced proportionally for accounting periods under 12 months and divided by (1 + number of associated companies).",
+      "verified_on": "2026-11-07"
     },
     "corporation_tax_upper_limit": {
       "value": 250000,
@@ -1174,16 +1299,24 @@
       "source": "https://www.gov.uk/guidance/corporation-tax-marginal-relief",
       "source_title": "Marginal Relief for Corporation Tax - GOV.UK",
       "confidence": "high",
-      "note": "Same adjustments as the lower limit."
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page. Same adjustments as the lower limit.",
+      "verified_on": "2026-11-07"
     },
     "corporation_tax_marginal_relief_fraction": {
       "value": 0.015,
       "unit": "rate",
       "label": "Standard marginal relief fraction (3/200)",
-      "source": "https://www.gov.uk/guidance/corporation-tax-marginal-relief",
-      "source_title": "Marginal Relief for Corporation Tax - GOV.UK",
+      "source": "https://www.gov.uk/government/publications/rates-and-allowances-corporation-tax/rates-and-allowances-corporation-tax",
+      "source_title": "Rates and allowances: Corporation Tax - GOV.UK",
       "confidence": "high",
-      "note": "3/200 = 0.015. Marginal relief = (U - A) x (N / A) x 3/200, where U = upper limit, A = augmented profits, N = taxable total profits. Tax = 25% x N - marginal relief. Example (no associates, N = A = 100,000): 25,000 - 150,000 x 0.015 = 22,750."
+      "note": "Checked on the live official page on 07/11/2026: 'Standard fraction 3/200'; the marginal relief guidance page does not give the fraction. 3/200 = 0.015. Marginal relief = (U - A) x (N / A) x 3/200, where U = upper limit, A = augmented profits, N = taxable total profits. Tax = 25% x N - marginal relief. Example (no associates, N = A = 100,000): 25,000 - 150,000 x 0.015 = 22,750.",
+      "more_sources": [
+        {
+          "source": "https://www.gov.uk/guidance/corporation-tax-marginal-relief",
+          "source_title": "Marginal Relief for Corporation Tax - GOV.UK"
+        }
+      ],
+      "verified_on": "2026-11-07"
     },
     "corporation_tax_effective_marginal_rate": {
       "value": 0.265,
@@ -1192,7 +1325,8 @@
       "source": "https://www.gov.uk/hmrc-internal-manuals/company-taxation-manual/ctm03925",
       "source_title": "CTM03925 - Small profits rate: financial year 2023 onwards: marginal relief - HMRC internal manual - GOV.UK",
       "confidence": "high",
-      "note": "Derived: 25% + 1.5% = 26.5% on each extra pound in the marginal band."
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page. Derived: 25% + 1.5% = 26.5% on each extra pound in the marginal band.",
+      "verified_on": "2026-11-07"
     },
     "corporation_tax_payment_deadline": {
       "value": "9 months and 1 day after the end of the accounting period (companies with profits up to 1.5m); CT600 return due 12 months after the end of the accounting period.",
@@ -1200,8 +1334,15 @@
       "label": "Corporation Tax payment and return deadlines",
       "source": "https://www.gov.uk/pay-corporation-tax",
       "source_title": "Pay your Corporation Tax bill - GOV.UK",
-      "confidence": "medium",
-      "note": "Standard rule, not re-verified against the live page in this session. Large companies pay by quarterly instalments."
+      "confidence": "high",
+      "note": "Checked on the live official page on 07/11/2026: 'You must pay your Corporation Tax 9 months and 1 day after the end of your accounting period' (profits up to £1.5 million); company tax return 'deadline is 12 months after the end of the accounting period it covers'. Standard rule, not re-verified against the live page in this session. Large companies pay by quarterly instalments.",
+      "verified_on": "2026-11-07",
+      "more_sources": [
+        {
+          "source": "https://www.gov.uk/company-tax-returns",
+          "source_title": "Company Tax Returns - GOV.UK"
+        }
+      ]
     },
     "dividend_allowance": {
       "value": 500,
@@ -1210,7 +1351,8 @@
       "source": "https://www.gov.uk/tax-on-dividends",
       "source_title": "Tax on dividends: Check if you have to pay tax on dividends - GOV.UK",
       "confidence": "high",
-      "note": "Unchanged from 2025/26 (500). Dividends within the allowance still use up band space. Dividends falling within the Personal Allowance are tax-free."
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page. Unchanged from 2025/26 (500). Dividends within the allowance still use up band space. Dividends falling within the Personal Allowance are tax-free.",
+      "verified_on": "2026-11-07"
     },
     "dividend_ordinary_rate": {
       "value": 0.1075,
@@ -1219,7 +1361,8 @@
       "source": "https://www.gov.uk/government/publications/changes-to-tax-rates-for-property-savings-and-dividend-income/change-to-tax-rates-for-property-savings-and-dividend-income-technical-note",
       "source_title": "Change to tax rates for property, savings and dividend income - technical note - GOV.UK",
       "confidence": "high",
-      "note": "Raised by 2 points from 8.75% from 6 April 2026 (Budget 26 November 2025, Finance Act 2026). UK-wide, including Scotland."
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page. Raised by 2 points from 8.75% from 6 April 2026 (Budget 26 November 2025, Finance Act 2026). UK-wide, including Scotland.",
+      "verified_on": "2026-11-07"
     },
     "dividend_upper_rate": {
       "value": 0.3575,
@@ -1228,7 +1371,8 @@
       "source": "https://www.gov.uk/government/publications/changes-to-tax-rates-for-property-savings-and-dividend-income/change-to-tax-rates-for-property-savings-and-dividend-income-technical-note",
       "source_title": "Change to tax rates for property, savings and dividend income - technical note - GOV.UK",
       "confidence": "high",
-      "note": "Raised from 33.75% from 6 April 2026. The s455 loans-to-participators charge is linked to this rate (35.75%)."
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page. Raised from 33.75% from 6 April 2026. The s455 loans-to-participators charge is linked to this rate (35.75%).",
+      "verified_on": "2026-11-07"
     },
     "dividend_additional_rate": {
       "value": 0.3935,
@@ -1237,7 +1381,8 @@
       "source": "https://www.gov.uk/tax-on-dividends",
       "source_title": "Tax on dividends: Check if you have to pay tax on dividends - GOV.UK",
       "confidence": "high",
-      "note": "Unchanged."
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page. Unchanged.",
+      "verified_on": "2026-11-07"
     },
     "dividend_rates_2025_26": {
       "value": {
@@ -1251,7 +1396,8 @@
       "source": "https://www.gov.uk/government/publications/rates-and-allowances-income-tax/income-tax-rates-and-allowances-current-and-past",
       "source_title": "Income Tax rates and allowances for current and previous tax years - GOV.UK",
       "confidence": "high",
-      "note": "'allowance' is in GBP. These are the rates used on 2025/26 returns (due 31 January 2027)."
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page. 'allowance' is in GBP. These are the rates used on 2025/26 returns (due 31 January 2027).",
+      "verified_on": "2026-11-07"
     },
     "class1_primary_threshold": {
       "value": 12570,
@@ -1260,7 +1406,8 @@
       "source": "https://www.gov.uk/guidance/rates-and-thresholds-for-employers-2026-to-2027",
       "source_title": "Rates and thresholds for employers 2026 to 2027 - GOV.UK",
       "confidence": "high",
-      "note": "242 per week, 1,048 per month. Same as 2025/26."
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page. 242 per week, 1,048 per month. Same as 2025/26.",
+      "verified_on": "2026-11-07"
     },
     "class1_upper_earnings_limit": {
       "value": 50270,
@@ -1269,7 +1416,8 @@
       "source": "https://www.gov.uk/guidance/rates-and-thresholds-for-employers-2026-to-2027",
       "source_title": "Rates and thresholds for employers 2026 to 2027 - GOV.UK",
       "confidence": "high",
-      "note": "967 per week. Same as 2025/26."
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page. 967 per week. Same as 2025/26.",
+      "verified_on": "2026-11-07"
     },
     "class1_lower_earnings_limit": {
       "value": 6708,
@@ -1278,7 +1426,8 @@
       "source": "https://www.gov.uk/guidance/rates-and-thresholds-for-employers-2026-to-2027",
       "source_title": "Rates and thresholds for employers 2026 to 2027 - GOV.UK",
       "confidence": "high",
-      "note": "129 per week, 559 per month. 2025/26: 125 per week (6,500 per year). Salary at or above the LEL earns a qualifying year for State Pension without paying NIC."
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page. 129 per week, 559 per month. 2025/26: 125 per week (6,500 per year). Salary at or above the LEL earns a qualifying year for State Pension without paying NIC.",
+      "verified_on": "2026-11-07"
     },
     "class1_employee_main_rate": {
       "value": 0.08,
@@ -1287,7 +1436,8 @@
       "source": "https://www.gov.uk/guidance/rates-and-thresholds-for-employers-2026-to-2027",
       "source_title": "Rates and thresholds for employers 2026 to 2027 - GOV.UK",
       "confidence": "high",
-      "note": "Category A. Same as 2025/26."
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page. Category A. Same as 2025/26.",
+      "verified_on": "2026-11-07"
     },
     "class1_employee_additional_rate": {
       "value": 0.02,
@@ -1296,7 +1446,8 @@
       "source": "https://www.gov.uk/guidance/rates-and-thresholds-for-employers-2026-to-2027",
       "source_title": "Rates and thresholds for employers 2026 to 2027 - GOV.UK",
       "confidence": "high",
-      "note": ""
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page.",
+      "verified_on": "2026-11-07"
     },
     "class1_secondary_threshold": {
       "value": 5000,
@@ -1305,7 +1456,8 @@
       "source": "https://www.gov.uk/guidance/rates-and-thresholds-for-employers-2026-to-2027",
       "source_title": "Rates and thresholds for employers 2026 to 2027 - GOV.UK",
       "confidence": "high",
-      "note": "96 per week, 417 per month. Lowered from 9,100 on 6 April 2025; same in 2025/26 and 2026/27. Directors use an annual earnings period. Under-21s, apprentices under 25 and veterans: employer rate 0% up to 50,270."
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page. 96 per week, 417 per month. Lowered from 9,100 on 6 April 2025; same in 2025/26 and 2026/27. Directors use an annual earnings period. Under-21s, apprentices under 25 and veterans: employer rate 0% up to 50,270.",
+      "verified_on": "2026-11-07"
     },
     "class1_employer_rate": {
       "value": 0.15,
@@ -1314,7 +1466,8 @@
       "source": "https://www.gov.uk/guidance/rates-and-thresholds-for-employers-2026-to-2027",
       "source_title": "Rates and thresholds for employers 2026 to 2027 - GOV.UK",
       "confidence": "high",
-      "note": "15% since 6 April 2025 (was 13.8%). Same in 2026/27. Class 1A (benefits in kind) also 15%."
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page. 15% since 6 April 2025 (was 13.8%). Same in 2026/27. Class 1A (benefits in kind) also 15%.",
+      "verified_on": "2026-11-07"
     },
     "employment_allowance": {
       "value": 10500,
@@ -1323,7 +1476,8 @@
       "source": "https://www.gov.uk/claim-employment-allowance",
       "source_title": "Employment Allowance: What you'll get - GOV.UK",
       "confidence": "high",
-      "note": "Same amount as 2025/26 (raised from 5,000 on 6 April 2025). NOT available to a company whose only employee paid above the secondary threshold is its sole director (typical one-person freelance limited company): https://www.gov.uk/hmrc-internal-manuals/national-insurance-manual/nim06545"
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page. Same amount as 2025/26 (raised from 5,000 on 6 April 2025). NOT available to a company whose only employee paid above the secondary threshold is its sole director (typical one-person freelance limited company): https://www.gov.uk/hmrc-internal-manuals/national-insurance-manual/nim06545",
+      "verified_on": "2026-11-07"
     },
     "auto_enrolment_2026_27": {
       "value": {
@@ -1354,7 +1508,8 @@
       "source": "https://www.gov.uk/guidance/understanding-off-payroll-working-ir35",
       "source_title": "Understanding off-payroll working (IR35) - GOV.UK",
       "confidence": "high",
-      "note": "Client guidance: https://www.gov.uk/guidance/off-payroll-working-for-clients ; size thresholds from 6 April 2025: https://www.gov.uk/hmrc-internal-manuals/employment-status-manual/esm10006a (older pages still show 10.2m / 5.1m)."
+      "note": "Checked on the live official page on 07/11/2026: the rules apply 'if the worker who provides services to a client through their own intermediary would have been an employee if they were providing their services directly to that client'; the deemed employer deducts Income Tax and employee National Insurance. Client guidance: https://www.gov.uk/guidance/off-payroll-working-for-clients ; size thresholds from 6 April 2025: https://www.gov.uk/hmrc-internal-manuals/employment-status-manual/esm10006a (older pages still show 10.2m / 5.1m).",
+      "verified_on": "2026-11-07"
     },
     "ir35_small_company_thresholds": {
       "value": {
@@ -1368,7 +1523,8 @@
       "source": "https://www.gov.uk/hmrc-internal-manuals/employment-status-manual/esm10006a",
       "source_title": "ESM10006A - Off-payroll working legislation: meaning of medium or large-sized non-public sector organisation: Size-threshold changes from 6 April 2025 - HMRC internal manual - GOV.UK",
       "confidence": "high",
-      "note": "Companies Act 2006 s.382 limits as amended by SI 2024/1303, for financial years beginning on or after 6 April 2025 (previously 10.2m turnover and 5.1m balance sheet). A client is small if it meets 2 or more of the 3 criteria; the status change takes effect from the following tax year."
+      "note": "Checked on the live official page on 07/11/2026: turnover over £15 million, balance sheet over £7.5 million, 50-employee limit unchanged. Companies Act 2006 s.382 limits as amended by SI 2024/1303, for financial years beginning on or after 6 April 2025 (previously 10.2m turnover and 5.1m balance sheet). A client is small if it meets 2 or more of the 3 criteria; the status change takes effect from the following tax year.",
+      "verified_on": "2026-11-07"
     },
     "late_payment_reference_rates": {
       "value": [
@@ -1398,16 +1554,8 @@
       "source": "https://www.bankofengland.co.uk/boeapps/database/Bank-Rate.asp",
       "source_title": "Bank of England - Official Bank Rate history",
       "confidence": "high",
-      "note": "Bank Rate on 31 Dec 2024: 4.75% (cut on 7 Nov 2024, next cut 6 Feb 2025); on 30 Jun 2025: 4.25% (8 May to 7 Aug 2025); on 31 Dec 2025 and 30 Jun 2026: 3.75% (since 18 Dec 2025). Statutory interest = 8% + reference rate: 12.75% (debts overdue in H1 2025), 12.25% (H2 2025), 11.75% (2026). Add the 31 Dec 2026 rate after the 17 Dec 2026 MPC decision."
-    },
-    "simplified_mileage_bicycle": {
-      "value": 0.2,
-      "unit": "GBP",
-      "label": "Simplified expenses / AMAP rate for bicycles, per mile",
-      "source": "https://www.gov.uk/simpler-income-tax-simplified-expenses/vehicles-",
-      "source_title": "GOV.UK - Simplified expenses: vehicles",
-      "confidence": "high",
-      "note": "20p per mile, unchanged."
+      "note": "Checked on the live official page on 07/11/2026: Bank of England database (read with the source reader on 07/11/2026): 4.75% from 7 November 2024, 4.50% from 6 February 2025, 4.25% from 8 May 2025, 4.00% from 7 August 2025, 3.75% from 18 December 2025, 4.00% from 5 November 2026. The Bank Rate on 31 December 2026 (debts overdue from 1 January 2027) depends on the 17 December 2026 decision. Bank Rate on 31 Dec 2024: 4.75% (cut on 7 Nov 2024, next cut 6 Feb 2025); on 30 Jun 2025: 4.25% (8 May to 7 Aug 2025); on 31 Dec 2025 and 30 Jun 2026: 3.75% (since 18 Dec 2025). Statutory interest = 8% + reference rate: 12.75% (debts overdue in H1 2025), 12.25% (H2 2025), 11.75% (2026). Add the 31 Dec 2026 rate after the 17 Dec 2026 MPC decision.",
+      "verified_on": "2026-11-07"
     },
     "pension_annual_allowance": {
       "value": {
@@ -1424,7 +1572,26 @@
       "source": "https://www.gov.uk/tax-on-your-private-pension/annual-allowance",
       "source_title": "Tax on your private pension contributions: Annual allowance - GOV.UK",
       "confidence": "high",
-      "note": "Relief limited to the higher of relevant UK earnings and £3,600 gross. Unused allowance can be carried forward from the 3 previous tax years. Relief at source: the provider adds 20%; higher and additional rate relief is claimed through Self Assessment."
+      "note": "Checked on the live official page on 07/11/2026: annual allowance £60,000; taper when threshold income is over £200,000 and adjusted income over £260,000, £1 less for every £2, minimum £10,000 (tapered allowance guidance); money purchase annual allowance £10,000 from 2023 (PTM056510, updated 2 November 2026); basic amount £3,600 (PTM044100); relief at source at the basic 20% rate. Relief limited to the higher of relevant UK earnings and £3,600 gross. Unused allowance can be carried forward from the 3 previous tax years. Relief at source: the provider adds 20%; higher and additional rate relief is claimed through Self Assessment.",
+      "verified_on": "2026-11-07",
+      "more_sources": [
+        {
+          "source": "https://www.gov.uk/guidance/pension-schemes-work-out-your-tapered-annual-allowance",
+          "source_title": "Pension schemes: work out your tapered annual allowance - GOV.UK"
+        },
+        {
+          "source": "https://www.gov.uk/hmrc-internal-manuals/pensions-tax-manual/ptm044100",
+          "source_title": "PTM044100 - Relief for contributions: relievable pension contributions - HMRC internal manual"
+        },
+        {
+          "source": "https://www.gov.uk/hmrc-internal-manuals/pensions-tax-manual/ptm056510",
+          "source_title": "PTM056510 - Annual allowance: money purchase annual allowance: general - HMRC internal manual"
+        },
+        {
+          "source": "https://www.gov.uk/tax-on-your-private-pension/pension-tax-relief",
+          "source_title": "Tax on your private pension contributions: Tax relief - GOV.UK"
+        }
+      ]
     },
     "vat_input_tax_recovery": {
       "value": "A VAT-registered business can usually reclaim the VAT charged on purchases used for its taxable business supplies, with a valid VAT invoice; not on purchases for non-business use or linked to exempt supplies (subject to the partial exemption rules).",
@@ -1432,8 +1599,9 @@
       "label": "Reclaiming VAT on business purchases (input tax)",
       "source": "https://www.gov.uk/hmrc-internal-manuals/vat-input-tax/vit12100",
       "source_title": "VIT12100 - VAT Input Tax basics: the basic right to deduct principles - HMRC internal manual (with VAT Notice 700/12 and Notice 706)",
-      "confidence": "medium",
-      "note": "Read on 21/10/2026 through search results on gov.uk, page not opened (blocked from the work environment)."
+      "confidence": "high",
+      "note": "Checked on the live official page on 07/11/2026: VIT12100: 'A business that is registered for VAT can claim back VAT incurred on goods or services that form a cost component of its taxable supplies' (conditions listed). Read on 21/10/2026 through search results on gov.uk, page not opened (blocked from the work environment).",
+      "verified_on": "2026-11-07"
     },
     "ni_annual_maximum_refund": {
       "value": "People who are both employed and self-employed may pay more National Insurance than the annual maximum; deferment of Class 4 ended from 2015/16, but HMRC may refund contributions paid above the maximum for previous tax years.",
@@ -1442,7 +1610,8 @@
       "source": "https://www.gov.uk/defer-national-insurance",
       "source_title": "Defer your National Insurance - GOV.UK",
       "confidence": "medium",
-      "note": "Read on 21/10/2026 through search results, page not opened. The annual maximum formula (SSCR 2001 reg. 100) is not modelled by the calculators: they may overstate Class 4 for people with a salary above the primary threshold."
+      "note": "Checked on the live official page on 07/11/2026: 'You cannot defer Class 4 contributions. You may be able to claim a refund for previous tax years.' The annual maximum formula stays an open question. Read on 21/10/2026 through search results, page not opened. The annual maximum formula (SSCR 2001 reg. 100) is not modelled by the calculators: they may overstate Class 4 for people with a salary above the primary threshold.",
+      "verified_on": "2026-11-07"
     },
     "uk_money_claim_issue_fee": {
       "value": [
@@ -3174,22 +3343,19 @@
     }
   },
   "open_questions": [
-    "Live GOV.UK, gov.scot and Bank of England pages could not be fetched (DNS/proxy block) and the shared web-search budget ran out before the end of the session: every figure comes from search excerpts of the official pages cited. A spot-check of the live pages is recommended before publishing a calculator.",
+    "Bank of England MPC decision on 17 December 2026: the Bank Rate on 31 December 2026 (4% since 5 November 2026) sets the Late Payment Act reference rate for debts falling due 1 January - 30 June 2027; add the row to late_payment_reference_rates.",
     "Simplified mileage 55p (from 6 April 2026): exact HMRC rule for sole traders whose period of account straddles 6 April 2026 (e.g. year to 31 December 2026). Commentary says the rate for each tax year applies; HMRC worked examples not read.",
-    "Bank of England MPC decisions on 5 November 2026 and 17 December 2026: the Bank Rate on 31 December 2026 sets the Late Payment Act reference rate for debts falling due 1 January - 30 June 2027 (three MPC members voted for a rise to 4% in September 2026). Also changes HMRC interest rates.",
     "Commercial Payments Bill [HL]: Lords third reading on 20 October 2026, Commons stages pending; check final text (60-day cap, mandatory statutory interest) and commencement date (reportedly no earlier than 2027).",
-    "MTD for Income Tax: confirm the GBP 20,000 threshold from April 2028 is fully legislated, and the 4%/4% late payment penalty percentages announced for 2027/28.",
     "Limited company invoices: whether the registered number and registered office are strictly mandatory on invoices (reg. 25 SI 2015/17 names business letters, order forms and websites) or only best practice.",
-    "Self Assessment 12-month late filing penalty (additional 5% or GBP 300) not re-confirmed in this session's sources.",
     "Autumn Budget 2026 date not identified: it will set 2027/28 figures (NIC uprating for Class 2/3 and the LEL/SPT, dividend and savings rates, VAT threshold).",
     "Budget 2025 also announced +2 point increases to savings income rates and new property income rates from April 2027: not needed for 2026/27, not verified in detail.",
-    "Cash basis as default since 2024/25, VAT return deadline (1 month + 7 days) and Corporation Tax payment deadline (9 months + 1 day) are standard rules recorded with medium confidence because the live pages were not re-read.",
     "Payments on account, source deduction test: GOV.UK and SALF303 say 'more than 80%', SAM121490 says '80 per cent or more'. The engine applies >= 0.8 (same result except at exactly 80%); to confirm on the legislation (TMA 1970 s59A and the 1996 regulations).",
     "National Insurance annual maximum (employed and self-employed): formula of SSCR 2001 reg. 100 to source and model in tax-uk.js (Class 4 overstated today for people with a salary above the primary threshold).",
     "Schedule 4A paragraph 16 'similar services': do design, copywriting, translation or software development supplied to a private client outside the UK count as consultancy-type services (outside the scope) or follow the general rule (UK VAT)? The overseas assistant answers 'it depends' for these services.",
     "Flat Rate Scheme (VAT Notice 733): are supplies outside the scope of UK VAT part of flat rate turnover? Exempt and zero-rated supplies are included; outside-the-scope supplies were not confirmed. The overseas assistant tells flat rate users to check Notice 733.",
     "Money Claim Online: does the 'less than £100,000' condition count interest? The small claims tool compares the total claimed, interest included (the cautious reading); to confirm on PD 7E.",
     "Small claims hearing fee (fee 2.1): is the band based on the amount claimed including interest, like the issue fee? The tool uses the total claimed; to confirm on the Civil Proceedings Fees Order 2008.",
-    "County Court enforcement fees after the 13 July 2026 increase (warrant of control, attachment of earnings, charging order, third party debt order): secondary sources disagree; not shown until the EX50 can be read."
+    "County Court enforcement fees after the 13 July 2026 increase (warrant of control, attachment of earnings, charging order, third party debt order): secondary sources disagree; not shown until the EX50 can be read.",
+    "Rules checked on the live official pages on 07/11/2026 (161 of 164 dated): still to read are the Bank of England list of upcoming MPC dates, the Commercial Payments Bill page (bills.parliament.uk) and HMRC's evidence guidance for B2B customers outside the UK (VATPOSS06500 and following)."
   ]
 }

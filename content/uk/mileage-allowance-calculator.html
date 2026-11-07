@@ -9,11 +9,11 @@
   "app": "UK Mileage Allowance Calculator",
   "scripts": ["tools/uk-mileage.js"],
   "rules": "uk",
-  "sources": ["simplified_mileage_car_first_10000", "simplified_mileage_car_after_10000", "simplified_mileage_motorcycle", "simplified_mileage_bicycle"],
+  "sources": ["simplified_mileage_car_first_10000", "simplified_mileage_car_after_10000", "simplified_mileage_motorcycle", "amap_bicycle_rate"],
   "priority": 0.85,
   "faq": [
-    ["What is the HMRC mileage rate for 2026/27?", "55p per mile for the first 10,000 business miles in the tax year by car or van, then 25p per mile. Motorcycles are 24p and bicycles 20p per mile. The car rate rose from 45p (unchanged since 2011) from 6 April 2026."],
-    ["Can sole traders use the mileage rates?", "Yes. Instead of working out the actual cost of running your vehicle, sole traders can use these flat rates as simplified expenses. Once you've used them for a vehicle, you must keep using them for as long as you use that vehicle in your business."],
+    ["What is the HMRC mileage rate for 2026/27?", "55p per mile for the first 10,000 business miles in the tax year by car or van, then 25p per mile. Motorcycles are 24p per mile. Employers can also pay 20p a mile tax-free for bicycles, a rate sole traders can't use. The car rate rose from 45p (unchanged since 2011) from 6 April 2026."],
+    ["Can sole traders use the mileage rates?", "Yes. Instead of working out the actual cost of running a car, goods vehicle or motorcycle, sole traders can use these flat rates as simplified expenses. There's no flat rate for bicycles. Once you've used them for a vehicle, you must keep using them for as long as you use that vehicle in your business."],
     ["My employer pays less than 55p. Can I claim the difference?", "Yes. If you use your own vehicle for work and your employer pays less than the approved rate, you can claim Mileage Allowance Relief on the difference from HMRC. Enter the rate your employer pays to see the amount."],
     ["Does commuting count?", "No. Travel between home and your normal place of work doesn't count. Trips to clients, temporary workplaces and suppliers do."]
   ]
@@ -62,9 +62,10 @@
     <tbody>
       <tr><td>Car or van</td><td>55p</td><td>25p</td></tr>
       <tr><td>Motorcycle</td><td>24p</td><td>24p</td></tr>
-      <tr><td>Bicycle</td><td>20p</td><td>20p</td></tr>
+      <tr><td>Bicycle (employees only)</td><td>20p</td><td>20p</td></tr>
     </tbody>
   </table>
   </div>
+  <p>The bicycle rate is an approved mileage payment for employees: the simplified expenses flat rates for sole traders cover cars, goods vehicles and motorcycles only.</p>
   <p>Sole traders deduct the result from their profit as an allowable expense; see what it saves you with the <a href="{{link:tax}}">self-employed tax calculator</a>.</p>
 </section>

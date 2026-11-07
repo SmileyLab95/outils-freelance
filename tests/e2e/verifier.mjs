@@ -2372,6 +2372,9 @@ const tests = {
     await page.fill("#m-paid", "");
     await page.selectOption("#m-vehicle", "motorcycle");
     check((await page.textContent("#m-total")).trim() === "£2,880.00", "UK mileage: motorcycle 12,000 × 24p = £2,880.00");
+    await page.selectOption("#m-vehicle", "bicycle");
+    check((await page.textContent("#m-total")).trim() === "£2,400.00" && (await page.textContent("#m-sub")).includes("Sole traders can't use this rate"),
+      "UK mileage: bicycle 12,000 × 20p = £2,400.00, employees only");
     await page.selectOption("#m-vehicle", "car");
   },
   async "ca/vehicle-expenses-calculator/"(page) {

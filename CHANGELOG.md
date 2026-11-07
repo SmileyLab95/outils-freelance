@@ -1,5 +1,20 @@
 # Journal des modifications
 
+## 2026-11-07 (soir) — Royaume-Uni : règles revérifiées sur les pages officielles en direct
+
+- GOV.UK étant désormais lisible directement, **161 des 164 règles britanniques** ont été contrôlées sur leur page
+  officielle en direct (valeur retrouvée dans son contexte) et datées ; huit sources mal ciblées corrigées (pénalités
+  de Self Assessment, seuils et échéances de Making Tax Digital, fraction de la *marginal relief*, classe 2 de 2025/26,
+  intérêts de retard : texte de l'ordonnance de 2002 sur legislation.gov.uk, déclaration de l'impôt sur les sociétés).
+- **Taux directeur de la Banque d'Angleterre relevé à 4 % le 5 novembre 2026** (règle mise à jour) ; intérêts du HMRC
+  à 8,00 % (retard) et 3,00 % (remboursement) à partir du 24 novembre 2026. Les intérêts légaux de retard des dettes
+  échues en 2026 restent à 11,75 % (taux de référence des 31/12/2025 et 30/06/2026) ; pour 2027, l'outil suppose 4 %
+  jusqu'à la décision du 17 décembre.
+- **Correction** : le taux vélo de 20p par mille est un remboursement des **salariés** (*approved mileage payments*),
+  pas un frais simplifié de l'indépendant (voitures, utilitaires et motos seulement) ; calculateur britannique des
+  indemnités kilométriques et sa règle corrigés, parcours navigateur complété.
+- Règle « classe 2 » et page de protection sociale : sans changement de fond.
+
 ## 2026-11-07 — Protection sociale au Royaume-Uni : maladie, maternité, fin d'activité
 
 - Nouvel outil **« Self-employed sick pay, maternity and out-of-work benefits »** (menu *Tax and admin* du

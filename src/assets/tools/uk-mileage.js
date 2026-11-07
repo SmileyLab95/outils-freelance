@@ -1,4 +1,5 @@
-/* UK mileage allowance : 55p puis 25p par mille (voiture), 24p (moto), 20p (vélo), et Mileage Allowance Relief. */
+/* UK mileage allowance : 55p puis 25p par mille (voiture), 24p (moto), 20p (vélo, salariés seulement : pas de frais
+ * simplifiés à vélo pour les indépendants), et Mileage Allowance Relief. */
 (function () {
   "use strict";
   var OF = window.OF, R = window.OF_RULES;
@@ -18,7 +19,7 @@
       formula = OF.fmt(first) + " × " + Math.round(R.simplified_mileage_car_first_10000 * 100) + "p" +
         (rest ? " + " + OF.fmt(rest) + " × " + Math.round(R.simplified_mileage_car_after_10000 * 100) + "p" : "") + " = " + OF.money(total);
     } else {
-      var rate = vehicle === "motorcycle" ? R.simplified_mileage_motorcycle : R.simplified_mileage_bicycle;
+      var rate = vehicle === "motorcycle" ? R.simplified_mileage_motorcycle : R.amap_bicycle_rate;
       total = miles * rate;
       formula = OF.fmt(miles) + " × " + Math.round(rate * 100) + "p = " + OF.money(total);
     }
@@ -26,7 +27,9 @@
     $("m-total").textContent = OF.money(total);
     $("m-sub").textContent = paid > 0
       ? "Your employer pays " + OF.money(miles * paid) + ": you can claim Mileage Allowance Relief on " + OF.money(relief) + "."
-      : "Allowable expense for sole traders, or tax-free allowance an employer can pay.";
+      : vehicle === "bicycle"
+        ? "Tax-free allowance an employer can pay. Sole traders can't use this rate: the simplified expenses flat rates cover cars, goods vehicles and motorcycles only."
+        : "Allowable expense for sole traders, or tax-free allowance an employer can pay.";
     $("m-formula").textContent = formula;
   }
 
