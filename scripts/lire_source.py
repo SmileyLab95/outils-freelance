@@ -3,7 +3,7 @@
 Les règles du site sont vérifiées aux sources officielles avant d'être publiées (documentation/04-methode-de-travail.md).
 L'environnement de travail habituel n'a pas accès à plusieurs de ces sites (CNIL, Légifrance…) : ce script tourne dans
 GitHub Actions (.github/workflows/lire-source.yml), à la demande, et son résultat se lit dans le journal de l'exécution.
-Il ne lit que les sites officiels de la liste OFFICIELS et n'écrit rien dans le dépôt.
+Il ne lit que les sites officiels (liste OFFICIELS et domaines .gov) et n'écrit rien dans le dépôt.
 
 Usage : python3 scripts/lire_source.py <adresse> [mots à chercher, séparés par |, ou « * » pour tout le texte]
 Un mot suivi de « +N » (par exemple « Disclosure of information +4000 ») affiche les N caractères qui suivent chaque
@@ -21,21 +21,16 @@ import urllib.parse
 import urllib.request
 from datetime import datetime, timezone
 
-# Sites officiels (et leurs sous-domaines) des quatre pays et de l'Union européenne. « gouv.fr » est réservé aux
-# services de l'État (Légifrance, impots.gouv.fr, entreprendre.service-public.gouv.fr…) ; Assurance maladie (ameli.fr) et
-# France Travail pour la protection sociale ; Assemblée nationale et Sénat
-# pour les textes de loi ; banques centrales pour les taux ; opm.gov pour les jours fériés fédéraux des États-Unis ;
-# Sécurité sociale (ssa.gov), SBA, ministère du Travail, Réserve fédérale, Trésor, Congrès, USPTO et ville de Seattle ;
-# textes des lois américaines : eCFR et govinfo (règlements fédéraux), Code des États-Unis (Chambre des représentants),
-# lois et sites officiels de l'État et de la ville de New York, de l'Illinois et de la Californie (ca.gov) ; lois des
-# provinces canadiennes : Ontario (ontario.ca), Québec (gouv.qc.ca), Colombie-Britannique (gov.bc.ca), Alberta (alberta.ca).
+# Sites officiels (et leurs sous-domaines) des quatre pays et de l'Union européenne, en plus des domaines en .gov
+# (administrations américaines : IRS, Sécurité sociale, ministère du Travail, Réserve fédérale, Congrès, eCFR, États et
+# villes ; voir autorise). « gouv.fr » est réservé aux services de l'État (Légifrance, impots.gouv.fr,
+# entreprendre.service-public.gouv.fr…) ; Assurance maladie (ameli.fr) et France Travail pour la protection sociale ;
+# Assemblée nationale et Sénat pour les textes de loi ; banques centrales pour les taux ; lois des provinces
+# canadiennes : Ontario (ontario.ca), Québec (gouv.qc.ca), Colombie-Britannique (gov.bc.ca), Alberta (alberta.ca).
 OFFICIELS = (
     "gouv.fr", "cnil.fr", "service-public.fr", "urssaf.fr", "ameli.fr", "francetravail.fr", "assemblee-nationale.fr",
     "senat.fr", "inpi.fr", "banque-france.fr", "europa.eu",
     "gov.uk", "legislation.gov.uk", "ico.org.uk", "bankofengland.co.uk",
-    "irs.gov", "ftc.gov", "opm.gov", "ecfr.gov", "govinfo.gov", "uscode.house.gov", "nysenate.gov", "ny.gov", "nyc.gov",
-    "ssa.gov", "sba.gov", "dol.gov", "federalreserve.gov", "treasury.gov", "congress.gov", "uspto.gov", "seattle.gov",
-    "ilga.gov", "illinois.gov", "ca.gov",
     "canada.ca", "gc.ca", "revenuquebec.ca", "bankofcanada.ca", "ontario.ca", "gouv.qc.ca", "gov.bc.ca", "alberta.ca",
     "iana.org", "fnfe-mpe.org",
 )
@@ -52,10 +47,11 @@ ENTETES = "@entetes"
 
 
 def autorise(url):
-    """Vrai si l'adresse est en https et sur un site officiel de la liste (ou un de ses sous-domaines)."""
+    """Vrai si l'adresse est en https et sur un site officiel de la liste (ou un de ses sous-domaines), ou sur un
+    domaine en .gov : ce domaine est réservé aux administrations américaines (fédérales, États, villes)."""
     parts = urllib.parse.urlsplit(url)
     host = (parts.hostname or "").lower()
-    return parts.scheme == "https" and any(host == d or host.endswith("." + d) for d in OFFICIELS)
+    return parts.scheme == "https" and (host.endswith(".gov") or any(host == d or host.endswith("." + d) for d in OFFICIELS))
 
 
 class _Texte(html.parser.HTMLParser):
@@ -177,7 +173,7 @@ def main():
     mots = [m.strip() for m in (sys.argv[2] if len(sys.argv) > 2 else "").split("|") if m.strip()]
     avec_entetes, mots = options(mots)
     if not autorise(url):
-        sys.exit(f"Adresse refusée : seuls les sites officiels en https sont lus ({', '.join(OFFICIELS)}).")
+        sys.exit(f"Adresse refusée : seuls les sites officiels en https sont lus ({', '.join(OFFICIELS)}, domaines .gov).")
     demande = {"User-Agent": "Mozilla/5.0 (outils-freelance, verification de sources)",
                "Accept-Language": "fr-FR,fr;q=0.9,en;q=0.8"}
     if avec_entetes:
