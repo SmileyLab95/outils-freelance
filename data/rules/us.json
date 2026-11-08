@@ -482,10 +482,12 @@
       "value": 0.76,
       "unit": "USD",
       "label": "IRS business standard mileage rate per mile, miles driven 2026-07-01 to 2026-12-31",
-      "source": "https://tax.thomsonreuters.com/news/irs-announces-midyear-increase-in-standard-mileage-rates-for-business-medical-and-moving-expense-purposes/",
-      "source_title": "Thomson Reuters - IRS Announces Midyear Increase in Standard Mileage Rates for Business, Medical, and Moving Expense Purposes",
-      "confidence": "medium",
-      "note": "Mid-year increase announced by the IRS on 2026-07-13 (Announcement 2026-11, IRB 2026-29, modifying Notice 2026-10) because of fuel prices. Corroborated by SHRM, IFEBP and others, but the irs.gov page itself could not be read. Medical/moving rate 23.5 cents from 2026-07-01; charitable unchanged at 14 cents. A calculator must split 2026 miles by date driven."
+      "source": "https://www.irs.gov/irb/2026-29_IRB",
+      "source_title": "Internal Revenue Bulletin 2026-29 (Announcement 2026-11) - IRS",
+      "confidence": "high",
+      "note": "Read on 08/11/2026 with the « Lire une source officielle » tool: Announcement 2026-11 in IRB 2026-29, 'The revised standard mileage rates are: (1) Business 76 cents per mile (2) Medical and moving 23.5 cents per mile', for expenses paid or incurred on or after July 1, 2026; Notice 2026-10 rates continue to apply before July 1, 2026. Previous secondary source kept for history: https://tax.thomsonreuters.com/news/irs-announces-midyear-increase-in-standard-mileage-rates-for-business-medical-and-moving-expense-purposes/ (Thomson Reuters - IRS Announces Midyear Increase in Standard Mileage Rates for Business, Medical, and Moving Expense Purposes). Mid-year increase announced by the IRS on 2026-07-13 (Announcement 2026-11, IRB 2026-29, modifying Notice 2026-10) because of fuel prices. Corroborated by SHRM, IFEBP and others, but the irs.gov page itself could not be read. Medical/moving rate 23.5 cents from 2026-07-01; charitable unchanged at 14 cents. A calculator must split 2026 miles by date driven.",
+      "more_sources": [],
+      "verified_on": "2026-11-08"
     },
     "home_office_simplified_method": {
       "value": {

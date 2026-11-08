@@ -863,19 +863,21 @@
       },
       "unit": "object",
       "label": "Barème kilométrique des voitures (frais réels) : par puissance fiscale, montant = d × taux + forfait selon la tranche de distance annuelle d",
-      "source": "https://www.legifiscal.fr/actualites-fiscales/4477-ir-revalorisation-2026-bareme-indemnites-kilometriques.html",
-      "source_title": "Barème kilométrique (arrêté du 27 mars 2023), non revalorisé pour l'imposition des revenus 2025",
+      "source": "https://bofip.impots.gouv.fr/bofip/2185-PGP.html",
+      "source_title": "BOI-BAREME-000001 - Barème kilométrique applicable aux automobiles et aux deux-roues motorisés - BOFiP-Impôts",
       "confidence": "high",
-      "note": "Barème de l'arrêté du 27 mars 2023, inchangé pour les revenus 2023, 2024 et 2025 (déclarés en 2026) selon Legifiscal, L'argus et Legisocial. Coefficients concordants (CFDT-UFETAM, CAPEB). Clé « 3 » = 3 CV et moins, « 7 » = 7 CV et plus. Le barème de l'année suivante est publié au printemps."
+      "note": "Source officielle : BOFiP, BOI-BAREME-000001 (version en vigueur depuis le 20/07/2023, lue le 08/11/2026 avec l'outil de lecture des sources ; majoration de 20 % pour les véhicules électriques depuis l'imposition des revenus de 2020, CGI, ann. IV, art. 6 B, II). Previous secondary source kept for history: https://www.legifiscal.fr/actualites-fiscales/4477-ir-revalorisation-2026-bareme-indemnites-kilometriques.html (Barème kilométrique (arrêté du 27 mars 2023), non revalorisé pour l'imposition des revenus 2025). Barème de l'arrêté du 27 mars 2023, inchangé pour les revenus 2023, 2024 et 2025 (déclarés en 2026) selon Legifiscal, L'argus et Legisocial. Coefficients concordants (CFDT-UFETAM, CAPEB). Clé « 3 » = 3 CV et moins, « 7 » = 7 CV et plus. Le barème de l'année suivante est publié au printemps.",
+      "more_sources": []
     },
     "bareme_kilometrique_majoration_electrique": {
       "value": 0.2,
       "unit": "rate",
       "label": "Majoration du barème kilométrique pour les véhicules 100 % électriques",
-      "source": "https://www.largus.fr/actualite-automobile/indemnites-kilometriques-2026-le-bareme-auto-moto-et-scooter-pour-declarer-vos-impots-30046424.html",
-      "source_title": "L'argus - Indemnités kilométriques 2026",
+      "source": "https://bofip.impots.gouv.fr/bofip/2185-PGP.html",
+      "source_title": "BOI-BAREME-000001 - Barème kilométrique applicable aux automobiles et aux deux-roues motorisés - BOFiP-Impôts",
       "confidence": "high",
-      "note": "Le montant obtenu avec le barème est majoré de 20 % pour les véhicules électriques."
+      "note": "Source officielle : BOFiP, BOI-BAREME-000001 (version en vigueur depuis le 20/07/2023, lue le 08/11/2026 avec l'outil de lecture des sources ; majoration de 20 % pour les véhicules électriques depuis l'imposition des revenus de 2020, CGI, ann. IV, art. 6 B, II). Previous secondary source kept for history: https://www.largus.fr/actualite-automobile/indemnites-kilometriques-2026-le-bareme-auto-moto-et-scooter-pour-declarer-vos-impots-30046424.html (L'argus - Indemnités kilométriques 2026). Le montant obtenu avec le barème est majoré de 20 % pour les véhicules électriques.",
+      "more_sources": []
     },
     "calendrier_urssaf_declarations": {
       "value": "Déclaration mensuelle : chiffre d'affaires du mois M avant la fin du mois M + 1. Trimestrielle : 30 avril, 31 juillet, 31 octobre, 31 janvier. Échéance reportée au jour suivant si elle tombe un week-end ou un jour férié. Changement de périodicité : demande avant le 31 janvier de l'année concernée.",
