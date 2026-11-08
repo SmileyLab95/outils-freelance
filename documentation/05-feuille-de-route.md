@@ -376,7 +376,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   des comptes attend le choix de l'hébergeur et du domaine.
 - **Vérification outillée des règles (08/11/2026)** : workflow « Vérifier les règles sur leurs sources »
   (`scripts/verifier_regles.py`, D55), pages lues en parallèle. Règles datées après relecture : Royaume-Uni 161 sur
-  164, États-Unis 81 sur 95, France 83 sur 119, Canada 81 sur 135 (France : fiches d'Entreprendre.Service-Public
+  164, États-Unis 81 sur 95, France 90 sur 119, Canada 81 sur 135 (France : fiches d'Entreprendre.Service-Public
   utilisées quand Urssaf, Légifrance ou economie.gouv.fr refusent la lecture). Barème kilométrique français et taux kilométrique
   américain de juillet rattachés au BOFiP et à l'IRS ; SMIC mis à jour (12,31 €) ; calendrier de la facturation
   électronique, abattements et versement libératoire relus sur impots.gouv.fr ; Canada : Loi de l'impôt, Loi sur
@@ -388,7 +388,8 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   mention de franchise de TVA de 2027, crédit québécois, extensions de noms de domaine) ; plafond de la Sécurité
   sociale 2027 (ssa.gov refuse la lecture, 403) ; minimum de déduction QBI 2026 ; barème de la contribution santé de
   l'Ontario (seuils absents de la page ontario.ca : lire la *Taxation Act, 2007*) ; sources françaises restantes
-  (Urssaf, Légifrance, economie.gouv.fr). États sans impôt sur le revenu : 8 pages officielles sur 9 lues le
+  (Urssaf, Légifrance, economie.gouv.fr ; compte bancaire de l'EI, assurances, PER, régimes TNS et SASU à rattacher
+  aux fiches de service-public avec l'option « essai » du vérificateur). États sans impôt sur le revenu : 8 pages officielles sur 9 lues le
   08/11/2026 (Tennessee illisible) ; Washington taxera dès 2028 les revenus de plus d'un million de dollars.
 - **Règles britanniques revérifiées en direct (07/11/2026, soir)** : 161 règles sur 164 contrôlées sur leur page
   officielle (GOV.UK, legislation.gov.uk ; Banque d'Angleterre par l'outil de lecture) et datées ; 8 sources corrigées ;
@@ -396,7 +397,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   vélo de 20p ne vaut que pour les salariés. Restent à lire : dates des prochaines réunions de la Banque d'Angleterre,
   page du *Commercial Payments Bill*, preuves de l'activité d'un client étranger (VATPOSS06500).
 - **Accès réseau (07/11/2026)** : environnement cloud « Outils Freelance (sources officielles) » créé et approuvé par Ismail (GOV.UK, legislation.gov.uk, canada.ca, Légifrance, economie.gouv.fr, ameli.fr, urssaf.fr, autoentrepreneur.urssaf.fr). GOV.UK et legislation.gov.uk se lisent désormais directement. Les autres sites refusent eux-mêmes la lecture automatisée (réponse 403 pour Légifrance, ameli et economie.gouv.fr ; connexion coupée pour canada.ca et l'Urssaf), comme depuis l'outil de lecture des sources : aucun contournement de ces protections.
-- **En attente d'Ismail** (pas urgent) : pour les textes encore illisibles, deux voies au choix : (1) créer un compte sur PISTE (portail officiel des API de l'État, piste.gouv.fr) et y souscrire à l'API Légifrance, puis me donner l'identifiant par le formulaire sécurisé de la session (je ne le demande qu'à ce moment-là) ; (2) enregistrer en PDF, depuis son navigateur, les pages voulues et les déposer dans le dépôt (dossier `sources/`) : loi n° 75-1334 du 31 décembre 1975 (sous-traitance), articles R123-237 et L131-3 à L131-6, pages de l'Assurance maladie et de l'Urssaf sur l'arrêt maladie du micro-entrepreneur, jours fériés et pratiques de l'ARC sur canada.ca ; questions à poser à l'expert-comptable ou à l'avocat : l'indemnité forfaitaire
+- **En attente d'Ismail** (pas urgent) : supprimer sur GitHub la branche d'essai `verif-tmp` (un seul commit de test, sans effet sur le site : le proxy de la session refuse la suppression de branches) ; pour les textes encore illisibles, deux voies au choix : (1) créer un compte sur PISTE (portail officiel des API de l'État, piste.gouv.fr) et y souscrire à l'API Légifrance, puis me donner l'identifiant par le formulaire sécurisé de la session (je ne le demande qu'à ce moment-là) ; (2) enregistrer en PDF, depuis son navigateur, les pages voulues et les déposer dans le dépôt (dossier `sources/`) : loi n° 75-1334 du 31 décembre 1975 (sous-traitance), articles R123-237 et L131-3 à L131-6, pages de l'Assurance maladie et de l'Urssaf sur l'arrêt maladie du micro-entrepreneur, jours fériés et pratiques de l'ARC sur canada.ca ; questions à poser à l'expert-comptable ou à l'avocat : l'indemnité forfaitaire
   de 40 € s'applique-t-elle aux factures des professions libérales et des prestataires non commerçants (la fiche
   officielle F23211 la réserve aux « actes de commerce ») ? Pour un retard sur plusieurs semestres, faut-il appliquer à
   chaque semestre son taux (choix du calculateur, lecture littérale de l'article L441-10) ou garder le taux du semestre
