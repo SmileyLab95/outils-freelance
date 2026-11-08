@@ -331,7 +331,13 @@
       "source": "https://www.revenuquebec.ca/fr/entreprises/retenues-a-la-source-et-cotisations-de-lemployeur/calcul-des-retenues-et-des-cotisations/cotisations-au-rrq/maximum-des-gains-admissibles-et-taux-de-cotisation/",
       "source_title": "Maximum des gains admissibles et taux de cotisation au Régime de rentes du Québec - Revenu Québec",
       "confidence": "high",
-      "note": "Same as the CPP YMPE. General exemption $3,500; maximum contributory earnings $71,100."
+      "note": "Same as the CPP YMPE. General exemption $3,500; maximum contributory earnings $71,100.",
+      "more_sources": [
+        {
+          "source": "https://www.retraitequebec.gouv.qc.ca/en/professionals-employers/your-role-quebec-pension-plan/contributions-quebec-pension-plan-qpp",
+          "source_title": "Contributions to the Québec Pension Plan (QPP) - Retraite Québec"
+        }
+      ]
     },
     "qpp_rate_employee": {
       "value": 0.063,
@@ -340,7 +346,13 @@
       "source": "https://www.revenuquebec.ca/fr/entreprises/retenues-a-la-source-et-cotisations-de-lemployeur/calcul-des-retenues-et-des-cotisations/cotisations-au-rrq/maximum-des-gains-admissibles-et-taux-de-cotisation/",
       "source_title": "Maximum des gains admissibles et taux de cotisation au Régime de rentes du Québec - Revenu Québec",
       "confidence": "high",
-      "note": "The base rate was cut for 2026 to 10.6% combined (5.3% each), from 10.8% (5.4% each) in 2025. Employee maximum: $4,479.30."
+      "note": "The base rate was cut for 2026 to 10.6% combined (5.3% each), from 10.8% (5.4% each) in 2025. Employee maximum: $4,479.30.",
+      "more_sources": [
+        {
+          "source": "https://www.retraitequebec.gouv.qc.ca/en/professionals-employers/your-role-quebec-pension-plan/contributions-quebec-pension-plan-qpp",
+          "source_title": "Contributions to the Québec Pension Plan (QPP) - Retraite Québec"
+        }
+      ]
     },
     "qpp_rate_self_employed": {
       "value": 0.126,
@@ -349,7 +361,13 @@
       "source": "https://www.revenuquebec.ca/fr/citoyens/declaration-de-revenus/payer-ou-etre-rembourse/paiement-des-cotisations/cotisations-du-travailleur-autonome-ou-du-membre-dune-societe-de-personnes/cotisation-du-travailleur-autonome-ou-du-membre-dune-societe-de-personnes-au-regime-de-rentes-du-quebec/",
       "source_title": "Cotisation du travailleur autonome ou du membre d'une société de personnes au Régime de rentes du Québec - Revenu Québec",
       "confidence": "high",
-      "note": "2025 was 12.8%. Paid with the Québec return (Schedule L / TP-1)."
+      "note": "2025 was 12.8%. Paid with the Québec return (Schedule L / TP-1).",
+      "more_sources": [
+        {
+          "source": "https://www.retraitequebec.gouv.qc.ca/en/professionals-employers/your-role-quebec-pension-plan/contributions-quebec-pension-plan-qpp",
+          "source_title": "Contributions to the Québec Pension Plan (QPP) - Retraite Québec"
+        }
+      ]
     },
     "qpp_max_contribution_self_employed": {
       "value": 8958.6,
@@ -358,7 +376,13 @@
       "source": "https://www.revenuquebec.ca/fr/citoyens/declaration-de-revenus/payer-ou-etre-rembourse/paiement-des-cotisations/cotisations-du-travailleur-autonome-ou-du-membre-dune-societe-de-personnes/cotisation-du-travailleur-autonome-ou-du-membre-dune-societe-de-personnes-au-regime-de-rentes-du-quebec/",
       "source_title": "Cotisation du travailleur autonome ou du membre d'une société de personnes au Régime de rentes du Québec - Revenu Québec",
       "confidence": "high",
-      "note": "Calculated = 71,100 x 12.6% (= 2 x $4,479.30 employee maximum published by Revenu Québec)."
+      "note": "Calculated = 71,100 x 12.6% (= 2 x $4,479.30 employee maximum published by Revenu Québec).",
+      "more_sources": [
+        {
+          "source": "https://www.retraitequebec.gouv.qc.ca/en/professionals-employers/your-role-quebec-pension-plan/contributions-quebec-pension-plan-qpp",
+          "source_title": "Contributions to the Québec Pension Plan (QPP) - Retraite Québec"
+        }
+      ]
     },
     "qpp2_maximum_additional_earnings": {
       "value": 85000,
@@ -377,7 +401,13 @@
       "source": "https://www.revenuquebec.ca/fr/citoyens/declaration-de-revenus/payer-ou-etre-rembourse/paiement-des-cotisations/cotisations-du-travailleur-autonome-ou-du-membre-dune-societe-de-personnes/cotisation-du-travailleur-autonome-ou-du-membre-dune-societe-de-personnes-au-regime-de-rentes-du-quebec/",
       "source_title": "Cotisation du travailleur autonome ou du membre d'une société de personnes au Régime de rentes du Québec - Revenu Québec",
       "confidence": "high",
-      "note": "4% employee + 4% employer."
+      "note": "4% employee + 4% employer.",
+      "more_sources": [
+        {
+          "source": "https://www.retraitequebec.gouv.qc.ca/en/professionals-employers/your-role-quebec-pension-plan/contributions-quebec-pension-plan-qpp",
+          "source_title": "Contributions to the Québec Pension Plan (QPP) - Retraite Québec"
+        }
+      ]
     },
     "qpp2_max_contribution_self_employed": {
       "value": 832,
@@ -396,7 +426,13 @@
       "source": "https://www.revenuquebec.ca/fr/entreprises/retenues-a-la-source-et-cotisations-de-lemployeur/calcul-des-retenues-et-des-cotisations/cotisations-au-rqap/maximum-de-revenus-assurables-et-taux-de-cotisation/",
       "source_title": "Maximum de revenus assurables et taux de cotisation au Régime québécois d'assurance parentale - Revenu Québec",
       "confidence": "high",
-      "note": "2025: $98,000."
+      "note": "2025: $98,000.",
+      "more_sources": [
+        {
+          "source": "https://www.quebec.ca/entreprises-et-travailleurs-autonomes/administrer-gerer/embauche-gestion-personnel/assurance-parentale/taux-cotisations",
+          "source_title": "Taux de cotisation au Régime québécois d'assurance parentale - Québec.ca"
+        }
+      ]
     },
     "qpip_rate_self_employed": {
       "value": 0.00764,
