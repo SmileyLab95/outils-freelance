@@ -137,8 +137,9 @@
       "label": "Versement libératoire de l'impôt sur le revenu, en % du CA",
       "source": "https://www.impots.gouv.fr/professionnel/le-versement-liberatoire",
       "source_title": "Le versement libératoire - impots.gouv.fr (et fiche « Les régimes réservés aux petites entreprises » 2026)",
-      "confidence": "medium",
-      "note": "Taux fixés par l'art. 151-0 du CGI, appliqués au chiffre d'affaires hors taxes : 1 % (vente, fourniture de logement hors locations meublées), 1,7 % (prestations de services BIC), 2,2 % (BNC, Cipav comprise). Relus le 21/10/2026 par recherche sur impots.gouv.fr (page « Le versement libératoire » et fiche « Les régimes réservés aux petites entreprises » 2026), sans ouvrir la page (accès bloqué depuis l'environnement de travail)."
+      "confidence": "high",
+      "note": "Vérifiée le 08/11/2026 avec l'outil de vérification des règles (page officielle lue dans GitHub Actions, valeur relue dans son contexte) : « 1 % pour les entreprises de vente ou de fourniture de logement ; 1,7 % pour les entreprises réalisant des prestations de services ; 2,2 % pour les titulaires de bénéfices non commerciaux ». Taux fixés par l'art. 151-0 du CGI, appliqués au chiffre d'affaires hors taxes (Cipav comprise pour les BNC).",
+      "verified_on": "2026-11-08"
     },
     "vl_rfr_plafond_par_part_2026": {
       "value": 29315,
@@ -171,7 +172,8 @@
       "source": "https://www.impots.gouv.fr/particulier/questions/comment-declarer-les-revenus-provenant-de-mon-activite-dauto-entrepreneur",
       "source_title": "Comment déclarer les revenus provenant de mon activité de micro-entrepreneur ? - impots.gouv.fr",
       "confidence": "high",
-      "note": "71 % : vente de marchandises et fourniture de logement (y compris meublés de tourisme classés et chambres d'hôtes) ; 50 % : autres prestations de services BIC ; 34 % : BNC. Meublés de tourisme non classés : 30 % avec un plafond de 15 000 EUR (loi n° 2024-1039)."
+      "note": "Vérifiée le 08/11/2026 avec l'outil de vérification des règles (page officielle lue dans GitHub Actions, valeur relue dans son contexte) : « 71 % pour l'achat-revente ou la fourniture de logement relevant des BIC », « 50 % pour les services relevant des BIC », « 34 % pour les activités libérales et les prestations de services relevant » des BNC. Meublés de tourisme classés et chambres d'hôtes : 50 % selon la même page ; meublés de tourisme non classés : 30 % avec un plafond de 15 000 EUR (loi n° 2024-1039). Ces locations ne sont pas couvertes par les outils.",
+      "verified_on": "2026-11-08"
     },
     "micro_abattement_minimum": {
       "value": 305,
@@ -323,7 +325,7 @@
       "source": "https://entreprendre.service-public.fr/vosdroits/F23575",
       "source_title": "Impôt sur les sociétés (IS) - entreprendre.service-public.fr (art. 219 CGI)",
       "confidence": "medium",
-      "note": "Vérifiée le 08/11/2026 avec l'outil de vérification des règles (page officielle lue dans GitHub Actions, valeur relue dans son contexte). S'applique jusqu'à 42 500 EUR de bénéfice si le CA HT est inférieur à 10 MEUR, le capital entièrement libéré et détenu à 75 % au moins par des personnes physiques. Non revérifié en ligne pendant cette session (budget de recherche épuisé) ; taux et seuil en vigueur depuis 2023.",
+      "note": "Vérifiée le 08/11/2026 avec l'outil de vérification des règles (page officielle lue dans GitHub Actions, valeur relue dans son contexte). S'applique jusqu'à 42 500 EUR de bénéfice si le CA HT est inférieur à 10 MEUR, le capital entièrement libéré et détenu à 75 % au moins par des personnes physiques. Taux et seuil en vigueur depuis 2023.",
       "verified_on": "2026-11-08"
     },
     "is_seuil_taux_reduit": {
@@ -333,7 +335,7 @@
       "source": "https://entreprendre.service-public.fr/vosdroits/F23575",
       "source_title": "Impôt sur les sociétés (IS) - entreprendre.service-public.fr",
       "confidence": "medium",
-      "note": "Vérifiée le 08/11/2026 avec l'outil de vérification des règles (page officielle lue dans GitHub Actions, valeur relue dans son contexte). Pour un exercice de 12 mois (montant proratisé sinon). Non revérifié en ligne pendant cette session.",
+      "note": "Vérifiée le 08/11/2026 avec l'outil de vérification des règles (page officielle lue dans GitHub Actions, valeur relue dans son contexte). Pour un exercice de 12 mois (montant proratisé sinon).",
       "verified_on": "2026-11-08"
     },
     "is_taux_normal": {
@@ -343,7 +345,7 @@
       "source": "https://entreprendre.service-public.fr/vosdroits/F23575",
       "source_title": "Impôt sur les sociétés (IS) - entreprendre.service-public.fr",
       "confidence": "medium",
-      "note": "Vérifiée le 08/11/2026 avec l'outil de vérification des règles (page officielle lue dans GitHub Actions, valeur relue dans son contexte). Les contributions exceptionnelles de la LF 2026 visent les très grandes entreprises (CA >= 1 MdEUR) et ne concernent pas les freelances. Non revérifié en ligne pendant cette session.",
+      "note": "Vérifiée le 08/11/2026 avec l'outil de vérification des règles (page officielle lue dans GitHub Actions, valeur relue dans son contexte). Les contributions exceptionnelles de la LF 2026 visent les très grandes entreprises (CA >= 1 MdEUR) et ne concernent pas les freelances.",
       "verified_on": "2026-11-08"
     },
     "pfu_part_impot": {

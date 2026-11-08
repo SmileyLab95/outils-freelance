@@ -942,7 +942,7 @@
       "source": "https://www.gov.uk/vat-returns/deadlines",
       "source_title": "VAT Returns: Deadlines - GOV.UK",
       "confidence": "high",
-      "note": "Checked on the live official page on 07/11/2026: 'usually one calendar month and 7 days after the end of an accounting period. This is also the deadline for paying HMRC'. Standard rule, not re-verified against the live page in this session. MTD for VAT applies to all VAT-registered businesses since April 2022.",
+      "note": "Checked on the live official page on 07/11/2026: 'usually one calendar month and 7 days after the end of an accounting period. This is also the deadline for paying HMRC'. MTD for VAT applies to all VAT-registered businesses since April 2022.",
       "verified_on": "2026-11-07"
     },
     "invoice_requirements_all": {
@@ -1335,7 +1335,7 @@
       "source": "https://www.gov.uk/pay-corporation-tax",
       "source_title": "Pay your Corporation Tax bill - GOV.UK",
       "confidence": "high",
-      "note": "Checked on the live official page on 07/11/2026: 'You must pay your Corporation Tax 9 months and 1 day after the end of your accounting period' (profits up to £1.5 million); company tax return 'deadline is 12 months after the end of the accounting period it covers'. Standard rule, not re-verified against the live page in this session. Large companies pay by quarterly instalments.",
+      "note": "Checked on the live official page on 07/11/2026: 'You must pay your Corporation Tax 9 months and 1 day after the end of your accounting period' (profits up to £1.5 million); company tax return 'deadline is 12 months after the end of the accounting period it covers'. Large companies pay by quarterly instalments.",
       "verified_on": "2026-11-07",
       "more_sources": [
         {

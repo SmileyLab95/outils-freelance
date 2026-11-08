@@ -411,7 +411,8 @@
       "source": "https://www.irs.gov/pub/irs-pdf/f1040es.pdf",
       "source_title": "IRS - 2026 Form 1040-ES, Estimated Tax for Individuals",
       "confidence": "high",
-      "note": "February 1, 2027 because January 31, 2027 is a Sunday."
+      "note": "Checked on 08/11/2026 (source reader), 2026 Form 1040-ES, record of payments: '4 1/15/2027* ... * You do not have to make this payment if you file your 2026 tax return by February 1, 2027, and pay the entire balance due with your return.' February 1, 2027 because January 31, 2027 is a Sunday.",
+      "verified_on": "2026-11-08"
     },
     "estimated_tax_threshold": {
       "value": 1000,
@@ -502,14 +503,15 @@
       "label": "Deadline to furnish and file Form 1099-NEC for 2026 payments",
       "source": "https://www.irs.gov/instructions/i1099mec",
       "source_title": "IRS - Instructions for Forms 1099-MISC and 1099-NEC (Rev. December 2026)",
-      "confidence": "medium",
-      "note": "Rule: January 31 to both recipient and IRS; January 31, 2027 is a Sunday, so the next business day (Monday 2027-02-01) applies. Derived from the general rule, not read verbatim in the Dec 2026 instructions.",
+      "confidence": "high",
+      "note": "Checked on 08/11/2026 (source reader): the instructions say 'Section 6071(c) requires you to file Form 1099-NEC on or before January 31' and 'You are required to furnish the payee statements and file with the IRS by January 31'; 'If any date shown falls on a Saturday, Sunday, or legal holiday in the District of Columbia or where the return is to be filed, the due date is the next business day.' January 31, 2027 is a Sunday, so the date is Monday 2027-02-01 (derived from these two rules).",
       "more_sources": [
         {
           "source": "https://www.irs.gov/instructions/i1099gi",
           "source_title": "General Instructions for Certain Information Returns (2026) - IRS"
         }
-      ]
+      ],
+      "verified_on": "2026-11-08"
     },
     "form_1099_k_threshold": {
       "value": {
@@ -632,13 +634,14 @@
       "note": "Secondary source. Hawaii (general excise tax) and New Mexico (gross receipts tax) are gross receipts taxes. In the other states, most professional services (consulting, design, writing, legal, accounting) are not subject to sales tax, but each state lists specific taxable services. Always check the state revenue department. Tax Foundation sales tax breadth data (cited in a Wyoming legislature briefing) ranks HI, NM, SD as broadest bases."
     },
     "sales_tax_services_washington": {
-      "value": "Since 2025-10-01 (ESSB 5814), Washington retail sales tax applies to newly listed services, including information technology services (help desk, network support, IT consulting, training), certain advertising services, security and others. Professional services delivered electronically are generally not covered per DOR interim guidance. Penalty relief for periods 2025-10-01 to 2026-12-31.",
+      "value": "Since 2025-10-01 (ESSB 5814), Washington retail sales tax applies to newly listed services, including information technology services (help desk, network support, training, IT consulting, data processing and data entry), custom website development, certain advertising services, live presentations, and investigation and security services. New exclusions and exemptions took effect on 2026-07-01.",
       "unit": "text",
       "label": "Washington: sales tax extended to IT, advertising and other services",
       "source": "https://dor.wa.gov/taxes-rates/retail-sales-tax/services-newly-subject-retail-sales-tax",
       "source_title": "Washington Department of Revenue - Services newly subject to retail sales tax",
       "confidence": "high",
-      "note": "New exclusions took effect 2026-07-01; litigation pending. A 2026 bill (reported as ESSB 6346) may repeal most of the expansion from 2029 - status not confirmed."
+      "note": "Checked on 08/11/2026 (source reader): 'As of Oct. 1, 2025, a new law (ESSB 5814) requires that certain services now be taxed when sold'; the service table lists IT services, custom website development (web hosting and domain registration not included), advertising, live presentations and security services; 'Effective July 1, 2026, there are new exclusions and exemptions'. The page announces a temporary ESSB 5814 Penalty Relief Program (dates not given on the page) and ongoing legal proceedings. Two earlier statements were not found on the page and were removed: electronically delivered professional services generally not covered, and penalty relief from 2025-10-01 to 2026-12-31. A 2026 bill (reported as ESSB 6346) may repeal most of the expansion from 2029 - status not confirmed.",
+      "verified_on": "2026-11-08"
     },
     "sales_tax_services_maryland_it_rate": {
       "value": 0.03,
@@ -913,7 +916,7 @@
       "source": "https://www.irs.gov/businesses/small-businesses-self-employed/single-member-limited-liability-companies",
       "source_title": "Single member limited liability companies - IRS",
       "confidence": "high",
-      "note": "Read on 2026-10-22 through search excerpts of the IRS page and the Form SS-4 and Form 2553 instructions. A disregarded LLC is still a separate entity for employment and certain excise taxes."
+      "note": "Checked on 08/11/2026 (source reader): 'If a single-member LLC does not elect to be treated as a corporation, the LLC is a \"disregarded entity,\" and the LLC's activities should be reflected on its owner's federal tax return', generally on 'Form 1040 or 1040-SR Schedule C'; the owner 'is subject to the tax on net earnings from self employment in the same manner as a sole proprietorship'. A disregarded LLC is still a separate entity for employment and certain excise taxes. The Form 2553 part was read on 2026-10-22 through search excerpts of the Form 2553 instructions."
     },
     "us_sole_prop_default": {
       "value": "You're automatically considered a sole proprietorship if you do business activities but don't register as any other kind of business; you don't need to register it at the state level.",

@@ -53,6 +53,12 @@ class Recherche(unittest.TestCase):
         self.assertFalse(V.trouve("50,000", "profits under £250,000"), "pas dans 250 000")
         self.assertFalse(V.trouve("3.5", "rate 3.50 a week"), "3.5 n'est pas trouvé dans 3.50")
         self.assertTrue(V.trouve("12 570", V.normaliser("jusqu'à 12 570 €")), "espace fine insécable")
+        self.assertFalse(V.trouve("1er septembre", "effective depuis le 1er septembre 2026."), "date d'une autre année")
+        self.assertFalse(V.trouve("September 1", "from September 1, 2026"), "date d'une autre année")
+        self.assertTrue(V.trouve("31 January", "pay by 31 January each year"), "date sans année sur la page")
+        self.assertTrue(V.trouve("5%", "a 5% penalty in 2026"), "taux suivi d'une année")
+        self.assertEqual(V.statut({"value": "2027-09-01", "unit": "date"}, ["depuis le 1er septembre 2026"]),
+                         ("MANQUE", ["1 September 2027"]))
 
     def test_contexte(self):
         self.assertEqual(V.contexte("8%", "Top rate 48%. Statutory interest is 8% plus base rate", 12), "interest is 8% plus base r", "12 caractères de part et d'autre")

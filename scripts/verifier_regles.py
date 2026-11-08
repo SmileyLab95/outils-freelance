@@ -24,6 +24,7 @@ import re
 import sys
 import urllib.error
 import urllib.request
+from concurrent.futures import ThreadPoolExecutor
 from datetime import date
 from pathlib import Path
 
@@ -133,15 +134,23 @@ def normaliser(txt):
     return re.sub("[   ]", " ", txt).replace("’", "'")
 
 
+def motif(forme):
+    """Expression d'une forme délimitée : pas de chiffre collé avant ou après. Une date sans année (« 1er septembre »)
+    ne doit pas non plus être suivie d'une année : « 1er septembre 2026 » n'est pas la date de 2027."""
+    m = r"(?<![\d.,])" + re.escape(normaliser(forme)) + r"(?![\d]|[.,]\d)"
+    if any(mois.lower() in forme.lower() for mois in MOIS_EN + MOIS_AP + MOIS_FR):
+        m += r"(?!,?\s*\d{4}(?!\d))"
+    return m
+
+
 def trouve(forme, txt):
-    """Vrai si la forme figure dans le texte comme nombre délimité (pas de chiffre collé avant ou après)."""
-    motif = r"(?<![\d.,])" + re.escape(normaliser(forme)) + r"(?![\d]|[.,]\d)"
-    return re.search(motif, txt, flags=re.IGNORECASE) is not None
+    """Vrai si la forme figure dans le texte comme nombre délimité (voir motif)."""
+    return re.search(motif(forme), txt, flags=re.IGNORECASE) is not None
 
 
 def contexte(forme, txt, largeur=70):
     """Passage autour de la première occurrence délimitée d'une forme, pour relire la valeur dans sa phrase."""
-    m = re.search(r"(?<![\d.,])" + re.escape(normaliser(forme)) + r"(?![\d]|[.,]\d)", txt, flags=re.IGNORECASE)
+    m = re.search(motif(forme), txt, flags=re.IGNORECASE)
     return " ".join(txt[max(0, m.start() - largeur): m.end() + largeur].split()) if m else ""
 
 
@@ -198,12 +207,17 @@ def main(argv):
         choisies = set(argv[argv.index("--regles") + 1].split(","))
     regles = json.loads((RULES / f"{pays}.json").read_text(encoding="utf-8"))["values"]
     cache, lignes, compte = {}, [], {}
-    for cle, regle in regles.items():
-        if choisies is not None and cle not in choisies:
-            continue
-        if choisies is None and not toutes and regle.get("verified_on"):
-            continue
-        urls = [regle.get("source", "")] + [m.get("source", "") for m in regle.get("more_sources", [])]
+    retenues = {cle: regle for cle, regle in regles.items()
+                if (cle in choisies if choisies is not None else toutes or not regle.get("verified_on"))}
+    sources = {cle: [regle.get("source", "")] + [m.get("source", "") for m in regle.get("more_sources", [])]
+               for cle, regle in retenues.items()}
+    # Pages lues en parallèle (chacune une seule fois) : une page qui n'aboutit pas ne retarde pas les autres.
+    a_lire = sorted({u for urls in sources.values() for u in urls if officiel(u)})
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        for url, lu in zip(a_lire, pool.map(lambda u: lire(u, {}), a_lire)):
+            cache[url] = lu
+    for cle, regle in retenues.items():
+        urls = sources[cle]
         officielles = [u for u in urls if officiel(u)]
         lus = [lire(u, cache) for u in officielles]
         st, manque = statut(regle, [t for t, _ in lus], pays)
