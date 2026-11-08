@@ -156,7 +156,14 @@
       "source": "https://www.autoentrepreneur.urssaf.fr/portail/accueil/sinformer-sur-le-statut/lessentiel-du-statut.html",
       "source_title": "L'essentiel du statut - Autoentrepreneur.urssaf.fr ; diaporama Urssaf Auto-entrepreneur avril 2026 ; FAQ entreprises.gouv.fr",
       "confidence": "high",
-      "note": "Taux fixés selon la catégorie professionnelle : commerçants 0,1 %, artisans 0,3 %, professions libérales réglementées ou non 0,2 %. Pour une prestation de services BIC commerciale (commerçant), le taux est donc 0,1 % ; certains sites commerciaux indiquent 0,2 % ou 0,3 %, sans source officielle."
+      "note": "Vérifiée le 08/11/2026 avec l'outil de vérification des règles (pages officielles lues dans GitHub Actions, valeurs relues dans leur contexte ; Légifrance et l'Urssaf refusent la lecture automatique) : F23459 : « Pour une activité commerciale : le montant de la CFP s'élève à 0,1 % du montant annuel du CA », « Pour une activité artisanale : […] 0,3 % », « Pour une activité libérale : […] 0,2 % ». Taux fixés selon la catégorie professionnelle : commerçants 0,1 %, artisans 0,3 %, professions libérales réglementées ou non 0,2 %. Pour une prestation de services BIC commerciale (commerçant), le taux est donc 0,1 % ; certains sites commerciaux indiquent 0,2 % ou 0,3 %, sans source officielle.",
+      "more_sources": [
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F23459",
+          "source_title": "Contribution à la formation professionnelle des entrepreneurs individuels - Entreprendre.Service-Public.gouv.fr (fiche F23459)"
+        }
+      ],
+      "verified_on": "2026-11-08"
     },
     "versement_liberatoire_taux": {
       "value": {
@@ -293,7 +300,14 @@
       "source": "https://www.autoentrepreneur.urssaf.fr/portail/accueil/sinformer-sur-le-statut/lessentiel-du-statut.html",
       "source_title": "L'essentiel du statut - Autoentrepreneur.urssaf.fr (art. 1600 et 1601 CGI)",
       "confidence": "low",
-      "note": "NON VÉRIFIÉ pendant cette session : valeurs habituellement publiées par l'Urssaf, citées de mémoire, et le budget de recherche était épuisé. Les professions libérales ne paient pas cette taxe. À confirmer avant tout usage dans un calculateur."
+      "note": "Vérifiée le 08/11/2026 avec l'outil de vérification des règles (pages officielles lues dans GitHub Actions, valeurs relues dans leur contexte ; Légifrance et l'Urssaf refusent la lecture automatique) : F37483 : taxe CMA, prestations de services 0,48 % et achat-vente 0,22 % (cas général), 0,65 % et 0,29 % en Alsace, 0,83 % et 0,37 % en Moselle ; taxe CCI, prestations de services 0,044 %, vente de marchandises 0,015 %, artisans en double immatriculation CCI-CMA 0,007 %. NON VÉRIFIÉ pendant cette session : valeurs habituellement publiées par l'Urssaf, citées de mémoire, et le budget de recherche était épuisé. Les professions libérales ne paient pas cette taxe. À confirmer avant tout usage dans un calculateur.",
+      "more_sources": [
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F37483",
+          "source_title": "Taxes pour frais de chambre consulaire du micro-entrepreneur - Entreprendre.Service-Public.gouv.fr (fiche F37483)"
+        }
+      ],
+      "verified_on": "2026-11-08"
     },
     "ir_bareme_revenus_2025": {
       "value": [
@@ -400,7 +414,14 @@
       "source": "https://www.legifrance.gouv.fr/codes/id/LEGITEXT000006069577",
       "source_title": "Code général des impôts, art. 200 A - Légifrance",
       "confidence": "medium",
-      "note": "On peut opter à la place pour le barème progressif, avec un abattement de 40 % sur les dividendes ; l'option est globale pour tous les revenus de capitaux de l'année. Non revérifié en ligne pendant cette session."
+      "note": "Vérifiée le 08/11/2026 avec l'outil de vérification des règles (pages officielles lues dans GitHub Actions, valeurs relues dans leur contexte ; Légifrance et l'Urssaf refusent la lecture automatique) : impots.gouv.fr : « un prélèvement obligatoire de 31,4 % au total : 12,8 % au titre de l'impôt sur le revenu, 18,6 % au titre des prélèvements sociaux ». On peut opter à la place pour le barème progressif, avec un abattement de 40 % sur les dividendes ; l'option est globale pour tous les revenus de capitaux de l'année. Non revérifié en ligne pendant cette session.",
+      "more_sources": [
+        {
+          "source": "https://www.impots.gouv.fr/particulier/questions/jai-des-valeurs-mobilieres-comment-sont-elles-imposees",
+          "source_title": "J'ai des valeurs mobilières, comment sont-elles imposées ? - impots.gouv.fr"
+        }
+      ],
+      "verified_on": "2026-11-08"
     },
     "prelevements_sociaux_revenus_capital_2026": {
       "value": 0.186,
@@ -409,7 +430,18 @@
       "source": "https://www.legifrance.gouv.fr/codes/id/LEGITEXT000006073189",
       "source_title": "Code de la sécurité sociale, art. L136-7 (CSG sur les produits de placement), modifié par la LFSS 2026 (loi n° 2025-1403 du 30 décembre 2025)",
       "confidence": "medium",
-      "note": "La LFSS 2026 relève la CSG sur les revenus du capital de 1,4 point (9,2 % -> 10,6 %), ce qui porte le total de 17,2 % à 18,6 % ; le PFU passe donc de 30 % à 31,4 % sur les dividendes perçus en 2026. Restent à 17,2 %, d'après les commentaires : assurance-vie, épargne logement (PEL, CEL), plus-values immobilières, et peut-être les revenus fonciers. Cité de mémoire, non revérifié en ligne pendant cette session : à confirmer sur impots.gouv.fr ou urssaf.fr."
+      "note": "Vérifiée le 08/11/2026 avec l'outil de vérification des règles (pages officielles lues dans GitHub Actions, valeurs relues dans leur contexte ; Légifrance et l'Urssaf refusent la lecture automatique) : F2329 : CRDS 0,5 %, prélèvement de solidarité 7,5 %, « TOTAL 18,6 % » ; impots.gouv.fr : « un prélèvement obligatoire de 31,4 % au total : 12,8 % au titre de l'impôt sur le revenu, 18,6 % au titre des prélèvements sociaux ». La LFSS 2026 relève la CSG sur les revenus du capital de 1,4 point (9,2 % -> 10,6 %), ce qui porte le total de 17,2 % à 18,6 % ; le PFU passe donc de 30 % à 31,4 % sur les dividendes perçus en 2026. Restent à 17,2 %, d'après les commentaires : assurance-vie, épargne logement (PEL, CEL), plus-values immobilières, et peut-être les revenus fonciers. Cité de mémoire, non revérifié en ligne pendant cette session : à confirmer sur impots.gouv.fr ou urssaf.fr.",
+      "more_sources": [
+        {
+          "source": "https://www.service-public.gouv.fr/particuliers/vosdroits/F2329",
+          "source_title": "Prélèvements sociaux (CSG, CRDS…) sur les revenus du patrimoine et de placement - Service-Public.gouv.fr (fiche F2329)"
+        },
+        {
+          "source": "https://www.impots.gouv.fr/particulier/questions/jai-des-valeurs-mobilieres-comment-sont-elles-imposees",
+          "source_title": "J'ai des valeurs mobilières, comment sont-elles imposées ? - impots.gouv.fr"
+        }
+      ],
+      "verified_on": "2026-11-08"
     },
     "pfu_total_dividendes_2026": {
       "value": 0.314,
@@ -418,7 +450,18 @@
       "source": "https://www.legifrance.gouv.fr/codes/id/LEGITEXT000006069577",
       "source_title": "CGI art. 200 A + CSS art. L136-7 (LFSS 2026)",
       "confidence": "medium",
-      "note": "Si la hausse de la CSG n'était pas confirmée : 30 % (12,8 % + 17,2 %). Voir prelevements_sociaux_revenus_capital_2026."
+      "note": "Vérifiée le 08/11/2026 avec l'outil de vérification des règles (pages officielles lues dans GitHub Actions, valeurs relues dans leur contexte ; Légifrance et l'Urssaf refusent la lecture automatique) : impots.gouv.fr : « un prélèvement obligatoire de 31,4 % au total : 12,8 % au titre de l'impôt sur le revenu, 18,6 % au titre des prélèvements sociaux ». Si la hausse de la CSG n'était pas confirmée : 30 % (12,8 % + 17,2 %). Voir prelevements_sociaux_revenus_capital_2026.",
+      "more_sources": [
+        {
+          "source": "https://www.impots.gouv.fr/particulier/questions/jai-des-valeurs-mobilieres-comment-sont-elles-imposees",
+          "source_title": "J'ai des valeurs mobilières, comment sont-elles imposées ? - impots.gouv.fr"
+        },
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/actualites/A18796",
+          "source_title": "Évolution du prélèvement forfaitaire unique - Entreprendre.Service-Public.gouv.fr (actualité A18796)"
+        }
+      ],
+      "verified_on": "2026-11-08"
     },
     "tns_gerant_majoritaire_taux_global_approx": {
       "value": 0.45,
