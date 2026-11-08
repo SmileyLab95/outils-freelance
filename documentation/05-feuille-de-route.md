@@ -9,7 +9,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 
 ## Où en est-on ?
 
-*Mis à jour le 07/11/2026 (soir).*
+*Mis à jour le 08/11/2026.*
 
 - **Priorité (décision D10)** : le site et la plateforme d'abord ; noms de domaine, Gumroad et affiliation à la fin.
   Règle de qualité maximale pour tout produit ou service (D11, charte dans la [méthode](04-methode-de-travail.md#charte-qualité)).
@@ -374,6 +374,12 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   Z12-012 pour le BT-32 en franchise, la question 13 de [pays/ca.md](pays/ca.md) sur la TVQ, et le
   remplacement annoncé de la section 17 du *Victims and Prisoners Act 2024* sur les accords de confidentialité). La mise en ligne
   des comptes attend le choix de l'hébergeur et du domaine.
+- **Vérification outillée des règles (08/11/2026)** : workflow « Vérifier les règles sur leurs sources »
+  (`scripts/verifier_regles.py`, D55) ; États-Unis : 77 règles sur 95 datées après relecture ; barème kilométrique
+  français et taux kilométrique américain de juillet rattachés au BOFiP et à l'IRS. À faire : lancer l'outil pour la
+  France et le Canada ; remplacer les dernières sources non officielles (États sans impôt sur le revenu, services
+  taxables, lois de Californie et de Columbus, mention de franchise de TVA, crédit québécois, extensions de noms de
+  domaine) ; plafond de la Sécurité sociale 2027 (ssa.gov refuse la lecture, 403) ; minimum de déduction QBI 2026.
 - **Règles britanniques revérifiées en direct (07/11/2026, soir)** : 161 règles sur 164 contrôlées sur leur page
   officielle (GOV.UK, legislation.gov.uk ; Banque d'Angleterre par l'outil de lecture) et datées ; 8 sources corrigées ;
   taux directeur à 4 % depuis le 5 novembre 2026 (intérêts du HMRC à 8 % au 24 novembre) ; erreur corrigée : le taux

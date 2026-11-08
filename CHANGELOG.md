@@ -1,5 +1,19 @@
 # Journal des modifications
 
+## 2026-11-08 — Vérification des règles sur leurs sources : outil et États-Unis
+
+- Nouvel outil interne **« Vérifier les règles sur leurs sources »** (workflow GitHub à la demande,
+  `scripts/verifier_regles.py`) : lit les sources officielles des règles d'un pays et cherche chaque valeur sous ses
+  formes rédigées, avec le passage de la page pour la relire (décision D55). L'outil de lecture des sources sépare
+  désormais les cellules des tableaux et accepte les sites fédéraux américains (Sécurité sociale, SBA, Réserve
+  fédérale…) et la ville de Seattle.
+- **États-Unis** : 77 règles sur 95 vérifiées sur irs.gov (barèmes 2026, déduction standard, QBI, acomptes, 1099,
+  plafonds de retraite, FUTA, cotisations sociales, retenue de 24 %…) ; taux kilométrique de 76 cents au 1er juillet
+  2026 rattaché à l'annonce de l'IRS ; la page citée pour le taux de 20 % de la déduction QBI ayant changé, sources
+  remplacées. Le minimum de déduction QBI de 2026 (400 $) reste à confirmer sur une source officielle.
+- **France** : barème kilométrique et majoration de 20 % des véhicules électriques rattachés au BOFiP
+  (BOI-BAREME-000001), tous les coefficients relus, au lieu de sites d'information.
+
 ## 2026-11-07 (soir) — Royaume-Uni : règles revérifiées sur les pages officielles en direct
 
 - GOV.UK étant désormais lisible directement, **161 des 164 règles britanniques** ont été contrôlées sur leur page
