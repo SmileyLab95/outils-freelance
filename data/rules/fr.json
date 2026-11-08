@@ -1079,7 +1079,14 @@
       "source": "https://www.urssaf.fr/accueil/outils-documentation/taux-baremes/plafonds-securite-sociale.html",
       "source_title": "Plafonds de la Sécurité sociale - Urssaf.fr",
       "confidence": "high",
-      "note": "Sert au plafond général d'épargne retraite des versements 2026 (revenus 2025) : minimum 4 710 €, maximum 37 680 €."
+      "note": "Vérifiée le 08/11/2026 avec l'outil de vérification des règles (pages officielles lues dans GitHub Actions, valeurs relues dans leur contexte ; Légifrance refuse la lecture automatique) : brochure de l'impôt sur le revenu 2026 (revenus de 2025) : « 15 % de la fraction de bénéfice imposable comprise entre 47 100 € et 376 800 € », soit 1 et 8 PASS 2025 (47 100 × 8 = 376 800). Sert au plafond général d'épargne retraite des versements 2026 (revenus 2025) : minimum 4 710 €, maximum 37 680 €.",
+      "more_sources": [
+        {
+          "source": "https://www.impots.gouv.fr/www2/fichiers/documentation/brochure/ir_2026/pdf_som/12-charges_ded_rev_225a236.pdf",
+          "source_title": "Brochure pratique de l'impôt sur le revenu 2026, charges déductibles (impots.gouv.fr)"
+        }
+      ],
+      "verified_on": "2026-11-08"
     },
     "salarie_cotisations_2026": {
       "value": {
@@ -1160,7 +1167,18 @@
       "source": "https://www.legifrance.gouv.fr/codes/id/LEGITEXT000006069577",
       "source_title": "Code général des impôts, art. 154 bis - Légifrance",
       "confidence": "high",
-      "note": "10 % du bénéfice imposable dans la limite de 8 PASS + 15 % de la fraction comprise entre 1 et 8 PASS ; minimum 10 % du PASS. PASS et bénéfice de l'année du versement. Maximum 2026 : 88 911 €."
+      "note": "Vérifiée le 08/11/2026 avec l'outil de vérification des règles (pages officielles lues dans GitHub Actions, valeurs relues dans leur contexte ; Légifrance refuse la lecture automatique) : BOFiP BOI-IR-BASE-20-50-20 : 10 % du bénéfice imposable dans la limite de 8 PASS, plafond minimum de 10 % du PASS, et « 15 % de la quote-part du bénéfice comprise entre une fois et huit fois le » PASS ; brochure 2026 : « 15 % de la fraction de bénéfice imposable comprise entre 47 100 € et 376 800 € ». 10 % du bénéfice imposable dans la limite de 8 PASS + 15 % de la fraction comprise entre 1 et 8 PASS ; minimum 10 % du PASS. PASS et bénéfice de l'année du versement. Maximum 2026 : 88 911 €.",
+      "more_sources": [
+        {
+          "source": "https://bofip.impots.gouv.fr/bofip/1124-PGP.html/identifiant=BOI-IR-BASE-20-50-20-20260217",
+          "source_title": "BOFiP, BOI-IR-BASE-20-50-20 (version du 17/02/2026) : limites de déduction des cotisations et primes d'épargne retraite"
+        },
+        {
+          "source": "https://www.impots.gouv.fr/www2/fichiers/documentation/brochure/ir_2026/pdf_som/12-charges_ded_rev_225a236.pdf",
+          "source_title": "Brochure pratique de l'impôt sur le revenu 2026, charges déductibles (impots.gouv.fr)"
+        }
+      ],
+      "verified_on": "2026-11-08"
     },
     "per_plafond_general": {
       "value": {
@@ -1173,7 +1191,18 @@
       "source": "https://www.legifrance.gouv.fr/codes/id/LEGITEXT000006069577",
       "source_title": "Code général des impôts, art. 163 quatervicies - Légifrance",
       "confidence": "medium",
-      "note": "10 % des revenus d'activité professionnelle de l'année précédente (après abattement), retenus dans la limite de 8 PASS, au minimum 10 % du PASS de l'année précédente. Plafonds non utilisés reportables : le montant exact figure sur l'avis d'impôt (« plafond épargne retraite »)."
+      "note": "Vérifiée le 08/11/2026 avec l'outil de vérification des règles (pages officielles lues dans GitHub Actions, valeurs relues dans leur contexte ; Légifrance refuse la lecture automatique) : BOFiP BOI-IR-BASE-20-50-20 : plafond égal à 10 % des « revenus d'activité professionnelle de N-1, retenus dans la limite de 8 PASS (N-1) », et au moins « 10 % du montant annuel du plafond de la sécurité sociale (« plafond brut minimum ») ». 10 % des revenus d'activité professionnelle de l'année précédente (après abattement), retenus dans la limite de 8 PASS, au minimum 10 % du PASS de l'année précédente. Plafonds non utilisés reportables : le montant exact figure sur l'avis d'impôt (« plafond épargne retraite »).",
+      "more_sources": [
+        {
+          "source": "https://bofip.impots.gouv.fr/bofip/1124-PGP.html/identifiant=BOI-IR-BASE-20-50-20-20260217",
+          "source_title": "BOFiP, BOI-IR-BASE-20-50-20 (version du 17/02/2026) : limites de déduction des cotisations et primes d'épargne retraite"
+        },
+        {
+          "source": "https://www.impots.gouv.fr/www2/fichiers/documentation/brochure/ir_2026/pdf_som/12-charges_ded_rev_225a236.pdf",
+          "source_title": "Brochure pratique de l'impôt sur le revenu 2026, charges déductibles (impots.gouv.fr)"
+        }
+      ],
+      "verified_on": "2026-11-08"
     },
     "mention_franchise_tva_2027": {
       "value": {
