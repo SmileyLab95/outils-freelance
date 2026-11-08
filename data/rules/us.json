@@ -662,10 +662,25 @@
       ],
       "unit": "list",
       "label": "States whose sales/gross receipts tax applies to services by default",
-      "source": "https://www.taxjar.com/sales-tax/when-should-a-business-charge-sales-tax-on-services",
-      "source_title": "TaxJar - When should a business charge sales tax on services?",
+      "source": "https://tax.hawaii.gov/get/",
+      "source_title": "Hawaii Department of Taxation - General Excise Tax (GET)",
       "confidence": "medium",
-      "note": "Secondary source. Hawaii (general excise tax) and New Mexico (gross receipts tax) are gross receipts taxes. In the other states, most professional services (consulting, design, writing, legal, accounting) are not subject to sales tax, but each state lists specific taxable services. Always check the state revenue department. Tax Foundation sales tax breadth data (cited in a Wyoming legislature briefing) ranks HI, NM, SD as broadest bases."
+      "note": "Read on 08/11/2026 with the source reader (official pages read in GitHub Actions): HI, the GET 'is imposed on the gross income or gross receipts of virtually all business activity conducted in Hawaii, including sales of goods, services, rents, commissions'; NM, the gross receipts tax applies to 'Performing services in New Mexico, and performing services outside of New Mexico, the product of which is initially used in New Mexico'; SD, sales tax applies to retail sales 'and the sale of services', and 'A business must report and pay sales tax on its gross receipts from the sale of a product or service unless' an exemption applies; WV (2022 study) 'West Virginia taxes services to a greater extent than most other states with the possible exceptions of Hawaii, Iowa, New Mexico, South Dakota, and Washington'. Iowa and Washington, also cited by the study, are not in the list (Washington taxes newly listed services, see sales_tax_services_washington; Iowa not reviewed). Hawaii (general excise tax) and New Mexico (gross receipts tax) tax the business, not the customer. Each state exempts some services (West Virginia exempts professional services under W. Va. Code 11-15-8: not reread). Always check the state revenue department.",
+      "more_sources": [
+        {
+          "source": "https://www.tax.newmexico.gov/businesses/gross-receipts-overview/",
+          "source_title": "New Mexico Taxation and Revenue - Gross Receipts Tax Overview"
+        },
+        {
+          "source": "https://dor.sd.gov/media/avyep2sr/2026-7_sales-use-tax-guide.pdf",
+          "source_title": "South Dakota Department of Revenue - Sales and Use Tax Guide (July 2026)"
+        },
+        {
+          "source": "https://tax.wv.gov/Documents/Reports/2022/ConsumersSalesAndServiceTaxAndUseTaxExpenditures.2022.01.pdf",
+          "source_title": "West Virginia State Tax Department - Consumers Sales and Service Tax and Use Tax Expenditure Study (2022)"
+        }
+      ],
+      "verified_on": "2026-11-08"
     },
     "sales_tax_services_washington": {
       "value": "Since 2025-10-01 (ESSB 5814), Washington retail sales tax applies to newly listed services, including information technology services (help desk, network support, training, IT consulting, data processing and data entry), custom website development, certain advertising services, live presentations, and investigation and security services. New exclusions and exemptions took effect on 2026-07-01.",
