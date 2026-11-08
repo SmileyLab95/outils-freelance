@@ -62,7 +62,7 @@
    "link": "salestax"
   },
   {
-   "date": "2026-11-02",
+   "date": "2026-10-31",
    "kind": "social",
    "tag": "Urssaf",
    "title": "Déclaration Urssaf du 3e trimestre 2026",
@@ -76,7 +76,7 @@
    "link": "tax"
   },
   {
-   "date": "2026-11-02",
+   "date": "2026-10-31",
    "kind": "social",
    "tag": "Urssaf",
    "title": "Déclaration Urssaf du chiffre d'affaires de septembre 2026",
@@ -88,6 +88,13 @@
     ]
    },
    "link": "tax"
+  },
+  {
+   "date": "2026-10-31",
+   "kind": "info",
+   "tag": "Option",
+   "title": "Changer de rythme de déclaration Urssaf pour 2027 : date limite",
+   "desc": "Pour passer d'une déclaration trimestrielle à mensuelle (ou l'inverse) au 1er janvier 2027, envoyez la demande par la messagerie de votre espace Urssaf avant le 31 octobre (fiche officielle de service-public ; d'anciennes pages de l'Urssaf parlent du 31 janvier : par prudence, retenez le 31 octobre)."
   },
   {
    "date": "2026-11-15",
@@ -107,7 +114,7 @@
    "kind": "tax",
    "tag": "CFE",
    "title": "CFE 2026 : adhésion au prélèvement à l'échéance",
-   "desc": "Dernier jour pour adhérer au prélèvement à l'échéance dans votre espace professionnel impots.gouv.fr. L'avis de CFE y est publié début ou mi-novembre.",
+   "desc": "Dernier jour pour adhérer au prélèvement à l'échéance dans votre espace professionnel impots.gouv.fr, où l'avis de CFE est mis en ligne.",
    "when": {
     "created": [
      "off"
@@ -159,7 +166,7 @@
    "kind": "tax",
    "tag": "CFE",
    "title": "Paiement de la CFE 2026",
-   "desc": "Cotisation foncière des entreprises, à payer en ligne depuis votre espace professionnel. Exonération l'année de création et si votre chiffre d'affaires ne dépasse pas 5 000 €.",
+   "desc": "Cotisation foncière des entreprises, à payer en ligne depuis votre espace professionnel. Exonération l'année de création, et si le chiffre d'affaires hors taxes de l'avant-dernière année ne dépasse pas 5 000 €.",
    "when": {
     "created": [
      "off"
@@ -204,13 +211,6 @@
     ]
    },
    "link": "salestax"
-  },
-  {
-   "date": "2027-01-31",
-   "kind": "info",
-   "tag": "Option",
-   "title": "Changer de rythme de déclaration Urssaf pour 2027 : date limite",
-   "desc": "Pour passer d'une déclaration trimestrielle à mensuelle (ou l'inverse) dès le 1er janvier, envoyez la demande par la messagerie de votre espace Urssaf avant le 31 janvier."
   },
   {
    "date": "2027-02-01",
@@ -559,6 +559,13 @@
    "link": "salestax"
   },
   {
+   "date": "2027-10-31",
+   "kind": "info",
+   "tag": "Option",
+   "title": "Changer de rythme de déclaration Urssaf pour 2028 : date limite",
+   "desc": "Pour passer d'une déclaration trimestrielle à mensuelle (ou l'inverse) au 1er janvier 2028, envoyez la demande par la messagerie de votre espace Urssaf avant le 31 octobre (fiche officielle de service-public ; d'anciennes pages de l'Urssaf parlent du 31 janvier : par prudence, retenez le 31 octobre)."
+  },
+  {
    "date": "2027-11-02",
    "kind": "social",
    "tag": "Urssaf",
@@ -604,7 +611,7 @@
    "kind": "tax",
    "tag": "CFE",
    "title": "CFE 2027 : adhésion au prélèvement à l'échéance",
-   "desc": "Dernier jour pour adhérer au prélèvement à l'échéance dans votre espace professionnel impots.gouv.fr. L'avis de CFE y est publié début ou mi-novembre."
+   "desc": "Dernier jour pour adhérer au prélèvement à l'échéance dans votre espace professionnel impots.gouv.fr, où l'avis de CFE est mis en ligne."
   },
   {
    "date": "2027-11-30",
@@ -651,7 +658,7 @@
    "kind": "tax",
    "tag": "CFE",
    "title": "Paiement de la CFE 2027",
-   "desc": "Cotisation foncière des entreprises, à payer en ligne depuis votre espace professionnel. Exonération l'année de création et si votre chiffre d'affaires ne dépasse pas 5 000 €.",
+   "desc": "Cotisation foncière des entreprises, à payer en ligne depuis votre espace professionnel. Exonération l'année de création, et si le chiffre d'affaires hors taxes de l'avant-dernière année ne dépasse pas 5 000 €.",
    "when": {
     "created": [
      "off"
@@ -663,7 +670,7 @@
    "kind": "tax",
    "tag": "CFE",
    "title": "Paiement de votre première CFE (2027)",
-   "desc": "Première CFE après l'année de création, avec une réduction de moitié la deuxième année d'activité. Avis publié en novembre dans votre espace professionnel impots.gouv.fr.",
+   "desc": "Première CFE après l'année de création, avec une réduction de moitié la deuxième année d'activité. Avis mis en ligne dans votre espace professionnel impots.gouv.fr.",
    "when": {
     "created": [
      "on"
@@ -696,13 +703,6 @@
     ]
    },
    "link": "salestax"
-  },
-  {
-   "date": "2028-01-31",
-   "kind": "info",
-   "tag": "Option",
-   "title": "Changer de rythme de déclaration Urssaf pour 2028 : date limite",
-   "desc": "Pour passer d'une déclaration trimestrielle à mensuelle (ou l'inverse) dès le 1er janvier, envoyez la demande par la messagerie de votre espace Urssaf avant le 31 janvier."
   },
   {
    "date": "2028-01-31",

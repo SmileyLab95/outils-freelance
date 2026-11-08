@@ -96,7 +96,10 @@ test("A7 : prochaine déclaration (trimestrielle, BNC) : période, date limite r
   const profile = { activity: "liberal_bnc", periodicity: "quarterly", vl: false, acre: 0 };
   const d = E.nextDeclaration(docs, profile, R, CAL, "2026-10-20");
   assert.equal(d.period.label, "3e trimestre 2026");
-  assert.equal(d.due, "2026-11-02", "31 octobre reporté au lundi 2 novembre");
+  assert.equal(d.due, "2026-10-31", "samedi 31 octobre 2026 exceptionnellement maintenu par l'Urssaf (service-public, A19087)");
+  const next = E.nextDeclaration(docs, profile, R, CAL, "2027-07-10");
+  assert.equal(next.period.label, "2e trimestre 2027");
+  assert.equal(next.due, "2027-08-02", "samedi 31 juillet 2027 reporté au lundi 2 août");
   assert.equal(d.revenue, 1000);
   near(d.social, 1000 * (0.256 + 0.002), "cotisations BNC 25,6 % + formation 0,2 %");
   const vl = E.nextDeclaration(docs, Object.assign({}, profile, { vl: true }), R, CAL, "2026-10-20");

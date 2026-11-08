@@ -67,6 +67,16 @@ def jour_ouvre(d):
     return d
 
 
+# Échéances que l'Urssaf a exceptionnellement maintenues un jour non ouvré (entreprendre.service-public.gouv.fr,
+# actualité A19087 du 10/10/2026 : le samedi 31 octobre 2026 « ne sera pas reporté au 2 novembre »).
+URSSAF_SANS_REPORT = {date(2026, 10, 31)}
+
+
+def echeance_urssaf(d):
+    """Échéance Urssaf : reportée au jour ouvré suivant, sauf exception annoncée par l'Urssaf."""
+    return d if d in URSSAF_SANS_REPORT else jour_ouvre(d)
+
+
 def ev(day, kind, tag, title, desc, when=None, est=False, link=None, period=None):
     """period : période déclarée (« 2026-09 » ou « 2026-T3 »), lue par l'Espace entrepreneur."""
     e = {"date": day.isoformat() if isinstance(day, date) else day, "kind": kind, "tag": tag, "title": title, "desc": desc}
@@ -83,7 +93,9 @@ def ev(day, kind, tag, title, desc, when=None, est=False, link=None, period=None
 
 def keep(events):
     events = [e for e in events if START.isoformat() <= e["date"] <= END.isoformat()]
-    return sorted(events, key=lambda e: (e["date"], e["title"] if isinstance(e["title"], str) else e["title"]["en"]))
+    # Le même jour, les échéances (déclarations, paiements) passent avant les simples informations.
+    return sorted(events, key=lambda e: (e["date"], e["kind"] == "info",
+                                         e["title"] if isinstance(e["title"], str) else e["title"]["en"]))
 
 
 # ---------------------------------------------------------------------------
@@ -95,7 +107,7 @@ def france():
     # Déclaration Urssaf mensuelle : chiffre d'affaires du mois M, avant la fin du mois M + 1.
     for y, m in months(date(2026, 8, 1), date(2027, 12, 1)):
         ny, nm = add_months(y, m, 1)
-        E.append(ev(jour_ouvre(last_day(ny, nm)), "social", "Urssaf",
+        E.append(ev(echeance_urssaf(last_day(ny, nm)), "social", "Urssaf",
                     f"Déclaration Urssaf du chiffre d'affaires {de(MOIS[m - 1])} {y}",
                     "Déclarez et payez vos cotisations (et le versement libératoire si vous l'avez choisi) sur "
                     "autoentrepreneur.urssaf.fr, même si votre chiffre d'affaires est nul.",
@@ -104,7 +116,7 @@ def france():
     for y, q in [(2026, 2), (2026, 3), (2026, 4), (2027, 1), (2027, 2), (2027, 3), (2027, 4)]:
         first = 3 * q - 2
         ny, nm = add_months(y, 3 * q, 1)
-        E.append(ev(jour_ouvre(last_day(ny, nm)), "social", "Urssaf",
+        E.append(ev(echeance_urssaf(last_day(ny, nm)), "social", "Urssaf",
                     f"Déclaration Urssaf du {q}{'er' if q == 1 else 'e'} trimestre {y}",
                     f"Chiffre d'affaires encaissé {de(MOIS[first - 1])} à {MOIS[3 * q - 1]} {y}. Déclarez et payez "
                     "vos cotisations sur autoentrepreneur.urssaf.fr, même si votre chiffre d'affaires est nul.",
@@ -116,22 +128,27 @@ def france():
                     "1er janvier, si votre revenu fiscal de référence le permet.", link="tax"))
         E.append(ev(date(y, 11, 30), "tax", "CFE", f"CFE {y} : adhésion au prélèvement à l'échéance",
                     "Dernier jour pour adhérer au prélèvement à l'échéance dans votre espace professionnel "
-                    "impots.gouv.fr. L'avis de CFE y est publié début ou mi-novembre.",
+                    "impots.gouv.fr, où l'avis de CFE est mis en ligne.",
                     {"created": ["off"]} if y == 2026 else None))
         E.append(ev(date(y, 12, 15), "tax", "CFE", f"Paiement de la CFE {y}",
                     "Cotisation foncière des entreprises, à payer en ligne depuis votre espace professionnel. "
-                    "Exonération l'année de création et si votre chiffre d'affaires ne dépasse pas 5 000 €.",
+                    "Exonération l'année de création, et si le chiffre d'affaires hors taxes de l'avant-dernière année ne "
+                    "dépasse pas 5 000 €.",
                     {"created": ["off"]}))
+    # Changement de périodicité : avant le 31 octobre de l'année précédente (service-public, F23257) ; d'anciennes
+    # pages de l'Urssaf disent le 31 janvier de l'année concernée : la date la plus proche est retenue (D57).
     for y in (2027, 2028):
-        E.append(ev(date(y, 1, 31), "info", "Option", f"Changer de rythme de déclaration Urssaf pour {y} : date limite",
-                    "Pour passer d'une déclaration trimestrielle à mensuelle (ou l'inverse) dès le 1er janvier, envoyez "
-                    "la demande par la messagerie de votre espace Urssaf avant le 31 janvier."))
+        E.append(ev(date(y - 1, 10, 31), "info", "Option", f"Changer de rythme de déclaration Urssaf pour {y} : date limite",
+                    f"Pour passer d'une déclaration trimestrielle à mensuelle (ou l'inverse) au 1er janvier {y}, envoyez "
+                    "la demande par la messagerie de votre espace Urssaf avant le 31 octobre (fiche officielle de "
+                    "service-public ; d'anciennes pages de l'Urssaf parlent du 31 janvier : par prudence, retenez "
+                    "le 31 octobre)."))
     E.append(ev(date(2026, 12, 31), "tax", "CFE", "Déclaration initiale de CFE (formulaire 1447-C-SD)",
                 "À déposer avant le 31 décembre de l'année de création de l'entreprise : elle sert à calculer votre "
                 "CFE à partir de la deuxième année.", {"created": ["on"]}))
     E.append(ev(date(2027, 12, 15), "tax", "CFE", "Paiement de votre première CFE (2027)",
                 "Première CFE après l'année de création, avec une réduction de moitié la deuxième année d'activité. "
-                "Avis publié en novembre dans votre espace professionnel impots.gouv.fr.", {"created": ["on"]}))
+                "Avis mis en ligne dans votre espace professionnel impots.gouv.fr.", {"created": ["on"]}))
     # TVA, régime réel simplifié : acomptes de juillet (55 %) et décembre (40 %), déclaration CA12 début mai.
     for d, label in [(date(2026, 12, 15), "Acompte de TVA de décembre 2026 (40 %)"),
                      (date(2027, 7, 15), "Acompte de TVA de juillet 2027 (55 %)"),

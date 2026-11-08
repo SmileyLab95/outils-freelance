@@ -1,5 +1,22 @@
 # Journal des modifications
 
+## 2026-11-08 (après-midi) — Calendrier Urssaf corrigé, mention de TVA de 2027 confirmée
+
+- **Correction** : pour changer de rythme de déclaration Urssaf (mensuel ou trimestriel), la fiche officielle de
+  service-public demande d'envoyer la demande **avant le 31 octobre de l'année précédente** (avant le 31 octobre
+  2027 pour 2028). Le site disait « avant le 31 janvier de l'année en cours », comme d'anciennes pages de l'Urssaf :
+  il retient désormais la date la plus proche et signale l'écart (FAQ et calendrier fiscal).
+- **Échéance du 3e trimestre 2026** : l'Urssaf a maintenu le samedi 31 octobre 2026 au lieu de la reporter au
+  2 novembre (actualité de service-public du 10/10/2026) ; calendrier et Espace corrigés. La règle générale (report
+  au jour ouvré suivant) est confirmée.
+- **Mention de franchise de TVA en 2027** confirmée sur impots.gouv.fr : « TVA non applicable, article L.233-3 du
+  CIBS », avec l'entrée en vigueur du CIBS prévue le 1er janvier 2027 ; le générateur de facture était juste. Durée
+  de tolérance de l'ancienne mention non confirmée : retirée de la règle (elle n'était pas affichée).
+- Chiffre d'affaires à déclarer hors taxes, sans TVA ni charges : relu sur service-public. Textes de la CFE dans
+  le calendrier : plus de date de publication de l'avis non sourcée.
+- Calendrier : le même jour, les échéances passent avant les simples informations.
+- Nouveaux tests du générateur de calendrier. France : 105 règles sur 119 datées.
+
 ## 2026-11-08 (midi) — Facturation électronique : sanctions et e-reporting relus
 
 - **Sanctions de la réforme** relues sur service-public et dans le guide pratique de la DGFiP : 50 € par facture

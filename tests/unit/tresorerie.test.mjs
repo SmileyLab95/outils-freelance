@@ -97,14 +97,15 @@ test("déjà dû (micro-entrepreneur) : cotisations des périodes pas encore pay
   issue(docs, { date: "2026-09-10" }, [{ date: "2026-09-20", amount: 400 }]);
   issue(docs, { date: "2026-10-01", lines: [{ desc: "Payée", qty: 1, price: 1500 }] }, [{ date: "2026-10-15", amount: 1500 }]);
   const o = E.owed(input({ documents: docs }));
-  // T3 (date limite 02/11/2026) : 400 × 25,8 % ; T4 commencé : 1 500 × 25,8 % ; T2 déjà payé (31/07/2026).
-  assert.deepEqual(o.urssaf.periods.map((p) => [p.period.key, p.cashed, p.amount, p.due]), [["2026-T3", 400, 103.2, "2026-11-02"], ["2026-T4", 1500, 387, "2027-02-01"]]);
+  // T3 (date limite samedi 31/10/2026, exceptionnellement non reportée) : 400 × 25,8 % ; T4 commencé : 1 500 × 25,8 % ;
+  // T2 déjà payé (31/07/2026).
+  assert.deepEqual(o.urssaf.periods.map((p) => [p.period.key, p.cashed, p.amount, p.due]), [["2026-T3", 400, 103.2, "2026-10-31"], ["2026-T4", 1500, 387, "2027-02-01"]]);
   assert.deepEqual([o.urssaf.total, o.vat.total, o.total], [490.2, 0, 490.2]);
   const acre = E.owed(input({ documents: docs, profile: Object.assign({}, micro, { acre: 50, startDate: "2025-11-15", vl: true }) }));
   // ACRE jusqu'à la fin du 3e trimestre civil suivant celui du début (30/09/2026) : T3 à 12,8 % + 0,2 % + 2,2 % ; T4 à 25,6 % + 0,2 % + 2,2 %.
   assert.deepEqual(acre.urssaf.periods.map((p) => p.amount), [60.8, 420]);
   const monthly = E.owed(input({ documents: docs, profile: Object.assign({}, micro, { periodicity: "monthly" }) }));
-  assert.deepEqual(monthly.urssaf.periods.map((p) => [p.period.key, p.amount]), [["2026-09", 103.2], ["2026-10", 387]], "septembre (30/10 → 02/11) et octobre");
+  assert.deepEqual(monthly.urssaf.periods.map((p) => [p.period.key, p.amount]), [["2026-09", 103.2], ["2026-10", 387]], "septembre (31/10, non reporté) et octobre");
   assert.deepEqual(E.owed(input({ documents: docs, profile: { activity: "real", vatRegime: "franchise" } })).urssaf, { total: 0, periods: [], computed: false },
     "hors micro-entreprise : cotisations non estimées");
 });
@@ -151,12 +152,12 @@ test("prévision sur 6 mois : factures attendues, cotisations au calendrier, cha
     { id: "ch2", label: "Assurance", amount: 420, every: "year", start: "2026-03-15" }];
   const f = E.forecast(input({ documents: docs, charges, profile: Object.assign({}, micro, { cashBalance: 5000, cashDate: T }) }));
   assert.deepEqual(f.months.map((m) => [m.key, m.in, m.out, m.balance]), [
-    ["2026-10", 600, 30, 5570], ["2026-11", 2000, 133.2, 7436.8], ["2026-12", 0, 30, 7406.8],
+    ["2026-10", 600, 133.2, 5466.8], ["2026-11", 2000, 30, 7436.8], ["2026-12", 0, 30, 7406.8],
     ["2027-01", 0, 30, 7376.8], ["2027-02", 0, 1087.8, 6289], ["2027-03", 0, 450, 5839]]);
   // T4 : encaissé 1 500 + attendu 600 (retard) + 2 000 = 4 100 × 25,8 % = 1 057,80 au 01/02/2027.
   assert.deepEqual(f.months[4].items.map((x) => [x.date, x.kind, x.amount]), [["2027-02-01", "urssaf", -1057.8], ["2027-02-28", "charge", -30]]);
   assert.equal(f.months[4].items[0].label, "Cotisations Urssaf du 4e trimestre 2026");
-  assert.deepEqual(f.months[0].items.map((x) => [x.date, x.kind, x.late || false]), [[T, "receipt", true], ["2026-10-31", "charge", false]]);
+  assert.deepEqual(f.months[0].items.map((x) => [x.date, x.kind, x.late || false]), [[T, "receipt", true], ["2026-10-31", "urssaf", false], ["2026-10-31", "charge", false]]);
   assert.equal(f.negative, null);
   assert.ok(f.items.every((x) => x.date >= T && x.date <= f.until) && f.until === "2027-03-31", "rien au-delà de l'horizon (T1 2027, payé le 30/04/2027)");
   assert.equal(f.calendarShort, false);

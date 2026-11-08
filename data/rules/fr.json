@@ -1064,13 +1064,23 @@
       "verified_on": "2026-11-08"
     },
     "calendrier_urssaf_declarations": {
-      "value": "Déclaration mensuelle : chiffre d'affaires du mois M avant la fin du mois M + 1. Trimestrielle : 30 avril, 31 juillet, 31 octobre, 31 janvier. Échéance reportée au jour suivant si elle tombe un week-end ou un jour férié. Changement de périodicité : demande avant le 31 janvier de l'année concernée.",
+      "value": "Déclaration mensuelle : chiffre d'affaires du mois M avant la fin du mois M + 1. Trimestrielle (sur option) : 30 avril, 31 juillet, 31 octobre, 31 janvier. Échéance reportée au jour suivant si elle tombe un samedi, un dimanche ou un jour férié, sauf exception annoncée par l'Urssaf (samedi 31 octobre 2026 maintenu). Changement de périodicité : demande avant le 31 octobre de l'année précédente selon service-public (31 janvier de l'année concernée selon d'anciennes pages de l'Urssaf) ; le site retient le 31 octobre.",
       "unit": "text",
       "label": "Échéances des déclarations Urssaf du micro-entrepreneur",
       "source": "https://www.autoentrepreneur.urssaf.fr/portail/accueil/une-question/toutes-les-fiches-pratiques/declarer-et-payer-mes-cotisation.html",
       "source_title": "Déclarer et payer mes cotisations - Autoentrepreneur.urssaf.fr",
+      "more_sources": [
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F23257",
+          "source_title": "Micro-entrepreneur : quand déclarer son chiffre d'affaires ? - entreprendre.service-public.gouv.fr"
+        },
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/actualites/A19087",
+          "source_title": "Avancement de la date limite de déclaration du chiffre d'affaires de septembre 2026 (10/10/2026) - entreprendre.service-public.gouv.fr"
+        }
+      ],
       "confidence": "high",
-      "note": "Report au jour ouvré suivant appliqué dans data/calendars/fr.json (scripts/calendriers.py)."
+      "note": "Relu le 08/11/2026 : F23257 (vérifiée le 01/01/2026) : déclaration avant la fin du mois suivant le mois ou le trimestre déclaré, échéances trimestrielles du 30 avril, 31 juillet, 31 octobre et 31 janvier ; option trimestrielle à prendre dans le mois qui suit le début d'activité, valable pour l'année civile et tacitement reconduite ; pour y renoncer, demande « avant le 31 octobre de l'année précédant celle pour laquelle vous souhaitez repasser à une déclaration mensuelle » (« Pour modifier la périodicité en 2027, la demande devait obligatoirement être effectuée avant le 31 octobre 2026 »). A19087 (10/10/2026) : « Si la date limite est un samedi, un dimanche ou un jour férié, elle est reportée au lundi ou au jour qui suit », mais le samedi 31 octobre 2026 a été maintenu. Divergence : d'anciennes pages de l'Urssaf (illisibles depuis nos outils) indiquent le 31 janvier de l'année concernée pour changer de périodicité ; le site retient la date la plus proche (D57), règle non datée. Report au jour ouvré suivant et exception appliqués dans data/calendars/fr.json (scripts/calendriers.py)."
     },
     "cfe_echeance": {
       "value": "Solde de CFE exigible le 15 décembre (15 février de l'année suivante si la mise en recouvrement est différée au 31 décembre) ; adhésion au prélèvement à l'échéance jusqu'au 30 novembre ; acompte au 15 juin si la CFE de l'année précédente atteint 3 000 €. Avis uniquement en ligne (espace professionnel).",
@@ -1259,15 +1269,21 @@
     "mention_franchise_tva_2027": {
       "value": {
         "text": "TVA non applicable, art. L. 233-3 du CIBS",
-        "from": "2027-01-01",
-        "old_reference_tolerated_until": "2028-06-30"
+        "from": "2027-01-01"
       },
       "unit": "object",
       "label": "Mention de franchise en base de TVA à partir du 1er janvier 2027",
-      "source": "https://www.legifiscal.fr/actualites-fiscales/4613-mention-facture-changement-article-exoneration-tva-autoentrepreneurs.html",
-      "source_title": "Legifiscal - Mention facture : changement d'article d'exonération de TVA pour les autoentrepreneurs",
-      "confidence": "medium",
-      "note": "Pas encore de source officielle lisible (08/11/2026) : la fiche F31808 ne cite que l'article 293 B ; l'ordonnance n° 2026-671 et le CIBS sont sur Légifrance, qui refuse la lecture automatique. Numéro L. 233-3 donné par Legifiscal et Bpifrance Création après la renumérotation de l'ordonnance n° 2026-671 (l'ordonnance n° 2025-1247 prévoyait L. 223-3). Tolérance de l'ancienne mention jusqu'au 30 juin 2028 selon des résumés de l'ordonnance (31 décembre 2027 selon d'autres) : à vérifier sur Légifrance en décembre 2026. Le site ajoute « (ex-art. 293 B du CGI) » pour lever toute ambiguïté."
+      "source": "https://www.impots.gouv.fr/professionnel/questions/en-tant-que-micro-entrepreneur-puis-je-etre-redevable-de-la-tva",
+      "source_title": "En tant que micro-entrepreneur, puis-je être redevable de la TVA ? - impots.gouv.fr (modifiée le 14/10/2026)",
+      "more_sources": [
+        {
+          "source": "https://www.legifiscal.fr/actualites-fiscales/4613-mention-facture-changement-article-exoneration-tva-autoentrepreneurs.html",
+          "source_title": "Legifiscal - Mention facture : changement d'article d'exonération de TVA pour les autoentrepreneurs"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-11-08",
+      "note": "Relu le 08/11/2026 sur impots.gouv.fr (page modifiée le 14/10/2026) : mention « TVA non applicable, art. 293 B du Code général des impôts (CGI) » ou « TVA non applicable, article L.233-3 du Code des impositions des biens et des services (CIBS) » ; note de la page : recodification prévue par les ordonnances n° 2025-1247 du 17/12/2025 et n° 2026-671 du 27/07/2026, entrée en vigueur du CIBS « prévue le 1er janvier 2027 ». La fiche F36244 (vérifiée le 13/03/2026, avant l'ordonnance de juillet) annonce encore le 1er septembre 2026 et « art. L. 223 et s. » : version dépassée. Durée de la tolérance de l'ancienne mention (31/12/2027 selon F36244 avant l'ordonnance, 30/06/2028 selon des résumés de l'ordonnance) : non confirmée, retirée de la règle et non affichée sur le site. Le site ajoute « (ex-art. 293 B du CGI) » pour lever toute ambiguïté."
     },
     "conservation_pieces": {
       "value": {
@@ -1621,8 +1637,15 @@
       "label": "Le chiffre d'affaires déclaré à l'Urssaf est le montant encaissé hors TVA ; la TVA facturée est reversée au service des impôts",
       "source": "https://www.autoentrepreneur.urssaf.fr/portail/accueil/une-question/toutes-les-fiches-pratiques/determiner-mon-chiffre-daffaires.html",
       "source_title": "Déterminer mon chiffre d'affaires - Autoentrepreneur.urssaf.fr",
-      "confidence": "medium",
-      "note": "Relevé le 21/10/2026 par recherche sur le site officiel (montant brut encaissé, hors TVA, sans déduction de charges), sans ouvrir la page (accès bloqué depuis l'environnement de travail)."
+      "more_sources": [
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F23257",
+          "source_title": "Micro-entrepreneur : quand déclarer son chiffre d'affaires ? - entreprendre.service-public.gouv.fr"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-11-08",
+      "note": "Relu le 08/11/2026 sur F23257 : « Le CA à déclarer correspond à la somme hors taxes des ventes de biens et prestations de services réalisées au cours du mois ou du trimestre précédent » ; « La TVA payée par les clients ne doit pas être incluse dans le chiffre d'affaires et aucune charge ne doit être déduite » ; déclaration obligatoire même à zéro (mention « Néant »)."
     },
     "tva_taux_metropole": {
       "value": {

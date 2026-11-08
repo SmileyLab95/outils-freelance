@@ -2394,10 +2394,10 @@ const tests = {
     await page.goto(BASE + "fr/calendrier-fiscal-auto-entrepreneur/?today=2026-10-20", { waitUntil: "networkidle" });
     const next = async () => [(await page.textContent("#cal-next")).trim(), await page.textContent("#cal-next-title")];
     let [day, title] = await next();
-    check(day === "2 novembre 2026" && title.includes("3e trimestre 2026"), "calendrier FR : trimestriel → 2 novembre 2026 (31 octobre reporté)");
+    check(day === "31 octobre 2026" && title.includes("3e trimestre 2026"), "calendrier FR : trimestriel → samedi 31 octobre 2026, exceptionnellement non reporté (A19087), avant l'information du même jour");
     await page.selectOption("#cal-periodicity", "monthly");
     [day, title] = await next();
-    check(day === "2 novembre 2026" && title.includes("septembre 2026"), "calendrier FR : mensuel → chiffre d'affaires de septembre");
+    check(day === "31 octobre 2026" && title.includes("septembre 2026"), "calendrier FR : mensuel → chiffre d'affaires de septembre");
     await page.check("#cal-created");
     const list = await page.textContent("#cal-list");
     check(list.includes("1447-C-SD") && !list.includes("Paiement de la CFE 2026"), "calendrier FR : création en 2026 → déclaration 1447-C, pas de CFE 2026");
@@ -3533,7 +3533,7 @@ const tests = {
     await go("#/");
     const kpis = await text(".kpis");
     check(kpis.includes("Encaissé en 2026 1 800,00 €"), "Espace : encaissé de l'année");
-    check(kpis.includes("Déclaration Urssaf : 3e trimestre 2026 1 800,00 €") && kpis.includes("2 novembre 2026") && kpis.includes("464,40 €"),
+    check(kpis.includes("Déclaration Urssaf : 3e trimestre 2026 1 800,00 €") && kpis.includes("31 octobre 2026") && kpis.includes("464,40 €"),
       "Espace : déclaration du 3e trimestre, date limite et cotisations 25,8 % (A7)");
     check((await text(".gauges")).includes("1 800,00 € / 83 600,00 €"), "Espace : jauge du plafond (A8)");
     await accessible(page, "Espace : tableau de bord");
