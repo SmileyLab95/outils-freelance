@@ -1482,7 +1482,14 @@
       "source": "https://www.economie.gouv.fr/entreprises/gerer-ses-ressources-humaines-et-ses-salaries/professionnels-quelles-sont-les-assurances-obligatoires",
       "source_title": "Professionnels : quelles sont les assurances obligatoires ? - economie.gouv.fr",
       "confidence": "medium",
-      "note": "Relevé le 20/10/2026 par extraits de la page officielle : professionnels de santé (RC médicale), du droit (RC professionnelle), du bâtiment (RC professionnelle et décennale) ; autres obligations fixées par les textes propres à chaque activité (agents immobiliers, agents de voyage, diagnostiqueurs…). Liste non exhaustive."
+      "note": "Vérifiée le 08/11/2026 avec l'outil de lecture des sources sur la fiche F23668 : « Si vous exercez une activité réglementée, vous devez souscrire un contrat d'assurance responsabilité civile professionnelle (RCP). Selon votre secteur d'activité, d'autres assurances sont obligatoires telles que l'assurance responsabilité décennale (secteur du bâtiment) ou encore l'assurance responsabilité civile médicale (secteur de la santé). » Relevé le 20/10/2026 par extraits de la page officielle : professionnels de santé (RC médicale), du droit (RC professionnelle), du bâtiment (RC professionnelle et décennale) ; autres obligations fixées par les textes propres à chaque activité (agents immobiliers, agents de voyage, diagnostiqueurs…). Liste non exhaustive.",
+      "more_sources": [
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F23668",
+          "source_title": "Le micro-entrepreneur doit-il être assuré ? - Entreprendre.Service-Public.gouv.fr (fiche F23668)"
+        }
+      ],
+      "verified_on": "2026-11-08"
     },
     "assurance_decennale": {
       "value": {

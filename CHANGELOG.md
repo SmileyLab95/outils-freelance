@@ -15,10 +15,12 @@
   rattachés aux administrations fiscales de ces États au lieu de TaxJar. **Columbus (Ohio)** : autorité
   d'application (Columbus Labor Commission) relue sur columbus.gov ; le chapitre ayant été remplacé en 2024, seuil
   et délai restent signalés « à relire ».
-- **France** : 18 règles relues sur les fiches lisibles d'Entreprendre.Service-Public (Urssaf, Légifrance et
+- **France** : 24 règles relues sur les fiches lisibles d'Entreprendre.Service-Public (Urssaf, Légifrance et
   economie.gouv.fr refusant la lecture automatique) : ACRE (50 % puis 25 % au 1er juillet 2026), plafonds micro,
   conservation des pièces (10 ans, 6 ans au fiscal), taux de TVA, PASS 2026 (48 060 €), PFU (12,8 % + 18,6 % = 31,4 %),
-  formation professionnelle, taxes consulaires, compte bancaire dédié du micro-entrepreneur, nouvelles mentions de
+  formation professionnelle, taxes consulaires, compte bancaire dédié du micro-entrepreneur, droit au compte
+  professionnel (ouverture sous 3 jours ouvrés, page précisée), plafonds du PER (BOFiP 2026), PASS 2025,
+  responsabilité civile professionnelle, nouvelles mentions de
   facture de la réforme (calendrier : grandes entreprises et ETI d'abord, PME et micro-entreprises au 1er septembre
   2027). **Correction** : l'option pour le versement libératoire se déclare avant le dernier jour du 3e mois qui suit
   la création (la page disait « 3 mois après »).

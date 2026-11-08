@@ -376,7 +376,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   des comptes attend le choix de l'hébergeur et du domaine.
 - **Vérification outillée des règles (08/11/2026)** : workflow « Vérifier les règles sur leurs sources »
   (`scripts/verifier_regles.py`, D55), pages lues en parallèle. Règles datées après relecture : Royaume-Uni 161 sur
-  164, États-Unis 81 sur 95, France 90 sur 119, Canada 81 sur 135 (France : fiches d'Entreprendre.Service-Public
+  164, États-Unis 81 sur 95, France 95 sur 119, Canada 81 sur 135 (France : fiches d'Entreprendre.Service-Public
   utilisées quand Urssaf, Légifrance ou economie.gouv.fr refusent la lecture). Barème kilométrique français et taux kilométrique
   américain de juillet rattachés au BOFiP et à l'IRS ; SMIC mis à jour (12,31 €) ; calendrier de la facturation
   électronique, abattements et versement libératoire relus sur impots.gouv.fr ; Canada : Loi de l'impôt, Loi sur
