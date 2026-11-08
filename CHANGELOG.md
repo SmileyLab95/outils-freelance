@@ -1,5 +1,27 @@
 # Journal des modifications
 
+## 2026-11-08 (nuit) — Vérification des règles : Canada, suite de la France et des États-Unis
+
+- **Canada** : le vérificateur lit désormais la Loi de l'impôt sur le revenu, la Loi sur l'intérêt, Retraite Québec,
+  Québec.ca et les sites des provinces ; 17 règles relues et datées : seuils des acomptes (3 000 $, 1 800 $ au
+  Québec) et leurs dates (15 mars, juin, septembre, décembre), date d'échéance du solde (30 avril), date de dépôt du
+  travailleur autonome (15 juin), délai du REER (60 jours après la fin de l'année), taux de la Loi sur l'intérêt
+  (5 %), taux et plafond du RRQ (5,3 % + 1 %, soit 12,6 % pour un travailleur autonome ; 74 600 $) et du RRQ supplémentaire (85 000 $, 832 $ au plus pour un travailleur autonome),
+  RQAP des travailleurs autonomes (0,764 %, 786,92 $ au plus), TVP de la Colombie-Britannique, de la Saskatchewan et
+  du Manitoba. Deux sources mal ciblées corrigées (dates des acomptes : art. 156 ; solde : définition de l'art. 248).
+  Les pages de canada.ca et de Revenu Québec refusent toujours la lecture automatisée (51 règles en attente).
+- **France** : abattements de la micro-entreprise (71 / 50 / 34 %), versement libératoire (1 / 1,7 / 2,2 %) et
+  calendrier de la facturation électronique (réception et grandes entreprises au 1er septembre 2026, PME et
+  micro-entreprises au 1er septembre 2027, micro-entrepreneurs en franchise concernés) relus sur impots.gouv.fr ; la
+  page générale ne citant plus 2027, la règle s'appuie sur la FAQ officielle « À partir de quand suis-je concerné ? ».
+- **États-Unis** : délai du 1099-NEC (31 janvier, reporté au lundi 1er février 2027), exception du 4e acompte
+  (1040-ES), LLC à associé unique et taxe de l'État de Washington sur les services (texte ramené à ce que dit la page
+  du Department of Revenue : deux affirmations non retrouvées retirées).
+- **Outils internes** : le vérificateur lit les pages en parallèle (rapport du Canada en 1 min 30 au lieu de plus de
+  12 min), ne confond plus une date sans année avec la même date d'une autre année, et reconnaît les pourcentages
+  écrits en lettres (« five per cent per annum ») ; l'outil de lecture accepte tous les domaines .gov et les sites
+  des gouvernements provinciaux. Notes contradictoires (« non revérifié » sur des règles vérifiées) retirées.
+
 ## 2026-11-08 — Vérification des règles sur leurs sources : outil et États-Unis
 
 - Nouvel outil interne **« Vérifier les règles sur leurs sources »** (workflow GitHub à la demande,

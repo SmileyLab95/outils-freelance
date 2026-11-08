@@ -331,13 +331,14 @@
       "source": "https://www.revenuquebec.ca/fr/entreprises/retenues-a-la-source-et-cotisations-de-lemployeur/calcul-des-retenues-et-des-cotisations/cotisations-au-rrq/maximum-des-gains-admissibles-et-taux-de-cotisation/",
       "source_title": "Maximum des gains admissibles et taux de cotisation au Régime de rentes du Québec - Revenu Québec",
       "confidence": "high",
-      "note": "Same as the CPP YMPE. General exemption $3,500; maximum contributory earnings $71,100.",
+      "note": "Checked on 08/11/2026 with the rule checker (official page read in GitHub Actions, value reread in its context): Retraite Québec, 'the maximum pensionable earnings (MPE), which is $74 600'. Same as the CPP YMPE. General exemption $3,500; maximum contributory earnings $71,100.",
       "more_sources": [
         {
           "source": "https://www.retraitequebec.gouv.qc.ca/en/professionals-employers/your-role-quebec-pension-plan/contributions-quebec-pension-plan-qpp",
           "source_title": "Contributions to the Québec Pension Plan (QPP) - Retraite Québec"
         }
-      ]
+      ],
+      "verified_on": "2026-11-08"
     },
     "qpp_rate_employee": {
       "value": 0.063,
@@ -346,13 +347,14 @@
       "source": "https://www.revenuquebec.ca/fr/entreprises/retenues-a-la-source-et-cotisations-de-lemployeur/calcul-des-retenues-et-des-cotisations/cotisations-au-rrq/maximum-des-gains-admissibles-et-taux-de-cotisation/",
       "source_title": "Maximum des gains admissibles et taux de cotisation au Régime de rentes du Québec - Revenu Québec",
       "confidence": "high",
-      "note": "The base rate was cut for 2026 to 10.6% combined (5.3% each), from 10.8% (5.4% each) in 2025. Employee maximum: $4,479.30.",
+      "note": "Checked on 08/11/2026 with the source reader (official page read in GitHub Actions): Retraite Québec, 'In 2026, if employment earnings exceed $3500, you are contributing to the basic plan under the QPP at a rate of 5.3% and to the additional plan at a rate of 1%' up to the MPE of $74 600, then 'at a rate of 4% on earnings between $74 600 and $85 000'; its contribution table gives employee maximums of 4479 (at $74 600) and 4895 (at $85 000 and over) and self-employed maximums of 8958 and 9790, twice the employee amounts (whole dollars). Derived: 5.3% + 1% = 6.3%. The base rate was cut for 2026 to 10.6% combined (5.3% each), from 10.8% (5.4% each) in 2025. Employee maximum: $4,479.30.",
       "more_sources": [
         {
           "source": "https://www.retraitequebec.gouv.qc.ca/en/professionals-employers/your-role-quebec-pension-plan/contributions-quebec-pension-plan-qpp",
           "source_title": "Contributions to the Québec Pension Plan (QPP) - Retraite Québec"
         }
-      ]
+      ],
+      "verified_on": "2026-11-08"
     },
     "qpp_rate_self_employed": {
       "value": 0.126,
@@ -361,13 +363,14 @@
       "source": "https://www.revenuquebec.ca/fr/citoyens/declaration-de-revenus/payer-ou-etre-rembourse/paiement-des-cotisations/cotisations-du-travailleur-autonome-ou-du-membre-dune-societe-de-personnes/cotisation-du-travailleur-autonome-ou-du-membre-dune-societe-de-personnes-au-regime-de-rentes-du-quebec/",
       "source_title": "Cotisation du travailleur autonome ou du membre d'une société de personnes au Régime de rentes du Québec - Revenu Québec",
       "confidence": "high",
-      "note": "2025 was 12.8%. Paid with the Québec return (Schedule L / TP-1).",
+      "note": "Checked on 08/11/2026 with the source reader (official page read in GitHub Actions): Retraite Québec, 'In 2026, if employment earnings exceed $3500, you are contributing to the basic plan under the QPP at a rate of 5.3% and to the additional plan at a rate of 1%' up to the MPE of $74 600, then 'at a rate of 4% on earnings between $74 600 and $85 000'; its contribution table gives employee maximums of 4479 (at $74 600) and 4895 (at $85 000 and over) and self-employed maximums of 8958 and 9790, twice the employee amounts (whole dollars). Derived: the self-employed pay both halves, 2 x 6.3% = 12.6% (8958 = 71,100 x 12.6%, rounded). 2025 was 12.8%. Paid with the Québec return (Schedule L / TP-1).",
       "more_sources": [
         {
           "source": "https://www.retraitequebec.gouv.qc.ca/en/professionals-employers/your-role-quebec-pension-plan/contributions-quebec-pension-plan-qpp",
           "source_title": "Contributions to the Québec Pension Plan (QPP) - Retraite Québec"
         }
-      ]
+      ],
+      "verified_on": "2026-11-08"
     },
     "qpp_max_contribution_self_employed": {
       "value": 8958.6,
@@ -376,13 +379,14 @@
       "source": "https://www.revenuquebec.ca/fr/citoyens/declaration-de-revenus/payer-ou-etre-rembourse/paiement-des-cotisations/cotisations-du-travailleur-autonome-ou-du-membre-dune-societe-de-personnes/cotisation-du-travailleur-autonome-ou-du-membre-dune-societe-de-personnes-au-regime-de-rentes-du-quebec/",
       "source_title": "Cotisation du travailleur autonome ou du membre d'une société de personnes au Régime de rentes du Québec - Revenu Québec",
       "confidence": "high",
-      "note": "Calculated = 71,100 x 12.6% (= 2 x $4,479.30 employee maximum published by Revenu Québec).",
+      "note": "Checked on 08/11/2026 with the source reader (official page read in GitHub Actions): Retraite Québec, 'In 2026, if employment earnings exceed $3500, you are contributing to the basic plan under the QPP at a rate of 5.3% and to the additional plan at a rate of 1%' up to the MPE of $74 600, then 'at a rate of 4% on earnings between $74 600 and $85 000'; its contribution table gives employee maximums of 4479 (at $74 600) and 4895 (at $85 000 and over) and self-employed maximums of 8958 and 9790, twice the employee amounts (whole dollars). Derived: (74,600 - 3,500) x 12.6% = 8,958.60 (the table shows 8958); = 2 x $4,479.30 employee maximum.",
       "more_sources": [
         {
           "source": "https://www.retraitequebec.gouv.qc.ca/en/professionals-employers/your-role-quebec-pension-plan/contributions-quebec-pension-plan-qpp",
           "source_title": "Contributions to the Québec Pension Plan (QPP) - Retraite Québec"
         }
-      ]
+      ],
+      "verified_on": "2026-11-08"
     },
     "qpp2_maximum_additional_earnings": {
       "value": 85000,
@@ -401,13 +405,14 @@
       "source": "https://www.revenuquebec.ca/fr/citoyens/declaration-de-revenus/payer-ou-etre-rembourse/paiement-des-cotisations/cotisations-du-travailleur-autonome-ou-du-membre-dune-societe-de-personnes/cotisation-du-travailleur-autonome-ou-du-membre-dune-societe-de-personnes-au-regime-de-rentes-du-quebec/",
       "source_title": "Cotisation du travailleur autonome ou du membre d'une société de personnes au Régime de rentes du Québec - Revenu Québec",
       "confidence": "high",
-      "note": "4% employee + 4% employer.",
+      "note": "Checked on 08/11/2026 with the source reader (official page read in GitHub Actions): Retraite Québec, 'In 2026, if employment earnings exceed $3500, you are contributing to the basic plan under the QPP at a rate of 5.3% and to the additional plan at a rate of 1%' up to the MPE of $74 600, then 'at a rate of 4% on earnings between $74 600 and $85 000'; its contribution table gives employee maximums of 4479 (at $74 600) and 4895 (at $85 000 and over) and self-employed maximums of 8958 and 9790, twice the employee amounts (whole dollars). Derived: 4% employee + 4% employer = 8% for the self-employed (9790 - 8958 = 832 = 10,400 x 8%).",
       "more_sources": [
         {
           "source": "https://www.retraitequebec.gouv.qc.ca/en/professionals-employers/your-role-quebec-pension-plan/contributions-quebec-pension-plan-qpp",
           "source_title": "Contributions to the Québec Pension Plan (QPP) - Retraite Québec"
         }
-      ]
+      ],
+      "verified_on": "2026-11-08"
     },
     "qpp2_max_contribution_self_employed": {
       "value": 832,

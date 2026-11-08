@@ -375,14 +375,19 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   remplacement annoncé de la section 17 du *Victims and Prisoners Act 2024* sur les accords de confidentialité). La mise en ligne
   des comptes attend le choix de l'hébergeur et du domaine.
 - **Vérification outillée des règles (08/11/2026)** : workflow « Vérifier les règles sur leurs sources »
-  (`scripts/verifier_regles.py`, D55) ; États-Unis : 77 règles sur 95 datées après relecture ; barème kilométrique
-  français et taux kilométrique américain de juillet rattachés au BOFiP et à l'IRS ; France : 13 règles vérifiées,
-  SMIC mis à jour (12,31 €, revalorisé en cours d'année), 38 sources illisibles automatiquement (Urssaf, Légifrance,
-  impots.gouv) ; la fiche F31808 ne mentionne plus les amendes pour mentions manquantes (règle
-  `sanctions_mentions_facture` à rattacher au CGI, art. 1737, et au Code de commerce, art. L441-16). À faire : rapport
-  du Canada ; remplacer les dernières sources non officielles (États sans impôt sur le revenu, services
-  taxables, lois de Californie et de Columbus, mention de franchise de TVA, crédit québécois, extensions de noms de
-  domaine) ; plafond de la Sécurité sociale 2027 (ssa.gov refuse la lecture, 403) ; minimum de déduction QBI 2026.
+  (`scripts/verifier_regles.py`, D55), pages lues en parallèle. Règles datées après relecture : Royaume-Uni 161 sur
+  164, États-Unis 80 sur 95, France 72 sur 119, Canada 81 sur 135. Barème kilométrique français et taux kilométrique
+  américain de juillet rattachés au BOFiP et à l'IRS ; SMIC mis à jour (12,31 €) ; calendrier de la facturation
+  électronique, abattements et versement libératoire relus sur impots.gouv.fr ; Canada : Loi de l'impôt, Loi sur
+  l'intérêt, Retraite Québec, Québec.ca et provinces lus (17 règles datées), mais canada.ca et Revenu Québec refusent
+  toujours la lecture automatisée (51 règles en attente : voir les options d'Ismail plus bas). La fiche F31808 ne
+  mentionne plus les amendes pour mentions manquantes (règle `sanctions_mentions_facture` à rattacher au CGI,
+  art. 1737, et au Code de commerce, art. L441-16, sur Légifrance ou le BOFiP). À faire : remplacer les dernières
+  sources non officielles (États sans impôt sur le revenu, services taxables, lois de Californie et de Columbus,
+  mention de franchise de TVA de 2027, crédit québécois, extensions de noms de domaine) ; plafond de la Sécurité
+  sociale 2027 (ssa.gov refuse la lecture, 403) ; minimum de déduction QBI 2026 ; barème de la contribution santé de
+  l'Ontario (seuils absents de la page ontario.ca : lire la *Taxation Act, 2007*) ; sources françaises restantes
+  (Urssaf, Légifrance, economie.gouv.fr).
 - **Règles britanniques revérifiées en direct (07/11/2026, soir)** : 161 règles sur 164 contrôlées sur leur page
   officielle (GOV.UK, legislation.gov.uk ; Banque d'Angleterre par l'outil de lecture) et datées ; 8 sources corrigées ;
   taux directeur à 4 % depuis le 5 novembre 2026 (intérêts du HMRC à 8 % au 24 novembre) ; erreur corrigée : le taux
