@@ -103,8 +103,8 @@ test("France : chiffres, dates et formulaires de la page repris des règles", ()
   // Délais écrits en toutes lettres dans les règles.
   assert.match(R.acre_conditions, /60 jours/);
   assert.ok(step("acre").text.includes("60 jours"));
-  assert.match(R.versement_liberatoire_option, /3 mois/);
-  assert.ok(step("vl").text.includes("3 mois"));
+  assert.match(R.versement_liberatoire_option, /dernier jour du 3e mois suivant celui de la création/);
+  assert.ok(step("vl").text.includes("dernier jour du 3e mois qui suit celui de la création"));
   assert.equal(R.facturation_electronique_calendrier.reception_toutes_entreprises, "2026-09-01");
   assert.ok(step("einvoice").text.includes("1er septembre 2026"));
   for (const piece of R.creation_guichet_unique.pieces) assert.ok(step("pieces").text.toLowerCase().includes(piece), piece);
