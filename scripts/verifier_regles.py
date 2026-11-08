@@ -88,7 +88,9 @@ def formes(valeur, unite, pays="uk", cle=""):
     if isinstance(valeur, bool) or valeur is None:
         return groupes
     if isinstance(valeur, (int, float)):
-        taux = unite in TAUX or re.search(r"rate|taux|fraction|percent|pct|credit|share|factor|ratio", cle or "") is not None
+        # Fraction sans unité monétaire (abattements de 71 %, versement libératoire de 1,7 %…) : aussi en pourcentage.
+        taux = (unite in TAUX or re.search(r"rate|taux|fraction|percent|pct|credit|share|factor|ratio", cle or "") is not None
+                or (unite not in MONNAIES and 0 < abs(valeur) < 1))
         if taux and 0 < abs(valeur) <= 2:
             pct = formes_nombre(valeur * 100)
             if float(valeur * 100).is_integer():
@@ -176,7 +178,7 @@ def lire(url, cache):
     try:
         demande = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (outils-freelance, verification de sources)",
                                                        "Accept-Language": "en-GB,en;q=0.9,fr-FR;q=0.8"})
-        with urllib.request.urlopen(demande, timeout=60) as r:
+        with urllib.request.urlopen(demande, timeout=25) as r:
             contenu, type_contenu, final = r.read(L.LIMITE), r.headers.get("Content-Type", ""), r.geturl()
         if r.status == 200 and contenu.strip() and officiel(final):
             texte = L.texte(contenu, type_contenu.lower(), final)[0]

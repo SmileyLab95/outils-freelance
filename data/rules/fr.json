@@ -147,7 +147,8 @@
       "source": "https://www.impots.gouv.fr/professionnel/questions/en-tant-que-micro-entrepreneur-sous-quelles-conditions-puis-je-opter-pour-l",
       "source_title": "En tant que micro-entrepreneur, sous quelles conditions puis-je opter pour le versement libératoire de l'impôt ? - impots.gouv.fr",
       "confidence": "high",
-      "note": "RFR 2024 <= 29 315 EUR x nombre de parts (58 630 EUR pour 2 parts, 87 945 EUR pour 3 parts, 73 288 EUR pour 2,5 parts). Pour 2026, l'option devait être demandée au plus tard le 30/09/2025 (ou dans les délais de création)."
+      "note": "Vérifiée le 08/11/2026 avec l'outil de vérification des règles (page officielle lue dans GitHub Actions, valeur relue dans son contexte). RFR 2024 <= 29 315 EUR x nombre de parts (58 630 EUR pour 2 parts, 87 945 EUR pour 3 parts, 73 288 EUR pour 2,5 parts). Pour 2026, l'option devait être demandée au plus tard le 30/09/2025 (ou dans les délais de création).",
+      "verified_on": "2026-11-08"
     },
     "vl_rfr_plafond_par_part_2027": {
       "value": 29579,
@@ -156,7 +157,8 @@
       "source": "https://bofip.impots.gouv.fr/bofip/2491-PGP.html/identifiant=BOI-IR-LIQ-20-10-20260407",
       "source_title": "BOFiP BOI-IR-LIQ-20-10 (barème 2026, limite supérieure de la tranche à 11 %)",
       "confidence": "medium",
-      "note": "Déduit de la règle (limite supérieure de la 2e tranche du barème en vigueur l'année précédente), qui donne 29 315 EUR pour 2026. Aucune page officielle consultée n'affiche ce montant. L'option pour 2027 devait être faite au plus tard le 30/09/2026."
+      "note": "Vérifiée le 08/11/2026 : le seuil (revenus de 2025) est la limite supérieure de la tranche à 11 % du barème des revenus de 2025, 29 579 €, lue sur la page officielle du barème. Déduit de la règle (limite supérieure de la 2e tranche du barème en vigueur l'année précédente), qui donne 29 315 EUR pour 2026. Aucune page officielle consultée n'affiche ce montant. L'option pour 2027 devait être faite au plus tard le 30/09/2026.",
+      "verified_on": "2026-11-08"
     },
     "micro_abattements": {
       "value": {
@@ -178,7 +180,8 @@
       "source": "https://bofip.impots.gouv.fr/bofip/1884-PGP.html/identifiant=BOI-BIC-DECLA-20-20200205",
       "source_title": "BOFiP - Incidence du régime des micro-entreprises sur la détermination du résultat imposable",
       "confidence": "high",
-      "note": "305 EUR par abattement. En cas d'activités mixtes BIC (vente + services), le minimum total est de 610 EUR."
+      "note": "Vérifiée le 08/11/2026 avec l'outil de vérification des règles (page officielle lue dans GitHub Actions, valeur relue dans son contexte). 305 EUR par abattement. En cas d'activités mixtes BIC (vente + services), le minimum total est de 610 EUR.",
+      "verified_on": "2026-11-08"
     },
     "micro_plafond_ca_vente": {
       "value": 203100,
@@ -210,7 +213,8 @@
       "source": "https://www.impots.gouv.fr/professionnel/questions/pour-rester-micro-entrepreneur-quel-montant-de-chiffre-daffaires-ou-de",
       "source_title": "Pour rester micro-entrepreneur, quel montant de chiffre d'affaires ne dois-je pas dépasser ? - impots.gouv.fr ; BOFiP BOI-TVA-DECLA-40-10-10-20260701",
       "confidence": "high",
-      "note": "Si le CA de N-1 dépasse le seuil, la franchise est perdue au 1er janvier de N. Si le CA de N dépasse le seuil majoré, la TVA est due dès l'opération qui fait franchir ce seuil. Le seuil unique de 25 000 EUR prévu par la LF 2025 a été suspendu, puis abandonné ; il n'a jamais été appliqué."
+      "note": "Vérifiée le 08/11/2026 avec l'outil de vérification des règles (page officielle lue dans GitHub Actions, valeur relue dans son contexte). Si le CA de N-1 dépasse le seuil, la franchise est perdue au 1er janvier de N. Si le CA de N dépasse le seuil majoré, la TVA est due dès l'opération qui fait franchir ce seuil. Le seuil unique de 25 000 EUR prévu par la LF 2025 a été suspendu, puis abandonné ; il n'a jamais été appliqué.",
+      "verified_on": "2026-11-08"
     },
     "tva_franchise_seuils_speciaux": {
       "value": {
@@ -224,7 +228,8 @@
       "source": "https://www.impots.gouv.fr/professionnel/tva",
       "source_title": "TVA - impots.gouv.fr (régimes d'imposition à la TVA)",
       "confidence": "medium",
-      "note": "50 000 / 55 000 EUR pour les opérations propres à la profession (activité réglementée d'avocat, livraisons et cessions de droits des auteurs, prestations des artistes-interprètes) ; 35 000 / 38 500 EUR pour leurs autres opérations. Le barème BOFiP BOI-BAREME-000036 en vigueur au 01/07/2026 n'a pas pu être lu ; sa version 2023 affichait les anciens seuils (47 700 / 58 600 et 19 600 / 23 700 EUR)."
+      "note": "Vérifiée le 08/11/2026 avec l'outil de vérification des règles (page officielle lue dans GitHub Actions, valeur relue dans son contexte). 50 000 / 55 000 EUR pour les opérations propres à la profession (activité réglementée d'avocat, livraisons et cessions de droits des auteurs, prestations des artistes-interprètes) ; 35 000 / 38 500 EUR pour leurs autres opérations. Le barème BOFiP BOI-BAREME-000036 en vigueur au 01/07/2026 n'a pas pu être lu ; sa version 2023 affichait les anciens seuils (47 700 / 58 600 et 19 600 / 23 700 EUR).",
+      "verified_on": "2026-11-08"
     },
     "taxe_chambre_consulaire": {
       "value": {
@@ -276,7 +281,8 @@
       "source": "https://bofip.impots.gouv.fr/bofip/2491-PGP.html/identifiant=BOI-IR-LIQ-20-10-20260407",
       "source_title": "BOFiP BOI-IR-LIQ-20-10-20260407 - IR - Calcul de l'impôt brut ; art. 197 CGI ; art. 4 de la loi n° 2026-103 du 19 février 2026",
       "confidence": "high",
-      "note": "Tranches revalorisées de 0,9 % par l'art. 4 de la loi de finances pour 2026 (loi n° 2026-103 du 19/02/2026, JO du 20/02/2026). Barème précédent (revenus 2024) : 11 497 / 29 315 / 83 823 / 180 294 EUR."
+      "note": "Vérifiée le 08/11/2026 avec l'outil de vérification des règles (page officielle lue dans GitHub Actions, valeur relue dans son contexte). Tranches revalorisées de 0,9 % par l'art. 4 de la loi de finances pour 2026 (loi n° 2026-103 du 19/02/2026, JO du 20/02/2026). Barème précédent (revenus 2024) : 11 497 / 29 315 / 83 823 / 180 294 EUR.",
+      "verified_on": "2026-11-08"
     },
     "ir_quotient_familial_plafond_demi_part": {
       "value": 1807,
@@ -285,7 +291,8 @@
       "source": "https://bofip.impots.gouv.fr/bofip/2494-PGP.html/identifiant=BOI-IR-LIQ-20-20-20-20260407",
       "source_title": "BOFiP BOI-IR-LIQ-20-20-20-20260407 - Plafonnement des effets du quotient familial ; art. 197 CGI",
       "confidence": "high",
-      "note": "Parts : 1 pour une personne seule, 2 pour un couple marié ou pacsé, +0,5 par enfant pour les deux premiers, +1 à partir du 3e. Plafond de la demi-part du premier enfant pour un parent isolé : 4 262 EUR ; demi-part des personnes seules ayant élevé un enfant : 1 079 EUR."
+      "note": "Vérifiée le 08/11/2026 avec l'outil de vérification des règles (page officielle lue dans GitHub Actions, valeur relue dans son contexte). Parts : 1 pour une personne seule, 2 pour un couple marié ou pacsé, +0,5 par enfant pour les deux premiers, +1 à partir du 3e. Plafond de la demi-part du premier enfant pour un parent isolé : 4 262 EUR ; demi-part des personnes seules ayant élevé un enfant : 1 079 EUR.",
+      "verified_on": "2026-11-08"
     },
     "ir_decote": {
       "value": {
@@ -316,7 +323,8 @@
       "source": "https://entreprendre.service-public.fr/vosdroits/F23575",
       "source_title": "Impôt sur les sociétés (IS) - entreprendre.service-public.fr (art. 219 CGI)",
       "confidence": "medium",
-      "note": "S'applique jusqu'à 42 500 EUR de bénéfice si le CA HT est inférieur à 10 MEUR, le capital entièrement libéré et détenu à 75 % au moins par des personnes physiques. Non revérifié en ligne pendant cette session (budget de recherche épuisé) ; taux et seuil en vigueur depuis 2023."
+      "note": "Vérifiée le 08/11/2026 avec l'outil de vérification des règles (page officielle lue dans GitHub Actions, valeur relue dans son contexte). S'applique jusqu'à 42 500 EUR de bénéfice si le CA HT est inférieur à 10 MEUR, le capital entièrement libéré et détenu à 75 % au moins par des personnes physiques. Non revérifié en ligne pendant cette session (budget de recherche épuisé) ; taux et seuil en vigueur depuis 2023.",
+      "verified_on": "2026-11-08"
     },
     "is_seuil_taux_reduit": {
       "value": 42500,
@@ -325,7 +333,8 @@
       "source": "https://entreprendre.service-public.fr/vosdroits/F23575",
       "source_title": "Impôt sur les sociétés (IS) - entreprendre.service-public.fr",
       "confidence": "medium",
-      "note": "Pour un exercice de 12 mois (montant proratisé sinon). Non revérifié en ligne pendant cette session."
+      "note": "Vérifiée le 08/11/2026 avec l'outil de vérification des règles (page officielle lue dans GitHub Actions, valeur relue dans son contexte). Pour un exercice de 12 mois (montant proratisé sinon). Non revérifié en ligne pendant cette session.",
+      "verified_on": "2026-11-08"
     },
     "is_taux_normal": {
       "value": 0.25,
@@ -334,7 +343,8 @@
       "source": "https://entreprendre.service-public.fr/vosdroits/F23575",
       "source_title": "Impôt sur les sociétés (IS) - entreprendre.service-public.fr",
       "confidence": "medium",
-      "note": "Les contributions exceptionnelles de la LF 2026 visent les très grandes entreprises (CA >= 1 MdEUR) et ne concernent pas les freelances. Non revérifié en ligne pendant cette session."
+      "note": "Vérifiée le 08/11/2026 avec l'outil de vérification des règles (page officielle lue dans GitHub Actions, valeur relue dans son contexte). Les contributions exceptionnelles de la LF 2026 visent les très grandes entreprises (CA >= 1 MdEUR) et ne concernent pas les freelances. Non revérifié en ligne pendant cette session.",
+      "verified_on": "2026-11-08"
     },
     "pfu_part_impot": {
       "value": 0.128,
@@ -768,10 +778,17 @@
       "value": "TVA non applicable, art. 293 B du CGI",
       "unit": "text",
       "label": "Mention de franchise en base de TVA sur les factures (jusqu'au 31 décembre 2026)",
-      "source": "https://bpifrance-creation.fr/entrepreneur/actualites/entrepreneurs-petite-mise-a-jour-a-prevoir-vos-factures",
-      "source_title": "Bpifrance Création - Entrepreneurs : petite mise à jour à prévoir sur vos factures (ordonnance n° 2026-671 du 27 juillet 2026)",
+      "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F31808",
+      "source_title": "Facturation : quelles sont les mentions obligatoires ? - Entreprendre.Service-Public.fr",
       "confidence": "high",
-      "note": "L'ordonnance n° 2026-671 du 27 juillet 2026 (JO du 28 juillet) reporte au 1er janvier 2027 le transfert de la TVA dans le CIBS, initialement prévu au 1er septembre 2026 par l'ordonnance n° 2025-1247. Jusqu'au 31 décembre 2026, la référence reste l'article 293 B du CGI (report confirmé par plusieurs sources : Bpifrance Création, Legifiscal, Cridon Nord-Est)."
+      "note": "Source officielle lue le 08/11/2026 (outil de lecture des sources) : la fiche F31808 donne la mention « TVA non applicable, art. 293 B du code général des impôts » (forme longue de la même mention ; référence juridique : CGI, art. 293 B). L'ordonnance n° 2026-671 du 27 juillet 2026 (JO du 28 juillet) reporte au 1er janvier 2027 le transfert de la TVA dans le CIBS, initialement prévu au 1er septembre 2026 par l'ordonnance n° 2025-1247. Jusqu'au 31 décembre 2026, la référence reste l'article 293 B du CGI (report confirmé par plusieurs sources : Bpifrance Création, Legifiscal, Cridon Nord-Est).",
+      "more_sources": [
+        {
+          "source": "https://bpifrance-creation.fr/entrepreneur/actualites/entrepreneurs-petite-mise-a-jour-a-prevoir-vos-factures",
+          "source_title": "Bpifrance Création - Entrepreneurs : petite mise à jour à prévoir sur vos factures (ordonnance n° 2026-671 du 27 juillet 2026)"
+        }
+      ],
+      "verified_on": "2026-11-08"
     },
     "bareme_kilometrique_voitures": {
       "value": {
@@ -866,8 +883,9 @@
       "source": "https://bofip.impots.gouv.fr/bofip/2185-PGP.html",
       "source_title": "BOI-BAREME-000001 - Barème kilométrique applicable aux automobiles et aux deux-roues motorisés - BOFiP-Impôts",
       "confidence": "high",
-      "note": "Source officielle : BOFiP, BOI-BAREME-000001 (version en vigueur depuis le 20/07/2023, lue le 08/11/2026 avec l'outil de lecture des sources ; majoration de 20 % pour les véhicules électriques depuis l'imposition des revenus de 2020, CGI, ann. IV, art. 6 B, II). Previous secondary source kept for history: https://www.legifiscal.fr/actualites-fiscales/4477-ir-revalorisation-2026-bareme-indemnites-kilometriques.html (Barème kilométrique (arrêté du 27 mars 2023), non revalorisé pour l'imposition des revenus 2025). Barème de l'arrêté du 27 mars 2023, inchangé pour les revenus 2023, 2024 et 2025 (déclarés en 2026) selon Legifiscal, L'argus et Legisocial. Coefficients concordants (CFDT-UFETAM, CAPEB). Clé « 3 » = 3 CV et moins, « 7 » = 7 CV et plus. Le barème de l'année suivante est publié au printemps.",
-      "more_sources": []
+      "note": "Vérifiée le 08/11/2026 avec l'outil de vérification des règles (page officielle lue dans GitHub Actions, valeur relue dans son contexte). Source officielle : BOFiP, BOI-BAREME-000001 (version en vigueur depuis le 20/07/2023, lue le 08/11/2026 avec l'outil de lecture des sources ; majoration de 20 % pour les véhicules électriques depuis l'imposition des revenus de 2020, CGI, ann. IV, art. 6 B, II). Previous secondary source kept for history: https://www.legifiscal.fr/actualites-fiscales/4477-ir-revalorisation-2026-bareme-indemnites-kilometriques.html (Barème kilométrique (arrêté du 27 mars 2023), non revalorisé pour l'imposition des revenus 2025). Barème de l'arrêté du 27 mars 2023, inchangé pour les revenus 2023, 2024 et 2025 (déclarés en 2026) selon Legifiscal, L'argus et Legisocial. Coefficients concordants (CFDT-UFETAM, CAPEB). Clé « 3 » = 3 CV et moins, « 7 » = 7 CV et plus. Le barème de l'année suivante est publié au printemps.",
+      "more_sources": [],
+      "verified_on": "2026-11-08"
     },
     "bareme_kilometrique_majoration_electrique": {
       "value": 0.2,
@@ -876,8 +894,9 @@
       "source": "https://bofip.impots.gouv.fr/bofip/2185-PGP.html",
       "source_title": "BOI-BAREME-000001 - Barème kilométrique applicable aux automobiles et aux deux-roues motorisés - BOFiP-Impôts",
       "confidence": "high",
-      "note": "Source officielle : BOFiP, BOI-BAREME-000001 (version en vigueur depuis le 20/07/2023, lue le 08/11/2026 avec l'outil de lecture des sources ; majoration de 20 % pour les véhicules électriques depuis l'imposition des revenus de 2020, CGI, ann. IV, art. 6 B, II). Previous secondary source kept for history: https://www.largus.fr/actualite-automobile/indemnites-kilometriques-2026-le-bareme-auto-moto-et-scooter-pour-declarer-vos-impots-30046424.html (L'argus - Indemnités kilométriques 2026). Le montant obtenu avec le barème est majoré de 20 % pour les véhicules électriques.",
-      "more_sources": []
+      "note": "Vérifiée le 08/11/2026 avec l'outil de vérification des règles (page officielle lue dans GitHub Actions, valeur relue dans son contexte). Source officielle : BOFiP, BOI-BAREME-000001 (version en vigueur depuis le 20/07/2023, lue le 08/11/2026 avec l'outil de lecture des sources ; majoration de 20 % pour les véhicules électriques depuis l'imposition des revenus de 2020, CGI, ann. IV, art. 6 B, II). Previous secondary source kept for history: https://www.largus.fr/actualite-automobile/indemnites-kilometriques-2026-le-bareme-auto-moto-et-scooter-pour-declarer-vos-impots-30046424.html (L'argus - Indemnités kilométriques 2026). Le montant obtenu avec le barème est majoré de 20 % pour les véhicules électriques.",
+      "more_sources": [],
+      "verified_on": "2026-11-08"
     },
     "calendrier_urssaf_declarations": {
       "value": "Déclaration mensuelle : chiffre d'affaires du mois M avant la fin du mois M + 1. Trimestrielle : 30 avril, 31 juillet, 31 octobre, 31 janvier. Échéance reportée au jour suivant si elle tombe un week-end ou un jour férié. Changement de périodicité : demande avant le 31 janvier de l'année concernée.",
@@ -1036,7 +1055,7 @@
       "source": "https://www.legifiscal.fr/actualites-fiscales/4613-mention-facture-changement-article-exoneration-tva-autoentrepreneurs.html",
       "source_title": "Legifiscal - Mention facture : changement d'article d'exonération de TVA pour les autoentrepreneurs",
       "confidence": "medium",
-      "note": "Numéro L. 233-3 donné par Legifiscal et Bpifrance Création après la renumérotation de l'ordonnance n° 2026-671 (l'ordonnance n° 2025-1247 prévoyait L. 223-3). Tolérance de l'ancienne mention jusqu'au 30 juin 2028 selon des résumés de l'ordonnance (31 décembre 2027 selon d'autres) : à vérifier sur Légifrance en décembre 2026. Le site ajoute « (ex-art. 293 B du CGI) » pour lever toute ambiguïté."
+      "note": "Pas encore de source officielle lisible (08/11/2026) : la fiche F31808 ne cite que l'article 293 B ; l'ordonnance n° 2026-671 et le CIBS sont sur Légifrance, qui refuse la lecture automatique. Numéro L. 233-3 donné par Legifiscal et Bpifrance Création après la renumérotation de l'ordonnance n° 2026-671 (l'ordonnance n° 2025-1247 prévoyait L. 223-3). Tolérance de l'ancienne mention jusqu'au 30 juin 2028 selon des résumés de l'ordonnance (31 décembre 2027 selon d'autres) : à vérifier sur Légifrance en décembre 2026. Le site ajoute « (ex-art. 293 B du CGI) » pour lever toute ambiguïté."
     },
     "conservation_pieces": {
       "value": {
