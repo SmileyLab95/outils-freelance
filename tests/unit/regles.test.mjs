@@ -19,7 +19,8 @@ test("règles : valeur, unité, libellé, source https et confiance pour chaque 
       assert.ok(typeof rule.label === "string" && rule.label.length > 0, `${where} : libellé`);
       for (const ref of [rule, ...(rule.more_sources || [])]) assert.match(ref.source, /^https:\/\//, `${where} : source`);
       assert.ok(["high", "medium", "low"].includes(rule.confidence), `${where} : confiance`);
-      if (rule.verified_on) assert.match(rule.verified_on, /^\d{4}-\d{2}-\d{2}$/, `${where} : date de lecture`);
+      // Date de lecture absente ou au format AAAA-MM-JJ (une valeur vide ou nulle casse le build).
+      if ("verified_on" in rule) assert.match(String(rule.verified_on), /^\d{4}-\d{2}-\d{2}$/, `${where} : date de lecture`);
     }
   }
 });

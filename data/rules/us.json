@@ -613,11 +613,45 @@
         "WY"
       ],
       "unit": "list",
-      "label": "States with no individual income tax on wage/earned income (2026)",
-      "source": "https://taxfoundation.org/data/all/state/state-income-tax-rates-2026/",
-      "source_title": "Tax Foundation - 2026 State Income Tax Rates and Brackets",
-      "confidence": "high",
-      "note": "Tax Foundation counts 8 states with no individual income tax (AK, FL, NV, NH, SD, TN, TX, WY) plus Washington, which taxes only capital gains (not wages/self-employment income). New Hampshire's interest and dividends tax was repealed from 2025. Business-level taxes can still apply to freelancers (e.g., Washington B&O tax, Tennessee franchise & excise tax on LLCs, Texas franchise tax on LLCs, Nevada commerce tax) - not verified in this session. Local income taxes (e.g., NYC, some Ohio/Pennsylvania cities) are separate."
+      "label": "States with no individual income tax (2026)",
+      "source": "https://dor.sd.gov/individuals/taxes/",
+      "source_title": "South Dakota Department of Revenue - Taxes",
+      "confidence": "medium",
+      "note": "Read on 08/11/2026 with the source reader (official pages read in GitHub Actions): SD 'South Dakota is one of seven states that does not impose a state income tax'; AK (Alaska Court System) 'Does Alaska have a state individual income tax? No.'; FL (Constitution art. VII s. 5(a)) no tax 'upon the income of natural persons who are residents or citizens of the state' beyond amounts creditable against a federal or other state tax; NV 'The State of Nevada does not impose a state income tax on individuals'; NH Interest and Dividends Tax repealed 'for tax periods beginning on or after January 1, 2025'; TX (Comptroller, February 2016) 'Texas does not have a personal income tax'; WA 'Washington does not currently have an individual income tax. Beginning Jan. 1, 2028, a new 9.9% income tax will apply to individuals and married couples filing jointly with annual adjusted gross income exceeding $1 million' (Senate Bill 6346, first returns due in April 2029); WY 'Wyoming does not possess an individual or corporate income tax'. TN: the Hall income tax on interest and dividends was repealed from 2021, but tn.gov refused the automated reading on 08/11/2026 (connection reset): not reread, hence not dated. Business-level taxes can still apply to freelancers (Nevada's Commerce Tax above $4 million of gross revenue, read on the Nevada page; others such as Washington B&O, Tennessee franchise and excise, Texas franchise tax on LLCs, New Hampshire business profits tax not verified). Local income taxes (e.g. NYC, some Ohio or Pennsylvania cities) are separate.",
+      "more_sources": [
+        {
+          "source": "https://courts.alaska.gov/shc/probate/tax-matters.htm",
+          "source_title": "Alaska Court System - Tax matters (Does Alaska have a state individual income tax?)"
+        },
+        {
+          "source": "https://www.flsenate.gov/Laws/Constitution",
+          "source_title": "Constitution of the State of Florida, Article VII, Section 5 (Florida Senate)"
+        },
+        {
+          "source": "https://tax.nv.gov/about-nevada-department-of-taxation/income-tax-in-nevada/",
+          "source_title": "Nevada Department of Taxation - Income Tax in Nevada"
+        },
+        {
+          "source": "https://www.revenue.nh.gov/news-and-media/repeal-nh-interest-and-dividends-tax-now-effect",
+          "source_title": "New Hampshire Department of Revenue Administration - Repeal of NH Interest and Dividends Tax Now in Effect"
+        },
+        {
+          "source": "https://www.tn.gov/revenue/taxes/hall-income-tax.html",
+          "source_title": "Tennessee Department of Revenue - Hall Income Tax"
+        },
+        {
+          "source": "https://comptroller.texas.gov/economy/fiscal-notes/archive/2016/february/starting.php",
+          "source_title": "Texas Comptroller - Fiscal Notes, Starting a New Business (February 2016)"
+        },
+        {
+          "source": "https://dor.wa.gov/taxes-rates/income-tax",
+          "source_title": "Washington Department of Revenue - Income tax"
+        },
+        {
+          "source": "https://www.wyo.gov/about-wyoming",
+          "source_title": "State of Wyoming - About Wyoming"
+        }
+      ]
     },
     "states_tax_services_by_default": {
       "value": [
@@ -640,7 +674,7 @@
       "source": "https://dor.wa.gov/taxes-rates/retail-sales-tax/services-newly-subject-retail-sales-tax",
       "source_title": "Washington Department of Revenue - Services newly subject to retail sales tax",
       "confidence": "high",
-      "note": "Checked on 08/11/2026 (source reader): 'As of Oct. 1, 2025, a new law (ESSB 5814) requires that certain services now be taxed when sold'; the service table lists IT services, custom website development (web hosting and domain registration not included), advertising, live presentations and security services; 'Effective July 1, 2026, there are new exclusions and exemptions'. The page announces a temporary ESSB 5814 Penalty Relief Program (dates not given on the page) and ongoing legal proceedings. Two earlier statements were not found on the page and were removed: electronically delivered professional services generally not covered, and penalty relief from 2025-10-01 to 2026-12-31. A 2026 bill (reported as ESSB 6346) may repeal most of the expansion from 2029 - status not confirmed.",
+      "note": "Checked on 08/11/2026 (source reader): 'As of Oct. 1, 2025, a new law (ESSB 5814) requires that certain services now be taxed when sold'; the service table lists IT services, custom website development (web hosting and domain registration not included), advertising, live presentations and security services; 'Effective July 1, 2026, there are new exclusions and exemptions'. The page announces a temporary ESSB 5814 Penalty Relief Program (dates not given on the page) and ongoing legal proceedings. Two earlier statements were not found on the page and were removed: electronically delivered professional services generally not covered, and penalty relief from 2025-10-01 to 2026-12-31. Senate Bill 6346 (2026) created a 9.9% income tax from 2028-01-01 on individuals with adjusted gross income over $1 million (dor.wa.gov, read on 08/11/2026); reports that it also repeals part of the services expansion from 2029 were not confirmed.",
       "verified_on": "2026-11-08"
     },
     "sales_tax_services_maryland_it_rate": {

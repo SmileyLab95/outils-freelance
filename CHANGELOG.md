@@ -1,5 +1,17 @@
 # Journal des modifications
 
+## 2026-11-08 (matin) — États sans impôt sur le revenu : sources officielles
+
+- La liste des **neuf États américains sans impôt sur le revenu des particuliers** ne s'appuie plus sur la Tax
+  Foundation mais sur les pages officielles de huit d'entre eux (Dakota du Sud, Alaska, Constitution de la Floride,
+  Nevada, New Hampshire, Texas, Washington, Wyoming) ; le site du Tennessee refuse la lecture automatisée, la règle
+  reste donc non datée.
+- **Nouveauté relevée** : l'État de Washington instaure à partir du **1er janvier 2028** un impôt de 9,9 % pour les
+  particuliers dont le revenu brut ajusté dépasse 1 million de dollars (Senate Bill 6346) ; la FAQ du calculateur de
+  *self-employment tax* le signale, et ne parle plus d'absence d'impôt « sur les revenus d'activité », formule trop
+  large (le New Hampshire et d'autres États taxent certaines activités par d'autres impôts).
+- Test des règles renforcé : une date de lecture vide ou nulle (qui cassait le build) est refusée.
+
 ## 2026-11-08 (nuit) — Vérification des règles : Canada, suite de la France et des États-Unis
 
 - **Canada** : le vérificateur lit désormais la Loi de l'impôt sur le revenu, la Loi sur l'intérêt, Retraite Québec,

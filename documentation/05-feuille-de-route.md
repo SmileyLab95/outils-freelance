@@ -383,11 +383,12 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   toujours la lecture automatisée (51 règles en attente : voir les options d'Ismail plus bas). La fiche F31808 ne
   mentionne plus les amendes pour mentions manquantes (règle `sanctions_mentions_facture` à rattacher au CGI,
   art. 1737, et au Code de commerce, art. L441-16, sur Légifrance ou le BOFiP). À faire : remplacer les dernières
-  sources non officielles (États sans impôt sur le revenu, services taxables, lois de Californie et de Columbus,
+  sources non officielles (services taxables, lois de Californie et de Columbus,
   mention de franchise de TVA de 2027, crédit québécois, extensions de noms de domaine) ; plafond de la Sécurité
   sociale 2027 (ssa.gov refuse la lecture, 403) ; minimum de déduction QBI 2026 ; barème de la contribution santé de
   l'Ontario (seuils absents de la page ontario.ca : lire la *Taxation Act, 2007*) ; sources françaises restantes
-  (Urssaf, Légifrance, economie.gouv.fr).
+  (Urssaf, Légifrance, economie.gouv.fr). États sans impôt sur le revenu : 8 pages officielles sur 9 lues le
+  08/11/2026 (Tennessee illisible) ; Washington taxera dès 2028 les revenus de plus d'un million de dollars.
 - **Règles britanniques revérifiées en direct (07/11/2026, soir)** : 161 règles sur 164 contrôlées sur leur page
   officielle (GOV.UK, legislation.gov.uk ; Banque d'Angleterre par l'outil de lecture) et datées ; 8 sources corrigées ;
   taux directeur à 4 % depuis le 5 novembre 2026 (intérêts du HMRC à 8 % au 24 novembre) ; erreur corrigée : le taux
