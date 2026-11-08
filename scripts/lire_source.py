@@ -26,12 +26,15 @@ from datetime import datetime, timezone
 # villes ; voir autorise). « gouv.fr » est réservé aux services de l'État (Légifrance, impots.gouv.fr,
 # entreprendre.service-public.gouv.fr…) ; Assurance maladie (ameli.fr) et France Travail pour la protection sociale ;
 # Assemblée nationale et Sénat pour les textes de loi ; banques centrales pour les taux ; lois des provinces
-# canadiennes : Ontario (ontario.ca), Québec (gouv.qc.ca), Colombie-Britannique (gov.bc.ca), Alberta (alberta.ca).
+# canadiennes : Ontario (ontario.ca), Québec (gouv.qc.ca, quebec.ca), Colombie-Britannique (gov.bc.ca), Alberta
+# (alberta.ca) ; sites des autres gouvernements provinciaux et territoriaux.
 OFFICIELS = (
     "gouv.fr", "cnil.fr", "service-public.fr", "urssaf.fr", "ameli.fr", "francetravail.fr", "assemblee-nationale.fr",
     "senat.fr", "inpi.fr", "banque-france.fr", "europa.eu",
     "gov.uk", "legislation.gov.uk", "ico.org.uk", "bankofengland.co.uk",
-    "canada.ca", "gc.ca", "revenuquebec.ca", "bankofcanada.ca", "ontario.ca", "gouv.qc.ca", "gov.bc.ca", "alberta.ca",
+    "canada.ca", "gc.ca", "revenuquebec.ca", "bankofcanada.ca", "ontario.ca", "gouv.qc.ca", "quebec.ca", "gov.bc.ca",
+    "alberta.ca", "saskatchewan.ca", "gov.mb.ca", "gnb.ca", "novascotia.ca", "princeedwardisland.ca", "gov.nl.ca",
+    "yukon.ca", "gov.nt.ca", "gov.nu.ca",
     "iana.org", "fnfe-mpe.org",
 )
 LIMITE = 20_000_000          # octets lus au plus

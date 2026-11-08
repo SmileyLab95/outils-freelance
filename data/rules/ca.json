@@ -366,7 +366,8 @@
       "source": "https://www.retraitequebec.gouv.qc.ca/en/professionals-employers/your-role-quebec-pension-plan/contributions-quebec-pension-plan-qpp",
       "source_title": "Contributions to the Québec Pension Plan (QPP) - Retraite Québec",
       "confidence": "high",
-      "note": "QPP2 applies between $74,600 and $85,000."
+      "note": "Checked on 08/11/2026 with the rule checker (official page read in GitHub Actions, value reread in its context): 'a rate of 4% on earnings between $74 600 and $85 000. You no longer contribute on earnings over $85 000'. QPP2 applies between $74,600 and $85,000.",
+      "verified_on": "2026-11-08"
     },
     "qpp2_rate_self_employed": {
       "value": 0.08,
@@ -384,7 +385,8 @@
       "source": "https://www.retraitequebec.gouv.qc.ca/en/professionals-employers/your-role-quebec-pension-plan/contributions-quebec-pension-plan-qpp",
       "source_title": "Contributions to the Québec Pension Plan (QPP) - Retraite Québec",
       "confidence": "high",
-      "note": "= (85,000 - 74,600) x 8%. Employee maximum $416. Total self-employed maximum QPP + QPP2 = $9,790.60."
+      "note": "Checked on 08/11/2026 with the source reader (official page read in GitHub Actions): the Retraite Québec contribution table gives a self-employed maximum of 8958 at $74 600 and 9790 at '85 000 and over' (whole dollars): 9790 - 8958 = 832. Derived: (85,000 - 74,600) x 8% = 832. Employee maximum $416 (4895 - 4479 in the same table). Total self-employed maximum QPP + QPP2 = $9,790.60 (8,958.60 + 832).",
+      "verified_on": "2026-11-08"
     },
     "qpip_max_insurable_earnings": {
       "value": 103000,
@@ -704,10 +706,11 @@
       ],
       "unit": "list",
       "label": "Quarterly income tax instalment due dates for 2026",
-      "source": "https://laws-lois.justice.gc.ca/eng/acts/I-3.3/section-156.1.html",
-      "source_title": "Income Tax Act, section 156.1",
-      "confidence": "medium",
-      "note": "March 15, 2026 is a Sunday: a payment received Monday 2026-03-16 is on time (CRA rule for weekends and public holidays). 2027 dates: 2027-03-15 (Mon), 2027-06-15 (Tue), 2027-09-15 (Wed), 2027-12-15 (Wed). Revenu Québec uses the same dates for Québec tax. Statutory and stable; not re-opened on 2026-10-20."
+      "source": "https://laws-lois.justice.gc.ca/eng/acts/I-3.3/section-156.html",
+      "source_title": "Income Tax Act, section 156",
+      "confidence": "high",
+      "note": "Checked on 08/11/2026 with the source reader (official page read in GitHub Actions): ITA s. 156(1)(a): every individual shall pay 'on or before March 15, June 15, September 15 and December 15 in the year, an amount equal to 1/4 of' the estimated tax or the instalment base. March 15, 2026 is a Sunday: a payment received Monday 2026-03-16 is on time (CRA rule for weekends and public holidays). 2027 dates: 2027-03-15 (Mon), 2027-06-15 (Tue), 2027-09-15 (Wed), 2027-12-15 (Wed). Revenu Québec uses the same dates for Québec tax. The weekend rule (CRA) was not reread on 08/11/2026.",
+      "verified_on": "2026-11-08"
     },
     "instalment_threshold": {
       "value": 3000,
@@ -764,8 +767,9 @@
       "label": "Interest Act s. 3: default rate when interest is payable but no rate is fixed",
       "source": "https://laws-lois.justice.gc.ca/eng/acts/I-15/page-1.html",
       "source_title": "Interest Act (R.S.C., 1985, c. I-15)",
-      "confidence": "medium",
-      "note": "5% per year when interest is payable by agreement or by law and no rate is fixed. In court, provincial prejudgment/post-judgment interest statutes also apply (e.g. Ontario Courts of Justice Act); in Québec, Civil Code art. 1617 and 1619 (legal interest + additional indemnity, https://www.legisquebec.gouv.qc.ca/en/document/cs/CCQ-1991). Not re-opened on 2026-10-20."
+      "confidence": "high",
+      "note": "Checked on 08/11/2026 with the source reader (official page read in GitHub Actions): Interest Act s. 3: 'Whenever any interest is payable by the agreement of parties or by law, and no rate is fixed by the agreement or by law, the rate of interest shall be five per cent per annum.' In court, provincial prejudgment/post-judgment interest statutes also apply (e.g. Ontario Courts of Justice Act); in Québec, Civil Code art. 1617 and 1619 (legal interest + additional indemnity, https://www.legisquebec.gouv.qc.ca/en/document/cs/CCQ-1991).",
+      "verified_on": "2026-11-08"
     },
     "criminal_interest_rate": {
       "value": 0.35,
@@ -892,7 +896,8 @@
       "source": "https://laws-lois.justice.gc.ca/eng/acts/I-3.3/section-146.html",
       "source_title": "Income Tax Act, section 146 (RRSP) - Justice Laws Website",
       "confidence": "high",
-      "note": "60th day of 2027 = March 1, 2027 (a Monday)."
+      "note": "Checked on 08/11/2026 with the source reader (official page read in GitHub Actions): ITA s. 146(5)(a): premiums paid 'on or before the day that is 60 days after the end of the year' are deductible for that year. 60 days after December 31, 2026 = March 1, 2027 (a Monday; derived).",
+      "verified_on": "2026-11-08"
     },
     "rrsp_limits_2026": {
       "value": {

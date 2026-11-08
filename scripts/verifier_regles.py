@@ -38,11 +38,10 @@ MOIS_AP = ["Jan.", "Feb.", "March", "April", "May", "June", "July", "Aug.", "Sep
 MOIS_FR = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre",
            "novembre", "décembre"]
 # Sites publics lus en plus de ceux de scripts/lire_source.py : tout domaine .gov (réservé aux administrations des
-# États-Unis), sites des États américains en .us, parlements, tribunaux et organismes publics des provinces canadiennes
-# des registres de noms de domaine et de leurs opérateurs (sources de référence des règles « shared »), régime
+# États-Unis), sites des États américains en .us, parlements, tribunaux et organismes publics des provinces canadiennes,
+# registres de noms de domaine et de leurs opérateurs (sources de référence des règles « shared »), régime
 # Agirc-Arrco (sa propre réglementation).
-PUBLICS = ("parliament.uk", "quebec.ca", "gov.mb.ca", "gnb.ca", "gov.nl.ca", "gov.nt.ca", "princeedwardisland.ca",
-           "yukon.ca", "saskatchewan.ca", "nslegislature.ca", "assembly.nl.ca", "provincialcourt.bc.ca",
+PUBLICS = ("parliament.uk", "nslegislature.ca", "assembly.nl.ca", "provincialcourt.bc.ca",
            "albertacourts.ca", "sasklawcourts.ca", "manitobacourts.mb.ca", "courts.ns.ca", "courts.pe.ca", "court.nl.ca",
            "yukoncourts.ca", "nwtcourts.ca", "wsib.ca", "worksafebc.com", "wcb.ab.ca", "wcbsask.com", "wcb.mb.ca",
            "wcb.ns.ca", "worksafenb.ca", "wcb.pe.ca", "workplacenl.ca", "wscc.nt.ca", "wcb.yk.ca", "oscn.net",
