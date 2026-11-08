@@ -25,6 +25,9 @@ class Formes(unittest.TestCase):
         self.assertIn("6.0%", V.formes(0.06, "rate")[0], "taux écrit avec une décimale")
         self.assertIn("110%", V.formes(1.1, "rate")[0], "coefficient de 110 %")
         self.assertIn("5.4%", V.formes({"max_credit": 0.054}, "USD")[0], "champ « credit »")
+        bareme = V.formes([{"to": 5000, "rate": 0.37, "fixed": 0}], "EUR")
+        self.assertIn("0,370", bareme[1], "coefficient du barème kilométrique, trois décimales")
+        self.assertTrue(V.trouve("0,370", "3 CV et moins d x 0,370 4 CV"))
         penalites = V.formes({"fixed": 100, "after_6_months": {"rate": 0.05, "minimum": 300}}, "GBP")
         self.assertEqual([g[0] for g in penalites], ["100", "5%", "300"], "champ « rate » d'une règle en livres")
 

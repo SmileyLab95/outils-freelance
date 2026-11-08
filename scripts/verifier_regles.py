@@ -74,7 +74,7 @@ def formes_nombre(n):
         out += [signe + _milliers(entier, ",") + ".00", signe + _milliers(entier, " ") + ",00"]
     else:
         txt = ("%.6f" % abs(n)).rstrip("0").split(".")[1]
-        variantes = {txt, txt.ljust(2, "0")}
+        variantes = {txt, txt.ljust(2, "0"), txt.ljust(3, "0")}
         for d in sorted(variantes):
             for sep, virgule in ((",", "."), ("", "."), (" ", ","), ("", ",")):
                 out.append(signe + _milliers(entier, sep) + virgule + d)
@@ -93,7 +93,11 @@ def formes(valeur, unite, pays="uk", cle=""):
             pct = formes_nombre(valeur * 100)
             if float(valeur * 100).is_integer():
                 pct.append("%d.0" % round(valeur * 100))
-            groupes.append([p + s for p in pct for s in ("%", " %", " per cent", " percent", " pour cent")])
+            groupe = [p + s for p in pct for s in ("%", " %", " per cent", " percent", " pour cent")]
+            # Un champ « rate » peut aussi être un coefficient (barème kilométrique : « d x 0,529 »).
+            if unite not in TAUX:
+                groupe += formes_nombre(valeur)
+            groupes.append(groupe)
         elif valeur == 0:
             return groupes
         elif unite in MONNAIES and 0 < valeur < 1:
