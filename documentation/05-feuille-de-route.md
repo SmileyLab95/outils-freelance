@@ -376,8 +376,11 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   des comptes attend le choix de l'hébergeur et du domaine.
 - **Vérification outillée des règles (08/11/2026)** : workflow « Vérifier les règles sur leurs sources »
   (`scripts/verifier_regles.py`, D55) ; États-Unis : 77 règles sur 95 datées après relecture ; barème kilométrique
-  français et taux kilométrique américain de juillet rattachés au BOFiP et à l'IRS. À faire : lancer l'outil pour la
-  France et le Canada ; remplacer les dernières sources non officielles (États sans impôt sur le revenu, services
+  français et taux kilométrique américain de juillet rattachés au BOFiP et à l'IRS ; France : 13 règles vérifiées,
+  SMIC mis à jour (12,31 €, revalorisé en cours d'année), 38 sources illisibles automatiquement (Urssaf, Légifrance,
+  impots.gouv) ; la fiche F31808 ne mentionne plus les amendes pour mentions manquantes (règle
+  `sanctions_mentions_facture` à rattacher au CGI, art. 1737, et au Code de commerce, art. L441-16). À faire : rapport
+  du Canada ; remplacer les dernières sources non officielles (États sans impôt sur le revenu, services
   taxables, lois de Californie et de Columbus, mention de franchise de TVA, crédit québécois, extensions de noms de
   domaine) ; plafond de la Sécurité sociale 2027 (ssa.gov refuse la lecture, 403) ; minimum de déduction QBI 2026.
 - **Règles britanniques revérifiées en direct (07/11/2026, soir)** : 161 règles sur 164 contrôlées sur leur page

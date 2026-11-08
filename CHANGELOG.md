@@ -12,7 +12,11 @@
   2026 rattaché à l'annonce de l'IRS ; la page citée pour le taux de 20 % de la déduction QBI ayant changé, sources
   remplacées. Le minimum de déduction QBI de 2026 (400 $) reste à confirmer sur une source officielle.
 - **France** : barème kilométrique et majoration de 20 % des véhicules électriques rattachés au BOFiP
-  (BOI-BAREME-000001), tous les coefficients relus, au lieu de sites d'information.
+  (BOI-BAREME-000001), tous les coefficients relus, au lieu de sites d'information ; 13 règles vérifiées en direct
+  (barème de l'impôt, franchise de TVA, IS, quotient familial, versement libératoire…) ; mention « TVA non
+  applicable, art. 293 B » rattachée à la fiche F31808 ; **SMIC mis à jour** (12,31 € brut de l'heure et 1 867,02 €
+  par mois selon la fiche F2300, revalorisé en cours d'année ; règle non utilisée par les calculs). La plupart des
+  autres sources françaises (Urssaf, Légifrance, impots.gouv) refusent la lecture automatique.
 
 ## 2026-11-07 (soir) — Royaume-Uni : règles revérifiées sur les pages officielles en direct
 
