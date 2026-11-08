@@ -818,20 +818,26 @@
     },
     "freelance_law_columbus_ohio": {
       "value": {
-        "name": "Columbus (OH) wage theft ordinance - freelance worker provisions",
+        "name": "Columbus (OH) City Codes, chapter 2337 (Freelance Worker Protections)",
         "effective_date": "2023 (amendment adopted May 2023; exact effective date not confirmed)",
         "written_contract_threshold_usd": 250,
         "aggregation": "$250 alone or over a 120-day period with the same hiring party",
         "payment_deadline": "Date in the contract; if none, no later than 30 days after completion of the services",
         "remedies": "Not verified",
-        "enforcer": "City of Columbus (not verified)"
+        "enforcer": "Columbus Labor Commission"
       },
       "unit": "text",
       "label": "Columbus, Ohio freelancer payment protection",
       "source": "https://www.ebglaw.com/workforce-bulletin/columbus-oh-adds-freelance-worker-protections-to-its-city-code",
       "source_title": "Epstein Becker Green Workforce Bulletin - Columbus, OH Adds Freelance Worker Protections to Its City Code",
       "confidence": "medium",
-      "note": "Secondary (law firm) source only; no columbus.gov page found. Contract kept 5 years."
+      "note": "Read on 08/11/2026 with the source reader: the City of Columbus 2025 annual report says the mission of the Columbus Labor Commission includes 'to protect freelance workers from common abusive practices' and counts complaints 'under Ch. 2337 (Freelance Worker Protections)' (none in 2025). The chapter was reportedly repealed and replaced by ordinance 2401-2024 (city legislative portal, not read): threshold, aggregation and payment deadline come from a law firm bulletin and must be re-checked against the current code text. Contract kept 5 years (same secondary source).",
+      "more_sources": [
+        {
+          "source": "https://www.columbus.gov/files/sharedassets/city/v/1/city-council/documents/annual-report/2025-annual-report-document.pdf",
+          "source_title": "City of Columbus - 2025 Annual Report (Columbus Labor Commission)"
+        }
+      ]
     },
     "freelance_law_seattle": {
       "value": {
