@@ -87,9 +87,11 @@ def formes(valeur, unite, pays="uk", cle=""):
     if isinstance(valeur, bool) or valeur is None:
         return groupes
     if isinstance(valeur, (int, float)):
-        taux = unite in TAUX or re.search(r"rate|taux|fraction|percent|pct", cle or "") is not None
-        if taux and 0 < abs(valeur) < 1:
+        taux = unite in TAUX or re.search(r"rate|taux|fraction|percent|pct|credit|share|factor|ratio", cle or "") is not None
+        if taux and 0 < abs(valeur) <= 2:
             pct = formes_nombre(valeur * 100)
+            if float(valeur * 100).is_integer():
+                pct.append("%d.0" % round(valeur * 100))
             groupes.append([p + s for p in pct for s in ("%", " %", " per cent", " percent", " pour cent")])
         elif valeur == 0:
             return groupes

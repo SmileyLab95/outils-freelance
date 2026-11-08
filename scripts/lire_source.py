@@ -57,7 +57,9 @@ def autorise(url):
 
 
 class _Texte(html.parser.HTMLParser):
-    BLOCS = {"p", "div", "br", "li", "tr", "h1", "h2", "h3", "h4", "h5", "h6", "section", "article", "table", "dd", "dt"}
+    # Cellules de tableau séparées (« 24,500 | 23,500 » et non « 24,50023,500 »).
+    BLOCS = {"p", "div", "br", "li", "tr", "td", "th", "h1", "h2", "h3", "h4", "h5", "h6", "section", "article", "table",
+             "dd", "dt"}
 
     def __init__(self):
         super().__init__(convert_charrefs=True)

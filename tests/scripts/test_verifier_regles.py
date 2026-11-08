@@ -22,6 +22,9 @@ class Formes(unittest.TestCase):
         self.assertIn("70 cents", V.formes(0.7, "USD")[0], "cents")
         self.assertEqual(V.formes(0, "rate"), [], "zéro : rien à chercher")
         self.assertIn("8.00%", V.formes(0.08, "rate")[0], "taux écrit avec deux décimales")
+        self.assertIn("6.0%", V.formes(0.06, "rate")[0], "taux écrit avec une décimale")
+        self.assertIn("110%", V.formes(1.1, "rate")[0], "coefficient de 110 %")
+        self.assertIn("5.4%", V.formes({"max_credit": 0.054}, "USD")[0], "champ « credit »")
         penalites = V.formes({"fixed": 100, "after_6_months": {"rate": 0.05, "minimum": 300}}, "GBP")
         self.assertEqual([g[0] for g in penalites], ["100", "5%", "300"], "champ « rate » d'une règle en livres")
 
