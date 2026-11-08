@@ -14,9 +14,12 @@ Il tourne dans GitHub Actions (.github/workflows/verifier-regles.yml), à la dem
 habituel n'a pas accès à tous ces sites. Le rapport est imprimé à la fin du journal.
 
 Usage : python3 scripts/verifier_regles.py <fr|uk|us|ca|shared> [--toutes] [--contexte] [--regles r1,r2]
+                                          [--essai "regle=url url;regle2=url"]
   --toutes : toutes les règles, datées comprises (contrôle de veille) ;
   --contexte : le passage de la page autour de chaque valeur trouvée, pour la relire ;
-  --regles : seulement ces règles.
+  --regles : seulement ces règles ;
+  --essai : sources candidates à lire en plus pour ces règles, sans les enregistrer (les règles citées sont vérifiées
+            même si elles sont datées).
 """
 import hashlib
 import json
@@ -203,6 +206,17 @@ def lire(url, cache):
     return cache[url]
 
 
+def essais(texte):
+    """« regle=url url;regle2=url » -> {regle: [url, …]} : sources candidates d'un essai, non enregistrées."""
+    out = {}
+    for morceau in texte.split(";"):
+        if "=" in morceau:
+            cle, urls = morceau.split("=", 1)
+            if cle.strip():
+                out.setdefault(cle.strip(), []).extend(u for u in urls.split() if u)
+    return out
+
+
 def main(argv):
     if not argv or argv[0] not in ("fr", "uk", "us", "ca", "shared"):
         sys.exit(__doc__)
@@ -210,12 +224,15 @@ def main(argv):
     choisies = None
     if "--regles" in argv:
         choisies = set(argv[argv.index("--regles") + 1].split(","))
+    essai = essais(argv[argv.index("--essai") + 1]) if "--essai" in argv else {}
+    if essai:
+        choisies = (choisies or set()) | set(essai)
     regles = json.loads((RULES / f"{pays}.json").read_text(encoding="utf-8"))["values"]
     cache, lignes, compte = {}, [], {}
     retenues = {cle: regle for cle, regle in regles.items()
                 if (cle in choisies if choisies is not None else toutes or not regle.get("verified_on"))}
-    sources = {cle: [regle.get("source", "")] + [m.get("source", "") for m in regle.get("more_sources", [])]
-               for cle, regle in retenues.items()}
+    sources = {cle: [regle.get("source", "")] + [m.get("source", "") for m in regle.get("more_sources") or []]
+               + essai.get(cle, []) for cle, regle in retenues.items()}
     # Pages lues en parallèle (chacune une seule fois) : une page qui n'aboutit pas ne retarde pas les autres.
     a_lire = sorted({u for urls in sources.values() for u in urls if officiel(u)})
     with ThreadPoolExecutor(max_workers=8) as pool:

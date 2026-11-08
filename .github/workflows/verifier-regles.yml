@@ -22,6 +22,10 @@ on:
         description: "Seulement ces règles (séparées par des virgules, facultatif)"
         type: string
         default: ""
+      essai:
+        description: "Sources candidates, non enregistrées : regle=url url;regle2=url (facultatif)"
+        type: string
+        default: ""
 
 permissions:
   contents: read
@@ -43,6 +47,9 @@ jobs:
           TOUTES: ${{ inputs.toutes && '--toutes' || '' }}
           CONTEXTE: ${{ inputs.contexte && '--contexte' || '' }}
           REGLES: ${{ inputs.regles }}
+          ESSAI: ${{ inputs.essai }}
         run: |
-          if [ -n "$REGLES" ]; then python scripts/verifier_regles.py "$PAYS" $TOUTES $CONTEXTE --regles "$REGLES"
-          else python scripts/verifier_regles.py "$PAYS" $TOUTES $CONTEXTE; fi
+          set -- "$PAYS" $TOUTES $CONTEXTE
+          if [ -n "$REGLES" ]; then set -- "$@" --regles "$REGLES"; fi
+          if [ -n "$ESSAI" ]; then set -- "$@" --essai "$ESSAI"; fi
+          python scripts/verifier_regles.py "$@"

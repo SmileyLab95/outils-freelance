@@ -11,6 +11,18 @@
   *self-employment tax* le signale, et ne parle plus d'absence d'impôt « sur les revenus d'activité », formule trop
   large (le New Hampshire et d'autres États taxent certaines activités par d'autres impôts).
 - Test des règles renforcé : une date de lecture vide ou nulle (qui cassait le build) est refusée.
+- **États qui taxent les services par défaut** (Hawaï, Nouveau-Mexique, Dakota du Sud, Virginie-Occidentale) :
+  rattachés aux administrations fiscales de ces États au lieu de TaxJar. **Columbus (Ohio)** : autorité
+  d'application (Columbus Labor Commission) relue sur columbus.gov ; le chapitre ayant été remplacé en 2024, seuil
+  et délai restent signalés « à relire ».
+- **France** : 11 règles relues sur les fiches lisibles d'Entreprendre.Service-Public (Urssaf, Légifrance et
+  economie.gouv.fr refusant la lecture automatique) : ACRE (50 % puis 25 % au 1er juillet 2026), plafonds micro,
+  conservation des pièces (10 ans, 6 ans au fiscal), taux de TVA, PASS 2026 (48 060 €), nouvelles mentions de
+  facture de la réforme (calendrier : grandes entreprises et ETI d'abord, PME et micro-entreprises au 1er septembre
+  2027). **Correction** : l'option pour le versement libératoire se déclare avant le dernier jour du 3e mois qui suit
+  la création (la page disait « 3 mois après »).
+- Outils internes : PDF officiels chiffrés lisibles ; option « essai » du vérificateur pour tester une source sans
+  l'enregistrer.
 
 ## 2026-11-08 (nuit) — Vérification des règles : Canada, suite de la France et des États-Unis
 

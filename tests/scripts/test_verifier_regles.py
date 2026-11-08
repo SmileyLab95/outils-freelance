@@ -78,6 +78,14 @@ class Recherche(unittest.TestCase):
         self.assertEqual(V.statut({"value": "texte", "unit": "text"}, ["…"]), ("TEXTE", []))
 
 
+class Essai(unittest.TestCase):
+    def test_essais(self):
+        self.assertEqual(V.essais("a=https://x.gov/1 https://x.gov/2;b=https://y.gov"),
+                         {"a": ["https://x.gov/1", "https://x.gov/2"], "b": ["https://y.gov"]})
+        self.assertEqual(V.essais(" a = https://x.gov ; ;=https://z.gov"), {"a": ["https://x.gov"]}, "espaces et morceaux vides")
+        self.assertEqual(V.essais(""), {})
+
+
 class Officiel(unittest.TestCase):
     def test_sources(self):
         for url in ("https://www.gov.uk/income-tax-rates", "https://www.ssa.gov/oact/cola/cbb.html",
