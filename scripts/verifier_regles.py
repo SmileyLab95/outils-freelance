@@ -13,8 +13,9 @@ source lisible). Un OK n'est qu'un indice : le contexte de chaque valeur reste �
 Il tourne dans GitHub Actions (.github/workflows/verifier-regles.yml), à la demande : l'environnement de travail
 habituel n'a pas accès à tous ces sites. Le rapport est imprimé à la fin du journal.
 
-Usage : python3 scripts/verifier_regles.py <fr|uk|us|ca|shared> [--toutes] [--regles r1,r2]
+Usage : python3 scripts/verifier_regles.py <fr|uk|us|ca|shared> [--toutes] [--contexte] [--regles r1,r2]
   --toutes : toutes les règles, datées comprises (contrôle de veille) ;
+  --contexte : le passage de la page autour de chaque valeur trouvée, pour la relire ;
   --regles : seulement ces règles.
 """
 import hashlib
@@ -32,6 +33,7 @@ import lire_source as L  # noqa: E402
 RULES = Path(__file__).resolve().parent.parent / "data" / "rules"
 MOIS_EN = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October",
            "November", "December"]
+MOIS_AP = ["Jan.", "Feb.", "March", "April", "May", "June", "July", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."]
 MOIS_FR = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre",
            "novembre", "décembre"]
 # Sites publics lus en plus de ceux de scripts/lire_source.py : tout domaine .gov (réservé aux administrations des
@@ -101,10 +103,10 @@ def formes(valeur, unite, pays="uk", cle=""):
         m = re.fullmatch(r"(\d{4})-(\d{2})-(\d{2})", valeur)
         if m:
             a, mo, j = int(m[1]), int(m[2]), int(m[3])
-            en, fr = MOIS_EN[mo - 1], MOIS_FR[mo - 1]
+            en, ap, fr = MOIS_EN[mo - 1], MOIS_AP[mo - 1], MOIS_FR[mo - 1]
             jfr = "1er" if j == 1 else str(j)
-            groupes.append([f"{j} {en} {a}", f"{en} {j}, {a}", f"{jfr} {fr} {a}", f"{j} {fr} {a}",
-                            f"{j} {en}", f"{en} {j}", f"{jfr} {fr}"])
+            groupes.append(list(dict.fromkeys([f"{j} {en} {a}", f"{en} {j}, {a}", f"{ap} {j}, {a}", f"{jfr} {fr} {a}",
+                                               f"{j} {fr} {a}", f"{j} {en}", f"{en} {j}", f"{ap} {j}", f"{jfr} {fr}"])))
         return groupes
     if isinstance(valeur, list):
         for x in valeur:
@@ -126,6 +128,12 @@ def trouve(forme, txt):
     """Vrai si la forme figure dans le texte comme nombre délimité (pas de chiffre collé avant ou après)."""
     motif = r"(?<![\d.,])" + re.escape(normaliser(forme)) + r"(?![\d]|[.,]\d)"
     return re.search(motif, txt, flags=re.IGNORECASE) is not None
+
+
+def contexte(forme, txt, largeur=70):
+    """Passage autour de la première occurrence délimitée d'une forme, pour relire la valeur dans sa phrase."""
+    m = re.search(r"(?<![\d.,])" + re.escape(normaliser(forme)) + r"(?![\d]|[.,]\d)", txt, flags=re.IGNORECASE)
+    return " ".join(txt[max(0, m.start() - largeur): m.end() + largeur].split()) if m else ""
 
 
 def statut(regle, textes, pays="uk"):
@@ -175,7 +183,7 @@ def lire(url, cache):
 def main(argv):
     if not argv or argv[0] not in ("fr", "uk", "us", "ca", "shared"):
         sys.exit(__doc__)
-    pays, toutes = argv[0], "--toutes" in argv
+    pays, toutes, avec_contexte = argv[0], "--toutes" in argv, "--contexte" in argv
     choisies = None
     if "--regles" in argv:
         choisies = set(argv[argv.index("--regles") + 1].split(","))
@@ -193,8 +201,15 @@ def main(argv):
         compte[st] = compte.get(st, 0) + 1
         empreintes = " ".join(e for _, e in lus if e)
         detail = (" manque : " + ", ".join(manque)) if manque else ""
-        lignes.append((st, f"{st:<12} {cle}{detail}" + (f"  [{empreintes}]" if empreintes else "")
-                       + ("" if officielles else "  (" + ", ".join(u.split('/')[2] for u in urls if u) + ")")))
+        ligne = f"{st:<12} {cle}{detail}" + (f"  [{empreintes}]" if empreintes else "") \
+            + ("" if officielles else "  (" + ", ".join(u.split('/')[2] for u in urls if u) + ")")
+        if avec_contexte and st in ("OK", "MANQUE"):
+            tout = "\n".join(normaliser(t) for t, _ in lus if t)
+            for groupe in formes(regle.get("value"), regle.get("unit"), pays)[:8]:
+                passage = next((contexte(f, tout) for f in groupe if trouve(f, tout)), "")
+                if passage:
+                    ligne += f"\n      {groupe[0]} : …{passage}…"
+        lignes.append((st, ligne))
     ordre = ["ERREUR", "NON OFFICIEL", "MANQUE", "TEXTE", "OK"]
     print(f"\n===== Règles {pays} vérifiées le {date.today():%d/%m/%Y} : "
           + ", ".join(f"{s} {compte[s]}" for s in ordre if s in compte))

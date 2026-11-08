@@ -30,6 +30,7 @@ class Formes(unittest.TestCase):
         self.assertIn("6 April 2026", d)
         self.assertIn("April 6, 2026", d)
         self.assertIn("1er janvier 2027", V.formes("2027-01-01", "date")[0])
+        self.assertIn("Sept. 15, 2026", V.formes("2026-09-15", "date")[0], "abréviations de l'IRS")
         self.assertEqual(V.formes("texte libre", "text"), [])
         tranches = V.formes([{"from": 0, "to": 37700, "rate": 0.2}], "brackets")
         self.assertEqual([g[0] for g in tranches], ["37,700", "20%"], "le 0 de départ n'est pas cherché")
@@ -43,6 +44,10 @@ class Recherche(unittest.TestCase):
         self.assertFalse(V.trouve("50,000", "profits under £250,000"), "pas dans 250 000")
         self.assertFalse(V.trouve("3.5", "rate 3.50 a week"), "3.5 n'est pas trouvé dans 3.50")
         self.assertTrue(V.trouve("12 570", V.normaliser("jusqu'à 12 570 €")), "espace fine insécable")
+
+    def test_contexte(self):
+        self.assertEqual(V.contexte("8%", "Top rate 48%. Statutory interest is 8% plus base rate", 12), "interest is 8% plus base r", "12 caractères de part et d'autre")
+        self.assertEqual(V.contexte("9%", "rate 8%"), "")
 
     def test_statut(self):
         regle = {"value": 12570, "unit": "GBP"}
