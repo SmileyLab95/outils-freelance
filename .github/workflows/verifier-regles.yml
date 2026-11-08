@@ -1,0 +1,43 @@
+# Vérification des règles d'un pays sur leurs pages officielles lues en direct (scripts/verifier_regles.py) :
+# l'environnement de travail habituel n'a pas accès à tous ces sites. Rapport à la fin du journal.
+name: Vérifier les règles sur leurs sources
+
+on:
+  workflow_dispatch:
+    inputs:
+      pays:
+        description: "Fichier de règles"
+        type: choice
+        options: [us, uk, ca, fr, shared]
+        default: us
+      toutes:
+        description: "Toutes les règles, déjà datées comprises (veille)"
+        type: boolean
+        default: false
+      regles:
+        description: "Seulement ces règles (séparées par des virgules, facultatif)"
+        type: string
+        default: ""
+
+permissions:
+  contents: read
+
+jobs:
+  verifier:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Installer la lecture des PDF
+        run: python -m pip install --quiet pypdf==5.4.0
+      - name: Vérifier
+        env:
+          PAYS: ${{ inputs.pays }}
+          TOUTES: ${{ inputs.toutes && '--toutes' || '' }}
+          REGLES: ${{ inputs.regles }}
+        run: |
+          if [ -n "$REGLES" ]; then python scripts/verifier_regles.py "$PAYS" $TOUTES --regles "$REGLES"
+          else python scripts/verifier_regles.py "$PAYS" $TOUTES; fi

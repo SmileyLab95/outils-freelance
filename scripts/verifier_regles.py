@@ -1,0 +1,208 @@
+"""Vérifie que les valeurs des règles d'un pays figurent sur leurs pages officielles, lues en direct.
+
+Pour chaque règle de data/rules/<pays>.json (par défaut celles qui n'ont pas encore de date de vérification), le script
+lit la source et les sources complémentaires (sites officiels de la liste de scripts/lire_source.py seulement), puis
+cherche chaque nombre ou date de la valeur sous ses formes rédigées (« £12,570 », « 12 570 € », « 20% », « 55p »,
+« 6 April 2026 », « 1er janvier »…), nombre entier délimité (« 8% » n'est pas trouvé dans « 48% »).
+
+Statuts : OK (toutes les valeurs trouvées), MANQUE (au moins une valeur absente : à relire à la main, la page peut la
+rédiger autrement), TEXTE (valeur sans nombre : à relire), NON OFFICIEL (aucune source officielle), ERREUR (aucune
+source lisible). Un OK n'est qu'un indice : le contexte de chaque valeur reste à relire avant de dater la règle
+(documentation/04-methode-de-travail.md).
+
+Il tourne dans GitHub Actions (.github/workflows/verifier-regles.yml), à la demande : l'environnement de travail
+habituel n'a pas accès à tous ces sites. Le rapport est imprimé à la fin du journal.
+
+Usage : python3 scripts/verifier_regles.py <fr|uk|us|ca|shared> [--toutes] [--regles r1,r2]
+  --toutes : toutes les règles, datées comprises (contrôle de veille) ;
+  --regles : seulement ces règles.
+"""
+import hashlib
+import json
+import re
+import sys
+import urllib.error
+import urllib.request
+from datetime import date
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import lire_source as L  # noqa: E402
+
+RULES = Path(__file__).resolve().parent.parent / "data" / "rules"
+MOIS_EN = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October",
+           "November", "December"]
+MOIS_FR = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre",
+           "novembre", "décembre"]
+# Sites publics lus en plus de ceux de scripts/lire_source.py : tout domaine .gov (réservé aux administrations des
+# États-Unis), sites des États américains en .us, parlements, tribunaux et organismes publics des provinces canadiennes
+# et des registres de noms de domaine (sources de référence des règles « shared »).
+PUBLICS = ("parliament.uk", "quebec.ca", "gov.mb.ca", "gnb.ca", "gov.nl.ca", "gov.nt.ca", "princeedwardisland.ca",
+           "yukon.ca", "saskatchewan.ca", "nslegislature.ca", "assembly.nl.ca", "provincialcourt.bc.ca",
+           "albertacourts.ca", "sasklawcourts.ca", "manitobacourts.mb.ca", "courts.ns.ca", "courts.pe.ca", "court.nl.ca",
+           "yukoncourts.ca", "nwtcourts.ca", "wsib.ca", "worksafebc.com", "wcb.ab.ca", "wcbsask.com", "wcb.mb.ca",
+           "wcb.ns.ca", "worksafenb.ca", "wcb.pe.ca", "workplacenl.ca", "wscc.nt.ca", "wcb.yk.ca", "oscn.net",
+           "pacourts.us", "sccourts.org", "vermontjudiciary.org", "rfc-editor.org", "icann.org", "afnic.fr", "cira.ca",
+           "registre.quebec", "nominet.uk")
+TAUX = ("rate", "brackets", "percent")
+MONNAIES = ("GBP", "USD", "CAD", "EUR")
+
+
+def _milliers(entier, sep):
+    s = str(entier)
+    groupes = []
+    while len(s) > 3:
+        groupes.insert(0, s[-3:])
+        s = s[:-3]
+    groupes.insert(0, s)
+    return sep.join(groupes)
+
+
+def formes_nombre(n):
+    """Formes rédigées d'un nombre : « 12,570 », « 12 570 », « 12570 » ; « 3.65 », « 3,65 » ; « 3.5 » aussi en « 3.50 »."""
+    n = round(float(n), 6)
+    entier = int(abs(n))
+    signe = "-" if n < 0 else ""
+    dec = abs(n) - entier
+    out = []
+    if dec < 1e-9:
+        for sep in (",", " ", ""):
+            out.append(signe + _milliers(entier, sep))
+        out += [signe + _milliers(entier, ",") + ".00", signe + _milliers(entier, " ") + ",00"]
+    else:
+        txt = ("%.6f" % abs(n)).rstrip("0").split(".")[1]
+        variantes = {txt, txt.ljust(2, "0")}
+        for d in sorted(variantes):
+            for sep, virgule in ((",", "."), ("", "."), (" ", ","), ("", ",")):
+                out.append(signe + _milliers(entier, sep) + virgule + d)
+    return list(dict.fromkeys(out))
+
+
+def formes(valeur, unite, pays="uk", cle=""):
+    """Liste de groupes de formes : chaque groupe est une valeur à trouver sous l'une de ses formes. Dans une valeur
+    composée, un champ dont le nom évoque un taux (« rate », « taux », « fraction ») est cherché en pourcentage."""
+    groupes = []
+    if isinstance(valeur, bool) or valeur is None:
+        return groupes
+    if isinstance(valeur, (int, float)):
+        taux = unite in TAUX or re.search(r"rate|taux|fraction|percent|pct", cle or "") is not None
+        if taux and 0 < abs(valeur) < 1:
+            pct = formes_nombre(valeur * 100)
+            groupes.append([p + s for p in pct for s in ("%", " %", " per cent", " percent", " pour cent")])
+        elif valeur == 0:
+            return groupes
+        elif unite in MONNAIES and 0 < valeur < 1:
+            c = formes_nombre(valeur * 100)
+            groupes.append([x + s for x in c for s in ("p", " pence", "¢", " cents", " c")] + formes_nombre(valeur))
+        else:
+            groupes.append(formes_nombre(valeur))
+        return groupes
+    if isinstance(valeur, str):
+        m = re.fullmatch(r"(\d{4})-(\d{2})-(\d{2})", valeur)
+        if m:
+            a, mo, j = int(m[1]), int(m[2]), int(m[3])
+            en, fr = MOIS_EN[mo - 1], MOIS_FR[mo - 1]
+            jfr = "1er" if j == 1 else str(j)
+            groupes.append([f"{j} {en} {a}", f"{en} {j}, {a}", f"{jfr} {fr} {a}", f"{j} {fr} {a}",
+                            f"{j} {en}", f"{en} {j}", f"{jfr} {fr}"])
+        return groupes
+    if isinstance(valeur, list):
+        for x in valeur:
+            groupes += formes(x, unite, pays, cle)
+    elif isinstance(valeur, dict):
+        for nom, x in valeur.items():
+            if nom == "from" and x == 0:
+                continue
+            groupes += formes(x, unite, pays, nom)
+    return groupes
+
+
+def normaliser(txt):
+    """Espaces insécables et fines en espaces, apostrophes droites : les pages et les formes se comparent ainsi."""
+    return re.sub("[   ]", " ", txt).replace("’", "'")
+
+
+def trouve(forme, txt):
+    """Vrai si la forme figure dans le texte comme nombre délimité (pas de chiffre collé avant ou après)."""
+    motif = r"(?<![\d.,])" + re.escape(normaliser(forme)) + r"(?![\d]|[.,]\d)"
+    return re.search(motif, txt, flags=re.IGNORECASE) is not None
+
+
+def statut(regle, textes, pays="uk"):
+    """(statut, valeurs manquantes) d'une règle, d'après les textes lus de ses sources officielles (None = illisible)."""
+    lus = [t for t in textes if t is not None]
+    groupes = formes(regle.get("value"), regle.get("unit"), pays)
+    if not textes:
+        return "NON OFFICIEL", []
+    if not lus:
+        return "ERREUR", []
+    if not groupes:
+        return "TEXTE", []
+    tout = "\n".join(normaliser(t) for t in lus)
+    manque = [g[0] for g in groupes if not any(trouve(f, tout) for f in g)]
+    return ("MANQUE" if manque else "OK"), manque
+
+
+def officiel(url):
+    """Vrai pour une source officielle : liste de lire_source, domaines .gov et .us d'administrations, PUBLICS."""
+    if L.autorise(url):
+        return True
+    m = re.match(r"https://([^/:]+)", url or "")
+    hote = m.group(1).lower() if m else ""
+    return bool(hote) and (hote.endswith(".gov") or re.search(r"\.(state\.[a-z]{2}\.us|legislature\.[a-z.]+)$", hote) is not None
+                           or any(hote == d or hote.endswith("." + d) for d in PUBLICS))
+
+
+def lire(url, cache):
+    """Texte d'une page officielle (None si illisible), lu une seule fois par exécution."""
+    if url in cache:
+        return cache[url]
+    texte, empreinte = None, ""
+    try:
+        demande = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (outils-freelance, verification de sources)",
+                                                       "Accept-Language": "en-GB,en;q=0.9,fr-FR;q=0.8"})
+        with urllib.request.urlopen(demande, timeout=60) as r:
+            contenu, type_contenu, final = r.read(L.LIMITE), r.headers.get("Content-Type", ""), r.geturl()
+        if r.status == 200 and contenu.strip() and officiel(final):
+            texte = L.texte(contenu, type_contenu.lower(), final)[0]
+            empreinte = hashlib.sha256(contenu).hexdigest()[:8]
+    except (urllib.error.URLError, TimeoutError, ValueError, OSError):
+        texte = None
+    cache[url] = (texte, empreinte)
+    return cache[url]
+
+
+def main(argv):
+    if not argv or argv[0] not in ("fr", "uk", "us", "ca", "shared"):
+        sys.exit(__doc__)
+    pays, toutes = argv[0], "--toutes" in argv
+    choisies = None
+    if "--regles" in argv:
+        choisies = set(argv[argv.index("--regles") + 1].split(","))
+    regles = json.loads((RULES / f"{pays}.json").read_text(encoding="utf-8"))["values"]
+    cache, lignes, compte = {}, [], {}
+    for cle, regle in regles.items():
+        if choisies is not None and cle not in choisies:
+            continue
+        if choisies is None and not toutes and regle.get("verified_on"):
+            continue
+        urls = [regle.get("source", "")] + [m.get("source", "") for m in regle.get("more_sources", [])]
+        officielles = [u for u in urls if officiel(u)]
+        lus = [lire(u, cache) for u in officielles]
+        st, manque = statut(regle, [t for t, _ in lus], pays)
+        compte[st] = compte.get(st, 0) + 1
+        empreintes = " ".join(e for _, e in lus if e)
+        detail = (" manque : " + ", ".join(manque)) if manque else ""
+        lignes.append((st, f"{st:<12} {cle}{detail}" + (f"  [{empreintes}]" if empreintes else "")
+                       + ("" if officielles else "  (" + ", ".join(u.split('/')[2] for u in urls if u) + ")")))
+    ordre = ["ERREUR", "NON OFFICIEL", "MANQUE", "TEXTE", "OK"]
+    print(f"\n===== Règles {pays} vérifiées le {date.today():%d/%m/%Y} : "
+          + ", ".join(f"{s} {compte[s]}" for s in ordre if s in compte))
+    for s in ordre:
+        for st, ligne in lignes:
+            if st == s:
+                print(ligne)
+
+
+if __name__ == "__main__":
+    main(sys.argv[1:])
