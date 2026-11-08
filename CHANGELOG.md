@@ -1,5 +1,13 @@
 # Journal des modifications
 
+## 2026-11-08 (nuit) — Formats de la facturation électronique relus
+
+- **Formats** : UBL, CII et Factur-X relus dans la fiche de la DGFiP sur la réforme ; les plateformes agréées
+  doivent transmettre les factures dans l'un de ces trois formats (CII et UBL : données structurées ; Factur-X :
+  format mixte, XML et PDF). Les spécifications externes de la DGFiP en sont à la version 3.2 du 30 avril 2026 ;
+  les formats et profils sont décrits par la norme AFNOR XP Z12-012.
+- France : 113 règles sur 120 datées.
+
 ## 2026-11-08 (fin de soirée) — Mentions de facture, compte d'une société et décennale relus
 
 - **Liste des mentions obligatoires** relue sur la fiche officielle (vérifiée le 11 août 2026) et dans le BOFiP :

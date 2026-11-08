@@ -690,11 +690,22 @@
         "CII"
       ],
       "unit": "list",
-      "label": "Formats du socle obligatoire",
-      "source": "https://www.impots.gouv.fr/professionnel/je-passe-la-facturation-electronique",
-      "source_title": "Spécifications externes de la facturation électronique - impots.gouv.fr",
-      "confidence": "medium",
-      "note": "UBL 2.1 et UN/CEFACT CII (XML, norme EN 16931) ; Factur-X est un format mixte, un PDF/A-3 qui embarque un XML CII. Toutes les PA doivent accepter ces trois formats. Relu le 08/11/2026 dans la FAQ « Plus juste, plus simple, plus efficace » de la DGFiP : une facture électronique est émise, transmise et reçue « sous un format numérique qui permet un traitement automatisé. Ce n'est donc pas un PDF envoyé par e-mail » ; elle comporte 34 données transmises en format structuré. Les noms des trois formats ne figurent pas dans les documents relus (FAQ, guide pratique) : à relire dans les spécifications externes de la DGFiP, règle non datée."
+      "label": "Formats de facture électronique compatibles avec la réforme",
+      "source": "https://www.impots.gouv.fr/sites/default/files/media/1_metier/2_professionnel/EV/2_gestion/290_facturation_electronique/fiches_reforme/fiche-1_f.pdf",
+      "source_title": "Facturation électronique - DGFiP 2025, fiche 1-f (définitions) - impots.gouv.fr",
+      "more_sources": [
+        {
+          "source": "https://www.impots.gouv.fr/specifications-externes-b2b",
+          "source_title": "Spécifications externes et normes pour la facturation électronique - impots.gouv.fr (version 3.2 du 30/04/2026 ; formats et profils : norme AFNOR XP Z12-012)"
+        },
+        {
+          "source": "https://www.impots.gouv.fr/professionnel/je-passe-la-facturation-electronique",
+          "source_title": "Je passe à la facturation électronique - impots.gouv.fr"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-11-08",
+      "note": "Lu le 08/11/2026 avec l'outil « Lire une source officielle », fiche 1-f de la DGFiP : « Formats de facture électronique compatibles avec la réforme (UBL/CII/Factur-X). Les plateformes agréées sont dans l'obligation (réglementaire) de transmettre les factures électroniques selon l'un de ces 3 formats. Deux de ces formats, le format Cross Industry Invoice (CII) et le format Universal Business Language (UBL), sont structurés pour un échange informatisé efficace. Le troisième, Factur-X, est un format mixte composé d'un fichier de données structurées au format XML et d'un fichier de données lisibles au format PDF. » Page des spécifications externes (lue le même jour) : version 3.2 du 30/04/2026 ; formats et profils des messages factures et statuts de cycle de vie décrits par la norme AFNOR XP Z12-012 (téléchargeable gratuitement sur le site de l'AFNOR, non lue). FAQ de la DGFiP : une facture électronique « n'est donc pas un PDF envoyé par e-mail »."
     },
     "facturation_electronique_nouvelles_mentions": {
       "value": [
