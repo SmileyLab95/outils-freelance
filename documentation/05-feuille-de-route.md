@@ -9,7 +9,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 
 ## Où en est-on ?
 
-*Mis à jour le 08/11/2026 (nuit).*
+*Mis à jour le 08/11/2026 (fin de nuit).*
 
 - **Priorité (décision D10)** : le site et la plateforme d'abord ; noms de domaine, Gumroad et affiliation à la fin.
   Règle de qualité maximale pour tout produit ou service (D11, charte dans la [méthode](04-methode-de-travail.md#charte-qualité)).
@@ -376,7 +376,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   des comptes attend le choix de l'hébergeur et du domaine.
 - **Vérification outillée des règles (08/11/2026)** : workflow « Vérifier les règles sur leurs sources »
   (`scripts/verifier_regles.py`, D55), pages lues en parallèle. Règles datées après relecture : Royaume-Uni 161 sur
-  164, États-Unis 81 sur 95, France 113 sur 120, Canada 81 sur 135 (France : fiches d'Entreprendre.Service-Public
+  164, États-Unis 85 sur 95, France 113 sur 120, Canada 81 sur 135 (France : fiches d'Entreprendre.Service-Public
   utilisées quand Urssaf, Légifrance ou economie.gouv.fr refusent la lecture). Barème kilométrique français et taux kilométrique
   américain de juillet rattachés au BOFiP et à l'IRS ; SMIC mis à jour (12,31 €) ; calendrier de la facturation
   électronique, abattements et versement libératoire relus sur impots.gouv.fr ; Canada : Loi de l'impôt, Loi sur
@@ -420,7 +420,11 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   avant les travaux, attestation jointe aux devis et à la facture et remise avant le chantier, sous-traitants exclus
   du champ de la garantie). Nuit : formats de la facturation électronique (UBL, CII, Factur-X) relus dans la fiche 1-f
   de la DGFiP et datés ; les spécifications externes en sont à la version 3.2 du 30/04/2026 (formats décrits par la
-  norme AFNOR XP Z12-012). France : 113 règles sur 120. Restent en France : TNS et
+  norme AFNOR XP Z12-012). France : 113 règles sur 120. États-Unis (fin de nuit) : W-9, rémunération raisonnable en
+  S corporation, revenus de S corporation hors self-employment tax et LLC à associé unique relus sur irs.gov et datés
+  (85 sur 95) ; **correction** : l'IRS ne fixe pas de montant mais cite « l'usage d'une formule » parmi ses facteurs,
+  le site ne dit plus « There's no formula » ; minimum de déduction QBI toujours sans source primaire lisible
+  (uscode.house.gov répond 404 à l'outil). Restent en France : TNS et
   SASU (ordres de grandeur), mention d'assurance (L132-1), compte du commerçant (L123-24),
   périodicité Urssaf, décret 2025-943 et taux ACRE arrondis. États sans impôt sur le revenu : 8 pages officielles sur 9 lues le
   08/11/2026 (Tennessee illisible) ; Washington taxera dès 2028 les revenus de plus d'un million de dollars.

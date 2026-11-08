@@ -1,5 +1,19 @@
 # Journal des modifications
 
+## 2026-11-08 (fin de nuit) — Règles américaines relues sur irs.gov
+
+- **Form W-9** relu (révision de mars 2024 et instructions pour le demandeur) : formulaire remis au client, pas à
+  l'IRS ; LLC à associé unique : nom du propriétaire en ligne 1, nom de la LLC en ligne 2, numéro du propriétaire ;
+  retenue de 24 % (backup withholding) sans numéro fiscal correct.
+- **S corporation** : rémunération raisonnable avant toute distribution, et pouvoir de l'IRS de requalifier les
+  distributions en salaires, relus sur la page de l'IRS (mise à jour le 3 mars 2026). **Correction** : l'IRS ne fixe
+  pas de montant mais cite l'usage d'une formule parmi ses facteurs ; les pages « S corp » ne disent plus « There's no
+  formula ». Revenus d'une S corporation hors self-employment tax et échéance du 16 mars 2026 relus dans les
+  instructions du formulaire 1120-S.
+- **LLC à associé unique** : élection au statut de S corporation par le formulaire 2553, sans formulaire 8832 pour une
+  entité qui remplit les conditions (instructions du formulaire 2553).
+- États-Unis : 85 règles sur 95 datées.
+
 ## 2026-11-08 (nuit) — Formats de la facturation électronique relus
 
 - **Formats** : UBL, CII et Factur-X relus dans la fiche de la DGFiP sur la réforme ; les plateformes agréées
