@@ -9,7 +9,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 
 ## Où en est-on ?
 
-*Mis à jour le 08/11/2026 (après-midi).*
+*Mis à jour le 08/11/2026 (fin d'après-midi).*
 
 - **Priorité (décision D10)** : le site et la plateforme d'abord ; noms de domaine, Gumroad et affiliation à la fin.
   Règle de qualité maximale pour tout produit ou service (D11, charte dans la [méthode](04-methode-de-travail.md#charte-qualité)).
@@ -376,7 +376,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   des comptes attend le choix de l'hébergeur et du domaine.
 - **Vérification outillée des règles (08/11/2026)** : workflow « Vérifier les règles sur leurs sources »
   (`scripts/verifier_regles.py`, D55), pages lues en parallèle. Règles datées après relecture : Royaume-Uni 161 sur
-  164, États-Unis 81 sur 95, France 105 sur 119, Canada 81 sur 135 (France : fiches d'Entreprendre.Service-Public
+  164, États-Unis 81 sur 95, France 106 sur 119, Canada 81 sur 135 (France : fiches d'Entreprendre.Service-Public
   utilisées quand Urssaf, Légifrance ou economie.gouv.fr refusent la lecture). Barème kilométrique français et taux kilométrique
   américain de juillet rattachés au BOFiP et à l'IRS ; SMIC mis à jour (12,31 €) ; calendrier de la facturation
   électronique, abattements et versement libératoire relus sur impots.gouv.fr ; Canada : Loi de l'impôt, Loi sur
@@ -402,7 +402,12 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   tolérance de l'ancienne mention non confirmée, retirée) ; chiffre d'affaires hors taxes (F23257) ; **correction** :
   changement de rythme de déclaration Urssaf avant le 31 octobre de l'année précédente (F23257) et non le 31 janvier
   (anciennes pages de l'Urssaf : date la plus proche retenue, D57) ; échéance du samedi 31 octobre 2026 maintenue
-  par l'Urssaf (A19087) ; calendrier : les échéances passent avant les informations du même jour. États sans impôt sur le revenu : 8 pages officielles sur 9 lues le
+  par l'Urssaf (A19087) ; calendrier : les échéances passent avant les informations du même jour. Fin
+  d'après-midi : ACRE datée (F11677 : demande sous 60 jours, bénéficiaires, réponse de l'Urssaf sous 30 jours) ;
+  taux de la micro-entreprise relus (cotisations, versement libératoire, abattements, plafonds, TVA, formation
+  professionnelle F23459, ACRE à 75 % du taux normal) sauf l'arrondi des taux ACRE de la vente et le taux ACRE
+  Cipav de 13,4 % (tableau de l'Urssaf) ; démarche de l'ACRE corrigée sur la page de création (demande à l'Urssaf
+  après la création, et non case à cocher dans la déclaration). États sans impôt sur le revenu : 8 pages officielles sur 9 lues le
   08/11/2026 (Tennessee illisible) ; Washington taxera dès 2028 les revenus de plus d'un million de dollars.
 - **Règles britanniques revérifiées en direct (07/11/2026, soir)** : 161 règles sur 164 contrôlées sur leur page
   officielle (GOV.UK, legislation.gov.uk ; Banque d'Angleterre par l'outil de lecture) et datées ; 8 sources corrigées ;

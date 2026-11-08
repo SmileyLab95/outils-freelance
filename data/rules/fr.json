@@ -66,8 +66,30 @@
       "label": "Micro-entreprise 2026 : taux et seuils par activité",
       "source": "https://www.autoentrepreneur.urssaf.fr/portail/accueil/sinformer-sur-le-statut/lessentiel-du-statut.html",
       "source_title": "L'essentiel du statut - Autoentrepreneur.urssaf.fr (avec le tableau ACRE de economie.gouv.fr et le diaporama Urssaf d'avril 2026)",
+      "more_sources": [
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F36232",
+          "source_title": "Cotisations sociales d'un micro-entrepreneur : ce qu'il faut savoir - entreprendre.service-public.gouv.fr"
+        },
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F23267",
+          "source_title": "Régime fiscal de la micro-entreprise - entreprendre.service-public.gouv.fr"
+        },
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F23459",
+          "source_title": "Contribution à la formation professionnelle (CFP) des entrepreneurs individuels (y compris des micro-entrepreneurs) - entreprendre.service-public.gouv.fr"
+        },
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F11677",
+          "source_title": "Aide à la création ou à la reprise d'une entreprise (Acre) - entreprendre.service-public.gouv.fr"
+        },
+        {
+          "source": "https://www.impots.gouv.fr/professionnel/questions/en-tant-que-micro-entrepreneur-puis-je-etre-redevable-de-la-tva",
+          "source_title": "En tant que micro-entrepreneur, puis-je être redevable de la TVA ? - impots.gouv.fr"
+        }
+      ],
       "confidence": "high",
-      "note": "Taux en vigueur au 1er janvier 2026. acre_50 = taux minoré pour un début d'activité jusqu'au 30/06/2026 ; acre_25 = début d'activité à partir du 01/07/2026 (décret n° 2026-69). ATTENTION Cipav : le taux ACRE publié par l'Urssaf et economie.gouv.fr pour un début avant le 01/07/2026 est 13,4 %, et non 11,6 % (23,2 % x 50 %). Le tableau Urssaf met un astérisque sur ce taux ; le texte de l'astérisque n'a pas pu être lu. Les autres taux ACRE publiés correspondent à taux plein x 50 % ou x 75 %, arrondi au dixième supérieur (vente : 6,15 -> 6,2 ; 9,225 -> 9,3). cfp services_bic = 0,1 % si l'activité est commerciale (commerçant) : l'Urssaf fixe la CFP selon la catégorie professionnelle (commerçant 0,1 %, artisan 0,3 %, libéral 0,2 %), pas selon la catégorie fiscale. Taux de versement libératoire (1 %, 1,7 %, 2,2 %) relus le 21/10/2026 par recherche sur impots.gouv.fr ; ils sont aussi dans la clé versement_liberatoire_taux (un test vérifie que les deux concordent)."
+      "note": "Taux en vigueur au 1er janvier 2026. acre_50 = taux minoré pour un début d'activité jusqu'au 30/06/2026 ; acre_25 = début d'activité à partir du 01/07/2026 (décret n° 2026-69). ATTENTION Cipav : le taux ACRE publié par l'Urssaf et economie.gouv.fr pour un début avant le 01/07/2026 est 13,4 %, et non 11,6 % (23,2 % x 50 %). Le tableau Urssaf met un astérisque sur ce taux ; le texte de l'astérisque n'a pas pu être lu. Les autres taux ACRE publiés correspondent à taux plein x 50 % ou x 75 %, arrondi au dixième supérieur (vente : 6,15 -> 6,2 ; 9,225 -> 9,3). cfp services_bic = 0,1 % si l'activité est commerciale (commerçant) : l'Urssaf fixe la CFP selon la catégorie professionnelle (commerçant 0,1 %, artisan 0,3 %, libéral 0,2 %), pas selon la catégorie fiscale. Taux de versement libératoire (1 %, 1,7 %, 2,2 %) relus le 21/10/2026 par recherche sur impots.gouv.fr ; ils sont aussi dans la clé versement_liberatoire_taux (un test vérifie que les deux concordent). Relu le 08/11/2026 (vérificateur et lecture des fiches) : taux de cotisations 12,3 %, 21,2 %, 25,6 % et 23,2 % et taux avec versement libératoire (22,9 %, 27,8 %, 25,4 %) sur F36232 (vérifiée le 01/01/2026) ; abattements, plafonds et taux de versement libératoire sur F23267 ; seuils de franchise de TVA (85 000 € / 93 500 €, 37 500 € / 41 250 €) sur impots.gouv.fr ; CFP 0,1 % (commerce), 0,3 % (artisanat), 0,2 % (libéral) sur F23459 (vérifiée le 01/01/2026) ; ACRE depuis le 01/07/2026 : « taux minoré de cotisations sociales égal à 75 % du taux normal » avec l'exemple de 15,9 % au lieu de 21,2 % (F11677, vérifiée le 01/07/2026), d'où 19,2 % et 17,4 %. Restent non relus : l'arrondi au dixième supérieur des taux ACRE de la vente (9,3 % pour 9,225 % ; 6,2 % pour 6,15 %) et le taux ACRE Cipav de 13,4 % pour un début avant le 01/07/2026, publiés dans le tableau de l'Urssaf : règle non datée."
     },
     "micro_cotisations_decret_2025_943": {
       "value": "Décret n° 2025-943 du 8 septembre 2025 : taux BNC (SSI, hors Cipav) porté de 24,6 % à 25,6 % au 01/01/2026 (au lieu des 26,1 % prévus par le décret n° 2024-484) ; taux global vente 12,3 %, BIC 21,2 % et Cipav 23,2 % inchangés, seule leur répartition interne change (plus de retraite complémentaire, moins de CSG-CRDS).",
@@ -75,8 +97,14 @@
       "label": "Base légale des taux micro-sociaux 2026",
       "source": "https://www.legifrance.gouv.fr/loda/id/JORFTEXT000052211971",
       "source_title": "Décret n° 2025-943 du 8 septembre 2025 - Légifrance",
+      "more_sources": [
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F36232",
+          "source_title": "Cotisations sociales d'un micro-entrepreneur : ce qu'il faut savoir - entreprendre.service-public.gouv.fr"
+        }
+      ],
       "confidence": "high",
-      "note": "25,6 % est le dernier palier prévu pour les BNC non réglementés. Certaines pages anciennes (CCI, Bpifrance) affichent encore 26,1 % pour 2026 : c'est l'ancienne trajectoire, remplacée par ce décret. Identifiant Légifrance repris d'un résultat de recherche, page non ouverte."
+      "note": "25,6 % est le dernier palier prévu pour les BNC non réglementés. Certaines pages anciennes (CCI, Bpifrance) affichent encore 26,1 % pour 2026 : c'est l'ancienne trajectoire, remplacée par ce décret. Identifiant Légifrance repris d'un résultat de recherche, page non ouverte. Taux qui en résultent (12,3 %, 21,2 %, 25,6 %, 23,2 %) relus le 08/11/2026 sur F36232 ; le numéro du décret et l'ancienne trajectoire (24,6 % puis 26,1 %) restent à relire sur Légifrance."
     },
     "acre_reduction_avant_2026_07_01": {
       "value": 0.5,
@@ -131,19 +159,20 @@
       "verified_on": "2026-11-08"
     },
     "acre_conditions": {
-      "value": "Taux minoré jusqu'à la fin du 3e trimestre civil qui suit celui du début d'activité (ex. : début le 01/07/2026 -> taux minoré jusqu'au 30/06/2027). L'ACRE n'est pas automatique : il faut remplir un critère d'éligibilité (demandeur d'emploi indemnisé, moins de 26 ans, bénéficiaire de certains minima sociaux, etc.) et en faire la demande à l'Urssaf au plus tard 60 jours après le début d'activité (règle depuis le 01/01/2026).",
+      "value": "Taux minoré jusqu'à la fin du 3e trimestre civil qui suit celui du début d'activité (ex. : début le 01/07/2026 -> taux minoré jusqu'au 30/06/2027). L'ACRE n'est pas automatique : il faut remplir un critère d'éligibilité (demandeur d'emploi, 18 à 25 ans, bénéficiaire du RSA ou de l'ASS, création en quartier prioritaire ou en zone France ruralités revitalisation, etc.) et en faire la demande à l'Urssaf au plus tard 60 jours après le début d'activité.",
       "unit": "text",
       "label": "ACRE : durée, conditions et délai de demande",
       "source": "https://www.urssaf.fr/accueil/exoneration-acre-createur.html",
       "source_title": "L'Acre : l'aide pour les créateurs et repreneurs - Urssaf.fr (et diaporama Urssaf Auto-entrepreneur, avril 2026)",
-      "confidence": "medium",
-      "note": "Relu en partie le 08/11/2026 sur F11677 : « Cette exonération s'applique jusqu'à la fin du 3e trimestre civil suivant la date de début d'activité déclarée (ou immatriculation) » ; le délai de demande de 60 jours n'a pas été relu, d'où l'absence de date. Le délai de 60 jours vient de la page Urssaf et du formulaire de demande ACRE 2026, vus seulement dans les extraits de recherche. Avant 2026, ce délai était de 45 jours.",
       "more_sources": [
         {
           "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F11677",
           "source_title": "Aide aux créateurs et repreneurs d'entreprise (Acre) - Entreprendre.Service-Public.gouv.fr (fiche F11677)"
         }
-      ]
+      ],
+      "confidence": "high",
+      "verified_on": "2026-11-08",
+      "note": "Relu le 08/11/2026 sur F11677 (vérifiée le 01/07/2026) : exonération « jusqu'à la fin du 3e trimestre civil suivant la date de début d'activité déclarée » (exemple : début le 3 septembre 2026, ACRE jusqu'au 30 juin 2027) ; « Les demandes d'Acre doivent être déposées dans les 60 jours qui suivent la date d'ouverture de l'activité » ; l'Urssaf statue dans les 30 jours, son silence valant accord ; bénéficiaires : demandeur d'emploi indemnisé (ou non indemnisé inscrit plus de 6 mois sur les 18 derniers mois), bénéficiaire du RSA ou de l'ASS, 18 à 25 ans (29 ans en cas de handicap), moins de 30 ans sans droit à l'ARE, création en QPV ou en ZFRR, bénéficiaire de la PreParE, etc. ; pas d'ACRE au cours des 3 années précédentes. Avant 2026, le délai de demande était de 45 jours (Urssaf)."
     },
     "cfp_taux": {
       "value": {

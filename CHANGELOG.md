@@ -1,5 +1,19 @@
 # Journal des modifications
 
+## 2026-11-08 (fin d'après-midi) — ACRE et taux de la micro-entreprise relus
+
+- **ACRE** relue sur la fiche officielle (vérifiée le 01/07/2026) : demande à déposer dans les 60 jours qui suivent
+  le début d'activité, réponse de l'Urssaf sous 30 jours (son silence vaut accord), liste des bénéficiaires.
+  **Correction** sur la page « Créer sa micro-entreprise » : la demande se fait auprès de l'Urssaf après la
+  création, avec le justificatif de création téléchargé sur le site du guichet des formalités, et non en cochant
+  une case dans la déclaration ; les exemples de bénéficiaires reprennent ceux de la fiche (18 à 25 ans, RSA ou
+  ASS…).
+- **Taux de la micro-entreprise** relus sur les fiches officielles : cotisations (12,3 %, 21,2 %, 25,6 %, 23,2 %),
+  versement libératoire, abattements, plafonds, seuils de TVA, contribution à la formation professionnelle (0,1 %,
+  0,3 %, 0,2 %) et ACRE à 75 % du taux normal. Restent à relire sur le tableau de l'Urssaf : l'arrondi des taux
+  ACRE de la vente et le taux ACRE Cipav de 13,4 %.
+- France : 106 règles sur 119 datées.
+
 ## 2026-11-08 (après-midi) — Calendrier Urssaf corrigé, mention de TVA de 2027 confirmée
 
 - **Correction** : pour changer de rythme de déclaration Urssaf (mensuel ou trimestriel), la fiche officielle de
