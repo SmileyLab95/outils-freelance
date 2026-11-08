@@ -67,7 +67,17 @@
       "source": "https://www.autoentrepreneur.urssaf.fr/portail/accueil/sinformer-sur-le-statut/lessentiel-du-statut.html",
       "source_title": "L'essentiel du statut - Autoentrepreneur.urssaf.fr (avec le tableau ACRE de economie.gouv.fr et le diaporama Urssaf d'avril 2026)",
       "confidence": "high",
-      "note": "Taux en vigueur au 1er janvier 2026. acre_50 = taux minoré pour un début d'activité jusqu'au 30/06/2026 ; acre_25 = début d'activité à partir du 01/07/2026 (décret n° 2026-69). ATTENTION Cipav : le taux ACRE publié par l'Urssaf et economie.gouv.fr pour un début avant le 01/07/2026 est 13,4 %, et non 11,6 % (23,2 % x 50 %). Le tableau Urssaf met un astérisque sur ce taux ; le texte de l'astérisque n'a pas pu être lu. Les autres taux ACRE publiés correspondent à taux plein x 50 % ou x 75 %, arrondi au dixième supérieur (vente : 6,15 -> 6,2 ; 9,225 -> 9,3). cfp services_bic = 0,1 % si l'activité est commerciale (commerçant) : l'Urssaf fixe la CFP selon la catégorie professionnelle (commerçant 0,1 %, artisan 0,3 %, libéral 0,2 %), pas selon la catégorie fiscale. Taux de versement libératoire (1 %, 1,7 %, 2,2 %) relus le 21/10/2026 par recherche sur impots.gouv.fr ; ils sont aussi dans la clé versement_liberatoire_taux (un test vérifie que les deux concordent)."
+      "note": "Taux en vigueur au 1er janvier 2026. acre_50 = taux minoré pour un début d'activité jusqu'au 30/06/2026 ; acre_25 = début d'activité à partir du 01/07/2026 (décret n° 2026-69). ATTENTION Cipav : le taux ACRE publié par l'Urssaf et economie.gouv.fr pour un début avant le 01/07/2026 est 13,4 %, et non 11,6 % (23,2 % x 50 %). Le tableau Urssaf met un astérisque sur ce taux ; le texte de l'astérisque n'a pas pu être lu. Les autres taux ACRE publiés correspondent à taux plein x 50 % ou x 75 %, arrondi au dixième supérieur (vente : 6,15 -> 6,2 ; 9,225 -> 9,3). cfp services_bic = 0,1 % si l'activité est commerciale (commerçant) : l'Urssaf fixe la CFP selon la catégorie professionnelle (commerçant 0,1 %, artisan 0,3 %, libéral 0,2 %), pas selon la catégorie fiscale. Taux de versement libératoire (1 %, 1,7 %, 2,2 %) relus le 21/10/2026 par recherche sur impots.gouv.fr ; ils sont aussi dans la clé versement_liberatoire_taux (un test vérifie que les deux concordent).",
+      "more_sources": [
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F36232",
+          "source_title": "(à confirmer)"
+        },
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F37353",
+          "source_title": "(à confirmer)"
+        }
+      ]
     },
     "micro_cotisations_decret_2025_943": {
       "value": "Décret n° 2025-943 du 8 septembre 2025 : taux BNC (SSI, hors Cipav) porté de 24,6 % à 25,6 % au 01/01/2026 (au lieu des 26,1 % prévus par le décret n° 2024-484) ; taux global vente 12,3 %, BIC 21,2 % et Cipav 23,2 % inchangés, seule leur répartition interne change (plus de retraite complémentaire, moins de CSG-CRDS).",
@@ -76,7 +86,13 @@
       "source": "https://www.legifrance.gouv.fr/loda/id/JORFTEXT000052211971",
       "source_title": "Décret n° 2025-943 du 8 septembre 2025 - Légifrance",
       "confidence": "high",
-      "note": "25,6 % est le dernier palier prévu pour les BNC non réglementés. Certaines pages anciennes (CCI, Bpifrance) affichent encore 26,1 % pour 2026 : c'est l'ancienne trajectoire, remplacée par ce décret. Identifiant Légifrance repris d'un résultat de recherche, page non ouverte."
+      "note": "25,6 % est le dernier palier prévu pour les BNC non réglementés. Certaines pages anciennes (CCI, Bpifrance) affichent encore 26,1 % pour 2026 : c'est l'ancienne trajectoire, remplacée par ce décret. Identifiant Légifrance repris d'un résultat de recherche, page non ouverte.",
+      "more_sources": [
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F36232",
+          "source_title": "(à confirmer)"
+        }
+      ]
     },
     "acre_reduction_avant_2026_07_01": {
       "value": 0.5,
@@ -85,7 +101,17 @@
       "source": "https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000053449085",
       "source_title": "Décret n° 2026-69 du 6 février 2026 fixant le taux d'exonération prévu à l'article 23 de la LFSS 2026 et adaptant le taux de cotisations des micro-entrepreneurs (ACRE) - Légifrance",
       "confidence": "high",
-      "note": "Taux minoré = 50 % du taux normal. Exception constatée : Cipav 13,4 % (voir micro_activities)."
+      "note": "Taux minoré = 50 % du taux normal. Exception constatée : Cipav 13,4 % (voir micro_activities).",
+      "more_sources": [
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/actualites/A18795",
+          "source_title": "(à confirmer)"
+        },
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F11677",
+          "source_title": "(à confirmer)"
+        }
+      ]
     },
     "acre_reduction_depuis_2026_07_01": {
       "value": 0.25,
@@ -94,7 +120,17 @@
       "source": "https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000053449085",
       "source_title": "Décret n° 2026-69 du 6 février 2026 - Légifrance",
       "confidence": "high",
-      "note": "Le taux minoré passe à 75 % du taux normal pour les créations ou reprises dans le régime micro-social à compter du 01/07/2026. Pour les indépendants au régime de droit commun, le nouveau régime d'exonération s'applique aux créations à compter du 01/01/2026."
+      "note": "Le taux minoré passe à 75 % du taux normal pour les créations ou reprises dans le régime micro-social à compter du 01/07/2026. Pour les indépendants au régime de droit commun, le nouveau régime d'exonération s'applique aux créations à compter du 01/01/2026.",
+      "more_sources": [
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/actualites/A18795",
+          "source_title": "(à confirmer)"
+        },
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F11677",
+          "source_title": "(à confirmer)"
+        }
+      ]
     },
     "acre_date_bascule": {
       "value": "2026-07-01",
@@ -103,7 +139,13 @@
       "source": "https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000053449085",
       "source_title": "Décret n° 2026-69 du 6 février 2026 - Légifrance",
       "confidence": "high",
-      "note": "La date de début d'activité fixe le régime pour toute la période d'ACRE. Une création antérieure garde -50 % jusqu'à la fin de sa période."
+      "note": "La date de début d'activité fixe le régime pour toute la période d'ACRE. Une création antérieure garde -50 % jusqu'à la fin de sa période.",
+      "more_sources": [
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/actualites/A18795",
+          "source_title": "(à confirmer)"
+        }
+      ]
     },
     "acre_conditions": {
       "value": "Taux minoré jusqu'à la fin du 3e trimestre civil qui suit celui du début d'activité (ex. : début le 01/07/2026 -> taux minoré jusqu'au 30/06/2027). L'ACRE n'est pas automatique : il faut remplir un critère d'éligibilité (demandeur d'emploi indemnisé, moins de 26 ans, bénéficiaire de certains minima sociaux, etc.) et en faire la demande à l'Urssaf au plus tard 60 jours après le début d'activité (règle depuis le 01/01/2026).",
@@ -112,7 +154,13 @@
       "source": "https://www.urssaf.fr/accueil/exoneration-acre-createur.html",
       "source_title": "L'Acre : l'aide pour les créateurs et repreneurs - Urssaf.fr (et diaporama Urssaf Auto-entrepreneur, avril 2026)",
       "confidence": "medium",
-      "note": "Le délai de 60 jours vient de la page Urssaf et du formulaire de demande ACRE 2026, vus seulement dans les extraits de recherche. Avant 2026, ce délai était de 45 jours."
+      "note": "Le délai de 60 jours vient de la page Urssaf et du formulaire de demande ACRE 2026, vus seulement dans les extraits de recherche. Avant 2026, ce délai était de 45 jours.",
+      "more_sources": [
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F11677",
+          "source_title": "(à confirmer)"
+        }
+      ]
     },
     "cfp_taux": {
       "value": {
@@ -125,7 +173,13 @@
       "source": "https://www.autoentrepreneur.urssaf.fr/portail/accueil/sinformer-sur-le-statut/lessentiel-du-statut.html",
       "source_title": "L'essentiel du statut - Autoentrepreneur.urssaf.fr ; diaporama Urssaf Auto-entrepreneur avril 2026 ; FAQ entreprises.gouv.fr",
       "confidence": "high",
-      "note": "Taux fixés selon la catégorie professionnelle : commerçants 0,1 %, artisans 0,3 %, professions libérales réglementées ou non 0,2 %. Pour une prestation de services BIC commerciale (commerçant), le taux est donc 0,1 % ; certains sites commerciaux indiquent 0,2 % ou 0,3 %, sans source officielle."
+      "note": "Taux fixés selon la catégorie professionnelle : commerçants 0,1 %, artisans 0,3 %, professions libérales réglementées ou non 0,2 %. Pour une prestation de services BIC commerciale (commerçant), le taux est donc 0,1 % ; certains sites commerciaux indiquent 0,2 % ou 0,3 %, sans source officielle.",
+      "more_sources": [
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F36232",
+          "source_title": "(à confirmer)"
+        }
+      ]
     },
     "versement_liberatoire_taux": {
       "value": {
@@ -192,7 +246,17 @@
       "source": "https://www.economie.gouv.fr/entreprises/gerer-sa-micro-entreprise/micro-entreprise-que-se-passe-t-il-quand-le-seuil-de-chiffre-daffaires-est-depasse",
       "source_title": "Micro-entreprise : que se passe-t-il quand le seuil de chiffre d'affaires est dépassé ? - economie.gouv.fr",
       "confidence": "high",
-      "note": "Valable pour 2026, 2027 et 2028 (révision tous les 3 ans, art. 50-0 CGI ; 2023-2025 : 188 700 EUR). Le régime est perdu au 1er janvier suivant deux années civiles consécutives de dépassement. En activité mixte : CA total <= 203 100 EUR, dont services <= 83 600 EUR."
+      "note": "Valable pour 2026, 2027 et 2028 (révision tous les 3 ans, art. 50-0 CGI ; 2023-2025 : 188 700 EUR). Le régime est perdu au 1er janvier suivant deux années civiles consécutives de dépassement. En activité mixte : CA total <= 203 100 EUR, dont services <= 83 600 EUR.",
+      "more_sources": [
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F37353",
+          "source_title": "(à confirmer)"
+        },
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F23267",
+          "source_title": "(à confirmer)"
+        }
+      ]
     },
     "micro_plafond_ca_services": {
       "value": 83600,
@@ -201,7 +265,17 @@
       "source": "https://www.economie.gouv.fr/entreprises/gerer-sa-micro-entreprise/micro-entreprise-que-se-passe-t-il-quand-le-seuil-de-chiffre-daffaires-est-depasse",
       "source_title": "Micro-entreprise : que se passe-t-il quand le seuil de chiffre d'affaires est dépassé ? - economie.gouv.fr",
       "confidence": "high",
-      "note": "Valable pour 2026, 2027 et 2028 (2023-2025 : 77 700 EUR). Meublés de tourisme non classés : 15 000 EUR."
+      "note": "Valable pour 2026, 2027 et 2028 (2023-2025 : 77 700 EUR). Meublés de tourisme non classés : 15 000 EUR.",
+      "more_sources": [
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F37353",
+          "source_title": "(à confirmer)"
+        },
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F23267",
+          "source_title": "(à confirmer)"
+        }
+      ]
     },
     "tva_franchise_seuils": {
       "value": {
@@ -248,7 +322,13 @@
       "source": "https://www.autoentrepreneur.urssaf.fr/portail/accueil/sinformer-sur-le-statut/lessentiel-du-statut.html",
       "source_title": "L'essentiel du statut - Autoentrepreneur.urssaf.fr (art. 1600 et 1601 CGI)",
       "confidence": "low",
-      "note": "NON VÉRIFIÉ pendant cette session : valeurs habituellement publiées par l'Urssaf, citées de mémoire, et le budget de recherche était épuisé. Les professions libérales ne paient pas cette taxe. À confirmer avant tout usage dans un calculateur."
+      "note": "NON VÉRIFIÉ pendant cette session : valeurs habituellement publiées par l'Urssaf, citées de mémoire, et le budget de recherche était épuisé. Les professions libérales ne paient pas cette taxe. À confirmer avant tout usage dans un calculateur.",
+      "more_sources": [
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F36232",
+          "source_title": "(à confirmer)"
+        }
+      ]
     },
     "ir_bareme_revenus_2025": {
       "value": [
@@ -927,7 +1007,13 @@
       "source": "https://www.autoentrepreneur.urssaf.fr/portail/accueil/une-question/toutes-les-fiches-pratiques/declarer-et-payer-mes-cotisation.html",
       "source_title": "Déclarer et payer mes cotisations - Autoentrepreneur.urssaf.fr",
       "confidence": "high",
-      "note": "Report au jour ouvré suivant appliqué dans data/calendars/fr.json (scripts/calendriers.py)."
+      "note": "Report au jour ouvré suivant appliqué dans data/calendars/fr.json (scripts/calendriers.py).",
+      "more_sources": [
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F36232",
+          "source_title": "(à confirmer)"
+        }
+      ]
     },
     "cfe_echeance": {
       "value": "Solde de CFE exigible le 15 décembre ; adhésion au prélèvement à l'échéance jusqu'au 30 novembre ; acompte au 15 juin si la CFE de l'année précédente atteint 3 000 €. Avis uniquement en ligne (espace professionnel).",
@@ -961,7 +1047,13 @@
       "source": "https://www.autoentrepreneur.urssaf.fr/portail/accueil/sinformer-sur-le-statut/lessentiel-du-statut.html",
       "source_title": "L'essentiel du statut - Autoentrepreneur.urssaf.fr",
       "confidence": "high",
-      "note": "Sous condition de revenu fiscal de référence."
+      "note": "Sous condition de revenu fiscal de référence.",
+      "more_sources": [
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F23267",
+          "source_title": "(à confirmer)"
+        }
+      ]
     },
     "pass_2025": {
       "value": 47100,
@@ -1089,7 +1181,13 @@
       "source": "https://www.legifrance.gouv.fr/codes/id/LEGITEXT000005634379",
       "source_title": "Code de commerce, art. L123-22 (documents comptables et pièces justificatives : 10 ans) ; Livre des procédures fiscales, art. L102 B (6 ans) - Légifrance",
       "confidence": "high",
-      "note": "Le délai le plus long (10 ans) est retenu dans l'Espace entrepreneur pour les factures et le livre des recettes."
+      "note": "Le délai le plus long (10 ans) est retenu dans l'Espace entrepreneur pour les factures et le livre des recettes.",
+      "more_sources": [
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F10029",
+          "source_title": "(à confirmer)"
+        }
+      ]
     },
     "micro_activites_exclues": {
       "value": [
@@ -1367,7 +1465,13 @@
       "source": "https://www.autoentrepreneur.urssaf.fr/portail/accueil/une-question/toutes-les-fiches-pratiques/determiner-mon-chiffre-daffaires.html",
       "source_title": "Déterminer mon chiffre d'affaires - Autoentrepreneur.urssaf.fr",
       "confidence": "medium",
-      "note": "Relevé le 21/10/2026 par recherche sur le site officiel (montant brut encaissé, hors TVA, sans déduction de charges), sans ouvrir la page (accès bloqué depuis l'environnement de travail)."
+      "note": "Relevé le 21/10/2026 par recherche sur le site officiel (montant brut encaissé, hors TVA, sans déduction de charges), sans ouvrir la page (accès bloqué depuis l'environnement de travail).",
+      "more_sources": [
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F36232",
+          "source_title": "(à confirmer)"
+        }
+      ]
     },
     "tva_taux_metropole": {
       "value": {
@@ -1381,7 +1485,13 @@
       "source": "https://www.economie.gouv.fr/entreprises/gerer-sa-fiscalite-et-ses-impots/autres-impots-et-taxes/entreprises-ce-que-vous-devez-savoir-sur-la-tva",
       "source_title": "Entreprises : ce que vous devez savoir sur la TVA - economie.gouv.fr",
       "confidence": "medium",
-      "note": "Relevé le 21/10/2026 par recherche sur economie.gouv.fr, sans ouvrir la page. Taux différents en outre-mer (Guadeloupe, Martinique, La Réunion : 8,5 % et 2,1 %) et en Corse : hors du champ des outils."
+      "note": "Relevé le 21/10/2026 par recherche sur economie.gouv.fr, sans ouvrir la page. Taux différents en outre-mer (Guadeloupe, Martinique, La Réunion : 8,5 % et 2,1 %) et en Corse : hors du champ des outils.",
+      "more_sources": [
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F23567",
+          "source_title": "(à confirmer)"
+        }
+      ]
     },
     "pas_micro_acomptes": {
       "value": {
