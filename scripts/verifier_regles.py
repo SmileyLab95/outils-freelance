@@ -48,6 +48,8 @@ PUBLICS = ("parliament.uk", "nslegislature.ca", "assembly.nl.ca", "provincialcou
            "pacourts.us", "sccourts.org", "vermontjudiciary.org", "rfc-editor.org", "icann.org", "afnic.fr", "cira.ca",
            "registre.quebec", "nominet.uk", "theukdomain.uk", "registry.google", "get.app", "agirc-arrco.fr")
 TAUX = ("rate", "brackets", "percent")
+NOMBRES_EN = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen",
+              "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen", "twenty"]
 MONNAIES = ("GBP", "USD", "CAD", "EUR")
 
 
@@ -96,6 +98,10 @@ def formes(valeur, unite, pays="uk", cle=""):
             if float(valeur * 100).is_integer():
                 pct.append("%d.0" % round(valeur * 100))
             groupe = [p + s for p in pct for s in ("%", " %", " per cent", " percent", " pour cent")]
+            # Textes de loi et pages canadiennes : « five per cent per annum », « a six per cent sales tax ».
+            entier = round(valeur * 100)
+            if abs(valeur * 100 - entier) < 1e-9 and 1 <= entier <= len(NOMBRES_EN):
+                groupe += [NOMBRES_EN[entier - 1] + s for s in (" per cent", " percent")]
             # Un champ « rate » peut aussi être un coefficient (barème kilométrique : « d x 0,529 »).
             if unite not in TAUX:
                 groupe += formes_nombre(valeur)

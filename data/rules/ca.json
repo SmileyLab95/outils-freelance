@@ -57,7 +57,7 @@
       "source": "https://www2.gov.bc.ca/gov/content/taxes/sales-taxes/pst",
       "source_title": "Provincial sales tax (PST) - Province of British Columbia",
       "confidence": "high",
-      "note": "Separate from GST, separate registration with each province (BC: eTaxBC; SK: Saskatchewan PST; MB: Retail Sales Tax). Manitoba RST went from 8% to 7% on 2019-07-01. Not re-opened on 2026-10-20.",
+      "note": "Checked on 08/11/2026 with the source reader (official pages read in GitHub Actions): BC 'Generally, the rate of PST is 7% on the purchase or lease price of goods and services, with some exceptions'; SK 'Provincial Sales Tax (PST) is a six per cent sales tax'; MB 'The general sales tax rate is 7%.' Separate from GST, separate registration with each province (BC: eTaxBC; SK: Saskatchewan PST; MB: Retail Sales Tax). Manitoba RST went from 8% to 7% on 2019-07-01 (not reread on 08/11/2026).",
       "more_sources": [
         {
           "source": "https://www.saskatchewan.ca/business/taxes-licensing-and-reporting/provincial-taxes-policies-and-bulletins/provincial-sales-tax",
@@ -67,7 +67,8 @@
           "source": "https://www.gov.mb.ca/finance/taxation/taxes/retail.html",
           "source_title": "Retail Sales Tax - Province of Manitoba"
         }
-      ]
+      ],
+      "verified_on": "2026-11-08"
     },
     "pst_on_professional_services": {
       "value": "Generally no PST/RST on most freelance professional services (consulting, writing, design, translation, coaching), but each province taxes a closed list of enumerated services, which can include legal services, telecommunication services, software and IT services, and services to goods. Check the specific service against each province's list before charging or not charging PST.",
