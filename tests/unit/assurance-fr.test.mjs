@@ -10,7 +10,7 @@ const rules = JSON.parse(readFileSync(new URL("../../data/rules/fr.json", import
 
 test("règles sourcées : décennale, attestation, mention sur les devis et factures, RC pro, véhicule", () => {
   for (const key of ["assurance_rc_pro", "assurance_decennale", "assurance_attestation_decennale", "assurance_mention_devis_factures", "assurance_rc_auto"]) {
-    assert.ok(rules[key] && /^https:\/\/(www\.)?(legifrance|economie)\.gouv\.fr\//.test(rules[key].source), key);
+    assert.ok(rules[key] && /^https:\/\/(www\.)?(legifrance|economie|service-public)\.gouv\.fr\//.test(rules[key].source), key);
   }
   assert.equal(rules.assurance_rc_pro.value.obligation_generale, false);
 });
@@ -19,8 +19,13 @@ test("travaux de construction : décennale obligatoire, responsabilité civile �
   for (const micro of [true, false]) {
     const r = A.check({ activity: "construction", micro, vehicle: false });
     assert.deepEqual([r.required, r.recommended], [["decennale"], ["rc-batiment"]], "pas d'obligation de RC pro affirmée sans article de loi");
-    assert.equal(r.documents, "attestation", "la mention de l'art. L132-1 ne s'applique pas aux constructeurs");
+    assert.equal(r.documents, "attestation", "attestation décennale jointe (art. L243-2)");
   }
+  // F36008 cite le plombier, soumis à la décennale, parmi les artisans qui portent la mention : la page la conseille aussi.
+  const tool = readFileSync(new URL("../../src/assets/tools/fr-assurance.js", import.meta.url), "utf8");
+  const attestation = tool.match(/"attestation": "([^"]*)"/)[1];
+  assert.ok(attestation.includes("L243-2") && attestation.includes("L132-1") && attestation.includes("par prudence"), "construction : attestation et, par prudence, mention de l'assurance");
+  assert.match(rules.assurance_mention_devis_factures.note, /plombier/, "règle : divergence relevée dans la note");
 });
 
 test("profession réglementée : responsabilité civile selon la profession ; mention si micro-entrepreneur", () => {

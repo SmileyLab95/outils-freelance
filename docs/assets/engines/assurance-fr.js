@@ -33,7 +33,8 @@
     else recommended.push("rc-pro");
     if (input.vehicle) required.push("rc-auto");
 
-    // La mention de l'art. L132-1 vise les artisans et les micro-entrepreneurs, sauf les constructeurs (attestation).
+    // La mention de l'art. L132-1 vise les artisans et les micro-entrepreneurs ; les constructeurs joignent l'attestation
+    // (art. L243-2), la page leur conseillant aussi la mention (fiche F36008 : exemple du plombier).
     var concerned = !!input.micro || !!input.artisan || activity === "artisan", documents;
     if (activity === "construction") documents = "attestation";
     else if (!concerned) documents = "none";

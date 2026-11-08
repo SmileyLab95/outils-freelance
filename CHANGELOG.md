@@ -1,5 +1,21 @@
 # Journal des modifications
 
+## 2026-11-08 (fin de matinée) — France : compte de l'EI, CFE, assurances
+
+- **Compte bancaire de l'entrepreneur individuel** : la mention « EI » dans l'intitulé du compte dédié est relue sur
+  la fiche officielle du compte du micro-entrepreneur ; pour une activité commerciale, le vérificateur précise que la
+  fiche officielle présente le compte obligatoire comme un compte dédié, à réserver à l'activité.
+- **CFE** : échéances relues sur impots.gouv.fr et la fiche officielle de la CFE (15 décembre, prélèvement à
+  l'échéance jusqu'au 30 novembre, acompte de juin au-delà de 3 000 €) ; exonération l'année de création confirmée
+  par le BOFiP. **Précision** dans la FAQ du calendrier fiscal : l'exonération à 5 000 € dépend du chiffre d'affaires
+  hors taxes de l'avant-dernière année (celui de la première année, ramené à 12 mois, pour la deuxième).
+- **Prélèvement à la source du micro-entrepreneur** (acomptes mensuels ou trimestriels, sauf versement libératoire)
+  et **assurance automobile** (responsabilité civile au minimum) relus sur impots.gouv.fr et service-public.gouv.fr.
+- **Assurance sur les devis et factures** : la fiche officielle des documents commerciaux d'une micro-entreprise
+  cite le plombier, soumis à la décennale, parmi les artisans qui doivent indiquer leur assurance ; le vérificateur
+  conseille donc, par prudence, cette mention en plus de l'attestation décennale (décision D57).
+- France : 99 règles sur 119 datées après relecture.
+
 ## 2026-11-08 (matin) — États sans impôt sur le revenu : sources officielles
 
 - La liste des **neuf États américains sans impôt sur le revenu des particuliers** ne s'appuie plus sur la Tax

@@ -1032,13 +1032,24 @@
       "note": "Report au jour ouvré suivant appliqué dans data/calendars/fr.json (scripts/calendriers.py)."
     },
     "cfe_echeance": {
-      "value": "Solde de CFE exigible le 15 décembre ; adhésion au prélèvement à l'échéance jusqu'au 30 novembre ; acompte au 15 juin si la CFE de l'année précédente atteint 3 000 €. Avis uniquement en ligne (espace professionnel).",
+      "value": "Solde de CFE exigible le 15 décembre (15 février de l'année suivante si la mise en recouvrement est différée au 31 décembre) ; adhésion au prélèvement à l'échéance jusqu'au 30 novembre ; acompte au 15 juin si la CFE de l'année précédente atteint 3 000 €. Avis uniquement en ligne (espace professionnel).",
       "unit": "text",
       "label": "Paiement de la cotisation foncière des entreprises",
       "source": "https://www.impots.gouv.fr/professionnel/cet-cfe-et-cvae",
       "source_title": "Impôts locaux : CET (CFE et CVAE) et TF - impots.gouv.fr",
+      "more_sources": [
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F23547",
+          "source_title": "Cotisation foncière des entreprises (CFE) - entreprendre.service-public.gouv.fr"
+        },
+        {
+          "source": "https://bofip.impots.gouv.fr/bofip/1291-PGP.html/identifiant=BOI-IF-CFE-20-50-10-20211222",
+          "source_title": "BOI-IF-CFE-20-50-10 : annualité de la cotisation, création et extension d'établissement - BOFiP"
+        }
+      ],
       "confidence": "high",
-      "note": "Exonération l'année de création et pour un chiffre d'affaires inférieur ou égal à 5 000 € ; base réduite de moitié la deuxième année."
+      "verified_on": "2026-11-08",
+      "note": "Échéances relues le 08/11/2026 sur impots.gouv.fr (« La CFE est due au 15 décembre… », adhésion au prélèvement à l'échéance « jusqu'au 30 novembre pour le solde », acompte « au plus tard le 15 juin N » si la CFE N-1 est « supérieure ou égale à 3 000 € », avis dématérialisés). Une date limite tombant un samedi, un dimanche ou un jour férié est reportée au premier jour ouvrable suivant (F23547, vérifiée le 02/04/2026). Exonération l'année de création (CGI, art. 1478 II, BOFiP BOI-IF-CFE-20-50-10) ; réduction de 50 % de la base l'année suivant la création (F23547) ; exonération si le chiffre d'affaires hors taxes de l'avant-dernière année (N-2) ne dépasse pas 5 000 € (première année : chiffre de N-1 ramené à 12 mois) pour les entreprises redevables de la cotisation minimum (F23547 et impots.gouv.fr)."
     },
     "tva_rsi_calendrier": {
       "value": "Régime réel simplifié : acomptes en juillet (55 %) et en décembre (40 %), déclaration annuelle CA12 au plus tard le 2e jour ouvré suivant le 1er mai. Régime réel normal : déclaration CA3 mensuelle entre le 15 et le 24 du mois suivant.",
@@ -1442,8 +1453,19 @@
       "label": "Entrepreneur individuel : l'intitulé de chaque compte bancaire dédié à l'activité contient sa dénomination (nom suivi de « EI » ou « entrepreneur individuel »)",
       "source": "https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000045697814",
       "source_title": "Code de commerce, art. R526-27 - Légifrance",
+      "more_sources": [
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F35991",
+          "source_title": "Compte bancaire du micro-entrepreneur (auto-entrepreneur) - entreprendre.service-public.gouv.fr"
+        },
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/actualites/A15664",
+          "source_title": "Nouveau statut unique de l'entrepreneur individuel : ce qu'il faut savoir - entreprendre.service-public.gouv.fr"
+        }
+      ],
       "confidence": "high",
-      "note": "Créé par le décret n° 2022-725 du 28/04/2022, en vigueur depuis le 15/05/2022 ; s'applique aussi aux micro-entrepreneurs (Urssaf)."
+      "verified_on": "2026-11-08",
+      "note": "Mention relue le 08/11/2026 sur la fiche F35991 (vérifiée le 28/05/2026) : « le compte bancaire dédié à l'activité professionnelle doit contenir la mention « entrepreneur individuel » ou « EI » » ; la fiche cite l'art. R526-27 du Code de commerce. Date : entrée en vigueur du statut unique de l'entrepreneur individuel le 15/05/2022 (actualité A15664), dont relève l'art. R526-27 créé par le décret n° 2022-725 du 28/04/2022. S'applique aussi aux micro-entrepreneurs."
     },
     "compte_commercant": {
       "value": true,
@@ -1451,8 +1473,14 @@
       "label": "Tout commerçant (personne physique ou société commerciale) doit se faire ouvrir un compte dans un établissement de crédit",
       "source": "https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000006219343",
       "source_title": "Code de commerce, art. L123-24 - Légifrance",
+      "more_sources": [
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F37368",
+          "source_title": "Compte bancaire de l'entrepreneur individuel - entreprendre.service-public.gouv.fr"
+        }
+      ],
       "confidence": "high",
-      "note": "Obligation d'avoir un compte, pas nécessairement réservé à l'activité pour une personne physique."
+      "note": "Obligation d'avoir un compte, pas nécessairement réservé à l'activité pour une personne physique. Relu le 08/11/2026 pour l'entreprise individuelle sur la fiche F37368 (vérifiée le 28/05/2026) : « il est obligatoire pour toute entreprise individuelle qui exerce une activité commerciale d'ouvrir un compte bancaire dans un établissement de crédit ou dans un bureau de chèques postaux » (art. L123-24 cité) ; le chapeau de la même fiche parle d'un « compte dédié », d'où le conseil de le réserver à l'activité. Le cas des sociétés commerciales n'y est pas traité : règle non datée tant que l'article n'est pas relu."
     },
     "droit_au_compte_pro": {
       "value": {
@@ -1519,17 +1547,30 @@
       "label": "Artisans et micro-entrepreneurs dont l'activité exige une assurance : sur chaque devis et chaque facture, l'assurance souscrite, les coordonnées de l'assureur ou du garant et la couverture géographique (sauf constructeurs soumis à la décennale)",
       "source": "https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000047362294",
       "source_title": "Code de l'artisanat, art. L132-1 - Légifrance",
+      "more_sources": [
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F36008",
+          "source_title": "Documents commerciaux d'une micro-entreprise - entreprendre.service-public.gouv.fr"
+        }
+      ],
       "confidence": "high",
-      "note": "En vigueur depuis le 01/07/2023 ; reprend l'art. 22-2 de la loi n° 96-603 du 05/07/1996. Ne s'applique pas aux personnes visées aux art. L241-1 et L241-2 du Code des assurances (constructeurs), qui joignent une attestation (art. L243-2). Sanction du défaut de mention non relevée."
+      "note": "En vigueur depuis le 01/07/2023 ; reprend l'art. 22-2 de la loi n° 96-603 du 05/07/1996. Ne s'applique pas aux personnes visées aux art. L241-1 et L241-2 du Code des assurances (constructeurs), qui joignent une attestation (art. L243-2) : lecture du 20/10/2026, non relue depuis (Légifrance ne s'ouvre pas depuis nos outils). La fiche F36008 (vérifiée le 08/12/2025, relue le 08/11/2026) confirme la mention sur les devis et factures (assurance obligatoire, coordonnées de l'assureur ou du garant, couverture géographique) mais cite en exemple le plombier, « pour lequel l'assurance décennale est obligatoire » : le guide conseille donc par prudence la mention en plus de l'attestation. Sanction du défaut de mention non relevée."
     },
     "assurance_rc_auto": {
       "value": true,
       "unit": "boolean",
       "label": "Tout véhicule à moteur doit être assuré, au minimum en responsabilité civile",
-      "source": "https://www.economie.gouv.fr/facileco/quelles-sont-les-assurances-indispensables",
-      "source_title": "Quelles sont les assurances indispensables ? - economie.gouv.fr",
+      "source": "https://www.service-public.gouv.fr/particuliers/vosdroits/F2628",
+      "source_title": "Assurance auto obligatoire ou « au tiers » - service-public.gouv.fr",
+      "more_sources": [
+        {
+          "source": "https://www.economie.gouv.fr/facileco/quelles-sont-les-assurances-indispensables",
+          "source_title": "Quelles sont les assurances indispensables ? - economie.gouv.fr"
+        }
+      ],
       "confidence": "high",
-      "note": "La responsabilité civile automobile est la seule assurance automobile obligatoire."
+      "verified_on": "2026-11-08",
+      "note": "Relu le 08/11/2026 sur la fiche F2628 (vérifiée le 10/04/2026) : « Tout véhicule terrestre à moteur destiné à circuler sur la voie publique doit être assuré, même lorsqu'il ne circule pas. L'assurance minimale requise est la garantie responsabilité civile, aussi appelée assurance au tiers » (Code des assurances, art. L211-1 et suivants). La page d'economie.gouv.fr, qui ne s'ouvre pas depuis nos outils de vérification, reste citée en complément."
     },
     "ca_declare_hors_taxes": {
       "value": {
@@ -1573,8 +1614,9 @@
       "label": "Sans versement libératoire, les revenus de micro-entrepreneur donnent lieu à des acomptes contemporains prélevés sur le compte bancaire chaque mois (ou chaque trimestre sur option), au taux du foyer ; le prélèvement à la source ne s'applique pas avec le versement libératoire",
       "source": "https://www.impots.gouv.fr/professionnel/questions/en-tant-que-micro-entrepreneur-suis-je-concerne-par-le-prelevement-la-sourc",
       "source_title": "En tant que micro-entrepreneur, suis-je concerné par le prélèvement à la source ? - impots.gouv.fr",
-      "confidence": "medium",
-      "note": "Relevé le 21/10/2026 par recherche sur impots.gouv.fr, sans ouvrir la page. L'acompte porte sur le bénéfice après abattement forfaitaire (BOFiP BOI-IR-PAS-20-20-10) ; il est calculé par l'administration sur les revenus des années précédentes, puis régularisé : le calculateur « à mettre de côté » n'en donne qu'une estimation."
+      "confidence": "high",
+      "verified_on": "2026-11-08",
+      "note": "Relu le 08/11/2026 sur impots.gouv.fr : « Vous êtes concerné par le prélèvement à la source sauf si vous avez opté pour le versement libératoire » ; « Les revenus déjà soumis au versement libératoire sont exclus du prélèvement à la source » ; sans cette option, « acomptes contemporains prélevés directement sur votre compte bancaire tous les mois (ou sur option, tous les trimestres) », l'option trimestrielle étant à exercer avant le 30 septembre de l'année précédente (prélèvements les 15 février, 15 mai, 15 août et 15 novembre). L'acompte porte sur le bénéfice après abattement forfaitaire (BOFiP BOI-IR-PAS-20-20-10) ; il est calculé par l'administration sur les revenus des années précédentes, puis régularisé : le calculateur « à mettre de côté » n'en donne qu'une estimation."
     },
     "micro_cessation": {
       "value": {

@@ -40,7 +40,7 @@
       case "ei": return [
         ["Séparez vos comptes", "Un compte pour l'activité, au moins pour les encaissements et les dépenses professionnelles : votre comptabilité au réel en sera plus simple."],
         TITLE_IF,
-        ["Activité commerciale : un compte bancaire est obligatoire", "Tout commerçant doit avoir un compte dans un établissement de crédit (article L123-24 du Code de commerce)."]];
+        ["Activité commerciale : un compte bancaire est obligatoire", "Tout commerçant doit avoir un compte dans un établissement de crédit (article L123-24 du Code de commerce). La fiche officielle de l'entrepreneur individuel le présente comme un compte dédié : réservez-le à l'activité."]];
       default: return [
         ["Ouvrez le compte au nom de la société", "Les encaissements et les dépenses de la société y passent, séparés de vos comptes personnels."],
         ["Rémunération et remboursements par virement", "Votre rémunération, vos dividendes ou vos notes de frais passent du compte de la société au vôtre par virement."]];

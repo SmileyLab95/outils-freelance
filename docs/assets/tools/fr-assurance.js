@@ -27,7 +27,7 @@
   };
   HERO.commerce = HERO.services;
   var DOCUMENTS = {
-    "attestation": "Sur vos devis et factures : joignez l'attestation d'assurance décennale, établie selon le modèle officiel, à chaque devis et à chaque facture (article L243-2 du Code des assurances). Pour des travaux non soumis à la décennale, un artisan ou un micro-entrepreneur dont l'activité exige une assurance l'indique sur ses devis et factures (article L132-1 du Code de l'artisanat).",
+    "attestation": "Sur vos devis et factures : joignez l'attestation d'assurance décennale, établie selon le modèle officiel, à chaque devis et à chaque facture (article L243-2 du Code des assurances). Artisan ou micro-entrepreneur : indiquez aussi, par prudence, l'assurance souscrite, les coordonnées de l'assureur et la couverture géographique (article L132-1 du Code de l'artisanat) ; la fiche officielle des documents commerciaux d'une micro-entreprise cite en exemple le plombier, soumis à la décennale.",
     "mention": "Sur vos devis et factures : indiquez l'assurance souscrite, les coordonnées de l'assureur et la couverture géographique du contrat (article L132-1 du Code de l'artisanat).",
     "mention-if-required": "Sur vos devis et factures : si votre métier impose une assurance, indiquez l'assurance souscrite, les coordonnées de l'assureur et la couverture géographique (article L132-1 du Code de l'artisanat). Sinon, aucune mention n'est exigée.",
     "none": "Sur vos devis et factures : le Code de l'artisanat n'exige de mention d'assurance que des artisans et des micro-entrepreneurs ; le texte de votre profession peut en prévoir une."
