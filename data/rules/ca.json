@@ -57,7 +57,17 @@
       "source": "https://www2.gov.bc.ca/gov/content/taxes/sales-taxes/pst",
       "source_title": "Provincial sales tax (PST) - Province of British Columbia",
       "confidence": "high",
-      "note": "Separate from GST, separate registration with each province (BC: eTaxBC; SK: Saskatchewan PST, https://www.saskatchewan.ca/business/taxes-licensing-and-reporting/provincial-taxes-policies-and-bulletins/provincial-sales-tax; MB: Retail Sales Tax, https://www.gov.mb.ca/finance/taxation/taxes/retail.html). Manitoba RST went from 8% to 7% on 2019-07-01. Not re-opened on 2026-10-20."
+      "note": "Separate from GST, separate registration with each province (BC: eTaxBC; SK: Saskatchewan PST; MB: Retail Sales Tax). Manitoba RST went from 8% to 7% on 2019-07-01. Not re-opened on 2026-10-20.",
+      "more_sources": [
+        {
+          "source": "https://www.saskatchewan.ca/business/taxes-licensing-and-reporting/provincial-taxes-policies-and-bulletins/provincial-sales-tax",
+          "source_title": "Provincial Sales Tax (PST) - Government of Saskatchewan"
+        },
+        {
+          "source": "https://www.gov.mb.ca/finance/taxation/taxes/retail.html",
+          "source_title": "Retail Sales Tax - Province of Manitoba"
+        }
+      ]
     },
     "pst_on_professional_services": {
       "value": "Generally no PST/RST on most freelance professional services (consulting, writing, design, translation, coaching), but each province taxes a closed list of enumerated services, which can include legal services, telecommunication services, software and IT services, and services to goods. Check the specific service against each province's list before charging or not charging PST.",
@@ -705,8 +715,9 @@
       "label": "Instalment threshold: net tax owing (federal + provincial, outside Québec)",
       "source": "https://laws-lois.justice.gc.ca/eng/acts/I-3.3/section-156.1.html",
       "source_title": "Income Tax Act, section 156.1",
-      "confidence": "medium",
-      "note": "Instalments are required for 2026 if net tax owing is more than $3,000 in 2026 and in either 2025 or 2024. Net tax owing = tax payable minus non-refundable credits and tax withheld at source; CPP/EI on self-employment and the Ontario Health Premium are included. Payment options: no-calculation (CRA reminder), prior-year or current-year method. Not re-opened on 2026-10-20."
+      "confidence": "high",
+      "note": "Checked on 08/11/2026 with the rule checker (official page read in GitHub Actions, value reread in its context): ITA s. 156.1(1), instalment threshold: '(a) in the case of an individual resident in the Province of Quebec at the end of the year, $1,800, and (b) in any other case, $3,000'. Instalments are required for 2026 if net tax owing is more than $3,000 in 2026 and in either 2025 or 2024. Net tax owing = tax payable minus non-refundable credits and tax withheld at source; CPP/EI on self-employment and the Ontario Health Premium are included. Payment options: no-calculation (CRA reminder), prior-year or current-year method.",
+      "verified_on": "2026-11-08"
     },
     "instalment_threshold_quebec": {
       "value": 1800,
@@ -715,7 +726,8 @@
       "source": "https://laws-lois.justice.gc.ca/eng/acts/I-3.3/section-156.1.html",
       "source_title": "Income Tax Act, section 156.1",
       "confidence": "medium",
-      "note": "Federal: $1,800 of federal net tax owing (s. 156.1(1) 'instalment threshold'). Québec: Revenu Québec requires instalments when the estimated net tax owing for the current year exceeds $1,800 and it exceeded $1,800 in either of the two previous years. Revenu Québec defines net tax payable as the tax for the year minus Québec tax withheld at source and refundable credits: QPP, QPIP, health services fund and drug insurance contributions are not part of the test, but they are paid through the same instalments when instalments are required (revenuquebec.ca, 'Acomptes provisionnels' and 'Paiement des cotisations par acomptes provisionnels', read through search results on 21/10/2026; Taxation Act, CQLR c. I-3, s. 1025 et seq.)."
+      "note": "Checked on 08/11/2026 with the rule checker (official page read in GitHub Actions, value reread in its context): ITA s. 156.1(1): '$1,800' for 'an individual resident in the Province of Quebec at the end of the year'. Federal: $1,800 of federal net tax owing (s. 156.1(1) 'instalment threshold'). Québec: Revenu Québec requires instalments when the estimated net tax owing for the current year exceeds $1,800 and it exceeded $1,800 in either of the two previous years. Revenu Québec defines net tax payable as the tax for the year minus Québec tax withheld at source and refundable credits: QPP, QPIP, health services fund and drug insurance contributions are not part of the test, but they are paid through the same instalments when instalments are required (revenuquebec.ca, 'Acomptes provisionnels' and 'Paiement des cotisations par acomptes provisionnels', read through search results on 21/10/2026; Taxation Act, CQLR c. I-3, s. 1025 et seq.).",
+      "verified_on": "2026-11-08"
     },
     "filing_deadline_self_employed": {
       "value": "2027-06-15",
@@ -723,8 +735,9 @@
       "label": "Filing deadline for the 2026 T1 return of a self-employed individual (and spouse)",
       "source": "https://laws-lois.justice.gc.ca/eng/acts/I-3.3/section-150.html",
       "source_title": "Income Tax Act, section 150",
-      "confidence": "medium",
-      "note": "June 15 of the following year (2027-06-15 is a Tuesday). Same deadline for the Québec TP-1. Late-filing penalty: 5% of the balance owing + 1% per full month late, up to 12 months (ITA s. 162(1)). Not re-opened on 2026-10-20."
+      "confidence": "high",
+      "note": "Checked on 08/11/2026 with the rule checker (official page read in GitHub Actions, value reread in its context): ITA s. 150(1)(d)(ii): an individual who carried on a business in the year files by 'the following June 15'. June 15 of the following year (2027-06-15 is a Tuesday). Same deadline for the Québec TP-1. Late-filing penalty: 5% of the balance owing + 1% per full month late, up to 12 months (ITA s. 162(1)).",
+      "verified_on": "2026-11-08"
     },
     "balance_due_date": {
       "value": "2027-04-30",
