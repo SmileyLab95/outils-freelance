@@ -7,6 +7,8 @@ Vérifié le 20 octobre 2026. Les données lisibles par les calculateurs sont da
 > - **issus de connaissances antérieures**, marqués *moyenne* ou *faible* : sociétés (IS, PFU, TNS, SASU), facturation électronique, retard de paiement, mentions obligatoires.
 >
 > Une ligne marquée *faible* ne doit pas alimenter un calculateur sans revérification.
+>
+> **Depuis le 08/11/2026**, 110 règles sur 120 de `data/rules/fr.json` ont été relues sur leur source officielle avec l'outil « Lire une source officielle » et portent une date de vérification (mentions obligatoires comprises) ; la liste des règles restantes est dans la [feuille de route](../05-feuille-de-route.md).
 
 ## 1. Résumé : quel statut choisir ?
 
@@ -133,21 +135,32 @@ La date d'effet est généralement fixée au 1er septembre 2026, mais certaines 
 
 ## 5. Mentions obligatoires d'une facture (2026)
 
-- date d'émission et numéro unique en séquence chronologique continue ;
-- vendeur : nom ou dénomination, adresse (et adresse de facturation si différente), SIREN ou SIRET, forme juridique et capital pour une société, RCS ou RM le cas échéant ;
-- **« EI » ou « entrepreneur individuel »** accolé au nom, obligatoire depuis le 15 mai 2022 (loi n° 2022-172), micro-entrepreneurs compris ;
-- numéro de TVA intracommunautaire du vendeur (sauf franchise) et du client professionnel ;
-- nom et adresse du client (et adresse de facturation si différente) ; numéro de bon de commande s'il existe ;
-- date de la vente ou de la prestation ;
-- désignation, quantité, prix unitaire HT, réductions ;
-- taux et montant de TVA, total HT et total TTC ;
-- date d'échéance, conditions d'escompte, taux des pénalités de retard, indemnité forfaitaire de 40 € (clients professionnels) ;
-- le cas échéant : « TVA non applicable, art. 293 B du CGI », « Autoliquidation », assurance professionnelle obligatoire (décennale pour le bâtiment) ;
-- **à partir de la réforme** : SIREN du client, adresse de livraison, nature de l'opération, option pour les débits (voir la section 3).
+Relues le 08/11/2026 sur la fiche F31808 (vérifiée le 11 août 2026) et dans le BOFiP (BOI-TVA-DECLA-30-20-20-10) ;
+règle `mentions_obligatoires_facture`.
 
-Sanctions : amende fiscale de 15 € par mention manquante, plafonnée au quart du montant de la facture (art. 1737 CGI). Amende administrative jusqu'à 75 000 € pour une personne physique et 375 000 € pour une personne morale (art. L441-9 C. com.).
+- date d'émission et numéro unique, basé sur une séquence chronologique et continue ;
+- vendeur : nom ou dénomination sociale, adresse (siège pour une société, et adresse de facturation si elle est distincte), numéro SIREN ; société : forme juridique et capital social ;
+- **« EI » ou « Entrepreneur individuel »** avant ou après le nom (Code de commerce, art. R526-27), micro-entrepreneurs compris ;
+- mention d'immatriculation des documents commerciaux : « RCS » suivi de la ville du greffe (activité commerciale) ou « RNE » (activité artisanale, libérale ou agricole) ; F31808 ne la cite pas, les fiches F37370 et F37371 la demandent (art. R123-237, non relu) : conservée par prudence (D57) ;
+- numéro de TVA du vendeur (sauf s'il ne lui en a pas été attribué, BOFiP § 40) et du client professionnel redevable de la TVA ; F31808 en dispense les factures de 150 € HT ou moins (non repris, par prudence) ;
+- client : nom complet ou dénomination sociale, adresse et adresse de facturation si elle est différente ; numéro de bon de commande s'il a été établi par l'acheteur ;
+- date de la vente ou de la prestation (livraison, fin d'exécution ou versement de l'acompte) ;
+- désignation, quantité, prix unitaire HT (prestation : matériaux et main-d'œuvre), majorations, réductions acquises ;
+- taux de TVA (ou mention d'exonération) ; total HT et TVA par taux, montant de la TVA à payer (BOFiP § 300), total TTC ;
+- date de règlement, conditions d'escompte (sinon « Escompte pour paiement anticipé : néant »), taux des pénalités de retard, indemnité forfaitaire de 40 € (clients professionnels) ;
+- le cas échéant : « TVA non applicable, art. 293 B du CGI » (art. L. 233-3 du CIBS à partir du 1er janvier 2027), « Auto-liquidation », « Membre d'une association agréée… » ;
+- activité artisanale : références de l'assurance professionnelle, coordonnées de l'assureur ou du garant, couverture géographique (Code de l'artisanat, art. L132-1 et R132-1) ; décennale : attestation jointe (Code des assurances, art. L243-2), et la mention par prudence (D57) ;
+- facture à un particulier pour certains biens (électroménager, informatique, téléphonie, ameublement…) : existence et durée de la garantie légale de conformité, d'au moins 2 ans (décret n° 2021-609) ;
+- **avec l'obligation d'émettre des factures électroniques** (1er septembre 2027 pour les PME et micro-entreprises) : SIREN du client, adresse de livraison, nature des opérations, option pour les débits (voir la section 3).
 
-Point à surveiller : une source non officielle affirme que l'art. 293 B du CGI serait recodifié au 1er septembre 2026 (ordonnance n° 2025-1247), ce qui changerait la référence de la mention de franchise. Non confirmé.
+**Client particulier** (règle `facture_client_particulier`, F23208 vérifiée le 7 août 2026) : pour une prestation de
+services, note obligatoire au-delà de 25 € TTC, et en dessous si le client la demande ; pour une vente de biens,
+facture obligatoire à la demande, pour une vente à distance ou une livraison intracommunautaire exonérée ; pas de
+facturation électronique en principe.
+
+Sanctions : amende fiscale de 15 € par mention manquante ou inexacte, plafonnée au quart du montant de la facture
+(CGI, art. 1737 ; BOFiP, relu le 08/11/2026). Les amendes administratives du Code de commerce (art. L441-9 et
+L441-16) ne sont pas publiées tant que le texte n'a pas été relu.
 
 ## 6. Points à revérifier chaque année
 

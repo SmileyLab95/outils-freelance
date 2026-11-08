@@ -9,7 +9,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 
 ## Où en est-on ?
 
-*Mis à jour le 08/11/2026 (soir).*
+*Mis à jour le 08/11/2026 (fin de soirée).*
 
 - **Priorité (décision D10)** : le site et la plateforme d'abord ; noms de domaine, Gumroad et affiliation à la fin.
   Règle de qualité maximale pour tout produit ou service (D11, charte dans la [méthode](04-methode-de-travail.md#charte-qualité)).
@@ -376,7 +376,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   des comptes attend le choix de l'hébergeur et du domaine.
 - **Vérification outillée des règles (08/11/2026)** : workflow « Vérifier les règles sur leurs sources »
   (`scripts/verifier_regles.py`, D55), pages lues en parallèle. Règles datées après relecture : Royaume-Uni 161 sur
-  164, États-Unis 81 sur 95, France 108 sur 119, Canada 81 sur 135 (France : fiches d'Entreprendre.Service-Public
+  164, États-Unis 81 sur 95, France 110 sur 120, Canada 81 sur 135 (France : fiches d'Entreprendre.Service-Public
   utilisées quand Urssaf, Légifrance ou economie.gouv.fr refusent la lecture). Barème kilométrique français et taux kilométrique
   américain de juillet rattachés au BOFiP et à l'IRS ; SMIC mis à jour (12,31 €) ; calendrier de la facturation
   électronique, abattements et versement libératoire relus sur impots.gouv.fr ; Canada : Loi de l'impôt, Loi sur
@@ -409,8 +409,13 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   Cipav de 13,4 % (tableau de l'Urssaf) ; démarche de l'ACRE corrigée sur la page de création (demande à l'Urssaf
   après la création, et non case à cocher dans la déclaration). Soir : régime fiscal par défaut des statuts
   (F36215 SASU, F36212 EURL, F36380 option IS de l'EI) et seuil de 10 % des dividendes du gérant TNS (notice
-  d'impots.gouv.fr, F36065) datés ; restent en France : TNS et SASU (ordres de grandeur), formats Factur-X, mentions
-  de facture, assurances, compte du commerçant, périodicité Urssaf, décret 2025-943 et taux ACRE arrondis. États sans impôt sur le revenu : 8 pages officielles sur 9 lues le
+  d'impots.gouv.fr, F36065) datés. Fin de soirée : mentions obligatoires de facture relues sur F31808 et le BOFiP et
+  datées ; ajouts : garantie légale de conformité pour certains biens vendus à un particulier (décret 2021-609),
+  montant de TVA par taux, mention « RNE » au lieu de « RM », formule « Escompte pour paiement anticipé : néant »
+  (générateur, Espace et Factur-X) ; nouvelle règle `facture_client_particulier` (F23208 : note obligatoire
+  au-delà de 25 € TTC pour une prestation), qui source un chiffre jusqu'ici sans source. Restent en France : TNS et
+  SASU (ordres de grandeur), formats Factur-X, assurances, compte du commerçant, périodicité Urssaf, décret 2025-943
+  et taux ACRE arrondis. États sans impôt sur le revenu : 8 pages officielles sur 9 lues le
   08/11/2026 (Tennessee illisible) ; Washington taxera dès 2028 les revenus de plus d'un million de dollars.
 - **Règles britanniques revérifiées en direct (07/11/2026, soir)** : 161 règles sur 164 contrôlées sur leur page
   officielle (GOV.UK, legislation.gov.uk ; Banque d'Angleterre par l'outil de lecture) et datées ; 8 sources corrigées ;

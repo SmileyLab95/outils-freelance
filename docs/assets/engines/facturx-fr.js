@@ -163,7 +163,7 @@
       "</rsm:ExchangedDocumentContext>" +
       "<rsm:ExchangedDocument>" + el("ram:ID", esc(doc.number)) + el("ram:TypeCode", doc.type === "avoir" ? "381" : "380") +
       date102("ram:IssueDateTime", doc.date) +
-      note("Pas d'escompte pour paiement anticipé.", "AAB") +
+      note("Escompte pour paiement anticipé : néant.", "AAB") +
       note("En cas de retard de paiement : pénalités au taux de " + (str(doc.penalty) || "trois fois le taux d'intérêt légal") + ".", "PMD") +
       note("Indemnité forfaitaire pour frais de recouvrement en cas de retard de paiement : " + fee + " € (art. L441-10 et D441-5 du Code de commerce).", "PMT") +
       (cat.code === "S" && doc.vat && doc.vat.debits ? note("Option pour le paiement de la taxe d'après les débits.", "TXD") : "") +

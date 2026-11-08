@@ -1,5 +1,22 @@
 # Journal des modifications
 
+## 2026-11-08 (fin de soirée) — Mentions obligatoires de facture relues
+
+- **Liste des mentions obligatoires** relue sur la fiche officielle (vérifiée le 11 août 2026) et dans le BOFiP :
+  ajout de la garantie légale de conformité (au moins 2 ans) pour certains biens vendus à un particulier, du montant
+  de TVA par taux et de la mention « Membre d'une association agréée » ; mention d'immatriculation « RCS » ou
+  « RNE » (l'ancienne mention « RM » est remplacée) ; mention d'assurance pour toute activité artisanale, comme le
+  dit la fiche.
+- **Générateur de factures, Espace et export Factur-X** : la mention d'absence d'escompte reprend la formule de la
+  fiche officielle, « Escompte pour paiement anticipé : néant ». Aide du champ « Statut » complétée (forme
+  juridique et capital d'une société, mention RCS ou RNE).
+- **Checklist des mentions** : identité du client, date de la prestation, TVA par taux et escompte précisés ;
+  **client particulier** : note obligatoire pour une prestation de plus de 25 € TTC, et en dessous à sa demande ;
+  facture d'une vente de biens à sa demande, pour une vente à distance ou une livraison intracommunautaire
+  exonérée (fiche « Tout savoir sur la facturation », vérifiée le 7 août 2026). Ce seuil de 25 € n'avait pas de
+  source : il en a désormais une.
+- France : 110 règles sur 120 datées.
+
 ## 2026-11-08 (soir) — Statuts et dividendes relus
 
 - **Régime fiscal par défaut** relu sur les fiches officielles (février 2026) : SASU à l'impôt sur les sociétés dès

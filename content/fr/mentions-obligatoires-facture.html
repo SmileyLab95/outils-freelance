@@ -8,7 +8,7 @@
   "blurb": "La checklist pour vérifier qu'une facture est conforme.",
   "scripts": ["tools/checklist.js"],
   "rules": "fr",
-  "sources": ["mentions_obligatoires_facture", "penalites_retard_regle", "indemnite_forfaitaire_recouvrement", "mention_franchise_tva", "assurance_mention_devis_factures", "assurance_attestation_decennale"],
+  "sources": ["mentions_obligatoires_facture", "facture_client_particulier", "penalites_retard_regle", "indemnite_forfaitaire_recouvrement", "mention_franchise_tva", "assurance_mention_devis_factures", "assurance_attestation_decennale"],
   "priority": 0.8,
   "faq": [
     ["Quelles sont les mentions obligatoires sur une facture d'auto-entrepreneur ?", "Les mêmes que pour toute facture entre professionnels, avec deux spécificités : la mention « EI » ou « Entrepreneur individuel » à côté de votre nom, et la mention « TVA non applicable, art. 293 B du CGI » (à partir du 1er janvier 2027 : « art. L. 233-3 du CIBS », l'ancienne mention restant admise pendant une période de transition) si vous bénéficiez de la franchise en base de TVA."],
@@ -31,17 +31,17 @@
     <div class="card">
       <ul class="checklist" id="checklist" data-score="{done} sur {total} mentions" data-all="Bravo : votre facture contient toutes les mentions essentielles." data-none="Cochez les mentions présentes sur votre facture." data-missing-one="Il manque {missing} mention. Les points non cochés sont à ajouter avant d'envoyer votre facture." data-missing-many="Il manque {missing} mentions. Les points non cochés sont à ajouter avant d'envoyer votre facture.">
         <li><label><input type="checkbox"><div><strong>Le mot « Facture », un numéro unique et la date</strong><span>La numérotation doit être chronologique et continue, sans trou ni doublon (ex. 2026-001, 2026-002…).</span></div></label></li>
-        <li><label><input type="checkbox"><div><strong>Votre identité complète</strong><span>Nom ou dénomination, adresse, forme juridique. Entrepreneur individuel : la mention « EI » ou « Entrepreneur individuel » juste avant ou après votre nom.</span></div></label></li>
-        <li><label><input type="checkbox"><div><strong>Votre numéro SIREN ou SIRET</strong><span>Et votre numéro RCS ou RM si vous êtes immatriculé.</span></div></label></li>
-        <li><label><input type="checkbox"><div><strong>L'identité de votre client</strong><span>Nom ou raison sociale et adresse de facturation (et son numéro de TVA intracommunautaire s'il en a un).</span></div></label></li>
-        <li><label><input type="checkbox"><div><strong>La date de la prestation ou de la vente</strong><span>Si elle diffère de la date de la facture.</span></div></label></li>
+        <li><label><input type="checkbox"><div><strong>Votre identité complète</strong><span>Nom ou dénomination, adresse. Société : forme juridique et capital social. Entrepreneur individuel : la mention « EI » ou « Entrepreneur individuel » juste avant ou après votre nom.</span></div></label></li>
+        <li><label><input type="checkbox"><div><strong>Votre numéro SIREN ou SIRET</strong><span>Et la mention « RCS » suivie de la ville du greffe (activité commerciale) ou « RNE » (activité artisanale, libérale ou agricole).</span></div></label></li>
+        <li><label><input type="checkbox"><div><strong>L'identité de votre client</strong><span>Nom ou raison sociale, adresse (et adresse de facturation si elle est différente), et son numéro de TVA intracommunautaire s'il est redevable de la TVA.</span></div></label></li>
+        <li><label><input type="checkbox"><div><strong>La date de la prestation ou de la vente</strong><span>Le jour de la livraison ou de la fin de la prestation (ou du versement de l'acompte).</span></div></label></li>
         <li><label><input type="checkbox"><div><strong>Le détail des prestations</strong><span>Désignation précise, quantité, prix unitaire hors taxes et éventuelles réductions.</span></div></label></li>
-        <li><label><input type="checkbox"><div><strong>Les totaux et la TVA</strong><span>Total HT, taux et montant de TVA, total TTC. En franchise : « TVA non applicable, art. 293 B du CGI » (à partir du 1er janvier 2027 : « art. L. 233-3 du CIBS », l'ancienne mention restant admise pendant une période de transition).</span></div></label></li>
+        <li><label><input type="checkbox"><div><strong>Les totaux et la TVA</strong><span>Total HT, taux et montant de TVA (par taux s'il y en a plusieurs), total TTC. En franchise : « TVA non applicable, art. 293 B du CGI » (à partir du 1er janvier 2027 : « art. L. 233-3 du CIBS », l'ancienne mention restant admise pendant une période de transition).</span></div></label></li>
         <li><label><input type="checkbox"><div><strong>La date d'échéance du paiement</strong><span>Entre professionnels, au plus 60 jours après la date de facture (ou 45 jours fin de mois si c'est convenu).</span></div></label></li>
         <li><label><input type="checkbox"><div><strong>Le taux des pénalités de retard</strong><span>Entre professionnels, au moins trois fois le taux d'intérêt légal.</span></div></label></li>
         <li><label><input type="checkbox"><div><strong>L'indemnité forfaitaire de 40 €</strong><span>« Indemnité forfaitaire pour frais de recouvrement en cas de retard de paiement : 40 € » (entre professionnels).</span></div></label></li>
         <li><label><input type="checkbox"><div><strong>L'assurance professionnelle, si votre activité l'exige</strong><span>Artisan ou micro-entrepreneur : l'assurance souscrite, les coordonnées de l'assureur et la couverture géographique, sur chaque devis et facture. Travaux soumis à la garantie décennale : l'attestation d'assurance jointe au devis et à la facture. À cocher aussi si votre activité n'exige aucune assurance ; en cas de doute, voir « Votre activité exige une assurance » plus bas.</span></div></label></li>
-        <li><label><input type="checkbox"><div><strong>Les conditions d'escompte</strong><span>Ou la mention « Pas d'escompte pour paiement anticipé ».</span></div></label></li>
+        <li><label><input type="checkbox"><div><strong>Les conditions d'escompte</strong><span>Ou, sans escompte, la mention « Escompte pour paiement anticipé : néant ».</span></div></label></li>
       </ul>
     </div>
     <div class="results">
@@ -67,7 +67,8 @@
   <h3>Vous êtes en franchise de TVA</h3>
   <p>Vous ne facturez pas la TVA : vos montants sont hors taxes et doivent porter la mention « TVA non applicable, art. 293 B du CGI » (à partir du 1er janvier 2027 : « art. L. 233-3 du CIBS », l'ancienne mention restant admise pendant une période de transition). Vous n'indiquez ni taux ni montant de TVA.</p>
   <h3>Votre client est un particulier</h3>
-  <p>Les pénalités de retard et l'indemnité de 40 € ne concernent que les relations entre professionnels. Pour un particulier, une facture est obligatoire dans certains cas (par exemple au-delà de 25 € pour certaines prestations, ou à sa demande).</p>
+  <p>Les pénalités de retard et l'indemnité de 40 € ne concernent que les relations entre professionnels. Pour une prestation de services, remettez-lui une note (une facture) dès que le montant dépasse 25 € TTC ; en dessous, seulement s'il la demande. Pour une vente de biens, la facture est obligatoire s'il la demande, pour une vente à distance ou pour une livraison intracommunautaire exonérée de TVA. Ces factures ne relèvent pas, en principe, de la facturation électronique.</p>
+  <p>Si vous vendez à un particulier un bien de certaines catégories (électroménager, informatique, téléphonie, jouets, articles de sport, ameublement…), la facture mentionne l'existence et la durée de la garantie légale de conformité, d'au moins 2 ans.</p>
   <h3>Votre activité exige une assurance</h3>
   <p>Si une assurance professionnelle est obligatoire pour votre métier, l'artisan et le micro-entrepreneur l'indiquent sur chaque devis et chaque facture, avec les coordonnées de l'assureur et la couverture géographique du contrat (article L132-1 du Code de l'artisanat). Pour les travaux soumis à la garantie décennale, joignez aussi l'attestation d'assurance au devis et à la facture (article L243-2 du Code des assurances). Le <a href="{{link:insurance}}">guide de l'assurance de l'indépendant</a> vous aide à savoir si vous êtes concerné.</p>
   <h3>Vous avez fait une erreur</h3>

@@ -59,7 +59,7 @@ test("mentions d'une facture : virement, escompte, pénalités et 40 € pour un
   const m = inv.mentions(doc, inv.compute(doc), R, fmt);
   assert.equal(m[0], "TVA non applicable, art. 293 B du CGI.");
   assert.match(m[1], /^Paiement par virement au plus tard le 15\/12\/2026 · IBAN FR76 1234 · Référence : F2026-001\.$/);
-  assert.equal(m[2], "Pas d'escompte pour paiement anticipé.");
+  assert.equal(m[2], "Escompte pour paiement anticipé : néant.", "formule de la fiche F31808");
   assert.match(m[3], /indemnité forfaitaire pour frais de recouvrement de 40 €/);
   doc.client.pro = false;
   assert.equal(inv.mentions(doc, inv.compute(doc), R, fmt).length, 3, "pas de pénalités pour un particulier");

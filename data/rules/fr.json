@@ -955,29 +955,65 @@
     "mentions_obligatoires_facture": {
       "value": [
         "Date d'émission",
-        "Numéro unique, selon une séquence chronologique continue",
-        "Identité du vendeur : nom ou dénomination, adresse (et adresse de facturation si différente), SIREN ou SIRET, forme juridique et capital pour une société, numéro RCS ou RM avec la ville du greffe le cas échéant",
-        "Mention « EI » ou « entrepreneur individuel » avant ou après le nom de l'entrepreneur individuel (y compris micro-entrepreneur)",
-        "Numéro de TVA intracommunautaire du vendeur (sauf franchise en base) et du client professionnel s'il en a un",
-        "Nom et adresse du client (et adresse de facturation si différente)",
+        "Numéro unique, basé sur une séquence chronologique et continue",
+        "Identité du vendeur : nom ou dénomination sociale, adresse (adresse du siège pour une société, et adresse de facturation si elle est distincte), numéro SIREN ; pour une société, forme juridique et montant du capital social",
+        "Mention « EI » ou « Entrepreneur individuel » avant ou après le nom de l'entrepreneur individuel (micro-entrepreneur compris)",
+        "Mention d'immatriculation des documents commerciaux : « RCS » suivi de la ville du greffe (activité commerciale) ou « RNE » (activité artisanale, libérale ou agricole)",
+        "Numéro individuel d'identification à la TVA du vendeur (sauf s'il ne lui en a pas été attribué) et celui du client professionnel redevable de la TVA",
+        "Identité du client : nom complet ou dénomination sociale, adresse, et adresse de facturation si elle est différente",
         "Numéro du bon de commande s'il a été établi par l'acheteur",
-        "Date de la vente ou de la prestation (ou date d'acompte)",
-        "Désignation précise, quantité et prix unitaire hors taxe de chaque produit ou service",
-        "Réductions de prix éventuelles",
-        "Taux et montant de TVA par taux, total HT et total TTC",
-        "Date d'échéance du paiement et conditions d'escompte (ou mention de leur absence)",
+        "Date de la vente ou de la prestation : jour de la livraison ou de la fin d'exécution de la prestation (ou date de versement de l'acompte)",
+        "Désignation précise, quantité et prix unitaire hors taxe de chaque produit ou prestation (prestation : matériaux fournis et main-d'œuvre), majorations éventuelles (transport, emballage)",
+        "Réductions de prix acquises à la date de l'opération (rabais, remises, ristournes)",
+        "Taux de TVA applicable (ou mention de l'exonération) ; total hors taxe et TVA correspondante par taux, montant de la TVA à payer, total TTC",
+        "Date de règlement et conditions d'escompte en cas de paiement anticipé ; sans escompte : « Escompte pour paiement anticipé : néant »",
         "Taux des pénalités de retard",
-        "Mention de l'indemnité forfaitaire de 40 EUR pour frais de recouvrement (clients professionnels)",
-        "Le cas échéant : « TVA non applicable, art. 293 B du CGI » (franchise en base), « Autoliquidation », mention d'exonération avec l'article du CGI",
-        "Le cas échéant, sur les devis et les factures : artisans et micro-entrepreneurs dont l'activité exige une assurance, l'assurance professionnelle souscrite, les coordonnées de l'assureur et la couverture géographique (Code de l'artisanat, art. L132-1) ; travaux soumis à l'assurance décennale : attestation d'assurance jointe au devis et à la facture (Code des assurances, art. L243-2)",
-        "À partir de la réforme : SIREN du client, adresse de livraison si différente, nature de l'opération (biens / services / mixte), option pour la TVA sur les débits"
+        "Mention de l'indemnité forfaitaire de 40 € pour frais de recouvrement (clients professionnels)",
+        "Le cas échéant : « TVA non applicable, art. 293 B du CGI » (franchise en base), « Auto-liquidation » (client redevable de la TVA), « Membre d'une association agréée, le règlement par chèque et carte bancaire est accepté »",
+        "Activité artisanale : références du contrat d'assurance professionnelle, coordonnées de l'assureur ou du garant et couverture géographique du contrat ou de la garantie (Code de l'artisanat, art. L132-1 et R132-1) ; travaux soumis à l'assurance décennale : attestation d'assurance jointe au devis et à la facture (Code des assurances, art. L243-2)",
+        "Facture adressée à un particulier pour un bien de certaines catégories (électroménager, informatique, électronique grand public, téléphonie, photographie, appareils à moteur de bricolage ou de jardinage, jeux et jouets, articles de sport, horlogerie, luminaires, lunettes de soleil, ameublement) : existence et durée de la garantie légale de conformité, d'au moins 2 ans (décret n° 2021-609)",
+        "Avec l'obligation d'émettre des factures électroniques (1er septembre 2026 pour les grandes entreprises et les ETI, 1er septembre 2027 pour les PME et micro-entreprises) : SIREN du client entreprise, adresse de livraison des biens si elle est différente, nature des opérations (biens, services ou les deux), « Option pour le paiement de la taxe d'après les débits » le cas échéant"
       ],
       "unit": "list",
       "label": "Mentions obligatoires d'une facture en 2026",
-      "source": "https://entreprendre.service-public.fr/vosdroits/F31808",
-      "source_title": "Facturation : quelles sont les mentions obligatoires ? - entreprendre.service-public.fr (art. L441-9 C. com., art. 242 nonies A ann. II CGI)",
+      "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F31808",
+      "source_title": "Mentions obligatoires sur une facture - Entreprendre Service Public (fiche F31808, vérifiée le 11 août 2026 ; art. L441-9 C. com., art. 242 nonies A ann. II CGI)",
+      "more_sources": [
+        {
+          "source": "https://bofip.impots.gouv.fr/bofip/140-PGP.html/identifiant=BOI-TVA-DECLA-30-20-20-10-20131018",
+          "source_title": "BOFiP, BOI-TVA-DECLA-30-20-20-10 (mentions à porter sur les factures), § 40, 300 et 450"
+        },
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F37370",
+          "source_title": "Documents commerciaux d'une entreprise individuelle - Entreprendre Service Public (mention RCS ou RNE)"
+        },
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F37371",
+          "source_title": "Documents commerciaux d'une société - Entreprendre Service Public (mention RCS ou RNE)"
+        }
+      ],
       "confidence": "medium",
-      "note": "Liste établie à partir des textes connus, non relue en ligne pendant cette session. Mention EI obligatoire depuis le 15/05/2022 (loi n° 2022-172). Voir facturation_electronique_nouvelles_mentions pour la date d'effet des nouvelles mentions. Mention de l'assurance corrigée le 20/10/2026 : art. 22-2 de la loi n° 96-603 repris à l'art. L132-1 du Code de l'artisanat depuis le 01/07/2023, qui exclut les constructeurs soumis à la décennale (attestation jointe, art. L243-2 du Code des assurances)."
+      "verified_on": "2026-11-08",
+      "note": "Relue le 08/11/2026 avec l'outil « Lire une source officielle » sur la fiche F31808 (vérifiée le 11 août 2026 ; tableaux « Mentions générales obligatoires pour toutes les factures » et « Mentions particulières ») et dans le BOFiP. Précisions de la fiche non reprises dans la liste, par prudence et faute de texte relu : le numéro de TVA n'est pas exigé « pour les factures d'un montant total HT inférieur ou égal à 150 € » ; l'adresse d'un client particulier figure « sauf opposition » de sa part ; pour un client entreprise, la fiche ne cite que son nom (l'adresse reste demandée par prudence). BOFiP § 40 : l'assujetti à qui aucun numéro de TVA n'a été attribué (opérations sans droit à déduction) est dispensé de cette mention ; § 300 : montant de la taxe à payer et, par taux, total hors taxe et taxe correspondante (11° du I de l'art. 242 nonies A) ; § 450 : mention de la franchise en base. Mention d'immatriculation : la fiche F31808 ne la cite pas ; les fiches des documents commerciaux (F37370, F37371, F36008, lues le 29/10/2026, règle email_signature) la demandent sur les documents commerciaux et renvoient au Code de commerce, art. R123-237, non relu (Légifrance inaccessible) : conservée par prudence (D57). Assurance : la fiche cite, « en cas d'activité artisanale », les références du contrat, les coordonnées de l'assureur et du garant et la couverture géographique (Code de l'artisanat, art. L132-1 et R132-1), sans exclure les constructeurs ; la lecture de L132-1 du 20/10/2026 les en excluait au profit de l'attestation (L243-2) : par prudence, les deux (D57, règle assurance_mention_devis_factures). Mention EI : Code de commerce, art. R526-27. Date d'effet des nouvelles mentions : règle facturation_electronique_nouvelles_mentions. Mentions particulières rarement utiles à un indépendant, non reprises : éco-participation DEEE, rémunération pour copie privée, autofacturation."
+    },
+    "facture_client_particulier": {
+      "value": {
+        "prestation_note_obligatoire_au_dela_ttc": 25,
+        "prestation_sous_le_seuil": "facultative, obligatoire si le client la demande",
+        "vente_biens_cas": [
+          "à la demande du client",
+          "vente à distance",
+          "livraison intracommunautaire exonérée de TVA"
+        ],
+        "facturation_electronique": "en principe non"
+      },
+      "unit": "object",
+      "label": "Client particulier : quand remettre une facture ou une note",
+      "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F23208",
+      "source_title": "Tout savoir sur la facturation - Entreprendre Service Public (vérifié le 07 août 2026 ; arrêté n° 83-50/A du 3 octobre 1983 relatif à la publicité des prix de tous les services)",
+      "confidence": "high",
+      "verified_on": "2026-11-08",
+      "note": "Lu le 08/11/2026 avec l'outil « Lire une source officielle » : « Lorsqu'une entreprise réalise une prestation de services pour un particulier, une note doit obligatoirement être remise lorsque le montant de la prestation est supérieur à 25 € (TVA comprise). En dessous de ce montant, la remise d'une note est facultative, mais elle devient obligatoire si le client en fait la demande. » Vente de biens à un particulier : facture (ou note) obligatoire « uniquement » à la demande du client, pour les ventes à distance et pour les livraisons intracommunautaires exonérées de TVA ; sinon, un ticket de caisse, dont l'impression systématique est interdite depuis le 1er août 2023 sauf exceptions. « Les ventes et prestations de services réalisées au profit d'un particulier ne sont, en principe, pas soumises à l'obligation de facturation électronique. » Le texte de l'arrêté n'a pas été relu (Légifrance inaccessible)."
     },
     "sanctions_mentions_facture": {
       "value": {
@@ -1660,17 +1696,21 @@
         "depuis": "2023-07-01"
       },
       "unit": "object",
-      "label": "Artisans et micro-entrepreneurs dont l'activité exige une assurance : sur chaque devis et chaque facture, l'assurance souscrite, les coordonnées de l'assureur ou du garant et la couverture géographique (sauf constructeurs soumis à la décennale)",
+      "label": "Artisans et micro-entrepreneurs dont l'activité exige une assurance : sur chaque devis et chaque facture, l'assurance souscrite, les coordonnées de l'assureur ou du garant et la couverture géographique (constructeurs soumis à la décennale : voir la note)",
       "source": "https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000047362294",
       "source_title": "Code de l'artisanat, art. L132-1 - Légifrance",
       "more_sources": [
         {
           "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F36008",
           "source_title": "Documents commerciaux d'une micro-entreprise - entreprendre.service-public.gouv.fr"
+        },
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F31808",
+          "source_title": "Mentions obligatoires sur une facture - Entreprendre Service Public (fiche F31808, vérifiée le 11 août 2026)"
         }
       ],
       "confidence": "high",
-      "note": "En vigueur depuis le 01/07/2023 ; reprend l'art. 22-2 de la loi n° 96-603 du 05/07/1996. Ne s'applique pas aux personnes visées aux art. L241-1 et L241-2 du Code des assurances (constructeurs), qui joignent une attestation (art. L243-2) : lecture du 20/10/2026, non relue depuis (Légifrance ne s'ouvre pas depuis nos outils). La fiche F36008 (vérifiée le 08/12/2025, relue le 08/11/2026) confirme la mention sur les devis et factures (assurance obligatoire, coordonnées de l'assureur ou du garant, couverture géographique) mais cite en exemple le plombier, « pour lequel l'assurance décennale est obligatoire » : le guide conseille donc par prudence la mention en plus de l'attestation. Sanction du défaut de mention non relevée."
+      "note": "En vigueur depuis le 01/07/2023 ; reprend l'art. 22-2 de la loi n° 96-603 du 05/07/1996. Ne s'applique pas aux personnes visées aux art. L241-1 et L241-2 du Code des assurances (constructeurs), qui joignent une attestation (art. L243-2) : lecture du 20/10/2026, non relue depuis (Légifrance ne s'ouvre pas depuis nos outils). Deux fiches officielles ne reprennent pas cette exclusion : F36008 (vérifiée le 08/12/2025, relue le 08/11/2026) confirme la mention sur les devis et factures (assurance obligatoire, coordonnées de l'assureur ou du garant, couverture géographique) et cite en exemple le plombier, « pour lequel l'assurance décennale est obligatoire » ; F31808 (vérifiée le 11/08/2026, relue le 08/11/2026) demande, « en cas d'activité artisanale », les références du contrat d'assurance professionnelle, les coordonnées de l'assureur et du garant et la couverture géographique (Code de l'artisanat, art. L132-1 et R132-1). Le guide conseille donc par prudence la mention en plus de l'attestation (D57). Sanction du défaut de mention non relevée."
     },
     "assurance_rc_auto": {
       "value": true,

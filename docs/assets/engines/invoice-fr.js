@@ -95,7 +95,7 @@
       } else {
         list.push("Paiement " + when + ".");
       }
-      list.push("Pas d'escompte pour paiement anticipé.");
+      list.push("Escompte pour paiement anticipé : néant.");
       if (doc.client && doc.client.pro) {
         var fee = rules && rules.indemnite_forfaitaire_recouvrement != null ? rules.indemnite_forfaitaire_recouvrement : 40;
         list.push("En cas de retard de paiement : pénalités au taux de " + (str(doc.penalty) || "trois fois le taux d'intérêt légal") +
