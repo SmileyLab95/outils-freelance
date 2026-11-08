@@ -1,5 +1,20 @@
 # Journal des modifications
 
+## 2026-11-08 (midi) — Facturation électronique : sanctions et e-reporting relus
+
+- **Sanctions de la réforme** relues sur service-public et dans le guide pratique de la DGFiP : 50 € par facture
+  non électronique et 500 € par transmission de données manquante, **chacune plafonnée à 15 000 € par an** (le
+  plafond de l'e-reporting manquait dans notre FAQ) ; sans plateforme agréée de réception, 500 € après une mise en
+  demeure de trois mois, puis 1 000 € tous les trois mois. La FAQ précise maintenant qu'une **première infraction**
+  réparée spontanément ou dans les 30 jours n'est pas sanctionnée, et que la DGFiP ne sanctionnera pas
+  automatiquement une difficulté de démarrage réelle, documentée et corrigée.
+- **E-reporting** (particuliers, opérations internationales, données de paiement des prestations de services) et
+  **plateformes agréées** (pas de plateforme gratuite de l'État, annuaire national, liste officielle) relus dans les
+  FAQ de la DGFiP ; un nombre approximatif de plateformes, sans source, est retiré de la règle.
+- **Amende de 15 € par mention de facture manquante**, plafonnée à 25 % du montant de la facture : relue sur le
+  BOFiP ; les amendes administratives du Code de commerce, non relues, sont retirées de la règle.
+- France : 103 règles sur 119 datées après relecture.
+
 ## 2026-11-08 (fin de matinée) — France : compte de l'EI, CFE, assurances
 
 - **Compte bancaire de l'entrepreneur individuel** : la mention « EI » dans l'intitulé du compte dédié est relue sur

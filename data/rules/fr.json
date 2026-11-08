@@ -590,17 +590,39 @@
       "label": "E-reporting",
       "source": "https://www.impots.gouv.fr/professionnel/je-passe-la-facturation-electronique",
       "source_title": "Facturation électronique - impots.gouv.fr",
-      "confidence": "medium",
-      "note": "Non revérifié en ligne pendant cette session."
+      "more_sources": [
+        {
+          "source": "https://www.impots.gouv.fr/sites/default/files/media/1_metier/2_professionnel/EV/2_gestion/290_facturation_electronique/faq---fe_japprofondis-la-facturation-electronique.pdf",
+          "source_title": "Foire aux questions – J'approfondis la facturation électronique (DGFiP, version du 01/09/2026) - impots.gouv.fr"
+        },
+        {
+          "source": "https://www.impots.gouv.fr/sites/default/files/media/1_metier/2_professionnel/EV/2_gestion/290_facturation_electronique/guide_pratique_facturation_electronique.pdf",
+          "source_title": "Facturation électronique : guide pratique de démarrage au 1er septembre 2026 (DGFiP, juillet 2026) - impots.gouv.fr"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-11-08",
+      "note": "Relu le 08/11/2026 dans la FAQ « J'approfondis la facturation électronique » (version du 01/09/2026) : opérations avec un particulier dans le champ du e-reporting (montant total par jour) ; opérations internationales avec un assujetti, facture par facture ; données de paiement pour les seules prestations de services, à une fréquence qui dépend du régime de TVA (franchise en base : tous les deux mois ; réel normal mensuel : chaque mois), sauf autoliquidation ou option pour la TVA d'après les débits ; mêmes dates pour les entreprises non établies en France (GE et ETI au 01/09/2026, PME et micro-entreprises au 01/09/2027). Guide pratique de la DGFiP (question 21) : e-reporting des GE et ETI depuis le 01/09/2026, par l'intermédiaire d'une plateforme agréée."
     },
     "plateformes_agreees": {
-      "value": "Les factures électroniques transitent obligatoirement par une plateforme agréée (PA) par la DGFiP, autrefois appelée plateforme de dématérialisation partenaire (PDP), nom changé par la LF 2025. Chaque entreprise doit en choisir au moins une pour recevoir ses factures avant le 01/09/2026. Le portail public de facturation (PPF) ne sert plus de plateforme d'échange gratuite : il tient l'annuaire central et concentre les données transmises à l'administration. La liste officielle des PA est publiée et mise à jour sur impots.gouv.fr.",
+      "value": "Les factures électroniques sont émises, transmises et reçues par l'intermédiaire d'une plateforme agréée (PA) par l'administration (CGI, art. 289 bis). Toutes les entreprises concernées doivent pouvoir recevoir leurs factures par une plateforme agréée depuis le 01/09/2026. Il n'y a pas de plateforme gratuite de l'État : l'administration définit les normes, gère l'annuaire national des destinataires et reçoit les données transmises par les plateformes. La liste officielle des plateformes agréées est publiée sur impots.gouv.fr.",
       "unit": "text",
       "label": "Rôle des plateformes agréées",
       "source": "https://www.impots.gouv.fr/professionnel/je-passe-la-facturation-electronique",
       "source_title": "Facturation électronique et liste des plateformes agréées - impots.gouv.fr",
-      "confidence": "medium",
-      "note": "Nombre de PA : de l'ordre d'une centaine d'immatriculées (environ 100 à 110 début 2026), confiance faible : vérifier sur la liste publiée. Les logiciels de facturation non immatriculés (opérateurs de dématérialisation, OD) doivent passer par une PA."
+      "more_sources": [
+        {
+          "source": "https://www.impots.gouv.fr/sites/default/files/media/1_metier/2_professionnel/EV/2_gestion/290_facturation_electronique/guide_pratique_facturation_electronique.pdf",
+          "source_title": "Facturation électronique : guide pratique de démarrage au 1er septembre 2026 (DGFiP, juillet 2026) - impots.gouv.fr"
+        },
+        {
+          "source": "https://www.impots.gouv.fr/sites/default/files/media/1_metier/2_professionnel/EV/2_gestion/290_facturation_electronique/faq_tout_savoir_facturation-electronique.pdf",
+          "source_title": "Plus juste, plus simple, plus efficace : la facturation électronique (FAQ de la DGFiP) - impots.gouv.fr"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-11-08",
+      "note": "Relu le 08/11/2026 : guide pratique de la DGFiP (question 1 : réception par une plateforme agréée depuis le 01/09/2026 ; données des factures transmises à l'administration par la plateforme choisie, CGI art. 289 E) ; FAQ « Plus juste, plus simple, plus efficace » (« La France a fait le choix de ne pas créer de portail public unique » ; l'État gère « l'annuaire national » ; plateformes « sous agrément de l'administration et sous son contrôle permanent ») ; la page impots.gouv.fr renvoie à la liste officielle des plateformes agréées. Les logiciels de facturation qui ne sont pas des plateformes agréées doivent passer par l'une d'elles. Nombre de plateformes : voir la liste officielle (non recopié ici)."
     },
     "facturation_electronique_formats": {
       "value": [
@@ -613,7 +635,7 @@
       "source": "https://www.impots.gouv.fr/professionnel/je-passe-la-facturation-electronique",
       "source_title": "Spécifications externes de la facturation électronique - impots.gouv.fr",
       "confidence": "medium",
-      "note": "UBL 2.1 et UN/CEFACT CII (XML, norme EN 16931) ; Factur-X est un format mixte, un PDF/A-3 qui embarque un XML CII. Toutes les PA doivent accepter ces trois formats. Un PDF simple n'est plus une facture électronique valable. Non revérifié en ligne pendant cette session."
+      "note": "UBL 2.1 et UN/CEFACT CII (XML, norme EN 16931) ; Factur-X est un format mixte, un PDF/A-3 qui embarque un XML CII. Toutes les PA doivent accepter ces trois formats. Relu le 08/11/2026 dans la FAQ « Plus juste, plus simple, plus efficace » de la DGFiP : une facture électronique est émise, transmise et reçue « sous un format numérique qui permet un traitement automatisé. Ce n'est donc pas un PDF envoyé par e-mail » ; elle comporte 34 données transmises en format structuré. Les noms des trois formats ne figurent pas dans les documents relus (FAQ, guide pratique) : à relire dans les spécifications externes de la DGFiP, règle non datée."
     },
     "facturation_electronique_nouvelles_mentions": {
       "value": [
@@ -641,14 +663,28 @@
         "facture_non_electronique_par_facture": 50,
         "facture_non_electronique_plafond_annuel": 15000,
         "e_reporting_par_transmission": 500,
-        "absence_plateforme_agreee": 500
+        "e_reporting_plafond_annuel": 15000,
+        "absence_plateforme_agreee": 500,
+        "absence_plateforme_agreee_persistance_par_trimestre": 1000,
+        "mise_en_demeure_mois": 3
       },
       "unit": "object",
       "label": "Amendes de la réforme (art. 1737 III et 1788 D CGI)",
-      "source": "https://www.legifrance.gouv.fr/codes/id/LEGITEXT000006069577",
-      "source_title": "Code général des impôts, art. 1737 et 1788 D - Légifrance",
-      "confidence": "medium",
-      "note": "Montants relevés par la loi de finances pour 2026 (art. 1788 D du CGI) selon la CAPEB, Tide, Banqup et Tiime (2026) : 50 € par facture non électronique (plafond 15 000 € par an), 500 € par transmission d'e-reporting manquante, 500 € en l'absence de plateforme agréée après mise en demeure (puis 1 000 € tous les trois mois). Anciens montants : 15 € et 250 €. Texte officiel à relire."
+      "source": "https://entreprendre.service-public.gouv.fr/actualites/A18802",
+      "source_title": "Facturation électronique : les sanctions évoluent (20/02/2026) - entreprendre.service-public.gouv.fr",
+      "more_sources": [
+        {
+          "source": "https://www.impots.gouv.fr/sites/default/files/media/1_metier/2_professionnel/EV/2_gestion/290_facturation_electronique/guide_pratique_facturation_electronique.pdf",
+          "source_title": "Facturation électronique : guide pratique de démarrage au 1er septembre 2026 (DGFiP, juillet 2026) - impots.gouv.fr"
+        },
+        {
+          "source": "https://www.legifrance.gouv.fr/codes/id/LEGITEXT000006069577",
+          "source_title": "Code général des impôts, art. 1737 et 1788 D - Légifrance"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-11-08",
+      "note": "Relu le 08/11/2026 sur l'actualité A18802 (loi n° 2026-103 du 19/02/2026 de finances pour 2026, art. 123) : 50 € par facture non électronique (au lieu de 15 €), total annuel plafonné à 15 000 € ; absence de plateforme agréée pour recevoir les factures : mise en demeure de 3 mois, puis amende de 500 €, puis 1 000 € tous les trois mois tant que la situation n'est pas régularisée ; données de transaction et de paiement non transmises : 500 € par transmission (au lieu de 250 €), total annuel plafonné à 15 000 €. Pas de sanction « en cas de première infraction commise au cours de l'année civile en cours et des trois années précédentes si l'infraction a été réparée spontanément ou dans les trente jours suivant une première demande de l'administration ». Guide pratique de la DGFiP (question 29) : pas de sanction « immédiate, automatique et aveugle » au démarrage pour une difficulté réelle, documentée et suivie d'actions de correction ; le calendrier reste applicable."
     },
     "retard_paiement_delais": {
       "value": {
@@ -887,16 +923,21 @@
     "sanctions_mentions_facture": {
       "value": {
         "amende_fiscale_par_mention": 15,
-        "plafond_amende_fiscale": "25 % du montant de la facture",
-        "amende_administrative_max_personne_physique": 75000,
-        "amende_administrative_max_personne_morale": 375000
+        "plafond_amende_fiscale": "25 % du montant de la facture"
       },
       "unit": "object",
       "label": "Sanctions en cas de facture incomplète",
-      "source": "https://entreprendre.service-public.fr/vosdroits/F31808",
-      "source_title": "Facturation : mentions obligatoires - entreprendre.service-public.fr (art. 1737 CGI, art. L441-9 C. com.)",
-      "confidence": "medium",
-      "note": "Amende fiscale de 15 EUR par mention manquante ou inexacte, plafonnée au quart du montant de la facture. Amende administrative (DGCCRF) de 75 000 EUR au plus pour une personne physique, 375 000 EUR pour une personne morale. Non revérifié en ligne pendant cette session."
+      "source": "https://bofip.impots.gouv.fr/bofip/724-PGP.html",
+      "source_title": "BOI-CF-INF-10-40-40 : infractions aux règles de facturation (CGI, art. 1737) - BOFiP",
+      "more_sources": [
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F31808",
+          "source_title": "Mentions obligatoires sur une facture - entreprendre.service-public.gouv.fr"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-11-08",
+      "note": "Relu le 08/11/2026 sur le BOFiP : « Le II de l'article 1737 du CGI dispose que chaque omission ou inexactitude est sanctionnée par une amende de 15 €. Lorsqu'une facture comporte plusieurs omissions ou inexactitudes, le montant total des amendes dues à ce titre est plafonné à 25 % du montant total de la facture. » La fiche F31808 ne mentionne plus ces amendes. Amendes administratives du Code de commerce : non relues, retirées de la règle en attendant la lecture du texte."
     },
     "mention_franchise_tva": {
       "value": "TVA non applicable, art. 293 B du CGI",
