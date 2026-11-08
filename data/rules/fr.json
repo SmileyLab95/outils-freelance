@@ -423,22 +423,24 @@
       "note": "48 060 / 12. Montant mensuel non lu directement."
     },
     "smic_horaire_brut_2026": {
-      "value": 12.02,
+      "value": 12.31,
       "unit": "EUR",
       "label": "Smic horaire brut au 1er janvier 2026",
       "source": "https://www.service-public.fr/particuliers/vosdroits/F2300",
       "source_title": "Smic - service-public.fr",
-      "confidence": "medium",
-      "note": "Hausse de 1,18 % au 01/01/2026 (11,88 EUR auparavant). Cité de mémoire, non revérifié en ligne pendant cette session. Revalorisation automatique en cours d'année si l'inflation dépasse 2 % : vérifier qu'il n'y en a pas eu en 2026."
+      "confidence": "high",
+      "note": "Lu le 08/11/2026 sur la fiche F2300 (« Vérifié le 01 juin 2026 ») : Smic horaire brut 12,31 € (net 9,74 €), mensuel brut 1 867,02 €, annuel 22 404,20 € en métropole. Revalorisation en cours d'année : 12,02 € au 1er janvier 2026 (hausse de 1,18 %) ; la date d'effet du nouveau montant n'est pas écrite dans le texte lu (la fiche indique qu'une hausse d'au moins 2 % de l'indice des prix entraîne une revalorisation en cours d'année). Règle non utilisée par les calculs du site.",
+      "verified_on": "2026-11-08"
     },
     "smic_mensuel_brut_2026": {
-      "value": 1823.03,
+      "value": 1867.02,
       "unit": "EUR",
       "label": "Smic mensuel brut (35 h) au 1er janvier 2026",
       "source": "https://www.service-public.fr/particuliers/vosdroits/F2300",
       "source_title": "Smic - service-public.fr",
-      "confidence": "medium",
-      "note": "12,02 EUR x 151,67 h. Non revérifié en ligne pendant cette session."
+      "confidence": "high",
+      "note": "Lu le 08/11/2026 sur la fiche F2300 : 1 867,02 € brut par mois pour 151,67 heures (montant officiel, à reprendre tel quel), contre 1 823,03 € au 1er janvier 2026. Voir smic_horaire_brut_2026.",
+      "verified_on": "2026-11-08"
     },
     "statuts_regime_fiscal_defaut": {
       "value": {
