@@ -1464,7 +1464,14 @@
       "source": "https://www.banque-france.fr/fr/a-votre-service/entreprises/interdit-bancaire-droit-compte-professionnel",
       "source_title": "Interdit bancaire et droit au compte professionnel - Banque de France",
       "confidence": "high",
-      "note": "Sans réponse de la banque sous 15 jours, le silence vaut refus ; la banque désignée ouvre le compte dans les 3 jours suivant la remise d'un dossier complet ; services de base sans chéquier ni découvert ; procédure gratuite. Relevé le 20/10/2026 (extraits de la page officielle)."
+      "note": "Vérifiée le 08/11/2026 avec l'outil de lecture des sources sur la fiche F21118 : pièces à fournir, dont la « lettre de refus d'ouverture de compte […] ou accusé de réception de la lettre recommandée […] de la demande d'ouverture de compte datée de plus de 15 jours » ; la Banque de France « doit désigner dans un délai de 24 heures une banque » (désignation valable 6 mois) ; « Si le dossier est complet, l'agence bancaire doit ouvrir le compte dans un délai de 3 jours ouvrés ». Services de base sans chéquier ni découvert ; procédure gratuite (relevé le 20/10/2026 sur la page de la Banque de France).",
+      "more_sources": [
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F21118",
+          "source_title": "Refus d'ouverture d'un compte bancaire professionnel : droits et recours - Entreprendre.Service-Public.gouv.fr (fiche F21118)"
+        }
+      ],
+      "verified_on": "2026-11-08"
     },
     "assurance_rc_pro": {
       "value": {

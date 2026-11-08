@@ -55,6 +55,6 @@ test("la page reprend les valeurs des règles (une seule source : data/rules/fr.
   assert.ok(page.includes(euros), `seuil ${euros}`);
   assert.ok(page.includes(since), `mention « EI » depuis le ${since}`);
   assert.ok(page.includes(`${dac.silence_vaut_refus_jours} jours`), "silence de la banque");
-  assert.ok(page.includes(["zéro", "un", "deux", "trois", "quatre", "cinq"][dac.ouverture_jours] + " jours"), "délai d'ouverture");
+  assert.ok(page.includes(["zéro", "un", "deux", "trois", "quatre", "cinq"][dac.ouverture_jours] + " jours ouvrés"), "délai d'ouverture (jours ouvrés)");
   assert.ok(page.includes("deux années civiles consécutives") && RULE.annees_consecutives === 2);
 });
