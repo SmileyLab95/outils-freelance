@@ -11,7 +11,13 @@
       "source": "https://www.ssa.gov/news/en/cola/factsheets/2026.html",
       "source_title": "SSA - 2026 Cost-of-Living Adjustment (COLA) Fact Sheet",
       "confidence": "high",
-      "note": "12.4% = 6.2% employee + 6.2% employer equivalent. Applies only up to the Social Security wage base (reduced by any W-2 Social Security wages). Also stated on IRS Topic 554 (https://www.irs.gov/taxtopics/tc554)."
+      "note": "12.4% = 6.2% employee + 6.2% employer equivalent. Applies only up to the Social Security wage base (reduced by any W-2 Social Security wages). Also stated on IRS Topic 554 (https://www.irs.gov/taxtopics/tc554).",
+      "more_sources": [
+        {
+          "source": "https://www.irs.gov/taxtopics/tc751",
+          "source_title": "Topic no. 751, Social Security and Medicare withholding rates - IRS"
+        }
+      ]
     },
     "se_tax_medicare_rate": {
       "value": 0.029,
@@ -20,7 +26,13 @@
       "source": "https://www.ssa.gov/news/en/cola/factsheets/2026.html",
       "source_title": "SSA - 2026 Cost-of-Living Adjustment (COLA) Fact Sheet",
       "confidence": "high",
-      "note": "2.9% = 1.45% x 2. No earnings cap. Additional Medicare Tax (0.9%) is separate (see additional_medicare_tax_rate)."
+      "note": "2.9% = 1.45% x 2. No earnings cap. Additional Medicare Tax (0.9%) is separate (see additional_medicare_tax_rate).",
+      "more_sources": [
+        {
+          "source": "https://www.irs.gov/taxtopics/tc751",
+          "source_title": "Topic no. 751, Social Security and Medicare withholding rates - IRS"
+        }
+      ]
     },
     "se_tax_total_rate": {
       "value": 0.153,
@@ -29,7 +41,13 @@
       "source": "https://www.irs.gov/taxtopics/tc554",
       "source_title": "IRS - Topic no. 554, Self-employment tax",
       "confidence": "high",
-      "note": "12.4% + 2.9%. Above the wage base only 2.9% (+0.9% Additional Medicare Tax above the filing-status threshold) applies."
+      "note": "12.4% + 2.9%. Above the wage base only 2.9% (+0.9% Additional Medicare Tax above the filing-status threshold) applies.",
+      "more_sources": [
+        {
+          "source": "https://www.irs.gov/taxtopics/tc751",
+          "source_title": "Topic no. 751, Social Security and Medicare withholding rates - IRS"
+        }
+      ]
     },
     "se_net_earnings_factor": {
       "value": 0.9235,
@@ -65,7 +83,17 @@
       "source": "https://www.ssa.gov/oact/cola/cbb.html",
       "source_title": "SSA Office of the Chief Actuary - Contribution and Benefit Base",
       "confidence": "high",
-      "note": "Up from $176,100 in 2025. Announced 2025-10-24 (press release https://www.ssa.gov/news/en/press/releases/2025-10-24.html). Confirmed by SSA 2026 COLA fact sheet."
+      "note": "Up from $176,100 in 2025. Announced 2025-10-24 (press release https://www.ssa.gov/news/en/press/releases/2025-10-24.html). Confirmed by SSA 2026 COLA fact sheet.",
+      "more_sources": [
+        {
+          "source": "https://www.irs.gov/taxtopics/tc751",
+          "source_title": "Topic no. 751, Social Security and Medicare withholding rates - IRS"
+        },
+        {
+          "source": "https://www.irs.gov/publications/p15",
+          "source_title": "Publication 15 (2026), (Circular E), Employer's Tax Guide - IRS"
+        }
+      ]
     },
     "social_security_wage_base_2027": {
       "value": 192300,
@@ -83,7 +111,17 @@
       "source": "https://www.ssa.gov/oact/cola/cbb.html",
       "source_title": "SSA Office of the Chief Actuary - Contribution and Benefit Base",
       "confidence": "high",
-      "note": "Derived: 0.124 x $184,500 = $22,878. Employee-only maximum is $11,439."
+      "note": "Derived: 0.124 x $184,500 = $22,878. Employee-only maximum is $11,439.",
+      "more_sources": [
+        {
+          "source": "https://www.irs.gov/taxtopics/tc751",
+          "source_title": "Topic no. 751, Social Security and Medicare withholding rates - IRS"
+        },
+        {
+          "source": "https://www.irs.gov/publications/p15",
+          "source_title": "Publication 15 (2026), (Circular E), Employer's Tax Guide - IRS"
+        }
+      ]
     },
     "additional_medicare_tax_rate": {
       "value": 0.009,
@@ -262,10 +300,11 @@
       "value": 0.2,
       "unit": "rate",
       "label": "Qualified Business Income (Section 199A) deduction rate",
-      "source": "https://www.irs.gov/newsroom/one-big-beautiful-bill-provisions-individuals-and-workers",
-      "source_title": "IRS - One, Big, Beautiful Bill provisions (Working Families Tax Cuts) - individuals and workers",
+      "source": "https://www.irs.gov/newsroom/qualified-business-income-deduction",
+      "source_title": "Qualified business income deduction - IRS",
       "confidence": "high",
-      "note": "OBBBA sec. 70105 made Sec. 199A permanent (no more 2025-12-31 sunset) and kept the rate at 20% (the House draft's 23% was not enacted). Deduction also capped at 20% of taxable income minus net capital gain. Taken below AGI; does not reduce SE tax."
+      "note": "Checked on 08/11/2026 (source reader): 'The deduction allows eligible taxpayers to deduct up to 20 percent of their QBI'. The previous source (https://www.irs.gov/newsroom/one-big-beautiful-bill-provisions-individuals-and-workers) now redirects to a page without the QBI figures. OBBBA sec. 70105 made Sec. 199A permanent (no more 2025-12-31 sunset) and kept the rate at 20% (the House draft's 23% was not enacted). Deduction also capped at 20% of taxable income minus net capital gain. Taken below AGI; does not reduce SE tax.",
+      "verified_on": "2026-11-08"
     },
     "qbi_threshold_2026": {
       "value": {
@@ -290,10 +329,11 @@
       },
       "unit": "USD",
       "label": "Width of the Sec. 199A phase-in range (OBBBA, from 2026)",
-      "source": "https://www.irs.gov/newsroom/one-big-beautiful-bill-provisions-individuals-and-workers",
-      "source_title": "IRS - One, Big, Beautiful Bill provisions (Working Families Tax Cuts) - individuals and workers",
+      "source": "https://www.irs.gov/pub/irs-drop/rp-25-32.pdf",
+      "source_title": "Rev. Proc. 2025-32 (2026 inflation adjustments) - IRS",
       "confidence": "high",
-      "note": "Widened from $50,000 / $100,000 (pre-2026) to $75,000 / $150,000 for tax years beginning after 2025. Within the range, the SSTB exclusion and W-2 wage/UBIA limits phase in."
+      "note": "Checked on 08/11/2026 with the rule checker: Rev. Proc. 2025-32 gives the 2026 threshold and the end of the phase-in range ($403,500 and $553,500 for joint returns, $201,750 and $276,750 for other returns, $201,775 and $276,775 for married filing separately): the range is $150,000 (joint) and $75,000 (others). The previous source (https://www.irs.gov/newsroom/one-big-beautiful-bill-provisions-individuals-and-workers) redirects to a page without the QBI figures. Widened from $50,000 / $100,000 (pre-2026) to $75,000 / $150,000 for tax years beginning after 2025. Within the range, the SSTB exclusion and W-2 wage/UBIA limits phase in.",
+      "verified_on": "2026-11-08"
     },
     "qbi_phase_in_end_2026": {
       "value": {
@@ -437,7 +477,13 @@
       "source": "https://www.irs.gov/instructions/i1099mec",
       "source_title": "IRS - Instructions for Forms 1099-MISC and 1099-NEC (Rev. December 2026)",
       "confidence": "medium",
-      "note": "Rule: January 31 to both recipient and IRS; January 31, 2027 is a Sunday, so the next business day (Monday 2027-02-01) applies. Derived from the general rule, not read verbatim in the Dec 2026 instructions."
+      "note": "Rule: January 31 to both recipient and IRS; January 31, 2027 is a Sunday, so the next business day (Monday 2027-02-01) applies. Derived from the general rule, not read verbatim in the Dec 2026 instructions.",
+      "more_sources": [
+        {
+          "source": "https://www.irs.gov/instructions/i1099gi",
+          "source_title": "General Instructions for Certain Information Returns (2026) - IRS"
+        }
+      ]
     },
     "form_1099_k_threshold": {
       "value": {
@@ -458,7 +504,17 @@
       "source": "https://www.irs.gov/instructions/i1099mec",
       "source_title": "IRS - Instructions for Forms 1099-MISC and 1099-NEC",
       "confidence": "medium",
-      "note": "24% (tied to the 4th-lowest bracket rate, made permanent by OBBBA). Rate confirmed in this session only through secondary sources; not read verbatim on irs.gov."
+      "note": "24% (tied to the 4th-lowest bracket rate, made permanent by OBBBA). Rate confirmed in this session only through secondary sources; not read verbatim on irs.gov.",
+      "more_sources": [
+        {
+          "source": "https://www.irs.gov/businesses/small-businesses-self-employed/backup-withholding",
+          "source_title": "Backup withholding - IRS"
+        },
+        {
+          "source": "https://www.irs.gov/forms-pubs/about-form-w-9",
+          "source_title": "About Form W-9 - IRS"
+        }
+      ]
     },
     "form_w9_basics": {
       "value": "Form W-9 (Request for Taxpayer Identification Number and Certification) is completed by the freelancer and given to the client, not to the IRS. It provides legal name, business name/disregarded entity name, federal tax classification (individual/sole proprietor, single-member LLC, S corporation...), address and TIN (SSN or EIN), with a certification that the payee is not subject to backup withholding. A single-member LLC that is a disregarded entity enters the owner's name on line 1 and the owner's TIN. Missing or incorrect TIN can trigger backup withholding.",
