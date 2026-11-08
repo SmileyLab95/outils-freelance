@@ -404,7 +404,8 @@
       "source": "https://www.quebec.ca/entreprises-et-travailleurs-autonomes/administrer-gerer/embauche-gestion-personnel/assurance-parentale/taux-cotisations",
       "source_title": "Taux de cotisations au Régime québécois d'assurance parentale (RQAP) - Québec.ca",
       "confidence": "high",
-      "note": "2025: 0.878%. Overall 13% rate cut from 2026-01-01 (Finances Québec Bulletin d'information 2025-8). Employee 0.430%, employer 0.602%. Compulsory for Québec self-employed people; the minimum-income condition (believed to be $2,000 of net self-employment income) was not re-checked online."
+      "note": "Checked on 08/11/2026 with the source reader (official page read in GitHub Actions): the Québec.ca table, 'Travailleurs autonomes', gives 'Taux de cotisation : 0,878 %' / 'Cotisations maximales : 860,44 $' (2025) then 'Taux de cotisation : 0,764 %' / 'Cotisations maximales : 786,92 $' (2026); employees 0,494 % then 0,430 % (maximum 442,90 $), employers 0,692 % then 0,602 % (maximum 620,06 $). Overall 13% rate cut from 2026-01-01 (Finances Québec Bulletin d'information 2025-8). Compulsory for Québec self-employed people; the minimum-income condition (believed to be $2,000 of net self-employment income) was not re-checked online.",
+      "verified_on": "2026-11-08"
     },
     "qpip_max_premium_self_employed": {
       "value": 786.92,
@@ -413,7 +414,8 @@
       "source": "https://www.quebec.ca/entreprises-et-travailleurs-autonomes/administrer-gerer/embauche-gestion-personnel/assurance-parentale/taux-cotisations",
       "source_title": "Taux de cotisations au Régime québécois d'assurance parentale (RQAP) - Québec.ca",
       "confidence": "high",
-      "note": "= 103,000 x 0.764%. Employee maximum $442.90, employer maximum $620.06. The $2,000 minimum income condition was not re-checked online. Tax treatment: the 'employer' part is deductible (federal line 22300), the employee part gives a credit — not re-checked online."
+      "note": "Checked on 08/11/2026 with the source reader (official page read in GitHub Actions): the Québec.ca table, 'Travailleurs autonomes', gives 'Taux de cotisation : 0,878 %' / 'Cotisations maximales : 860,44 $' (2025) then 'Taux de cotisation : 0,764 %' / 'Cotisations maximales : 786,92 $' (2026); employees 0,494 % then 0,430 % (maximum 442,90 $), employers 0,692 % then 0,602 % (maximum 620,06 $). = 103,000 x 0.764%. The $2,000 minimum income condition was not re-checked online. Tax treatment: the 'employer' part is deductible (federal line 22300), the employee part gives a credit — not re-checked online.",
+      "verified_on": "2026-11-08"
     },
     "ei_max_insurable_earnings": {
       "value": 68900,
@@ -746,10 +748,17 @@
       "value": "2027-04-30",
       "unit": "date",
       "label": "Payment deadline for any 2026 balance owing (even for the self-employed)",
-      "source": "https://laws-lois.justice.gc.ca/eng/acts/I-3.3/section-156.1.html",
-      "source_title": "Income Tax Act, section 156.1",
-      "confidence": "medium",
-      "note": "April 30 of the following year (2027-04-30 is a Friday). Interest runs from May 1 on unpaid balances, even though the self-employed have until June 15 to file. Same for Revenu Québec. Not re-opened on 2026-10-20."
+      "source": "https://laws-lois.justice.gc.ca/eng/acts/I-3.3/section-248.html",
+      "source_title": "Income Tax Act, section 248(1), definition of balance-due day",
+      "confidence": "high",
+      "note": "Checked on 08/11/2026 with the source reader (official page read in GitHub Actions): ITA s. 248(1), balance-due day: '(c) in any other case where the taxpayer is an individual, April 30 in the following taxation year'. The payment rule for the remainder (s. 156.1(4)) was not reread on 08/11/2026. April 30 of the following year (2027-04-30 is a Friday). Interest runs from May 1 on unpaid balances, even though the self-employed have until June 15 to file. Same for Revenu Québec.",
+      "more_sources": [
+        {
+          "source": "https://laws-lois.justice.gc.ca/eng/acts/I-3.3/section-156.1.html",
+          "source_title": "Income Tax Act, section 156.1"
+        }
+      ],
+      "verified_on": "2026-11-08"
     },
     "interest_act_s4": {
       "value": "When a written contract (other than a mortgage on real property) sets interest per day, week, month or any period shorter than a year, no more than 5% per year can be charged, paid or recovered unless the contract also states the equivalent yearly rate or percentage.",
