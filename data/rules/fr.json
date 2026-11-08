@@ -1377,7 +1377,14 @@
       "source": "https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000038586837",
       "source_title": "Code de la sécurité sociale, art. L613-10 - Légifrance",
       "confidence": "high",
-      "note": "En vigueur depuis le 24/05/2019 (loi PACTE). Le compte est réservé à l'ensemble des opérations financières de l'activité, dans un établissement mentionné à l'art. L123-24 du Code de commerce. Recoupé avec autoentrepreneur.urssaf.fr et economie.gouv.fr le 20/10/2026."
+      "note": "Vérifiée le 08/11/2026 avec l'outil de lecture des sources (fiche officielle lue dans GitHub Actions ; Légifrance et l'Urssaf refusent la lecture automatique) : F35991 : « L'ouverture d'un compte bancaire dédié à l'activité professionnelle est obligatoire dès lors que son chiffre d'affaires (ou ses recettes) dépasse le seuil de 10 000 € pendant 2 années consécutives ». En vigueur depuis le 24/05/2019 (loi PACTE). Le compte est réservé à l'ensemble des opérations financières de l'activité, dans un établissement mentionné à l'art. L123-24 du Code de commerce. Recoupé avec autoentrepreneur.urssaf.fr et economie.gouv.fr le 20/10/2026.",
+      "more_sources": [
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F35991",
+          "source_title": "Compte bancaire du micro-entrepreneur (auto-entrepreneur) - Entreprendre.Service-Public.gouv.fr (fiche F35991)"
+        }
+      ],
+      "verified_on": "2026-11-08"
     },
     "compte_dedie_urssaf": {
       "value": {
@@ -1388,7 +1395,14 @@
       "source": "https://www.autoentrepreneur.urssaf.fr/portail/accueil/sinformer-sur-le-statut/lessentiel-du-statut.html",
       "source_title": "L'essentiel du statut - Autoentrepreneur.urssaf.fr",
       "confidence": "high",
-      "note": "Relevé le 20/10/2026 (extraits de la page officielle)."
+      "note": "Vérifiée le 08/11/2026 avec l'outil de lecture des sources (fiche officielle lue dans GitHub Actions ; Légifrance et l'Urssaf refusent la lecture automatique) : F35991 : le compte dédié peut être « un compte bancaire personnel (compte courant distinct du compte personnel utilisé par le micro-entrepreneur pour ses dépenses personnelles) » ou « un compte bancaire professionnel » ; « Il est recommandé d'ouvrir un compte bancaire dédié même dans le cas où le seuil de chiffre d'affaires annuel de 10 000 € n'est pas dépassé pendant 2 années consécutives ». Relevé le 20/10/2026 (extraits de la page officielle).",
+      "more_sources": [
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F35991",
+          "source_title": "Compte bancaire du micro-entrepreneur (auto-entrepreneur) - Entreprendre.Service-Public.gouv.fr (fiche F35991)"
+        }
+      ],
+      "verified_on": "2026-11-08"
     },
     "compte_intitule_ei": {
       "value": {
