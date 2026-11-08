@@ -25,6 +25,7 @@ from datetime import datetime, timezone
 # services de l'État (Légifrance, impots.gouv.fr, entreprendre.service-public.gouv.fr…) ; Assurance maladie (ameli.fr) et
 # France Travail pour la protection sociale ; Assemblée nationale et Sénat
 # pour les textes de loi ; banques centrales pour les taux ; opm.gov pour les jours fériés fédéraux des États-Unis ;
+# Sécurité sociale (ssa.gov), SBA, ministère du Travail, Réserve fédérale, Trésor, Congrès, USPTO et ville de Seattle ;
 # textes des lois américaines : eCFR et govinfo (règlements fédéraux), Code des États-Unis (Chambre des représentants),
 # lois et sites officiels de l'État et de la ville de New York, de l'Illinois et de la Californie (ca.gov) ; lois des
 # provinces canadiennes : Ontario (ontario.ca), Québec (gouv.qc.ca), Colombie-Britannique (gov.bc.ca), Alberta (alberta.ca).
@@ -33,6 +34,7 @@ OFFICIELS = (
     "senat.fr", "inpi.fr", "banque-france.fr", "europa.eu",
     "gov.uk", "legislation.gov.uk", "ico.org.uk", "bankofengland.co.uk",
     "irs.gov", "ftc.gov", "opm.gov", "ecfr.gov", "govinfo.gov", "uscode.house.gov", "nysenate.gov", "ny.gov", "nyc.gov",
+    "ssa.gov", "sba.gov", "dol.gov", "federalreserve.gov", "treasury.gov", "congress.gov", "uspto.gov", "seattle.gov",
     "ilga.gov", "illinois.gov", "ca.gov",
     "canada.ca", "gc.ca", "revenuquebec.ca", "bankofcanada.ca", "ontario.ca", "gouv.qc.ca", "gov.bc.ca", "alberta.ca",
     "iana.org", "fnfe-mpe.org",
