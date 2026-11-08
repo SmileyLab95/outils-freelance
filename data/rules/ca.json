@@ -739,7 +739,7 @@
       "source": "https://www.ontario.ca/page/health-premium",
       "source_title": "Health premium - Ontario.ca",
       "confidence": "high",
-      "note": "Not indexed, unchanged since 2004. $0 up to $20,000 of taxable income, $900 maximum above $200,600. Collected with the T1 return (and through instalments for the self-employed)."
+      "note": "Not indexed, unchanged since 2004. $0 up to $20,000 of taxable income, $900 maximum above $200,600. Collected with the T1 return (and through instalments for the self-employed). Partly checked on 08/11/2026: the ontario.ca page confirms '$0 if your taxable income is $20,000 or less' and '$900 if your taxable income is more than $200,600'; the intermediate thresholds are not on the page, and the Taxation Act, 2007 on ontario.ca/laws is rendered by script (unreadable by the source reader): not dated."
     },
     "instalment_due_dates_2026": {
       "value": [
