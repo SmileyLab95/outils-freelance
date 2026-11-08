@@ -8,7 +8,7 @@
   var esc = function (s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); };
 
   var ITEMS = {
-    "decennale": ["Assurance de responsabilité décennale", "Obligatoire pour les travaux qui engagent votre responsabilité décennale, à justifier à l'ouverture de chaque chantier (article L241-1 du Code des assurances). Les simples travaux d'entretien en sont dispensés."],
+    "decennale": ["Assurance de responsabilité décennale", "Obligatoire pour les travaux qui engagent votre responsabilité décennale : à souscrire avant le démarrage des travaux et à justifier à l'ouverture de chaque chantier (article L241-1 du Code des assurances). Sous-traitant sans lien direct avec le client : vous êtes exclu du champ de la garantie décennale, mais restez responsable envers l'entreprise qui vous fait travailler. Selon la DGCCRF, les simples travaux d'entretien en sont dispensés."],
     "rc-batiment": ["À vérifier : responsabilité civile professionnelle", "Le ministère de l'Économie la cite parmi les assurances des professionnels du bâtiment, et les clients l'exigent souvent : vérifiez avec votre assureur ou votre organisation professionnelle si votre métier l'impose."],
     "rc-profession": ["Responsabilité civile professionnelle", "Le texte qui encadre votre profession fixe l'obligation et ses conditions (responsabilité civile médicale pour la santé, par exemple) : vérifiez-les auprès de votre ordre ou de votre organisme professionnel."],
     "rc-auto": ["Responsabilité civile automobile", "Tout véhicule à moteur doit être assuré ; signalez à votre assureur l'usage professionnel du véhicule."],
@@ -27,7 +27,7 @@
   };
   HERO.commerce = HERO.services;
   var DOCUMENTS = {
-    "attestation": "Sur vos devis et factures : joignez l'attestation d'assurance décennale, établie selon le modèle officiel, à chaque devis et à chaque facture (article L243-2 du Code des assurances). Artisan ou micro-entrepreneur : indiquez aussi, par prudence, l'assurance souscrite, les coordonnées de l'assureur et la couverture géographique (article L132-1 du Code de l'artisanat) ; la fiche officielle des documents commerciaux d'une micro-entreprise cite en exemple le plombier, soumis à la décennale.",
+    "attestation": "Sur vos devis et factures : joignez l'attestation d'assurance décennale, établie selon le modèle officiel, à chaque devis et à chaque facture, et remettez-la au client avant l'ouverture du chantier (article L243-2 du Code des assurances). Artisan ou micro-entrepreneur : indiquez aussi, par prudence, l'assurance souscrite, les coordonnées de l'assureur et la couverture géographique (article L132-1 du Code de l'artisanat) ; la fiche officielle des documents commerciaux d'une micro-entreprise cite en exemple le plombier, soumis à la décennale.",
     "mention": "Sur vos devis et factures : indiquez l'assurance souscrite, les coordonnées de l'assureur et la couverture géographique du contrat (article L132-1 du Code de l'artisanat).",
     "mention-if-required": "Sur vos devis et factures : si votre métier impose une assurance, indiquez l'assurance souscrite, les coordonnées de l'assureur et la couverture géographique (article L132-1 du Code de l'artisanat). Sinon, aucune mention n'est exigée.",
     "none": "Sur vos devis et factures : le Code de l'artisanat n'exige de mention d'assurance que des artisans et des micro-entrepreneurs ; le texte de votre profession peut en prévoir une."

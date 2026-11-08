@@ -1677,23 +1677,46 @@
     },
     "assurance_decennale": {
       "value": {
-        "justification": "ouverture de chaque chantier"
+        "justification": "ouverture de chaque chantier",
+        "souscription": "avant le démarrage des travaux"
       },
       "unit": "object",
-      "label": "Travaux de construction : assurance de responsabilité décennale obligatoire pour toute personne dont la responsabilité décennale peut être engagée, justifiée à l'ouverture de chaque chantier",
-      "source": "https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000006073984/LEGISCTA000006142820/",
-      "source_title": "Code des assurances, art. L241-1 et suivants (assurance des travaux de construction) - Légifrance",
+      "label": "Travaux de construction : assurance de responsabilité décennale obligatoire pour le constructeur professionnel (entrepreneur, artisan, auto-entrepreneur, maître d'œuvre…), souscrite avant le démarrage des travaux et justifiée à l'ouverture de chaque chantier",
+      "source": "https://www.service-public.gouv.fr/particuliers/vosdroits/F2034",
+      "source_title": "Garantie décennale des constructeurs - Service-Public.gouv.fr (vérifié le 10 avril 2026 ; Code des assurances, art. L241-1 et L241-2, sanction : art. L243-3)",
+      "more_sources": [
+        {
+          "source": "https://www.legifrance.gouv.fr/codes/section_lc/LEGITEXT000006073984/LEGISCTA000006142820/",
+          "source_title": "Code des assurances, art. L241-1 et suivants (assurance des travaux de construction) - Légifrance"
+        },
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F37364",
+          "source_title": "Assurances de l'entrepreneur individuel - Entreprendre Service Public (vérifié le 7 juillet 2026)"
+        }
+      ],
       "confidence": "high",
-      "note": "Selon la DGCCRF, les simples travaux d'entretien sont dispensés de l'obligation ; la réhabilitation n'est concernée que si elle peut compromettre la solidité de l'ouvrage ou le rendre impropre à sa destination (economie.gouv.fr, « Malfaçon : mettez en œuvre les garanties »)."
+      "verified_on": "2026-11-08",
+      "note": "Fiche F2034 lue le 08/11/2026 avec l'outil « Lire une source officielle » : « Le constructeur professionnel doit souscrire une assurance en garantie décennale. Il peut être un entrepreneur, un promoteur, un lotisseur, un maître d'œuvre, un architecte, un technicien, un bureau d'étude, un ingénieur-conseil, un artisan, un auto-entrepreneur » ; « La garantie doit être souscrite avant le démarrage des travaux » ; « L'ouverture de chantier doit intervenir pendant la période de validité du contrat » ; elle concerne « les constructions nouvelles, les travaux d'extension et de rénovation d'un bâtiment existant », selon leur importance. « Les sous-traitants sont exclus du champ d'application de la garantie décennale, car ils n'ont pas de lien direct avec le maître d'ouvrage » ; ils restent responsables de leurs engagements envers le constructeur. Sanction du défaut d'assurance : 6 mois d'emprisonnement et/ou 75 000 € d'amende (art. L243-3), sauf pour un particulier qui construit pour lui ou sa famille. F37364 (vérifiée le 07/07/2026) : décennale « exigée pour certaines professions du bâtiment, comme le peintre en bâtiment ». Selon la DGCCRF (economie.gouv.fr, « Malfaçon : mettez en œuvre les garanties », non relue : site inaccessible), les simples travaux d'entretien sont dispensés de l'obligation ; la réhabilitation n'est concernée que si elle peut compromettre la solidité de l'ouvrage ou le rendre impropre à sa destination."
     },
     "assurance_attestation_decennale": {
       "value": true,
       "unit": "boolean",
-      "label": "Constructeurs soumis à la décennale : attestation d'assurance (modèle fixé par arrêté du 05/01/2016) jointe aux devis et aux factures",
-      "source": "https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000031010272",
-      "source_title": "Code des assurances, art. L243-2 - Légifrance",
+      "label": "Constructeurs soumis à la décennale : attestation d'assurance établie selon le modèle officiel, jointe aux devis et à la facture, et remise au maître d'ouvrage avant l'ouverture du chantier",
+      "source": "https://www.service-public.gouv.fr/particuliers/vosdroits/F2034",
+      "source_title": "Garantie décennale des constructeurs - Service-Public.gouv.fr (vérifié le 10 avril 2026 ; Code des assurances, art. L243-2, modèle : art. A243-1 à A243-5)",
+      "more_sources": [
+        {
+          "source": "https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000031010272",
+          "source_title": "Code des assurances, art. L243-2 - Légifrance"
+        },
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F39041",
+          "source_title": "Entrepreneur en bâtiment : conditions d'accès et d'exercice en France - Entreprendre Service Public (vérifié le 21 février 2026)"
+        }
+      ],
       "confidence": "high",
-      "note": "Modèle d'attestation : arrêté du 5 janvier 2016 (art. A243-3 du Code des assurances)."
+      "verified_on": "2026-11-08",
+      "note": "Fiche F2034 lue le 08/11/2026 avec l'outil « Lire une source officielle » : « Avant l'ouverture du chantier, le professionnel a l'obligation de remettre au maître d'ouvrage une attestation d'assurance de responsabilité civile décennale » ; « L'attestation d'assurance de responsabilité civile décennale doit être jointe aux devis et à la facture » ; modèles officiels (contrat individuel, contrat collectif) : art. A243-1 à A243-5 du Code des assurances et leurs annexes. F39041 (vérifiée le 21/02/2026) : art. L243-2, « obligation de joindre une attestation d'assurance décennale aux devis et factures » ; art. A243-3, mentions obligatoires de l'attestation. Date de l'arrêté fixant le modèle (5 janvier 2016 selon notre lecture du 20/10/2026) non relue."
     },
     "assurance_mention_devis_factures": {
       "value": {

@@ -376,7 +376,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   des comptes attend le choix de l'hébergeur et du domaine.
 - **Vérification outillée des règles (08/11/2026)** : workflow « Vérifier les règles sur leurs sources »
   (`scripts/verifier_regles.py`, D55), pages lues en parallèle. Règles datées après relecture : Royaume-Uni 161 sur
-  164, États-Unis 81 sur 95, France 110 sur 120, Canada 81 sur 135 (France : fiches d'Entreprendre.Service-Public
+  164, États-Unis 81 sur 95, France 112 sur 120, Canada 81 sur 135 (France : fiches d'Entreprendre.Service-Public
   utilisées quand Urssaf, Légifrance ou economie.gouv.fr refusent la lecture). Barème kilométrique français et taux kilométrique
   américain de juillet rattachés au BOFiP et à l'IRS ; SMIC mis à jour (12,31 €) ; calendrier de la facturation
   électronique, abattements et versement libératoire relus sur impots.gouv.fr ; Canada : Loi de l'impôt, Loi sur
@@ -416,9 +416,11 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   au-delà de 25 € TTC pour une prestation), qui source un chiffre jusqu'ici sans source. Compte bancaire d'une
   société relu (F37369) : obligatoire à la création pour déposer le capital, puis, selon la fiche, plus d'obligation
   légale de le garder ; notre lecture de L123-24 dit l'inverse : le guide conseille de le garder par prudence (D57),
-  règle `compte_commercant` non datée. Restent en France : TNS et
-  SASU (ordres de grandeur), formats Factur-X, assurances, compte du commerçant, périodicité Urssaf, décret 2025-943
-  et taux ACRE arrondis. États sans impôt sur le revenu : 8 pages officielles sur 9 lues le
+  règle `compte_commercant` non datée. Décennale et attestation relues sur F2034 et F39041 et datées (souscription
+  avant les travaux, attestation jointe aux devis et à la facture et remise avant le chantier, sous-traitants exclus
+  du champ de la garantie). France : 112 règles sur 120. Restent en France : TNS et
+  SASU (ordres de grandeur), formats Factur-X, mention d'assurance (L132-1), compte du commerçant (L123-24),
+  périodicité Urssaf, décret 2025-943 et taux ACRE arrondis. États sans impôt sur le revenu : 8 pages officielles sur 9 lues le
   08/11/2026 (Tennessee illisible) ; Washington taxera dès 2028 les revenus de plus d'un million de dollars.
 - **Règles britanniques revérifiées en direct (07/11/2026, soir)** : 161 règles sur 164 contrôlées sur leur page
   officielle (GOV.UK, legislation.gov.uk ; Banque d'Angleterre par l'outil de lecture) et datées ; 8 sources corrigées ;

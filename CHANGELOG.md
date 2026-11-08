@@ -1,6 +1,6 @@
 # Journal des modifications
 
-## 2026-11-08 (fin de soirée) — Mentions obligatoires de facture relues
+## 2026-11-08 (fin de soirée) — Mentions de facture, compte d'une société et décennale relus
 
 - **Liste des mentions obligatoires** relue sur la fiche officielle (vérifiée le 11 août 2026) et dans le BOFiP :
   ajout de la garantie légale de conformité (au moins 2 ans) pour certains biens vendus à un particulier, du montant
@@ -19,7 +19,12 @@
   la fiche officielle (vérifiée le 27 mai 2026) dit que la loi n'impose plus de garder ce compte après
   l'immatriculation, alors que le Code de commerce demande un compte à tout commerçant : le guide conseille de le
   garder, par prudence, et le dit.
-- France : 110 règles sur 120 datées.
+- **Assurance décennale** relue sur la fiche officielle « Garantie décennale des constructeurs » (vérifiée le
+  10 avril 2026) : à souscrire avant le démarrage des travaux ; attestation jointe aux devis et à la facture et
+  remise au client avant l'ouverture du chantier ; les sous-traitants, sans lien direct avec le client, sont exclus
+  du champ de la garantie. Le guide et le vérificateur le disent ; la dispense des simples travaux d'entretien est
+  attribuée à la DGCCRF.
+- France : 112 règles sur 120 datées.
 
 ## 2026-11-08 (soir) — Statuts et dividendes relus
 

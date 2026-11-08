@@ -8,7 +8,7 @@ Vérifié le 20 octobre 2026. Les données lisibles par les calculateurs sont da
 >
 > Une ligne marquée *faible* ne doit pas alimenter un calculateur sans revérification.
 >
-> **Depuis le 08/11/2026**, 110 règles sur 120 de `data/rules/fr.json` ont été relues sur leur source officielle avec l'outil « Lire une source officielle » et portent une date de vérification (mentions obligatoires comprises) ; la liste des règles restantes est dans la [feuille de route](../05-feuille-de-route.md).
+> **Depuis le 08/11/2026**, 112 règles sur 120 de `data/rules/fr.json` ont été relues sur leur source officielle avec l'outil « Lire une source officielle » et portent une date de vérification (mentions obligatoires comprises) ; la liste des règles restantes est dans la [feuille de route](../05-feuille-de-route.md).
 
 ## 1. Résumé : quel statut choisir ?
 

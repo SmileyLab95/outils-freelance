@@ -59,8 +59,8 @@ devis et factures ? »
 | Règle | Source |
 |---|---|
 | Pas d'obligation générale d'assurance de responsabilité civile professionnelle : elle dépend de l'activité (professions de santé, du droit, de l'immobilier, du bâtiment, agents de voyage, diagnostiqueurs…). Conseillée dans les autres cas ; les clients la demandent souvent. | [economie.gouv.fr, « Professionnels : quelles sont les assurances obligatoires ? »](https://www.economie.gouv.fr/entreprises/gerer-ses-ressources-humaines-et-ses-salaries/professionnels-quelles-sont-les-assurances-obligatoires) ; fiches des activités réglementées de Bpifrance Création |
-| Travaux de construction : assurance de responsabilité décennale obligatoire pour toute personne dont la responsabilité décennale peut être engagée, justifiée à l'ouverture de chaque chantier. | Code des assurances, art. L241-1 |
-| Constructeurs soumis à la décennale : attestation d'assurance (modèle fixé par arrêté du 05/01/2016) jointe aux devis et aux factures. | Code des assurances, art. L243-2 ; arrêté du 05/01/2016 |
+| Travaux de construction : assurance de responsabilité décennale obligatoire pour le constructeur professionnel (artisan et auto-entrepreneur compris), souscrite avant le démarrage des travaux, justifiée à l'ouverture de chaque chantier ; sous-traitants exclus du champ de la garantie (relu le 08/11/2026 sur F2034). | Code des assurances, art. L241-1 ; F2034 |
+| Constructeurs soumis à la décennale : attestation d'assurance (modèle officiel) jointe aux devis et à la facture, remise au maître d'ouvrage avant l'ouverture du chantier (relu le 08/11/2026 sur F2034 et F39041). | Code des assurances, art. L243-2 et A243-1 à A243-5 |
 | Artisans (secteur des métiers) et micro-entrepreneurs dont l'activité exige une assurance : sur chaque devis et chaque facture, l'assurance professionnelle souscrite, les coordonnées de l'assureur ou du garant et la couverture géographique ; ne s'applique pas aux constructeurs soumis à la décennale (règle précédente), selon la lecture du 20/10/2026 ; la fiche F36008, relue le 08/11/2026, cite pourtant le plombier, soumis à la décennale, parmi les artisans concernés : le vérificateur conseille donc la mention, « par prudence », en plus de l'attestation. Depuis le 01/07/2023 (reprise de l'art. 22-2 de la loi n° 96-603). | Code de l'artisanat, art. L132-1 ; fiche F36008 |
 
 ### Vérificateur
@@ -84,6 +84,9 @@ devis et factures ? »
 - Compte bancaire (section 1) : relire l'art. L123-24 du Code de commerce, pour savoir s'il vise les sociétés commerciales (fiche F37369 : pas d'obligation
   légale de conserver le compte après l'immatriculation).
 - Sanctions du défaut de mention (art. L132-1) : non relevées.
+- Responsabilité civile professionnelle du bâtiment : la fiche F39041 (vérifiée le 21/02/2026) libelle les art. L241-1
+  et L241-2 du Code des assurances « RCP obligatoire en cas de garantie décennale obligatoire » ; le guide l'affiche
+  « à vérifier » : relire les articles (Légifrance) avant de la présenter comme obligatoire.
 - Exclusion des constructeurs soumis à la décennale (art. L132-1) : à relire sur le texte, la fiche F36008 donnant
   l'exemple contraire du plombier (08/11/2026).
 - Liste des professions soumises à une responsabilité civile professionnelle obligatoire : à constituer à partir des
