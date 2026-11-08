@@ -507,8 +507,19 @@
       "label": "Gérant majoritaire SARL/EURL à l'IS (et EI à l'IS) : part des dividendes non soumise à cotisations",
       "source": "https://www.legifrance.gouv.fr/codes/id/LEGITEXT000006073189",
       "source_title": "Code de la sécurité sociale, art. L131-6 - Légifrance",
+      "more_sources": [
+        {
+          "source": "https://www.impots.gouv.fr/notice-des-travailleurs-independants-revenus-2024",
+          "source_title": "Notice des travailleurs indépendants, revenus 2024 (rubriques DSAA et DSAB) - impots.gouv.fr"
+        },
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F36065",
+          "source_title": "Revenus du dirigeant d'une société - entreprendre.service-public.gouv.fr"
+        }
+      ],
       "confidence": "high",
-      "note": "Les dividendes qui dépassent 10 % du capital social, des primes d'émission et des sommes en compte courant d'associé (détenus par le gérant, son conjoint et ses enfants mineurs) sont soumis aux cotisations sociales TNS au lieu des prélèvements sociaux. La part sous ce seuil supporte le PFU. Règle stable depuis 2013 ; texte non relu en ligne pendant cette session."
+      "verified_on": "2026-11-08",
+      "note": "Relu le 08/11/2026 dans la notice des travailleurs indépendants d'impots.gouv.fr : part des dividendes « supérieure à 10 % du montant du capital social, des primes d'émission et des sommes versées en compte courant d'associé que vous, votre conjoint ou partenaire pacsé et vos enfants mineurs non émancipés détenez » (capital et primes appréciés au dernier jour de l'exercice précédant la distribution ; compte courant au solde moyen annuel) ; F36065 : « Les dividendes ne sont pas soumis à cotisations sociales dès lors qu'ils ne dépassent pas 10 % du capital social ». Concerne le gérant majoritaire de SARL ou l'associé unique gérant d'EURL à l'IS (TNS)."
     },
     "sasu_president_taux_global_approx": {
       "value": {
@@ -578,16 +589,35 @@
     "statuts_regime_fiscal_defaut": {
       "value": {
         "micro_entreprise": "IR (BIC/BNC micro, abattement forfaitaire) ou versement libératoire",
-        "ei_reel": "IR sur le bénéfice réel (BIC/BNC) ; option pour l'IS possible",
-        "eurl": "IR si l'associé unique est une personne physique ; option IS possible (irrévocable après 5 ans)",
+        "ei_reel": "IR sur le bénéfice réel (BIC/BNC) ; option pour l'IS par assimilation à une EURL (irrévocable, mais renonciation possible jusqu'au 5e exercice)",
+        "eurl": "IR si l'associé unique est une personne physique (IS obligatoire si c'est une personne morale) ; option pour l'IS possible",
         "sasu": "IS ; option IR possible pour 5 exercices au plus"
       },
       "unit": "object",
       "label": "Régime fiscal par défaut de chaque statut",
-      "source": "https://entreprendre.service-public.fr/vosdroits/F23575",
-      "source_title": "Impôt sur les sociétés (IS) - entreprendre.service-public.fr",
-      "confidence": "medium",
-      "note": "Règles générales, non revérifiées en ligne pendant cette session."
+      "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F36215",
+      "source_title": "Fiscalité de la société par actions simplifiée unipersonnelle (SASU) : ce qu'il faut savoir - entreprendre.service-public.gouv.fr",
+      "more_sources": [
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F36212",
+          "source_title": "Fiscalité de l'entreprise unipersonnelle à responsabilité limitée (EURL) : ce qu'il faut savoir - entreprendre.service-public.gouv.fr"
+        },
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F36380",
+          "source_title": "Entrepreneur individuel : passer de l'impôt sur le revenu (IR) à l'impôt sur les sociétés (IS) - entreprendre.service-public.gouv.fr"
+        },
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F23267",
+          "source_title": "Régime fiscal de la micro-entreprise - entreprendre.service-public.gouv.fr"
+        },
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F23575",
+          "source_title": "Impôt sur les sociétés (IS) : taux, déclaration, paiement - entreprendre.service-public.gouv.fr"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-11-08",
+      "note": "Relu le 08/11/2026 (fiches vérifiées le 21/02/2026) : « Au moment de sa création, une SASU est automatiquement soumise au régime de l'impôt sur les sociétés » ; option pour l'IR « valable pour 5 exercices comptables et ne peut pas être renouvelée » (société de moins de 5 ans, moins de 50 salariés, etc.) ; « une EURL est automatiquement soumise au régime de l'impôt sur le revenu », l'IS étant obligatoire si l'associé unique est une personne morale ; entrepreneur individuel : option pour l'assimilation à une EURL à notifier avant la fin du 3e mois d'exercice, « irrévocable », renonciation possible « jusqu'au mois précédent le versement du premier acompte d'IS du 5e exercice ». Le délai de révocation de l'option IS d'une EURL n'a pas été relu : retiré de la règle."
     },
     "facturation_electronique_calendrier": {
       "value": {

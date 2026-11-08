@@ -1,5 +1,17 @@
 # Journal des modifications
 
+## 2026-11-08 (soir) — Statuts et dividendes relus
+
+- **Régime fiscal par défaut** relu sur les fiches officielles (février 2026) : SASU à l'impôt sur les sociétés dès
+  la création (option pour l'impôt sur le revenu limitée à 5 exercices), EURL à l'impôt sur le revenu si l'associé
+  unique est une personne physique, entrepreneur individuel à l'impôt sur le revenu avec option pour l'IS par
+  assimilation à une EURL (irrévocable, renonciation possible jusqu'au 5e exercice). Un délai de révocation non
+  relu est retiré de la règle.
+- **Dividendes du gérant non salarié** : soumis aux cotisations au-delà de 10 % du capital social, des primes
+  d'émission et des comptes courants d'associé (du gérant, de son conjoint et de ses enfants mineurs), relu dans la
+  notice d'impots.gouv.fr.
+- France : 108 règles sur 119 datées.
+
 ## 2026-11-08 (fin d'après-midi) — ACRE et taux de la micro-entreprise relus
 
 - **ACRE** relue sur la fiche officielle (vérifiée le 01/07/2026) : demande à déposer dans les 60 jours qui suivent
