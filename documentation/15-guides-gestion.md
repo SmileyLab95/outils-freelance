@@ -29,7 +29,9 @@ sourcée ; les règles et leurs sources sont dans `data/rules/fr.json`. Pas de c
   - micro, sinon : **pas obligatoire**, conseillé ;
   - entreprise individuelle au réel : **pas d'obligation générale** de compte dédié ; un compte est exigé si l'activité
     est commerciale ; séparation conseillée ;
-  - société : **compte au nom de la société**.
+  - société : **compte au nom de la société** ; étapes : dépôt du capital à la création (F37369, R22-10-6), puis
+    compte gardé par prudence (08/11/2026 : F37369 dit que la loi n'impose plus de le conserver après
+    l'immatriculation, alors que notre lecture de L123-24 vise tout commerçant, personne morale comprise ; D57).
 - Les étapes affichées sous la réponse ne présentent des obligations que si le compte est (ou va être) obligatoire ;
   sinon, des conseils (« Préparez », « Conseillé »). Chaque réponse rappelle l'intitulé « EI » et renvoie au droit au
   compte.
@@ -79,6 +81,8 @@ devis et factures ? »
 
 ### Questions ouvertes
 
+- Compte bancaire (section 1) : relire l'art. L123-24 du Code de commerce, pour savoir s'il vise les sociétés commerciales (fiche F37369 : pas d'obligation
+  légale de conserver le compte après l'immatriculation).
 - Sanctions du défaut de mention (art. L132-1) : non relevées.
 - Exclusion des constructeurs soumis à la décennale (art. L132-1) : à relire sur le texte, la fiche F36008 donnant
   l'exemple contraire du plombier (08/11/2026).

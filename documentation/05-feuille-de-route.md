@@ -413,7 +413,10 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   datées ; ajouts : garantie légale de conformité pour certains biens vendus à un particulier (décret 2021-609),
   montant de TVA par taux, mention « RNE » au lieu de « RM », formule « Escompte pour paiement anticipé : néant »
   (générateur, Espace et Factur-X) ; nouvelle règle `facture_client_particulier` (F23208 : note obligatoire
-  au-delà de 25 € TTC pour une prestation), qui source un chiffre jusqu'ici sans source. Restent en France : TNS et
+  au-delà de 25 € TTC pour une prestation), qui source un chiffre jusqu'ici sans source. Compte bancaire d'une
+  société relu (F37369) : obligatoire à la création pour déposer le capital, puis, selon la fiche, plus d'obligation
+  légale de le garder ; notre lecture de L123-24 dit l'inverse : le guide conseille de le garder par prudence (D57),
+  règle `compte_commercant` non datée. Restent en France : TNS et
   SASU (ordres de grandeur), formats Factur-X, assurances, compte du commerçant, périodicité Urssaf, décret 2025-943
   et taux ACRE arrondis. États sans impôt sur le revenu : 8 pages officielles sur 9 lues le
   08/11/2026 (Tennessee illisible) ; Washington taxera dès 2028 les revenus de plus d'un million de dollars.

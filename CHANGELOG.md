@@ -15,6 +15,10 @@
   facture d'une vente de biens à sa demande, pour une vente à distance ou une livraison intracommunautaire
   exonérée (fiche « Tout savoir sur la facturation », vérifiée le 7 août 2026). Ce seuil de 25 € n'avait pas de
   source : il en a désormais une.
+- **Compte bancaire d'une société** (guide et vérificateur) : nouvelle étape « dépôt du capital » à la création ;
+  la fiche officielle (vérifiée le 27 mai 2026) dit que la loi n'impose plus de garder ce compte après
+  l'immatriculation, alors que le Code de commerce demande un compte à tout commerçant : le guide conseille de le
+  garder, par prudence, et le dit.
 - France : 110 règles sur 120 datées.
 
 ## 2026-11-08 (soir) — Statuts et dividendes relus

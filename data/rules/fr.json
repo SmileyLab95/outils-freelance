@@ -1629,10 +1629,14 @@
         {
           "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F37368",
           "source_title": "Compte bancaire de l'entrepreneur individuel - entreprendre.service-public.gouv.fr"
+        },
+        {
+          "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F37369",
+          "source_title": "Compte bancaire professionnel d'une société - Entreprendre Service Public (vérifié le 27 mai 2026 ; Code de commerce, art. R22-10-6)"
         }
       ],
       "confidence": "high",
-      "note": "Obligation d'avoir un compte, pas nécessairement réservé à l'activité pour une personne physique. Relu le 08/11/2026 pour l'entreprise individuelle sur la fiche F37368 (vérifiée le 28/05/2026) : « il est obligatoire pour toute entreprise individuelle qui exerce une activité commerciale d'ouvrir un compte bancaire dans un établissement de crédit ou dans un bureau de chèques postaux » (art. L123-24 cité) ; le chapeau de la même fiche parle d'un « compte dédié », d'où le conseil de le réserver à l'activité. Le cas des sociétés commerciales n'y est pas traité : règle non datée tant que l'article n'est pas relu."
+      "note": "Obligation d'avoir un compte, pas nécessairement réservé à l'activité pour une personne physique. Relu le 08/11/2026 pour l'entreprise individuelle sur la fiche F37368 (vérifiée le 28/05/2026) : « il est obligatoire pour toute entreprise individuelle qui exerce une activité commerciale d'ouvrir un compte bancaire dans un établissement de crédit ou dans un bureau de chèques postaux » (art. L123-24 cité) ; le chapeau de la même fiche parle d'un « compte dédié », d'où le conseil de le réserver à l'activité. Sociétés : la fiche F37369 (vérifiée le 27/05/2026, lue le 08/11/2026) indique que « toute société ayant un capital social doit obligatoirement disposer d'un compte bancaire professionnel » pour le dépôt du capital, puis qu'« une fois la société créée, la loi n'impose pas de conserver un compte bancaire professionnel » ; notre lecture de l'art. L123-24 (20/10/2026, non relue : Légifrance inaccessible) vise toute personne physique ou morale ayant la qualité de commerçant. Divergence : le guide conseille par prudence de garder un compte au nom de la société (D57) ; règle non datée tant que l'article n'est pas relu."
     },
     "droit_au_compte_pro": {
       "value": {

@@ -42,7 +42,8 @@
         TITLE_IF,
         ["Activité commerciale : un compte bancaire est obligatoire", "Tout commerçant doit avoir un compte dans un établissement de crédit (article L123-24 du Code de commerce). La fiche officielle de l'entrepreneur individuel le présente comme un compte dédié : réservez-le à l'activité."]];
       default: return [
-        ["Ouvrez le compte au nom de la société", "Les encaissements et les dépenses de la société y passent, séparés de vos comptes personnels."],
+        ["À la création : le dépôt du capital", "Une société à capital social (SAS, SARL…) doit avoir un compte à sa création : il reçoit le dépôt du capital, et la banque remet l'attestation de dépôt à joindre au dossier d'immatriculation."],
+        ["Gardez un compte au nom de la société", "Ses encaissements et ses dépenses y passent, séparés de vos comptes personnels. Selon la fiche officielle, la loi n'impose plus de le conserver après l'immatriculation ; le Code de commerce (art. L123-24) demande toutefois un compte à tout commerçant : gardez-le, par prudence."],
         ["Rémunération et remboursements par virement", "Votre rémunération, vos dividendes ou vos notes de frais passent du compte de la société au vôtre par virement."]];
     }
   }

@@ -3355,8 +3355,8 @@ const tests = {
     [a] = await res();
     check(a.includes("Pas d'obligation") && !(await page.isVisible("#b-prev")) && !(await page.isVisible("#b-notice")), "compte bancaire : entreprise individuelle au réel → pas d'obligation générale, champs masqués");
     await page.selectOption("#b-status", "societe");
-    [a] = await res();
-    check(a.includes("à son nom"), "compte bancaire : société → compte à son nom");
+    [a, , steps] = await res();
+    check(a.includes("à son nom") && steps.includes("dépôt du capital") && steps.includes("par prudence"), "compte bancaire : société → compte à son nom, dépôt du capital, compte gardé par prudence (D57)");
     await page.reload({ waitUntil: "networkidle" });
     [a] = await res();
     check(a.includes("à son nom") && !(await page.isVisible("#b-prev")), "compte bancaire : statut retrouvé après rechargement");
