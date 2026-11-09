@@ -61,10 +61,11 @@
     MN: {
       label: "Minnesota Paid Leave (election of coverage)",
       points: [
+        "Under the law, a self-employed individual is a Minnesota resident whose net earnings from self-employment reached at least " + pct(M.min_net_earnings_share_of_state_average_wage) + " of the state's average annual wage in a tax year before the current one.",
         "You apply for coverage for at least " + M.min_weeks + " consecutive weeks.",
         "Coverage starts in the calendar quarter after approval (or later if you ask).",
         "You can only leave on January 1, with a notice filed at least " + M.cancel_notice_days + " days before.",
-        "Yearly premium: the Paid Leave premium rate times your self-employment premium base, capped at the Social Security wage base."
+        "Yearly premium: the Paid Leave premium rate times your self-employment premium base (your estimated self-employment income for the year plus your self-employment wages), capped at the Social Security wage base. The state adjusts the rate every year, by " + M.rate_adjusted_each_year_by + " for the next year."
       ],
       step: "Next: check the current premium rate and apply on Minnesota Paid Leave's site for the self-employed."
     },

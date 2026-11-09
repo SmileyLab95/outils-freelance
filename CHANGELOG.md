@@ -1,5 +1,14 @@
 # Journal des modifications
 
+## 2026-11-09 (soir) — Congés payés des indépendants : Minnesota complété
+
+- Minnesota, d'après sa loi (Minnesota Statutes 268B.01 et 268B.14) : l'outil dit désormais qui est un indépendant au
+  sens de la loi (résident dont les revenus nets d'indépendant ont atteint au moins 5,3 % du salaire annuel moyen de
+  l'État pendant une année précédente), sur quoi la prime est calculée (revenu d'indépendant estimé de l'année plus
+  les salaires d'indépendant, dans la limite du plafond de la Social Security) et que le taux est revu chaque année
+  avant le 31 juillet. Le taux en vigueur n'ayant pas pu être lu sur le site de l'État, aucune prime n'est estimée.
+- Tests unitaires et parcours navigateur complétés.
+
 ## 2026-11-09 (fin d'après-midi) — Congés payés des indépendants : Delaware
 
 - L'outil américain *Paid leave and disability insurance for the self-employed* couvre désormais 8 États avec le

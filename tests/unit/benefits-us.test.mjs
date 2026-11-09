@@ -28,6 +28,8 @@ test("règles : chiffres lus aux sources officielles", () => {
   assert.equal(R.us_paid_leave_wa_elective.initial_period_years, 3);
   assert.equal(R.us_paid_leave_wa_elective.hours_required, 820);
   assert.equal(R.us_paid_leave_mn_self_employed.min_weeks, 104);
+  assert.equal(R.us_paid_leave_mn_self_employed.min_net_earnings_share_of_state_average_wage, 0.053);
+  assert.equal(R.us_paid_leave_mn_self_employed.rate_adjusted_each_year_by, "July 31");
   assert.equal(R.us_paid_leave_ny_self_employed.pfl_alone_allowed, false);
   assert.deepEqual(R.us_paid_leave_ma_self_employed, { initial_period_years: 3, quarters_of_contributions: 2, quarters_lookback: 4 });
   assert.equal(R.us_paid_leave_me_self_employed.initial_period_years, 3);
@@ -82,5 +84,8 @@ test("page : chiffres cités égaux aux règles", () => {
     "Delaware : lignes de la déclaration, division par 4, 100 % de la cotisation");
   assert.ok(html.includes(`${C.di_max_weeks} weeks`) && html.includes(`${C.pfl_max_weeks} weeks`) && html.includes(`${C.months_before_claim} months`));
   assert.ok(html.includes(`${W.hours_required} hours`) && html.includes(`${R.us_paid_leave_mn_self_employed.min_weeks} consecutive weeks`));
+  const MN = R.us_paid_leave_mn_self_employed;
+  assert.ok(html.includes(`at least ${Math.round(MN.min_net_earnings_share_of_state_average_wage * 1000) / 10}% of the state's average annual wage`)
+    && html.includes(`by ${MN.rate_adjusted_each_year_by} for the next year`), "Minnesota : 5,3 % du salaire moyen, taux ajusté avant le 31 juillet");
   assert.ok(html.includes(`${R.us_ssdi_basics.waiting_period_months} full months`) && html.includes(`${R.us_ssdi_basics.insured_quarters_of_coverage} quarters`));
 });

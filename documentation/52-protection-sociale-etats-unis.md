@@ -45,7 +45,14 @@ lu. Ajouté le 09/11/2026 après-midi.
 **Minnesota** (`us_paid_leave_mn_self_employed`, Minn. Stat. 268B.11) : adhésion pour **104 semaines consécutives**
 au moins ; couverture au trimestre civil suivant l'accord ; sortie seulement au 1er janvier, avec un préavis de
 **30 jours** ; prime annuelle : taux du programme × base de prime de l'indépendant, plafonnée au plafond de la Social
-Security ; prestations comme les salariés. Taux non lu (pl.mn.gov refuse la lecture) : pas d'estimation.
+Security ; prestations comme les salariés. Définitions (268B.01, lues le 09/11/2026 en fin d'après-midi) : est
+*self-employed individual* le résident de l'État dont les revenus nets d'indépendant ont atteint au moins **5,3 %** du
+salaire annuel moyen de l'État pendant une année fiscale précédant l'année en cours (subd. 36) ; la base de prime est
+le revenu d'indépendant estimé de l'année plus les salaires d'indépendant, dans la limite du plafond de la Social
+Security (subd. 37). Taux (268B.14) : 0,7 % fixé par la loi à partir du 1er janvier 2026 pour les deux programmes,
+mais le commissaire pouvait l'ajuster avant cette date et doit l'ajuster chaque année **avant le 31 juillet** pour
+l'année suivante (subd. 7) : le taux en vigueur n'est donc pas établi par la loi seule, pas d'estimation (D57) ; le
+taux publié par l'administration n'est pas lu (pl.mn.gov refuse la lecture).
 
 **New York** (`us_paid_leave_ny_self_employed`) : sans salarié, adhésion par l'achat d'une **police d'assurance**
 couvrant **à la fois** le *Paid Family Leave* et l'invalidité (pas de PFL seul) ; prix fixé par l'assureur.
@@ -100,6 +107,7 @@ York, Washington, Minnesota, Delaware, Massachusetts, Maine, autre État, access
 | RCW 50A.10.010 (Washington State Legislature) | 3 ans puis 1 an, congé familial et médical, 100 % de la prime salariale, 820 heures, retrait |
 | Washington Paid Leave, *Self-employed* | Déclaration et paiement trimestriels |
 | Minnesota Statutes 2026, 268B.11 | 104 semaines, trimestre suivant, sortie au 1er janvier avec 30 jours, prime plafonnée, prestations |
+| Minnesota Statutes 2026, 268B.01 et 268B.14 | 268B.01 subd. 36 (5,3 % du salaire annuel moyen) et 37 (base de prime) ; 268B.14 subd. 6 (0,7 % en 2026) et 7 (ajustement annuel avant le 31 juillet, plafond de 1,1 %) |
 | M.G.L. c. 175M, art. 2 et 6 (malegislature.gov) | 2(j) : 3 ans au moins, effet au dépôt, 2 trimestres sur les 4 derniers ; 6(b) : toute la cotisation à la charge de l'indépendant |
 | 26 M.R.S. 850-G (Maine Legislature) | 3 ans au moins, effet au dépôt, retrait dans les 30 jours après les 3 ans, effet 30 jours après l'avis |
 | Maine Department of Labor, FAQ employeurs (juillet 2026) | Adhésion volontaire des indépendants, prime 2025-2027 de 0,5 % des revenus d'indépendant, portail Maine Paid Leave |

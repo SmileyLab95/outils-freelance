@@ -9,7 +9,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 
 ## Où en est-on ?
 
-*Mis à jour le 09/11/2026 (fin d'après-midi).*
+*Mis à jour le 09/11/2026 (soir).*
 
 - **Priorité (décision D10)** : le site et la plateforme d'abord ; noms de domaine, Gumroad et affiliation à la fin.
   Règle de qualité maximale pour tout produit ou service (D11, charte dans la [méthode](04-methode-de-travail.md#charte-qualité)).
@@ -348,7 +348,9 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   ([52](52-protection-sociale-etats-unis.md), D58). Après-midi : **Massachusetts** (loi 175M : 3 ans, toute la
   cotisation, 2 trimestres sur les 4 derniers) et **Maine** (26 M.R.S. 850-G : 3 ans ; prime 2025-2027 de 0,5 %)
   ajoutés ; fin d'après-midi : **Delaware** (règlement 1401 : revenus d'indépendant de la dernière déclaration
-  divisés par 4, toute la cotisation), soit 8 États.
+  divisés par 4, toute la cotisation), soit 8 États ; soir : Minnesota complété par sa loi (268B.01 : indépendant
+  résident ayant gagné au moins 5,3 % du salaire annuel moyen de l'État, base de prime ; 268B.14 : taux ajusté chaque
+  année avant le 31 juillet, donc pas d'estimation tant que le taux publié n'est pas lu).
 - **Prochaines actions de Claude** : refonte, suite ([31](31-vision-plateforme.md) § 5) : les quatre modules du compte
   gratuit sont faits (étape 5) ; étape 6, outils restants (CGV : faites dans les quatre pays ;
   lois des autres provinces sur la protection du consommateur à lire pour les détailler ; le règlement albertain sur les

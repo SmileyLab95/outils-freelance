@@ -3278,7 +3278,12 @@ const tests = {
     check((await t("ben-big")) === "Opt in" && (await points()).some((p) => p.includes("820 hours")) &&
       (await points())[0].startsWith("You elect coverage for at least 3 years"), "paid leave: Washington → 3 years, 820 hours");
     await page.selectOption("#ben-state", "MN");
-    check((await t("ben-big")) === "Opt in" && (await points())[0] === "You apply for coverage for at least 104 consecutive weeks.", "paid leave: Minnesota → 104 weeks");
+    {
+      const mn = await points();
+      check((await t("ben-big")) === "Opt in" && mn[0].includes("at least 5.3% of the state's average annual wage")
+        && mn[1] === "You apply for coverage for at least 104 consecutive weeks." && mn[4].includes("by July 31 for the next year"),
+        "paid leave: Minnesota → 5.3% of the average wage, 104 weeks, rate set by July 31");
+    }
     await page.selectOption("#ben-state", "DE");
     check((await t("ben-big")) === "Opt in" && (await points())[2] === "You pay 100% of the contribution." &&
       (await points())[1].includes("(Schedule C line 31 or Schedule SE line 6), divided by 4"), "paid leave: Delaware → 100% of the contribution, earnings ÷ 4");
