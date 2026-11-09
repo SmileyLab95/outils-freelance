@@ -59,6 +59,7 @@ Les services rendus à un client non résident non inscrit sont en général **d
 ### Seuil du petit fournisseur (*small supplier*)
 
 - **30 000 $** de fournitures taxables mondiales (les vôtres et celles des personnes associées), sur un seul trimestre civil ou sur les quatre derniers trimestres civils consécutifs.
+- *Relu le 09/11/2026 dans la Loi sur la taxe d'accise (art. 148, Lois du Canada)* : seuil de 30 000 $ (50 000 $ pour un organisme de services publics), hors services financiers et ventes d'immobilisations ; taux de TPS de 5 % (art. 165(1)). L'annexe VIII de la Loi affiche encore 8 % pour chaque province harmonisée et ne cite pas l'Île-du-Prince-Édouard : les parts provinciales en vigueur sont fixées ailleurs (règlements non lus), elle ne confirme donc pas le tableau ci-dessus. Les délais d'inscription (29 jours) viennent du guide RC4022, non relu.
 - Dépassement en un seul trimestre : inscription et perception dès la fourniture qui fait dépasser le seuil.
 - Dépassement sur quatre trimestres : inscription dans les 29 jours, et perception à compter de la fin du mois suivant.
 - La TVQ suit le même seuil de 30 000 $. Au Québec, l'inscription à la TPS et à la TVQ se fait en général ensemble auprès de Revenu Québec.

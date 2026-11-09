@@ -376,7 +376,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   des comptes attend le choix de l'hébergeur et du domaine.
 - **Vérification outillée des règles (08/11/2026)** : workflow « Vérifier les règles sur leurs sources »
   (`scripts/verifier_regles.py`, D55), pages lues en parallèle. Règles datées après relecture : Royaume-Uni 161 sur
-  164, États-Unis 89 sur 95, France 113 sur 120, Canada 86 sur 135 (France : fiches d'Entreprendre.Service-Public
+  164, États-Unis 89 sur 95, France 113 sur 120, Canada 93 sur 135 (France : fiches d'Entreprendre.Service-Public
   utilisées quand Urssaf, Légifrance ou economie.gouv.fr refusent la lecture). Barème kilométrique français et taux kilométrique
   américain de juillet rattachés au BOFiP et à l'IRS ; SMIC mis à jour (12,31 €) ; calendrier de la facturation
   électronique, abattements et versement libératoire relus sur impots.gouv.fr ; Canada : Loi de l'impôt, Loi sur
@@ -442,6 +442,11 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   non relu). Canada : mentions de facture pour les CTI (DORS/91-45, art. 3), facture en français au Québec (Charte,
   art. 57, LégisQuébec) et échéances de la TPS/TVH (Loi sur la taxe d'accise, art. 228, 237 et 238) relues sur les
   textes et datées ; la suspension du 2e alinéa de l'art. 57, citée par une note antérieure, n'est pas confirmée.
+  Ensuite : TPS de 5 % (art. 165(1)), seuil du petit fournisseur (art. 148), taux du RPC (annexes 1 et 2 : base,
+  premier et second suppléments) et exemption de base de 3 500 $ (art. 20(2)) relus dans les lois fédérales et datés,
+  canada.ca restant illisible ; l'annexe VIII de la Loi sur la taxe d'accise affiche encore 8 % pour chaque province
+  harmonisée : elle ne confirme pas les taux de TVH en vigueur (règle non datée) ; seuils fédéraux 2026 recoupés avec
+  l'art. 117(2) de la Loi de l'impôt (montants de base × 1,02), non datés faute de lire le facteur d'indexation.
   Restent en France : TNS et
   SASU (ordres de grandeur), mention d'assurance (L132-1), compte du commerçant (L123-24),
   périodicité Urssaf, décret 2025-943 et taux ACRE arrondis. États sans impôt sur le revenu : 8 pages officielles sur 9 lues le

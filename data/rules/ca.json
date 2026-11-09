@@ -17,10 +17,17 @@
       "value": 0.05,
       "unit": "rate",
       "label": "Federal Goods and Services Tax (GST) rate",
-      "source": "https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/gst-hst-businesses/charge-collect-which-rate/calculator.html",
-      "source_title": "CRA - GST/HST calculator (and rates)",
+      "source": "https://laws-lois.justice.gc.ca/eng/acts/E-15/section-165.html",
+      "source_title": "Excise Tax Act, section 165 (imposition of goods and services tax) - Justice Laws Website",
+      "more_sources": [
+        {
+          "source": "https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/gst-hst-businesses/charge-collect-which-rate/calculator.html",
+          "source_title": "CRA - GST/HST calculator (and rates)"
+        }
+      ],
       "confidence": "high",
-      "note": "Applies alone in AB, YT, NT, NU and alongside the provincial sales tax in BC, SK, MB and QC. Included in the HST in ON, NB, NL, NS, PE. Unchanged since 2008-01-01. Not re-opened on 2026-10-20."
+      "verified_on": "2026-11-09",
+      "note": "Read on 09/11/2026 with the source reader (Justice Laws Website, Act current to 2026-10-19), Excise Tax Act 165(1): 'every recipient of a taxable supply made in Canada shall pay to Her Majesty in right of Canada tax in respect of the supply calculated at the rate of 5% on the value of the consideration for the supply.' Applies alone in AB, YT, NT, NU and alongside the provincial sales tax in BC, SK, MB and QC; included in the HST in ON, NB, NL, NS, PE (165(2): additional tax in a participating province). The CRA page refuses automated reading."
     },
     "hst_rates": {
       "value": {
@@ -35,7 +42,7 @@
       "source": "https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/gst-hst-businesses/charge-collect-which-rate/calculator.html",
       "source_title": "CRA - GST/HST calculator (and rates)",
       "confidence": "high",
-      "note": "Re-verified 2026-10-20 on the CRA rate table: ON 13%, NB/NL/PE 15%, NS 14% for supplies on or after 2025-04-01 (15% before). HST = 5% federal part + provincial part (ON 8%, NB/NL/PE 10%, NS 9%). Nova Scotia went from 15% to 14% on 2025-04-01. The rate charged depends on the place of supply (for most services, the province of the customer's address), not on where the freelancer lives. No change known for 2026, but not re-opened on 2026-10-20."
+      "note": "Re-verified 2026-10-20 on the CRA rate table: ON 13%, NB/NL/PE 15%, NS 14% for supplies on or after 2025-04-01 (15% before). HST = 5% federal part + provincial part (ON 8%, NB/NL/PE 10%, NS 9%). Nova Scotia went from 15% to 14% on 2025-04-01. The rate charged depends on the place of supply (for most services, the province of the customer's address), not on where the freelancer lives. No change known for 2026, but not re-opened on 2026-10-20. Excise Tax Act, Schedule VIII (read on 09/11/2026 with the source reader) still lists 8% for Ontario, Nova Scotia, New Brunswick and Newfoundland and Labrador (and no Prince Edward Island): the provincial parts in force are set elsewhere (regulations not read), so the Schedule cannot confirm them and the rule stays undated."
     },
     "qst_rate": {
       "value": 0.09975,
@@ -83,10 +90,17 @@
       "value": 30000,
       "unit": "CAD",
       "label": "GST/HST small supplier threshold (mandatory registration above it)",
-      "source": "https://www.canada.ca/en/revenue-agency/services/forms-publications/publications/rc4022.html",
-      "source_title": "RC4022 General Information for GST/HST Registrants - Canada.ca",
-      "confidence": "medium",
-      "note": "You remain a small supplier while worldwide taxable supplies (yours plus those of associates) do not exceed $30,000 in a single calendar quarter or over the last four consecutive calendar quarters. If one quarter alone exceeds $30,000, registration is required from the supply that made you exceed it; if the four-quarter total exceeds it, registration is required within 29 days and you must charge tax from the end of the following month. Voluntary registration is possible (it lets you claim input tax credits). Not re-opened on 2026-10-20."
+      "source": "https://laws-lois.justice.gc.ca/eng/acts/E-15/section-148.html",
+      "source_title": "Excise Tax Act, section 148 (small supplier) - Justice Laws Website",
+      "more_sources": [
+        {
+          "source": "https://www.canada.ca/en/revenue-agency/services/forms-publications/publications/rc4022.html",
+          "source_title": "RC4022 General Information for GST/HST Registrants - Canada.ca"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-11-09",
+      "note": "Read on 09/11/2026 with the source reader (Justice Laws Website), Excise Tax Act 148: a person remains a small supplier while the value of the consideration for taxable supplies 'made inside or outside Canada by the person or associate' in the four calendar quarters immediately preceding 'does not exceed the total of (b) $30,000 or, where the person is a public service body, $50,000'; the status ends when the consideration in a single calendar quarter 'exceeds the total of (b) $30,000'. Supplies of financial services and sales of capital property are left out. Registration deadlines (within 29 days; tax charged from the supply that made a single quarter exceed $30,000) come from the CRA guide RC4022 and section 240, not reread. Voluntary registration is possible (it lets you claim input tax credits)."
     },
     "small_supplier_not_required_to_collect": {
       "value": "A small supplier that is not registered is generally not required to collect the GST/HST on most of its taxable supplies, and cannot claim input tax credits.",
@@ -264,28 +278,49 @@
       "value": 3500,
       "unit": "CAD",
       "label": "CPP basic exemption amount",
-      "source": "https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/payroll/payroll-deductions-contributions/canada-pension-plan-cpp/cpp-contribution-rates-maximums-exemptions.html",
-      "source_title": "CPP contribution rates, maximums and exemptions - Canada.ca",
+      "source": "https://laws-lois.justice.gc.ca/eng/acts/C-8/FullText.html",
+      "source_title": "Canada Pension Plan (R.S.C., 1985, c. C-8), section 20 - Justice Laws Website",
+      "more_sources": [
+        {
+          "source": "https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/payroll/payroll-deductions-contributions/canada-pension-plan-cpp/cpp-contribution-rates-maximums-exemptions.html",
+          "source_title": "CPP contribution rates, maximums and exemptions - Canada.ca"
+        }
+      ],
       "confidence": "high",
-      "note": "Frozen at $3,500. Contributory earnings = net self-employment earnings (plus employment earnings) between $3,500 and the YMPE."
+      "verified_on": "2026-11-09",
+      "note": "Read on 09/11/2026 with the source reader (Justice Laws Website): Canada Pension Plan 20(2), 'For each year after 1997 the amount of a Year's Basic Exemption is $3,500.' Contributory earnings = net self-employment earnings (plus employment earnings) between $3,500 and the YMPE."
     },
     "cpp_rate_employee": {
       "value": 0.0595,
       "unit": "rate",
       "label": "CPP rate, each of employee and employer half (base 4.95% + first additional 1%)",
-      "source": "https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/payroll/payroll-deductions-contributions/canada-pension-plan-cpp/cpp-contribution-rates-maximums-exemptions.html",
-      "source_title": "CPP contribution rates, maximums and exemptions - Canada.ca",
+      "source": "https://laws-lois.justice.gc.ca/eng/acts/C-8/FullText.html",
+      "source_title": "Canada Pension Plan (R.S.C., 1985, c. C-8), Schedules 1 and 2 - Justice Laws Website",
+      "more_sources": [
+        {
+          "source": "https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/payroll/payroll-deductions-contributions/canada-pension-plan-cpp/cpp-contribution-rates-maximums-exemptions.html",
+          "source_title": "CPP contribution rates, maximums and exemptions - Canada.ca"
+        }
+      ],
       "confidence": "high",
-      "note": "Base 9.9% combined (4.95% each) + first additional (enhancement) 2% combined (1% each)."
+      "verified_on": "2026-11-09",
+      "note": "Canada Pension Plan read on 09/11/2026 with the source reader (Justice Laws Website, consolidated text): Schedule 1, '2003 and each subsequent year': employees 4.95%, employers 4.95%, self-employed persons 9.9%; Schedule 2, first additional contribution rates, '2024 and each subsequent year': 1.0%, 1.0% and 2.0%; second additional contribution rates, '2024 and each subsequent year': 4.0%, 4.0% and 8.0% (sections 11.1(2) and 11.2: rates 'as set out in Schedule 1/2, as amended from time to time under section 113.1'). Base 9.9% combined (4.95% each) + first additional (enhancement) 2% combined (1% each)."
     },
     "cpp_rate_self_employed": {
       "value": 0.119,
       "unit": "rate",
       "label": "CPP rate for the self-employed (both halves)",
-      "source": "https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/payroll/payroll-deductions-contributions/canada-pension-plan-cpp/cpp-contribution-rates-maximums-exemptions.html",
-      "source_title": "CPP contribution rates, maximums and exemptions - Canada.ca",
+      "source": "https://laws-lois.justice.gc.ca/eng/acts/C-8/FullText.html",
+      "source_title": "Canada Pension Plan (R.S.C., 1985, c. C-8), Schedules 1 and 2 - Justice Laws Website",
+      "more_sources": [
+        {
+          "source": "https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/payroll/payroll-deductions-contributions/canada-pension-plan-cpp/cpp-contribution-rates-maximums-exemptions.html",
+          "source_title": "CPP contribution rates, maximums and exemptions - Canada.ca"
+        }
+      ],
       "confidence": "high",
-      "note": "Applied to self-employment earnings between $3,500 and $74,600. Paid with the T1 return (Schedule 8)."
+      "verified_on": "2026-11-09",
+      "note": "Canada Pension Plan read on 09/11/2026 with the source reader (Justice Laws Website, consolidated text): Schedule 1, '2003 and each subsequent year': employees 4.95%, employers 4.95%, self-employed persons 9.9%; Schedule 2, first additional contribution rates, '2024 and each subsequent year': 1.0%, 1.0% and 2.0%; second additional contribution rates, '2024 and each subsequent year': 4.0%, 4.0% and 8.0% (sections 11.1(2) and 11.2: rates 'as set out in Schedule 1/2, as amended from time to time under section 113.1'). Applied to self-employment earnings between $3,500 and $74,600. Paid with the T1 return (Schedule 8)."
     },
     "cpp_max_contribution_self_employed": {
       "value": 8460.9,
@@ -309,10 +344,17 @@
       "value": 0.08,
       "unit": "rate",
       "label": "CPP2 (second additional) rate for the self-employed",
-      "source": "https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/payroll/calculating-deductions/making-deductions/second-additional-cpp-contribution-rates-maximums.html",
-      "source_title": "Second additional CPP (CPP2) contribution rates and maximums - Canada.ca",
+      "source": "https://laws-lois.justice.gc.ca/eng/acts/C-8/FullText.html",
+      "source_title": "Canada Pension Plan (R.S.C., 1985, c. C-8), Schedules 1 and 2 - Justice Laws Website",
+      "more_sources": [
+        {
+          "source": "https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/payroll/calculating-deductions/making-deductions/second-additional-cpp-contribution-rates-maximums.html",
+          "source_title": "Second additional CPP (CPP2) contribution rates and maximums - Canada.ca"
+        }
+      ],
       "confidence": "high",
-      "note": "4% employee + 4% employer."
+      "verified_on": "2026-11-09",
+      "note": "Canada Pension Plan read on 09/11/2026 with the source reader (Justice Laws Website, consolidated text): Schedule 1, '2003 and each subsequent year': employees 4.95%, employers 4.95%, self-employed persons 9.9%; Schedule 2, first additional contribution rates, '2024 and each subsequent year': 1.0%, 1.0% and 2.0%; second additional contribution rates, '2024 and each subsequent year': 4.0%, 4.0% and 8.0% (sections 11.1(2) and 11.2: rates 'as set out in Schedule 1/2, as amended from time to time under section 113.1'). 4% employee + 4% employer."
     },
     "cpp2_max_contribution_self_employed": {
       "value": 832,
@@ -612,8 +654,14 @@
       "label": "Federal income tax brackets 2026 (taxable income)",
       "source": "https://www.canada.ca/en/revenue-agency/services/tax/individuals/tax-rates-brackets/current-year.html",
       "source_title": "Current year tax rates and income brackets (2026) - Canada.ca",
+      "more_sources": [
+        {
+          "source": "https://laws-lois.justice.gc.ca/eng/acts/I-3.3/section-117.html",
+          "source_title": "Income Tax Act, section 117 (tax payable, rates) - Justice Laws Website"
+        }
+      ],
       "confidence": "high",
-      "note": "Thresholds indexed by 2.0% for 2026. Lowest rate 14% for the full 2026 year and later years (Bill C-4)."
+      "note": "Thresholds indexed by 2.0% for 2026. Lowest rate 14% for the full 2026 year and later years (Bill C-4). Income Tax Act 117(2), read on 09/11/2026 with the source reader (Act current to 2026-10-19, 'Rates for taxation years after 2024'): 14% up to $57,375, 20.5% to $114,750, then up to $177,882 (rate cut off in the reading), 29% to $253,414 and 33% above, each amount being 'the amount determined for the taxation year in respect of' it (indexation, section 117.1). These amounts times 1.02, rounded to the nearest dollar, give exactly the 2026 thresholds above; the 2.0% factor comes from the CRA (canada.ca, not reread), so the rule stays undated."
     },
     "federal_lowest_rate_history": {
       "value": {
@@ -625,8 +673,14 @@
       "label": "Federal lowest marginal rate by year",
       "source": "https://www.canada.ca/en/department-finance/services/publications/report-impact-reducing-lowest-marginal-personal-income-tax-rate-non-refundable-tax-credits.html",
       "source_title": "Report on the Impact of Reducing the Lowest Marginal Personal Income Tax Rate on Non-Refundable Tax Credits - Canada.ca",
+      "more_sources": [
+        {
+          "source": "https://laws-lois.justice.gc.ca/eng/acts/I-3.3/section-117.html",
+          "source_title": "Income Tax Act, section 117 (tax payable, rates) - Justice Laws Website"
+        }
+      ],
       "confidence": "high",
-      "note": "Cut to 14% from 2025-07-01: 2025 uses a blended full-year rate of 14.5%, 2026 and later 14%."
+      "note": "Cut to 14% from 2025-07-01: 2025 uses a blended full-year rate of 14.5%, 2026 and later 14%. Income Tax Act 117(2)(a) (consolidated text read on 09/11/2026): '14% of the amount taxable' under the heading 'Rates for taxation years after 2024'; the 2025 blended rate comes from application provisions, which the consolidated text does not include (not read), so the rule stays undated."
     },
     "federal_non_refundable_credit_rate": {
       "value": 0.14,
@@ -905,10 +959,17 @@
       "value": 0.01,
       "unit": "rate",
       "label": "First additional (enhanced) CPP/QPP contribution rate, employee share (part of 5.95% CPP / 6.3% QPP)",
-      "source": "https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/payroll/payroll-deductions-contributions/canada-pension-plan-cpp/cpp-contribution-rates-maximums-exemptions.html",
-      "source_title": "CRA - CPP contribution rates, maximums and exemptions",
+      "source": "https://laws-lois.justice.gc.ca/eng/acts/C-8/FullText.html",
+      "source_title": "Canada Pension Plan (R.S.C., 1985, c. C-8), Schedules 1 and 2 - Justice Laws Website",
+      "more_sources": [
+        {
+          "source": "https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/payroll/payroll-deductions-contributions/canada-pension-plan-cpp/cpp-contribution-rates-maximums-exemptions.html",
+          "source_title": "CRA - CPP contribution rates, maximums and exemptions"
+        }
+      ],
       "confidence": "high",
-      "note": "Fully phased in since 2023: employee rate 5.95% = 4.95% base + 1% first additional (QPP 2026: 6.3% = 5.3% base + 1%). The base part gives the line 31000 credit; the first additional part is deducted (line 22200)."
+      "verified_on": "2026-11-09",
+      "note": "Canada Pension Plan read on 09/11/2026 with the source reader (Justice Laws Website, consolidated text): Schedule 1, '2003 and each subsequent year': employees 4.95%, employers 4.95%, self-employed persons 9.9%; Schedule 2, first additional contribution rates, '2024 and each subsequent year': 1.0%, 1.0% and 2.0%; second additional contribution rates, '2024 and each subsequent year': 4.0%, 4.0% and 8.0% (sections 11.1(2) and 11.2: rates 'as set out in Schedule 1/2, as amended from time to time under section 113.1'). Fully phased in since 2023: employee rate 5.95% = 4.95% base + 1% first additional (QPP 2026: 6.3% = 5.3% base + 1%). The base part gives the line 31000 credit; the first additional part is deducted (line 22200). QPP figures in this note are not reread here."
     },
     "ontario_health_premium_steps": {
       "value": [

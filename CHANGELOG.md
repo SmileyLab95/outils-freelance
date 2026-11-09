@@ -9,7 +9,11 @@
 - **Canada** : mentions d'une facture pour les crédits de taxe sur les intrants (règlement DORS/91-45, art. 3),
   facture rédigée en français au Québec (Charte de la langue française, art. 57) et échéances de déclaration, de
   paiement (30 avril pour un particulier au 31 décembre) et d'acomptes de la TPS/TVH (Loi sur la taxe d'accise,
-  art. 228, 237 et 238) relues dans les textes officiels et datées. Canada : 86 règles sur 135 datées.
+  art. 228, 237 et 238) relues dans les textes officiels et datées. Puis taux de TPS de 5 %, seuil de 30 000 $ du
+  petit fournisseur, taux du Régime de pensions du Canada (base, premier et second suppléments) et exemption de base
+  de 3 500 $ relus dans les lois fédérales et datés. L'annexe des taux de TVH de la Loi sur la taxe d'accise affiche
+  encore d'anciens taux (8 %) : elle ne permet pas de confirmer les taux actuels, qui restent sur la source de l'ARC.
+  Canada : 93 règles sur 135 datées.
 
 ## 2026-11-09 (matin) — Déduction QBI minimale de 400 $ relue dans la loi
 
