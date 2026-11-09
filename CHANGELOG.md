@@ -1,5 +1,14 @@
 # Journal des modifications
 
+## 2026-11-09 (fin d'après-midi) — Congés payés des indépendants : Delaware
+
+- L'outil américain *Paid leave and disability insurance for the self-employed* couvre désormais 8 États avec le
+  **Delaware** : adhésion volontaire au *Delaware Paid Leave*, cotisations calculées sur les revenus d'indépendant de
+  la dernière déclaration fédérale (Schedule C ligne 31 ou Schedule SE ligne 6) divisés par 4 pour chaque trimestre,
+  et payées à 100 % par l'indépendant (règlement 19 DE Admin. Code 1401, art. 6.4.5). Taux et durée d'engagement non
+  trouvés dans le règlement : la page renvoie au site de l'État.
+- Une règle nouvelle datée ; tests unitaires et parcours navigateur complétés. États-Unis : 98 règles sur 104.
+
 ## 2026-11-09 (après-midi) — Congés payés des indépendants : Massachusetts et Maine
 
 - L'outil américain *Paid leave and disability insurance for the self-employed* couvre désormais 7 États :

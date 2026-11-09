@@ -31,14 +31,16 @@ test("règles : chiffres lus aux sources officielles", () => {
   assert.equal(R.us_paid_leave_ny_self_employed.pfl_alone_allowed, false);
   assert.deepEqual(R.us_paid_leave_ma_self_employed, { initial_period_years: 3, quarters_of_contributions: 2, quarters_lookback: 4 });
   assert.equal(R.us_paid_leave_me_self_employed.initial_period_years, 3);
+  assert.equal(R.us_paid_leave_de_self_employed.contribution_share, 1);
+  assert.equal(R.us_paid_leave_de_self_employed.quarterly_divisor, 4);
   assert.equal(R.us_paid_leave_me_self_employed.premium_rate_2025_2027, 0.005);
   assert.equal(R.us_ssdi_basics.waiting_period_months, 5);
   assert.equal(R.us_ssdi_basics.insured_quarters_of_coverage, 20);
   assert.equal(R.us_ssdi_basics.insured_period_quarters, 40);
 });
 
-test("programmes : les sept États lus, aucun autre", () => {
-  assert.deepEqual(Object.keys(B.STATES).sort(), ["CA", "MA", "ME", "MN", "NY", "OR", "WA"]);
+test("programmes : les huit États lus, aucun autre", () => {
+  assert.deepEqual(Object.keys(B.STATES).sort(), ["CA", "DE", "MA", "ME", "MN", "NY", "OR", "WA"]);
   for (const s of Object.keys(B.STATES)) assert.ok(B.program(R, s), s);
   assert.equal(B.program(R, "TX"), null);
   assert.equal(B.program(R, "toString"), null, "pas de propriété héritée");
@@ -61,7 +63,7 @@ test("Oregon : 0,6 % du revenu net, plafond de 184 500 $, 1 000 $ au moins", () 
 });
 
 test("autres États et saisies invalides", () => {
-  for (const s of ["MA", "ME", "MN", "NY", "WA", "TX"]) assert.equal(B.premium(R, s, 50000), null, s + " : pas d'estimation");
+  for (const s of ["DE", "MA", "ME", "MN", "NY", "WA", "TX"]) assert.equal(B.premium(R, s, 50000), null, s + " : pas d'estimation");
   for (const bad of [-1, NaN, Infinity, "50000", undefined]) assert.deepEqual(B.premium(R, "CA", bad), { error: "profit" });
   assert.deepEqual(B.premium(R, "OR", -5), { error: "profit" });
 });
@@ -75,6 +77,9 @@ test("page : chiffres cités égaux aux règles", () => {
   }
   assert.ok(html.includes("8.84%") && html.includes("0.6%") && html.includes("0.5%"), "taux de la Californie, de l'Oregon et du Maine");
   assert.ok(html.includes("2 of your last 4 completed calendar quarters"), "Massachusetts : 2 trimestres sur les 4 derniers");
+  const D = R.us_paid_leave_de_self_employed;
+  assert.ok(html.includes(`(${D.earnings_lines}), divided by ${D.quarterly_divisor} for each quarter, and you pay ${D.contribution_share * 100}% of them`),
+    "Delaware : lignes de la déclaration, division par 4, 100 % de la cotisation");
   assert.ok(html.includes(`${C.di_max_weeks} weeks`) && html.includes(`${C.pfl_max_weeks} weeks`) && html.includes(`${C.months_before_claim} months`));
   assert.ok(html.includes(`${W.hours_required} hours`) && html.includes(`${R.us_paid_leave_mn_self_employed.min_weeks} consecutive weeks`));
   assert.ok(html.includes(`${R.us_ssdi_basics.waiting_period_months} full months`) && html.includes(`${R.us_ssdi_basics.insured_quarters_of_coverage} quarters`));

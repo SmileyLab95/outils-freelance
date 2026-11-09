@@ -9,7 +9,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 
 ## Où en est-on ?
 
-*Mis à jour le 09/11/2026 (après-midi).*
+*Mis à jour le 09/11/2026 (fin d'après-midi).*
 
 - **Priorité (décision D10)** : le site et la plateforme d'abord ; noms de domaine, Gumroad et affiliation à la fin.
   Règle de qualité maximale pour tout produit ou service (D11, charte dans la [méthode](04-methode-de-travail.md#charte-qualité)).
@@ -347,7 +347,8 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   Colorado, autres États et chômage non traités (lecture refusée ou non faite)
   ([52](52-protection-sociale-etats-unis.md), D58). Après-midi : **Massachusetts** (loi 175M : 3 ans, toute la
   cotisation, 2 trimestres sur les 4 derniers) et **Maine** (26 M.R.S. 850-G : 3 ans ; prime 2025-2027 de 0,5 %)
-  ajoutés, soit 7 États.
+  ajoutés ; fin d'après-midi : **Delaware** (règlement 1401 : revenus d'indépendant de la dernière déclaration
+  divisés par 4, toute la cotisation), soit 8 États.
 - **Prochaines actions de Claude** : refonte, suite ([31](31-vision-plateforme.md) § 5) : les quatre modules du compte
   gratuit sont faits (étape 5) ; étape 6, outils restants (CGV : faites dans les quatre pays ;
   lois des autres provinces sur la protection du consommateur à lire pour les détailler ; le règlement albertain sur les
@@ -360,9 +361,10 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   réel et chômage faits le 31/10/2026, [50](50-protection-sociale.md) ; arrêt maladie du micro-entrepreneur dès que ses
   règles sont lues ; maternité, accident, prévoyance ; Royaume-Uni fait le 07/11/2026,
   [51](51-protection-sociale-royaume-uni.md) : à revoir si GOV.UK précise comment les crédits de classe 2 comptent pour
-  la *Maternity Allowance* ; États-Unis faits le 09/11/2026 (7 États), [52](52-protection-sociale-etats-unis.md) :
-  ajouter le Colorado (sites et lois hors .gov ou illisibles), le Connecticut, le New Jersey et le Delaware (code à
-  relire), taux du Massachusetts, du Minnesota et de Washington ; Canada (prestations spéciales de
+  la *Maternity Allowance* ; États-Unis faits le 09/11/2026 (8 États), [52](52-protection-sociale-etats-unis.md) :
+  ajouter le Colorado (sites et lois hors .gov ou illisibles), le Connecticut (certificat de cga.ct.gov refusé par
+  l'outil de lecture) et le New Jersey ; taux du Delaware, du Massachusetts, du Minnesota et de Washington, durée
+  d'engagement au Delaware ; Canada (prestations spéciales de
   l'assurance-emploi, dès que canada.ca est lisible))) ;
   ajouter les taux du 1er semestre 2027 dès leur publication
   (fin décembre 2026 : intérêt légal par arrêté, taux de la BCE en vigueur au 1er janvier ; tables `taux_interet_legal`
@@ -389,7 +391,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   des comptes attend le choix de l'hébergeur et du domaine.
 - **Vérification outillée des règles (08/11/2026)** : workflow « Vérifier les règles sur leurs sources »
   (`scripts/verifier_regles.py`, D55), pages lues en parallèle. Règles datées après relecture : Royaume-Uni 161 sur
-  164, États-Unis 97 sur 103, France 113 sur 120, Canada 96 sur 135 (France : fiches d'Entreprendre.Service-Public
+  164, États-Unis 98 sur 104, France 113 sur 120, Canada 96 sur 135 (France : fiches d'Entreprendre.Service-Public
   utilisées quand Urssaf, Légifrance ou economie.gouv.fr refusent la lecture). Barème kilométrique français et taux kilométrique
   américain de juillet rattachés au BOFiP et à l'IRS ; SMIC mis à jour (12,31 €) ; calendrier de la facturation
   électronique, abattements et versement libératoire relus sur impots.gouv.fr ; Canada : Loi de l'impôt, Loi sur

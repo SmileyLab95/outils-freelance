@@ -25,6 +25,13 @@ la déclaration **2024** (Schedule SE ligne 3 ou Schedule C ligne 31), au moins 
 ou moins, soit 4 600 × 8,84 %), en quatre versements trimestriels. Conditions d'adhésion et de résiliation non lues :
 renvoi à l'EDD.
 
+**Delaware** (`us_paid_leave_de_self_employed`, 19 DE Admin. Code 1401, art. 6.4.5.1 et 6.4.5.3) : adhésion volontaire
+des indépendants au *Delaware Paid Leave* ; cotisations calculées sur les revenus d'indépendant de la dernière
+déclaration fédérale (Schedule C ligne 31 ou Schedule SE ligne 6), **divisés par 4** pour chaque trimestre ;
+l'indépendant paie **100 %** de la cotisation. Taux non lu ; durée d'engagement non trouvée dans le règlement (les
+3 ans de l'art. 18.2 visent les employeurs ; le texte du projet de loi de 2021, cité ailleurs, disait 3 ans et 50 % :
+ce n'est pas la règle en vigueur, D57) : renvoi au site de l'État. Ajouté le 09/11/2026 en fin d'après-midi.
+
 **Maine** (`us_paid_leave_me_self_employed`, 26 M.R.S. 850-G, FAQ de juillet 2026) : entrepreneurs individuels, indépendants
 et associés ; adhésion pour **3 ans** au moins, effective au dépôt de la déclaration ; retrait dans les 30 jours suivant la
 fin des 3 ans, effectif au moins 30 jours après l'avis ; prime 2025-2027 de **0,5 %** des revenus d'indépendant (base
@@ -53,8 +60,8 @@ prestations après **820 heures** travaillées dans l'État après la déclarati
 d'une période. Taux non lu : pas d'estimation.
 
 **Non retenus** (lecture refusée ou non faite, D57 : ne rien affirmer) : Colorado (famli.colorado.gov : refus, lois
-hors .gov), Delaware (page du code lue sans le texte attendu), autres États (Connecticut, New Jersey, Rhode Island, Hawaï,
-Maryland…) ;
+hors .gov), Connecticut (cga.ct.gov : certificat refusé par l'outil de lecture, non contourné), New Jersey (aucune source
+officielle lue ne le dit clairement), autres États (Rhode Island, Hawaï, Maryland…) ;
 assurance chômage des indépendants (aucune page du DOL lue ne le dit clairement) ; FMLA (dol.gov : refus).
 
 ## 3. Outil
@@ -63,23 +70,23 @@ Une page aux États-Unis, **Paid leave and disability insurance for the self-emp
 id `sick-pay`, reliée par *hreflang* aux pages française et britannique), menu « Taxes and admin » (description :
 « Tax, deadlines, expenses, retirement and benefits. »).
 
-Saisie : l'État (Californie, Maine, Massachusetts, Minnesota, New York, Oregon, Washington, autre) et, pour la Californie et l'Oregon, le
+Saisie : l'État (Californie, Delaware, Maine, Massachusetts, Minnesota, New York, Oregon, Washington, autre) et, pour la Californie et l'Oregon, le
 bénéfice net. Résultat : le programme, la prime annuelle et trimestrielle estimée (Californie, Oregon), « Opt in » ou
 « Buy a policy » ailleurs, « Not eligible » en Oregon sous 1 000 $, « Not covered yet » pour un autre État ; les points à
 savoir (durées, engagement, conditions), la démarche, et la note sur le SSDI. Moteur `engines/benefits-us.js`
 (`OFE.benefitsUS` : `STATES`, `program`, `premium`), chiffres lus dans les règles, textes dans `tools/us-benefits.js`.
 
-Hors champ : montants des prestations (calculateurs des États), taux du Minnesota et de Washington, résiliation en
-Californie, États non lus, chômage, assurance invalidité privée (renvoi au guide des assurances).
+Hors champ : montants des prestations (calculateurs des États), taux du Delaware, du Massachusetts, du Minnesota et de
+Washington, engagement au Delaware, résiliation en Californie, États non lus, chômage, assurance invalidité privée (renvoi au guide des assurances).
 
 ## 4. Tests
 
-Moteur (`tests/unit/benefits-us.test.mjs`, 6 tests) : chiffres des règles ; cinq États et aucun autre ; Californie
+Moteur (`tests/unit/benefits-us.test.mjs`, 6 tests) : chiffres des règles ; huit États et aucun autre ; Californie
 (50 000 $ → 4 420 $, 4 600 $ et 0 $ → 406,64 $, 4 601 $ → 406,73 $) ; Oregon (exemple officiel 10 000 $ → 60 $, 1 000 $,
 999 $ → non éligible, plafond) ; autres États sans taux ; saisies invalides ; chiffres cités par la page égaux aux
 règles. Mutation : 9 mutants détectés sur 10, le dixième (`<=` → `<` au seuil californien) est équivalent (4 600 × 8,84 %
 = 406,64 $). Parcours navigateur (`tests/e2e/verifier.mjs`) : Californie, minimum, bénéfice vide, Oregon et seuil, New
-York, Washington, Minnesota, autre État, accessibilité, trois largeurs ; captures relues.
+York, Washington, Minnesota, Delaware, Massachusetts, Maine, autre État, accessibilité, trois largeurs ; captures relues.
 
 ## Annexe : sources lues (09/11/2026, outil « Lire une source officielle »)
 
@@ -96,4 +103,5 @@ York, Washington, Minnesota, autre État, accessibilité, trois largeurs ; captu
 | M.G.L. c. 175M, art. 2 et 6 (malegislature.gov) | 2(j) : 3 ans au moins, effet au dépôt, 2 trimestres sur les 4 derniers ; 6(b) : toute la cotisation à la charge de l'indépendant |
 | 26 M.R.S. 850-G (Maine Legislature) | 3 ans au moins, effet au dépôt, retrait dans les 30 jours après les 3 ans, effet 30 jours après l'avis |
 | Maine Department of Labor, FAQ employeurs (juillet 2026) | Adhésion volontaire des indépendants, prime 2025-2027 de 0,5 % des revenus d'indépendant, portail Maine Paid Leave |
-| Refus de lecture | mass.gov (403), famli.colorado.gov, pl.mn.gov, dol.gov (FMLA) ; brochure de Washington (lien déplacé) |
+| 19 DE Admin. Code 1401 (archive.regulations.delaware.gov) | 6.4.5.1 : revenus d'indépendant de la dernière déclaration (Schedule C ligne 31, Schedule SE ligne 6) divisés par 4 ; 6.4.5.3 : 100 % de la cotisation ; 18.2 : 3 ans pour les employeurs |
+| Refus de lecture | mass.gov (403), famli.colorado.gov, pl.mn.gov, dol.gov (FMLA), cga.ct.gov (certificat refusé) ; brochure de Washington (lien déplacé) ; Delaware Code, chapitre 37 du titre 19 (page sans le texte) |

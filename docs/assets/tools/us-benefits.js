@@ -11,7 +11,7 @@
   if (!form || !OFE || !OFE.benefitsUS || !R || !R.us_paid_leave_ca_diec) return;
   var B = OFE.benefitsUS;
   var C = R.us_paid_leave_ca_diec, M = R.us_paid_leave_mn_self_employed, N = R.us_paid_leave_ny_self_employed;
-  var MA = R.us_paid_leave_ma_self_employed, ME = R.us_paid_leave_me_self_employed;
+  var MA = R.us_paid_leave_ma_self_employed, ME = R.us_paid_leave_me_self_employed, DE = R.us_paid_leave_de_self_employed;
   var O = R.us_paid_leave_or_self_employed, W = R.us_paid_leave_wa_elective, S = R.us_ssdi_basics;
   var $ = function (id) { return document.getElementById(id); };
   var set = function (id, text) { $(id).textContent = text; };
@@ -30,6 +30,15 @@
         "Premium: " + pct(C.premium_rate_2026) + " of your net profit, at least " + usd(C.minimum_annual_premium_2026) + " a year (net profit of " + usd(C.minimum_premium_net_profit) + " or less), in four quarterly installments."
       ],
       step: "Next: apply for Disability Insurance Elective Coverage with the EDD. Check its page for the eligibility rules and how to cancel."
+    },
+    DE: {
+      label: "Delaware Paid Leave (voluntary enrollment)",
+      points: [
+        "Self-employed people and independent contractors can enroll voluntarily.",
+        "Contributions are based on your self-employment earnings on your most recent federal tax return (" + DE.earnings_lines + "), divided by " + DE.quarterly_divisor + " for each quarter.",
+        "You pay " + pct(DE.contribution_share) + " of the contribution."
+      ],
+      step: "Next: enroll with Delaware Paid Leave, which sets the contribution rates and tells you how long you commit for."
     },
     MA: {
       label: "Massachusetts Paid Family and Medical Leave (self-employed election)",
@@ -90,7 +99,7 @@
       step: "Next: elect coverage with Washington's Employment Security Department; its calculator estimates your quarterly premium."
     }
   };
-  var NAMES = ["California", "Maine", "Massachusetts", "Minnesota", "New York", "Oregon", "Washington"];
+  var NAMES = ["California", "Delaware", "Maine", "Massachusetts", "Minnesota", "New York", "Oregon", "Washington"];
 
   function compute() {
     var state = $("ben-state").value;

@@ -1,7 +1,7 @@
 /*
  * Moteur : protection de l'indépendant aux États-Unis en cas de maladie, de naissance ou de soins à un proche.
- * Programmes des États ouverts aux indépendants par adhésion volontaire (Californie, Maine, Massachusetts, Minnesota,
- * New York, Oregon, Washington) et invalidité de longue durée de la Social Security (SSDI). Chiffres lus dans data/rules/us.json
+ * Programmes des États ouverts aux indépendants par adhésion volontaire (Californie, Delaware, Maine, Massachusetts,
+ * Minnesota, New York, Oregon, Washington) et invalidité de longue durée de la Social Security (SSDI). Chiffres lus dans data/rules/us.json
  * (us_paid_leave_*, us_ssdi_basics). Spécification : documentation/52-protection-sociale-etats-unis.md.
  * Fonctions pures, testées par tests/unit/benefits-us.test.mjs.
  */
@@ -13,7 +13,7 @@
   "use strict";
 
   // États dont les règles ont été lues aux sources (règle de chaque programme).
-  var STATES = { CA: "us_paid_leave_ca_diec", MA: "us_paid_leave_ma_self_employed", ME: "us_paid_leave_me_self_employed",
+  var STATES = { CA: "us_paid_leave_ca_diec", DE: "us_paid_leave_de_self_employed", MA: "us_paid_leave_ma_self_employed", ME: "us_paid_leave_me_self_employed",
     MN: "us_paid_leave_mn_self_employed", NY: "us_paid_leave_ny_self_employed", OR: "us_paid_leave_or_self_employed",
     WA: "us_paid_leave_wa_elective" };
 

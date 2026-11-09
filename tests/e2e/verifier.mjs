@@ -3279,6 +3279,9 @@ const tests = {
       (await points())[0].startsWith("You elect coverage for at least 3 years"), "paid leave: Washington → 3 years, 820 hours");
     await page.selectOption("#ben-state", "MN");
     check((await t("ben-big")) === "Opt in" && (await points())[0] === "You apply for coverage for at least 104 consecutive weeks.", "paid leave: Minnesota → 104 weeks");
+    await page.selectOption("#ben-state", "DE");
+    check((await t("ben-big")) === "Opt in" && (await points())[2] === "You pay 100% of the contribution." &&
+      (await points())[1].includes("(Schedule C line 31 or Schedule SE line 6), divided by 4"), "paid leave: Delaware → 100% of the contribution, earnings ÷ 4");
     await page.selectOption("#ben-state", "MA");
     check((await t("ben-big")) === "Opt in" && (await points())[2].includes("at least 2 of your last 4 completed calendar quarters") && !(await page.isVisible("#ben-profit")),
       "paid leave: Massachusetts → 3 years, 2 of the last 4 quarters");
@@ -3288,7 +3291,7 @@ const tests = {
       (await t("ben-step")) === "Next: elect coverage through the Maine Paid Leave portal.", "paid leave: Maine → 0.5% for 2025-2027");
     await page.selectOption("#ben-state", "other");
     check((await t("ben-big")) === "Not covered yet" && !(await page.isVisible("#ben-step")) &&
-      (await points())[0] === "This page covers 7 states so far: California, Maine, Massachusetts, Minnesota, New York, Oregon and Washington.",
+      (await points())[0] === "This page covers 8 states so far: California, Delaware, Maine, Massachusetts, Minnesota, New York, Oregon and Washington.",
       "paid leave: another state → not covered yet, check the state's program");
     await accessible(page, "paid leave (another state)");
     // Retour à la situation par défaut pour les formats suivants (tablette, mobile).

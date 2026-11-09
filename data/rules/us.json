@@ -2619,6 +2619,20 @@
       "confidence": "high",
       "verified_on": "2026-11-09",
       "note": "Read on 09/11/2026 with the source reader. 26 M.R.S. 850-G(1): 'A self-employed individual, including an independent contractor, sole proprietor or partner, may elect coverage under this subchapter for an initial period of not less than 3 years'; 'The election becomes effective on the date of filing the notice.' (2): withdrawal 'within 30 days after the end of the 3-year period of coverage' (or other times set by rule); 'A withdrawal may not take effect sooner than 30 days after filing the notice.' FAQ (July 2026), question 18: 'Self-employed individuals are eligible for Paid Family and Medical Leave but must choose to opt in for coverage. For calendar years 2025-2027, the premium rate has been set at 0.5 percent of the individual's income from self-employment. Self-employed individuals can elect coverage through the Maine Paid Leave portal.' Premium base details (cap, year of income) not read: no estimate on the site."
+    },
+    "us_paid_leave_de_self_employed": {
+      "value": {
+        "contribution_share": 1.0,
+        "earnings_lines": "Schedule C line 31 or Schedule SE line 6",
+        "quarterly_divisor": 4
+      },
+      "unit": "object",
+      "label": "Delaware: voluntary enrollment of the self-employed in Delaware Paid Leave (19 DE Admin. Code 1401)",
+      "source": "https://archive.regulations.delaware.gov/AdminCode/title19/1000/1400/1401.shtml",
+      "source_title": "19 DE Admin. Code 1401, Rules defining and regulating the Healthy Delaware Families Act - Delaware Regulations",
+      "confidence": "high",
+      "verified_on": "2026-11-09",
+      "note": "Read on 09/11/2026 with the source reader. 6.4.5.1: 'If a self-employed individual has voluntarily enrolled in the Delaware Paid Leave program, contributions are based on the individual's self-employment earnings, as reported on their Federal Income taxes. If Schedule C is completed, self-employment earnings are found on line 31. If Schedule SE is completed, self-employment earnings are reported on line 6. Self-employed individuals shall calculate their quarterly earnings by dividing their self-employment earnings found on their most recently filed income tax return by 4.' 6.4.5.3: 'Self-employed individuals and independent contractors are responsible for paying 100% of the required contribution'. The 3-year minimum in the rule (18.2) concerns employers; no commitment period for the self-employed was found (the 2021 bill text cited by secondary sources said 3 years and 50%: not the current rule, D57). Rates not read. The Delaware Code page read did not contain the chapter text."
     }
   },
   "open_questions": [
