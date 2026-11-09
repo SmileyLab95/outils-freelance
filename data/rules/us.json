@@ -106,10 +106,21 @@
       "value": 192300,
       "unit": "USD",
       "label": "2027 Social Security contribution and benefit base (taxable maximum)",
-      "source": "https://www.ssa.gov/news/en/cola/factsheets/2027.html",
-      "source_title": "SSA - 2027 Cost-of-Living Adjustment (COLA) Fact Sheet",
+      "source": "https://public-inspection.federalregister.gov/2026-21796.pdf",
+      "source_title": "Federal Register (public inspection) - SSA, Cost-of-Living Increase and Other Determinations for 2027 (Docket No. SSA-2026-1024)",
+      "more_sources": [
+        {
+          "source": "https://www.ssa.gov/news/en/cola/factsheets/2027.html",
+          "source_title": "SSA - 2027 Cost-of-Living Adjustment (COLA) Fact Sheet"
+        },
+        {
+          "source": "https://www.ssa.gov/blog/en/posts/2026-10-14.html",
+          "source_title": "SSA - Social Security Announces 3.6 Percent Benefit Increase for 2027 (October 14, 2026)"
+        }
+      ],
       "confidence": "high",
-      "note": "Announced 2026-10-14 with the 3.6% COLA for 2027 (https://www.ssa.gov/blog/en/posts/2026-10-14.html). For tax year 2027, not 2026. Max OASDI SE tax 2027 = 0.124 x 192,300 = $23,845.20."
+      "verified_on": "2026-11-09",
+      "note": "Read on 09/11/2026 with the source reader (ssa.gov refuses automated reading): 'The OASDI contribution and benefit base is $192,300 for remuneration paid in 2027 and self-employment income earned in tax years beginning in 2027' (1994 base of $60,600 x national average wage index for 2025, $72,800.33, / 1992 index, $22,935.42 = $192,353.14, rounded to $192,300; 2026 base: $184,500). 3.6 percent cost-of-living increase. For tax year 2027, not 2026. Max OASDI SE tax 2027 = 0.124 x 192,300 = $23,845.20."
     },
     "se_tax_social_security_max_2026": {
       "value": 22878,

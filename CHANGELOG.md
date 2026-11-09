@@ -1,5 +1,14 @@
 # Journal des modifications
 
+## 2026-11-09 (petit matin) — Plafond de la Sécurité sociale 2027 et lecture des classeurs
+
+- **États-Unis** : plafond de la Sécurité sociale de 192 300 $ pour 2027 relu dans l'avis officiel de la Social
+  Security Administration au Federal Register (« Cost-of-Living Increase and Other Determinations for 2027 »), et non
+  plus seulement sur ssa.gov, qui refuse la lecture automatisée. États-Unis : 87 règles sur 95 datées.
+- **Outil de vérification** : « Lire une source officielle » lit aussi les classeurs XLSX publiés par les
+  administrations (jeux de données ouverts), avec la seule bibliothèque standard ; test unitaire contrôlé par
+  mutation.
+
 ## 2026-11-09 (nuit) — Lois locales sur les freelances : Californie et Seattle
 
 - **Seattle** : ordonnance sur les travailleurs indépendants relue dans le guide officiel de l'Office of Labor

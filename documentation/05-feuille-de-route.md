@@ -9,7 +9,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 
 ## Où en est-on ?
 
-*Mis à jour le 09/11/2026 (nuit).*
+*Mis à jour le 09/11/2026 (petit matin).*
 
 - **Priorité (décision D10)** : le site et la plateforme d'abord ; noms de domaine, Gumroad et affiliation à la fin.
   Règle de qualité maximale pour tout produit ou service (D11, charte dans la [méthode](04-methode-de-travail.md#charte-qualité)).
@@ -376,7 +376,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   des comptes attend le choix de l'hébergeur et du domaine.
 - **Vérification outillée des règles (08/11/2026)** : workflow « Vérifier les règles sur leurs sources »
   (`scripts/verifier_regles.py`, D55), pages lues en parallèle. Règles datées après relecture : Royaume-Uni 161 sur
-  164, États-Unis 86 sur 95, France 113 sur 120, Canada 81 sur 135 (France : fiches d'Entreprendre.Service-Public
+  164, États-Unis 87 sur 95, France 113 sur 120, Canada 81 sur 135 (France : fiches d'Entreprendre.Service-Public
   utilisées quand Urssaf, Légifrance ou economie.gouv.fr refusent la lecture). Barème kilométrique français et taux kilométrique
   américain de juillet rattachés au BOFiP et à l'IRS ; SMIC mis à jour (12,31 €) ; calendrier de la facturation
   électronique, abattements et versement libératoire relus sur impots.gouv.fr ; Canada : Loi de l'impôt, Loi sur
@@ -428,7 +428,10 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   (leginfo, illisible : 403) et à l'analyse de la commission judiciaire du Sénat (version du 1er avril 2024), règle
   non datée ; Seattle relu dans le guide de l'Office of Labor Standards (09/2024 : au moins 600 $ par an chez un même
   client, avis écrit avant le travail, paiement sous 30 jours) et daté ; Columbus : aucune source en .gov trouvée
-  (code municipal hébergé hors .gov), règle laissée sur sa source secondaire. Restent en France : TNS et
+  (code municipal hébergé hors .gov), règle laissée sur sa source secondaire. Petit matin : plafond de la Sécurité
+  sociale 2027 (192 300 $) relu dans l'avis de la SSA au Federal Register (ssa.gov refuse toujours la lecture) et
+  daté ; l'outil « Lire une source officielle » lit désormais les classeurs XLSX (jeux de données publics), testé.
+  Restent en France : TNS et
   SASU (ordres de grandeur), mention d'assurance (L132-1), compte du commerçant (L123-24),
   périodicité Urssaf, décret 2025-943 et taux ACRE arrondis. États sans impôt sur le revenu : 8 pages officielles sur 9 lues le
   08/11/2026 (Tennessee illisible) ; Washington taxera dès 2028 les revenus de plus d'un million de dollars.

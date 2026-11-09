@@ -55,6 +55,30 @@ class LireSource(unittest.TestCase):
         self.assertFalse(L.autorise("https://faux-cnil.fr/"), "nom qui se termine par un site officiel")
         self.assertFalse(L.autorise("https://exemple.com/?u=https://www.cnil.fr"))
 
+    def test_classeur_xlsx(self):
+        import zipfile
+        m = 'xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"'
+        tampon = io.BytesIO()
+        with zipfile.ZipFile(tampon, "w") as z:
+            z.writestr("xl/workbook.xml", f"<workbook {m}/>")
+            z.writestr("xl/sharedStrings.xml", f"<sst {m}><si><t>Taxable income</t></si><si><t>Premium</t></si>"
+                                               f"<si><r><t>Over </t></r><r><t>$200,000</t></r></si></sst>")
+            z.writestr("xl/worksheets/sheet2.xml", f'<worksheet {m}><sheetData><row><c t="inlineStr"><is><t>Notes</t></is></c>'
+                                                   f"</row></sheetData></worksheet>")
+            z.writestr("xl/worksheets/sheet1.xml", f'<worksheet {m}><sheetData><row><c t="s"><v>0</v></c><c t="s"><v>1</v></c></row>'
+                                                   f'<row><c><v>20000</v></c><c><v>0</v></c><c/></row><row/>'
+                                                   f'<row><c t="s"><v>2</v></c><c><v>900</v></c></row></sheetData></worksheet>')
+        contenu = tampon.getvalue()
+        attendu = "[sheet1]\nTaxable income | Premium\n20000 | 0\nOver $200,000 | 900\n[sheet2]\nNotes"
+        for type_contenu in ("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/octet-stream"):
+            txt, liens = L.texte(contenu, type_contenu)
+            self.assertEqual((txt, liens), (attendu, []), type_contenu)
+        autre = io.BytesIO()
+        with zipfile.ZipFile(autre, "w") as z:
+            z.writestr("page.html", "<p>pas un classeur</p>")
+        self.assertFalse(L._est_xlsx(autre.getvalue()), "une archive sans classeur n'est pas lue comme un XLSX")
+        self.assertFalse(L._est_xlsx(b"PK pas une archive"))
+
     def test_texte_et_liens(self):
         txt, liens = L.texte(PAGE.encode("utf-8"), "text/html", "https://www.cnil.fr/fr/prospection")
         self.assertIn("Le droit d’opposition s’exerce sans frais.", txt)

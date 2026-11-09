@@ -1,4 +1,5 @@
-"""Lit une source officielle et en affiche le texte, ou les passages autour des mots cherchés.
+"""Lit une source officielle (page HTML, PDF ou classeur XLSX) et en affiche le texte, ou les passages autour des mots
+cherchés.
 
 Les règles du site sont vérifiées aux sources officielles avant d'être publiées (documentation/04-methode-de-travail.md).
 L'environnement de travail habituel n'a pas accès à plusieurs de ces sites (CNIL, Légifrance…) : ce script tourne dans
@@ -91,13 +92,69 @@ class _Texte(html.parser.HTMLParser):
                 self.lien[1] += data
 
 
+XLSX = "http://schemas.openxmlformats.org/spreadsheetml/2006/main"
+
+
+def _xlsx(contenu):
+    """Texte d'un classeur XLSX (jeux de données publics, tableaux de taux) : feuille par feuille, une ligne par rangée,
+    cellules non vides séparées par « | ». Bibliothèque standard seulement ; les parties trop grosses sont refusées."""
+    import xml.etree.ElementTree as ET
+    import zipfile
+
+    def balise(nom):
+        return "{%s}%s" % (XLSX, nom)
+
+    with zipfile.ZipFile(io.BytesIO(contenu)) as z:
+        def lire(nom):
+            if z.getinfo(nom).file_size > LIMITE:
+                raise ValueError("partie trop grosse dans le classeur : " + nom)
+            return ET.fromstring(z.read(nom))
+
+        noms = z.namelist()
+        partagees = []
+        if "xl/sharedStrings.xml" in noms:
+            partagees = ["".join(t.text or "" for t in si.iter(balise("t"))) for si in lire("xl/sharedStrings.xml").findall(balise("si"))]
+        feuilles = sorted((n for n in noms if re.fullmatch(r"xl/worksheets/sheet\d+\.xml", n)),
+                          key=lambda n: int(re.search(r"(\d+)\.xml$", n).group(1)))
+        lignes = []
+        for nom in feuilles:
+            lignes.append("[" + nom.rsplit("/", 1)[1][:-4] + "]")
+            for rangee in lire(nom).iter(balise("row")):
+                cellules = []
+                for c in rangee.findall(balise("c")):
+                    v = c.find(balise("v"))
+                    if c.get("t") == "s" and v is not None:
+                        valeur = partagees[int(v.text)]
+                    elif c.get("t") == "inlineStr":
+                        valeur = "".join(t.text or "" for t in c.iter(balise("t")))
+                    else:
+                        valeur = v.text if v is not None else ""
+                    if valeur and valeur.strip():
+                        cellules.append(valeur.strip())
+                if cellules:
+                    lignes.append(" | ".join(cellules))
+    return "\n".join(lignes)
+
+
+def _est_xlsx(contenu):
+    """Vrai si le contenu est une archive ZIP qui contient un classeur (xl/workbook.xml), quel que soit le type annoncé."""
+    import zipfile
+    try:
+        with zipfile.ZipFile(io.BytesIO(contenu)) as z:
+            return "xl/workbook.xml" in z.namelist()
+    except zipfile.BadZipFile:
+        return False
+
+
 def texte(contenu, type_contenu, base=""):
-    """Texte lisible d'une page HTML ou d'un PDF, espaces et lignes vides resserrés, et liens de la page (adresse
-    complète, texte) : un PDF n'en a pas ici."""
+    """Texte lisible d'une page HTML, d'un PDF ou d'un classeur XLSX, espaces et lignes vides resserrés, et liens de la
+    page (adresse complète, texte) : un PDF ou un classeur n'en a pas ici."""
     liens = []
     if "pdf" in type_contenu or contenu[:5] == b"%PDF-":
         from pypdf import PdfReader  # installé par le workflow
         brut = "\n".join(page.extract_text() or "" for page in PdfReader(io.BytesIO(contenu)).pages)
+    elif _est_xlsx(contenu):
+        brut = _xlsx(contenu)
     else:
         parser = _Texte()
         parser.feed(contenu.decode("utf-8", errors="replace"))
