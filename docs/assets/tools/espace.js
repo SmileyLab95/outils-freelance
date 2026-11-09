@@ -30,6 +30,15 @@
     ["liberal_bnc", "Profession libérale (BNC)"], ["cipav", "Profession libérale relevant de la CIPAV"],
     ["services_bic", "Prestations de services commerciales (BIC)"], ["artisan", "Activité artisanale (BIC)"],
     ["vente", "Vente de marchandises (BIC)"], ["real", "Je ne suis pas en micro-entreprise"]];
+  /** Seconde activité possible (activité mixte, documentation/53) : la vente avec une activité de services. */
+  function activity2Options(activity) {
+    var none = [["", "Aucune"]];
+    if (activity === "vente") return none.concat(ACTIVITIES.filter(function (a) { return a[0] !== "vente" && a[0] !== "real"; }));
+    if (R.micro_activities[activity]) return none.concat(ACTIVITIES.filter(function (a) { return a[0] === "vente"; }));
+    return none;
+  }
+  /** Profil en activité mixte (ventes et prestations suivies séparément). */
+  function isMixed() { return !!E.mixedActivities(profile(), R); }
   var VAT_REGIMES = [["franchise", "Franchise en base (pas de TVA)"], ["simplified", "Régime réel simplifié de TVA"], ["normal", "Régime réel normal de TVA"]];
   var TYPES = { facture: "Facture", devis: "Devis", avoir: "Avoir" };
   var STATES = {
@@ -337,6 +346,8 @@
       field("vatRegime", "TVA", p.vatRegime, { options: VAT_REGIMES, half: true }) +
       field("vatRate", "Taux de TVA habituel", p.vatRate || 20, { options: [[20, "20 %"], [10, "10 %"], [5.5, "5,5 %"], [2.1, "2,1 %"]], half: true }) +
       '<div class="micro-only full fields"' + (micro ? "" : " hidden") + ">" +
+      field("activity2", "Seconde activité (activité mixte)", p.activity2 || "", { options: activity2Options(p.activity),
+        hint: "Vente de marchandises et prestations de services : plafonds, cotisations et livre des recettes suivis par activité." }) +
       field("periodicity", "Déclaration Urssaf", p.periodicity, { options: [["quarterly", "Trimestrielle"], ["monthly", "Mensuelle"]], half: true }) +
       field("startDate", "Début d'activité", p.startDate, { type: "date", half: true }) +
       field("acre", "ACRE", p.acre || 0, { options: [[0, "Non"], [50, "Oui, réduction de 50 %"], [25, "Oui, réduction de 25 %"]], half: true }) +
@@ -365,6 +376,8 @@
     var form = $("profile-form");
     var toggle = function () {
       form.querySelector(".micro-only").hidden = !R.micro_activities[form.elements.activity.value];
+      var second = form.elements.activity2, keep = second.value;
+      second.innerHTML = options(activity2Options(form.elements.activity.value), keep);
       form.elements.vatRate.closest(".field").hidden = form.elements.vatRegime.value === "franchise";
     };
     form.elements.activity.addEventListener("change", toggle);
@@ -380,6 +393,7 @@
       p.vatRate = Number(f.vatRate.value);
       p.acre = Number(f.acre.value);
       p.vl = f.vl.value === "1";
+      p.activity2 = E.mixedActivities({ activity: p.activity, activity2: f.activity2.value }, R) ? f.activity2.value : "";
       if (!first) {
         ["status", "address", "siret", "vat", "email", "phone", "iban", "bic", "penalty", "endpoint"].forEach(function (k) { p[k] = f[k].value.trim(); });
         var endpointError = checkEndpoint(p.endpoint, p.siret, "votre SIREN");
@@ -460,9 +474,16 @@
       '<section class="card espace-card"><h3>Derniers documents</h3>' + docTable(recentDocs(5), true) +
       '<p class="small"><a href="#/documents">Tous les documents →</a></p></section></div>';
     if (decl) {
-      html += '<p class="small muted espace-note">Estimation : chiffre d\'affaires encaissé de la période × ' +
-        OF.fmt(Math.round((decl.rates.social + decl.rates.cfp) * 1000) / 10) + " %" + (decl.rates.acre ? " (ACRE)" : "") +
-        (decl.rates.vl ? " + versement libératoire " + OF.fmt(Math.round(decl.rates.vl * 1000) / 10) + " %" : "") +
+      var pct = function (r) { return OF.fmt(Math.round(r * 1000) / 10) + " %"; };
+      html += '<p class="small muted espace-note">' + (decl.mixed
+        // Activité mixte : chaque part au taux de son activité ; formation professionnelle au plus élevé des deux taux.
+        ? "Estimation : ventes " + esc(money(decl.parts[0].revenue)) + " × " + pct(decl.parts[0].rates.social + decl.parts[0].rates.cfp) +
+          " et prestations " + esc(money(decl.parts[1].revenue)) + " × " + pct(decl.parts[1].rates.social + decl.parts[1].rates.cfp) +
+          (decl.rates.acre ? " (ACRE)" : "") +
+          (decl.rates.vl ? " + versement libératoire " + pct(decl.parts[0].rates.vl) + " et " + pct(decl.parts[1].rates.vl) : "") +
+          " ; formation professionnelle au taux le plus élevé de vos deux activités"
+        : "Estimation : chiffre d'affaires encaissé de la période × " + pct(decl.rates.social + decl.rates.cfp) + (decl.rates.acre ? " (ACRE)" : "") +
+          (decl.rates.vl ? " + versement libératoire " + pct(decl.rates.vl) : "")) +
         '. Déclarez et payez sur <a href="https://www.autoentrepreneur.urssaf.fr/" rel="noopener">autoentrepreneur.urssaf.fr</a>.</p>';
     }
     view.innerHTML = html;
@@ -485,6 +506,16 @@
   function gauges(th) {
     var html = '<div class="card gauges">' + gauge("Plafond de la micro-entreprise (" + YEAR + ")", th.revenue, th.ceiling,
       th.revenue > th.ceiling ? "Plafond dépassé : au-delà de deux années de dépassement, vous sortez de la micro-entreprise." : "");
+    if (th.services) {
+      html += gauge("Part des prestations de services (" + YEAR + ")", th.services.revenue, th.services.ceiling,
+        th.services.revenue > th.services.ceiling ? "Plafond des prestations dépassé : au-delà de deux années de dépassement, vous sortez de la micro-entreprise." : "");
+    }
+    if (th.vatMixed) {
+      // Seuil de franchise propre à l'activité mixte (art. 293 B du CGI) non lu : chiffres seulement (documentation/53).
+      html += '<p class="small muted" style="margin: 6px 0 0;">Franchise de TVA en activité mixte : ' + esc(money(th.goods)) + " de ventes et " +
+        esc(money(th.services.revenue)) + " de prestations encaissées en " + YEAR + '. Vérifiez les seuils qui s\'appliquent à votre situation sur ' +
+        '<a href="https://www.impots.gouv.fr/professionnel/questions/pour-rester-micro-entrepreneur-quel-montant-de-chiffre-daffaires-ou-de" rel="noopener">impots.gouv.fr</a>.</p>';
+    }
     if (th.vat) {
       html += gauge("Seuil de la franchise de TVA", th.revenue, th.vat.base,
         th.revenue > th.vat.major ? "Seuil majoré dépassé : la TVA est due dès le jour du dépassement." :
@@ -505,7 +536,7 @@
 
   /** Vente de marchandises : registre des achats obligatoire (règle registre_achats) ; rappel tant que rien n'est saisi. */
   function purchasesReminder() {
-    if (!E.purchasesRequired(profile(), R.registre_achats)) return "";
+    if (!E.purchasesRequired(profile(), R.registre_achats, R)) return "";
     if (E.expenseRows(data.expenses, YEAR + "-01-01", YEAR + "-12-31").rows.length) return "";
     return '<p class="notice espace-noprint">Vente de marchandises : tenez votre <b>registre des achats</b>, obligatoire avec le livre des recettes. ' +
       '<a href="#/depenses">Saisir vos achats</a></p>';
@@ -644,9 +675,13 @@
   }
 
   var LINE_UNITS = [["", "Aucune"], ["hour", "Heure"], ["day", "Jour"]];
+  var LINE_KINDS = [["", "À préciser"], ["biens", "Vente"], ["services", "Service"]];
   function linesHTML(d) {
+    var mixed = d.nature === "mixte";
     return d.lines.map(function (l, i) {
-      return '<div class="line-row has-unit" data-line="' + i + '">' +
+      return '<div class="line-row has-unit' + (mixed ? " has-kind" : "") + '" data-line="' + i + '">' +
+        (mixed ? '<div class="field line-kind"><label for="ln-kind-' + i + '">Nature</label><select id="ln-kind-' + i + '" data-k="kind">' +
+          options(LINE_KINDS, l.kind || "") + "</select></div>" : "") +
         '<div class="field line-desc"><label for="ln-desc-' + i + '">Désignation</label><input type="text" id="ln-desc-' + i + '" data-k="desc" value="' + esc(l.desc) + '"></div>' +
         '<div class="field line-qty"><label for="ln-qty-' + i + '">Qté</label><input type="text" id="ln-qty-' + i + '" data-k="qty" inputmode="decimal" value="' + (isFinite(INV.amount(l.qty)) ? esc(OF.fmt(l.qty)) : "") + '"></div>' +
         '<div class="field line-unit"><label for="ln-unit-' + i + '">Unité</label><select id="ln-unit-' + i + '" data-k="unit">' + options(LINE_UNITS, l.unit || "") + "</select></div>" +
@@ -732,8 +767,9 @@
       var row = t.closest("[data-line]");
       if (row) {
         var l = d.lines[+row.getAttribute("data-line")], k = t.getAttribute("data-k");
-        if (k === "unit") { if (t.value) l.unit = t.value; else delete l.unit; } else l[k] = k === "desc" ? t.value : OF.num(t.value);
+        if (k === "unit" || k === "kind") { if (t.value) l[k] = t.value; else delete l[k]; } else l[k] = k === "desc" ? t.value : OF.num(t.value);
       } else if (t.name === "rate") d.vat.rate = Number(t.value);
+      else if (t.name === "nature") { d.nature = t.value; $("d-lines").innerHTML = linesHTML(d); }
       else if (t.name === "depositPct" || t.name === "validity" || t.name === "terms") d[t.name] = Number(OF.num(t.value)) || 0;
       else if (t.name) d[t.name] = t.value;
       refresh();
@@ -774,7 +810,8 @@
     });
     $("d-issue").addEventListener("click", function () {
       var c = client(d.clientId);
-      var res = E.issue(data.documents, d, meFromProfile(profile()), c ? clientForDoc(c) : null, profile().prefixes, now(), profile().numbering);
+      var res = E.issue(data.documents, d, meFromProfile(profile()), c ? clientForDoc(c) : null, profile().prefixes, now(), profile().numbering,
+        { lineKinds: isMixed() });
       if (res.errors.length) { showError("doc-error", res.errors.join(" ")); return; }
       if (!confirm("Émettre " + (d.type === "facture" ? "la facture" : d.type === "devis" ? "le devis" : "l'avoir") + " n° " +
         res.doc.number + " ? Il ne pourra plus être modifié.")) return;
@@ -1167,23 +1204,35 @@
     years[YEAR] = true;
     data.documents.forEach(function (d) { (d.payments || []).forEach(function (p) { years[p.date.slice(0, 4)] = true; }); });
     var year = r.params.annee && years[r.params.annee] ? r.params.annee : YEAR;
-    var rows = E.ledger(data.documents, year + "-01-01", year + "-12-31");
+    var rows = E.ledger(data.documents, year + "-01-01", year + "-12-31", profile(), R);
     var sum = rows.reduce(function (s, x) { return s + x.amount; }, 0);
+    // Activité mixte : ventes et prestations distinctes (BOFiP, BOI-BIC-DECLA-30-30, § 30).
+    var mixed = isMixed();
+    var parts = function (x) {
+      return mixed ? '<td class="num c-part" data-label="Ventes">' + esc(money(x.goods)) + '</td><td class="num c-part" data-label="Prestations">' +
+        esc(money(x.services)) + "</td>" : "";
+    };
+    var goodsSum = rows.reduce(function (s, x) { return s + (x.goods || 0); }, 0);
     view.innerHTML = '<div class="espace-head"><h2>Livre des recettes ' + esc(year) + '</h2><div class="espace-quick espace-noprint">' +
       '<button type="button" class="btn btn-ghost btn-sm" id="ledger-csv"' + (rows.length ? "" : " disabled") + ">Exporter (CSV)</button>" +
       '<button type="button" class="btn btn-ghost btn-sm" id="ledger-print"' + (rows.length ? "" : " disabled") + ">Imprimer</button></div></div>" +
       '<div class="card espace-card"><div class="espace-filters espace-noprint" role="group" aria-label="Année">' +
       Object.keys(years).sort().reverse().map(function (y) { return '<a class="tab" href="#/recettes?annee=' + y + '"' + (y === year ? ' aria-current="true"' : "") + ">" + y + "</a>"; }).join("") + "</div>" +
-      (rows.length ? '<table class="ledger"><thead><tr><th>Date</th><th>Client</th><th>Nature</th><th>Moyen</th><th>Référence</th><th class="num">Montant</th></tr></thead><tbody>' +
+      (rows.length ? '<table class="ledger"><thead><tr><th>Date</th><th>Client</th><th>Nature</th><th>Moyen</th><th>Référence</th>' +
+        (mixed ? '<th class="num">Ventes</th><th class="num">Prestations</th>' : "") + '<th class="num">Montant</th></tr></thead><tbody>' +
         E.ledgerQuarters(rows, year, TODAY, profile().startDate).map(function (q) {
           return rows.filter(function (x) { return x.date >= q.start && x.date <= q.end; }).map(function (x) {
             return '<tr><td class="c-date">' + day(x.date) + '</td><td class="c-client">' + esc(x.client) + '</td><td class="c-nature">' + esc(x.nature) +
               '</td><td class="c-method">' + esc(x.method) + '</td><td class="c-ref"><a href="#/documents/' + esc(x.docId) + '">' + esc(x.ref) +
-              '</a></td><td class="num">' + esc(money(x.amount)) + "</td></tr>";
-          }).join("") + '<tr class="ledger-subtotal"><td colspan="5">Total du ' + esc(q.label) + (q.open ? " (en cours)" : "") + '</td><td class="num">' + esc(money(q.total)) + "</td></tr>";
-        }).join("") + '</tbody><tfoot><tr><td colspan="5">Total encaissé en ' + esc(year) + '</td><td class="num">' + esc(money(sum)) + "</td></tr></tfoot></table>"
+              '</a></td>' + parts(x) + '<td class="num">' + esc(money(x.amount)) + "</td></tr>";
+          }).join("") + '<tr class="ledger-subtotal"><td colspan="5">Total du ' + esc(q.label) + (q.open ? " (en cours)" : "") + "</td>" + parts(q) +
+            '<td class="num">' + esc(money(q.total)) + "</td></tr>";
+        }).join("") + '</tbody><tfoot><tr><td colspan="5">Total encaissé en ' + esc(year) + "</td>" +
+          parts({ goods: Math.round(goodsSum * 100) / 100, services: Math.round((sum - goodsSum) * 100) / 100 }) +
+          '<td class="num">' + esc(money(sum)) + "</td></tr></tfoot></table>"
         : '<p class="muted">Aucun encaissement en ' + esc(year) + ". Les encaissements enregistrés sur vos factures apparaissent ici automatiquement.</p>") +
       '<p class="small muted">Tenu par date d\'encaissement : date, client, nature, montant, moyen de paiement et référence de la facture ; totalisé à la fin de chaque trimestre et de l\'année. ' +
+      (mixed ? "Activité mixte : ventes et prestations sont distinguées ; l'encaissement d'une facture mixte est réparti au prorata de ses lignes hors taxes. " : "") +
       "Conservez-le avec vos factures pendant " + R.conservation_pieces.commerce_annees + " ans.</p></div>";
     if (!rows.length) return;
     $("ledger-csv").addEventListener("click", function () {
@@ -1201,7 +1250,7 @@
   function expense(id) { return data.expenses.filter(function (e) { return e.id === id; })[0] || null; }
 
   function viewExpenses(r) {
-    var required = E.purchasesRequired(profile(), R.registre_achats);
+    var required = E.purchasesRequired(profile(), R.registre_achats, R);
     var years = {};
     years[YEAR] = true;
     data.expenses.forEach(function (e) { years[e.date.slice(0, 4)] = true; });
@@ -1242,7 +1291,7 @@
     var x = isNew ? { date: TODAY, method: "carte" } : expense(r.id);
     if (!x) { view.innerHTML = '<div class="espace-head"><h2>Dépense introuvable</h2></div><p><a href="#/depenses">Retour aux dépenses</a></p>'; return; }
     var methods = Object.keys(E.METHODS).map(function (k) { return [k, E.METHODS[k]]; });
-    var required = E.purchasesRequired(profile(), R.registre_achats);
+    var required = E.purchasesRequired(profile(), R.registre_achats, R);
     view.innerHTML = '<div class="espace-head"><h2>' + (isNew ? (required ? "Nouvel achat" : "Nouvelle dépense") : esc(x.supplier)) + "</h2></div>" +
       '<form class="card espace-card" id="expense-form" novalidate><div class="fields">' +
       field("date", "Date", x.date, { type: "date", half: true, required: true }) +

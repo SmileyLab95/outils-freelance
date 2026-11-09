@@ -4255,6 +4255,71 @@ const tests = {
     await page.waitForSelector(".kpis");
     await go("#/tresorerie");
     check(!(await page.$(".charges-list")) && (await text("#espace-view")).includes("Loyer, logiciels, assurance"), "Trésorerie : sauvegarde antérieure au module acceptée");
+
+    // Activité mixte (documentation/53-activite-mixte.md) : seconde activité, facture « biens et services » avec la nature
+    // de chaque ligne et ses sous-totaux, encaissement partiel réparti, livre des recettes à deux colonnes, déclaration
+    // par activité, jauges et franchise de TVA sans seuil.
+    await go("#/reglages");
+    const second = await page.$$eval("#ep-activity2 option", (o) => o.map((x) => x.textContent));
+    check(JSON.stringify(second) === JSON.stringify(["Aucune", "Vente de marchandises (BIC)"]), "Activité mixte : seconde activité proposée selon l'activité (libérale : la vente)");
+    await page.selectOption("#ep-activity", "vente");
+    const second2 = await page.$$eval("#ep-activity2 option", (o) => o.map((x) => x.value));
+    check(second2.join() === ",liberal_bnc,cipav,services_bic,artisan", "Activité mixte : vente, avec une activité de services au choix");
+    await page.selectOption("#ep-activity", "liberal_bnc");
+    await page.selectOption("#ep-activity2", "vente");
+    await page.click("#profile-form button[type=submit]");
+    await page.waitForTimeout(300);
+    check((await store()).profile.activity2 === "vente", "Activité mixte : profil enregistré (libéral et vente)");
+    await go("#/documents/nouveau?type=facture");
+    await page.selectOption("#d-client", { label: "Atelier Lumen" });
+    await page.fill("#d-date", "2026-10-20");
+    check(!(await page.$("#ln-kind-0")), "Activité mixte : pas de nature de ligne pour une facture de services");
+    await page.selectOption("#d-nature", "mixte");
+    await page.waitForSelector("#ln-kind-0");
+    await page.selectOption("#ln-kind-0", "biens");
+    await page.fill("#ln-desc-0", "Lampe d'atelier");
+    await page.fill("#ln-price-0", "300");
+    await page.click("#d-add-line");
+    await page.fill("#ln-desc-1", "Pose et réglage");
+    await page.fill("#ln-price-1", "700");
+    await page.waitForTimeout(600);
+    await page.click("#d-issue");
+    check((await text("#doc-error")).includes("Indiquez si la ligne 2 est une vente ou une prestation"), "Activité mixte : nature de chaque ligne exigée à l'émission");
+    await page.selectOption("#ln-kind-1", "services");
+    await page.waitForTimeout(600);
+    const mixedPreview = await text("#d-preview");
+    check(mixedPreview.includes("Vente : Lampe d'atelier") && mixedPreview.includes("Service : Pose et réglage") &&
+      mixedPreview.includes("dont ventes 300,00 €") && mixedPreview.includes("dont prestations de services 700,00 €"),
+      "Activité mixte : ventes et prestations distinctes sur la facture (BOFiP)");
+    await accessible(page, "Espace : facture mixte en cours de saisie");
+    await shot("facture-mixte");
+    await page.click("#d-issue");
+    await page.waitForFunction(() => /Facture/.test(document.querySelector("#espace-view h2").textContent) && !document.querySelector("#doc-form"));
+    await page.fill("#pay-date", "2026-10-20");
+    await page.fill("#pay-amount", "500");
+    await page.click("#pay-form button[type=submit]");
+    await page.waitForTimeout(250);
+    await go("#/recettes");
+    const mixedLedger = await text(".ledger");
+    const heads = await page.$$eval(".ledger thead th", (t) => t.map((x) => x.textContent));
+    check(heads.join("|") === "Date|Client|Nature|Moyen|Référence|Ventes|Prestations|Montant" && mixedLedger.includes("150,00 € 350,00 € 500,00 €"),
+      "Activité mixte : livre des recettes, encaissement de 500 € réparti en 150 € de ventes et 350 € de prestations");
+    check((await text("#espace-view")).includes("l'encaissement d'une facture mixte est réparti au prorata de ses lignes hors taxes"), "Activité mixte : répartition expliquée");
+    await accessible(page, "Espace : livre des recettes (activité mixte)");
+    await shot("recettes-mixte");
+    await go("#/");
+    const mixedNote = await text(".espace-note");
+    check(/^Estimation : ventes .* × 12,5 % et prestations .* × 25,8 %/.test(mixedNote) && mixedNote.includes("formation professionnelle au taux le plus élevé de vos deux activités"),
+      "Activité mixte : déclaration estimée au taux de chaque activité");
+    const mixedGauges = await text(".gauges");
+    check(mixedGauges.includes("Part des prestations de services (2026)") && mixedGauges.includes("/ 203 100,00 €") && mixedGauges.includes("/ 83 600,00 €") &&
+      mixedGauges.includes("Franchise de TVA en activité mixte : 150,00 € de ventes") && !mixedGauges.includes("Seuil de la franchise de TVA"),
+      "Activité mixte : plafond global et plafond des prestations ; franchise de TVA sans seuil, renvoi à impots.gouv.fr");
+    await accessible(page, "Espace : tableau de bord (activité mixte)");
+    await page.evaluate(async () => { const d = await window.EspaceStore.load(); d.profile.activity2 = ""; await window.EspaceStore.save(d); });
+    await page.reload({ waitUntil: "networkidle" });
+    await go("#/recettes");
+    check(!(await text(".ledger thead")).includes("Ventes"), "Activité mixte : retour à une activité, une seule colonne");
     await go("#/");
   },
   async "fr/conversion-devises/"(page) {

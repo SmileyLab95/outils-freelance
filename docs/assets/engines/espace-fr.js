@@ -126,7 +126,7 @@
   }
 
   /** Contrôles avant émission ; renvoie la liste des erreurs (vide si le document peut être émis). */
-  function checkIssue(documents, doc, client) {
+  function checkIssue(documents, doc, client, opts) {
     var errors = [];
     if (!/^\d{4}-\d{2}-\d{2}$/.test(doc.date || "")) errors.push("Indiquez la date du document.");
     if (!client || !String(client.name || "").trim()) errors.push("Choisissez un client.");
@@ -142,6 +142,14 @@
       errors.push((incomplete.length > 1 ? "Complétez les lignes " + incomplete.slice(0, -1).join(", ") + " et " + incomplete[incomplete.length - 1]
         : "Complétez la ligne " + incomplete[0]) + " (désignation, quantité et prix unitaire hors taxes) ou supprimez-" + (incomplete.length > 1 ? "les." : "la."));
     } else if (total(doc) <= 0) errors.push("Le montant total doit être positif.");
+    else if (opts && opts.lineKinds && doc.nature === "mixte") {
+      // Activité mixte : ventes et prestations distinctes sur la facture (BOFiP, BOI-BIC-DECLA-30-30, § 30).
+      var unknown = started.filter(function (n) { return !has(INV.LINE_KINDS, doc.lines[n - 1].kind); });
+      if (unknown.length) {
+        errors.push("Indiquez si " + (unknown.length > 1 ? "les lignes " + unknown.slice(0, -1).join(", ") + " et " + unknown[unknown.length - 1] + " sont des ventes ou des prestations"
+          : "la ligne " + unknown[0] + " est une vente ou une prestation") + " : en activité mixte, la facture les distingue.");
+      }
+    }
     else if (doc.type === "avoir" && doc.originId) {
       var origin = documents.filter(function (d) { return d.id === doc.originId; })[0];
       if (origin && total(doc) > total(origin) - credited(documents, origin) + 0.005) {
@@ -158,8 +166,8 @@
   }
 
   /** Émission : numéro, statut, coordonnées figées. Renvoie un nouveau document (l'original n'est pas modifié). */
-  function issue(documents, doc, me, client, prefixes, now, numbering) {
-    var errors = checkIssue(documents, doc, client);
+  function issue(documents, doc, me, client, prefixes, now, numbering, opts) {
+    var errors = checkIssue(documents, doc, client, opts);
     if (errors.length) return { errors: errors };
     var issued = JSON.parse(JSON.stringify(doc));
     issued.number = nextNumber(documents, doc.type, String(doc.date).slice(0, 4), prefixes, numbering);
@@ -211,17 +219,47 @@
     return more > 0 ? n + " (+ " + more + ")" : n;
   }
 
-  /** Encaissements (factures) et remboursements (avoirs, en négatif), par date, entre deux dates incluses. */
-  function ledger(documents, from, to) {
-    var rows = [];
+  // ----- Activité mixte (documentation/53-activite-mixte.md) ----------------------------------------------
+
+  /** Activités d'un profil en activité mixte : la vente et une activité de services ; null sinon. */
+  function mixedActivities(profile, rules) {
+    var a = profile && profile.activity, b = profile && profile.activity2, list = rules && rules.micro_activities;
+    if (!list || !a || !b || a === b || !has(list, a) || !has(list, b)) return null;
+    if (a === "vente") return { vente: a, services: b };
+    if (b === "vente") return { vente: b, services: a };
+    return null;
+  }
+
+  /**
+   * Part HT des ventes d'un document : 1 (biens), 0 (services), part des lignes « biens » dans le total HT d'un document
+   * mixte (une ligne sans nature compte avec les prestations, au taux de cotisations le plus élevé).
+   */
+  function goodsShare(doc) {
+    if (doc.nature === "biens") return 1;
+    if (doc.nature !== "mixte") return 0;
+    var t = INV.compute(doc);
+    return t.ht > 0 ? Math.min(1, t.split.goods / t.ht) : 0;
+  }
+
+  /** Part des ventes d'un montant encaissé ou remboursé (arrondie au centime ; le reste va aux prestations). */
+  function goodsPart(doc, amount) { return round2(amount * goodsShare(doc)); }
+
+  /**
+   * Encaissements (factures) et remboursements (avoirs, en négatif), par date, entre deux dates incluses. Profil en
+   * activité mixte (profile et rules donnés) : chaque ligne porte aussi sa part de ventes (goods) et de prestations.
+   */
+  function ledger(documents, from, to, profile, rules) {
+    var rows = [], split = !!mixedActivities(profile, rules);
     documents.forEach(function (doc) {
       if (doc.status === "draft" || (doc.type !== "facture" && doc.type !== "avoir")) return;
       var who = (doc.snapshot && doc.snapshot.client && doc.snapshot.client.name) || "";
       payments(doc).forEach(function (p) {
         if ((from && p.date < from) || (to && p.date > to)) return;
-        rows.push({ date: p.date, client: who, nature: nature(doc), method: METHODS[p.method] || p.method,
+        var row = { date: p.date, client: who, nature: nature(doc), method: METHODS[p.method] || p.method,
                     amount: doc.type === "avoir" ? -round2(Number(p.amount)) : round2(Number(p.amount)),
-                    ref: doc.number, docId: doc.id, note: p.note || "" });
+                    ref: doc.number, docId: doc.id, note: p.note || "" };
+        if (split) { row.goods = goodsPart(doc, row.amount); row.services = round2(row.amount - row.goods); }
+        rows.push(row);
       });
     });
     return rows.sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : (a.ref < b.ref ? -1 : 1); });
@@ -239,8 +277,13 @@
       var list = (rows || []).filter(function (r) { return r.date >= p.start && r.date <= p.end; });
       var started = today >= p.start && !(startDate && startDate > p.end);
       if (!list.length && !started) continue;
-      out.push({ key: p.key, label: p.label, start: p.start, end: p.end, count: list.length, open: today >= p.start && today <= p.end,
-                 total: round2(list.reduce(function (s, r) { return s + r.amount; }, 0)) });
+      var q = { key: p.key, label: p.label, start: p.start, end: p.end, count: list.length, open: today >= p.start && today <= p.end,
+                total: round2(list.reduce(function (s, r) { return s + r.amount; }, 0)) };
+      if ((rows || []).some(function (r) { return r.goods !== undefined; })) {
+        q.goods = round2(list.reduce(function (s, r) { return s + (r.goods || 0); }, 0));
+        q.services = round2(q.total - q.goods);
+      }
+      out.push(q);
     }
     return out;
   }
@@ -276,13 +319,38 @@
     return iso(y, endMonth, lastDay(y, endMonth));
   }
 
-  /** Taux de cotisations d'une période (ACRE si la période se termine avant la fin de l'ACRE). */
-  function rates(profile, rules, periodEnd) {
-    var a = rules.micro_activities[profile.activity];
+  /**
+   * Taux de cotisations d'une période (ACRE si la période se termine avant la fin de l'ACRE), pour l'activité du profil
+   * ou pour l'activité donnée. Activité mixte : formation professionnelle au plus élevé des taux des deux activités
+   * (aucune règle publiée pour l'activité mixte : lecture la plus prudente, documentation/53).
+   */
+  function rates(profile, rules, periodEnd, activity) {
+    var a = rules.micro_activities[activity || profile.activity];
     if (!a) return null;
     var acre = Number(profile.acre) || 0;
     var inAcre = acre && periodEnd <= acreEnd(profile.startDate);
-    return { social: inAcre ? a["acre_" + acre] : a.cotisations, cfp: a.cfp, vl: profile.vl ? a.versement_liberatoire : 0, acre: !!inAcre };
+    var m = mixedActivities(profile, rules);
+    var cfp = m ? Math.max(rules.micro_activities[m.vente].cfp, rules.micro_activities[m.services].cfp) : a.cfp;
+    return { social: inAcre ? a["acre_" + acre] : a.cotisations, cfp: cfp, vl: profile.vl ? a.versement_liberatoire : 0, acre: !!inAcre };
+  }
+
+  /** Chiffre d'affaires encaissé d'une période, par activité du profil : [{ activity, kind, revenue }]. */
+  function revenueParts(documents, profile, rules, from, to) {
+    var m = mixedActivities(profile, rules);
+    if (!m) return [{ activity: profile.activity, kind: "", revenue: cashed(documents, from, to) }];
+    var rows = ledger(documents, from, to, profile, rules);
+    var goods = round2(rows.reduce(function (s, r) { return s + r.goods; }, 0));
+    var services = round2(rows.reduce(function (s, r) { return s + r.services; }, 0));
+    return [{ activity: m.vente, kind: "biens", revenue: goods }, { activity: m.services, kind: "services", revenue: services }];
+  }
+
+  /** Cotisations (et versement libératoire) d'un chiffre d'affaires réparti par activité, au taux de chaque activité. */
+  function partsDue(parts, profile, rules, periodEnd) {
+    return parts.map(function (x) {
+      var r = rates(profile, rules, periodEnd, x.activity);
+      var social = round2(x.revenue * (r.social + r.cfp)), vl = round2(x.revenue * r.vl);
+      return { activity: x.activity, kind: x.kind, revenue: x.revenue, rates: r, social: social, vl: vl, total: round2(social + vl) };
+    });
   }
 
   /**
@@ -297,19 +365,29 @@
     }).sort(function (a, b) { return a.date < b.date ? -1 : 1; })[0];
     if (!ev) return null;
     var p = period(ev.period);
-    var revenue = cashed(documents, p.start, p.end);
-    var r = rates(profile, rules, p.end);
-    var social = round2(revenue * (r.social + r.cfp));
-    var vl = round2(revenue * r.vl);
-    return { period: p, due: ev.date, revenue: revenue, rates: r, social: social, vl: vl, total: round2(social + vl),
-             open: today <= p.end };
+    var parts = partsDue(revenueParts(documents, profile, rules, p.start, p.end), profile, rules, p.end);
+    var sum = function (k) { return round2(parts.reduce(function (s, x) { return s + x[k]; }, 0)); };
+    var social = sum("social"), vl = sum("vl");
+    return { period: p, due: ev.date, revenue: sum("revenue"), rates: rates(profile, rules, p.end), social: social, vl: vl, total: round2(social + vl),
+             open: today <= p.end, parts: parts, mixed: parts.length > 1 };
   }
 
-  /** Plafond de la micro-entreprise et seuil de la franchise de TVA, sur l'année civile. */
+  /**
+   * Plafond de la micro-entreprise et seuil de la franchise de TVA, sur l'année civile. Activité mixte : plafond global
+   * de la vente, plafond des services sur la part des prestations ; pas de seuil de TVA (règle de l'art. 293 B du CGI
+   * non lue, documentation/53), seulement l'encaissé des ventes et des prestations.
+   */
   function thresholds(documents, profile, rules, year) {
     var a = rules.micro_activities[profile.activity];
     var revenue = cashed(documents, year + "-01-01", year + "-12-31");
     if (!a) return { revenue: revenue };
+    var m = mixedActivities(profile, rules);
+    if (m) {
+      var parts = revenueParts(documents, profile, rules, year + "-01-01", year + "-12-31");
+      return { revenue: revenue, ceiling: rules.micro_activities[m.vente].plafond_ca, mixed: true,
+               goods: parts[0].revenue, services: { revenue: parts[1].revenue, ceiling: rules.micro_activities[m.services].plafond_ca },
+               vat: null, vatMixed: profile.vatRegime === "franchise" };
+    }
     return { revenue: revenue, ceiling: a.plafond_ca, vat: profile.vatRegime === "franchise" ? { base: a.tva_seuil, major: a.tva_seuil_majore } : null };
   }
 
@@ -490,8 +568,10 @@
   // ----- Dépenses et registre des achats (documentation/36-depenses-et-registre-des-achats.md) ------------
 
   /** Le registre des achats est obligatoire pour l'activité du profil (règle registre_achats). */
-  function purchasesRequired(profile, rule) {
-    return !!(profile && rule && (rule.activities || []).indexOf(profile.activity) > -1);
+  function purchasesRequired(profile, rule, rules) {
+    if (!profile || !rule) return false;
+    var list = rule.activities || [], m = rules ? mixedActivities(profile, rules) : null;
+    return list.indexOf(profile.activity) > -1 || !!(m && list.indexOf(m.vente) > -1);
   }
 
   /**
@@ -916,8 +996,9 @@
       urssaf.computed = true;
       declarations(p, input.events).forEach(function (d) {
         if (d.due < today || d.period.start > today) return;
-        var cash = cashed(docs, d.period.start, d.period.end);
-        var amount = round2(cash * totalRate(p, input.rules, d.period.end));
+        var parts = revenueParts(docs, p, input.rules, d.period.start, d.period.end);
+        var cash = round2(parts.reduce(function (s, x) { return s + x.revenue; }, 0));
+        var amount = round2(partsDue(parts, p, input.rules, d.period.end).reduce(function (s, x) { return s + x.total; }, 0));
         urssaf.periods.push({ period: d.period, due: d.due, cashed: cash, amount: amount });
         urssaf.total = round2(urssaf.total + amount);
       });
@@ -963,9 +1044,16 @@
     if (totalRate(p, input.rules, today) !== null) {
       declarations(p, input.events).forEach(function (d) {
         if (d.due < today || d.due > until) return;
-        var expected = receipts.filter(function (r) { return r.date >= d.period.start && r.date <= d.period.end; })
-          .reduce(function (s, r) { return s + r.amount; }, 0);
-        var amount = round2((cashed(docs, d.period.start, d.period.end) + expected) * totalRate(p, input.rules, d.period.end));
+        var inPeriod = receipts.filter(function (r) { return r.date >= d.period.start && r.date <= d.period.end; });
+        var parts = revenueParts(docs, p, input.rules, d.period.start, d.period.end).map(function (x) {
+          // Encaissements attendus ajoutés à chaque activité (facture mixte : au prorata de ses lignes, comme un encaissement réel).
+          var add = inPeriod.reduce(function (s, r) {
+            var g = goodsPart(r.doc, r.amount);
+            return s + (x.kind === "biens" ? g : x.kind === "services" ? r.amount - g : r.amount);
+          }, 0);
+          return { activity: x.activity, kind: x.kind, revenue: round2(x.revenue + add) };
+        });
+        var amount = round2(partsDue(parts, p, input.rules, d.period.end).reduce(function (s, x) { return s + x.total; }, 0));
         if (amount) items.push({ date: d.due, kind: "urssaf", amount: -amount, label: "Cotisations Urssaf " + (d.period.key.indexOf("T") > -1 ? "du " : "de ") + d.period.label });
       });
     }
@@ -1009,9 +1097,13 @@
 
   function ledgerCSV(rows) {
     var q = function (v) { return '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"'; };
-    var lines = ["Date;Client;Nature;Montant;Moyen de paiement;Référence"];
+    var eur = function (n) { return String(n.toFixed(2)).replace(".", ","); };
+    // Activité mixte : ventes et prestations dans deux colonnes (BOFiP, BOI-BIC-DECLA-30-30, § 30).
+    var split = rows.some(function (r) { return r.goods !== undefined; });
+    var lines = [split ? "Date;Client;Nature;Ventes;Prestations;Montant;Moyen de paiement;Référence" : "Date;Client;Nature;Montant;Moyen de paiement;Référence"];
     rows.forEach(function (r) {
-      lines.push([r.date.split("-").reverse().join("/"), q(r.client), q(r.nature), String(r.amount.toFixed(2)).replace(".", ","), q(r.method), q(r.ref)].join(";"));
+      lines.push([r.date.split("-").reverse().join("/"), q(r.client), q(r.nature)].concat(split ? [eur(r.goods), eur(r.services)] : [])
+        .concat([eur(r.amount), q(r.method), q(r.ref)]).join(";"));
     });
     return lines.join("\r\n");
   }
@@ -1022,6 +1114,7 @@
            series: series, seriesPrefix: seriesPrefix, nextNumber: nextNumber, continuation: continuation,
            checkIssue: checkIssue, issue: issue, state: state, email: email, fromGenerator: fromGenerator,
            checkPayment: checkPayment, ledger: ledger, ledgerQuarters: ledgerQuarters, cashed: cashed, period: period, acreEnd: acreEnd, rates: rates,
+           mixedActivities: mixedActivities, goodsShare: goodsShare, revenueParts: revenueParts,
            nextDeclaration: nextDeclaration, thresholds: thresholds, clientTotals: clientTotals,
            invoiceFromQuote: invoiceFromQuote, creditFromInvoice: creditFromInvoice, duplicate: duplicate, ledgerCSV: ledgerCSV,
            purchasesRequired: purchasesRequired, expenseRows: expenseRows, checkExpense: checkExpense, expensesCSV: expensesCSV,

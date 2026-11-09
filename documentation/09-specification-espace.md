@@ -63,6 +63,7 @@ Espace { schema: 1, profile, clients[], documents[], settings, savedAt }
 
 profile   { name, status, address, siret, vat, email, phone, iban, bic, logo,
             activity: "liberal_bnc" | "cipav" | "services_bic" | "artisan" | "vente" | "real",
+            activity2 (activité mixte, documentation/53) : "" | "vente" | "liberal_bnc" | "cipav" | "services_bic" | "artisan",
             vatRegime: "franchise" | "simplified" | "normal", vatRate,
             periodicity: "monthly" | "quarterly", vl: bool, acre: 0 | 25 | 50, startDate,
             terms, penalty, prefixes: { facture, devis, avoir } }
@@ -71,7 +72,7 @@ client    { id, name, address, siren, vat, email, pro: bool, place: "fr" | "eu" 
             delivery, notes, archived: bool, createdAt, updatedAt }
 
 document  { id, type: "facture" | "devis" | "avoir", status, number, date, serviceDate, terms, validity,
-            depositPct, nature, clientId, lines[{ desc, qty, price }],
+            depositPct, nature, clientId, lines[{ desc, qty, price, unit, kind ("biens" | "services", document mixte) }],
             vat { franchise, rate, place, debits }, paid, penalty, notes,
             snapshot { me, client }   (figé à l'émission),
             payments[{ id, date, amount, method, note }],

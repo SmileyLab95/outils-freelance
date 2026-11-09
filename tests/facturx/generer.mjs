@@ -46,6 +46,10 @@ add("tva-20-debits", docs, base({ vat: { franchise: false, rate: 20, place: "fr"
   lines: [{ desc: "Conseil", qty: 2.5, price: 450 }, { desc: "Licence & support <annuel>", qty: 1, price: 99.99 }], notes: "Merci pour votre confiance !" }),
   clients.fr, { vat: "FR40123456789" });
 docs = [];
+// Activité mixte (documentation/53) : nature de chaque ligne et sous-totaux des ventes et des prestations dans le PDF.
+add("activite-mixte", docs, base({ nature: "mixte", lines: [{ desc: "Lampe d'atelier", qty: 2, price: 150, kind: "biens" },
+  { desc: "Pose et réglage", qty: 1, price: 700, kind: "services" }] }), clients.fr);
+docs = [];
 add("tva-5-5-acompte", docs, base({ vat: { franchise: false, rate: 5.5, place: "fr" }, nature: "biens", paid: 200, terms: 0,
   lines: [{ desc: "Livres", qty: 3, price: 33.333333 }] }), clients.fr, { vat: "FR40123456789", iban: "" });
 docs = [];

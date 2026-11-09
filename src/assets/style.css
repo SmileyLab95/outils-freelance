@@ -338,10 +338,14 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--b
 .line-row.has-unit .line-unit { grid-area: unit; }
 .line-row.has-unit .line-price { grid-area: price; }
 .line-row.has-unit .line-remove { grid-area: remove; }
+/* Document « biens et services » (activité mixte) : nature de la ligne (vente ou service) avant la désignation. */
+.line-row.has-unit.has-kind { grid-template-columns: 112px 104px minmax(0, 1fr) 34px; grid-template-areas: "kind desc desc remove" "qty unit price price"; }
+.line-row.has-kind .line-kind { grid-area: kind; }
 @media (max-width: 520px) {
   .line-row { grid-template-columns: 64px minmax(0, 1fr) 34px; }
   .line-row .line-desc { grid-column: 1 / -1; }
   .line-row.has-unit { grid-template-columns: 64px 92px minmax(0, 1fr) 34px; }
+  .line-row.has-unit.has-kind { grid-template-columns: 64px 92px minmax(0, 1fr) 34px; grid-template-areas: "desc desc desc remove" "kind kind kind kind" "qty unit price price"; }
 }
 /* Proposition commerciale : étapes (intitulé, durée, prix) et options (intitulé, prix). */
 .pr-phases { grid-template-columns: minmax(0, 1fr) 110px 110px 34px; }
@@ -849,6 +853,10 @@ a.country-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg)
   .ledger tfoot tr { border-bottom: 0; }
   .ledger tr.ledger-subtotal { padding: 10px 8px; }
   .ledger tfoot td[colspan] { grid-column: 1; }
+  /* Activité mixte : ventes et prestations sous la ligne, le montant reste à droite. */
+  .ledger tbody .c-part, .ledger tfoot .c-part { grid-column: 1 / -1; grid-row: auto; font-weight: 500; font-size: .82rem; color: var(--muted); text-align: left; }
+  .ledger .c-part::before { content: attr(data-label) " : "; }
+  .ledger tfoot .num:not(.c-part) { grid-column: 2; grid-row: 1; }
 }
 .espace-editor .form-card h3 { margin-top: 18px; }
 @media (max-width: 1060px) {

@@ -1554,7 +1554,8 @@
         ],
         "ordre": "chronologique, par date d'encaissement",
         "totaux": "à la fin de chaque trimestre et de l'année",
-        "registre_achats": "obligatoire en plus pour la vente de marchandises et la fourniture de logement"
+        "registre_achats": "obligatoire en plus pour la vente de marchandises et la fourniture de logement",
+        "activite_mixte": "ventes et prestations de services distinctes sur le livre-journal et sur les factures"
       },
       "unit": "object",
       "label": "Livre des recettes du micro-entrepreneur",
@@ -1568,7 +1569,7 @@
       ],
       "confidence": "medium",
       "verified_on": "2026-10-24",
-      "note": "Livre-journal présentant le détail des recettes professionnelles, tenu au jour le jour. BOFiP lu en entier le 24/10/2026 (outil « Lire une source officielle ») : recettes inscrites suivant leur date d'encaissement, règlements en espèces distingués des autres modes, références des pièces justificatives, tenue chronologique, totaux à la fin du trimestre et de l'année ; en cas d'activité mixte, ventes et prestations de services distinctes. Client et nature de la prestation : recoupés sur des guides professionnels (L'Expert-Comptable.com, Le Coin des Entrepreneurs), d'où la confiance moyenne."
+      "note": "Livre-journal présentant le détail des recettes professionnelles, tenu au jour le jour. BOFiP lu en entier le 24/10/2026 (outil « Lire une source officielle ») : recettes inscrites suivant leur date d'encaissement, règlements en espèces distingués des autres modes, références des pièces justificatives, tenue chronologique, totaux à la fin du trimestre et de l'année ; en cas d'activité mixte, ventes et prestations de services distinctes. Client et nature de la prestation : recoupés sur des guides professionnels (L'Expert-Comptable.com, Le Coin des Entrepreneurs), d'où la confiance moyenne. Relu le 09/11/2026 (BOFiP, BOI-BIC-DECLA-30-30, § 30) : « en cas d'activité mixte, les ventes et les prestations de services doivent apparaître distinctement sur le livre-journal présentant le détail des recettes et sur les factures » (Espace : documentation/53-activite-mixte.md)."
     },
     "compte_dedie_micro": {
       "value": {

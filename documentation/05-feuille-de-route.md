@@ -9,7 +9,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 
 ## Où en est-on ?
 
-*Mis à jour le 09/11/2026 (soir).*
+*Mis à jour le 09/11/2026 (fin de soirée).*
 
 - **Priorité (décision D10)** : le site et la plateforme d'abord ; noms de domaine, Gumroad et affiliation à la fin.
   Règle de qualité maximale pour tout produit ou service (D11, charte dans la [méthode](04-methode-de-travail.md#charte-qualité)).
@@ -351,6 +351,14 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   divisés par 4, toute la cotisation), soit 8 États ; soir : Minnesota complété par sa loi (268B.01 : indépendant
   résident ayant gagné au moins 5,3 % du salaire annuel moyen de l'État, base de prime ; 268B.14 : taux ajusté chaque
   année avant le 31 juillet, donc pas d'estimation tant que le taux publié n'est pas lu).
+- **Activité mixte dans l'Espace (09/11/2026, soir)** : un micro-entrepreneur qui vend des marchandises et rend des
+  services déclare une seconde activité ; nature « vente » ou « service » de chaque ligne d'une facture « biens et
+  services », sous-totaux sur la facture et dans le PDF ; encaissement d'une facture mixte réparti au prorata HT ; livre
+  des recettes à deux colonnes (export compris) ; déclaration Urssaf, versement libératoire, ACRE et trésorerie au taux
+  de chaque activité (CFP au taux le plus élevé, faute de règle publiée) ; plafond global (203 100 €) et des prestations
+  (83 600 €) ; franchise de TVA en activité mixte non jaugée (article 293 B du CGI non lu : chiffres seulement et renvoi
+  à impots.gouv.fr) ; registre des achats demandé dès qu'une activité est la vente. Règles lues : BOFiP
+  BOI-BIC-DECLA-30-30 § 30, F23267, F37353, F23459, impots.gouv.fr ([53](53-activite-mixte.md), D59).
 - **Prochaines actions de Claude** : refonte, suite ([31](31-vision-plateforme.md) § 5) : les quatre modules du compte
   gratuit sont faits (étape 5) ; étape 6, outils restants (CGV : faites dans les quatre pays ;
   lois des autres provinces sur la protection du consommateur à lire pour les détailler ; le règlement albertain sur les
@@ -376,8 +384,9 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   (`late_payment_reference_rates` : intérêt légal du calculateur britannique et des *terms and conditions* en 2027) ;
   texte de l'article R123-237 du Code de commerce à relire dès que Légifrance est lisible (mentions sur les
   correspondances, signature d'email) ;
-  activité mixte de l'Espace à spécifier (le profil n'a qu'une activité : deux plafonds, déclaration et livre des
-  recettes distinguant ventes et prestations, BOFiP BOI-BIC-DECLA-30-30) ; questions ouvertes de `data/rules/` à relire
+  activité mixte, suite ([53](53-activite-mixte.md) § 7) : seuil de franchise de TVA en activité mixte dès que
+  l'article 293 B du CGI est lisible, natures de lignes dans le générateur de facture public, abattements par activité
+  (minimum 610 €) dans le calculateur « Combien mettre de côté » ; questions ouvertes de `data/rules/` à relire
   avec l'outil de lecture des sources (ACRE) ; puis besoins P3 restants
   ([02](02-besoins-clients.md) : sous-traitance) ; loi californienne sur les freelances (SB 988) et
   loi de l'Illinois (820 ILCS 193) à relire dès que leurs sites officiels sont lisibles par l'outil (refus le

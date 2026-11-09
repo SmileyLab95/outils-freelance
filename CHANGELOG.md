@@ -1,5 +1,20 @@
 # Journal des modifications
 
+## 2026-11-09 (fin de soirée) — Espace : activité mixte (ventes et prestations)
+
+- Un micro-entrepreneur qui **vend des marchandises et rend des services** peut déclarer une seconde activité dans ses
+  réglages. Ses factures « biens et services » indiquent la nature de chaque ligne (vente ou service) et le sous-total
+  de chacune, comme le demande le BOFiP ; l'émission est refusée tant qu'une ligne n'a pas de nature.
+- Le **livre des recettes** distingue ventes et prestations (deux colonnes, totaux trimestriels et annuels, export
+  CSV) ; l'encaissement d'une facture mixte est réparti au prorata de ses lignes hors taxes.
+- **Déclaration Urssaf, versement libératoire, ACRE et trésorerie** : chaque part au taux de son activité ; formation
+  professionnelle au taux le plus élevé des deux activités, faute de règle publiée pour l'activité mixte.
+- **Plafonds** : chiffre d'affaires global (203 100 €) et part des prestations (83 600 €). La franchise de TVA en
+  activité mixte n'est pas jaugée tant que sa règle (article 293 B du CGI) n'a pas pu être lue : l'Espace affiche les
+  montants et renvoie vers impots.gouv.fr.
+- Spécification : documentation/53 ; décision D59. 10 tests unitaires (21 erreurs réintroduites, toutes détectées),
+  parcours navigateur complété, accessibilité contrôlée, captures relues sur ordinateur et mobile.
+
 ## 2026-11-09 (soir) — Congés payés des indépendants : Minnesota complété
 
 - Minnesota, d'après sa loi (Minnesota Statutes 268B.01 et 268B.14) : l'outil dit désormais qui est un indépendant au

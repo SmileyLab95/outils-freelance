@@ -19,6 +19,8 @@
   "use strict";
 
   var NATURES = { services: "Prestation de services", biens: "Livraison de biens", mixte: "Biens et services" };
+  /** Nature d'une ligne d'un document « biens et services » (activité mixte : documentation/53-activite-mixte.md). */
+  var LINE_KINDS = { biens: "Vente", services: "Service" };
   /** Mention manuscrite demandée au client pour accepter un devis (reprise dans l'email d'envoi de l'Espace). */
   var QUOTE_ACCEPTANCE = "Devis reçu avant l'exécution des travaux, bon pour accord";
   var TITLES = { facture: "FACTURE", devis: "DEVIS", avoir: "AVOIR" };
@@ -52,7 +54,8 @@
       // Montant de ligne arrondi au centime : la facture lisible et ses données structurées (Factur-X) concordent.
       var total = isFinite(qty) && isFinite(price) ? Math.round(qty * price * 100) / 100 : NaN;
       if (isFinite(total)) ht += total;
-      return { desc: l.desc, qty: qty, unit: Object.prototype.hasOwnProperty.call(UNITS, l.unit) ? l.unit : "", price: price, total: total };
+      return { desc: l.desc, qty: qty, unit: Object.prototype.hasOwnProperty.call(UNITS, l.unit) ? l.unit : "", price: price, total: total,
+               kind: Object.prototype.hasOwnProperty.call(LINE_KINDS, l.kind) ? l.kind : "" };
     });
     var v = doc.vat || {};
     var place = v.place || "fr";
@@ -61,8 +64,22 @@
     ht = Math.round(ht * 100) / 100;
     var vat = Math.round(ht * rate) / 100;
     var paid = Number(doc.paid);
+    // Document « biens et services » : sous-totaux HT des ventes et des prestations (BOFiP, BOI-BIC-DECLA-30-30, § 30),
+    // et nombre de lignes chiffrées sans nature.
+    var split = null;
+    if (doc.nature === "mixte") {
+      split = { goods: 0, services: 0, unclassified: 0 };
+      rows.forEach(function (r) {
+        if (!isFinite(r.total)) return;
+        if (r.kind === "biens") split.goods += r.total;
+        else if (r.kind === "services") split.services += r.total;
+        else split.unclassified++;
+      });
+      split.goods = Math.round(split.goods * 100) / 100;
+      split.services = Math.round(split.services * 100) / 100;
+    }
     return { rows: rows, ht: ht, rate: rate, vat: vat, ttc: ht + vat, paid: isFinite(paid) ? paid : 0,
-             franchise: !!v.franchise, place: place, noVat: noVat };
+             franchise: !!v.franchise, place: place, noVat: noVat, split: split };
   }
 
   /** Mention de franchise : art. 293 B du CGI, puis CIBS pour les documents datés à partir du 1er janvier 2027. */
@@ -136,6 +153,10 @@
     meta.push(["Opération", NATURES[doc.nature] || NATURES.services]);
 
     var tot = [["Total HT", fmt.eur(t.ht)]];
+    if (t.split && (t.split.goods || t.split.services)) {
+      tot.push(["dont ventes", fmt.eur(t.split.goods)]);
+      tot.push(["dont prestations de services", fmt.eur(t.split.services)]);
+    }
     if (t.place === "eu") tot.push(["TVA", "autoliquidation"]);
     else if (t.noVat) tot.push(["TVA", "non applicable"]);
     else tot.push(["TVA (" + fmt.num(t.rate) + " %)", fmt.eur(t.vat)]);
@@ -158,7 +179,8 @@
                 vatMissing: t.place === "eu" && !str(client.vat), delivery: str(client.delivery) },
       meta: meta,
       rows: t.rows.filter(function (r) { return str(r.desc) || isFinite(r.price); }).map(function (r) {
-        return { desc: str(r.desc), qty: isFinite(r.qty) ? fmt.num(r.qty) + (UNITS[r.unit] || "") : "", price: isFinite(r.price) ? fmt.eur(r.price) : "",
+        var kind = t.split && r.kind ? LINE_KINDS[r.kind] + " : " : "";
+        return { desc: str(r.desc) ? kind + str(r.desc) : "", qty: isFinite(r.qty) ? fmt.num(r.qty) + (UNITS[r.unit] || "") : "", price: isFinite(r.price) ? fmt.eur(r.price) : "",
                  total: isFinite(r.total) ? fmt.eur(r.total) : "" };
       }),
       sums: tot,
@@ -208,6 +230,6 @@
     return html;
   }
 
-  return { NATURES: NATURES, UNITS: UNITS, QUOTE_ACCEPTANCE: QUOTE_ACCEPTANCE, amount: amount, compute: compute, franchiseMention: franchiseMention, mentions: mentions,
+  return { NATURES: NATURES, LINE_KINDS: LINE_KINDS, UNITS: UNITS, QUOTE_ACCEPTANCE: QUOTE_ACCEPTANCE, amount: amount, compute: compute, franchiseMention: franchiseMention, mentions: mentions,
            model: model, render: render, addDays: addDays };
 });
