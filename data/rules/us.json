@@ -786,10 +786,16 @@
       },
       "unit": "text",
       "label": "California statewide freelancer payment protection (professional services)",
-      "source": "https://calmatters.digitaldemocracy.org/bills/ca_202320240sb988",
-      "source_title": "CalMatters Digital Democracy - SB 988 (2023-2024)",
+      "source": "https://leginfo.legislature.ca.gov/faces/billTextClient.xhtml?bill_id=202320240SB988",
+      "source_title": "California Legislative Information - SB 988 (2023-2024), Freelance Worker Protection Act",
+      "more_sources": [
+        {
+          "source": "https://sjud.senate.ca.gov/sites/sjud.senate.ca.gov/files/sb_988_wiener_sjud_analysis.pdf",
+          "source_title": "California Senate Judiciary Committee - SB 988 analysis (bill version of April 1, 2024; hearing April 16, 2024)"
+        }
+      ],
       "confidence": "medium",
-      "note": "Applies to contracts entered into or renewed on/after 2025-01-01, single-person independent contractors providing professional services. Hiring party keeps contract 4 years. Confirmed via consistent secondary sources; the code text on leginfo.legislature.ca.gov was not read."
+      "note": "The official bill page (leginfo.legislature.ca.gov) refuses automated reading (403 on 09/11/2026): the chaptered text is not re-read. Read on 09/11/2026 with the source reader, the Senate Judiciary Committee analysis of the April 1, 2024 version (then drafted as Labor Code 10500 et seq.; the enacted law is cited as Bus. & Prof. Code 18100 et seq. by secondary sources): freelance worker = a person or one-person organization hired as an independent contractor 'to provide professional services in exchange for an amount equal to or greater than two hundred and fifty dollars ($250), either by itself or when aggregated with all contracts for services between the same hiring party and independent contractor during the immediately preceding 120 days'; written contract, signed copy furnished to the freelancer, kept by the hiring party 'for no less than four years'; payment by the date in the contract or 'no later than 30 days after the work is completed'; anti-retaliation; damages; 'applies only to contracts entered into or renewed on or after January 1, 2025'. Hiring parties exclude the U.S. and California governments, foreign governments and individuals hiring for themselves, their family or their homestead. Rule left undated until the final text is read."
     },
     "freelance_law_los_angeles": {
       "value": {
@@ -852,20 +858,28 @@
     },
     "freelance_law_seattle": {
       "value": {
-        "name": "Seattle Independent Contractor Protections Ordinance",
+        "name": "Seattle Independent Contractor Protections Ordinance (SMC 14.34)",
         "effective_date": "2022-09-01",
         "written_contract_threshold_usd": 600,
-        "aggregation": "$600 or more in a calendar year (as recalled; not verified)",
-        "payment_deadline": "Date in the contract; if none, within 30 days after completion (as recalled; not verified)",
-        "remedies": "Not verified",
-        "enforcer": "Seattle Office of Labor Standards"
+        "aggregation": "At least $600 in total compensation expected from the same commercial hiring entity between January 1 and December 31 of a calendar year; contracts can be combined over the year",
+        "payment_deadline": "Date in the pre-work written notice or contract; if unspecified, within 30 days after the work is completed",
+        "remedies": "Complaint to the Office of Labor Standards or lawsuit",
+        "enforcer": "Seattle Office of Labor Standards",
+        "written_terms": "Written notice of the proposed terms and conditions of work and payment before work begins (a written contract may meet it)"
       },
       "unit": "text",
       "label": "Seattle independent contractor payment protection",
-      "source": "https://www.seattle.gov/laborstandards",
-      "source_title": "City of Seattle - Office of Labor Standards",
-      "confidence": "low",
-      "note": "NOT verified in this session (web search quota exhausted before the check). Do not display without verification."
+      "source": "https://www.seattle.gov/documents/departments/laborstandards/final2_cityofseattle_ols_navigationguide_092424.pdf",
+      "source_title": "City of Seattle, Office of Labor Standards - Independent Contractor Protections Guide (09/24/2024)",
+      "more_sources": [
+        {
+          "source": "https://www.seattle.gov/documents/Departments/LaborStandards/Fact%20Sheet_ICP_FINAL%20.pdf",
+          "source_title": "City of Seattle, Office of Labor Standards - Independent Contractor Protections Ordinance Fact Sheet"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-11-09",
+      "note": "Read on 09/11/2026 with the source reader, Office of Labor Standards guide (09/24/2024): the ordinance covers independent contractors with no employees who 'Perform any part of their work in Seattle for a Commercial Hiring Entity' and 'Will receive or may reasonably expect to receive at least $600 in total compensation from that same Commercial Hiring Entity between January 1 and December 31 in a given calendar year'; rights: 'Receive a written notice before beginning work' (a written contract may meet it; without notice, the worker's understanding is presumed correct, SMC 14.34.050), 'If the timing of payment is unspecified in the pre-work written notice, payment must be made within 30 days after work has been completed' (SMC 14.34.055), a written itemized payment notice each time payment is made, no retaliation; complaint to the Office of Labor Standards or lawsuit. The 2022 fact sheet (effective date September 1, 2022) says 'Contract greater than $600' and 'Contracts can be combined over a year'; the more recent guide's 'at least $600' is kept. Ordinance text (SMC 14.34) not read."
     },
     "late_fees_federal_rule": {
       "value": "No federal law sets or caps late fees on invoices between private businesses. A late fee or interest charge is enforceable only if agreed in the contract or accepted terms, and must respect state usury law and the state's liquidated-damages/penalty doctrine (a fee must be a reasonable estimate of the loss, not a penalty). Freelancer protection laws (NYC, NYS, IL, CA, LA...) add statutory remedies such as double damages for late payment but do not set an interest rate.",

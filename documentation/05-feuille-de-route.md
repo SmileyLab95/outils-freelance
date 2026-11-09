@@ -9,7 +9,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 
 ## Où en est-on ?
 
-*Mis à jour le 08/11/2026 (fin de nuit).*
+*Mis à jour le 09/11/2026 (nuit).*
 
 - **Priorité (décision D10)** : le site et la plateforme d'abord ; noms de domaine, Gumroad et affiliation à la fin.
   Règle de qualité maximale pour tout produit ou service (D11, charte dans la [méthode](04-methode-de-travail.md#charte-qualité)).
@@ -376,7 +376,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   des comptes attend le choix de l'hébergeur et du domaine.
 - **Vérification outillée des règles (08/11/2026)** : workflow « Vérifier les règles sur leurs sources »
   (`scripts/verifier_regles.py`, D55), pages lues en parallèle. Règles datées après relecture : Royaume-Uni 161 sur
-  164, États-Unis 85 sur 95, France 113 sur 120, Canada 81 sur 135 (France : fiches d'Entreprendre.Service-Public
+  164, États-Unis 86 sur 95, France 113 sur 120, Canada 81 sur 135 (France : fiches d'Entreprendre.Service-Public
   utilisées quand Urssaf, Légifrance ou economie.gouv.fr refusent la lecture). Barème kilométrique français et taux kilométrique
   américain de juillet rattachés au BOFiP et à l'IRS ; SMIC mis à jour (12,31 €) ; calendrier de la facturation
   électronique, abattements et versement libératoire relus sur impots.gouv.fr ; Canada : Loi de l'impôt, Loi sur
@@ -424,7 +424,11 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   S corporation, revenus de S corporation hors self-employment tax et LLC à associé unique relus sur irs.gov et datés
   (85 sur 95) ; **correction** : l'IRS ne fixe pas de montant mais cite « l'usage d'une formule » parmi ses facteurs,
   le site ne dit plus « There's no formula » ; minimum de déduction QBI toujours sans source primaire lisible
-  (uscode.house.gov répond 404 à l'outil). Restent en France : TNS et
+  (uscode.house.gov répond 404 à l'outil). 09/11 : loi californienne SB 988 rattachée à la page officielle du texte
+  (leginfo, illisible : 403) et à l'analyse de la commission judiciaire du Sénat (version du 1er avril 2024), règle
+  non datée ; Seattle relu dans le guide de l'Office of Labor Standards (09/2024 : au moins 600 $ par an chez un même
+  client, avis écrit avant le travail, paiement sous 30 jours) et daté ; Columbus : aucune source en .gov trouvée
+  (code municipal hébergé hors .gov), règle laissée sur sa source secondaire. Restent en France : TNS et
   SASU (ordres de grandeur), mention d'assurance (L132-1), compte du commerçant (L123-24),
   périodicité Urssaf, décret 2025-943 et taux ACRE arrondis. États sans impôt sur le revenu : 8 pages officielles sur 9 lues le
   08/11/2026 (Tennessee illisible) ; Washington taxera dès 2028 les revenus de plus d'un million de dollars.

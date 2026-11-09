@@ -1,5 +1,17 @@
 # Journal des modifications
 
+## 2026-11-09 (nuit) — Lois locales sur les freelances : Californie et Seattle
+
+- **Seattle** : ordonnance sur les travailleurs indépendants relue dans le guide officiel de l'Office of Labor
+  Standards (septembre 2024) : au moins 600 $ attendus d'un même client commercial sur l'année civile, avis écrit des
+  conditions avant le début du travail, paiement sous 30 jours après la fin du travail si rien n'est prévu, avis de
+  paiement détaillé. Règle datée ; la fiche de 2022 disait « plus de 600 $ », le guide plus récent est retenu.
+- **Californie** (SB 988) : la source non officielle est remplacée par la page officielle du texte et par l'analyse
+  de la commission judiciaire du Sénat (seuil de 250 $ cumulé sur 120 jours, contrat écrit conservé 4 ans, paiement
+  sous 30 jours, contrats conclus à partir du 1er janvier 2025). Le texte final ne s'ouvre pas avec nos outils : la
+  règle reste « à vérifier » sur le site.
+- États-Unis : 86 règles sur 95 datées.
+
 ## 2026-11-08 (fin de nuit) — Règles américaines relues sur irs.gov
 
 - **Form W-9** relu (révision de mars 2024 et instructions pour le demandeur) : formulaire remis au client, pas à
