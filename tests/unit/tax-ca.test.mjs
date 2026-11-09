@@ -174,3 +174,14 @@ test("montant personnel de base réduit : Manitoba (200 000 à 400 000 $) et Yuk
   // Sous les seuils, montant entier.
   near(ca.provincialBPA(P.MB, 150000, R), 15780, "Manitoba sous 200 000 $");
 });
+
+test("contribution santé de l'Ontario : tableau officiel du ministère des Finances (data.ontario.ca, 29/01/2025)", () => {
+  // « Ontario Health Premium rates » (XLSX), lu le 09/11/2026 : revenu imposable → contribution de l'année.
+  const officiel = [[20000, 0], [21000, 60], [22000, 120], [23000, 180], [24000, 240], [25000, 300], [36000, 300],
+    [36500, 330], [37000, 360], [37500, 390], [38000, 420], [38500, 450], [48000, 450], [48100, 475], [48200, 500],
+    [48300, 525], [48400, 550], [48500, 575], [48600, 600], [72000, 600], [72100, 625], [72200, 650], [72300, 675],
+    [72400, 700], [72500, 725], [72600, 750], [200000, 750], [200100, 775], [200200, 800], [200300, 825],
+    [200400, 850], [200500, 875], [200600, 900], [500000, 900]];
+  for (const [revenu, contribution] of officiel) near(ca.healthPremium(revenu, R), contribution, `contribution santé à ${revenu} $`);
+  near(ca.healthPremium(0, R), 0, "revenu nul");
+});

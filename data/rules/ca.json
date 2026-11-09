@@ -736,10 +736,21 @@
       ],
       "unit": "list",
       "label": "Ontario Health Premium by taxable income (TI)",
-      "source": "https://www.ontario.ca/page/health-premium",
-      "source_title": "Health premium - Ontario.ca",
+      "source": "https://data.ontario.ca/dataset/0ac05194-c053-430a-8ffd-0e9bbc28e8f4/resource/c40063e9-1dfa-4e82-acc2-3aaac9838e9b/download/ontario-health-premium-rates-en.xlsx",
+      "source_title": "Ontario Health Premium rates (XLSX) - Ontario Data Catalogue, Ministry of Finance (data last updated January 29, 2025)",
+      "more_sources": [
+        {
+          "source": "https://www.ontario.ca/page/health-premium",
+          "source_title": "Health premium - Ontario.ca"
+        },
+        {
+          "source": "https://data.ontario.ca/dataset/ontario-health-premium-rates",
+          "source_title": "Ontario Health Premium rates - Ontario Data Catalogue (dataset page)"
+        }
+      ],
       "confidence": "high",
-      "note": "Not indexed, unchanged since 2004. $0 up to $20,000 of taxable income, $900 maximum above $200,600. Collected with the T1 return (and through instalments for the self-employed). Partly checked on 08/11/2026: the ontario.ca page confirms '$0 if your taxable income is $20,000 or less' and '$900 if your taxable income is more than $200,600'; the intermediate thresholds are not on the page, and the Taxation Act, 2007 on ontario.ca/laws is rendered by script (unreadable by the source reader): not dated."
+      "verified_on": "2026-11-09",
+      "note": "Not indexed. Read on 09/11/2026 with the source reader, the Ministry of Finance table (taxable income -> premium for the tax year): 'Up to 20,000 | 0', 21000 | 60, 22000 | 120, 23000 | 180, 24000 | 240, 'From 25,000 to 36,000 | 300', 36500 | 330 ... 38000 | 420, 'From 38,500 to 48,000 | 450', 48100 | 475 ... 48500 | 575, 'From 48,600 to 72,000 | 600', 72100 | 625 ... 72500 | 725, 'From 72,600 to 200,000 | 750', 200100 | 775 ... 200500 | 875, '200,600 and over | 900': the formulas above reproduce every row (unit test tests/unit/tax-ca.test.mjs). The ontario.ca page confirms '$0 if your taxable income is $20,000 or less' and '$900 if your taxable income is more than $200,600'. Collected with the T1 return (and through instalments for the self-employed)."
     },
     "instalment_due_dates_2026": {
       "value": [
@@ -926,10 +937,21 @@
       ],
       "unit": "list",
       "label": "Ontario Health Premium as steps: premium = min(cap, base + rate x (taxable income - from)) for the highest step reached",
-      "source": "https://www.ontario.ca/page/health-premium",
-      "source_title": "Health premium - Ontario.ca",
+      "source": "https://data.ontario.ca/dataset/0ac05194-c053-430a-8ffd-0e9bbc28e8f4/resource/c40063e9-1dfa-4e82-acc2-3aaac9838e9b/download/ontario-health-premium-rates-en.xlsx",
+      "source_title": "Ontario Health Premium rates (XLSX) - Ontario Data Catalogue, Ministry of Finance (data last updated January 29, 2025)",
+      "more_sources": [
+        {
+          "source": "https://www.ontario.ca/page/health-premium",
+          "source_title": "Health premium - Ontario.ca"
+        },
+        {
+          "source": "https://data.ontario.ca/dataset/ontario-health-premium-rates",
+          "source_title": "Ontario Health Premium rates - Ontario Data Catalogue (dataset page)"
+        }
+      ],
       "confidence": "high",
-      "note": "Structured version of ontario_health_premium (same figures). No premium at or below $20,000 of taxable income."
+      "verified_on": "2026-11-09",
+      "note": "Structured version of ontario_health_premium (same figures), checked against every row of the Ministry of Finance table on 09/11/2026. No premium at or below $20,000 of taxable income."
     },
     "gst_hst_filing_due_dates": {
       "value": "Monthly and quarterly filers: one month after the end of the reporting period. Annual filers who are individuals with business income and a December 31 year-end: return by June 15, payment by April 30. Annual filers' quarterly instalments: one month after the end of each fiscal quarter, if net tax is $3,000 or more.",

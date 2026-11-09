@@ -376,7 +376,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   des comptes attend le choix de l'hébergeur et du domaine.
 - **Vérification outillée des règles (08/11/2026)** : workflow « Vérifier les règles sur leurs sources »
   (`scripts/verifier_regles.py`, D55), pages lues en parallèle. Règles datées après relecture : Royaume-Uni 161 sur
-  164, États-Unis 87 sur 95, France 113 sur 120, Canada 81 sur 135 (France : fiches d'Entreprendre.Service-Public
+  164, États-Unis 87 sur 95, France 113 sur 120, Canada 83 sur 135 (France : fiches d'Entreprendre.Service-Public
   utilisées quand Urssaf, Légifrance ou economie.gouv.fr refusent la lecture). Barème kilométrique français et taux kilométrique
   américain de juillet rattachés au BOFiP et à l'IRS ; SMIC mis à jour (12,31 €) ; calendrier de la facturation
   électronique, abattements et versement libératoire relus sur impots.gouv.fr ; Canada : Loi de l'impôt, Loi sur
@@ -386,8 +386,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   art. 1737, et au Code de commerce, art. L441-16, sur Légifrance ou le BOFiP). À faire : remplacer les dernières
   sources non officielles (services taxables, lois de Californie et de Columbus,
   mention de franchise de TVA de 2027, crédit québécois, extensions de noms de domaine) ; plafond de la Sécurité
-  sociale 2027 (ssa.gov refuse la lecture, 403) ; minimum de déduction QBI 2026 ; barème de la contribution santé de
-  l'Ontario (seuils absents de la page ontario.ca : lire la *Taxation Act, 2007*) ; sources françaises restantes
+  sociale 2027 (ssa.gov refuse la lecture, 403) ; minimum de déduction QBI 2026 ; sources françaises restantes
   (Urssaf, Légifrance, economie.gouv.fr ; régimes TNS et SASU, formats de la facturation électronique, calendrier Urssaf à
   rattacher aux fiches de service-public avec l'option « essai » du vérificateur). Fait en fin de matinée : intitulé
   « EI » du compte (F35991), CFE (impots.gouv.fr, F23547, BOFiP), prélèvement à la source du micro-entrepreneur et
@@ -430,7 +429,9 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   client, avis écrit avant le travail, paiement sous 30 jours) et daté ; Columbus : aucune source en .gov trouvée
   (code municipal hébergé hors .gov), règle laissée sur sa source secondaire. Petit matin : plafond de la Sécurité
   sociale 2027 (192 300 $) relu dans l'avis de la SSA au Federal Register (ssa.gov refuse toujours la lecture) et
-  daté ; l'outil « Lire une source officielle » lit désormais les classeurs XLSX (jeux de données publics), testé.
+  daté ; l'outil « Lire une source officielle » lit désormais les classeurs XLSX (jeux de données publics), testé ;
+  contribution santé de l'Ontario relue dans le tableau officiel du ministère des Finances (data.ontario.ca) :
+  le moteur canadien en reproduit les 33 lignes (nouveau test), règles datées.
   Restent en France : TNS et
   SASU (ordres de grandeur), mention d'assurance (L132-1), compte du commerçant (L123-24),
   périodicité Urssaf, décret 2025-943 et taux ACRE arrondis. États sans impôt sur le revenu : 8 pages officielles sur 9 lues le

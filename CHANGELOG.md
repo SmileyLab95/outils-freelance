@@ -1,6 +1,6 @@
 # Journal des modifications
 
-## 2026-11-09 (petit matin) — Plafond de la Sécurité sociale 2027 et lecture des classeurs
+## 2026-11-09 (petit matin) — Sécurité sociale 2027, contribution santé de l'Ontario, lecture des classeurs
 
 - **États-Unis** : plafond de la Sécurité sociale de 192 300 $ pour 2027 relu dans l'avis officiel de la Social
   Security Administration au Federal Register (« Cost-of-Living Increase and Other Determinations for 2027 »), et non
@@ -8,6 +8,9 @@
 - **Outil de vérification** : « Lire une source officielle » lit aussi les classeurs XLSX publiés par les
   administrations (jeux de données ouverts), avec la seule bibliothèque standard ; test unitaire contrôlé par
   mutation.
+- **Canada** : contribution santé de l'Ontario relue dans le tableau officiel du ministère des Finances (catalogue
+  de données ouvertes de l'Ontario) ; le calcul du site en reproduit chacune des 33 lignes, vérifiées par un nouveau
+  test. Canada : 83 règles sur 135 datées.
 
 ## 2026-11-09 (nuit) — Lois locales sur les freelances : Californie et Seattle
 
