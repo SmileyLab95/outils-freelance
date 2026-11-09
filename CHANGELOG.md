@@ -1,5 +1,13 @@
 # Journal des modifications
 
+## 2026-11-09 (après-midi) — Congés payés des indépendants : Massachusetts et Maine
+
+- L'outil américain *Paid leave and disability insurance for the self-employed* couvre désormais 7 États :
+  **Massachusetts** (adhésion de 3 ans au moins, toute la cotisation à la charge de l'indépendant, prestations après
+  2 trimestres cotisés sur les 4 derniers, d'après la loi 175M) et **Maine** (3 ans au moins, prime 2025-2027 de 0,5 %
+  des revenus d'indépendant, d'après la loi 26 M.R.S. 850-G et la FAQ de juillet 2026 du ministère du Travail).
+- Deux règles nouvelles datées ; tests unitaires et parcours navigateur complétés. États-Unis : 97 règles sur 103.
+
 ## 2026-11-09 (midi) — États-Unis : congés payés et invalidité pour les indépendants
 
 - **Nouvel outil** (menu *Taxes and admin*) : *Paid leave and disability insurance for the self-employed*. Pour

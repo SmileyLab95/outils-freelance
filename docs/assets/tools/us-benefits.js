@@ -11,6 +11,7 @@
   if (!form || !OFE || !OFE.benefitsUS || !R || !R.us_paid_leave_ca_diec) return;
   var B = OFE.benefitsUS;
   var C = R.us_paid_leave_ca_diec, M = R.us_paid_leave_mn_self_employed, N = R.us_paid_leave_ny_self_employed;
+  var MA = R.us_paid_leave_ma_self_employed, ME = R.us_paid_leave_me_self_employed;
   var O = R.us_paid_leave_or_self_employed, W = R.us_paid_leave_wa_elective, S = R.us_ssdi_basics;
   var $ = function (id) { return document.getElementById(id); };
   var set = function (id, text) { $(id).textContent = text; };
@@ -29,6 +30,24 @@
         "Premium: " + pct(C.premium_rate_2026) + " of your net profit, at least " + usd(C.minimum_annual_premium_2026) + " a year (net profit of " + usd(C.minimum_premium_net_profit) + " or less), in four quarterly installments."
       ],
       step: "Next: apply for Disability Insurance Elective Coverage with the EDD. Check its page for the eligibility rules and how to cancel."
+    },
+    MA: {
+      label: "Massachusetts Paid Family and Medical Leave (self-employed election)",
+      points: [
+        "You elect coverage for at least " + MA.initial_period_years + " years by filing a notice of election with the state; it takes effect on the filing date.",
+        "You pay all the contributions on your income from self-employment.",
+        "You can get benefits once you've paid contributions for at least " + MA.quarters_of_contributions + " of your last " + MA.quarters_lookback + " completed calendar quarters."
+      ],
+      step: "Next: file your notice of election with Massachusetts Paid Family and Medical Leave, which sets the contribution rate."
+    },
+    ME: {
+      label: "Maine Paid Family and Medical Leave (elective coverage)",
+      points: [
+        "Independent contractors, sole proprietors and partners can elect coverage for at least " + ME.initial_period_years + " years; it takes effect on the date you file your notice.",
+        "Premium for 2025-2027: " + pct(ME.premium_rate_2025_2027) + " of your income from self-employment.",
+        "You can withdraw within " + ME.withdraw_within_days_after_period + " days after the end of the 3-year period; the withdrawal takes effect at least " + ME.withdrawal_notice_days + " days after your notice."
+      ],
+      step: "Next: elect coverage through the Maine Paid Leave portal."
     },
     MN: {
       label: "Minnesota Paid Leave (election of coverage)",
@@ -71,7 +90,7 @@
       step: "Next: elect coverage with Washington's Employment Security Department; its calculator estimates your quarterly premium."
     }
   };
-  var STATES = ["CA", "MN", "NY", "OR", "WA"];
+  var NAMES = ["California", "Maine", "Massachusetts", "Minnesota", "New York", "Oregon", "Washington"];
 
   function compute() {
     var state = $("ben-state").value;
@@ -81,7 +100,7 @@
     if (hasRate) set("ben-profit-hint", info.hint);
     list.textContent = "";
     var points = info ? info.points : [
-      "This page covers " + STATES.length + " states so far: California, Minnesota, New York, Oregon and Washington.",
+      "This page covers " + NAMES.length + " states so far: " + NAMES.slice(0, -1).join(", ") + " and " + NAMES[NAMES.length - 1] + ".",
       "Other states have their own paid leave or disability programs, or none: check your state's labor or employment department."
     ];
     points.forEach(function (p) {
@@ -110,7 +129,9 @@
         set("ben-sub", "estimated premium, or " + usd(p.quarterly) + " a quarter" + (state === "CA" ? " for 2026." : " (2025-2026 rate)."));
       } else {
         set("ben-big", state === "NY" ? "Buy a policy" : "Opt in");
-        set("ben-sub", state === "NY" ? "Paid Family Leave and disability, priced by the insurer." : "Premium rate: see the state's site.");
+        set("ben-sub", state === "NY" ? "Paid Family Leave and disability, priced by the insurer."
+          : state === "ME" ? "Premium: " + pct(ME.premium_rate_2025_2027) + " of your income from self-employment (2025-2027)."
+          : "Premium rate: see the state's site.");
       }
     }
     set("ben-ssdi", "Social Security Disability Insurance (SSDI) only covers long-term disability: it starts after " + S.waiting_period_months

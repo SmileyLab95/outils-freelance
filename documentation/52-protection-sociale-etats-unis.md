@@ -25,6 +25,16 @@ la déclaration **2024** (Schedule SE ligne 3 ou Schedule C ligne 31), au moins 
 ou moins, soit 4 600 × 8,84 %), en quatre versements trimestriels. Conditions d'adhésion et de résiliation non lues :
 renvoi à l'EDD.
 
+**Maine** (`us_paid_leave_me_self_employed`, 26 M.R.S. 850-G, FAQ de juillet 2026) : entrepreneurs individuels, indépendants
+et associés ; adhésion pour **3 ans** au moins, effective au dépôt de la déclaration ; retrait dans les 30 jours suivant la
+fin des 3 ans, effectif au moins 30 jours après l'avis ; prime 2025-2027 de **0,5 %** des revenus d'indépendant (base
+et plafond non lus : pas d'estimation). Ajouté le 09/11/2026 après-midi.
+
+**Massachusetts** (`us_paid_leave_ma_self_employed`, M.G.L. c. 175M, art. 2(j) et 6(b) ; mass.gov refuse la lecture) :
+adhésion pour **3 ans** au moins, effective au dépôt ; l'indépendant paie **toute** la cotisation sur ses revenus
+d'indépendant ; prestations après des cotisations sur au moins **2 des 4** derniers trimestres civils complets. Taux non
+lu. Ajouté le 09/11/2026 après-midi.
+
 **Minnesota** (`us_paid_leave_mn_self_employed`, Minn. Stat. 268B.11) : adhésion pour **104 semaines consécutives**
 au moins ; couverture au trimestre civil suivant l'accord ; sortie seulement au 1er janvier, avec un préavis de
 **30 jours** ; prime annuelle : taux du programme × base de prime de l'indépendant, plafonnée au plafond de la Social
@@ -42,8 +52,9 @@ d'**un an** au moins, congé familial et médical ensemble ; l'indépendant paie
 prestations après **820 heures** travaillées dans l'État après la déclaration ; retrait dans les 30 jours suivant la fin
 d'une période. Taux non lu : pas d'estimation.
 
-**Non retenus** (lecture refusée ou non faite, D57 : ne rien affirmer) : Massachusetts (mass.gov : 403), Colorado
-(famli.colorado.gov : refus), autres États (Connecticut, New Jersey, Rhode Island, Hawaï, Delaware, Maine, Maryland…) ;
+**Non retenus** (lecture refusée ou non faite, D57 : ne rien affirmer) : Colorado (famli.colorado.gov : refus, lois
+hors .gov), Delaware (page du code lue sans le texte attendu), autres États (Connecticut, New Jersey, Rhode Island, Hawaï,
+Maryland…) ;
 assurance chômage des indépendants (aucune page du DOL lue ne le dit clairement) ; FMLA (dol.gov : refus).
 
 ## 3. Outil
@@ -52,7 +63,7 @@ Une page aux États-Unis, **Paid leave and disability insurance for the self-emp
 id `sick-pay`, reliée par *hreflang* aux pages française et britannique), menu « Taxes and admin » (description :
 « Tax, deadlines, expenses, retirement and benefits. »).
 
-Saisie : l'État (Californie, Minnesota, New York, Oregon, Washington, autre) et, pour la Californie et l'Oregon, le
+Saisie : l'État (Californie, Maine, Massachusetts, Minnesota, New York, Oregon, Washington, autre) et, pour la Californie et l'Oregon, le
 bénéfice net. Résultat : le programme, la prime annuelle et trimestrielle estimée (Californie, Oregon), « Opt in » ou
 « Buy a policy » ailleurs, « Not eligible » en Oregon sous 1 000 $, « Not covered yet » pour un autre État ; les points à
 savoir (durées, engagement, conditions), la démarche, et la note sur le SSDI. Moteur `engines/benefits-us.js`
@@ -82,4 +93,7 @@ York, Washington, Minnesota, autre État, accessibilité, trois largeurs ; captu
 | RCW 50A.10.010 (Washington State Legislature) | 3 ans puis 1 an, congé familial et médical, 100 % de la prime salariale, 820 heures, retrait |
 | Washington Paid Leave, *Self-employed* | Déclaration et paiement trimestriels |
 | Minnesota Statutes 2026, 268B.11 | 104 semaines, trimestre suivant, sortie au 1er janvier avec 30 jours, prime plafonnée, prestations |
+| M.G.L. c. 175M, art. 2 et 6 (malegislature.gov) | 2(j) : 3 ans au moins, effet au dépôt, 2 trimestres sur les 4 derniers ; 6(b) : toute la cotisation à la charge de l'indépendant |
+| 26 M.R.S. 850-G (Maine Legislature) | 3 ans au moins, effet au dépôt, retrait dans les 30 jours après les 3 ans, effet 30 jours après l'avis |
+| Maine Department of Labor, FAQ employeurs (juillet 2026) | Adhésion volontaire des indépendants, prime 2025-2027 de 0,5 % des revenus d'indépendant, portail Maine Paid Leave |
 | Refus de lecture | mass.gov (403), famli.colorado.gov, pl.mn.gov, dol.gov (FMLA) ; brochure de Washington (lien déplacé) |
