@@ -1,5 +1,17 @@
 # Journal des modifications
 
+## 2026-11-09 (midi) — États-Unis : congés payés et invalidité pour les indépendants
+
+- **Nouvel outil** (menu *Taxes and admin*) : *Paid leave and disability insurance for the self-employed*. Pour
+  l'État où le freelance travaille, ce qu'il peut souscrire, ce que cela coûte et ce à quoi il s'engage : Californie
+  (assurance invalidité et congé familial, 8,84 % du bénéfice 2024, au moins 406,64 $ par an), Minnesota (104 semaines
+  au moins), New York (police couvrant congé familial et invalidité), Oregon (0,6 % jusqu'à 184 500 $, 3 ans),
+  Washington (3 ans, 820 heures) ; prime estimée en Californie et en Oregon ; invalidité de longue durée de la Social
+  Security (5 mois de carence). Règles lues sur les sites officiels des États et dans leurs lois ; les États dont les
+  sites refusent la lecture (Massachusetts, Colorado) ne sont pas encore traités.
+- Six règles nouvelles datées ; moteur testé (contrôle par mutation) ; parcours navigateur sur trois formats,
+  accessibilité comprise. Spécification : documentation/52 ; décision D58.
+
 ## 2026-11-09 (fin de matinée) — Assurance-emploi et taux des petites entreprises relus (Canada)
 
 - **Assurance-emploi des travailleurs autonomes** : taux 2026 de 1,63 $ par 100 $ relu dans l'avis de la Commission de

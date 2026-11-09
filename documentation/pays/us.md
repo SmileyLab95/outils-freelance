@@ -260,3 +260,7 @@ identifiant `structure`).
 - **Critères** : tests unitaires (cas calculés à la main, QBI avec salaires dans et au-delà de la zone de
   transition, SSTB, déclaration commune, salaire nul, bénéfice nul, plafond de la Social Security, frais) ; parcours
   navigateur ; accessibilité ; captures relues ; revue critique.
+
+## Protection de l'indépendant (09/11/2026)
+
+Congés payés et invalidité des États ouverts aux indépendants par adhésion volontaire (Californie, Minnesota, New York, Oregon, Washington) et invalidité de longue durée de la Social Security (SSDI) : règles `us_paid_leave_*` et `us_ssdi_basics`, lues sur les sites officiels des États et dans leurs lois ; spécification [52](../52-protection-sociale-etats-unis.md), outil `/us/self-employed-paid-leave/`.

@@ -2471,6 +2471,109 @@
       "confidence": "high",
       "verified_on": "2026-10-30",
       "note": "Read on 30/10/2026 with the « Lire une source officielle » tool (https://www.govinfo.gov/link/uscode/17/204, SHA-256 d5b61ba7…aba5e): § 204(a) and (b). Consequence on the site: a freelancer who assigns copyright signs the quote or contract that refers to the terms; an electronic signature can be used (rule us_esign)."
+    },
+    "us_ssdi_basics": {
+      "value": {
+        "waiting_period_months": 5,
+        "insured_quarters_of_coverage": 20,
+        "insured_period_quarters": 40
+      },
+      "unit": "object",
+      "label": "Social Security Disability Insurance: five-month waiting period and recent-work test",
+      "source": "https://www.govinfo.gov/content/pkg/USCODE-2023-title42/html/USCODE-2023-title42-chap7-subchapII-sec423.htm",
+      "source_title": "42 U.S.C. 423, Disability insurance benefit payments - govinfo (United States Code, 2023 edition)",
+      "confidence": "high",
+      "verified_on": "2026-11-09",
+      "note": "Read on 09/11/2026 with the source reader (ssa.gov refuses automated reading). 423(c)(2): 'The term \"waiting period\" means, in the case of any application for disability insurance benefits, the earliest period of five consecutive calendar months—(A) throughout which the individual ... has been under a disability'. 423(c)(1): insured for disability benefits if fully insured and '(B)(i) he had not less than 20 quarters of coverage during the 40-quarter period which ends with the quarter in which such month occurred, or (ii)' before age 31, not less than one-half (and not less than 6) of the quarters after age 21. Benefits depend on covered earnings, wages and self-employment income (see ssa_benefits_based_on_earnings)."
+    },
+    "us_paid_leave_ca_diec": {
+      "value": {
+        "program": "Disability Insurance Elective Coverage (DIEC)",
+        "agency": "California Employment Development Department (EDD)",
+        "premium_rate_2026": 0.0884,
+        "minimum_premium_net_profit": 4600,
+        "minimum_annual_premium_2026": 406.64,
+        "premium_year_of_return": 2024,
+        "di_max_weeks": 39,
+        "pfl_max_weeks": 8,
+        "months_before_claim": 6
+      },
+      "unit": "object",
+      "label": "California: Disability Insurance Elective Coverage for the self-employed (DI and Paid Family Leave), 2026",
+      "source": "https://edd.ca.gov/en/disability/Self-Employed_Benefit_Amounts/",
+      "source_title": "California EDD - Disability Elective Coverage Benefits and Premium Amounts",
+      "more_sources": [
+        {
+          "source": "https://edd.ca.gov/en/payroll_taxes/Disability_Insurance_Elective_Coverage/",
+          "source_title": "California EDD - Disability Insurance Elective Coverage (DIEC)"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-11-09",
+      "note": "Read on 09/11/2026 with the source reader. Premiums: 'For calendar year 2026, we base DIEC premiums on the net profit you reported on your 2024 IRS Form 1040, Schedule SE, or Schedule C'; 'The DIEC premium rate for 2026 is 8.84 percent of your net profit. The premium includes contributions for DI and PFL benefits'; '$4,600 or less, you will pay a 2026 annual premium of $406.64 in four equal quarterly installments'; '$4,601 or more, multiply your net profit by 8.84 percent'. DIEC page: it 'protects business owners who are sole proprietors, self-employed, independent contractors, partnerships, limited liability partnerships (LLP), co-ownerships, and the managing members of certain limited liability corporations (LLC)'; 'You must participate in DIEC for at least six months after your plan's approved start date before you can apply for DI or PFL benefits'; 'DI provides up to 39 weeks of benefits'; 'PFL provides up to 8 weeks of benefits in a 12-month period'; 'You must pay all contributions to qualify for benefits'. Cancellation and eligibility conditions were not found in the passages read: the site sends readers to the EDD page. $406.64 = $4,600 x 8.84%."
+    },
+    "us_paid_leave_ny_self_employed": {
+      "value": {
+        "opt_in": "purchase an insurance policy",
+        "pfl_alone_allowed": false
+      },
+      "unit": "object",
+      "label": "New York: self-employed people can opt in to Paid Family Leave by buying a policy that also covers disability benefits",
+      "source": "https://paidfamilyleave.ny.gov/self-employed-individuals",
+      "source_title": "New York State Paid Family Leave - Self-Employed Individuals",
+      "confidence": "high",
+      "verified_on": "2026-11-09",
+      "note": "Read on 09/11/2026 with the source reader: 'As a self-employed individual – whether a sole proprietor or independent contractor – you can take advantage of New York Paid Family Leave by voluntarily opting in'; 'If you are a self-employed individual with no employees, opting in is as simple as purchasing an insurance policy. Under the governing law, you are required to purchase a policy for both Paid Family Leave and disability; you cannot opt in for Paid Family Leave alone.' A self-employed person without employees may cancel the policy; a carrier may then require an explanation and a waiting period may apply to a new policy. Waiting periods before benefits were not read."
+    },
+    "us_paid_leave_wa_elective": {
+      "value": {
+        "initial_period_years": 3,
+        "renewal_period_years": 1,
+        "hours_required": 820,
+        "employee_premium_share": 1.0,
+        "withdraw_within_days_after_period": 30
+      },
+      "unit": "object",
+      "label": "Washington: elective coverage of Paid Family and Medical Leave for the self-employed (RCW 50A.10.010)",
+      "source": "https://app.leg.wa.gov/RCW/default.aspx?cite=50A.10.010",
+      "source_title": "RCW 50A.10.010, Elective coverage—Self-employed - Washington State Legislature",
+      "more_sources": [
+        {
+          "source": "https://paidleave.wa.gov/elective-coverage/",
+          "source_title": "Washington Paid Family and Medical Leave - Self-employed: Electing coverage"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-11-09",
+      "note": "Read on 09/11/2026 with the source reader. RCW 50A.10.010(1): 'any self-employed person, including a sole proprietor, independent contractor, partner, or joint venturer, may elect coverage under this title for an initial period of not less than three years and subsequent periods of not less than one year'; 'must elect coverage for both family leave and medical leave and are responsible for payment of one hundred percent of all premiums assessed to an employee under RCW 50A.10.030'; 'eligible for family and medical leave benefits after working eight hundred twenty hours in the state during the qualifying period following the date of filing the notice'. (2): withdrawal 'within thirty days after the end of each period of coverage'. (3): the department may cancel coverage for missing payments or reports. The ESD page says self-employed people report income and pay premiums quarterly. Premium rate not read (RCW 50A.10.030)."
+    },
+    "us_paid_leave_or_self_employed": {
+      "value": {
+        "min_oregon_net_income": 1000,
+        "contribution_rate_2025_2026": 0.006,
+        "income_cap": 184500,
+        "commitment_years": 3
+      },
+      "unit": "object",
+      "label": "Oregon: Paid Leave Oregon coverage for the self-employed",
+      "source": "https://paidleave.oregon.gov/self-employed/overview.html",
+      "source_title": "Paid Leave Oregon - Self-employed and independent contractors",
+      "confidence": "high",
+      "verified_on": "2026-11-09",
+      "note": "Read on 09/11/2026 with the source reader: 'You can choose coverage if: Your work is in Oregon; You earned at least $1,000 in Oregon net income from self-employment (income after your expenses) in the previous tax year'; 'If you choose coverage, you get the same benefits as other employees'; 'Your Paid Leave contribution rate for 2025-2026 is 0.6% of your Oregon net income from self-employment (income after expenses) on your previous tax return, up to a maximum of $184,500 in income'; example: $10,000 gives $60 a year, $15 a quarter; 'you'll need to agree to pay contributions for at least 3 years'; contributions are due every quarter, with a bill from the Oregon Employment Department."
+    },
+    "us_paid_leave_mn_self_employed": {
+      "value": {
+        "min_weeks": 104,
+        "cancel_notice_days": 30
+      },
+      "unit": "object",
+      "label": "Minnesota: Paid Leave election of coverage for the self-employed (Minn. Stat. 268B.11)",
+      "source": "https://www.revisor.mn.gov/statutes/cite/268B.11",
+      "source_title": "Minnesota Statutes 2026, section 268B.11, Self-employed and independent contractor election of coverage",
+      "confidence": "high",
+      "verified_on": "2026-11-09",
+      "note": "Read on 09/11/2026 with the source reader. Subd. 1(a): 'A self-employed individual or independent contractor may file with the commissioner ... an application to be entitled to benefits under this chapter for a period not less than 104 consecutive calendar weeks'; benefits begin 'the calendar quarter after the date of approval' (or later if requested); coverage ends on January 1 only with a notice filed 'at least 30 calendar days before'. (b): if terminated for unpaid premiums during the first 104 weeks, the premium remains due for the rest of the period. Subd. 3: the annual premium is the rate of section 268B.14, subd. 6, clause (1), times the lesser of the self-employment premium base and the Social Security wage base. Subd. 4: benefits 'on the same basis as an employee'. The rate itself was not read (pl.mn.gov refuses automated reading)."
     }
   },
   "open_questions": [

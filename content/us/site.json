@@ -63,7 +63,7 @@
     {
       "key": "manage",
       "label": "Taxes and admin",
-      "description": "Tax, deadlines, expenses and retirement.",
+      "description": "Tax, deadlines, expenses, retirement and benefits.",
       "items": [
         "tax",
         "estimated-tax",
@@ -72,7 +72,8 @@
         "1099",
         "mileage",
         "home-office",
-        "retirement"
+        "retirement",
+        "sick-pay"
       ]
     }
   ],

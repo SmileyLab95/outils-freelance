@@ -3251,6 +3251,43 @@ const tests = {
     await page.selectOption("#ben-situation", "ill");
     check((await t("ben-big")) === "Up to £95.55", "benefits: default situation restored");
   },
+  async "us/self-employed-paid-leave/"(page) {
+    // documentation/52-protection-sociale-etats-unis.md : programmes des États par adhésion volontaire et SSDI.
+    const t = (id) => fxText(page, id);
+    const points = () => page.$$eval("#ben-points li", (li) => li.map((l) => l.textContent.replace(/\s+/g, " ").trim()));
+    check((await t("ben-label")) === "California DIEC (disability and paid family leave)" && (await t("ben-big")) === "$4,420 a year" &&
+      (await t("ben-sub")) === "estimated premium, or $1,105 a quarter for 2026." && (await points()).length === 4 &&
+      await page.isVisible("#ben-profit"), "paid leave: California, $50,000 → 8.84% = $4,420 a year");
+    check((await t("ben-ssdi")).startsWith("Social Security Disability Insurance (SSDI) only covers long-term disability: it starts after 5 full months") &&
+      (await t("ben-ssdi")).includes("20 quarters of coverage in the last 40"), "paid leave: SSDI explained from the rules");
+    await page.screenshot({ path: path.join(shots, "paid-leave-ca.png"), fullPage: true });
+    await page.fill("#ben-profit", "3,000");
+    check((await t("ben-big")) === "$406.64 a year" && (await t("ben-sub")).includes("$101.66 a quarter"), "paid leave: California minimum premium $406.64");
+    await page.fill("#ben-profit", "");
+    check((await t("ben-big")) === "–" && (await t("ben-sub")) === "Enter your net profit to estimate the premium.", "paid leave: no profit → no estimate");
+    await page.selectOption("#ben-state", "OR");
+    await page.fill("#ben-profit", "10,000");
+    check((await t("ben-label")) === "Paid Leave Oregon" && (await t("ben-big")) === "$60 a year" && (await t("ben-sub")) === "estimated premium, or $15 a quarter (2025-2026 rate).",
+      "paid leave: Oregon, $10,000 → $60 a year (official example)");
+    await page.fill("#ben-profit", "900");
+    check((await t("ben-big")) === "Not eligible" && (await t("ben-sub")).includes("at least $1,000"), "paid leave: Oregon under $1,000 → not eligible");
+    await page.selectOption("#ben-state", "NY");
+    check((await t("ben-big")) === "Buy a policy" && !(await page.isVisible("#ben-profit")) &&
+      (await points()).some((p) => p.includes("can't opt in for Paid Family Leave alone")), "paid leave: New York → policy covering PFL and disability");
+    await page.selectOption("#ben-state", "WA");
+    check((await t("ben-big")) === "Opt in" && (await points()).some((p) => p.includes("820 hours")) &&
+      (await points())[0].startsWith("You elect coverage for at least 3 years"), "paid leave: Washington → 3 years, 820 hours");
+    await page.selectOption("#ben-state", "MN");
+    check((await t("ben-big")) === "Opt in" && (await points())[0] === "You apply for coverage for at least 104 consecutive weeks.", "paid leave: Minnesota → 104 weeks");
+    await page.selectOption("#ben-state", "other");
+    check((await t("ben-big")) === "Not covered yet" && !(await page.isVisible("#ben-step")) && (await points())[0].includes("5 states"),
+      "paid leave: another state → not covered yet, check the state's program");
+    await accessible(page, "paid leave (another state)");
+    // Retour à la situation par défaut pour les formats suivants (tablette, mobile).
+    await page.selectOption("#ben-state", "CA");
+    await page.fill("#ben-profit", "50,000");
+    check((await t("ben-big")) === "$4,420 a year", "paid leave: default situation restored");
+  },
   async "us/sep-ira-vs-solo-401k-calculator/"(page) {
     check((await page.textContent("#u-sep-max")).trim() === "$18,587" && (await page.textContent("#u-solo-max")).trim() === "$43,087", "retirement: $100k profit → SEP $18,587, solo 401(k) $43,087");
     check((await page.textContent("#u-solo-tax")).trim() === "$5,243", "retirement: tax saved at the solo 401(k) maximum (engine)");
