@@ -65,10 +65,14 @@
     var applicable = sstb ? 1 - f : 1;
     var tentative = rate * qbiAmount * applicable;
     var wageLimit = w2Wages > 0 ? rules.qbi_w2_wage_limit.w2_wage_rate * w2Wages * applicable : 0;
-    var deduction = tentative - f * Math.max(0, tentative - wageLimit);
+    var deduction = Math.min(tentative - f * Math.max(0, tentative - wageLimit), rate * taxableBeforeQbi);
+    // IRC 199A(i) (P.L. 119-21, sect. 70105) : avec au moins 1 000 $ de QBI d'activités où l'indépendant participe
+    // matériellement, la déduction est « the greater of » la déduction calculée (plafond de 20 % du revenu imposable
+    // compris) et 400 $. Le QBI d'une SSTB dans la zone de transition ne compte qu'au pourcentage applicable
+    // (199A(d)(3)(A)(ii), « for purposes of applying this section »). Au-delà du revenu imposable, plus d'effet.
     var min = rules.qbi_minimum_deduction;
-    if (min && qbiAmount >= min.minimum_qbi_required) deduction = Math.max(deduction, min.minimum_deduction);
-    return Math.max(0, Math.min(deduction, rate * taxableBeforeQbi, taxableBeforeQbi));
+    if (min && qbiAmount * applicable >= min.minimum_qbi_required) deduction = Math.max(deduction, min.minimum_deduction);
+    return Math.max(0, Math.min(deduction, taxableBeforeQbi));
   }
 
   /**

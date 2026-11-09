@@ -65,6 +65,22 @@ test("déduction QBI dans la zone de transition", () => {
   near(tax.qbi(200000, R.qbi_phase_in_end_2026.single + 1, "single", true, R), 0, "SSTB au-delà de la zone");
 });
 
+test("déduction QBI minimale de 400 $ (IRC 199A(i), loi P.L. 119-21, sect. 70105) : elle remplace le plafond de 20 %", () => {
+  // « the greater of (A) the amount of such deduction determined without regard to this subsection, or (B) $400 »,
+  // pour au moins 1 000 $ de QBI d'activités où le contribuable participe matériellement.
+  near(tax.qbi(1500, 1500, "single", false, R), 400, "20 % de 1 500 $ = 300 $ < 400 $ : le minimum l'emporte");
+  near(tax.qbi(1000, 300, "single", false, R), 300, "minimum de 400 $, sans effet au-delà du revenu imposable (300 $)");
+  near(tax.qbi(999, 50000, "single", false, R), 199.8, "moins de 1 000 $ de QBI : pas de minimum");
+  const fin = R.qbi_threshold_2026.single + R.qbi_phase_in_range_2026.single + 1;
+  near(tax.qbi(200000, fin, "single", false, R), 400, "sans salaires au-delà de la zone : la déduction calculée tombe à 0, le minimum reste");
+  near(tax.qbi(200000, fin, "single", true, R), 0, "SSTB au-delà de la zone : plus une activité qualifiée, ni déduction ni minimum");
+  // 199A(d)(3)(A)(ii) : dans la zone, seul le pourcentage applicable du QBI d'une SSTB compte, seuil de 1 000 $ compris.
+  const milieu = R.qbi_threshold_2026.single + R.qbi_phase_in_range_2026.single / 2;
+  near(tax.qbi(1500, milieu, "single", true, R), 75, "SSTB à mi-zone : 50 % de 1 500 $ = 750 $ de QBI < 1 000 $, pas de minimum");
+  near(tax.qbi(1500, milieu, "single", false, R), 400, "même cas hors SSTB : 1 500 $ de QBI, le minimum s'applique");
+  near(tax.qbi(2000, milieu, "single", true, R), 400, "SSTB à mi-zone : 50 % de 2 000 $ = 1 000 $, le minimum s'applique");
+});
+
 test("acomptes : la règle de l'année précédente quand elle est plus favorable", () => {
   const q = tax.quarterly(16647.47, 0, 12000, 60000, "single", R);
   near(q.required, 12000, "100 % de l'impôt de l'année précédente");

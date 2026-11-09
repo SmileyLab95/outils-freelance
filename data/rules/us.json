@@ -382,11 +382,22 @@
         "minimum_qbi_required": 1000
       },
       "unit": "USD",
-      "label": "OBBBA minimum QBI deduction for active qualified businesses",
-      "source": "https://www.irs.gov/newsroom/one-big-beautiful-bill-provisions-individuals-and-workers",
-      "source_title": "IRS - One, Big, Beautiful Bill provisions (Working Families Tax Cuts) - individuals and workers",
-      "confidence": "medium",
-      "note": "Not confirmed on 08/11/2026: the IRS QBI page names the 'Minimum Deduction for Active Qualified Business Income' for tax years beginning after 2025 without amounts; the Form 8995 instructions read do not give them yet and the US Code page could not be read. New IRC 199A(i): taxpayers who materially participate in an active qualified trade or business with at least $1,000 of aggregate QBI get a deduction of at least $400. Effective for tax years beginning after 2025; both amounts indexed from 2027. Details confirmed only through secondary sources (law firms, beancount.io) in this session."
+      "label": "Minimum QBI deduction for active qualified businesses (IRC 199A(i), tax years beginning after 2025)",
+      "source": "https://www.govinfo.gov/content/pkg/PLAW-119publ21/pdf/PLAW-119publ21.pdf",
+      "source_title": "Public Law 119-21 (July 4, 2025), sec. 70105(b) - govinfo",
+      "more_sources": [
+        {
+          "source": "https://www.govinfo.gov/content/pkg/USCODE-2023-title26/html/USCODE-2023-title26-subtitleA-chap1-subchapB-partVI-sec199A.htm",
+          "source_title": "26 U.S.C. 199A, Qualified business income - govinfo (United States Code, 2023 edition; subsection (d)(3))"
+        },
+        {
+          "source": "https://www.irs.gov/newsroom/one-big-beautiful-bill-provisions-individuals-and-workers",
+          "source_title": "IRS - One, Big, Beautiful Bill provisions (Working Families Tax Cuts) - individuals and workers"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-11-09",
+      "note": "Read on 09/11/2026 with the source reader. P.L. 119-21, sec. 70105(b), new IRC 199A(i): 'In the case of an applicable taxpayer for any taxable year, the deduction allowed under subsection (a) for the taxable year shall be equal to the greater of—(A) the amount of such deduction determined without regard to this subsection, or (B) $400.' Applicable taxpayer: 'aggregate qualified business income with respect to all active qualified trades or businesses of the taxpayer for such taxable year is at least $1,000'; active qualified trade or business: one 'in which the taxpayer materially participates (within the meaning of section 469(h))'. Inflation adjustment 'In the case of any taxable year beginning after 2026' for both amounts, rounded to the nearest multiple of $5. Sec. 70105(c): 'shall apply to taxable years beginning after December 31, 2025'. 199A(d)(3)(A)(ii) (US Code 2023, read the same day; sec. 70105(a) of the law only replaces the phase-in amounts with '$75,000 ($150,000 in the case of a joint return)'): in the phase-in range, 'only the applicable percentage of qualified items' of a specified service trade or business is taken into account 'in computing the qualified business income ... for purposes of applying this section'; the calculators therefore test the $1,000 on that reduced QBI, and assume material participation. 2027 amounts: see open questions."
     },
     "qbi_w2_wage_limit": {
       "value": {
@@ -543,8 +554,6 @@
       "label": "Backup withholding rate when a payee fails to provide a correct TIN (Form W-9)",
       "source": "https://www.irs.gov/instructions/i1099mec",
       "source_title": "IRS - Instructions for Forms 1099-MISC and 1099-NEC",
-      "confidence": "medium",
-      "note": "Checked on 08/11/2026 with the rule checker: IRS backup withholding page: 'withhold at the current rate of 24 percent'. 24% (tied to the 4th-lowest bracket rate, made permanent by OBBBA). Rate confirmed in this session only through secondary sources; not read verbatim on irs.gov.",
       "more_sources": [
         {
           "source": "https://www.irs.gov/businesses/small-businesses-self-employed/backup-withholding",
@@ -553,9 +562,15 @@
         {
           "source": "https://www.irs.gov/forms-pubs/about-form-w-9",
           "source_title": "About Form W-9 - IRS"
+        },
+        {
+          "source": "https://www.irs.gov/instructions/iw9",
+          "source_title": "IRS - Instructions for the Requester of Form W-9 (03/2024)"
         }
       ],
-      "verified_on": "2026-11-08"
+      "confidence": "high",
+      "verified_on": "2026-11-08",
+      "note": "Checked on 08/11/2026 with the rule checker on the IRS backup withholding page: 'withhold at the current rate of 24 percent'. Instructions for the Requester of Form W-9 (03/2024), read the same day with the source reader (see form_w9_basics): 'The backup withholding rate is 24% for reportable payments'."
     },
     "form_w9_basics": {
       "value": "Form W-9 (Request for Taxpayer Identification Number and Certification) is completed by the freelancer and given to the client (the requester), not sent to the IRS. It gives the name (line 1), business or disregarded entity name (line 2), federal tax classification (line 3a), address and TIN (SSN, or EIN; a sole proprietor with an EIN may enter either), with a certification that the payee is not subject to backup withholding. A single-member LLC that is a disregarded entity enters the owner's name on line 1, its own name on line 2, checks the owner's tax classification and gives the owner's number. Without a correct TIN, the payer must withhold 24% (backup withholding).",
@@ -2447,11 +2462,7 @@
   },
   "open_questions": [
     "Tax year 2027 IRS inflation adjustments (brackets, standard deduction, QBI thresholds, inflation-indexed 1099-NEC/MISC threshold and QBI $400/$1,000 minimum) were not yet published as of the last search; the Rev. Proc. usually comes out in October-November.",
-    "Mid-year 2026 mileage rate (76 cents from 2026-07-01, Announcement 2026-11): confirm the exact wording and URL on irs.gov (only secondary sources were reachable).",
     "Form 1099-NEC deadline for 2026 payments: confirm 2027-02-01 (Jan 31, 2027 is a Sunday) in the Dec 2026 instructions or Pub. 509 (2027).",
-    "QBI $400 minimum deduction: confirm wording and indexing on an irs.gov page or the 2026 Form 8995 instructions.",
-    "Backup withholding rate (24%) and Form W-9 instructions: re-read on irs.gov (not reachable in this session).",
-    "Seattle Independent Contractor Protections Ordinance: threshold, payment deadline and effective date not verified (search quota exhausted).",
     "Columbus, Ohio freelance provisions: find the official city code section/page and the exact effective date and remedies.",
     "New York State FIFA penalty amounts after the S8039 chapter amendment (AG enforcement) - not confirmed on an official page.",
     "California SB 988: read Bus. & Prof. Code 18100 et seq. on leginfo for remedies and exact definitions.",

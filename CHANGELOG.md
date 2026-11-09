@@ -1,5 +1,17 @@
 # Journal des modifications
 
+## 2026-11-09 (matin) — Déduction QBI minimale de 400 $ relue dans la loi
+
+- **États-Unis** : minimum de déduction QBI relu dans le texte de la loi P.L. 119-21 (section 70105, govinfo) :
+  400 $ au moins pour qui a 1 000 $ ou plus de revenu d'activités auxquelles il participe matériellement, pour les
+  années ouvertes à partir du 1er janvier 2026, montants indexés dès 2027. Règle datée ; États-Unis : 88 règles sur
+  95 datées.
+- **Correction des calculateurs américains** : le minimum de 400 $ s'applique même quand le plafond de 20 % du
+  revenu imposable donnait moins (la loi retient « the greater of ») ; pour une activité de service spécifiée dans la
+  zone de transition, le seuil de 1 000 $ se calcule sur le revenu réduit au pourcentage applicable (IRC 199A(d)(3)).
+  Tests ajoutés, contrôlés par mutation ; FAQ du calculateur de self-employment tax et du comparateur S corp
+  précisées (participation matérielle supposée).
+
 ## 2026-11-09 (petit matin) — Sécurité sociale 2027, contribution santé de l'Ontario, lecture des classeurs
 
 - **États-Unis** : plafond de la Sécurité sociale de 192 300 $ pour 2027 relu dans l'avis officiel de la Social
