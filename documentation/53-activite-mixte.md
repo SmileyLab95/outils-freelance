@@ -39,6 +39,14 @@ document affiche alors, sous les lignes, le **sous-total HT des ventes** et le *
 (BOFiP § 30). Une facture « biens et services » ne peut pas être émise tant qu'une ligne n'a pas de nature. Les
 avoirs reprennent la nature des lignes de leur facture.
 
+**Simulateur auto-entrepreneur** (ajouté le 09/11/2026 dans la nuit) : type d'activité « Activité mixte », avec la
+part des ventes du chiffre d'affaires (même période) et l'activité de services. Moteur `OFE.microFR.mixedYear` :
+cotisations et versement libératoire de chaque part à leurs taux (ACRE comprise), CFP au plus élevé des deux taux,
+abattements de chaque activité cumulés, au moins 610 € (règle `micro_abattement_minimum_mixte`, F23267), sans dépasser
+le chiffre d'affaires ; jauges du plafond global et du plafond des prestations ; pas de seuil de TVA (renvoi à
+impots.gouv.fr) ; part des ventes illisible ou supérieure au chiffre d'affaires refusée. Le calculateur « Combien
+mettre de côté » reste par paiement : un paiement relève d'une activité, l'abattement minimal est annuel.
+
 **Générateur de facture public** (ajouté le 09/11/2026 au soir) : pour une opération « Mixte (biens et services) »,
 même choix « Vente » ou « Service » sur chaque ligne, avec une aide qui l'explique, et mêmes sous-totaux dans l'aperçu
 (moteur commun). La nature des lignes est mémorisée avec la saisie et reprise quand le document passe dans l'Espace
@@ -103,7 +111,11 @@ versement libératoire, ACRE) ; plafonds ; trésorerie (déjà dû 429,55 €, p
 encaissements attendus répartis) ; registre des achats. Contrôle par mutation : 21 erreurs réintroduites dans les
 moteurs de l'Espace et de la facture, toutes détectées (deux l'ont été après ajout d'assertions). Profil à une
 activité : tests existants inchangés. Reprise du générateur : nature des lignes conservée, nature inconnue ignorée
-(11 tests en tout).
+(11 tests en tout). Simulateur (`tests/unit/micro-fr.test.mjs`) : 20 000 € de ventes et 30 000 € de prestations
+libérales donnent 2 460 + 7 680 € de cotisations, 100 € de CFP, 25 600 € de revenu imposable ; versement libératoire ;
+ACRE ; CFP de l'artisan ; minimum de 610 € (800 € de chiffre d'affaires : revenu imposable de 190 €) ; jamais négatif ;
+saisies invalides. Mutation : 11 erreurs sur 12 détectées, la dernière (CFP prise sur la seule activité de services)
+est équivalente avec les taux 2026 (CFP de la vente, 0,1 %, la plus basse).
 
 Parcours navigateur (`tests/e2e/verifier.mjs`, fin du parcours de l'Espace) : seconde activité proposée selon
 l'activité, profil enregistré, nature des lignes absente d'une facture de services, émission refusée tant qu'une ligne
@@ -112,12 +124,14 @@ des recettes, note de déclaration par activité, jauges et note sur la TVA, ret
 (axe-core) de la facture, du livre des recettes et du tableau de bord ; captures relues sur ordinateur et mobile.
 Générateur public : pas de nature de ligne pour des services, choix et aide pour une opération mixte, sous-totaux
 (1 800 € de ventes, 451,50 € de prestations), accessibilité, nature mémorisée après rechargement, retour aux services.
+Simulateur : champs cachés pour une activité, montants et libellés de l'exemple, jauges (25 % de 203 100 €, 36 % de
+83 600 €), accessibilité, part des ventes trop grande refusée, prestations au-delà de 83 600 €, retour à une activité.
 
 ## 7. Hors champ
 
 Deux activités de services (BIC et BNC) ensemble ; location meublée de tourisme ; seuil de franchise de TVA en
 activité mixte (article 293 B à lire) ; impôt sur le revenu (abattements par part, minimum de 610 €) dans
-l'Espace.
+l'Espace (fait dans le simulateur).
 
 ## Annexe : sources lues le 09/11/2026 (outil « Lire une source officielle »)
 

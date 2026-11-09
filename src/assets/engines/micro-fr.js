@@ -76,5 +76,34 @@
     };
   }
 
-  return { activity: activity, cotisationRate: cotisationRate, setAside: setAside };
+  /**
+   * Année d'activité mixte (documentation/53-activite-mixte.md) : chiffre d'affaires annuel des ventes (goods) et des
+   * prestations (services), activité de services (servicesKey), ACRE, versement libératoire. Chaque part à ses taux ;
+   * formation professionnelle au plus élevé des deux taux (aucune règle publiée pour l'activité mixte) ; abattements de
+   * chaque activité cumulés, au moins micro_abattement_minimum_mixte (F23267), sans dépasser le chiffre d'affaires.
+   * Taux en dixièmes de point, comme le simulateur (25,6 % → 256) ; montants en euros non arrondis.
+   * Renvoie { errors: ["goods" | "services"] } si une part est illisible ou négative.
+   */
+  function mixedYear(rules, input) {
+    var g = input.goods, s = input.services, errors = [];
+    if (!(typeof g === "number" && g >= 0 && g <= MAX)) errors.push("goods");
+    if (!(typeof s === "number" && s >= 0 && s <= MAX)) errors.push("services");
+    if (errors.length) return { errors: errors };
+    var v = activity(rules, "vente"), o = activity(rules, input.servicesKey), acre = input.acre || 0;
+    if (o.key === "vente") throw new Error("Activité mixte : la seconde activité doit être une activité de services");
+    var t = function (rate) { return Math.round(rate * 1000); };
+    var cotisV = t(cotisationRate(v, acre)), cotisO = t(cotisationRate(o, acre)), cfp = Math.max(t(v.cfp), t(o.cfp));
+    var ca = g + s;
+    var abatt = Math.max(g * Math.round(v.abattement * 100) / 100 + s * Math.round(o.abattement * 100) / 100, rules.micro_abattement_minimum_mixte);
+    return {
+      ca: ca, rates: { goods: cotisV, services: cotisO, cfp: cfp, vlGoods: t(v.vl), vlServices: t(o.vl),
+                       abattGoods: Math.round(v.abattement * 100), abattServices: Math.round(o.abattement * 100) },
+      cotisations: g * cotisV / 1000 + s * cotisO / 1000, cfp: ca * cfp / 1000,
+      vl: input.vl ? g * t(v.vl) / 1000 + s * t(o.vl) / 1000 : 0,
+      taxable: Math.max(0, ca - abatt),
+      ceilings: { total: v.plafond, services: o.plafond }
+    };
+  }
+
+  return { activity: activity, cotisationRate: cotisationRate, setAside: setAside, mixedYear: mixedYear };
 });

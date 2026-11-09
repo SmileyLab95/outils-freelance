@@ -129,3 +129,25 @@ test("taux de TVA : les pages proposent les taux des règles (tva_taux_metropole
   }
   assert.ok(JSON.parse(tva.match(/<!--(\{.*?\})-->/s)[1]).sources.includes("tva_taux_metropole"), "calcul de TVA : source affichée");
 });
+
+test("activité mixte sur l'année (documentation/53) : chaque part à ses taux, CFP la plus élevée, abattements cumulés, minimum 610 €", () => {
+  assert.equal(rules.micro_abattement_minimum_mixte, 2 * rules.micro_abattement_minimum, "minimum doublé (F23267)");
+  const y = M.mixedYear(rules, { goods: 20000, services: 30000, servicesKey: "liberal_bnc", acre: 0, vl: false });
+  // Ventes 20 000 × 12,3 % = 2 460 ; prestations BNC 30 000 × 25,6 % = 7 680 ; CFP 50 000 × 0,2 % = 100 ;
+  // abattements 20 000 × 71 % + 30 000 × 34 % = 24 400, revenu imposable 25 600.
+  assert.deepEqual([y.ca, y.cotisations, y.cfp, y.vl, y.taxable], [50000, 10140, 100, 0, 25600]);
+  assert.deepEqual(y.ceilings, { total: 203100, services: 83600 });
+  const vl = M.mixedYear(rules, { goods: 20000, services: 30000, servicesKey: "liberal_bnc", vl: true });
+  assert.equal(vl.vl, 20000 * 0.01 + 30000 * 0.022, "versement libératoire : 1 % et 2,2 %");
+  const acre = M.mixedYear(rules, { goods: 10000, services: 10000, servicesKey: "services_bic", acre: 25 });
+  // ACRE de 25 % : 10 000 × 9,3 % + 10 000 × 15,9 % = 2 520 ; CFP des deux activités : 0,1 %.
+  assert.deepEqual([acre.cotisations, acre.cfp, acre.rates.cfp], [2520, 20, 1]);
+  assert.equal(M.mixedYear(rules, { goods: 1000, services: 1000, servicesKey: "artisan" }).cfp, 6, "artisan : CFP de 0,3 % sur tout le chiffre d'affaires");
+  assert.equal(M.mixedYear(rules, { goods: 600, services: 400, servicesKey: "services_bic" }).taxable, 374,
+    "abattements 426 + 200 = 626 € : au-dessus du minimum, revenu imposable 1 000 − 626");
+  assert.equal(M.mixedYear(rules, { goods: 500, services: 300, servicesKey: "services_bic" }).taxable, 190,
+    "abattements 355 + 150 = 505 € : minimum de 610 €, revenu imposable 800 − 610");
+  assert.equal(M.mixedYear(rules, { goods: 300, services: 200, servicesKey: "services_bic" }).taxable, 0, "jamais négatif");
+  assert.deepEqual(M.mixedYear(rules, { goods: -1, services: NaN, servicesKey: "cipav" }), { errors: ["goods", "services"] });
+  assert.throws(() => M.mixedYear(rules, { goods: 1, services: 1, servicesKey: "vente" }), /activité de services/);
+});

@@ -337,7 +337,30 @@ const tests = {
     await page.fill("#s-ca", "");
     check((await page.textContent("#s-g-plafond")).trim() === "–" && (await page.getAttribute("#s-g-plafond-bar", "style")).includes("width: 0%"),
       "simulateur : sans chiffre d'affaires, jauges vides");
+    // Activité mixte (documentation/53) : 20 000 € de ventes et 30 000 € de prestations libérales par an.
+    check(await page.isHidden("#s-mixed-fields"), "simulateur : champs de l'activité mixte cachés pour une seule activité");
+    await page.selectOption("#s-activity", "mixte");
+    await page.fill("#s-ca", "50 000");
+    await page.fill("#s-goods", "20 000");
+    await page.selectOption("#s-activity2", "liberal");
+    const mixedRow = async (id) => (await page.textContent(id)).replace(/\s/g, "");
+    check((await mixedRow("#s-r-cotis")) === "10140€" && (await mixedRow("#s-r-cfp")) === "100€" && (await mixedRow("#s-r-tax")) === "25600€" &&
+      (await page.textContent("#s-r-cotis-label")).includes("12,3 % sur les ventes, 25,6 % sur les prestations") &&
+      (await page.textContent("#s-r-tax-label")).includes("abattements de 71 % et 34 %"),
+      "simulateur mixte : 2 460 + 7 680 € de cotisations, CFP de 100 €, revenu imposable de 25 600 €");
+    check(JSON.stringify([await gauge("s-g-plafond"), await gauge("s-g-tva")]) === JSON.stringify([["25%de203100€", ""], ["36%de83600€", ""]]) &&
+      (await page.textContent("#s-g-tva-label")) === "Plafond des prestations de services" && (await page.textContent("#s-notice")).includes("impots.gouv.fr"),
+      "simulateur mixte : plafond global (203 100 €) et des prestations (83 600 €), renvoi pour la TVA");
+    await accessible(page, "simulateur : activité mixte");
+    await page.fill("#s-goods", "60 000");
+    check((await page.textContent("#s-notice")).includes("entre 0 et votre chiffre d'affaires") && (await page.textContent("#s-r-cotis")).trim() === "–",
+      "simulateur mixte : part des ventes supérieure au chiffre d'affaires refusée");
+    await page.fill("#s-goods", "20 000");
+    await page.fill("#s-ca", "120 000");
+    check((await page.textContent("#s-notice")).includes("plafond des prestations de services (83 600 €)"), "simulateur mixte : prestations au-delà de 83 600 €");
+    await page.selectOption("#s-activity", "liberal");
     await page.fill("#s-ca", "36 000");
+    check((await page.textContent("#s-g-tva-label")) === "Seuil de franchise de TVA" && await page.isHidden("#s-mixed-fields"), "simulateur : retour à une activité");
     await page.reload({ waitUntil: "networkidle" });
     check((await page.getAttribute('[data-period="an"]', "aria-pressed")) === "true", "simulateur : période mémorisée après rechargement");
   },

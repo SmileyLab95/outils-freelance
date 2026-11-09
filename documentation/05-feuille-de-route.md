@@ -9,7 +9,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 
 ## Où en est-on ?
 
-*Mis à jour le 09/11/2026 (nuit).*
+*Mis à jour le 09/11/2026 (fin de nuit).*
 
 - **Priorité (décision D10)** : le site et la plateforme d'abord ; noms de domaine, Gumroad et affiliation à la fin.
   Règle de qualité maximale pour tout produit ou service (D11, charte dans la [méthode](04-methode-de-travail.md#charte-qualité)).
@@ -360,7 +360,8 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   à impots.gouv.fr) ; registre des achats demandé dès qu'une activité est la vente. Règles lues : BOFiP
   BOI-BIC-DECLA-30-30 § 30, F23267, F37353, F23459, impots.gouv.fr ([53](53-activite-mixte.md), D59). Nuit : même
   choix « Vente » ou « Service » par ligne dans le générateur de facture public (sous-totaux, mémorisé, repris par
-  l'Espace).
+  l'Espace) ; simulateur auto-entrepreneur en activité mixte (part des ventes, taux de chaque activité, abattements
+  cumulés avec un minimum de 610 €, deux plafonds).
 - **Prochaines actions de Claude** : refonte, suite ([31](31-vision-plateforme.md) § 5) : les quatre modules du compte
   gratuit sont faits (étape 5) ; étape 6, outils restants (CGV : faites dans les quatre pays ;
   lois des autres provinces sur la protection du consommateur à lire pour les détailler ; le règlement albertain sur les
@@ -387,8 +388,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   texte de l'article R123-237 du Code de commerce à relire dès que Légifrance est lisible (mentions sur les
   correspondances, signature d'email) ;
   activité mixte, suite ([53](53-activite-mixte.md) § 7) : seuil de franchise de TVA en activité mixte dès que
-  l'article 293 B du CGI est lisible, abattements par activité (minimum 610 €) dans le calculateur « Combien mettre
-  de côté » ; questions ouvertes de `data/rules/` à relire
+  l'article 293 B du CGI est lisible ; questions ouvertes de `data/rules/` à relire
   avec l'outil de lecture des sources (ACRE) ; puis besoins P3 restants
   ([02](02-besoins-clients.md) : sous-traitance) ; loi californienne sur les freelances (SB 988) et
   loi de l'Illinois (820 ILCS 193) à relire dès que leurs sites officiels sont lisibles par l'outil (refus le
@@ -404,7 +404,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   des comptes attend le choix de l'hébergeur et du domaine.
 - **Vérification outillée des règles (08/11/2026)** : workflow « Vérifier les règles sur leurs sources »
   (`scripts/verifier_regles.py`, D55), pages lues en parallèle. Règles datées après relecture : Royaume-Uni 161 sur
-  164, États-Unis 98 sur 104, France 113 sur 120, Canada 96 sur 135 (France : fiches d'Entreprendre.Service-Public
+  164, États-Unis 98 sur 104, France 114 sur 121, Canada 96 sur 135 (France : fiches d'Entreprendre.Service-Public
   utilisées quand Urssaf, Légifrance ou economie.gouv.fr refusent la lecture). Barème kilométrique français et taux kilométrique
   américain de juillet rattachés au BOFiP et à l'IRS ; SMIC mis à jour (12,31 €) ; calendrier de la facturation
   électronique, abattements et versement libératoire relus sur impots.gouv.fr ; Canada : Loi de l'impôt, Loi sur

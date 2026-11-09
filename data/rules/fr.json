@@ -252,6 +252,16 @@
       "note": "Vérifiée le 08/11/2026 avec l'outil de vérification des règles (page officielle lue dans GitHub Actions, valeur relue dans son contexte). 305 EUR par abattement. En cas d'activités mixtes BIC (vente + services), le minimum total est de 610 EUR.",
       "verified_on": "2026-11-08"
     },
+    "micro_abattement_minimum_mixte": {
+      "value": 610,
+      "unit": "EUR",
+      "label": "Abattement minimum du régime micro en activité mixte (vente et prestations de services)",
+      "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F23267",
+      "source_title": "Régime fiscal de la micro-entreprise - Entreprendre.Service-Public.gouv.fr (fiche F23267)",
+      "confidence": "high",
+      "verified_on": "2026-11-09",
+      "note": "Lu le 09/11/2026 avec l'outil de lecture des sources : « Lorsque l’activité de la micro-enterprise est mixte (par exemple une activité de vente puis une autre de réalisation de travaux de bâtiment), les abattements propres à chaque activité s’appliquent cumulativement, sur la fraction de chiffre d'affaires correspondant à chacune de ces actvités. Dans ce cas, l’abattement minimal est doublé et passe à 610 €. » Double de micro_abattement_minimum (305 EUR, BOFiP BOI-BIC-DECLA-20). Utilisé par le simulateur auto-entrepreneur (documentation/53-activite-mixte.md)."
+    },
     "micro_plafond_ca_vente": {
       "value": 203100,
       "unit": "EUR",

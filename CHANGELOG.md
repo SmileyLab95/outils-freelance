@@ -1,5 +1,15 @@
 # Journal des modifications
 
+## 2026-11-09 (fin de nuit) — Simulateur auto-entrepreneur : activité mixte
+
+- Le simulateur propose « Activité mixte : vente de marchandises et prestations de services ». On indique la part des
+  ventes et le type de prestations ; cotisations, versement libératoire et ACRE sont calculés au taux de chaque
+  activité, la formation professionnelle au taux le plus élevé des deux, et le revenu imposable avec les abattements de
+  chaque activité, au moins 610 € au total (fiche officielle F23267, règle nouvelle datée).
+- Deux jauges : plafond global (203 100 €) et plafond des prestations (83 600 €) ; la franchise de TVA en activité
+  mixte renvoie à impots.gouv.fr.
+- Tests unitaires (contrôle par mutation) et parcours navigateur complétés ; captures relues sur ordinateur et mobile.
+
 ## 2026-11-09 (nuit) — Générateur de facture : ventes et prestations distinctes
 
 - Dans le générateur de facture public, une opération « Mixte (biens et services) » propose pour chaque ligne le choix
