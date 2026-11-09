@@ -244,7 +244,7 @@ Les dates sont les mêmes pour Revenu Québec. Des intérêts courent sur le sol
 
 ### Mentions nécessaires pour que le client puisse demander ses CTI
 
-Ces mentions sont prévues par le *Input Tax Credit Information (GST/HST) Regulations*, DORS/91-45 (confiance moyenne ; répartition par palier revérifiée le 21/10/2026 sur le tableau du mémorandum 8.4 de l'ARC). Les seuils de 100 $ et 500 $, taxes comprises, remplacent les anciens seuils de 30 $ et 150 $ (date d'effet : l'ARC mentionne le 20 avril 2021, une note antérieure le 2021-01-01 ; non affichée sur le site).
+Ces mentions sont prévues par le *Input Tax Credit Information (GST/HST) Regulations*, DORS/91-45, article 3 (confiance élevée : texte relu le 09/11/2026 sur le site Lois du Canada avec l'outil de lecture des sources ; répartition par palier revérifiée le 21/10/2026 sur le tableau du mémorandum 8.4 de l'ARC). Les seuils de 100 $ et 500 $, taxes comprises, remplacent les anciens seuils de 30 $ et 150 $ (date d'effet : l'ARC mentionne le 20 avril 2021, une note antérieure le 2021-01-01 ; non affichée sur le site).
 
 | Total de la facture | Mentions requises |
 |---|---|
@@ -254,7 +254,7 @@ Ces mentions sont prévues par le *Input Tax Credit Information (GST/HST) Regula
 
 Revenu Québec applique les mêmes seuils pour les RTI de la TVQ, avec le numéro de TVQ à partir de 100 $ ; son tableau semble exiger en plus, pour la TVQ seulement, une description et le montant de TVQ sur les petites factures (non confirmé : question 13). Selon Revenu Québec, ces régimes n'imposent pas de facture particulière, sauf pour la restauration et le transport par taxi.
 
-**Langue (Québec)** : les factures sont rédigées en français (Charte de la langue française, art. 57, 1er alinéa). Le 2e alinéa ajouté en 2022 a vu son entrée en vigueur suspendue par la Cour supérieure ; il n'est pas repris sur le site.
+**Langue (Québec)** : les factures sont rédigées en français (Charte de la langue française, art. 57, 1er alinéa, relu le 09/11/2026 sur LégisQuébec). Le texte consolidé contient aussi le 2e alinéa ajouté en 2022 (pas d'envoi dans une autre langue si la version française n'est pas accessible dans des conditions au moins aussi favorables) ; une note antérieure, tirée d'extraits de recherche, le disait suspendu par la Cour supérieure, ce qui n'a pas été confirmé sur une source officielle : il n'est pas repris sur le site.
 
 **Bonnes pratiques**, non exigées par la loi fédérale mais attendues des clients : numéro de facture unique, adresse des deux parties, conditions de retard (voir section 7). Pour un client non résident, précisez que la fourniture est détaxée.
 
@@ -439,7 +439,7 @@ France et au Royaume-Uni par la même liste (identifiant `invoice-rules`).
 - **Règles** (`data/rules/ca.json`) : `itc_invoice_requirements` (revérifiée : tableau de l'ARC, mémorandum 8.4 et
   *Excise and GST/HST News* n° 118) ; nouvelles : `qst_registration_number_on_invoices` (numéro de TVQ à partir de
   100 $, Revenu Québec), `quebec_invoices_in_french` (Charte de la langue française, art. 57, 1er alinéa ; le 2e
-  alinéa, dont l'entrée en vigueur a été suspendue, n'est pas repris), `small_supplier_not_required_to_collect`
+  alinéa, dont le statut n'est pas confirmé, n'est pas repris), `small_supplier_not_required_to_collect`
   (ARC, mémorandum 2.2).
 - **Situation** : total de la facture, taxes comprises (trois paliers, 500 $ ou plus par défaut) ; inscrit à la
   TPS/TVH (coché par défaut) ; entreprise au Québec. Conditions combinées (`data-when="gst !amount=under100"`) :

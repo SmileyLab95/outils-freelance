@@ -208,10 +208,11 @@
       },
       "unit": "object",
       "label": "Information an invoice must contain for the customer to claim GST/HST input tax credits",
-      "source": "https://laws-lois.justice.gc.ca/eng/regulations/SOR-91-45/",
-      "source_title": "Input Tax Credit Information (GST/HST) Regulations (SOR/91-45)",
-      "confidence": "medium",
-      "note": "Thresholds are under $100, $100 to $499.99 and $500 or more (they replaced $30 and $150). They apply to the total amount paid or payable shown on the supporting documentation (regulation wording), i.e. taxes included; Revenu Québec states the total value of the purchase including taxes. Re-checked on 2026-10-21 against search excerpts of CRA GST/HST Memorandum 8.4 (Documentary Requirements for Claiming Input Tax Credits, https://www.canada.ca/en/revenue-agency/services/forms-publications/publications/8-4/documentary-requirements-claiming-input-tax-credits.html) and Excise and GST/HST News No. 118: the registration number and the tax indication start at $100; the customer's name, the terms of payment and the description at $500. Effective date: CRA mentions April 20, 2021 (an earlier note said 2021-01-01); not shown on the site. Revenu Québec applies the same thresholds for QST input tax refunds, with the QST registration number required from $100. Also summarized in RC4022."
+      "source": "https://laws-lois.justice.gc.ca/eng/regulations/SOR-91-45/FullText.html",
+      "source_title": "Input Tax Credit Information (GST/HST) Regulations (SOR/91-45), section 3 - Justice Laws Website",
+      "confidence": "high",
+      "verified_on": "2026-11-09",
+      "note": "Read on 09/11/2026 with the source reader (Justice Laws Website, page modified 2026-11-02), section 3: (a) where 'the total amount paid or payable shown on the supporting documentation ... is less than $100': name of the supplier or intermediary (or name under which it does business), date of the invoice (or date on which tax is paid or payable if no invoice), total amount paid or payable; (b) '$100 or more and less than $500': the same plus 'the registration number assigned under section 241 of the Act', the amount of tax (or, where the price includes it, a statement that tax is included with the total or the rate), and, 'where the status of two or more supplies is different, an indication of the status of each taxable supply'; (c) '$500 or more': the information in (a) and (b), 'the recipient's name, the name under which the recipient does business or the name of the recipient's duly authorized agent or representative', 'the terms of payment' and 'a description of each supply sufficient to identify it'. Section history: SOR/2000-180, SOR/2014-248, 2024, c. 15, s. 142 (date from which the $100 and $500 thresholds apply not shown on the site). Revenu Québec applies the same thresholds for QST input tax refunds, with the QST registration number required from $100 (see qst_registration_number_on_invoices)."
     },
     "qst_registration_number_on_invoices": {
       "value": 100,
@@ -226,10 +227,17 @@
       "value": "Invoices, receipts, acquittances and other documents of the same nature are drawn up in French.",
       "unit": "text",
       "label": "Charter of the French language, section 57, first paragraph: invoices of businesses in Québec are drawn up in French",
-      "source": "https://www.legisquebec.gouv.qc.ca/en/document/cs/c-11",
-      "source_title": "C-11 - Charter of the French language - LégisQuébec",
-      "confidence": "medium",
-      "note": "Read on 2026-10-21 through search excerpts of LégisQuébec (French: « Les factures, les reçus, les quittances et les autres documents de même nature sont rédigés en français »). The second paragraph added in 2022 (no document sent in another language unless the French version is available on terms at least as favourable) had its entry into force suspended by the Superior Court (August 2022); its current status is not confirmed, so the site does not state it. Whether another language may accompany French (section 89) is not shown on the site."
+      "source": "https://www.legisquebec.gouv.qc.ca/fr/document/lc/C-11",
+      "source_title": "C-11 - Charte de la langue française, article 57 - LégisQuébec (texte français)",
+      "more_sources": [
+        {
+          "source": "https://www.legisquebec.gouv.qc.ca/en/document/cs/c-11",
+          "source_title": "C-11 - Charter of the French language - LégisQuébec"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-11-09",
+      "note": "Read on 09/11/2026 with the source reader (LégisQuébec, consolidated French text): « 57. Les factures, les reçus, les quittances et les autres documents de même nature sont rédigés en français. » Second paragraph (1977, c. 5, a. 57; 2022, c. 14, a. 47): « Nul ne peut transmettre un tel document dans une autre langue que le français lorsque sa version française n'est pas accessible au destinataire dans des conditions au moins aussi favorables. » An earlier note (search excerpts, 21/10/2026) said the Superior Court had suspended this second paragraph in August 2022: not confirmed on an official source, so the site states only the first paragraph. Whether another language may accompany French (section 89) is not shown on the site."
     },
     "tax_number_formats": {
       "value": {
@@ -954,13 +962,24 @@
       "note": "Structured version of ontario_health_premium (same figures), checked against every row of the Ministry of Finance table on 09/11/2026. No premium at or below $20,000 of taxable income."
     },
     "gst_hst_filing_due_dates": {
-      "value": "Monthly and quarterly filers: one month after the end of the reporting period. Annual filers who are individuals with business income and a December 31 year-end: return by June 15, payment by April 30. Annual filers' quarterly instalments: one month after the end of each fiscal quarter, if net tax is $3,000 or more.",
+      "value": "Monthly and quarterly filers: one month after the end of the reporting period. Annual filers who are individuals with business income and a December 31 year-end: return by June 15, payment by April 30. Annual filers' quarterly instalments: one month after the end of each fiscal quarter, if the instalment base is $3,000 or more.",
       "unit": "text",
       "label": "GST/HST return and payment due dates",
       "source": "https://laws-lois.justice.gc.ca/eng/acts/E-15/section-238.html",
       "source_title": "Excise Tax Act, section 238 (filing of returns) - Justice Laws Website",
+      "more_sources": [
+        {
+          "source": "https://laws-lois.justice.gc.ca/eng/acts/E-15/section-228.html",
+          "source_title": "Excise Tax Act, section 228 (remittance) - Justice Laws Website"
+        },
+        {
+          "source": "https://laws-lois.justice.gc.ca/eng/acts/E-15/section-237.html",
+          "source_title": "Excise Tax Act, section 237 (instalments) - Justice Laws Website"
+        }
+      ],
       "confidence": "high",
-      "note": "Quebec: GST and QST are filed with Revenu Québec on the same schedule."
+      "verified_on": "2026-11-09",
+      "note": "Read on 09/11/2026 with the source reader (Justice Laws Website, Act current to 2026-10-19). Section 238(1): the return is filed, for an individual whose fiscal year is a calendar year, who carried on a business and whose income tax filing-due date 'is June 15 of the following year, on or before that day', otherwise for an annual period 'within three months after the end of the year', and '(b) in every other case, within one month after the end of the reporting period'. Section 228(2)(a): such an individual remits 'on or before April 30 of the year following the end of the reporting period'; (b) others 'on or before the day on or before which the return for that period is required to be filed'. Section 237(1): annual filers pay 'within one month after the end of each fiscal quarter' an instalment equal to 1/4 of the instalment base (the lesser of the current-year and previous-year amounts, 237(2)); 237(3): an instalment base 'less than $3,000' is 'deemed to be nil'. Quebec: GST and QST are filed with Revenu Québec on the same schedule (not reread: revenuquebec.ca refuses automated reading)."
     },
     "rrsp_deadline_2026": {
       "value": "2027-03-01",

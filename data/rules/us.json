@@ -654,7 +654,7 @@
       "source": "https://dor.sd.gov/individuals/taxes/",
       "source_title": "South Dakota Department of Revenue - Taxes",
       "confidence": "medium",
-      "note": "Read on 08/11/2026 with the source reader (official pages read in GitHub Actions): SD 'South Dakota is one of seven states that does not impose a state income tax'; AK (Alaska Court System) 'Does Alaska have a state individual income tax? No.'; FL (Constitution art. VII s. 5(a)) no tax 'upon the income of natural persons who are residents or citizens of the state' beyond amounts creditable against a federal or other state tax; NV 'The State of Nevada does not impose a state income tax on individuals'; NH Interest and Dividends Tax repealed 'for tax periods beginning on or after January 1, 2025'; TX (Comptroller, February 2016) 'Texas does not have a personal income tax'; WA 'Washington does not currently have an individual income tax. Beginning Jan. 1, 2028, a new 9.9% income tax will apply to individuals and married couples filing jointly with annual adjusted gross income exceeding $1 million' (Senate Bill 6346, first returns due in April 2029); WY 'Wyoming does not possess an individual or corporate income tax'. TN: the Hall income tax on interest and dividends was repealed from 2021, but tn.gov refused the automated reading on 08/11/2026 (connection reset): not reread, hence not dated. Business-level taxes can still apply to freelancers (Nevada's Commerce Tax above $4 million of gross revenue, read on the Nevada page; others such as Washington B&O, Tennessee franchise and excise, Texas franchise tax on LLCs, New Hampshire business profits tax not verified). Local income taxes (e.g. NYC, some Ohio or Pennsylvania cities) are separate.",
+      "note": "Read on 08/11/2026 with the source reader (official pages read in GitHub Actions): SD 'South Dakota is one of seven states that does not impose a state income tax'; AK (Alaska Court System) 'Does Alaska have a state individual income tax? No.'; FL (Constitution art. VII s. 5(a)) no tax 'upon the income of natural persons who are residents or citizens of the state' beyond amounts creditable against a federal or other state tax; NV 'The State of Nevada does not impose a state income tax on individuals'; NH Interest and Dividends Tax repealed 'for tax periods beginning on or after January 1, 2025'; TX (Comptroller, February 2016) 'Texas does not have a personal income tax'; WA 'Washington does not currently have an individual income tax. Beginning Jan. 1, 2028, a new 9.9% income tax will apply to individuals and married couples filing jointly with annual adjusted gross income exceeding $1 million' (Senate Bill 6346, first returns due in April 2029); WY 'Wyoming does not possess an individual or corporate income tax'. TN: the Hall income tax on interest and dividends was repealed from 2021, but tn.gov refused the automated reading on 08/11/2026 and again on 09/11/2026 (connection reset): not reread, hence not dated. Business-level taxes can still apply to freelancers (Nevada's Commerce Tax above $4 million of gross revenue, read on the Nevada page; others such as Washington B&O, Tennessee franchise and excise, Texas franchise tax on LLCs, New Hampshire business profits tax not verified). Local income taxes (e.g. NYC, some Ohio or Pennsylvania cities) are separate.",
       "more_sources": [
         {
           "source": "https://courts.alaska.gov/shc/probate/tax-matters.htm",
@@ -913,8 +913,14 @@
       "label": "Late fees on invoices: general US rule",
       "source": "https://www.nyc.gov/assets/dca/downloads/pdf/workers/Protecting-Freelance-Workers.pdf",
       "source_title": "NYC DCWP - Protecting Freelance Workers (flyer) [for the double-damages remedy]",
+      "more_sources": [
+        {
+          "source": "https://www.govinfo.gov/content/pkg/USCODE-2023-title31/html/USCODE-2023-title31-subtitleIII-chap39.htm",
+          "source_title": "31 U.S.C. chapter 39, Prompt Payment - govinfo (United States Code, 2023 edition)"
+        }
+      ],
       "confidence": "medium",
-      "note": "General legal principle summarised; no single official page states it. The federal Prompt Payment Act (31 U.S.C. 3901-3907) only covers payments by federal agencies to contractors (interest penalty if paid after the due date, generally 30 days after a proper invoice) - not verified in this session."
+      "note": "General legal principle summarised; no single official page states it, so the rule stays undated. Prompt Payment Act, 31 U.S.C. 3902(a), read on 09/11/2026 with the source reader (govinfo, US Code 2023): 'the head of an agency acquiring property or service from a business concern, who does not pay the concern for each complete delivered item of property or service by the required payment date, shall pay an interest penalty to the concern on the amount of the payment due', at the rate set by the Secretary of the Treasury: it only concerns federal agencies paying their contractors, not invoices between private businesses."
     },
     "late_fee_example_california": {
       "value": {
@@ -1125,13 +1131,20 @@
       "note": "A recommendation, not a legal requirement for a sole proprietor. Banks may ask for a business license or DBA documents."
     },
     "ssa_benefits_based_on_earnings": {
-      "value": "Social Security benefits are based on your lifetime covered earnings (wages and net self-employment earnings), not on the taxes you paid.",
+      "value": "Social Security benefits are based on your covered earnings (the wages and self-employment income credited to your benefit computation years), not on the taxes you paid.",
       "unit": "text",
       "label": "Social Security benefits depend on covered earnings",
-      "source": "https://www.ssa.gov/pubs/EN-05-10024.pdf",
-      "source_title": "Understanding the Benefits (2026) - SSA",
+      "source": "https://www.govinfo.gov/content/pkg/USCODE-2023-title42/html/USCODE-2023-title42-chap7-subchapII-sec415.htm",
+      "source_title": "42 U.S.C. 415, Computation of primary insurance amount - govinfo (United States Code, 2023 edition)",
+      "more_sources": [
+        {
+          "source": "https://www.ssa.gov/pubs/EN-05-10024.pdf",
+          "source_title": "Understanding the Benefits (2026) - SSA"
+        }
+      ],
       "confidence": "high",
-      "note": "Read on 2026-10-22 through search excerpts of SSA publications (benefits based on the highest 35 years of indexed earnings). A lower S corp salary therefore means lower earnings on the owner's record."
+      "verified_on": "2026-11-09",
+      "note": "Read on 09/11/2026 with the source reader (ssa.gov refuses automated reading). 42 U.S.C. 415(b)(1): 'An individual's average indexed monthly earnings shall be equal to the quotient obtained by dividing—(A) the total (after adjustment under paragraph (3)) of his wages paid in and self-employment income credited to his benefit computation years (determined under paragraph (2)), by (B) the number of months in those years.' (b)(2)(A)(i): 'The number of an individual's benefit computation years equals the number of elapsed years reduced ... by 5 years' for old-age benefits. A lower S corp salary therefore means lower earnings on the owner's record. The SSA booklet (highest 35 years of indexed earnings) was read on 22/10/2026 through search excerpts only."
     },
     "us_foreign_currency_translation": {
       "value": "Report every amount in US dollars. When your functional currency is the US dollar (the case of a US sole proprietor), translate each item you receive, pay or accrue in a foreign currency at the exchange rate prevailing at that time; if there is more than one exchange rate, use the one that most properly reflects your income. The IRS has no official exchange rate and generally accepts any posted exchange rate that is used consistently.",

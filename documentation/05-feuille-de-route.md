@@ -376,7 +376,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   des comptes attend le choix de l'hébergeur et du domaine.
 - **Vérification outillée des règles (08/11/2026)** : workflow « Vérifier les règles sur leurs sources »
   (`scripts/verifier_regles.py`, D55), pages lues en parallèle. Règles datées après relecture : Royaume-Uni 161 sur
-  164, États-Unis 88 sur 95, France 113 sur 120, Canada 83 sur 135 (France : fiches d'Entreprendre.Service-Public
+  164, États-Unis 89 sur 95, France 113 sur 120, Canada 86 sur 135 (France : fiches d'Entreprendre.Service-Public
   utilisées quand Urssaf, Légifrance ou economie.gouv.fr refusent la lecture). Barème kilométrique français et taux kilométrique
   américain de juillet rattachés au BOFiP et à l'IRS ; SMIC mis à jour (12,31 €) ; calendrier de la facturation
   électronique, abattements et versement libératoire relus sur impots.gouv.fr ; Canada : Loi de l'impôt, Loi sur
@@ -436,7 +436,12 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   **corrections** du moteur américain : le minimum remplace aussi le plafond de 20 % du revenu imposable (« the
   greater of »), et le seuil de 1 000 $ d'une SSTB dans la zone de transition se calcule sur le QBI réduit au
   pourcentage applicable (IRC 199A(d)(3), relu) ; tests contrôlés par mutation ; FAQ des deux calculateurs
-  concernés précisées.
+  concernés précisées. Puis : droits à la Social Security relus dans 42 U.S.C. 415(b) (govinfo, ssa.gov refusant la
+  lecture) et datés ; Prompt Payment Act (31 U.S.C. 3902) relu : il ne vise que les agences fédérales (règle générale
+  sur les pénalités de retard laissée non datée, faute de texte unique) ; tn.gov refuse toujours la lecture (Tennessee
+  non relu). Canada : mentions de facture pour les CTI (DORS/91-45, art. 3), facture en français au Québec (Charte,
+  art. 57, LégisQuébec) et échéances de la TPS/TVH (Loi sur la taxe d'accise, art. 228, 237 et 238) relues sur les
+  textes et datées ; la suspension du 2e alinéa de l'art. 57, citée par une note antérieure, n'est pas confirmée.
   Restent en France : TNS et
   SASU (ordres de grandeur), mention d'assurance (L132-1), compte du commerçant (L123-24),
   périodicité Urssaf, décret 2025-943 et taux ACRE arrondis. États sans impôt sur le revenu : 8 pages officielles sur 9 lues le

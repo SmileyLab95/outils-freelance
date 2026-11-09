@@ -1,5 +1,16 @@
 # Journal des modifications
 
+## 2026-11-09 (matin, suite) — Textes de loi relus aux États-Unis et au Canada
+
+- **États-Unis** : droits à la retraite de la Social Security relus dans le Code américain (42 U.S.C. 415(b),
+  govinfo) : ils dépendent des salaires et revenus d'indépendant inscrits, ce que dit le comparateur S corp. Règle
+  datée ; États-Unis : 89 règles sur 95 datées. *Prompt Payment Act* relu : il ne concerne que les paiements des
+  agences fédérales à leurs fournisseurs.
+- **Canada** : mentions d'une facture pour les crédits de taxe sur les intrants (règlement DORS/91-45, art. 3),
+  facture rédigée en français au Québec (Charte de la langue française, art. 57) et échéances de déclaration, de
+  paiement (30 avril pour un particulier au 31 décembre) et d'acomptes de la TPS/TVH (Loi sur la taxe d'accise,
+  art. 228, 237 et 238) relues dans les textes officiels et datées. Canada : 86 règles sur 135 datées.
+
 ## 2026-11-09 (matin) — Déduction QBI minimale de 400 $ relue dans la loi
 
 - **États-Unis** : minimum de déduction QBI relu dans le texte de la loi P.L. 119-21 (section 70105, govinfo) :
