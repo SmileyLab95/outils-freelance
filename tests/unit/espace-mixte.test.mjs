@@ -155,3 +155,12 @@ test("registre des achats : obligatoire si l'une des deux activités est la vent
   assert.equal(E.purchasesRequired({ activity: "liberal_bnc", activity2: "services_bic" }, R.registre_achats, R), false);
   assert.equal(E.purchasesRequired({ activity: "vente" }, R.registre_achats, R), true);
 });
+
+test("générateur public vers l'Espace : la nature des lignes d'un document mixte est reprise, une nature inconnue ignorée", () => {
+  const g = { type: "facture", date: "2026-10-15", nature: "mixte", client: { name: "Atelier Lumen" }, vat: { franchise: true },
+    lines: [{ desc: "Lampe", qty: "2", price: "150", kind: "biens" }, { desc: "Pose", qty: "1", price: "700", kind: "services" },
+      { desc: "Câbles", qty: "1", price: "20", kind: "toString" }, { desc: "Sans nature", qty: "1", price: "10", kind: "" }] };
+  const r = E.fromGenerator(g, mixed, [], [], { doc: "d", client: "c" }, "2026-10-20", "t");
+  assert.equal(r.doc.nature, "mixte");
+  assert.deepEqual(r.doc.lines.map((l) => [l.desc, l.kind]), [["Lampe", "biens"], ["Pose", "services"], ["Câbles", undefined], ["Sans nature", undefined]]);
+});

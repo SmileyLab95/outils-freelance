@@ -532,8 +532,11 @@
     var place = client && client.pro ? client.place || "fr" : "fr";
     var rate = Number(gv.rate) > 0 ? Number(gv.rate) : profile.vatRate || 20;
     var amount = function (v) { var n = INV.amount(v); return isFinite(n) ? n : NaN; };
-    var lines = (g.lines || []).map(function (l) { return { desc: String((l && l.desc) || ""), qty: amount(l && l.qty), price: amount(l && l.price) }; })
-      .filter(function (l) { return l.desc.trim() || isFinite(l.price); });
+    var lines = (g.lines || []).map(function (l) {
+      var out = { desc: String((l && l.desc) || ""), qty: amount(l && l.qty), price: amount(l && l.price) };
+      if (l && has(INV.LINE_KINDS, l.kind)) out.kind = l.kind; // vente ou service (document mixte, documentation/53)
+      return out;
+    }).filter(function (l) { return l.desc.trim() || isFinite(l.price); });
     if (!lines.length) lines = [{ desc: "", qty: 1, price: NaN }];
     var date = isISO(g.date) ? g.date : today;
     var terms = parseInt(g.terms, 10);

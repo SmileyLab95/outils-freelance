@@ -23,12 +23,19 @@
   function val(id) { return ($(id).value || "").trim(); }
 
   // ----- Lignes de prestations -------------------------------------------------
+  // Document « biens et services » : nature de chaque ligne (vente ou service) et sous-totaux sur la facture, comme le
+  // demande le BOFiP en activité mixte (documentation/53-activite-mixte.md).
+  var KINDS = [["", "À préciser"], ["biens", "Vente"], ["services", "Service"]];
   function renderLines() {
+    var mixed = $("f-nature").value === "mixte";
+    $("f-lines-hint").hidden = !mixed;
     linesBox.innerHTML = "";
     state.lines.forEach(function (line, i) {
       var row = document.createElement("div");
-      row.className = "line-row";
+      row.className = "line-row" + (mixed ? " has-kind" : "");
       row.innerHTML =
+        (mixed ? '<div class="field line-kind"><label for="l-kind-' + i + '">Nature</label><select id="l-kind-' + i + '" data-k="kind">' +
+          KINDS.map(function (o) { return '<option value="' + o[0] + '">' + o[1] + "</option>"; }).join("") + "</select></div>" : "") +
         '<div class="field line-desc"><label for="l-desc-' + i + '">Désignation</label>' +
         '<input type="text" id="l-desc-' + i + '" data-k="desc" placeholder="Ex. : création d\'un site vitrine (5 pages)"></div>' +
         '<div class="field line-qty"><label for="l-qty-' + i + '">Qté</label>' +
@@ -39,6 +46,7 @@
       row.querySelector('[data-k="desc"]').value = line.desc;
       row.querySelector('[data-k="qty"]').value = line.qty;
       row.querySelector('[data-k="price"]').value = line.price;
+      if (mixed) row.querySelector('[data-k="kind"]').value = line.kind === "biens" || line.kind === "services" ? line.kind : "";
       row.addEventListener("input", function (e) {
         var k = e.target.getAttribute("data-k");
         if (!k) return;
@@ -117,7 +125,7 @@
             logo: state.logo },
       client: { name: val("f-client-name"), address: $("f-client-address").value, id: val("f-client-id"), vat: val("f-client-vat"),
                 delivery: val("f-client-delivery"), pro: $("f-client-pro").checked },
-      lines: state.lines.map(function (l) { return { desc: l.desc, qty: OF.num(l.qty), price: OF.num(l.price) }; }),
+      lines: state.lines.map(function (l) { return { desc: l.desc, qty: OF.num(l.qty), price: OF.num(l.price), kind: l.kind || "" }; }),
       vat: { franchise: $("f-franchise").checked, rate: num("f-vat-rate"), place: $("f-vat-place").value, debits: $("f-debits").checked },
       paid: num("f-paid"), penalty: val("f-penalty"), notes: val("f-notes")
     };
@@ -174,6 +182,7 @@
   $("f-service-date").value = OF.today();
   applyType();
   renderLines();
+  $("f-nature").addEventListener("change", renderLines);
   form.addEventListener("input", render);
   form.addEventListener("change", render);
   render();

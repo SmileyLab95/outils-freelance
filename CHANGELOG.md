@@ -1,5 +1,12 @@
 # Journal des modifications
 
+## 2026-11-09 (nuit) — Générateur de facture : ventes et prestations distinctes
+
+- Dans le générateur de facture public, une opération « Mixte (biens et services) » propose pour chaque ligne le choix
+  « Vente » ou « Service » ; la facture affiche les sous-totaux des ventes et des prestations, comme dans l'Espace. Le
+  choix est mémorisé et suit le document quand il passe dans l'Espace.
+- Tests unitaires et parcours navigateur complétés (accessibilité comprise) ; captures relues sur ordinateur et mobile.
+
 ## 2026-11-09 (fin de soirée) — Espace : activité mixte (ventes et prestations)
 
 - Un micro-entrepreneur qui **vend des marchandises et rend des services** peut déclarer une seconde activité dans ses

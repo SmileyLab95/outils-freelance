@@ -340,12 +340,19 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--b
 .line-row.has-unit .line-remove { grid-area: remove; }
 /* Document « biens et services » (activité mixte) : nature de la ligne (vente ou service) avant la désignation. */
 .line-row.has-unit.has-kind { grid-template-columns: 112px 104px minmax(0, 1fr) 34px; grid-template-areas: "kind desc desc remove" "qty unit price price"; }
+.line-row.has-kind:not(.has-unit) { grid-template-columns: 112px 104px minmax(0, 1fr) 34px; grid-template-areas: "kind desc desc remove" "qty price price price";
+  padding-bottom: 12px; border-bottom: 1px solid var(--line); margin-bottom: 12px; }
 .line-row.has-kind .line-kind { grid-area: kind; }
+.line-row.has-kind .line-desc { grid-area: desc; }
+.line-row.has-kind .line-qty { grid-area: qty; }
+.line-row.has-kind .line-price { grid-area: price; }
+.line-row.has-kind .line-remove { grid-area: remove; }
 @media (max-width: 520px) {
   .line-row { grid-template-columns: 64px minmax(0, 1fr) 34px; }
   .line-row .line-desc { grid-column: 1 / -1; }
   .line-row.has-unit { grid-template-columns: 64px 92px minmax(0, 1fr) 34px; }
   .line-row.has-unit.has-kind { grid-template-columns: 64px 92px minmax(0, 1fr) 34px; grid-template-areas: "desc desc desc remove" "kind kind kind kind" "qty unit price price"; }
+  .line-row.has-kind:not(.has-unit) { grid-template-columns: 64px 92px minmax(0, 1fr) 34px; grid-template-areas: "desc desc desc remove" "kind kind kind kind" "qty price price price"; }
 }
 /* Proposition commerciale : étapes (intitulé, durée, prix) et options (intitulé, prix). */
 .pr-phases { grid-template-columns: minmax(0, 1fr) 110px 110px 34px; }

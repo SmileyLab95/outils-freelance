@@ -39,6 +39,12 @@ document affiche alors, sous les lignes, le **sous-total HT des ventes** et le *
 (BOFiP § 30). Une facture « biens et services » ne peut pas être émise tant qu'une ligne n'a pas de nature. Les
 avoirs reprennent la nature des lignes de leur facture.
 
+**Générateur de facture public** (ajouté le 09/11/2026 au soir) : pour une opération « Mixte (biens et services) »,
+même choix « Vente » ou « Service » sur chaque ligne, avec une aide qui l'explique, et mêmes sous-totaux dans l'aperçu
+(moteur commun). La nature des lignes est mémorisée avec la saisie et reprise quand le document passe dans l'Espace
+(une nature inconnue est ignorée). Le générateur ne connaît pas l'activité de l'utilisateur : la nature des lignes y
+reste facultative.
+
 **Encaissements.** Un encaissement est rattaché aux ventes (facture de biens), aux prestations (facture de services)
 ou aux deux (facture mixte) : dans ce dernier cas, il est **réparti au prorata des montants HT** des lignes de
 chaque nature (convention D59, aucune source ne fixant la répartition d'un paiement partiel) ; arrondi au centime
@@ -96,19 +102,22 @@ trimestre et export CSV ; déclaration (ventes 650 € × 12,5 % = 81,25 €, pr
 versement libératoire, ACRE) ; plafonds ; trésorerie (déjà dû 429,55 €, prévision du 4e trimestre 340,45 € avec les
 encaissements attendus répartis) ; registre des achats. Contrôle par mutation : 21 erreurs réintroduites dans les
 moteurs de l'Espace et de la facture, toutes détectées (deux l'ont été après ajout d'assertions). Profil à une
-activité : tests existants inchangés (641 tests unitaires au total).
+activité : tests existants inchangés. Reprise du générateur : nature des lignes conservée, nature inconnue ignorée
+(11 tests en tout).
 
 Parcours navigateur (`tests/e2e/verifier.mjs`, fin du parcours de l'Espace) : seconde activité proposée selon
 l'activité, profil enregistré, nature des lignes absente d'une facture de services, émission refusée tant qu'une ligne
 n'a pas de nature, aperçu avec « Vente : … », « Service : … » et sous-totaux, encaissement partiel réparti dans le livre
 des recettes, note de déclaration par activité, jauges et note sur la TVA, retour à une activité ; accessibilité
 (axe-core) de la facture, du livre des recettes et du tableau de bord ; captures relues sur ordinateur et mobile.
+Générateur public : pas de nature de ligne pour des services, choix et aide pour une opération mixte, sous-totaux
+(1 800 € de ventes, 451,50 € de prestations), accessibilité, nature mémorisée après rechargement, retour aux services.
 
 ## 7. Hors champ
 
 Deux activités de services (BIC et BNC) ensemble ; location meublée de tourisme ; seuil de franchise de TVA en
 activité mixte (article 293 B à lire) ; impôt sur le revenu (abattements par part, minimum de 610 €) dans
-l'Espace ; générateur de facture public (natures de lignes à ajouter ensuite).
+l'Espace.
 
 ## Annexe : sources lues le 09/11/2026 (outil « Lire une source officielle »)
 

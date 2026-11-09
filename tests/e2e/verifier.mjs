@@ -157,9 +157,23 @@ const tests = {
     await page.fill("#f-client-id", "812 345 678");
     const reform = await page.textContent("#f-preview");
     check(reform.includes("SIREN : 812 345 678") && reform.includes("Prestation de services"), "facture : SIREN du client et nature de l'opération (réforme)");
+    check(!(await page.$("#l-kind-0")) && await page.isHidden("#f-lines-hint"), "facture : pas de nature de ligne pour une prestation de services");
     await page.selectOption("#f-nature", "mixte");
     check((await page.textContent("#f-preview")).includes("Biens et services"), "facture : nature de l'opération mixte");
+    // Activité mixte (documentation/53) : nature de chaque ligne et sous-totaux des ventes et des prestations.
+    await page.waitForSelector("#l-kind-1");
+    check(await page.isVisible("#f-lines-hint") && (await page.inputValue("#l-desc-1")) === "Rédaction des contenus", "facture mixte : nature des lignes demandée, lignes conservées");
+    await page.selectOption("#l-kind-0", "biens");
+    await page.selectOption("#l-kind-1", "services");
+    const mixedText = (await page.textContent("#f-preview")).replace(/\s+/g, " ");
+    check(mixedText.includes("Vente : Création du site vitrine") && mixedText.includes("Service : Rédaction des contenus") &&
+      /dont ventes ?1 ?800,00 ?€/.test(mixedText) && /dont prestations de services ?451,50 ?€/.test(mixedText),
+      "facture mixte : ventes et prestations distinctes, sous-totaux HT (1 800 € et 451,50 €)");
+    await accessible(page, "facture mixte (nature des lignes)");
+    await page.reload({ waitUntil: "networkidle" });
+    check((await page.inputValue("#l-kind-0")) === "biens" && (await page.inputValue("#l-kind-1")) === "services", "facture mixte : nature des lignes mémorisée");
     await page.selectOption("#f-nature", "services");
+    check(!(await page.$("#l-kind-0")) && !(await page.textContent("#f-preview")).includes("dont ventes"), "facture : retour aux prestations, plus de sous-totaux");
     await page.uncheck("#f-franchise");
     const ttc = await page.textContent("#f-preview");
     check(/2\s?701,80\s?€/.test(ttc), "facture : TVA 20 % appliquée (2 701,80 € TTC)");
