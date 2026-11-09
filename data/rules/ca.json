@@ -513,19 +513,37 @@
       "value": 68900,
       "unit": "CAD",
       "label": "EI maximum insurable earnings 2026",
-      "source": "https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/payroll/payroll-deductions-contributions/employment-insurance-ei/ei-premium-rates-maximums.html",
-      "source_title": "EI premium rates and maximums - Canada.ca",
+      "source": "https://gazette.gc.ca/rp-pr/p2/2026/2026-02-25/html/sor-dors18-eng.html",
+      "source_title": "Canada Gazette, Part II, February 25, 2026 - Regulations Amending the Employment Insurance Regulations (SOR/2026-18), Regulatory Impact Analysis Statement",
+      "more_sources": [
+        {
+          "source": "https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/payroll/payroll-deductions-contributions/employment-insurance-ei/ei-premium-rates-maximums.html",
+          "source_title": "EI premium rates and maximums - Canada.ca"
+        }
+      ],
       "confidence": "high",
-      "note": "2025: $65,700. Maximum weekly benefit 2026: $729."
+      "verified_on": "2026-11-09",
+      "note": "Read on 09/11/2026 with the source reader: 'EI only replaces 55% of an employee's income, up to a threshold of $68,900, which is the 2026 limit for maximum insurable earnings (MIE) under the program. This means the maximum possible EI benefit is $729 per week'. The notice fixing the MIE itself was not found; the CRA page refuses automated reading. 2025: $65,700 (not reread)."
     },
     "ei_rate_self_employed": {
       "value": 0.0163,
       "unit": "rate",
       "label": "EI special benefits premium rate for opted-in self-employed (outside Québec), 2026",
-      "source": "https://www.canada.ca/en/services/benefits/ei/ei-self-employed-workers/premiums.html",
-      "source_title": "EI special benefits for self-employed people: Premiums - Canada.ca",
+      "source": "https://gazette.gc.ca/rp-pr/p1/2025/2025-10-11/pdf/g1-15941.pdf",
+      "source_title": "Canada Gazette, Part I, October 11, 2025 - Canada Employment Insurance Commission, Employment Insurance premium rate for 2026",
+      "more_sources": [
+        {
+          "source": "https://laws-lois.justice.gc.ca/eng/acts/E-5.6/section-152.21.html",
+          "source_title": "Employment Insurance Act, section 152.21 (self-employment premium) - Justice Laws Website"
+        },
+        {
+          "source": "https://www.canada.ca/en/services/benefits/ei/ei-self-employed-workers/premiums.html",
+          "source_title": "EI special benefits for self-employed people: Premiums - Canada.ca"
+        }
+      ],
       "confidence": "high",
-      "note": "$1.63 per $100 of self-employment earnings, maximum premium $1,123.07 in 2026, paid once a year with the income tax return. No employer share. Opt-in by agreement with Service Canada; premiums are due for the whole calendar year in which you sign up. Rate set by the Canada Employment Insurance Commission (news release, September 2025)."
+      "verified_on": "2026-11-09",
+      "note": "Canada Gazette, Part I (11/10/2025), read on 09/11/2026 with the source reader: 'Pursuant to section 66.5 of the Employment Insurance Act, notice is hereby given that the Employment Insurance premium rate for the year 2026 is $1.63 per $100 of insurable earnings'; the premium reduction rate for residents of Quebec covered under the QPIP is $0.33, 'Therefore, the Employment Insurance premium rate for residents of Quebec is $1.30 per $100 of insurable earnings'. Employment Insurance Act 152.21(1), read the same day: every self-employed person with an agreement in force pays 'a self-employment premium equal to the amount determined under subsection (2) multiplied by the premium rate set under section 66 or 66.32'; (2): the lesser of the self-employed earnings and the maximum yearly insurable earnings minus insurable earnings; (3): a premium is due for the year in which the agreement is entered into, whatever its date. No employer share. Maximum premium 2026: $68,900 x 1.63% = $1,123.07. Opt-in by agreement with Service Canada."
     },
     "ei_rate_self_employed_quebec": {
       "value": 0.013,
@@ -533,8 +551,14 @@
       "label": "EI premium rate in Québec, 2026 (Québec self-employed opting in for EI special benefits)",
       "source": "https://www.canada.ca/en/employment-social-development/news/2025/09/canada-employment-insurance-commission-sets-the-2026-employment-insurance-premium-rate.html",
       "source_title": "Canada Employment Insurance Commission sets the 2026 Employment Insurance premium rate - Canada.ca",
+      "more_sources": [
+        {
+          "source": "https://gazette.gc.ca/rp-pr/p1/2025/2025-10-11/pdf/g1-15941.pdf",
+          "source_title": "Canada Gazette, Part I, October 11, 2025 - Canada Employment Insurance Commission, Employment Insurance premium rate for 2026"
+        }
+      ],
       "confidence": "medium",
-      "note": "Québec EI rate 1.30% (maximum $895.70) is confirmed. It is lower because maternity and parental benefits are covered by QPIP. That this exact rate applies to Québec self-employed who opt in to EI sickness, compassionate care and caregiving benefits was not confirmed on a CRA self-employed page."
+      "note": "Québec EI rate 1.30% (maximum $895.70) is confirmed. It is lower because maternity and parental benefits are covered by QPIP. That this exact rate applies to Québec self-employed who opt in to EI sickness, compassionate care and caregiving benefits was not confirmed on a CRA self-employed page. Canada Gazette, Part I (11/10/2025), read on 09/11/2026 with the source reader: 'Pursuant to section 66.5 of the Employment Insurance Act, notice is hereby given that the Employment Insurance premium rate for the year 2026 is $1.63 per $100 of insurable earnings'; the premium reduction rate for residents of Quebec covered under the QPIP is $0.33, 'Therefore, the Employment Insurance premium rate for residents of Quebec is $1.30 per $100 of insurable earnings'. The notice cites sections 76.07 and 76.35 of the Employment Insurance Regulations for the reduction."
     },
     "ca_sole_prop": {
       "value": "A sole proprietorship is an unincorporated business owned by one individual: the owner reports the business income on their own return and pays personal income tax on it.",
@@ -747,7 +771,7 @@
       "source": "https://www.canada.ca/en/revenue-agency/services/forms-publications/payroll/t4127-payroll-deductions-formulas/t4127-jan/t4127-jan-payroll-deductions-formulas-computer-programs.html",
       "source_title": "Payroll Deductions Formulas - 122nd Edition Effective January 1, 2026 - Canada.ca",
       "confidence": "medium",
-      "note": "16.5% of basic federal tax (T1 line 44000), because Québec funds some programs itself. Long-standing rate; not re-opened on 2026-10-20."
+      "note": "16.5% of basic federal tax (T1 line 44000), because Québec funds some programs itself. Long-standing rate; not re-opened on 2026-10-20. Reread on 09/11/2026: Income Tax Act 120(2) deems paid 3% of tax otherwise payable for income earned in a province that provided schooling allowances on January 1, 1973 (Quebec); the 13.5% part was not found in a text that applies it to taxpayers (the Federal-Provincial Fiscal Arrangements Act uses 13.5/(100-9.143) to compute payments to the province), so the rule stays undated."
     },
     "ontario_surtax": {
       "value": {
@@ -952,8 +976,23 @@
       "label": "Federal corporate tax rate after the small business deduction (for comparing with incorporation)",
       "source": "https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/corporations/corporation-tax-rates.html",
       "source_title": "Corporation tax rates - Canada.ca",
-      "confidence": "medium",
-      "note": "Applies to the first $500,000 of active business income of a Canadian-controlled private corporation; general federal rate 15%. A provincial small-business rate is added. Does not apply to a personal services business (an incorporated freelancer who would otherwise be an employee of the client). Not re-opened on 2026-10-20."
+      "more_sources": [
+        {
+          "source": "https://laws-lois.justice.gc.ca/eng/acts/I-3.3/section-125.html",
+          "source_title": "Income Tax Act, section 125 (small business deduction) - Justice Laws Website"
+        },
+        {
+          "source": "https://laws-lois.justice.gc.ca/eng/acts/I-3.3/section-123.html",
+          "source_title": "Income Tax Act, section 123 (rate for corporations) - Justice Laws Website"
+        },
+        {
+          "source": "https://laws-lois.justice.gc.ca/eng/acts/I-3.3/section-124.html",
+          "source_title": "Income Tax Act, section 124 (deduction from corporation tax) - Justice Laws Website"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-11-09",
+      "note": "Read on 09/11/2026 with the source reader (Act current to 2026-10-19): 123(1)(a) '38% of its amount taxable'; 124(1) a deduction of '10% of the corporation's taxable income earned in the year in a province'; 125(1.1)(c) small business deduction rate of '19%' for days after 2018; 125(2) 'business limit for a taxation year is $500,000' (shared between associated corporations, reduced by taxable capital and passive income, 125(3.1)). 38% - 10% - 19% = 9% on the first $500,000 of active business income of a Canadian-controlled private corporation. General federal rate 15% and the personal services business exclusion (an incorporated freelancer who would otherwise be an employee of the client) not reread. A provincial small-business rate is added."
     },
     "cpp_first_additional_rate_employee": {
       "value": 0.01,

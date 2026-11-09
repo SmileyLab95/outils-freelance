@@ -9,7 +9,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 
 ## Où en est-on ?
 
-*Mis à jour le 09/11/2026 (matin).*
+*Mis à jour le 09/11/2026 (fin de matinée).*
 
 - **Priorité (décision D10)** : le site et la plateforme d'abord ; noms de domaine, Gumroad et affiliation à la fin.
   Règle de qualité maximale pour tout produit ou service (D11, charte dans la [méthode](04-methode-de-travail.md#charte-qualité)).
@@ -376,7 +376,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   des comptes attend le choix de l'hébergeur et du domaine.
 - **Vérification outillée des règles (08/11/2026)** : workflow « Vérifier les règles sur leurs sources »
   (`scripts/verifier_regles.py`, D55), pages lues en parallèle. Règles datées après relecture : Royaume-Uni 161 sur
-  164, États-Unis 89 sur 95, France 113 sur 120, Canada 93 sur 135 (France : fiches d'Entreprendre.Service-Public
+  164, États-Unis 89 sur 95, France 113 sur 120, Canada 96 sur 135 (France : fiches d'Entreprendre.Service-Public
   utilisées quand Urssaf, Légifrance ou economie.gouv.fr refusent la lecture). Barème kilométrique français et taux kilométrique
   américain de juillet rattachés au BOFiP et à l'IRS ; SMIC mis à jour (12,31 €) ; calendrier de la facturation
   électronique, abattements et versement libératoire relus sur impots.gouv.fr ; Canada : Loi de l'impôt, Loi sur
@@ -447,6 +447,11 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   canada.ca restant illisible ; l'annexe VIII de la Loi sur la taxe d'accise affiche encore 8 % pour chaque province
   harmonisée : elle ne confirme pas les taux de TVH en vigueur (règle non datée) ; seuils fédéraux 2026 recoupés avec
   l'art. 117(2) de la Loi de l'impôt (montants de base × 1,02), non datés faute de lire le facteur d'indexation.
+  Fin de matinée : assurance-emploi des travailleurs autonomes (taux 2026 de 1,63 $ par 100 $, avis de la Commission à
+  la Gazette du Canada ; cotisation au même taux, Loi sur l'assurance-emploi, art. 152.21), maximum de la rémunération
+  assurable de 68 900 $ (Gazette, partie II) et taux fédéral des petites entreprises de 9 % (Loi de l'impôt, art. 123,
+  124, 125 : 38 % − 10 % − 19 %) datés ; taux québécois de 1,30 $ relu mais non rattaché aux travailleurs autonomes
+  (règlement, art. 76.35, non lu) ; abattement du Québec de 16,5 % : seule la part de 3 % (art. 120(2)) retrouvée.
   Restent en France : TNS et
   SASU (ordres de grandeur), mention d'assurance (L132-1), compte du commerçant (L123-24),
   périodicité Urssaf, décret 2025-943 et taux ACRE arrondis. États sans impôt sur le revenu : 8 pages officielles sur 9 lues le

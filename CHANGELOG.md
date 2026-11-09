@@ -1,5 +1,14 @@
 # Journal des modifications
 
+## 2026-11-09 (fin de matinée) — Assurance-emploi et taux des petites entreprises relus (Canada)
+
+- **Assurance-emploi des travailleurs autonomes** : taux 2026 de 1,63 $ par 100 $ relu dans l'avis de la Commission de
+  l'assurance-emploi publié à la Gazette du Canada (1,30 $ au Québec), cotisation calculée à ce taux (Loi sur
+  l'assurance-emploi, art. 152.21) et maximum de la rémunération assurable de 68 900 $ (Gazette du Canada, partie II).
+- **Taux fédéral des petites entreprises** (9 %) relu dans la Loi de l'impôt sur le revenu : 38 % moins l'abattement
+  de 10 % et la déduction de 19 %, sur les 500 000 premiers dollars.
+- Canada : 96 règles sur 135 datées (canada.ca reste illisible par l'outil de lecture).
+
 ## 2026-11-09 (matin, suite) — Textes de loi relus aux États-Unis et au Canada
 
 - **États-Unis** : droits à la retraite de la Social Security relus dans le Code américain (42 U.S.C. 415(b),
