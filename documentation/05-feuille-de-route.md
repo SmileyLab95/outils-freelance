@@ -9,7 +9,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 
 ## Où en est-on ?
 
-*Mis à jour le 10/11/2026 (nuit).*
+*Mis à jour le 10/11/2026 (fin de nuit).*
 
 - **Priorité (décision D10)** : le site et la plateforme d'abord ; noms de domaine, Gumroad et affiliation à la fin.
   Règle de qualité maximale pour tout produit ou service (D11, charte dans la [méthode](04-methode-de-travail.md#charte-qualité)).
@@ -363,7 +363,9 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   l'Espace) ; simulateur auto-entrepreneur en activité mixte (part des ventes, taux de chaque activité, abattements
   cumulés avec un minimum de 610 €, deux plafonds). 10/11 : franchise de TVA en activité mixte jaugée d'après le
   BOFiP (§ 160 : 85 000 € au total et 37 500 € de prestations, D60) ; Washington : taux 2026 (1,13 %, part salariale
-  71,43 %) et 2027 (1,2 %, 70,7 %) lus dans les communiqués de l'État, soit environ 0,81 % des revenus déclarés.
+  71,43 %) et 2027 (1,2 %, 70,7 %) lus dans les communiqués de l'État, soit environ 0,81 % des revenus déclarés ;
+  Minnesota : taux de 2026 (0,88 %) lu dans deux sources du DEED, prime annuelle estimée (0,88 % de la base de prime,
+  plafond de 184 500 $).
 - **Prochaines actions de Claude** : refonte, suite ([31](31-vision-plateforme.md) § 5) : les quatre modules du compte
   gratuit sont faits (étape 5) ; étape 6, outils restants (CGV : faites dans les quatre pays ;
   lois des autres provinces sur la protection du consommateur à lire pour les détailler ; le règlement albertain sur les
@@ -378,7 +380,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   [51](51-protection-sociale-royaume-uni.md) : à revoir si GOV.UK précise comment les crédits de classe 2 comptent pour
   la *Maternity Allowance* ; États-Unis faits le 09/11/2026 (8 États), [52](52-protection-sociale-etats-unis.md) :
   ajouter le Colorado (sites et lois hors .gov ou illisibles), le Connecticut (certificat de cga.ct.gov refusé par
-  l'outil de lecture) et le New Jersey ; taux du Delaware, du Massachusetts et du Minnesota, assiette de la prime de
+  l'outil de lecture) et le New Jersey ; taux du Delaware et du Massachusetts, taux 2027 du Minnesota, assiette de la prime de
   Washington pour les indépendants (estimation chiffrée), durée d'engagement au Delaware ; Canada (prestations spéciales de
   l'assurance-emploi, dès que canada.ca est lisible))) ;
   ajouter les taux du 1er semestre 2027 dès leur publication

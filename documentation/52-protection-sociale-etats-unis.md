@@ -51,8 +51,11 @@ salaire annuel moyen de l'État pendant une année fiscale précédant l'année 
 le revenu d'indépendant estimé de l'année plus les salaires d'indépendant, dans la limite du plafond de la Social
 Security (subd. 37). Taux (268B.14) : 0,7 % fixé par la loi à partir du 1er janvier 2026 pour les deux programmes,
 mais le commissaire pouvait l'ajuster avant cette date et doit l'ajuster chaque année **avant le 31 juillet** pour
-l'année suivante (subd. 7) : le taux en vigueur n'est donc pas établi par la loi seule, pas d'estimation (D57) ; le
-taux publié par l'administration n'est pas lu (pl.mn.gov refuse la lecture).
+l'année suivante (subd. 7) : le taux en vigueur n'est donc pas établi par la loi seule. Lu le 10/11/2026 dans deux
+sources du DEED sur mn.gov (communiqué du 21/02/2025 et affiche obligatoire) : **0,88 %** en 2026 (« the premium rate
+will be 0.88 percent »). L'outil estime donc la prime de 2026 : 0,88 % de la base de prime saisie, plafonnée au plafond
+de la Social Security (184 500 $), en montant annuel seulement (rythme de paiement des indépendants non lu, pl.mn.gov
+refusant la lecture) ; taux de 2027 non lu.
 
 **New York** (`us_paid_leave_ny_self_employed`) : sans salarié, adhésion par l'achat d'une **police d'assurance**
 couvrant **à la fois** le *Paid Family Leave* et l'invalidité (pas de PFL seul) ; prix fixé par l'assureur.
@@ -86,7 +89,8 @@ bénéfice net. Résultat : le programme, la prime annuelle et trimestrielle est
 savoir (durées, engagement, conditions), la démarche, et la note sur le SSDI. Moteur `engines/benefits-us.js`
 (`OFE.benefitsUS` : `STATES`, `program`, `premium`), chiffres lus dans les règles, textes dans `tools/us-benefits.js`.
 
-Hors champ : montants des prestations (calculateurs des États), taux du Delaware, du Massachusetts et du Minnesota,
+Hors champ : montants des prestations (calculateurs des États), taux du Delaware et du Massachusetts, taux de 2027 du
+Minnesota,
 estimation de la prime de Washington (assiette non lue), engagement au Delaware, résiliation en Californie, États non lus, chômage, assurance invalidité privée (renvoi au guide des assurances).
 
 ## 4. Tests
@@ -111,6 +115,7 @@ York, Washington, Minnesota, Delaware, Massachusetts, Maine, autre État, access
 | Washington Paid Leave, *Self-employed* | Déclaration et paiement trimestriels |
 | Employment Security Department, communiqués du 29/10/2025 et du 16/10/2026 (lus le 10/11/2026) | Taux de 1,13 % en 2026 (salariés 71,43 %), 1,2 % en 2027 (salariés 70,7 %) ; page des primes : 1,13 % des salaires bruts plafonnés à 184 500 $ (salariés) |
 | Minnesota Statutes 2026, 268B.11 | 104 semaines, trimestre suivant, sortie au 1er janvier avec 30 jours, prime plafonnée, prestations |
+| DEED (mn.gov), communiqué du 21/02/2025 et affiche obligatoire de Paid Leave (lus le 10/11/2026) | Taux de 0,88 % en 2026 ; indépendants non couverts d'office mais pouvant adhérer |
 | Minnesota Statutes 2026, 268B.01 et 268B.14 | 268B.01 subd. 36 (5,3 % du salaire annuel moyen) et 37 (base de prime) ; 268B.14 subd. 6 (0,7 % en 2026) et 7 (ajustement annuel avant le 31 juillet, plafond de 1,1 %) |
 | M.G.L. c. 175M, art. 2 et 6 (malegislature.gov) | 2(j) : 3 ans au moins, effet au dépôt, 2 trimestres sur les 4 derniers ; 6(b) : toute la cotisation à la charge de l'indépendant |
 | 26 M.R.S. 850-G (Maine Legislature) | 3 ans au moins, effet au dépôt, retrait dans les 30 jours après les 3 ans, effet 30 jours après l'avis |

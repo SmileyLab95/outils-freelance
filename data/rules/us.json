@@ -2579,7 +2579,8 @@
         "min_weeks": 104,
         "cancel_notice_days": 30,
         "min_net_earnings_share_of_state_average_wage": 0.053,
-        "rate_adjusted_each_year_by": "July 31"
+        "rate_adjusted_each_year_by": "July 31",
+        "premium_rate_2026": 0.0088
       },
       "unit": "object",
       "label": "Minnesota: Paid Leave election of coverage for the self-employed (Minn. Stat. 268B.11)",
@@ -2593,11 +2594,19 @@
         {
           "source": "https://www.revisor.mn.gov/statutes/cite/268B.14",
           "source_title": "Minnesota Statutes 2026, section 268B.14, Employer premiums"
+        },
+        {
+          "source": "https://mn.gov/deed/newscenter/press-releases/?id=1045-670064",
+          "source_title": "DEED Confirms Paid Leave Premium Rate, Remains on Track for Launch in 2026 - Minnesota DEED (February 21, 2025)"
+        },
+        {
+          "source": "https://mn.gov/deed/assets/paid-leave-mandatory-employer-poster-acc_tcm1045-700342.pdf",
+          "source_title": "Minnesota Paid Leave mandatory employer poster - Minnesota DEED"
         }
       ],
       "confidence": "high",
-      "verified_on": "2026-11-09",
-      "note": "Read on 09/11/2026 with the source reader. Subd. 1(a): 'A self-employed individual or independent contractor may file with the commissioner ... an application to be entitled to benefits under this chapter for a period not less than 104 consecutive calendar weeks'; benefits begin 'the calendar quarter after the date of approval' (or later if requested); coverage ends on January 1 only with a notice filed 'at least 30 calendar days before'. (b): if terminated for unpaid premiums during the first 104 weeks, the premium remains due for the rest of the period. Subd. 3: the annual premium is the rate of section 268B.14, subd. 6, clause (1), times the lesser of the self-employment premium base and the Social Security wage base. Subd. 4: benefits 'on the same basis as an employee'. 268B.01 (read on 09/11/2026), subd. 36: '\"Self-employed individual\" means a resident of the state who, in one taxable year preceding the current calendar year, derived at least 5.3 percent of the state's average annual wage in net earnings from self-employment.' Subd. 37: '\"Self-employment premium base\" means the lesser of: (1) a self-employed individual's estimated self-employment income for the calendar year plus the individual's self-employment wages in the calendar year; or (2) the maximum earnings subject to the FICA Old-Age, Survivors, and Disability Insurance tax in the taxable year.' 268B.14 (read on 09/11/2026), subd. 6: employer rates 'beginning January 1, 2026', 0.7 percent for both programs; subd. 7: 'The commissioner may adjust the annual premium rates pursuant to this section prior to January 1, 2026. By July 31, 2026, and then by July 31 of each year thereafter, the commissioner must adjust the annual premium rates for the following calendar year'; 'In no year shall the annual premium rate exceed 1.1 percent of' (text cut by the reader). The rate in force is therefore not the statutory 0.7% for sure: not used for an estimate (D57); the rate published by the department was not read (pl.mn.gov refuses automated reading)."
+      "verified_on": "2026-11-10",
+      "note": "Read on 09/11/2026 with the source reader. Subd. 1(a): 'A self-employed individual or independent contractor may file with the commissioner ... an application to be entitled to benefits under this chapter for a period not less than 104 consecutive calendar weeks'; benefits begin 'the calendar quarter after the date of approval' (or later if requested); coverage ends on January 1 only with a notice filed 'at least 30 calendar days before'. (b): if terminated for unpaid premiums during the first 104 weeks, the premium remains due for the rest of the period. Subd. 3: the annual premium is the rate of section 268B.14, subd. 6, clause (1), times the lesser of the self-employment premium base and the Social Security wage base. Subd. 4: benefits 'on the same basis as an employee'. 268B.01 (read on 09/11/2026), subd. 36: '\"Self-employed individual\" means a resident of the state who, in one taxable year preceding the current calendar year, derived at least 5.3 percent of the state's average annual wage in net earnings from self-employment.' Subd. 37: '\"Self-employment premium base\" means the lesser of: (1) a self-employed individual's estimated self-employment income for the calendar year plus the individual's self-employment wages in the calendar year; or (2) the maximum earnings subject to the FICA Old-Age, Survivors, and Disability Insurance tax in the taxable year.' 268B.14 (read on 09/11/2026), subd. 6: employer rates 'beginning January 1, 2026', 0.7 percent for both programs; subd. 7: 'The commissioner may adjust the annual premium rates pursuant to this section prior to January 1, 2026. By July 31, 2026, and then by July 31 of each year thereafter, the commissioner must adjust the annual premium rates for the following calendar year'; 'In no year shall the annual premium rate exceed 1.1 percent of' (text cut by the reader). Rate in force read on 10/11/2026 in two DEED sources: press release of 21/02/2025, 'when Paid Leave begins for Minnesotans in January 2026, the premium rate will be 0.88 percent'; employer poster, 'The initial premium rate is 0.88% of covered wages' and 'Independent contractors and self-employed individuals are not automatically covered but may opt in'. The statutory 0.7% was adjusted under subd. 7. Self-employed premium for 2026: 0.88% × the lesser of the self-employment premium base and the Social Security wage base (social_security_wage_base_2026). The 2027 rate was not read; how often the self-employed pay was not read (pl.mn.gov refuses automated reading)."
     },
     "us_paid_leave_ma_self_employed": {
       "value": {

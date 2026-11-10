@@ -25,19 +25,23 @@
   }
 
   /**
-   * Prime annuelle estimée, pour les États dont le taux a été lu (Californie, Oregon), à partir du bénéfice net de
+   * Prime annuelle estimée, pour les États dont le taux a été lu (Californie, Oregon, Minnesota), à partir du bénéfice net de
    * l'activité indépendante (netProfit, en dollars). Renvoie { error } pour un bénéfice invalide, null si l'État n'a pas
    * de taux publié dans les règles, sinon { annual, quarterly, eligible }.
    * Californie (DIEC 2026) : 8,84 % du bénéfice, avec un minimum de 406,64 $ (bénéfice de 4 600 $ ou moins).
    * Oregon (2025-2026) : 0,6 % du revenu net d'Oregon, plafonné à 184 500 $ ; au moins 1 000 $ pour pouvoir adhérer.
+   * Minnesota (2026) : 0,88 % de la base de prime de l'indépendant, plafonnée au plafond de la Social Security
+   * (Minn. Stat. 268B.11, subd. 3 ; taux publié par le DEED).
    */
   function premium(rules, state, netProfit) {
-    if (state !== "CA" && state !== "OR") return null;
+    if (state !== "CA" && state !== "OR" && state !== "MN") return null;
     if (typeof netProfit !== "number" || !isFinite(netProfit) || netProfit < 0) return { error: "profit" };
     var annual, eligible = true;
     if (state === "CA") {
       var C = rules.us_paid_leave_ca_diec;
       annual = netProfit <= C.minimum_premium_net_profit ? C.minimum_annual_premium_2026 : round2(netProfit * C.premium_rate_2026);
+    } else if (state === "MN") {
+      annual = round2(Math.min(netProfit, rules.social_security_wage_base_2026) * rules.us_paid_leave_mn_self_employed.premium_rate_2026);
     } else {
       var O = rules.us_paid_leave_or_self_employed;
       eligible = netProfit >= O.min_oregon_net_income;

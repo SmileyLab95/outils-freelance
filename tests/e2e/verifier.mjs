@@ -3321,9 +3321,13 @@ const tests = {
     check((await points())[2] === "Premium rate for 2026: 1.13%, of which employees pay 71.43%: about 0.81% of the income you report. For 2027: 1.2% and 70.7%, about 0.85%." &&
       (await t("ben-sub")) === "You pay the employee share of the premium: about 0.81% of the income you report in 2026.", "paid leave: Washington → 2026 and 2027 rates, employee share");
     await page.selectOption("#ben-state", "MN");
+    await page.fill("#ben-profit", "50,000");
     {
       const mn = await points();
-      check((await t("ben-big")) === "Opt in" && mn[0].includes("at least 5.3% of the state's average annual wage")
+      check((await t("ben-big")) === "$440 a year" && (await t("ben-sub")) === "estimated premium for 2026, at the 0.88% rate." &&
+        (await t("ben-profit-hint")).includes("premium base under Minnesota law") && mn[4].includes("($184,500 in 2026). The rate is 0.88% in 2026"),
+        "paid leave: Minnesota → $50,000 × 0.88% = $440 a year (2026)");
+      check(mn[0].includes("at least 5.3% of the state's average annual wage")
         && mn[1] === "You apply for coverage for at least 104 consecutive weeks." && mn[4].includes("by July 31 for the next year"),
         "paid leave: Minnesota → 5.3% of the average wage, 104 weeks, rate set by July 31");
     }

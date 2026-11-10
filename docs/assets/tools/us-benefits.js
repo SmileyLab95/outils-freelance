@@ -60,14 +60,16 @@
     },
     MN: {
       label: "Minnesota Paid Leave (election of coverage)",
+      hint: "Your estimated self-employment income for 2026, plus any self-employment wages: the premium base under Minnesota law.",
       points: [
         "Under the law, a self-employed individual is a Minnesota resident whose net earnings from self-employment reached at least " + pct(M.min_net_earnings_share_of_state_average_wage) + " of the state's average annual wage in a tax year before the current one.",
         "You apply for coverage for at least " + M.min_weeks + " consecutive weeks.",
         "Coverage starts in the calendar quarter after approval (or later if you ask).",
         "You can only leave on January 1, with a notice filed at least " + M.cancel_notice_days + " days before.",
-        "Yearly premium: the Paid Leave premium rate times your self-employment premium base (your estimated self-employment income for the year plus your self-employment wages), capped at the Social Security wage base. The state adjusts the rate every year, by " + M.rate_adjusted_each_year_by + " for the next year."
+        "Yearly premium: the Paid Leave premium rate times your self-employment premium base (your estimated self-employment income for the year plus your self-employment wages), capped at the Social Security wage base (" + usd(R.social_security_wage_base_2026) + " in 2026). The rate is " + pct(M.premium_rate_2026) +
+          " in 2026; the state adjusts it every year, by " + M.rate_adjusted_each_year_by + " for the next year."
       ],
-      step: "Next: check the current premium rate and apply on Minnesota Paid Leave's site for the self-employed."
+      step: "Next: apply on Minnesota Paid Leave's site for the self-employed."
     },
     NY: {
       label: "New York Paid Family Leave and disability",
@@ -108,7 +110,7 @@
   function compute() {
     var state = $("ben-state").value;
     var info = INFO[state], list = $("ben-points");
-    var hasRate = state === "CA" || state === "OR";
+    var hasRate = state === "CA" || state === "OR" || state === "MN";
     $("ben-profit-field").hidden = !hasRate;
     if (hasRate) set("ben-profit-hint", info.hint);
     list.textContent = "";
@@ -139,7 +141,9 @@
         set("ben-sub", "You need at least " + usd(O.min_oregon_net_income) + " of Oregon net income from self-employment in the previous tax year.");
       } else if (hasRate) {
         set("ben-big", usd(p.annual) + " a year");
-        set("ben-sub", "estimated premium, or " + usd(p.quarterly) + " a quarter" + (state === "CA" ? " for 2026." : " (2025-2026 rate)."));
+        // Minnesota : prime annuelle seulement (rythme de paiement des indépendants non lu).
+        set("ben-sub", state === "MN" ? "estimated premium for 2026, at the " + pct(M.premium_rate_2026) + " rate."
+          : "estimated premium, or " + usd(p.quarterly) + " a quarter" + (state === "CA" ? " for 2026." : " (2025-2026 rate)."));
       } else {
         set("ben-big", state === "NY" ? "Buy a policy" : "Opt in");
         set("ben-sub", state === "NY" ? "Paid Family Leave and disability, priced by the insurer."

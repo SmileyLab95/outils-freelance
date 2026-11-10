@@ -66,8 +66,17 @@ test("Oregon : 0,6 % du revenu net, plafond de 184 500 $, 1 000 $ au moins", () 
   assert.deepEqual(B.premium(R, "OR", 184500), { annual: 1107, quarterly: 276.75, eligible: true });
 });
 
+test("Minnesota : 0,88 % de la base de prime en 2026, plafonnée au plafond de la Social Security", () => {
+  assert.equal(R.us_paid_leave_mn_self_employed.premium_rate_2026, 0.0088);
+  assert.deepEqual(B.premium(R, "MN", 50000), { annual: 440, quarterly: 110, eligible: true }, "50 000 × 0,88 %");
+  assert.deepEqual(B.premium(R, "MN", 200000), { annual: 1623.6, quarterly: 405.9, eligible: true }, "184 500 × 0,88 %");
+  assert.deepEqual(B.premium(R, "MN", 184500), { annual: 1623.6, quarterly: 405.9, eligible: true });
+  assert.deepEqual(B.premium(R, "MN", 0), { annual: 0, quarterly: 0, eligible: true });
+  assert.deepEqual(B.premium(R, "MN", -1), { error: "profit" });
+});
+
 test("autres États et saisies invalides", () => {
-  for (const s of ["DE", "MA", "ME", "MN", "NY", "WA", "TX"]) assert.equal(B.premium(R, s, 50000), null, s + " : pas d'estimation");
+  for (const s of ["DE", "MA", "ME", "NY", "WA", "TX"]) assert.equal(B.premium(R, s, 50000), null, s + " : pas d'estimation");
   for (const bad of [-1, NaN, Infinity, "50000", undefined]) assert.deepEqual(B.premium(R, "CA", bad), { error: "profit" });
   assert.deepEqual(B.premium(R, "OR", -5), { error: "profit" });
 });
@@ -91,6 +100,7 @@ test("page : chiffres cités égaux aux règles", () => {
   assert.ok(html.includes(`${C.di_max_weeks} weeks`) && html.includes(`${C.pfl_max_weeks} weeks`) && html.includes(`${C.months_before_claim} months`));
   assert.ok(html.includes(`${W.hours_required} hours`) && html.includes(`${R.us_paid_leave_mn_self_employed.min_weeks} consecutive weeks`));
   const MN = R.us_paid_leave_mn_self_employed;
+  assert.ok(html.includes(`the rate is ${Math.round(MN.premium_rate_2026 * 10000) / 100}% in 2026`), "Minnesota : taux de 2026");
   assert.ok(html.includes(`at least ${Math.round(MN.min_net_earnings_share_of_state_average_wage * 1000) / 10}% of the state's average annual wage`)
     && html.includes(`by ${MN.rate_adjusted_each_year_by} for the next year`), "Minnesota : 5,3 % du salaire moyen, taux ajusté avant le 31 juillet");
   assert.ok(html.includes(`${R.us_ssdi_basics.waiting_period_months} full months`) && html.includes(`${R.us_ssdi_basics.insured_quarters_of_coverage} quarters`));

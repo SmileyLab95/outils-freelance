@@ -1,5 +1,13 @@
 # Journal des modifications
 
+## 2026-11-10 (fin de nuit) — Congés payés des indépendants : prime estimée au Minnesota
+
+- Minnesota : le taux de 2026, **0,88 %**, est lu dans deux sources officielles du ministère de l'Emploi de l'État
+  (communiqué et affiche obligatoire) ; l'outil estime désormais la prime annuelle d'un indépendant : 0,88 % de sa
+  base de prime (revenu d'indépendant estimé de l'année, plus ses salaires d'indépendant), plafonnée au plafond de la
+  Social Security (184 500 $). Exemple : 50 000 $ → 440 $ par an.
+- Tests unitaires (contrôle par mutation) et parcours navigateur complétés ; capture relue.
+
 ## 2026-11-10 (nuit) — Franchise de TVA en activité mixte ; taux de Washington
 
 - **Espace et simulateur, activité mixte** : la franchise de TVA est maintenant suivie avec ses deux seuils, lus dans le
