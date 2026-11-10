@@ -101,7 +101,9 @@
       cotisations: g * cotisV / 1000 + s * cotisO / 1000, cfp: ca * cfp / 1000,
       vl: input.vl ? g * t(v.vl) / 1000 + s * t(o.vl) / 1000 : 0,
       taxable: Math.max(0, ca - abatt),
-      ceilings: { total: v.plafond, services: o.plafond }
+      ceilings: { total: v.plafond, services: o.plafond },
+      // Franchise de TVA de l'activité mixte (BOFiP, BOI-TVA-DECLA-40-10-10, § 160) : global et prestations.
+      vat: { total: v.tva, services: o.tva }
     };
   }
 

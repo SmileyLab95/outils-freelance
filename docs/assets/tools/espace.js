@@ -510,13 +510,16 @@
       html += gauge("Part des prestations de services (" + YEAR + ")", th.services.revenue, th.services.ceiling,
         th.services.revenue > th.services.ceiling ? "Plafond des prestations dépassé : au-delà de deux années de dépassement, vous sortez de la micro-entreprise." : "");
     }
-    if (th.vatMixed) {
-      // Seuil de franchise propre à l'activité mixte (art. 293 B du CGI) non lu : chiffres seulement (documentation/53).
-      html += '<p class="small muted" style="margin: 6px 0 0;">Franchise de TVA en activité mixte : ' + esc(money(th.goods)) + " de ventes et " +
-        esc(money(th.services.revenue)) + " de prestations encaissées en " + YEAR + '. Vérifiez les seuils qui s\'appliquent à votre situation sur ' +
-        '<a href="https://www.impots.gouv.fr/professionnel/questions/pour-rester-micro-entrepreneur-quel-montant-de-chiffre-daffaires-ou-de" rel="noopener">impots.gouv.fr</a>.</p>';
-    }
-    if (th.vat) {
+    if (th.vat && th.vat.mixed) {
+      // Activité mixte (BOFiP, BOI-TVA-DECLA-40-10-10, § 160) : deux seuils ; seuils majorés de l'année en cours non lus
+      // pour l'activité mixte : renvoi à impots.gouv.fr (documentation/53).
+      var over = th.revenue > th.vat.base || th.services.revenue > th.vat.servicesBase;
+      html += gauge("Franchise de TVA : chiffre d'affaires global", th.revenue, th.vat.base, "") +
+        gauge("Franchise de TVA : prestations de services", th.services.revenue, th.vat.servicesBase,
+          over ? "Seuil dépassé : la TVA sera due au plus tard à partir du 1er janvier prochain, et dès le jour du dépassement si un seuil majoré est franchi." : "");
+      html += '<p class="small muted" style="margin: 6px 0 0;">Activité mixte : la franchise demande que ni le chiffre d\'affaires global ni la part des prestations ne dépasse son seuil. ' +
+        'Seuils majorés de l\'année en cours : <a href="https://www.impots.gouv.fr/professionnel/questions/pour-rester-micro-entrepreneur-quel-montant-de-chiffre-daffaires-ou-de" rel="noopener">impots.gouv.fr</a>.</p>';
+    } else if (th.vat) {
       html += gauge("Seuil de la franchise de TVA", th.revenue, th.vat.base,
         th.revenue > th.vat.major ? "Seuil majoré dépassé : la TVA est due dès le jour du dépassement." :
         th.revenue > th.vat.base ? "Seuil dépassé : la TVA sera due à partir du 1er janvier prochain (seuil majoré : " + money(th.vat.major) + ")." : "");

@@ -1,5 +1,17 @@
 # Journal des modifications
 
+## 2026-11-10 (nuit) — Franchise de TVA en activité mixte ; taux de Washington
+
+- **Espace et simulateur, activité mixte** : la franchise de TVA est maintenant suivie avec ses deux seuils, lus dans le
+  BOFiP (BOI-TVA-DECLA-40-10-10, § 160) : chiffre d'affaires global de 85 000 € au plus et prestations de services de
+  37 500 € au plus. Au-delà, la TVA est due au plus tard au 1er janvier suivant ; les seuils majorés de l'année en
+  cours propres à l'activité mixte, non lus, ne sont pas affirmés (renvoi à impots.gouv.fr). Décision D60.
+- **États-Unis, Washington** : taux du congé payé lus dans les communiqués de l'État (1,13 % en 2026, dont 71,43 % à la
+  charge des salariés ; 1,2 % en 2027, dont 70,7 %) ; l'outil indique que l'indépendant, qui paie la part salariale,
+  verse environ 0,81 % de ses revenus déclarés en 2026 (0,85 % en 2027). Pas d'estimation chiffrée tant que l'assiette
+  de l'adhésion volontaire n'est pas lue.
+- Tests unitaires et parcours navigateur complétés ; captures relues.
+
 ## 2026-11-09 (fin de nuit) — Simulateur auto-entrepreneur : activité mixte
 
 - Le simulateur propose « Activité mixte : vente de marchandises et prestations de services ». On indique la part des

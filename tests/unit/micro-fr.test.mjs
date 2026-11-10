@@ -137,6 +137,8 @@ test("activité mixte sur l'année (documentation/53) : chaque part à ses taux,
   // abattements 20 000 × 71 % + 30 000 × 34 % = 24 400, revenu imposable 25 600.
   assert.deepEqual([y.ca, y.cotisations, y.cfp, y.vl, y.taxable], [50000, 10140, 100, 0, 25600]);
   assert.deepEqual(y.ceilings, { total: 203100, services: 83600 });
+  assert.deepEqual(y.vat, { total: 85000, services: 37500 }, "franchise de TVA de l'activité mixte (BOFiP § 160)");
+  assert.match(rules.tva_franchise_seuils.activite_mixte, /global .* <= vente_seuil et .* prestations de services <= services_seuil/);
   const vl = M.mixedYear(rules, { goods: 20000, services: 30000, servicesKey: "liberal_bnc", vl: true });
   assert.equal(vl.vl, 20000 * 0.01 + 30000 * 0.022, "versement libératoire : 1 % et 2,2 %");
   const acre = M.mixedYear(rules, { goods: 10000, services: 10000, servicesKey: "services_bic", acre: 25 });

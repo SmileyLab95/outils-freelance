@@ -129,8 +129,9 @@ test("déclaration Urssaf : encaissé et cotisations par activité, formation pr
 
 test("plafonds : global au plafond de la vente, part des prestations au plafond des services ; TVA non jaugée", () => {
   const th = E.thresholds(year2026(), mixed, R, 2026);
-  assert.deepEqual([th.revenue, th.ceiling, th.goods, th.services.revenue, th.services.ceiling, th.vat, th.vatMixed], [2000, 203100, 650, 1350, 83600, null, true]);
-  assert.equal(E.thresholds(year2026(), Object.assign({}, mixed, { vatRegime: "normal" }), R, 2026).vatMixed, false);
+  assert.deepEqual([th.revenue, th.ceiling, th.goods, th.services.revenue, th.services.ceiling], [2000, 203100, 650, 1350, 83600]);
+  assert.deepEqual(th.vat, { mixed: true, base: 85000, servicesBase: 37500 }, "franchise de TVA : 85 000 € au total, 37 500 € de prestations (BOFiP § 160)");
+  assert.equal(E.thresholds(year2026(), Object.assign({}, mixed, { vatRegime: "normal" }), R, 2026).vat, null);
   const single = E.thresholds(year2026(), { activity: "vente", vatRegime: "franchise" }, R, 2026);
   assert.deepEqual([single.ceiling, single.vat.base, single.services], [203100, 85000, undefined]);
 });

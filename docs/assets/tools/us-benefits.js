@@ -94,6 +94,9 @@
       points: [
         "You elect coverage for at least " + W.initial_period_years + " years, then for periods of at least " + W.renewal_period_years + " year, for both family and medical leave.",
         "You pay the full employee premium, and report your income every quarter.",
+        "Premium rate for 2026: " + pct(W.premium_rate_2026) + ", of which employees pay " + pct(W.employee_share_2026) + ": about " +
+          pct(W.premium_rate_2026 * W.employee_share_2026) + " of the income you report. For 2027: " + pct(W.premium_rate_2027) + " and " +
+          pct(W.employee_share_2027) + ", about " + pct(W.premium_rate_2027 * W.employee_share_2027) + ".",
         "You can take benefits after working " + W.hours_required + " hours in the state after filing your notice.",
         "You can withdraw within " + W.withdraw_within_days_after_period + " days after the end of a coverage period."
       ],
@@ -141,6 +144,7 @@
         set("ben-big", state === "NY" ? "Buy a policy" : "Opt in");
         set("ben-sub", state === "NY" ? "Paid Family Leave and disability, priced by the insurer."
           : state === "ME" ? "Premium: " + pct(ME.premium_rate_2025_2027) + " of your income from self-employment (2025-2027)."
+          : state === "WA" ? "You pay the employee share of the premium: about " + pct(W.premium_rate_2026 * W.employee_share_2026) + " of the income you report in 2026."
           : "Premium rate: see the state's site.");
       }
     }

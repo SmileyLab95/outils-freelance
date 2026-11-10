@@ -349,8 +349,12 @@ const tests = {
       (await page.textContent("#s-r-tax-label")).includes("abattements de 71 % et 34 %"),
       "simulateur mixte : 2 460 + 7 680 € de cotisations, CFP de 100 €, revenu imposable de 25 600 €");
     check(JSON.stringify([await gauge("s-g-plafond"), await gauge("s-g-tva")]) === JSON.stringify([["25%de203100€", ""], ["36%de83600€", ""]]) &&
-      (await page.textContent("#s-g-tva-label")) === "Plafond des prestations de services" && (await page.textContent("#s-notice")).includes("impots.gouv.fr"),
-      "simulateur mixte : plafond global (203 100 €) et des prestations (83 600 €), renvoi pour la TVA");
+      (await page.textContent("#s-g-tva-label")) === "Plafond des prestations de services" &&
+      (await page.textContent("#s-notice")).replace(/\s/g, " ").includes("sous les seuils de franchise de TVA de l'activité mixte (85 000 € au total, dont 37 500 € de prestations)"),
+      "simulateur mixte : plafond global (203 100 €) et des prestations (83 600 €), seuils de TVA de l'activité mixte");
+    await page.fill("#s-goods", "10 000");
+    check((await page.textContent("#s-notice")).includes("Vous dépassez un seuil de franchise de TVA de l'activité mixte"), "simulateur mixte : 40 000 € de prestations, seuil de TVA de 37 500 € dépassé");
+    await page.fill("#s-goods", "20 000");
     await accessible(page, "simulateur : activité mixte");
     await page.fill("#s-goods", "60 000");
     check((await page.textContent("#s-notice")).includes("entre 0 et votre chiffre d'affaires") && (await page.textContent("#s-r-cotis")).trim() === "–",
@@ -3314,6 +3318,8 @@ const tests = {
     await page.selectOption("#ben-state", "WA");
     check((await t("ben-big")) === "Opt in" && (await points()).some((p) => p.includes("820 hours")) &&
       (await points())[0].startsWith("You elect coverage for at least 3 years"), "paid leave: Washington → 3 years, 820 hours");
+    check((await points())[2] === "Premium rate for 2026: 1.13%, of which employees pay 71.43%: about 0.81% of the income you report. For 2027: 1.2% and 70.7%, about 0.85%." &&
+      (await t("ben-sub")) === "You pay the employee share of the premium: about 0.81% of the income you report in 2026.", "paid leave: Washington → 2026 and 2027 rates, employee share");
     await page.selectOption("#ben-state", "MN");
     {
       const mn = await points();
@@ -4350,8 +4356,10 @@ const tests = {
       "Activité mixte : déclaration estimée au taux de chaque activité");
     const mixedGauges = await text(".gauges");
     check(mixedGauges.includes("Part des prestations de services (2026)") && mixedGauges.includes("/ 203 100,00 €") && mixedGauges.includes("/ 83 600,00 €") &&
-      mixedGauges.includes("Franchise de TVA en activité mixte : 150,00 € de ventes") && !mixedGauges.includes("Seuil de la franchise de TVA"),
-      "Activité mixte : plafond global et plafond des prestations ; franchise de TVA sans seuil, renvoi à impots.gouv.fr");
+      mixedGauges.includes("Franchise de TVA : chiffre d'affaires global") && mixedGauges.includes("/ 85 000,00 €") && mixedGauges.includes("/ 37 500,00 €") &&
+      !mixedGauges.includes("Seuil de la franchise de TVA"),
+      "Activité mixte : plafond global et plafond des prestations ; franchise de TVA à 85 000 € au total et 37 500 € de prestations (BOFiP)");
+    await shot("tableau-de-bord-mixte");
     await accessible(page, "Espace : tableau de bord (activité mixte)");
     await page.evaluate(async () => { const d = await window.EspaceStore.load(); d.profile.activity2 = ""; await window.EspaceStore.save(d); });
     await page.reload({ waitUntil: "networkidle" });

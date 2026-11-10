@@ -299,15 +299,22 @@
         "vente_seuil": 85000,
         "vente_seuil_majore": 93500,
         "services_seuil": 37500,
-        "services_seuil_majore": 41250
+        "services_seuil_majore": 41250,
+        "activite_mixte": "chiffre d'affaires global de l'année précédente <= vente_seuil et chiffre d'affaires des prestations de services <= services_seuil"
       },
       "unit": "object",
       "label": "Franchise en base de TVA 2026 (art. 293 B CGI)",
       "source": "https://www.impots.gouv.fr/professionnel/questions/pour-rester-micro-entrepreneur-quel-montant-de-chiffre-daffaires-ou-de",
       "source_title": "Pour rester micro-entrepreneur, quel montant de chiffre d'affaires ne dois-je pas dépasser ? - impots.gouv.fr ; BOFiP BOI-TVA-DECLA-40-10-10-20260701",
+      "more_sources": [
+        {
+          "source": "https://bofip.impots.gouv.fr/bofip/849-PGP.html/identifiant=BOI-TVA-DECLA-40-10-10-20260701",
+          "source_title": "BOI-TVA-DECLA-40-10-10 (version du 01/07/2026), Franchise en base de droit commun - Champ d'application et limites à considérer - BOFiP"
+        }
+      ],
       "confidence": "high",
-      "note": "Vérifiée le 08/11/2026 avec l'outil de vérification des règles (page officielle lue dans GitHub Actions, valeur relue dans son contexte). Si le CA de N-1 dépasse le seuil, la franchise est perdue au 1er janvier de N. Si le CA de N dépasse le seuil majoré, la TVA est due dès l'opération qui fait franchir ce seuil. Le seuil unique de 25 000 EUR prévu par la LF 2025 a été suspendu, puis abandonné ; il n'a jamais été appliqué.",
-      "verified_on": "2026-11-08"
+      "verified_on": "2026-11-08",
+      "note": "Vérifiée le 08/11/2026 avec l'outil de vérification des règles (page officielle lue dans GitHub Actions, valeur relue dans son contexte). Si le CA de N-1 dépasse le seuil, la franchise est perdue au 1er janvier de N. Si le CA de N dépasse le seuil majoré, la TVA est due dès l'opération qui fait franchir ce seuil. Le seuil unique de 25 000 EUR prévu par la LF 2025 a été suspendu, puis abandonné ; il n'a jamais été appliqué. Activité mixte, BOFiP BOI-TVA-DECLA-40-10-10 (version du 01/07/2026), § 160, lu le 10/11/2026 : « Pour les assujettis qui réalisent les deux catégories d’opérations, le régime de la franchise ne leur est applicable que s’ils n’ont pas réalisé au cours de l’année civile précédente un chiffre d’affaires global qui n’excède pas 85 000 €, et un chiffre d’affaires afférent aux prestations de services autres que des ventes à consommer sur place et des prestations d’hébergement qui n’excède pas 37 500 €. Le bénéfice de la franchise n’est accordé à ces assujettis que si aucune de ces deux limites n’est atteinte. » La règle des seuils majorés en cours d'année pour l'activité mixte n'a pas été lue (documentation/53)."
     },
     "tva_franchise_seuils_speciaux": {
       "value": {

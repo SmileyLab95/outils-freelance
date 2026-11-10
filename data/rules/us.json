@@ -2531,7 +2531,11 @@
         "renewal_period_years": 1,
         "hours_required": 820,
         "employee_premium_share": 1.0,
-        "withdraw_within_days_after_period": 30
+        "withdraw_within_days_after_period": 30,
+        "premium_rate_2026": 0.0113,
+        "employee_share_2026": 0.7143,
+        "premium_rate_2027": 0.012,
+        "employee_share_2027": 0.707
       },
       "unit": "object",
       "label": "Washington: elective coverage of Paid Family and Medical Leave for the self-employed (RCW 50A.10.010)",
@@ -2541,11 +2545,19 @@
         {
           "source": "https://paidleave.wa.gov/elective-coverage/",
           "source_title": "Washington Paid Family and Medical Leave - Self-employed: Electing coverage"
+        },
+        {
+          "source": "https://esd.wa.gov/about-us/news-release/2025/paid-family-medical-leave-premium-rate-increases-113-2026",
+          "source_title": "Paid Family & Medical Leave premium rate increases to 1.13% in 2026 - Washington Employment Security Department (October 29, 2025)"
+        },
+        {
+          "source": "https://esd.wa.gov/about-us/news-release/2026/paid-family-medical-leave-premium-rate-increases-12-2027",
+          "source_title": "Paid Family & Medical Leave premium rate increases to 1.2% in 2027 - Washington Employment Security Department (October 16, 2026)"
         }
       ],
       "confidence": "high",
-      "verified_on": "2026-11-09",
-      "note": "Read on 09/11/2026 with the source reader. RCW 50A.10.010(1): 'any self-employed person, including a sole proprietor, independent contractor, partner, or joint venturer, may elect coverage under this title for an initial period of not less than three years and subsequent periods of not less than one year'; 'must elect coverage for both family leave and medical leave and are responsible for payment of one hundred percent of all premiums assessed to an employee under RCW 50A.10.030'; 'eligible for family and medical leave benefits after working eight hundred twenty hours in the state during the qualifying period following the date of filing the notice'. (2): withdrawal 'within thirty days after the end of each period of coverage'. (3): the department may cancel coverage for missing payments or reports. The ESD page says self-employed people report income and pay premiums quarterly. Premium rate not read (RCW 50A.10.030)."
+      "verified_on": "2026-11-10",
+      "note": "Read on 09/11/2026 with the source reader. RCW 50A.10.010(1): 'any self-employed person, including a sole proprietor, independent contractor, partner, or joint venturer, may elect coverage under this title for an initial period of not less than three years and subsequent periods of not less than one year'; 'must elect coverage for both family leave and medical leave and are responsible for payment of one hundred percent of all premiums assessed to an employee under RCW 50A.10.030'; 'eligible for family and medical leave benefits after working eight hundred twenty hours in the state during the qualifying period following the date of filing the notice'. (2): withdrawal 'within thirty days after the end of each period of coverage'. (3): the department may cancel coverage for missing payments or reports. The ESD page says self-employed people report income and pay premiums quarterly. Rates read on 10/11/2026 in two ESD news releases: 'Starting Jan. 1, 2026: The premium rate will be 1.13%' and 'Employers will pay 28.57% of the total premium and employees will pay 71.43%'; 'Starting Jan. 1, 2027: The premium rate will be 1.2%' and 'Employers will pay 29.3% of the total premium and employees will pay 70.7%'. The ESD premiums page (read the same day) gives 1.13% 'of each employee's gross wages, not including tips, up to the 2026 Social Security cap ($184,500)' for employees; the premium base and cap of elective coverage were not read (the Elective Coverage Toolkit PDF link redirects to a menu page): no premium estimate, only the share of the rate the self-employed person pays (100% of the employee share, RCW 50A.10.010)."
     },
     "us_paid_leave_or_self_employed": {
       "value": {

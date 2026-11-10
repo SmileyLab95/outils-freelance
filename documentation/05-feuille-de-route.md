@@ -9,7 +9,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 
 ## Où en est-on ?
 
-*Mis à jour le 09/11/2026 (fin de nuit).*
+*Mis à jour le 10/11/2026 (nuit).*
 
 - **Priorité (décision D10)** : le site et la plateforme d'abord ; noms de domaine, Gumroad et affiliation à la fin.
   Règle de qualité maximale pour tout produit ou service (D11, charte dans la [méthode](04-methode-de-travail.md#charte-qualité)).
@@ -361,7 +361,9 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   BOI-BIC-DECLA-30-30 § 30, F23267, F37353, F23459, impots.gouv.fr ([53](53-activite-mixte.md), D59). Nuit : même
   choix « Vente » ou « Service » par ligne dans le générateur de facture public (sous-totaux, mémorisé, repris par
   l'Espace) ; simulateur auto-entrepreneur en activité mixte (part des ventes, taux de chaque activité, abattements
-  cumulés avec un minimum de 610 €, deux plafonds).
+  cumulés avec un minimum de 610 €, deux plafonds). 10/11 : franchise de TVA en activité mixte jaugée d'après le
+  BOFiP (§ 160 : 85 000 € au total et 37 500 € de prestations, D60) ; Washington : taux 2026 (1,13 %, part salariale
+  71,43 %) et 2027 (1,2 %, 70,7 %) lus dans les communiqués de l'État, soit environ 0,81 % des revenus déclarés.
 - **Prochaines actions de Claude** : refonte, suite ([31](31-vision-plateforme.md) § 5) : les quatre modules du compte
   gratuit sont faits (étape 5) ; étape 6, outils restants (CGV : faites dans les quatre pays ;
   lois des autres provinces sur la protection du consommateur à lire pour les détailler ; le règlement albertain sur les
@@ -376,8 +378,8 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   [51](51-protection-sociale-royaume-uni.md) : à revoir si GOV.UK précise comment les crédits de classe 2 comptent pour
   la *Maternity Allowance* ; États-Unis faits le 09/11/2026 (8 États), [52](52-protection-sociale-etats-unis.md) :
   ajouter le Colorado (sites et lois hors .gov ou illisibles), le Connecticut (certificat de cga.ct.gov refusé par
-  l'outil de lecture) et le New Jersey ; taux du Delaware, du Massachusetts, du Minnesota et de Washington, durée
-  d'engagement au Delaware ; Canada (prestations spéciales de
+  l'outil de lecture) et le New Jersey ; taux du Delaware, du Massachusetts et du Minnesota, assiette de la prime de
+  Washington pour les indépendants (estimation chiffrée), durée d'engagement au Delaware ; Canada (prestations spéciales de
   l'assurance-emploi, dès que canada.ca est lisible))) ;
   ajouter les taux du 1er semestre 2027 dès leur publication
   (fin décembre 2026 : intérêt légal par arrêté, taux de la BCE en vigueur au 1er janvier ; tables `taux_interet_legal`
@@ -387,8 +389,8 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   (`late_payment_reference_rates` : intérêt légal du calculateur britannique et des *terms and conditions* en 2027) ;
   texte de l'article R123-237 du Code de commerce à relire dès que Légifrance est lisible (mentions sur les
   correspondances, signature d'email) ;
-  activité mixte, suite ([53](53-activite-mixte.md) § 7) : seuil de franchise de TVA en activité mixte dès que
-  l'article 293 B du CGI est lisible ; questions ouvertes de `data/rules/` à relire
+  activité mixte, suite ([53](53-activite-mixte.md) § 7) : seuils majorés de la franchise de TVA en cours d'année
+  pour l'activité mixte (article 293 B du CGI ou BOFiP à lire) ; questions ouvertes de `data/rules/` à relire
   avec l'outil de lecture des sources (ACRE) ; puis besoins P3 restants
   ([02](02-besoins-clients.md) : sous-traitance) ; loi californienne sur les freelances (SB 988) et
   loi de l'Illinois (820 ILCS 193) à relire dès que leurs sites officiels sont lisibles par l'outil (refus le

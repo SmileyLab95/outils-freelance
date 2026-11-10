@@ -27,6 +27,8 @@ test("règles : chiffres lus aux sources officielles", () => {
   assert.equal(O.commitment_years, 3);
   assert.equal(R.us_paid_leave_wa_elective.initial_period_years, 3);
   assert.equal(R.us_paid_leave_wa_elective.hours_required, 820);
+  const WA = R.us_paid_leave_wa_elective;
+  assert.deepEqual([WA.premium_rate_2026, WA.employee_share_2026, WA.premium_rate_2027, WA.employee_share_2027], [0.0113, 0.7143, 0.012, 0.707]);
   assert.equal(R.us_paid_leave_mn_self_employed.min_weeks, 104);
   assert.equal(R.us_paid_leave_mn_self_employed.min_net_earnings_share_of_state_average_wage, 0.053);
   assert.equal(R.us_paid_leave_mn_self_employed.rate_adjusted_each_year_by, "July 31");
@@ -79,6 +81,10 @@ test("page : chiffres cités égaux aux règles", () => {
   }
   assert.ok(html.includes("8.84%") && html.includes("0.6%") && html.includes("0.5%"), "taux de la Californie, de l'Oregon et du Maine");
   assert.ok(html.includes("2 of your last 4 completed calendar quarters"), "Massachusetts : 2 trimestres sur les 4 derniers");
+  const WA = R.us_paid_leave_wa_elective, pct = (r) => Math.round(r * 10000) / 100 + "%";
+  assert.ok(html.includes(`The premium rate is ${pct(WA.premium_rate_2026)} in 2026 (${pct(WA.premium_rate_2027)} in 2027), and employees pay ${pct(WA.employee_share_2026)} of it (${pct(WA.employee_share_2027)} in 2027)`) &&
+    html.includes(`about ${pct(WA.premium_rate_2026 * WA.employee_share_2026)} of the income you report (about ${pct(WA.premium_rate_2027 * WA.employee_share_2027)} in 2027)`),
+    "Washington : taux, part des salariés et part de l'indépendant");
   const D = R.us_paid_leave_de_self_employed;
   assert.ok(html.includes(`(${D.earnings_lines}), divided by ${D.quarterly_divisor} for each quarter, and you pay ${D.contribution_share * 100}% of them`),
     "Delaware : lignes de la déclaration, division par 4, 100 % de la cotisation");

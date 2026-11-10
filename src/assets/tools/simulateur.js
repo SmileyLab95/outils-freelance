@@ -125,8 +125,13 @@
           : "le plafond des prestations de services (" + OF.eur(m.ceilings.services, 0) + ")") +
           ". Si cela se produit deux années de suite, vous passez au régime réel au 1er janvier suivant : parlez-en à un expert-comptable.";
         level = "warn";
+      } else if (ca > m.vat.total || services > m.vat.services) {
+        msg = "Vous dépassez un seuil de franchise de TVA de l'activité mixte (" + OF.eur(m.vat.total, 0) + " au total, " + OF.eur(m.vat.services, 0) +
+          " pour les prestations) : vous facturerez la TVA au plus tard à partir du 1er janvier suivant, et dès le jour du dépassement si un seuil majoré est franchi (voir impots.gouv.fr).";
+        level = "warn";
       } else {
-        msg = "Vous restez sous les deux plafonds de la micro-entreprise. Franchise de TVA en activité mixte : vérifiez les seuils qui s'appliquent à votre situation sur impots.gouv.fr.";
+        msg = "Vous restez sous les deux plafonds de la micro-entreprise et sous les seuils de franchise de TVA de l'activité mixte (" + OF.eur(m.vat.total, 0) +
+          " au total, dont " + OF.eur(m.vat.services, 0) + " de prestations).";
       }
       notice.textContent = msg;
       notice.className = "notice" + (level ? " " + level : "");

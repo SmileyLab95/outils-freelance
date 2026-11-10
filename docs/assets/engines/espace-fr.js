@@ -374,8 +374,9 @@
 
   /**
    * Plafond de la micro-entreprise et seuil de la franchise de TVA, sur l'année civile. Activité mixte : plafond global
-   * de la vente, plafond des services sur la part des prestations ; pas de seuil de TVA (règle de l'art. 293 B du CGI
-   * non lue, documentation/53), seulement l'encaissé des ventes et des prestations.
+   * de la vente, plafond des services sur la part des prestations ; franchise de TVA : chiffre d'affaires global au
+   * seuil de la vente et part des prestations au seuil des services (BOFiP, BOI-TVA-DECLA-40-10-10, § 160) ; seuils
+   * majorés de l'année en cours non donnés pour l'activité mixte (règle non lue, documentation/53).
    */
   function thresholds(documents, profile, rules, year) {
     var a = rules.micro_activities[profile.activity];
@@ -386,7 +387,8 @@
       var parts = revenueParts(documents, profile, rules, year + "-01-01", year + "-12-31");
       return { revenue: revenue, ceiling: rules.micro_activities[m.vente].plafond_ca, mixed: true,
                goods: parts[0].revenue, services: { revenue: parts[1].revenue, ceiling: rules.micro_activities[m.services].plafond_ca },
-               vat: null, vatMixed: profile.vatRegime === "franchise" };
+               vat: profile.vatRegime === "franchise" ? { mixed: true, base: rules.micro_activities[m.vente].tva_seuil,
+                 servicesBase: rules.micro_activities[m.services].tva_seuil } : null };
     }
     return { revenue: revenue, ceiling: a.plafond_ca, vat: profile.vatRegime === "franchise" ? { base: a.tva_seuil, major: a.tva_seuil_majore } : null };
   }
