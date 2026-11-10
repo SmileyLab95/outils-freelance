@@ -13,7 +13,7 @@
   "use strict";
 
   // États dont les règles ont été lues aux sources (règle de chaque programme).
-  var STATES = { CA: "us_paid_leave_ca_diec", DE: "us_paid_leave_de_self_employed", MA: "us_paid_leave_ma_self_employed", ME: "us_paid_leave_me_self_employed",
+  var STATES = { CA: "us_paid_leave_ca_diec", CO: "us_paid_leave_co_self_employed", DE: "us_paid_leave_de_self_employed", MA: "us_paid_leave_ma_self_employed", ME: "us_paid_leave_me_self_employed",
     MN: "us_paid_leave_mn_self_employed", NJ: "us_paid_leave_nj_self_employed", NY: "us_paid_leave_ny_self_employed", OR: "us_paid_leave_or_self_employed",
     WA: "us_paid_leave_wa_elective" };
 
@@ -30,16 +30,19 @@
    * de taux publié dans les règles, sinon { annual, quarterly, eligible }.
    * Californie (DIEC 2026) : 8,84 % du bénéfice, avec un minimum de 406,64 $ (bénéfice de 4 600 $ ou moins).
    * Oregon (2025-2026) : 0,6 % du revenu net d'Oregon, plafonné à 184 500 $ ; au moins 1 000 $ pour pouvoir adhérer.
+   * Colorado (2026) : 0,44 % du revenu brut d'indépendant, plafonné au plafond de la Social Security (FAMLI).
    * Minnesota (2026) : 0,88 % de la base de prime de l'indépendant, plafonnée au plafond de la Social Security
    * (Minn. Stat. 268B.11, subd. 3 ; taux publié par le DEED).
    */
   function premium(rules, state, netProfit) {
-    if (state !== "CA" && state !== "OR" && state !== "MN") return null;
+    if (state !== "CA" && state !== "OR" && state !== "MN" && state !== "CO") return null;
     if (typeof netProfit !== "number" || !isFinite(netProfit) || netProfit < 0) return { error: "profit" };
     var annual, eligible = true;
     if (state === "CA") {
       var C = rules.us_paid_leave_ca_diec;
       annual = netProfit <= C.minimum_premium_net_profit ? C.minimum_annual_premium_2026 : round2(netProfit * C.premium_rate_2026);
+    } else if (state === "CO") {
+      annual = round2(Math.min(netProfit, rules.social_security_wage_base_2026) * rules.us_paid_leave_co_self_employed.self_employed_premium_rate_2026);
     } else if (state === "MN") {
       annual = round2(Math.min(netProfit, rules.social_security_wage_base_2026) * rules.us_paid_leave_mn_self_employed.premium_rate_2026);
     } else {

@@ -25,6 +25,15 @@ la déclaration **2024** (Schedule SE ligne 3 ou Schedule C ligne 31), au moins 
 ou moins, soit 4 600 × 8,84 %), en quatre versements trimestriels. Conditions d'adhésion et de résiliation non lues :
 renvoi à l'EDD.
 
+**Colorado** (`us_paid_leave_co_self_employed`, article « Opting in to FAMLI » de la FAMLI Division, daté du 30/12/2024, lu
+le 10/11/2026 ; famli.colorado.gov refusait la lecture la veille) : adhésion **facultative** des indépendants résidant au
+Colorado ; ils paient **0,44 %** de leur revenu brut d'indépendant, sur les revenus plafonnés au plafond de la Social
+Security ; primes **chaque trimestre pendant au moins 3 ans**, dues à la fin du mois qui suit le trimestre ; transcription
+fiscale fédérale pour adhérer, justificatifs avec chaque déclaration trimestrielle ; couverture dès l'inscription,
+prestations après au moins un trimestre de primes payées. Le 0,44 % correspond à la part salariale de 2026 de l'avis
+officiel de décembre 2025 : retenu comme taux de 2026, prime estimée (0,44 % du revenu, plafond de 184 500 $). Taux de
+2027 (baisse annoncée le 06/10/2026) non lu. Ajouté le 10/11/2026.
+
 **Delaware** (`us_paid_leave_de_self_employed`, 19 DE Admin. Code 1401, art. 6.4.5.1 et 6.4.5.3) : adhésion volontaire
 des indépendants au *Delaware Paid Leave* ; cotisations calculées sur les revenus d'indépendant de la dernière
 déclaration fédérale (Schedule C ligne 31 ou Schedule SE ligne 6), **divisés par 4** pour chaque trimestre ;
@@ -80,8 +89,7 @@ dont **71,43 %** à la charge des salariés, et **1,2 %** en 2027, dont **70,7 %
 salariale, l'outil indique environ **0,81 %** des revenus déclarés en 2026 (0,85 % en 2027). Assiette et plafond de
 l'adhésion volontaire non lus (le guide de l'adhésion renvoie vers une page de menu) : pas d'estimation chiffrée.
 
-**Non retenus** (lecture refusée ou non faite, D57 : ne rien affirmer) : Colorado (famli.colorado.gov : refus, lois
-hors .gov), Connecticut (cga.ct.gov : certificat refusé par l'outil de lecture, non contourné), autres États (Rhode
+**Non retenus** (lecture refusée ou non faite, D57 : ne rien affirmer) : Connecticut (cga.ct.gov : certificat refusé par l'outil de lecture, non contourné), autres États (Rhode
 Island, Hawaï, Maryland…) ;
 assurance chômage des indépendants (aucune page du DOL lue ne le dit clairement) ; FMLA (dol.gov : refus).
 
@@ -91,7 +99,7 @@ Une page aux États-Unis, **Paid leave and disability insurance for the self-emp
 id `sick-pay`, reliée par *hreflang* aux pages française et britannique), menu « Taxes and admin » (description :
 « Tax, deadlines, expenses, retirement and benefits. »).
 
-Saisie : l'État (Californie, Delaware, Maine, Massachusetts, Minnesota, New Jersey, New York, Oregon, Washington, autre) et, pour la Californie et l'Oregon, le
+Saisie : l'État (Californie, Colorado, Delaware, Maine, Massachusetts, Minnesota, New Jersey, New York, Oregon, Washington, autre) et, pour la Californie et l'Oregon, le
 bénéfice net. Résultat : le programme, la prime annuelle et trimestrielle estimée (Californie, Oregon), « Opt in » ou
 « Buy a policy » ailleurs, « Not eligible » en Oregon sous 1 000 $, « Not covered yet » pour un autre État ; les points à
 savoir (durées, engagement, conditions), la démarche, et la note sur le SSDI. Moteur `engines/benefits-us.js`
@@ -103,7 +111,7 @@ estimation de la prime de Washington (assiette non lue), engagement au Delaware,
 
 ## 4. Tests
 
-Moteur (`tests/unit/benefits-us.test.mjs`, 6 tests) : chiffres des règles ; neuf États et aucun autre ; Californie
+Moteur (`tests/unit/benefits-us.test.mjs`, 6 tests) : chiffres des règles ; dix États et aucun autre ; Californie
 (50 000 $ → 4 420 $, 4 600 $ et 0 $ → 406,64 $, 4 601 $ → 406,73 $) ; Oregon (exemple officiel 10 000 $ → 60 $, 1 000 $,
 999 $ → non éligible, plafond) ; autres États sans taux ; saisies invalides ; chiffres cités par la page égaux aux
 règles. Mutation : 9 mutants détectés sur 10, le dixième (`<=` → `<` au seuil californien) est équivalent (4 600 × 8,84 %
@@ -131,4 +139,5 @@ York, Washington, Minnesota, Delaware, Massachusetts, Maine, autre État, access
 | 19 DE Admin. Code 1401 (archive.regulations.delaware.gov) | 6.4.5.1 : revenus d'indépendant de la dernière déclaration (Schedule C ligne 31, Schedule SE ligne 6) divisés par 4 ; 6.4.5.3 : 100 % de la cotisation ; 18.2 : 3 ans pour les employeurs |
 | New Jersey, *Employment situations* (myleavebenefits.nj.gov) et guide de l'employeur sur TDI et FLI (nj.gov), lus le 10/11/2026 | Indépendants (*independent contractors*) non couverts ; membres ou associés d'une LLC non couverts ; aucune adhésion volontaire décrite |
 | Delaware, FAQ du programme (laborfiles.delaware.gov) et règlement 1401, art. 6.6, lus le 10/11/2026 | 0,8 % des salaires garanti jusqu'en 2026 ; taux renouvelés à l'identique, changement par modification du règlement à partir de 2027 |
-| Refus de lecture | mass.gov (403), famli.colorado.gov, pl.mn.gov, dol.gov (FMLA), cga.ct.gov (certificat refusé) ; brochure de Washington (lien déplacé) ; Delaware Code, chapitre 37 du titre 19 (page sans le texte) |
+| FAMLI Division, « Opting in to FAMLI » (famli.colorado.gov), et avis du programme de décembre 2025 (dhr.colorado.gov), lus le 10/11/2026 | Adhésion facultative, 0,44 % du revenu brut d'indépendant, plafond de la Social Security, 3 ans, primes trimestrielles, un trimestre avant les prestations ; part salariale de 0,44 % en 2026 |
+| Refus de lecture | mass.gov (403), famli.colorado.gov (le 09/11/2026 ; lisible le 10/11), pl.mn.gov, dol.gov (FMLA), cga.ct.gov (certificat refusé) ; brochure de Washington (lien déplacé) ; Delaware Code, chapitre 37 du titre 19 (page sans le texte) |

@@ -2665,6 +2665,26 @@
       "verified_on": "2026-11-09",
       "note": "Read on 09/11/2026 with the source reader. 26 M.R.S. 850-G(1): 'A self-employed individual, including an independent contractor, sole proprietor or partner, may elect coverage under this subchapter for an initial period of not less than 3 years'; 'The election becomes effective on the date of filing the notice.' (2): withdrawal 'within 30 days after the end of the 3-year period of coverage' (or other times set by rule); 'A withdrawal may not take effect sooner than 30 days after filing the notice.' FAQ (July 2026), question 18: 'Self-employed individuals are eligible for Paid Family and Medical Leave but must choose to opt in for coverage. For calendar years 2025-2027, the premium rate has been set at 0.5 percent of the individual's income from self-employment. Self-employed individuals can elect coverage through the Maine Paid Leave portal.' Premium base details (cap, year of income) not read: no estimate on the site."
     },
+    "us_paid_leave_co_self_employed": {
+      "value": {
+        "self_employed_premium_rate_2026": 0.0044,
+        "min_years": 3,
+        "quarters_paid_before_benefits": 1
+      },
+      "unit": "object",
+      "label": "Colorado: FAMLI, optional coverage for the self-employed (premium on gross self-employment income)",
+      "source": "https://famli.colorado.gov/news-article/opting-in-to-famli-what-self-employed-individuals-and-employees-of-colorados-local",
+      "source_title": "Opting in to FAMLI: what self-employed individuals and employees of Colorado's local governments need to know - Colorado FAMLI Division",
+      "more_sources": [
+        {
+          "source": "https://dhr.colorado.gov/sites/dhr/files/documents/FAMLI%20Program%20Notice%20English%20December%202025.pdf",
+          "source_title": "FAMLI Program Notice (December 2025) - Colorado Division of Human Resources"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-11-10",
+      "note": "Read on 10/11/2026 with the source reader (famli.colorado.gov, refused on 09/11/2026, readable on 10/11/2026). Article dated 30/12/2024: participation is optional for self-employed Colorado residents; 'Self-employed workers who voluntarily wish to participate in FAMLI are only responsible for paying 0.44% of their gross income from self-employment'; to elect coverage, a federal tax transcript and any W-2s, then supporting documents with each quarterly wage report; 'Pay premiums every quarter for at least three years', due by the end of the month after each quarter; 'Premiums are paid on wages up to the Federal Social Security Wage Cap'; coverage begins on the registration date and 'benefits are available after you've reported and paid premiums for at least one quarter'. The 0.44% matches the 2026 employee share in the State notice of December 2025 ('For 2026, your employer sends 0.44% of your wages'): used as the 2026 rate. The 2027 rate (press release of 06/10/2026 announcing a lower rate) was not read: its text did not render."
+    },
     "us_paid_leave_de_self_employed": {
       "value": {
         "contribution_share": 1.0,

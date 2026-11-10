@@ -1,5 +1,14 @@
 # Journal des modifications
 
+## 2026-11-10 (matinée) — Congés payés des indépendants : Colorado
+
+- **Colorado** ajouté à l'outil américain (10 États) : d'après la FAMLI Division, l'adhésion des indépendants résidant au
+  Colorado est facultative ; ils paient 0,44 % de leur revenu brut d'indépendant en 2026 (plafond de la Social
+  Security), chaque trimestre pendant au moins 3 ans ; les prestations sont ouvertes après un trimestre de primes.
+  L'outil estime la prime : 50 000 $ → 220 $ par an, 55 $ par trimestre.
+- Une règle nouvelle datée (États-Unis : 100 sur 106) ; tests unitaires (mutants détectés) et parcours navigateur
+  complétés ; capture relue.
+
 ## 2026-11-10 (matin) — Congés payés des indépendants : New Jersey ; taux du Delaware
 
 - **New Jersey** ajouté à l'outil américain : d'après la Division of Temporary Disability and Family Leave Insurance, les

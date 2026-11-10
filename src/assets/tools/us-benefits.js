@@ -13,6 +13,7 @@
   var C = R.us_paid_leave_ca_diec, M = R.us_paid_leave_mn_self_employed, N = R.us_paid_leave_ny_self_employed;
   var MA = R.us_paid_leave_ma_self_employed, ME = R.us_paid_leave_me_self_employed, DE = R.us_paid_leave_de_self_employed;
   var O = R.us_paid_leave_or_self_employed, W = R.us_paid_leave_wa_elective, S = R.us_ssdi_basics, NJ = R.us_paid_leave_nj_self_employed;
+  var CO = R.us_paid_leave_co_self_employed;
   var $ = function (id) { return document.getElementById(id); };
   var set = function (id, text) { $(id).textContent = text; };
   // Montants comme les pages officielles : « $406.64 », « $1,000 ».
@@ -30,6 +31,18 @@
         "Premium: " + pct(C.premium_rate_2026) + " of your net profit, at least " + usd(C.minimum_annual_premium_2026) + " a year (net profit of " + usd(C.minimum_premium_net_profit) + " or less), in four quarterly installments."
       ],
       step: "Next: apply for Disability Insurance Elective Coverage with the EDD. Check its page for the eligibility rules and how to cancel."
+    },
+    CO: {
+      label: "Colorado FAMLI (optional coverage for the self-employed)",
+      hint: "Your gross income from self-employment for the year: FAMLI bases the premiums on it.",
+      points: [
+        "If you're self-employed and live in Colorado, joining FAMLI (Family and Medical Leave Insurance) is optional.",
+        "You pay " + pct(CO.self_employed_premium_rate_2026) + " of your gross income from self-employment (2026), on up to the Social Security wage cap (" + usd(R.social_security_wage_base_2026) + ").",
+        "You pay premiums every quarter for at least " + CO.min_years + " years; each is due by the end of the month after the quarter.",
+        "To elect coverage you send a federal tax transcript (and any W-2s), then supporting documents with each quarterly wage report.",
+        "Coverage starts when you register; benefits are available after at least " + CO.quarters_paid_before_benefits + " quarter of reported and paid premiums."
+      ],
+      step: "Next: register as a self-employed individual in My FAMLI+ Employer."
     },
     DE: {
       label: "Delaware Paid Leave (voluntary enrollment)",
@@ -116,12 +129,12 @@
       step: "Next: elect coverage with Washington's Employment Security Department; its calculator estimates your quarterly premium."
     }
   };
-  var NAMES = ["California", "Delaware", "Maine", "Massachusetts", "Minnesota", "New Jersey", "New York", "Oregon", "Washington"];
+  var NAMES = ["California", "Colorado", "Delaware", "Maine", "Massachusetts", "Minnesota", "New Jersey", "New York", "Oregon", "Washington"];
 
   function compute() {
     var state = $("ben-state").value;
     var info = INFO[state], list = $("ben-points");
-    var hasRate = state === "CA" || state === "OR" || state === "MN";
+    var hasRate = state === "CA" || state === "OR" || state === "MN" || state === "CO";
     $("ben-profit-field").hidden = !hasRate;
     if (hasRate) set("ben-profit-hint", info.hint);
     list.textContent = "";
@@ -154,7 +167,7 @@
         set("ben-big", usd(p.annual) + " a year");
         // Minnesota : prime annuelle seulement (rythme de paiement des indépendants non lu).
         set("ben-sub", state === "MN" ? "estimated premium for 2026, at the " + pct(M.premium_rate_2026) + " rate."
-          : "estimated premium, or " + usd(p.quarterly) + " a quarter" + (state === "CA" ? " for 2026." : " (2025-2026 rate)."));
+          : "estimated premium, or " + usd(p.quarterly) + " a quarter" + (state === "CA" || state === "CO" ? " for 2026." : " (2025-2026 rate)."));
       } else {
         set("ben-big", state === "NY" ? "Buy a policy" : state === "NJ" ? "Not covered" : "Opt in");
         set("ben-sub", state === "NY" ? "Paid Family Leave and disability, priced by the insurer."

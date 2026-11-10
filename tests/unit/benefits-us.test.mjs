@@ -45,8 +45,8 @@ test("règles : chiffres lus aux sources officielles", () => {
   assert.equal(R.us_ssdi_basics.insured_period_quarters, 40);
 });
 
-test("programmes : les neuf États lus, aucun autre", () => {
-  assert.deepEqual(Object.keys(B.STATES).sort(), ["CA", "DE", "MA", "ME", "MN", "NJ", "NY", "OR", "WA"]);
+test("programmes : les dix États lus, aucun autre", () => {
+  assert.deepEqual(Object.keys(B.STATES).sort(), ["CA", "CO", "DE", "MA", "ME", "MN", "NJ", "NY", "OR", "WA"]);
   for (const s of Object.keys(B.STATES)) assert.ok(B.program(R, s), s);
   assert.equal(B.program(R, "TX"), null);
   assert.equal(B.program(R, "toString"), null, "pas de propriété héritée");
@@ -77,6 +77,14 @@ test("Minnesota : 0,88 % de la base de prime en 2026, plafonnée au plafond de l
   assert.deepEqual(B.premium(R, "MN", -1), { error: "profit" });
 });
 
+test("Colorado : 0,44 % du revenu brut d'indépendant en 2026, plafonné au plafond de la Social Security", () => {
+  const CO = R.us_paid_leave_co_self_employed;
+  assert.deepEqual([CO.self_employed_premium_rate_2026, CO.min_years, CO.quarters_paid_before_benefits], [0.0044, 3, 1]);
+  assert.deepEqual(B.premium(R, "CO", 50000), { annual: 220, quarterly: 55, eligible: true }, "50 000 × 0,44 %");
+  assert.deepEqual(B.premium(R, "CO", 200000), { annual: 811.8, quarterly: 202.95, eligible: true }, "184 500 × 0,44 %");
+  assert.deepEqual(B.premium(R, "CO", "x"), { error: "profit" });
+});
+
 test("autres États et saisies invalides", () => {
   for (const s of ["DE", "MA", "ME", "NJ", "NY", "WA", "TX"]) assert.equal(B.premium(R, s, 50000), null, s + " : pas d'estimation");
   for (const bad of [-1, NaN, Infinity, "50000", undefined]) assert.deepEqual(B.premium(R, "CA", bad), { error: "profit" });
@@ -101,6 +109,9 @@ test("page : chiffres cités égaux aux règles", () => {
     "Delaware : lignes de la déclaration, division par 4, 100 % de la cotisation");
   assert.ok(html.includes(`contribution rate is ${D.program_rate_through_2026 * 100}% of wages through 2026`), "Delaware : taux du programme");
   assert.ok(html.includes("independent contractors are not covered") && !html.includes("New Jersey and other states"), "New Jersey : non couverts");
+  const CO = R.us_paid_leave_co_self_employed;
+  assert.ok(html.includes(`You pay ${CO.self_employed_premium_rate_2026 * 100}% of your gross income from self-employment (2026)`) &&
+    html.includes(`every quarter for at least ${CO.min_years} years`) && !html.includes("Colorado, Connecticut"), "Colorado : taux, engagement");
   assert.ok(html.includes(`${C.di_max_weeks} weeks`) && html.includes(`${C.pfl_max_weeks} weeks`) && html.includes(`${C.months_before_claim} months`));
   assert.ok(html.includes(`${W.hours_required} hours`) && html.includes(`${R.us_paid_leave_mn_self_employed.min_weeks} consecutive weeks`));
   const MN = R.us_paid_leave_mn_self_employed;
