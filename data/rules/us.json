@@ -2525,6 +2525,18 @@
       "verified_on": "2026-11-09",
       "note": "Read on 09/11/2026 with the source reader: 'As a self-employed individual – whether a sole proprietor or independent contractor – you can take advantage of New York Paid Family Leave by voluntarily opting in'; 'If you are a self-employed individual with no employees, opting in is as simple as purchasing an insurance policy. Under the governing law, you are required to purchase a policy for both Paid Family Leave and disability; you cannot opt in for Paid Family Leave alone.' A self-employed person without employees may cancel the policy; a carrier may then require an explanation and a waiting period may apply to a new policy. Waiting periods before benefits were not read."
     },
+    "us_paid_leave_nj_self_employed": {
+      "value": {
+        "independent_contractors_covered": false
+      },
+      "unit": "object",
+      "label": "New Jersey: independent contractors are not covered by Temporary Disability and Family Leave Insurance",
+      "source": "https://myleavebenefits.nj.gov/worker/resources/employmentsituations.shtml",
+      "source_title": "Employment situations - New Jersey Division of Temporary Disability and Family Leave Insurance",
+      "confidence": "high",
+      "verified_on": "2026-11-10",
+      "note": "Read on 10/11/2026 with the source reader: 'Independent Contractors are not covered for Temporary Disability and Family Leave Insurance. It is important to know if your work or services are classified correctly. Some employers misclassify workers who are employees as independent contractors'. The same page says members or partners of an LLC are not covered (passage cut by the reader). The pages read (this one and the employer handbook on TDI and FLI) describe no way for the self-employed to opt in; that is said as such, not asserted as a rule."
+    },
     "us_paid_leave_wa_elective": {
       "value": {
         "initial_period_years": 3,
@@ -2657,15 +2669,22 @@
       "value": {
         "contribution_share": 1.0,
         "earnings_lines": "Schedule C line 31 or Schedule SE line 6",
-        "quarterly_divisor": 4
+        "quarterly_divisor": 4,
+        "program_rate_through_2026": 0.008
       },
       "unit": "object",
       "label": "Delaware: voluntary enrollment of the self-employed in Delaware Paid Leave (19 DE Admin. Code 1401)",
       "source": "https://archive.regulations.delaware.gov/AdminCode/title19/1000/1400/1401.shtml",
       "source_title": "19 DE Admin. Code 1401, Rules defining and regulating the Healthy Delaware Families Act - Delaware Regulations",
+      "more_sources": [
+        {
+          "source": "https://laborfiles.delaware.gov/main/pfl/PFML_Overview_FAQ.pdf",
+          "source_title": "Delaware Paid Leave overview FAQ - Delaware Department of Labor"
+        }
+      ],
       "confidence": "high",
-      "verified_on": "2026-11-09",
-      "note": "Read on 09/11/2026 with the source reader. 6.4.5.1: 'If a self-employed individual has voluntarily enrolled in the Delaware Paid Leave program, contributions are based on the individual's self-employment earnings, as reported on their Federal Income taxes. If Schedule C is completed, self-employment earnings are found on line 31. If Schedule SE is completed, self-employment earnings are reported on line 6. Self-employed individuals shall calculate their quarterly earnings by dividing their self-employment earnings found on their most recently filed income tax return by 4.' 6.4.5.3: 'Self-employed individuals and independent contractors are responsible for paying 100% of the required contribution'. The 3-year minimum in the rule (18.2) concerns employers; no commitment period for the self-employed was found (the 2021 bill text cited by secondary sources said 3 years and 50%: not the current rule, D57). Rates not read. The Delaware Code page read did not contain the chapter text."
+      "verified_on": "2026-11-10",
+      "note": "Read on 09/11/2026 with the source reader. 6.4.5.1: 'If a self-employed individual has voluntarily enrolled in the Delaware Paid Leave program, contributions are based on the individual's self-employment earnings, as reported on their Federal Income taxes. If Schedule C is completed, self-employment earnings are found on line 31. If Schedule SE is completed, self-employment earnings are reported on line 6. Self-employed individuals shall calculate their quarterly earnings by dividing their self-employment earnings found on their most recently filed income tax return by 4.' 6.4.5.3: 'Self-employed individuals and independent contractors are responsible for paying 100% of the required contribution'. The 3-year minimum in the rule (18.2) concerns employers; no commitment period for the self-employed was found (the 2021 bill text cited by secondary sources said 3 years and 50%: not the current rule, D57). The Delaware Code page read did not contain the chapter text. Read on 10/11/2026: Department of Labor FAQ, 'The rates are guaranteed through 2026 at 0.8% of wages, and component rates are available for each line of coverage' (employer contributions on employees' FICA wages); regulation 1401, 6.6: 'Current rates are in effect for 52 weeks and will automatically renew at the same rates as stated in the Act. Beginning in 2027, if there is a new rate, the new rate will be changed by modification to this regulation.' No text read applies the 0.8% expressly to self-employment earnings: the tool gives the program rate, not a self-employed estimate."
     }
   },
   "open_questions": [

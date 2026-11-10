@@ -30,7 +30,10 @@ des indépendants au *Delaware Paid Leave* ; cotisations calculées sur les reve
 déclaration fédérale (Schedule C ligne 31 ou Schedule SE ligne 6), **divisés par 4** pour chaque trimestre ;
 l'indépendant paie **100 %** de la cotisation. Taux non lu ; durée d'engagement non trouvée dans le règlement (les
 3 ans de l'art. 18.2 visent les employeurs ; le texte du projet de loi de 2021, cité ailleurs, disait 3 ans et 50 % :
-ce n'est pas la règle en vigueur, D57) : renvoi au site de l'État. Ajouté le 09/11/2026 en fin d'après-midi.
+ce n'est pas la règle en vigueur, D57) : renvoi au site de l'État. Ajouté le 09/11/2026 en fin d'après-midi. Taux du
+programme (lu le 10/11/2026) : **0,8 %** des salaires jusqu'en 2026 (FAQ du ministère du Travail), taux renouvelés tant
+que le règlement ne change pas (art. 6.6) ; aucun texte lu ne l'applique expressément aux revenus d'indépendant : l'outil
+donne le taux du programme, sans estimation.
 
 **Maine** (`us_paid_leave_me_self_employed`, 26 M.R.S. 850-G, FAQ de juillet 2026) : entrepreneurs individuels, indépendants
 et associés ; adhésion pour **3 ans** au moins, effective au dépôt de la déclaration ; retrait dans les 30 jours suivant la
@@ -57,6 +60,11 @@ will be 0.88 percent »). L'outil estime donc la prime de 2026 : 0,88 % de la ba
 de la Social Security (184 500 $), en montant annuel seulement (rythme de paiement des indépendants non lu, pl.mn.gov
 refusant la lecture) ; taux de 2027 non lu.
 
+**New Jersey** (`us_paid_leave_nj_self_employed`, page « Employment situations » de la Division of Temporary Disability
+and Family Leave Insurance, lue le 10/11/2026) : « Independent Contractors are not covered for Temporary Disability and
+Family Leave Insurance ». Les pages lues ne décrivent aucune adhésion volontaire des indépendants : l'outil le dit tel
+quel (« Not covered »), sans l'ériger en règle. Ajouté le 10/11/2026.
+
 **New York** (`us_paid_leave_ny_self_employed`) : sans salarié, adhésion par l'achat d'une **police d'assurance**
 couvrant **à la fois** le *Paid Family Leave* et l'invalidité (pas de PFL seul) ; prix fixé par l'assureur.
 
@@ -73,8 +81,8 @@ salariale, l'outil indique environ **0,81 %** des revenus déclarés en 2026 (0,
 l'adhésion volontaire non lus (le guide de l'adhésion renvoie vers une page de menu) : pas d'estimation chiffrée.
 
 **Non retenus** (lecture refusée ou non faite, D57 : ne rien affirmer) : Colorado (famli.colorado.gov : refus, lois
-hors .gov), Connecticut (cga.ct.gov : certificat refusé par l'outil de lecture, non contourné), New Jersey (aucune source
-officielle lue ne le dit clairement), autres États (Rhode Island, Hawaï, Maryland…) ;
+hors .gov), Connecticut (cga.ct.gov : certificat refusé par l'outil de lecture, non contourné), autres États (Rhode
+Island, Hawaï, Maryland…) ;
 assurance chômage des indépendants (aucune page du DOL lue ne le dit clairement) ; FMLA (dol.gov : refus).
 
 ## 3. Outil
@@ -83,7 +91,7 @@ Une page aux États-Unis, **Paid leave and disability insurance for the self-emp
 id `sick-pay`, reliée par *hreflang* aux pages française et britannique), menu « Taxes and admin » (description :
 « Tax, deadlines, expenses, retirement and benefits. »).
 
-Saisie : l'État (Californie, Delaware, Maine, Massachusetts, Minnesota, New York, Oregon, Washington, autre) et, pour la Californie et l'Oregon, le
+Saisie : l'État (Californie, Delaware, Maine, Massachusetts, Minnesota, New Jersey, New York, Oregon, Washington, autre) et, pour la Californie et l'Oregon, le
 bénéfice net. Résultat : le programme, la prime annuelle et trimestrielle estimée (Californie, Oregon), « Opt in » ou
 « Buy a policy » ailleurs, « Not eligible » en Oregon sous 1 000 $, « Not covered yet » pour un autre État ; les points à
 savoir (durées, engagement, conditions), la démarche, et la note sur le SSDI. Moteur `engines/benefits-us.js`
@@ -95,7 +103,7 @@ estimation de la prime de Washington (assiette non lue), engagement au Delaware,
 
 ## 4. Tests
 
-Moteur (`tests/unit/benefits-us.test.mjs`, 6 tests) : chiffres des règles ; huit États et aucun autre ; Californie
+Moteur (`tests/unit/benefits-us.test.mjs`, 6 tests) : chiffres des règles ; neuf États et aucun autre ; Californie
 (50 000 $ → 4 420 $, 4 600 $ et 0 $ → 406,64 $, 4 601 $ → 406,73 $) ; Oregon (exemple officiel 10 000 $ → 60 $, 1 000 $,
 999 $ → non éligible, plafond) ; autres États sans taux ; saisies invalides ; chiffres cités par la page égaux aux
 règles. Mutation : 9 mutants détectés sur 10, le dixième (`<=` → `<` au seuil californien) est équivalent (4 600 × 8,84 %
@@ -121,4 +129,6 @@ York, Washington, Minnesota, Delaware, Massachusetts, Maine, autre État, access
 | 26 M.R.S. 850-G (Maine Legislature) | 3 ans au moins, effet au dépôt, retrait dans les 30 jours après les 3 ans, effet 30 jours après l'avis |
 | Maine Department of Labor, FAQ employeurs (juillet 2026) | Adhésion volontaire des indépendants, prime 2025-2027 de 0,5 % des revenus d'indépendant, portail Maine Paid Leave |
 | 19 DE Admin. Code 1401 (archive.regulations.delaware.gov) | 6.4.5.1 : revenus d'indépendant de la dernière déclaration (Schedule C ligne 31, Schedule SE ligne 6) divisés par 4 ; 6.4.5.3 : 100 % de la cotisation ; 18.2 : 3 ans pour les employeurs |
+| New Jersey, *Employment situations* (myleavebenefits.nj.gov) et guide de l'employeur sur TDI et FLI (nj.gov), lus le 10/11/2026 | Indépendants (*independent contractors*) non couverts ; membres ou associés d'une LLC non couverts ; aucune adhésion volontaire décrite |
+| Delaware, FAQ du programme (laborfiles.delaware.gov) et règlement 1401, art. 6.6, lus le 10/11/2026 | 0,8 % des salaires garanti jusqu'en 2026 ; taux renouvelés à l'identique, changement par modification du règlement à partir de 2027 |
 | Refus de lecture | mass.gov (403), famli.colorado.gov, pl.mn.gov, dol.gov (FMLA), cga.ct.gov (certificat refusé) ; brochure de Washington (lien déplacé) ; Delaware Code, chapitre 37 du titre 19 (page sans le texte) |

@@ -12,7 +12,7 @@
   var B = OFE.benefitsUS;
   var C = R.us_paid_leave_ca_diec, M = R.us_paid_leave_mn_self_employed, N = R.us_paid_leave_ny_self_employed;
   var MA = R.us_paid_leave_ma_self_employed, ME = R.us_paid_leave_me_self_employed, DE = R.us_paid_leave_de_self_employed;
-  var O = R.us_paid_leave_or_self_employed, W = R.us_paid_leave_wa_elective, S = R.us_ssdi_basics;
+  var O = R.us_paid_leave_or_self_employed, W = R.us_paid_leave_wa_elective, S = R.us_ssdi_basics, NJ = R.us_paid_leave_nj_self_employed;
   var $ = function (id) { return document.getElementById(id); };
   var set = function (id, text) { $(id).textContent = text; };
   // Montants comme les pages officielles : « $406.64 », « $1,000 ».
@@ -36,7 +36,8 @@
       points: [
         "Self-employed people and independent contractors can enroll voluntarily.",
         "Contributions are based on your self-employment earnings on your most recent federal tax return (" + DE.earnings_lines + "), divided by " + DE.quarterly_divisor + " for each quarter.",
-        "You pay " + pct(DE.contribution_share) + " of the contribution."
+        "You pay " + pct(DE.contribution_share) + " of the contribution.",
+        "The program's contribution rate is " + pct(DE.program_rate_through_2026) + " of wages through 2026; Delaware Paid Leave confirms the contribution on your self-employment earnings."
       ],
       step: "Next: enroll with Delaware Paid Leave, which sets the contribution rates and tells you how long you commit for."
     },
@@ -70,6 +71,16 @@
           " in 2026; the state adjusts it every year, by " + M.rate_adjusted_each_year_by + " for the next year."
       ],
       step: "Next: apply on Minnesota Paid Leave's site for the self-employed."
+    },
+    NJ: {
+      label: "New Jersey Temporary Disability and Family Leave Insurance",
+      points: [
+        (NJ.independent_contractors_covered ? "Independent contractors are covered" : "Independent contractors are not covered") +
+          " for Temporary Disability and Family Leave Insurance, according to New Jersey's Division of Temporary Disability and Family Leave Insurance.",
+        "The state's pages read for this tool describe no way for the self-employed to opt in: check with the Division before you rely on it.",
+        "If you were misclassified as an independent contractor, you may in fact be an employee, and covered."
+      ],
+      step: "Next: look at private disability insurance and keep a cash buffer for time off."
     },
     NY: {
       label: "New York Paid Family Leave and disability",
@@ -105,7 +116,7 @@
       step: "Next: elect coverage with Washington's Employment Security Department; its calculator estimates your quarterly premium."
     }
   };
-  var NAMES = ["California", "Delaware", "Maine", "Massachusetts", "Minnesota", "New York", "Oregon", "Washington"];
+  var NAMES = ["California", "Delaware", "Maine", "Massachusetts", "Minnesota", "New Jersey", "New York", "Oregon", "Washington"];
 
   function compute() {
     var state = $("ben-state").value;
@@ -145,8 +156,9 @@
         set("ben-sub", state === "MN" ? "estimated premium for 2026, at the " + pct(M.premium_rate_2026) + " rate."
           : "estimated premium, or " + usd(p.quarterly) + " a quarter" + (state === "CA" ? " for 2026." : " (2025-2026 rate)."));
       } else {
-        set("ben-big", state === "NY" ? "Buy a policy" : "Opt in");
+        set("ben-big", state === "NY" ? "Buy a policy" : state === "NJ" ? "Not covered" : "Opt in");
         set("ben-sub", state === "NY" ? "Paid Family Leave and disability, priced by the insurer."
+          : state === "NJ" ? "Independent contractors aren't covered by the state programs."
           : state === "ME" ? "Premium: " + pct(ME.premium_rate_2025_2027) + " of your income from self-employment (2025-2027)."
           : state === "WA" ? "You pay the employee share of the premium: about " + pct(W.premium_rate_2026 * W.employee_share_2026) + " of the income you report in 2026."
           : "Premium rate: see the state's site.");

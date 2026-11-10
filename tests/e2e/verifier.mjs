@@ -3334,6 +3334,12 @@ const tests = {
     await page.selectOption("#ben-state", "DE");
     check((await t("ben-big")) === "Opt in" && (await points())[2] === "You pay 100% of the contribution." &&
       (await points())[1].includes("(Schedule C line 31 or Schedule SE line 6), divided by 4"), "paid leave: Delaware → 100% of the contribution, earnings ÷ 4");
+    check((await points())[3] === "The program's contribution rate is 0.8% of wages through 2026; Delaware Paid Leave confirms the contribution on your self-employment earnings.",
+      "paid leave: Delaware → program rate of 0.8% through 2026");
+    await page.selectOption("#ben-state", "NJ");
+    check((await t("ben-big")) === "Not covered" && (await t("ben-sub")) === "Independent contractors aren't covered by the state programs." &&
+      (await points())[0].startsWith("Independent contractors are not covered for Temporary Disability and Family Leave Insurance") &&
+      !(await page.isVisible("#ben-profit")), "paid leave: New Jersey → independent contractors not covered");
     await page.selectOption("#ben-state", "MA");
     check((await t("ben-big")) === "Opt in" && (await points())[2].includes("at least 2 of your last 4 completed calendar quarters") && !(await page.isVisible("#ben-profit")),
       "paid leave: Massachusetts → 3 years, 2 of the last 4 quarters");
@@ -3343,7 +3349,7 @@ const tests = {
       (await t("ben-step")) === "Next: elect coverage through the Maine Paid Leave portal.", "paid leave: Maine → 0.5% for 2025-2027");
     await page.selectOption("#ben-state", "other");
     check((await t("ben-big")) === "Not covered yet" && !(await page.isVisible("#ben-step")) &&
-      (await points())[0] === "This page covers 8 states so far: California, Delaware, Maine, Massachusetts, Minnesota, New York, Oregon and Washington.",
+      (await points())[0] === "This page covers 9 states so far: California, Delaware, Maine, Massachusetts, Minnesota, New Jersey, New York, Oregon and Washington.",
       "paid leave: another state → not covered yet, check the state's program");
     await accessible(page, "paid leave (another state)");
     // Retour à la situation par défaut pour les formats suivants (tablette, mobile).

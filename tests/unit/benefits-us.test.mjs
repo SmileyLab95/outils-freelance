@@ -37,14 +37,16 @@ test("règles : chiffres lus aux sources officielles", () => {
   assert.equal(R.us_paid_leave_me_self_employed.initial_period_years, 3);
   assert.equal(R.us_paid_leave_de_self_employed.contribution_share, 1);
   assert.equal(R.us_paid_leave_de_self_employed.quarterly_divisor, 4);
+  assert.equal(R.us_paid_leave_de_self_employed.program_rate_through_2026, 0.008);
+  assert.equal(R.us_paid_leave_nj_self_employed.independent_contractors_covered, false);
   assert.equal(R.us_paid_leave_me_self_employed.premium_rate_2025_2027, 0.005);
   assert.equal(R.us_ssdi_basics.waiting_period_months, 5);
   assert.equal(R.us_ssdi_basics.insured_quarters_of_coverage, 20);
   assert.equal(R.us_ssdi_basics.insured_period_quarters, 40);
 });
 
-test("programmes : les huit États lus, aucun autre", () => {
-  assert.deepEqual(Object.keys(B.STATES).sort(), ["CA", "DE", "MA", "ME", "MN", "NY", "OR", "WA"]);
+test("programmes : les neuf États lus, aucun autre", () => {
+  assert.deepEqual(Object.keys(B.STATES).sort(), ["CA", "DE", "MA", "ME", "MN", "NJ", "NY", "OR", "WA"]);
   for (const s of Object.keys(B.STATES)) assert.ok(B.program(R, s), s);
   assert.equal(B.program(R, "TX"), null);
   assert.equal(B.program(R, "toString"), null, "pas de propriété héritée");
@@ -76,7 +78,7 @@ test("Minnesota : 0,88 % de la base de prime en 2026, plafonnée au plafond de l
 });
 
 test("autres États et saisies invalides", () => {
-  for (const s of ["DE", "MA", "ME", "NY", "WA", "TX"]) assert.equal(B.premium(R, s, 50000), null, s + " : pas d'estimation");
+  for (const s of ["DE", "MA", "ME", "NJ", "NY", "WA", "TX"]) assert.equal(B.premium(R, s, 50000), null, s + " : pas d'estimation");
   for (const bad of [-1, NaN, Infinity, "50000", undefined]) assert.deepEqual(B.premium(R, "CA", bad), { error: "profit" });
   assert.deepEqual(B.premium(R, "OR", -5), { error: "profit" });
 });
@@ -97,6 +99,8 @@ test("page : chiffres cités égaux aux règles", () => {
   const D = R.us_paid_leave_de_self_employed;
   assert.ok(html.includes(`(${D.earnings_lines}), divided by ${D.quarterly_divisor} for each quarter, and you pay ${D.contribution_share * 100}% of them`),
     "Delaware : lignes de la déclaration, division par 4, 100 % de la cotisation");
+  assert.ok(html.includes(`contribution rate is ${D.program_rate_through_2026 * 100}% of wages through 2026`), "Delaware : taux du programme");
+  assert.ok(html.includes("independent contractors are not covered") && !html.includes("New Jersey and other states"), "New Jersey : non couverts");
   assert.ok(html.includes(`${C.di_max_weeks} weeks`) && html.includes(`${C.pfl_max_weeks} weeks`) && html.includes(`${C.months_before_claim} months`));
   assert.ok(html.includes(`${W.hours_required} hours`) && html.includes(`${R.us_paid_leave_mn_self_employed.min_weeks} consecutive weeks`));
   const MN = R.us_paid_leave_mn_self_employed;

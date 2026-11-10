@@ -1,5 +1,14 @@
 # Journal des modifications
 
+## 2026-11-10 (matin) — Congés payés des indépendants : New Jersey ; taux du Delaware
+
+- **New Jersey** ajouté à l'outil américain : d'après la Division of Temporary Disability and Family Leave Insurance, les
+  indépendants ne sont pas couverts par l'assurance invalidité temporaire ni par l'assurance congé familial ; les pages
+  officielles lues ne décrivent aucune adhésion volontaire (dit tel quel). L'outil couvre 9 États.
+- **Delaware** : taux du programme lu (0,8 % des salaires jusqu'en 2026, FAQ du ministère du Travail et règlement
+  1401) ; faute de texte qui l'applique aux revenus d'indépendant, pas d'estimation chiffrée.
+- Une règle nouvelle datée (États-Unis : 99 sur 105) ; tests unitaires et parcours navigateur complétés ; capture relue.
+
 ## 2026-11-10 (fin de nuit) — Congés payés des indépendants : prime estimée au Minnesota
 
 - Minnesota : le taux de 2026, **0,88 %**, est lu dans deux sources officielles du ministère de l'Emploi de l'État

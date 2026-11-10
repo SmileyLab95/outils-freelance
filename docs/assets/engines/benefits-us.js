@@ -14,7 +14,7 @@
 
   // États dont les règles ont été lues aux sources (règle de chaque programme).
   var STATES = { CA: "us_paid_leave_ca_diec", DE: "us_paid_leave_de_self_employed", MA: "us_paid_leave_ma_self_employed", ME: "us_paid_leave_me_self_employed",
-    MN: "us_paid_leave_mn_self_employed", NY: "us_paid_leave_ny_self_employed", OR: "us_paid_leave_or_self_employed",
+    MN: "us_paid_leave_mn_self_employed", NJ: "us_paid_leave_nj_self_employed", NY: "us_paid_leave_ny_self_employed", OR: "us_paid_leave_or_self_employed",
     WA: "us_paid_leave_wa_elective" };
 
   function round2(x) { return Math.round(Number((x * 100).toPrecision(12))) / 100; }
