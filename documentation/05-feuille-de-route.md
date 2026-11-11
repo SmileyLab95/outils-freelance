@@ -9,7 +9,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 
 ## Où en est-on ?
 
-*Mis à jour le 10/11/2026 (matinée).*
+*Mis à jour le 11/11/2026 (soir).*
 
 - **Priorité (décision D10)** : le site et la plateforme d'abord ; noms de domaine, Gumroad et affiliation à la fin.
   Règle de qualité maximale pour tout produit ou service (D11, charte dans la [méthode](04-methode-de-travail.md#charte-qualité)).
@@ -368,7 +368,30 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   plafond de 184 500 $) ; matin : New Jersey ajouté (indépendants non couverts, d'après la Division TDI/FLI), taux du
   programme du Delaware (0,8 % des salaires jusqu'en 2026, sans estimation pour les indépendants) ; Colorado ajouté
   (FAMLI lisible : adhésion facultative, 0,44 % du revenu brut d'indépendant en 2026, 3 ans, prime estimée).
-- **Prochaines actions de Claude** : refonte, suite ([31](31-vision-plateforme.md) § 5) : les quatre modules du compte
+  Fin de matinée : Massachusetts toujours illisible (mass.gov répond 403, page et affiche PDF : pas de contournement) ;
+  seuils majorés de la franchise de TVA en activité mixte : BOFiP BOI-TVA-DECLA-40-10-10 et 40-10-20 lus, règle
+  générale seulement (TVA due dès le dépassement), rien sur l'activité mixte : toujours non affirmés, renvoi au service
+  des impôts des entreprises (D62) ; § 300 du BOI-TVA-DECLA-40-10-20 : seconde source pour les ventes et prestations
+  distinctes sur les factures.
+- **Demandes d'Ismail du 11/11/2026** : (1) « la trésorerie n'est pas bien faite » : tout ce dont l'utilisateur a
+  besoin, avec graphiques et indicateurs, **et de même pour tous les autres onglets** ; (2) « le design est très
+  classique » : proposer d'autres thèmes pour qu'il décide.
+- **Thèmes proposés (11/11/2026)** : trois thèmes appliqués aux vraies pages (accueil, simulateur, Espace, trésorerie,
+  mobile) sur une page de comparaison privée : A « Minuit » (sombre, citron), B « Bento » (clair, cobalt, cartes
+  arrondies), C « Pop » (néo-brutalisme) ; recommandation : B, avec A en mode sombre automatique
+  ([54](54-themes.md)). Le site garde son thème actuel jusqu'à la décision d'Ismail.
+- **Trésorerie v2 (11/11/2026, D61)** : 8 indicateurs (solde, disponible, point bas prévu, versement possible sans
+  passer sous le seuil, à encaisser dont en retard, délai moyen de paiement, autonomie en mois, point mort mensuel) ;
+  courbe du solde jour par jour en deux scénarios (prévu, prudent : retards réellement constatés), seuil de sécurité,
+  point bas ; entrées et sorties par mois (6 mois réels, mois prévus hachurés) ; créances par ancienneté avec les
+  factures en retard à relancer ; prochains mouvements ; mouvements prévus ponctuels, entrées et chiffre d'affaires
+  prévu (cotisations et TVA estimées dessus) ; horizon de 3, 6 ou 12 mois ; export CSV. Graphiques SVG faits maison,
+  accessibles (titre, description, données), aux couleurs du thème. 20 tests unitaires nouveaux, 40 erreurs
+  réintroduites toutes détectées, parcours navigateur (29 points) et des comptes ; captures relues (4 corrections).
+- **Prochaines actions de Claude** : **indicateurs et graphiques dans les autres onglets de l'Espace** (demande
+  d'Ismail du 11/11 : tableau de bord, documents, clients, recettes, dépenses avec catégories, temps, prospects,
+  échéances ; même composant de graphique que la trésorerie ; spécification écrite : [55](55-indicateurs-espace.md), à commencer par le tableau de bord) ; **appliquer le thème**
+  choisi par Ismail dès sa réponse ([54](54-themes.md) § 2) ; refonte, suite ([31](31-vision-plateforme.md) § 5) : les quatre modules du compte
   gratuit sont faits (étape 5) ; étape 6, outils restants (CGV : faites dans les quatre pays ;
   lois des autres provinces sur la protection du consommateur à lire pour les détailler ; le règlement albertain sur les
   contrats Internet expire le 30/09/2028 : à revérifier) ; jours ouvrés au Canada (jours fériés fédéraux et provinciaux) : en attente de l'accès à canada.ca, refusé
@@ -393,7 +416,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   texte de l'article R123-237 du Code de commerce à relire dès que Légifrance est lisible (mentions sur les
   correspondances, signature d'email) ;
   activité mixte, suite ([53](53-activite-mixte.md) § 7) : seuils majorés de la franchise de TVA en cours d'année
-  pour l'activité mixte (article 293 B du CGI ou BOFiP à lire) ; questions ouvertes de `data/rules/` à relire
+  pour l'activité mixte (BOFiP lu sans réponse le 10/11 ; article 293 B du CGI à lire dès que Légifrance est lisible) ; questions ouvertes de `data/rules/` à relire
   avec l'outil de lecture des sources (ACRE) ; puis besoins P3 restants
   ([02](02-besoins-clients.md) : sous-traitance) ; loi californienne sur les freelances (SB 988) et
   loi de l'Illinois (820 ILCS 193) à relire dès que leurs sites officiels sont lisibles par l'outil (refus le
@@ -495,7 +518,8 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   vélo de 20p ne vaut que pour les salariés. Restent à lire : dates des prochaines réunions de la Banque d'Angleterre,
   page du *Commercial Payments Bill*, preuves de l'activité d'un client étranger (VATPOSS06500).
 - **Accès réseau (07/11/2026)** : environnement cloud « Outils Freelance (sources officielles) » créé et approuvé par Ismail (GOV.UK, legislation.gov.uk, canada.ca, Légifrance, economie.gouv.fr, ameli.fr, urssaf.fr, autoentrepreneur.urssaf.fr). GOV.UK et legislation.gov.uk se lisent désormais directement. Les autres sites refusent eux-mêmes la lecture automatisée (réponse 403 pour Légifrance, ameli et economie.gouv.fr ; connexion coupée pour canada.ca et l'Urssaf), comme depuis l'outil de lecture des sources : aucun contournement de ces protections.
-- **En attente d'Ismail** (pas urgent) : supprimer sur GitHub la branche d'essai `verif-tmp` (un seul commit de test, sans effet sur le site : le proxy de la session refuse la suppression de branches) ; pour les textes encore illisibles, deux voies au choix : (1) créer un compte sur PISTE (portail officiel des API de l'État, piste.gouv.fr) et y souscrire à l'API Légifrance, puis me donner l'identifiant par le formulaire sécurisé de la session (je ne le demande qu'à ce moment-là) ; (2) enregistrer en PDF, depuis son navigateur, les pages voulues et les déposer dans le dépôt (dossier `sources/`) : loi n° 75-1334 du 31 décembre 1975 (sous-traitance), articles R123-237 et L131-3 à L131-6, pages de l'Assurance maladie et de l'Urssaf sur l'arrêt maladie du micro-entrepreneur, jours fériés et pratiques de l'ARC sur canada.ca ; questions à poser à l'expert-comptable ou à l'avocat : l'indemnité forfaitaire
+- **En attente d'Ismail** : **choisir le thème du site** (A, B, C ou un mélange ; page de comparaison envoyée le
+  11/11/2026, [54](54-themes.md)). Pas urgent : supprimer sur GitHub la branche d'essai `verif-tmp` (un seul commit de test, sans effet sur le site : le proxy de la session refuse la suppression de branches) ; pour les textes encore illisibles, deux voies au choix : (1) créer un compte sur PISTE (portail officiel des API de l'État, piste.gouv.fr) et y souscrire à l'API Légifrance, puis me donner l'identifiant par le formulaire sécurisé de la session (je ne le demande qu'à ce moment-là) ; (2) enregistrer en PDF, depuis son navigateur, les pages voulues et les déposer dans le dépôt (dossier `sources/`) : loi n° 75-1334 du 31 décembre 1975 (sous-traitance), articles R123-237 et L131-3 à L131-6, pages de l'Assurance maladie et de l'Urssaf sur l'arrêt maladie du micro-entrepreneur, jours fériés et pratiques de l'ARC sur canada.ca ; questions à poser à l'expert-comptable ou à l'avocat : l'indemnité forfaitaire
   de 40 € s'applique-t-elle aux factures des professions libérales et des prestataires non commerçants (la fiche
   officielle F23211 la réserve aux « actes de commerce ») ? Pour un retard sur plusieurs semestres, faut-il appliquer à
   chaque semestre son taux (choix du calculateur, lecture littérale de l'article L441-10) ou garder le taux du semestre
@@ -737,6 +761,8 @@ micro-entreprises), et lancer l'offre Pro.
 - [ ] **[Ismail]** Contrat avec un agrégateur bancaire agréé
 - [ ] Banque connectée : catégorisation, rapprochement avec les factures
 - [x] Trésorerie et prévisions ; provisions pour cotisations et TVA *(version locale, France ; impôt sur le revenu hors versement libératoire : calculateur à part)*
+- [x] Pilotage de la trésorerie : indicateurs, courbe du solde en deux scénarios, flux par mois, ancienneté des créances, seuil de sécurité, export *(v2, 11/11/2026, D61)*
+- [ ] Indicateurs et graphiques dans les autres onglets de l'Espace *(demande d'Ismail du 11/11/2026)*
 - [ ] Déclarations préparées : montant Urssaf, TVA, récapitulatif pour la 2042-C-PRO
 - [ ] Exports comptables (fichier des écritures comptables pour le régime réel, CSV) et accès invité pour le comptable
 - [ ] Application mobile installable (photo des reçus, notifications)

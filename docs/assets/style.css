@@ -832,6 +832,84 @@ a.country-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg)
 .treasury-month ul { list-style: none; margin: 8px 0 0; padding: 0; }
 .treasury-month li { display: grid; grid-template-columns: 6.5em minmax(0, 1fr) auto; gap: 4px 12px; padding: 4px 0; }
 .treasury-month li span:nth-child(2) { overflow-wrap: anywhere; }
+/* Trésorerie v2 : indicateurs, graphiques, créances, prochains mouvements (documentation/39-tresorerie.md, § 7). */
+.kpis.kpis-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.kpis.kpis-4 .kpi:last-child { grid-column: auto; }
+.kpi.is-bad .kpi-value { color: var(--danger); }
+.kpi-sub a { font-weight: 650; }
+.tr-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.seg { display: inline-flex; gap: 4px; padding: 3px; border-radius: 999px; background: var(--tint); }
+.seg .tab { border-color: transparent; background: transparent; text-decoration: none; padding: 6px 12px; }
+.seg .tab[aria-current="true"] { background: var(--ink); color: #fff; border-color: var(--ink); }
+.card-head { display: flex; flex-direction: column; gap: 2px; margin-bottom: 10px; }
+.card-head h3 { margin: 0; }
+.tr-charts { align-items: stretch; }
+.tr-charts .espace-card, .tr-stack .espace-card { min-width: 0; }
+.tr-stack { display: grid; align-content: start; min-width: 0; }
+.chart { width: 100%; min-height: 40px; }
+.chart-svg { display: block; width: 100%; height: auto; overflow: visible; font-family: var(--font); }
+.ch-grid { stroke: var(--line); stroke-width: 1; }
+.ch-grid.ch-zero { stroke: var(--ink-2); stroke-width: 1.2; }
+.ch-month { stroke: var(--line); stroke-dasharray: 2 4; }
+.ch-tick { font-size: 11px; fill: var(--muted); font-variant-numeric: tabular-nums; }
+.ch-note { font-size: 11px; font-weight: 700; fill: var(--ink-2); paint-order: stroke; stroke: var(--card); stroke-width: 4px; stroke-linejoin: round; }
+.ch-note-warn { fill: var(--warn); }
+.ch-line { fill: none; stroke-width: 2.4; stroke-linejoin: round; }
+.ch-line.is-main { stroke: var(--brand); }
+.ch-line.is-alt { stroke: var(--ink-2); stroke-width: 1.6; }
+.ch-dashed { stroke-dasharray: 6 5; }
+.ch-area.is-main { fill: var(--brand); opacity: .1; }
+.ch-threshold { stroke: var(--warn); stroke-width: 1.6; stroke-dasharray: 3 3; }
+.ch-low { fill: var(--card); stroke: var(--ok); stroke-width: 3; }
+.ch-low.is-bad { stroke: var(--danger); }
+.ch-sep { stroke: var(--ink-2); stroke-dasharray: 4 4; }
+.ch-bar.is-in { fill: var(--ok); }
+.ch-bar.is-out { fill: var(--danger); }
+.ch-bar.is-future { stroke-width: 1.2; }
+.ch-bar.is-in.is-future, .ch-hatch.is-in { stroke: var(--ok); }
+.ch-bar.is-out.is-future, .ch-hatch.is-out { stroke: var(--danger); }
+.ch-hatch-bg { fill: var(--card); }
+.ch-hatch { stroke-width: 2.4; }
+.ch-seg { stroke: var(--card); stroke-width: 1; }
+.ch-seg.is-ok, .ch-key.is-ok { fill: var(--ok); background: var(--ok); }
+.ch-seg.is-near, .ch-key.is-near { fill: var(--gold); background: var(--gold); }
+.ch-seg.is-warn, .ch-key.is-warn { fill: #d97706; background: #d97706; }
+.ch-seg.is-hot, .ch-key.is-hot { fill: #ea580c; background: #ea580c; }
+.ch-seg.is-bad, .ch-key.is-bad { fill: var(--danger); background: var(--danger); }
+.ch-seg.ch-empty { fill: var(--line); }
+.ch-legend { list-style: none; display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 8px 0 0; padding: 0; font-size: .82rem; color: var(--muted); }
+.ch-legend li { display: inline-flex; align-items: center; gap: 6px; }
+.ch-legend-values { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); }
+.ch-legend-values b { color: var(--ink); font-variant-numeric: tabular-nums; }
+.ch-key { width: 14px; height: 10px; border-radius: 3px; flex: none; }
+.ch-key.is-main { background: var(--brand); }
+.ch-key.is-alt { background: none; border-top: 2px dashed var(--ink-2); border-radius: 0; height: 0; }
+.ch-key.is-threshold { background: none; border-top: 2px dotted var(--warn); border-radius: 0; height: 0; }
+.ch-key.is-in { background: var(--ok); }
+.ch-key.is-out { background: var(--danger); }
+.ch-key.is-future { background: repeating-linear-gradient(45deg, var(--muted) 0 2px, transparent 2px 5px); border: 1px solid var(--muted); }
+.ch-data { margin-top: 10px; font-size: .88rem; }
+.ch-data summary { cursor: pointer; font-weight: 650; color: var(--ink-2); }
+.ch-data .table-scroll { overflow-x: auto; }
+.treasury-upcoming { list-style: none; margin: 0; padding: 0; }
+.treasury-upcoming li { display: grid; grid-template-columns: 6.2em minmax(0, 1fr) auto; gap: 2px 10px; align-items: baseline; padding: 7px 0; border-bottom: 1px solid var(--line); font-size: .9rem; }
+.treasury-upcoming li:last-child { border-bottom: 0; }
+.tr-label { display: flex; flex-direction: column; min-width: 0; overflow-wrap: anywhere; }
+.tr-kind { font-size: .78rem; font-weight: 650; color: var(--muted); }
+.is-in { color: var(--ok); }
+.is-out { color: var(--ink); }
+b.is-in, b.is-out, .treasury-upcoming .num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+@media (max-width: 1100px) { .kpis.kpis-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 900px) { .tr-charts { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 600px) {
+  .treasury-upcoming li { grid-template-columns: minmax(0, 1fr) auto; }
+  .treasury-upcoming .c-date { grid-column: 1 / -1; color: var(--muted); font-size: .82rem; }
+  .tr-tools { width: 100%; }
+  .kpis.kpis-4 { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px; }
+  .kpis-4 .kpi { padding: 12px; }
+  .kpis-4 .kpi-value { font-size: 1.2rem; }
+  .kpis-4 .kpi-label, .kpis-4 .kpi-sub { font-size: .76rem; }
+}
 @media (max-width: 640px) {
   .ledger.treasury-table tr { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .ledger.treasury-table tbody .c-date { grid-column: 1 / -1; }

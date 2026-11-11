@@ -85,7 +85,8 @@
     // Charges régulières (trésorerie) : facultatives (sauvegardes antérieures au module).
     if (data.charges !== undefined && !Array.isArray(data.charges)) return "Cette sauvegarde est incomplète.";
     var badCharge = (data.charges || []).some(function (c) {
-      return !c || !isText(c.id) || !isText(c.label) || ["month", "quarter", "year"].indexOf(c.every) < 0 || !isDate(c.start) || !isFinite(Number(c.amount));
+      return !c || !isText(c.id) || !isText(c.label) || ["month", "quarter", "year", "once"].indexOf(c.every) < 0 || !isDate(c.start) || !isFinite(Number(c.amount)) ||
+        (c.flow !== undefined && c.flow !== "in" && c.flow !== "out");
     });
     return badClient || badDoc || badExpense || badTime || badProspect || badOptout || badCharge ? "Cette sauvegarde contient des éléments illisibles." : "";
   }

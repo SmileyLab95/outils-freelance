@@ -1,0 +1,50 @@
+/* Proposition C : « Pop » — audacieux (néo-brutalisme) : traits noirs épais, ombres pleines, couleurs franches. */
+@font-face { font-family: "Inter V"; src: url("/pf/inter-latin-wght-normal.woff2") format("woff2"); font-weight: 100 900; }
+@font-face { font-family: "Inter V"; src: url("/pf/inter-latin-ext-wght-normal.woff2") format("woff2"); font-weight: 100 900; unicode-range: U+0100-024F, U+1E00-1EFF, U+20A0-20CF; }
+@font-face { font-family: "Archivo V"; src: url("/pf/archivo-latin-wdth-normal.woff2") format("woff2"); font-weight: 100 900; font-stretch: 62% 125%; }
+@font-face { font-family: "Archivo V"; src: url("/pf/archivo-latin-ext-wdth-normal.woff2") format("woff2"); font-weight: 100 900; font-stretch: 62% 125%; unicode-range: U+0100-024F, U+1E00-1EFF; }
+:root {
+  --bg: #fff5d9; --card: #ffffff; --tint: #fff0c4; --ink: #111111; --ink-2: #1c1c1c; --muted: #3d3d3d; --faint: #474747;
+  --line: #111111; --line-2: #111111; --field: #111111;
+  --brand: #ff5a1f; --brand-2: #b33a00; --brand-soft: #ffe0cf; --brand-ink: #7a2800; --stamp: #ff5a1f;
+  --gold: #ffd23f; --gold-2: #ffbf00;
+  --ok: #0a7a4a; --ok-soft: #c9f7df; --warn: #8a5300; --warn-soft: #ffe69a; --danger: #b3001b; --danger-soft: #ffd3d8; --info-soft: #d5ecff;
+  --radius: 14px; --radius-sm: 10px;
+  --shadow: 4px 4px 0 #111; --shadow-lg: 7px 7px 0 #111;
+  --font: "Inter V", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Archivo V", "Inter V", ui-sans-serif, sans-serif;
+}
+h1, h2, h3 { font-stretch: 112%; font-weight: 900; letter-spacing: -0.02em; }
+h1 { font-stretch: 118%; letter-spacing: -0.03em; }
+.site-header { background: var(--bg); border-bottom: 2px solid #111; }
+.logo b { color: var(--brand-2); }
+.hero-home h1 em, .hero-global h1 em { color: #111; background: linear-gradient(transparent 58%, #ffd23f 58%, #ffd23f 92%, transparent 92%); padding: 0 .08em; }
+.btn { border: 2px solid #111; box-shadow: 3px 3px 0 #111; border-radius: 10px; }
+.btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 #111; }
+.btn-primary { background: var(--brand); color: #111; box-shadow: 3px 3px 0 #111; }
+.btn-primary:hover { background: #ff7a45; color: #111; }
+.btn-ghost { background: #fff; border-color: #111; }
+.card, .faq-item, .output { border: 2px solid #111; box-shadow: 4px 4px 0 #111; }
+input, select, textarea { border: 2px solid #111 !important; border-radius: 10px !important; background: #fff; }
+.hero-search { border: 2px solid #111; box-shadow: 4px 4px 0 #111; color: var(--muted); }
+.hero-quick a { border: 2px solid #111; background: #fff; color: #111; }
+.notice { background: #d5ecff; color: #111; border: 2px solid #111; }
+.notice.warn { background: #ffe69a; color: #111; }
+.espace-nav { border: 2px solid #111; box-shadow: 4px 4px 0 #111; }
+.espace-nav a:hover { background: var(--tint); color: #111; }
+.espace-nav a[aria-current="page"] { background: #ffd23f; color: #111; outline: 2px solid #111; outline-offset: -2px; }
+.kpi { border: 2px solid #111; box-shadow: 4px 4px 0 #111; }
+.kpis > .kpi:nth-child(1) { background: #c6f1ff; } .kpis > .kpi:nth-child(2) { background: #c9f7df; }
+.kpi.is-brand { background: var(--brand); color: #111; }
+.kpi.is-brand .kpi-label, .kpi.is-brand .kpi-sub { color: #111; }
+.kpi-value { font-family: var(--font-display); font-stretch: 112%; font-weight: 900; }
+.kpi.is-warn .kpi-value { color: #111; }
+.time-totals li { border: 2px solid #111 !important; background: #fff !important; }
+.progress { height: 14px; background: #fff; border: 2px solid #111; }
+.progress > div { background: #00c98d; }
+.progress > div.near { background: #ffbf00; } .progress > div.over { background: #ff4d4d; }
+.nav-item .ico, .mega-title .i { background: #ffd23f; color: #111; }
+.hv-invoice, .hv-chip { border: 2px solid #111; box-shadow: 6px 6px 0 #111; }
+.st { border: 1.5px solid #111; color: #111 !important; }
+.dl-date { color: #111; }
+.hv-tjm { color: #111; border: 2px solid #111; }

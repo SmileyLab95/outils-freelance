@@ -7,7 +7,7 @@
   "icon": "🗂️",
   "blurb": "Factures, encaissements, livre des recettes et Urssaf au même endroit.",
   "app": "Espace entrepreneur",
-  "scripts": ["engines/invoice-fr.js", "engines/espace-fr.js", "tools/espace-store.js", "tools/espace.js"],
+  "scripts": ["engines/invoice-fr.js", "engines/espace-fr.js", "engines/chart-scale.js", "tools/charts.js", "tools/espace-store.js", "tools/espace.js"],
   "draft_scripts": ["engines/espace-sync.js", "engines/compte-crypto.js", "tools/compte-sync.js", "tools/espace-compte.js"],
   "lazy_scripts": ["engines/pdf-fonts.js", "engines/pdf-srgb.js", "engines/pdfa.js", "engines/facturx-fr.js", "engines/facturx-pdf.js"],
   "rules": "fr",
@@ -68,7 +68,7 @@
     <li><strong>Livre des recettes</strong> tenu automatiquement, totalisé par trimestre et par année, exportable.</li>
     <li><strong>Activité mixte</strong> : si vous vendez des marchandises et rendez des services, ventes et prestations sont distinguées sur vos factures et dans le livre des recettes, avec les cotisations de chaque activité et les deux plafonds.</li>
     <li><strong>Dépenses et registre des achats</strong> : obligatoire si vous vendez des marchandises, en ordre chronologique avec les règlements en espèces distingués ; exportable.</li>
-    <li><strong>Trésorerie</strong> : ce qui est déjà dû sur votre compte (cotisations, TVA), ce qui reste vraiment disponible, et la prévision des six prochains mois avec vos factures attendues et vos charges régulières.</li>
+    <li><strong>Trésorerie</strong> : ce qui est déjà dû (cotisations, TVA), ce qui reste vraiment disponible, combien vous pouvez vous verser sans passer sous votre seuil de sécurité, la courbe du solde prévu sur 3, 6 ou 12 mois (scénario prévu ou prudent), les clients en retard, votre délai moyen de paiement, votre autonomie et votre point mort, avec un export de la prévision.</li>
     <li><strong>Urssaf</strong> : chiffre d'affaires de la période, cotisations estimées et date limite ; jauges du plafond et du seuil de TVA.</li>
     <li><strong>Échéances</strong> : votre calendrier fiscal, selon votre situation.</li>
   </ul>

@@ -1,0 +1,10 @@
+/* Commun aux trois propositions : en-tête de l'Espace compact (l'application apparaît tout de suite),
+   menu de l'Espace sans emoji (icônes au trait à la réalisation). */
+.hero-compact { padding: 22px 0 6px !important; }
+.hero-compact h1 { font-size: clamp(1.7rem, 3vw, 2.3rem) !important; margin-bottom: .2em !important; }
+.hero-compact .lead { font-size: 1rem !important; margin-bottom: 0 !important; }
+.hero-compact .pill { display: none !important; }
+.espace-nav a > span[aria-hidden] { display: none; }
+.espace-nav a::before { content: ""; width: 8px; height: 8px; border-radius: 3px; background: currentColor; opacity: .35; flex: none; }
+.espace-nav a[aria-current="page"]::before { opacity: 1; }
+.kpi-value, .ledger .num, .dl-side b, .gauge-head b, .result-value { font-variant-numeric: tabular-nums; }

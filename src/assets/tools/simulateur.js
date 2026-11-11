@@ -127,7 +127,7 @@
         level = "warn";
       } else if (ca > m.vat.total || services > m.vat.services) {
         msg = "Vous dépassez un seuil de franchise de TVA de l'activité mixte (" + OF.eur(m.vat.total, 0) + " au total, " + OF.eur(m.vat.services, 0) +
-          " pour les prestations) : vous facturerez la TVA au plus tard à partir du 1er janvier suivant, et dès le jour du dépassement si un seuil majoré est franchi (voir impots.gouv.fr).";
+          " pour les prestations) : vous facturerez la TVA au plus tard à partir du 1er janvier suivant, et dès le jour du dépassement si un seuil majoré est franchi (non précisés pour l'activité mixte : demandez à votre service des impôts des entreprises).";
         level = "warn";
       } else {
         msg = "Vous restez sous les deux plafonds de la micro-entreprise et sous les seuils de franchise de TVA de l'activité mixte (" + OF.eur(m.vat.total, 0) +

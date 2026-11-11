@@ -634,5 +634,13 @@ test("trésorerie : charges ajoutées, modifiées et supprimées sur deux appare
     state({ profile: { ...p, cashBalance: 900, cashDate: "2026-10-19", updatedAt: T(1) } }));
   assert.deepEqual([r.data.profile.cashBalance, r.data.profile.cashDate], [1200, "2026-10-20"]);
   assert.equal(r.conflicts[0].message, "Profil modifié sur deux appareils : la version la plus récente est gardée (solde du compte, date du solde).");
+  // Trésorerie v2 : seuil de sécurité du profil, sens et chiffre d'affaires d'un mouvement prévu (documentation/39, § 7).
+  r = merge(state({ profile: p }), state({ profile: { ...p, cashThreshold: 2000, updatedAt: T(2) } }), state({ profile: { ...p, cashThreshold: 500, updatedAt: T(1) } }));
+  assert.deepEqual([r.data.profile.cashThreshold, r.conflicts[0].message], [2000, "Profil modifié sur deux appareils : la version la plus récente est gardée (seuil de sécurité)."]);
+  r = merge(o, state({ charges: [charge({ flow: "in", revenue: true, updatedAt: T(2) })] }), state({ charges: [charge({ flow: "out", updatedAt: T(1) })] }));
+  assert.deepEqual([r.data.charges[0].flow, r.data.charges[0].revenue], ["in", true]);
+  assert.equal(r.conflicts[0].message, "Charge modifiée sur deux appareils : la version la plus récente est gardée (sens).", "chiffre d'affaires changé d'un seul côté : pas en conflit");
+  r = merge(o, state({ charges: [charge({ revenue: true, updatedAt: T(2) })] }), state({ charges: [charge({ revenue: false, updatedAt: T(1) })] }));
+  assert.equal(r.conflicts[0].message, "Charge modifiée sur deux appareils : la version la plus récente est gardée (chiffre d'affaires prévu).");
   assert.deepEqual(S.migrate({ schema: 1, clients: [], documents: [] }).charges, [], "ancienne sauvegarde sans charges");
 });

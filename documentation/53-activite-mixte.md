@@ -24,7 +24,7 @@ pas le bon plafond et tient un livre des recettes incomplet.
 | Formation professionnelle (CFP) | 0,1 % du chiffre d'affaires pour une activité commerciale, 0,3 % artisanale, 0,2 % libérale ; **rien sur l'activité mixte** | F23459 |
 | Abattement fiscal | Les abattements de chaque activité s'appliquent à la fraction du chiffre d'affaires correspondante ; abattement minimal doublé, 610 € | F23267 ; BOFiP BOI-BIC-DECLA-20 ; règle `micro_abattement_minimum` |
 | Registre des achats | Obligatoire quand le commerce principal est la vente de marchandises ou la fourniture de logement | BOFiP, BOI-BIC-DECLA-30-30, § 40 ; règle `registre_achats` |
-| Franchise de TVA | Seuils par catégorie (85 000 € et 93 500 € pour les ventes, 37 500 € et 41 250 € pour les services). Activité mixte (lu le 10/11/2026) : la franchise ne s'applique que si, l'année civile précédente, le chiffre d'affaires **global** n'a pas dépassé 85 000 € **et** celui des prestations de services 37 500 € (« aucune de ces deux limites ») ; la règle des seuils majorés en cours d'année pour l'activité mixte n'est pas lue | BOFiP BOI-TVA-DECLA-40-10-10 (01/07/2026), § 160 ; impots.gouv.fr ; F21746 ; règle `tva_franchise_seuils` |
+| Franchise de TVA | Seuils par catégorie (85 000 € et 93 500 € pour les ventes, 37 500 € et 41 250 € pour les services). Activité mixte (lu le 10/11/2026) : la franchise ne s'applique que si, l'année civile précédente, le chiffre d'affaires **global** n'a pas dépassé 85 000 € **et** celui des prestations de services 37 500 € (« aucune de ces deux limites ») ; en cours d'année, la franchise cesse au dépassement des plafonds de la « troisième ligne du tableau » (93 500 € et 41 250 €), la TVA étant due à compter de la date du dépassement, mais **ni l'un ni l'autre texte ne dit comment ces seuils majorés s'appliquent à l'activité mixte** (lus le 10/11/2026) : non affirmé | BOFiP BOI-TVA-DECLA-40-10-10 (01/07/2026), § 160 ; BOI-TVA-DECLA-40-10-20 (01/07/2026), § 160 à 180 ; impots.gouv.fr ; F21746 ; règle `tva_franchise_seuils` |
 
 ## 3. Ce que fait l'Espace
 
@@ -72,7 +72,7 @@ prestations comparée au plafond des services (83 600 €).
 **Franchise de TVA.** En activité mixte (décision D60, 10/11/2026), deux jauges : encaissé global comparé au seuil de
 la vente (85 000 €) et part des prestations comparée au seuil des services (37 500 €), d'après le BOFiP (§ 160) ; au
 delà, « la TVA sera due au plus tard à partir du 1er janvier prochain, et dès le jour du dépassement si un seuil majoré
-est franchi » ; les seuils majorés de l'activité mixte, non lus, ne sont pas affirmés : renvoi à impots.gouv.fr. Le
+est franchi » ; les seuils majorés de l'activité mixte, que la doctrine lue ne précise pas, ne sont pas affirmés : renvoi au service des impôts des entreprises (11/11/2026 ; auparavant à impots.gouv.fr, qui ne les précise pas non plus). Le
 simulateur applique les mêmes deux seuils. (Jusqu'au 10/11/2026 : pas de jauge, la règle n'étant pas lue.)
 
 **Trésorerie.** Les cotisations « déjà dues » et prévues ([39](39-tresorerie.md)) sont calculées de la même façon,
@@ -133,7 +133,8 @@ Simulateur : champs cachés pour une activité, montants et libellés de l'exemp
 ## 7. Hors champ
 
 Deux activités de services (BIC et BNC) ensemble ; location meublée de tourisme ; seuils majorés de la franchise de
-TVA en cours d'année pour l'activité mixte (à lire) ; impôt sur le revenu (abattements par part, minimum de 610 €)
+TVA en cours d'année pour l'activité mixte (BOFiP lu le 10/11/2026 sans réponse ; reste l'article 293 B du CGI, sur
+Légifrance, illisible depuis l'environnement de travail) ; impôt sur le revenu (abattements par part, minimum de 610 €)
 dans l'Espace (fait dans le simulateur).
 
 ## Annexe : sources lues le 09/11/2026 (outil « Lire une source officielle »)
@@ -148,3 +149,5 @@ dans l'Espace (fait dans le simulateur).
 | F21746, Franchise en base de TVA | Seuils par activité ; pas de règle pour l'activité mixte ; renvoi à l'article 293 B du CGI |
 | BOFiP, BOI-TVA-DECLA-40-10-10 (version du 01/07/2026), lu le 10/11/2026 | § 160 : activité mixte, chiffre d'affaires global de l'année précédente d'au plus 85 000 € et prestations d'au plus 37 500 €, aucune des deux limites atteinte ; § 170 (travaux immobiliers avec fourniture des matériaux : activité mixte) ; § 300 (plusieurs établissements, BIC et BNC : chiffres d'affaires totalisés, conditions de l'activité mixte) |
 | F36232 | Pas de mention de l'activité mixte |
+| BOFiP, BOI-TVA-DECLA-40-10-20 (version du 01/07/2026), lu le 10/11/2026 | § 160 : dépassement en cours d'année du plafond de la troisième ligne du tableau de l'article 293 B : TVA due pour les opérations dont le fait générateur intervient à compter de la date du dépassement ; § 170 : factures rectificatives aux clients assujettis ; § 300 : en activité mixte, part des livraisons de biens et part des services distinctes sur le livre-journal et sur les factures (confirme BOI-BIC-DECLA-30-30, § 30) ; rien sur les seuils majorés de l'activité mixte |
+| BOFiP, BOI-BAREME-000036 (version du 01/07/2026), lu le 10/11/2026 | Désormais limité aux seuils du régime simplifié : ni « mixte », ni 93 500 €, ni 41 250 € |

@@ -1,5 +1,26 @@
 # Journal des modifications
 
+## 2026-11-11 — Trésorerie v2 : indicateurs et graphiques ; propositions de thème
+
+- **Trésorerie de l'Espace refaite** (demande d'Ismail) : 8 indicateurs (solde, disponible, point bas prévu, versement
+  possible sans passer sous un seuil de sécurité, à encaisser dont en retard, délai moyen de paiement, autonomie en
+  mois, point mort mensuel) ; courbe du solde jour par jour en deux scénarios (prévu ; prudent : factures en retard
+  non comptées, autres factures avec le retard moyen réellement constaté du client) ; entrées et sorties par mois
+  (6 mois réels puis les mois prévus) ; créances clients par ancienneté, factures en retard à relancer, devis acceptés
+  à facturer ; prochains mouvements sur 30 jours ; mouvements prévus ponctuels ou réguliers, sorties ou entrées, dont
+  le chiffre d'affaires attendu (cotisations et TVA estimées dessus) ; horizon de 3, 6 ou 12 mois ; export CSV de la
+  prévision. Le tableau de bord prévient avec la date du passage sous zéro ou sous le seuil.
+- Graphiques faits maison (SVG, sans bibliothèque ni service tiers), accessibles (titre, description, tableau des
+  données), lisibles sur mobile, aux couleurs du thème.
+- Tests : 20 tests unitaires nouveaux (moteur et échelles des graphiques), 40 erreurs réintroduites toutes détectées,
+  synchronisation des nouveaux champs, parcours navigateur de l'Espace (29 points sur la trésorerie, accessibilité
+  comprise) et des comptes ; captures relues sur ordinateur et mobile (4 corrections).
+- **Thèmes** : trois propositions (Minuit, Bento, Pop) appliquées aux vraies pages, pour la décision d'Ismail ; le site
+  garde son thème jusqu'à sa réponse (documentation/54).
+- Franchise de TVA en activité mixte : BOFiP relu (BOI-TVA-DECLA-40-10-10 et 40-10-20) ; il ne précise pas les seuils
+  majorés de l'activité mixte : toujours non affirmés, l'Espace et le simulateur renvoient au service des impôts des
+  entreprises (D62). Massachusetts : mass.gov refuse toujours la lecture.
+
 ## 2026-11-10 (matinée) — Congés payés des indépendants : Colorado
 
 - **Colorado** ajouté à l'outil américain (10 États) : d'après la FAMLI Division, l'adhésion des indépendants résidant au

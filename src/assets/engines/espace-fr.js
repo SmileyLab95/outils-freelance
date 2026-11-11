@@ -894,7 +894,9 @@
   // ----- Trésorerie (documentation/39-tresorerie.md) ----------------------------------------------------------
 
   var EVERY = { month: 1, quarter: 3, year: 12 };
-  var CHARGE_LABELS = { month: "Chaque mois", quarter: "Chaque trimestre", year: "Chaque année" };
+  var CHARGE_LABELS = { month: "Chaque mois", quarter: "Chaque trimestre", year: "Chaque année", once: "Une seule fois" };
+  /** Sens d'un mouvement prévu : sortie (charge) par défaut, entrée si flow vaut "in" (documentation/39, § 7). */
+  var isIn = function (c) { return !!c && c.flow === "in"; };
   /** Même jour n mois plus tard ; un jour qui n'existe pas devient le dernier jour du mois. */
   function addMonths(date, n) {
     var m = +date.slice(5, 7) - 1 + n, y = +date.slice(0, 4) + Math.floor(m / 12);
@@ -906,6 +908,7 @@
 
   /** Échéances d'une charge régulière comprises entre from et to (bornes comprises). */
   function chargeDates(c, from, to) {
+    if (c.every === "once") return isDay(c.start) && c.start >= from && c.start <= to ? [c.start] : [];
     var step = has(EVERY, c.every) ? EVERY[c.every] : 0, out = [];
     if (!step || !isDay(c.start)) return out;
     // Saute directement près de from (charge ancienne) sans dériver : chaque date part de la première échéance.
@@ -923,9 +926,10 @@
     var errors = [], add = function (field, message) { errors.push({ field: field, message: message }); };
     if (!String(c.label || "").trim()) add("label", "Indiquez la charge : loyer, logiciel, assurance…");
     if (!(isFinite(Number(c.amount)) && Number(c.amount) > 0)) add("amount", "Indiquez un montant positif, en euros.");
-    if (!has(EVERY, c.every)) add("every", "Choisissez la fréquence.");
-    if (!isDay(c.start)) add("start", "Indiquez la date de la prochaine échéance.");
-    else if (!blank(c.end) && (!isDay(c.end) || c.end < c.start)) add("end", "La dernière échéance doit être une date après la première.");
+    if (!has(EVERY, c.every) && c.every !== "once") add("every", "Choisissez la fréquence.");
+    if (!blank(c.flow) && c.flow !== "in" && c.flow !== "out") add("flow", "Choisissez le sens : entrée ou sortie.");
+    if (!isDay(c.start)) add("start", c.every === "once" ? "Indiquez la date du mouvement." : "Indiquez la date de la prochaine échéance.");
+    else if (c.every !== "once" && !blank(c.end) && (!isDay(c.end) || c.end < c.start)) add("end", "La dernière échéance doit être une date après la première.");
     return errors;
   }
 
@@ -1037,14 +1041,32 @@
    * calendrier, charges régulières ; solde de fin de chaque mois à partir du solde saisi (profile.cashBalance).
    */
   function forecast(input) {
-    var p = input.profile || {}, today = input.today, docs = input.documents || [], n = input.months || 6;
+    var p = input.profile || {}, today = input.today, docs = input.documents || [];
+    var n = Math.min(12, Math.max(1, Math.round(Number(input.months)) || 6)), prudent = input.scenario === "prudent";
     var until = monthEnd(addMonths(monthStart(today), n - 1)), items = [];
-    var receipts = expectedReceipts(docs, today).filter(function (r) { return r.date <= until; });
+    var receipts = expectedReceipts(docs, today);
+    if (prudent) {
+      // Scénario prudent : factures déjà en retard non comptées ; les autres arrivent avec le retard moyen constaté
+      // du client sur 12 mois (à défaut, le retard moyen de tous les clients ; documentation/39, § 7).
+      var stats = paymentStats(docs, addMonths(today, -12), today);
+      receipts = receipts.filter(function (r) { return !r.late; }).map(function (r) {
+        if (r.amount < 0) return r;
+        var c = stats.byClient[r.doc.clientId], delay = Math.round(c ? c.avgLate : stats.avgLate || 0);
+        return delay > 0 ? Object.assign({}, r, { date: INV.addDays(r.date, delay), delay: delay }) : r;
+      });
+    }
+    receipts = receipts.filter(function (r) { return r.date <= until; });
     receipts.forEach(function (r) {
       var who = (r.doc.snapshot && r.doc.snapshot.client && r.doc.snapshot.client.name) || "";
-      items.push({ date: r.date, kind: r.amount < 0 ? "refund" : "receipt", amount: r.amount, late: r.late, docId: r.doc.id,
+      items.push({ date: r.date, kind: r.amount < 0 ? "refund" : "receipt", amount: r.amount, late: r.late, docId: r.doc.id, delay: r.delay || 0,
                    label: (r.doc.type === "avoir" ? "Remboursement de l'avoir " : "Facture ") + r.doc.number + (who ? " (" + who + ")" : "") });
     });
+    // Entrées prévues de chiffre d'affaires (mouvements prévus « revenue ») : comptées comme des encaissements.
+    var plannedRevenue = [];
+    (input.charges || []).forEach(function (c) {
+      if (isIn(c) && c.revenue) chargeDates(c, today, until).forEach(function (d) { plannedRevenue.push({ date: d, amount: round2(Number(c.amount)) }); });
+    });
+    var mainActivity = p.activity;
     // Cotisations : encaissé de la période + encaissements attendus dans la période, à la date limite.
     if (totalRate(p, input.rules, today) !== null) {
       declarations(p, input.events).forEach(function (d) {
@@ -1058,6 +1080,13 @@
           }, 0);
           return { activity: x.activity, kind: x.kind, revenue: round2(x.revenue + add) };
         });
+        // Chiffre d'affaires prévu : rattaché à l'activité principale du profil.
+        var planned = plannedRevenue.filter(function (r) { return r.date >= d.period.start && r.date <= d.period.end; })
+          .reduce(function (s, r) { return s + r.amount; }, 0);
+        if (planned && parts.length) {
+          var target = parts.filter(function (x) { return x.activity === mainActivity; })[0] || parts[0];
+          target.revenue = round2(target.revenue + planned);
+        }
         var amount = round2(partsDue(parts, p, input.rules, d.period.end).reduce(function (s, x) { return s + x.total; }, 0));
         if (amount) items.push({ date: d.due, kind: "urssaf", amount: -amount, label: "Cotisations Urssaf " + (d.period.key.indexOf("T") > -1 ? "du " : "de ") + d.period.label });
       });
@@ -1069,6 +1098,9 @@
         var m = addMonths(monthStart(e.date), -1), end = monthEnd(m);
         var expected = receipts.filter(function (r) { return r.date >= m && r.date <= end && onCash(r.doc); })
           .reduce(function (s, r) { return s + r.amount * vatPart(r.doc); }, 0); // un remboursement d'avoir est déjà négatif
+        var rate = Number(p.vatRate) > 0 ? Number(p.vatRate) : 20;
+        expected += plannedRevenue.filter(function (r) { return r.date >= m && r.date <= end; })
+          .reduce(function (s, r) { return s + r.amount * rate / (100 + rate); }, 0); // montant prévu TTC
         var amount = round2(vatExigible(docs, m, end) + expected);
         if (amount > 0) items.push({ date: e.date, kind: "vat", amount: -amount, label: e.title.replace(/^Déclaration de /, "") });
       });
@@ -1081,7 +1113,8 @@
     }
     (input.charges || []).forEach(function (c) {
       chargeDates(c, today, until).forEach(function (d) {
-        items.push({ date: d, kind: "charge", amount: -round2(Number(c.amount)), label: c.label, chargeId: c.id });
+        var amount = round2(Number(c.amount));
+        items.push({ date: d, kind: isIn(c) ? "planned" : "charge", amount: isIn(c) ? amount : -amount, label: c.label, chargeId: c.id });
       });
     });
     items.sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : 0; });
@@ -1097,7 +1130,131 @@
       months.push({ key: ms.slice(0, 7), label: period(ms.slice(0, 7)).label, start: ms, end: me, items: list, in: inflow, out: outflow, balance: bal });
     }
     var lastEvent = (input.events || []).reduce(function (m, e) { return e.date > m ? e.date : m; }, "");
-    return { start: start, until: until, items: items, months: months, negative: negative, calendarShort: lastEvent < until };
+    return { start: start, today: today, until: until, scenario: prudent ? "prudent" : "prevu", items: items, months: months,
+             negative: negative, calendarShort: lastEvent < until };
+  }
+
+  /**
+   * Courbe du solde prévu : aujourd'hui (solde saisi), puis le solde de fin de chaque jour qui a un mouvement ;
+   * point bas (le premier s'il y en a plusieurs) et solde final. null sans solde saisi.
+   */
+  function balanceCurve(f) {
+    if (!f || f.start === null || f.start === undefined) return null;
+    var bal = f.start, points = [{ date: f.today, balance: bal }];
+    f.items.forEach(function (x, i) {
+      bal = round2(bal + x.amount);
+      var next = f.items[i + 1];
+      if (!next || next.date !== x.date) points.push({ date: x.date, balance: bal });
+    });
+    var low = points.reduce(function (m, pt) { return pt.balance < m.balance ? pt : m; }, points[0]);
+    return { points: points, low: low, end: bal };
+  }
+  /** Ce qui peut sortir aujourd'hui sans que le solde prévu passe sous le seuil : point bas − seuil, au moins 0. */
+  function safeAmount(curve, threshold) {
+    if (!curve) return null;
+    return Math.max(0, round2(curve.low.balance - Math.max(0, Number(threshold) || 0)));
+  }
+
+  var daysBetween = function (a, b) { return Math.round((Date.parse(b) - Date.parse(a)) / 864e5); };
+  var avg = function (list) { return list.length ? Math.round(list.reduce(function (s, v) { return s + v; }, 0) / list.length * 10) / 10 : null; };
+  /**
+   * Délais de paiement des factures soldées par un paiement entre from et to (date du dernier paiement) : délai moyen
+   * depuis la date de la facture, retard moyen après l'échéance (un paiement en avance compte 0), part payée à l'heure ;
+   * même calcul par client. Factures annulées par avoir exclues.
+   */
+  function paymentStats(documents, from, to) {
+    var all = [], byClient = {};
+    (documents || []).forEach(function (d) {
+      if (!d || d.type !== "facture" || d.status === "draft" || state(d, to, documents) !== "paid") return;
+      var last = payments(d).map(function (p) { return p.date; }).sort().pop();
+      if (!last || last < from || last > to) return;
+      var row = { days: Math.max(0, daysBetween(d.date, last)), late: Math.max(0, daysBetween(dueDate(d), last)) };
+      all.push(row);
+      (byClient[d.clientId] = byClient[d.clientId] || []).push(row);
+    });
+    var summary = function (rows) {
+      return { count: rows.length, avgDays: avg(rows.map(function (r) { return r.days; })), avgLate: avg(rows.map(function (r) { return r.late; })),
+               onTime: rows.length ? Math.round(rows.filter(function (r) { return r.late === 0; }).length / rows.length * 100) / 100 : null };
+    };
+    var out = summary(all);
+    out.byClient = {};
+    Object.keys(byClient).forEach(function (k) { out.byClient[k] = summary(byClient[k]); });
+    return out;
+  }
+
+  var AGING = [["notDue", "Pas encore échues", -Infinity, 0], ["d30", "1 à 30 jours de retard", 1, 30], ["d60", "31 à 60 jours", 31, 60],
+               ["d90", "61 à 90 jours", 61, 90], ["more", "Plus de 90 jours", 91, Infinity]];
+  /** Factures émises non soldées par ancienneté du retard ; les plus en retard d'abord. */
+  function aging(documents, today) {
+    var buckets = AGING.map(function (b) { return { key: b[0], label: b[1], amount: 0, count: 0 }; }), items = [];
+    (documents || []).forEach(function (d) {
+      if (!d || d.type !== "facture" || d.status === "draft") return;
+      var st = state(d, today, documents);
+      if (st !== "unpaid" && st !== "partial" && st !== "overdue") return;
+      var due = dueDate(d), late = Math.max(0, daysBetween(due, today)), amount = balance(d, documents);
+      var i = AGING.findIndex(function (b) { return late >= b[2] && late <= b[3]; });
+      buckets[i].amount = round2(buckets[i].amount + amount);
+      buckets[i].count++;
+      items.push({ doc: d, amount: amount, due: due, lateDays: late, bucket: AGING[i][0] });
+    });
+    items.sort(function (a, b) { return b.lateDays - a.lateDays || (a.due < b.due ? -1 : 1); });
+    var sum = function (list) { return round2(list.reduce(function (s, b) { return s + b.amount; }, 0)); };
+    return { total: sum(buckets), late: sum(buckets.slice(1)), lateCount: buckets.slice(1).reduce(function (s, b) { return s + b.count; }, 0),
+             buckets: buckets, items: items };
+  }
+
+  /** Par mois entre from et to : encaissements nets (remboursements d'avoirs déduits) et dépenses saisies. */
+  function cashHistory(documents, expenses, from, to) {
+    var rows = ledger(documents || [], from, to), out = [];
+    for (var m = monthStart(from); m <= to; m = addMonths(m, 1)) {
+      var end = monthEnd(m), inflow = 0;
+      rows.forEach(function (r) { if (r.date >= m && r.date <= end) inflow += r.amount; });
+      var outflow = expenseRows(expenses, m < from ? from : m, end < to ? end : to).total;
+      out.push({ key: m.slice(0, 7), label: period(m.slice(0, 7)).label, in: round2(inflow), out: outflow, net: round2(inflow - outflow) });
+    }
+    return out;
+  }
+
+  /** Sorties régulières ramenées au mois (trimestre ÷ 3, année ÷ 12) ; charges terminées, ponctuelles et entrées exclues. */
+  function monthlyCharges(charges, today) {
+    return round2((charges || []).reduce(function (s, c) {
+      if (!c || isIn(c) || !has(EVERY, c.every) || (c.end && c.end < today)) return s;
+      return s + (Number(c.amount) || 0) / EVERY[c.every];
+    }, 0));
+  }
+  /** Mois couverts par le disponible au rythme des charges mensuelles (une décimale) ; null sans charges. */
+  function runway(available, monthly) {
+    if (available === null || available === undefined || !(monthly > 0)) return null;
+    return Math.max(0, Math.floor(available / monthly * 10) / 10);
+  }
+  /**
+   * Point mort : chiffre d'affaires à encaisser chaque mois pour couvrir les charges mensuelles et les cotisations
+   * (taux total de l'activité principale : cotisations, formation professionnelle, versement libératoire) ; null hors
+   * micro-entreprise ou sans charges.
+   */
+  function breakEven(monthly, profile, rules, today) {
+    var r = totalRate(profile || {}, rules, today);
+    if (r === null || !(monthly > 0) || r >= 1) return null;
+    return Math.ceil(monthly / (1 - r));
+  }
+  /** Devis acceptés pas encore facturés : nombre et montant TTC. */
+  function quotesToInvoice(documents) {
+    var list = (documents || []).filter(function (d) { return d && d.type === "devis" && d.status === "accepted" && !d.invoiceId; });
+    return { count: list.length, amount: round2(list.reduce(function (s, d) { return s + total(d); }, 0)) };
+  }
+
+  var FLOW_KINDS = { receipt: "Encaissement attendu", refund: "Remboursement", urssaf: "Cotisations", vat: "TVA", charge: "Charge", planned: "Entrée prévue" };
+  /** Export de la prévision : date, nature, libellé, montant et solde après le mouvement (si un solde est saisi). */
+  function forecastCSV(f) {
+    var q = function (v) { return '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"'; };
+    var eur = function (n) { return String(n.toFixed(2)).replace(".", ","); };
+    var bal = f.start, lines = ["Date;Nature;Libellé;Montant;Solde prévu"];
+    if (bal !== null) lines.push([f.today.split("-").reverse().join("/"), q("Solde du compte"), q(""), "", eur(bal)].join(";"));
+    f.items.forEach(function (x) {
+      if (bal !== null) bal = round2(bal + x.amount);
+      lines.push([x.date.split("-").reverse().join("/"), q(FLOW_KINDS[x.kind] || x.kind), q(x.label), eur(x.amount), bal === null ? "" : eur(bal)].join(";"));
+    });
+    return lines.join("\r\n");
   }
 
   function ledgerCSV(rows) {
@@ -1130,5 +1287,7 @@
            minStage: minStage, prospectStage: prospectStage, prospectValue: prospectValue, pipeline: pipeline, followUps: followUps,
            lastContactFrom: lastContactFrom, addYears: addYears, retentionDue: retentionDue, optoutKeys: optoutKeys, prospectsCSV: prospectsCSV,
            CHARGE_LABELS: CHARGE_LABELS, chargeDates: chargeDates, chargeErrors: chargeErrors, expectedReceipts: expectedReceipts, vatPart: vatPart,
-           vatExigible: vatExigible, owed: owed, forecast: forecast };
+           vatExigible: vatExigible, owed: owed, forecast: forecast, balanceCurve: balanceCurve, safeAmount: safeAmount, paymentStats: paymentStats,
+           addMonths: addMonths, aging: aging, cashHistory: cashHistory, monthlyCharges: monthlyCharges, runway: runway, quotesToInvoice: quotesToInvoice, breakEven: breakEven,
+           FLOW_KINDS: FLOW_KINDS, forecastCSV: forecastCSV };
 });
