@@ -184,11 +184,13 @@ Lu le 12/11/2026 :
 | Fédéral | Loi instituant des jours de fête légale (L.R.C. 1985, ch. H-5), art. 2 à 4 | Canada Day : 1er juillet, ou 2 juillet si le 1er est un dimanche ; Remembrance Day : 11 novembre ; Victoria Day : « The first Monday immediately preceding May 25 » ; la Journée de la vérité et de la réconciliation n'y figure pas |
 | Colombie-Britannique | Employment Standards Act, art. 1, « statutory holiday » | New Year's Day, Family Day, Good Friday, Victoria Day, Canada Day, British Columbia Day, Labour Day, National Day for Truth and Reconciliation, Thanksgiving Day, Remembrance Day, Christmas Day, et tout jour prévu par règlement |
 | Manitoba | Employment Standards Code (C.P.L.M. c. E110), art. 21(1), « general holiday » | New Year's Day, Louis Riel Day (« the third Monday in February »), Good Friday, Victoria Day, July 1, Labour Day, Orange Shirt Day (National Day for Truth and Reconciliation), Thanksgiving Day, Christmas Day, et tout jour désigné par règlement |
-| Ontario | Employment Standards Act, 2000 | La page d'ontario.ca est construite par JavaScript (texte vide) ; la version Word (`ontario.ca/laws/docs/00e41_e.doc`, 1,3 million de caractères, SHA-256 63d227ab…a638) est lisible : définition de « public holiday » à relire avec le bon libellé |
-| Alberta | Employment Standards Code (RSA 2000, c. E-9), PDF du King's Printer | PDF lisible (SHA-256 b5242ba6…e001) : liste des « general holidays » à relire avec le bon libellé |
+| Ontario | Employment Standards Act, 2000, art. 1, « public holiday » (version Word d'ontario.ca, la page web étant construite par JavaScript ; SHA-256 63d227ab…a638) | New Year's Day, Family Day (« the third Monday in February »), Good Friday, Victoria Day, Canada Day, Labour Day, Thanksgiving Day, Christmas Day, December 26, et tout jour prescrit |
+| Alberta | Employment Standards Code (RSA 2000, c. E-9), art. 25 (PDF du King's Printer, SHA-256 b5242ba6…e001) | New Year's Day, Alberta Family Day, Good Friday, Victoria Day, Canada Day, Labour Day, Thanksgiving Day, Remembrance Day, Christmas Day, et tout jour désigné par règlement ou par accord |
+| Québec | Loi sur les normes du travail (RLRQ, c. N-1.1), art. 60 (SHA-256 ac48c12f…a8dd) | 1er janvier ; « le Vendredi saint ou le lundi de Pâques, au choix de l'employeur » ; « le lundi qui précède le 25 mai » ; « le 1er juillet ou, si cette date tombe un dimanche, le 2 juillet » ; « le 1er lundi de septembre » ; « le deuxième lundi d'octobre » ; 25 décembre ; la fête nationale (24 juin) relève de la Loi sur la fête nationale (c. F-1.1), article à relire |
+| Nouvelle-Écosse | Page « Holiday Pay » du ministère (novascotia.ca) | « six holidays with pay: New Year's Day, Nova Scotia Heritage Day, Good Friday, Canada Day, Labour Day, and Christmas Day » ; « A separate law covers Remembrance Day » (texte de la loi à lire) |
 
-Lecture du Québec (legisquebec) lancée, à relire. À lire : dates de Labour Day, Thanksgiving Day et Family Day (lois
+À lire : dates de Labour Day, Thanksgiving Day et Family Day (lois
 d'interprétation, fédérale et provinciales), Québec
-(Loi sur les normes du travail, art. 60 ; Loi sur la fête nationale), Ontario et Alberta (relecture), Saskatchewan, Nouvelle-Écosse,
+(Loi sur la fête nationale), Saskatchewan (la page des jours fériés ne contient pas la liste), Nouvelle-Écosse (Remembrance Day Act),
 Nouveau-Brunswick, Île-du-Prince-Édouard, Terre-Neuve-et-Labrador, Yukon, Territoires du Nord-Ouest, Nunavut ; le
 Boxing Day et le jour de la vérité et de la réconciliation selon chaque province.

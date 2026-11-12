@@ -21,6 +21,10 @@ class LireSource(unittest.TestCase):
     def test_autorise(self):
         self.assertTrue(L.autorise("https://www.cnil.fr/fr/page"))
         self.assertTrue(L.autorise("https://bofip.impots.gouv.fr/bofip/1.html"))
+        # Lois des assemblées provinciales et territoriales (jours fériés du Canada, documentation/42, § 10).
+        self.assertTrue(L.autorise("https://www.assembly.nl.ca/legislation/sr/statutes/l02.htm"))
+        self.assertTrue(L.autorise("https://nslegislature.ca/sites/default/files/legc/statutes/remembrance%20day.pdf"))
+        self.assertFalse(L.autorise("https://assembly.nl.ca.example.com/l02.htm"))
         self.assertTrue(L.autorise("https://cnil.fr/"))
         self.assertTrue(L.autorise("https://entreprendre.service-public.gouv.fr/vosdroits/F23566"), "sites de l'État en gouv.fr")
         self.assertTrue(L.autorise("https://www.ameli.fr/assure/remboursements/indemnites-journalieres"), "Assurance maladie")
