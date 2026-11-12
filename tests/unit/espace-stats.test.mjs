@@ -165,3 +165,58 @@ test("fiche d'un client : facturé, encaissé sur 12 mois, reste, retard, délai
   assert.equal(S.clientDetail(docs.slice().reverse(), "c1", "2026-11-12").lastInvoice, "2026-11-01", "dernière facture quel que soit l'ordre");
   assert.deepEqual(S.clientDetail(docs, "zz", "2026-11-12"), { invoiced: 0, cashed12: 0, due: 0, late: 0, avgDays: null, avgLate: null, paidCount: 0, lastInvoice: null });
 });
+
+// ----- Dépenses et recettes (documentation/55, § 2) -----
+
+const R = (await import("./regles.mjs")).ruleValues("fr");
+const exp = (date, supplier, amount, category) => ({ id: "e" + (++seq), date, supplier, amount, method: "carte", category });
+
+test("dépenses de l'année : mois, moyenne, catégories, fournisseurs, part des encaissements, abattement", () => {
+  const list = [exp("2025-12-20", "Ancien", 999, "materiel"), exp("2026-01-10", "Adobe", 70, "logiciels"), exp("2026-03-05", "Boulanger", 400, "materiel"),
+    exp("2026-03-20", "Adobe", 70, "logiciels"), exp("2026-11-02", "SNCF", 60, "deplacements"), exp("2026-11-05", "Papeterie", 40),
+    exp("2026-11-20", "Futur", 500, "autres")]; // après aujourd'hui : non compté
+  const docs = [];
+  issue(docs, "2026-02-01", "c1", 2000, [["2026-02-10", 2000]]);
+  issue(docs, "2026-06-01", "c2", 1280, [["2026-06-10", 1280]]);
+  const micro = { activity: "liberal_bnc" };
+  const x = S.expenses(list, docs, "2026", "2026-11-12", micro, R);
+  // 70 + 400 + 70 + 60 + 40 = 640 sur 11 mois écoulés ; encaissé 3 280.
+  assert.deepEqual([x.total, x.count, x.month, x.average, x.cashed, x.ratio, x.abatement], [640, 5, 100, 58.18, 3280, 0.195, 0.34]);
+  assert.equal(x.byMonth.length, 11);
+  assert.deepEqual(x.byMonth.filter((m) => m.amount).map((m) => [m.key, m.amount]), [["2026-01", 70], ["2026-03", 470], ["2026-11", 100]]);
+  assert.deepEqual(x.byCategory, [{ name: "Matériel", amount: 400, share: 0.625 }, { name: "Logiciels et abonnements", amount: 140, share: 0.219 },
+    { name: "Déplacements", amount: 60, share: 0.094 }, { name: "Non classées", amount: 40, share: 0.063 }]);
+  assert.deepEqual(x.suppliers.map((s) => [s.name, s.amount]), [["Boulanger", 400], ["Adobe", 140], ["SNCF", 60], ["Papeterie", 40]]);
+  const past = S.expenses(list, docs, "2025", "2026-11-12", micro, R);
+  assert.deepEqual([past.total, past.month, past.average, past.byMonth.length, past.ratio], [999, null, 83.25, 12, null], "année passée : 12 mois, rien encaissé");
+  assert.equal(S.expenses(list, docs, "2026", "2026-11-12", { activity: "vente", activity2: "services_bic" }, R).abatement, null, "activité mixte : pas d'abattement unique");
+  assert.equal(S.expenses(list, docs, "2026", "2026-11-12", { activity: "real" }, R).abatement, null, "hors micro-entreprise");
+  assert.equal(S.expenses(list, docs, "2026", "2026-11-12", { activity: "liberal_bnc", vl: true }, R).abatement, null, "versement libératoire : pas d'abattement");
+  assert.equal(S.expenses([], [], "2027", "2026-11-12", micro, R).average, null, "année à venir");
+  const six = [];
+  for (let i = 1; i <= 6; i++) six.push(exp("2026-0" + i + "-01", "F" + i, i * 10));
+  assert.equal(S.expenses(six, [], "2026", "2026-11-12", micro, R).suppliers.length, 5, "5 premiers fournisseurs");
+  assert.equal(E.expenseRows([exp("2026-01-01", "X", 1, "inconnue")]).rows[0].category, "", "catégorie inconnue : non classée");
+  const tie = S.expenses([exp("2026-01-01", "Zeta", 50, "telecom"), exp("2026-01-02", "Alpha", 50, "banque")], [], "2026", "2026-11-12", micro, R);
+  assert.deepEqual([tie.suppliers.map((x) => x.name), tie.byCategory.map((x) => x.name)], [["Alpha", "Zeta"], ["Frais bancaires", "Téléphone et internet"]],
+    "égalité : ordre alphabétique");
+});
+
+test("recettes de l'année : trimestre en cours, moyenne, projection, cumul", () => {
+  const docs = [];
+  issue(docs, "2026-01-05", "c1", 1000, [["2026-01-15", 1000]]);
+  issue(docs, "2026-05-05", "c2", 2000, [["2026-05-15", 1500], ["2026-05-15", 500]]);
+  issue(docs, "2026-10-01", "c3", 600, [["2026-10-20", 600]]);
+  issue(docs, "2026-11-01", "c1", 900, [["2026-11-10", 900]]);
+  const r = S.receipts(docs, "2026", "2026-11-12");
+  // 1 000 + 2 000 + 600 + 900 = 4 500 encaissés ; 4e trimestre : 1 500 ; 11 mois ; 316 jours écoulés sur 365 → 4 500 / 316 × 365 = 5 197,78.
+  assert.deepEqual([r.total, r.quarter, r.quarterLabel, r.average, r.projection, r.end], [4500, 1500, "4e trimestre 2026", 409.09, 5198, "2026-11-12"]);
+  assert.deepEqual(r.points, [{ date: "2026-01-01", balance: 0 }, { date: "2026-01-15", balance: 1000 }, { date: "2026-05-15", balance: 3000 },
+    { date: "2026-10-20", balance: 3600 }, { date: "2026-11-10", balance: 4500 }], "deux paiements le même jour : un seul point");
+  const past = S.receipts(docs, "2025", "2026-11-12");
+  assert.deepEqual([past.total, past.quarter, past.average, past.projection, past.end], [0, null, 0, null, "2025-12-31"]);
+  assert.equal(S.receipts(docs, "2026", "2026-01-20").projection, null, "janvier : pas de projection");
+  assert.equal(S.receipts(docs, "2026", "2026-02-01").projection, Math.round(1000 / 32 * 365), "février : projection");
+  assert.equal(S.receipts(docs, "2026", "2026-03-31").quarterLabel, "1er trimestre 2026");
+  assert.equal(S.receipts(docs, "2026", "2026-04-01").quarter, 0, "2e trimestre commencé, rien encaissé");
+});

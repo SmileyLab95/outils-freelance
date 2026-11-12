@@ -171,6 +171,69 @@
              avgDays: stats.avgDays, avgLate: stats.avgLate, paidCount: stats.count, lastInvoice: last };
   }
 
-  return { lastYear: lastYear, change: change, toDate: toDate, monthly: monthly, topClients: topClients,
+  // ----- Dépenses et recettes (documentation/55, § 2) --------------------------------------------------------
+
+  var monthsOf = function (year, today) {
+    var last = year === today.slice(0, 4) ? +today.slice(5, 7) : year < today.slice(0, 4) ? 12 : 0, out = [];
+    for (var m = 1; m <= last; m++) out.push(year + "-" + pad(m));
+    return out;
+  };
+  /** Classement par montant décroissant (à égalité, par ordre alphabétique) avec la part de chacun ; n premiers. */
+  function ranking(map, total, n) {
+    return Object.keys(map).filter(function (k) { return map[k] > 0; })
+      .sort(function (a, b) { return map[b] - map[a] || a.localeCompare(b, "fr"); }).slice(0, n || 100)
+      .map(function (k) { return { name: k, amount: round2(map[k]), share: total > 0 ? Math.round(map[k] / total * 1000) / 1000 : 0 }; });
+  }
+
+  /**
+   * Dépenses d'une année (jusqu'à aujourd'hui pour l'année en cours) : total, mois en cours, moyenne mensuelle (mois
+   * écoulés), par mois, par catégorie (« Non classées » sans catégorie), 5 premiers fournisseurs ; part des
+   * encaissements de la même période ; abattement forfaitaire de l'activité (micro-entreprise à une activité, sans
+   * versement libératoire).
+   */
+  function expenses(list, documents, year, today, profile, rules) {
+    var to = year === today.slice(0, 4) ? today : year + "-12-31";
+    var res = E.expenseRows(list, year + "-01-01", to), months = monthsOf(year, today);
+    var byCat = {}, bySupplier = {}, byMonth = {};
+    res.rows.forEach(function (r) {
+      var cat = r.category || "Non classées";
+      byCat[cat] = (byCat[cat] || 0) + r.amount;
+      bySupplier[r.supplier] = (bySupplier[r.supplier] || 0) + r.amount;
+      byMonth[r.date.slice(0, 7)] = round2((byMonth[r.date.slice(0, 7)] || 0) + r.amount);
+    });
+    var cashed = E.cashed(documents || [], year + "-01-01", to);
+    var p = profile || {}, a = rules && rules.micro_activities && rules.micro_activities[p.activity];
+    var mixed = rules && E.mixedActivities(p, rules);
+    return { total: res.total, count: res.rows.length, month: year === today.slice(0, 4) ? byMonth[today.slice(0, 7)] || 0 : null,
+             average: months.length ? round2(res.total / months.length) : null,
+             byMonth: months.map(function (k) { return { key: k, label: E.period(k).label, amount: byMonth[k] || 0 }; }),
+             byCategory: ranking(byCat, res.total), suppliers: ranking(bySupplier, res.total, 5),
+             cashed: cashed, ratio: cashed > 0 ? Math.round(res.total / cashed * 1000) / 1000 : null,
+             // Abattement de l'impôt sur le revenu : sans objet avec le versement libératoire (impôt en % du chiffre d'affaires).
+             abatement: a && !mixed && !p.vl ? a.abattement : null };
+  }
+
+  /**
+   * Recettes d'une année : encaissé, trimestre en cours (année en cours), moyenne mensuelle (mois écoulés), projection
+   * de fin d'année au rythme des jours écoulés (année en cours, à partir du 2e mois), cumul jour par jour.
+   */
+  function receipts(documents, year, today) {
+    var current = year === today.slice(0, 4), to = current ? today : year + "-12-31";
+    var rows = E.ledger(documents || [], year + "-01-01", to), total = round2(rows.reduce(function (s, r) { return s + r.amount; }, 0));
+    var months = monthsOf(year, today), q = Math.floor((+today.slice(5, 7) - 1) / 3) * 3 + 1;
+    var quarter = current ? E.cashed(documents || [], year + "-" + pad(q) + "-01", today) : null;
+    var days = Math.round((Date.parse(to) - Date.parse(year + "-01-01")) / 864e5) + 1;
+    var inYear = Math.round((Date.parse(year + "-12-31") - Date.parse(year + "-01-01")) / 864e5) + 1;
+    var cum = 0, points = [{ date: year + "-01-01", balance: 0 }];
+    rows.forEach(function (r, i) {
+      cum = round2(cum + r.amount);
+      if (!rows[i + 1] || rows[i + 1].date !== r.date) points.push({ date: r.date, balance: cum });
+    });
+    return { total: total, quarter: quarter, quarterLabel: current ? E.period(year + "-T" + ((q + 2) / 3)).label : null,
+             average: months.length ? round2(total / months.length) : null,
+             projection: current && +today.slice(5, 7) > 1 ? Math.round(total / days * inYear) : null, points: points, end: to };
+  }
+
+  return { lastYear: lastYear, change: change, toDate: toDate, monthly: monthly, topClients: topClients, expenses: expenses, receipts: receipts,
            invoiced: invoiced, quotes: quotes, documents: documents, invoicedMonthly: invoicedMonthly, clients: clients, clientDetail: clientDetail };
 });

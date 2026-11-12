@@ -12,6 +12,10 @@
   "use strict";
 
   var MONTHS = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
+  /** Catégories facultatives des dépenses (documentation/55, § 3) : liste fermée ; une dépense sans catégorie est « non classée ». */
+  var EXPENSE_CATEGORIES = { logiciels: "Logiciels et abonnements", materiel: "Matériel", deplacements: "Déplacements", locaux: "Locaux",
+    telecom: "Téléphone et internet", formation: "Formation", soustraitance: "Sous-traitance", marchandises: "Marchandises",
+    assurances: "Assurances", banque: "Frais bancaires", autres: "Autres" };
   var METHODS = { virement: "Virement", carte: "Carte bancaire", cheque: "Chèque", especes: "Espèces", prelevement: "Prélèvement", autre: "Autre" };
   var DEFAULT_PREFIXES = { facture: "F", devis: "D", avoir: "A" };
   // Codes pays ISO 3166-1 alpha-2 (249) et États membres de l'Union européenne (27) ; noms affichés par Intl.DisplayNames.
@@ -587,7 +591,8 @@
     var rows = (expenses || []).filter(function (e) { return e && e.date && (!from || e.date >= from) && (!to || e.date <= to); })
       .map(function (e) {
         return { id: e.id, date: e.date, supplier: e.supplier || "", label: e.label || "", method: METHODS[e.method] || e.method || "",
-                 cash: e.method === "especes", ref: e.ref || "", amount: round2(Number(e.amount) || 0), createdAt: e.createdAt || "" };
+                 cash: e.method === "especes", ref: e.ref || "", amount: round2(Number(e.amount) || 0), createdAt: e.createdAt || "",
+                 category: EXPENSE_CATEGORIES[e.category] || "" };
       })
       .sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : (a.createdAt < b.createdAt ? -1 : a.createdAt > b.createdAt ? 1 : (a.id < b.id ? -1 : 1)); });
     var sum = function (list) { return round2(list.reduce(function (s, r) { return s + r.amount; }, 0)); };
@@ -606,9 +611,10 @@
 
   function expensesCSV(rows) {
     var q = function (v) { return '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"'; };
-    var lines = ["Date;Fournisseur;Nature;Montant;Moyen de paiement;Référence de la pièce"];
+    // Catégorie (documentation/55) en dernière colonne : les colonnes du registre des achats restent à leur place.
+    var lines = ["Date;Fournisseur;Nature;Montant;Moyen de paiement;Référence de la pièce;Catégorie"];
     rows.forEach(function (r) {
-      lines.push([r.date.split("-").reverse().join("/"), q(r.supplier), q(r.label), String(r.amount.toFixed(2)).replace(".", ","), q(r.method), q(r.ref)].join(";"));
+      lines.push([r.date.split("-").reverse().join("/"), q(r.supplier), q(r.label), String(r.amount.toFixed(2)).replace(".", ","), q(r.method), q(r.ref), q(r.category)].join(";"));
     });
     return lines.join("\r\n");
   }
@@ -1270,7 +1276,7 @@
     return lines.join("\r\n");
   }
 
-  return { METHODS: METHODS, DEFAULT_PREFIXES: DEFAULT_PREFIXES, PROFILE_FIELDS: PROFILE_FIELDS, COUNTRIES: COUNTRIES,
+  return { METHODS: METHODS, EXPENSE_CATEGORIES: EXPENSE_CATEGORIES, DEFAULT_PREFIXES: DEFAULT_PREFIXES, PROFILE_FIELDS: PROFILE_FIELDS, COUNTRIES: COUNTRIES,
            EU_COUNTRIES: EU_COUNTRIES, countries: countries,
            total: total, payments: payments, paidAmount: paidAmount, credited: credited, balance: balance, dueDate: dueDate,
            series: series, seriesPrefix: seriesPrefix, nextNumber: nextNumber, continuation: continuation,

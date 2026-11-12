@@ -87,3 +87,26 @@ tablette et mobile, documentation, publication.
   de deux cas (quatre clients actifs ; factures dans le désordre) ; parcours navigateur (3 points et 3 contrôles
   d'accessibilité nouveaux ; valeurs attendues recalculées par le moteur dans la page) ; captures relues sur ordinateur
   et mobile.
+
+### 5.3 Dépenses et recettes (12/11/2026)
+
+- Données : catégorie facultative des dépenses (`category`, liste fermée `E.EXPENSE_CATEGORIES` ; une catégorie
+  inconnue compte comme non classée), proposée dans le formulaire, ajoutée **en dernière colonne** de l'export CSV
+  (les colonnes du registre des achats restent à leur place), synchronisée (libellé « catégorie »).
+- Moteur `espace-stats.js` : `expenses` (année choisie, jusqu'à aujourd'hui pour l'année en cours : total, mois en
+  cours, moyenne des mois écoulés, par mois, par catégorie, 5 premiers fournisseurs, part des encaissements ;
+  abattement forfaitaire de l'activité seulement en micro-entreprise à une activité **sans versement libératoire**),
+  `receipts` (encaissé, trimestre en cours, moyenne des mois écoulés, **projection** de fin d'année au rythme des jours
+  écoulés à partir de février, signalée comme une estimation, cumul jour par jour).
+- Écrans : **Dépenses** (4 indicateurs, dépenses par mois, par catégorie, principaux fournisseurs, rappel de
+  l'abattement avec lien vers le comparateur de statuts) ; **Recettes** (4 indicateurs, encaissements cumulés face au
+  plafond de la micro-entreprise et au seuil de la franchise de TVA). Ces blocs ne s'impriment pas : le livre et le
+  registre imprimés restent tels quels.
+- Composant : lignes de référence (`refs`) et fin de courbe (`end`) dans le graphique en escalier ; tableaux de données
+  des graphiques en classe `data-table` (ils prenaient la classe du livre des recettes, que le parcours navigateur a
+  confondue avec le registre).
+- Tests : 2 tests unitaires nouveaux et un contrôle de l'export, 15 erreurs réintroduites toutes détectées (après un cas
+  d'égalité ajouté) ; parcours navigateur (3 points nouveaux) ; captures relues sur ordinateur et mobile (courbe du
+  cumul arrêtée à aujourd'hui, noms de catégories longs sur deux lignes).
+- Relecture : la note sur l'abattement était fausse avec le versement libératoire (impôt en pourcentage du chiffre
+  d'affaires) : retirée dans ce cas, test ajouté.

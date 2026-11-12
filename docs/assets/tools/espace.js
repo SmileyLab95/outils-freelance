@@ -1333,6 +1333,7 @@
     view.innerHTML = '<div class="espace-head"><h2>Livre des recettes ' + esc(year) + '</h2><div class="espace-quick espace-noprint">' +
       '<button type="button" class="btn btn-ghost btn-sm" id="ledger-csv"' + (rows.length ? "" : " disabled") + ">Exporter (CSV)</button>" +
       '<button type="button" class="btn btn-ghost btn-sm" id="ledger-print"' + (rows.length ? "" : " disabled") + ">Imprimer</button></div></div>" +
+      receiptsOverview(year) +
       '<div class="card espace-card"><div class="espace-filters espace-noprint" role="group" aria-label="Année">' +
       Object.keys(years).sort().reverse().map(function (y) { return '<a class="tab" href="#/recettes?annee=' + y + '"' + (y === year ? ' aria-current="true"' : "") + ">" + y + "</a>"; }).join("") + "</div>" +
       (rows.length ? '<table class="ledger"><thead><tr><th>Date</th><th>Client</th><th>Nature</th><th>Moyen</th><th>Référence</th>' +
@@ -1351,6 +1352,20 @@
       '<p class="small muted">Tenu par date d\'encaissement : date, client, nature, montant, moyen de paiement et référence de la facture ; totalisé à la fin de chaque trimestre et de l\'année. ' +
       (mixed ? "Activité mixte : ventes et prestations sont distinguées ; l'encaissement d'une facture mixte est réparti au prorata de ses lignes hors taxes. " : "") +
       "Conservez-le avec vos factures pendant " + R.conservation_pieces.commerce_annees + " ans.</p></div>";
+    drawCharts = function () {
+      var el = view.querySelector('[data-chart="receipts"]');
+      if (!el) return;
+      var rc = ST.receipts(data.documents, year, TODAY), refs = [];
+      if (isMicro() && year === YEAR) {
+        var th = E.thresholds(data.documents, profile(), R, year);
+        refs.push({ value: th.ceiling, label: "Plafond de la micro-entreprise", cls: "is-ceiling" });
+        if (th.vat) refs.push({ value: th.vat.base, label: "Seuil de la franchise de TVA", cls: "is-vat" });
+      }
+      el.innerHTML = OF.charts.balance({ width: Math.floor(el.getBoundingClientRect().width) || 600, from: year + "-01-01", to: year + "-12-31", refs: refs,
+        series: [{ name: "Encaissé", points: rc.points, cls: "is-main", end: rc.end }], title: "Encaissements cumulés en " + year,
+        desc: "Total " + money(rc.total) + (refs.length ? " ; " + refs.map(function (r) { return r.label + " : " + money(r.value); }).join(" ; ") : "") + "." });
+    };
+    drawCharts();
     if (!rows.length) return;
     $("ledger-csv").addEventListener("click", function () {
       OF.download("﻿" + E.ledgerCSV(rows), "livre-des-recettes-" + year + ".csv", "text/csv;charset=utf-8");
@@ -1360,6 +1375,52 @@
       window.print();
       document.body.classList.remove("print-ledger");
     });
+  }
+
+  /** Liste en barres horizontales : [{ name, href, amount, share }] (parts de 0 à 1). */
+  function barList(items) {
+    var max = items.reduce(function (m, x) { return Math.max(m, x.amount); }, 0);
+    return '<ul class="bar-list">' + items.map(function (x) {
+      return '<li><span class="bl-name">' + (x.href ? '<a href="' + x.href + '">' + esc(x.name) + "</a>" : esc(x.name)) + '</span><span class="bl-bar" aria-hidden="true"><span style="width:' +
+        (max > 0 ? Math.max(1, x.amount / max * 100).toFixed(1) : 0) + '%"></span></span><b class="bl-amount">' + esc(money(x.amount)) + '</b><span class="bl-share">' + pct(x.share) + "</span></li>";
+    }).join("") + "</ul>";
+  }
+
+  /** Livre des recettes : encaissé, trimestre, moyenne, projection et cumul face au plafond (documentation/55, § 2). */
+  function receiptsOverview(year) {
+    var rc = ST.receipts(data.documents, year, TODAY);
+    if (!rc.total && year !== YEAR) return "";
+    var th = isMicro() && year === YEAR ? E.thresholds(data.documents, profile(), R, year) : null;
+    return '<div class="espace-noprint"><div class="kpis kpis-4">' +
+      kpi("Encaissé en " + year, money(rc.total), countText(rc.points.length - 1, "jour d'encaissement", "jours d'encaissement")) +
+      (rc.quarter !== null ? kpi("Encaissé au " + rc.quarterLabel, money(rc.quarter), "depuis le début du trimestre") : kpi("Moyenne par trimestre", money(Math.round(rc.total / 4 * 100) / 100), "année entière")) +
+      kpi("Moyenne mensuelle", rc.average === null ? "–" : money(rc.average), year === YEAR ? "mois écoulés de l'année" : "sur 12 mois") +
+      (rc.projection !== null ? kpi("Projection de fin d'année", money(rc.projection), "au rythme des jours écoulés : une estimation, pas une prévision" +
+        (th && rc.projection > th.ceiling ? " · au-delà du plafond" : ""), th && rc.projection > th.ceiling ? "is-warn" : "")
+        : kpi("Encaissements", String(rc.points.length - 1), "jours avec au moins un encaissement")) + "</div>" +
+      '<section class="card espace-card"><div class="card-head"><h3>Encaissements cumulés</h3><span class="small muted">Depuis le 1er janvier' +
+      (th ? ", face au plafond de la micro-entreprise" + (th.vat ? " et au seuil de la franchise de TVA" : "") : "") + ".</span></div>" +
+      '<div class="chart" data-chart="receipts"></div>' + OF.charts.legend([{ cls: "is-main", label: "Encaissé (cumul)" }].concat(th ? [{ cls: "is-ceiling", label: "Plafond (" + money(th.ceiling) + ")" }] : [])
+        .concat(th && th.vat ? [{ cls: "is-vat", label: "Seuil de TVA (" + money(th.vat.base) + ")" }] : [])) + "</section></div>";
+  }
+
+  /** Dépenses : indicateurs, graphique par mois, catégories et fournisseurs (documentation/55, § 2). */
+  function expensesOverview(year) {
+    var xs = ST.expenses(data.expenses, data.documents, year, TODAY, profile(), R);
+    if (!xs.count) return "";
+    var top = xs.byCategory[0];
+    return '<div class="espace-noprint"><div class="kpis kpis-4">' +
+      kpi("Dépenses en " + year, money(xs.total), countText(xs.count, "dépense", "dépenses")) +
+      (xs.month !== null ? kpi("Ce mois-ci", money(xs.month), "depuis le 1er du mois") : kpi("Premier poste", money(top.amount), top.name + " · " + pct(top.share))) +
+      kpi("Moyenne mensuelle", xs.average === null ? "–" : money(xs.average), year === YEAR ? "mois écoulés de l'année" : "sur 12 mois") +
+      kpi("Part des encaissements", xs.ratio === null ? "–" : pct(xs.ratio), xs.ratio === null ? "aucun encaissement sur la période" :
+        "dépenses ÷ encaissements de " + year + (xs.abatement !== null ? " · abattement forfaitaire de votre activité : " + pct(xs.abatement) : "")) + "</div>" +
+      '<div class="espace-cols tr-charts"><section class="card espace-card"><div class="card-head"><h3>Dépenses par mois</h3><span class="small muted">' + esc(year) + ".</span></div>" +
+      '<div class="chart" data-chart="expenses"></div>' + OF.charts.table("Dépenses par mois", ["Mois", "Dépenses"], xs.byMonth.map(function (m) { return [m.label, money(m.amount)]; })) +
+      '</section><section class="card espace-card"><h3>Par catégorie</h3>' + barList(xs.byCategory) + "<h4>Principaux fournisseurs</h4>" + barList(xs.suppliers) +
+      (xs.abatement !== null ? '<p class="small muted">En micro-entreprise, l\'impôt est calculé après un abattement forfaitaire de ' + pct(xs.abatement) +
+        ' pour votre activité, quelles que soient vos dépenses. Pour comparer avec un régime où les charges réelles sont déduites : <a href="/fr/comparateur-statuts/">comparateur de statuts</a>.</p>' : "") +
+      "</section></div></div>";
   }
 
   // ----- Dépenses et registre des achats ----------------------------------------------------------------
@@ -1378,6 +1439,7 @@
       '<a class="btn btn-primary btn-sm" href="#/depenses/nouvelle">+ ' + (required ? "Achat" : "Dépense") + "</a>" +
       '<button type="button" class="btn btn-ghost btn-sm" id="expenses-csv"' + (res.rows.length ? "" : " disabled") + ">Exporter (CSV)</button>" +
       '<button type="button" class="btn btn-ghost btn-sm" id="expenses-print"' + (res.rows.length ? "" : " disabled") + ">Imprimer</button></div></div>" +
+      expensesOverview(year) +
       '<div class="card espace-card"><div class="espace-filters espace-noprint" role="group" aria-label="Année">' +
       Object.keys(years).sort().reverse().map(function (y) { return '<a class="tab" href="#/depenses?annee=' + y + '"' + (y === year ? ' aria-current="true"' : "") + ">" + y + "</a>"; }).join("") + "</div>" +
       (res.rows.length ? '<table class="ledger"><thead><tr><th>Date</th><th>Fournisseur</th><th>Nature</th><th>Moyen</th><th>Pièce</th><th class="num">Montant</th></tr></thead><tbody>' +
@@ -1392,6 +1454,15 @@
         : '<p class="small muted">Prestataire de services : ce suivi est facultatif. Le registre des achats n\'est obligatoire que pour la vente de marchandises ou la fourniture de logement.</p>') +
       (isMicro() ? '<p class="small muted">En micro-entreprise, les dépenses ne se déduisent pas du chiffre d\'affaires déclaré : l\'abattement forfaitaire en tient lieu.</p>' : "") +
       '<p class="small muted">Conservez les factures d\'achat pendant ' + R.conservation_pieces.commerce_annees + " ans.</p></div>";
+    drawCharts = function () {
+      var el = view.querySelector('[data-chart="expenses"]');
+      if (!el) return;
+      var xs = ST.expenses(data.expenses, data.documents, year, TODAY, profile(), R);
+      el.innerHTML = OF.charts.bars({ width: Math.floor(el.getBoundingClientRect().width) || 600,
+        groups: xs.byMonth.map(function (m) { return { key: m.key, label: m.label, values: [m.amount], future: false }; }),
+        series: [{ name: "Dépenses", cls: "is-out" }], title: "Dépenses par mois en " + year, desc: "Total " + money(xs.total) + "." });
+    };
+    drawCharts();
     if (!res.rows.length) return;
     $("expenses-csv").addEventListener("click", function () {
       OF.download("\ufeff" + E.expensesCSV(res.rows), (required ? "registre-des-achats-" : "depenses-") + year + ".csv", "text/csv;charset=utf-8");
@@ -1418,6 +1489,8 @@
       field("label", "Nature de l'achat", x.label, { placeholder: "Ramettes de papier, marchandises…" }) +
       field("method", "Moyen de paiement", x.method, { options: methods, half: true }) +
       field("ref", "Référence de la pièce", x.ref, { half: true, placeholder: "N° de la facture du fournisseur" }) +
+      field("category", "Catégorie (facultatif)", x.category || "", { half: true, options: [["", "Non classée"]].concat(Object.keys(E.EXPENSE_CATEGORIES).map(function (k) {
+        return [k, E.EXPENSE_CATEGORIES[k]]; })), hint: "Pour suivre où part votre argent." }) +
       '</div><p class="form-error" id="expense-error" role="alert" hidden></p><div class="espace-actions">' +
       '<button type="submit" class="btn btn-primary">Enregistrer</button><a class="btn btn-ghost" href="#/depenses?annee=' + esc(String(x.date).slice(0, 4)) + '">Annuler</a>' +
       (isNew ? "" : '<button type="button" class="btn btn-ghost" id="expense-delete">Supprimer</button>') + "</div></form>";
@@ -1426,7 +1499,7 @@
       e.preventDefault();
       var f = form.elements;
       var next = { date: f.date.value, supplier: f.supplier.value.trim(), label: f.label.value.trim(), method: f.method.value,
-                   ref: f.ref.value.trim(), amount: OF.num(f.amount.value) };
+                   ref: f.ref.value.trim(), amount: OF.num(f.amount.value), category: E.EXPENSE_CATEGORIES[f.category.value] ? f.category.value : "" };
       var errors = E.checkExpense(next);
       f.supplier.setAttribute("aria-invalid", String(!next.supplier));
       f.amount.setAttribute("aria-invalid", String(!(next.amount > 0)));

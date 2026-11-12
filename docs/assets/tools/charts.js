@@ -26,8 +26,8 @@
   }
 
   /**
-   * Solde prévu en escalier. o : { width, height, from, to, series: [{ name, points, cls, area }], threshold, low,
-   * title, desc }. La première série porte la surface ; les suivantes sont en pointillés.
+   * Solde prévu (ou cumul) en escalier. o : { width, height, from, to, series: [{ name, points, cls, area }], threshold,
+   * refs: [{ value, label, cls }], low, title, desc }. La première série porte la surface ; les suivantes sont en pointillés.
    */
   function balance(o) {
     var w = Math.max(300, Math.round(o.width || 640)), h = o.height || (w < 480 ? 220 : 260);
@@ -35,6 +35,7 @@
     var values = [];
     o.series.forEach(function (s) { s.points.forEach(function (p) { values.push(p.balance); }); });
     if (o.threshold) values.push(o.threshold);
+    (o.refs || []).forEach(function (r) { values.push(r.value); });
     var tk = C.ticks(values, w < 480 ? 4 : 5), y = C.linear(tk.min, tk.max, bottom, top), x = C.dateScale(o.from, o.to, left, right);
     var body = yAxis(tk, y, left, right);
     C.monthStarts(o.from, o.to).forEach(function (m, i, all) {
@@ -47,11 +48,17 @@
       body += '<line class="ch-threshold" x1="' + left + '" x2="' + right + '" y1="' + y(o.threshold) + '" y2="' + y(o.threshold) + '"/>' +
         '<text class="ch-note ch-note-warn" x="' + right + '" y="' + (y(o.threshold) - 5) + '" text-anchor="end">Seuil de sécurité</text>';
     }
+    // Lignes de référence (plafond, seuil de TVA…) : trait et libellé dans la couleur de la ligne.
+    (o.refs || []).forEach(function (r) {
+      body += '<line class="ch-ref ' + (r.cls || "") + '" x1="' + left + '" x2="' + right + '" y1="' + y(r.value) + '" y2="' + y(r.value) + '"/>' +
+        '<text class="ch-note ' + (r.cls || "") + '" x="' + (left + 6) + '" y="' + (y(r.value) - 5) + '">' + esc(r.label) + "</text>";
+    });
     var base = y(Math.max(tk.min, Math.min(0, tk.max)));
     o.series.forEach(function (s, i) {
       if (!s.points.length) return;
-      if (i === 0) body += '<path class="ch-area ' + (s.cls || "") + '" d="' + C.stepArea(s.points, x, y, o.to, base) + '"/>';
-      body += '<path class="ch-line ' + (s.cls || "") + (i ? " ch-dashed" : "") + '" d="' + C.stepPath(s.points, x, y, o.to) + '"/>';
+      // La courbe s'arrête à s.end (aujourd'hui pour un cumul) ou à la fin de l'axe.
+      if (i === 0) body += '<path class="ch-area ' + (s.cls || "") + '" d="' + C.stepArea(s.points, x, y, s.end || o.to, base) + '"/>';
+      body += '<path class="ch-line ' + (s.cls || "") + (i ? " ch-dashed" : "") + '" d="' + C.stepPath(s.points, x, y, s.end || o.to) + '"/>';
     });
     if (o.low) {
       var lx = x(o.low.date), ly = y(o.low.balance), anchor = lx > (left + right) / 2 ? "end" : "start";
@@ -121,7 +128,8 @@
 
   /** Tableau des données d'un graphique, dans un « Voir les données ». */
   function table(caption, head, rows) {
-    return '<details class="ch-data"><summary>Voir les données</summary><div class="table-scroll"><table class="ledger"><caption class="sr-only">' + esc(caption) +
+    // Classe propre (et non « ledger ») : ces tableaux ne doivent pas être confondus avec le livre des recettes ou le registre.
+    return '<details class="ch-data"><summary>Voir les données</summary><div class="table-scroll"><table class="data-table"><caption class="sr-only">' + esc(caption) +
       "</caption><thead><tr>" + head.map(function (c, i) { return "<th" + (i ? ' class="num"' : "") + ' scope="col">' + esc(c) + "</th>"; }).join("") +
       "</tr></thead><tbody>" + rows.map(function (r) {
         return "<tr>" + r.map(function (c, i) { return i ? '<td class="num">' + esc(c) + "</td>" : '<th scope="row">' + esc(c) + "</th>"; }).join("") + "</tr>";

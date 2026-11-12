@@ -3694,6 +3694,10 @@ const tests = {
     check(ledger.includes("Total du 1er trimestre 2026 0,00 €") && ledger.indexOf("20/09/2026") < ledger.indexOf("Total du 3e trimestre 2026 1 800,00 €") &&
       ledger.includes("Total du 4e trimestre 2026 (en cours) 0,00 €") && !ledger.includes("Total du 1er trimestre 2027"),
       "Espace : livre des recettes totalisé à la fin de chaque trimestre (BOFiP)");
+    const rk = await text("#espace-view .kpis");
+    check(rk.includes("Encaissé en 2026 1 800,00 €") && rk.includes("Encaissé au 4e trimestre 2026 0,00 €") && rk.includes("Projection de fin d'année") &&
+      (await page.$$eval('[data-chart="receipts"] svg[role="img"]', (l) => l.length)) === 1 && (await page.$$eval('[data-chart="receipts"] .ch-ref', (l) => l.length)) === 2 &&
+      (await text("#espace-view .ch-legend")).includes("Plafond (83 600,00 €)"), "Recettes : indicateurs, cumul face au plafond et au seuil de TVA");
     await accessible(page, "Espace : livre des recettes");
     const [csv] = await Promise.all([page.waitForEvent("download"), page.click("#ledger-csv")]);
     check(fs.readFileSync(await csv.path(), "utf8").includes('15/09/2026;"Studio Nova";"Site vitrine";800,00;"Virement";"F2026-001"'), "Espace : export CSV du livre des recettes");
@@ -3710,7 +3714,7 @@ const tests = {
       && (await page.getAttribute("#ep-supplier", "aria-invalid")) === "true" && (await page.evaluate(() => document.activeElement.id)) === "ep-supplier",
       "Espace : dépense incomplète refusée, champ en erreur");
     await accessible(page, "Espace : nouvelle dépense");
-    const addExpense = async (date, amount, supplier, label, method, ref) => {
+    const addExpense = async (date, amount, supplier, label, method, ref, category) => {
       await go("#/depenses/nouvelle");
       await page.fill("#ep-date", date);
       await page.fill("#ep-amount", amount);
@@ -3718,17 +3722,23 @@ const tests = {
       await page.fill("#ep-label", label);
       await page.selectOption("#ep-method", method);
       await page.fill("#ep-ref", ref);
+      if (category) await page.selectOption("#ep-category", category);
       await page.click("#expense-form button[type=submit]");
       await page.waitForSelector("#espace-view .ledger");
     };
-    await addExpense("2026-10-02", "24,90", "Papeterie du centre", "Ramettes", "especes", "F-881");
+    await addExpense("2026-10-02", "24,90", "Papeterie du centre", "Ramettes", "especes", "F-881", "autres");
     await addExpense("2026-09-15", "120", "Imprimeur", "Cartes de visite", "carte", "2026-0412");
     let spent = await text("#espace-view .ledger");
     check(spent.indexOf("15/09/2026") < spent.indexOf("02/10/2026") && spent.includes("Total des dépenses en 2026 144,90 €") && spent.includes("Dont réglé en espèces 24,90 €"),
       "Espace : dépenses dans l'ordre chronologique, total et espèces");
+    // Indicateurs et catégories (documentation/55, § 2) : 144,90 € dont 24,90 € « Autres » ; encaissé de l'année : 1 800 €.
+    const xk = await text("#espace-view .kpis");
+    check(xk.includes("Dépenses en 2026 144,90 € 2 dépenses") && xk.includes("Part des encaissements 8 %") && xk.includes("abattement forfaitaire de votre activité : 34 %") &&
+      (await text(".bar-list")).includes("Non classées 120,00 € 83 %") && (await text(".bar-list")).includes("Autres 24,90 € 17 %") &&
+      (await page.$$eval('[data-chart="expenses"] svg[role="img"]', (l) => l.length)) === 1, "Dépenses : indicateurs, catégories et graphique");
     await accessible(page, "Espace : dépenses");
     const [spentCsv] = await Promise.all([page.waitForEvent("download"), page.click("#expenses-csv")]);
-    check(fs.readFileSync(await spentCsv.path(), "utf8").includes('02/10/2026;"Papeterie du centre";"Ramettes";24,90;"Espèces";"F-881"'), "Espace : export CSV des dépenses");
+    check(fs.readFileSync(await spentCsv.path(), "utf8").includes('02/10/2026;"Papeterie du centre";"Ramettes";24,90;"Espèces";"F-881";"Autres"'), "Espace : export CSV des dépenses (catégorie en dernière colonne)");
     await page.click('#espace-view .ledger a:text("Imprimeur")');
     await page.waitForSelector("#expense-form");
     check((await text("#espace-view h2")) === "Imprimeur" && (await page.inputValue("#ep-amount")) === "120,00", "Espace : dépense ouverte pour modification (montant à deux décimales)");

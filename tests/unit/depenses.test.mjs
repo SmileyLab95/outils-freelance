@@ -51,5 +51,7 @@ test("contrôle de la saisie : date, fournisseur, montant positif, moyen de paie
 
 test("export CSV : séparateur point-virgule, date française, virgule décimale, guillemets échappés", () => {
   const rows = E.expenseRows([x({ supplier: 'Atelier "Nord"', amount: 1234.5, method: "especes" })]).rows;
-  assert.equal(E.expensesCSV(rows), 'Date;Fournisseur;Nature;Montant;Moyen de paiement;Référence de la pièce\r\n10/03/2026;"Atelier ""Nord""";"Bougies";1234,50;"Espèces";"FA-12"');
+  assert.equal(E.expensesCSV(rows), 'Date;Fournisseur;Nature;Montant;Moyen de paiement;Référence de la pièce;Catégorie\r\n10/03/2026;"Atelier ""Nord""";"Bougies";1234,50;"Espèces";"FA-12";""');
+  const withCat = E.expenseRows([x({ category: "materiel" })]).rows;
+  assert.ok(E.expensesCSV(withCat).endsWith(';"FA-12";"Matériel"'), "catégorie en dernière colonne, en toutes lettres");
 });

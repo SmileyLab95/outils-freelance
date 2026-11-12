@@ -28,7 +28,7 @@
                  contact: "interlocuteur", source: "origine", stage: "étape", value: "valeur estimée", nextDate: "date de relance",
                  nextAction: "prochaine action", prospectId: "piste", from: "sens de l'échange", text: "résumé", hashes: "empreintes",
                  every: "fréquence", start: "première échéance", end: "dernière échéance", cashBalance: "solde du compte",
-                 cashDate: "date du solde", vatLastYear: "TVA de l'année précédente", cashThreshold: "seuil de sécurité",
+                 cashDate: "date du solde", vatLastYear: "TVA de l'année précédente", cashThreshold: "seuil de sécurité", category: "catégorie",
                  flow: "sens", revenue: "chiffre d'affaires prévu" };
   var labels = function (fields) { return fields.map(function (k) { return LABELS[k] || k; }).join(", "); };
 

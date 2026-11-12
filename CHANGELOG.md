@@ -1,5 +1,19 @@
 # Journal des modifications
 
+## 2026-11-12 (matin) — Dépenses et recettes : indicateurs, catégories, cumul face au plafond
+
+- **Dépenses** : catégorie facultative (logiciels, matériel, déplacements, locaux, téléphone, formation,
+  sous-traitance, marchandises, assurances, frais bancaires, autres), reprise dans l'export CSV ; indicateurs de
+  l'année (total, mois en cours, moyenne mensuelle, part des encaissements comparée à l'abattement forfaitaire de
+  l'activité) ; dépenses par mois, par catégorie et principaux fournisseurs.
+- **Livre des recettes** : encaissé de l'année, du trimestre, moyenne mensuelle, projection de fin d'année (une
+  estimation au rythme des jours écoulés) ; encaissements cumulés face au plafond de la micro-entreprise et au seuil de
+  la franchise de TVA. Le livre et le registre imprimés ne changent pas.
+- Tests : 15 erreurs réintroduites toutes détectées ; parcours navigateur de l'Espace (256 points, accessibilité
+  comprise) et des comptes au vert ; captures relues sur ordinateur et mobile.
+- Corrections trouvées en relisant : la note sur l'abattement ne s'applique pas avec le versement libératoire ; les
+  tableaux de données des graphiques ont leur propre style (ils pouvaient être confondus avec le registre).
+
 ## 2026-11-12 (petit matin) — Documents et clients : indicateurs et graphiques
 
 - **Documents** : facturé HT du mois et de l'année (nombre de factures, montant moyen, avoirs), devis en attente,
