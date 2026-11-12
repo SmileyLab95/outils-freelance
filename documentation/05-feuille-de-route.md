@@ -9,7 +9,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 
 ## Où en est-on ?
 
-*Mis à jour le 12/11/2026 (fin d'après-midi).*
+*Mis à jour le 12/11/2026 (soir).*
 
 - **Priorité (décision D10)** : le site et la plateforme d'abord ; noms de domaine, Gumroad et affiliation à la fin.
   Règle de qualité maximale pour tout produit ou service (D11, charte dans la [méthode](04-methode-de-travail.md#charte-qualité)).
@@ -434,9 +434,12 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   conversion en comptabilité de caisse n'est pas lue : renvoi au comptable (règle `uk_income_tax_foreign_currency`,
   [49](49-devises.md) § 2, D72). *Bank holidays* 2029 pas encore publiés par GOV.UK (liste jusqu'en 2028, vu le 12/11).
 - **Jours ouvrés au Canada : lecture des lois commencée (12/11/2026, soir)** : canada.ca restant illisible, les jours
-  fériés sont pris dans les lois (outil de lecture des sources) ; lus : Code canadien du travail (art. 166), Loi
-  instituant des jours de fête légale, Colombie-Britannique, Manitoba ; Ontario et Alberta lisibles (à relire avec le
-  bon libellé) ; autres provinces et territoires à suivre ([42](42-jours-ouvres.md) § 10). Taux H.10 de la Réserve
+  fériés sont pris dans les lois (outil de lecture des sources) ; lus le 12/11 : fédéral (Code canadien du travail,
+  Loi instituant des jours de fête légale), Colombie-Britannique, Alberta, Manitoba, Ontario, Québec (normes du travail
+  et fête nationale), Nouveau-Brunswick, Nouvelle-Écosse (page du ministère), Terre-Neuve-et-Labrador ; restent la
+  Saskatchewan, l'Île-du-Prince-Édouard, les trois territoires et les dates de quelques fêtes (Family Day, New
+  Brunswick Day, Memorial Day) ([42](42-jours-ouvres.md) § 10) ; l'outil de lecture accepte désormais les lois des
+  assemblées de Nouvelle-Écosse, de Terre-Neuve-et-Labrador et du Nunavut. Taux H.10 de la Réserve
   fédérale : fichier sans en-tête CORS, non lisible depuis un navigateur ([49](49-devises.md)). *Maternity Allowance* :
   pages de GOV.UK inchangées (11/02/2025), effet des crédits de classe 2 toujours non précisé.
 - **Prochaines actions de Claude** : indicateurs de l'Espace : les huit onglets, la date de clôture des pistes et la période de
