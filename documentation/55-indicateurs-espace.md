@@ -169,6 +169,57 @@ tablette et mobile, documentation, publication.
 ## 6. Bilan
 
 Les huit onglets de l'Espace (trésorerie comprise, [39](39-tresorerie.md) § 7) ont leurs indicateurs et graphiques.
-Pistes d'amélioration notées : date de clôture des pistes (conversion par période, gagnées et perdues par mois) ;
+Pistes d'amélioration notées : date de clôture des pistes (faite le 12/11, § 7) ;
 période choisie dans l'adresse pour les documents et les dépenses (`?periode=`), aujourd'hui fixée à l'année ou à
 12 mois glissants.
+
+## 7. Date de clôture des pistes (spécification du 12/11/2026, suite du § 6)
+
+Besoin : le § 2 demandait le taux de conversion sur 12 mois et les pistes gagnées et perdues par mois ; il faut pour
+cela savoir **quand** une piste a été gagnée ou perdue, ce que les données ne disaient pas (§ 5.4).
+
+**Données** (deux champs facultatifs, au format AAAA-MM-JJ ; les anciennes données restent valables) :
+
+- devis : `decidedAt`, date à laquelle l'utilisateur l'a marqué « Accepté » ou « Refusé » (retirée s'il le remet « En
+  attente ») ; posée aussi quand une facture est créée depuis le devis, s'il n'en avait pas ;
+- piste : `closedAt`, date à laquelle l'utilisateur l'a passée à « Gagné » ou « Perdu » (retirée s'il la rouvre ; une
+  piste déjà close et seulement modifiée garde sa date ; une piste close **avant** ce changement reste sans date : on
+  ne la date pas du jour où elle est réenregistrée).
+
+**Date de clôture d'une piste** (moteur, une seule source de vérité) :
+
+- piste affichée « Perdu » : `closedAt` ;
+- piste affichée « Gagné » : la plus ancienne des dates disponibles : `closedAt` si « Gagné » a été choisi, date de
+  décision de ses devis acceptés ou facturés, et, pour un devis facturé sans date de décision, date de la facture ;
+- piste ouverte : aucune ; aucune date connue : « sans date ».
+
+**Indicateurs** : taux de conversion sur les **12 derniers mois** (pistes closes datées dans la période, du lendemain
+du même jour un an plus tôt jusqu'à aujourd'hui) ; s'il n'y en a aucune, le taux sur toutes les pistes closes, dit
+comme tel ; graphique « Pistes gagnées et perdues par mois » (12 derniers mois), affiché dès qu'une clôture est
+datée, avec le nombre de pistes closes sans date signalé sous le graphique.
+
+**Synchronisation et sauvegarde** : champs fusionnés comme les autres champs (libellés « date de décision » et « date
+de clôture » dans les conflits) ; à l'import, une date présente mais illisible rend la sauvegarde illisible.
+
+**Tests** : moteur (cas calculés à la main : chaque règle ci-dessus, bornes des 12 mois, anciennes pistes sans date),
+erreurs réintroduites ; parcours navigateur (devis accepté puis remis en attente, piste perdue puis rouverte,
+graphique et note des pistes sans date) ; import d'une date illisible ; captures.
+
+### 7.1 Réalisation (12/11/2026)
+
+- Moteur : `E.prospectClosedAt` (règles ci-dessus) ; `ST.prospects` donne en plus `closed12`, `conversion12`,
+  `undated` (pistes closes sans date) et `months` (gagnées et perdues des 12 derniers mois calendaires).
+- Écran : boutons « Accepté », « Refusé », « En attente » du devis et création d'une facture depuis un devis (date de
+  décision) ; enregistrement d'une piste (date de clôture) ; indicateur « Taux de conversion » sur 12 mois (sinon sur
+  toutes les pistes closes, dit comme tel) ; carte « Pistes gagnées et perdues » (graphique bas, données, note des
+  pistes sans date).
+- Sauvegarde : une date présente mais illisible est refusée ; synchronisation : libellés « date de décision » et « date
+  de clôture ».
+- Tests : 1 test du moteur des pistes (12 cas), 1 test des indicateurs, 1 test de synchronisation ; 15 erreurs
+  réintroduites : 14 détectées après l'ajout de deux cas (devis refusé sur une piste gagnée ; devis facturé qui a aussi
+  une date de décision), la quinzième sans effet possible (une piste ouverte n'a aucune date à retenir) ; parcours
+  navigateur (10 points nouveaux, accessibilité comprise) ; captures relues sur ordinateur et mobile (hauteur du
+  graphique réduite : il ne compte que quelques pistes).
+- Relecture : un contrôle existant du parcours lisait le premier bloc dépliable de la page, devenu le « Voir les
+  données » du nouveau graphique ; il vise maintenant la liste des pistes gagnées. Un second clic sur « Accepté »
+  aurait redaté le devis du jour : la date n'est posée que si le statut change (contrôle ajouté au parcours).

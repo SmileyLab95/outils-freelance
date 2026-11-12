@@ -175,3 +175,34 @@ test("export CSV des prospects", () => {
     '"Sans type";"";Professionnel;"";"";"";À contacter;;;"";;01/10/2026');
   assert.deepEqual(Object.keys(E.STAGE_LABELS), ["new", "talks", "quote", "won", "lost"]);
 });
+
+test("date de clôture d'une piste (documentation/55, § 7)", () => {
+  assert.equal(E.prospectClosedAt(p(), []), null, "piste ouverte : pas de date");
+  assert.equal(E.prospectClosedAt(p({ stage: "lost", closedAt: "2026-10-05" }), []), "2026-10-05", "perdue : date de clôture");
+  assert.equal(E.prospectClosedAt(p({ stage: "lost" }), []), null, "perdue avant le suivi des dates : sans date");
+  assert.equal(E.prospectClosedAt(p({ stage: "lost", closedAt: "2026-13-01" }), []), null, "date illisible ignorée");
+  assert.equal(E.prospectClosedAt(p({ stage: "talks", closedAt: "2026-10-05" }), []), null, "rouverte : la date restante est ignorée");
+  assert.equal(E.prospectClosedAt(p({ stage: "won", closedAt: "2026-10-07" }), []), "2026-10-07", "gagnée par choix");
+  const docs = [];
+  Object.assign(issued(docs), { status: "accepted", decidedAt: "2026-10-12" });
+  assert.equal(E.prospectClosedAt(p(), docs), "2026-10-12", "devis accepté : date de décision");
+  assert.equal(E.prospectClosedAt(p({ stage: "won", closedAt: "2026-10-15" }), docs), "2026-10-12", "la plus ancienne des dates");
+  assert.equal(E.prospectClosedAt(p({ stage: "talks", closedAt: "2026-10-01" }), docs), "2026-10-12", "closedAt d'une étape non choisie ignoré");
+  const docs2 = [];
+  const q = Object.assign(issued(docs2), { status: "accepted" });
+  assert.equal(E.prospectClosedAt(p(), docs2), null, "accepté sans date de décision (ancien devis) : sans date");
+  q.invoiceId = "f1";
+  docs2.push({ id: "f1", type: "facture", status: "draft", date: "2026-10-25", lines: [], payments: [] });
+  assert.equal(E.prospectClosedAt(p(), docs2), "2026-10-25", "devis facturé sans date de décision : date de la facture");
+  q.status = "sent";
+  assert.equal(E.prospectClosedAt(p(), docs2), "2026-10-25", "devis facturé, même resté « en attente »");
+  const docs3 = [];
+  Object.assign(issued(docs3), { status: "refused", decidedAt: "2026-10-12" });
+  assert.equal(E.prospectClosedAt(p({ stage: "lost", closedAt: "2026-10-14" }), docs3), "2026-10-14", "devis refusé : la piste perdue garde sa date");
+  assert.equal(E.prospectClosedAt(p(), docs3), null, "devis refusé seul : piste encore ouverte");
+  assert.equal(E.prospectClosedAt(p({ stage: "won", closedAt: "2026-10-15" }), docs3), "2026-10-15", "piste gagnée : la date d'un devis refusé ne compte pas");
+  const docs4 = [];
+  Object.assign(issued(docs4), { status: "accepted", decidedAt: "2026-10-12", invoiceId: "f4" });
+  docs4.push({ id: "f4", type: "facture", status: "draft", date: "2026-10-08", lines: [], payments: [] });
+  assert.equal(E.prospectClosedAt(p(), docs4), "2026-10-12", "devis facturé avec une date de décision : la date de la facture ne compte pas");
+});

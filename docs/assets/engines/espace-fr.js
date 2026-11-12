@@ -811,6 +811,26 @@
     return STAGE_RANK[auto] > STAGE_RANK[chosen] ? auto : chosen;
   }
 
+  /**
+   * Date de clôture d'une piste (documentation/55, § 7) : « Perdu » : closedAt ; « Gagné » : la plus ancienne de closedAt
+   * (si « Gagné » a été choisi), des dates de décision de ses devis acceptés ou facturés et, pour un devis facturé sans
+   * date de décision, de la date de la facture ; piste ouverte ou aucune date connue : null.
+   */
+  function prospectClosedAt(p, documents) {
+    var stage = prospectStage(p, documents);
+    if (stage === "lost") return isDay(p.closedAt) ? p.closedAt : null;
+    if (stage !== "won") return null;
+    var dates = [];
+    if (p.stage === "won" && isDay(p.closedAt)) dates.push(p.closedAt);
+    prospectQuotes(p, documents).forEach(function (q) {
+      if (q.status === "draft" || !(q.status === "accepted" || q.invoiceId)) return;
+      if (isDay(q.decidedAt)) { dates.push(q.decidedAt); return; }
+      var inv = q.invoiceId ? (documents || []).filter(function (d) { return d && d.id === q.invoiceId; })[0] : null;
+      if (inv && isDay(inv.date)) dates.push(inv.date);
+    });
+    return dates.length ? dates.sort()[0] : null;
+  }
+
   /** Valeur : montant HT du dernier devis émis, sinon le montant estimé (ou null). */
   function prospectValue(p, documents) {
     var quotes = prospectQuotes(p, documents).filter(function (d) { return d.status !== "draft"; });
@@ -1290,7 +1310,7 @@
            timeInvoiceLines: timeInvoiceLines, timeInvoice: timeInvoice, timeSummary: timeSummary, unbilledByClient: unbilledByClient,
            timeCSV: timeCSV,
            STAGE_LABELS: STAGE_LABELS, OPEN_STAGES: OPEN_STAGES, prospectErrors: prospectErrors, exchangeErrors: exchangeErrors, prospectQuotes: prospectQuotes,
-           minStage: minStage, prospectStage: prospectStage, prospectValue: prospectValue, pipeline: pipeline, followUps: followUps,
+           minStage: minStage, prospectStage: prospectStage, prospectClosedAt: prospectClosedAt, prospectValue: prospectValue, pipeline: pipeline, followUps: followUps,
            lastContactFrom: lastContactFrom, addYears: addYears, retentionDue: retentionDue, optoutKeys: optoutKeys, prospectsCSV: prospectsCSV,
            CHARGE_LABELS: CHARGE_LABELS, chargeDates: chargeDates, chargeErrors: chargeErrors, expectedReceipts: expectedReceipts, vatPart: vatPart,
            vatExigible: vatExigible, owed: owed, forecast: forecast, balanceCurve: balanceCurve, safeAmount: safeAmount, paymentStats: paymentStats,

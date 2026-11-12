@@ -1174,13 +1174,18 @@
       var inv = E.invoiceFromQuote(d, TODAY, S.uid());
       inv.createdAt = inv.updatedAt = now();
       d.status = d.status === "refused" ? "accepted" : d.status === "sent" ? "accepted" : d.status;
+      if (d.status === "accepted" && !d.decidedAt) d.decidedAt = TODAY;
       d.invoiceId = inv.id;
       data.documents.push(inv);
       persist("Facture créée en brouillon à partir du devis.").then(function () { location.hash = "#/documents/" + inv.id; });
     });
     view.querySelectorAll("[data-quote]").forEach(function (b) {
       b.addEventListener("click", function () {
+        var before = d.status;
         d.status = b.getAttribute("data-quote");
+        // Date de décision (documentation/55, § 7) : posée quand le devis devient accepté ou refusé (un second clic ne la change
+        // pas ; un devis décidé avant ce suivi reste sans date), retirée si le devis est remis en attente.
+        if (d.status === "sent") delete d.decidedAt; else if (d.status !== before) d.decidedAt = TODAY;
         d.updatedAt = now();
         persist("Devis : " + STATES[d.status][0].toLowerCase() + ".").then(function () { render(true); });
       });
@@ -1943,7 +1948,8 @@
       html += '<div class="kpis kpis-4">' +
         kpi("Pistes ouvertes", String(pipe.open.count), "valeur estimée : " + money(pipe.open.value)) +
         kpi("À relancer", String(due.length), ps.late ? "dont " + ps.late + " en retard" : due.length ? "aujourd'hui" : "aucune relance due") +
-        kpi("Taux de conversion", ps.conversion === null ? "–" : pct(ps.conversion), ps.closed ? "pistes gagnées sur " + countText(ps.closed, "piste close", "pistes closes") : "aucune piste close") +
+        (ps.closed12 ? kpi("Taux de conversion", pct(ps.conversion12), "12 derniers mois : " + countText(ps.closed12, "piste close", "pistes closes")) :
+          kpi("Taux de conversion", ps.conversion === null ? "–" : pct(ps.conversion), ps.closed ? "toutes les pistes closes (" + ps.closed + ")" : "aucune piste close")) +
         kpi("Valeur moyenne gagnée", ps.wonAverage === null ? "–" : money(ps.wonAverage), ps.wonAverage === null ? "aucune piste gagnée" : "par piste gagnée") + "</div>";
       html += '<section class="card espace-card">' +
         (due.length ? '<h3>À relancer</h3><ul class="doc-list">' + due.map(function (p) {
@@ -1959,6 +1965,15 @@
             '" style="width:' + (top > 0 ? Math.max(x.count ? 2 : 0, x.count / top * 100).toFixed(1) : 0) + '%"></span></span><b class="bl-amount">' + esc(countText(x.count, "piste", "pistes")) +
             '</b><span class="bl-share">' + esc(money(x.value)) + "</span></li>";
         }).join("") + "</ul></section>";
+      var closedShown = ps.months.reduce(function (s, m) { return s + m.won + m.lost; }, 0);
+      if (closedShown) {
+        html += '<section class="card espace-card espace-noprint"><div class="card-head"><h3>Pistes gagnées et perdues</h3><span class="small muted">12 derniers mois, ' +
+          "à la date de clôture.</span></div>" + '<div class="chart" data-chart="closed"></div>' +
+          OF.charts.legend([{ cls: "is-in", label: "Gagnées" }, { cls: "is-prev", label: "Perdues" }]) +
+          OF.charts.table("Pistes gagnées et perdues par mois", ["Mois", "Gagnées", "Perdues"], ps.months.map(function (m) { return [monthLabel(m.key), String(m.won), String(m.lost)]; })) +
+          (ps.undated ? '<p class="small muted">' + esc(countText(ps.undated, "piste close avant le suivi des dates n'y figure pas", "pistes closes avant le suivi des dates n'y figurent pas")) + ".</p>" : "") +
+          "</section>";
+      }
       html += '<div class="pipeline">' + E.OPEN_STAGES.map(function (s) {
         return '<section class="card espace-card" aria-labelledby="stage-' + s + '"><div class="pipeline-head"><h3 id="stage-' + s + '">' + esc(E.STAGE_LABELS[s]) +
           '</h3><span class="small muted">' + esc(countText(pipe[s].count, "piste", "pistes")) + " · " + esc(money(pipe[s].value)) + "</span></div>" +
@@ -1987,6 +2002,16 @@
       R.prospects_opposition.conservation_min_annees + " ans.</p></section>" +
       '<section class="card espace-card"><h3>Prospecter dans les règles</h3>' + prospectRules() + "</section>";
     view.innerHTML = html;
+    drawCharts = function () {
+      var el = view.querySelector('[data-chart="closed"]');
+      if (!el) return;
+      el.innerHTML = OF.charts.bars({ width: Math.floor(el.getBoundingClientRect().width) || 600, height: 190, // des nombres de pistes : un graphique bas suffit
+        groups: ps.months.map(function (m) { return { key: m.key, values: [m.won, m.lost], future: false }; }),
+        series: [{ name: "Gagnées", cls: "is-in" }, { name: "Perdues", cls: "is-prev" }], title: "Pistes gagnées et perdues par mois",
+        desc: "12 derniers mois : " + countText(ps.months.reduce(function (s, m) { return s + m.won; }, 0), "piste gagnée", "pistes gagnées") + ", " +
+          countText(ps.months.reduce(function (s, m) { return s + m.lost; }, 0), "piste perdue", "pistes perdues") + "." });
+    };
+    drawCharts();
     view.querySelectorAll("[data-forget]").forEach(function (b) {
       b.addEventListener("click", function () {
         var p = prospect(b.getAttribute("data-forget"));
@@ -2084,7 +2109,12 @@
       if (errors.length) { f[errors[0].field].focus(); return; }
       if (next.value !== null) next.value = Math.round(next.value * 100) / 100;
       var save = function () {
+        // Date de clôture (documentation/55, § 7) : posée quand la piste passe à « Gagné » ou « Perdu », gardée si l'étape ne
+        // change pas (une piste close avant ce suivi reste sans date), retirée si elle est rouverte.
+        var closing = next.stage === "won" || next.stage === "lost";
+        if (closing && (isNew || p.stage !== next.stage)) next.closedAt = TODAY;
         Object.assign(p, next, { updatedAt: now() });
+        if (!closing) delete p.closedAt;
         if (isNew) { p.createdAt = p.updatedAt; data.prospects.push(p); }
         persist(isNew ? "Prospect créé." : "Prospect enregistré.").then(function () { location.hash = isNew ? "#/prospects/" + p.id : "#/prospects"; });
       };

@@ -4185,10 +4185,57 @@ const tests = {
     await page.click('[data-quote="accepted"]');
     await page.waitForTimeout(300);
     await go("#/prospects");
-    check((await text("#espace-view details")).startsWith("Gagnés · 1 piste · 1 800,00 €") && (await text("#espace-view .kpis")).startsWith("Pistes ouvertes 0"),
+    check((await text("#espace-view details.details-card")).startsWith("Gagnés · 1 piste · 1 800,00 €") && (await text("#espace-view .kpis")).startsWith("Pistes ouvertes 0"),
       "Prospects : devis accepté, piste gagnée");
-    check((await text("#espace-view .kpis")).includes("Taux de conversion 100 % pistes gagnées sur 1 piste close Valeur moyenne gagnée 1 800,00 € par piste gagnée"),
-      "Prospects : taux de conversion et valeur moyenne d'une piste gagnée");
+    check((await text("#espace-view .kpis")).includes("Taux de conversion 100 % 12 derniers mois : 1 piste close Valeur moyenne gagnée 1 800,00 € par piste gagnée"),
+      "Prospects : taux de conversion (12 mois) et valeur moyenne d'une piste gagnée");
+    // Dates de clôture (documentation/55, § 7) : décision du devis, piste perdue puis rouverte, pistes closes sans date.
+    const verdierQuote = async () => (await store()).documents.filter((d) => d.type === "devis" && d.prospectId === verdier)[0];
+    const closedRows = async () => page.$$eval("#espace-view .data-table tbody tr:last-child > *", (c) => c.map((x) => x.textContent).join(" | "));
+    check((await verdierQuote()).decidedAt === "2026-10-20" && (await page.getAttribute('[data-chart="closed"] svg', "role")) === "img" &&
+      (await closedRows()) === "octobre 2026 | 1 | 0" && !(await text("#espace-view")).includes("avant le suivi des dates"),
+      "Prospects : date de décision du devis, graphique des pistes gagnées et perdues");
+    await accessible(page, "Prospects : pistes gagnées et perdues");
+    await go("#/prospects/" + verdier);
+    await page.click("#espace-view .doc-list a");
+    await page.waitForSelector('[data-quote="sent"]');
+    await page.click('[data-quote="sent"]');
+    await page.waitForTimeout(300);
+    check((await verdierQuote()).decidedAt === undefined && (await verdierQuote()).status === "sent", "Prospects : devis remis en attente, date de décision retirée");
+    await page.click('[data-quote="accepted"]');
+    await page.waitForTimeout(300);
+    await page.evaluate(async (id) => { const d = await window.EspaceStore.load(); d.documents.filter((x) => x.type === "devis" && x.prospectId === id)[0].decidedAt = "2026-10-15"; await window.EspaceStore.save(d); }, verdier);
+    await page.reload({ waitUntil: "networkidle" });
+    await page.waitForSelector('[data-quote="accepted"]');
+    await page.click('[data-quote="accepted"]');
+    await page.waitForTimeout(300);
+    check((await verdierQuote()).decidedAt === "2026-10-15", "Prospects : second clic sur « Accepté » : date de décision inchangée");
+    await page.evaluate(async (id) => { const d = await window.EspaceStore.load(); d.documents.filter((x) => x.type === "devis" && x.prospectId === id)[0].decidedAt = "2026-10-20"; await window.EspaceStore.save(d); }, verdier);
+    await page.reload({ waitUntil: "networkidle" });
+    await go("#/prospects/nouveau");
+    await page.fill("#ep-name", "Galerie Orion");
+    await page.selectOption("#ep-stage", "lost");
+    await page.click("#prospect-form button[type=submit]");
+    await page.waitForSelector("#exchange-form");
+    const orion = await page.evaluate(() => location.hash.split("/")[2]);
+    const orionData = async () => (await store()).prospects.filter((x) => x.id === orion)[0];
+    check((await orionData()).closedAt === "2026-10-20", "Prospects : piste perdue datée du jour");
+    await go("#/prospects");
+    check((await text("#espace-view .kpis")).includes("Taux de conversion 50 % 12 derniers mois : 2 pistes closes") && (await closedRows()) === "octobre 2026 | 1 | 1",
+      "Prospects : conversion sur 12 mois et graphique avec la piste perdue");
+    await go("#/prospects/" + orion);
+    await page.selectOption("#ep-stage", "talks");
+    await page.click("#prospect-form button[type=submit]");
+    await page.waitForFunction(() => location.hash === "#/prospects");
+    check((await orionData()).closedAt === undefined && (await text("#espace-view .kpis")).includes("Taux de conversion 100 % 12 derniers mois : 1 piste close"),
+      "Prospects : piste rouverte, date de clôture retirée");
+    await page.evaluate(async (id) => { const d = await window.EspaceStore.load(); d.prospects.filter((x) => x.id === id)[0].stage = "lost"; await window.EspaceStore.save(d); }, orion);
+    await page.reload({ waitUntil: "networkidle" });
+    await go("#/prospects");
+    check((await text("#espace-view")).includes("1 piste close avant le suivi des dates n'y figure pas.") &&
+      (await text("#espace-view .kpis")).includes("Taux de conversion 100 % 12 derniers mois : 1 piste close"), "Prospects : piste close sans date signalée, hors des 12 mois");
+    await page.evaluate(async (id) => { const d = await window.EspaceStore.load(); d.prospects = d.prospects.filter((x) => x.id !== id); await window.EspaceStore.save(d); }, orion);
+    await page.reload({ waitUntil: "networkidle" });
 
     // Opposition : la fiche est remplacée par des empreintes ; avertissement si la personne est ajoutée de nouveau.
     const createProspect = async (fields) => {
@@ -4268,6 +4315,14 @@ const tests = {
     await restore("illisible.json", Object.assign({}, withProspects, { optouts: [{ id: "o", date: "2026-10-20", hashes: [] }] }));
     await page.waitForFunction(() => !document.getElementById("import-error").hidden);
     check((await text("#import-error")) === "Cette sauvegarde contient des éléments illisibles.", "Prospects : opposition sans empreinte refusée");
+    // Dates de clôture et de décision (documentation/55, § 7) : facultatives, mais refusées si illisibles.
+    for (const [label, bad] of [["date de clôture", { prospects: withProspects.prospects.map((x, i) => i ? x : { ...x, closedAt: "20/10/2026" }) }],
+      ["date de décision", { documents: withProspects.documents.map((d) => d.type === "devis" ? { ...d, decidedAt: "hier" } : d) }]]) {
+      await page.evaluate(() => { document.getElementById("import-error").hidden = true; });
+      await restore("illisible.json", Object.assign({}, withProspects, bad));
+      await page.waitForFunction(() => !document.getElementById("import-error").hidden);
+      check((await text("#import-error")) === "Cette sauvegarde contient des éléments illisibles.", "Sauvegarde : " + label + " illisible refusée");
+    }
     const noProspects = Object.assign({}, withProspects);
     delete noProspects.prospects;
     delete noProspects.optouts;

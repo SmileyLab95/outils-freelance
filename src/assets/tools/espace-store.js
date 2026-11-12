@@ -48,6 +48,8 @@
 
   var isText = function (v) { return typeof v === "string"; };
   var isDate = function (v) { return isText(v) && /^\d{4}-\d{2}-\d{2}$/.test(v); };
+  // Dates facultatives (décision d'un devis, clôture d'une piste : documentation/55, § 7).
+  var optionalDate = function (v) { return v === undefined || v === null || isDate(v); };
 
   /** Vérifie qu'un objet a la forme d'un Espace (sauvegarde importée) ; renvoie un message d'erreur ou "". */
   function validate(data) {
@@ -59,7 +61,7 @@
     }
     var badClient = data.clients.some(function (c) { return !c || !isText(c.id) || !isText(c.name); });
     var badDoc = data.documents.some(function (d) {
-      return !d || !isText(d.id) || ["facture", "devis", "avoir"].indexOf(d.type) < 0 || !isText(d.status) || !isDate(d.date) ||
+      return !d || !isText(d.id) || ["facture", "devis", "avoir"].indexOf(d.type) < 0 || !isText(d.status) || !isDate(d.date) || !optionalDate(d.decidedAt) ||
         !Array.isArray(d.lines) || (d.payments !== undefined && !Array.isArray(d.payments)) ||
         (d.payments || []).some(function (p) { return !p || !isDate(p.date) || !isFinite(Number(p.amount)); });
     });
@@ -76,7 +78,7 @@
       return "Cette sauvegarde est incomplète.";
     }
     var badProspect = (data.prospects || []).some(function (p) {
-      return !p || !isText(p.id) || !isText(p.name) || (p.exchanges !== undefined && !Array.isArray(p.exchanges)) ||
+      return !p || !isText(p.id) || !isText(p.name) || (p.exchanges !== undefined && !Array.isArray(p.exchanges)) || !optionalDate(p.closedAt) ||
         (p.exchanges || []).some(function (x) { return !x || !isText(x.id) || !isDate(x.date) || ["me", "them"].indexOf(x.from) < 0; });
     });
     var badOptout = (data.optouts || []).some(function (o) {

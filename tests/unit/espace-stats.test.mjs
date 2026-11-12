@@ -297,3 +297,20 @@ test("échéances : prochaine, fenêtre de 90 jours, montants repris de la trés
   assert.deepEqual([none.next, none.soon, none.urssaf, none.vat], [null, [], 0, 0]);
   assert.equal(S.deadlines([], [], "2026-11-12", 30).end, "2026-12-12");
 });
+
+test("prospects : clôtures datées, conversion sur 12 mois, gagnées et perdues par mois", () => {
+  const pr = (o) => Object.assign({ id: "c" + (++seq), name: "Piste " + seq, stage: "new", exchanges: [] }, o);
+  const list = [pr({ stage: "won", closedAt: "2026-11-12" }), pr({ stage: "won", closedAt: "2025-11-13" }), // aujourd'hui ; premier jour des 12 mois
+    pr({ stage: "lost", closedAt: "2025-11-12" }), // même jour un an plus tôt : hors des 12 mois
+    pr({ stage: "lost", closedAt: "2026-03-04" }), pr({ stage: "lost" }), pr({ stage: "won" }), // sans date
+    pr({ stage: "lost", closedAt: "2026-11-20" }), // après aujourd'hui (horloge d'un autre appareil) : ignorée
+    pr({ stage: "talks", closedAt: "2026-06-01" })];
+  const p = S.prospects(list, [], "2026-11-12");
+  assert.deepEqual([p.closed, p.conversion], [7, 0.429], "toutes les pistes closes : 3 gagnées sur 7");
+  assert.deepEqual([p.closed12, p.conversion12, p.undated], [3, 0.667, 2], "12 mois : 2 gagnées, 1 perdue ; 2 sans date");
+  assert.deepEqual(p.months.map((m) => m.key), ["2025-12", "2026-01", "2026-02", "2026-03", "2026-04", "2026-05", "2026-06", "2026-07", "2026-08", "2026-09", "2026-10", "2026-11"]);
+  assert.deepEqual([p.months[3], p.months[11]], [{ key: "2026-03", won: 0, lost: 1 }, { key: "2026-11", won: 1, lost: 0 }],
+    "par mois calendaire : novembre 2025 (13/11) hors des 12 mois affichés");
+  const none = S.prospects([pr({ stage: "lost" })], [], "2026-11-12");
+  assert.deepEqual([none.closed12, none.conversion12, none.undated, none.months.every((m) => !m.won && !m.lost)], [0, null, 1, true]);
+});

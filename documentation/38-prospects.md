@@ -30,14 +30,16 @@ est permise. Le module n'envoie rien : le bouton « Écrire » ouvre la messager
 Deux nouvelles listes de l'Espace (aucune donnée envoyée sans compte) :
 
 - `prospects` : `{ id, name, contact, email, phone, pro (vrai : professionnel), source, stage, value (montant estimé HT,
-  facultatif), nextDate (prochaine relance), nextAction, notes, clientId, exchanges, createdAt, updatedAt }`.
+  facultatif), nextDate (prochaine relance), nextAction, notes, clientId, exchanges, closedAt (date de clôture, depuis le
+  12/11/2026 : [55](55-indicateurs-espace.md) § 7), createdAt, updatedAt }`.
   - `stage` : `new` (À contacter), `talks` (En discussion), `quote` (Devis envoyé), `won` (Gagné), `lost` (Perdu).
   - `exchanges` : `[{ id, date, from ("me" | "them"), text }]`, du plus ancien au plus récent ; date aujourd'hui au plus.
 - `optouts` (liste d'opposition) : `{ id, date, hashes: ["e:…", "t:…", "n:…"], createdAt, updatedAt }`. Empreinte =
   SHA-256 (hexadécimal) du texte normalisé, préfixé du type : email en minuscules sans espaces ; téléphone réduit à ses
   chiffres, indicatif français ramené au 0 (« +33 6 12… », « 0033 6… » et « 06 12… » donnent la même empreinte) ; nom
   en minuscules, sans accents ni ponctuation, espaces resserrés.
-- Devis : nouveau champ facultatif `prospectId` (devis fait depuis une piste).
+- Devis : nouveau champ facultatif `prospectId` (devis fait depuis une piste) ; `decidedAt` (date d'acceptation ou de
+  refus, depuis le 12/11/2026 : [55](55-indicateurs-espace.md) § 7).
 
 **Étape affichée** (calculée, une seule source de vérité : le devis fait foi) :
 

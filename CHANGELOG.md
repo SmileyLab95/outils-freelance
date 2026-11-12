@@ -1,5 +1,15 @@
 # Journal des modifications
 
+## 2026-11-12 (suite) — Prospects : date de clôture, conversion sur 12 mois
+
+- Un devis marqué « Accepté » ou « Refusé » garde la date de la décision ; une piste passée à « Gagné » ou « Perdu »
+  garde sa date de clôture (retirées si l'on revient en arrière).
+- Onglet Prospects : taux de conversion des 12 derniers mois et graphique des pistes gagnées et perdues par mois ; les
+  pistes closes avant ce suivi restent sans date et sont signalées.
+- Sauvegarde : une date illisible est refusée à l'import ; synchronisation : nouveaux libellés de conflit.
+- Tests : 3 tests unitaires nouveaux, 15 erreurs réintroduites (14 détectées, la dernière sans effet possible) ;
+  parcours navigateur de l'Espace (276 points, accessibilité comprise) et des comptes au vert ; captures relues.
+
 ## 2026-11-12 (midi) — Échéances : montants estimés et frise des 90 jours
 
 - **Échéances de l'Espace** : prochaine échéance (dans combien de jours), nombre d'échéances dans les 90 jours,

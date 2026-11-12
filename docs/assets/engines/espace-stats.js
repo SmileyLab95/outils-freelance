@@ -287,8 +287,28 @@
   function prospects(list, documents, today) {
     var pipe = E.pipeline(list || [], documents), due = E.followUps(list || [], documents, today);
     var closed = pipe.won.count + pipe.lost.count;
+    // Clôtures datées (documentation/55, § 7) : 12 derniers mois glissants et 12 derniers mois calendaires.
+    var from = lastYear(today), start = E.addMonths(today.slice(0, 8) + "01", -11), won12 = 0, lost12 = 0, undated = 0, byMonth = {};
+    (list || []).forEach(function (p) {
+      var s = E.prospectStage(p, documents);
+      if (s !== "won" && s !== "lost") return;
+      var at = E.prospectClosedAt(p, documents);
+      if (!at) { undated++; return; }
+      if (at > from && at <= today) { if (s === "won") won12++; else lost12++; }
+      if (at >= start && at <= today) {
+        var k = at.slice(0, 7);
+        byMonth[k] = byMonth[k] || { won: 0, lost: 0 };
+        byMonth[k][s]++;
+      }
+    });
+    var months = [];
+    for (var i = 0; i < 12; i++) {
+      var key = E.addMonths(start, i).slice(0, 7);
+      months.push({ key: key, won: (byMonth[key] || {}).won || 0, lost: (byMonth[key] || {}).lost || 0 });
+    }
     return { open: pipe.open, stages: Object.keys(E.STAGE_LABELS).map(function (k) { return { key: k, label: E.STAGE_LABELS[k], count: pipe[k].count, value: pipe[k].value }; }),
              closed: closed, conversion: closed ? Math.round(pipe.won.count / closed * 1000) / 1000 : null,
+             closed12: won12 + lost12, conversion12: won12 + lost12 ? Math.round(won12 / (won12 + lost12) * 1000) / 1000 : null, undated: undated, months: months,
              wonAverage: pipe.won.count ? round2(pipe.won.value / pipe.won.count) : null,
              late: due.filter(function (p) { return p.nextDate < today; }).length, today: due.filter(function (p) { return p.nextDate === today; }).length };
   }

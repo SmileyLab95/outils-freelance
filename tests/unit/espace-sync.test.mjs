@@ -644,3 +644,21 @@ test("trésorerie : charges ajoutées, modifiées et supprimées sur deux appare
   assert.equal(r.conflicts[0].message, "Charge modifiée sur deux appareils : la version la plus récente est gardée (chiffre d'affaires prévu).");
   assert.deepEqual(S.migrate({ schema: 1, clients: [], documents: [] }).charges, [], "ancienne sauvegarde sans charges");
 });
+
+// Dates de décision et de clôture (documentation/55, § 7) : fusionnées comme les autres champs, libellées dans les conflits.
+test("date de décision d'un devis et date de clôture d'une piste : fusion et libellés", () => {
+  const q = issue({ id: "q1", type: "devis", status: "draft", date: "2026-10-05", clientId: "c1", validity: 30, lines: [{ desc: "Logo", qty: 1, price: 900 }],
+    vat: { franchise: true, rate: 20, place: "fr" }, payments: [], createdAt: T(0), updatedAt: T(0) }, T(1));
+  const o = state({ documents: [q] });
+  let r = merge(o, state({ documents: [{ ...q, status: "accepted", decidedAt: "2026-10-10", updatedAt: T(3) }] }), o);
+  assert.deepEqual([r.data.documents[0].status, r.data.documents[0].decidedAt, r.conflicts.length], ["accepted", "2026-10-10", 0], "décision d'un seul côté : gardée");
+  r = merge(o, state({ documents: [{ ...q, status: "accepted", decidedAt: "2026-10-10", updatedAt: T(3) }] }),
+    state({ documents: [{ ...q, status: "refused", decidedAt: "2026-10-12", updatedAt: T(4) }] }));
+  assert.deepEqual([r.data.documents[0].status, r.data.documents[0].decidedAt], ["refused", "2026-10-12"]);
+  assert.equal(r.conflicts[0].message, "Modifié sur deux appareils : la version la plus récente est gardée (date de décision, statut).");
+  const base = state({ prospects: [prospect()] });
+  r = merge(base, state({ prospects: [prospect({ stage: "lost", closedAt: "2026-10-20", updatedAt: T(2) })] }),
+    state({ prospects: [prospect({ stage: "won", closedAt: "2026-10-21", updatedAt: T(3) })] }));
+  assert.deepEqual([r.data.prospects[0].stage, r.data.prospects[0].closedAt], ["won", "2026-10-21"]);
+  assert.equal(r.conflicts[0].message, "Prospect modifié sur deux appareils : la version la plus récente est gardée (date de clôture, étape).");
+});

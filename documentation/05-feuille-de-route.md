@@ -9,7 +9,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 
 ## Où en est-on ?
 
-*Mis à jour le 12/11/2026 (midi).*
+*Mis à jour le 12/11/2026.*
 
 - **Priorité (décision D10)** : le site et la plateforme d'abord ; noms de domaine, Gumroad et affiliation à la fin.
   Règle de qualité maximale pour tout produit ou service (D11, charte dans la [méthode](04-methode-de-travail.md#charte-qualité)).
@@ -410,8 +410,11 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 - **Échéances (12/11/2026, midi)** : prochaine échéance, nombre d'échéances sur 90 jours, cotisations et TVA estimées
   (reprises de la trésorerie), frise des 90 prochains jours, montant estimé dans la liste ([55](55-indicateurs-espace.md)
   § 5.5, D67). **Les huit onglets de l'Espace ont désormais leurs indicateurs et graphiques** (demande d'Ismail du 11/11).
-- **Prochaines actions de Claude** : indicateurs de l'Espace : les huit onglets sont faits (12/11) ; pistes notées dans
-  [55](55-indicateurs-espace.md) § 6 (date de clôture des pistes, période choisie dans l'adresse) ; **appliquer le thème**
+- **Date de clôture des pistes (12/11/2026, suite)** : date de décision des devis et date de clôture des pistes,
+  taux de conversion sur 12 mois, graphique des pistes gagnées et perdues par mois ; anciennes pistes closes signalées
+  sans date ([55](55-indicateurs-espace.md) § 7, D68).
+- **Prochaines actions de Claude** : indicateurs de l'Espace : les huit onglets sont faits (12/11), date de clôture des pistes
+  aussi ; reste la période choisie dans l'adresse ([55](55-indicateurs-espace.md) § 6) ; **appliquer le thème**
   choisi par Ismail dès sa réponse ([54](54-themes.md) § 2) ; refonte, suite ([31](31-vision-plateforme.md) § 5) : les quatre modules du compte
   gratuit sont faits (étape 5) ; étape 6, outils restants (CGV : faites dans les quatre pays ;
   lois des autres provinces sur la protection du consommateur à lire pour les détailler ; le règlement albertain sur les

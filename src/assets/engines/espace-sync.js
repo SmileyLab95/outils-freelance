@@ -29,7 +29,7 @@
                  nextAction: "prochaine action", prospectId: "piste", from: "sens de l'échange", text: "résumé", hashes: "empreintes",
                  every: "fréquence", start: "première échéance", end: "dernière échéance", cashBalance: "solde du compte",
                  cashDate: "date du solde", vatLastYear: "TVA de l'année précédente", cashThreshold: "seuil de sécurité", category: "catégorie",
-                 flow: "sens", revenue: "chiffre d'affaires prévu" };
+                 flow: "sens", revenue: "chiffre d'affaires prévu", decidedAt: "date de décision", closedAt: "date de clôture" };
   var labels = function (fields) { return fields.map(function (k) { return LABELS[k] || k; }).join(", "); };
 
   // ----- Comparaison et copie ------------------------------------------------------------------
