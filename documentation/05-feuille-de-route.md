@@ -436,9 +436,10 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 - **Jours ouvrés au Canada : lecture des lois commencée (12/11/2026, soir)** : canada.ca restant illisible, les jours
   fériés sont pris dans les lois (outil de lecture des sources) ; lus le 12/11 : fédéral (Code canadien du travail,
   Loi instituant des jours de fête légale), Colombie-Britannique, Alberta, Manitoba, Ontario, Québec (normes du travail
-  et fête nationale), Nouveau-Brunswick, Nouvelle-Écosse (page du ministère), Terre-Neuve-et-Labrador ; restent la
-  Saskatchewan, l'Île-du-Prince-Édouard, les trois territoires et les dates de quelques fêtes (Family Day, New
-  Brunswick Day, Memorial Day) ([42](42-jours-ouvres.md) § 10) ; l'outil de lecture accepte désormais les lois des
+  et fête nationale), Nouveau-Brunswick (avec Family Day et New Brunswick Day datés), Nouvelle-Écosse (page du
+  ministère, Heritage Day daté), Terre-Neuve-et-Labrador, Île-du-Prince-Édouard, Territoires du Nord-Ouest ; restent la
+  Saskatchewan, le Yukon et le Nunavut (sites refusant l'outil : autres sources officielles à trouver) et les dates des
+  fêtes que les lois ne datent pas (listes datées des gouvernements provinciaux) ([42](42-jours-ouvres.md) § 10) ; l'outil de lecture accepte désormais les lois des
   assemblées de Nouvelle-Écosse, de Terre-Neuve-et-Labrador et du Nunavut. Taux H.10 de la Réserve
   fédérale : fichier sans en-tête CORS, non lisible depuis un navigateur ([49](49-devises.md)). *Maternity Allowance* :
   pages de GOV.UK inchangées (11/02/2025), effet des crédits de classe 2 toujours non précisé.
