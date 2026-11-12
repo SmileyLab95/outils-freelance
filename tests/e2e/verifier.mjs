@@ -4419,6 +4419,28 @@ const tests = {
     check((await store()).profile.vatLastYear === 5000 && (await text(".treasury-owed")).includes("acomptes déjà versés déduits (2 750,00 €)"),
       "Trésorerie : réel simplifié, acompte de juillet (55 % de 5 000 €) déduit");
     await accessible(page, "Espace : trésorerie (réel simplifié)");
+    // Échéances (documentation/55, § 5.5) : fenêtre de 90 jours (20/10/2026 → 18/01/2027) ; acompte de TVA de décembre = 40 % de 5 000 € ;
+    // cotisations = celles de la trésorerie dans la fenêtre (moteur testé à part).
+    await go("#/echeances");
+    const dlUrssaf = await page.evaluate(async () => {
+      const d = await window.EspaceStore.load();
+      const f = window.OFE.espaceFR.forecast({ documents: d.documents, charges: d.charges, profile: d.profile, rules: window.OF_RULES, today: "2026-10-20", months: 5,
+        events: JSON.parse(document.getElementById("calendar-data").textContent).events });
+      return window.OF.eur(f.items.filter((x) => x.kind === "urssaf" && x.date <= "2027-01-18").reduce((s, x) => s - x.amount, 0));
+    });
+    const dlKpis = flat(await text("#espace-view .kpis")), dlList = flat(await text("#espace-view .espace-deadlines"));
+    const dlCount = Number((/Dans les 90 jours (\d+)/.exec(dlKpis) || [])[1]);
+    check(dlKpis.includes("jusqu'au 18/01/2027") && dlKpis.includes("Cotisations estimées " + flat(dlUrssaf) + " à payer dans les 90 jours") &&
+      dlKpis.includes("TVA estimée 2 000,00 € à reverser dans les 90 jours"), "Échéances : fenêtre de 90 jours, cotisations et TVA reprises de la trésorerie (acompte : 40 % de 5 000 €)");
+    check(dlList.includes("Acompte de TVA de décembre 2026 (40 %) dans 56 jours 2 000,00 € estimé") &&
+      dlKpis.startsWith("Prochaine échéance " + flat(await page.$eval("#espace-view .espace-deadlines .dl-body", (b) => b.innerText.replace(/\n/g, " "))).replace(/^(.*?) (dans \d+ jours|demain|aujourd'hui).*$/, "$2 $1")),
+      "Échéances : prochaine échéance = première de la liste ; montant estimé dans la liste");
+    check((await page.getAttribute('[data-chart="deadlines"] svg', "role")) === "img" && dlCount > 0 &&
+      (await page.$$eval("#espace-view .data-table tbody tr", (r) => r.length)) === dlCount &&
+      (await page.$$eval('[data-chart="deadlines"] .ch-stem', (l) => l.length)) === (await page.$$eval("#espace-view .data-table tbody tr td:last-child", (l) => l.filter((c) => c.textContent !== "–").length)),
+      "Échéances : frise des 90 jours (une tige par montant estimé) et ses données");
+    check((await text("#espace-view")).includes("(déclaration trimestrielle, réel simplifié de TVA)"), "Échéances : profil rappelé sans parenthèse doublée");
+    await accessible(page, "Espace : échéances");
     await page.evaluate(async () => { const d = await window.EspaceStore.load(); d.profile.vatRegime = "franchise"; delete d.profile.vatLastYear; await window.EspaceStore.save(d); });
     await page.reload({ waitUntil: "networkidle" });
     // Sauvegarde : charges et solde compris ; charge illisible refusée ; sauvegarde antérieure acceptée.

@@ -274,3 +274,26 @@ test("prospects : étapes, conversion des pistes closes, valeur moyenne gagnée,
   const none = S.prospects([], [], "2026-11-12");
   assert.deepEqual([none.closed, none.conversion, none.wonAverage], [0, null, null]);
 });
+
+test("échéances : prochaine, fenêtre de 90 jours, montants repris de la trésorerie", () => {
+  const ev = (date, tag, title) => ({ date, tag, title, kind: tag === "Urssaf" ? "social" : tag === "TVA" ? "vat" : "tax" });
+  const events = [ev("2026-11-30", "Urssaf", "Déclaration d'octobre"), ev("2026-11-15", "TVA", "TVA d'octobre"), ev("2026-11-10", "TVA", "passée"),
+    ev("2026-12-15", "CFE", "Paiement de la CFE"), ev("2026-12-15", "TVA", "TVA de novembre"), ev("2027-02-10", "Urssaf", "Dernier jour de la fenêtre"),
+    ev("2027-02-11", "Urssaf", "Hors fenêtre")];
+  const items = [{ date: "2026-11-30", kind: "urssaf", amount: -512.4 }, { date: "2026-11-15", kind: "vat", amount: -300 },
+    { date: "2026-12-15", kind: "vat", amount: -120 }, { date: "2026-12-15", kind: "charge", amount: -80 }, // une charge le même jour n'est pas une échéance
+    { date: "2027-02-10", kind: "urssaf", amount: -700 }, { date: "2027-02-11", kind: "urssaf", amount: -900 }, // au-delà des 90 jours
+    { date: "2026-11-20", kind: "receipt", amount: 1000 }];
+  const d = S.deadlines(events, items, "2026-11-12");
+  assert.equal(d.end, "2027-02-10");
+  assert.deepEqual([d.next.title, d.next.days, d.next.amount], ["TVA d'octobre", 3, 300]);
+  assert.deepEqual(d.soon.map((e) => [e.date, e.tag, e.amount]), [["2026-11-15", "TVA", 300], ["2026-11-30", "Urssaf", 512.4], ["2026-12-15", "CFE", null],
+    ["2026-12-15", "TVA", 120], ["2027-02-10", "Urssaf", 700]]);
+  assert.deepEqual([d.events.length, d.events[5].amount], [6, null], "hors fenêtre : listée, sans montant");
+  assert.deepEqual([d.urssaf, d.vat], [1212.4, 420]);
+  const same = S.deadlines([ev("2026-11-12", "Urssaf", "Aujourd'hui")], [{ date: "2026-11-12", kind: "urssaf", amount: -10 }, { date: "2026-11-12", kind: "urssaf", amount: -5 }], "2026-11-12");
+  assert.deepEqual([same.next.days, same.next.amount, same.urssaf], [0, 15, 15], "aujourd'hui compris ; deux montants le même jour additionnés");
+  const none = S.deadlines([], [], "2026-11-12");
+  assert.deepEqual([none.next, none.soon, none.urssaf, none.vat], [null, [], 0, 0]);
+  assert.equal(S.deadlines([], [], "2026-11-12", 30).end, "2026-12-12");
+});

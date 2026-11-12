@@ -140,3 +140,35 @@ tablette et mobile, documentation, publication.
   comprise ; valeurs attendues calculées à la main) ; captures relues sur ordinateur et mobile.
 - Relecture : le haut de l'onglet Prospects gardait l'ancien encadré à trois chiffres : remplacé par les tuiles
   communes ; le nombre de pistes closes était recalculé dans l'écran : fourni par le moteur.
+
+### 5.5 Échéances (12/11/2026)
+
+- Moteur `espace-stats.js` : `deadlines(événements, mouvements prévus, aujourd'hui, jours)` : échéances à venir triées,
+  nombre de jours restants, **montant estimé** d'une échéance Urssaf ou TVA repris des mouvements prévus de la
+  trésorerie (`E.forecast`) à la même date, totaux des cotisations et de la TVA dans la fenêtre. Les échéances retenues
+  restent celles du profil (périodicité, régime de TVA, création dans l'année), comme avant.
+- Écran : 4 indicateurs (prochaine échéance, nombre d'échéances dans les 90 jours, cotisations estimées, TVA estimée ;
+  « – » avec la raison en franchise en base, au réel simplifié sans la TVA de l'an dernier, ou hors micro-entreprise) ;
+  **frise des 90 prochains jours** (tige de hauteur proportionnelle au montant estimé ; repères sous l'axe pour les
+  échéances sans montant ; forme et couleur par catégorie : rond Urssaf, carré TVA, losange impôts, anneau
+  information ; tableau des données) ; liste des 12 mois avec le montant estimé à droite.
+- Écart avec le tableau du § 2 : les montants portent sur les **90 prochains jours** (la fenêtre de la frise) et non sur
+  « 3 prochains mois » : le calendrier reporte au premier jour ouvré une date limite tombant un week-end (déclaration du
+  4e trimestre 2026 : 1er février 2027), qu'une fenêtre arrêtée au 31 janvier aurait laissée de côté pour un
+  déclarant trimestriel.
+- Composant : `OF.charts.timeline` ; classes `is-dl-*` (la classe `is-vat` désignait déjà le seuil de TVA en
+  pointillés des recettes).
+- Tests : 1 test unitaire nouveau (cas calculés à la main, bornes de la fenêtre, deux montants le même jour),
+  12 erreurs réintroduites : 11 détectées ; la douzième était redondante (le montant n'est indexé que dans la fenêtre) et
+  la vérification a été retirée ; parcours navigateur (4 points nouveaux, accessibilité comprise ; acompte de TVA de
+  décembre calculé à la main : 40 % de 5 000 €) ; captures relues sur ordinateur et mobile (franchise trimestrielle,
+  réel normal mensuel).
+- Relecture : la phrase d'en-tête de la liste affichait « franchise en base (pas de tva)) » (libellé du formulaire mis en
+  minuscules) : libellés propres à cette phrase.
+
+## 6. Bilan
+
+Les huit onglets de l'Espace (trésorerie comprise, [39](39-tresorerie.md) § 7) ont leurs indicateurs et graphiques.
+Pistes d'amélioration notées : date de clôture des pistes (conversion par période, gagnées et perdues par mois) ;
+période choisie dans l'adresse pour les documents et les dépenses (`?periode=`), aujourd'hui fixée à l'année ou à
+12 mois glissants.

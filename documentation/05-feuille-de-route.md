@@ -9,7 +9,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 
 ## Où en est-on ?
 
-*Mis à jour le 12/11/2026 (fin de matinée).*
+*Mis à jour le 12/11/2026 (midi).*
 
 - **Priorité (décision D10)** : le site et la plateforme d'abord ; noms de domaine, Gumroad et affiliation à la fin.
   Règle de qualité maximale pour tout produit ou service (D11, charte dans la [méthode](04-methode-de-travail.md#charte-qualité)).
@@ -407,9 +407,11 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   facturer, taux moyen ; graphique des 8 dernières semaines, facturable et interne ; répartition du mois par client) ;
   onglet Prospects (pistes ouvertes et leur valeur, relances dont en retard, taux de conversion, valeur moyenne gagnée ;
   entonnoir par étape). 15 erreurs réintroduites, toutes détectées ([55](55-indicateurs-espace.md) § 5.4, D66).
-- **Prochaines actions de Claude** : **indicateurs et graphiques dans les autres onglets de l'Espace** (demande
-  d'Ismail du 11/11 : tableau de bord, documents, clients, recettes, dépenses avec catégories, temps, prospects,
-  échéances ; même composant de graphique que la trésorerie ; spécification écrite : [55](55-indicateurs-espace.md) ; tableau de bord, documents, clients, dépenses, recettes, temps et prospects faits le 12/11 ; reste l'onglet Échéances : prochaine échéance, montants des 3 prochains mois repris de la trésorerie, frise des 90 jours) ; **appliquer le thème**
+- **Échéances (12/11/2026, midi)** : prochaine échéance, nombre d'échéances sur 90 jours, cotisations et TVA estimées
+  (reprises de la trésorerie), frise des 90 prochains jours, montant estimé dans la liste ([55](55-indicateurs-espace.md)
+  § 5.5, D67). **Les huit onglets de l'Espace ont désormais leurs indicateurs et graphiques** (demande d'Ismail du 11/11).
+- **Prochaines actions de Claude** : indicateurs de l'Espace : les huit onglets sont faits (12/11) ; pistes notées dans
+  [55](55-indicateurs-espace.md) § 6 (date de clôture des pistes, période choisie dans l'adresse) ; **appliquer le thème**
   choisi par Ismail dès sa réponse ([54](54-themes.md) § 2) ; refonte, suite ([31](31-vision-plateforme.md) § 5) : les quatre modules du compte
   gratuit sont faits (étape 5) ; étape 6, outils restants (CGV : faites dans les quatre pays ;
   lois des autres provinces sur la protection du consommateur à lire pour les détailler ; le règlement albertain sur les
@@ -781,7 +783,7 @@ micro-entreprises), et lancer l'offre Pro.
 - [ ] Banque connectée : catégorisation, rapprochement avec les factures
 - [x] Trésorerie et prévisions ; provisions pour cotisations et TVA *(version locale, France ; impôt sur le revenu hors versement libératoire : calculateur à part)*
 - [x] Pilotage de la trésorerie : indicateurs, courbe du solde en deux scénarios, flux par mois, ancienneté des créances, seuil de sécurité, export *(v2, 11/11/2026, D61)*
-- [ ] Indicateurs et graphiques dans les autres onglets de l'Espace *(demande d'Ismail du 11/11/2026)* : tableau de bord, documents, clients, dépenses, recettes, temps et prospects faits le 12/11 ; reste : échéances
+- [x] Indicateurs et graphiques dans les autres onglets de l'Espace *(demande d'Ismail du 11/11/2026)* : les huit onglets faits le 11 et le 12/11 ([55](55-indicateurs-espace.md))
 - [ ] Déclarations préparées : montant Urssaf, TVA, récapitulatif pour la 2042-C-PRO
 - [ ] Exports comptables (fichier des écritures comptables pour le régime réel, CSV) et accès invité pour le comptable
 - [ ] Application mobile installable (photo des reçus, notifications)

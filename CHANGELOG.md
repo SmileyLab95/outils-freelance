@@ -1,5 +1,16 @@
 # Journal des modifications
 
+## 2026-11-12 (midi) — Échéances : montants estimés et frise des 90 jours
+
+- **Échéances de l'Espace** : prochaine échéance (dans combien de jours), nombre d'échéances dans les 90 jours,
+  cotisations et TVA estimées (mêmes calculs que la trésorerie), frise des 90 prochains jours (hauteur selon le montant,
+  forme et couleur selon la catégorie, tableau des données), montant estimé à côté de chaque échéance de la liste.
+- Correction : la phrase de rappel du profil affichait « franchise en base (pas de tva)) ».
+- Avec cette étape, les huit onglets de l'Espace ont leurs indicateurs et graphiques (demande du 11/11).
+- Tests : 1 test unitaire nouveau, 12 erreurs réintroduites (11 détectées, la dernière portait sur une vérification
+  redondante, retirée) ; parcours navigateur de l'Espace (266 points, accessibilité comprise) et des comptes au vert ;
+  captures relues sur ordinateur et mobile.
+
 ## 2026-11-12 (fin de matinée) — Temps et prospects : indicateurs, semaines, entonnoir
 
 - **Temps passé** : temps de la semaine, part facturable du mois, montant encore à facturer, taux horaire (ou

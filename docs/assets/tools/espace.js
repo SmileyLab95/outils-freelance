@@ -632,21 +632,63 @@
       return Object.keys(w).every(function (k) { return values[k] === undefined || w[k].indexOf(values[k]) > -1; });
     });
   }
+  function inDays(n) { return n === 0 ? "aujourd'hui" : n === 1 ? "demain" : "dans " + n + " jours"; }
   function deadlinesList(limit) {
     var list = matchingEvents().slice(0, limit || 999);
     if (!list.length) return '<p class="muted">Aucune échéance à venir.</p>';
     return '<ul class="espace-deadlines">' + list.map(function (e) {
       var n = OF.daysBetween(TODAY, e.date);
       return '<li><span class="dl-date">' + esc(OF.date(e.date, { day: "numeric", month: "short" })) + '</span><span class="dl-body"><b>' +
-        esc(e.title) + '</b><span class="small muted">' + (n === 0 ? "aujourd'hui" : n === 1 ? "demain" : "dans " + n + " jours") +
+        esc(e.title) + '</b><span class="small muted">' + inDays(n) +
         (e.est ? " · date estimée" : "") + "</span></span></li>";
     }).join("") + "</ul>";
   }
+  // Catégorie d'une échéance pour la frise et la liste : forme et couleur (documentation/55, § 5.5).
+  var DEADLINE_CLASSES = { Urssaf: ["is-dl-urssaf", "Urssaf"], TVA: ["is-dl-vat", "TVA"], CFE: ["is-dl-tax", "Impôts (CFE, impôt)"], "Impôt": ["is-dl-tax", "Impôts (CFE, impôt)"] };
+  var deadlineClass = function (e) { return (DEADLINE_CLASSES[e.tag] || ["is-dl-info", "Information, option"])[0]; };
+
   function viewDeadlines() {
+    var p = profile();
+    // 90 jours tiennent toujours dans 5 mois commencés : la trésorerie fournit les montants estimés aux mêmes dates.
+    var f = E.forecast(treasuryInput({ months: 5 })), dl = ST.deadlines(matchingEvents(), f.items, TODAY, 90);
+    var vatNote = p.vatRegime === "franchise" ? "franchise en base : pas de TVA à reverser" :
+      p.vatRegime === "simplified" && (p.vatLastYear === undefined || p.vatLastYear === null || p.vatLastYear === "") ? "indiquez la TVA de l'an dernier dans la trésorerie" : "";
+    var amountText = function (e) { return e.amount === null ? "" : money(e.amount); };
+    var tags = {};
+    dl.soon.forEach(function (e) { var c = DEADLINE_CLASSES[e.tag] || ["is-dl-info", "Information, option"]; tags[c[0]] = c[1]; });
     view.innerHTML = '<div class="espace-head"><h2>Échéances</h2></div>' +
-      '<section class="card espace-card"><p class="muted">Échéances des 12 prochains mois selon votre profil (déclaration ' +
-      (profile().periodicity === "monthly" ? "mensuelle" : "trimestrielle") + ", " + esc((VAT_REGIMES.filter(function (v) { return v[0] === profile().vatRegime; })[0] || ["", ""])[1].toLowerCase()) + ").</p>" +
-      deadlinesList(40) + '<p class="small"><a href="../calendrier-fiscal-auto-entrepreneur/">Calendrier fiscal complet et export vers votre agenda →</a></p></section>';
+      '<div class="kpis kpis-4">' +
+      kpi("Prochaine échéance", dl.next ? inDays(dl.next.days) : "–", dl.next ? dl.next.title + " · " + day(dl.next.date) + (dl.next.est ? " (date estimée)" : "") : "aucune échéance à venir") +
+      kpi("Dans les 90 jours", String(dl.soon.length), "jusqu'au " + day(dl.end)) +
+      kpi("Cotisations estimées", isMicro() ? money(dl.urssaf) : "–", isMicro() ? "à payer dans les 90 jours" : "estimées pour la micro-entreprise seulement") +
+      kpi("TVA estimée", vatNote ? "–" : money(dl.vat), vatNote || "à reverser dans les 90 jours") + "</div>" +
+      '<p class="small muted">Montants estimés comme dans la <a href="#/tresorerie">trésorerie</a> : sur vos encaissements, les factures en attente et le ' +
+      "chiffre d'affaires prévu. Ils ne remplacent pas vos déclarations.</p>" +
+      '<section class="card espace-card espace-noprint"><div class="card-head"><h3>Les 90 prochains jours</h3><span class="small muted">Hauteur : montant estimé ; ' +
+      "repères sous l'axe : échéances sans montant.</span></div>" +
+      (dl.soon.length ? '<div class="chart" data-chart="deadlines"></div>' +
+        OF.charts.legend(Object.keys(tags).map(function (k) { return { cls: k, label: tags[k] }; })) +
+        OF.charts.table("Échéances des 90 prochains jours", ["Date", "Échéance", "Montant estimé"], dl.soon.map(function (e) { return [day(e.date), e.title, amountText(e) || "–"]; }))
+        : '<p class="muted">Aucune échéance dans les 90 prochains jours.</p>') + "</section>" +
+      '<section class="card espace-card"><h3>Toutes les échéances</h3><p class="muted">Échéances des 12 prochains mois selon votre profil (déclaration ' +
+      (p.periodicity === "monthly" ? "mensuelle" : "trimestrielle") + ", " + ({ franchise: "franchise en base de TVA", simplified: "réel simplifié de TVA", normal: "réel normal de TVA" }[p.vatRegime] ||
+        "régime de TVA non précisé") + ").</p>" +
+      (dl.events.length ? '<ul class="espace-deadlines">' + dl.events.slice(0, 40).map(function (e) {
+        return '<li><span class="dl-date">' + esc(OF.date(e.date, { day: "numeric", month: "short" })) + '</span><span class="dl-body"><b>' + esc(e.title) +
+          '</b><span class="small muted">' + inDays(e.days) + (e.est ? " · date estimée" : "") + "</span></span>" +
+          (e.amount !== null ? '<span class="dl-amount"><b>' + esc(money(e.amount)) + '</b><span class="small muted">estimé</span></span>' : "") + "</li>";
+      }).join("") + "</ul>" : '<p class="muted">Aucune échéance à venir.</p>') +
+      '<p class="small"><a href="../calendrier-fiscal-auto-entrepreneur/">Calendrier fiscal complet et export vers votre agenda →</a></p></section>';
+    drawCharts = function () {
+      var el = view.querySelector('[data-chart="deadlines"]');
+      if (!el) return;
+      var plain = dl.soon.filter(function (e) { return e.amount === null; }).length, priced = dl.soon.length - plain;
+      el.innerHTML = OF.charts.timeline({ width: Math.floor(el.getBoundingClientRect().width) || 600, from: TODAY, to: dl.end,
+        events: dl.soon.map(function (e) { return { date: e.date, amount: e.amount, cls: deadlineClass(e) }; }), title: "Échéances des 90 prochains jours",
+        desc: countText(dl.soon.length, "échéance", "échéances") + " jusqu'au " + day(dl.end) + (priced ? ", dont " + priced + " avec un montant estimé (" +
+          money(dl.urssaf + dl.vat) + " au total)" : "") + "." });
+    };
+    drawCharts();
   }
 
   // ----- Liste des documents ---------------------------------------------------------------

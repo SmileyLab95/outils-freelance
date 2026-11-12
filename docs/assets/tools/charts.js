@@ -119,6 +119,51 @@
     return frame(w, h, o.title, o.desc, body);
   }
 
+  /**
+   * Frise des échéances (documentation/55, § 5.5). o : { width, from, to, events: [{ date, amount, cls }], title, desc }.
+   * Une échéance chiffrée est une tige de hauteur proportionnelle au montant ; les autres sont des repères sous l'axe,
+   * empilés quand ils tombent le même jour. Forme en plus de la couleur : rond (Urssaf), carré (TVA), losange (impôts),
+   * anneau (information).
+   */
+  function mark(cls, cx, cy) {
+    if (cls === "is-dl-vat") return '<rect class="ch-mark ' + cls + '" x="' + (cx - 4) + '" y="' + (cy - 4) + '" width="8" height="8"/>';
+    if (cls === "is-dl-tax") return '<path class="ch-mark ' + cls + '" d="M' + cx + " " + (cy - 5.5) + "l5.5 5.5l-5.5 5.5l-5.5-5.5z" + '"/>';
+    return '<circle class="ch-mark ' + cls + '" cx="' + cx + '" cy="' + cy + '" r="4.5"/>';
+  }
+  function timeline(o) {
+    var w = Math.max(300, Math.round(o.width || 640)), small = w < 480;
+    var values = o.events.filter(function (e) { return e.amount !== null && e.amount !== undefined; }).map(function (e) { return e.amount; });
+    var plain = o.events.filter(function (e) { return e.amount === null || e.amount === undefined; });
+    var perDay = {}, depth = 0;
+    plain.forEach(function (e) { perDay[e.date] = (perDay[e.date] || 0) + 1; depth = Math.max(depth, perDay[e.date]); });
+    var h = (values.length ? (small ? 170 : 200) : 40) + depth * 13;
+    var left = small ? 40 : 52, right = w - 12, top = 22, base = values.length ? h - 30 - depth * 13 : 14;
+    var x = C.dateScale(o.from, o.to, left, right), body = "";
+    if (values.length) {
+      var tk = C.ticks(values, 4), y = C.linear(tk.min, tk.max, base, top);
+      body += yAxis(tk, y, left, right);
+    } else {
+      body += '<line class="ch-grid ch-zero" x1="' + left + '" x2="' + right + '" y1="' + base + '" y2="' + base + '"/>';
+    }
+    C.monthStarts(o.from, o.to).forEach(function (m) {
+      body += '<line class="ch-month" x1="' + x(m) + '" x2="' + x(m) + '" y1="' + (values.length ? top : 4) + '" y2="' + (h - 22) + '"/>' +
+        '<text class="ch-tick" x="' + x(m) + '" y="' + (h - 8) + '" text-anchor="middle">' + esc(monthLabel(m, m.slice(5, 7) === "01")) + "</text>";
+    });
+    body += '<text class="ch-note" x="' + (left + 2) + '" y="' + (values.length ? top - 6 : h - 8) + '">' + "Aujourd'hui" + "</text>";
+    o.events.forEach(function (e) {
+      var cx = x(e.date);
+      if (e.amount === null || e.amount === undefined) return;
+      var y1 = y(e.amount);
+      body += '<line class="ch-stem ' + e.cls + '" x1="' + cx + '" x2="' + cx + '" y1="' + base + '" y2="' + y1 + '"/>' + mark(e.cls, cx, y1);
+    });
+    var seen = {};
+    plain.forEach(function (e) {
+      seen[e.date] = (seen[e.date] || 0) + 1;
+      body += mark(e.cls, x(e.date), base + 13 * seen[e.date]);
+    });
+    return frame(w, h, o.title, o.desc, body);
+  }
+
   /** Légende : pastilles de couleur et libellés (texte réel, pas dans le SVG). */
   function legend(items) {
     return '<ul class="ch-legend">' + items.map(function (it) {
@@ -137,5 +182,5 @@
   }
 
   window.OF = window.OF || {};
-  window.OF.charts = { balance: balance, bars: bars, stack: stack, legend: legend, table: table, monthLabel: monthLabel };
+  window.OF.charts = { balance: balance, bars: bars, stack: stack, timeline: timeline, legend: legend, table: table, monthLabel: monthLabel };
 })();

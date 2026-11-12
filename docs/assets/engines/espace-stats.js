@@ -293,7 +293,32 @@
              late: due.filter(function (p) { return p.nextDate < today; }).length, today: due.filter(function (p) { return p.nextDate === today; }).length };
   }
 
+  /**
+   * Échéances (documentation/55, § 5.5) : events = échéances du calendrier retenues pour le profil ; items = mouvements
+   * prévus de la trésorerie (E.forecast). Montant estimé d'une échéance = cotisations (tag « Urssaf ») ou TVA (tag « TVA »)
+   * prévues à la même date. Fenêtre : aujourd'hui compris, jusqu'à aujourd'hui + days (90 par défaut).
+   */
+  var DEADLINE_KINDS = { Urssaf: "urssaf", TVA: "vat" };
+  function deadlines(events, items, today, days) {
+    days = days || 90;
+    var end = addDays(today, days), due = {};
+    var inWindow = function (date) { return date >= today && date <= end; };
+    (items || []).forEach(function (x) {
+      if ((x.kind === "urssaf" || x.kind === "vat") && inWindow(x.date)) due[x.date + "|" + x.kind] = round2((due[x.date + "|" + x.kind] || 0) - x.amount);
+    });
+    var list = (events || []).filter(function (e) { return e && e.date >= today; }).slice().sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : 0; })
+      .map(function (e) {
+        var k = DEADLINE_KINDS[e.tag], amount = k && due[e.date + "|" + k] !== undefined ? due[e.date + "|" + k] : null; // due ne contient que la fenêtre
+        return Object.assign({}, e, { days: Math.round((Date.parse(e.date) - Date.parse(today)) / 864e5), amount: amount });
+      });
+    var total = function (kind) {
+      return round2(Object.keys(due).filter(function (k) { return k.split("|")[1] === kind; }).reduce(function (s, k) { return s + due[k]; }, 0));
+    };
+    var soon = list.filter(function (e) { return e.date <= end; });
+    return { end: end, next: list[0] || null, events: list, soon: soon, urssaf: total("urssaf"), vat: total("vat") };
+  }
+
   return { lastYear: lastYear, change: change, toDate: toDate, monthly: monthly, topClients: topClients, expenses: expenses, receipts: receipts,
-           monday: monday, isoWeek: isoWeek, time: time, prospects: prospects,
+           monday: monday, isoWeek: isoWeek, time: time, prospects: prospects, deadlines: deadlines,
            invoiced: invoiced, quotes: quotes, documents: documents, invoicedMonthly: invoicedMonthly, clients: clients, clientDetail: clientDetail };
 });
