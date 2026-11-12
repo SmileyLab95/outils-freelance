@@ -427,6 +427,12 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   protégée contre les robots (non contournée) ; à reprendre.
 - **Période de l'onglet Dépenses (12/11/2026, fin d'après-midi)** : mois, trimestre, année ou 12 mois pour les
   indicateurs de l'année en cours ; onglets d'année gardés pour le registre ([55](55-indicateurs-espace.md) § 9, D71).
+- **Devises, Royaume-Uni : impôt sur le revenu (12/11/2026, soir)** : section « Income tax: converting for Self
+  Assessment » de la page *Foreign currency invoices* et question de la FAQ, d'après le manuel du HMRC lu sur GOV.UK
+  (BIM39500, BIM39510, BIM39515, BIM72005) : taux acceptés (cours de clôture de Londres, banque, taux mensuels du HMRC
+  pour la TVA), comptabilité de caisse par défaut depuis 2024/25, comptes selon les normes comptables ; la date de
+  conversion en comptabilité de caisse n'est pas lue : renvoi au comptable (règle `uk_income_tax_foreign_currency`,
+  [49](49-devises.md) § 2, D72). *Bank holidays* 2029 pas encore publiés par GOV.UK (liste jusqu'en 2028, vu le 12/11).
 - **Prochaines actions de Claude** : indicateurs de l'Espace : les huit onglets, la date de clôture des pistes et la période de
   l'onglet Documents et de l'onglet Dépenses sont faits (12/11, [55](55-indicateurs-espace.md)) ; **appliquer le thème**
   choisi par Ismail dès sa réponse ([54](54-themes.md) § 2) ; refonte, suite ([31](31-vision-plateforme.md) § 5) : les quatre modules du compte
@@ -436,7 +442,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   depuis l'environnement de travail et sans réponse depuis l'outil de lecture des sources le 29/10/2026 ; sous-traitance
   (Royaume-Uni, États-Unis et Canada faits le 30/10/2026, [48](48-sous-traitance.md) ; France en attente de la lecture de la loi du 31 décembre 1975 sur Légifrance, décision D50),
   devises (faites le 30/10/2026, [49](49-devises.md) ; à étudier : taux H.10 de la Réserve fédérale lisible depuis un
-  navigateur pour les États-Unis ; conversion pour l'impôt sur le revenu au Royaume-Uni ; pratiques de l'ARC, taux
+  navigateur pour les États-Unis ; date de conversion d'une recette en comptabilité de caisse au Royaume-Uni (non lue) ; pratiques de l'ARC, taux
   moyen annuel et TPS/TVH, dès que canada.ca est lisible), guides de protection sociale (France : arrêt maladie au
   réel et chômage faits le 31/10/2026, [50](50-protection-sociale.md) ; arrêt maladie du micro-entrepreneur dès que ses
   règles sont lues ; maternité, accident, prévoyance ; Royaume-Uni fait le 07/11/2026,

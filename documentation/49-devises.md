@@ -64,6 +64,18 @@ Le fichier quotidien XML de la BCE (`eurofxref-daily.xml`) n'autorise pas la lec
 La BCE précise que ses taux de référence sont publiés à titre d'information : ce ne sont pas les taux de la banque du
 visiteur, ce que l'outil dit.
 
+**Royaume-Uni, impôt sur le revenu** (règle `uk_income_tax_foreign_currency`, lue le 12/11/2026 sur GOV.UK). Pour les
+entreprises individuelles et les sociétés de personnes comptant au moins une personne physique (BIM39500), le manuel du
+HMRC accepte, pour convertir en livres, les **cours de clôture de Londres**, un **taux donné par la banque** ou les
+**taux mensuels publiés par le HMRC pour la TVA** ; le HMRC ne conteste un taux que s'il s'écarte nettement de telles
+sources (BIM39515). Comptabilité de caisse (*cash basis*), **méthode par défaut depuis 2024/25** : une recette compte
+l'année où elle est reçue, à la date choisie par l'entreprise (par exemple celle du relevé bancaire) si elle s'y tient
+(BIM72005). Comptes tenus selon les normes comptables (sur option) : taux du jour de la première comptabilisation, ou
+taux moyen (du mois, par exemple) si les cours varient peu ; sommes détenues et créances ou dettes reconverties au cours
+de clôture de l'exercice, l'écart allant au résultat (BIM39510). **Non lu** : la date de conversion d'une recette en
+comptabilité de caisse ; la page le dit et renvoie au comptable (aucune règle inventée). Les sociétés relèvent d'autres
+règles (BIM39500), hors champ.
+
 ## 3. Outil
 
 **Pages** (identifiant `currency`, liens de langue ; menu « Facturer et encaisser » / « Invoicing » après la page
@@ -105,7 +117,7 @@ la monnaie du pays (France, Royaume-Uni), **mention à reporter sur la facture**
 
 **Avertissements** : taux d'information, pas celui de la banque (l'écart et les frais bancaires sont des écarts de
 change à suivre avec le comptable) ; France sans TVA (franchise) : aucun texte lu sur la conversion des recettes,
-demander à l'expert-comptable ; Royaume-Uni : impôt sur le revenu non couvert ; Canada : TPS/TVH non couverte.
+demander à l'expert-comptable ; Royaume-Uni : impôt sur le revenu traité dans une section de la page (§ 2, depuis le 12/11/2026) ; Canada : TPS/TVH non couverte.
 
 **Confidentialité** : les pages Confidentialité des cinq sections disent que la conversion de devises interroge, au
 clic, la BCE, le HMRC ou la Banque du Canada depuis le navigateur.
@@ -162,3 +174,4 @@ ordinateur, tablette, mobile) ; captures relues.
 | Loi de l'impôt sur le revenu (Canada), art. 261 (modifiée le 15/10/2026, justice.gc.ca) | e7948664…8a88 | Art. 261(1) « relevant spot rate » (taux de change au comptant) : taux publié par la Banque du Canada le jour même ou le jour précédent le plus proche, ou autre taux acceptable pour le ministre ; art. 261(2)b) : conversion au taux du jour où le montant est survenu |
 | Loi sur la taxe d'accise (Canada), art. 159 | 9c4682eb…3b26 | Aucune règle de conversion des devises dans cet article : TPS/TVH non couverte |
 | Banque du Canada, Valet (FXUSDCAD, FXEURCAD, FXGBPCAD, JSON) | 9fa55713…503e | « Daily average exchange rate », « Canadian dollars per US dollar », jours ouvrables ; `Access-Control-Allow-Origin: *` |
+| HMRC, *Business Income Manual*, BIM39500, BIM39510, BIM39515, BIM72005 (GOV.UK, lus le 12/11/2026) | 430fe1d4…436f (BIM39500), 09d2d61d…08a4 (BIM39510), 05d6c9a4…a21c (BIM39515), 0ed132cf…03ef (BIM72005) | Champ (entreprises non constituées en société) ; taux acceptés pour l'impôt (cours de clôture de Londres, banque, taux mensuels du HMRC pour la TVA) ; normes comptables (FRS 102, section 30) ; comptabilité de caisse par défaut depuis 2024/25, date de réception au choix si constante |

@@ -3248,7 +3248,42 @@
       ],
       "confidence": "high",
       "verified_on": "2026-10-30",
-      "note": "Read on 30/10/2026 with the « Lire une source officielle » tool (GOV.UK guidance, SHA-256 da063a64…8829; VATREC5060, updated 16 January 2025, SHA-256 af133934…f60a: VAT Regulations 1995, regulation 14(1), amounts in any currency, total VAT in sterling). The guidance asks for the net value at each rate in sterling as well, and is followed here. Income tax (Self Assessment) conversion rules for sole traders not read: not covered."
+      "note": "Read on 30/10/2026 with the « Lire une source officielle » tool (GOV.UK guidance, SHA-256 da063a64…8829; VATREC5060, updated 16 January 2025, SHA-256 af133934…f60a: VAT Regulations 1995, regulation 14(1), amounts in any currency, total VAT in sterling). The guidance asks for the net value at each rate in sterling as well, and is followed here. Income tax (Self Assessment): see uk_income_tax_foreign_currency (read on 12/11/2026)."
+    },
+    "uk_income_tax_foreign_currency": {
+      "value": {
+        "cash_basis_default_from": "2024-04-06",
+        "cash_basis": "Default method for sole traders from 2024/25 unless they elect to use accounting standards (GAAP): receipts count in the tax year they are received; the business can choose the date it treats income as received (for example the date on the bank statement), as long as it is consistent.",
+        "rates": [
+          "London closing rates",
+          "an exchange rate quoted by your bank",
+          "HMRC's monthly average rates published for VAT"
+        ],
+        "query": "HMRC only queries the rate used if, exceptionally, it diverges markedly from rates obtained from reputable sources like these.",
+        "accruals": "Accounts under accounting standards (FRS 102 section 30): the spot rate on the date the transaction is first recognised; an average rate (for example for the month) if rates don't fluctuate significantly; money held and amounts to be received or paid retranslated at the closing rate at the end of the period of account, differences generally recognised in profit or loss.",
+        "cash_basis_conversion_date": null
+      },
+      "unit": "object",
+      "label": "Income tax: converting foreign currency amounts into sterling (sole traders and partnerships with an individual partner)",
+      "source": "https://www.gov.uk/hmrc-internal-manuals/business-income-manual/bim39515",
+      "source_title": "BIM39515 - Foreign exchange: exchange rate for tax purposes - HMRC internal manual",
+      "more_sources": [
+        {
+          "source": "https://www.gov.uk/hmrc-internal-manuals/business-income-manual/bim39510",
+          "source_title": "BIM39510 - Foreign exchange: exchange rate for accounts purposes - HMRC internal manual"
+        },
+        {
+          "source": "https://www.gov.uk/hmrc-internal-manuals/business-income-manual/bim72005",
+          "source_title": "BIM72005 - Cash basis: overview - HMRC internal manual"
+        },
+        {
+          "source": "https://www.gov.uk/hmrc-internal-manuals/business-income-manual/bim39500",
+          "source_title": "BIM39500 - Foreign exchange: contents - HMRC internal manual"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-11-12",
+      "note": "Read on 12/11/2026 on GOV.UK. BIM39500 (SHA-256 430fe1d4…436f): the chapter 'relates only to unincorporated businesses', including partnerships with at least one individual partner, not companies. BIM39515 (SHA-256 05d6c9a4…a21c, public update 01/04/2016): S25 ITTOIA 2005 requires profits in accordance with GAAP; 'Traders may use London closing rates (BIM39505) when translating foreign currency amounts into sterling in their accounts. Equally they may use other exchange rates, such as an exchange rate quoted by their bank, or the monthly average rates published by HMRC for VAT purposes. You only need to query the rate of exchange used if, exceptionally, it diverges markedly from rates obtained from reputable sources of this nature.' BIM39510 (SHA-256 09d2d61d…08a4, public update 07/12/2022): FRS 102 section 30, spot rate at the date of initial recognition, average rate if rates do not fluctuate significantly, monetary items retranslated at the closing rate. BIM72005 (SHA-256 0ed132cf…03ef, published 07/04/2025, tax years from 2024/25): 'Use of the cash basis is the default method of accounting unless an election is made to calculate profits in accordance with generally accepted accounting principles'; receipts received during the tax year; 'The business can treat income as received and expenses as paid at the date of its choosing, as long as the treatment is consistent.' The pages read don't say which date to use to convert a foreign currency receipt under the cash basis (cash_basis_conversion_date: null): not asserted, the page sends the question to an accountant."
     },
     "uk_statutory_sick_pay": {
       "value": {

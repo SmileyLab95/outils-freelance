@@ -4731,6 +4731,14 @@ const tests = {
     check((await t("cx-mention")).includes("£1 = 1.1 CHF (UK market selling rate on 15 December 2026)"), "devises UK : taux du marché saisi");
     await page.selectOption("#cx-method", "official");
     await page.selectOption("#cx-currency", "USD");
+    // Sans TVA britannique : le montant en livres sert aux registres ; renvoi vers la section sur l'impôt sur le revenu
+    // (règle uk_income_tax_foreign_currency, documentation/49, § 2).
+    await page.selectOption("#cx-vat", "");
+    await page.fill("#cx-date", "2026-10-15");
+    await fxFetch(page);
+    check((await t("cx-notice")).includes("For Self Assessment, see “Income tax” below.") && (await page.isVisible("#income-tax")) &&
+      (await page.textContent("#income-tax + p")).includes("London closing rates"), "devises UK : sans TVA → renvoi vers l'impôt sur le revenu");
+    await page.selectOption("#cx-vat", "vat_standard_rate");
   },
   async "us/foreign-currency-income/"(page) {
     const fx = await mockFx(page), t = (id) => fxText(page, id);

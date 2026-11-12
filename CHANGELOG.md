@@ -1,5 +1,15 @@
 # Journal des modifications
 
+## 2026-11-12 (soir) — Devises au Royaume-Uni : conversion pour l'impôt sur le revenu
+
+- Page *Foreign currency invoices* : section « Income tax: converting for Self Assessment » et question de la FAQ
+  (taux acceptés par le HMRC : cours de clôture de Londres, taux de la banque, taux mensuels du HMRC pour la TVA ;
+  comptabilité de caisse par défaut depuis 2024/25 ; comptes selon les normes comptables). La date de conversion en
+  comptabilité de caisse, que les pages lues ne donnent pas, est signalée comme une question pour le comptable.
+- Sans TVA britannique, le message de l'outil renvoie vers cette section au lieu de dire que l'impôt n'est pas couvert.
+- Règle `uk_income_tax_foreign_currency` (BIM39500, BIM39510, BIM39515, BIM72005, lus le 12/11/2026) ; décision D72 ;
+  parcours de la page au vert (accessibilité comprise), captures relues sur ordinateur et mobile.
+
 ## 2026-11-12 (fin d'après-midi) — Dépenses : période au choix
 
 - Onglet Dépenses : boutons « Mois, Trimestre, Année, 12 mois » pour les indicateurs de l'année en cours (dépenses,

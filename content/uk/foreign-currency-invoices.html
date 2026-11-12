@@ -13,7 +13,8 @@
   ],
   "rules": "uk",
   "sources": [
-    "uk_vat_foreign_currency"
+    "uk_vat_foreign_currency",
+    "uk_income_tax_foreign_currency"
   ],
   "priority": 0.8,
   "faq": [
@@ -28,6 +29,10 @@
     [
       "Can I switch between the market rate and the HMRC period rate?",
       "You can use the period rate for all your supplies or just for one type of supply. If you use it for one type only, note the details in your records; you don't need to tell HMRC. If you change your mind later, you need HMRC's agreement."
+    ],
+    [
+      "Which exchange rate do I use for my Self Assessment (income tax)?",
+      "HMRC's Business Income Manual says traders may use London closing rates, a rate quoted by their bank, or the monthly rates HMRC publishes for VAT purposes (this converter reads HMRC's monthly exchange rates, the period rates used for VAT). HMRC only queries a rate that diverges markedly from reputable sources like these. Sole traders use the cash basis by default since 2024/25: income counts when it's received. Which date to use for the conversion on the cash basis isn't spelled out in the pages we read: check with your accountant."
     ],
     [
       "What if I invoice before the work is done?",
@@ -82,7 +87,7 @@
   "unpublished": "HMRC hasn't published its rates for {month} yet. Choose another date, or enter the UK market selling rate.",
   "earlier": "",
   "cash_due": "",
-  "no_vat": "No UK VAT on this invoice: the sterling figure is for your records. Converting income for Self Assessment isn't covered here.",
+  "no_vat": "No UK VAT on this invoice: the sterling figure is for your records. For Self Assessment, see “Income tax” below.",
   "always": "Your bank converts at its own rate, plus fees: what you receive can differ from this sterling figure."
  }
 }
@@ -181,6 +186,13 @@
   <h2>The rule: sterling figures for VAT</h2>
   <p>You can invoice in any currency, but sales must be converted into sterling for VAT, when you record them. If UK VAT is due, your invoice must also show in sterling the <strong>total net value at each VAT rate</strong> and the <strong>VAT at each rate</strong> (not each line). There are two standard ways to convert: the <strong>UK market selling rate at the time of supply</strong> (newspaper rates are acceptable), or the <strong>HMRC period rate of exchange</strong>, the same rate for a whole period, usually a calendar month. Using another rate needs HMRC's approval.</p>
   <p>The rest of the invoice still has to meet the usual rules: see <a href="{{link:invoice-rules}}">what to put on an invoice</a> and, for a client abroad, <a href="{{link:international}}">invoicing overseas clients</a> (reverse charge, outside the scope of UK VAT).</p>
+  <h2 id="income-tax">Income tax: converting for Self Assessment</h2>
+  <p>Your trading profit is worked out in sterling, so income and expenses in another currency have to be converted. HMRC's Business Income Manual lists the rates it accepts when sole traders and partnerships translate foreign currency amounts into sterling: <strong>London closing rates</strong>, an <strong>exchange rate quoted by your bank</strong>, or <strong>the monthly rates HMRC publishes for VAT purposes</strong> (this converter reads HMRC's monthly exchange rates, the period rates used for VAT). HMRC only queries the rate used if, exceptionally, it diverges markedly from reputable sources like these.</p>
+  <ul>
+    <li><strong>Cash basis</strong>, the default for sole traders since the 2024/25 tax year: income counts in the tax year you receive it, and you can choose the date you treat a payment as received (for example the date on your bank statement), as long as you do it the same way every time. The manual pages we read don't say which date to use for the exchange rate on the cash basis: check with your accountant.</li>
+    <li><strong>Accounts under accounting standards</strong> (if you've opted out of the cash basis): each transaction is converted at the rate on the date it's first recorded, or at an average rate, for example for the month, if rates don't move much; money held and amounts still owed are converted again at the rate on the last day of your accounting period, and the difference goes into your profit or loss.</li>
+  </ul>
+  <p>Limited companies follow different rules (Corporation Tax), not covered here.</p>
   <h2>Where the rate comes from</h2>
   <p>When you click “Get the HMRC rate”, your browser downloads the month's rates file straight from <a href="https://www.trade-tariff.service.gov.uk/exchange_rates" rel="noopener">HMRC's exchange rates service</a>, without going through our servers; the amount is never sent (<a href="{{link:privacy}}">privacy</a>). If the service doesn't answer, enter the rate from that page, or the UK market selling rate.</p>
 </section>
