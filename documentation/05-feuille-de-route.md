@@ -433,16 +433,22 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   pour la TVA), comptabilité de caisse par défaut depuis 2024/25, comptes selon les normes comptables ; la date de
   conversion en comptabilité de caisse n'est pas lue : renvoi au comptable (règle `uk_income_tax_foreign_currency`,
   [49](49-devises.md) § 2, D72). *Bank holidays* 2029 pas encore publiés par GOV.UK (liste jusqu'en 2028, vu le 12/11).
+- **Jours ouvrés au Canada : lecture des lois commencée (12/11/2026, soir)** : canada.ca restant illisible, les jours
+  fériés sont pris dans les lois (outil de lecture des sources) ; lus : Code canadien du travail (art. 166), Loi
+  instituant des jours de fête légale, Colombie-Britannique, Manitoba ; Ontario et Alberta lisibles (à relire avec le
+  bon libellé) ; autres provinces et territoires à suivre ([42](42-jours-ouvres.md) § 10). Taux H.10 de la Réserve
+  fédérale : fichier sans en-tête CORS, non lisible depuis un navigateur ([49](49-devises.md)). *Maternity Allowance* :
+  pages de GOV.UK inchangées (11/02/2025), effet des crédits de classe 2 toujours non précisé.
 - **Prochaines actions de Claude** : indicateurs de l'Espace : les huit onglets, la date de clôture des pistes et la période de
   l'onglet Documents et de l'onglet Dépenses sont faits (12/11, [55](55-indicateurs-espace.md)) ; **appliquer le thème**
   choisi par Ismail dès sa réponse ([54](54-themes.md) § 2) ; refonte, suite ([31](31-vision-plateforme.md) § 5) : les quatre modules du compte
   gratuit sont faits (étape 5) ; étape 6, outils restants (CGV : faites dans les quatre pays ;
   lois des autres provinces sur la protection du consommateur à lire pour les détailler ; le règlement albertain sur les
-  contrats Internet expire le 30/09/2028 : à revérifier) ; jours ouvrés au Canada (jours fériés fédéraux et provinciaux) : en attente de l'accès à canada.ca, refusé
-  depuis l'environnement de travail et sans réponse depuis l'outil de lecture des sources le 29/10/2026 ; sous-traitance
+  contrats Internet expire le 30/09/2028 : à revérifier) ; jours ouvrés au Canada (jours fériés fédéraux et provinciaux) : lecture des lois en cours ([42](42-jours-ouvres.md)
+  § 10 ; canada.ca toujours illisible) ; sous-traitance
   (Royaume-Uni, États-Unis et Canada faits le 30/10/2026, [48](48-sous-traitance.md) ; France en attente de la lecture de la loi du 31 décembre 1975 sur Légifrance, décision D50),
-  devises (faites le 30/10/2026, [49](49-devises.md) ; à étudier : taux H.10 de la Réserve fédérale lisible depuis un
-  navigateur pour les États-Unis ; date de conversion d'une recette en comptabilité de caisse au Royaume-Uni (non lue) ; pratiques de l'ARC, taux
+  devises (faites le 30/10/2026, [49](49-devises.md) ; taux H.10 de la Réserve fédérale : non lisible depuis un
+  navigateur (pas d'en-tête CORS, vu le 12/11), saisie maintenue ; date de conversion d'une recette en comptabilité de caisse au Royaume-Uni (non lue) ; pratiques de l'ARC, taux
   moyen annuel et TPS/TVH, dès que canada.ca est lisible), guides de protection sociale (France : arrêt maladie au
   réel et chômage faits le 31/10/2026, [50](50-protection-sociale.md) ; arrêt maladie du micro-entrepreneur dès que ses
   règles sont lues ; maternité, accident, prévoyance ; Royaume-Uni fait le 07/11/2026,

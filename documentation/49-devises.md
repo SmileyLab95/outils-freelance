@@ -94,7 +94,9 @@ monnaie du pays, ou l'inverse pour établir un devis) ; date ; méthode et taux 
 - *Royaume-Uni* : taux de la période du HMRC pour le mois de la date de livraison (bouton) ou taux vendeur du marché
   saisi ; taux de TVA (20 %, 5 %, 0 %, sans TVA).
 - *États-Unis* : taux publié du jour du paiement, saisi (1 unité de devise = … $), avec les liens des sources que cite
-  l'IRS (Trésor, Réserve fédérale) ; pas de récupération automatique (série H.10 de la Réserve fédérale à étudier).
+  l'IRS (Trésor, Réserve fédérale) ; pas de récupération automatique : la série H.10 de la Réserve fédérale (fichier CSV
+  du service *Data Download*) est servie **sans en-tête `Access-Control-Allow-Origin`** (lu le 12/11/2026 avec l'origine
+  du site, SHA-256 74076b7b…f390) : un navigateur ne peut pas la lire depuis le site ; saisie du taux maintenue.
 - *Canada* : taux de la Banque du Canada du jour (bouton ; à défaut, jour ouvrable précédent le plus proche) ou autre
   taux saisi.
 

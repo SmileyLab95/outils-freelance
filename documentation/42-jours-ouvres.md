@@ -167,3 +167,28 @@ horaire).
   réintroduites dans le moteur (5) et dans les données (4) : toutes détectées ; libellé « (observed) » retiré du script :
   détecté par le parcours navigateur ; parcours américain sur ordinateur, tablette et mobile, audit d'accessibilité
   sans erreur.
+
+## 10. Canada (spécification en cours, 12/11/2026)
+
+Même outil, en anglais et en français (*Business days calculator* / « Jours ouvrables »). canada.ca refusant la lecture,
+les jours fériés sont pris **dans les lois** (fédérale et provinciales), lues avec l'outil « Lire une source officielle ».
+Une **zone par juridiction** : fédéral (entreprises de compétence fédérale) et chaque province ou territoire, au choix ;
+dates **légales** seulement (un jour de remplacement accordé aux salariés quand un férié tombe un jour de repos dépend de
+la loi et de l'employeur : signalé, non compté).
+
+Lu le 12/11/2026 :
+
+| Juridiction | Texte | Jours fériés |
+|---|---|---|
+| Fédéral | Code canadien du travail, art. 166, « general holiday » | New Year's Day, Good Friday, Victoria Day, Canada Day, Labour Day, National Day for Truth and Reconciliation (« observed on September 30 »), Thanksgiving Day, Remembrance Day, Christmas Day, Boxing Day ; plus les jours substitués selon l'art. 195 |
+| Fédéral | Loi instituant des jours de fête légale (L.R.C. 1985, ch. H-5), art. 2 à 4 | Canada Day : 1er juillet, ou 2 juillet si le 1er est un dimanche ; Remembrance Day : 11 novembre ; Victoria Day : « The first Monday immediately preceding May 25 » ; la Journée de la vérité et de la réconciliation n'y figure pas |
+| Colombie-Britannique | Employment Standards Act, art. 1, « statutory holiday » | New Year's Day, Family Day, Good Friday, Victoria Day, Canada Day, British Columbia Day, Labour Day, National Day for Truth and Reconciliation, Thanksgiving Day, Remembrance Day, Christmas Day, et tout jour prévu par règlement |
+| Manitoba | Employment Standards Code (C.P.L.M. c. E110), art. 21(1), « general holiday » | New Year's Day, Louis Riel Day (« the third Monday in February »), Good Friday, Victoria Day, July 1, Labour Day, Orange Shirt Day (National Day for Truth and Reconciliation), Thanksgiving Day, Christmas Day, et tout jour désigné par règlement |
+| Ontario | Employment Standards Act, 2000 | La page d'ontario.ca est construite par JavaScript (texte vide) ; la version Word (`ontario.ca/laws/docs/00e41_e.doc`, 1,3 million de caractères, SHA-256 63d227ab…a638) est lisible : définition de « public holiday » à relire avec le bon libellé |
+| Alberta | Employment Standards Code (RSA 2000, c. E-9), PDF du King's Printer | PDF lisible (SHA-256 b5242ba6…e001) : liste des « general holidays » à relire avec le bon libellé |
+
+Lecture du Québec (legisquebec) lancée, à relire. À lire : dates de Labour Day, Thanksgiving Day et Family Day (lois
+d'interprétation, fédérale et provinciales), Québec
+(Loi sur les normes du travail, art. 60 ; Loi sur la fête nationale), Alberta, Manitoba, Saskatchewan, Nouvelle-Écosse,
+Nouveau-Brunswick, Île-du-Prince-Édouard, Terre-Neuve-et-Labrador, Yukon, Territoires du Nord-Ouest, Nunavut ; le
+Boxing Day et le jour de la vérité et de la réconciliation selon chaque province.
