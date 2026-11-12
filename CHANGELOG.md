@@ -1,5 +1,15 @@
 # Journal des modifications
 
+## 2026-11-12 (après-midi) — Contrôle de contraste intermittent : cause trouvée
+
+- Cause du seul échec d'axe-core relevé dans l'Espace (21/10, logo) : l'en-tête collant est translucide ; avec l'ancien
+  logo et un fond à 86 %, le contraste tombait à 4,36:1 quand un élément sombre défilait dessous. Le design du 23/10
+  l'avait déjà corrigé (5,6:1 au pire).
+- Nouveau test : contraste minimal du logo et des menus sur tout fond possible, lu dans la feuille de style, pour que
+  le thème à venir garde 4,5:1 (7 erreurs réintroduites, 6 détectées, la septième conforme ; décision D70).
+- Taux 2027 des congés payés du Colorado et du Minnesota cherchés aux sources officielles : pas encore lisibles
+  (pages du Colorado inchangées, page du Minnesota protégée contre les robots).
+
 ## 2026-11-12 (suite) — Documents : période au choix
 
 - Onglet Documents : boutons « Mois, Trimestre, Année, 12 mois, Année précédente » (gardés dans l'adresse, avec les

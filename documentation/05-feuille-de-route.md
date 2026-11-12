@@ -9,7 +9,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 
 ## Où en est-on ?
 
-*Mis à jour le 12/11/2026.*
+*Mis à jour le 12/11/2026 (après-midi).*
 
 - **Priorité (décision D10)** : le site et la plateforme d'abord ; noms de domaine, Gumroad et affiliation à la fin.
   Règle de qualité maximale pour tout produit ou service (D11, charte dans la [méthode](04-methode-de-travail.md#charte-qualité)).
@@ -416,9 +416,18 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 - **Période de l'onglet Documents (12/11/2026, suite)** : mois, trimestre, année, 12 mois ou année précédente choisis
   dans l'adresse ; facturé, encaissé et signature des devis sur la période ; même définition des 12 derniers mois dans
   tous les onglets ([55](55-indicateurs-espace.md) § 8, D69).
+- **Contrôle de contraste intermittent : cause trouvée (12/11/2026)** : un seul échec dans les journaux (21/10, logo de
+  l'en-tête, liste des clients), avant le design du 23/10. L'en-tête collant est translucide : le contenu qui défile
+  dessous change son fond réel. Avec l'ancien logo (`#4f46e5`) et un fond à 86 %, le contraste tombait à 4,36:1 au-dessus
+  d'un élément sombre (au moins 4,5:1 requis), selon le défilement au moment du contrôle. Aujourd'hui : 5,6:1 au pire
+  pour le logo, 9,9:1 pour les menus. Nouveau test `tests/unit/contraste-entete.test.mjs` : contraste minimal du logo et
+  des menus sur tout fond possible, lu dans `style.css` (7 erreurs réintroduites, 6 détectées ; la septième est conforme,
+  4,83:1), pour que le thème à venir garde la règle (D70). Taux 2027 du Colorado et du Minnesota cherchés le même jour
+  avec l'outil de lecture : pages du Colorado inchangées (0,44 %, article de 2024), page des primes du Minnesota
+  protégée contre les robots (non contournée) ; à reprendre.
 - **Prochaines actions de Claude** : indicateurs de l'Espace : les huit onglets, la date de clôture des pistes et la période de
-  l'onglet Documents sont faits (12/11, [55](55-indicateurs-espace.md)) ; trouver la cause du contrôle de contraste
-  intermittent de l'Espace ; **appliquer le thème**
+  l'onglet Documents sont faits (12/11, [55](55-indicateurs-espace.md)) ; période au choix pour l'onglet Dépenses
+  (§ 6, à spécifier : les onglets d'année y servent déjà le registre) ; **appliquer le thème**
   choisi par Ismail dès sa réponse ([54](54-themes.md) § 2) ; refonte, suite ([31](31-vision-plateforme.md) § 5) : les quatre modules du compte
   gratuit sont faits (étape 5) ; étape 6, outils restants (CGV : faites dans les quatre pays ;
   lois des autres provinces sur la protection du consommateur à lire pour les détailler ; le règlement albertain sur les
@@ -452,7 +461,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   comptes : adaptateur
   PostgreSQL et sauvegardes dès que l'hébergeur est choisi ; taux du crédit pour
   dividendes de la Saskatchewan et du Nunavut dès qu'ils sont publiés (formulaires 2026) ;
-  trouver la cause du contrôle de contraste intermittent de l'Espace ; revérifier les grilles des prestataires de
+  revérifier les grilles des prestataires de
   paiement (Stripe, Mollie) quand Ismail décidera ([17](17-offres-et-paiements.md)) ; guide du recouvrement dès que
   les textes sont lisibles ; veille réglementaire de décembre (dont la version de Factur-X et l'annexe A de XP
   Z12-012 pour le BT-32 en franchise, la question 13 de [pays/ca.md](pays/ca.md) sur la TVQ, et le
@@ -663,10 +672,10 @@ Objectif : un site mesuré, sous sa propre marque, qui commence à rapporter, et
       l'UE, preuves, case 6, seuil ; réponse « ça dépend » quand la règle n'est pas tranchée) ; moteur
       `engines/international-uk.js` testé (48 situations) ; option « hors champ » dans le générateur de facture ;
       spécification [pays/uk.md](pays/uk.md)
-- [ ] Parcours navigateur : un contrôle de contraste (axe) a échoué une fois sur le logo de l'Espace (liste des
-      clients) dans une suite complète, sans se reproduire en isolé (3 essais) : en trouver la cause ; le 12/11/2026, aucune
-      récidive sur une dizaine de parcours complets de l'Espace (le contrôle attend déjà la fin des animations) :
-      à surveiller dans les suites complètes
+- [x] Parcours navigateur : un contrôle de contraste (axe) a échoué une fois sur le logo de l'Espace (liste des
+      clients) dans une suite complète, sans se reproduire en isolé (3 essais) : cause trouvée le 12/11/2026 (en-tête
+      translucide au-dessus d'un contenu sombre, ancien logo à 4,36:1 au pire ; corrigé par le design du 23/10) ; test
+      du pire cas ajouté (`tests/unit/contraste-entete.test.mjs`, D70)
 - [x] Canada : assistant *Invoicing clients outside Canada* / « Facturer un client étranger » (services exportés
       détaxés et exceptions, TVQ, preuve de non-résidence, seuil du petit fournisseur détaxé compris, ligne 101) ;
       moteur `engines/international-ca.js` testé (32 situations) ; spécification [pays/ca.md](pays/ca.md)

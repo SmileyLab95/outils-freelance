@@ -33,5 +33,8 @@ Feuilles de style des maquettes : `design/propositions/` (`commun.css` et une fe
 2. Polices servies par le site (licence OFL, `scripts/polices_site.py`), sans service tiers.
 3. Icônes Lucide dans le menu de l'Espace ; en-tête de l'Espace compact.
 4. Contrastes AA vérifiés par axe-core sur toutes les pages (parcours navigateur), captures relues sur ordinateur,
-   tablette et mobile ; mise à jour de [32](32-design.md) (jetons et contrastes calculés).
+   tablette et mobile ; mise à jour de [32](32-design.md) (jetons et contrastes calculés). L'en-tête translucide doit
+   garder 4,5:1 **quel que soit le contenu qui défile dessous** (D70) : `tests/unit/contraste-entete.test.mjs` le
+   vérifie pour le thème clair ; l'étendre aux jetons du mode sombre s'il est retenu (le test ne lit que les règles
+   hors `@media`).
 5. Les graphiques de l'Espace ([39](39-tresorerie.md), § 7.4) prennent déjà leurs couleurs des jetons : rien à changer.

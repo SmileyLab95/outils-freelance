@@ -32,7 +32,9 @@ Security ; primes **chaque trimestre pendant au moins 3 ans**, dues à la fin du
 fiscale fédérale pour adhérer, justificatifs avec chaque déclaration trimestrielle ; couverture dès l'inscription,
 prestations après au moins un trimestre de primes payées. Le 0,44 % correspond à la part salariale de 2026 de l'avis
 officiel de décembre 2025 : retenu comme taux de 2026, prime estimée (0,44 % du revenu, plafond de 184 500 $). Taux de
-2027 (baisse annoncée le 06/10/2026) non lu. Ajouté le 10/11/2026.
+2027 (baisse annoncée le 06/10/2026) non lu ; relu le 12/11/2026 avec l'outil de lecture : l'article de l'adhésion
+(30/12/2024) et la page « Opting in » de famli.colorado.gov ne donnent toujours que 0,44 %, sans taux de 2027. Ajouté le
+10/11/2026.
 
 **Delaware** (`us_paid_leave_de_self_employed`, 19 DE Admin. Code 1401, art. 6.4.5.1 et 6.4.5.3) : adhésion volontaire
 des indépendants au *Delaware Paid Leave* ; cotisations calculées sur les revenus d'indépendant de la dernière
@@ -67,7 +69,8 @@ l'année suivante (subd. 7) : le taux en vigueur n'est donc pas établi par la l
 sources du DEED sur mn.gov (communiqué du 21/02/2025 et affiche obligatoire) : **0,88 %** en 2026 (« the premium rate
 will be 0.88 percent »). L'outil estime donc la prime de 2026 : 0,88 % de la base de prime saisie, plafonnée au plafond
 de la Social Security (184 500 $), en montant annuel seulement (rythme de paiement des indépendants non lu, pl.mn.gov
-refusant la lecture) ; taux de 2027 non lu.
+refusant la lecture) ; taux de 2027 non lu (le 12/11/2026, la page des primes de mn.gov renvoie vers une protection
+contre les robots, non contournée ; la liste des communiqués du DEED ne cite pas le taux de 2027).
 
 **New Jersey** (`us_paid_leave_nj_self_employed`, page « Employment situations » de la Division of Temporary Disability
 and Family Leave Insurance, lue le 10/11/2026) : « Independent Contractors are not covered for Temporary Disability and
