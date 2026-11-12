@@ -1378,11 +1378,11 @@
   }
 
   /** Liste en barres horizontales : [{ name, href, amount, share }] (parts de 0 à 1). */
-  function barList(items) {
+  function barList(items, fmt) {
     var max = items.reduce(function (m, x) { return Math.max(m, x.amount); }, 0);
     return '<ul class="bar-list">' + items.map(function (x) {
       return '<li><span class="bl-name">' + (x.href ? '<a href="' + x.href + '">' + esc(x.name) + "</a>" : esc(x.name)) + '</span><span class="bl-bar" aria-hidden="true"><span style="width:' +
-        (max > 0 ? Math.max(1, x.amount / max * 100).toFixed(1) : 0) + '%"></span></span><b class="bl-amount">' + esc(money(x.amount)) + '</b><span class="bl-share">' + pct(x.share) + "</span></li>";
+        (max > 0 ? Math.max(1, x.amount / max * 100).toFixed(1) : 0) + '%"></span></span><b class="bl-amount">' + esc((fmt || money)(x.amount)) + '</b><span class="bl-share">' + pct(x.share) + "</span></li>";
     }).join("") + "</ul>";
   }
 
@@ -1610,9 +1610,20 @@
     var x = Object.assign({ date: TODAY, clientId: "", unit: "hour", rate: null, billable: true }, timeDefaults);
     if (x.clientId && !client(x.clientId)) x.clientId = "";
     var prev = monthShift(month, -1), next = monthShift(month, 1);
+    // Indicateurs (documentation/55, § 2) : semaine et mois en cours, dans l'unité suivie (heures, sinon jours).
+    var ts = ST.time(data.timeEntries, data.documents, TODAY, 8), unitLabel = function (q) { return q || ts.unit === "day" ? E.durationLabel(q, ts.unit) : "0 h"; };
+    var otherUnit = data.timeEntries.some(function (t) { return t.date && t.date.slice(0, 7) === TODAY.slice(0, 7) && t.unit !== ts.unit; });
     view.innerHTML = '<div class="espace-head"><h2>Temps passé</h2><div class="espace-quick espace-noprint">' +
       '<button type="button" class="btn btn-ghost btn-sm" id="time-csv"' + (s.rows.length ? "" : " disabled") + ">Exporter le mois (CSV)</button>" +
       '<button type="button" class="btn btn-ghost btn-sm" id="time-print"' + (s.rows.length ? "" : " disabled") + ">Imprimer</button></div></div>" +
+      (data.timeEntries.length ? '<div class="kpis kpis-4 espace-noprint">' +
+        kpi("Cette semaine", unitLabel(ts.week), "semaine " + ST.isoWeek(TODAY) + ", temps interne compris") +
+        kpi("Part facturable", ts.share === null ? "–" : pct(ts.share), "temps du mois en cours : " + unitLabel(ts.month)) +
+        kpi("À facturer", money(ts.unbilled), "temps facturable pas encore facturé") +
+        kpi(ts.unit === "day" ? "Taux journalier moyen" : "Taux horaire moyen", ts.rate === null ? "–" : money(ts.rate) + (ts.unit === "day" ? " / jour" : " / h"),
+          ts.rate === null ? "aucun temps facturable avec un taux ce mois-ci" : "temps facturables du mois, pondéré par la durée") + "</div>" +
+        (otherUnit ? '<p class="small muted espace-noprint">Indicateurs et graphiques calculés sur les temps en ' + (ts.unit === "day" ? "jours" : "heures") +
+          " ; les temps saisis en " + (ts.unit === "day" ? "heures" : "jours") + " figurent dans le détail du mois.</p>" : "") : "") +
       '<form class="card espace-card espace-noprint" id="time-form" novalidate><h3>Saisir du temps</h3><div class="fields">' + timeFields(x) + "</div>" +
       '<p class="form-error" id="time-error" role="alert" hidden></p><div class="espace-actions"><button type="submit" class="btn btn-primary">Ajouter</button></div></form>' +
       (due.length ? '<section class="card espace-card espace-noprint"><h3>À facturer</h3><ul class="time-due">' + due.map(function (c) {
@@ -1621,6 +1632,13 @@
           '<span class="dl-side"><b>' + esc(c.amount || !c.missingRate ? money(c.amount) : "Taux à préciser") + "</b>" + (c.missingRate ? '<span class="small muted">' + esc(countText(c.missingRate, "temps sans taux", "temps sans taux")) + "</span>" : "") + "</span>" +
           '<a class="btn btn-primary btn-sm" href="#/temps/facturer?client=' + esc(c.clientId) + '" aria-label="Facturer le temps de ' + esc(clientName(c.clientId)) + '">Facturer</a></li>';
       }).join("") + "</ul></section>" : "") +
+      (data.timeEntries.length ? '<div class="espace-cols tr-charts espace-noprint"><section class="card espace-card"><div class="card-head"><h3>Temps par semaine</h3><span class="small muted">8 dernières semaines, en ' +
+        (ts.unit === "day" ? "jours" : "heures") + '.</span></div><div class="chart" data-chart="weeks"></div>' +
+        OF.charts.legend([{ cls: "is-cur", label: "Facturable" }, { cls: "is-prev", label: "Interne" }]) +
+        OF.charts.table("Temps par semaine", ["Semaine", "Facturable", "Interne"], ts.weeks.map(function (w) { return [w.label + " (lundi " + day(w.key) + ")", unitLabel(w.billable), unitLabel(w.internal)]; })) +
+        '</section><section class="card espace-card"><div class="card-head"><h3>Par client</h3><span class="small muted">Mois en cours.</span></div>' +
+        (ts.byClient.length ? barList(ts.byClient.map(function (c) { return { name: c.clientId ? clientName(c.clientId) : "Temps interne", amount: c.quantity, share: c.share }; }), unitLabel) :
+          '<p class="small muted">Aucun temps saisi ce mois-ci.</p>') + "</section></div>" : "") +
       '<section class="card espace-card"><div class="time-month"><a class="btn btn-ghost btn-sm espace-noprint" href="#/temps?mois=' + prev + '" aria-label="Mois précédent : ' + esc(monthLabel(prev)) + '">←</a>' +
       "<h3>" + esc(monthLabel(month)) + '</h3><a class="btn btn-ghost btn-sm espace-noprint" href="#/temps?mois=' + next + '" aria-label="Mois suivant : ' + esc(monthLabel(next)) + '">→</a></div>' +
       '<ul class="time-totals"><li><span>Temps du mois</span><b>' + esc(durations(s.hours, s.days)) + "</b></li><li><span>Facturable</span><b>" +
@@ -1635,6 +1653,16 @@
         : '<p class="muted">Aucun temps saisi en ' + esc(monthLabel(month)) + ".</p>") +
       '<p class="small muted">Notez aussi le temps que vous ne facturez pas (prospection, administratif) : décochez « Facturable ». ' +
       "Ce suivi est facultatif : ce n'est pas un registre obligatoire.</p></section>";
+    drawCharts = function () {
+      var el = view.querySelector('[data-chart="weeks"]');
+      if (!el) return;
+      el.innerHTML = OF.charts.bars({ width: Math.floor(el.getBoundingClientRect().width) || 600,
+        groups: ts.weeks.map(function (w) { return { key: w.key, short: w.label, values: [w.billable, w.internal], future: false }; }),
+        series: [{ name: "Facturable", cls: "is-cur" }, { name: "Interne", cls: "is-prev" }], title: "Temps par semaine",
+        desc: "8 dernières semaines : " + unitLabel(ts.weeks.reduce(function (s, w) { return s + w.billable; }, 0)) + " facturables, " +
+          unitLabel(ts.weeks.reduce(function (s, w) { return s + w.internal; }, 0)) + " internes." });
+    };
+    drawCharts();
     var form = $("time-form");
     bindTimeForm(form, null, false)();
     form.addEventListener("submit", function (e) {
@@ -1868,13 +1896,27 @@
         "puis transformez une piste gagnée en client et en devis sans rien recopier.</p>" +
         '<a class="btn btn-primary btn-sm" href="#/prospects/nouveau">Ajouter un prospect</a></div>';
     } else {
-      html += '<section class="card espace-card"><ul class="time-totals"><li><span>Pistes ouvertes</span><b>' + pipe.open.count + "</b></li>" +
-        "<li><span>Valeur estimée</span><b>" + esc(money(pipe.open.value)) + "</b></li><li><span>À relancer</span><b>" + due.length + "</b></li></ul>" +
+      // Indicateurs (documentation/55, § 2) : carnet ouvert, relances, conversion des pistes closes, valeur moyenne d'une piste gagnée.
+      var ps = ST.prospects(list, docs, TODAY);
+      html += '<div class="kpis kpis-4">' +
+        kpi("Pistes ouvertes", String(pipe.open.count), "valeur estimée : " + money(pipe.open.value)) +
+        kpi("À relancer", String(due.length), ps.late ? "dont " + ps.late + " en retard" : due.length ? "aujourd'hui" : "aucune relance due") +
+        kpi("Taux de conversion", ps.conversion === null ? "–" : pct(ps.conversion), ps.closed ? "pistes gagnées sur " + countText(ps.closed, "piste close", "pistes closes") : "aucune piste close") +
+        kpi("Valeur moyenne gagnée", ps.wonAverage === null ? "–" : money(ps.wonAverage), ps.wonAverage === null ? "aucune piste gagnée" : "par piste gagnée") + "</div>";
+      html += '<section class="card espace-card">' +
         (due.length ? '<h3>À relancer</h3><ul class="doc-list">' + due.map(function (p) {
           return '<li><a href="#/prospects/' + esc(p.id) + '"><span class="dl-main"><b>' + esc(p.name) + '</b><span class="small muted">' +
             esc(p.nextAction || "Relance prévue") + '</span></span><span class="dl-side"><b>' + day(p.nextDate) + "</b>" +
             (p.nextDate < TODAY ? '<span class="st st-overdue">En retard</span>' : '<span class="st st-unpaid">Aujourd\'hui</span>') + "</span></a></li>";
         }).join("") + "</ul>" : '<p class="small muted">Aucune relance prévue aujourd\'hui.</p>') + "</section>";
+      // Entonnoir (documentation/55, § 2) : nombre de pistes et valeur par étape.
+      var top = Math.max.apply(null, ps.stages.map(function (x) { return x.count; }));
+      html += '<section class="card espace-card espace-noprint"><div class="card-head"><h3>Entonnoir</h3><span class="small muted">Pistes par étape et leur valeur.</span></div>' +
+        '<ul class="bar-list funnel">' + ps.stages.map(function (x) {
+          return '<li><span class="bl-name">' + esc(x.label) + '</span><span class="bl-bar" aria-hidden="true"><span class="' + (x.key === "lost" ? "is-lost" : x.key === "won" ? "is-won" : "") +
+            '" style="width:' + (top > 0 ? Math.max(x.count ? 2 : 0, x.count / top * 100).toFixed(1) : 0) + '%"></span></span><b class="bl-amount">' + esc(countText(x.count, "piste", "pistes")) +
+            '</b><span class="bl-share">' + esc(money(x.value)) + "</span></li>";
+        }).join("") + "</ul></section>";
       html += '<div class="pipeline">' + E.OPEN_STAGES.map(function (s) {
         return '<section class="card espace-card" aria-labelledby="stage-' + s + '"><div class="pipeline-head"><h3 id="stage-' + s + '">' + esc(E.STAGE_LABELS[s]) +
           '</h3><span class="small muted">' + esc(countText(pipe[s].count, "piste", "pistes")) + " · " + esc(money(pipe[s].value)) + "</span></div>" +

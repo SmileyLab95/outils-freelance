@@ -110,3 +110,33 @@ tablette et mobile, documentation, publication.
   cumul arrêtée à aujourd'hui, noms de catégories longs sur deux lignes).
 - Relecture : la note sur l'abattement était fausse avec le versement libératoire (impôt en pourcentage du chiffre
   d'affaires) : retirée dans ce cas, test ajouté.
+
+### 5.4 Temps et prospects (12/11/2026)
+
+- Moteur `espace-stats.js` : `monday` et `isoWeek` (semaine ISO : celle qui contient le jeudi ; semaine 53 et semaine 1
+  à cheval sur deux années testées), `time` (8 dernières semaines du lundi au dimanche, facturable et interne ; semaine
+  et mois en cours ; part facturable ; taux moyen ; répartition du mois par client, le temps interne à part ; montant
+  encore à facturer, repris de `unbilledByClient` comme la liste « À facturer » de l'écran), `prospects` (pistes par
+  étape avec leur valeur, pistes closes, taux de conversion, valeur moyenne d'une piste gagnée, relances en retard et
+  du jour).
+- **Unité** : les indicateurs et le graphique sont calculés dans l'unité suivie (heures si au moins un temps des
+  8 dernières semaines ou du mois est en heures, sinon jours) ; un mélange d'heures et de jours n'est pas converti (la
+  durée d'une journée dépend de chacun) : l'écran signale que l'autre unité figure dans le détail du mois.
+- Écrans : **Temps** (4 indicateurs : cette semaine, part facturable du mois, à facturer, taux horaire ou journalier
+  moyen ; graphique des 8 semaines, facturable et interne ; répartition du mois par client) ; **Prospects**
+  (4 indicateurs : pistes ouvertes et leur valeur, à relancer dont en retard, taux de conversion, valeur moyenne
+  gagnée ; entonnoir par étape, en nombre et en valeur). Ces blocs ne s'impriment pas.
+- Écarts avec le tableau du § 2, et pourquoi :
+  - « revenu par heure (facturé ÷ heures facturables) » devient le **taux moyen** des temps facturables du mois,
+    pondéré par la durée : une facture n'est pas reliée aux heures qu'elle rémunère quand elle n'a pas été faite
+    depuis l'onglet Temps, et diviser tout le facturé par les seules heures saisies gonflerait le résultat ;
+  - le taux de conversion porte sur **toutes les pistes closes** et non sur 12 mois, et le graphique « gagnées et
+    perdues par mois » n'est pas fait : une piste n'enregistre pas la date à laquelle elle a été gagnée ou perdue (sa
+    date de modification change à chaque échange). À reprendre si une date de clôture est ajoutée aux pistes.
+- Composant : libellé court d'un groupe de barres (`short`, ici « S46 ») dans `OF.charts.bars` ; `barList` accepte un
+  format (durées au lieu de montants).
+- Tests : 2 tests unitaires nouveaux (cas calculés à la main), 15 erreurs réintroduites toutes détectées après l'ajout
+  d'un cas (ancienne saisie sans champ « facturable ») ; parcours navigateur (5 points nouveaux, accessibilité
+  comprise ; valeurs attendues calculées à la main) ; captures relues sur ordinateur et mobile.
+- Relecture : le haut de l'onglet Prospects gardait l'ancien encadré à trois chiffres : remplacé par les tuiles
+  communes ; le nombre de pistes closes était recalculé dans l'écran : fourni par le moteur.

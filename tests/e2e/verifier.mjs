@@ -3990,6 +3990,14 @@ const tests = {
     let month = await text("#espace-view");
     check(month.includes("Temps du mois 5 h 45 et 0,5 jour") && month.includes("Facturable 5 h et 0,5 jour") && month.includes("Montant facturable 465,00 € hors 1 temps sans taux") &&
       month.includes("Temps interne Prospection 45 min Non facturable –"), "Temps : totaux du mois, temps interne sans montant");
+    // Indicateurs (documentation/55, § 5.4) : semaine 43 (lundi 19/10), 5 h 45 dont 45 min internes ; taux pondéré (2 h 30 et 1 h 30 à 60 €) ;
+    // à facturer = 150 + 90 + 225 (la demi-journée) ; les temps en jours sont signalés à part.
+    check(month.includes("Cette semaine 5 h 45 semaine 43, temps interne compris") && month.includes("Part facturable 87 % temps du mois en cours : 5 h 45") &&
+      month.includes("À facturer 465,00 € temps facturable pas encore facturé") && month.includes("Taux horaire moyen 60,00 € / h") &&
+      month.includes("les temps saisis en jours figurent dans le détail du mois"), "Temps : indicateurs de la semaine et du mois");
+    check((await page.getAttribute('[data-chart="weeks"] svg', "role")) === "img" && (await page.$$('[data-chart="weeks"] .ch-bar')).length === 16 &&
+      (await page.$$eval("#espace-view .data-table tbody tr:last-child > *", (cells) => cells.map((c) => c.textContent.replace(/\s+/g, " ")).join(" | "))) === "S43 (lundi 19/10/2026) | 5 h | 45 min" &&
+      (await text("#espace-view .bar-list")).startsWith("Atelier Lumen 5 h 87 % Temps interne 45 min 13 %"), "Temps : graphique des 8 semaines et répartition par client");
     check((await text(".time-due")).includes("Atelier Lumen 5 h et 0,5 jour · 4 saisies 465,00 € 1 temps sans taux Facturer"), "Temps : à facturer par client (montant de la facture par tâche)");
     await accessible(page, "Temps : liste du mois");
     const [timeCsv] = await Promise.all([page.waitForEvent("download"), page.click("#time-csv")]);
@@ -4140,9 +4148,13 @@ const tests = {
     await go("#/");
     check((await text("#espace-view")).includes("Un prospect à relancer : Maison Verdier."), "Prospects : relance du jour au tableau de bord");
     await go("#/prospects");
-    check((await text("#espace-view")).includes("Pistes ouvertes 1 Valeur estimée 1 500,00 € À relancer 1") &&
+    check((await text("#espace-view .kpis")).startsWith("Pistes ouvertes 1 valeur estimée : 1 500,00 € À relancer 1 aujourd'hui") &&
       (await text("#espace-view .doc-list")).includes("Maison Verdier Rappeler pour le devis 20/10/2026 Aujourd'hui") &&
       (await text("#stage-talks + span")) === "1 piste · 1 500,00 €", "Prospects : relance due, piste dans « En discussion » avec sa valeur");
+    check((await text("#espace-view .funnel")).includes("En discussion 1 piste 1 500,00 €") && (await text("#espace-view .funnel")).includes("Gagné 0 piste 0,00 €") &&
+      (await text("#espace-view .kpis")).includes("Taux de conversion – aucune piste close Valeur moyenne gagnée – aucune piste gagnée"),
+      "Prospects : entonnoir par étape, pas de taux sans piste close");
+    await accessible(page, "Prospects : entonnoir");
     await go("#/prospects/" + verdier);
     await page.click('#espace-view a:text("Faire un devis")');
     await page.waitForSelector("#client-form");
@@ -4173,8 +4185,10 @@ const tests = {
     await page.click('[data-quote="accepted"]');
     await page.waitForTimeout(300);
     await go("#/prospects");
-    check((await text("#espace-view details")).startsWith("Gagnés · 1 piste · 1 800,00 €") && (await text("#espace-view")).includes("Pistes ouvertes 0"),
+    check((await text("#espace-view details")).startsWith("Gagnés · 1 piste · 1 800,00 €") && (await text("#espace-view .kpis")).startsWith("Pistes ouvertes 0"),
       "Prospects : devis accepté, piste gagnée");
+    check((await text("#espace-view .kpis")).includes("Taux de conversion 100 % pistes gagnées sur 1 piste close Valeur moyenne gagnée 1 800,00 € par piste gagnée"),
+      "Prospects : taux de conversion et valeur moyenne d'une piste gagnée");
 
     // Opposition : la fiche est remplacée par des empreintes ; avertissement si la personne est ajoutée de nouveau.
     const createProspect = async (fields) => {

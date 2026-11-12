@@ -1,5 +1,15 @@
 # Journal des modifications
 
+## 2026-11-12 (fin de matinée) — Temps et prospects : indicateurs, semaines, entonnoir
+
+- **Temps passé** : temps de la semaine, part facturable du mois, montant encore à facturer, taux horaire (ou
+  journalier) moyen ; graphique des 8 dernières semaines (facturable et interne) ; répartition du mois par client. Les
+  indicateurs suivent l'unité utilisée (heures, sinon jours) et signalent les temps saisis dans l'autre unité.
+- **Prospects** : pistes ouvertes et leur valeur, relances dues (dont en retard), taux de conversion des pistes closes,
+  valeur moyenne d'une piste gagnée ; entonnoir par étape, en nombre et en valeur.
+- Tests : 2 tests unitaires nouveaux, 15 erreurs réintroduites toutes détectées ; parcours navigateur de l'Espace
+  (261 points, accessibilité comprise) et des comptes au vert ; captures relues sur ordinateur et mobile.
+
 ## 2026-11-12 (matin) — Dépenses et recettes : indicateurs, catégories, cumul face au plafond
 
 - **Dépenses** : catégorie facultative (logiciels, matériel, déplacements, locaux, téléphone, formation,

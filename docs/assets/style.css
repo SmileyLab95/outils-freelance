@@ -919,6 +919,11 @@ a.country-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg)
 .tr-summary b { font-variant-numeric: tabular-nums; white-space: nowrap; }
 .tr-summary b.is-bad { color: var(--danger); }
 @media (max-width: 600px) { .bar-list li { grid-template-columns: minmax(0, 1fr) auto 3em; } .bl-bar { grid-column: 1 / -1; grid-row: 2; } }
+.funnel li { grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr) auto 7em; }
+.funnel .bl-share { font-size: .85rem; }
+.bl-bar > span.is-won { background: var(--ok); }
+.bl-bar > span.is-lost { background: var(--faint); }
+@media (max-width: 600px) { .funnel li { grid-template-columns: minmax(0, 1fr) auto auto; } }
 .treasury-upcoming { list-style: none; margin: 0; padding: 0; }
 .treasury-upcoming li { display: grid; grid-template-columns: 6.2em minmax(0, 1fr) auto; gap: 2px 10px; align-items: baseline; padding: 7px 0; border-bottom: 1px solid var(--line); font-size: .9rem; }
 .treasury-upcoming li:last-child { border-bottom: 0; }

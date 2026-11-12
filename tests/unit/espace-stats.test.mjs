@@ -220,3 +220,57 @@ test("recettes de l'année : trimestre en cours, moyenne, projection, cumul", ()
   assert.equal(S.receipts(docs, "2026", "2026-03-31").quarterLabel, "1er trimestre 2026");
   assert.equal(S.receipts(docs, "2026", "2026-04-01").quarter, 0, "2e trimestre commencé, rien encaissé");
 });
+
+// ----- Temps et prospects (documentation/55, § 2) -----
+
+const te = (date, quantity, o = {}) => Object.assign({ id: "t" + (++seq), date, task: "Tâche", unit: "hour", quantity, clientId: "c1", rate: 50, billable: true }, o);
+
+test("semaines ISO et lundi", () => {
+  assert.equal(S.monday("2026-11-12"), "2026-11-09");
+  assert.equal(S.monday("2026-11-09"), "2026-11-09");
+  assert.equal(S.monday("2026-11-15"), "2026-11-09", "dimanche");
+  assert.equal(S.isoWeek("2026-11-12"), 46);
+  assert.equal(S.isoWeek("2026-01-01"), 1, "jeudi 1er janvier : semaine 1");
+  assert.equal(S.isoWeek("2027-01-01"), 53, "vendredi 1er janvier 2027 : semaine 53 de 2026");
+  assert.equal(S.isoWeek("2021-01-03"), 53, "dimanche 3 janvier 2021 : semaine 53 de 2020");
+  assert.equal(S.isoWeek("2024-12-30"), 1, "lundi 30 décembre 2024 : semaine 1 de 2025");
+});
+
+test("temps : semaines, semaine en cours, part facturable, taux moyen, par client, à facturer", () => {
+  const list = [te("2026-09-14", 9), // hors des 8 semaines et du mois
+    te("2026-11-02", 4), te("2026-11-03", 2, { clientId: "c2", rate: 80 }), te("2026-11-04", 2, { billable: false, clientId: "", rate: null }),
+    te("2026-11-10", 3, { rate: null }), te("2026-11-11", 1, { billable: false, clientId: "", rate: null }), te("2026-11-13", 5), // après aujourd'hui
+    te("2026-10-30", 1, { unit: "day", rate: 400 })];
+  const t = S.time(list, [], "2026-11-12");
+  assert.equal(t.unit, "hour");
+  assert.deepEqual(t.weeks.map((w) => w.label), ["S39", "S40", "S41", "S42", "S43", "S44", "S45", "S46"]);
+  assert.deepEqual([t.weeks[6], t.weeks[7]], [{ key: "2026-11-02", label: "S45", billable: 6, internal: 2 }, { key: "2026-11-09", label: "S46", billable: 3, internal: 1 }]);
+  // Mois : 4 + 2 + 2 + 3 + 1 = 12 h, dont 9 facturables ; taux : (4 × 50 + 2 × 80) / 6 = 60 (les 3 h sans taux ne comptent pas).
+  assert.deepEqual([t.week, t.month, t.share, t.rate], [4, 12, 0.75, 60]);
+  assert.deepEqual(t.byClient, [{ clientId: "c1", quantity: 7, share: 0.583 }, { clientId: "", quantity: 3, share: 0.25 }, { clientId: "c2", quantity: 2, share: 0.167 }]);
+  // À facturer (tous mois, temps facturables non facturés) : 9 × 50 + 4 × 50 + 2 × 80 + 1 jour × 400 + 5 × 50 (le 13/11 est saisi) ; sans taux : 0.
+  assert.equal(t.unbilled, 450 + 200 + 160 + 400 + 250);
+  const days = S.time([te("2026-11-02", 1, { unit: "day", rate: 450 }), te("2026-11-03", 0.5, { unit: "day", rate: 450 })], [], "2026-11-12");
+  assert.deepEqual([days.unit, days.month, days.rate, days.weeks[6].billable], ["day", 1.5, 450, 1.5], "suivi à la journée");
+  const internalWithClient = S.time([te("2026-11-02", 2), te("2026-11-08", 1, { billable: false, rate: null })], [], "2026-11-12");
+  assert.deepEqual(internalWithClient.byClient.map((c) => [c.clientId, c.quantity]), [["c1", 2], ["", 1]], "temps interne rattaché à un client : compté comme interne");
+  assert.deepEqual(internalWithClient.weeks[6], { key: "2026-11-02", label: "S45", billable: 2, internal: 1 }, "le dimanche appartient à sa semaine");
+  const legacy = te("2026-11-10", 2);
+  delete legacy.billable;
+  const old = S.time([legacy], [], "2026-11-12");
+  assert.deepEqual([old.weeks[7].billable, old.weeks[7].internal, old.share], [2, 0, 1], "temps sans champ « facturable » (ancienne saisie) : facturable");
+  const none = S.time([], [], "2026-11-12");
+  assert.deepEqual([none.unit, none.month, none.share, none.rate, none.unbilled, none.byClient], ["hour", 0, null, null, 0, []]);
+});
+
+test("prospects : étapes, conversion des pistes closes, valeur moyenne gagnée, relances", () => {
+  const pr = (o) => Object.assign({ id: "p" + (++seq), name: "Piste " + seq, stage: "new", exchanges: [] }, o);
+  const list = [pr({ value: 1000, nextDate: "2026-11-10" }), pr({ stage: "talks", value: 2000, nextDate: "2026-11-12" }), pr({ stage: "talks", value: 500 }),
+    pr({ stage: "won", value: 3000 }), pr({ stage: "won", value: 1000 }), pr({ stage: "lost", value: 800, nextDate: "2026-11-01" })];
+  const p = S.prospects(list, [], "2026-11-12");
+  assert.deepEqual(p.open, { count: 3, value: 3500 });
+  assert.deepEqual(p.stages.map((s) => [s.key, s.count, s.value]), [["new", 1, 1000], ["talks", 2, 2500], ["quote", 0, 0], ["won", 2, 4000], ["lost", 1, 800]]);
+  assert.deepEqual([p.closed, p.conversion, p.wonAverage, p.late, p.today], [3, 0.667, 2000, 1, 1], "piste perdue : pas de relance comptée");
+  const none = S.prospects([], [], "2026-11-12");
+  assert.deepEqual([none.closed, none.conversion, none.wonAverage], [0, null, null]);
+});

@@ -94,7 +94,7 @@
       });
       var c = band(i, 0).x + (band(i, o.series.length - 1).x + band(i, o.series.length - 1).width - band(i, 0).x) / 2;
       var every = o.groups.length > 9 && w < 640 ? 2 : 1;
-      if (i % every === 0) body += '<text class="ch-tick" x="' + c + '" y="' + (h - 8) + '" text-anchor="middle">' + esc(monthLabel(g.key + "-01", g.key.slice(5) === "01")) + "</text>";
+      if (i % every === 0) body += '<text class="ch-tick" x="' + c + '" y="' + (h - 8) + '" text-anchor="middle">' + esc(g.short || monthLabel(g.key + "-01", g.key.slice(5) === "01")) + "</text>";
     });
     if (firstFuture > 0) {
       var sx = band(firstFuture, 0).x - (band(1, 0).x - band(0, 0).x) * 0.15;

@@ -234,6 +234,66 @@
              projection: current && +today.slice(5, 7) > 1 ? Math.round(total / days * inYear) : null, points: points, end: to };
   }
 
+  // ----- Temps et prospects (documentation/55, § 2) ----------------------------------------------------------
+
+  var addDays = function (iso, n) { return new Date(Date.parse(iso + "T00:00:00Z") + n * 864e5).toISOString().slice(0, 10); };
+  /** Lundi de la semaine d'une date. */
+  function monday(iso) { var dow = (new Date(iso + "T00:00:00Z").getUTCDay() + 6) % 7; return addDays(iso, -dow); }
+  /** Numéro de semaine ISO 8601 (la semaine 1 contient le premier jeudi de l'année). */
+  function isoWeek(iso) {
+    var thursday = addDays(monday(iso), 3), y = thursday.slice(0, 4);
+    return 1 + Math.floor((Date.parse(thursday) - Date.parse(y + "-01-01")) / (7 * 864e5));
+  }
+
+  /**
+   * Temps passé : unité de suivi (heures si des heures sont saisies sur la période, sinon jours), n dernières
+   * semaines (facturable et interne), semaine en cours, mois en cours (part facturable, taux moyen facturé par unité,
+   * temps par client) et montant du temps à facturer (tous mois).
+   */
+  function time(entries, documents, today, n) {
+    n = n || 8;
+    var start = addDays(monday(today), -7 * (n - 1)), month = today.slice(0, 7);
+    var list = (entries || []).filter(function (t) { return t && t.date && t.date <= today && (t.unit === "hour" || t.unit === "day"); });
+    var recent = list.filter(function (t) { return t.date >= start || t.date.slice(0, 7) === month; });
+    var unit = recent.some(function (t) { return t.unit === "hour"; }) || !recent.length ? "hour" : "day";
+    var mine = list.filter(function (t) { return t.unit === unit; }), qty = function (t) { return Number(t.quantity) || 0; };
+    var weeks = [];
+    for (var i = 0; i < n; i++) {
+      var w0 = addDays(start, 7 * i), w1 = addDays(w0, 6), inWeek = mine.filter(function (t) { return t.date >= w0 && t.date <= w1; });
+      weeks.push({ key: w0, label: "S" + isoWeek(w0), billable: round2(inWeek.filter(function (t) { return t.billable !== false; }).reduce(function (s, t) { return s + qty(t); }, 0)),
+                   internal: round2(inWeek.filter(function (t) { return t.billable === false; }).reduce(function (s, t) { return s + qty(t); }, 0)) });
+    }
+    var inMonth = mine.filter(function (t) { return t.date.slice(0, 7) === month; });
+    var total = inMonth.reduce(function (s, t) { return s + qty(t); }, 0);
+    var billable = inMonth.filter(function (t) { return t.billable !== false; });
+    var rated = billable.filter(function (t) { return t.rate !== null && t.rate !== undefined && t.rate !== "" && isFinite(Number(t.rate)); });
+    var ratedQty = rated.reduce(function (s, t) { return s + qty(t); }, 0);
+    var byClient = {};
+    inMonth.forEach(function (t) { var k = t.billable === false ? "" : t.clientId || ""; byClient[k] = (byClient[k] || 0) + qty(t); });
+    var cur = weeks[weeks.length - 1];
+    return { unit: unit, weeks: weeks, week: round2(cur.billable + cur.internal), month: round2(total),
+             share: total > 0 ? Math.round(billable.reduce(function (s, t) { return s + qty(t); }, 0) / total * 1000) / 1000 : null,
+             rate: ratedQty > 0 ? round2(rated.reduce(function (s, t) { return s + qty(t) * Number(t.rate); }, 0) / ratedQty) : null,
+             byClient: Object.keys(byClient).map(function (k) { return { clientId: k, quantity: round2(byClient[k]), share: total > 0 ? Math.round(byClient[k] / total * 1000) / 1000 : 0 }; })
+               .sort(function (a, b) { return b.quantity - a.quantity || a.clientId.localeCompare(b.clientId); }),
+             unbilled: round2(E.unbilledByClient(entries, documents).reduce(function (s, c) { return s + (c.amount || 0); }, 0)) };
+  }
+
+  /**
+   * Prospects : pistes par étape (nombre, valeur), pistes ouvertes, taux de conversion des pistes closes
+   * (gagnées ÷ gagnées et perdues, sans période : une piste n'a pas de date de clôture), valeur moyenne d'une piste
+   * gagnée, relances en retard (avant aujourd'hui) et du jour.
+   */
+  function prospects(list, documents, today) {
+    var pipe = E.pipeline(list || [], documents), due = E.followUps(list || [], documents, today);
+    var closed = pipe.won.count + pipe.lost.count;
+    return { open: pipe.open, stages: Object.keys(E.STAGE_LABELS).map(function (k) { return { key: k, label: E.STAGE_LABELS[k], count: pipe[k].count, value: pipe[k].value }; }),
+             closed: closed, conversion: closed ? Math.round(pipe.won.count / closed * 1000) / 1000 : null,
+             wonAverage: pipe.won.count ? round2(pipe.won.value / pipe.won.count) : null,
+             late: due.filter(function (p) { return p.nextDate < today; }).length, today: due.filter(function (p) { return p.nextDate === today; }).length };
+  }
+
   return { lastYear: lastYear, change: change, toDate: toDate, monthly: monthly, topClients: topClients, expenses: expenses, receipts: receipts,
+           monday: monday, isoWeek: isoWeek, time: time, prospects: prospects,
            invoiced: invoiced, quotes: quotes, documents: documents, invoicedMonthly: invoicedMonthly, clients: clients, clientDetail: clientDetail };
 });
