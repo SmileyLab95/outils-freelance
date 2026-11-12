@@ -664,7 +664,9 @@ Objectif : un site mesuré, sous sa propre marque, qui commence à rapporter, et
       `engines/international-uk.js` testé (48 situations) ; option « hors champ » dans le générateur de facture ;
       spécification [pays/uk.md](pays/uk.md)
 - [ ] Parcours navigateur : un contrôle de contraste (axe) a échoué une fois sur le logo de l'Espace (liste des
-      clients) dans une suite complète, sans se reproduire en isolé (3 essais) : en trouver la cause
+      clients) dans une suite complète, sans se reproduire en isolé (3 essais) : en trouver la cause ; le 12/11/2026, aucune
+      récidive sur une dizaine de parcours complets de l'Espace (le contrôle attend déjà la fin des animations) :
+      à surveiller dans les suites complètes
 - [x] Canada : assistant *Invoicing clients outside Canada* / « Facturer un client étranger » (services exportés
       détaxés et exceptions, TVQ, preuve de non-résidence, seuil du petit fournisseur détaxé compris, ligne 101) ;
       moteur `engines/international-ca.js` testé (32 situations) ; spécification [pays/ca.md](pays/ca.md)
