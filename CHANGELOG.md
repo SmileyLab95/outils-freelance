@@ -1,5 +1,16 @@
 # Journal des modifications
 
+## 2026-11-12 (nuit) — Tableau de bord : comparaison avec l'an dernier, graphique, principaux clients
+
+- **Tableau de bord de l'Espace** : encaissé de l'année et du mois comparés à la même date l'an dernier ; graphique des
+  encaissements des 12 derniers mois face au même mois un an plus tôt (avec ses données) ; principaux clients (barres,
+  montants, parts ; la part du premier est signalée quand elle dépasse la moitié) ; résumé de la trésorerie (disponible,
+  point bas, versement possible).
+- Nouveau moteur d'indicateurs (`espace-stats.js`) : 4 tests, 13 erreurs réintroduites toutes détectées ; parcours
+  navigateur de l'Espace (248 points) et des comptes au vert ; captures relues.
+- **Correction** : une fonction d'affichage des indicateurs de la trésorerie portait le même nom que celle du tableau
+  de bord et la remplaçait ; renommée, et un test refuse désormais deux fonctions de même nom dans un script.
+
 ## 2026-11-11 — Trésorerie v2 : indicateurs et graphiques ; propositions de thème
 
 - **Trésorerie de l'Espace refaite** (demande d'Ismail) : 8 indicateurs (solde, disponible, point bas prévu, versement

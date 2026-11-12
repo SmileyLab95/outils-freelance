@@ -48,3 +48,25 @@ graphiques. Spécification avant le code ; réalisation onglet par onglet, chacu
 
 Chaque étape : moteur et tests, écran, parcours navigateur (accessibilité comprise), captures relues sur ordinateur,
 tablette et mobile, documentation, publication.
+
+## 5. Réalisation
+
+### 5.1 Tableau de bord (12/11/2026)
+
+- Moteur `engines/espace-stats.js` (nouveau, s'appuie sur `espace-fr.js`) : `lastYear` (même jour un an plus tôt, le
+  29 février devient le 28), `change` (évolution en %, une décimale ; aucune si la référence est nulle), `toDate`
+  (encaissé de l'année et du mois face à la même période de l'an dernier, **jusqu'au même jour**), `monthly`
+  (encaissements des 12 derniers mois et du même mois un an plus tôt, mois entier), `topClients` (encaissements nets
+  des 12 derniers mois par client, remboursements d'avoirs déduits, 5 premiers et le reste, parts).
+- Écran : 4 indicateurs (encaissé de l'année avec la comparaison, encaissé du mois, à encaisser, déclaration Urssaf ou
+  devis en attente) ; graphique « Encaissements par mois » (barres pleines : 12 derniers mois ; barres vides : un an plus
+  tôt ; tableau des données) ; « Principaux clients » (barres, montants, parts, lien vers la fiche ; constat si le
+  premier client dépasse la moitié des encaissements, sans conseil) ; résumé de la trésorerie (disponible, point bas
+  sur 6 mois, versement possible) ; prochaines échéances ; derniers documents.
+- Choix : base **encaissements** (le livre des recettes et les déclarations de la micro-entreprise sont tenus à
+  l'encaissement) ; comparaison « à la même date » plutôt qu'à l'année entière, pour ne pas comparer 10 mois à 12.
+- Tests : `espace-stats.test.mjs` (4 tests, cas calculés à la main), 13 erreurs réintroduites toutes détectées ;
+  parcours navigateur (5 points nouveaux, accessibilité comprise) ; captures relues sur ordinateur et mobile.
+- Relecture du code : une seconde fonction `kpi()` (trésorerie, 11/11) remplaçait en silence celle du tableau de bord,
+  qui échappe le texte ; renommée `tile()`, et nouveau test `doublons.test.mjs` qui refuse deux fonctions de même nom au
+  premier niveau d'un script (il détecte l'erreur sur l'ancien code).

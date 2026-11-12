@@ -12,7 +12,7 @@
   var OF = window.OF, OFE = window.OFE, R = window.OF_RULES, S = window.EspaceStore;
   var app = document.getElementById("espace-app");
   if (!app || !OFE || !OFE.espaceFR || !R || !S) return;
-  var E = OFE.espaceFR, INV = OFE.invoiceFR;
+  var E = OFE.espaceFR, INV = OFE.invoiceFR, ST = OFE.espaceStats;
   var $ = function (id) { return document.getElementById(id); };
   var view = $("espace-view"), statusEl = $("espace-status");
   var calEl = $("calendar-data");
@@ -125,6 +125,7 @@
   }
 
   function render(keepFocus) {
+    drawCharts = null; // chaque vue qui a des graphiques fournit sa fonction de dessin (redessin au changement de taille)
     var r = route();
     var name = data.profile ? r.name : (r.name === "reglages" ? "reglages" : "accueil");
     app.querySelectorAll("[data-route]").forEach(function (a) {
@@ -460,8 +461,15 @@
       '<a class="btn btn-ghost btn-sm" href="#/documents/nouveau?type=devis">+ Devis</a>' +
       '<a class="btn btn-ghost btn-sm" href="#/clients/nouveau">+ Client</a></div></div>';
     html += profileReminder() + purchasesReminder() + timeReminder() + prospectsReminder() + treasuryReminder() + backupReminder();
-    html += '<div class="kpis">' +
-      kpi("Encaissé en " + YEAR, money(year), countText(E.ledger(data.documents, YEAR + "-01-01", YEAR + "-12-31").filter(function (x) { return x.amount > 0; }).length, "encaissement", "encaissements")) +
+    // Indicateurs et graphiques (documentation/55-indicateurs-espace.md, § 2) : comparaison avec l'an dernier à la même date.
+    var td = ST.toDate(data.documents, TODAY), prevYear = String(+YEAR - 1);
+    var versus = function (x, what) {
+      return x.change === null ? (x.prev ? "" : what + " : rien d'encaissé") : (x.change >= 0 ? "+" : "−") + OF.fmt(Math.abs(x.change)) + " % par rapport à " + what;
+    };
+    html += '<div class="kpis kpis-4">' +
+      kpi("Encaissé en " + YEAR, money(year), [countText(E.ledger(data.documents, YEAR + "-01-01", YEAR + "-12-31").filter(function (x) { return x.amount > 0; }).length,
+        "encaissement", "encaissements"), versus(td.year, prevYear + " à la même date")].filter(Boolean).join(" · ")) +
+      kpi("Encaissé ce mois-ci", money(td.month.now), versus(td.month, "l'an dernier à la même date") || "l'an dernier à la même date : " + money(td.month.prev)) +
       kpi("À encaisser", money(openSum), open.length ? countText(open.length, "facture", "factures") + (late.length ? ", dont " + late.length + " en retard" : "") : "Aucune facture en attente", late.length ? "is-warn" : "") +
       (decl ? kpi("Déclaration Urssaf : " + decl.period.label, money(decl.revenue),
         "À déclarer avant le " + longDay(decl.due) + " · cotisations estimées " + money(decl.total) + (decl.open ? " (période en cours)" : ""), "is-brand")
@@ -469,10 +477,17 @@
       "</div>";
 
     if (isMicro()) html += gauges(th);
-    html += '<div class="espace-cols"><section class="card espace-card"><h3>Prochaines échéances</h3>' + deadlinesList(4) +
-      '<p class="small"><a href="#/echeances">Toutes les échéances →</a></p></section>' +
+    var series = ST.monthly(data.documents, TODAY, 12), top = ST.topClients(data.documents, E.addYears(TODAY, -1), TODAY, 5);
+    html += '<div class="espace-cols tr-charts"><section class="card espace-card"><div class="card-head"><h3>Encaissements par mois</h3>' +
+      '<span class="small muted">12 derniers mois, comparés au même mois un an plus tôt.</span></div><div class="chart" data-chart="monthly"></div>' +
+      OF.charts.legend([{ cls: "is-cur", label: "12 derniers mois" }, { cls: "is-prev", label: "Un an plus tôt" }]) +
+      OF.charts.table("Encaissements par mois", ["Mois", "Encaissé", "Un an plus tôt"], series.map(function (m) {
+        return [m.label + (m.current ? " (en cours)" : ""), money(m.amount), money(m.prev)];
+      })) + "</section>" + topClientsCard(top) + "</div>";
+    html += '<div class="espace-cols">' + treasuryCard() + '<section class="card espace-card"><h3>Prochaines échéances</h3>' + deadlinesList(4) +
+      '<p class="small"><a href="#/echeances">Toutes les échéances →</a></p></section></div>' +
       '<section class="card espace-card"><h3>Derniers documents</h3>' + docTable(recentDocs(5), true) +
-      '<p class="small"><a href="#/documents">Tous les documents →</a></p></section></div>';
+      '<p class="small"><a href="#/documents">Tous les documents →</a></p></section>';
     if (decl) {
       var pct = function (r) { return OF.fmt(Math.round(r * 1000) / 10) + " %"; };
       html += '<p class="small muted espace-note">' + (decl.mixed
@@ -487,6 +502,47 @@
         '. Déclarez et payez sur <a href="https://www.autoentrepreneur.urssaf.fr/" rel="noopener">autoentrepreneur.urssaf.fr</a>.</p>';
     }
     view.innerHTML = html;
+    drawCharts = function () {
+      var el = view.querySelector('[data-chart="monthly"]');
+      if (!el) return;
+      el.innerHTML = OF.charts.bars({ width: Math.floor(el.getBoundingClientRect().width) || 600,
+        groups: series.map(function (m) { return { key: m.key, label: m.label, values: [m.amount, m.prev], future: false }; }),
+        series: [{ name: "12 derniers mois", cls: "is-cur" }, { name: "Un an plus tôt", cls: "is-prev" }],
+        title: "Encaissements par mois", desc: "12 derniers mois : " + money(series.reduce(function (s, m) { return s + m.amount; }, 0)) +
+          " ; même période un an plus tôt : " + money(series.reduce(function (s, m) { return s + m.prev; }, 0)) + "." });
+    };
+    drawCharts();
+  }
+
+  /** Principaux clients sur 12 mois (encaissements nets) : barres, part et reste ; constat de dépendance au premier client. */
+  function topClientsCard(top) {
+    var pct = function (x) { return OF.fmt(Math.round(x * 100)) + " %"; };
+    var max = top.rows.length ? top.rows[0].amount : 0;
+    var row = function (name, href, amount, share) {
+      return '<li><span class="bl-name">' + (href ? '<a href="' + href + '">' + esc(name) + "</a>" : esc(name)) + '</span><span class="bl-bar" aria-hidden="true"><span style="width:' +
+        (max > 0 ? Math.max(1, amount / max * 100).toFixed(1) : 0) + '%"></span></span><b class="bl-amount">' + esc(money(amount)) + '</b><span class="bl-share">' + pct(share) + "</span></li>";
+    };
+    return '<section class="card espace-card"><div class="card-head"><h3>Principaux clients</h3><span class="small muted">Encaissements des 12 derniers mois : ' +
+      esc(money(top.total)) + ".</span></div>" + (top.rows.length ? '<ul class="bar-list">' + top.rows.map(function (r) {
+        return row(r.name, r.clientId !== "?" && client(r.clientId) ? "#/clients/" + encodeURIComponent(r.clientId) : "", r.amount, r.share);
+      }).join("") + (top.others.count ? row("Autres clients (" + top.others.count + ")", "", top.others.amount, top.others.share) : "") + "</ul>" +
+      (top.rows[0].share >= 0.5 ? '<p class="small muted">Votre premier client représente ' + pct(top.rows[0].share) + " de vos encaissements des 12 derniers mois.</p>" : "") :
+      '<p class="small muted">Aucun encaissement sur les 12 derniers mois.</p>') + '<p class="small"><a href="#/clients">Tous les clients →</a></p></section>';
+  }
+
+  /** Résumé de la trésorerie : disponible, point bas sur 6 mois, versement possible (documentation/39, § 7). */
+  function treasuryCard() {
+    if (!hasCash()) {
+      return '<section class="card espace-card"><h3>Trésorerie</h3><p class="small muted">Indiquez le solde de votre compte professionnel pour savoir ce qui est ' +
+        'vraiment disponible, jusqu\'où il descendra et combien vous pouvez vous verser.</p><p class="small"><a href="#/tresorerie">Ouvrir la trésorerie →</a></p></section>';
+    }
+    var o = E.owed(treasuryInput()), f = E.forecast(treasuryInput()), c = E.balanceCurve(f), limit = threshold();
+    var line = function (label, value, cls) { return "<li><span>" + esc(label) + '</span><b class="' + (cls || "") + '">' + esc(value) + "</b></li>"; };
+    return '<section class="card espace-card"><h3>Trésorerie</h3><ul class="tr-summary">' +
+      line("Disponible", money(f.start - o.total), f.start - o.total < 0 ? "is-bad" : "") +
+      line("Point bas prévu (6 mois)", money(c.low.balance) + (c.low.date === TODAY ? "" : " le " + day(c.low.date)), c.low.balance < limit ? "is-bad" : "") +
+      line("Versement possible", money(E.safeAmount(c, limit))) + "</ul>" +
+      '<p class="small"><a href="#/tresorerie">Voir la trésorerie →</a></p></section>';
   }
 
   function kpi(label, value, sub, cls) {
@@ -1959,14 +2015,15 @@
     sync();
   }
 
-  function kpi(label, value, sub, cls) {
+  /** Tuile d'indicateur de la trésorerie : value et sub sont déjà du HTML échappé (liens, montants). */
+  function tile(label, value, sub, cls) {
     return '<div class="card kpi' + (cls ? " " + cls : "") + '"><span class="kpi-label">' + esc(label) + '</span><b class="kpi-value">' + value + "</b>" +
       (sub ? '<span class="kpi-sub">' + sub + "</span>" : "") + "</div>";
   }
   var lateText = function (n) { return n === 1 ? "1 jour de retard" : n + " jours de retard"; };
   var KIND_LABELS = { receipt: "Facture attendue", refund: "Remboursement", urssaf: "Urssaf", vat: "TVA", charge: "Charge", planned: "Entrée prévue" };
   var AGING_CLS = { notDue: "is-ok", d30: "is-near", d60: "is-warn", d90: "is-hot", more: "is-bad" };
-  var treasuryDraw = null;
+  var drawCharts = null;
 
   function viewTreasury(r) {
     var p = profile(), params = r.params || {};
@@ -2004,20 +2061,20 @@
 
     var lowBad = curve && curve.low.balance < limit, below = firstBelow(curve, limit);
     var kpis = '<div class="kpis kpis-4">' +
-      kpi("Solde du compte", hasBalance ? esc(money(f.start)) : "–", hasBalance ? "au " + day(p.cashDate || TODAY) + (stale ? " · à mettre à jour" : "") :
+      tile("Solde du compte", hasBalance ? esc(money(f.start)) : "–", hasBalance ? "au " + day(p.cashDate || TODAY) + (stale ? " · à mettre à jour" : "") :
         '<a href="#tr-settings">Indiquer le solde</a>', stale ? "is-warn" : "") +
-      kpi("Disponible", available === null ? "–" : esc(money(available)), "après " + esc(money(o.total)) + " déjà dus (estimés)", available !== null && available < 0 ? "is-bad" : "is-brand") +
-      kpi("Point bas prévu", curve ? esc(money(curve.low.balance)) : "–", curve ? (curve.low.date === TODAY ? "aujourd'hui" : "le " + day(curve.low.date)) +
+      tile("Disponible", available === null ? "–" : esc(money(available)), "après " + esc(money(o.total)) + " déjà dus (estimés)", available !== null && available < 0 ? "is-bad" : "is-brand") +
+      tile("Point bas prévu", curve ? esc(money(curve.low.balance)) : "–", curve ? (curve.low.date === TODAY ? "aujourd'hui" : "le " + day(curve.low.date)) +
         (lowBad ? (curve.low.balance < 0 ? " · sous zéro" : " · sous votre seuil") : "") : "avec le solde du compte", lowBad ? "is-bad" : "") +
-      kpi("Versement possible", safe === null ? "–" : esc(money(safe)), safe === null ? "avec le solde du compte" :
+      tile("Versement possible", safe === null ? "–" : esc(money(safe)), safe === null ? "avec le solde du compte" :
         "sans passer sous " + (limit ? "votre seuil (" + esc(money(limit)) + ")" : "zéro") + " d'ici " + esc(E.period(f.until.slice(0, 7)).label)) +
-      kpi("À encaisser", esc(money(ag.total)), ag.late ? "dont " + esc(money(ag.late)) + " en retard (" + ag.lateCount + " facture" + (ag.lateCount > 1 ? "s" : "") + ")" : "aucune facture en retard",
+      tile("À encaisser", esc(money(ag.total)), ag.late ? "dont " + esc(money(ag.late)) + " en retard (" + ag.lateCount + " facture" + (ag.lateCount > 1 ? "s" : "") + ")" : "aucune facture en retard",
         ag.late ? "is-warn" : "") +
-      kpi("Délai moyen de paiement", stats.count ? esc(OF.fmt(stats.avgDays)) + " j" : "–", stats.count ? "retard moyen " + esc(OF.fmt(stats.avgLate)) + " j · " +
+      tile("Délai moyen de paiement", stats.count ? esc(OF.fmt(stats.avgDays)) + " j" : "–", stats.count ? "retard moyen " + esc(OF.fmt(stats.avgLate)) + " j · " +
         Math.round(stats.onTime * 100) + " % payées à l'heure (12 mois)" : "pas encore de facture payée") +
-      kpi("Autonomie", run === null ? "–" : esc(OF.fmt(run)) + " mois", run === null ? (monthly ? "avec le solde du compte" : '<a href="#tr-charges">Notez vos charges</a>') :
+      tile("Autonomie", run === null ? "–" : esc(OF.fmt(run)) + " mois", run === null ? (monthly ? "avec le solde du compte" : '<a href="#tr-charges">Notez vos charges</a>') :
         "disponible ÷ " + esc(money(monthly)) + " de charges par mois", run !== null && run < 2 ? "is-warn" : "") +
-      kpi("Point mort", be === null ? "–" : esc(money(be)), be === null ? "chiffre d'affaires mensuel nécessaire (micro-entreprise, charges notées)" :
+      tile("Point mort", be === null ? "–" : esc(money(be)), be === null ? "chiffre d'affaires mensuel nécessaire (micro-entreprise, charges notées)" :
         "à encaisser par mois · encaissé moyen : " + esc(money(avgIn)) + (active.length ? " (" + active.length + " mois)" : ""), be !== null && avgIn < be ? "is-warn" : "") + "</div>";
 
     var tools = '<div class="tr-tools espace-noprint"><div class="seg" role="group" aria-label="Horizon de la prévision">' + HORIZONS.map(function (h) {
@@ -2121,7 +2178,7 @@
       '<div class="espace-cols">' + agingCard + '<div class="tr-stack">' + upcomingCard + owedCard + "</div></div>" +
       monthsCard + '<div class="espace-cols">' + chargesCard + settingsCard + "</div>" + assumptions;
 
-    treasuryDraw = function () {
+    drawCharts = function () {
       var box = function (name) { return view.querySelector('[data-chart="' + name + '"]'); };
       var width = function (el) { return Math.floor(el.getBoundingClientRect().width) || 600; };
       var el = box("balance");
@@ -2142,7 +2199,7 @@
           title: "Créances par ancienneté", desc: ag.buckets.map(function (b) { return b.label + " : " + money(b.amount); }).join(" ; ") + "." });
       }
     };
-    treasuryDraw();
+    drawCharts();
 
     $("tr-csv").addEventListener("click", function () {
       OF.download("﻿" + E.forecastCSV(f), "prevision-tresorerie-" + TODAY + ".csv", "text/csv;charset=utf-8");
@@ -2186,7 +2243,7 @@
     if (window.innerWidth === lastWidth) return;
     lastWidth = window.innerWidth;
     clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(function () { if (treasuryDraw && route().name === "tresorerie" && !route().id) treasuryDraw(); }, 150);
+    resizeTimer = setTimeout(function () { if (drawCharts) drawCharts(); }, 150);
   });
 
   function viewChargeForm(r) {

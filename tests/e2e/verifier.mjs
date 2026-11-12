@@ -3649,6 +3649,16 @@ const tests = {
     check(kpis.includes("Déclaration Urssaf : 3e trimestre 2026 1 800,00 €") && kpis.includes("31 octobre 2026") && kpis.includes("464,40 €"),
       "Espace : déclaration du 3e trimestre, date limite et cotisations 25,8 % (A7)");
     check((await text(".gauges")).includes("1 800,00 € / 83 600,00 €"), "Espace : jauge du plafond (A8)");
+    // Tableau de bord v2 (documentation/55) : comparaison avec l'an dernier, encaissements par mois, principaux clients, trésorerie.
+    check(kpis.includes("Encaissé en 2026 1 800,00 € 2 encaissements · 2025 à la même date : rien d'encaissé") &&
+      kpis.includes("Encaissé ce mois-ci 0,00 € l'an dernier à la même date : rien d'encaissé"), "Tableau de bord : encaissé de l'année et du mois, comparaison avec l'an dernier");
+    check((await page.$$eval('[data-chart="monthly"] svg[role="img"]', (l) => l.length)) === 1 &&
+      (await page.$$eval('section:has([data-chart="monthly"]) .ch-data tbody tr', (rows) => rows.map((r) => [...r.cells].map((c) => c.textContent.replace(/\s+/g, " ")).join(" | "))))
+        .includes("septembre 2026 | 1 800,00 € | 0,00 €"),
+      "Tableau de bord : graphique des encaissements par mois et ses données");
+    check((await text(".bar-list")).includes("Studio Nova 1 800,00 € 100 %") && (await text("#espace-view")).includes("Votre premier client représente 100 % de vos encaissements"),
+      "Tableau de bord : principaux clients et part du premier");
+    check((await text("#espace-view")).includes("Indiquez le solde de votre compte professionnel pour savoir ce qui est vraiment disponible"), "Tableau de bord : trésorerie à compléter");
     await accessible(page, "Espace : tableau de bord");
 
     await go("#/recettes");
@@ -4283,6 +4293,7 @@ const tests = {
     await shot("tresorerie");
     await go("#/");
     check((await text("#espace-view")).includes("Prévision de trésorerie : votre compte passerait sous zéro le 10/11/2026"), "Trésorerie : rappel au tableau de bord");
+    check((await text(".tr-summary")).includes("Point bas prévu (6 mois)") && (await page.$(".tr-summary b.is-bad")), "Tableau de bord : résumé de la trésorerie, point bas signalé");
     await go("#/tresorerie");
     await page.locator(".charges-list a", { hasText: "Matériel" }).click();
     await page.waitForSelector("#charge-delete");

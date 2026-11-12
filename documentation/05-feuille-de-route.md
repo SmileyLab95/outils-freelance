@@ -9,7 +9,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 
 ## Où en est-on ?
 
-*Mis à jour le 11/11/2026 (soir).*
+*Mis à jour le 12/11/2026 (nuit).*
 
 - **Priorité (décision D10)** : le site et la plateforme d'abord ; noms de domaine, Gumroad et affiliation à la fin.
   Règle de qualité maximale pour tout produit ou service (D11, charte dans la [méthode](04-methode-de-travail.md#charte-qualité)).
@@ -388,9 +388,14 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   prévu (cotisations et TVA estimées dessus) ; horizon de 3, 6 ou 12 mois ; export CSV. Graphiques SVG faits maison,
   accessibles (titre, description, données), aux couleurs du thème. 20 tests unitaires nouveaux, 40 erreurs
   réintroduites toutes détectées, parcours navigateur (29 points) et des comptes ; captures relues (4 corrections).
+- **Tableau de bord v2 (12/11/2026)**, premier onglet de [55](55-indicateurs-espace.md) : encaissé de l'année et du mois
+  comparés à la même date l'an dernier, graphique des encaissements des 12 derniers mois face à l'année précédente,
+  principaux clients (part du premier signalée au-delà de 50 %), résumé de la trésorerie ; moteur
+  `engines/espace-stats.js` (13 erreurs réintroduites, toutes détectées). Correction : une seconde fonction `kpi()` de la
+  trésorerie remplaçait celle du tableau de bord ; garde-fou contre les fonctions déclarées deux fois.
 - **Prochaines actions de Claude** : **indicateurs et graphiques dans les autres onglets de l'Espace** (demande
   d'Ismail du 11/11 : tableau de bord, documents, clients, recettes, dépenses avec catégories, temps, prospects,
-  échéances ; même composant de graphique que la trésorerie ; spécification écrite : [55](55-indicateurs-espace.md), à commencer par le tableau de bord) ; **appliquer le thème**
+  échéances ; même composant de graphique que la trésorerie ; spécification écrite : [55](55-indicateurs-espace.md) ; tableau de bord fait le 12/11, ensuite clients et documents) ; **appliquer le thème**
   choisi par Ismail dès sa réponse ([54](54-themes.md) § 2) ; refonte, suite ([31](31-vision-plateforme.md) § 5) : les quatre modules du compte
   gratuit sont faits (étape 5) ; étape 6, outils restants (CGV : faites dans les quatre pays ;
   lois des autres provinces sur la protection du consommateur à lire pour les détailler ; le règlement albertain sur les
