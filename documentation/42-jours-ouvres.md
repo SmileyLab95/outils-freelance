@@ -189,6 +189,6 @@ Lu le 12/11/2026 :
 
 Lecture du Québec (legisquebec) lancée, à relire. À lire : dates de Labour Day, Thanksgiving Day et Family Day (lois
 d'interprétation, fédérale et provinciales), Québec
-(Loi sur les normes du travail, art. 60 ; Loi sur la fête nationale), Alberta, Manitoba, Saskatchewan, Nouvelle-Écosse,
+(Loi sur les normes du travail, art. 60 ; Loi sur la fête nationale), Ontario et Alberta (relecture), Saskatchewan, Nouvelle-Écosse,
 Nouveau-Brunswick, Île-du-Prince-Édouard, Terre-Neuve-et-Labrador, Yukon, Territoires du Nord-Ouest, Nunavut ; le
 Boxing Day et le jour de la vérité et de la réconciliation selon chaque province.
