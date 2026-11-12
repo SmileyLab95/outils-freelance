@@ -186,11 +186,19 @@ Lu le 12/11/2026 :
 | Manitoba | Employment Standards Code (C.P.L.M. c. E110), art. 21(1), « general holiday » | New Year's Day, Louis Riel Day (« the third Monday in February »), Good Friday, Victoria Day, July 1, Labour Day, Orange Shirt Day (National Day for Truth and Reconciliation), Thanksgiving Day, Christmas Day, et tout jour désigné par règlement |
 | Ontario | Employment Standards Act, 2000, art. 1, « public holiday » (version Word d'ontario.ca, la page web étant construite par JavaScript ; SHA-256 63d227ab…a638) | New Year's Day, Family Day (« the third Monday in February »), Good Friday, Victoria Day, Canada Day, Labour Day, Thanksgiving Day, Christmas Day, December 26, et tout jour prescrit |
 | Alberta | Employment Standards Code (RSA 2000, c. E-9), art. 25 (PDF du King's Printer, SHA-256 b5242ba6…e001) | New Year's Day, Alberta Family Day, Good Friday, Victoria Day, Canada Day, Labour Day, Thanksgiving Day, Remembrance Day, Christmas Day, et tout jour désigné par règlement ou par accord |
-| Québec | Loi sur les normes du travail (RLRQ, c. N-1.1), art. 60 (SHA-256 ac48c12f…a8dd) | 1er janvier ; « le Vendredi saint ou le lundi de Pâques, au choix de l'employeur » ; « le lundi qui précède le 25 mai » ; « le 1er juillet ou, si cette date tombe un dimanche, le 2 juillet » ; « le 1er lundi de septembre » ; « le deuxième lundi d'octobre » ; 25 décembre ; la fête nationale (24 juin) relève de la Loi sur la fête nationale (c. F-1.1), article à relire |
+| Québec | Loi sur les normes du travail (RLRQ, c. N-1.1), art. 60 (SHA-256 ac48c12f…a8dd) | 1er janvier ; « le Vendredi saint ou le lundi de Pâques, au choix de l'employeur » ; « le lundi qui précède le 25 mai » ; « le 1er juillet ou, si cette date tombe un dimanche, le 2 juillet » ; « le 1er lundi de septembre » ; « le deuxième lundi d'octobre » ; 25 décembre ; Loi sur la fête nationale (c. F-1.1), art. 1 et 2 : « Le 24 juin est un jour férié et chômé » ; « lorsque cette date tombe un dimanche, le 25 juin est, à l'égard du salarié pour qui le dimanche n'est pas normalement un jour ouvrable, un jour chômé » |
 | Nouvelle-Écosse | Page « Holiday Pay » du ministère (novascotia.ca) | « six holidays with pay: New Year's Day, Nova Scotia Heritage Day, Good Friday, Canada Day, Labour Day, and Christmas Day » ; « A separate law covers Remembrance Day » (texte de la loi à lire) |
+| Nouveau-Brunswick | Employment Standards Act (c. E-7.2), art. 1, « public holiday » (laws.gnb.ca, SHA-256 027c0e06…81ca0) | New Year's Day, Family Day, Good Friday, Canada Day, New Brunswick Day, Labour Day, Remembrance Day, Christmas Day, et les jours substitués selon la loi ; dates de Family Day et New Brunswick Day à relire dans la loi |
+| Terre-Neuve-et-Labrador | Labour Standards Act (RSNL 1990, c. L-2), art. 14(1), « public holiday » (assembly.nl.ca) | New Year's Day, Good Friday, Remembrance Day, Memorial Day, Labour Day, Christmas Day, et les jours proclamés par le lieutenant-gouverneur en conseil ; date de Memorial Day à lire |
+| Île-du-Prince-Édouard | Page « Paid Holidays » (princeedwardisland.ca) | Page construite par JavaScript (108 caractères lus) : lire la loi consolidée en PDF (Employment Standards Act, E-6.3, publiée sur le site de la province) |
+| Saskatchewan | Page « Public (Statutory) Holidays » (saskatchewan.ca, 6 288 caractères) | La liste n'apparaît pas dans le texte lu : lire la loi (publications.saskatchewan.ca) |
 
-À lire : dates de Labour Day, Thanksgiving Day et Family Day (lois
-d'interprétation, fédérale et provinciales), Québec
-(Loi sur la fête nationale), Saskatchewan (la page des jours fériés ne contient pas la liste), Nouvelle-Écosse (Remembrance Day Act),
-Nouveau-Brunswick, Île-du-Prince-Édouard, Terre-Neuve-et-Labrador, Yukon, Territoires du Nord-Ouest, Nunavut ; le
-Boxing Day et le jour de la vérité et de la réconciliation selon chaque province.
+À lire : dates de Labour Day, Thanksgiving Day, Family Day, New Brunswick Day et Memorial Day (lois
+d'interprétation et lois provinciales) ; Saskatchewan et Île-du-Prince-Édouard (lois) ; Nouvelle-Écosse (Remembrance
+Day Act) ; Yukon et Territoires du Nord-Ouest (lectures lancées le 12/11) ; Nunavut.
+
+Choix de réalisation envisagés (à confirmer par la décision lors de la réalisation) : une zone par juridiction ; au
+Québec, deux zones (« Vendredi saint » et « lundi de Pâques »), la loi laissant le choix à l'employeur ; dates calculées
+par règle (jour fixe, n-ième lundi, lundi précédant le 25 mai, Pâques) et contrôlées par un test, comme aux États-Unis ;
+jours de remplacement : seulement ceux que la loi fixe pour tous (fête du Canada le 2 juillet au Québec et au fédéral,
+25 juin au Québec), les autres étant propres à chaque salarié ou employeur.
