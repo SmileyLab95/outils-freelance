@@ -1,5 +1,16 @@
 # Journal des modifications
 
+## 2026-11-12 (petit matin) — Documents et clients : indicateurs et graphiques
+
+- **Documents** : facturé HT du mois et de l'année (nombre de factures, montant moyen, avoirs), devis en attente,
+  **taux de signature des devis** sur 12 mois (signés, refusés, expirés), graphique « facturé et encaissé par mois ».
+- **Clients** : clients actifs, nouveaux clients de l'année, encaissé moyen par client, part du premier et des trois
+  premiers clients, 10 principaux clients.
+- **Fiche d'un client** : facturé depuis le début, encaissé sur 12 mois, reste à encaisser et retard, délai moyen de
+  paiement, graphique facturé et encaissé.
+- Tests : 5 tests unitaires nouveaux, 17 erreurs réintroduites toutes détectées ; parcours navigateur de l'Espace
+  (254 points, accessibilité comprise) et des comptes au vert ; captures relues sur ordinateur et mobile.
+
 ## 2026-11-12 (nuit) — Tableau de bord : comparaison avec l'an dernier, graphique, principaux clients
 
 - **Tableau de bord de l'Espace** : encaissé de l'année et du mois comparés à la même date l'an dernier ; graphique des

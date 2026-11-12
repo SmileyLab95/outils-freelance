@@ -81,3 +81,87 @@ test("principaux clients par encaissements nets, part et reste", () => {
   assert.deepEqual(S.topClients(tie, "2026-01-01", "2026-12-31").rows.map((r) => r.name), ["Atelier Kora", "Studio Nova"], "égalité : ordre alphabétique");
   assert.deepEqual(S.topClients([], "2026-01-01", "2026-12-31"), { total: 0, rows: [], others: { count: 0, amount: 0, share: 0 } });
 });
+
+// ----- Documents et clients (documentation/55, § 2) -----
+
+const quote = (docs, date, clientId, price, status, validity = 30) => {
+  const d = { id: "q" + (++seq), type: "devis", status: "draft", date, validity, clientId, nature: "services",
+    lines: [{ desc: "Devis", qty: 1, price }], vat: { franchise: true, rate: 20, place: "fr" }, payments: [] };
+  const r = E.issue(docs, d, me, clients[clientId], null, date + "T10:00:00Z");
+  assert.deepEqual(r.errors, []);
+  if (status !== "sent") r.doc.status = status;
+  docs.push(r.doc);
+  return r.doc;
+};
+
+test("devis : signés, refusés, expirés, en attente et taux de signature", () => {
+  const docs = [];
+  quote(docs, "2025-09-01", "c1", 999, "accepted"); // hors des 12 mois
+  quote(docs, "2026-01-10", "c1", 1000, "accepted");
+  const inv = quote(docs, "2026-02-10", "c2", 2000, "accepted");
+  inv.invoiceId = "f1"; // facturé : compte comme signé
+  quote(docs, "2026-03-10", "c3", 500, "refused");
+  quote(docs, "2026-09-01", "c1", 700, "sent", 30); // validité passée le 01/10 : expiré
+  quote(docs, "2026-10-14", "c2", 400, "sent", 30); // validité le 13/11 : en attente
+  quote(docs, "2026-11-01", "c2", 300, "sent", 30); // en attente
+  const q = S.quotes(docs, "2025-11-12", "2026-11-12", "2026-11-12");
+  assert.deepEqual(q, { signed: 2, refused: 1, expired: 1, pending: 2, pendingAmount: 700, signedAmount: 3000, rate: 0.5 });
+  assert.equal(S.quotes([], "2025-11-12", "2026-11-12", "2026-11-12").rate, null, "aucun devis tranché");
+  const edge = [];
+  quote(edge, "2026-10-13", "c1", 100, "sent", 30); // validité le 12/11 : encore valable ce jour-là
+  assert.deepEqual([S.quotes(edge, "2025-11-12", "2026-11-12", "2026-11-12").pending, S.quotes(edge, "2025-11-12", "2026-11-13", "2026-11-13").expired], [1, 1]);
+});
+
+test("documents : facturé HT du mois et de l'année, moyenne, avoirs", () => {
+  const docs = [];
+  issue(docs, "2025-12-20", "c1", 5000); // année précédente
+  issue(docs, "2026-01-15", "c1", 1000);
+  const big = issue(docs, "2026-06-15", "c2", 3000);
+  issue(docs, "2026-11-02", "c3", 600);
+  docs.push(E.issue(docs, Object.assign(E.creditFromInvoice(big, "2026-11-05", "av1"), { lines: [{ desc: "Remise", qty: 1, price: 200 }] }),
+    me, clients.c2, null, "2026-11-05T10:00:00Z").doc);
+  const d = S.documents(docs, "2026-11-12");
+  assert.deepEqual([d.month, d.year, d.count, d.average, d.credits, d.creditCount], [400, 4400, 3, 1533.33, 200, 1]);
+  assert.equal(S.invoiced(docs, "2026-01-01", "2026-12-31", "c2"), 2800, "par client : avoir déduit");
+  assert.deepEqual(S.documents([], "2026-11-12").average, null);
+});
+
+test("facturé et encaissé par mois, pour tous les clients ou un seul", () => {
+  const docs = [];
+  issue(docs, "2026-09-10", "c1", 1000, [["2026-10-05", 1000]]);
+  issue(docs, "2026-10-20", "c2", 400, [["2026-11-03", 150]]);
+  issue(docs, "2026-11-10", "c1", 250);
+  const m = S.invoicedMonthly(docs, "2026-11-12", 3);
+  assert.deepEqual(m.map((x) => [x.key, x.invoiced, x.cashed, x.current]), [["2026-09", 1000, 0, false], ["2026-10", 400, 1000, false], ["2026-11", 250, 150, true]]);
+  assert.deepEqual(S.invoicedMonthly(docs, "2026-11-12", 3, "c1").map((x) => [x.invoiced, x.cashed]), [[1000, 0], [0, 1000], [250, 0]]);
+  assert.equal(S.invoicedMonthly(docs, "2026-11-12").length, 12);
+});
+
+test("clients : actifs, nouveaux de l'année, moyenne, parts du premier et des trois premiers", () => {
+  const docs = [];
+  issue(docs, "2025-03-01", "c1", 2000, [["2025-03-10", 2000]]); // c1 client depuis 2025
+  issue(docs, "2026-02-01", "c1", 4000, [["2026-02-10", 4000]]);
+  issue(docs, "2026-03-01", "c2", 3000, [["2026-03-10", 3000]]); // c2 nouveau en 2026
+  issue(docs, "2026-04-01", "c3", 1000, [["2026-04-10", 1000]]); // c3 nouveau en 2026
+  clients.c4 = { id: "c4", name: "Julie Fabre", pro: false };
+  issue(docs, "2026-10-01", "c4", 2000); // c4 nouveau, rien encaissé : pas actif
+  const c = S.clients(docs, "2026-11-12");
+  assert.deepEqual(c, { active: 3, newThisYear: 3, average: 2666.67, total: 8000, top1: 0.5, top3: 1 });
+  docs.find((d) => d.clientId === "c4").payments = [{ id: "p4", date: "2026-10-20", amount: 2000, method: "virement" }];
+  assert.deepEqual(S.clients(docs, "2026-11-12"), { active: 4, newThisYear: 3, average: 2500, total: 10000, top1: 0.4, top3: 0.9 },
+    "quatre clients actifs : le quatrième compte dans la moyenne");
+  assert.deepEqual(S.clients([], "2026-11-12"), { active: 0, newThisYear: 0, average: null, total: 0, top1: null, top3: null });
+});
+
+test("fiche d'un client : facturé, encaissé sur 12 mois, reste, retard, délais, dernière facture", () => {
+  const docs = [];
+  issue(docs, "2025-01-10", "c1", 1000, [["2025-02-19", 1000]]); // 40 jours, 10 de retard ; hors 12 mois
+  issue(docs, "2026-05-01", "c1", 2000, [["2026-05-21", 2000]]); // 20 jours, à l'heure
+  issue(docs, "2026-09-01", "c1", 500, [["2026-09-15", 100]]); // en retard depuis le 01/10 : reste 400
+  issue(docs, "2026-11-01", "c1", 300); // pas échue
+  issue(docs, "2026-11-02", "c2", 9999, [["2026-11-03", 9999]]); // autre client
+  const f = S.clientDetail(docs, "c1", "2026-11-12");
+  assert.deepEqual(f, { invoiced: 3800, cashed12: 2100, due: 700, late: 400, avgDays: 30, avgLate: 5, paidCount: 2, lastInvoice: "2026-11-01" });
+  assert.equal(S.clientDetail(docs.slice().reverse(), "c1", "2026-11-12").lastInvoice, "2026-11-01", "dernière facture quel que soit l'ordre");
+  assert.deepEqual(S.clientDetail(docs, "zz", "2026-11-12"), { invoiced: 0, cashed12: 0, due: 0, late: 0, avgDays: null, avgLate: null, paidCount: 0, lastInvoice: null });
+});

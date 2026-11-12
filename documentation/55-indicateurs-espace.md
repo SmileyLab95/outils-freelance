@@ -70,3 +70,20 @@ tablette et mobile, documentation, publication.
 - Relecture du code : une seconde fonction `kpi()` (trésorerie, 11/11) remplaçait en silence celle du tableau de bord,
   qui échappe le texte ; renommée `tile()`, et nouveau test `doublons.test.mjs` qui refuse deux fonctions de même nom au
   premier niveau d'un script (il détecte l'erreur sur l'ancien code).
+
+### 5.2 Documents et clients (12/11/2026)
+
+- Moteur `espace-stats.js` : `invoiced` (facturé HT entre deux dates, factures moins avoirs, à la date du document,
+  pour tous les clients ou un seul), `quotes` (devis émis sur la période : signés, refusés, **expirés** – envoyés dont
+  la validité est passée sans réponse –, en attente ; taux de signature = signés ÷ (signés + refusés + expirés)),
+  `documents`, `invoicedMonthly` (facturé HT et encaissé par mois), `clients` (actifs : un encaissement sur 12 mois ;
+  nouveaux : première facture émise cette année ; encaissé moyen ; part du premier et des trois premiers),
+  `clientDetail` (facturé depuis le début, encaissé sur 12 mois, reste et retard, délais de paiement de toutes ses
+  factures soldées, dernière facture).
+- Écrans : **Documents** (4 indicateurs : facturé du mois et de l'année, devis en attente, taux de signature ;
+  graphique facturé et encaissé par mois) ; **Clients** (4 indicateurs, principaux clients sur 12 mois, 10 premiers) ;
+  **fiche d'un client** (4 indicateurs et son graphique facturé et encaissé).
+- Tests : 5 tests unitaires nouveaux (cas calculés à la main), 17 erreurs réintroduites, toutes détectées après ajout
+  de deux cas (quatre clients actifs ; factures dans le désordre) ; parcours navigateur (3 points et 3 contrôles
+  d'accessibilité nouveaux ; valeurs attendues recalculées par le moteur dans la page) ; captures relues sur ordinateur
+  et mobile.

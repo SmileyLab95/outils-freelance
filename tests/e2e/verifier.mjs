@@ -3660,6 +3660,33 @@ const tests = {
       "Tableau de bord : principaux clients et part du premier");
     check((await text("#espace-view")).includes("Indiquez le solde de votre compte professionnel pour savoir ce qui est vraiment disponible"), "Tableau de bord : trésorerie à compléter");
     await accessible(page, "Espace : tableau de bord");
+    // Documents, clients et fiche client (documentation/55, § 2) : montants attendus recalculés par le moteur dans la page.
+    const stats = (hash) => page.evaluate(async (hash) => {
+      const d = await window.EspaceStore.load(), S = window.OFE.espaceStats, eur = (n) => window.OF.eur(n).replace(/\s+/g, " ");
+      const ds = S.documents(d.documents, "2026-10-20"), cs = S.clients(d.documents, "2026-10-20");
+      const id = hash ? decodeURIComponent(hash.split("/").pop()) : "", cd = S.clientDetail(d.documents, id, "2026-10-20");
+      return { year: eur(ds.year), month: eur(ds.month), pending: eur(ds.quotes.pendingAmount), rate: ds.quotes.rate, active: cs.active,
+               top1: cs.top1, invoiced: eur(cd.invoiced), due: eur(cd.due) };
+    }, hash);
+    const st = await stats("");
+    await go("#/documents");
+    const dk = await text(".kpis");
+    check(dk.includes("Facturé en 2026 (HT) " + st.year) && dk.includes("Facturé ce mois-ci (HT) " + st.month) && dk.includes("Devis en attente (HT) " + st.pending) &&
+      dk.includes("Taux de signature des devis " + (st.rate === null ? "–" : Math.round(st.rate * 100) + " %")) &&
+      (await page.$$eval('[data-chart="invoiced"] svg[role="img"]', (l) => l.length)) === 1, "Documents : indicateurs (facturé, devis, signature) et graphique");
+    await accessible(page, "Espace : documents (indicateurs)");
+    await go("#/clients");
+    const ck = await text(".kpis");
+    check(ck.includes("Clients actifs " + st.active) && ck.includes("Part du premier client " + Math.round(st.top1 * 100) + " %") && (await text(".bar-list")).includes("Studio Nova"),
+      "Clients : indicateurs et principaux clients");
+    await accessible(page, "Espace : clients (indicateurs)");
+    await page.click('.doc-list a:has-text("Studio Nova")');
+    await page.waitForSelector('[data-chart="client-invoiced"] svg');
+    const sc = await stats(await page.evaluate(() => location.hash));
+    const fk = await text(".kpis");
+    check(sc.invoiced === "1 800,00 €" && fk.includes("Facturé (HT) " + sc.invoiced) && fk.includes("Reste à encaisser " + sc.due) &&
+      (await page.$$eval('[data-chart="client-invoiced"] svg[role="img"]', (l) => l.length)) === 1, "Fiche client : synthèse et graphique");
+    await accessible(page, "Espace : fiche client (indicateurs)");
 
     await go("#/recettes");
     const ledger = await text(".ledger");

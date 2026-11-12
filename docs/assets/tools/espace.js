@@ -515,7 +515,7 @@
   }
 
   /** Principaux clients sur 12 mois (encaissements nets) : barres, part et reste ; constat de dépendance au premier client. */
-  function topClientsCard(top) {
+  function topClientsCard(top, onClientsPage) {
     var pct = function (x) { return OF.fmt(Math.round(x * 100)) + " %"; };
     var max = top.rows.length ? top.rows[0].amount : 0;
     var row = function (name, href, amount, share) {
@@ -527,7 +527,7 @@
         return row(r.name, r.clientId !== "?" && client(r.clientId) ? "#/clients/" + encodeURIComponent(r.clientId) : "", r.amount, r.share);
       }).join("") + (top.others.count ? row("Autres clients (" + top.others.count + ")", "", top.others.amount, top.others.share) : "") + "</ul>" +
       (top.rows[0].share >= 0.5 ? '<p class="small muted">Votre premier client représente ' + pct(top.rows[0].share) + " de vos encaissements des 12 derniers mois.</p>" : "") :
-      '<p class="small muted">Aucun encaissement sur les 12 derniers mois.</p>') + '<p class="small"><a href="#/clients">Tous les clients →</a></p></section>';
+      '<p class="small muted">Aucun encaissement sur les 12 derniers mois.</p>') + (onClientsPage ? "" : '<p class="small"><a href="#/clients">Tous les clients →</a></p>') + "</section>";
   }
 
   /** Résumé de la trésorerie : disponible, point bas sur 6 mois, versement possible (documentation/39, § 7). */
@@ -681,11 +681,13 @@
     }).sort(function (a, b) { return a.date === b.date ? ((b.number || "~") > (a.number || "~") ? 1 : -1) : (a.date < b.date ? 1 : -1); });
     view.innerHTML = '<div class="espace-head"><h2>Documents</h2><div class="espace-quick espace-noprint">' +
       '<a class="btn btn-primary btn-sm" href="#/documents/nouveau?type=facture">+ Facture</a>' +
-      '<a class="btn btn-ghost btn-sm" href="#/documents/nouveau?type=devis">+ Devis</a></div></div>' +
+      '<a class="btn btn-ghost btn-sm" href="#/documents/nouveau?type=devis">+ Devis</a></div></div>' + documentsOverview() +
       '<div class="card espace-card"><div class="espace-filters" role="group" aria-label="Filtrer les documents">' +
       FILTERS.map(function (f) { return '<a class="tab" href="#/documents?filtre=' + f[0] + '"' + (f[0] === filter ? ' aria-current="true"' : "") + ">" + esc(f[1]) + "</a>"; }).join("") +
       '</div><div class="field"><label for="doc-search">Rechercher</label><input id="doc-search" type="search" value="' + esc(r.params.q || "") +
       '" placeholder="Numéro, client, prestation…"></div>' + docTable(list) + "</div>";
+    drawCharts = function () { drawInvoicedChart("invoiced", ST.invoicedMonthly(data.documents, TODAY, 12)); };
+    drawCharts();
     var input = $("doc-search");
     input.addEventListener("input", function () {
       clearTimeout(input.t);
@@ -1164,6 +1166,40 @@
 
   // ----- Clients --------------------------------------------------------------------------------
 
+  // ----- Indicateurs des documents et des clients (documentation/55-indicateurs-espace.md, § 2) ----------------
+
+  var pct = function (x) { return OF.fmt(Math.round(x * 100)) + " %"; };
+  /** Barres « facturé (HT) et encaissé » par mois dans le conteneur data-chart="name". */
+  function drawInvoicedChart(name, months, who) {
+    var el = view.querySelector('[data-chart="' + name + '"]');
+    if (!el) return;
+    el.innerHTML = OF.charts.bars({ width: Math.floor(el.getBoundingClientRect().width) || 600,
+      groups: months.map(function (m) { return { key: m.key, label: m.label, values: [m.invoiced, m.cashed], future: false }; }),
+      series: [{ name: "Facturé (HT)", cls: "is-cur" }, { name: "Encaissé", cls: "is-in" }],
+      title: "Facturé et encaissé par mois" + (who ? " : " + who : ""),
+      desc: "12 derniers mois : facturé " + money(months.reduce(function (s, m) { return s + m.invoiced; }, 0)) + " HT, encaissé " +
+        money(months.reduce(function (s, m) { return s + m.cashed; }, 0)) + "." });
+  }
+  function invoicedCard(name, months, intro) {
+    return '<section class="card espace-card"><div class="card-head"><h3>Facturé et encaissé par mois</h3><span class="small muted">' + esc(intro) + "</span></div>" +
+      '<div class="chart" data-chart="' + name + '"></div>' + OF.charts.legend([{ cls: "is-cur", label: "Facturé (HT, à la date de la facture)" }, { cls: "is-in", label: "Encaissé" }]) +
+      OF.charts.table("Facturé et encaissé par mois", ["Mois", "Facturé (HT)", "Encaissé"], months.map(function (m) {
+        return [m.label + (m.current ? " (en cours)" : ""), money(m.invoiced), money(m.cashed)];
+      })) + "</section>";
+  }
+  function documentsOverview() {
+    if (!data.documents.some(function (d) { return d.status !== "draft"; })) return "";
+    var ds = ST.documents(data.documents, TODAY), q = ds.quotes;
+    return '<div class="kpis kpis-4">' +
+      kpi("Facturé ce mois-ci (HT)", money(ds.month), "factures moins avoirs du mois") +
+      kpi("Facturé en " + YEAR + " (HT)", money(ds.year), [countText(ds.count, "facture", "factures"), ds.average !== null ? "moyenne " + money(ds.average) : "",
+        ds.creditCount ? countText(ds.creditCount, "avoir", "avoirs") + " (" + money(ds.credits) + ")" : ""].filter(Boolean).join(" · ")) +
+      kpi("Devis en attente (HT)", money(q.pendingAmount), q.pending ? countText(q.pending, "devis encore valable", "devis encore valables") : "aucun devis en attente") +
+      kpi("Taux de signature des devis", q.rate === null ? "–" : pct(q.rate), q.rate === null ? "aucun devis tranché sur 12 mois" :
+        q.signed + " signé" + (q.signed > 1 ? "s" : "") + ", " + q.refused + " refusé" + (q.refused > 1 ? "s" : "") + ", " + q.expired + " expiré" + (q.expired > 1 ? "s" : "") + " (12 mois)") +
+      "</div>" + invoicedCard("invoiced", ST.invoicedMonthly(data.documents, TODAY, 12), "12 derniers mois.");
+  }
+
   function viewClients(r) {
     var showArchived = r.params.archives === "1";
     var list = data.clients.filter(function (c) { return showArchived || !c.archived; })
@@ -1173,6 +1209,15 @@
       html += '<div class="card espace-card"><p class="muted">Pas encore de client. Créez votre premier client pour lui faire un devis ou une facture.</p>' +
         '<a class="btn btn-primary btn-sm" href="#/clients/nouveau">Créer un client</a></div>';
     } else {
+      var cs = ST.clients(data.documents, TODAY);
+      if (cs.active) {
+        html += '<div class="kpis kpis-4">' +
+          kpi("Clients actifs", String(cs.active), "au moins un encaissement sur 12 mois") +
+          kpi("Nouveaux clients en " + YEAR, String(cs.newThisYear), "première facture émise cette année") +
+          kpi("Encaissé moyen par client", money(cs.average), "clients actifs, 12 derniers mois") +
+          kpi("Part du premier client", pct(cs.top1), "trois premiers : " + pct(cs.top3) + " des encaissements", cs.top1 >= 0.5 ? "is-warn" : "") + "</div>" +
+          topClientsCard(ST.topClients(data.documents, E.addYears(TODAY, -1), TODAY, 10), true);
+      }
       html += '<div class="card espace-card"><ul class="doc-list">' + list.map(function (c) {
         var t = E.clientTotals(data.documents, c.id);
         return '<li><a href="#/clients/' + esc(c.id) + '"><span class="dl-main"><b>' + esc(c.name) + (c.archived ? " (archivé)" : "") + '</b><span class="small muted">' +
@@ -1196,7 +1241,16 @@
         notes: [lead.contact ? "Interlocuteur : " + lead.contact : "", lead.phone ? "Téléphone : " + lead.phone : ""].filter(Boolean).join("\n") });
     }
     var docs = isNew ? [] : data.documents.filter(function (d) { return d.clientId === c.id; });
+    var issuedDocs = docs.some(function (d) { return d.status !== "draft" && d.type === "facture"; });
+    var cd = issuedDocs ? ST.clientDetail(data.documents, c.id, TODAY) : null, cm = issuedDocs ? ST.invoicedMonthly(data.documents, TODAY, 12, c.id) : null;
     view.innerHTML = '<div class="espace-head"><h2>' + (isNew ? "Nouveau client" : esc(c.name)) + "</h2></div>" +
+      (cd ? '<div class="kpis kpis-4">' +
+        kpi("Facturé (HT)", money(cd.invoiced), "depuis la première facture" + (cd.lastInvoice ? " · dernière le " + day(cd.lastInvoice) : "")) +
+        kpi("Encaissé sur 12 mois", money(cd.cashed12), "remboursements d'avoirs déduits") +
+        kpi("Reste à encaisser", money(cd.due), cd.late ? "dont " + money(cd.late) + " en retard" : "aucune facture en retard", cd.late ? "is-warn" : "") +
+        kpi("Délai moyen de paiement", cd.paidCount ? OF.fmt(cd.avgDays) + " j" : "–", cd.paidCount ? "retard moyen " + OF.fmt(cd.avgLate) + " j · " +
+          countText(cd.paidCount, "facture payée", "factures payées") : "pas encore de facture payée") + "</div>" +
+        invoicedCard("client-invoiced", cm, "12 derniers mois, pour ce client.") : "") +
       '<form class="card espace-card" id="client-form" novalidate><div class="fields">' +
       field("name", "Nom ou raison sociale", c.name, { required: true, placeholder: "Studio Nova" }) +
       field("pro", "Type de client", c.pro ? "1" : "0", { options: [["1", "Professionnel (entreprise, association…)"], ["0", "Particulier"]], half: true }) +
@@ -1216,6 +1270,10 @@
       (isNew ? "" : '<a class="btn btn-ghost" href="#/documents/nouveau?type=facture&client=' + esc(c.id) + '">Nouvelle facture</a>' +
         '<button type="button" class="btn btn-ghost" id="client-archive">' + (c.archived ? "Réactiver" : "Archiver") + "</button>") +
       "</div></form>" + (docs.length ? '<section class="card espace-card"><h3>Documents de ce client</h3>' + docTable(docs) + "</section>" : "");
+    if (cm) {
+      drawCharts = function () { drawInvoicedChart("client-invoiced", cm, c.name); };
+      drawCharts();
+    }
     var form = $("client-form");
     form.elements.place.addEventListener("change", function () {
       var place = form.elements.place.value;
