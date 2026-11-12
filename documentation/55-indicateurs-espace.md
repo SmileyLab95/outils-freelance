@@ -170,7 +170,7 @@ tablette et mobile, documentation, publication.
 
 Les huit onglets de l'Espace (trésorerie comprise, [39](39-tresorerie.md) § 7) ont leurs indicateurs et graphiques.
 Pistes d'amélioration notées : date de clôture des pistes (faite le 12/11, § 7) ;
-période choisie dans l'adresse (faite le 12/11 pour les documents, § 8) pour les documents et les dépenses (`?periode=`), aujourd'hui fixée à l'année ou à
+période choisie dans l'adresse (faite le 12/11 pour les documents, § 8, et les dépenses, § 9) pour les documents et les dépenses (`?periode=`), aujourd'hui fixée à l'année ou à
 12 mois glissants.
 
 ## 7. Date de clôture des pistes (spécification du 12/11/2026, suite du § 6)
@@ -265,3 +265,41 @@ L'onglet Dépenses a déjà son année dans l'adresse (`?annee=`) ; l'onglet Cli
   parcours navigateur (6 points nouveaux, accessibilité comprise) ; captures relues sur ordinateur et mobile.
 - Relecture : le parcours lisait l'écran avant son nouveau rendu après un clic ; il attend désormais que les
   indicateurs affichent la période choisie.
+
+## 9. Période de l'onglet Dépenses (spécification du 12/11/2026, suite du § 6)
+
+Besoin : en début d'année, les indicateurs « de l'année » ne portent que sur quelques semaines ; le mois et le
+trimestre servent au suivi courant ; les 12 derniers mois donnent une moyenne et une part des encaissements stables.
+
+- **Onglets d'année gardés** : le registre des achats se tient et se récapitule **par année** (documentation/36) ;
+  la liste, ses totaux, l'export CSV et l'impression restent ceux de l'année choisie. Une année passée garde ses
+  indicateurs de l'année entière, sans boutons (« Du 01/01/2025 au 31/12/2025. »).
+- **Année en cours** : boutons « Période des indicateurs » **Mois, Trimestre, Année** (par défaut), **12 mois**, mêmes
+  bornes que les documents (§ 8, `ST.period`). Pas d'« Année précédente » : l'onglet de l'année la remplace. Adresse
+  `#/depenses?periode=mois|trimestre|12m` ; une période inconnue (ou « precedente ») donne l'année.
+- **Indicateurs** sur la période : dépenses (total, nombre) ; premier poste (catégorie la plus élevée et sa part) ;
+  moyenne mensuelle sur les mois de la période (trimestre : mois commencés du trimestre ; année : mois écoulés ;
+  12 mois : 12) ou, pour le mois, **dépense moyenne** (total ÷ nombre) ; part des encaissements de la même période
+  (et abattement forfaitaire de l'activité, inchangé). Catégories et principaux fournisseurs sur la période.
+- **Graphique** « Dépenses par mois » : mois de l'année pour « Année » (et pour une année passée), 12 derniers mois
+  sinon (comme les documents).
+- **Affichage** : les indicateurs apparaissent dès qu'une dépense passée existe (une année sans dépense affiche
+  0 € et les 12 mois restent utiles) ; aucune dépense : rien, comme aujourd'hui.
+- **Tests** : moteur (chaque période, bornes, moyenne, part des encaissements, valeurs calculées à la main), parcours
+  navigateur (boutons, adresse, période inconnue, année passée), captures sur ordinateur et mobile.
+
+### 9.1 Réalisation (12/11/2026)
+
+- Moteur : `ST.expensesPeriod(dépenses, documents, aujourd'hui, clé, profil, règles)` (bornes et libellés de
+  `ST.period`, moyenne par mois de la période, dépense moyenne, graphique) ; `ST.expenses` (année entière) et lui
+  partagent le calcul des catégories, fournisseurs, encaissé et abattement (`expenseStats`, `expensesByMonth`).
+- Écran : boutons « Mois, Trimestre, Année, 12 mois » au-dessus des indicateurs de l'année en cours, avec les dates de
+  la période ; « Premier poste » remplace « Ce mois-ci » (le bouton « Mois » le donne) ; une année passée affiche ses
+  dates, sans boutons. La liste, l'export et l'impression restent ceux de l'année.
+- Graphique des 12 derniers mois : mois entiers (de décembre 2025 à novembre 2026 le 12/11/2026) ; les indicateurs
+  « sur 12 mois » partent du 13/11/2025 : une dépense du début du mois de l'an dernier compte dans les indicateurs sans
+  figurer sur le graphique (comme pour les documents, § 8).
+- Tests : 1 test unitaire (chaque période, bornes du trimestre et des 12 mois, dépense future, janvier, aucune dépense),
+  valeurs calculées à la main ; 15 erreurs réintroduites : 14 détectées, la quinzième sans effet (la fin de chaque
+  période est aujourd'hui) ; parcours navigateur (6 points nouveaux, accessibilité comprise ; Espace : 288 points) ;
+  captures relues sur ordinateur et mobile (trimestre, 12 mois, année passée).

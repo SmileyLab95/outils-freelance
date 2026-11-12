@@ -209,25 +209,52 @@
    * versement libératoire).
    */
   function expenses(list, documents, year, today, profile, rules) {
-    var to = year === today.slice(0, 4) ? today : year + "-12-31";
-    var res = E.expenseRows(list, year + "-01-01", to), months = monthsOf(year, today);
-    var byCat = {}, bySupplier = {}, byMonth = {};
+    var to = year === today.slice(0, 4) ? today : year + "-12-31", months = monthsOf(year, today);
+    var x = expenseStats(list, documents, year + "-01-01", to, profile, rules), byMonth = expensesByMonth(list, months, to);
+    // Année en cours : le dernier mois de la liste est le mois en cours.
+    return Object.assign(x, { month: year === today.slice(0, 4) ? byMonth[byMonth.length - 1].amount : null,
+                              average: months.length ? round2(x.total / months.length) : null, byMonth: byMonth });
+  }
+
+  /** Dépenses d'une plage de dates : total, nombre, catégories, 5 premiers fournisseurs, encaissé et part des
+   *  encaissements, abattement forfaitaire de l'activité (micro-entreprise à une activité, sans versement libératoire). */
+  function expenseStats(list, documents, from, to, profile, rules) {
+    var res = E.expenseRows(list, from, to), byCat = {}, bySupplier = {};
     res.rows.forEach(function (r) {
       var cat = r.category || "Non classées";
       byCat[cat] = (byCat[cat] || 0) + r.amount;
       bySupplier[r.supplier] = (bySupplier[r.supplier] || 0) + r.amount;
-      byMonth[r.date.slice(0, 7)] = round2((byMonth[r.date.slice(0, 7)] || 0) + r.amount);
     });
-    var cashed = E.cashed(documents || [], year + "-01-01", to);
+    var cashed = E.cashed(documents || [], from, to);
     var p = profile || {}, a = rules && rules.micro_activities && rules.micro_activities[p.activity];
     var mixed = rules && E.mixedActivities(p, rules);
-    return { total: res.total, count: res.rows.length, month: year === today.slice(0, 4) ? byMonth[today.slice(0, 7)] || 0 : null,
-             average: months.length ? round2(res.total / months.length) : null,
-             byMonth: months.map(function (k) { return { key: k, label: E.period(k).label, amount: byMonth[k] || 0 }; }),
-             byCategory: ranking(byCat, res.total), suppliers: ranking(bySupplier, res.total, 5),
+    return { total: res.total, count: res.rows.length, byCategory: ranking(byCat, res.total), suppliers: ranking(bySupplier, res.total, 5),
              cashed: cashed, ratio: cashed > 0 ? Math.round(res.total / cashed * 1000) / 1000 : null,
              // Abattement de l'impôt sur le revenu : sans objet avec le versement libératoire (impôt en % du chiffre d'affaires).
              abatement: a && !mixed && !p.vl ? a.abattement : null };
+  }
+  /** Dépenses de chaque mois (clés AAAA-MM), jusqu'à la date `to` comprise. */
+  function expensesByMonth(list, keys, to) {
+    var byMonth = {};
+    if (keys.length) E.expenseRows(list, keys[0] + "-01", to).rows.forEach(function (r) {
+      byMonth[r.date.slice(0, 7)] = round2((byMonth[r.date.slice(0, 7)] || 0) + r.amount);
+    });
+    return keys.map(function (k) { return { key: k, label: E.period(k).label, amount: byMonth[k] || 0 }; });
+  }
+
+  /**
+   * Dépenses de l'année en cours sur une période (documentation/55, § 9) : mois, trimestre, année (par défaut) ou
+   * 12 derniers mois ; moyenne par mois de la période (dépense moyenne pour le mois) ; graphique de l'année pour
+   * « année », des 12 derniers mois sinon.
+   */
+  var EXPENSE_PERIODS = ["mois", "trimestre", "annee", "12m"];
+  function expensesPeriod(list, documents, today, key, profile, rules) {
+    var p = period(EXPENSE_PERIODS.indexOf(key) >= 0 ? key : "annee", today), m = +today.slice(5, 7);
+    var n = { mois: 1, trimestre: m - Math.floor((m - 1) / 3) * 3, annee: m, "12m": 12 }[p.key];
+    var x = expenseStats(list, documents, p.from, p.to, profile, rules), keys = [];
+    for (var i = p.key === "annee" ? m - 1 : 11; i >= 0; i--) keys.push(E.addMonths(today.slice(0, 8) + "01", -i).slice(0, 7));
+    return Object.assign(x, { period: p, months: n, average: p.key === "mois" ? null : round2(x.total / n),
+                              perExpense: x.count ? round2(x.total / x.count) : null, byMonth: expensesByMonth(list, keys, today) });
   }
 
   /**
@@ -355,7 +382,7 @@
     return { end: end, next: list[0] || null, events: list, soon: soon, urssaf: total("urssaf"), vat: total("vat") };
   }
 
-  return { lastYear: lastYear, change: change, toDate: toDate, monthly: monthly, topClients: topClients, expenses: expenses, receipts: receipts,
+  return { lastYear: lastYear, change: change, toDate: toDate, monthly: monthly, topClients: topClients, expenses: expenses, expensesPeriod: expensesPeriod, EXPENSE_PERIODS: EXPENSE_PERIODS, receipts: receipts,
            monday: monday, isoWeek: isoWeek, time: time, prospects: prospects, deadlines: deadlines,
            since12: since12, period: period, PERIODS: PERIODS, invoiced: invoiced, quotes: quotes, documents: documents, invoicedMonthly: invoicedMonthly, clients: clients, clientDetail: clientDetail };
 });

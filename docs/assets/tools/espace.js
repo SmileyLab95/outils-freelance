@@ -1468,18 +1468,40 @@
         .concat(th && th.vat ? [{ cls: "is-vat", label: "Seuil de TVA (" + money(th.vat.base) + ")" }] : [])) + "</section></div>";
   }
 
-  /** Dépenses : indicateurs, graphique par mois, catégories et fournisseurs (documentation/55, § 2). */
-  function expensesOverview(year) {
-    var xs = ST.expenses(data.expenses, data.documents, year, TODAY, profile(), R);
-    if (!xs.count) return "";
-    var top = xs.byCategory[0];
-    return '<div class="espace-noprint"><div class="kpis kpis-4">' +
-      kpi("Dépenses en " + year, money(xs.total), countText(xs.count, "dépense", "dépenses")) +
-      (xs.month !== null ? kpi("Ce mois-ci", money(xs.month), "depuis le 1er du mois") : kpi("Premier poste", money(top.amount), top.name + " · " + pct(top.share))) +
-      kpi("Moyenne mensuelle", xs.average === null ? "–" : money(xs.average), year === YEAR ? "mois écoulés de l'année" : "sur 12 mois") +
-      kpi("Part des encaissements", xs.ratio === null ? "–" : pct(xs.ratio), xs.ratio === null ? "aucun encaissement sur la période" :
-        "dépenses ÷ encaissements de " + year + (xs.abatement !== null ? " · abattement forfaitaire de votre activité : " + pct(xs.abatement) : "")) + "</div>" +
-      '<div class="espace-cols tr-charts"><section class="card espace-card"><div class="card-head"><h3>Dépenses par mois</h3><span class="small muted">' + esc(year) + ".</span></div>" +
+  /**
+   * Indicateurs des dépenses : année passée entière, ou période choisie de l'année en cours (documentation/55, § 2 et
+   * § 9) ; libellé, bornes, mois de la moyenne et du graphique.
+   */
+  function expensesFigures(year, key) {
+    if (year === YEAR) {
+      var x = ST.expensesPeriod(data.expenses, data.documents, TODAY, key, profile(), R);
+      return Object.assign(x, { label: x.period.label, from: x.period.from, to: x.period.to,
+        averageHint: { trimestre: "mois commencés du trimestre", annee: "mois écoulés de l'année", "12m": "sur 12 mois" }[x.period.key],
+        chartIntro: x.period.key === "annee" ? "Année " + YEAR + "." : "12 derniers mois.",
+        chartTitle: x.period.key === "annee" ? "Dépenses par mois en " + YEAR : "Dépenses des 12 derniers mois" });
+    }
+    return Object.assign(ST.expenses(data.expenses, data.documents, year, TODAY, profile(), R), { period: null, label: "en " + year,
+      from: year + "-01-01", to: year + "-12-31", averageHint: "sur 12 mois", perExpense: null, chartIntro: "Année " + year + ".", chartTitle: "Dépenses par mois en " + year });
+  }
+  var EXPENSE_PERIOD_LABELS = { mois: "Mois", trimestre: "Trimestre", annee: "Année", "12m": "12 mois" };
+
+  /** Dépenses : période, indicateurs, graphique par mois, catégories et fournisseurs (documentation/55, § 2 et § 9). */
+  function expensesOverview(year, key) {
+    if (!data.expenses.some(function (e) { return e.date <= TODAY; })) return "";
+    var xs = expensesFigures(year, key), top = xs.byCategory[0];
+    var tools = '<div class="tr-tools espace-noprint">' + (xs.period ? '<div class="seg" role="group" aria-label="Période des indicateurs">' +
+      ST.EXPENSE_PERIODS.map(function (k) {
+        return '<a class="tab" href="#/depenses' + (k === "annee" ? "" : "?periode=" + k) + '"' + (k === xs.period.key ? ' aria-current="true"' : "") + ">" + EXPENSE_PERIOD_LABELS[k] + "</a>";
+      }).join("") + "</div>" : "") + '<span class="small muted">Du ' + day(xs.from) + " au " + day(xs.to) + ".</span></div>";
+    return '<div class="espace-noprint">' + tools + '<div class="kpis kpis-4">' +
+      kpi("Dépenses " + xs.label, money(xs.total), xs.count ? countText(xs.count, "dépense", "dépenses") : "aucune dépense sur la période") +
+      kpi("Premier poste", top ? money(top.amount) : "–", top ? top.name + " · " + pct(top.share) : "aucune dépense sur la période") +
+      (xs.period && xs.period.key === "mois"
+        ? kpi("Dépense moyenne", xs.perExpense === null ? "–" : money(xs.perExpense), xs.count ? "total ÷ nombre de dépenses" : "aucune dépense sur la période")
+        : kpi("Moyenne mensuelle", xs.average === null ? "–" : money(xs.average), xs.averageHint)) +
+      kpi("Part des encaissements", xs.ratio === null ? "–" : pct(xs.ratio), (xs.ratio === null ? "aucun encaissement sur la période" :
+        "dépenses ÷ encaissements " + xs.label) + (xs.abatement !== null ? " · abattement forfaitaire de votre activité : " + pct(xs.abatement) : "")) + "</div>" +
+      '<div class="espace-cols tr-charts"><section class="card espace-card"><div class="card-head"><h3>Dépenses par mois</h3><span class="small muted">' + esc(xs.chartIntro) + "</span></div>" +
       '<div class="chart" data-chart="expenses"></div>' + OF.charts.table("Dépenses par mois", ["Mois", "Dépenses"], xs.byMonth.map(function (m) { return [m.label, money(m.amount)]; })) +
       '</section><section class="card espace-card"><h3>Par catégorie</h3>' + barList(xs.byCategory) + "<h4>Principaux fournisseurs</h4>" + barList(xs.suppliers) +
       (xs.abatement !== null ? '<p class="small muted">En micro-entreprise, l\'impôt est calculé après un abattement forfaitaire de ' + pct(xs.abatement) +
@@ -1503,7 +1525,7 @@
       '<a class="btn btn-primary btn-sm" href="#/depenses/nouvelle">+ ' + (required ? "Achat" : "Dépense") + "</a>" +
       '<button type="button" class="btn btn-ghost btn-sm" id="expenses-csv"' + (res.rows.length ? "" : " disabled") + ">Exporter (CSV)</button>" +
       '<button type="button" class="btn btn-ghost btn-sm" id="expenses-print"' + (res.rows.length ? "" : " disabled") + ">Imprimer</button></div></div>" +
-      expensesOverview(year) +
+      expensesOverview(year, r.params.periode) +
       '<div class="card espace-card"><div class="espace-filters espace-noprint" role="group" aria-label="Année">' +
       Object.keys(years).sort().reverse().map(function (y) { return '<a class="tab" href="#/depenses?annee=' + y + '"' + (y === year ? ' aria-current="true"' : "") + ">" + y + "</a>"; }).join("") + "</div>" +
       (res.rows.length ? '<table class="ledger"><thead><tr><th>Date</th><th>Fournisseur</th><th>Nature</th><th>Moyen</th><th>Pièce</th><th class="num">Montant</th></tr></thead><tbody>' +
@@ -1521,10 +1543,11 @@
     drawCharts = function () {
       var el = view.querySelector('[data-chart="expenses"]');
       if (!el) return;
-      var xs = ST.expenses(data.expenses, data.documents, year, TODAY, profile(), R);
+      var xs = expensesFigures(year, r.params.periode);
       el.innerHTML = OF.charts.bars({ width: Math.floor(el.getBoundingClientRect().width) || 600,
         groups: xs.byMonth.map(function (m) { return { key: m.key, label: m.label, values: [m.amount], future: false }; }),
-        series: [{ name: "Dépenses", cls: "is-out" }], title: "Dépenses par mois en " + year, desc: "Total " + money(xs.total) + "." });
+        series: [{ name: "Dépenses", cls: "is-out" }], title: xs.chartTitle,
+        desc: "Total " + money(xs.byMonth.reduce(function (s, m) { return Math.round((s + m.amount) * 100) / 100; }, 0)) + "." });
     };
     drawCharts();
     if (!res.rows.length) return;

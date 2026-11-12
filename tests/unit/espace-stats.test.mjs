@@ -348,3 +348,48 @@ test("12 derniers mois : même fenêtre pour les clients actifs et l'encaissé d
   assert.deepEqual([c.active, c.total], [1, 200]);
   assert.deepEqual([S.clientDetail(docs, "c1", "2026-11-12").cashed12, S.clientDetail(docs, "c2", "2026-11-12").cashed12], [0, 200]);
 });
+
+test("dépenses sur une période de l'année en cours : mois, trimestre, année, 12 mois (documentation/55, § 9)", () => {
+  const list = [exp("2025-11-10", "Ancien", 300, "materiel"), exp("2025-11-13", "Bord", 50, "telecom"), exp("2025-12-20", "Ancien", 999, "materiel"),
+    exp("2026-01-10", "Adobe", 70, "logiciels"), exp("2026-03-05", "Boulanger", 400, "materiel"), exp("2026-09-30", "Hôtel", 90, "deplacements"),
+    exp("2026-10-01", "SNCF", 60, "deplacements"), exp("2026-11-01", "Papeterie", 40), exp("2026-11-12", "Adobe", 30, "logiciels"),
+    exp("2026-11-13", "Futur", 500, "autres")]; // après aujourd'hui : non compté
+  const docs = [];
+  issue(docs, "2025-12-01", "c1", 1000, [["2025-12-15", 1000]]);
+  issue(docs, "2026-02-01", "c1", 2000, [["2026-02-10", 2000]]);
+  issue(docs, "2026-10-05", "c2", 500, [["2026-10-20", 500]]);
+  issue(docs, "2026-11-02", "c2", 400, [["2026-11-05", 400]]);
+  const micro = { activity: "liberal_bnc" }, T = "2026-11-12";
+  const pick = (x) => [x.period.key, x.period.from, x.period.to, x.total, x.count, x.months, x.average, x.perExpense, x.cashed, x.ratio];
+  // Mois : 40 + 30 = 70 € (2 dépenses, 35 € en moyenne) ; encaissé 400 €.
+  const mois = S.expensesPeriod(list, docs, T, "mois", micro, R);
+  assert.deepEqual(pick(mois), ["mois", "2026-11-01", T, 70, 2, 1, null, 35, 400, 0.175]);
+  assert.deepEqual(mois.byCategory, [{ name: "Non classées", amount: 40, share: 0.571 }, { name: "Logiciels et abonnements", amount: 30, share: 0.429 }]);
+  assert.equal(mois.period.label, "ce mois-ci");
+  // Trimestre : 60 + 40 + 30 = 130 € sur 2 mois commencés (octobre, novembre) ; encaissé 900 €.
+  assert.deepEqual(pick(S.expensesPeriod(list, docs, T, "trimestre", micro, R)), ["trimestre", "2026-10-01", T, 130, 3, 2, 65, 43.33, 900, 0.144]);
+  // Année : 70 + 400 + 90 + 60 + 40 + 30 = 690 € sur 11 mois ; encaissé 2 900 € ; graphique de janvier à novembre.
+  const an = S.expensesPeriod(list, docs, T, "annee", micro, R);
+  assert.deepEqual(pick(an), ["annee", "2026-01-01", T, 690, 6, 11, 62.73, 115, 2900, 0.238]);
+  assert.deepEqual([an.byMonth.length, an.byMonth[0].key, an.byMonth[10].key], [11, "2026-01", "2026-11"]);
+  assert.deepEqual(an.byMonth.filter((m) => m.amount).map((m) => [m.key, m.amount]), [["2026-01", 70], ["2026-03", 400], ["2026-09", 90], ["2026-10", 60], ["2026-11", 70]]);
+  assert.equal(an.abatement, 0.34);
+  // 12 mois : du 13/11/2025 au 12/11/2026 (les 300 € du 10/11/2025 restent dehors) : 50 + 999 + 690 = 1 739 € ÷ 12 ;
+  // encaissé 1 000 + 2 900 = 3 900 € ; graphique des 12 mois entiers de décembre 2025 à novembre 2026.
+  const douze = S.expensesPeriod(list, docs, T, "12m", micro, R);
+  assert.deepEqual(pick(douze), ["12m", "2025-11-13", T, 1739, 8, 12, 144.92, 217.38, 3900, 0.446]);
+  assert.deepEqual([douze.byMonth.length, douze.byMonth[0].key, douze.byMonth[0].amount, douze.byMonth[11].key], [12, "2025-12", 999, "2026-11"]);
+  assert.deepEqual(douze.suppliers.map((s) => [s.name, s.amount]), [["Ancien", 999], ["Boulanger", 400], ["Adobe", 100], ["Hôtel", 90], ["SNCF", 60]]);
+  // Mois et trimestre : graphique des 12 derniers mois.
+  assert.deepEqual(S.expensesPeriod(list, docs, T, "trimestre", micro, R).byMonth.map((m) => m.key), douze.byMonth.map((m) => m.key));
+  // Année précédente (non proposée : l'onglet de l'année la remplace) et période inconnue : l'année en cours.
+  assert.equal(S.expensesPeriod(list, docs, T, "precedente", micro, R).period.key, "annee");
+  assert.equal(S.expensesPeriod(list, docs, T, "semaine", micro, R).period.key, "annee");
+  assert.deepEqual(S.EXPENSE_PERIODS, ["mois", "trimestre", "annee", "12m"]);
+  // Premier mois d'un trimestre et de l'année : moyenne sur un mois.
+  const jan = S.expensesPeriod(list, docs, "2026-01-15", "trimestre", micro, R);
+  assert.deepEqual([jan.months, jan.total, jan.average], [1, 70, 70]);
+  assert.deepEqual([S.expensesPeriod(list, docs, "2026-01-15", "annee", micro, R).average, S.expensesPeriod(list, docs, "2026-01-15", "annee", micro, R).byMonth.length], [70, 1]);
+  // Aucune dépense ni encaissement : zéros, pas de moyenne par dépense ni de part.
+  assert.deepEqual(pick(S.expensesPeriod([], [], T, "mois", micro, R)), ["mois", "2026-11-01", T, 0, 0, 1, null, null, 0, null]);
+});

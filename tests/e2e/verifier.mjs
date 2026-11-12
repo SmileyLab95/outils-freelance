@@ -3761,6 +3761,36 @@ const tests = {
       (await text(".bar-list")).includes("Non classées 120,00 € 83 %") && (await text(".bar-list")).includes("Autres 24,90 € 17 %") &&
       (await page.$$eval('[data-chart="expenses"] svg[role="img"]', (l) => l.length)) === 1, "Dépenses : indicateurs, catégories et graphique");
     await accessible(page, "Espace : dépenses");
+    // Période des indicateurs (documentation/55, § 9) : au 4e trimestre, seule la dépense du 02/10 (24,90 €, « Autres ») ;
+    // la liste reste celle de l'année.
+    await page.click('.seg a:text-is("Trimestre")');
+    await page.waitForFunction(() => location.hash === "#/depenses?periode=trimestre" && document.querySelector("#espace-view .kpis").innerText.includes("trimestre"));
+    const xq = await text("#espace-view .kpis");
+    check(xq.includes("Dépenses au 4e trimestre 24,90 € 1 dépense") && xq.includes("Premier poste 24,90 € Autres · 100 %") &&
+      xq.includes("Moyenne mensuelle 24,90 € mois commencés du trimestre") && (await text(".tr-tools .small")) === "Du 01/10/2026 au 20/10/2026." &&
+      (await text(".tr-charts .card-head .small")) === "12 derniers mois." && (await text("#espace-view .ledger")).includes("Total des dépenses en 2026 144,90 €"),
+      "Dépenses : période du trimestre (indicateurs, dates, graphique des 12 mois, liste de l'année)");
+    await accessible(page, "Espace : dépenses (trimestre)");
+    await page.click('.seg a:text-is("Mois")');
+    await page.waitForFunction(() => location.hash === "#/depenses?periode=mois" && document.querySelector("#espace-view .kpis").innerText.includes("ce mois-ci"));
+    check((await text("#espace-view .kpis")).includes("Dépenses ce mois-ci 24,90 €") && (await text("#espace-view .kpis")).includes("Dépense moyenne 24,90 € total ÷ nombre de dépenses"),
+      "Dépenses : période du mois (dépense moyenne)");
+    await page.click('.seg a:text-is("12 mois")');
+    await page.waitForFunction(() => location.hash === "#/depenses?periode=12m" && /sur\s12\smois/.test(document.querySelector("#espace-view .kpis").innerText));
+    check((await text("#espace-view .kpis")).includes("Dépenses sur 12 mois 144,90 € 2 dépenses") && (await text(".tr-tools .small")) === "Du 21/10/2025 au 20/10/2026." &&
+      (await page.getAttribute('.espace-filters a:text-is("2026")', "href")) === "#/depenses?annee=2026", "Dépenses : 12 derniers mois");
+    await go("#/depenses?periode=precedente");
+    check((await text('.seg a[aria-current="true"]')) === "Année" && (await text("#espace-view .kpis")).includes("Dépenses en 2026 144,90 €"), "Dépenses : période inconnue : année en cours");
+    // Année passée : indicateurs de l'année entière, sans boutons de période.
+    await addExpense("2025-06-10", "50", "Ancien fournisseur", "Clavier", "carte", "A-1", "materiel");
+    await go("#/depenses?annee=2025&periode=mois");
+    check((await text("#espace-view .kpis")).includes("Dépenses en 2025 50,00 € 1 dépense") && !(await page.$("#espace-view .seg")) &&
+      (await text(".tr-tools .small")) === "Du 01/01/2025 au 31/12/2025." && (await text(".tr-charts .card-head .small")) === "Année 2025.",
+      "Dépenses : année passée entière, sans période");
+    await page.click('#espace-view .ledger a:text("Ancien fournisseur")');
+    await page.waitForSelector("#expense-delete");
+    await page.click("#expense-delete");
+    await page.waitForSelector("#espace-view .ledger");
     const [spentCsv] = await Promise.all([page.waitForEvent("download"), page.click("#expenses-csv")]);
     check(fs.readFileSync(await spentCsv.path(), "utf8").includes('02/10/2026;"Papeterie du centre";"Ramettes";24,90;"Espèces";"F-881";"Autres"'), "Espace : export CSV des dépenses (catégorie en dernière colonne)");
     await page.click('#espace-view .ledger a:text("Imprimeur")');

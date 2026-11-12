@@ -9,7 +9,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 
 ## Où en est-on ?
 
-*Mis à jour le 12/11/2026 (après-midi).*
+*Mis à jour le 12/11/2026 (fin d'après-midi).*
 
 - **Priorité (décision D10)** : le site et la plateforme d'abord ; noms de domaine, Gumroad et affiliation à la fin.
   Règle de qualité maximale pour tout produit ou service (D11, charte dans la [méthode](04-methode-de-travail.md#charte-qualité)).
@@ -425,9 +425,10 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   4,83:1), pour que le thème à venir garde la règle (D70). Taux 2027 du Colorado et du Minnesota cherchés le même jour
   avec l'outil de lecture : pages du Colorado inchangées (0,44 %, article de 2024), page des primes du Minnesota
   protégée contre les robots (non contournée) ; à reprendre.
+- **Période de l'onglet Dépenses (12/11/2026, fin d'après-midi)** : mois, trimestre, année ou 12 mois pour les
+  indicateurs de l'année en cours ; onglets d'année gardés pour le registre ([55](55-indicateurs-espace.md) § 9, D71).
 - **Prochaines actions de Claude** : indicateurs de l'Espace : les huit onglets, la date de clôture des pistes et la période de
-  l'onglet Documents sont faits (12/11, [55](55-indicateurs-espace.md)) ; période au choix pour l'onglet Dépenses
-  (§ 6, à spécifier : les onglets d'année y servent déjà le registre) ; **appliquer le thème**
+  l'onglet Documents et de l'onglet Dépenses sont faits (12/11, [55](55-indicateurs-espace.md)) ; **appliquer le thème**
   choisi par Ismail dès sa réponse ([54](54-themes.md) § 2) ; refonte, suite ([31](31-vision-plateforme.md) § 5) : les quatre modules du compte
   gratuit sont faits (étape 5) ; étape 6, outils restants (CGV : faites dans les quatre pays ;
   lois des autres provinces sur la protection du consommateur à lire pour les détailler ; le règlement albertain sur les

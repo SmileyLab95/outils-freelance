@@ -1,5 +1,15 @@
 # Journal des modifications
 
+## 2026-11-12 (fin d'après-midi) — Dépenses : période au choix
+
+- Onglet Dépenses : boutons « Mois, Trimestre, Année, 12 mois » pour les indicateurs de l'année en cours (dépenses,
+  premier poste, moyenne mensuelle ou dépense moyenne, part des encaissements, catégories et fournisseurs), avec les
+  dates de la période ; graphique de l'année ou des 12 derniers mois. Les onglets d'année restent : la liste, l'export
+  et l'impression du registre gardent l'année choisie ; une année passée affiche ses dates.
+- Tests : 1 test unitaire (valeurs calculées à la main), 15 erreurs réintroduites (14 détectées, la quinzième sans
+  effet) ; parcours de l'Espace (288 points, accessibilité comprise) et des comptes au vert ; captures relues sur
+  ordinateur et mobile.
+
 ## 2026-11-12 (après-midi) — Contrôle de contraste intermittent : cause trouvée
 
 - Cause du seul échec d'axe-core relevé dans l'Espace (21/10, logo) : l'en-tête collant est translucide ; avec l'ancien
