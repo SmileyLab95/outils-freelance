@@ -3664,17 +3664,41 @@ const tests = {
     const stats = (hash) => page.evaluate(async (hash) => {
       const d = await window.EspaceStore.load(), S = window.OFE.espaceStats, eur = (n) => window.OF.eur(n).replace(/\s+/g, " ");
       const ds = S.documents(d.documents, "2026-10-20"), cs = S.clients(d.documents, "2026-10-20");
+      const per = (k) => { const x = S.documents(d.documents, "2026-10-20", k); return { invoiced: eur(x.invoiced), cashed: eur(x.cashed), count: x.count }; };
       const id = hash ? decodeURIComponent(hash.split("/").pop()) : "", cd = S.clientDetail(d.documents, id, "2026-10-20");
-      return { year: eur(ds.year), month: eur(ds.month), pending: eur(ds.quotes.pendingAmount), rate: ds.quotes.rate, active: cs.active,
-               top1: cs.top1, invoiced: eur(cd.invoiced), due: eur(cd.due) };
+      return { year: eur(ds.invoiced), cashed: eur(ds.cashed), pending: eur(ds.quotes.pendingAmount), rate: ds.quotes.rate, active: cs.active,
+               top1: cs.top1, invoiced: eur(cd.invoiced), due: eur(cd.due), quarter: per("trimestre"), previous: per("precedente"), month: per("mois") };
     }, hash);
     const st = await stats("");
     await go("#/documents");
     const dk = await text(".kpis");
-    check(dk.includes("Facturé en 2026 (HT) " + st.year) && dk.includes("Facturé ce mois-ci (HT) " + st.month) && dk.includes("Devis en attente (HT) " + st.pending) &&
+    check(dk.includes("Facturé en 2026 (HT) " + st.year) && dk.includes("Encaissé en 2026 " + st.cashed) && dk.includes("Devis en attente (HT) " + st.pending) &&
       dk.includes("Taux de signature des devis " + (st.rate === null ? "–" : Math.round(st.rate * 100) + " %")) &&
-      (await page.$$eval('[data-chart="invoiced"] svg[role="img"]', (l) => l.length)) === 1, "Documents : indicateurs (facturé, devis, signature) et graphique");
+      (await text('.seg a[aria-current="true"]')) === "Année" && (await text(".tr-tools .small")) === "Du 01/01/2026 au 20/10/2026." &&
+      (await page.$$eval('[data-chart="invoiced"] svg[role="img"]', (l) => l.length)) === 1, "Documents : indicateurs de l'année (facturé, encaissé, devis, signature) et graphique");
     await accessible(page, "Espace : documents (indicateurs)");
+    // Période choisie dans l'adresse (documentation/55, § 8) : valeurs recalculées par le moteur (testé à part).
+    await page.click('.seg a:text-is("Trimestre")');
+    await page.waitForFunction(() => location.hash === "#/documents?periode=trimestre" && document.querySelector(".kpis").textContent.includes("trimestre"));
+    check((await text(".kpis")).includes("Facturé au 4e trimestre (HT) " + st.quarter.invoiced) && (await text(".kpis")).includes("Encaissé au 4e trimestre " + st.quarter.cashed) &&
+      (await text(".tr-tools .small")) === "Du 01/10/2026 au 20/10/2026.", "Documents : période du trimestre (adresse, dates, montants)");
+    await page.click('.seg a:text-is("Mois")');
+    await page.waitForFunction(() => location.hash === "#/documents?periode=mois" && document.querySelector(".kpis").textContent.includes("ce mois-ci"));
+    check((await text(".kpis")).includes("Facturé ce mois-ci (HT) " + st.month.invoiced), "Documents : période du mois");
+    await page.click('.seg a:text-is("Année précédente")');
+    await page.waitForFunction(() => location.hash === "#/documents?periode=precedente" && document.querySelector(".kpis").textContent.includes("en 2025"));
+    check((await text(".kpis")).includes("Facturé en 2025 (HT) " + st.previous.invoiced) && (await text(".card-head .small")).startsWith("Année 2025") &&
+      (await page.$$eval("#espace-view .data-table tbody tr", (r) => r.length)) === 12 && (await page.$eval("#espace-view .data-table tbody tr", (r) => r.textContent)).startsWith("janvier 2025") &&
+      (await page.getAttribute('.espace-filters a:text-is("Factures")', "href")) === "#/documents?filtre=facture&periode=precedente",
+      "Documents : année précédente (12 mois de 2025), filtres qui gardent la période");
+    await page.click('.espace-filters a:text-is("Factures")');
+    await page.waitForFunction(() => location.hash === "#/documents?filtre=facture&periode=precedente" &&
+      document.querySelector('.espace-filters a[aria-current="true"]').textContent === "Factures");
+    check((await text('.seg a[aria-current="true"]')) === "Année précédente" && (await text('.espace-filters a[aria-current="true"]')) === "Factures",
+      "Documents : filtre et période ensemble");
+    await accessible(page, "Espace : documents (année précédente)");
+    await go("#/documents?periode=semaine");
+    check((await text('.seg a[aria-current="true"]')) === "Année" && (await text(".kpis")).includes("Facturé en 2026 (HT) " + st.year), "Documents : période inconnue : année en cours");
     await go("#/clients");
     const ck = await text(".kpis");
     check(ck.includes("Clients actifs " + st.active) && ck.includes("Part du premier client " + Math.round(st.top1 * 100) + " %") && (await text(".bar-list")).includes("Studio Nova"),

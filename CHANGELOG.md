@@ -1,5 +1,16 @@
 # Journal des modifications
 
+## 2026-11-12 (suite) — Documents : période au choix
+
+- Onglet Documents : boutons « Mois, Trimestre, Année, 12 mois, Année précédente » (gardés dans l'adresse, avec les
+  filtres et la recherche) ; facturé HT, **encaissé**, nombre et moyenne des factures, avoirs et taux de signature des
+  devis sur la période ; graphique de l'année choisie.
+- Les « 12 derniers mois » ont la même définition dans tous les onglets (du lendemain du même jour un an plus tôt à
+  aujourd'hui) ; certains comptaient aussi le jour de l'an dernier.
+- Mobile : les boutons de période passent à la ligne au lieu de dépasser de l'écran.
+- Tests : 3 tests unitaires, 14 erreurs réintroduites toutes détectées ; parcours navigateur de l'Espace (282 points,
+  accessibilité comprise) et des comptes au vert ; captures relues sur ordinateur et mobile.
+
 ## 2026-11-12 (suite) — Prospects : date de clôture, conversion sur 12 mois
 
 - Un devis marqué « Accepté » ou « Refusé » garde la date de la décision ; une piste passée à « Gagné » ou « Perdu »

@@ -477,7 +477,7 @@
       "</div>";
 
     if (isMicro()) html += gauges(th);
-    var series = ST.monthly(data.documents, TODAY, 12), top = ST.topClients(data.documents, E.addYears(TODAY, -1), TODAY, 5);
+    var series = ST.monthly(data.documents, TODAY, 12), top = ST.topClients(data.documents, ST.since12(TODAY), TODAY, 5);
     html += '<div class="espace-cols tr-charts"><section class="card espace-card"><div class="card-head"><h3>Encaissements par mois</h3>' +
       '<span class="small muted">12 derniers mois, comparés au même mois un an plus tôt.</span></div><div class="chart" data-chart="monthly"></div>' +
       OF.charts.legend([{ cls: "is-cur", label: "12 derniers mois" }, { cls: "is-prev", label: "Un an plus tôt" }]) +
@@ -721,20 +721,27 @@
       }
       return true;
     }).sort(function (a, b) { return a.date === b.date ? ((b.number || "~") > (a.number || "~") ? 1 : -1) : (a.date < b.date ? 1 : -1); });
+    // Adresse de l'onglet : filtre, recherche et période gardés ensemble (documentation/55, § 8).
+    var url = function (over) {
+      var o = Object.assign({ filtre: filter, q: r.params.q || "", periode: r.params.periode || "" }, over);
+      var parts = [["filtre", o.filtre !== "tous" ? o.filtre : ""], ["q", o.q], ["periode", ST.PERIODS.indexOf(o.periode) > -1 && o.periode !== "annee" ? o.periode : ""]]
+        .filter(function (x) { return x[1]; }).map(function (x) { return x[0] + "=" + encodeURIComponent(x[1]); });
+      return "#/documents" + (parts.length ? "?" + parts.join("&") : "");
+    };
     view.innerHTML = '<div class="espace-head"><h2>Documents</h2><div class="espace-quick espace-noprint">' +
       '<a class="btn btn-primary btn-sm" href="#/documents/nouveau?type=facture">+ Facture</a>' +
-      '<a class="btn btn-ghost btn-sm" href="#/documents/nouveau?type=devis">+ Devis</a></div></div>' + documentsOverview() +
+      '<a class="btn btn-ghost btn-sm" href="#/documents/nouveau?type=devis">+ Devis</a></div></div>' + documentsOverview(r, url) +
       '<div class="card espace-card"><div class="espace-filters" role="group" aria-label="Filtrer les documents">' +
-      FILTERS.map(function (f) { return '<a class="tab" href="#/documents?filtre=' + f[0] + '"' + (f[0] === filter ? ' aria-current="true"' : "") + ">" + esc(f[1]) + "</a>"; }).join("") +
+      FILTERS.map(function (f) { return '<a class="tab" href="' + url({ filtre: f[0] }) + '"' + (f[0] === filter ? ' aria-current="true"' : "") + ">" + esc(f[1]) + "</a>"; }).join("") +
       '</div><div class="field"><label for="doc-search">Rechercher</label><input id="doc-search" type="search" value="' + esc(r.params.q || "") +
       '" placeholder="Numéro, client, prestation…"></div>' + docTable(list) + "</div>";
-    drawCharts = function () { drawInvoicedChart("invoiced", ST.invoicedMonthly(data.documents, TODAY, 12)); };
+    drawCharts = function () { drawInvoicedChart("invoiced", documentsMonths(ST.period(r.params.periode, TODAY))); };
     drawCharts();
     var input = $("doc-search");
     input.addEventListener("input", function () {
       clearTimeout(input.t);
       input.t = setTimeout(function () {
-        history.replaceState(null, "", "#/documents?filtre=" + filter + (input.value ? "&q=" + encodeURIComponent(input.value) : ""));
+        history.replaceState(null, "", url({ q: input.value }));
         var pos = input.selectionStart;
         render(true);
         var again = $("doc-search"); again.focus(); again.setSelectionRange(pos, pos);
@@ -1234,17 +1241,27 @@
         return [m.label + (m.current ? " (en cours)" : ""), money(m.invoiced), money(m.cashed)];
       })) + "</section>";
   }
-  function documentsOverview() {
+  // Période de l'onglet Documents (documentation/55, § 8) : boutons, et mois du graphique selon la période.
+  var PERIOD_LABELS = { mois: "Mois", trimestre: "Trimestre", annee: "Année", "12m": "12 mois", precedente: "Année précédente" };
+  function documentsMonths(p) {
+    var end = p.key === "precedente" ? p.to : TODAY, n = p.key === "annee" ? +TODAY.slice(5, 7) : 12;
+    return ST.invoicedMonthly(data.documents, end, n).map(function (m) { return Object.assign({}, m, { current: m.key === TODAY.slice(0, 7) }); });
+  }
+  function documentsOverview(r, url) {
     if (!data.documents.some(function (d) { return d.status !== "draft"; })) return "";
-    var ds = ST.documents(data.documents, TODAY), q = ds.quotes;
-    return '<div class="kpis kpis-4">' +
-      kpi("Facturé ce mois-ci (HT)", money(ds.month), "factures moins avoirs du mois") +
-      kpi("Facturé en " + YEAR + " (HT)", money(ds.year), [countText(ds.count, "facture", "factures"), ds.average !== null ? "moyenne " + money(ds.average) : "",
+    var ds = ST.documents(data.documents, TODAY, r.params.periode), q = ds.quotes, p = ds.period;
+    var plural = function (n, one) { return n + " " + one + (n > 1 ? "s" : ""); };
+    return '<div class="tr-tools espace-noprint"><div class="seg" role="group" aria-label="Période des indicateurs">' + ST.PERIODS.map(function (k) {
+        return '<a class="tab" href="' + url({ periode: k }) + '"' + (k === p.key ? ' aria-current="true"' : "") + ">" + PERIOD_LABELS[k] + "</a>";
+      }).join("") + '</div><span class="small muted">Du ' + day(p.from) + " au " + day(p.to) + ".</span></div>" +
+      '<div class="kpis kpis-4">' +
+      kpi("Facturé " + p.label + " (HT)", money(ds.invoiced), [countText(ds.count, "facture", "factures"), ds.average !== null ? "moyenne " + money(ds.average) : "",
         ds.creditCount ? countText(ds.creditCount, "avoir", "avoirs") + " (" + money(ds.credits) + ")" : ""].filter(Boolean).join(" · ")) +
-      kpi("Devis en attente (HT)", money(q.pendingAmount), q.pending ? countText(q.pending, "devis encore valable", "devis encore valables") : "aucun devis en attente") +
-      kpi("Taux de signature des devis", q.rate === null ? "–" : pct(q.rate), q.rate === null ? "aucun devis tranché sur 12 mois" :
-        q.signed + " signé" + (q.signed > 1 ? "s" : "") + ", " + q.refused + " refusé" + (q.refused > 1 ? "s" : "") + ", " + q.expired + " expiré" + (q.expired > 1 ? "s" : "") + " (12 mois)") +
-      "</div>" + invoicedCard("invoiced", ST.invoicedMonthly(data.documents, TODAY, 12), "12 derniers mois.");
+      kpi("Encaissé " + p.label, money(ds.cashed), "paiements reçus, remboursements déduits") +
+      kpi("Devis en attente (HT)", money(q.pendingAmount), q.pending ? countText(q.pending, "devis encore valable", "devis encore valables") + " aujourd'hui" : "aucun devis en attente") +
+      kpi("Taux de signature des devis", q.rate === null ? "–" : pct(q.rate), q.rate === null ? "aucun devis émis " + p.label + " n'est tranché" :
+        plural(q.signed, "signé") + ", " + plural(q.refused, "refusé") + ", " + plural(q.expired, "expiré") + " (devis émis " + p.label + ")") +
+      "</div>" + invoicedCard("invoiced", documentsMonths(p), p.key === "annee" || p.key === "precedente" ? "Année " + p.from.slice(0, 4) + "." : "12 derniers mois.");
   }
 
   function viewClients(r) {
@@ -1263,7 +1280,7 @@
           kpi("Nouveaux clients en " + YEAR, String(cs.newThisYear), "première facture émise cette année") +
           kpi("Encaissé moyen par client", money(cs.average), "clients actifs, 12 derniers mois") +
           kpi("Part du premier client", pct(cs.top1), "trois premiers : " + pct(cs.top3) + " des encaissements", cs.top1 >= 0.5 ? "is-warn" : "") + "</div>" +
-          topClientsCard(ST.topClients(data.documents, E.addYears(TODAY, -1), TODAY, 10), true);
+          topClientsCard(ST.topClients(data.documents, ST.since12(TODAY), TODAY, 10), true);
       }
       html += '<div class="card espace-card"><ul class="doc-list">' + list.map(function (c) {
         var t = E.clientTotals(data.documents, c.id);
@@ -2279,7 +2296,7 @@
     var curve = E.balanceCurve(f), altCurve = E.balanceCurve(g), limit = threshold();
     var hasBalance = f.start !== null, stale = hasBalance && p.cashDate && (Date.parse(TODAY) - Date.parse(p.cashDate)) / 864e5 > 7;
     var available = hasBalance ? Math.round((f.start - o.total) * 100) / 100 : null, safe = E.safeAmount(curve, limit);
-    var stats = E.paymentStats(data.documents, E.addYears(TODAY, -1), TODAY), ag = E.aging(data.documents, TODAY);
+    var stats = E.paymentStats(data.documents, ST.since12(TODAY), TODAY), ag = E.aging(data.documents, TODAY);
     var monthly = E.monthlyCharges(data.charges, TODAY), run = E.runway(available, monthly), be = E.breakEven(monthly, p, R, TODAY);
     var thisMonth = TODAY.slice(0, 8) + "01";
     var hist12 = E.cashHistory(data.documents, data.expenses, E.addMonths(thisMonth, -12), new Date(Date.parse(thisMonth) - 864e5).toISOString().slice(0, 10));

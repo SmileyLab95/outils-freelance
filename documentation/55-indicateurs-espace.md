@@ -170,7 +170,7 @@ tablette et mobile, documentation, publication.
 
 Les huit onglets de l'Espace (trésorerie comprise, [39](39-tresorerie.md) § 7) ont leurs indicateurs et graphiques.
 Pistes d'amélioration notées : date de clôture des pistes (faite le 12/11, § 7) ;
-période choisie dans l'adresse pour les documents et les dépenses (`?periode=`), aujourd'hui fixée à l'année ou à
+période choisie dans l'adresse (faite le 12/11 pour les documents, § 8) pour les documents et les dépenses (`?periode=`), aujourd'hui fixée à l'année ou à
 12 mois glissants.
 
 ## 7. Date de clôture des pistes (spécification du 12/11/2026, suite du § 6)
@@ -223,3 +223,45 @@ graphique et note des pistes sans date) ; import d'une date illisible ; captures
 - Relecture : un contrôle existant du parcours lisait le premier bloc dépliable de la page, devenu le « Voir les
   données » du nouveau graphique ; il vise maintenant la liste des pistes gagnées. Un second clic sur « Accepté »
   aurait redaté le devis du jour : la date n'est posée que si le statut change (contrôle ajouté au parcours).
+
+## 8. Période choisie dans l'adresse : onglet Documents (spécification du 12/11/2026, suite du § 6)
+
+Besoin : les indicateurs de l'onglet Documents étaient figés (mois, année en cours, 12 mois). Un indépendant veut
+aussi voir son trimestre (déclarations trimestrielles) et l'année précédente entière (déclaration annuelle des revenus).
+L'onglet Dépenses a déjà son année dans l'adresse (`?annee=`) ; l'onglet Clients reste sur 12 mois (dépendance).
+
+- **Adresse** : `#/documents?periode=mois|trimestre|annee|12m|precedente` ; par défaut `annee` ; une valeur inconnue
+  revient au défaut. Le choix se fait par des boutons (comme l'horizon de la trésorerie) et se combine avec les
+  filtres et la recherche existants.
+- **Périodes** (moteur `ST.period`, une seule définition) : mois en cours (du 1er à aujourd'hui) ; trimestre civil en
+  cours (de son premier jour à aujourd'hui) ; année en cours (du 1er janvier à aujourd'hui) ; 12 derniers mois (du
+  lendemain du même jour un an plus tôt à aujourd'hui) ; année précédente entière (1er janvier – 31 décembre).
+- **Indicateurs** sur la période : facturé HT (factures moins avoirs, nombre de factures, montant moyen, avoirs) ;
+  **encaissé** (paiements reçus, remboursements déduits, comme le livre des recettes) ; taux de signature des devis
+  émis sur la période ; « devis en attente » reste un état présent (devis encore valables), sans période.
+- **Graphique** « Facturé et encaissé par mois » : mois de l'année choisie pour « année » et « année précédente » ;
+  12 derniers mois sinon.
+- **12 derniers mois partout** : la même fenêtre (du lendemain du même jour un an plus tôt à aujourd'hui) pour les
+  principaux clients (tableau de bord, Clients), les clients actifs, l'encaissé sur 12 mois d'une fiche client, les
+  délais de paiement de la trésorerie et les prospects ; jusqu'ici certains onglets comptaient aussi le jour de
+  l'an dernier (12 mois et un jour).
+- **Tests** : moteur (chaque période, bornes, 29 février, début de trimestre), parcours navigateur (chaque bouton,
+  valeurs recalculées, adresse inconnue), captures.
+
+### 8.1 Réalisation (12/11/2026)
+
+- Moteur : `ST.period(clé, aujourd'hui)` (bornes et libellé : « ce mois-ci », « au 4e trimestre », « en 2026 »,
+  « sur 12 mois », « en 2025 »), `ST.since12` (début des 12 derniers mois) ; `ST.documents(liste, aujourd'hui, clé)`
+  donne facturé, encaissé, nombre et moyenne des factures, avoirs et devis de la période.
+- Écran : boutons « Mois, Trimestre, Année, 12 mois, Année précédente » avec les dates de la période ; indicateurs
+  « Facturé », « Encaissé », « Devis en attente » (état présent) et « Taux de signature » ; graphique de l'année
+  choisie ; les filtres et la recherche gardent la période dans l'adresse. La liste des documents n'est pas filtrée
+  par la période (les boutons portent sur les indicateurs, comme le dit leur libellé).
+- 12 derniers mois : la même fenêtre partout (principaux clients du tableau de bord et de Clients, clients actifs,
+  encaissé d'une fiche client, délais de paiement de la trésorerie, prospects).
+- Mobile : les boutons de période passent à la ligne dans un cadre arrondi (ils dépassaient de l'écran).
+- Tests : 3 tests unitaires (périodes, documents sur chaque période, bornes des 12 mois pour les clients), cas
+  calculés à la main ; 14 erreurs réintroduites, toutes détectées après l'ajout d'un devis de l'année en cours ;
+  parcours navigateur (6 points nouveaux, accessibilité comprise) ; captures relues sur ordinateur et mobile.
+- Relecture : le parcours lisait l'écran avant son nouveau rendu après un clic ; il attend désormais que les
+  indicateurs affichent la période choisie.

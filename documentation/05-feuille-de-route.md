@@ -413,8 +413,12 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 - **Date de clôture des pistes (12/11/2026, suite)** : date de décision des devis et date de clôture des pistes,
   taux de conversion sur 12 mois, graphique des pistes gagnées et perdues par mois ; anciennes pistes closes signalées
   sans date ([55](55-indicateurs-espace.md) § 7, D68).
-- **Prochaines actions de Claude** : indicateurs de l'Espace : les huit onglets sont faits (12/11), date de clôture des pistes
-  aussi ; reste la période choisie dans l'adresse ([55](55-indicateurs-espace.md) § 6) ; **appliquer le thème**
+- **Période de l'onglet Documents (12/11/2026, suite)** : mois, trimestre, année, 12 mois ou année précédente choisis
+  dans l'adresse ; facturé, encaissé et signature des devis sur la période ; même définition des 12 derniers mois dans
+  tous les onglets ([55](55-indicateurs-espace.md) § 8, D69).
+- **Prochaines actions de Claude** : indicateurs de l'Espace : les huit onglets, la date de clôture des pistes et la période de
+  l'onglet Documents sont faits (12/11, [55](55-indicateurs-espace.md)) ; trouver la cause du contrôle de contraste
+  intermittent de l'Espace ; **appliquer le thème**
   choisi par Ismail dès sa réponse ([54](54-themes.md) § 2) ; refonte, suite ([31](31-vision-plateforme.md) § 5) : les quatre modules du compte
   gratuit sont faits (étape 5) ; étape 6, outils restants (CGV : faites dans les quatre pays ;
   lois des autres provinces sur la protection du consommateur à lire pour les détailler ; le règlement albertain sur les

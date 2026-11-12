@@ -112,16 +112,41 @@ test("devis : signés, refusés, expirés, en attente et taux de signature", () 
   assert.deepEqual([S.quotes(edge, "2025-11-12", "2026-11-12", "2026-11-12").pending, S.quotes(edge, "2025-11-12", "2026-11-13", "2026-11-13").expired], [1, 1]);
 });
 
-test("documents : facturé HT du mois et de l'année, moyenne, avoirs", () => {
+test("périodes : mois, trimestre, année, 12 mois, année précédente ; clé inconnue", () => {
+  const range = (k, t) => { const p = S.period(k, t); return [p.key, p.from, p.to, p.label]; };
+  assert.deepEqual(range("mois", "2026-11-12"), ["mois", "2026-11-01", "2026-11-12", "ce mois-ci"]);
+  assert.deepEqual(range("trimestre", "2026-11-12"), ["trimestre", "2026-10-01", "2026-11-12", "au 4e trimestre"]);
+  assert.deepEqual(range("trimestre", "2026-03-31"), ["trimestre", "2026-01-01", "2026-03-31", "au 1er trimestre"]);
+  assert.deepEqual(range("trimestre", "2026-04-01"), ["trimestre", "2026-04-01", "2026-04-01", "au 2e trimestre"]);
+  assert.deepEqual(range("annee", "2026-11-12"), ["annee", "2026-01-01", "2026-11-12", "en 2026"]);
+  assert.deepEqual(range("12m", "2026-11-12"), ["12m", "2025-11-13", "2026-11-12", "sur 12 mois"]);
+  assert.deepEqual(range("12m", "2028-02-29"), ["12m", "2027-03-01", "2028-02-29", "sur 12 mois"], "29 février : depuis le 1er mars");
+  assert.deepEqual(range("precedente", "2026-11-12"), ["precedente", "2025-01-01", "2025-12-31", "en 2025"]);
+  assert.deepEqual(range("semaine", "2026-11-12"), range("annee", "2026-11-12"), "clé inconnue : année en cours");
+  assert.deepEqual(range(undefined, "2026-11-12"), range("annee", "2026-11-12"));
+  assert.equal(S.since12("2026-11-12"), "2025-11-13");
+});
+
+test("documents : facturé HT, encaissé, moyenne, avoirs et devis sur la période choisie", () => {
   const docs = [];
-  issue(docs, "2025-12-20", "c1", 5000); // année précédente
-  issue(docs, "2026-01-15", "c1", 1000);
+  issue(docs, "2025-11-12", "c2", 70); // même jour un an plus tôt : hors des 12 mois
+  issue(docs, "2025-11-13", "c2", 30); // premier jour des 12 mois
+  issue(docs, "2025-12-20", "c1", 5000, [["2026-01-05", 5000]]);
+  issue(docs, "2026-01-15", "c1", 1000, [["2026-02-01", 1000]]);
   const big = issue(docs, "2026-06-15", "c2", 3000);
-  issue(docs, "2026-11-02", "c3", 600);
+  issue(docs, "2026-10-01", "c1", 250); // premier jour du trimestre
+  issue(docs, "2026-11-02", "c3", 600, [["2026-11-10", 600]]);
   docs.push(E.issue(docs, Object.assign(E.creditFromInvoice(big, "2026-11-05", "av1"), { lines: [{ desc: "Remise", qty: 1, price: 200 }] }),
     me, clients.c2, null, "2026-11-05T10:00:00Z").doc);
-  const d = S.documents(docs, "2026-11-12");
-  assert.deepEqual([d.month, d.year, d.count, d.average, d.credits, d.creditCount], [400, 4400, 3, 1533.33, 200, 1]);
+  quote(docs, "2025-12-01", "c1", 900, "refused");
+  quote(docs, "2026-03-10", "c3", 500, "refused");
+  const row = (k) => { const d = S.documents(docs, "2026-11-12", k); return [d.invoiced, d.cashed, d.count, d.average, d.credits, d.creditCount, d.quotes.refused]; };
+  assert.deepEqual(row("mois"), [400, 600, 1, 600, 200, 1, 0], "novembre : 600 − avoir 200");
+  assert.deepEqual(row("trimestre"), [650, 600, 2, 425, 200, 1, 0]);
+  assert.deepEqual(row("annee"), [4650, 6600, 4, 1212.5, 200, 1, 1], "encaissé en 2026 : la facture de décembre 2025 comprise");
+  assert.deepEqual(row("12m"), [9680, 6600, 6, 1646.67, 200, 1, 2]);
+  assert.deepEqual(row("precedente"), [5100, 0, 3, 1700, 0, 0, 1], "devis de 2026 exclus de l'année précédente");
+  assert.equal(S.documents(docs, "2026-11-12").period.key, "annee", "par défaut : l'année en cours");
   assert.equal(S.invoiced(docs, "2026-01-01", "2026-12-31", "c2"), 2800, "par client : avoir déduit");
   assert.deepEqual(S.documents([], "2026-11-12").average, null);
 });
@@ -313,4 +338,13 @@ test("prospects : clôtures datées, conversion sur 12 mois, gagnées et perdues
     "par mois calendaire : novembre 2025 (13/11) hors des 12 mois affichés");
   const none = S.prospects([pr({ stage: "lost" })], [], "2026-11-12");
   assert.deepEqual([none.closed12, none.conversion12, none.undated, none.months.every((m) => !m.won && !m.lost)], [0, null, 1, true]);
+});
+
+test("12 derniers mois : même fenêtre pour les clients actifs et l'encaissé d'une fiche (documentation/55, § 8)", () => {
+  const docs = [];
+  issue(docs, "2025-10-01", "c1", 100, [["2025-11-12", 100]]); // payée le même jour un an plus tôt : hors des 12 mois
+  issue(docs, "2025-10-02", "c2", 200, [["2025-11-13", 200]]); // premier jour des 12 mois
+  const c = S.clients(docs, "2026-11-12");
+  assert.deepEqual([c.active, c.total], [1, 200]);
+  assert.deepEqual([S.clientDetail(docs, "c1", "2026-11-12").cashed12, S.clientDetail(docs, "c2", "2026-11-12").cashed12], [0, 200]);
 });

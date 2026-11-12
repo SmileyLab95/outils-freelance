@@ -850,6 +850,9 @@ a.country-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg)
 .kpi-sub a { font-weight: 650; }
 .tr-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
 .seg { display: inline-flex; gap: 4px; padding: 3px; border-radius: 999px; background: var(--tint); }
+/* Plus de boutons que la largeur (périodes des documents sur mobile) : ils passent à la ligne, dans un cadre arrondi. */
+.seg { flex-wrap: wrap; max-width: 100%; }
+@media (max-width: 600px) { .seg { border-radius: 16px; } }
 .seg .tab { border-color: transparent; background: transparent; text-decoration: none; padding: 6px 12px; }
 .seg .tab[aria-current="true"] { background: var(--ink); color: #fff; border-color: var(--ink); }
 .card-head { display: flex; flex-direction: column; gap: 2px; margin-bottom: 10px; }

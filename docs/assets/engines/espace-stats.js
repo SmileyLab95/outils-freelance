@@ -107,19 +107,36 @@
     return out;
   }
 
+  /** 12 derniers mois (documentation/55, § 8) : du lendemain du même jour un an plus tôt à aujourd'hui, dans tous les onglets. */
+  function since12(today) { return addDays(lastYear(today), 1); }
+
   /**
-   * Indicateurs de l'onglet Documents : facturé HT du mois et de l'année, nombre et montant moyen des factures de
-   * l'année, avoirs de l'année, devis des 12 derniers mois.
+   * Période choisie dans l'adresse (documentation/55, § 8) : mois, trimestre civil ou année en cours (jusqu'à
+   * aujourd'hui), 12 derniers mois, année précédente entière ; une clé inconnue donne l'année en cours.
    */
-  function documents(list, today) {
-    var year = today.slice(0, 4), from = year + "-01-01";
-    var bills = (list || []).filter(function (d) { return issued(d) && d.type === "facture" && d.date >= from && d.date <= today; });
-    var credits = (list || []).filter(function (d) { return issued(d) && d.type === "avoir" && d.date >= from && d.date <= today; });
+  var PERIODS = ["mois", "trimestre", "annee", "12m", "precedente"];
+  function period(key, today) {
+    var y = +today.slice(0, 4), m = +today.slice(5, 7), q = Math.floor((m - 1) / 3);
+    if (key === "mois") return { key: key, from: today.slice(0, 8) + "01", to: today, label: "ce mois-ci" };
+    if (key === "trimestre") return { key: key, from: y + "-" + pad(q * 3 + 1) + "-01", to: today, label: "au " + (q + 1) + (q ? "e" : "er") + " trimestre" };
+    if (key === "12m") return { key: key, from: since12(today), to: today, label: "sur 12 mois" };
+    if (key === "precedente") return { key: key, from: (y - 1) + "-01-01", to: (y - 1) + "-12-31", label: "en " + (y - 1) };
+    return { key: "annee", from: y + "-01-01", to: today, label: "en " + y };
+  }
+
+  /**
+   * Indicateurs de l'onglet Documents sur une période (documentation/55, § 8) : facturé HT (factures moins avoirs),
+   * nombre et montant moyen des factures, avoirs, encaissé, devis émis sur la période.
+   */
+  function documents(list, today, key) {
+    var p = period(key, today);
+    var inPeriod = function (type) { return (list || []).filter(function (d) { return issued(d) && d.type === type && d.date >= p.from && d.date <= p.to; }); };
+    var bills = inPeriod("facture"), credits = inPeriod("avoir");
     var gross = round2(bills.reduce(function (s, d) { return s + INV.compute(d).ht; }, 0));
-    return { month: invoiced(list, today.slice(0, 8) + "01", today), year: invoiced(list, from, today), count: bills.length,
+    return { period: p, invoiced: invoiced(list, p.from, p.to), cashed: E.cashed(list || [], p.from, p.to), count: bills.length,
              average: bills.length ? round2(gross / bills.length) : null,
              credits: round2(credits.reduce(function (s, d) { return s + INV.compute(d).ht; }, 0)), creditCount: credits.length,
-             quotes: quotes(list, E.addYears(today, -1), today, today) };
+             quotes: quotes(list, p.from, p.to, today) };
   }
 
   /** Facturé HT et encaissé par mois sur les n derniers mois (le mois en cours compris), pour un client ou tous. */
@@ -138,7 +155,7 @@
    * (première facture émise cette année), encaissé moyen par client actif, part du premier et des trois premiers.
    */
   function clients(list, today) {
-    var top = topClients(list, E.addYears(today, -1), today, 3), first = {};
+    var top = topClients(list, since12(today), today, 3), first = {};
     (list || []).forEach(function (d) {
       if (!issued(d) || d.type !== "facture" || !d.clientId) return;
       if (!first[d.clientId] || d.date < first[d.clientId]) first[d.clientId] = d.date;
@@ -167,7 +184,7 @@
       }
     });
     var stats = E.paymentStats(own, "0000-01-01", today);
-    return { invoiced: invoiced(own, "0000-01-01", today), cashed12: E.cashed(own, E.addYears(today, -1), today), due: round2(due), late: round2(late),
+    return { invoiced: invoiced(own, "0000-01-01", today), cashed12: E.cashed(own, since12(today), today), due: round2(due), late: round2(late),
              avgDays: stats.avgDays, avgLate: stats.avgLate, paidCount: stats.count, lastInvoice: last };
   }
 
@@ -288,13 +305,13 @@
     var pipe = E.pipeline(list || [], documents), due = E.followUps(list || [], documents, today);
     var closed = pipe.won.count + pipe.lost.count;
     // Clôtures datées (documentation/55, § 7) : 12 derniers mois glissants et 12 derniers mois calendaires.
-    var from = lastYear(today), start = E.addMonths(today.slice(0, 8) + "01", -11), won12 = 0, lost12 = 0, undated = 0, byMonth = {};
+    var from = since12(today), start = E.addMonths(today.slice(0, 8) + "01", -11), won12 = 0, lost12 = 0, undated = 0, byMonth = {};
     (list || []).forEach(function (p) {
       var s = E.prospectStage(p, documents);
       if (s !== "won" && s !== "lost") return;
       var at = E.prospectClosedAt(p, documents);
       if (!at) { undated++; return; }
-      if (at > from && at <= today) { if (s === "won") won12++; else lost12++; }
+      if (at >= from && at <= today) { if (s === "won") won12++; else lost12++; }
       if (at >= start && at <= today) {
         var k = at.slice(0, 7);
         byMonth[k] = byMonth[k] || { won: 0, lost: 0 };
@@ -340,5 +357,5 @@
 
   return { lastYear: lastYear, change: change, toDate: toDate, monthly: monthly, topClients: topClients, expenses: expenses, receipts: receipts,
            monday: monday, isoWeek: isoWeek, time: time, prospects: prospects, deadlines: deadlines,
-           invoiced: invoiced, quotes: quotes, documents: documents, invoicedMonthly: invoicedMonthly, clients: clients, clientDetail: clientDetail };
+           since12: since12, period: period, PERIODS: PERIODS, invoiced: invoiced, quotes: quotes, documents: documents, invoicedMonthly: invoicedMonthly, clients: clients, clientDetail: clientDetail };
 });
