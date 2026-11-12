@@ -187,8 +187,8 @@ Lu le 12/11/2026 :
 | Ontario | Employment Standards Act, 2000, art. 1, « public holiday » (version Word d'ontario.ca, la page web étant construite par JavaScript ; SHA-256 63d227ab…a638) | New Year's Day, Family Day (« the third Monday in February »), Good Friday, Victoria Day, Canada Day, Labour Day, Thanksgiving Day, Christmas Day, December 26, et tout jour prescrit |
 | Alberta | Employment Standards Code (RSA 2000, c. E-9), art. 25 (PDF du King's Printer, SHA-256 b5242ba6…e001) | New Year's Day, Alberta Family Day, Good Friday, Victoria Day, Canada Day, Labour Day, Thanksgiving Day, Remembrance Day, Christmas Day, et tout jour désigné par règlement ou par accord |
 | Québec | Loi sur les normes du travail (RLRQ, c. N-1.1), art. 60 (SHA-256 ac48c12f…a8dd) | 1er janvier ; « le Vendredi saint ou le lundi de Pâques, au choix de l'employeur » ; « le lundi qui précède le 25 mai » ; « le 1er juillet ou, si cette date tombe un dimanche, le 2 juillet » ; « le 1er lundi de septembre » ; « le deuxième lundi d'octobre » ; 25 décembre ; Loi sur la fête nationale (c. F-1.1), art. 1 et 2 : « Le 24 juin est un jour férié et chômé » ; « lorsque cette date tombe un dimanche, le 25 juin est, à l'égard du salarié pour qui le dimanche n'est pas normalement un jour ouvrable, un jour chômé » |
-| Nouvelle-Écosse | Page « Holiday Pay » du ministère (novascotia.ca) | « six holidays with pay: New Year's Day, Nova Scotia Heritage Day, Good Friday, Canada Day, Labour Day, and Christmas Day » ; « A separate law covers Remembrance Day » (texte de la loi à lire) |
-| Nouveau-Brunswick | Employment Standards Act (c. E-7.2), art. 1, « public holiday » (laws.gnb.ca, SHA-256 027c0e06…81ca0) | New Year's Day, Family Day, Good Friday, Canada Day, New Brunswick Day, Labour Day, Remembrance Day, Christmas Day, et les jours substitués selon la loi ; « Family Day » : « the third Monday in February » (même loi) ; date de New Brunswick Day non définie dans cette loi, à lire ailleurs |
+| Nouvelle-Écosse | Page « Holiday Pay » du ministère (novascotia.ca) | « six holidays with pay: New Year's Day, Nova Scotia Heritage Day, Good Friday, Canada Day, Labour Day, and Christmas Day » ; « A separate law covers Remembrance Day » (texte de la loi à lire) ; Heritage Day : décret pris en vertu du February Holiday Act (S.N.S. 2013, c. 35), N.S. Reg. 9/2015 : « the third Monday in February in 2015 and in each subsequent year » |
+| Nouveau-Brunswick | Employment Standards Act (c. E-7.2), art. 1, « public holiday » (laws.gnb.ca, SHA-256 027c0e06…81ca0) | New Year's Day, Family Day, Good Friday, Canada Day, New Brunswick Day, Labour Day, Remembrance Day, Christmas Day, et les jours substitués selon la loi ; « Family Day » : « the third Monday in February » (même loi) ; New Brunswick Day Act (2014, c.121), art. 1 : « the first Monday in August » |
 | Terre-Neuve-et-Labrador | Labour Standards Act (RSNL 1990, c. L-2), art. 14(1), « public holiday » (assembly.nl.ca) | New Year's Day, Good Friday, Remembrance Day, Memorial Day, Labour Day, Christmas Day, et les jours proclamés par le lieutenant-gouverneur en conseil ; date de Memorial Day à lire |
 | Île-du-Prince-Édouard | Employment Standards Act (E-6.3, consolidée au 30/06/2026, PDF de princeedwardisland.ca, SHA-256 56b44f65…db08), art. 1(n), « paid holiday » ; la page « Paid Holidays » est construite par JavaScript | New Year's Day, Islander Day, Good Friday, July 1, Labour Day, National Day for Truth and Reconciliation (« observed on September 30 »), Remembrance Day, Christmas Day, et tout jour prescrit ; date d'Islander Day à relire |
 | Territoires du Nord-Ouest | Foire aux questions du ministère (ece.gov.nt.ca), renvoi à l'art. 22 de l'Employment Standards Act | New Year's Day, Good Friday, Victoria Day, National Aboriginal Day, Canada Day, First Monday in August, Labour Day, National Day for Truth and Reconciliation, Thanksgiving Day, Remembrance Day, Christmas Day (11) ; Easter Monday et Boxing Day ne sont pas des jours fériés de la loi |
@@ -197,7 +197,14 @@ Lu le 12/11/2026 :
 
 À lire : dates de Labour Day, Thanksgiving Day, Family Day, New Brunswick Day et Memorial Day (lois
 d'interprétation et lois provinciales), Islander Day ; Saskatchewan (loi) ; Nouvelle-Écosse (Remembrance Day Act) ;
-Yukon et Nunavut (autres sites officiels).
+Yukon et Nunavut (autres sites officiels ; le communiqué de gov.nu.ca de juin 2020 n'a pas été lu, échec de la lecture).
+
+Constat du 12/11/2026 (soir) : plusieurs lois nomment les fêtes sans les dater (Interpretation Act de la
+Colombie-Britannique, art. 29 : « holiday » comprend Family Day, British Columbia Day, December 26… sans date ; loi de
+l'Île-du-Prince-Édouard : Islander Day sans date). Pour ces fêtes, prendre la date dans la loi propre à la fête quand
+elle existe (comme le New Brunswick Day Act ou le décret néo-écossais), sinon dans la liste datée publiée par le
+gouvernement de la province (page officielle des jours fériés de l'année), qui servira aussi de contrôle de
+transcription, comme le tableau d'OPM aux États-Unis.
 
 Choix de réalisation envisagés (à confirmer par la décision lors de la réalisation) : une zone par juridiction ; au
 Québec, deux zones (« Vendredi saint » et « lundi de Pâques »), la loi laissant le choix à l'employeur ; dates calculées
