@@ -81,6 +81,7 @@ test("Colorado : 0,44 % du revenu brut d'indépendant en 2026, 0,43 % en 2027, p
   const CO = R.us_paid_leave_co_self_employed;
   assert.deepEqual([CO.self_employed_premium_rate_2026, CO.min_years, CO.quarters_paid_before_benefits], [0.0044, 3, 1]);
   assert.deepEqual([CO.premium_rate_2026, CO.premium_rate_2027, CO.self_employed_share_of_premium], [0.0088, 0.0086, 0.5]);
+  assert.deepEqual([CO.annual_documents_due, CO.annual_documents_fine_max, CO.withdrawal_notice_days], ["December 1", 500, 30], "7 CCR 1107-1, 1.3.1 E et 1.3.2 D");
   assert.equal(CO.premium_rate_2026 * CO.self_employed_share_of_premium, CO.self_employed_premium_rate_2026, "2026 : la moitié de 0,88 %");
   assert.deepEqual(B.premium(R, "CO", 50000), { annual: 220, quarterly: 55, eligible: true,
     next: { year: 2027, annual: 215, quarterly: 53.75 } }, "50 000 × 0,44 % ; 50 000 × 0,43 %");
@@ -118,6 +119,8 @@ test("page : chiffres cités égaux aux règles", () => {
   const CO = R.us_paid_leave_co_self_employed;
   assert.ok(html.includes(`drops from ${pct(CO.premium_rate_2026)} to ${pct(CO.premium_rate_2027)} of wages; as self-employed people pay half of it, your rate becomes ${pct(CO.premium_rate_2027 * CO.self_employed_share_of_premium)}`),
     "Colorado : taux de 2027 et part de l'indépendant");
+  assert.ok(html.includes(`every year, by ${CO.annual_documents_due}, the prior year's tax transcript and W-2s (or a fine of up to $${CO.annual_documents_fine_max})`) &&
+    html.includes(`no sooner than the end of your ${CO.min_years} years and ${CO.withdrawal_notice_days} days after your notice`), "Colorado : documents annuels et retrait");
   assert.ok(html.includes(`You pay ${CO.self_employed_premium_rate_2026 * 100}% of your gross income from self-employment (2026)`) &&
     html.includes(`every quarter for at least ${CO.min_years} years`) && !html.includes("Colorado, Connecticut"), "Colorado : taux, engagement");
   assert.ok(html.includes(`${C.di_max_weeks} weeks`) && html.includes(`${C.pfl_max_weeks} weeks`) && html.includes(`${C.months_before_claim} months`));

@@ -9,7 +9,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 
 ## Où en est-on ?
 
-*Mis à jour le 13/11/2026 (début d'après-midi).*
+*Mis à jour le 13/11/2026 (après-midi).*
 
 - **Priorité (décision D10)** : le site et la plateforme d'abord ; noms de domaine, Gumroad et affiliation à la fin.
   Règle de qualité maximale pour tout produit ou service (D11, charte dans la [méthode](04-methode-de-travail.md#charte-qualité)).
@@ -466,7 +466,11 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   le site du Secretary of State du Colorado) : 0,43 %, avec la prime estimée de 2027 dans le résultat de la page
   *Paid leave* ([52](52-protection-sociale-etats-unis.md)). Lecteur de sources : liens trouvés aussi pour un mot suivi
   de « +N » (défaut corrigé, test ajouté) ; Code of Colorado Regulations ajouté aux sites officiels. Minnesota : 2027
-  toujours illisible (protection contre les robots, non contournée).
+  toujours illisible (protection contre les robots, non contournée). **Après-midi** : version en vigueur de
+  7 CCR 1107-1 (01/01/2026) lue grâce à la nouvelle option « @html » du lecteur (adresse du PDF cachée dans du
+  JavaScript) et part de 50 % lue dans la loi (C.R.S. 8-13.3-507(4)(a)) : revenu brut et effet au dépôt de l'avis
+  confirmés ; page complétée (documents fiscaux chaque année avant le 1er décembre, amende jusqu'à 500 $ ; retrait à
+  tout moment, effet au plus tôt à la fin des 3 ans et 30 jours après l'avis) ([52](52-protection-sociale-etats-unis.md)).
 - **Prochaines actions de Claude** : indicateurs de l'Espace : les huit onglets, la date de clôture des pistes et la période de
   l'onglet Documents et de l'onglet Dépenses sont faits (12/11, [55](55-indicateurs-espace.md)) ; **appliquer le thème**
   choisi par Ismail dès sa réponse ([54](54-themes.md) § 2) ; refonte, suite ([31](31-vision-plateforme.md) § 5) : les quatre modules du compte
@@ -483,8 +487,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   règles sont lues ; maternité, accident, prévoyance ; Royaume-Uni fait le 07/11/2026,
   [51](51-protection-sociale-royaume-uni.md) : à revoir si GOV.UK précise comment les crédits de classe 2 comptent pour
   la *Maternity Allowance* ; États-Unis faits le 09/11/2026 (10 États avec le New Jersey et le Colorado, 10/11), [52](52-protection-sociale-etats-unis.md) :
-  ajouter le Connecticut (certificat de cga.ct.gov refusé par l'outil de lecture) ; Colorado : taux 2027 fait le 13/11,
-  relire la version en vigueur de 7 CCR 1107-1 (début de la couverture, base nette ou brute) ; taux du Massachusetts, taux des indépendants au Delaware, taux 2027 du Minnesota, assiette de la prime de
+  ajouter le Connecticut (certificat de cga.ct.gov refusé par l'outil de lecture) ; Colorado : taux 2027 et règle en vigueur faits le 13/11 ; taux du Massachusetts, taux des indépendants au Delaware, taux 2027 du Minnesota, assiette de la prime de
   Washington pour les indépendants (estimation chiffrée), durée d'engagement au Delaware ; Canada : fait le 13/11
   ([56](56-protection-sociale-canada.md)) ; montant minimal indexé de l'AE et « arrêt de rémunération » dès que
   canada.ca ou les règlements sont lus)) ;

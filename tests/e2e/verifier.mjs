@@ -3456,6 +3456,9 @@ const tests = {
       (await points())[1] === "You pay 0.44% of your gross income from self-employment (2026), on up to the Social Security wage cap ($184,500)." &&
       (await points())[2] === "In 2027 the FAMLI premium drops from 0.88% to 0.86%. Self-employed people pay half of it, so 0.43%, on up to the $192,300 cap of 2027." &&
       (await points())[3].startsWith("You pay premiums every quarter for at least 3 years"), "paid leave: Colorado → $50,000 × 0.44% = $220 in 2026, × 0.43% = $215 in 2027, 3 years");
+    check((await points())[5] === "Every year, by December 1, you also send the prior year's tax transcript and W-2s; otherwise FAMLI can leave that income out of your claims and fine you up to $500." &&
+      (await points())[7] === "You can file a notice of withdrawal at any time; it takes effect no sooner than the end of your 3 years and 30 days after you file it." &&
+      (await points()).length === 8, "paid leave: Colorado → yearly documents by December 1, withdrawal");
     await page.fill("#ben-profit", "200,000");
     check((await t("ben-big")) === "$811.80 a year" &&
       (await t("ben-sub")) === "estimated premium for 2026, or $202.95 a quarter. For 2027: about $826.89 ($206.72 a quarter), at 0.43%.",

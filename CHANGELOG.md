@@ -1,5 +1,15 @@
 # Journal des modifications
 
+## 2026-11-13 (après-midi) — États-Unis : règle du FAMLI en vigueur au Colorado
+
+- *Paid leave and disability insurance for the self-employed* : au Colorado, documents fiscaux de l'année précédente à
+  envoyer chaque année avant le 1er décembre (sinon amende jusqu'à 500 $) et retrait possible à tout moment, avec effet
+  au plus tôt à la fin des 3 ans et 30 jours après l'avis, d'après la règle 7 CCR 1107-1 en vigueur ; base de la prime
+  (revenu brut) et début de la couverture (dépôt de l'avis) confirmés ; part de 50 % de l'indépendant rattachée à la
+  loi (C.R.S. 8-13.3-507(4)(a)).
+- Lecteur de sources : option « @html » pour chercher dans le code d'une page (adresse cachée dans du JavaScript).
+- Tests : page (3 erreurs réintroduites, toutes détectées), parcours navigateur, captures relues.
+
 ## 2026-11-13 (début d'après-midi) — États-Unis : taux 2027 du Colorado
 
 - *Paid leave and disability insurance for the self-employed* : au Colorado, la prime du FAMLI passe de 0,88 % à 0,86 %

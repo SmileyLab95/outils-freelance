@@ -37,17 +37,26 @@ officiel de décembre 2025 : retenu comme taux de 2026, prime estimée (0,44 % d
 **Colorado, taux de 2027 (lu le 13/11/2026)** : communiqué du CDLE du 06/10/2026 (« the premium rate will drop from
 0.88% in 2026 to 0.86% starting in 2027 », premier taux fixé par la FAMLI Division et non par la loi) et page
 *Rules & Guidance* du FAMLI (« Effective January 1, 2027, FAMLI premiums are reducing from 0.88% to 0.86% of gross
-wages »). Part de l'indépendant : règle **7 CCR 1107-1**, 1.5.2 B, lue sur le site du Secretary of State du Colorado
-(éditeur officiel du *Code of Colorado Regulations*, ajouté ce jour aux sites lus par l'outil) : « a self-employed person
-is required to submit only 50 percent of the premium required for an employee » (en application de C.R.S.
-8-13.3-507(4)(a)). Les chiffres de 2026 concordent (50 % de 0,88 % = 0,44 %) : le site donne **0,43 %** pour 2027
-(50 % de 0,86 %), sur les revenus plafonnés au plafond de la Social Security de 2027 (192 300 $) ; aucune page du FAMLI
-n'énonce encore ce taux de l'indépendant. Seule la version de 2022 de la règle a une adresse lisible (les versions en
-vigueur le 01/01/2026 et adoptée pour le 01/01/2027 sont liées en JavaScript ou sur Google Drive). **À vérifier dans la
-version en vigueur** : cette version de 2022 fait commencer la couverture « on the first day of the calendar quarter
-immediately following the notice of the election » (l'article du FAMLI de 2024 dit : dès l'inscription) et laisse
-l'indépendant choisir le revenu net ou brut comme base des primes et des prestations pour les 3 ans, avec un changement
-permis (1.5.1 A.2, 1.5.2 C à E) ; la page garde l'article du FAMLI tant que la version en vigueur n'est pas lue.
+wages »). Part de l'indépendant : **loi, C.R.S. 8-13.3-507(4)(a)**, texte publié par la Division of Insurance du
+Colorado (révisé le 14/11/2023) : « A self-employed individual who elects coverage under section 8-13.3-514 shall pay
+only 50 percent of the premium required for an employee » ; la loi SB 25-144 (2025) ne modifie que le paragraphe (3)
+(0,88 % en 2026, puis un taux fixé par règlement avant le 1er septembre de l'année précédente). Les chiffres de 2026
+concordent (50 % de 0,88 % = 0,44 %) : le site donne **0,43 %** pour 2027 (50 % de 0,86 %), sur les revenus plafonnés au
+plafond de la Social Security de 2027 (192 300 $) ; aucune page du FAMLI n'énonce encore ce taux de l'indépendant.
+
+**Colorado, règle 7 CCR 1107-1 en vigueur (lue le 13/11/2026, version du 01/01/2026)** sur le site du Secretary of
+State du Colorado (éditeur officiel du *Code of Colorado Regulations*, ajouté ce jour aux sites lus par l'outil ;
+l'adresse du PDF, cachée dans du JavaScript, a été trouvée avec la nouvelle option « @html » du lecteur) : la base de
+la prime est le **revenu brut d'indépendant** (1.2.3 et 1.2.9 : Schedule SE, plus les sommes de l'entreprise déclarées
+sur W-2 ou Schedule E partie II) ; la couverture prend effet **le jour du dépôt de l'avis** (1.3.1 B, comme la loi,
+8-13.3-514(1)) ; l'avis passe par My FAMLI+ Employer avec la dernière transcription fiscale et les W-2 de l'entreprise
+(1.3.1 A) ; au moins 3 ans, puis sans fin jusqu'à un avis de retrait, déposable à tout moment, qui prend effet au plus
+tôt à la fin de la période et 30 jours après son dépôt (1.3.1 C à E) ; justificatifs avec chaque déclaration
+trimestrielle (1.3.2 A) ; **chaque année avant le 1er décembre**, transcription fiscale et W-2 de l'année précédente,
+sinon revenu écarté des demandes et amende jusqu'à 500 $ (1.3.2 D) ; déclarations et primes chaque trimestre, au plus
+tard le dernier jour du mois suivant (1.3.3, 1.4 2). La version de 2022 (couverture au trimestre suivant, choix du net)
+est remplacée : la page, qui suivait déjà l'article du FAMLI, est confirmée, et complétée par les documents annuels et
+le retrait.
 Minnesota, taux de 2027 : communiqué du DEED et page de Paid Leave refusés le 13/11/2026 (protection contre les robots,
 réponse 405), non contournés.
 
@@ -161,5 +170,5 @@ York, Washington, Minnesota, Delaware, Massachusetts, Maine, autre État, access
 | New Jersey, *Employment situations* (myleavebenefits.nj.gov) et guide de l'employeur sur TDI et FLI (nj.gov), lus le 10/11/2026 | Indépendants (*independent contractors*) non couverts ; membres ou associés d'une LLC non couverts ; aucune adhésion volontaire décrite |
 | Delaware, FAQ du programme (laborfiles.delaware.gov) et règlement 1401, art. 6.6, lus le 10/11/2026 | 0,8 % des salaires garanti jusqu'en 2026 ; taux renouvelés à l'identique, changement par modification du règlement à partir de 2027 |
 | FAMLI Division, « Opting in to FAMLI » (famli.colorado.gov), et avis du programme de décembre 2025 (dhr.colorado.gov), lus le 10/11/2026 | Adhésion facultative, 0,44 % du revenu brut d'indépendant, plafond de la Social Security, 3 ans, primes trimestrielles, un trimestre avant les prestations ; part salariale de 0,44 % en 2026 |
-| CDLE, communiqué du 06/10/2026 ; FAMLI, *Rules & Guidance* ; 7 CCR 1107-1 (sos.state.co.us, version de 2022), lus le 13/11/2026 | Prime totale de 0,88 % en 2026 et 0,86 % au 1er janvier 2027 ; l'indépendant paie 50 % de la prime (1.5.2 B) ; début de couverture et base nette ou brute à revérifier dans la version en vigueur |
+| CDLE, communiqué du 06/10/2026 ; FAMLI, *Rules & Guidance* ; loi (C.R.S. 8-13.3-507 et 514, copie de la Division of Insurance, 2023) et SB 25-144 ; 7 CCR 1107-1 (sos.state.co.us, versions de 2026 et de 2022), lus le 13/11/2026 | Prime totale de 0,88 % en 2026 et 0,86 % au 1er janvier 2027 ; l'indépendant paie 50 % de la prime (loi, 507(4)(a)) ; revenu brut, effet au dépôt de l'avis, retrait (30 jours, fin des 3 ans), documents annuels avant le 1er décembre (amende jusqu'à 500 $) |
 | Refus de lecture | mass.gov (403), mn.gov et pl.mn.gov (13/11/2026 : protection contre les robots, 405), famli.colorado.gov (le 09/11/2026 ; lisible le 10/11), pl.mn.gov, dol.gov (FMLA), cga.ct.gov (certificat refusé) ; brochure de Washington (lien déplacé) ; Delaware Code, chapitre 37 du titre 19 (page sans le texte) |

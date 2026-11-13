@@ -42,7 +42,9 @@
           pct(CO.premium_rate_2027 * CO.self_employed_share_of_premium) + ", on up to the " + usd(R.social_security_wage_base_2027) + " cap of 2027.",
         "You pay premiums every quarter for at least " + CO.min_years + " years; each is due by the end of the month after the quarter.",
         "To elect coverage you send a federal tax transcript (and any W-2s), then supporting documents with each quarterly wage report.",
-        "Coverage starts when you register; benefits are available after at least " + CO.quarters_paid_before_benefits + " quarter of reported and paid premiums."
+        "Every year, by " + CO.annual_documents_due + ", you also send the prior year's tax transcript and W-2s; otherwise FAMLI can leave that income out of your claims and fine you up to " + usd(CO.annual_documents_fine_max) + ".",
+        "Coverage starts when you register; benefits are available after at least " + CO.quarters_paid_before_benefits + " quarter of reported and paid premiums.",
+        "You can file a notice of withdrawal at any time; it takes effect no sooner than the end of your " + CO.min_years + " years and " + CO.withdrawal_notice_days + " days after you file it."
       ],
       step: "Next: register as a self-employed individual in My FAMLI+ Employer."
     },
