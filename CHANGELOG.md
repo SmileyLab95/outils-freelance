@@ -1,5 +1,14 @@
 # Journal des modifications
 
+## 2026-11-13 (matin, fin) — Canada : règles de l'assurance-emploi des travailleurs autonomes et du RQAP
+
+- Règles lues dans la Loi sur l'assurance-emploi (partie VII.1, prestations spéciales des travailleurs indépendants :
+  adhésion, 12 mois d'attente, 6 000 $ indexés, 55 % ou 33 %, semaines maximales, semaine de carence, cotisation) et
+  dans la Loi sur l'assurance parentale (RQAP : 2 000 $, revenu de l'année précédente ÷ 52, 70 %, 55 % ou 75 %,
+  semaines de maternité, de paternité et parentales, cotisation obligatoire).
+- Moteur de calcul testé (4 tests, valeurs calculées à la main ; 18 erreurs réintroduites, toutes détectées). Les
+  pages de l'outil suivent.
+
 ## 2026-11-13 (matin, suite) — Jours ouvrables : Saskatchewan
 
 - Calculateur des jours ouvrables du Canada (anglais et français) : la Saskatchewan est ajoutée, d'après la liste

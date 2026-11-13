@@ -2433,6 +2433,100 @@
       "verified_on": "2026-10-30",
       "note": "Read on 30/10/2026 with the « Lire une source officielle » tool (page modified 2026-10-15, SHA-256 e7948664…8a88). French term: taux de change au comptant. CRA administrative practice (yearly average rate, GST/HST conversion) is on canada.ca, not readable from the work environment: not covered. Excise Tax Act s. 159 read (SHA-256 9c4682eb…3b26): no currency conversion rule there. Bank of Canada daily exchange rates page read on 30/10/2026: daily average rates published once each business day by 16:30 ET, expressed as 1 unit of foreign currency in Canadian dollars, indicative rates only."
     },
+    "ei_self_employed_special_benefits": {
+      "value": {
+        "rate": 0.55,
+        "extended_parental_rate": 0.33,
+        "weeks": {
+          "sickness": 26,
+          "maternity": 15,
+          "parental": 35,
+          "parental_extended": 61,
+          "compassionate": 26,
+          "critically_ill_child": 35,
+          "critically_ill_adult": 15
+        },
+        "parental_shared_weeks": {
+          "standard": 40,
+          "extended": 69
+        },
+        "waiting_weeks": 1,
+        "agreement_months": 12,
+        "minimum_earnings_base": 6000,
+        "minimum_earnings_indexed_from": 2012,
+        "cancel_days": 60,
+        "divisor": 52
+      },
+      "unit": "object",
+      "label": "EI special benefits for self-employed people (Employment Insurance Act, Part VII.1): rate, maximum weeks, waiting period, agreement and minimum earnings",
+      "source": "https://laws-lois.justice.gc.ca/eng/acts/E-5.6/FullText.html",
+      "source_title": "Employment Insurance Act (S.C. 1996, c. 23), Part VII.1, ss. 152.01 to 152.22",
+      "more_sources": [
+        {
+          "source": "https://laws-lois.justice.gc.ca/eng/regulations/SOR-96-332/FullText.html",
+          "source_title": "Employment Insurance Regulations (SOR/96-332), ss. 9.01, 9.02 and 11.1"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-11-13",
+      "note": "Read on 13/11/2026 with the « Lire une source officielle » tool (Act current to 2026-10-19, SHA-256 830801db…a827; Regulations SHA-256 a15d0d70…050b). s. 152.02: Canadian citizen or permanent resident who has entered into an agreement with the Commission; agreement of indefinite duration; may be terminated by notice before any benefits are paid (after benefits, only in prescribed circumstances, none found in the Regulations read), the termination taking effect on December 31 of the year of the notice; notice within 60 days: the agreement is deemed never to have been entered into (notice and withdrawal in writing, Regs ss. 9.01, 9.02). s. 152.07(1): 12 months since the agreement, agreement in force, interruption of earnings from self-employment, self-employed earnings during the qualifying period of at least « $6,000 or the amount fixed or determined in accordance with the regulations » (× 1.25 to 2 after a violation); Regs s. 11.1: adjusted annually on a compound basis from January 1, 2012 by the ratio of s. 4(2)(b) of the Act, never below $6,000, rounded down (the amount for each year is published by Service Canada on canada.ca, not readable: not computed here). s. 152.14(1): maximum weeks: pregnancy 15; care of new-born or adopted children 35 or 61 (election, s. 152.05); illness, injury or quarantine 26; family member needing care (compassionate) 26; critically ill child 35; critically ill adult 15; shared parental weeks 40 or 69 (s. 152.14(2)). s. 152.15: waiting period of one week (the waiver of s. 153.191(1.1) belongs to Part VIII.5, temporary measures that, under s. 153.196(1), ceased to apply on « the earlier of September 25, 2021 » and the repeal of Interim Order No. 8). s. 152.16: 55% (33% for extended parental benefits) of (self-employed earnings for the qualifying period + insurable earnings) ÷ 52, the total capped at the maximum yearly insurable earnings (rule ei_max_insurable_earnings); s. 152.01(5): rounded to the nearest dollar, half up. s. 152.17: family supplement for low-income families (not computed). s. 152.21: premium every year of the agreement, including the year it is entered into and the year it ends: rate × the lesser of the self-employed earnings for the year and the maximum yearly insurable earnings minus insurable earnings; s. 152.22: return filed with the income tax return. s. 152.2: no benefits while not in Canada, except as prescribed."
+    },
+    "qpip_self_employed_benefits": {
+      "value": {
+        "basic": {
+          "maternity": {
+            "weeks": 18,
+            "rate": 0.7
+          },
+          "paternity": {
+            "weeks": 5,
+            "rate": 0.7
+          },
+          "parental": [
+            {
+              "weeks": 7,
+              "rate": 0.7
+            },
+            {
+              "weeks": 25,
+              "rate": 0.55
+            }
+          ]
+        },
+        "special": {
+          "maternity": {
+            "weeks": 15,
+            "rate": 0.75
+          },
+          "paternity": {
+            "weeks": 3,
+            "rate": 0.75
+          },
+          "parental": [
+            {
+              "weeks": 25,
+              "rate": 0.75
+            }
+          ]
+        },
+        "minimum_insurable_income": 2000,
+        "premium_exempt_below": 2000,
+        "divisor": 52
+      },
+      "unit": "object",
+      "label": "Québec Parental Insurance Plan (QPIP) for self-employed workers: weeks, replacement rates, minimum insurable income, average weekly income",
+      "source": "https://www.legisquebec.gouv.qc.ca/fr/document/lc/A-29.011",
+      "source_title": "Loi sur l'assurance parentale (RLRQ, c. A-29.011), art. 3, 7, 9, 10, 18, 21, 53, 54 et 66",
+      "more_sources": [
+        {
+          "source": "https://www.legisquebec.gouv.qc.ca/fr/document/rc/A-29.011,%20r.%202",
+          "source_title": "Règlement d'application de la Loi sur l'assurance parentale (A-29.011, r. 2)"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-11-13",
+      "note": "Read on 13/11/2026 on LégisQuébec (Act SHA-256 578de835…cb05, consolidated with 2026, c. 5: the plan is now administered by Retraite Québec). Art. 3: eligibility: insurable income during the reference period « égal ou supérieur à 2 000 $ », residence in Québec, an « arrêt de rémunération » as defined by regulation. Art. 7, 9, 10: maternity 18 weeks (15 with the option of art. 18), paternity 5 (3), shareable parental 32 (25). Art. 18: 70% for maternity and paternity weeks and the first seven weeks of shareable parental benefits, 55% for the other shareable parental weeks; « une personne peut … opter pour une prestation hebdomadaire égale à 75% de son revenu hebdomadaire moyen pour un nombre de semaines de prestations moindre »; the option of the first parent to apply binds the other, and is irrevocable save exceptional circumstances. Art. 19: increase for low-income families (not computed). Art. 21: for income from a business, the average weekly income is one fifty-second of the insurable income for the year before the benefit period begins, capped at the maximum insurable earnings ÷ 52 (rule qpip_max_insurable_earnings) and not below 2 000 $ ÷ 52. Art. 53, 54, 66: every self-employed worker resident in Québec at the end of the year pays the premium (no premium if work income is under 2 000 $): rate (rule qpip_rate_self_employed) × the lesser of the business income and the maximum insurable earnings minus salaried income already subject to premiums. Rounding of the weekly benefit not read: amounts shown to the cent, as an estimate. Additional weeks (multiple births, adoption, surrogacy, art. 10.1 to 12.8, 17) not computed."
+    },
     "statutory_holidays": {
       "value": {
         "years": {
