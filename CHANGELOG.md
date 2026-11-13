@@ -1,5 +1,15 @@
 # Journal des modifications
 
+## 2026-11-13 (matin, suite) — Jours ouvrables : Saskatchewan
+
+- Calculateur des jours ouvrables du Canada (anglais et français) : la Saskatchewan est ajoutée, d'après la liste
+  officielle de son gouvernement (10 jours fériés ; quand le jour de l'An, le jour du Souvenir ou Noël tombe un
+  dimanche, le lundi suivant est férié là où les entreprises sont fermées le dimanche ; pas de Journée de la vérité
+  et de la réconciliation provinciale). Le Yukon et le Nunavut restent à ajouter (sites officiels illisibles par
+  l'outil).
+- Tests : dates de 2026 = liste officielle, règle du dimanche recalculée sans le moteur ; parcours des pages
+  canadiennes au vert.
+
 ## 2026-11-13 (matin) — Jours ouvrables et jours fériés au Canada
 
 - Nouveaux outils *Business days calculator* (/ca/) et « Calcul des jours ouvrables » (/ca/fr/) : jours ouvrables et

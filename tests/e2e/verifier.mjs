@@ -603,6 +603,10 @@ const tests = {
     check((await t("#jo-due")) === "July 6, 2026" && (await t("#jo-explain")).includes("Wed, Jul 1"), "CA: 5 business days after June 26, 2026 → July 6 (Canada Day skipped)");
     await page.selectOption("#jo-zone", "federal");
     check((await t("#jo-zone-hint")).includes("Canada Labour Code") && (await t("#jo-billable")) === "252", "CA federal: Canada Labour Code, 252 in 2026");
+    await page.selectOption("#jo-zone", "sk");
+    check((await t("#jo-billable")) === "251" && (await t("#jo-zone-hint")).includes("Government of Saskatchewan") &&
+      (await rows()).includes("Mon, Aug 3 | Saskatchewan Day | Day off") && !(await rows()).some((r) => r.includes("Truth and Reconciliation")),
+      "CA Saskatchewan 2026: 251, official list, no National Day for Truth and Reconciliation");
     check((await page.$$('#jo-mode option[value="franc"]')).length === 0, "CA: no French « jours francs »");
   },
   async "ca/fr/calcul-jours-ouvrables/"(page) {

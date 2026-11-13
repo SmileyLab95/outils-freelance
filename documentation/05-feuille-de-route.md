@@ -451,14 +451,16 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   dates calculées par la règle de chaque loi (règle `statutory_holidays`), contrôlées par les tableaux datés de la
   Colombie-Britannique (2024 à 2027) et de l'Alberta (2026 à 2028) ; reports fixés par la loi (2 juillet, 25 juin) ;
   Nouvelle-Écosse : 11 novembre (Remembrance Day Act) ; Saskatchewan, Yukon et Nunavut absents, dits sur la page
-  ([42](42-jours-ouvres.md) § 10.1, D73).
+  ([42](42-jours-ouvres.md) § 10.1, D73). **Saskatchewan ajoutée le 13/11 (matin)** d'après la liste officielle du
+  gouvernement (10 jours fériés, lundi suivant un dimanche pour le jour de l'An, le jour du Souvenir et Noël) ; Yukon
+  et Nunavut toujours refusés (403) ([42](42-jours-ouvres.md) § 10.2).
 - **Prochaines actions de Claude** : indicateurs de l'Espace : les huit onglets, la date de clôture des pistes et la période de
   l'onglet Documents et de l'onglet Dépenses sont faits (12/11, [55](55-indicateurs-espace.md)) ; **appliquer le thème**
   choisi par Ismail dès sa réponse ([54](54-themes.md) § 2) ; refonte, suite ([31](31-vision-plateforme.md) § 5) : les quatre modules du compte
   gratuit sont faits (étape 5) ; étape 6, outils restants (CGV : faites dans les quatre pays ;
   lois des autres provinces sur la protection du consommateur à lire pour les détailler ; le règlement albertain sur les
   contrats Internet expire le 30/09/2028 : à revérifier) ; jours ouvrés au Canada (faits le 13/11, [42](42-jours-ouvres.md) § 10.1) :
-  ajouter la Saskatchewan, le Yukon et le Nunavut dès que leurs textes sont lisibles par l'outil, relire la date fédérale
+  ajouter le Yukon et le Nunavut dès que leurs textes sont lisibles par l'outil (Saskatchewan faite le 13/11), relire la date fédérale
   de l'Action de grâces (proclamation) et prolonger au-delà de 2030 après relecture des lois ; sous-traitance
   (Royaume-Uni, États-Unis et Canada faits le 30/10/2026, [48](48-sous-traitance.md) ; France en attente de la lecture de la loi du 31 décembre 1975 sur Légifrance, décision D50),
   devises (faites le 30/10/2026, [49](49-devises.md) ; taux H.10 de la Réserve fédérale : non lisible depuis un

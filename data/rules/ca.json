@@ -3084,11 +3084,79 @@
               "name_fr": "Noël",
               "date": "12-25"
             }
+          ],
+          "sk": [
+            {
+              "name": "New Year’s Day",
+              "name_fr": "Jour de l’An",
+              "date": "01-01",
+              "sunday_also": "01-02"
+            },
+            {
+              "name": "Family Day",
+              "name_fr": "Fête de la famille",
+              "monday": [
+                2,
+                3
+              ]
+            },
+            {
+              "name": "Good Friday",
+              "name_fr": "Vendredi saint",
+              "paques": -2
+            },
+            {
+              "name": "Victoria Day",
+              "name_fr": "Fête de Victoria",
+              "monday_before": "05-25"
+            },
+            {
+              "name": "Canada Day",
+              "name_fr": "Fête du Canada",
+              "date": "07-01",
+              "sunday": "07-02"
+            },
+            {
+              "name": "Saskatchewan Day",
+              "name_fr": "Fête de la Saskatchewan",
+              "monday": [
+                8,
+                1
+              ]
+            },
+            {
+              "name": "Labour Day",
+              "name_fr": "Fête du Travail",
+              "monday": [
+                9,
+                1
+              ]
+            },
+            {
+              "name": "Thanksgiving Day",
+              "name_fr": "Action de grâces",
+              "monday": [
+                10,
+                2
+              ]
+            },
+            {
+              "name": "Remembrance Day",
+              "name_fr": "Jour du Souvenir",
+              "date": "11-11",
+              "sunday_also": "11-12"
+            },
+            {
+              "name": "Christmas Day",
+              "name_fr": "Noël",
+              "date": "12-25",
+              "sunday_also": "12-26"
+            }
           ]
         }
       },
       "unit": "object",
-      "label": "Statutory (general, public) holidays by jurisdiction: federally regulated workplaces and 9 provinces and territories, legal dates computed from the rule each law states, 2024 to 2030",
+      "label": "Statutory (general, public) holidays by jurisdiction: federally regulated workplaces and 10 provinces and territories, legal dates computed from the rule each law states, 2024 to 2030",
       "source": "https://laws-lois.justice.gc.ca/eng/acts/L-2/FullText.html",
       "source_title": "Canada Labour Code (R.S.C. 1985, c. L-2), s. 166, « general holiday »",
       "more_sources": [
@@ -3169,6 +3237,10 @@
           "source_title": "Prince Edward Island Islander Day Act (c. I-10.01)"
         },
         {
+          "source": "https://www.saskatchewan.ca/business/employment-standards/public-statutory-holidays/list-of-saskatchewan-public-holidays",
+          "source_title": "Government of Saskatchewan, « List of Saskatchewan Public Holidays » (dates of 2026, Sunday rule)"
+        },
+        {
           "source": "https://www.legisquebec.gouv.qc.ca/fr/document/lc/N-1.1",
           "source_title": "Québec, Loi sur les normes du travail (RLRQ, c. N-1.1), art. 60"
         },
@@ -3179,7 +3251,7 @@
       ],
       "confidence": "medium",
       "verified_on": "2026-11-13",
-      "note": "Read on 12 and 13/11/2026 with the « Lire une source officielle » tool (official texts; canada.ca refuses the tool). Each holiday is stored with the rule its law states: fixed date (date), Easter offset (paques: Good Friday -2, Easter Monday +1), n-th Monday of a month (monday: [month, n]), Monday preceding May 25 (monday_before). Dates: Victoria Day « the first Monday immediately preceding May 25 » (Holidays Act s. 3; Québec LNT art. 60: « le lundi qui précède le 25 mai »); Labour Day « the first Monday in September » (Interpretation Act s. 35); National Day for Truth and Reconciliation « observed on September 30 » (Interpretation Act s. 35, PE and NT laws); Thanksgiving Day: the federal Interpretation Act gives no date (day appointed by proclamation, not read): second Monday in October from Québec LNT art. 60 and Alberta's table (« Second Monday in October »); Family Day (ON, NB), Louis Riel Day (MB), Islander Day (PE, Islander Day Act), Heritage Day (NS, N.S. Reg. 9/2015): « the third Monday in February »; New Brunswick Day: « the first Monday in August » (2014, c. 121); NT: « the first Monday in August » (ESA s. 22(1)(f)) and National Indigenous Peoples Day « June 21 » (SNWT 2021, c. 15, s. 1; SHA-256 38258b4a…4d11; ESA SHA-256 ad2f707b…80a0); BC Family Day and British Columbia Day: the third Monday in February and the first Monday in August, as on the dated tables of gov.bc.ca for 2023 to 2027 (page last updated 01/01/2026, SHA-256 eef31e4d…2c8d), the BC laws naming them without a date; Alberta Family Day: third Monday in February (alberta.ca table, SHA-256 e2bd71a1…864c). Canada Day: July 1, or July 2 when July 1 is a Sunday (Holidays Act s. 2, « Canada Day »; Québec LNT art. 60; alberta.ca), applied where the law names « Canada Day »; Manitoba and Prince Edward Island laws say « July 1 » and Newfoundland and Labrador's Memorial Day is July 1 (« Memorial Day (Canada Day) », official guide): no move. Québec: « le Vendredi saint ou le lundi de Pâques, au choix de l'employeur » (two zones); June 24, and June 25 when June 24 is a Sunday « à l'égard du salarié pour qui le dimanche n'est pas normalement un jour ouvrable » (F-1.1 art. 2). Nova Scotia: Remembrance Day is not a holiday of the Labour Standards Code; the Remembrance Day Act (SHA-256 ed90764e…be26c, consolidated 27/10/2020) bars selling and working « for gain or reward » in any industry on November 11, with exceptions (s. 4): counted as a day off. Other days off for employees (a holiday falling on a non-working day, days agreed with the employer, days proclaimed by a government) depend on each law and employer: not counted. Not covered: Saskatchewan (publications.saskatchewan.ca refused by the tool, certificate), Yukon and Nunavut (403). French names: Canada Labour Code s. 166 in French (« la fête de Victoria, la fête du Canada, la fête du Travail, la Journée nationale de la vérité et de la réconciliation, … le jour de l'Action de grâces, le jour du Souvenir, le jour de Noël et le lendemain de Noël », SHA-256 b4d7885b…c3c5) and NT laws (bilingual); Québec's LNT art. 60 gives dates without names: « Journée nationale des patriotes » and « Action de grâce » are the usual names (the CNESST page refused the tool, 403); elsewhere the usual French name, for display. Years 2024 to 2030: laws as read in November 2026, to re-read before extending."
+      "note": "Read on 12 and 13/11/2026 with the « Lire une source officielle » tool (official texts; canada.ca refuses the tool). Each holiday is stored with the rule its law states: fixed date (date), Easter offset (paques: Good Friday -2, Easter Monday +1), n-th Monday of a month (monday: [month, n]), Monday preceding May 25 (monday_before). Dates: Victoria Day « the first Monday immediately preceding May 25 » (Holidays Act s. 3; Québec LNT art. 60: « le lundi qui précède le 25 mai »); Labour Day « the first Monday in September » (Interpretation Act s. 35); National Day for Truth and Reconciliation « observed on September 30 » (Interpretation Act s. 35, PE and NT laws); Thanksgiving Day: the federal Interpretation Act gives no date (day appointed by proclamation, not read): second Monday in October from Québec LNT art. 60 and Alberta's table (« Second Monday in October »); Family Day (ON, NB), Louis Riel Day (MB), Islander Day (PE, Islander Day Act), Heritage Day (NS, N.S. Reg. 9/2015): « the third Monday in February »; New Brunswick Day: « the first Monday in August » (2014, c. 121); NT: « the first Monday in August » (ESA s. 22(1)(f)) and National Indigenous Peoples Day « June 21 » (SNWT 2021, c. 15, s. 1; SHA-256 38258b4a…4d11; ESA SHA-256 ad2f707b…80a0); BC Family Day and British Columbia Day: the third Monday in February and the first Monday in August, as on the dated tables of gov.bc.ca for 2023 to 2027 (page last updated 01/01/2026, SHA-256 eef31e4d…2c8d), the BC laws naming them without a date; Alberta Family Day: third Monday in February (alberta.ca table, SHA-256 e2bd71a1…864c). Canada Day: July 1, or July 2 when July 1 is a Sunday (Holidays Act s. 2, « Canada Day »; Québec LNT art. 60; alberta.ca), applied where the law names « Canada Day »; Manitoba and Prince Edward Island laws say « July 1 » and Newfoundland and Labrador's Memorial Day is July 1 (« Memorial Day (Canada Day) », official guide): no move. Québec: « le Vendredi saint ou le lundi de Pâques, au choix de l'employeur » (two zones); June 24, and June 25 when June 24 is a Sunday « à l'égard du salarié pour qui le dimanche n'est pas normalement un jour ouvrable » (F-1.1 art. 2). Nova Scotia: Remembrance Day is not a holiday of the Labour Standards Code; the Remembrance Day Act (SHA-256 ed90764e…be26c, consolidated 27/10/2020) bars selling and working « for gain or reward » in any industry on November 11, with exceptions (s. 4): counted as a day off. Other days off for employees (a holiday falling on a non-working day, days agreed with the employer, days proclaimed by a government) depend on each law and employer: not counted. Saskatchewan (read on 13/11/2026, saskatchewan.ca, « List of Saskatchewan Public Holidays », SHA-256 13cc3882…0d0d; the Saskatchewan Employment Act itself, on publications.saskatchewan.ca, was refused by the tool, certificate): « There are 10 public (statutory) holidays per year in Saskatchewan »; 2026: New Year's Day January 1, Family Day February 16, Good Friday April 3, Victoria Day May 18, Canada Day July 1, Saskatchewan Day August 3, Labour Day September 7, Thanksgiving October 12, Remembrance Day November 11, Christmas Day December 25 (Family Day: third Monday in February and Saskatchewan Day: first Monday in August, as on that list; the rule itself not read in the Act); « Where businesses are normally closed on Sunday, and New Year's Day, Christmas Day or Remembrance Day fall on a Sunday, the following Monday is observed as a public holiday » (counted, like June 25 in Québec); Canada Day follows the federal Holidays Act (July 2 when July 1 is a Sunday); « When a public holiday falls on a Saturday, it is not observed on a different day »; the National Day for Truth and Reconciliation « is not a public holiday under The Saskatchewan Employment Act ». Not covered: Yukon (yukon.ca and laws.yukon.ca refuse the tool, 403) and Nunavut (gov.nu.ca and nunavutlegislation.ca, 403). French names: Canada Labour Code s. 166 in French (« la fête de Victoria, la fête du Canada, la fête du Travail, la Journée nationale de la vérité et de la réconciliation, … le jour de l'Action de grâces, le jour du Souvenir, le jour de Noël et le lendemain de Noël », SHA-256 b4d7885b…c3c5) and NT laws (bilingual); Québec's LNT art. 60 gives dates without names: « Journée nationale des patriotes » and « Action de grâce » are the usual names (the CNESST page refused the tool, 403); elsewhere the usual French name, for display. Years 2024 to 2030: laws as read in November 2026, to re-read before extending."
     }
   },
   "provinces": {

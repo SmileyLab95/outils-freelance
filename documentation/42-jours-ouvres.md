@@ -287,3 +287,24 @@ refusé l'outil (403, non contournée).
   français ; pages, menu et chiffres de la FAQ tirés du moteur. 15 erreurs réintroduites dans le moteur : 15
   détectées (la quinzième après l'ajout d'un cas de règles dans le désordre). Parcours navigateur des deux pages
   (accessibilité comprise) et des 74 pages canadiennes ; captures relues sur ordinateur et mobile.
+
+### 10.2 Saskatchewan (13/11/2026, matin)
+
+La loi (*The Saskatchewan Employment Act*) reste illisible (certificat de publications.saskatchewan.ca refusé par
+l'outil), mais la page officielle « List of Saskatchewan Public Holidays » (saskatchewan.ca, SHA-256 13cc3882…0d0d)
+l'est : « There are 10 public (statutory) holidays per year in Saskatchewan » ; dates de 2026 : New Year's Day
+(1er janvier), Family Day (16 février), Good Friday (3 avril), Victoria Day (18 mai), Canada Day (1er juillet),
+Saskatchewan Day (3 août), Labour Day (7 septembre), Thanksgiving (12 octobre), Remembrance Day (11 novembre),
+Christmas Day (25 décembre). Dimanche : « Where businesses are normally closed on Sunday, and New Year's Day,
+Christmas Day or Remembrance Day fall on a Sunday, the following Monday is observed as a public holiday » ; fête du
+Canada selon la loi fédérale (2 juillet quand le 1er est un dimanche) ; « When a public holiday falls on a Saturday,
+it is not observed on a different day » ; la Journée nationale de la vérité et de la réconciliation « is not a public
+holiday under The Saskatchewan Employment Act ».
+
+Réalisation : zone `sk` de la règle `statutory_holidays` (Family Day : troisième lundi de février ; Saskatchewan
+Day : premier lundi d'août, comme sur la liste de 2026, la règle de la loi n'étant pas lue : signalé dans la note) ;
+le lundi qui suit le jour de l'An, le jour du Souvenir ou Noël tombé un dimanche est compté, comme le 25 juin au
+Québec (prochain cas : lundi 12 novembre 2029). Test : dates de 2026 = liste officielle ; règle du dimanche
+recalculée sans le moteur. **Yukon** (yukon.ca et laws.yukon.ca : 403) et **Nunavut** (gov.nu.ca, www.gov.nu.ca et
+nunavutlegislation.ca : 403) restent absents, sans contournement.
+
