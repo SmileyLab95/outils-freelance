@@ -207,10 +207,12 @@ def passages(txt, mots):
 
 
 def liens_trouves(liens, mots):
-    """Liens dont le texte contient un des mots cherchés (sans doublon), pour trouver l'adresse d'une page citée."""
+    """Liens dont le texte contient un des mots cherchés (sans doublon), pour trouver l'adresse d'une page citée. Le
+    suffixe « +N » d'un mot cherché ne fait pas partie du mot."""
+    motifs = [_motif(_mot_et_suite(mot)[0]) for mot in mots]
     vus, out = set(), []
     for adresse, txt in liens:
-        if adresse not in vus and any(_motif(mot).search(txt) for mot in mots):
+        if adresse not in vus and any(motif.search(txt) for motif in motifs):
             vus.add(adresse)
             out.append((txt, adresse))
     return out[:LIENS]

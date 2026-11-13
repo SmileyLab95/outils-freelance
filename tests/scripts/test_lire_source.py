@@ -98,6 +98,7 @@ class LireSource(unittest.TestCase):
         self.assertEqual(L.liens_trouves(liens, ["l'opposition"])[0][1], "https://www.cnil.fr/fr/utiliser-une-liste-repoussoir",
                          "apostrophe droite ou typographique")
         self.assertEqual(L.liens_trouves(liens, ["introuvable"]), [])
+        self.assertEqual(L.liens_trouves(liens, ["repoussoir +300"]), trouves, "le suffixe « +N » ne fait pas partie du mot")
 
     def test_passages(self):
         txt = "a" * 2000 + " opposition " + "b" * 100 + " Opposition " + "c" * 2000
