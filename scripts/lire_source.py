@@ -11,6 +11,9 @@ Un mot suivi de « +N » (par exemple « Disclosure of information +4000 ») aff
 occurrence (au plus SUITE_MAX), pour lire en une fois une liste longue : un article et ses paragraphes.
 « @entetes » parmi les mots envoie la demande avec l'origine du site (en-tête Origin) et affiche les en-têtes de la
 réponse : Access-Control-Allow-Origin dit si un navigateur peut lire la source depuis le site (taux de change…).
+« @html » parmi les mots cherche dans le code HTML de la page plutôt que dans son texte : une adresse que la page ne
+donne que dans du JavaScript (lien « javascript:void(0) » et attribut onclick, comme les PDF du Code of Colorado
+Regulations).
 """
 import hashlib
 import html.parser
@@ -51,6 +54,7 @@ LIENS = 20                   # liens affichés au plus
 LIENS_SOURCES = 60           # liens vers d'autres sites officiels affichés au plus avec « * »
 ORIGINE = "https://smileylab95.github.io"  # origine des pages du site, envoyée avec « @entetes »
 ENTETES = "@entetes"
+HTML = "@html"
 
 
 def autorise(url):
@@ -185,6 +189,12 @@ def options(mots):
     return len(restants) != len(mots), restants
 
 
+def option_html(mots):
+    """Sépare l'option « @html » (majuscules ignorées) des mots cherchés : (chercher dans le code HTML, mots restants)."""
+    restants = [m for m in mots if m.lower() != HTML]
+    return len(restants) != len(mots), restants
+
+
 def entetes_lisibles(entetes):
     """Lignes « Nom : valeur » des en-têtes d'une réponse, triées par nom (majuscules ignorées)."""
     return [f"{nom} : {valeur}" for nom, valeur in sorted(entetes, key=lambda e: e[0].lower())]
@@ -237,6 +247,7 @@ def main():
     url = sys.argv[1].strip()
     mots = [m.strip() for m in (sys.argv[2] if len(sys.argv) > 2 else "").split("|") if m.strip()]
     avec_entetes, mots = options(mots)
+    avec_html, mots = option_html(mots)
     if not autorise(url):
         sys.exit(f"Adresse refusée : seuls les sites officiels en https sont lus ({', '.join(OFFICIELS)}, domaines .gov).")
     demande = {"User-Agent": "Mozilla/5.0 (outils-freelance, verification de sources)",
@@ -258,11 +269,16 @@ def main():
     if statut != 200 or not contenu.strip():
         sys.exit(f"Réponse {statut} sans contenu lisible pour {url} (le site filtre peut-être les lectures automatiques).")
     txt, liens = texte(contenu, type_contenu.lower(), final)
+    html_lu = avec_html and "html" in type_contenu.lower()
+    if html_lu:
+        txt = contenu.decode("utf-8", errors="replace")
     print(f"Source : {url}")
     if final != url:
         print(f"Adresse finale : {final}")
     print(f"Lue le : {datetime.now(timezone.utc):%d/%m/%Y à %H:%M} UTC · réponse {statut} · {type_contenu or 'type inconnu'}")
     print(f"Taille : {len(contenu)} octets · texte : {len(txt)} caractères · SHA-256 : {hashlib.sha256(contenu).hexdigest()}")
+    if avec_html:
+        print("\n===== Recherche dans le code HTML de la page" if html_lu else "\n===== Option « @html » ignorée : pas une page HTML")
     if avec_entetes:
         print(f"\n===== En-têtes de la réponse (demande envoyée avec Origin : {ORIGINE})")
         print("\n".join(entetes_lisibles(entetes)))

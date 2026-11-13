@@ -159,6 +159,31 @@ class LireSource(unittest.TestCase):
         self.assertIn("[…]", debut)
         self.assertNotIn("Liens vers d'autres sites officiels", debut)
 
+    def test_option_html(self):
+        self.assertEqual(L.option_html(["@HTML", "taux"]), (True, ["taux"]), "majuscules ignorées")
+        self.assertEqual(L.option_html(["html"]), (False, ["html"]), "sans @ : un mot cherché")
+        page = ('<html><body><a href="javascript:void(0)" onclick="openRule(\'GenerateRulePdf.do?ruleVersionId=4242\')">'
+                "01/01/2026 (PDF)</a></body></html>").encode("utf-8")
+
+        class Reponse(io.BytesIO):
+            status, headers = 200, {"Content-Type": "text/html; charset=UTF-8"}
+
+            def geturl(self):
+                return "https://www.sos.state.co.us/CCR/DisplayRule.do"
+
+        def lire(mots):
+            sortie = io.StringIO()
+            with mock.patch.object(L.urllib.request, "urlopen", lambda *a, **k: Reponse(page)), \
+                    mock.patch.object(sys, "argv", ["lire_source.py", "https://www.sos.state.co.us/CCR/DisplayRule.do", mots]), \
+                    contextlib.redirect_stdout(sortie):
+                L.main()
+            return sortie.getvalue()
+
+        self.assertIn("« ruleVersionId » : 0 occurrence(s)", lire("ruleVersionId"), "texte de la page : adresse invisible")
+        avec = lire("@html|ruleVersionId +10")
+        self.assertIn("Recherche dans le code HTML de la page", avec)
+        self.assertIn("ruleVersionId=4242", avec, "code HTML : adresse de l'attribut onclick")
+
     def test_entetes(self):
         self.assertEqual(L.options(["@entetes", "taux"]), (True, ["taux"]))
         self.assertEqual(L.options(["@Entetes"]), (True, []), "majuscules ignorées")
