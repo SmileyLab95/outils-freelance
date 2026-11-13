@@ -34,7 +34,9 @@ from datetime import datetime, timezone
 # (alberta.ca) ; sites des autres gouvernements provinciaux et territoriaux ; lois publiées par les assemblées de
 # Nouvelle-Écosse (nslegislature.ca), de Terre-Neuve-et-Labrador (assembly.nl.ca) et du Nunavut (nunavutlegislation.ca) ;
 # gnwt.ca, domaine du gouvernement des Territoires du Nord-Ouest (lois publiées par le ministère de la Justice) ;
-# sos.state.co.us, Secretary of State du Colorado, éditeur officiel du Code of Colorado Regulations (règles du FAMLI).
+# sos.state.co.us, Secretary of State du Colorado, éditeur officiel du Code of Colorado Regulations (règles du FAMLI) ;
+# columbus.legistar.com et son API webapi.legistar.com (chemins /v1/columbus/ seulement), registre législatif du
+# greffe municipal de Columbus (Ohio), où sont publiées les ordonnances du City Code (protection des freelances).
 OFFICIELS = (
     "gouv.fr", "cnil.fr", "service-public.fr", "urssaf.fr", "ameli.fr", "francetravail.fr", "assemblee-nationale.fr",
     "senat.fr", "inpi.fr", "banque-france.fr", "europa.eu",
@@ -42,8 +44,10 @@ OFFICIELS = (
     "canada.ca", "gc.ca", "revenuquebec.ca", "bankofcanada.ca", "ontario.ca", "gouv.qc.ca", "quebec.ca", "gov.bc.ca",
     "alberta.ca", "saskatchewan.ca", "gov.mb.ca", "gnb.ca", "novascotia.ca", "princeedwardisland.ca", "gov.nl.ca",
     "yukon.ca", "gov.nt.ca", "gnwt.ca", "gov.nu.ca", "nslegislature.ca", "assembly.nl.ca", "nunavutlegislation.ca",
-    "sos.state.co.us", "iana.org", "fnfe-mpe.org",
+    "sos.state.co.us", "columbus.legistar.com", "iana.org", "fnfe-mpe.org",
 )
+# Sites partagés par plusieurs administrations : seul le chemin de l'administration citée est autorisé.
+OFFICIELS_CHEMINS = (("webapi.legistar.com", "/v1/columbus/"),)
 LIMITE = 20_000_000          # octets lus au plus
 PASSAGE = 600                # caractères affichés de part et d'autre d'un mot trouvé
 PASSAGES_PAR_MOT = 8
@@ -59,10 +63,16 @@ HTML = "@html"
 
 def autorise(url):
     """Vrai si l'adresse est en https et sur un site officiel de la liste (ou un de ses sous-domaines), ou sur un
-    domaine en .gov : ce domaine est réservé aux administrations américaines (fédérales, États, villes)."""
+    domaine en .gov : ce domaine est réservé aux administrations américaines (fédérales, États, villes) ; ou, sur un
+    site partagé (OFFICIELS_CHEMINS), sous le chemin de l'administration citée, sans « .. » qui en sortirait."""
     parts = urllib.parse.urlsplit(url)
     host = (parts.hostname or "").lower()
-    return parts.scheme == "https" and (host.endswith(".gov") or any(host == d or host.endswith("." + d) for d in OFFICIELS))
+    if parts.scheme != "https":
+        return False
+    chemin = urllib.parse.unquote(parts.path)
+    if any(host == h and chemin.startswith(debut) and ".." not in chemin.split("/") for h, debut in OFFICIELS_CHEMINS):
+        return True
+    return host.endswith(".gov") or any(host == d or host.endswith("." + d) for d in OFFICIELS)
 
 
 class _Texte(html.parser.HTMLParser):

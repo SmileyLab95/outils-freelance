@@ -29,6 +29,14 @@ class LireSource(unittest.TestCase):
         self.assertTrue(L.autorise("https://www.sos.state.co.us/CCR/GenerateRulePdf.do?ruleVersionId=9914"),
                         "Code of Colorado Regulations (Secretary of State)")
         self.assertFalse(L.autorise("https://state.co.us/"), "seulement le site du Secretary of State")
+        # Registre législatif du greffe de Columbus (Ohio) : son site, et l'API partagée sous /v1/columbus/ seulement.
+        self.assertTrue(L.autorise("https://columbus.legistar.com/LegislationDetail.aspx?ID=1"))
+        self.assertTrue(L.autorise("https://webapi.legistar.com/v1/columbus/matters?$filter=MatterFile eq '2401-2024'"))
+        self.assertFalse(L.autorise("https://webapi.legistar.com/v1/chicago/matters"), "autre ville : non")
+        self.assertFalse(L.autorise("https://webapi.legistar.com/v1/columbus/../chicago/matters"), "« .. » : non")
+        self.assertFalse(L.autorise("https://webapi.legistar.com/v1/columbus/%2e%2e/chicago/matters"), "« .. » encodé : non")
+        self.assertFalse(L.autorise("http://webapi.legistar.com/v1/columbus/matters"), "https seulement")
+        self.assertFalse(L.autorise("https://chicago.legistar.com/"), "autre ville : non")
         self.assertTrue(L.autorise("https://cnil.fr/"))
         self.assertTrue(L.autorise("https://entreprendre.service-public.gouv.fr/vosdroits/F23566"), "sites de l'État en gouv.fr")
         self.assertTrue(L.autorise("https://www.ameli.fr/assure/remboursements/indemnites-journalieres"), "Assurance maladie")
