@@ -861,26 +861,35 @@
     },
     "freelance_law_columbus_ohio": {
       "value": {
-        "name": "Columbus (OH) City Codes, chapter 2337 (Freelance Worker Protections)",
-        "effective_date": "2023 (amendment adopted May 2023; exact effective date not confirmed)",
+        "name": "Columbus (OH) City Codes, chapter 2337 (Freelance Workers)",
+        "effective_date": "2023 (ordinance 1016-2023, passed in May 2023); text replaced by ordinance 2401-2024 (September 2024)",
         "written_contract_threshold_usd": 250,
-        "aggregation": "$250 alone or over a 120-day period with the same hiring party",
-        "payment_deadline": "Date in the contract; if none, no later than 30 days after completion of the services",
-        "remedies": "Not verified",
+        "aggregation": "$250 or more alone, or with all your contracts with the same client in the preceding 120 days",
+        "payment_deadline": "Date in the contract; if none, no later than 30 days after you complete the work",
+        "remedies": "Complaint to the Labor Commission: its staff investigate and try to settle and remedy the violation; otherwise a public hearing and a written decision, after which the City may pursue legal remedies and refer you to community legal services. The code sets no damages or fines of its own.",
         "enforcer": "Columbus Labor Commission"
       },
       "unit": "text",
       "label": "Columbus, Ohio freelancer payment protection",
-      "source": "https://www.ebglaw.com/workforce-bulletin/columbus-oh-adds-freelance-worker-protections-to-its-city-code",
-      "source_title": "Epstein Becker Green Workforce Bulletin - Columbus, OH Adds Freelance Worker Protections to Its City Code",
-      "confidence": "medium",
-      "note": "Read on 08/11/2026 with the source reader: the City of Columbus 2025 annual report says the mission of the Columbus Labor Commission includes 'to protect freelance workers from common abusive practices' and counts complaints 'under Ch. 2337 (Freelance Worker Protections)' (none in 2025). The chapter was reportedly repealed and replaced by ordinance 2401-2024 (city legislative portal, not read): threshold, aggregation and payment deadline come from a law firm bulletin and must be re-checked against the current code text. Contract kept 5 years (same secondary source).",
+      "source": "https://legistar3.granicus.com/Columbus/attachments/22bceeab-b409-4a25-9e5b-f2bf278cc3a7.docx",
+      "source_title": "City of Columbus - Ordinance 2401-2024, attachment 'Chapter 2337 - 2024 Revisions - Final' (City Codes, Chapter 2337 Freelance Workers)",
+      "confidence": "high",
+      "note": "Read in full on 13/11/2026 with the source reader in the City of Columbus legislative record (Legistar, City Clerk): ordinance 2401-2024 (matter 131156, passed 19/09/2024) repeals and replaces chapters 377 and 2337 'in their entirety' (spelling, grammar and formatting; the Wage Theft Prevention and Enforcement Commission becomes the Labor Commission); chapter 2337 had been created by ordinance 1016-2023 (passed in May 2023). Attachment 'Chapter 2337 - 2024 Revisions - Final' (DOCX, SHA-256 597323cc…6005): 2337.01 freelance worker = an individual or a one-person organization hired as an independent contractor, hiring party = any person including the City (not the federal or state government or other local governments); 2337.02(a) written contract when the contract is worth $250 or more by itself or aggregated with all contracts between the same parties during the immediately preceding 120 days, written by the hiring party unless both agree to use the freelancer's, copy kept by the hiring party for at least 5 years; 2337.02(b) names and mailing addresses, itemized services, their value, rate and method of compensation, payment date or no later than 30 days after completion; 2337.03 payment on or before the date in the contract, otherwise no later than 30 days after completion, and no condition of accepting less; 2337.04 retaliation prohibited; 2337.05 complaint to the Labor Commission under chapter 377; 2337.06 waivers void, contract stays valid. Attachment 'Chapter 377 - 2024 Revisions - Final' (DOCX): 377.02(i)-(k) investigation, settlement approved by the Commission or public hearing (30 days' notice), written decision by majority vote, appeal under Ohio Revised Code chapter 2506; 377.12(a) the City may pursue any available legal, contractual or equitable remedies; 377.12(c) the Commission may give the freelancer contact information for community legal services; no 'damages' in either chapter. The exact effective date of ordinance 1016-2023 (30-day ordinance) was not read.",
       "more_sources": [
+        {
+          "source": "https://legistar3.granicus.com/Columbus/attachments/327557ea-547f-4d4b-9149-9dbb4f680689.docx",
+          "source_title": "City of Columbus - Ordinance 2401-2024, attachment 'Chapter 377 - 2024 Revisions - Final' (Labor Commission)"
+        },
+        {
+          "source": "https://webapi.legistar.com/v1/columbus/matters/131156/texts/130609",
+          "source_title": "City of Columbus legislative record - Ordinance 2401-2024 (text, passed 19 September 2024)"
+        },
         {
           "source": "https://www.columbus.gov/files/sharedassets/city/v/1/city-council/documents/annual-report/2025-annual-report-document.pdf",
           "source_title": "City of Columbus - 2025 Annual Report (Columbus Labor Commission)"
         }
-      ]
+      ],
+      "verified_on": "2026-11-13"
     },
     "freelance_law_seattle": {
       "value": {

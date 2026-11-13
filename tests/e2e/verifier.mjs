@@ -3236,6 +3236,16 @@ const tests = {
     check((await page.textContent("#l-answer")).startsWith("Written contract required"), "freelance law: Illinois 120-day aggregation");
     await page.selectOption("#l-place", "other");
     check((await page.textContent("#l-answer")).includes("No freelance law"), "freelance law: elsewhere → no specific law");
+    // Columbus, Ohio : chapitre 2337 lu le 13/11/2026 dans l'ordonnance 2401-2024 (250 $, 120 jours, Labor Commission).
+    await page.selectOption("#l-place", "cbus");
+    await page.fill("#l-value", "200");
+    await page.fill("#l-prior", "");
+    check((await page.textContent("#l-answer")).startsWith("Not required"), "freelance law: Columbus $200 → below $250");
+    await page.fill("#l-prior", "60");
+    const cbus = await page.textContent("#l-details");
+    check((await page.textContent("#l-answer")).startsWith("Written contract required") && cbus.includes("preceding 120 days") &&
+      cbus.includes("no later than 30 days after you complete the work") && cbus.includes("The code sets no damages or fines of its own") &&
+      await page.isHidden("#l-verify"), "freelance law: Columbus $260 over 120 days → contract required, official text (no warning)");
     await page.selectOption("#l-place", "nyc");
     await page.fill("#l-value", "1,200");
     await page.fill("#l-prior", "");

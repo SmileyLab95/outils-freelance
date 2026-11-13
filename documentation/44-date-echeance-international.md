@@ -18,8 +18,10 @@ le délai convenu est trop long, selon la règle du pays.
 | Canada | Aucune règle n'est reprise : la date dépend des conditions convenues ; les lois sur le paiement rapide ne visent que la construction (règle existante `prompt_payment_legislation`) | `late_payment_interest_practice`, `prompt_payment_legislation` (`data/rules/ca.json`) | Calcul selon les conditions, sans plafond légal |
 | France | Inchangé : 60 jours après la facture, ou 45 jours fin de mois (deux méthodes) au plus (L441-10) | `retard_paiement_delais` | Moteur commun |
 
-**Prudence.** Les autres lois américaines (Californie, Los Angeles, Columbus, Seattle) sont en confiance moyenne ou
-basse dans `us.json` : elles ne sont pas reprises dans le calcul ; la page renvoie au guide *Freelance Isn't Free*. Le
+**Prudence.** Les autres lois américaines (Californie, Los Angeles, Seattle) sont en confiance moyenne ou basse dans
+`us.json` : elles ne sont pas reprises dans le calcul ; Columbus (Ohio), relu le 13/11/2026 dans le texte officiel du
+chapitre 2337 (paiement à la date du contrat, sinon au plus tard 30 jours après la fin du travail), est en confiance
+haute mais pas encore proposé dans le calcul (à ajouter) ; la page renvoie au guide *Freelance Isn't Free*. Le
 caractère « manifestement abusif » d'un délai au Royaume-Uni s'apprécie au cas par cas (s. 4(7A)) : l'outil ne le
 juge pas, il signale le dépassement de 60 jours.
 

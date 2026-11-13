@@ -1,5 +1,16 @@
 # Journal des modifications
 
+## 2026-11-13 (nuit) — États-Unis : loi de Columbus (Ohio) relue dans le texte officiel
+
+- Outil « Freelance protection laws » : Columbus, Ohio, repose désormais sur le chapitre 2337 du City Code lu en entier
+  dans le registre législatif de la ville (ordonnance 2401-2024) au lieu d'un bulletin de cabinet d'avocats : contrat
+  écrit dès 250 $ (cumul sur les 120 jours précédents), paiement à la date du contrat ou au plus tard 30 jours après la
+  fin du travail, plainte à la Labor Commission (enquête, règlement ou audience publique), pas de dommages-intérêts
+  propres au code ; l'avertissement « non vérifié » disparaît pour Columbus.
+- Lecteur de sources : documents Word (DOCX) ; registre législatif de Columbus autorisé, limité au chemin de la ville.
+- Tests : 2 points de plus dans le parcours de la page (seuil, cumul, texte officiel), 8 erreurs réintroduites dans le
+  lecteur, toutes détectées ; parcours des 39 pages américaines.
+
 ## 2026-11-13 (soir) — Canada : CGV pour les particuliers de l'Île-du-Prince-Édouard
 
 - Générateur de *terms and conditions* / conditions générales : particuliers de l'Île-du-Prince-Édouard ajoutés (loi sur la

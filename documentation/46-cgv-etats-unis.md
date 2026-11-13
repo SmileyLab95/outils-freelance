@@ -38,7 +38,8 @@ a un champ précis.
 
 **Points signalés, non tranchés** : la loi californienne (SB 988, contrat écrit dès 250 $) n'a pas pu être lue sur le
 site officiel (réponse 403) : la page la cite seulement comme exemple d'autres lois, sans détail ; idem pour les villes
-(Los Angeles, Seattle, Minneapolis, Columbus), dont les règles restent en confiance moyenne ou basse ; les lois des États
+(Los Angeles, Seattle, Minneapolis), dont les règles restent en confiance moyenne ou basse (Columbus, relu dans le
+texte officiel le 13/11/2026, est en confiance haute) ; les lois des États
 sur la vente à domicile (souvent plus protectrices) et sur les clauses limitatives ne sont pas couvertes : la page le
 dit ; l'outil ne juge pas si un plafond de responsabilité est opposable dans un État donné.
 

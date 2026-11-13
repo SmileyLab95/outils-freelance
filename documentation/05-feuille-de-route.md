@@ -9,7 +9,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 
 ## Où en est-on ?
 
-*Mis à jour le 13/11/2026 (soir).*
+*Mis à jour le 13/11/2026 (nuit).*
 
 - **Priorité (décision D10)** : le site et la plateforme d'abord ; noms de domaine, Gumroad et affiliation à la fin.
   Règle de qualité maximale pour tout produit ou service (D11, charte dans la [méthode](04-methode-de-travail.md#charte-qualité)).
@@ -471,6 +471,13 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   JavaScript) et part de 50 % lue dans la loi (C.R.S. 8-13.3-507(4)(a)) : revenu brut et effet au dépôt de l'avis
   confirmés ; page complétée (documents fiscaux chaque année avant le 1er décembre, amende jusqu'à 500 $ ; retrait à
   tout moment, effet au plus tôt à la fin des 3 ans et 30 jours après l'avis) ([52](52-protection-sociale-etats-unis.md)).
+- **Columbus (Ohio) : texte officiel lu (13/11/2026, nuit)** : la règle `freelance_law_columbus_ohio` reposait sur
+  un bulletin de cabinet d'avocats ; le chapitre 2337 du City Code (version de l'ordonnance 2401-2024) et le
+  chapitre 377 (Labor Commission) sont lus en entier dans le registre législatif officiel de la ville (Legistar, D76) :
+  seuil de 250 $ cumulé sur 120 jours, paiement à la date du contrat ou sous 30 jours, plainte, règlement ou audience
+  publique, aucun dommage-intérêt propre ; règle en confiance haute, avertissement retiré de la page. L'outil de
+  lecture lit désormais les documents Word (DOCX). CGV des territoires : Yukon et Nunavut refusent la lecture (403),
+  site des Territoires du Nord-Ouest en panne (502, deux fois) : à retenter.
 - **CGV au Canada : trois provinces de plus (13/11/2026, fin d'après-midi)** : lois du Manitoba (partie XVI et
   règlement 176/2000), de la Nouvelle-Écosse (art. 21V à 21AF et règlement 91/2002) et de Terre-Neuve-et-Labrador
   (partie V, division 2) lues ; même modèle que l'Ontario, la Colombie-Britannique et l'Alberta : texte commun gardé,
@@ -484,7 +491,9 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   choisi par Ismail dès sa réponse ([54](54-themes.md) § 2) ; refonte, suite ([31](31-vision-plateforme.md) § 5) : les quatre modules du compte
   gratuit sont faits (étape 5) ; étape 6, outils restants (CGV : faites dans les quatre pays ;
   Manitoba, Nouvelle-Écosse, Terre-Neuve-et-Labrador et Île-du-Prince-Édouard détaillés le 13/11 ; Saskatchewan
-  (certificat refusé), Nouveau-Brunswick (dès la proclamation de la loi de 2024) et territoires à lire ; le règlement albertain sur les
+  (certificat refusé), Nouveau-Brunswick (dès la proclamation de la loi de 2024) et territoires à lire (Yukon et
+  Nunavut : 403 ; Territoires du Nord-Ouest : 502 le 13/11, à retenter) ; date d'échéance américaine : proposer Columbus (règle
+  relue dans le texte officiel le 13/11, [44](44-date-echeance-international.md)) ; le règlement albertain sur les
   contrats Internet expire le 30/09/2028 : à revérifier) ; jours ouvrés au Canada (faits le 13/11, [42](42-jours-ouvres.md) § 10.1) :
   ajouter le Yukon et le Nunavut dès que leurs textes sont lisibles par l'outil (Saskatchewan faite le 13/11), relire la date fédérale
   de l'Action de grâces (proclamation) et prolonger au-delà de 2030 après relecture des lois ; sous-traitance
@@ -533,7 +542,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   toujours la lecture automatisée (51 règles en attente : voir les options d'Ismail plus bas). La fiche F31808 ne
   mentionne plus les amendes pour mentions manquantes (règle `sanctions_mentions_facture` à rattacher au CGI,
   art. 1737, et au Code de commerce, art. L441-16, sur Légifrance ou le BOFiP). À faire : remplacer les dernières
-  sources non officielles (services taxables, lois de Californie et de Columbus,
+  sources non officielles (services taxables, loi de Californie ; Columbus fait le 13/11/2026,
   mention de franchise de TVA de 2027, crédit québécois, extensions de noms de domaine) ; sources françaises restantes
   (Urssaf, Légifrance, economie.gouv.fr ; régimes TNS et SASU, formats de la facturation électronique, calendrier Urssaf à
   rattacher aux fiches de service-public avec l'option « essai » du vérificateur). Fait en fin de matinée : intitulé
