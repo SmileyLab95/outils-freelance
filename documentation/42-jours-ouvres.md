@@ -199,6 +199,16 @@ Lu le 12/11/2026 :
 d'interprétation et lois provinciales), Islander Day ; Saskatchewan (loi) ; Nouvelle-Écosse (Remembrance Day Act) ;
 Yukon et Nunavut (autres sites officiels ; le communiqué de gov.nu.ca de juin 2020 n'a pas été lu, échec de la lecture).
 
+Lu le 13/11/2026 : **Loi d'interprétation fédérale** (L.R.C. 1985, ch. I-21), art. 35, « holiday » (SHA-256
+5fd81300…1d86) : « the first Monday in September, designated Labour Day » ; « National Day for Truth and Reconciliation,
+which is observed on September 30 » ; l'Action de grâce n'y a pas de date (« any day appointed by proclamation to be
+observed as a day of … thanksgiving ») : la date (deuxième lundi d'octobre) vient de la Loi sur les normes du travail
+du Québec et, ailleurs, d'une proclamation non lue (à signaler). **Colombie-Britannique** : la page officielle
+« Statutory holidays » (gov.bc.ca) affiche une liste datée (celle de 2023 : B.C. Day le lundi 7 août, Labour Day le
+lundi 4 septembre, Thanksgiving le lundi 9 octobre…) : contrôle possible de la transcription. **Bloqués** :
+publications.saskatchewan.ca (certificat refusé par l'outil, non contourné), gov.nu.ca (403), alberta.ca (adresse de la
+page des jours fériés à retrouver, 404).
+
 Constat du 12/11/2026 (soir) : plusieurs lois nomment les fêtes sans les dater (Interpretation Act de la
 Colombie-Britannique, art. 29 : « holiday » comprend Family Day, British Columbia Day, December 26… sans date ; loi de
 l'Île-du-Prince-Édouard : Islander Day sans date). Pour ces fêtes, prendre la date dans la loi propre à la fête quand
