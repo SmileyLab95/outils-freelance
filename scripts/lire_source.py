@@ -46,8 +46,9 @@ OFFICIELS = (
     "yukon.ca", "gov.nt.ca", "gnwt.ca", "gov.nu.ca", "nslegislature.ca", "assembly.nl.ca", "nunavutlegislation.ca",
     "sos.state.co.us", "columbus.legistar.com", "iana.org", "fnfe-mpe.org",
 )
-# Sites partagés par plusieurs administrations : seul le chemin de l'administration citée est autorisé.
-OFFICIELS_CHEMINS = (("webapi.legistar.com", "/v1/columbus/"),)
+# Sites partagés par plusieurs administrations : seul le chemin de l'administration citée est autorisé
+# (legistar3.granicus.com : pièces jointes des ordonnances de Columbus, dont le texte des chapitres du City Code).
+OFFICIELS_CHEMINS = (("webapi.legistar.com", "/v1/columbus/"), ("legistar3.granicus.com", "/Columbus/"))
 LIMITE = 20_000_000          # octets lus au plus
 PASSAGE = 600                # caractères affichés de part et d'autre d'un mot trouvé
 PASSAGES_PAR_MOT = 8
@@ -110,6 +111,7 @@ class _Texte(html.parser.HTMLParser):
 
 
 XLSX = "http://schemas.openxmlformats.org/spreadsheetml/2006/main"
+DOCX = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
 
 
 def _xlsx(contenu):
@@ -153,25 +155,65 @@ def _xlsx(contenu):
     return "\n".join(lignes)
 
 
-def _est_xlsx(contenu):
-    """Vrai si le contenu est une archive ZIP qui contient un classeur (xl/workbook.xml), quel que soit le type annoncé."""
+def _zip_contient(contenu, nom):
+    """Vrai si le contenu est une archive ZIP qui contient la partie « nom », quel que soit le type annoncé."""
     import zipfile
     try:
         with zipfile.ZipFile(io.BytesIO(contenu)) as z:
-            return "xl/workbook.xml" in z.namelist()
+            return nom in z.namelist()
     except zipfile.BadZipFile:
         return False
 
 
+def _est_xlsx(contenu):
+    """Vrai si le contenu est un classeur XLSX (xl/workbook.xml)."""
+    return _zip_contient(contenu, "xl/workbook.xml")
+
+
+def _est_docx(contenu):
+    """Vrai si le contenu est un document Word DOCX (word/document.xml)."""
+    return _zip_contient(contenu, "word/document.xml")
+
+
+def _docx(contenu):
+    """Texte d'un document Word DOCX (textes de loi joints aux ordonnances municipales) : un paragraphe par ligne,
+    tabulations et sauts de ligne gardés. Les numéros automatiques des listes (définis à part) ne sont pas repris.
+    Bibliothèque standard seulement ; une partie trop grosse est refusée."""
+    import xml.etree.ElementTree as ET
+    import zipfile
+
+    def balise(nom):
+        return "{%s}%s" % (DOCX, nom)
+
+    with zipfile.ZipFile(io.BytesIO(contenu)) as z:
+        if z.getinfo("word/document.xml").file_size > LIMITE:
+            raise ValueError("partie trop grosse dans le document : word/document.xml")
+        racine = ET.fromstring(z.read("word/document.xml"))
+    lignes = []
+    for para in racine.iter(balise("p")):
+        morceaux = []
+        for el in para.iter():
+            if el.tag == balise("t"):
+                morceaux.append(el.text or "")
+            elif el.tag == balise("tab"):
+                morceaux.append("\t")
+            elif el.tag in (balise("br"), balise("cr")):
+                morceaux.append("\n")
+        lignes.append("".join(morceaux))
+    return "\n".join(lignes)
+
+
 def texte(contenu, type_contenu, base=""):
-    """Texte lisible d'une page HTML, d'un PDF ou d'un classeur XLSX, espaces et lignes vides resserrés, et liens de la
-    page (adresse complète, texte) : un PDF ou un classeur n'en a pas ici."""
+    """Texte lisible d'une page HTML, d'un PDF, d'un classeur XLSX ou d'un document DOCX, espaces et lignes vides
+    resserrés, et liens de la page (adresse complète, texte) : un PDF, un classeur ou un document n'en a pas ici."""
     liens = []
     if "pdf" in type_contenu or contenu[:5] == b"%PDF-":
         from pypdf import PdfReader  # installé par le workflow
         brut = "\n".join(page.extract_text() or "" for page in PdfReader(io.BytesIO(contenu)).pages)
     elif _est_xlsx(contenu):
         brut = _xlsx(contenu)
+    elif _est_docx(contenu):
+        brut = _docx(contenu)
     else:
         parser = _Texte()
         parser.feed(contenu.decode("utf-8", errors="replace"))

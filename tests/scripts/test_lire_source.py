@@ -95,6 +95,27 @@ class LireSource(unittest.TestCase):
         self.assertFalse(L._est_xlsx(autre.getvalue()), "une archive sans classeur n'est pas lue comme un XLSX")
         self.assertFalse(L._est_xlsx(b"PK pas une archive"))
 
+    def test_document_docx(self):
+        import zipfile
+        w = 'xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"'
+        tampon = io.BytesIO()
+        with zipfile.ZipFile(tampon, "w") as z:
+            z.writestr("word/document.xml", f"<w:document {w}><w:body>"
+                                            f"<w:p><w:r><w:t>2337.03 Written </w:t></w:r><w:r><w:t>contract.</w:t></w:r></w:p>"
+                                            f"<w:p/><w:tbl><w:tr><w:tc><w:p><w:r><w:t>(A)</w:t><w:tab/><w:t>$250</w:t>"
+                                            f"<w:br/><w:t>or more</w:t></w:r></w:p></w:tc></w:tr></w:tbl></w:body></w:document>")
+        contenu = tampon.getvalue()
+        for type_contenu in ("application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/octet-stream"):
+            txt, liens = L.texte(contenu, type_contenu)
+            self.assertEqual((txt, liens), ("2337.03 Written contract.\n\n(A) $250\nor more", []), type_contenu)
+        self.assertFalse(L._est_docx(b"PK pas une archive"))
+        classeur = io.BytesIO()
+        with zipfile.ZipFile(classeur, "w") as z:
+            z.writestr("xl/workbook.xml", "<workbook/>")
+        self.assertFalse(L._est_docx(classeur.getvalue()), "un classeur n'est pas lu comme un document")
+        self.assertTrue(L.autorise("https://legistar3.granicus.com/Columbus/attachments/22bceeab.docx"))
+        self.assertFalse(L.autorise("https://legistar3.granicus.com/Chicago/attachments/x.docx"), "autre ville : non")
+
     def test_texte_et_liens(self):
         txt, liens = L.texte(PAGE.encode("utf-8"), "text/html", "https://www.cnil.fr/fr/prospection")
         self.assertIn("Le droit d’opposition s’exerce sans frais.", txt)
