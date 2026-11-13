@@ -38,6 +38,8 @@
       points: [
         "If you're self-employed and live in Colorado, joining FAMLI (Family and Medical Leave Insurance) is optional.",
         "You pay " + pct(CO.self_employed_premium_rate_2026) + " of your gross income from self-employment (2026), on up to the Social Security wage cap (" + usd(R.social_security_wage_base_2026) + ").",
+        "In 2027 the FAMLI premium drops from " + pct(CO.premium_rate_2026) + " to " + pct(CO.premium_rate_2027) + ". Self-employed people pay half of it, so " +
+          pct(CO.premium_rate_2027 * CO.self_employed_share_of_premium) + ", on up to the " + usd(R.social_security_wage_base_2027) + " cap of 2027.",
         "You pay premiums every quarter for at least " + CO.min_years + " years; each is due by the end of the month after the quarter.",
         "To elect coverage you send a federal tax transcript (and any W-2s), then supporting documents with each quarterly wage report.",
         "Coverage starts when you register; benefits are available after at least " + CO.quarters_paid_before_benefits + " quarter of reported and paid premiums."
@@ -167,7 +169,9 @@
         set("ben-big", usd(p.annual) + " a year");
         // Minnesota : prime annuelle seulement (rythme de paiement des indépendants non lu).
         set("ben-sub", state === "MN" ? "estimated premium for 2026, at the " + pct(M.premium_rate_2026) + " rate."
-          : "estimated premium, or " + usd(p.quarterly) + " a quarter" + (state === "CA" || state === "CO" ? " for 2026." : " (2025-2026 rate)."));
+          : state === "CO" ? "estimated premium for 2026, or " + usd(p.quarterly) + " a quarter. For " + p.next.year + ": about " + usd(p.next.annual) +
+            " (" + usd(p.next.quarterly) + " a quarter), at " + pct(CO.premium_rate_2027 * CO.self_employed_share_of_premium) + "."
+          : "estimated premium, or " + usd(p.quarterly) + " a quarter" + (state === "CA" ? " for 2026." : " (2025-2026 rate)."));
       } else {
         set("ben-big", state === "NY" ? "Buy a policy" : state === "NJ" ? "Not covered" : "Opt in");
         set("ben-sub", state === "NY" ? "Paid Family Leave and disability, priced by the insurer."

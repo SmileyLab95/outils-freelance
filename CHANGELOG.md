@@ -1,5 +1,15 @@
 # Journal des modifications
 
+## 2026-11-13 (début d'après-midi) — États-Unis : taux 2027 du Colorado
+
+- *Paid leave and disability insurance for the self-employed* : au Colorado, la prime du FAMLI passe de 0,88 % à 0,86 %
+  au 1er janvier 2027 ; l'indépendant en paie la moitié, soit 0,43 % (règle 7 CCR 1107-1). Le résultat donne aussi la
+  prime estimée de 2027, plafonnée au plafond de la Social Security de 2027 (192 300 $).
+- Lecteur de sources : les liens d'une page sont aussi listés quand le mot cherché est suivi de « +N » ; le Code of
+  Colorado Regulations (Secretary of State) fait partie des sites officiels lus.
+- Tests : moteur (6 erreurs réintroduites, toutes détectées), page, parcours navigateur (accessibilité comprise),
+  captures relues.
+
 ## 2026-11-13 (fin de matinée) — Canada : assurance-emploi et RQAP du travailleur autonome
 
 - Nouvel outil *EI special benefits for the self-employed* (/ca/) et « Assurance-emploi et RQAP du travailleur

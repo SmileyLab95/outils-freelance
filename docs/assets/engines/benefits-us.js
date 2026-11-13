@@ -30,19 +30,23 @@
    * de taux publié dans les règles, sinon { annual, quarterly, eligible }.
    * Californie (DIEC 2026) : 8,84 % du bénéfice, avec un minimum de 406,64 $ (bénéfice de 4 600 $ ou moins).
    * Oregon (2025-2026) : 0,6 % du revenu net d'Oregon, plafonné à 184 500 $ ; au moins 1 000 $ pour pouvoir adhérer.
-   * Colorado (2026) : 0,44 % du revenu brut d'indépendant, plafonné au plafond de la Social Security (FAMLI).
+   * Colorado (2026) : 0,44 % du revenu brut d'indépendant, plafonné au plafond de la Social Security (FAMLI) ; en plus,
+   * next = { year: 2027, annual, quarterly } : la moitié de la prime de 2027 (0,86 %), au plafond de 2027 (7 CCR 1107-1, 1.5.2 B).
    * Minnesota (2026) : 0,88 % de la base de prime de l'indépendant, plafonnée au plafond de la Social Security
    * (Minn. Stat. 268B.11, subd. 3 ; taux publié par le DEED).
    */
   function premium(rules, state, netProfit) {
     if (state !== "CA" && state !== "OR" && state !== "MN" && state !== "CO") return null;
     if (typeof netProfit !== "number" || !isFinite(netProfit) || netProfit < 0) return { error: "profit" };
-    var annual, eligible = true;
+    var annual, eligible = true, next = null;
     if (state === "CA") {
       var C = rules.us_paid_leave_ca_diec;
       annual = netProfit <= C.minimum_premium_net_profit ? C.minimum_annual_premium_2026 : round2(netProfit * C.premium_rate_2026);
     } else if (state === "CO") {
-      annual = round2(Math.min(netProfit, rules.social_security_wage_base_2026) * rules.us_paid_leave_co_self_employed.self_employed_premium_rate_2026);
+      var CO = rules.us_paid_leave_co_self_employed;
+      annual = round2(Math.min(netProfit, rules.social_security_wage_base_2026) * CO.self_employed_premium_rate_2026);
+      var annual2027 = round2(Math.min(netProfit, rules.social_security_wage_base_2027) * CO.premium_rate_2027 * CO.self_employed_share_of_premium);
+      next = { year: 2027, annual: annual2027, quarterly: round2(annual2027 / 4) };
     } else if (state === "MN") {
       annual = round2(Math.min(netProfit, rules.social_security_wage_base_2026) * rules.us_paid_leave_mn_self_employed.premium_rate_2026);
     } else {
@@ -50,7 +54,9 @@
       eligible = netProfit >= O.min_oregon_net_income;
       annual = eligible ? round2(Math.min(netProfit, O.income_cap) * O.contribution_rate_2025_2026) : 0;
     }
-    return { annual: annual, quarterly: round2(annual / 4), eligible: eligible };
+    var out = { annual: annual, quarterly: round2(annual / 4), eligible: eligible };
+    if (next) out.next = next;
+    return out;
   }
 
   return { STATES: STATES, program: program, premium: premium };

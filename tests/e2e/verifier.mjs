@@ -3451,9 +3451,15 @@ const tests = {
       "paid leave: Delaware → program rate of 0.8% through 2026");
     await page.selectOption("#ben-state", "CO");
     await page.fill("#ben-profit", "50,000");
-    check((await t("ben-big")) === "$220 a year" && (await t("ben-sub")) === "estimated premium, or $55 a quarter for 2026." &&
+    check((await t("ben-big")) === "$220 a year" &&
+      (await t("ben-sub")) === "estimated premium for 2026, or $55 a quarter. For 2027: about $215 ($53.75 a quarter), at 0.43%." &&
       (await points())[1] === "You pay 0.44% of your gross income from self-employment (2026), on up to the Social Security wage cap ($184,500)." &&
-      (await points())[2].startsWith("You pay premiums every quarter for at least 3 years"), "paid leave: Colorado → $50,000 × 0.44% = $220 a year, 3 years");
+      (await points())[2] === "In 2027 the FAMLI premium drops from 0.88% to 0.86%. Self-employed people pay half of it, so 0.43%, on up to the $192,300 cap of 2027." &&
+      (await points())[3].startsWith("You pay premiums every quarter for at least 3 years"), "paid leave: Colorado → $50,000 × 0.44% = $220 in 2026, × 0.43% = $215 in 2027, 3 years");
+    await page.fill("#ben-profit", "200,000");
+    check((await t("ben-big")) === "$811.80 a year" &&
+      (await t("ben-sub")) === "estimated premium for 2026, or $202.95 a quarter. For 2027: about $826.89 ($206.72 a quarter), at 0.43%.",
+      "paid leave: Colorado → caps of 2026 ($184,500) and 2027 ($192,300)");
     await page.selectOption("#ben-state", "NJ");
     check((await t("ben-big")) === "Not covered" && (await t("ben-sub")) === "Independent contractors aren't covered by the state programs." &&
       (await points())[0].startsWith("Independent contractors are not covered for Temporary Disability and Family Leave Insurance") &&

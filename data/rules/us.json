@@ -2669,7 +2669,10 @@
       "value": {
         "self_employed_premium_rate_2026": 0.0044,
         "min_years": 3,
-        "quarters_paid_before_benefits": 1
+        "quarters_paid_before_benefits": 1,
+        "premium_rate_2026": 0.0088,
+        "premium_rate_2027": 0.0086,
+        "self_employed_share_of_premium": 0.5
       },
       "unit": "object",
       "label": "Colorado: FAMLI, optional coverage for the self-employed (premium on gross self-employment income)",
@@ -2679,11 +2682,23 @@
         {
           "source": "https://dhr.colorado.gov/sites/dhr/files/documents/FAMLI%20Program%20Notice%20English%20December%202025.pdf",
           "source_title": "FAMLI Program Notice (December 2025) - Colorado Division of Human Resources"
+        },
+        {
+          "source": "https://cdle.colorado.gov/press-releases/press-release-colorados-family-and-medical-leave-insurance-famli-announces-lower",
+          "source_title": "Colorado's Family and Medical Leave Insurance (FAMLI) Announces Lower Premium Rate Starting in 2027 - Colorado Department of Labor and Employment (October 6, 2026)"
+        },
+        {
+          "source": "https://famli.colorado.gov/rules-guidance",
+          "source_title": "Rules & Guidance - Colorado FAMLI Division"
+        },
+        {
+          "source": "https://www.sos.state.co.us/CCR/GenerateRulePdf.do?ruleVersionId=9914&fileName=7+CCR+1107-1",
+          "source_title": "7 CCR 1107-1, Premiums and Individuals Electing Coverage Rules (version effective 01/01/2022) - Code of Colorado Regulations, Colorado Secretary of State"
         }
       ],
       "confidence": "high",
-      "verified_on": "2026-11-10",
-      "note": "Read on 10/11/2026 with the source reader (famli.colorado.gov, refused on 09/11/2026, readable on 10/11/2026). Article dated 30/12/2024: participation is optional for self-employed Colorado residents; 'Self-employed workers who voluntarily wish to participate in FAMLI are only responsible for paying 0.44% of their gross income from self-employment'; to elect coverage, a federal tax transcript and any W-2s, then supporting documents with each quarterly wage report; 'Pay premiums every quarter for at least three years', due by the end of the month after each quarter; 'Premiums are paid on wages up to the Federal Social Security Wage Cap'; coverage begins on the registration date and 'benefits are available after you've reported and paid premiums for at least one quarter'. The 0.44% matches the 2026 employee share in the State notice of December 2025 ('For 2026, your employer sends 0.44% of your wages'): used as the 2026 rate. The 2027 rate (press release of 06/10/2026 announcing a lower rate) was not read: its text did not render."
+      "verified_on": "2026-11-13",
+      "note": "Read on 10/11/2026 with the source reader (famli.colorado.gov, refused on 09/11/2026, readable on 10/11/2026). Article dated 30/12/2024: participation is optional for self-employed Colorado residents; 'Self-employed workers who voluntarily wish to participate in FAMLI are only responsible for paying 0.44% of their gross income from self-employment'; to elect coverage, a federal tax transcript and any W-2s, then supporting documents with each quarterly wage report; 'Pay premiums every quarter for at least three years', due by the end of the month after each quarter; 'Premiums are paid on wages up to the Federal Social Security Wage Cap'; coverage begins on the registration date and 'benefits are available after you've reported and paid premiums for at least one quarter'. The 0.44% matches the 2026 employee share in the State notice of December 2025 ('For 2026, your employer sends 0.44% of your wages'): used as the 2026 rate. The 2027 rate was read on 13/11/2026 with the source reader: CDLE press release of 06/10/2026 (SHA-256 7b8b320a…1056), 'the premium rate will drop from 0.88% in 2026 to 0.86% starting in 2027', 'the first to be set administratively by the FAMLI Division'; FAMLI Rules & Guidance page (SHA-256 8916d1c0…48b4), 'Premiums Update: Effective January 1, 2027, FAMLI premiums are reducing from 0.88% to 0.86% of gross wages.' Share of the self-employed: 7 CCR 1107-1 on the Colorado Secretary of State's site (version effective 01/01/2022, the only one whose address could be read; the versions in force from 01/01/2026 and adopted for 01/01/2027 are linked as JavaScript or on Google Drive), rule 1.5.2 B: 'Pursuant to 8-13.3-507 (4)(a) C.R.S., a self-employed person is required to submit only 50 percent of the premium required for an employee by section 8-13.3-507 (3) C.R.S. on that individual's income from self employment.' The 2026 figures agree (50% of 0.88% = 0.44%): the site gives 50% of 0.86% = 0.43% for 2027 (no FAMLI page states the 2027 self-employed rate), on income up to the 2027 Social Security wage base. To check in the 2026 version of 7 CCR 1107-1: the same 2022 version says elective coverage 'begins on the first day of the calendar quarter immediately following the notice of the election' (the FAMLI article says coverage begins on the registration date) and lets the self-employed person choose net or gross earnings from self-employment as the basis of premiums and benefits for the 3-year period, with one change allowed (rules 1.5.1 A.2, 1.5.2 C to E); the site keeps the FAMLI article until the version in force is read."
     },
     "us_paid_leave_de_self_employed": {
       "value": {
