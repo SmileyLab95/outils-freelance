@@ -105,12 +105,16 @@ test("intérêts de retard : taux mensuel et annuel écrits, illisibles, au-del�
 test("provinces des particuliers : cochées, sinon celle du travailleur autonome ; autres provinces signalées", () => {
   assert.deepEqual(C.consumerProvinces({ cons_qc: "on", cons_bc: "on" }, "ON"), { list: ["QC", "BC"], other: false });
   assert.deepEqual(C.consumerProvinces({}, "AB"), { list: ["AB"], other: false });
-  assert.deepEqual(C.consumerProvinces({}, "MB"), { list: [], other: true });
+  assert.deepEqual(C.consumerProvinces({}, "MB"), { list: ["MB"], other: false }, "Manitoba : loi lue le 13/11/2026");
+  assert.deepEqual(C.consumerProvinces({}, "PE"), { list: [], other: true });
+  assert.deepEqual(C.consumerProvinces({ cons_mb: "on", cons_ns: "on", cons_nl: "on", cons_other: "on" }, "ON"),
+    { list: ["MB", "NS", "NL"], other: true });
   assert.deepEqual(C.consumerProvinces({ cons_other: "on" }, "QC"), { list: [], other: true });
   assert.deepEqual(C.consumerProvinces({}, ""), { list: [], other: false });
-  assert.ok(codes(prep({ ...OK, clients: "part", province: "NS" })).includes("other_provinces"));
+  assert.ok(codes(prep({ ...OK, clients: "part", province: "PE" })).includes("other_provinces"));
+  for (const p of ["MB", "NS", "NL"]) assert.ok(!codes(prep({ ...OK, clients: "part", province: p })).includes("other_provinces"), p);
   assert.ok(!codes(prep({ ...OK, clients: "part", province: "ON" })).includes("other_provinces"));
-  assert.ok(!codes(prep({ ...OK, clients: "pro", province: "NS" })).includes("other_provinces"), "entreprises seulement : pas de mention");
+  assert.ok(!codes(prep({ ...OK, clients: "pro", province: "PE" })).includes("other_provinces"), "entreprises seulement : pas de mention");
   assert.equal(prep({ ...OK, clients: "part", province: "QC" }).flags.qc_cons, "on");
   assert.equal(prep({ ...OK, clients: "pro", province: "QC" }).flags.qc_cons, "off");
 });
@@ -197,8 +201,26 @@ function renderDoc(lang, raw) {
   const html = K.render(D, { raw: { ...K.flags(raw), ...p.flags }, text, blocks: p.blocks });
   return html.replace(/<[^>]+>/g, " ").replace(/&#39;/g, "'").replace(/&quot;/g, '"').replace(/&amp;/g, "&").replace(/\s+/g, " ");
 }
+test("Terre-Neuve-et-Labrador : 10 jours pour annuler, précisés pour ses consommateurs seulement", () => {
+  assert.deepEqual(R.ca_consumer_info_cancel_days, { days: 7, nl_days: 10 });
+  assert.equal(prep({ ...OK, clients: "part", province: "NL" }).text.info_cancel_nl, " (10 days in Newfoundland and Labrador)");
+  assert.equal(prep({ ...OK, clients: "both", province: "ON", cons_nl: "on" }, "fr-CA").text.info_cancel_nl, " (10 jours à Terre-Neuve-et-Labrador)");
+  assert.equal(prep({ ...OK, clients: "part", province: "NS" }).text.info_cancel_nl, "");
+  assert.equal(prep({ ...OK, clients: "pro", province: "NL" }).text.info_cancel_nl, "", "entreprises seulement");
+});
+
+test("pages : une case par province détaillée, reconnue par le moteur", () => {
+  for (const lang of ["en", "fr"]) {
+    const html = readFileSync(new URL("../../" + PAGES[lang], import.meta.url), "utf8");
+    const boxes = [...html.matchAll(/name="cons_([a-z]+)"/g)].map((m) => m[1]);
+    assert.deepEqual(boxes, ["on", "qc", "bc", "ab", "mb", "ns", "nl", "other"], lang);
+    for (const b of boxes.filter((x) => x !== "other"))
+      assert.deepEqual(C.consumerProvinces({ ["cons_" + b]: "on" }, "PE").list, [b.toUpperCase()], `${lang} : ${b}`);
+  }
+});
+
 const COMBOS = [];
-for (const clients of ["pro", "part", "both"]) for (const province of ["ON", "QC", "MB"]) for (const cons_qc of ["off", "on"])
+for (const clients of ["pro", "part", "both"]) for (const province of ["ON", "QC", "MB", "NL"]) for (const cons_qc of ["off", "on"])
   for (const opt of ["on", "off"]) COMBOS.push({ ...OK, clients, province, cons_qc, late: opt, late_rate: "1.5", deposit: opt === "on" ? "30" : "",
     liability: opt, conf: opt, portfolio: opt, subcontract: opt, ip: opt === "on" ? "assign" : "license", p_trading: opt === "on" ? "Tremblay Design" : "" });
 
@@ -232,6 +254,14 @@ test("pages : clauses selon la clientèle et la province (règles lues)", () => 
     assert.equal(has("en", raw, /Business clients:/), pro);
     // Particuliers : renseignements, exemplaire sous 15 jours, estimation, 30 jours, arbitrage, pas de pénalité.
     assert.equal(has("en", raw, /Information for consumers/), part);
+    // Consommateurs de Terre-Neuve-et-Labrador : sa province, si aucune case n'est cochée (ici, seule la case du Québec l'est parfois).
+    const nlCons = part && raw.province === "NL" && raw.cons_qc !== "on";
+    // Garanties et renseignements personnels (Manitoba, M.R. 176/2000, art. 3(1)e) et o)) ; 10 jours à Terre-Neuve-et-Labrador.
+    assert.equal(has("en", raw, /in the sections “Warranties and liability” and “Personal information”/), part);
+    assert.equal(has("fr", raw, /aux articles « Garanties et responsabilité » et « Renseignements personnels »/), part);
+    assert.equal(has("en", raw, /within 7 days \(10 days in Newfoundland and Labrador\) of receiving the copy/), nlCons);
+    assert.equal(has("fr", raw, /dans les 7 jours \(10 jours à Terre-Neuve-et-Labrador\) suivant la réception/), nlCons);
+    assert.equal(has("en", raw, /within 7 days of receiving the copy/), part && !nlCons);
     assert.equal(has("en", raw, /within 15 days of your acceptance/), part);
     assert.equal(has("fr", raw, /dans les 15 jours suivant votre acceptation/), part);
     assert.equal(has("en", raw, /more than 10% above it/), part);

@@ -2194,11 +2194,23 @@
         {
           "source": "https://kings-printer.alberta.ca/documents/Acts/C26P3.pdf",
           "source_title": "Consumer Protection Act, RSA 2000, c. C-26.3, s. 16 - Alberta King's Printer"
+        },
+        {
+          "source": "https://web2.gov.mb.ca/laws/statutes/ccsm/_pdf.php?cap=C200",
+          "source_title": "The Consumer Protection Act, C.C.S.M. c. C200, Part XVI (Internet Agreements) - Manitoba Laws"
+        },
+        {
+          "source": "https://nslegislature.ca/sites/default/files/legc/statutes/consumer%20protection.pdf",
+          "source_title": "Consumer Protection Act, R.S.N.S. 1989, c. 92, ss. 21V to 21AF - Nova Scotia Legislature"
+        },
+        {
+          "source": "https://www.assembly.nl.ca/legislation/sr/statutes/c31-1.htm",
+          "source_title": "Consumer Protection and Business Practices Act, SNL 2009, c. C-31.1, Part V, Division 2 - House of Assembly of Newfoundland and Labrador"
         }
       ],
       "confidence": "high",
-      "verified_on": "2026-10-30",
-      "note": "Read on 30/10/2026 with the « Lire une source officielle » tool. Ontario (Ontario CPA 2002 (Word version 02c30_e.doc, SHA-256 67576a25…be25, consolidated from 11/12/2025; repealed on a day to be named by proclamation, so still in force)): s. 7(1) rights apply despite any agreement or waiver; s. 7(2) a term requiring arbitration is invalid insofar as it prevents the consumer from going to court (arbitration only if the consumer agrees after the dispute arises, s. 7(3)-(5)); s. 8 class proceedings despite any term; s. 11 ambiguities interpreted to the consumer's benefit. Québec (Québec Consumer Protection Act P-40.1 (SHA-256 8ee36350…130b)): art. 10 no stipulation releasing the merchant from the consequences of its own act; art. 11.1 no mandatory arbitration or class-action waiver; art. 12 no costs unless their precise amount is in the contract; art. 13 no predetermined fees, penalties or damages for the consumer's non-performance other than accrued interest. Alberta (Alberta CPA RSA 2000 c. C-26.3 (PDF, SHA-256 8f1d0dd3…d9b3)): s. 16 an arbitration clause in a consumer transaction is void and unenforceable, except an arbitration agreement entered into voluntarily after a dispute arises (other exception in s. 16(3)(b) not read in full)."
+      "verified_on": "2026-11-13",
+      "note": "Read on 30/10/2026 with the « Lire une source officielle » tool. Ontario (Ontario CPA 2002 (Word version 02c30_e.doc, SHA-256 67576a25…be25, consolidated from 11/12/2025; repealed on a day to be named by proclamation, so still in force)): s. 7(1) rights apply despite any agreement or waiver; s. 7(2) a term requiring arbitration is invalid insofar as it prevents the consumer from going to court (arbitration only if the consumer agrees after the dispute arises, s. 7(3)-(5)); s. 8 class proceedings despite any term; s. 11 ambiguities interpreted to the consumer's benefit. Québec (Québec Consumer Protection Act P-40.1 (SHA-256 8ee36350…130b)): art. 10 no stipulation releasing the merchant from the consequences of its own act; art. 11.1 no mandatory arbitration or class-action waiver; art. 12 no costs unless their precise amount is in the contract; art. 13 no predetermined fees, penalties or damages for the consumer's non-performance other than accrued interest. Alberta (Alberta CPA RSA 2000 c. C-26.3 (PDF, SHA-256 8f1d0dd3…d9b3)): s. 16 an arbitration clause in a consumer transaction is void and unenforceable, except an arbitration agreement entered into voluntarily after a dispute arises (other exception in s. 16(3)(b) not read in full). Read on 13/11/2026 with the source reader: Manitoba Consumer Protection Act (PDF, current from 1 June 2026 to 10 Nov. 2026, SHA-256 1ead42e4…d59f) and M.R. 176/2000 (current to 10 Nov. 2026); Nova Scotia Consumer Protection Act (consolidated to 3 October 2025) and N.S. Reg. 91/2002 (unofficial consolidation of the Registry, SHA-256 68c965ba…95d8); Newfoundland and Labrador Consumer Protection and Business Practices Act (SHA-256 7c402fa1…7f55). None of the three Acts mentions arbitration (no match for 'arbitrat'): no arbitration or class action rule to add for Manitoba, Nova Scotia or Newfoundland and Labrador."
     },
     "ca_on_estimate_tolerance": {
       "value": 0.1,
@@ -2220,11 +2232,15 @@
         {
           "source": "https://kings-printer.alberta.ca/documents/Regs/2001_081.pdf",
           "source_title": "Internet Sales Contract Regulation, AR 81/2001, s. 1 - Alberta King's Printer"
+        },
+        {
+          "source": "https://novascotia.ca/just/regulations/regs/cpintrnt.htm",
+          "source_title": "Internet Sales Contract Regulations, N.S. Reg. 91/2002 - Nova Scotia Registry of Regulations"
         }
       ],
       "confidence": "high",
-      "verified_on": "2026-10-30",
-      "note": "Read on 30/10/2026 with the « Lire une source officielle » tool: O. Reg. 17/05 (050017_e.doc, SHA-256 26ef5e9a…ec39): $50 for future performance agreements (s. 23.1), internet agreements (s. 31), direct agreements (s. 34) and remote agreements (s. 36); Alberta Internet Sales Contract Regulation AR 81/2001 (PDF, consolidated to 76/2023, SHA-256 e98c3f2f…1439; expires 30/09/2028): an Internet sales contract is a consumer contract over $50 formed by text-based Internet communications (s. 1). British Columbia's prescribed amounts (BPCPA regulation) not read: the tool applies the BC rules whatever the amount."
+      "verified_on": "2026-11-13",
+      "note": "Read on 30/10/2026 with the « Lire une source officielle » tool: O. Reg. 17/05 (050017_e.doc, SHA-256 26ef5e9a…ec39): $50 for future performance agreements (s. 23.1), internet agreements (s. 31), direct agreements (s. 34) and remote agreements (s. 36); Alberta Internet Sales Contract Regulation AR 81/2001 (PDF, consolidated to 76/2023, SHA-256 e98c3f2f…1439; expires 30/09/2028): an Internet sales contract is a consumer contract over $50 formed by text-based Internet communications (s. 1). British Columbia's prescribed amounts (BPCPA regulation) not read: the tool applies the BC rules whatever the amount. Read on 13/11/2026 with the source reader: Manitoba Consumer Protection Act (PDF, current from 1 June 2026 to 10 Nov. 2026, SHA-256 1ead42e4…d59f) and M.R. 176/2000 (current to 10 Nov. 2026); Nova Scotia Consumer Protection Act (consolidated to 3 October 2025) and N.S. Reg. 91/2002 (unofficial consolidation of the Registry, SHA-256 68c965ba…95d8); Newfoundland and Labrador Consumer Protection and Business Practices Act (SHA-256 7c402fa1…7f55). Nova Scotia: ss. 21X to 21AF do not apply where the total costs payable are less than $50 (N.S. Reg. 91/2002, s. 2). Manitoba (Part XVI) and Newfoundland and Labrador (Part V, Division 2): no amount in the texts read."
     },
     "ca_consumer_distance_disclosure": {
       "value": [
@@ -2257,11 +2273,23 @@
         {
           "source": "https://kings-printer.alberta.ca/documents/Regs/2001_081.pdf",
           "source_title": "Internet Sales Contract Regulation, AR 81/2001 - Alberta King's Printer"
+        },
+        {
+          "source": "https://web2.gov.mb.ca/laws/regs/current/_pdf-regs.php?reg=176%2F2000",
+          "source_title": "Internet Agreements Regulation, M.R. 176/2000 - Manitoba Laws"
+        },
+        {
+          "source": "https://novascotia.ca/just/regulations/regs/cpintrnt.htm",
+          "source_title": "Internet Sales Contract Regulations, N.S. Reg. 91/2002 - Nova Scotia Registry of Regulations"
+        },
+        {
+          "source": "https://www.assembly.nl.ca/legislation/sr/statutes/c31-1.htm",
+          "source_title": "Consumer Protection and Business Practices Act, SNL 2009, c. C-31.1, Part V, Division 2 - House of Assembly of Newfoundland and Labrador"
         }
       ],
       "confidence": "high",
-      "verified_on": "2026-10-30",
-      "note": "Read on 30/10/2026 with the « Lire une source officielle » tool. Common core of: O. Reg. 17/05 (050017_e.doc, SHA-256 26ef5e9a…ec39) s. 24 (future performance agreements, 16 items including the consumer's name and the date), s. 25 (express opportunity to accept, decline and correct errors), s. 32 (internet agreements, 14 items) and s. 33 (written copy within 15 days with the consumer's name and date), s. 37 (remote agreements); Québec Consumer Protection Act P-40.1 (SHA-256 8ee36350…130b) art. 54.4 (information before a distance contract, presented prominently and in a form easy to keep and print; opening words of para. a to be re-read word for word), 54.6 (written contract), 54.7 (copy within 15 days); BC BPCPA Part 4 (04002_04, current to 27/10/2026, SHA-256 bf483af7…9443) s. 18.2 (contract contents a to t), 18.3 (disclosure before the contract, free, clear, with an express opportunity to view the whole contract), 47 (electronic: accessible, retainable, printable, correct/accept/decline), 48 (copy within 15 days, email deemed received on the 3rd day); Alberta Internet Sales Contract Regulation AR 81/2001 (PDF, consolidated to 76/2023, SHA-256 e98c3f2f…1439; expires 30/09/2028) s. 4(1)(a) (i) name and business name, (ii) business and mailing address, (iii) telephone and, if available, email, (iv) fair and accurate description with technical specifications, (v) itemized price and associated costs with taxes, (vi) additional charges that cannot be determined, (vii) total or periodic payments, (viii) currency, (ix) terms, conditions and method of payment, (x) date services begin, (xi) delivery arrangements, (xii) cancellation, return, exchange and refund policies, (xiii) other restrictions; s. 4(1)(b) express opportunity to accept, decline and correct errors; s. 4(2) prominently displayed, clear, accessed by the consumer, retainable and printable; s. 5 copy in writing or electronic form within 15 days, with the consumer's name and the date, by email to the address the consumer gave. Québec art. 54.4 a) re-read the same day: « son nom et tout autre nom qu'il utilise dans l'exploitation de son entreprise »."
+      "verified_on": "2026-11-13",
+      "note": "Read on 30/10/2026 with the « Lire une source officielle » tool. Common core of: O. Reg. 17/05 (050017_e.doc, SHA-256 26ef5e9a…ec39) s. 24 (future performance agreements, 16 items including the consumer's name and the date), s. 25 (express opportunity to accept, decline and correct errors), s. 32 (internet agreements, 14 items) and s. 33 (written copy within 15 days with the consumer's name and date), s. 37 (remote agreements); Québec Consumer Protection Act P-40.1 (SHA-256 8ee36350…130b) art. 54.4 (information before a distance contract, presented prominently and in a form easy to keep and print; opening words of para. a to be re-read word for word), 54.6 (written contract), 54.7 (copy within 15 days); BC BPCPA Part 4 (04002_04, current to 27/10/2026, SHA-256 bf483af7…9443) s. 18.2 (contract contents a to t), 18.3 (disclosure before the contract, free, clear, with an express opportunity to view the whole contract), 47 (electronic: accessible, retainable, printable, correct/accept/decline), 48 (copy within 15 days, email deemed received on the 3rd day); Alberta Internet Sales Contract Regulation AR 81/2001 (PDF, consolidated to 76/2023, SHA-256 e98c3f2f…1439; expires 30/09/2028) s. 4(1)(a) (i) name and business name, (ii) business and mailing address, (iii) telephone and, if available, email, (iv) fair and accurate description with technical specifications, (v) itemized price and associated costs with taxes, (vi) additional charges that cannot be determined, (vii) total or periodic payments, (viii) currency, (ix) terms, conditions and method of payment, (x) date services begin, (xi) delivery arrangements, (xii) cancellation, return, exchange and refund policies, (xiii) other restrictions; s. 4(1)(b) express opportunity to accept, decline and correct errors; s. 4(2) prominently displayed, clear, accessed by the consumer, retainable and printable; s. 5 copy in writing or electronic form within 15 days, with the consumer's name and the date, by email to the address the consumer gave. Québec art. 54.4 a) re-read the same day: « son nom et tout autre nom qu'il utilise dans l'exploitation de son entreprise ». Read on 13/11/2026 with the source reader: Manitoba Consumer Protection Act (PDF, current from 1 June 2026 to 10 Nov. 2026, SHA-256 1ead42e4…d59f) and M.R. 176/2000 (current to 10 Nov. 2026); Nova Scotia Consumer Protection Act (consolidated to 3 October 2025) and N.S. Reg. 91/2002 (unofficial consolidation of the Registry, SHA-256 68c965ba…95d8); Newfoundland and Labrador Consumer Protection and Business Practices Act (SHA-256 7c402fa1…7f55). Manitoba, M.R. 176/2000 s. 3(1): (a) name and business name, (b) business and mailing address, (c) phone, fax and email, (d) fair and accurate description with technical specifications, (e) details of any warranties or guarantees, (f) itemized price with shipping, taxes, duties, (g) delivery, handling or insurance costs, (h) total and currency, (i) terms and method of payment, (j) credit, (k) delivery or commencement date, (l) delivery arrangements, (m) restrictions or conditions, (n) exchange, cancellation and refund policies, (o) policies for protecting the buyer's financial and personal information; s. 3(2): this information forms part of the agreement; Act s. 129(2): given in writing by email, or online in a way that ensures the buyer accessed it before the agreement and can retain and print it. Nova Scotia, N.S. Reg. 91/2002 s. 3 (a) to (m), the same list as Alberta, displayed prominently, clearly, retainable or printable (s. 4); Act s. 21Y: express opportunity to accept, decline and correct errors. Newfoundland and Labrador, s. 29(1): the s. 24 information, email address, detailed description with technical specifications, currency, delivery arrangements, cancellation, return, exchange and refund policies; s. 30(2): in electronic form, the consumer must access the information, can retain and print it, and has an express opportunity to correct errors and to accept or decline. The terms refer to their warranties and personal information sections for Manitoba's items (e) and (o)."
     },
     "ca_consumer_copy_days": {
       "value": {
@@ -2279,15 +2307,24 @@
         {
           "source": "https://www.bclaws.gov.bc.ca/civix/document/id/complete/statreg/04002_04",
           "source_title": "Business Practices and Consumer Protection Act, s. 48 - BC Laws"
+        },
+        {
+          "source": "https://nslegislature.ca/sites/default/files/legc/statutes/consumer%20protection.pdf",
+          "source_title": "Consumer Protection Act, R.S.N.S. 1989, c. 92, ss. 21V to 21AF - Nova Scotia Legislature"
+        },
+        {
+          "source": "https://www.assembly.nl.ca/legislation/sr/statutes/c31-1.htm",
+          "source_title": "Consumer Protection and Business Practices Act, SNL 2009, c. C-31.1, Part V, Division 2 - House of Assembly of Newfoundland and Labrador"
         }
       ],
       "confidence": "high",
-      "verified_on": "2026-10-30",
-      "note": "Read on 30/10/2026 with the « Lire une source officielle » tool: O. Reg. 17/05 (050017_e.doc, SHA-256 26ef5e9a…ec39) s. 33(1) copy of an internet agreement in writing within 15 days; Québec Consumer Protection Act P-40.1 (SHA-256 8ee36350…130b) art. 54.7 copy within 15 days after the contract; BC BPCPA Part 4 (04002_04, current to 27/10/2026, SHA-256 bf483af7…9443) s. 48(1) copy within 15 days, by email deemed received on the 3rd day (s. 48(4)). Alberta Internet Sales Contract Regulation AR 81/2001 s. 5(1) (re-read on 30/10/2026): copy in writing or electronic form within 15 days. Ontario remote agreements (s. 39) period not read."
+      "verified_on": "2026-11-13",
+      "note": "Read on 30/10/2026 with the « Lire une source officielle » tool: O. Reg. 17/05 (050017_e.doc, SHA-256 26ef5e9a…ec39) s. 33(1) copy of an internet agreement in writing within 15 days; Québec Consumer Protection Act P-40.1 (SHA-256 8ee36350…130b) art. 54.7 copy within 15 days after the contract; BC BPCPA Part 4 (04002_04, current to 27/10/2026, SHA-256 bf483af7…9443) s. 48(1) copy within 15 days, by email deemed received on the 3rd day (s. 48(4)). Alberta Internet Sales Contract Regulation AR 81/2001 s. 5(1) (re-read on 30/10/2026): copy in writing or electronic form within 15 days. Ontario remote agreements (s. 39) period not read. Read on 13/11/2026 with the source reader: Manitoba Consumer Protection Act (PDF, current from 1 June 2026 to 10 Nov. 2026, SHA-256 1ead42e4…d59f) and M.R. 176/2000 (current to 10 Nov. 2026); Nova Scotia Consumer Protection Act (consolidated to 3 October 2025) and N.S. Reg. 91/2002 (unofficial consolidation of the Registry, SHA-256 68c965ba…95d8); Newfoundland and Labrador Consumer Protection and Business Practices Act (SHA-256 7c402fa1…7f55). Nova Scotia Act s. 21Z(1): copy in writing or electronic form within fifteen days, with the s. 3 information, the consumer's name or unique identifier and the date (Reg. s. 5). Newfoundland and Labrador s. 31: copy within 15 days with the s. 29 information, the consumer's name and the date; by email, received on the third day after it is sent. Manitoba Part XVI: no copy requirement in the Act or M.R. 176/2000."
     },
     "ca_consumer_info_cancel_days": {
       "value": {
-        "days": 7
+        "days": 7,
+        "nl_days": 10
       },
       "unit": "object",
       "label": "Consumers at a distance: cancellation within 7 days of receiving the copy if the required information was not given",
@@ -2305,11 +2342,23 @@
         {
           "source": "https://kings-printer.alberta.ca/documents/Regs/2001_081.pdf",
           "source_title": "Internet Sales Contract Regulation, AR 81/2001, s. 6 - Alberta King's Printer"
+        },
+        {
+          "source": "https://novascotia.ca/just/regulations/regs/cpintrnt.htm",
+          "source_title": "Internet Sales Contract Regulations, N.S. Reg. 91/2002 - Nova Scotia Registry of Regulations"
+        },
+        {
+          "source": "https://www.assembly.nl.ca/legislation/sr/statutes/c31-1.htm",
+          "source_title": "Consumer Protection and Business Practices Act, SNL 2009, c. C-31.1, Part V, Division 2 - House of Assembly of Newfoundland and Labrador"
+        },
+        {
+          "source": "https://web2.gov.mb.ca/laws/statutes/ccsm/_pdf.php?cap=C200",
+          "source_title": "The Consumer Protection Act, C.C.S.M. c. C200, Part XVI (Internet Agreements) - Manitoba Laws"
         }
       ],
       "confidence": "high",
-      "verified_on": "2026-10-30",
-      "note": "Read on 30/10/2026 with the « Lire une source officielle » tool: Ontario CPA 2002 (Word version 02c30_e.doc, SHA-256 67576a25…be25, consolidated from 11/12/2025; repealed on a day to be named by proclamation, so still in force) s. 47(1) remote agreements (7 days after the copy if s. 45 not complied with; 1 year if s. 46 not complied with); internet agreements s. 40 (7 days; 30 days without a copy); Québec Consumer Protection Act P-40.1 (SHA-256 8ee36350…130b) art. 54.8 (7 days after receiving the copy); BC BPCPA Part 4 (04002_04, current to 27/10/2026, SHA-256 bf483af7…9443) s. 18.4(2)(c) (distance sales contract: 7 days after the copy); Alberta Internet Sales Contract Regulation AR 81/2001 (PDF, consolidated to 76/2023, SHA-256 e98c3f2f…1439; expires 30/09/2028) s. 6(1) (7 days after the copy; 30 days without a copy)."
+      "verified_on": "2026-11-13",
+      "note": "Read on 30/10/2026 with the « Lire une source officielle » tool: Ontario CPA 2002 (Word version 02c30_e.doc, SHA-256 67576a25…be25, consolidated from 11/12/2025; repealed on a day to be named by proclamation, so still in force) s. 47(1) remote agreements (7 days after the copy if s. 45 not complied with; 1 year if s. 46 not complied with); internet agreements s. 40 (7 days; 30 days without a copy); Québec Consumer Protection Act P-40.1 (SHA-256 8ee36350…130b) art. 54.8 (7 days after receiving the copy); BC BPCPA Part 4 (04002_04, current to 27/10/2026, SHA-256 bf483af7…9443) s. 18.4(2)(c) (distance sales contract: 7 days after the copy); Alberta Internet Sales Contract Regulation AR 81/2001 (PDF, consolidated to 76/2023, SHA-256 e98c3f2f…1439; expires 30/09/2028) s. 6(1) (7 days after the copy; 30 days without a copy). Read on 13/11/2026 with the source reader: Manitoba Consumer Protection Act (PDF, current from 1 June 2026 to 10 Nov. 2026, SHA-256 1ead42e4…d59f) and M.R. 176/2000 (current to 10 Nov. 2026); Nova Scotia Consumer Protection Act (consolidated to 3 October 2025) and N.S. Reg. 91/2002 (unofficial consolidation of the Registry, SHA-256 68c965ba…95d8); Newfoundland and Labrador Consumer Protection and Business Practices Act (SHA-256 7c402fa1…7f55). Nova Scotia Reg. 91/2002 s. 6(1)(a): until 7 days after the consumer receives the copy if the information or the express opportunity was missing; (b) 30 days without a copy. Newfoundland and Labrador s. 32(1)(a): not later than 10 days after the consumer receives the copy where s. 30 or 31 is not complied with (nl_days); (b) 30 days without a copy. Manitoba s. 129(1): if the prescribed information was not given in writing, the buyer may cancel before accepting delivery of the goods or services."
     },
     "ca_consumer_start_delay_days": {
       "value": {
@@ -2327,11 +2376,23 @@
         {
           "source": "https://kings-printer.alberta.ca/documents/Regs/2001_081.pdf",
           "source_title": "Internet Sales Contract Regulation, AR 81/2001, s. 6(2) and (3) - Alberta King's Printer"
+        },
+        {
+          "source": "https://web2.gov.mb.ca/laws/statutes/ccsm/_pdf.php?cap=C200",
+          "source_title": "The Consumer Protection Act, C.C.S.M. c. C200, Part XVI (Internet Agreements) - Manitoba Laws"
+        },
+        {
+          "source": "https://novascotia.ca/just/regulations/regs/cpintrnt.htm",
+          "source_title": "Internet Sales Contract Regulations, N.S. Reg. 91/2002 - Nova Scotia Registry of Regulations"
+        },
+        {
+          "source": "https://www.assembly.nl.ca/legislation/sr/statutes/c31-1.htm",
+          "source_title": "Consumer Protection and Business Practices Act, SNL 2009, c. C-31.1, Part V, Division 2 - House of Assembly of Newfoundland and Labrador"
         }
       ],
       "confidence": "high",
-      "verified_on": "2026-10-30",
-      "note": "Read on 30/10/2026 with the « Lire une source officielle » tool: Ontario CPA 2002 (Word version 02c30_e.doc, SHA-256 67576a25…be25, consolidated from 11/12/2025; repealed on a day to be named by proclamation, so still in force) s. 26(1) future performance agreement: cancellation at any time before commencement if the supplier does not begin within 30 days after the commencement date (or, s. 26(2), within 30 days after the agreement if no date is specified); BC BPCPA Part 4 (04002_04, current to 27/10/2026, SHA-256 bf483af7…9443) s. 23(5)(b) and 49(1)(c) (not supplied within 30 days of the supply date); Alberta Internet Sales Contract Regulation AR 81/2001 (PDF, consolidated to 76/2023, SHA-256 e98c3f2f…1439; expires 30/09/2028) s. 6(2)(c) and (3) (services not begun within 30 days of the commencement date)."
+      "verified_on": "2026-11-13",
+      "note": "Read on 30/10/2026 with the « Lire une source officielle » tool: Ontario CPA 2002 (Word version 02c30_e.doc, SHA-256 67576a25…be25, consolidated from 11/12/2025; repealed on a day to be named by proclamation, so still in force) s. 26(1) future performance agreement: cancellation at any time before commencement if the supplier does not begin within 30 days after the commencement date (or, s. 26(2), within 30 days after the agreement if no date is specified); BC BPCPA Part 4 (04002_04, current to 27/10/2026, SHA-256 bf483af7…9443) s. 23(5)(b) and 49(1)(c) (not supplied within 30 days of the supply date); Alberta Internet Sales Contract Regulation AR 81/2001 (PDF, consolidated to 76/2023, SHA-256 e98c3f2f…1439; expires 30/09/2028) s. 6(2)(c) and (3) (services not begun within 30 days of the commencement date). Read on 13/11/2026 with the source reader: Manitoba Consumer Protection Act (PDF, current from 1 June 2026 to 10 Nov. 2026, SHA-256 1ead42e4…d59f) and M.R. 176/2000 (current to 10 Nov. 2026); Nova Scotia Consumer Protection Act (consolidated to 3 October 2025) and N.S. Reg. 91/2002 (unofficial consolidation of the Registry, SHA-256 68c965ba…95d8); Newfoundland and Labrador Consumer Protection and Business Practices Act (SHA-256 7c402fa1…7f55). Manitoba s. 130(1)(d): services other than travel, transportation or accommodation not begun within 30 days after the commencement date specified or agreed in writing; Nova Scotia Reg. 91/2002 s. 6(1)(c)(iii) and (d): 30 days after the commencement date or, without one, after the contract; Newfoundland and Labrador s. 32(1)(c) and (d): not delivered within 30 days of the supply date or, without one, of the contract."
     },
     "ca_consumer_refund_days": {
       "value": {
@@ -2349,11 +2410,23 @@
         {
           "source": "https://kings-printer.alberta.ca/documents/Acts/C26P3.pdf",
           "source_title": "Consumer Protection Act, RSA 2000, c. C-26.3, s. 31 - Alberta King's Printer"
+        },
+        {
+          "source": "https://nslegislature.ca/sites/default/files/legc/statutes/consumer%20protection.pdf",
+          "source_title": "Consumer Protection Act, R.S.N.S. 1989, c. 92, ss. 21V to 21AF - Nova Scotia Legislature"
+        },
+        {
+          "source": "https://www.assembly.nl.ca/legislation/sr/statutes/c31-1.htm",
+          "source_title": "Consumer Protection and Business Practices Act, SNL 2009, c. C-31.1, Part V, Division 2 - House of Assembly of Newfoundland and Labrador"
+        },
+        {
+          "source": "https://web2.gov.mb.ca/laws/statutes/ccsm/_pdf.php?cap=C200",
+          "source_title": "The Consumer Protection Act, C.C.S.M. c. C200, Part XVI (Internet Agreements) - Manitoba Laws"
         }
       ],
       "confidence": "high",
-      "verified_on": "2026-10-30",
-      "note": "Read on 30/10/2026 with the « Lire une source officielle » tool: Québec Consumer Protection Act P-40.1 (SHA-256 8ee36350…130b) art. 54.13 (refund of all sums within 15 days after the resolution of a distance contract); Alberta Internet Sales Contract Regulation AR 81/2001 (PDF, consolidated to 76/2023, SHA-256 e98c3f2f…1439; expires 30/09/2028) s. 10(1) and 11 (refund within 15 days); Alberta CPA RSA 2000 c. C-26.3 (PDF, SHA-256 8f1d0dd3…d9b3) direct sales (refund within 15 days after cancellation)."
+      "verified_on": "2026-11-13",
+      "note": "Read on 30/10/2026 with the « Lire une source officielle » tool: Québec Consumer Protection Act P-40.1 (SHA-256 8ee36350…130b) art. 54.13 (refund of all sums within 15 days after the resolution of a distance contract); Alberta Internet Sales Contract Regulation AR 81/2001 (PDF, consolidated to 76/2023, SHA-256 e98c3f2f…1439; expires 30/09/2028) s. 10(1) and 11 (refund within 15 days); Alberta CPA RSA 2000 c. C-26.3 (PDF, SHA-256 8f1d0dd3…d9b3) direct sales (refund within 15 days after cancellation). Read on 13/11/2026 with the source reader: Manitoba Consumer Protection Act (PDF, current from 1 June 2026 to 10 Nov. 2026, SHA-256 1ead42e4…d59f) and M.R. 176/2000 (current to 10 Nov. 2026); Nova Scotia Consumer Protection Act (consolidated to 3 October 2025) and N.S. Reg. 91/2002 (unofficial consolidation of the Registry, SHA-256 68c965ba…95d8); Newfoundland and Labrador Consumer Protection and Business Practices Act (SHA-256 7c402fa1…7f55). Nova Scotia Act s. 21AC(1) and Newfoundland and Labrador s. 33: refund within 15 days of the cancellation; Manitoba s. 133(1)(b): within 30 days (the terms' 15 days are within it)."
     },
     "qc_distance_no_prepayment": {
       "value": "A merchant who offers to enter into, or enters into, a distance contract with a Québec consumer may not collect partial or full payment, or offer to collect it, before performing its principal obligation, unless the consumer can request a chargeback of that payment under the Act or a regulation (credit card).",

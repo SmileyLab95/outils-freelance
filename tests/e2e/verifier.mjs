@@ -2975,7 +2975,17 @@ const tests = {
     check(await page.isVisible("#cg-cons-qc") && text.includes("Information for consumers") && text.includes("within 15 days of your acceptance") &&
       text.includes("more than 10% above it") && text.includes("If we have not started within 30 days") && text.includes("do not require you to go to arbitration"),
       "T&Cs CA : règles des particuliers");
-    check((await notices()).includes("In Ontario and Alberta, these rules apply above $50"), "T&Cs CA : contenu du devis, seuil de 50 $");
+    check((await notices()).includes("In Ontario and Alberta, these rules apply above $50; in Nova Scotia, from $50"), "T&Cs CA : contenu du devis, seuil de 50 $");
+    check(text.includes("in the sections “Warranties and liability” and “Personal information”") && text.includes("within 7 days of receiving the copy"),
+      "T&Cs CA : garanties et renseignements personnels (Manitoba), 7 jours");
+    await page.check("#cg-cons-nl");
+    check((await preview()).includes("within 7 days (10 days in Newfoundland and Labrador) of receiving the copy") &&
+      !(await notices()).includes("are not detailed here"), "T&Cs CA : consommateurs de Terre-Neuve-et-Labrador, 10 jours");
+    await page.uncheck("#cg-cons-nl");
+    await page.check("#cg-cons-other");
+    check((await notices()).includes("other than Ontario, Quebec, British Columbia, Alberta, Manitoba, Nova Scotia and Newfoundland and Labrador"),
+      "T&Cs CA : autres provinces signalées");
+    await page.uncheck("#cg-cons-other");
     await page.check("#cg-at-home");
     check((await notices()).includes("itinerant merchant permit"), "T&Cs CA : contrat chez le particulier hors champ");
     await page.uncheck("#cg-at-home");

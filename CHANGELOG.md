@@ -1,5 +1,15 @@
 # Journal des modifications
 
+## 2026-11-13 (fin d'après-midi) — Canada : CGV pour les particuliers de trois provinces de plus
+
+- Générateur de *terms and conditions* / conditions générales (/ca/ et /ca/fr/) : particuliers du Manitoba, de la
+  Nouvelle-Écosse et de Terre-Neuve-et-Labrador ajoutés, d'après leurs lois lues sur les sites officiels ; 10 jours
+  d'annulation précisés pour Terre-Neuve-et-Labrador ; l'article des renseignements pour les consommateurs renvoie aux
+  garanties et à la protection des renseignements personnels (exigé au Manitoba) ; seuil de 50 $ en Nouvelle-Écosse.
+- Présentation et question fréquente des deux pages mises à jour ; « autres provinces » limitées aux lois non lues.
+- Tests : 15 tests unitaires (5 erreurs réintroduites, toutes détectées), parcours navigateur des deux pages
+  (accessibilité comprise), captures relues.
+
 ## 2026-11-13 (après-midi) — États-Unis : règle du FAMLI en vigueur au Colorado
 
 - *Paid leave and disability insurance for the self-employed* : au Colorado, documents fiscaux de l'année précédente à

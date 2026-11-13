@@ -18,8 +18,9 @@ au Québec) et la page le dit.
 **Champ** : prestations de services ; travailleur établi dans une province ou un territoire (choix obligatoire, qui
 donne le droit applicable entre entreprises) ; clients entreprises partout au Canada ; particuliers servis **à distance**
 (Internet, email, téléphone) ou **dans l'établissement du travailleur autonome** ; règles détaillées pour les
-particuliers de l'Ontario, du Québec, de la Colombie-Britannique et de l'Alberta, mention générale pour les autres
-provinces et territoires (lois non lues à ce jour).
+particuliers de l'Ontario, du Québec, de la Colombie-Britannique, de l'Alberta et, depuis le 13/11/2026 (§ 6), du
+Manitoba, de la Nouvelle-Écosse et de Terre-Neuve-et-Labrador ; mention générale pour les autres provinces et territoires
+(Saskatchewan, Nouveau-Brunswick, Île-du-Prince-Édouard, territoires : lois non lues à ce jour).
 **Hors champ** (signalé sur la page) : vente de biens ; **contrats conclus en personne chez le particulier ou hors de
 l'établissement** (*direct agreements*, *direct sales contracts*, commerçant itinérant au Québec : permis et formulaires
 réglementaires propres à chaque province, non reproduits) ; abonnements reconduits automatiquement ; services
@@ -44,8 +45,8 @@ familiales ou domestiques (Ontario, art. 1 ; Québec, art. 2 ; Alberta, art. 1).
 | **Langue (Québec)** : contrat d'adhésion d'abord remis en français | `qc_adhesion_contract_french` (existante) | Page anglaise : avertissement et lien vers la page française dès qu'il y a un client au Québec |
 | **Cession du droit d'auteur** : une cession ou une licence n'est valable que **par écrit signé** par le titulaire ou son mandataire ; droits moraux incessibles, renonciation possible | *Copyright Act*, art. 13(4) et 14.1(2) et (3) (lus : la cession seule ne vaut pas renonciation aux droits moraux) ; `ca_copyright_assignment` | Article « Intellectual property », contrôle (devis signé) |
 
-**Points signalés, non tranchés** : lois des autres provinces et territoires non lues (mention générale : leurs lois de
-protection du consommateur s'appliquent aussi) ; montants réglementaires de la Colombie-Britannique non lus (les
+**Points signalés, non tranchés** : lois des autres provinces et territoires non lues (Saskatchewan, Nouveau-Brunswick,
+Île-du-Prince-Édouard, territoires ; mention générale : leurs lois de protection du consommateur s'appliquent aussi) ; montants réglementaires de la Colombie-Britannique non lus (les
 obligations sont appliquées quel que soit le montant, par prudence) ; art. 54.4 a) (Québec) et art. 4 et 5 du règlement albertain relus mot pour mot le 30/10/2026 ; la qualification de contrat d'adhésion (C.c.Q. 1379)
 dépend du cas : la page le dit.
 
@@ -120,6 +121,31 @@ réalisation : « virement bancaire (y compris par Interac) » pour éviter « o
 paiement ; « tribunal des petites créances » (et non « division des petites créances », propre au Québec) ; la clause
 « version française remise d'abord » n'est que dans la version anglaise, pour les clients du Québec.
 
+## 6. Manitoba, Nouvelle-Écosse et Terre-Neuve-et-Labrador (13/11/2026)
+
+Lois lues le 13/11/2026 (annexe) ; elles suivent le même modèle que les quatre provinces déjà détaillées (contrats
+conclus en ligne ou à distance), si bien que le **texte commun reste valable** ; trois écarts relevés :
+
+- **Terre-Neuve-et-Labrador** : le particulier peut annuler dans les **10 jours** (et non 7) suivant la réception de
+  l'exemplaire si les renseignements ou l'exemplaire ne sont pas conformes (art. 32(1)a)) ; le texte le précise entre
+  parenthèses quand des particuliers de cette province sont visés (règle `ca_consumer_info_cancel_days`, `nl_days`).
+- **Manitoba** : la liste réglementaire (M.R. 176/2000, art. 3(1)) comprend aussi le **détail des garanties** (e) et la
+  **politique de protection des renseignements financiers et personnels** (o) ; l'article « Renseignements pour les
+  consommateurs » renvoie désormais, pour tous les particuliers, aux articles « Garanties et responsabilité » et
+  « Renseignements personnels ». Pas d'exemplaire obligatoire ; annulation avant la fourniture des services si les
+  renseignements n'ont pas été donnés par écrit (art. 129) ; remboursement sous 30 jours (art. 133 ; le texte promet 15
+  jours, ce qui le respecte).
+- **Nouvelle-Écosse** : règles de 50 $ et plus (règl. 91/2002, art. 2 : moins de 50 $ exclu), d'où le message « à
+  partir de 50 $ » ; mêmes 13 renseignements qu'en Alberta, exemplaire sous 15 jours, annulation sous 7 jours,
+  remboursement sous 15 jours.
+
+Aucune des trois lois ne parle d'arbitrage (aucune occurrence) : rien à ajouter aux clauses interdites. Outil : trois
+cases de plus pour les provinces des particuliers, message « autres provinces » limité aux provinces non lues, textes de
+la page (présentation, question fréquente) mis à jour dans les deux langues. Tests : 15 tests unitaires (cases des pages
+= moteur, 10 jours seulement pour Terre-Neuve-et-Labrador, renvoi aux garanties ; 48 combinaisons rendues dans les deux
+langues), 5 mutants du moteur détectés, parcours navigateur des deux pages (62 points, accessibilité comprise), captures
+relues.
+
 ## Annexe : sources lues (30/10/2026, outil « Lire une source officielle »)
 
 | Source | Lecture | Contenu relevé |
@@ -138,3 +164,8 @@ paiement ; « tribunal des petites créances » (et non « division des petites 
 | Québec, Loi sur la protection du consommateur, art. 2, 54.1, 54.2 et 54.4 (même source, même empreinte) | Lus | Art. 2 : la loi s'applique à tout contrat entre un consommateur et un commerçant dans le cours des activités de son commerce, pour un bien ou un service ; **art. 54.1** : contrat à distance = conclu sans que les parties soient en présence l'une de l'autre, précédé d'une offre du commerçant (sa proposition est une offre dès qu'elle contient les éléments essentiels du contrat) ; art. 54.2 : réputé conclu à l'adresse du consommateur ; **art. 54.4** : avant la conclusion, le commerçant divulgue son nom, son adresse, son téléphone et son adresse électronique, une description détaillée de chaque service, un état détaillé du prix et des frais connexes, les frais de tiers non chiffrables, le total, les versements périodiques et les modalités de paiement, la devise si elle n'est pas canadienne, la date ou les délais d'exécution, la livraison, les conditions d'annulation, de résiliation, de retour, d'échange ou de remboursement et les autres restrictions, de manière évidente et intelligible, sous une forme facile à conserver et à imprimer (a) : « son nom et tout autre nom qu'il utilise dans l'exploitation de son entreprise », relu le 30/10/2026) ; **art. 54.3** (relu mot pour mot) : le commerçant qui offre de conclure un contrat à distance ou qui le conclut « ne peut percevoir un paiement partiel ou total du consommateur ou lui offrir de percevoir un tel paiement avant d'exécuter son obligation principale », sauf paiement dont le consommateur peut demander la rétrofacturation |
 | Alberta, *Internet Sales Contract Regulation*, AR 81/2001 (King's Printer, PDF, consolidé jusqu'au règlement 76/2023) | Passages lus, SHA-256 e98c3f2f…1439 | Art. 1 : contrat de vente par Internet = transaction de consommation de plus de **50 $** formée par des communications Internet textuelles ; art. 2 : s'applique si le fournisseur **ou le consommateur réside en Alberta**, ou si l'offre ou l'acceptation est faite en Alberta ou en part ; **art. 4** (relu en entier) : avant le contrat, nom et nom commercial, adresse d'affaires et postale, téléphone et courriel, description juste et exacte, prix détaillé avec taxes, frais non chiffrables, total ou paiements périodiques, devise, modalités de paiement, date de début des services, livraison, politiques d'annulation, de retour et de remboursement, autres conditions ; possibilité expresse d'accepter, de refuser et de corriger ; informations en évidence, claires, consultées, conservables et imprimables ; **art. 5** : copie écrite ou électronique **dans les 15 jours**, avec le nom du consommateur et la date, par courriel notamment ; **art. 6** : annulation jusqu'à 7 jours après la copie si les informations ou la possibilité expresse d'accepter, de refuser et de corriger manquent ; 30 jours sans copie ; avant le début des services s'ils ne commencent pas dans les 30 jours de la date prévue ; art. 10 à 12 : remboursement sous 15 jours, recours contre l'émetteur de la carte ; **expire le 30/09/2028** (réexamen périodique) |
 | *Copyright Act*, L.R.C. 1985, ch. C-42, art. 13 (laws-lois.justice.gc.ca, `section-13.html`) | Lu, SHA-256 862e5479…b40a | Art. 13(3) : l'employeur est premier titulaire du droit d'auteur sur l'œuvre faite par un employé dans le cadre de son emploi, sauf convention contraire (pas le client d'un travailleur autonome) ; **art. 13(4)** : le titulaire peut céder son droit, en tout ou en partie, ou concéder une licence, mais **la cession ou la concession n'est valable que par écrit signé** par le titulaire ou son mandataire |
+| Manitoba, *The Consumer Protection Act*, C.C.S.M. c. C200 (Manitoba Laws, PDF bilingue, à jour du 1er juin au 10 nov. 2026), lue le 13/11/2026 | Partie XVI lue, SHA-256 1ead42e4…d59f | Art. 128 : la partie XVI vise les ventes au détail conclues par communications Internet ; art. 129 : annulation avant d'accepter les biens ou services si les renseignements prescrits n'ont pas été donnés par écrit (courriel, ou en ligne, consultés avant le contrat, conservables et imprimables) ; art. 130(1)d) : services non commencés dans les 30 jours suivant la date convenue ; art. 132 : avis d'annulation par tout moyen, réputé donné à l'envoi ; art. 133 : remboursement sous 30 jours ; aucune occurrence d'« arbitrat » |
+| Manitoba, *Internet Agreements Regulation*, M.R. 176/2000 (à jour au 10 nov. 2026), lu le 13/11/2026 | Lu en entier | Art. 3(1) : 15 renseignements, dont (e) garanties et (o) politique de protection des renseignements financiers et personnels ; art. 3(2) : ils font partie de la convention ; art. 5 : demande d'annulation d'un débit de carte |
+| Nouvelle-Écosse, *Consumer Protection Act*, R.S.N.S. 1989, c. 92 (nslegislature.ca, à jour au 3 octobre 2025), lue le 13/11/2026 | Art. 21V à 21AF lus | Définitions (consommateur, services à des fins personnelles, familiales ou domestiques) ; 21X : renseignements prescrits avant le contrat ; 21Y : accepter, refuser, corriger ; 21Z : exemplaire sous 15 jours ; 21AA à 21AF : annulation selon le règlement, remboursement sous 15 jours, recours contre l'émetteur de la carte ; aucune occurrence d'« arbitrat » |
+| Nouvelle-Écosse, *Internet Sales Contract Regulations*, N.S. Reg. 91/2002 (Registry of Regulations, consolidation non officielle), lu le 13/11/2026 | Lu en entier, SHA-256 68c965ba…95d8 | Art. 2 : moins de 50 $ exclu ; art. 3 : 13 renseignements ; art. 4 : en évidence, clairs, conservables ou imprimables ; art. 5 : exemplaire avec le nom du consommateur et la date ; art. 6 : annulation jusqu'à 7 jours après l'exemplaire, 30 jours sans exemplaire, avant le début des services s'ils ont 30 jours de retard ; art. 7 : avis par tout moyen |
+| Terre-Neuve-et-Labrador, *Consumer Protection and Business Practices Act*, SNL 2009, c. C-31.1 (assembly.nl.ca), lue le 13/11/2026 | Partie V, divisions 2 et 3 lues, SHA-256 7c402fa1…7f55 | Art. 28 : contrat à distance = non conclu en personne ; art. 29 : renseignements avant le contrat (ceux de l'art. 24, courriel, description détaillée, devise, livraison, politiques d'annulation et de remboursement), clairs et compréhensibles ; art. 30 : sous forme électronique, consultés, conservables et imprimables, possibilité de corriger, d'accepter ou de refuser ; art. 31 : exemplaire sous 15 jours, avec le nom du consommateur et la date (par courriel : reçu le 3e jour) ; **art. 32 : annulation dans les 10 jours** suivant la réception de l'exemplaire si les art. 30 ou 31 ne sont pas respectés, 30 jours sans exemplaire, avant la fourniture si elle a 30 jours de retard ; art. 33 : remboursement sous 15 jours ; division 3 (contrats de service à distance) abrogée en 2022 ; aucune occurrence d'« arbitrat » |

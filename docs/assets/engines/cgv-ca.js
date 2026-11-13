@@ -34,7 +34,7 @@
     NU: { en: "Nunavut", fr: "le Nunavut", fr_of: "du Nunavut", fr_in: "au Nunavut" }
   };
   // Provinces dont les règles sur les particuliers ont été lues (les autres : mention générale).
-  var DETAILED = ["ON", "QC", "BC", "AB"];
+  var DETAILED = ["ON", "QC", "BC", "AB", "MB", "NS", "NL"];
 
   var WORDS = {
     en: {
@@ -76,7 +76,7 @@
   }
 
   /**
-   * Provinces des particuliers : celles cochées (cons_on, cons_qc, cons_bc, cons_ab), « autres » (cons_other) ;
+   * Provinces des particuliers : celles cochées (cons_on, cons_qc, cons_bc, cons_ab, cons_mb, cons_ns, cons_nl), « autres » (cons_other) ;
    * sans case cochée, la province du travailleur autonome.
    */
   function consumerProvinces(raw, province) {
@@ -184,6 +184,10 @@
       copy_days: copyDays ? fmt.num(copyDays) : "",
       start_days: R("ca_consumer_start_delay_days", "days") ? fmt.num(R("ca_consumer_start_delay_days", "days")) : "",
       info_cancel_days: R("ca_consumer_info_cancel_days", "days") ? fmt.num(R("ca_consumer_info_cancel_days", "days")) : "",
+      // Terre-Neuve-et-Labrador : 10 jours au lieu de 7 (art. 32(1)a)), précisé seulement pour ces clients.
+      info_cancel_nl: cons.list.indexOf("NL") > -1 && R("ca_consumer_info_cancel_days", "nl_days")
+        ? (fr ? " (" + fmt.num(R("ca_consumer_info_cancel_days", "nl_days")) + " jours à Terre-Neuve-et-Labrador)"
+          : " (" + fmt.num(R("ca_consumer_info_cancel_days", "nl_days")) + " days in Newfoundland and Labrador)") : "",
       refund_days: R("ca_consumer_refund_days", "days") ? fmt.num(R("ca_consumer_refund_days", "days")) : ""
     };
     return { flags: flags, text: text, blocks: {}, checks: checks };
