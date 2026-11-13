@@ -1,5 +1,14 @@
 # Journal des modifications
 
+## 2026-11-13 (soir) — Canada : CGV pour les particuliers de l'Île-du-Prince-Édouard
+
+- Générateur de *terms and conditions* / conditions générales : particuliers de l'Île-du-Prince-Édouard ajoutés (loi sur la
+  protection du consommateur sans règle sur les contrats à distance ; loi sur la vente directe non applicable sans contact
+  en personne, art. 5(3)) ; l'île figure parmi les provinces à 10 jours pour les contrats signés chez le client.
+- Nouveau-Brunswick : nouvelle loi de 2024 non proclamée, laissé parmi les « autres provinces » ; Saskatchewan : site
+  officiel toujours illisible par l'outil.
+- Tests : test des cases et des provinces, parcours navigateur des deux pages.
+
 ## 2026-11-13 (fin d'après-midi) — Canada : CGV pour les particuliers de trois provinces de plus
 
 - Générateur de *terms and conditions* / conditions générales (/ca/ et /ca/fr/) : particuliers du Manitoba, de la

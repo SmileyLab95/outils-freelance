@@ -106,15 +106,16 @@ test("provinces des particuliers : cochées, sinon celle du travailleur autonome
   assert.deepEqual(C.consumerProvinces({ cons_qc: "on", cons_bc: "on" }, "ON"), { list: ["QC", "BC"], other: false });
   assert.deepEqual(C.consumerProvinces({}, "AB"), { list: ["AB"], other: false });
   assert.deepEqual(C.consumerProvinces({}, "MB"), { list: ["MB"], other: false }, "Manitoba : loi lue le 13/11/2026");
-  assert.deepEqual(C.consumerProvinces({}, "PE"), { list: [], other: true });
+  assert.deepEqual(C.consumerProvinces({}, "PE"), { list: ["PE"], other: false }, "Île-du-Prince-Édouard : lois lues le 13/11/2026");
+  assert.deepEqual(C.consumerProvinces({}, "NB"), { list: [], other: true }, "Nouveau-Brunswick : loi de 2024 non proclamée");
   assert.deepEqual(C.consumerProvinces({ cons_mb: "on", cons_ns: "on", cons_nl: "on", cons_other: "on" }, "ON"),
     { list: ["MB", "NS", "NL"], other: true });
   assert.deepEqual(C.consumerProvinces({ cons_other: "on" }, "QC"), { list: [], other: true });
   assert.deepEqual(C.consumerProvinces({}, ""), { list: [], other: false });
-  assert.ok(codes(prep({ ...OK, clients: "part", province: "PE" })).includes("other_provinces"));
-  for (const p of ["MB", "NS", "NL"]) assert.ok(!codes(prep({ ...OK, clients: "part", province: p })).includes("other_provinces"), p);
+  for (const p of ["NB", "SK", "YT", "NT", "NU"]) assert.ok(codes(prep({ ...OK, clients: "part", province: p })).includes("other_provinces"), p);
+  for (const p of ["MB", "NS", "NL", "PE"]) assert.ok(!codes(prep({ ...OK, clients: "part", province: p })).includes("other_provinces"), p);
   assert.ok(!codes(prep({ ...OK, clients: "part", province: "ON" })).includes("other_provinces"));
-  assert.ok(!codes(prep({ ...OK, clients: "pro", province: "PE" })).includes("other_provinces"), "entreprises seulement : pas de mention");
+  assert.ok(!codes(prep({ ...OK, clients: "pro", province: "NB" })).includes("other_provinces"), "entreprises seulement : pas de mention");
   assert.equal(prep({ ...OK, clients: "part", province: "QC" }).flags.qc_cons, "on");
   assert.equal(prep({ ...OK, clients: "pro", province: "QC" }).flags.qc_cons, "off");
 });
@@ -213,9 +214,9 @@ test("pages : une case par province détaillée, reconnue par le moteur", () => 
   for (const lang of ["en", "fr"]) {
     const html = readFileSync(new URL("../../" + PAGES[lang], import.meta.url), "utf8");
     const boxes = [...html.matchAll(/name="cons_([a-z]+)"/g)].map((m) => m[1]);
-    assert.deepEqual(boxes, ["on", "qc", "bc", "ab", "mb", "ns", "nl", "other"], lang);
+    assert.deepEqual(boxes, ["on", "qc", "bc", "ab", "mb", "ns", "nl", "pe", "other"], lang);
     for (const b of boxes.filter((x) => x !== "other"))
-      assert.deepEqual(C.consumerProvinces({ ["cons_" + b]: "on" }, "PE").list, [b.toUpperCase()], `${lang} : ${b}`);
+      assert.deepEqual(C.consumerProvinces({ ["cons_" + b]: "on" }, "NB").list, [b.toUpperCase()], `${lang} : ${b}`);
   }
 });
 

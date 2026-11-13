@@ -2983,7 +2983,7 @@ const tests = {
       !(await notices()).includes("are not detailed here"), "T&Cs CA : consommateurs de Terre-Neuve-et-Labrador, 10 jours");
     await page.uncheck("#cg-cons-nl");
     await page.check("#cg-cons-other");
-    check((await notices()).includes("other than Ontario, Quebec, British Columbia, Alberta, Manitoba, Nova Scotia and Newfoundland and Labrador"),
+    check((await notices()).includes("other than Ontario, Quebec, British Columbia, Alberta, Manitoba, Nova Scotia, Newfoundland and Labrador and Prince Edward Island"),
       "T&Cs CA : autres provinces signalées");
     await page.uncheck("#cg-cons-other");
     await page.check("#cg-at-home");

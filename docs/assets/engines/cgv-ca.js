@@ -34,7 +34,7 @@
     NU: { en: "Nunavut", fr: "le Nunavut", fr_of: "du Nunavut", fr_in: "au Nunavut" }
   };
   // Provinces dont les règles sur les particuliers ont été lues (les autres : mention générale).
-  var DETAILED = ["ON", "QC", "BC", "AB", "MB", "NS", "NL"];
+  var DETAILED = ["ON", "QC", "BC", "AB", "MB", "NS", "NL", "PE"];
 
   var WORDS = {
     en: {
@@ -76,7 +76,7 @@
   }
 
   /**
-   * Provinces des particuliers : celles cochées (cons_on, cons_qc, cons_bc, cons_ab, cons_mb, cons_ns, cons_nl), « autres » (cons_other) ;
+   * Provinces des particuliers : celles cochées (cons_on, cons_qc, cons_bc, cons_ab, cons_mb, cons_ns, cons_nl, cons_pe), « autres » (cons_other) ;
    * sans case cochée, la province du travailleur autonome.
    */
   function consumerProvinces(raw, province) {

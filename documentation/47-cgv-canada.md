@@ -19,8 +19,9 @@ au Québec) et la page le dit.
 donne le droit applicable entre entreprises) ; clients entreprises partout au Canada ; particuliers servis **à distance**
 (Internet, email, téléphone) ou **dans l'établissement du travailleur autonome** ; règles détaillées pour les
 particuliers de l'Ontario, du Québec, de la Colombie-Britannique, de l'Alberta et, depuis le 13/11/2026 (§ 6), du
-Manitoba, de la Nouvelle-Écosse et de Terre-Neuve-et-Labrador ; mention générale pour les autres provinces et territoires
-(Saskatchewan, Nouveau-Brunswick, Île-du-Prince-Édouard, territoires : lois non lues à ce jour).
+Manitoba, de la Nouvelle-Écosse, de Terre-Neuve-et-Labrador et de l'Île-du-Prince-Édouard ; mention générale pour les
+autres provinces et territoires (Saskatchewan et territoires : lois non lues à ce jour ; Nouveau-Brunswick : loi de 2024
+non proclamée).
 **Hors champ** (signalé sur la page) : vente de biens ; **contrats conclus en personne chez le particulier ou hors de
 l'établissement** (*direct agreements*, *direct sales contracts*, commerçant itinérant au Québec : permis et formulaires
 réglementaires propres à chaque province, non reproduits) ; abonnements reconduits automatiquement ; services
@@ -45,8 +46,8 @@ familiales ou domestiques (Ontario, art. 1 ; Québec, art. 2 ; Alberta, art. 1).
 | **Langue (Québec)** : contrat d'adhésion d'abord remis en français | `qc_adhesion_contract_french` (existante) | Page anglaise : avertissement et lien vers la page française dès qu'il y a un client au Québec |
 | **Cession du droit d'auteur** : une cession ou une licence n'est valable que **par écrit signé** par le titulaire ou son mandataire ; droits moraux incessibles, renonciation possible | *Copyright Act*, art. 13(4) et 14.1(2) et (3) (lus : la cession seule ne vaut pas renonciation aux droits moraux) ; `ca_copyright_assignment` | Article « Intellectual property », contrôle (devis signé) |
 
-**Points signalés, non tranchés** : lois des autres provinces et territoires non lues (Saskatchewan, Nouveau-Brunswick,
-Île-du-Prince-Édouard, territoires ; mention générale : leurs lois de protection du consommateur s'appliquent aussi) ; montants réglementaires de la Colombie-Britannique non lus (les
+**Points signalés, non tranchés** : lois des autres provinces et territoires non lues (Saskatchewan, territoires ;
+Nouveau-Brunswick dès la proclamation de sa loi de 2024 ; mention générale : leurs lois de protection du consommateur s'appliquent aussi) ; montants réglementaires de la Colombie-Britannique non lus (les
 obligations sont appliquées quel que soit le montant, par prudence) ; art. 54.4 a) (Québec) et art. 4 et 5 du règlement albertain relus mot pour mot le 30/10/2026 ; la qualification de contrat d'adhésion (C.c.Q. 1379)
 dépend du cas : la page le dit.
 
@@ -146,6 +147,24 @@ la page (présentation, question fréquente) mis à jour dans les deux langues. 
 langues), 5 mutants du moteur détectés, parcours navigateur des deux pages (62 points, accessibilité comprise), captures
 relues.
 
+**Même jour, soir : Île-du-Prince-Édouard, Nouveau-Brunswick, Saskatchewan.**
+
+- **Île-du-Prince-Édouard** (ajoutée) : la *Consumer Protection Act* (consolidée au 30/03/2026) ne traite que du crédit,
+  sans règle sur les contrats à distance ou en ligne. La *Direct Sellers Act* vise la vente « de porte en porte, par
+  téléphone ou par la poste » (art. 1(c)), mais **ne s'applique pas** au contrat sollicité, négocié et conclu sans aucun
+  contact en personne, à celui de 100 $ ou moins, ni à celui conclu dans l'établissement du vendeur, entre autres
+  (art. 5(3)a), b) et d)). Le texte
+  commun s'applique donc aux particuliers de l'île ; le contrat signé chez le client reste hors champ (licence, contrat
+  signé avec l'encadré « BUYER'S RIGHT TO CANCEL » du règlement, annulation dans les 10 jours : ajouté au message « hors
+  champ »). Lecture en deux temps : la définition seule laissait croire que la vente par téléphone était visée ;
+  l'exclusion de l'art. 5(3) l'écarte.
+- **Nouveau-Brunswick** (non ajouté) : la nouvelle *Consumer Protection Act* (2024, c. 1, division B : contrats à
+  distance et par Internet, art. 28 à 37) entre en vigueur par proclamation ; le rapport annuel 2024-2025 de la
+  Commission des services financiers et des services aux consommateurs indique qu'elle n'est pas proclamée. À ajouter dès
+  sa proclamation.
+- **Saskatchewan** (non ajoutée) : publications.saskatchewan.ca refuse toujours l'outil de lecture (certificat), non
+  contourné.
+
 ## Annexe : sources lues (30/10/2026, outil « Lire une source officielle »)
 
 | Source | Lecture | Contenu relevé |
@@ -169,3 +188,6 @@ relues.
 | Nouvelle-Écosse, *Consumer Protection Act*, R.S.N.S. 1989, c. 92 (nslegislature.ca, à jour au 3 octobre 2025), lue le 13/11/2026 | Art. 21V à 21AF lus | Définitions (consommateur, services à des fins personnelles, familiales ou domestiques) ; 21X : renseignements prescrits avant le contrat ; 21Y : accepter, refuser, corriger ; 21Z : exemplaire sous 15 jours ; 21AA à 21AF : annulation selon le règlement, remboursement sous 15 jours, recours contre l'émetteur de la carte ; aucune occurrence d'« arbitrat » |
 | Nouvelle-Écosse, *Internet Sales Contract Regulations*, N.S. Reg. 91/2002 (Registry of Regulations, consolidation non officielle), lu le 13/11/2026 | Lu en entier, SHA-256 68c965ba…95d8 | Art. 2 : moins de 50 $ exclu ; art. 3 : 13 renseignements ; art. 4 : en évidence, clairs, conservables ou imprimables ; art. 5 : exemplaire avec le nom du consommateur et la date ; art. 6 : annulation jusqu'à 7 jours après l'exemplaire, 30 jours sans exemplaire, avant le début des services s'ils ont 30 jours de retard ; art. 7 : avis par tout moyen |
 | Terre-Neuve-et-Labrador, *Consumer Protection and Business Practices Act*, SNL 2009, c. C-31.1 (assembly.nl.ca), lue le 13/11/2026 | Partie V, divisions 2 et 3 lues, SHA-256 7c402fa1…7f55 | Art. 28 : contrat à distance = non conclu en personne ; art. 29 : renseignements avant le contrat (ceux de l'art. 24, courriel, description détaillée, devise, livraison, politiques d'annulation et de remboursement), clairs et compréhensibles ; art. 30 : sous forme électronique, consultés, conservables et imprimables, possibilité de corriger, d'accepter ou de refuser ; art. 31 : exemplaire sous 15 jours, avec le nom du consommateur et la date (par courriel : reçu le 3e jour) ; **art. 32 : annulation dans les 10 jours** suivant la réception de l'exemplaire si les art. 30 ou 31 ne sont pas respectés, 30 jours sans exemplaire, avant la fourniture si elle a 30 jours de retard ; art. 33 : remboursement sous 15 jours ; division 3 (contrats de service à distance) abrogée en 2022 ; aucune occurrence d'« arbitrat » |
+| Île-du-Prince-Édouard, *Consumer Protection Act*, R.S.P.E.I. 1988, c. C-19 (consolidation au 30/03/2026), lue le 13/11/2026 | Recherche par mots, SHA-256 8242f95b…c0e | 28 articles (registraire, crédit, hypothèques) ; aucune occurrence de « internet », « distance », « remote », « electronic », « cancel » ni « arbitrat » |
+| Île-du-Prince-Édouard, *Direct Sellers Act*, R.S.P.E.I. 1988, c. D-11 (consolidation au 30/03/2026) et *Direct Sales Contract Regulations* (consolidation au 01/02/2004, SHA-256 7543e167…696e), lus le 13/11/2026 | Art. 1, 4, 5, 9 à 10.3 et règlement lus | Art. 1(c) : vente directe de porte en porte, par téléphone ou par la poste ; art. 5(1) : licence ; **art. 5(3) : ne s'applique pas au contrat conclu sans aucun contact en personne, de 100 $ ou moins, ou dans l'établissement du vendeur** ; art. 9 et 10 : contrat écrit signé, copie ; art. 10.1 : annulation dans les 10 jours, un an dans certains cas ; art. 10.3 : remboursement sous 15 jours ; règlement : mentions et encadré « BUYER'S RIGHT TO CANCEL » |
+| Nouveau-Brunswick, *Consumer Protection Act*, 2024, c. 1 (laws.gnb.ca, à jour au 7 juin 2024), lue le 13/11/2026 | Passages lus | Division B (art. 28 à 37), contrats à distance et par Internet, applicable aux contrats conclus après l'entrée en vigueur ; entrée en vigueur par proclamation, non proclamée d'après le rapport annuel 2024-2025 de la Commission |
