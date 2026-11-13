@@ -30,7 +30,8 @@ from datetime import datetime, timezone
 # canadiennes : Ontario (ontario.ca), Québec (gouv.qc.ca, quebec.ca), Colombie-Britannique (gov.bc.ca), Alberta
 # (alberta.ca) ; sites des autres gouvernements provinciaux et territoriaux ; lois publiées par les assemblées de
 # Nouvelle-Écosse (nslegislature.ca), de Terre-Neuve-et-Labrador (assembly.nl.ca) et du Nunavut (nunavutlegislation.ca) ;
-# gnwt.ca, domaine du gouvernement des Territoires du Nord-Ouest (lois publiées par le ministère de la Justice).
+# gnwt.ca, domaine du gouvernement des Territoires du Nord-Ouest (lois publiées par le ministère de la Justice) ;
+# sos.state.co.us, Secretary of State du Colorado, éditeur officiel du Code of Colorado Regulations (règles du FAMLI).
 OFFICIELS = (
     "gouv.fr", "cnil.fr", "service-public.fr", "urssaf.fr", "ameli.fr", "francetravail.fr", "assemblee-nationale.fr",
     "senat.fr", "inpi.fr", "banque-france.fr", "europa.eu",
@@ -38,7 +39,7 @@ OFFICIELS = (
     "canada.ca", "gc.ca", "revenuquebec.ca", "bankofcanada.ca", "ontario.ca", "gouv.qc.ca", "quebec.ca", "gov.bc.ca",
     "alberta.ca", "saskatchewan.ca", "gov.mb.ca", "gnb.ca", "novascotia.ca", "princeedwardisland.ca", "gov.nl.ca",
     "yukon.ca", "gov.nt.ca", "gnwt.ca", "gov.nu.ca", "nslegislature.ca", "assembly.nl.ca", "nunavutlegislation.ca",
-    "iana.org", "fnfe-mpe.org",
+    "sos.state.co.us", "iana.org", "fnfe-mpe.org",
 )
 LIMITE = 20_000_000          # octets lus au plus
 PASSAGE = 600                # caractères affichés de part et d'autre d'un mot trouvé

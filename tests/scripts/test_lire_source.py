@@ -26,6 +26,9 @@ class LireSource(unittest.TestCase):
         self.assertTrue(L.autorise("https://nslegislature.ca/sites/default/files/legc/statutes/remembrance%20day.pdf"))
         self.assertFalse(L.autorise("https://assembly.nl.ca.example.com/l02.htm"))
         self.assertTrue(L.autorise("https://gnwt.ca/resources/employment-standards-act?justice=en"))
+        self.assertTrue(L.autorise("https://www.sos.state.co.us/CCR/GenerateRulePdf.do?ruleVersionId=9914"),
+                        "Code of Colorado Regulations (Secretary of State)")
+        self.assertFalse(L.autorise("https://state.co.us/"), "seulement le site du Secretary of State")
         self.assertTrue(L.autorise("https://cnil.fr/"))
         self.assertTrue(L.autorise("https://entreprendre.service-public.gouv.fr/vosdroits/F23566"), "sites de l'État en gouv.fr")
         self.assertTrue(L.autorise("https://www.ameli.fr/assure/remboursements/indemnites-journalieres"), "Assurance maladie")
