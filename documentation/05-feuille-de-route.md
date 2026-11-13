@@ -9,7 +9,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 
 ## Où en est-on ?
 
-*Mis à jour le 12/11/2026 (soir).*
+*Mis à jour le 13/11/2026 (nuit).*
 
 - **Priorité (décision D10)** : le site et la plateforme d'abord ; noms de domaine, Gumroad et affiliation à la fin.
   Règle de qualité maximale pour tout produit ou service (D11, charte dans la [méthode](04-methode-de-travail.md#charte-qualité)).
@@ -438,8 +438,11 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   Loi instituant des jours de fête légale), Colombie-Britannique, Alberta, Manitoba, Ontario, Québec (normes du travail
   et fête nationale), Nouveau-Brunswick (avec Family Day et New Brunswick Day datés), Nouvelle-Écosse (page du
   ministère, Heritage Day daté), Terre-Neuve-et-Labrador, Île-du-Prince-Édouard, Territoires du Nord-Ouest ; restent la
-  Saskatchewan, le Yukon et le Nunavut (sites refusant l'outil : autres sources officielles à trouver) et les dates des
-  fêtes que les lois ne datent pas (listes datées des gouvernements provinciaux) ([42](42-jours-ouvres.md) § 10) ; l'outil de lecture accepte désormais les lois des
+  Saskatchewan (certificat du site des publications refusé par l'outil), le Yukon et le Nunavut (403), non contournés, et
+  les dates des fêtes que les lois ne datent pas (Alberta Family Day, Islander Day, Memorial Day…) ; le 13/11 : fête du
+  Travail lue dans la loi d'interprétation fédérale, liste datée de la Colombie-Britannique trouvée
+  ([42](42-jours-ouvres.md) § 10). Si ces trois juridictions restent illisibles, publier les onze autres et le fédéral
+  en le disant ; l'outil de lecture accepte désormais les lois des
   assemblées de Nouvelle-Écosse, de Terre-Neuve-et-Labrador et du Nunavut. Taux H.10 de la Réserve
   fédérale : fichier sans en-tête CORS, non lisible depuis un navigateur ([49](49-devises.md)). *Maternity Allowance* :
   pages de GOV.UK inchangées (11/02/2025), effet des crédits de classe 2 toujours non précisé.
