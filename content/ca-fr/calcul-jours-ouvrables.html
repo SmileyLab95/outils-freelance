@@ -1,0 +1,170 @@
+<!--{
+  "id": "workdays",
+  "slug": "calcul-jours-ouvrables/",
+  "title": "Calcul des jours ouvrables et des jours fériés au Canada",
+  "description": "Comptez les jours ouvrables et facturables d'un mois ou d'une année dans votre province, voyez ses jours fériés et calculez un délai en jours ouvrables.",
+  "menu": "Jours ouvrables et jours fériés",
+  "icon": "📆",
+  "blurb": "Jours facturables d'un mois ou d'une année, jours fériés et délais.",
+  "app": "Calcul des jours ouvrables (Canada)",
+  "scripts": ["engines/jours.js", "tools/jours.js"],
+  "rules": "ca",
+  "sources": ["statutory_holidays"],
+  "priority": 0.8,
+  "faq": [
+    ["Combien y a-t-il de jours ouvrables en 2026 ?", "Cela dépend de la province : du lundi au vendredi, 253 jours ouvrables au Québec et en Ontario (261 jours de semaine moins 8 jours fériés en semaine ; en Ontario, le lendemain de Noël tombe un samedi), 252 en Alberta, au Manitoba et dans les entreprises de compétence fédérale, 250 en Colombie-Britannique. Retirez vos jours de vacances pour obtenir vos jours facturables."],
+    ["Quels sont les jours fériés au Québec ?", "La Loi sur les normes du travail en compte 8 : le 1er janvier, le Vendredi saint ou le lundi de Pâques, au choix de l'employeur, le lundi qui précède le 25 mai (Journée nationale des patriotes), le 24 juin (fête nationale), le 1er juillet ou, s'il tombe un dimanche, le 2 juillet (fête du Canada), le 1er lundi de septembre (fête du Travail), le 2e lundi d'octobre (Action de grâce) et le 25 décembre."],
+    ["Vendredi saint ou lundi de Pâques ?", "Au Québec, la loi laisse le choix à l'employeur. Le calculateur propose les deux : choisissez celui que prennent vos clients, ou vous-même."],
+    ["Que se passe-t-il quand un jour férié tombe un dimanche ?", "Là où la loi nomme la fête du Canada, elle est reportée au lundi 2 juillet quand le 1er juillet est un dimanche (prochaine fois en 2029). Au Québec, quand le 24 juin est un dimanche, le 25 juin est aussi chômé. Pour les autres fêtes, un congé compensatoire dépend de la loi et de chaque employeur : le calculateur ne l'ajoute pas."],
+    ["La Saskatchewan, le Yukon et le Nunavut sont-ils couverts ?", "Pas encore : leurs textes officiels n'ont pas pu être lus et vérifiés. Consultez en attendant la liste officielle de votre province ou de votre territoire."],
+    ["Les jours fériés sont-ils comptés comme des jours de congé ?", "Oui, par défaut. Travailleur autonome, vous choisissez : cochez « Je travaille les jours fériés » pour les compter comme des jours travaillés."]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Gratuit · jours fériés tirés des lois</span>
+    <h1>Jours ouvrables et jours fériés</h1>
+    <p class="lead">Combien de jours pouvez-vous facturer ce mois-ci ou cette année ? Quand tombe un délai de 10 jours ouvrables ? Le calculateur suit les jours fériés fixés par la loi sur les normes du travail de votre province ou de votre territoire, ou par le Code canadien du travail, et votre propre semaine de travail.</p>
+    <ul class="trust"><li>Jours fériés tirés des lois officielles</li><li>Votre province ou votre territoire</li><li>Jours facturables et délais</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="jo-form" onsubmit="return false">
+      <h2>La période</h2>
+      <div class="fields">
+        <div class="field"><label for="jo-year">Année</label>
+          <input type="number" id="jo-year" name="year" min="2024" max="2030" step="1" inputmode="numeric" data-save></div>
+        <div class="field"><label for="jo-period">Période</label>
+          <select id="jo-period" name="period" data-save>
+            <option value="year">Toute l'année</option>
+            <option value="q1">Janvier à mars</option>
+            <option value="q2">Avril à juin</option>
+            <option value="q3">Juillet à septembre</option>
+            <option value="q4">Octobre à décembre</option>
+            <option value="m1">Janvier</option>
+            <option value="m2">Février</option>
+            <option value="m3">Mars</option>
+            <option value="m4">Avril</option>
+            <option value="m5">Mai</option>
+            <option value="m6">Juin</option>
+            <option value="m7">Juillet</option>
+            <option value="m8">Août</option>
+            <option value="m9">Septembre</option>
+            <option value="m10">Octobre</option>
+            <option value="m11">Novembre</option>
+            <option value="m12">Décembre</option>
+            <option value="dates">Dates précises</option>
+          </select></div>
+        <div class="field" data-when="dates" hidden><label for="jo-from">Du</label>
+          <input type="date" id="jo-from" name="from" data-save></div>
+        <div class="field" data-when="dates" hidden><label for="jo-to">Au (inclus)</label>
+          <input type="date" id="jo-to" name="to" data-save></div>
+        <div class="field full"><label for="jo-zone">Province ou territoire</label>
+          <select id="jo-zone" name="zone" aria-describedby="jo-zone-hint" data-save>
+            <option value="ab">Alberta</option>
+            <option value="bc">Colombie-Britannique</option>
+            <option value="pe">Île-du-Prince-Édouard</option>
+            <option value="mb">Manitoba</option>
+            <option value="nb">Nouveau-Brunswick</option>
+            <option value="ns">Nouvelle-Écosse</option>
+            <option value="on">Ontario</option>
+            <option value="qc-good-friday" selected>Québec (Vendredi saint)</option>
+            <option value="qc-easter-monday">Québec (lundi de Pâques)</option>
+            <option value="nl">Terre-Neuve-et-Labrador</option>
+            <option value="nt">Territoires du Nord-Ouest</option>
+            <option value="federal">Entreprise de compétence fédérale</option>
+          </select>
+          <span class="hint" id="jo-zone-hint"></span></div>
+      </div>
+      <p class="small muted" style="margin: 12px 0 0;">La Saskatchewan, le Yukon et le Nunavut ne sont pas encore couverts. Vos clients et votre banque peuvent fermer d'autres jours.</p>
+      <h3>Votre semaine de travail</h3>
+      <fieldset class="weekdays">
+        <legend class="sr-only">Jours travaillés</legend>
+        <label class="check"><input type="checkbox" name="w1" checked data-save><span>Lundi</span></label>
+        <label class="check"><input type="checkbox" name="w2" checked data-save><span>Mardi</span></label>
+        <label class="check"><input type="checkbox" name="w3" checked data-save><span>Mercredi</span></label>
+        <label class="check"><input type="checkbox" name="w4" checked data-save><span>Jeudi</span></label>
+        <label class="check"><input type="checkbox" name="w5" checked data-save><span>Vendredi</span></label>
+        <label class="check"><input type="checkbox" name="w6" data-save><span>Samedi</span></label>
+        <label class="check"><input type="checkbox" name="w0" data-save><span>Dimanche</span></label>
+      </fieldset>
+      <div class="fields">
+        <label class="check full"><input type="checkbox" id="jo-work-holidays" name="workHolidays" data-save>
+          <span>Je travaille les jours fériés</span></label>
+        <div class="field full"><label for="jo-leave">Vacances dans la période</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="jo-leave" name="leave" value="0" aria-describedby="jo-leave-hint" data-save><span>jours</span></div>
+          <span class="hint" id="jo-leave-hint">En jours travaillés : 4 semaines = 20 jours si vous travaillez 5 jours par semaine.</span></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="result-hero" role="status" aria-atomic="true">
+        <div class="label">Jours facturables</div>
+        <div class="big" id="jo-billable">–</div>
+        <div class="sub" id="jo-sub">–</div>
+      </div>
+      <ul class="result-list card" style="padding: 6px 18px; margin-top: 16px;">
+        <li><span>Jours civils</span><b id="jo-calendar">–</b></li>
+        <li><span>Jours ouvrables (votre semaine de travail)</span><b id="jo-ouvres">–</b></li>
+        <li><span>Jours fériés un jour travaillé</span><b id="jo-off">–</b></li>
+      </ul>
+      <p class="notice warn" id="jo-warn" aria-live="polite" hidden style="margin-top: 16px;"></p>
+      <table class="mini-table holiday-table" id="jo-list" style="margin-top: 8px;">
+        <caption id="jo-list-title">Jours fériés de la période</caption>
+        <thead><tr><th scope="col" class="text">Date</th><th scope="col" class="text">Jour férié</th><th scope="col" class="text">Pour vous</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="jo-delay-form" onsubmit="return false">
+      <h2>Calculer un délai</h2>
+      <p class="small muted">Même province et même semaine de travail que ci-dessus.</p>
+      <div class="fields">
+        <div class="field"><label for="jo-start">À partir du</label>
+          <input type="date" id="jo-start" name="start" aria-describedby="jo-start-hint">
+          <span class="hint" id="jo-start-hint">Ce jour n'est pas compté.</span></div>
+        <div class="field"><label for="jo-n">Nombre de jours</label>
+          <input type="number" id="jo-n" name="n" value="10" min="0" max="3650" step="1" inputmode="numeric" data-save></div>
+        <div class="field full"><label for="jo-mode">Type de jours</label>
+          <select id="jo-mode" name="mode" data-save>
+            <option value="ouvre">Jours ouvrables (votre semaine de travail)</option>
+            <option value="calendaire">Jours civils (tous les jours)</option>
+          </select></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="result-hero" role="status" aria-atomic="true">
+        <div class="label">Échéance</div>
+        <div class="big" id="jo-due">–</div>
+        <div class="sub" id="jo-due-sub">–</div>
+      </div>
+      <p class="formula" id="jo-explain" style="margin-top: 16px;">–</p>
+    </div>
+  </div>
+</section>
+
+<script type="application/json" id="jours-data">{"store": "jours-ca-fr", "sep": " ; ", "substitute": " (la fête tombe un dimanche)", "zone_notes": {"*": "Jours fériés de la loi sur les normes du travail de la province ou du territoire.", "federal": "Code canadien du travail : entreprises de compétence fédérale, comme les banques, le transport aérien et le transport interprovincial.", "qc-good-friday": "L'employeur choisit le Vendredi saint ou le lundi de Pâques (Loi sur les normes du travail).", "qc-easter-monday": "L'employeur choisit le Vendredi saint ou le lundi de Pâques (Loi sur les normes du travail).", "ns": "Le 11 novembre, la Remembrance Day Act oblige la plupart des entreprises à fermer, avec des exceptions ; ce n'est pas un jour férié du Labour Standards Code.", "nl": "Le Memorial Day tombe le 1er juillet, jour de la fête du Canada."}, "days": ["{n} jour", "{n} jours"], "period": ["Du {from} au {to} : {n} jour ouvrable", "Du {from} au {to} : {n} jours ouvrables"], "period_off": [" ({n} jour férié en moins)", " ({n} jours fériés en moins)"], "period_leave": [", moins {n} jour de vacances.", ", moins {n} jours de vacances."], "end": ".", "status": ["Congé", "Travaillé", "Jour de repos"], "no_holiday": "Aucun jour férié dans la période.", "no_workday": "Cochez au moins un jour travaillé : sans jour coché, le calcul retient du lundi au vendredi.", "leave_range": "Les vacances doivent être comprises entre 0 et {max} (les jours ouvrables de la période).", "choose_year": "Choisissez une année de {min} à {max} : le calculateur suit les lois lues en novembre 2026.", "choose_dates": "Choisissez deux dates de {min} à {max}, la seconde après la première.", "delay_invalid": "Indiquez un nombre entier de jours, de 0 à 3 650. Les jours ouvrables ne se comptent que de {min} à {max}, les années que couvre le calculateur.", "due": "{date} : {n} {noun} après le {start}.", "modes": {"ouvre": ["jour ouvrable", "jours ouvrables"], "calendaire": ["jour civil", "jours civils"]}, "explain_calendar": "Tous les jours comptent, y compris les fins de semaine et les jours fériés.", "explain_skipped": ["{n} jour non compté (repos ou jour férié) : {list}", "{n} jours non comptés (repos ou jours fériés) : {list}"], "etc": ", etc.", "explain_none": "Aucun jour sauté."}</script>
+
+<section class="section prose">
+  <h2>Jours ouvrables, jours fériés et délais</h2>
+  <ul>
+    <li><strong>Jours ouvrables :</strong> les jours où vous travaillez, du lundi au vendredi par défaut, moins les jours fériés que vous prenez.</li>
+    <li><strong>Jours fériés :</strong> ceux de la loi sur les normes du travail de chaque province ou territoire, ou du Code canadien du travail pour les entreprises de compétence fédérale. Chaque date est calculée selon la règle que fixe la loi : une date fixe, Pâques, le troisième lundi de février, le premier lundi d'août ou de septembre, le deuxième lundi d'octobre, le lundi qui précède le 25 mai.</li>
+    <li><strong>Jours civils :</strong> tous les jours, fins de semaine et jours fériés compris.</li>
+  </ul>
+  <h3>Les jours fériés qui tombent un dimanche</h3>
+  <p>La fête du Canada est le 2 juillet quand le 1er juillet est un dimanche (Loi instituant des jours de fête légale), comme le disent aussi la Loi sur les normes du travail du Québec et la liste officielle de l'Alberta ; le calculateur l'applique là où la loi nomme la fête du Canada. Les lois du Manitoba et de l'Île-du-Prince-Édouard nomment le 1er juillet lui-même. Au Québec, quand le 24 juin est un dimanche, le 25 juin est aussi chômé pour le salarié qui ne travaille pas normalement le dimanche. Les autres congés compensatoires, quand un jour férié tombe un jour de repos, dépendent de chaque loi et de chaque employeur : ils ne sont pas comptés.</p>
+  <h3>Vos jours facturables</h3>
+  <p>Pour fixer votre tarif, partez des jours ouvrables de l'année, retirez vos vacances et le temps que vous ne facturez pas (prospection, administration, formation) : le <a href="{{link:rate}}">calculateur de taux horaire</a> le fait pour vous.</p>
+  <h3>Ce que le calculateur ne compte pas</h3>
+  <p>Les jours fériés de ces lois visent les salariés. Vos clients, votre banque et les bureaux du gouvernement peuvent fermer d'autres jours, ou rester ouverts certains de ces jours : vérifiez leur calendrier. La Saskatchewan, le Yukon et le Nunavut ne sont pas encore couverts. Un délai fixé par un contrat ou par la loi se compte selon ses propres règles : vérifiez-les pour tout délai qui touche vos droits.</p>
+  <p class="small muted">Lois lues en novembre 2026, pour les années 2024 à 2030. Action de grâce : le deuxième lundi d'octobre, comme dans la loi du Québec et la liste de l'Alberta (la date fédérale est fixée par proclamation). Noms des fêtes : ceux des lois bilingues lues (fédérales, Québec, Territoires du Nord-Ouest) ; ailleurs, le nom français usuel. À titre informatif.</p>
+</section>

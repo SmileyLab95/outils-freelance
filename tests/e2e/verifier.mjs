@@ -570,6 +570,60 @@ const tests = {
       "US: 10 business days after June 26, 2026 → July 13 (Independence Day observed on July 3 skipped)");
     check((await page.$$('#jo-mode option[value="franc"]')).length === 0, "US: no French « jours francs »");
   },
+  async "ca/business-days-calculator/"(page) {
+    const t = async (sel) => (await page.textContent(sel)).replace(/[  ]/g, " ").replace(/\s+/g, " ").trim();
+    const rows = () => page.$$eval("#jo-list tbody tr", (trs) => trs.map((tr) => [...tr.cells].map((c) => c.textContent).join(" | ")));
+    check((await page.inputValue("#jo-year")) === String(new Date().getFullYear()) && (await page.inputValue("#jo-zone")) === "on" &&
+      (await t("#jo-zone-hint")).startsWith("Statutory holidays of the province"), "CA business days: current year and Ontario by default, hint");
+    await page.fill("#jo-year", "2026");
+    check((await t("#jo-billable")) === "253" && (await t("#jo-off")) === "8 days" && (await page.$$("#jo-list tbody tr")).length === 9 &&
+      (await rows()).includes("Sat, Dec 26 | Boxing Day (December 26) | Not a working day") && (await rows()).includes("Mon, Feb 16 | Family Day | Day off"),
+      "CA Ontario 2026: 253 business days, 9 holidays (Boxing Day on a Saturday)");
+    await page.selectOption("#jo-zone", "bc");
+    check((await t("#jo-billable")) === "250" && (await rows()).includes("Mon, Aug 3 | British Columbia Day | Day off"), "CA British Columbia 2026: 250, B.C. Day on August 3");
+    await page.selectOption("#jo-zone", "ns");
+    check((await t("#jo-billable")) === "254" && (await t("#jo-zone-hint")).includes("Remembrance Day Act"), "CA Nova Scotia 2026: 254, Remembrance Day Act note");
+    await page.selectOption("#jo-zone", "qc-easter-monday");
+    check((await rows()).includes("Mon, Apr 6 | Easter Monday | Day off") && !(await rows()).some((r) => r.includes("Good Friday")) &&
+      (await t("#jo-zone-hint")).includes("Good Friday or Easter Monday"), "CA Quebec: Easter Monday zone, employer's choice");
+    await accessible(page, "CA business days: Quebec");
+    await page.fill("#jo-year", "2029");
+    check((await rows()).includes("Mon, Jun 25 | Fête nationale du Québec (the holiday falls on a Sunday) | Day off") &&
+      (await rows()).includes("Mon, Jul 2 | Canada Day (the holiday falls on a Sunday) | Day off") && (await rows()).includes("Sun, Jun 24 | Fête nationale du Québec | Not a working day"),
+      "CA Quebec 2029: June 25 and July 2 when June 24 and July 1 are Sundays");
+    await page.selectOption("#jo-zone", "mb");
+    check((await rows()).includes("Sun, Jul 1 | Canada Day (July 1) | Not a working day") && !(await rows()).some((r) => r.includes("Jul 2")), "CA Manitoba 2029: July 1 itself");
+    await page.fill("#jo-year", "2031");
+    check((await t("#jo-billable")) === "–" && (await t("#jo-sub")).includes("November 2026"), "CA: years after 2030 are refused");
+    await page.fill("#jo-year", "2026");
+    await page.selectOption("#jo-zone", "on");
+    await page.fill("#jo-start", "2026-06-26");
+    await page.fill("#jo-n", "5");
+    await page.selectOption("#jo-mode", "ouvre");
+    check((await t("#jo-due")) === "July 6, 2026" && (await t("#jo-explain")).includes("Wed, Jul 1"), "CA: 5 business days after June 26, 2026 → July 6 (Canada Day skipped)");
+    await page.selectOption("#jo-zone", "federal");
+    check((await t("#jo-zone-hint")).includes("Canada Labour Code") && (await t("#jo-billable")) === "252", "CA federal: Canada Labour Code, 252 in 2026");
+    check((await page.$$('#jo-mode option[value="franc"]')).length === 0, "CA: no French « jours francs »");
+  },
+  async "ca/fr/calcul-jours-ouvrables/"(page) {
+    const t = async (sel) => (await page.textContent(sel)).replace(/[  ]/g, " ").replace(/\s+/g, " ").trim();
+    const rows = () => page.$$eval("#jo-list tbody tr", (trs) => trs.map((tr) => [...tr.cells].map((c) => c.textContent.replace(/[  ]/g, " ")).join(" | ")));
+    check((await page.inputValue("#jo-zone")) === "qc-good-friday", "CA-FR jours ouvrables : Québec (Vendredi saint) par défaut");
+    await page.fill("#jo-year", "2026");
+    check((await t("#jo-billable")) === "253" && (await t("#jo-off")) === "8 jours" && (await rows()).includes("Lun. 18 mai | Journée nationale des patriotes | Congé") &&
+      (await rows()).includes("Ven. 3 avr. | Vendredi saint | Congé"), "CA-FR Québec 2026 : 253 jours ouvrables, noms en français");
+    await page.selectOption("#jo-zone", "nt");
+    check((await rows()).includes("Dim. 21 juin | Journée nationale des peuples autochtones | Jour de repos") && (await t("#jo-billable")) === "251",
+      "CA-FR Territoires du Nord-Ouest : 21 juin (un dimanche en 2026), 251 jours");
+    await page.selectOption("#jo-zone", "qc-good-friday");
+    await page.fill("#jo-start", "2026-06-22");
+    await page.fill("#jo-n", "3");
+    await page.selectOption("#jo-mode", "ouvre");
+    check((await t("#jo-due")) === "26 juin 2026" && (await t("#jo-due-sub")).includes("3 jours ouvrables après le 22 juin 2026") && (await t("#jo-explain")).includes("mer. 24 juin"),
+      "CA-FR : 3 jours ouvrables après le 22 juin 2026 → 26 juin (fête nationale sautée)");
+    await page.selectOption("#jo-mode", "calendaire");
+    check((await t("#jo-due-sub")).includes("3 jours civils"), "CA-FR : jours civils");
+  },
   async "fr/calcul-jours-ouvres/"(page) {
     const t = async (sel) => (await page.textContent(sel)).replace(/[\u00a0\u202f]/g, " ").replace(/\s+/g, " ").trim();
     check((await page.inputValue("#jo-year")) === String(new Date().getFullYear()) && (await page.inputValue("#jo-period")) === "year",
@@ -1934,6 +1988,7 @@ const tests = {
       return Math.abs(back - 60000) < 1 && document.getElementById("h-rate").textContent.trim() === OF.money((profit + 5000) / 1288 * 1.15, 0);
     });
     check(ok, "CA taux horaire : calcul inverse cohérent");
+    check((await page.getAttribute("#h-holidays-hint a", "href")).endsWith("/ca/business-days-calculator/"), "CA hourly rate: link to business days");
   },
   async "ca/invoice-generator/"(page) {
     await page.fill("#iv-me-name", "Alex Morgan Design");
@@ -2283,6 +2338,7 @@ const tests = {
   },
   async "ca/fr/calculateur-taux-horaire/"(page) {
     check((await page.textContent("#h-billable")).replace(/\s/g, "").includes("1299heures"), "CA-FR taux horaire : 1 299 heures facturables");
+    check((await page.getAttribute("#h-holidays-hint a", "href")).endsWith("/ca/fr/calcul-jours-ouvrables/"), "CA-FR taux horaire : lien vers les jours ouvrables");
   },
   async "ca/fr/generateur-facture/"(page) {
     await page.fill("#l-desc-0", "Conception du site Web");

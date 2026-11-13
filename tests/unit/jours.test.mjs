@@ -353,3 +353,148 @@ test("États-Unis : page, menu, chiffres de la FAQ = règles, aide du taux horai
   assert.match(rate, /href="\{\{link:workdays\}\}"/);
   assert.match(rate, /id="h-holidays" name="holidays" value="10"/, "valeur par défaut inchangée");
 });
+
+// ------------------------------------------------------------------------------------------------------------
+// Canada : jours fériés de chaque juridiction calculés par la règle de la loi (data/rules/ca.json, statutory_holidays),
+// contrôlés par les tableaux datés publiés par la Colombie-Britannique (2023 à 2027) et l'Alberta (2026 à 2028).
+
+const CA = ruleValues("ca");
+const ca = (zone, lang) => ({ rules: CA, zone, lang });
+const caEn = readFileSync(new URL("../../content/ca/business-days-calculator.html", import.meta.url), "utf8");
+const caFr = readFileSync(new URL("../../content/ca-fr/calcul-jours-ouvrables.html", import.meta.url), "utf8");
+const frontOf = (page) => JSON.parse(/<!--(\{[\s\S]*?\})-->/.exec(page)[1]);
+const md = (zone, y) => D.holidays(y, CA, zone).map((h) => h.date.slice(5));
+
+test("Canada : années, juridictions, tableaux datés de gov.bc.ca (2024 à 2027) et d'alberta.ca (2026 à 2028)", () => {
+  assert.deepEqual(D.years(CA), { min: 2024, max: 2030 });
+  assert.deepEqual(D.zones(CA), ["federal", "ab", "bc", "mb", "nb", "nl", "ns", "nt", "on", "pe", "qc-good-friday", "qc-easter-monday"]);
+  // gov.bc.ca, « Statutory holidays », page mise à jour le 01/01/2026, lue le 13/11/2026 : 11 jours par an.
+  const bc = {
+    2024: ["01-01", "02-19", "03-29", "05-20", "07-01", "08-05", "09-02", "09-30", "10-14", "11-11", "12-25"],
+    2025: ["01-01", "02-17", "04-18", "05-19", "07-01", "08-04", "09-01", "09-30", "10-13", "11-11", "12-25"],
+    2026: ["01-01", "02-16", "04-03", "05-18", "07-01", "08-03", "09-07", "09-30", "10-12", "11-11", "12-25"],
+    2027: ["01-01", "02-15", "03-26", "05-24", "07-01", "08-02", "09-06", "09-30", "10-11", "11-11", "12-25"],
+  };
+  for (const [y, list] of Object.entries(bc)) assert.deepEqual(md("bc", Number(y)), list, `Colombie-Britannique ${y}`);
+  assert.deepEqual(D.holidays(2026, CA, "bc").map((h) => h.name), ["New Year’s Day", "Family Day", "Good Friday", "Victoria Day", "Canada Day",
+    "British Columbia Day", "Labour Day", "National Day for Truth and Reconciliation", "Thanksgiving Day", "Remembrance Day", "Christmas Day"]);
+  // alberta.ca, « Alberta general holidays », lue le 13/11/2026 : 9 jours par an.
+  const ab = {
+    2026: ["01-01", "02-16", "04-03", "05-18", "07-01", "09-07", "10-12", "11-11", "12-25"],
+    2027: ["01-01", "02-15", "03-26", "05-24", "07-01", "09-06", "10-11", "11-11", "12-25"],
+    2028: ["01-01", "02-21", "04-14", "05-22", "07-01", "09-04", "10-09", "11-11", "12-25"],
+  };
+  for (const [y, list] of Object.entries(ab)) assert.deepEqual(md("ab", Number(y)), list, `Alberta ${y}`);
+  assert.deepEqual(D.holidays(2023, CA, "bc"), [], "2023 hors des années couvertes");
+  assert.deepEqual(D.holidays(2031, CA, "on"), []);
+  assert.deepEqual(D.holidays(2026, CA, "sk"), D.holidays(2026, CA, "federal"), "juridiction inconnue : la première des règles");
+  const unordered = { statutory_holidays: { years: { min: 2026, max: 2026 }, zones: { x: [{ name: "B", date: "12-25" }, { name: "A", paques: -2 }, { name: "C", monday: [2, 3] }] } } };
+  assert.deepEqual(D.holidays(2026, unordered, "x").map((h) => h.name), ["C", "A", "B"], "rangés par date, quel que soit l'ordre des règles");
+  assert.match(ruleEntries("ca").statutory_holidays.source, /^https:\/\/laws-lois\.justice\.gc\.ca\//);
+});
+
+test("Canada : contrôle de la transcription (règle de chaque loi recalculée, nombre de jours par juridiction)", () => {
+  // Règles des lois lues (documentation/42, § 10), refaites ici sans le moteur : jour du mois et jour de la semaine.
+  const wd = (iso) => new Date(`${iso}T12:00:00Z`).getUTCDay();
+  const isMonday = (iso, from, to) => wd(iso) === 1 && Number(iso.slice(8)) >= from && Number(iso.slice(8)) <= to;
+  const rules = {
+    "Family Day": (d) => d.slice(5, 7) === "02" && isMonday(d, 15, 21), "Alberta Family Day": (d) => d.slice(5, 7) === "02" && isMonday(d, 15, 21),
+    "Louis Riel Day": (d) => d.slice(5, 7) === "02" && isMonday(d, 15, 21), "Islander Day": (d) => d.slice(5, 7) === "02" && isMonday(d, 15, 21),
+    "Nova Scotia Heritage Day": (d) => d.slice(5, 7) === "02" && isMonday(d, 15, 21),
+    "Victoria Day": (d) => d.slice(5, 7) === "05" && isMonday(d, 18, 24), "National Patriots’ Day": (d) => d.slice(5, 7) === "05" && isMonday(d, 18, 24),
+    "British Columbia Day": (d) => d.slice(5, 7) === "08" && isMonday(d, 1, 7), "New Brunswick Day": (d) => d.slice(5, 7) === "08" && isMonday(d, 1, 7),
+    "First Monday in August": (d) => d.slice(5, 7) === "08" && isMonday(d, 1, 7),
+    "Labour Day": (d) => d.slice(5, 7) === "09" && isMonday(d, 1, 7), "Thanksgiving Day": (d) => d.slice(5, 7) === "10" && isMonday(d, 8, 14),
+    "Good Friday": (d, y) => d === D.iso(D.day(D.easter(y)) - 2), "Easter Monday": (d, y) => d === D.iso(D.day(D.easter(y)) + 1),
+  };
+  const fixed = { "New Year’s Day": "01-01", "National Indigenous Peoples Day": "06-21", "Canada Day (July 1)": "07-01",
+    "Memorial Day (Canada Day)": "07-01", "National Day for Truth and Reconciliation": "09-30",
+    "Orange Shirt Day (National Day for Truth and Reconciliation)": "09-30", "Remembrance Day": "11-11", "Christmas Day": "12-25",
+    "Boxing Day": "12-26", "Boxing Day (December 26)": "12-26" };
+  const sizes = { federal: 10, ab: 9, bc: 11, mb: 9, nb: 8, nl: 6, ns: 7, nt: 11, on: 9, pe: 8, "qc-good-friday": 8, "qc-easter-monday": 8 };
+  for (const zone of D.zones(CA)) {
+    for (let y = 2024; y <= 2030; y++) {
+      const list = D.holidays(y, CA, zone), sundayJuly = wd(`${y}-07-01`) === 0, sundayJune = wd(`${y}-06-24`) === 0;
+      const extra = zone.startsWith("qc") && sundayJune ? 1 : 0;
+      assert.equal(list.length, sizes[zone] + extra, `${zone} ${y} : nombre de jours`);
+      assert.deepEqual(dates(list), dates(list).slice().sort(), `${zone} ${y} : dans l'ordre`);
+      for (const h of list) {
+        assert.ok(h.date.startsWith(String(y)), `${zone} ${h.name} ${y}`);
+        if (rules[h.name]) assert.ok(rules[h.name](h.date, y), `${zone} ${h.name} ${h.date}`);
+        else if (fixed[h.name]) assert.equal(h.date.slice(5), fixed[h.name], `${zone} ${h.name} ${y}`);
+        else if (h.name === "Canada Day") assert.equal(h.date.slice(5), sundayJuly ? "07-02" : "07-01", `${zone} Canada Day ${y}`);
+        else if (h.name === "Fête nationale du Québec") assert.ok(h.date.endsWith("06-24") || (sundayJune && h.date.endsWith("06-25")), `${zone} ${h.date}`);
+        else assert.fail(`${zone} : jour sans règle de contrôle, ${h.name}`);
+        assert.equal(h.substitute, h.date.endsWith("07-02") || (h.date.endsWith("06-25") && zone.startsWith("qc")), `${zone} ${h.date} : report`);
+      }
+    }
+  }
+  // 2029 : 1er juillet et 24 juin un dimanche.
+  assert.deepEqual(md("federal", 2029).filter((d) => d.startsWith("07")), ["07-02"], "fédéral : fête du Canada le 2 juillet");
+  assert.deepEqual(md("qc-good-friday", 2029).filter((d) => d.startsWith("06") || d.startsWith("07")), ["06-24", "06-25", "07-02"]);
+  for (const zone of ["mb", "pe", "nl"]) assert.ok(md(zone, 2029).includes("07-01") && !md(zone, 2029).includes("07-02"), `${zone} : la loi nomme le 1er juillet`);
+  assert.deepEqual(md("qc-easter-monday", 2026).slice(0, 2), ["01-01", "04-06"], "Québec : lundi de Pâques");
+  assert.ok(!md("on", 2026).includes("11-11") && !md("qc-good-friday", 2026).includes("11-11") && !md("mb", 2026).includes("11-11"));
+  assert.ok(md("ns", 2026).includes("11-11"), "Nouvelle-Écosse : Remembrance Day Act");
+  assert.ok(md("nt", 2026).includes("06-21") && !md("nt", 2026).includes("12-26"));
+});
+
+test("Canada : jours ouvrables 2026, noms en français, délais, années non couvertes", () => {
+  const year = (zone) => D.count("2026-01-01", "2026-12-31", ca(zone)).ouvres;
+  assert.deepEqual(Object.fromEntries(D.zones(CA).map((z) => [z, year(z)])), { federal: 252, ab: 252, bc: 250, mb: 252, nb: 253, nl: 255,
+    ns: 254, nt: 251, on: 253, pe: 253, "qc-good-friday": 253, "qc-easter-monday": 253 }, "261 jours de semaine moins les jours fériés en semaine");
+  const on = D.count("2026-01-01", "2026-12-31", ca("on"));
+  assert.deepEqual(on.holidays.filter((h) => !h.off).map((h) => [h.date, h.weekday]), [["2026-12-26", 6]], "Ontario : le 26 décembre est un samedi");
+  assert.equal(D.count("2026-01-01", "2026-12-31", ca("nt")).holidays.find((h) => h.date === "2026-06-21").off, false, "21 juin 2026 : un dimanche");
+  assert.deepEqual(D.holidays(2026, CA, "qc-good-friday", "fr").map((h) => h.name), ["Jour de l’An", "Vendredi saint",
+    "Journée nationale des patriotes", "Fête nationale du Québec", "Fête du Canada", "Fête du Travail", "Action de grâce", "Noël"]);
+  assert.equal(D.count("2026-06-01", "2026-06-30", ca("nt", "fr")).holidays[0].name, "Journée nationale des peuples autochtones", "nom de la loi bilingue");
+  assert.equal(D.count("2026-06-01", "2026-06-30", ca("nt")).holidays[0].name, "National Indigenous Peoples Day");
+  for (const zone of D.zones(CA)) assert.ok(CA.statutory_holidays.zones[zone].every((h) => h.name && h.name_fr), `${zone} : noms anglais et français`);
+  assert.deepEqual(D.count("2029-06-20", "2029-07-05", ca("qc-good-friday", "fr")).holidays.map((h) => [h.date, h.name, h.substitute, h.off]),
+    [["2029-06-24", "Fête nationale du Québec", false, false], ["2029-06-25", "Fête nationale du Québec", true, true], ["2029-07-02", "Fête du Canada", true, true]]);
+  assert.equal(D.addDays("2026-06-29", 2, "ouvre", ca("on")).date, "2026-07-02", "fête du Canada sautée");
+  assert.equal(D.addDays("2026-12-23", 2, "ouvre", ca("on")).date, "2026-12-28", "Noël, puis la fin de semaine (26 décembre un samedi)");
+  assert.equal(D.addDays("2026-11-10", 1, "ouvre", ca("ns")).date, "2026-11-12", "Nouvelle-Écosse : 11 novembre");
+  assert.equal(D.addDays("2026-11-10", 1, "ouvre", ca("on")).date, "2026-11-11", "Ontario : 11 novembre travaillé");
+  assert.equal(D.count("2030-12-01", "2031-01-31", ca("on")), null, "2031 non couvert");
+  assert.equal(D.count("2023-12-01", "2024-01-31", ca("on")), null, "2023 non couvert");
+  assert.equal(D.addDays("2030-12-20", 20, "calendaire", ca("on")).date, "2031-01-09", "jours civils : pas besoin des jours fériés");
+});
+
+test("Canada : pages en anglais et en français, menu, chiffres de la FAQ = moteur, aide du taux horaire", () => {
+  for (const [page, site, rate, store, lang] of [[caEn, "ca", "hourly-rate-calculator", "jours-ca", "en"], [caFr, "ca-fr", "calculateur-taux-horaire", "jours-ca-fr", "fr"]]) {
+    const f = frontOf(page);
+    assert.equal(f.id, "workdays");
+    assert.deepEqual(f.scripts, ["engines/jours.js", "tools/jours.js"]);
+    assert.equal(f.rules, "ca");
+    assert.deepEqual(f.sources, ["statutory_holidays"]);
+    assert.ok(f.title.length <= 60 && f.description.length <= 160, `${site} : titre et description`);
+    assert.ok(f.faq.length >= 3 && f.faq.length <= 6);
+    const pricing = JSON.parse(readFileSync(new URL(`../../content/${site}/site.json`, import.meta.url), "utf8")).nav.find((g) => g.key === "pricing");
+    assert.deepEqual(pricing.items.slice(0, 2), ["rate", "workdays"], site);
+    const options = [...page.matchAll(/<select id="jo-zone"[\s\S]*?<\/select>/g)][0][0].match(/value="([\w-]+)"/g).map((v) => v.slice(7, -1));
+    assert.deepEqual(options.slice().sort(), D.zones(CA).slice().sort(), `${site} : une option par juridiction`);
+    assert.deepEqual([...page.matchAll(/<select id="jo-mode"[\s\S]*?<\/select>/g)][0][0].match(/value="(\w+)"/g), ['value="ouvre"', 'value="calendaire"']);
+    assert.match(page, new RegExp(`id="jo-year" name="year" min="${D.years(CA).min}" max="${D.years(CA).max}"`));
+    const data = JSON.parse(/id="jours-data">([\s\S]*?)<\/script>/.exec(page)[1]);
+    const usData = JSON.parse(/id="jours-data">([\s\S]*?)<\/script>/.exec(usHtml)[1]);
+    assert.deepEqual(Object.keys(data).filter((k) => k !== "zone_notes").sort(), Object.keys(usData).sort(), `${site} : mêmes textes qu'aux États-Unis`);
+    assert.equal(data.store, store);
+    for (const zone of Object.keys(data.zone_notes)) assert.ok(zone === "*" || D.zones(CA).includes(zone), `${site} : note de ${zone}`);
+    const faq = f.faq.flat().join(" "), n = (zone) => D.count("2026-01-01", "2026-12-31", ca(zone)).ouvres;
+    assert.ok(faq.includes(`${n("on")} `) && n("on") === n("qc-good-friday") && faq.includes(`${n("ab")} `) && n("ab") === n("mb") && n("ab") === n("federal") &&
+      faq.includes(`${n("bc")} `) && faq.includes("261") && faq.includes(`${D.count("2026-01-01", "2026-12-31", ca("on")).holidays.filter((h) => h.off).length} `), `${site} : FAQ 2026`);
+    assert.ok(faq.includes("2029") && D.holidays(2029, CA, "federal").some((h) => h.date === "2029-07-02"), `${site} : prochaine fête du Canada reportée`);
+    const ratePage = readFileSync(new URL(`../../content/${site}/${rate}.html`, import.meta.url), "utf8");
+    assert.match(ratePage, /aria-describedby="h-holidays-hint"[^>]*>\s*<span class="hint" id="h-holidays-hint"><a href="\{\{link:workdays\}\}">/, `${site} : lien depuis le taux horaire`);
+    assert.equal(lang === "fr" ? /selected>Québec \(Vendredi saint\)/.test(page) : /value="on" selected>Ontario/.test(page), true, `${site} : juridiction par défaut`);
+  }
+  const fr = frontOf(caFr).faq.flat().join(" ");
+  assert.ok(fr.includes(`en compte ${D.holidays(2026, CA, "qc-good-friday").length}`), "Québec : nombre de jours fériés");
+  const en = frontOf(caEn).faq.flat().join(" ");
+  const withRemembrance = D.zones(CA).filter((z) => z !== "ns" && md(z, 2026).includes("11-11"));
+  assert.deepEqual(withRemembrance, ["federal", "ab", "bc", "nb", "nl", "nt", "pe"], "Remembrance Day dans la FAQ");
+  assert.ok(["Alberta", "British Columbia", "New Brunswick", "Newfoundland and Labrador", "Northwest Territories", "Prince Edward Island", "federally regulated"].every((w) => en.includes(w)));
+  assert.ok(en.includes("Ontario: " + D.holidays(2026, CA, "on").map((h) => h.name.replace(" (December 26)", "")).slice(0, -1).join(", ") + " and Boxing Day"), "liste de l'Ontario");
+});

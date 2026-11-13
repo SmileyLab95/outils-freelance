@@ -2,7 +2,9 @@
  * Moteur : jours fériés, jours ouvrés et ouvrables d'une période, échéance d'un délai (documentation/42-jours-ouvres.md).
  * Jours fériés lus dans les règles : France, fêtes légales calculées à partir de Pâques, Alsace-Moselle et outre-mer
  * (rules.jours_feries, fiche F2405) ; Royaume-Uni et États-Unis, liste publiée par région et par année
- * (rules.public_holidays : GOV.UK, OPM), avec les jours de remplacement (substitute days, observed dates).
+ * (rules.public_holidays : GOV.UK, OPM), avec les jours de remplacement (substitute days, observed dates) ; Canada,
+ * jours fériés de chaque juridiction calculés par la règle que pose la loi (rules.statutory_holidays : jour fixe,
+ * Pâques, n-ième lundi d'un mois, lundi qui précède une date ; report du dimanche quand la loi le prévoit).
  * Quatre façons de compter (fiche F35697) : jours calendaires, francs, ouvrables, ouvrés. Fonctions pures, sans DOM.
  * Testé par tests/unit/jours.test.mjs.
  */
@@ -36,33 +38,73 @@
     return year + "-" + String(month).padStart(2, "0") + "-" + String(date).padStart(2, "0");
   }
 
-  /** Années couvertes par les règles : { min, max } (liste publiée : ses années ; calcul : 2000 à 2100), ou null. */
+  /**
+   * Années couvertes par les règles : { min, max } (liste publiée : ses années ; Canada : années des règles ; calcul
+   * français : 2000 à 2100), ou null.
+   */
   function years(rules) {
     if (rules.public_holidays) {
       var list = Object.keys(rules.public_holidays[zones(rules)[0]]).map(Number);   // clés numériques : ordre croissant
       return { min: list[0], max: list[list.length - 1] };
     }
+    if (rules.statutory_holidays) return { min: rules.statutory_holidays.years.min, max: rules.statutory_holidays.years.max };
     return rules.jours_feries ? { min: MIN_YEAR, max: MAX_YEAR } : null;
   }
 
-  /** Lieux des règles : régions de la liste publiée, ou « metropole » et les lieux français. */
+  /** Lieux des règles : régions de la liste publiée, juridictions canadiennes, ou « metropole » et les lieux français. */
   function zones(rules) {
     if (rules.public_holidays) return Object.keys(rules.public_holidays);
+    if (rules.statutory_holidays) return Object.keys(rules.statutory_holidays.zones);
     return ["metropole", "alsace_moselle"].concat(Object.keys(rules.jours_feries.abolition_esclavage));
+  }
+
+  /** N-ième lundi d'un mois (numéro du jour). */
+  function nthMonday(year, month, n) {
+    var first = day(year + "-" + String(month).padStart(2, "0") + "-01");
+    return first + (8 - weekday(first)) % 7 + 7 * (n - 1);
+  }
+
+  /** Lundi qui précède une date (« the first Monday immediately preceding May 25 ») : le dernier lundi avant ce jour. */
+  function mondayBefore(year, md) {
+    var n = day(year + "-" + md) - 1;
+    return n - (weekday(n) + 6) % 7;
+  }
+
+  /**
+   * Canada : jours fériés d'une année pour une juridiction, calculés par la règle de chaque fête (rules.statutory_holidays,
+   * documentation/42, § 10) ; sunday : date qui remplace la fête quand elle tombe un dimanche (fête du Canada le 2 juillet) ;
+   * sunday_also : jour chômé en plus quand la fête tombe un dimanche (25 juin au Québec). Nom en français si lang = « fr ».
+   */
+  function statutory(year, rules, zone, lang) {
+    var S = rules.statutory_holidays, list = S.zones[zone] || S.zones[zones(rules)[0]], out = [];
+    list.forEach(function (h) {
+      var name = lang === "fr" && h.name_fr ? h.name_fr : h.name, n;
+      if (h.date) n = day(year + "-" + h.date);
+      else if (h.paques != null) n = day(easter(year)) + h.paques;
+      else if (h.monday) n = nthMonday(year, h.monday[0], h.monday[1]);
+      else n = mondayBefore(year, h.monday_before);
+      var sunday = weekday(n) === 0;
+      if (sunday && h.sunday) { out.push({ date: year + "-" + h.sunday, name: name, substitute: true }); return; }
+      out.push({ date: iso(n), name: name, substitute: false });
+      if (sunday && h.sunday_also) out.push({ date: year + "-" + h.sunday_also, name: name, substitute: true });
+    });
+    return out.sort(function (x, y) { return x.date < y.date ? -1 : x.date > y.date ? 1 : 0; });
   }
 
   /**
    * Jours fériés d'une année pour un lieu (France : « metropole », « alsace_moselle » ou un territoire d'outre-mer ;
-   * Royaume-Uni, États-Unis : une région de la liste) : [{ date, name, substitute }] triés par date ; substitute : jour
-   * qui en remplace un autre tombé un samedi ou un dimanche (liste publiée) ; [] si l'année n'est pas couverte.
+   * Royaume-Uni, États-Unis : une région de la liste ; Canada : une juridiction) : [{ date, name, substitute }] triés par
+   * date ; substitute : jour qui en remplace un autre tombé un samedi ou un dimanche (liste publiée, loi canadienne) ;
+   * [] si l'année n'est pas couverte. lang : « fr » pour les noms en français des règles canadiennes.
    */
-  function holidays(year, rules, zone) {
+  function holidays(year, rules, zone, lang) {
     var span = years(rules);
     if (!span || !(year >= span.min && year <= span.max)) return [];
     if (rules.public_holidays) {
       var region = rules.public_holidays[zone] || rules.public_holidays[zones(rules)[0]];
       return (region[year] || []).map(function (h) { return { date: h.date, name: h.title, substitute: !!h.substitute }; });
     }
+    if (rules.statutory_holidays) return statutory(year, rules, zone, lang);
     var R = rules.jours_feries;
     var paques = day(easter(year));
     var at = function (h) { return h.date ? year + "-" + h.date : iso(paques + h.paques); };
@@ -78,26 +120,27 @@
    * Recherche des jours fériés, année par année : le jour férié ({ date, name, substitute }), null pour un autre jour,
    * undefined si l'année n'est pas couverte par les règles.
    */
-  function lookup(rules, zone) {
+  function lookup(rules, zone, lang) {
     var span = years(rules), cache = {};
     return function (n) {
       var date = iso(n), y = Number(date.slice(0, 4));
       if (!span || y < span.min || y > span.max) return undefined;
       if (!cache[y]) {
         cache[y] = {};
-        holidays(y, rules, zone).forEach(function (h) { cache[y][h.date] = h; });
+        holidays(y, rules, zone, lang).forEach(function (h) { cache[y][h.date] = h; });
       }
       return cache[y][date] || null;
     };
   }
 
   /**
-   * Options : { rules, zone, workdays, workHolidays } ; workdays : jours travaillés (0 dimanche … 6 samedi), du lundi
-   * au vendredi par défaut ; workHolidays : les jours fériés sont travaillés (comptés comme jours ouvrés).
+   * Options : { rules, zone, workdays, workHolidays, lang } ; workdays : jours travaillés (0 dimanche … 6 samedi), du
+   * lundi au vendredi par défaut ; workHolidays : les jours fériés sont travaillés (comptés comme jours ouvrés) ; lang :
+   * langue des noms des jours fériés canadiens (« fr » ou l'anglais).
    */
   function settings(opts) {
     var work = opts.workdays && opts.workdays.length ? opts.workdays : [1, 2, 3, 4, 5];
-    return { rules: opts.rules, zone: opts.zone, work: work, workHolidays: !!opts.workHolidays };   // sans lieu : le premier des règles
+    return { rules: opts.rules, zone: opts.zone, work: work, workHolidays: !!opts.workHolidays, lang: opts.lang };   // sans lieu : le premier des règles
   }
 
   /**
@@ -110,7 +153,7 @@
   function count(from, to, opts) {
     var a = day(from), b = day(to), o = settings(opts);
     if (isNaN(a) || isNaN(b) || b < a) return null;
-    var look = lookup(o.rules, o.zone), out = { calendar: b - a + 1, ouvrables: 0, ouvres: 0, holidays: [] };
+    var look = lookup(o.rules, o.zone, o.lang), out = { calendar: b - a + 1, ouvrables: 0, ouvres: 0, holidays: [] };
     for (var n = a; n <= b; n++) {
       var w = weekday(n), h = look(n), works = o.work.indexOf(w) >= 0;
       if (h === undefined) return null;
@@ -132,7 +175,7 @@
   function addDays(start, n, mode, opts) {
     var a = day(start), o = settings(opts);
     if (isNaN(a) || !(n >= 0 && n <= 3650 && Math.floor(n) === n) || ["calendaire", "franc", "ouvrable", "ouvre"].indexOf(mode) < 0) return null;
-    var look = lookup(o.rules, o.zone), skipped = [], d = a, postponed = false, h;
+    var look = lookup(o.rules, o.zone, o.lang), skipped = [], d = a, postponed = false, h;
     if (mode === "calendaire" || mode === "franc") {
       d = a + n;
       while (mode === "franc" && n > 0) {

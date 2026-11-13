@@ -52,7 +52,8 @@
         <div class="field"><label for="h-weeks">Semaines de congé par année</label>
           <input type="number" id="h-weeks" name="weeks" value="4" min="0" max="26" data-save></div>
         <div class="field"><label for="h-holidays">Jours fériés</label>
-          <input type="number" id="h-holidays" name="holidays" value="8" min="0" max="20" data-save></div>
+          <input type="number" id="h-holidays" name="holidays" value="8" min="0" max="20" aria-describedby="h-holidays-hint" data-save>
+          <span class="hint" id="h-holidays-hint"><a href="{{link:workdays}}">Voir les jours fériés de votre province</a>.</span></div>
         <div class="field"><label for="h-hours">Heures travaillées par semaine</label>
           <input type="number" id="h-hours" name="hours" value="40" min="1" max="80" data-save></div>
         <div class="field"><label for="h-unbilled">Temps non facturable</label>

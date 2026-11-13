@@ -22,9 +22,10 @@
     {
       "key": "pricing",
       "label": "Pricing",
-      "description": "Work out a fair rate and raise it over time.",
+      "description": "Work out a fair rate, your billable days, and raise it over time.",
       "items": [
         "rate",
+        "workdays",
         "rate-converter",
         "project-price",
         "raise"

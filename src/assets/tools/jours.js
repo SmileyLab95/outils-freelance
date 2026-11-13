@@ -1,4 +1,4 @@
-/* Jours ouvrés, jours fériés et délais (France, Royaume-Uni, États-Unis) : période (année, trimestre, mois ou dates),
+/* Jours ouvrés, jours fériés et délais (France, Royaume-Uni, États-Unis, Canada) : période (année, trimestre, mois ou dates),
    lieu, semaine de travail, congés ; échéance d'un délai. Moteur OFE.days, jours fériés lus dans les règles ; textes de
    la page (<script type="application/json" id="jours-data">). Spécification : documentation/42-jours-ouvres.md. */
 (function () {
@@ -28,7 +28,7 @@
   }
 
   function options() {
-    return { rules: R, zone: $("jo-zone").value, workdays: workdays(), workHolidays: $("jo-work-holidays").checked };
+    return { rules: R, zone: $("jo-zone").value, workdays: workdays(), workHolidays: $("jo-work-holidays").checked, lang: FRENCH ? "fr" : "en" };
   }
 
   /** Bornes de la période choisie, ou null si l'année est illisible ou hors des années couvertes. */
@@ -46,6 +46,7 @@
   function period() {
     var o = options(), r = range(), c = r && E.count(r.from, r.to, o);
     var warn = !o.workdays.length ? L.no_workday : "";
+    if (L.zone_notes) set("jo-zone-hint", L.zone_notes[o.zone] || L.zone_notes["*"] || "");
     var body = $("jo-list").tBodies[0];
     if (!c) {
       ["jo-calendar", "jo-ouvrables", "jo-ouvres", "jo-off"].forEach(function (id) { set(id, "–"); });

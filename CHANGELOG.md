@@ -1,5 +1,20 @@
 # Journal des modifications
 
+## 2026-11-13 (matin) — Jours ouvrables et jours fériés au Canada
+
+- Nouveaux outils *Business days calculator* (/ca/) et « Calcul des jours ouvrables » (/ca/fr/) : jours ouvrables et
+  facturables d'une année, d'un trimestre, d'un mois ou de dates précises, jours fériés de la période et échéance d'un
+  délai, pour les entreprises de compétence fédérale et 9 provinces et territoires (Québec : Vendredi saint ou lundi
+  de Pâques, au choix de l'employeur). La Saskatchewan, le Yukon et le Nunavut ne sont pas encore couverts.
+- Jours fériés tirés des lois (Code canadien du travail, lois sur les normes du travail, lois propres à certaines
+  fêtes) et calculés par la règle de chaque loi, de 2024 à 2030 ; fête du Canada le 2 juillet quand le 1er est un
+  dimanche, là où la loi le prévoit ; 25 juin au Québec quand le 24 tombe un dimanche ; 11 novembre en
+  Nouvelle-Écosse (Remembrance Day Act).
+- Calculateurs de taux horaire (anglais et français) : lien vers les jours fériés de la province.
+- Tests : 4 tests unitaires (tableaux datés de la Colombie-Britannique et de l'Alberta, chaque fête recalculée sans le
+  moteur), 15 erreurs réintroduites, toutes détectées ; parcours des pages canadiennes au vert (accessibilité
+  comprise) ; captures relues sur ordinateur et mobile.
+
 ## 2026-11-12 (soir) — Devises au Royaume-Uni : conversion pour l'impôt sur le revenu
 
 - Page *Foreign currency invoices* : section « Income tax: converting for Self Assessment » et question de la FAQ

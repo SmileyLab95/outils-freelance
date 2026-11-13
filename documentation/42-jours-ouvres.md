@@ -168,7 +168,7 @@ horaire).
   détecté par le parcours navigateur ; parcours américain sur ordinateur, tablette et mobile, audit d'accessibilité
   sans erreur.
 
-## 10. Canada (spécification en cours, 12/11/2026)
+## 10. Canada (spécification du 12/11/2026, réalisée le 13/11/2026, § 10.1)
 
 Même outil, en anglais et en français (*Business days calculator* / « Jours ouvrables »). canada.ca refusant la lecture,
 les jours fériés sont pris **dans les lois** (fédérale et provinciales), lues avec l'outil « Lire une source officielle ».
@@ -241,3 +241,49 @@ Québec, deux zones (« Vendredi saint » et « lundi de Pâques »), la loi lai
 par règle (jour fixe, n-ième lundi, lundi précédant le 25 mai, Pâques) et contrôlées par un test, comme aux États-Unis ;
 jours de remplacement : seulement ceux que la loi fixe pour tous (fête du Canada le 2 juillet au Québec et au fédéral,
 25 juin au Québec), les autres étant propres à chaque salarié ou employeur.
+
+Lu le 13/11/2026 (matin, suite) : **Nouvelle-Écosse**, Remembrance Day Act (R.S., c. 396, consolidé au 27/10/2020,
+nslegislature.ca, SHA-256 ed90764e…be26c) : « Remembrance Day » est « the whole of the eleventh day of November »
+(art. 2) ; « no person shall, on Remembrance Day, (a) sell, offer for sale or purchase any goods or real property; or
+(b) for gain or reward engage as employer or employee in any industry » (art. 3), sauf les exceptions de l'art. 4
+(hôpitaux, hôtellerie, stations-service, commerces de trois personnes au plus…). **Territoires du Nord-Ouest** :
+National Indigenous Peoples Day Act (SNWT 2021, c. 15, gnwt.ca, SHA-256 38258b4a…4d11), art. 1 : « June 21 of each
+year shall be known as "National Indigenous Peoples Day" and shall be observed as a public holiday » (remplace la
+National Aboriginal Day) ; Employment Standards Act, art. 22(1) (SHA-256 ad2f707b…80a0, bilingue) : 11 jours, dont
+« the first Monday in August » et la Journée nationale de la vérité et de la réconciliation « observed on
+September 30 ». **Colombie-Britannique** : la page « Statutory holidays » (mise à jour le 01/01/2026, SHA-256
+eef31e4d…2c8d) donne les tableaux datés de **2023 à 2027** (11 jours par an) et précise : « Easter Sunday, Easter
+Monday and Boxing Day are not statutory holidays in B.C. ». **Code canadien du travail en français**, art. 166
+(SHA-256 b4d7885b…c3c5) : « Le 1er janvier, le vendredi saint, la fête de Victoria, la fête du Canada, la fête du
+Travail, la Journée nationale de la vérité et de la réconciliation, qui a lieu le 30 septembre, le jour de l'Action de
+grâces, le jour du Souvenir, le jour de Noël et le lendemain de Noël ». La page de la CNESST sur les jours fériés a
+refusé l'outil (403, non contournée).
+
+### 10.1 Réalisation (13/11/2026)
+
+- **Règle** `statutory_holidays` de `data/rules/ca.json` : douze zones (fédéral ; Alberta, Colombie-Britannique,
+  Manitoba, Nouveau-Brunswick, Terre-Neuve-et-Labrador, Nouvelle-Écosse, Territoires du Nord-Ouest, Ontario,
+  Île-du-Prince-Édouard ; Québec « Vendredi saint » et Québec « lundi de Pâques »), années 2024 à 2030. Chaque fête est
+  enregistrée avec **la règle que pose sa loi** (date fixe, écart à Pâques, n-ième lundi d'un mois, lundi qui précède le
+  25 mai) et le moteur calcule les dates : 8 Ko dans chaque page canadienne, au lieu de quelque 80 Ko pour une liste
+  datée de sept ans, et une seule source de vérité (la règle de la loi). Noms anglais et français.
+- **Reports** : seulement ceux que la loi fixe pour tous : fête du Canada le 2 juillet quand le 1er est un dimanche
+  (loi fédérale, Québec, Alberta ; appliqué là où la loi nomme « Canada Day ») ; 25 juin chômé en plus du 24 juin
+  quand celui-ci tombe un dimanche (Québec). Le Manitoba et l'Île-du-Prince-Édouard nomment le « July 1 » et
+  Terre-Neuve-et-Labrador le Memorial Day du 1er juillet : pas de report. Prochain cas : 2029.
+- **Nouvelle-Écosse** : le 11 novembre compté comme jour non travaillé (loi de fermeture, avec exceptions), signalé
+  sous le choix de la province.
+- **Action de grâces** : deuxième lundi d'octobre (loi du Québec, tableau de l'Alberta) ; la date fédérale est fixée
+  par proclamation (non lue) : signalé en bas de page.
+- **Absents** : Saskatchewan, Yukon et Nunavut (textes illisibles par l'outil, non contournés), dits sur la page.
+- **Moteur** : `engines/jours.js` (`statutory`, `nthMonday`, `mondayBefore`, option `lang` pour les noms) ; écran
+  commun (`tools/jours.js`, note propre à la zone sous le choix de la province).
+- **Pages** : *Business days calculator* (/ca/, Ontario par défaut) et « Calcul des jours ouvrables » (/ca/fr/, Québec
+  « Vendredi saint » par défaut ; jours ouvrables et jours civils), menu « Pricing / Prix » ; lien depuis le champ
+  « jours fériés » des calculateurs de taux horaire.
+- **Tests** : 4 tests unitaires : dates calculées = tableaux datés de la Colombie-Britannique (2024 à 2027) et de
+  l'Alberta (2026 à 2028) ; chaque fête de chaque zone et de chaque année recalculée sans le moteur à partir du texte
+  de la loi (jour du mois et jour de la semaine) ; nombres de jours ouvrables de 2026 ; reports de 2029 ; noms
+  français ; pages, menu et chiffres de la FAQ tirés du moteur. 15 erreurs réintroduites dans le moteur : 15
+  détectées (la quinzième après l'ajout d'un cas de règles dans le désordre). Parcours navigateur des deux pages
+  (accessibilité comprise) et des 74 pages canadiennes ; captures relues sur ordinateur et mobile.
