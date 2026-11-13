@@ -865,7 +865,7 @@
         "effective_date": "2023 (ordinance 1016-2023, passed in May 2023); text replaced by ordinance 2401-2024 (September 2024)",
         "written_contract_threshold_usd": 250,
         "aggregation": "$250 or more alone, or with all your contracts with the same client in the preceding 120 days",
-        "payment_deadline": "Date in the contract; if none, no later than 30 days after you complete the work",
+        "payment_deadline": "Date in the contract; if none, no later than 30 days after completion of the work",
         "remedies": "Complaint to the Labor Commission: its staff investigate and try to settle and remedy the violation; otherwise a public hearing and a written decision, after which the City may pursue legal remedies and refer you to community legal services. The code sets no damages or fines of its own.",
         "enforcer": "Columbus Labor Commission"
       },
@@ -2313,17 +2313,19 @@
         "places": [
           "nyc",
           "new_york_state",
-          "illinois"
+          "illinois",
+          "columbus"
         ],
         "days_after_completion": 30,
         "laws": {
           "nyc": "freelance_law_nyc",
           "new_york_state": "freelance_law_new_york_state",
-          "illinois": "freelance_law_illinois"
+          "illinois": "freelance_law_illinois",
+          "columbus": "freelance_law_columbus_ohio"
         }
       },
       "unit": "object",
-      "label": "Freelance Isn't Free laws: payment due by the contract date or, if none, no later than 30 days after completion (New York City, New York State, Illinois)",
+      "label": "Freelance Isn't Free laws: payment due by the contract date or, if none, no later than 30 days after completion (New York City, New York State, Illinois, Columbus, Ohio)",
       "source": "https://dol.ny.gov/freelance-isnt-free-act",
       "source_title": "NYS Department of Labor - Freelance Isn't Free Act",
       "more_sources": [
@@ -2334,11 +2336,15 @@
         {
           "source": "https://labor.illinois.gov/laws-rules/legal/freelance-worker-protection-act.html",
           "source_title": "Illinois Department of Labor - Freelance Worker Protection Act"
+        },
+        {
+          "source": "https://legistar3.granicus.com/Columbus/attachments/22bceeab-b409-4a25-9e5b-f2bf278cc3a7.docx",
+          "source_title": "City of Columbus - Ordinance 2401-2024, attachment 'Chapter 2337 - 2024 Revisions - Final' (City Codes, Chapter 2337 Freelance Workers)"
         }
       ],
       "confidence": "high",
-      "verified_on": "2026-10-29",
-      "note": "Groups the payment deadline of the rules freelance_law_nyc, freelance_law_new_york_state and freelance_law_illinois (each: « Date in the contract; if none, no later than 30 days after completion »), for the due date calculator; their scope (contract thresholds, exclusions, effective dates) is in each rule. Laws with medium or low confidence in this file (California, Los Angeles, Columbus, Seattle) are not used for calculations."
+      "verified_on": "2026-11-13",
+      "note": "Groups the payment deadline of the rules freelance_law_nyc, freelance_law_new_york_state, freelance_law_illinois and freelance_law_columbus_ohio (each: « Date in the contract; if none, no later than 30 days after completion »), for the due date calculator; their scope (contract thresholds, exclusions, effective dates) is in each rule. Columbus added on 13/11/2026 after reading chapter 2337 of the City Codes in the city's legislative record (2337.03(a)(2): no later than 30 days after the completion of the freelance worker's work). Laws with medium or low confidence in this file (California, Los Angeles, Seattle) are not used for calculations."
     },
     "us_ftc_cooling_off": {
       "value": {

@@ -1,5 +1,13 @@
 # Journal des modifications
 
+## 2026-11-13 (fin de soirée) — États-Unis : Columbus dans le calculateur de date d'échéance
+
+- *Invoice due date calculator* : nouveau lieu « Columbus, Ohio » ; sans date dans le contrat, l'échéance est fixée au
+  plus tard 30 jours après la fin du travail (City Code, art. 2337.03(a), lu dans le texte officiel), comme à New York
+  et dans l'Illinois ; présentation, question fréquente et description mises à jour (seuil de 250 $).
+- Tests : moteur (Columbus, passage d'année), page (lieux et noms des lois ; 2 erreurs réintroduites, détectées),
+  parcours des 39 pages américaines (815 points), capture mobile relue.
+
 ## 2026-11-13 (nuit) — États-Unis : loi de Columbus (Ohio) relue dans le texte officiel
 
 - Outil « Freelance protection laws » : Columbus, Ohio, repose désormais sur le chapitre 2337 du City Code lu en entier

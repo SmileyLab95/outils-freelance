@@ -452,6 +452,10 @@ const tests = {
     await page.selectOption("#ec-place", "illinois");
     check((await t("#ec-due")) === "November 14, 2026" && (await t("#ec-notice")).includes("Illinois Freelance Worker Protection Act"),
       "US due date: Illinois, 30 days after the work (October 15 → November 14)");
+    await page.selectOption("#ec-place", "columbus");
+    check((await t("#ec-due")) === "November 14, 2026" && (await t("#ec-notice")).includes("Columbus City Code (chapter 2337, Freelance Workers)"),
+      "US due date: Columbus, Ohio, 30 days after the work (October 15 → November 14)");
+    await page.selectOption("#ec-place", "illinois");
     await page.reload({ waitUntil: "networkidle" });
     check((await page.inputValue("#ec-place")) === "illinois" && (await t("#ec-due")) === "November 14, 2026", "US due date: kept after reload");
   },
@@ -3244,7 +3248,7 @@ const tests = {
     await page.fill("#l-prior", "60");
     const cbus = await page.textContent("#l-details");
     check((await page.textContent("#l-answer")).startsWith("Written contract required") && cbus.includes("preceding 120 days") &&
-      cbus.includes("no later than 30 days after you complete the work") && cbus.includes("The code sets no damages or fines of its own") &&
+      cbus.includes("no later than 30 days after completion of the work") && cbus.includes("The code sets no damages or fines of its own") &&
       await page.isHidden("#l-verify"), "freelance law: Columbus $260 over 120 days → contract required, official text (no warning)");
     await page.selectOption("#l-place", "nyc");
     await page.fill("#l-value", "1,200");

@@ -76,15 +76,17 @@ test("Royaume-Uni : date convenue, plafonds de 60 jours (entreprise) et 30 jours
   assert.equal(pubLong.cap, "30", "autorité publique : jamais le plafond de 60 jours");
 });
 
-test("États-Unis : sans date au contrat, 30 jours après la fin du travail à New York et dans l'Illinois", () => {
+test("États-Unis : sans date au contrat, 30 jours après la fin du travail à New York, dans l'Illinois et à Columbus", () => {
   const R = US.freelance_default_payment;
-  assert.deepEqual(R.places, ["nyc", "new_york_state", "illinois"]);
+  assert.deepEqual(R.places, ["nyc", "new_york_state", "illinois", "columbus"]);
   for (const place of R.places) {
     assert.match(US[R.laws[place]].payment_deadline, new RegExp(`if none, no later than ${R.days_after_completion} days after completion`), place);
     assert.equal(ruleEntries("us")[R.laws[place]].confidence, "high", place);
   }
   assert.equal(E.usDefault("2026-10-15", "nyc", US), "2026-11-14");
   assert.equal(E.usDefault("2026-10-15", "illinois", US), "2026-11-14");
+  assert.equal(E.usDefault("2026-10-15", "columbus", US), "2026-11-14", "Columbus, City Code 2337.03(a)(2)");
+  assert.equal(E.usDefault("2026-12-20", "columbus", US), "2027-01-19", "passage d'année");
   assert.equal(E.usDefault("2026-10-15", "other", US), "", "ailleurs : pas de date par défaut calculée");
   assert.equal(E.usDefault("", "nyc", US), "");
 });
@@ -128,6 +130,7 @@ test("pages : en-tête, menu, conditions lisibles par le moteur, textes complets
   const places = [...(/<select id="ec-place"[\s\S]*?<\/select>/.exec(usHtml))[0].matchAll(/value="(\w+)"/g)].map((m) => m[1]);
   assert.deepEqual(places, [...US.freelance_default_payment.places, "other"]);
   assert.deepEqual(Object.keys(us.laws), US.freelance_default_payment.places);
+  for (const place of US.freelance_default_payment.places) assert.ok(us.laws[place].trim().length > 5, `us : nom de la loi (${place})`);
   for (const k of ["terms_note", "us_terms_law", "us_default", "us_no_default", "need_done"]) assert.ok(us[k], `us : ${k}`);
   assert.match(usHtml, /id="ec-done"/);
   for (const name of ["ca", "ca-fr"]) {

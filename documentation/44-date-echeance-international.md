@@ -14,14 +14,14 @@ le délai convenu est trop long, selon la règle du pays.
 | Pays | Règle | Source | Usage |
 |---|---|---|---|
 | Royaume-Uni (entre entreprises) | « Relevant day » : la date de paiement convenue ; sans date convenue, le dernier jour d'une période de **30 jours commençant** le jour de la prestation ou, s'il est plus tardif, le jour où le client connaît le montant (la facture) ; l'intérêt légal court **le lendemain**. Client **autorité publique** : si la date convenue tombe après la fin de cette période de 30 jours, la fin de la période l'emporte. Autre client : si elle tombe après la fin de la période de **60 jours**, la fin de cette période l'emporte, sauf si la date convenue n'est pas manifestement abusive (*grossly unfair*) pour le prestataire | Late Payment of Commercial Debts (Interest) Act 1998, s. 4(2) à (2I) et (7A) (version révisée, à jour) ; GOV.UK, *When a payment becomes late* ; règle `late_payment_default_due_period` (`data/rules/uk.json`), reprise et structurée | Échéance, début du retard, plafonds de 30 et 60 jours |
-| États-Unis | Pas de règle fédérale générale. À New York (ville et État) et dans l'Illinois, un client qui engage un freelance paie à la date du contrat ou, **s'il n'y en a pas, au plus tard 30 jours après la fin du travail** | Règles existantes `freelance_law_nyc`, `freelance_law_new_york_state`, `freelance_law_illinois` (confiance haute) ; nouvelle règle `freelance_default_payment` qui les regroupe | Échéance par défaut selon le lieu |
+| États-Unis | Pas de règle fédérale générale. À New York (ville et État), dans l'Illinois et à Columbus (Ohio, depuis le 13/11/2026), un client qui engage un freelance paie à la date du contrat ou, **s'il n'y en a pas, au plus tard 30 jours après la fin du travail** | Règles existantes `freelance_law_nyc`, `freelance_law_new_york_state`, `freelance_law_illinois`, `freelance_law_columbus_ohio` (confiance haute) ; nouvelle règle `freelance_default_payment` qui les regroupe | Échéance par défaut selon le lieu |
 | Canada | Aucune règle n'est reprise : la date dépend des conditions convenues ; les lois sur le paiement rapide ne visent que la construction (règle existante `prompt_payment_legislation`) | `late_payment_interest_practice`, `prompt_payment_legislation` (`data/rules/ca.json`) | Calcul selon les conditions, sans plafond légal |
 | France | Inchangé : 60 jours après la facture, ou 45 jours fin de mois (deux méthodes) au plus (L441-10) | `retard_paiement_delais` | Moteur commun |
 
 **Prudence.** Les autres lois américaines (Californie, Los Angeles, Seattle) sont en confiance moyenne ou basse dans
 `us.json` : elles ne sont pas reprises dans le calcul ; Columbus (Ohio), relu le 13/11/2026 dans le texte officiel du
-chapitre 2337 (paiement à la date du contrat, sinon au plus tard 30 jours après la fin du travail), est en confiance
-haute mais pas encore proposé dans le calcul (à ajouter) ; la page renvoie au guide *Freelance Isn't Free*. Le
+chapitre 2337 (art. 2337.03(a) : paiement à la date du contrat, sinon au plus tard 30 jours après la fin du travail),
+est en confiance haute et proposé dans le calcul depuis le 13/11/2026 ; la page renvoie au guide *Freelance Isn't Free*. Le
 caractère « manifestement abusif » d'un délai au Royaume-Uni s'apprécie au cas par cas (s. 4(7A)) : l'outil ne le
 juge pas, il signale le dépassement de 60 jours.
 
@@ -38,7 +38,7 @@ juge pas, il signale le dépassement de 60 jours.
   date agreed »), client entreprise ou autorité publique → *pay by*, *late from*, avertissement au-delà de 60 (ou 30)
   jours, lien vers le calcul des intérêts.
 - **États-Unis** : date de la facture, conditions (dont « no date in the contract »), date de fin du travail, lieu
-  (New York City, État de New York, Illinois, ailleurs) → échéance, rappel des lois.
+  (New York City, État de New York, Illinois, Columbus, ailleurs) → échéance, rappel des lois.
 - **Canada** (anglais et français) : date de la facture et conditions → échéance ; rappel : convenir des conditions
   par écrit.
 - Menu « Invoicing and getting paid / Facturer » après la facture (comme en France) ; jour de la semaine affiché.
@@ -50,8 +50,8 @@ juge pas, il signale le dépassement de 60 jours.
 - Royaume-Uni : sans date convenue, prestation le 1er mars et facture le 5 mars → dernier jour le 3 avril (période de
   30 jours commençant le 5 mars), retard le 4 avril ; date convenue à 90 jours → plafonnée au 60e jour (sauf accord non
   abusif) ; autorité publique et date à 45 jours → 30e jour.
-- États-Unis : sans date, fin du travail le 15 octobre 2026 → 14 novembre 2026 à New York et dans l'Illinois ; rien
-  ailleurs.
+- États-Unis : sans date, fin du travail le 15 octobre 2026 → 14 novembre 2026 à New York, dans l'Illinois et à
+  Columbus ; rien ailleurs ; fin du travail le 20 décembre 2026 → 19 janvier 2027 (passage d'année).
 - Pages : textes complets, sources, parcours navigateur sur ordinateur, tablette et mobile, accessibilité.
 
 ## 5. Réalisation (29/10/2026)
