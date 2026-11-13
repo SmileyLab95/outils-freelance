@@ -209,6 +209,14 @@ lundi 4 septembre, Thanksgiving le lundi 9 octobre…) : contrôle possible de l
 publications.saskatchewan.ca (certificat refusé par l'outil, non contourné), gov.nu.ca (403), alberta.ca (adresse de la
 page des jours fériés à retrouver, 404).
 
+Lu le 13/11/2026 (nuit) : **Islander Day Act** (Île-du-Prince-Édouard, c. I-10.01, consolidé au 15/05/2009,
+princeedwardisland.ca) : « the third Monday in February in each year shall be a public holiday … “Islander Day” ».
+**Terre-Neuve-et-Labrador** : le Commemoration Day Act (dimanche du 1er juillet ou le plus proche) ne date pas le
+Memorial Day de la Labour Standards Act : date à trouver (liste du gouvernement ou règlement). **Alberta** : la page
+open.alberta.ca/publications/f04p5 et le PDF F04P5 ne sont pas le Family Day Act (texte sans « Monday ») : référence à
+retrouver. **Territoires du Nord-Ouest** : le PDF de la loi redirige vers gnwt.ca, domaine du gouvernement territorial,
+désormais accepté par l'outil de lecture.
+
 Constat du 12/11/2026 (soir) : plusieurs lois nomment les fêtes sans les dater (Interpretation Act de la
 Colombie-Britannique, art. 29 : « holiday » comprend Family Day, British Columbia Day, December 26… sans date ; loi de
 l'Île-du-Prince-Édouard : Islander Day sans date). Pour ces fêtes, prendre la date dans la loi propre à la fête quand
