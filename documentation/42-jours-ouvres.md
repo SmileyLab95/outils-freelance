@@ -217,6 +217,18 @@ open.alberta.ca/publications/f04p5 et le PDF F04P5 ne sont pas le Family Day Act
 retrouver. **Territoires du Nord-Ouest** : le PDF de la loi redirige vers gnwt.ca, domaine du gouvernement territorial,
 désormais accepté par l'outil de lecture.
 
+Lu le 13/11/2026 (matin) : **Alberta**, page officielle « Alberta general holidays » (alberta.ca, SHA-256
+e2bd71a1…864c) : tableau daté des 9 jours fériés pour 2026, 2027 et 2028 avec leur règle — New Year's Day (1er janvier) ;
+Alberta Family Day, « Third Monday in February » (16/02/2026, 15/02/2027, 21/02/2028) ; Good Friday, « Friday before
+Easter » (03/04/2026, 26/03/2027, 14/04/2028) ; Victoria Day, « Monday before May 25 » (18/05/2026, 24/05/2027,
+22/05/2028) ; Canada Day, « July 1, except when it falls on a Sunday, then it is July 2 » ; Labour Day (07/09/2026,
+06/09/2027, 04/09/2028) ; Thanksgiving Day, « Second Monday in October » (12/10/2026, 11/10/2027, 09/10/2028) ;
+Remembrance Day (11 novembre) ; Christmas Day (25 décembre) : **contrôle de transcription** pour 2026 à 2028 et règle de
+l'Action de grâce confirmée par une source provinciale. **Terre-Neuve-et-Labrador**, guide officiel « Your Rights at
+Work » (gov.nl.ca) : « Memorial Day (Canada Day) » parmi les six jours fériés, donc le 1er juillet. **À lire encore** :
+date de la National Aboriginal Day aux Territoires du Nord-Ouest (la page gnwt.ca atteinte ne contient pas la loi) ;
+Remembrance Day Act de Nouvelle-Écosse (non trouvé dans la page lue).
+
 Constat du 12/11/2026 (soir) : plusieurs lois nomment les fêtes sans les dater (Interpretation Act de la
 Colombie-Britannique, art. 29 : « holiday » comprend Family Day, British Columbia Day, December 26… sans date ; loi de
 l'Île-du-Prince-Édouard : Islander Day sans date). Pour ces fêtes, prendre la date dans la loi propre à la fête quand
