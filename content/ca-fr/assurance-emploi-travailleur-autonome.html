@@ -1,0 +1,119 @@
+<!--{
+  "id": "sick-pay",
+  "slug": "assurance-emploi-travailleur-autonome/",
+  "title": "Assurance-emploi du travailleur autonome et RQAP",
+  "description": "Assurance-emploi du travailleur autonome : montant par semaine, nombre de semaines, conditions et cotisation des prestations spéciales, et RQAP au Québec.",
+  "menu": "Assurance-emploi et RQAP",
+  "icon": "🩺",
+  "blurb": "Ce que vous toucheriez si vous êtes malade, attendez un enfant ou aidez un proche.",
+  "app": "Calcul des prestations de l'assurance-emploi du travailleur autonome",
+  "scripts": ["engines/benefits-ca.js", "tools/ca-benefits.js"],
+  "rules": "ca",
+  "sources": ["qpip_self_employed_benefits", "ei_self_employed_special_benefits", "qpip_rate_self_employed", "qpip_max_insurable_earnings", "ei_max_insurable_earnings", "ei_rate_self_employed", "ei_rate_self_employed_quebec"],
+  "priority": 0.8,
+  "faq": [
+    ["Le travailleur autonome a-t-il droit à l'assurance-emploi ?", "Oui, mais seulement aux prestations spéciales (maladie, maternité, parentales, compassion et proches aidants), et seulement s'il y adhère : il conclut une entente avec la Commission de l'assurance-emploi du Canada et cotise chaque année. Il peut demander des prestations 12 mois après son adhésion. La loi ne prévoit pas de prestations pour le travailleur autonome qui manque simplement de contrats."],
+    ["Au Québec, qui paie la maternité et le congé parental ?", "Le Régime québécois d'assurance parentale (RQAP), obligatoire pour les travailleurs autonomes : 0,764 % du revenu d'entreprise en 2026, au plus 786,92 $. Avec un revenu de 52 000 $ l'année précédente, les prestations de maternité sont de 700 $ par semaine pendant 18 semaines (70 %), ou de 750 $ par semaine pendant 15 semaines (75 %) au régime particulier."],
+    ["Combien rapportent les prestations de maladie de l'assurance-emploi ?", "55 % du revenu net de travail autonome de l'année précédente divisé par 52, au plus 729 $ par semaine en 2026, pendant au plus 26 semaines, après une semaine de délai de carence. Avec 50 000 $, c'est 529 $ par semaine, soit 13 754 $ sur 26 semaines."],
+    ["Combien coûte l'adhésion à l'assurance-emploi ?", "1,30 % du revenu de travail autonome au Québec en 2026 (1,63 % ailleurs au Canada), sur au plus 68 900 $ de revenu : au plus 895,70 $ par année (1 123,07 $ hors Québec). La cotisation se paie avec la déclaration de revenus, y compris pour l'année de l'adhésion."],
+    ["Peut-on annuler son adhésion ?", "Oui, tant que vous n'avez reçu aucune prestation : l'entente prend fin le 31 décembre de l'année de l'avis écrit. Un avis donné dans les 60 jours de l'adhésion l'annule comme si elle n'avait jamais existé. Après avoir reçu des prestations, seulement dans les cas prévus par règlement."],
+    ["Quel revenu compte, et y a-t-il un minimum ?", "Pour l'assurance-emploi, le revenu net de travail autonome de l'année qui précède la demande (revenu d'entreprise au sens de la Loi de l'impôt sur le revenu moins les pertes d'entreprise), jusqu'à 68 900 $. Il faut au moins 6 000 $, un montant indexé chaque année depuis 2012 : Service Canada publie le montant de chaque année. Pour le RQAP, au moins 2 000 $ de revenu assurable."]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Gratuit · montants 2026 · d'après les lois</span>
+    <h1>Assurance-emploi et RQAP du travailleur autonome</h1>
+    <p class="lead">Malade, enceinte, nouveau parent ou proche aidant ? Voyez ce qu'un travailleur autonome peut recevoir de l'assurance-emploi ou du Régime québécois d'assurance parentale : le montant par semaine, le nombre de semaines, les conditions et la cotisation.</p>
+    <ul class="trust"><li>Loi sur l'assurance-emploi, partie VII.1</li><li>Loi sur l'assurance parentale</li><li>Maximums 2026</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="ben-form" onsubmit="return false">
+      <h2>Votre situation</h2>
+      <div class="fields">
+        <div class="field full"><label for="ben-province">Où habitez-vous ?</label>
+          <select id="ben-province" name="province" data-save>
+            <option value="qc">Au Québec</option>
+            <option value="other">Ailleurs au Canada</option>
+          </select></div>
+        <div class="field full"><label for="ben-situation">Que se passe-t-il ?</label>
+          <select id="ben-situation" name="situation" data-save>
+            <option value="sickness">Je suis malade, blessé ou en quarantaine</option>
+            <option value="maternity">Je suis enceinte ou je viens d'accoucher</option>
+            <option value="paternity">Je suis l'autre parent d'un nouveau-né (Québec)</option>
+            <option value="parental">Je m'occupe d'un nouveau-né ou d'un enfant adopté</option>
+            <option value="compassionate">Un membre de ma famille est gravement malade et risque de mourir</option>
+            <option value="critically_ill_child">Mon enfant est gravement malade ou blessé</option>
+            <option value="critically_ill_adult">Un adulte de ma famille est gravement malade ou blessé</option>
+          </select></div>
+        <div class="field full" id="ben-registration-field"><label for="ben-registration">Avez-vous adhéré aux prestations spéciales de l'assurance-emploi ?</label>
+          <select id="ben-registration" name="registration" data-save>
+            <option value="12_months">Oui, il y a au moins 12 mois</option>
+            <option value="less">Oui, il y a moins de 12 mois</option>
+            <option value="none">Non, pas encore</option>
+          </select></div>
+        <div class="field full" id="ben-ei-parental-field"><label for="ben-ei-parental">Option des prestations parentales</label>
+          <select id="ben-ei-parental" name="eiParental" aria-describedby="ben-ei-parental-hint" data-save>
+            <option value="standard">Standard : 55 % pendant au plus 35 semaines</option>
+            <option value="extended">Prolongée : 33 % pendant au plus 61 semaines</option>
+          </select>
+          <span class="hint" id="ben-ei-parental-hint">Deux parents peuvent se partager 40 semaines (standard) ou 69 semaines (prolongée).</span></div>
+        <div class="field full" id="ben-qpip-option-field"><label for="ben-qpip-option">Régime du RQAP</label>
+          <select id="ben-qpip-option" name="qpipOption" aria-describedby="ben-qpip-option-hint" data-save>
+            <option value="basic">Régime de base : 70 %, puis 55 % pour une partie du congé parental</option>
+            <option value="special">Régime particulier : 75 % pendant moins de semaines</option>
+          </select>
+          <span class="hint" id="ben-qpip-option-hint">Le choix du premier parent qui fait sa demande vaut aussi pour l'autre parent.</span></div>
+        <div class="field full"><label for="ben-earnings">Votre revenu net de travail autonome de l'an dernier</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="ben-earnings" name="earnings" value="50 000" aria-describedby="ben-earnings-hint" data-save><span>$</span></div>
+          <span class="hint" id="ben-earnings-hint">Revenu d'entreprise de votre déclaration de revenus, après dépenses et pertes d'entreprise.</span></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="result-hero" role="status" aria-atomic="true">
+        <div class="label" id="ben-label">–</div>
+        <div class="big" id="ben-big">–</div>
+        <div class="sub" id="ben-sub">–</div>
+      </div>
+      <div class="card" style="padding: 6px 18px 4px;">
+        <h2 class="small" style="margin: 12px 0 0;">Conditions</h2>
+        <ul class="mention-checks" id="ben-checks" aria-live="polite"></ul>
+      </div>
+      <p class="notice" id="ben-step" style="margin-top: 16px;">–</p>
+      <p class="notice" id="ben-notice" style="margin-top: 16px;">–</p>
+    </div>
+  </div>
+</section>
+
+<script type="application/json" id="benefits-data">{"store": "ca-fr-benefits", "labels": {"ei_sickness": "Prestations de maladie de l'assurance-emploi", "ei_maternity": "Prestations de maternité de l'assurance-emploi", "ei_parental": "Prestations parentales de l'assurance-emploi", "ei_compassionate": "Prestations de compassion de l'assurance-emploi", "ei_critically_ill_child": "Prestations pour un enfant gravement malade", "ei_critically_ill_adult": "Prestations pour un adulte gravement malade", "qpip_maternity": "Prestations de maternité du RQAP", "qpip_paternity": "Prestations de paternité du RQAP", "qpip_parental": "Prestations parentales du RQAP"}, "weekly": "{amount} par semaine", "then": " puis ", "ei_sub": "pendant au plus {weeks} semaines : {total} au total, après une semaine de délai de carence sans prestations. {pct} de {base} ÷ 52{cap}.", "qpip_sub": "{phases} : {total} au total. Revenu hebdomadaire moyen : {average} (revenu de l'an dernier ÷ 52{cap}).", "phase": "{weeks} semaines à {pct}", "phase_sep": ", puis ", "capped": ", plafonné à {max}", "not_eligible": "Pas admissible", "missing": ["Une condition n'est pas remplie : voir ci-dessous.", "{n} conditions ne sont pas remplies : voir ci-dessous."], "error": "Indiquez votre revenu net de travail autonome de l'an dernier.", "conditions": {"ei": {"registration": {"ok": "Adhésion aux prestations spéciales depuis au moins {months} mois.", "no_less": "Vous pourrez demander des prestations {months} mois après votre adhésion.", "no_none": "Il faut d'abord adhérer, puis attendre {months} mois avant de pouvoir demander des prestations."}, "earnings": {"no": "Moins de {min} de revenu de travail autonome l'an dernier : sous le minimum.", "check": "Au moins {min} : vérifiez le minimum indexé que publie Service Canada pour l'année."}, "interruption": {"check": "Un arrêt de la rémunération provenant du travail autonome, au sens du règlement."}}, "qpip": {"insurable_income": {"ok": "Au moins {qpip_min} de revenu assurable l'an dernier.", "no": "Moins de {qpip_min} de revenu assurable l'an dernier : pas admissible au RQAP."}, "residence": {"check": "Résider au Québec au début de la période de prestations (et le 31 décembre de l'an dernier)."}, "interruption": {"check": "Un arrêt de rémunération au sens du règlement : Retraite Québec en décide."}}}, "step_ei": "Ensuite : faites votre demande à Service Canada dès l'arrêt de votre rémunération. Les prestations ne sont en général pas versées pendant un séjour hors du Canada.", "step_ei_register": "Pour y avoir droit plus tard, adhérez dès maintenant auprès de Service Canada : vous pourrez demander des prestations {months} mois après, et vous pouvez annuler dans les 60 jours ou tant que vous n'avez reçu aucune prestation.", "step_ei_low": "Avec moins de {min} de revenu de travail autonome l'an dernier, pas de prestations cette année : le minimum s'applique à l'année qui précède la demande.", "step_qpip_low": "Avec moins de {qpip_min} de revenu assurable l'an dernier, le RQAP ne verse pas de prestations.", "step_qpip": "Ensuite : faites votre demande au RQAP (administré par Retraite Québec) dès l'arrêt de votre rémunération.", "premium_ei": "L'adhésion coûte {rate} du revenu de travail autonome chaque année : {amount} sur {earnings} en 2026, payés avec la déclaration de revenus, y compris l'année de l'adhésion.", "premium_ei_qc": " Taux du Québec : la maternité et les prestations parentales relèvent du RQAP.", "premium_qpip": "La cotisation au RQAP est obligatoire pour le travailleur autonome au Québec : {rate} du revenu d'entreprise, {amount} sur {earnings} en 2026 (aucune si le revenu de travail est inférieur à 2 000 $)."}</script>
+
+<section class="section prose">
+  <h2>L'assurance-emploi du travailleur autonome</h2>
+  <ul>
+    <li><strong>Prestations spéciales seulement :</strong> maladie, blessure ou quarantaine (au plus 26 semaines), maternité (15 semaines), parentales (35 semaines à 55 % ou 61 semaines à 33 %), compassion (26 semaines), soins à un enfant (35 semaines) ou à un adulte (15 semaines) gravement malade. La Loi sur l'assurance-emploi ne prévoit pas de prestations pour le travailleur autonome qui manque de contrats.</li>
+    <li><strong>Montant :</strong> 55 % du revenu net de travail autonome de l'année qui précède la demande, divisé par 52 et arrondi au dollar le plus proche, sur au plus 68 900 $ de revenu en 2026 : au plus 729 $ par semaine. Les prestations parentales prolongées sont de 33 %.</li>
+    <li><strong>Délai de carence :</strong> la première semaine n'est pas payée.</li>
+  </ul>
+
+  <h2>L'adhésion : l'entente et la cotisation</h2>
+  <ul>
+    <li><strong>Qui :</strong> le travailleur autonome citoyen canadien ou résident permanent, en concluant une entente avec la Commission de l'assurance-emploi du Canada.</li>
+    <li><strong>Quand demander :</strong> 12 mois après l'adhésion, si le revenu de travail autonome de l'année précédente atteint au moins 6 000 $, indexé chaque année depuis 2012 (Service Canada publie le montant).</li>
+    <li><strong>Cotisation :</strong> 1,63 % du revenu de travail autonome en 2026 (1,30 % au Québec), sur au plus 68 900 $, payée chaque année avec la déclaration de revenus, y compris l'année de l'adhésion et celle de la fin de l'entente.</li>
+    <li><strong>Mettre fin à l'entente :</strong> par avis écrit, tant que vous n'avez reçu aucune prestation ; elle prend fin le 31 décembre de l'année de l'avis. Dans les 60 jours de l'adhésion, l'avis l'annule comme si elle n'avait jamais existé. Après des prestations, seulement dans les cas prévus par règlement.</li>
+  </ul>
+
+  <h2>Au Québec : le RQAP</h2>
+  <ul>
+    <li><strong>Obligatoire :</strong> le travailleur autonome qui réside au Québec cotise avec sa déclaration de revenus (0,764 % du revenu d'entreprise en 2026, au plus 786,92 $), sauf si son revenu de travail est inférieur à 2 000 $.</li>
+    <li><strong>Prestations :</strong> calculées sur le revenu assurable de l'année précédente divisé par 52, au plus 103 000 $ par année. Régime de base : maternité 18 semaines à 70 %, paternité 5 semaines à 70 %, parentales 32 semaines (7 à 70 %, puis 25 à 55 %). Régime particulier : 75 % pendant 15, 3 et 25 semaines. Il faut au moins 2 000 $ de revenu assurable.</li>
+    <li><strong>L'assurance-emploi au Québec :</strong> la maternité et les prestations parentales relèvent du RQAP, mais les prestations de maladie et de proche aidant de l'assurance-emploi restent ouvertes en adhérant.</li>
+  </ul>
+  <p>Les prestations publiques remplacent rarement tout le revenu. Une assurance peut combler l'écart : voyez le <a href="{{link:insurance}}">guide de l'assurance d'entreprise</a>, et constituez une réserve avec le <a href="{{link:set-aside}}">calculateur de la somme à mettre de côté</a>.</p>
+  <p class="small muted">À titre informatif, d'après la Loi sur l'assurance-emploi (partie VII.1), son règlement et la Loi sur l'assurance parentale, lus en novembre 2026 (montants 2026). Service Canada et Retraite Québec décident de votre demande. Non couverts : le supplément familial de l'assurance-emploi et la majoration du RQAP pour les familles à faible revenu, les semaines additionnelles (naissances multiples, adoption, enfant hospitalisé) et le propriétaire d'une société par actions qui se verse un salaire.</p>
+</section>

@@ -99,3 +99,38 @@ test("RQAP : revenu hebdomadaire moyen, tranches de semaines et taux de l'art. 1
   assert.deepEqual(q({ kind: "maternity", option: "minimum_insurable_income", earnings: 1 }), { error: "option" });
   assert.deepEqual(q({ kind: "maternity", option: "basic", earnings: NaN }), { error: "earnings" });
 });
+
+test("pages : en-tête, menu, options = moteur, chiffres de la FAQ = moteur, mêmes textes en anglais et en français", async () => {
+  const { readFileSync } = await import("node:fs");
+  const pages = [["ca", "self-employed-ei-benefits"], ["ca-fr", "assurance-emploi-travailleur-autonome"]].map(([site, slug]) => {
+    const html = readFileSync(new URL(`../../content/${site}/${slug}.html`, import.meta.url), "utf8");
+    return { site, html, front: JSON.parse(/<!--(\{[\s\S]*?\})-->/.exec(html)[1]), data: JSON.parse(/id="benefits-data">([\s\S]*?)<\/script>/.exec(html)[1]) };
+  });
+  const keys = (o, p = "") => Object.entries(o).flatMap(([k, v]) => (v && typeof v === "object" && !Array.isArray(v) ? keys(v, p + k + ".") : [p + k])).sort();
+  assert.deepEqual(keys(pages[0].data).filter((k) => k !== "store"), keys(pages[1].data).filter((k) => k !== "store"), "mêmes textes");
+  const money = (n, fr) => fr ? n.toLocaleString("fr-CA", { minimumFractionDigits: Math.round(n) === n ? 0 : 2 }).replace(/\s/g, " ") + " $"
+    : "$" + n.toLocaleString("en-CA", { minimumFractionDigits: Math.round(n) === n ? 0 : 2 });
+  for (const { site, html, front, data } of pages) {
+    const fr = site === "ca-fr";
+    assert.equal(front.id, "sick-pay");
+    assert.deepEqual(front.scripts, ["engines/benefits-ca.js", "tools/ca-benefits.js"]);
+    assert.ok(front.title.length <= 60 && front.description.length <= 160, `${site} : titre et description`);
+    for (const s of front.sources) assert.ok(R[s] !== undefined, `${site} : source ${s}`);
+    const manage = JSON.parse(readFileSync(new URL(`../../content/${site}/site.json`, import.meta.url), "utf8")).nav.find((g) => g.key === "manage");
+    assert.ok(manage.items.includes("sick-pay"), `${site} : menu`);
+    const situations = [...html.matchAll(/<select id="ben-situation"[\s\S]*?<\/select>/g)][0][0].match(/value="(\w+)"/g).map((v) => v.slice(7, -1));
+    for (const k of situations) assert.ok(B.EI_KINDS.includes(k) || B.QPIP_KINDS.includes(k), `${site} : situation ${k}`);
+    for (const k of Object.keys(data.labels)) assert.ok(/^(ei|qpip)_/.test(k) && (B.EI_KINDS.includes(k.replace(/^(ei|qpip)_/, "")) || B.QPIP_KINDS.includes(k.replace(/^qpip_/, ""))), `${site} : libellé ${k}`);
+    const faq = front.faq.flat().join(" ").replace(/[  ]/g, " ");
+    const sick = B.ei(R, { kind: "sickness", registration: "12_months", earnings: 50000 });
+    const max = B.ei(R, { kind: "sickness", registration: "12_months", earnings: 1e6 });
+    const qc = B.ei(R, { kind: "sickness", registration: "12_months", earnings: 1e6, quebec: true });
+    const mat = B.qpip(R, { kind: "maternity", option: "basic", earnings: 52000 }), matS = B.qpip(R, { kind: "maternity", option: "special", earnings: 52000 });
+    const qpipMax = B.qpip(R, { kind: "maternity", option: "basic", earnings: 1e6 });
+    for (const n of [sick.weekly, sick.total, max.weekly, max.premium, qc.premium, mat.phases[0].weekly, matS.phases[0].weekly, qpipMax.premium,
+      R.ei_max_insurable_earnings, R.ei_self_employed_special_benefits.minimum_earnings_base, R.qpip_self_employed_benefits.minimum_insurable_income]) {
+      assert.ok(faq.includes(money(n, fr)), `${site} : FAQ ${money(n, fr)}`);
+    }
+    assert.ok(faq.includes(String(sick.weeks)) && faq.includes(String(mat.weeks)) && faq.includes(String(matS.weeks)) && faq.includes("2012") && faq.includes("60"), `${site} : semaines, 2012, 60 jours`);
+  }
+});

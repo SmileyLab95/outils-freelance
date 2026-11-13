@@ -78,8 +78,10 @@ SHA-256 578de835…cb05, à jour de 2026, c. 5 : le régime est désormais admin
   Majoration pour les familles à faible revenu (art. 19) et semaines additionnelles (naissances multiples, adoption,
   grossesse pour autrui) : non calculées. Arrondi de la prestation : non lu (montants au cent, estimation).
 
-**Non lus ou non tranchés** : période de référence de l'AE (art. 152.08, introuvable dans la page lue ; l'art. 152.16
-parle du revenu « for their qualifying period ») ; « arrêt de rémunération » (règlements) ; montant minimal indexé de
+**Période de référence de l'AE** (art. 152.08(1)) : « the year immediately before the year during which their
+benefit period begins » ; un même revenu ne sert qu'à une demande initiale (152.08(2)).
+
+**Non lus ou non tranchés** : « arrêt de rémunération » (règlements) ; montant minimal indexé de
 l'AE pour l'année ; taux de cotisation de l'AE au Québec pour les travailleurs autonomes (règle
 `ei_rate_self_employed_quebec`, confiance moyenne).
 
@@ -101,5 +103,21 @@ renvoyées au RQAP. Moteur `engines/benefits-ca.js`, chiffres lus dans les règl
   tranches de semaines et taux, plafond, plancher, cotisation, conditions).
 - Tests : 4 tests unitaires, valeurs calculées à la main (dont 729 $, maximum hebdomadaire publié, et 786,92 $,
   cotisation maximale du RQAP publiée) ; 18 erreurs réintroduites, toutes détectées.
-- Étape 2 : pages anglaise et française (id `sick-pay`), parcours navigateur, captures.
+- Étape 2 : pages anglaise et française (id `sick-pay`), parcours navigateur, captures (faite, § 5).
+
+## 5. Réalisation, étape 2 (13/11/2026)
+
+- Pages *EI special benefits for the self-employed* (`/ca/self-employed-ei-benefits/`, hors Québec par défaut) et
+  « Assurance-emploi et RQAP du travailleur autonome » (`/ca/fr/assurance-emploi-travailleur-autonome/`, Québec par
+  défaut), menu « Taxes and admin / Impôts et gestion » ; script `tools/ca-benefits.js`, textes de chaque page dans un
+  bloc JSON (`benefits-data`).
+- Saisie : lieu (Québec ou ailleurs), situation (maladie, grossesse, paternité au Québec, parentales, trois cas de
+  proche aidant), adhésion à l'AE (12 mois ou plus, moins, pas encore), option parentale de l'AE (standard ou
+  prolongée), régime du RQAP (base ou particulier), revenu net de l'an dernier. Résultat : montant par semaine (ou
+  tranches du RQAP), semaines, total, conditions, prochaine étape (demande, adhésion, ou minimum non atteint) et
+  cotisation (AE au taux du Québec ou d'ailleurs ; RQAP obligatoire).
+- Tests : test des pages (en-têtes, menu, options = moteur, chiffres de la FAQ = moteur, mêmes textes dans les deux
+  langues) ; parcours navigateur (14 points, accessibilité comprise, trois largeurs) ; parcours des pages canadiennes ;
+  captures relues (ordinateur, mobile) : le message « faites votre demande » affiché sous le minimum de revenu a été
+  remplacé par un message propre à ce cas.
 

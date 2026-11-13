@@ -570,6 +570,57 @@ const tests = {
       "US: 10 business days after June 26, 2026 → July 13 (Independence Day observed on July 3 skipped)");
     check((await page.$$('#jo-mode option[value="franc"]')).length === 0, "US: no French « jours francs »");
   },
+  async "ca/self-employed-ei-benefits/"(page) {
+    const t = async (sel) => (await page.textContent(sel)).replace(/[  ]/g, " ").replace(/\s+/g, " ").trim();
+    const checks = () => page.$$eval("#ben-checks li", (lis) => lis.map((li) => li.className + " " + li.textContent));
+    check((await t("#ben-label")) === "EI sickness benefits" && (await t("#ben-big")) === "$529 a week" &&
+      (await t("#ben-sub")).includes("$13,754 in total") && (await t("#ben-sub")).includes("55% of $50,000 ÷ 52") &&
+      (await t("#ben-notice")).includes("$815 on $50,000") && (await checks()).length === 3,
+      "CA EI: sickness on $50,000 → $529 a week for 26 weeks, premium $815");
+    check(await page.$eval('#ben-situation option[value="paternity"]', (o) => o.hidden), "CA EI: paternity (QPIP) hidden outside Quebec");
+    await page.selectOption("#ben-situation", "parental");
+    await page.selectOption("#ben-ei-parental", "extended");
+    check((await t("#ben-big")) === "$317 a week" && (await t("#ben-sub")).includes("61 weeks") && (await t("#ben-sub")).includes("33%"),
+      "CA EI: extended parental 33% for 61 weeks");
+    await page.selectOption("#ben-province", "qc");
+    await page.selectOption("#ben-situation", "maternity");
+    check((await t("#ben-label")) === "QPIP maternity benefits" && (await t("#ben-big")) === "$673.08 a week" &&
+      (await t("#ben-sub")).includes("18 weeks at 70%: $12,115.44 in total") && await page.$eval("#ben-registration-field", (e) => e.hidden) &&
+      (await t("#ben-notice")).includes("mandatory"), "CA QPIP: maternity basic plan on $50,000 → $673.08 a week for 18 weeks");
+    await page.selectOption("#ben-situation", "parental");
+    check((await t("#ben-big")) === "$673.08 then $528.85 a week" && (await t("#ben-sub")).includes("7 weeks at 70%, then 25 weeks at 55%: $17,932.81"),
+      "CA QPIP: parental 7 weeks at 70%, then 25 at 55%");
+    await page.selectOption("#ben-qpip-option", "special");
+    check((await t("#ben-sub")).startsWith("25 weeks at 75%"), "CA QPIP: special plan 75%");
+    await accessible(page, "CA EI benefits: QPIP");
+    await page.selectOption("#ben-situation", "sickness");
+    check((await t("#ben-label")) === "EI sickness benefits" && (await t("#ben-notice")).includes("1.3%") && (await t("#ben-notice")).includes("$650"),
+      "CA EI in Quebec: sickness through EI at the Quebec rate");
+    await page.selectOption("#ben-registration", "none");
+    check((await t("#ben-big")) === "Not eligible" && (await checks()).some((c) => c.startsWith("is-todo") && c.includes("sign up first")) &&
+      (await t("#ben-step")).includes("60 days"), "CA EI: not signed up → not eligible, how to sign up");
+    await page.fill("#ben-earnings", "");
+    check((await t("#ben-big")) === "–" && (await t("#ben-sub")).includes("Enter your net"), "CA EI: income required");
+    await page.fill("#ben-earnings", "5,000");
+    await page.selectOption("#ben-registration", "12_months");
+    check((await checks()).some((c) => c.startsWith("is-todo") && c.includes("$6,000")) && (await t("#ben-step")).includes("can't claim this year"),
+      "CA EI: under $6,000 → minimum not met, no 'apply' step");
+    await page.selectOption("#ben-situation", "maternity");
+    await page.fill("#ben-earnings", "1,500");
+    check((await t("#ben-big")) === "Not eligible" && (await t("#ben-step")).includes("$2,000") && (await t("#ben-notice")).includes("$0 on $1,500"),
+      "CA QPIP: under $2,000 → not eligible, no premium");
+  },
+  async "ca/fr/assurance-emploi-travailleur-autonome/"(page) {
+    const t = async (sel) => (await page.textContent(sel)).replace(/[  ]/g, " ").replace(/\s+/g, " ").trim();
+    check((await page.inputValue("#ben-province")) === "qc" && (await t("#ben-big")) === "529 $ par semaine" && (await t("#ben-notice")).includes("650 $"),
+      "CA-FR AE : Québec par défaut, maladie à l'assurance-emploi au taux du Québec");
+    await page.selectOption("#ben-situation", "paternity");
+    check((await t("#ben-label")) === "Prestations de paternité du RQAP" && (await t("#ben-big")) === "673,08 $ par semaine" &&
+      (await t("#ben-sub")).includes("5 semaines à 70 %"), "CA-FR RQAP : paternité 5 semaines à 70 %");
+    await page.selectOption("#ben-province", "other");
+    check((await page.inputValue("#ben-situation")) === "parental" && (await t("#ben-label")) === "Prestations parentales de l'assurance-emploi",
+      "CA-FR : hors Québec, la paternité devient des prestations parentales de l'assurance-emploi");
+  },
   async "ca/business-days-calculator/"(page) {
     const t = async (sel) => (await page.textContent(sel)).replace(/[  ]/g, " ").replace(/\s+/g, " ").trim();
     const rows = () => page.$$eval("#jo-list tbody tr", (trs) => trs.map((tr) => [...tr.cells].map((c) => c.textContent).join(" | ")));

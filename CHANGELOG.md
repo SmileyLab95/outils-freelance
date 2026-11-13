@@ -1,5 +1,16 @@
 # Journal des modifications
 
+## 2026-11-13 (fin de matinée) — Canada : assurance-emploi et RQAP du travailleur autonome
+
+- Nouvel outil *EI special benefits for the self-employed* (/ca/) et « Assurance-emploi et RQAP du travailleur
+  autonome » (/ca/fr/) : montant par semaine, nombre de semaines, total, conditions et cotisation des prestations
+  spéciales de l'assurance-emploi (maladie, grossesse, parentales standard ou prolongées, proches aidants) et, au
+  Québec, du RQAP (maternité, paternité, parentales, régime de base ou particulier).
+- Chiffres tirés de la Loi sur l'assurance-emploi et de la Loi sur l'assurance parentale ; le minimum indexé de l'AE
+  (au moins 6 000 $) est signalé « à vérifier ».
+- Tests : test des pages (chiffres de la FAQ tirés du moteur), parcours navigateur (accessibilité comprise) et
+  captures relues.
+
 ## 2026-11-13 (matin, fin) — Canada : règles de l'assurance-emploi des travailleurs autonomes et du RQAP
 
 - Règles lues dans la Loi sur l'assurance-emploi (partie VII.1, prestations spéciales des travailleurs indépendants :

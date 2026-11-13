@@ -1,0 +1,119 @@
+<!--{
+  "id": "sick-pay",
+  "slug": "self-employed-ei-benefits/",
+  "title": "EI for the Self-Employed: Sickness, Maternity, Parental",
+  "description": "Can a self-employed person get EI in Canada? See the weekly amount, the weeks, the conditions and the premium for EI special benefits, and the QPIP in Quebec.",
+  "menu": "EI and parental benefits",
+  "icon": "🩺",
+  "blurb": "What you'd get if you're sick, having a baby or caring for someone.",
+  "app": "Canada Self-Employed EI Benefits Calculator",
+  "scripts": ["engines/benefits-ca.js", "tools/ca-benefits.js"],
+  "rules": "ca",
+  "sources": ["ei_self_employed_special_benefits", "qpip_self_employed_benefits", "ei_max_insurable_earnings", "ei_rate_self_employed", "ei_rate_self_employed_quebec", "qpip_rate_self_employed", "qpip_max_insurable_earnings"],
+  "priority": 0.8,
+  "faq": [
+    ["Can self-employed people get EI in Canada?", "Yes, but only the special benefits (sickness, maternity, parental, compassionate care and family caregiver benefits), and only if you sign up: you enter into an agreement with the Canada Employment Insurance Commission and pay premiums every year. You can claim once 12 months have passed since you signed up. The Act gives the self-employed no benefits when work simply dries up."],
+    ["How much are EI sickness benefits for the self-employed?", "55% of your net self-employment income for the previous year divided by 52, up to $729 a week in 2026, for up to 26 weeks after a one-week waiting period. On $50,000, that's $529 a week, or $13,754 over 26 weeks."],
+    ["How much does signing up for EI cost?", "1.63% of your self-employment earnings in 2026 (1.30% in Quebec), on earnings up to the maximum insurable earnings of $68,900: at most $1,123.07 a year ($895.70 in Quebec). You pay it with your income tax return, including for the year you sign up."],
+    ["Can I cancel my EI registration?", "Yes, as long as you haven't received any benefits: it ends on December 31 of the year you give written notice. If you give notice within 60 days of signing up, it's as if you'd never signed up. Once you've received benefits, you can only end it in the cases set by regulation."],
+    ["What about Quebec?", "In Quebec, maternity, paternity and parental benefits come from the Quebec Parental Insurance Plan (QPIP), which is mandatory for the self-employed: 0.764% of business income in 2026, at most $786.92. With last year's income at $52,000, maternity benefits are $700 a week for 18 weeks (70%), or $750 a week for 15 weeks (75%) with the special plan. EI sickness and caregiver benefits are still open if you sign up, at the Quebec rate."],
+    ["What income counts, and is there a minimum?", "For EI, your net self-employment income for the year before your claim (business income under the Income Tax Act minus business losses), up to $68,900. You need at least $6,000, an amount indexed every year since 2012: Service Canada publishes the amount for each year. For the QPIP, at least $2,000 of insurable income."]
+  ]
+}-->
+<section class="hero hero-tool">
+  <div class="wrap">
+    {{breadcrumb}}
+    <span class="pill">Free · 2026 amounts · from the law</span>
+    <h1>EI special benefits for the self-employed</h1>
+    <p class="lead">Sick, having a baby or caring for someone? See what a self-employed person can get from Employment Insurance, or from the Quebec Parental Insurance Plan: the weekly amount, the weeks, the conditions and the premium.</p>
+    <ul class="trust"><li>Employment Insurance Act, Part VII.1</li><li>QPIP in Quebec</li><li>2026 maximums</li></ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="tool-layout">
+    <form class="card form-card" id="ben-form" onsubmit="return false">
+      <h2>Your situation</h2>
+      <div class="fields">
+        <div class="field full"><label for="ben-province">Where do you live?</label>
+          <select id="ben-province" name="province" data-save>
+            <option value="other">Outside Quebec</option>
+            <option value="qc">Quebec</option>
+          </select></div>
+        <div class="field full"><label for="ben-situation">What's happening?</label>
+          <select id="ben-situation" name="situation" data-save>
+            <option value="sickness">I'm sick, injured or in quarantine</option>
+            <option value="maternity">I'm pregnant or have just given birth</option>
+            <option value="paternity">I'm the other parent of a new baby (Quebec)</option>
+            <option value="parental">I'm caring for a new-born or adopted child</option>
+            <option value="compassionate">A family member is seriously ill and may die</option>
+            <option value="critically_ill_child">My child is critically ill or injured</option>
+            <option value="critically_ill_adult">An adult family member is critically ill or injured</option>
+          </select></div>
+        <div class="field full" id="ben-registration-field"><label for="ben-registration">Have you signed up for EI special benefits?</label>
+          <select id="ben-registration" name="registration" data-save>
+            <option value="12_months">Yes, at least 12 months ago</option>
+            <option value="less">Yes, less than 12 months ago</option>
+            <option value="none">No, not yet</option>
+          </select></div>
+        <div class="field full" id="ben-ei-parental-field"><label for="ben-ei-parental">Parental benefits option</label>
+          <select id="ben-ei-parental" name="eiParental" aria-describedby="ben-ei-parental-hint" data-save>
+            <option value="standard">Standard: 55% for up to 35 weeks</option>
+            <option value="extended">Extended: 33% for up to 61 weeks</option>
+          </select>
+          <span class="hint" id="ben-ei-parental-hint">Two parents can share 40 weeks (standard) or 69 weeks (extended).</span></div>
+        <div class="field full" id="ben-qpip-option-field"><label for="ben-qpip-option">QPIP plan</label>
+          <select id="ben-qpip-option" name="qpipOption" aria-describedby="ben-qpip-option-hint" data-save>
+            <option value="basic">Basic plan: 70%, then 55% for part of parental leave</option>
+            <option value="special">Special plan: 75% for fewer weeks</option>
+          </select>
+          <span class="hint" id="ben-qpip-option-hint">The choice of the first parent to apply also applies to the other parent.</span></div>
+        <div class="field full"><label for="ben-earnings">Your net self-employment income last year</label>
+          <div class="input-suffix"><input type="text" inputmode="decimal" id="ben-earnings" name="earnings" value="50,000" aria-describedby="ben-earnings-hint" data-save><span>$</span></div>
+          <span class="hint" id="ben-earnings-hint">Business income on your tax return, after expenses and business losses.</span></div>
+      </div>
+    </form>
+
+    <div class="results">
+      <div class="result-hero" role="status" aria-atomic="true">
+        <div class="label" id="ben-label">–</div>
+        <div class="big" id="ben-big">–</div>
+        <div class="sub" id="ben-sub">–</div>
+      </div>
+      <div class="card" style="padding: 6px 18px 4px;">
+        <h2 class="small" style="margin: 12px 0 0;">Conditions</h2>
+        <ul class="mention-checks" id="ben-checks" aria-live="polite"></ul>
+      </div>
+      <p class="notice" id="ben-step" style="margin-top: 16px;">–</p>
+      <p class="notice" id="ben-notice" style="margin-top: 16px;">–</p>
+    </div>
+  </div>
+</section>
+
+<script type="application/json" id="benefits-data">{"store": "ca-benefits", "labels": {"ei_sickness": "EI sickness benefits", "ei_maternity": "EI maternity benefits", "ei_parental": "EI parental benefits", "ei_compassionate": "EI compassionate care benefits", "ei_critically_ill_child": "EI benefits for a critically ill child", "ei_critically_ill_adult": "EI benefits for a critically ill adult", "qpip_maternity": "QPIP maternity benefits", "qpip_paternity": "QPIP paternity benefits", "qpip_parental": "QPIP parental benefits"}, "weekly": "{amount} a week", "then": " then ", "ei_sub": "for up to {weeks} weeks: {total} in total, after a one-week waiting period without benefits. {pct} of {base} ÷ 52{cap}.", "qpip_sub": "{phases}: {total} in total. Average weekly income: {average} (last year's income ÷ 52{cap}).", "phase": "{weeks} weeks at {pct}", "phase_sep": ", then ", "capped": ", capped at {max}", "not_eligible": "Not eligible", "missing": ["A condition isn't met: see below.", "{n} conditions aren't met: see below."], "error": "Enter your net self-employment income for last year.", "conditions": {"ei": {"registration": {"ok": "Signed up for EI special benefits at least {months} months ago.", "no_less": "You can only claim once {months} months have passed since you signed up.", "no_none": "You need to sign up first, then wait {months} months before you can claim."}, "earnings": {"no": "Less than {min} of self-employment income last year: below the minimum.", "check": "At least {min}: check the indexed minimum Service Canada publishes for that year."}, "interruption": {"check": "An interruption of your self-employment earnings, as the regulations define it."}}, "qpip": {"insurable_income": {"ok": "At least {qpip_min} of insurable income last year.", "no": "Less than {qpip_min} of insurable income last year: not eligible for the QPIP."}, "residence": {"check": "Living in Quebec when your benefit period begins (and on December 31 of last year)."}, "interruption": {"check": "An interruption of your earnings, as defined by regulation: Retraite Québec decides."}}}, "step_ei": "Next: apply to Service Canada as soon as your earnings stop. Benefits generally aren't paid while you're outside Canada.", "step_ei_register": "To get these benefits later, sign up with Service Canada now: you can claim {months} months after you sign up, and you can cancel within 60 days or before receiving any benefits.", "step_ei_low": "With less than {min} of self-employment income last year, you can't claim this year: the minimum applies to the year before your claim.", "step_qpip_low": "With less than {qpip_min} of insurable income last year, the QPIP doesn't pay benefits.", "step_qpip": "Next: apply to the QPIP (administered by Retraite Québec) once your earnings stop.", "premium_ei": "Signing up costs {rate} of your self-employment earnings each year: {amount} on {earnings} in 2026, paid with your tax return, including the year you sign up.", "premium_ei_qc": " Quebec rate: maternity and parental benefits come from the QPIP.", "premium_qpip": "QPIP premiums are mandatory for the self-employed in Quebec: {rate} of business income, {amount} on {earnings} in 2026 (none if your work income is under $2,000)."}</script>
+
+<section class="section prose">
+  <h2>EI for the self-employed: what you can get</h2>
+  <ul>
+    <li><strong>Special benefits only:</strong> sickness, injury or quarantine (up to 26 weeks), maternity (15 weeks), parental (35 weeks at 55% or 61 weeks at 33%), compassionate care (26 weeks), and care for a critically ill child (35 weeks) or adult (15 weeks). The Employment Insurance Act doesn't give the self-employed benefits when work dries up.</li>
+    <li><strong>How much:</strong> 55% of your net self-employment income for the year before your claim, divided by 52 and rounded to the nearest dollar, on income up to $68,900 in 2026: at most $729 a week. Extended parental benefits pay 33%.</li>
+    <li><strong>Waiting period:</strong> the first week of your claim isn't paid.</li>
+  </ul>
+
+  <h2>Signing up: the agreement and the premium</h2>
+  <ul>
+    <li><strong>Who:</strong> self-employed Canadian citizens and permanent residents, by entering into an agreement with the Canada Employment Insurance Commission.</li>
+    <li><strong>When you can claim:</strong> once 12 months have passed since you signed up, if your self-employment earnings last year were at least $6,000, indexed each year since 2012 (Service Canada publishes the amount).</li>
+    <li><strong>Premium:</strong> 1.63% of your self-employment earnings in 2026 (1.30% in Quebec), on up to $68,900 of earnings, paid with your income tax return every year, including the year you sign up and the year it ends.</li>
+    <li><strong>Leaving:</strong> you can end the agreement by written notice as long as you haven't received benefits; it ends on December 31 of that year. Within 60 days of signing up, it's as if you'd never signed up. After receiving benefits, only in the cases set by regulation.</li>
+  </ul>
+
+  <h2>In Quebec: the QPIP</h2>
+  <ul>
+    <li><strong>Mandatory:</strong> self-employed workers living in Quebec pay QPIP premiums with their tax return (0.764% of business income in 2026, at most $786.92), unless their work income is under $2,000.</li>
+    <li><strong>Benefits:</strong> based on last year's insurable income divided by 52, up to $103,000 a year. Basic plan: maternity 18 weeks at 70%, paternity 5 weeks at 70%, parental 32 weeks (7 at 70%, then 25 at 55%). Special plan: 75% for 15, 3 and 25 weeks. You need at least $2,000 of insurable income.</li>
+    <li><strong>EI in Quebec:</strong> maternity and parental benefits come from the QPIP, but EI sickness and caregiver benefits remain open if you sign up.</li>
+  </ul>
+  <p>State benefits rarely replace your income. Insurance can cover the gap: see the <a href="{{link:insurance}}">business insurance guide</a>, and build a buffer with the <a href="{{link:set-aside}}">set-aside calculator</a>.</p>
+  <p class="small muted">Guidance only, based on the Employment Insurance Act (Part VII.1), its regulations and the Quebec Act respecting parental insurance, read in November 2026 (2026 amounts). Service Canada and Retraite Québec decide on your claim. Not covered: the EI family supplement and the QPIP increase for low-income families, extra weeks (multiple births, adoption, a hospitalized child), and limited company owners who pay themselves a salary.</p>
+</section>

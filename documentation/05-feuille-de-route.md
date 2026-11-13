@@ -9,7 +9,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 
 ## Où en est-on ?
 
-*Mis à jour le 13/11/2026 (matin).*
+*Mis à jour le 13/11/2026 (fin de matinée).*
 
 - **Priorité (décision D10)** : le site et la plateforme d'abord ; noms de domaine, Gumroad et affiliation à la fin.
   Règle de qualité maximale pour tout produit ou service (D11, charte dans la [méthode](04-methode-de-travail.md#charte-qualité)).
@@ -458,7 +458,9 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   règlement lus sur laws-lois.justice.gc.ca, Loi sur l'assurance parentale (RQAP) lue sur LégisQuébec ; spécification
   [56](56-protection-sociale-canada.md) ; règles `ei_self_employed_special_benefits` et `qpip_self_employed_benefits`,
   moteur `engines/benefits-ca.js` testé (valeurs calculées à la main, dont les maximums publiés de 729 $ par semaine
-  et de 786,92 $ de cotisation RQAP ; 18 erreurs réintroduites, toutes détectées) (D74). Étape 2 : les pages.
+  et de 786,92 $ de cotisation RQAP ; 18 erreurs réintroduites, toutes détectées) (D74). **Étape 2 faite (13/11,
+  fin de matinée)** : pages *EI special benefits for the self-employed* et « Assurance-emploi et RQAP du travailleur
+  autonome », menu « Impôts et gestion », parcours navigateur et captures ([56](56-protection-sociale-canada.md) § 5).
 - **Prochaines actions de Claude** : indicateurs de l'Espace : les huit onglets, la date de clôture des pistes et la période de
   l'onglet Documents et de l'onglet Dépenses sont faits (12/11, [55](55-indicateurs-espace.md)) ; **appliquer le thème**
   choisi par Ismail dès sa réponse ([54](54-themes.md) § 2) ; refonte, suite ([31](31-vision-plateforme.md) § 5) : les quatre modules du compte
@@ -476,9 +478,9 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   [51](51-protection-sociale-royaume-uni.md) : à revoir si GOV.UK précise comment les crédits de classe 2 comptent pour
   la *Maternity Allowance* ; États-Unis faits le 09/11/2026 (10 États avec le New Jersey et le Colorado, 10/11), [52](52-protection-sociale-etats-unis.md) :
   ajouter le Connecticut (certificat de cga.ct.gov refusé par l'outil de lecture) ; taux 2027 du Colorado ; taux du Massachusetts, taux des indépendants au Delaware, taux 2027 du Minnesota, assiette de la prime de
-  Washington pour les indépendants (estimation chiffrée), durée d'engagement au Delaware ; Canada : moteur fait le 13/11
-  ([56](56-protection-sociale-canada.md)), **pages anglaise et française à faire** (id `sick-pay`), montant minimal
-  indexé de l'AE dès que canada.ca est lisible)) ;
+  Washington pour les indépendants (estimation chiffrée), durée d'engagement au Delaware ; Canada : fait le 13/11
+  ([56](56-protection-sociale-canada.md)) ; montant minimal indexé de l'AE et « arrêt de rémunération » dès que
+  canada.ca ou les règlements sont lus)) ;
   ajouter les taux du 1er semestre 2027 dès leur publication
   (fin décembre 2026 : intérêt légal par arrêté, taux de la BCE en vigueur au 1er janvier ; tables `taux_interet_legal`
   et `taux_bce_refinancement`, utilisées par le calculateur de pénalités et les CGV) ; *bank holidays* de 2029 dès que
