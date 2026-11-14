@@ -1,5 +1,17 @@
 # Journal des modifications
 
+## 2026-11-14 (fin d'après-midi) — Espace : condition des cinq ans d'activité (151 septies)
+
+- Réglages : « Début d'activité » proposé à tous les profils, y compris au régime réel (« début de l'activité
+  professionnelle, même sous un autre régime »).
+- Registre des immobilisations : le bloc « Exonération possible » dit si la condition des cinq ans est remplie au
+  31 décembre de l'année de la cession ; non remplie, il l'indique (avec la date des cinq ans et l'exception de
+  l'expropriation et des indemnités d'assurance) et ne fait plus d'estimation ; sans date, il invite à la saisir.
+- Règle lue au BOFiP (BOI-BIC-PVMV-40-10-10-20, § 10 et 160).
+- Tests : 2 tests unitaires (9 erreurs réintroduites dans le moteur et 5 dans l'écran, toutes détectées), parcours de
+  l'Espace (champ au réel, condition à vérifier, remplie, non remplie), des comptes (51 points) et du site
+  (4 427 points), captures relues.
+
 ## 2026-11-14 (après-midi) — Espace : exonération des plus-values des petites entreprises (151 septies)
 
 - Registre des immobilisations : sous la synthèse des cessions, rappel de l'exonération de l'article 151 septies du

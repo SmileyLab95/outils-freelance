@@ -340,3 +340,28 @@ test("151 septies : une année sans encaissement enregistré → estimation à �
   x = E.exemption151([inv([["2024-06-30", 50000]], franchise), inv([["2025-06-30", 0]], franchise)], 2026, D, R);
   assert.deepEqual([x.kind, x.average], ["full", 25000], "encaissement nul enregistré : l'année est connue");
 });
+
+test("151 septies : condition des cinq ans (atteints au plus tard le 1er janvier suivant), date absente ou illisible", () => {
+  assert.deepEqual(E.fiveYears("2022-01-01", 2026, R), { status: "met", reachedOn: "2027-01-01" }, "cinq années pleines au 31/12/2026");
+  assert.deepEqual(E.fiveYears("2022-01-02", 2026, R), { status: "not_met", reachedOn: "2027-01-02" }, "un jour de moins");
+  assert.deepEqual(E.fiveYears("2021-03-01", "2026", R), { status: "met", reachedOn: "2026-03-01" });
+  assert.deepEqual(E.fiveYears("2024-02-29", 2029, R), { status: "met", reachedOn: "2029-02-28" }, "29 février → 28 février");
+  assert.deepEqual(E.fiveYears("2024-02-29", 2028, R), { status: "not_met", reachedOn: "2029-02-28" });
+  for (const bad of ["", undefined, null, "01/03/2021", "2021-02-30"]) assert.deepEqual(E.fiveYears(bad, 2026, R), { status: "unknown", reachedOn: null }, String(bad));
+});
+
+test("151 septies : condition des cinq ans non remplie → aucune exonération, sans estimation des recettes", () => {
+  const years = [inv([["2024-06-30", 50000]], franchise), inv([["2025-06-30", 50000]], franchise)];
+  const D = { shortTerm: 3000, longTerm: 1000 };
+  let x = E.exemption151(years, 2026, D, R, "2023-05-01");
+  assert.deepEqual([x.kind, x.reason, x.rate, x.shortTerm, x.longTerm, x.average], ["none", "activity", 0, 0, 0, null]);
+  assert.deepEqual(x.activity, { status: "not_met", reachedOn: "2028-05-01" });
+  x = E.exemption151([], 2026, D, R, "2023-05-01");
+  assert.deepEqual([x.kind, x.reason], ["none", "activity"], "même sans encaissements : la condition suffit à exclure");
+  x = E.exemption151(years, 2026, D, R, "2020-05-01");
+  assert.deepEqual([x.kind, x.reason, x.shortTerm, x.activity.status], ["full", null, 3000, "met"]);
+  x = E.exemption151(years, 2026, D, R, "2021-06-01");
+  assert.deepEqual([x.kind, x.activity], ["full", { status: "met", reachedOn: "2026-06-01" }], "cinq ans atteints pendant l'année de la cession");
+  x = E.exemption151(years, 2026, D, R);
+  assert.deepEqual([x.kind, x.activity.status], ["full", "unknown"], "date inconnue : estimation conditionnelle");
+});

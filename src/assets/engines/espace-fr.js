@@ -798,16 +798,30 @@
     return Math.round((c.partial_below - receipts) / c.divisor * 10000) / 10000;
   }
   /**
-   * Exonération de l'article 151 septies estimée pour un BNC (documentation/57 § 10) : moyenne des encaissements HT des
-   * deux années précédentes, taux, montants exonérés de la plus-value nette à court terme et à long terme de l'année.
-   * kind null (montants null) : une des deux années n'a aucun encaissement enregistré, estimation à établir.
+   * Condition des cinq ans d'activité (article 151 septies, documentation/57 § 11) : remplie pour l'année si les cinq ans
+   * sont atteints au plus tard le 1er janvier suivant (activité exercée jusqu'au 31 décembre) ; unknown sans date lisible.
    */
-  function exemption151(documents, year, disposals, rules) {
+  function fiveYears(startDate, year, rules) {
+    if (!validDay(startDate)) return { status: "unknown", reachedOn: null };
+    var reached = addYears(startDate, rules.plus_values_exoneration_151_septies.activity_years);
+    return { status: reached <= (Number(year) + 1) + "-01-01" ? "met" : "not_met", reachedOn: reached };
+  }
+  /**
+   * Exonération de l'article 151 septies estimée pour un BNC (documentation/57 § 10 et 11) : moyenne des encaissements HT
+   * des deux années précédentes, taux, montants exonérés de la plus-value nette à court terme et à long terme de l'année.
+   * kind null (montants null) : une des deux années n'a aucun encaissement enregistré, estimation à établir ; condition
+   * des cinq ans non remplie (date de début d'activité connue) : kind "none", reason "activity", montants nuls.
+   */
+  function exemption151(documents, year, disposals, rules, startDate) {
     var X = rules.plus_values_exoneration_151_septies, Y = Number(year);
     var receipts = [receiptsHT(documents, Y - 2), receiptsHT(documents, Y - 1)];
     var st = Math.max(0, (disposals && disposals.shortTerm) || 0), lt = Math.max(0, (disposals && disposals.longTerm) || 0);
     var out = { years: [Y - 2, Y - 1], receipts: receipts, average: null, rate: null, kind: null, shortTerm: null, longTerm: null,
-                base: { shortTerm: st, longTerm: lt } };
+                base: { shortTerm: st, longTerm: lt }, activity: fiveYears(startDate, Y, rules), reason: null };
+    if (out.activity.status === "not_met") {
+      out.kind = "none"; out.reason = "activity"; out.rate = 0; out.shortTerm = 0; out.longTerm = 0;
+      return out;
+    }
     if (!receipts[0].count || !receipts[1].count) return out;
     out.average = round2((receipts[0].amount + receipts[1].amount) / 2);
     var C = X.services_bnc;
@@ -1575,7 +1589,7 @@
            parseDuration: parseDuration, durationLabel: durationLabel, checkTime: checkTime, timeErrors: timeErrors, timeState: timeState, lastRate: lastRate,
            timeInvoiceLines: timeInvoiceLines, timeInvoice: timeInvoice, timeSummary: timeSummary, unbilledByClient: unbilledByClient,
            ASSET_CATEGORIES: ASSET_CATEGORIES, assetErrors: assetErrors, checkAsset: checkAsset, assetStart: assetStart, assetPlan: assetPlan,
-           assetsYear: assetsYear, assetHints: assetHints, assetsCSV: assetsCSV, vehicleCap: vehicleCap, assetDisposal: assetDisposal, receiptsHT: receiptsHT, exemption151: exemption151,
+           assetsYear: assetsYear, assetHints: assetHints, assetsCSV: assetsCSV, vehicleCap: vehicleCap, assetDisposal: assetDisposal, receiptsHT: receiptsHT, exemption151: exemption151, fiveYears: fiveYears,
            timeCSV: timeCSV, timerCheck: timerCheck, timerElapsed: timerElapsed, timerStart: timerStart, timerPause: timerPause,
            timerResume: timerResume, timerStop: timerStop, timerClock: timerClock, timerDuration: timerDuration,
            STAGE_LABELS: STAGE_LABELS, OPEN_STAGES: OPEN_STAGES, prospectErrors: prospectErrors, exchangeErrors: exchangeErrors, prospectQuotes: prospectQuotes,

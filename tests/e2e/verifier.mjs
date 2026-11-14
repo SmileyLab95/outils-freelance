@@ -4547,6 +4547,34 @@ const tests = {
     exemption = await receipts(0, 0);
     check(exemption.includes("en 2026 ni en 2027") && !(await assetsStore()).documents.some((x) => /^e2e-151/.test(x.id)),
       "Immobilisations : encaissements de test retirés");
+    check(exemption.includes("Indiquez votre début d'activité dans les réglages : l'Espace vérifiera la condition des cinq ans."),
+      "Immobilisations : condition des cinq ans à vérifier sans date de début d'activité");
+    // Condition des cinq ans (documentation/57 § 11) : date de début d'activité saisie dans les réglages, au réel.
+    const startDate = async (value) => {
+      await go("#/reglages");
+      await page.waitForSelector("#profile-form");
+      await page.fill("#ep-startDate", value);
+      await page.click("#profile-form button[type=submit]");
+      await page.waitForTimeout(300);
+      await go("#/immobilisations?annee=2028");
+      await page.waitForSelector(".assets-table");
+      return text("#espace-view .asset-exemption");
+    };
+    await go("#/reglages");
+    await page.waitForSelector("#profile-form");
+    check((await page.isVisible("#ep-startDate")) && (await page.isHidden("#ep-acre")) &&
+      (await text("#profile-form")).includes("Début de l'activité professionnelle, même sous un autre régime."),
+      "Réglages : début d'activité proposé au régime réel (ACRE masquée)");
+    exemption = await startDate("2023-05-01");
+    check(exemption.includes("Condition des cinq ans remplie au 31/12/2028 (début d'activité le 01/05/2023).") && exemption.includes("Estimation impossible"),
+      "Immobilisations : condition des cinq ans remplie");
+    exemption = await startDate("2024-05-01");
+    check(exemption.includes("Condition des cinq ans non remplie au 31/12/2028 (début d'activité le 01/05/2024, cinq ans le 01/05/2029) : pas d'exonération, " +
+      "sauf plus-values d'expropriation ou d'indemnités d'assurance.") && !exemption.includes("Estimation") && !exemption.includes("En BIC"),
+      "Immobilisations : condition des cinq ans non remplie, pas d'estimation");
+    exemption = await startDate("");
+    check(exemption.includes("Indiquez votre début d'activité dans les réglages") && (await assetsStore()).profile.startDate === "",
+      "Immobilisations : date de début d'activité retirée");
     await go("#/immobilisations?annee=2026");
     await page.click('.assets-table a:text("Fauteuil de bureau")');
     await page.waitForSelector("#asset-delete");

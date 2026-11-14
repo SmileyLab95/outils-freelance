@@ -277,3 +277,42 @@ sans encaissement) ; 22 erreurs réintroduites dans le moteur : 21 détectées (
 pour lui-même avec une règle fictive, long terme négatif), 1 équivalente (à 126 000 € la formule vaut déjà 0) ; parcours de l'Espace : rappel, estimation impossible, totale (90 000 €), partielle (16,67 %, exemple du
 BOFiP : 167,04 € et 16,67 €), aucune (126 000 €), une année manquante, plus-value à établir, encaissements de test
 retirés ; 11 erreurs réintroduites dans l'écran, toutes détectées ; captures relues. Relecture : la phrase de règle précise « moyenne des deux années précédentes » ; la fiche ne parle plus d'exonération pour une moins-value (elle ne porte que sur les plus-values).
+
+## 11. Condition des cinq ans d'activité (spécification du 14/11/2026, fin d'après-midi)
+
+**Besoin** : l'estimation du § 10 disait « si votre activité est exercée depuis au moins 5 ans » sans pouvoir le
+vérifier : le champ « Début d'activité » du profil n'était proposé qu'en micro-entreprise.
+
+**Règle** (BOI-BIC-PVMV-40-10-10-20, § 10, lu le 14/11/2026) : l'activité doit avoir été exercée à titre professionnel
+pendant au moins cinq ans ; le délai court du **début de l'exercice effectif** de l'activité et s'achève à la **clôture
+de l'exercice** (en BNC : le 31 décembre de l'année) au titre duquel la plus-value nette est déterminée ; il n'est pas
+exigé pour les plus-values d'expropriation ou d'indemnités d'assurance (§ 160).
+
+**Choix (D82)** :
+- Réglages : « Début d'activité » proposé pour **tous** les profils, avec l'aide « Début de l'activité professionnelle,
+  même sous un autre régime. » (il sert déjà au livre des recettes, à l'ACRE et à la trésorerie).
+- Condition remplie pour l'année Y si la date anniversaire des cinq ans tombe **au plus tard le 1er janvier Y+1**
+  (début le 1er janvier 2022 : cinq années pleines au 31 décembre 2026) ; 29 février → 28 février (même règle que la
+  durée de détention, § 9) : **point signalé**.
+- Bloc « Exonération possible » : une ligne de plus.
+  - Date connue, condition remplie : « Condition des cinq ans remplie au 31/12/Y (début d'activité le …). »
+  - Date connue, condition non remplie : « Condition des cinq ans non remplie au 31/12/Y (début d'activité le …,
+    cinq ans le …) : pas d'exonération, sauf plus-values d'expropriation ou d'indemnités d'assurance. » ; pas
+    d'estimation des recettes.
+  - Date inconnue : « Indiquez votre début d'activité dans les réglages : l'Espace vérifiera la condition des cinq
+    ans. » ; l'estimation reste conditionnelle.
+
+**Moteur** : `fiveYears(startDate, year, rules)` → `{ status: "met" | "not_met" | "unknown", reachedOn }` ;
+`exemption151(…, startDate)` ajoute `activity` et, condition non remplie, `kind: "none"` avec `reason: "activity"`.
+
+**Tests** : bornes (1er janvier : remplie ; 2 janvier : non remplie), 29 février, date illisible ou absente
+(inconnue), effet sur l'estimation ; écran : champ visible au réel, trois cas du bloc.
+
+**Réalisation (14/11/2026, fin d'après-midi)** : moteur `fiveYears` ; `exemption151` prend la date de début d'activité ;
+réglages : « Début d'activité » sorti du bloc propre à la micro-entreprise, avec son aide ; bloc « Exonération
+possible » : ligne de la condition, et plus d'estimation ni de phrase BIC quand la condition n'est pas remplie.
+Tests : 2 tests unitaires de plus (bornes du 1er et du 2 janvier, 29 février, date illisible, effet sur l'estimation,
+cinq ans atteints pendant l'année de la cession) ; 9 erreurs réintroduites dans le moteur, toutes détectées (une après
+l'ajout de ce dernier cas) ; parcours de l'Espace : champ visible au réel (ACRE masquée), condition à vérifier,
+remplie, non remplie, date retirée ; 5 erreurs réintroduites dans l'écran, toutes détectées ; parcours des comptes ; captures relues (réglages au réel, condition non remplie, ordinateur et mobile).
+

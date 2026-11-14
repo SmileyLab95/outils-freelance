@@ -9,7 +9,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 
 ## Où en est-on ?
 
-*Mis à jour le 14/11/2026 (après-midi).*
+*Mis à jour le 14/11/2026 (fin d'après-midi).*
 
 - **Priorité (décision D10)** : le site et la plateforme d'abord ; noms de domaine, Gumroad et affiliation à la fin.
   Règle de qualité maximale pour tout produit ou service (D11, charte dans la [méthode](04-methode-de-travail.md#charte-qualité)).
@@ -471,6 +471,9 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   JavaScript) et part de 50 % lue dans la loi (C.R.S. 8-13.3-507(4)(a)) : revenu brut et effet au dépôt de l'avis
   confirmés ; page complétée (documents fiscaux chaque année avant le 1er décembre, amende jusqu'à 500 $ ; retrait à
   tout moment, effet au plus tôt à la fin des 3 ans et 30 jours après l'avis) ([52](52-protection-sociale-etats-unis.md)).
+- **Espace : condition des cinq ans (14/11/2026, fin d'après-midi)** : « Début d'activité » proposé au régime réel ;
+  le bloc d'exonération dit si l'activité a cinq ans au 31 décembre de l'année de la cession, sinon ne fait pas
+  d'estimation ([57](57-immobilisations.md) § 11, D82).
 - **Espace : exonération des petites entreprises (14/11/2026, après-midi)** : sous la synthèse des cessions du
   registre, rappel de l'article 151 septies et estimation pour un BNC (moyenne des encaissements HT des deux années
   précédentes : totale jusqu'à 90 000 €, partielle jusqu'à 126 000 €), montants exonérés à court et à long terme
@@ -524,8 +527,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   toujours illisible.
 - **Prochaines actions de Claude** : immobilisations de l'Espace (faites le 14/11, [57](57-immobilisations.md) ; plafond
   des voitures particulières, plus-values de cession et exonération de l'article 151 septies faits le 14/11) : estimation
-  151 septies pour un BIC (produits acquis) et pour l'activité mixte, condition des cinq ans (date de début d'activité
-  à demander au profil « réel »), barèmes des voitures acquises avant 2021, combinaison part privée et plafond, plus-value d'un bien
+  151 septies pour un BIC (produits acquis) et pour l'activité mixte (condition des cinq ans faite le 14/11), barèmes des voitures acquises avant 2021, combinaison part privée et plafond, plus-value d'un bien
   partiel autre qu'un véhicule, dès que leurs règles sont lues ; indicateurs de l'Espace : les huit onglets, la date de clôture des pistes et la période de
   l'onglet Documents et de l'onglet Dépenses sont faits (12/11, [55](55-indicateurs-espace.md)) ; **appliquer le thème**
   choisi par Ismail dès sa réponse ([54](54-themes.md) § 2) ; refonte, suite ([31](31-vision-plateforme.md) § 5) : les quatre modules du compte

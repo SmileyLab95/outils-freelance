@@ -349,11 +349,11 @@
       field("activity", "Activité", p.activity, { options: ACTIVITIES }) +
       field("vatRegime", "TVA", p.vatRegime, { options: VAT_REGIMES, half: true }) +
       field("vatRate", "Taux de TVA habituel", p.vatRate || 20, { options: [[20, "20 %"], [10, "10 %"], [5.5, "5,5 %"], [2.1, "2,1 %"]], half: true }) +
+      field("startDate", "Début d'activité", p.startDate, { type: "date", half: true, hint: "Début de l'activité professionnelle, même sous un autre régime." }) +
       '<div class="micro-only full fields"' + (micro ? "" : " hidden") + ">" +
       field("activity2", "Seconde activité (activité mixte)", p.activity2 || "", { options: activity2Options(p.activity),
         hint: "Vente de marchandises et prestations de services : plafonds, cotisations et livre des recettes suivis par activité." }) +
       field("periodicity", "Déclaration Urssaf", p.periodicity, { options: [["quarterly", "Trimestrielle"], ["monthly", "Mensuelle"]], half: true }) +
-      field("startDate", "Début d'activité", p.startDate, { type: "date", half: true }) +
       field("acre", "ACRE", p.acre || 0, { options: [[0, "Non"], [50, "Oui, réduction de 50 %"], [25, "Oui, réduction de 25 %"]], half: true }) +
       field("vl", "Versement libératoire de l'impôt", p.vl ? "1" : "0", { options: [["0", "Non"], ["1", "Oui"]], half: true }) +
       "</div>" +
@@ -1699,25 +1699,32 @@
     if (!(disposals.shortTerm > 0 || disposals.longTerm > 0 || disposals.pendingGains)) return "";
     var X = R.plus_values_exoneration_151_septies, S = X.services_bnc, V = X.sales;
     var eur0 = function (n) { return OF.eur(n, 0); }, rate = function (r) { return OF.fmt(Math.round(r * 10000) / 100) + " %"; };
-    var x = E.exemption151(data.documents, year, disposals, R);
+    var start = profile().startDate, x = E.exemption151(data.documents, year, disposals, R, start);
     var lines = ["si votre activité est exercée depuis au moins " + X.activity_years + " ans, la plus-value nette de l'année (hors terrains à bâtir) est " +
       "exonérée en totalité quand vos recettes annuelles HT (moyenne des deux années précédentes) ne dépassent pas " + eur0(S.full_up_to) + " (professions libérales et services) ou " +
       eur0(V.full_up_to) + " (vente de marchandises), et en partie en dessous de " + eur0(S.partial_below) + " ou de " + eur0(V.partial_below) + "."];
-    if (x.kind === null) {
-      lines.push("Estimation impossible : aucun encaissement enregistré dans l'Espace en " + x.receipts.filter(function (r) { return !r.count; })
-        .map(function (r) { return r.year; }).join(" ni en ") + ". Faites la moyenne de vos recettes HT de " + x.years.join(" et ") + " (déclarations 2035).");
-    } else {
-      var amounts = money(x.shortTerm) + " à court terme et " + money(x.longTerm) + " à long terme";
-      lines.push("Estimation pour une profession libérale (BNC), d'après vos encaissements HT enregistrés dans l'Espace (" +
-        x.receipts.map(function (r) { return r.year + " : " + money(r.amount); }).join(", ") + ", moyenne " + money(x.average) + ") : " +
-        (x.kind === "full" ? "exonération totale, soit " + amounts + " exonérés." :
-          x.kind === "partial" ? "exonération partielle au taux de " + rate(x.rate) + " ((" + eur0(S.partial_below) + " − " + money(x.average) + ") ÷ " +
-            eur0(S.divisor) + "), soit " + amounts + " exonérés." :
-          "pas d'exonération (moyenne de " + eur0(S.partial_below) + " ou plus).") +
-        " Ce calcul suppose que tous vos encaissements de ces deux années sont dans l'Espace.");
+    var A = x.activity, endOfYear = "31/12/" + year;
+    lines.push(A.status === "met" ? "Condition des cinq ans remplie au " + endOfYear + " (début d'activité le " + day(start) + ")." :
+      A.status === "not_met" ? "Condition des cinq ans non remplie au " + endOfYear + " (début d'activité le " + day(start) + ", cinq ans le " + day(A.reachedOn) +
+        ") : pas d'exonération, sauf plus-values d'expropriation ou d'indemnités d'assurance." :
+      "Indiquez votre début d'activité dans les réglages : l'Espace vérifiera la condition des cinq ans.");
+    if (x.reason !== "activity") {   // condition des cinq ans non remplie : rien à estimer
+      if (x.kind === null) {
+        lines.push("Estimation impossible : aucun encaissement enregistré dans l'Espace en " + x.receipts.filter(function (r) { return !r.count; })
+          .map(function (r) { return r.year; }).join(" ni en ") + ". Faites la moyenne de vos recettes HT de " + x.years.join(" et ") + " (déclarations 2035).");
+      } else {
+        var amounts = money(x.shortTerm) + " à court terme et " + money(x.longTerm) + " à long terme";
+        lines.push("Estimation pour une profession libérale (BNC), d'après vos encaissements HT enregistrés dans l'Espace (" +
+          x.receipts.map(function (r) { return r.year + " : " + money(r.amount); }).join(", ") + ", moyenne " + money(x.average) + ") : " +
+          (x.kind === "full" ? "exonération totale, soit " + amounts + " exonérés." :
+            x.kind === "partial" ? "exonération partielle au taux de " + rate(x.rate) + " ((" + eur0(S.partial_below) + " − " + money(x.average) + ") ÷ " +
+              eur0(S.divisor) + "), soit " + amounts + " exonérés." :
+            "pas d'exonération (moyenne de " + eur0(S.partial_below) + " ou plus).") +
+          " Ce calcul suppose que tous vos encaissements de ces deux années sont dans l'Espace.");
+      }
+      lines.push("En BIC, les recettes retenues sont celles des exercices clos (produits acquis) : pas d'estimation ici." +
+        (disposals.pending ? " Les cessions à établir ne sont pas comptées." : ""));
     }
-    lines.push("En BIC, les recettes retenues sont celles des exercices clos (produits acquis) : pas d'estimation ici." +
-      (disposals.pending ? " Les cessions à établir ne sont pas comptées." : ""));
     return '<div class="notice asset-exemption"><p><strong>Exonération possible (article 151 septies du CGI)</strong> : ' +
       lines.map(function (l, i) { return (i ? "<p>" : "") + esc(l) + "</p>"; }).join("") + "</div>";
   }
