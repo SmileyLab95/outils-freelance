@@ -80,7 +80,7 @@ test("registre de l'année : biens présents, annuités, totaux ; bien cédé da
   // 2029 : imprimante amortie (rien cette année, valeur nette nulle) ; ordinateur : reste 247,95 € ; achat de 2027
   // (1er février : 334 jours en 2027, 457,53 €) : troisième année pleine, reste 42,47 € pour 2030.
   assert.deepEqual(y29.rows.map((r) => [r.asset.id, r.amount, r.net]), [["p", 0, 0], ["o", 247.95, 0], ["f", 500, 42.47]]);
-  assert.deepEqual(E.assetsYear([], 2026), { rows: [], amount: 0, deductible: 0, net: 0, count: 0 });
+  assert.deepEqual(E.assetsYear([], 2026), { rows: [], amount: 0, deductible: 0, net: 0, count: 0, pending: 0 });
 });
 
 test("contrôles de saisie : champs obligatoires, dates, durée entière, part, cession", () => {
@@ -115,4 +115,78 @@ test("export CSV du registre de l'année", () => {
   const [head, line] = csv.split("\r\n");
   assert.equal(head.split(";").length, 13);
   assert.equal(line, '"Bureau ""assis-debout""";"Matériel et mobilier de bureau";01/07/2026;01/07/2026;1234,50;3;50;207,44;207,44;1027,06;103,72;31/01/2027;400,00');
+});
+
+// Plafond des voitures particulières (documentation/57 § 8) : CGI, art. 39, 4 ; BOI-BIC-AMT-20-40-50 ; notices 2032 et 2142 de 2026.
+const car = (over) => a(Object.assign({ id: "c", label: "Voiture", category: "transport", vp: true, acquiredOn: "2026-01-01", cost: 35000, years: 4,
+  firstRegOn: "2026-01-01", co2: 200 }, over));
+const capOf = (over) => E.vehicleCap(car(over), R).cap;
+
+test("règle du plafond des voitures particulières : barèmes WLTP et ancien, sources officielles", () => {
+  assert.deepEqual(R.plafond_amortissement_vp, { acquired_from: "2021-01-01", wltp_from: "2020-03-01",
+    wltp: [{ below: 20, cap: 30000 }, { below: 50, cap: 20300 }, { up_to: 160, cap: 18300 }, { cap: 9900 }],
+    nedc: [{ below: 20, cap: 30000 }, { below: 60, cap: 20300 }, { up_to: 130, cap: 18300 }, { cap: 9900 }] });
+  const entry = ruleEntries("fr").plafond_amortissement_vp;
+  assert.equal(entry.confidence, "high");
+  assert.match(entry.source, /^https:\/\/www\.impots\.gouv\.fr\//);
+  assert.ok(entry.more_sources.some((m) => /BOI-BIC-AMT-20-40-50/.test(m.source)));
+});
+
+test("plafond : bornes des barèmes WLTP (première immatriculation depuis le 1er mars 2020) et ancien", () => {
+  const wltp = (co2) => capOf({ firstRegOn: "2020-03-01", co2 });
+  assert.deepEqual([0, 19, 20, 49, 50, 160, 161].map(wltp), [30000, 30000, 20300, 20300, 18300, 18300, 9900]);
+  const old = (co2) => capOf({ acquiredOn: "2022-05-10", firstRegOn: "2020-02-29", co2 });
+  assert.deepEqual([19, 20, 59, 60, 130, 131].map(old), [30000, 20300, 20300, 18300, 18300, 9900]);
+  assert.equal(E.vehicleCap(car({ firstRegOn: "2020-03-01", co2: 120 }), R).wltp, true);
+  assert.equal(E.vehicleCap(car({ firstRegOn: "2020-02-29", co2: 120 }), R).wltp, false);
+});
+
+test("plafond : statuts (pas un véhicule, pas une voiture particulière, acquise avant 2021, carte grise incomplète, sous le plafond)", () => {
+  assert.equal(E.vehicleCap(a(), R), null);
+  assert.deepEqual(E.vehicleCap(car({ vp: false }), R), { status: "not_vp" });
+  assert.deepEqual(E.vehicleCap(car({ acquiredOn: "2020-12-31" }), R), { status: "before" });
+  assert.equal(E.vehicleCap(car({ acquiredOn: "2021-01-01" }), R).status, "capped");
+  assert.deepEqual(E.vehicleCap(car({ co2: "" }), R), { status: "missing" });
+  assert.deepEqual(E.vehicleCap(car({ firstRegOn: "" }), R), { status: "missing" });
+  assert.deepEqual(E.vehicleCap(car({ co2: "abc" }), R), { status: "missing" });
+  assert.deepEqual(E.vehicleCap(car({ cost: 18300, co2: 120 }), R), { status: "under", cap: 18300, ratio: 1, wltp: true, co2: 120 });
+  assert.equal(E.vehicleCap(car({ cost: 18300.01, co2: 120 }), R).status, "capped");
+  assert.equal(E.vehicleCap(car({ cost: 15000, co2: 120 }), R).ratio, 1, "sous le plafond : rapport de 1");
+});
+
+test("plafond : part déductible = annuité × plafond ÷ prix (exemple du BOFiP : 8 750 € × 9 900 / 35 000 = 2 475 €)", () => {
+  assert.deepEqual(E.assetPlan(car(), R).map((r) => [r.amount, r.deductible]), [[8750, 2475], [8750, 2475], [8750, 2475], [8750, 2475]]);
+  const prorata = E.assetPlan(car({ acquiredOn: "2026-03-01" }), R);
+  assert.deepEqual(prorata.map((r) => r.deductible), [2074.93, 2475, 2475, 2475, 400.07]);
+  assert.equal(Math.round(prorata.reduce((s, r) => s + r.deductible, 0) * 100) / 100, 9900, "total déductible = plafond");
+  assert.deepEqual(prorata.map((r) => r.net).slice(-1), [0], "cumul et valeur nette comptables inchangés");
+  assert.deepEqual(E.assetPlan(car(), undefined).map((r) => r.deductible), [8750, 8750, 8750, 8750], "sans les règles : pas de plafond");
+  for (const over of [{ vp: false }, { cost: 15000, co2: 120 }]) {
+    assert.deepEqual(E.assetPlan(car(over), R).map((r) => r.deductible), E.assetPlan(car(over)).map((r) => r.amount), JSON.stringify(over));
+  }
+});
+
+test("plafond : voiture en partie privée, acquise avant 2021 ou carte grise incomplète, part à établir ; totaux sans elle", () => {
+  assert.deepEqual(E.assetPlan(car({ proShare: 80 }), R).map((r) => r.deductible), [null, null, null, null]);
+  assert.deepEqual(E.assetPlan(car({ co2: "" }), R).map((r) => r.deductible), [null, null, null, null]);
+  assert.deepEqual(E.assetPlan(car({ acquiredOn: "2020-01-01", cost: 9000 }), R).map((r) => r.deductible), [null, null, null, null], "acquise avant 2021");
+  assert.deepEqual(E.assetPlan(car({ proShare: 80, cost: 15000, co2: 120 }), R)[0].deductible, 3000, "sous le plafond : part professionnelle seule");
+  const y = E.assetsYear([car(), car({ id: "d", label: "Autre voiture", proShare: 80 }),
+    a({ id: "m", acquiredOn: "2026-01-01", cost: 1200 })], 2026, R);
+  assert.deepEqual([y.amount, y.deductible, y.pending], [17900, 2875, 1]);
+  assert.deepEqual(y.rows.map((r) => [r.asset.id, r.deductible]), [["d", null], ["m", 400], ["c", 2475]]);
+  const lines = E.assetsCSV(y).split("\r\n");
+  assert.equal(lines[1], '"Autre voiture";"Véhicule ou matériel de transport";01/01/2026;01/01/2026;35000,00;4;80;8750,00;8750,00;26250,00;;;', "part à établir : cellule vide");
+});
+
+test("plafond : saisie de la carte grise exigée pour une voiture particulière acquise depuis 2021", () => {
+  const fields = (x) => E.assetErrors(x, R).map((e) => e.field);
+  assert.deepEqual(fields(car()), []);
+  assert.deepEqual(fields(car({ firstRegOn: "", co2: "" })), ["firstRegOn", "co2"]);
+  for (const co2 of [120.5, -1, 1000, "abc"]) assert.deepEqual(fields(car({ co2 })), ["co2"], String(co2));
+  assert.deepEqual(fields(car({ co2: 0 })), [], "0 g (électrique) accepté");
+  assert.deepEqual(fields(car({ firstRegOn: "", co2: "", acquiredOn: "2020-06-01" })), [], "acquise avant 2021 : rien d'exigé");
+  assert.deepEqual(fields(car({ firstRegOn: "", co2: "", acquiredOn: "2021-01-01" })), ["firstRegOn", "co2"], "acquise le 1er janvier 2021 : exigé");
+  assert.deepEqual(fields(car({ firstRegOn: "", co2: "", vp: false })), [], "pas une voiture particulière");
+  assert.deepEqual(E.assetErrors(car({ firstRegOn: "", co2: "" })).map((e) => e.field), [], "sans les règles : pas de contrôle");
 });

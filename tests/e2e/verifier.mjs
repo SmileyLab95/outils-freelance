@@ -4457,7 +4457,55 @@ const tests = {
     await page.waitForFunction(() => !document.getElementById("import-error").hidden);
     check((await text("#import-error")) === "Cette sauvegarde contient des éléments illisibles.", "Immobilisations : sauvegarde avec un bien illisible refusée");
     check((await assetsStore()).assets.length === 2, "Immobilisations : sauvegarde refusée, registre inchangé");
-    for (const label of ["Ordinateur portable", "Fauteuil de bureau"]) {
+    for (const [file, bad] of [["voiture-date-illisible.json", { firstRegOn: "15/02/2026" }], ["voiture-co2-illisible.json", { co2: "beaucoup" }]]) {
+      await page.evaluate(() => { document.getElementById("import-error").hidden = true; });
+      await restore(file, Object.assign({}, before, { assets: [Object.assign({ id: "v", label: "Voiture", category: "transport", vp: true, acquiredOn: "2026-01-01",
+        cost: 30000, years: 4, firstRegOn: "2026-01-01", co2: 120 }, bad)] }));
+      await page.waitForFunction(() => !document.getElementById("import-error").hidden);
+      check((await text("#import-error")) === "Cette sauvegarde contient des éléments illisibles." && (await assetsStore()).assets.length === 2,
+        "Immobilisations : sauvegarde avec une carte grise illisible refusée (" + Object.keys(bad)[0] + ")");
+    }
+    // Voiture particulière (documentation/57 § 8) : champs de la carte grise, plafond (9 900 € / 35 000 €), part à établir.
+    await go("#/immobilisations/nouveau");
+    check(await page.isHidden("#ep-vp"), "Immobilisations : champs de la carte grise masqués hors véhicule");
+    await page.fill("#ep-label", "Voiture");
+    await page.selectOption("#ep-category", "transport");
+    check((await page.isVisible("#ep-vp")) && (await page.isVisible("#ep-co2")) && (await page.isVisible("#ep-firstRegOn")), "Immobilisations : champs de la carte grise pour un véhicule");
+    await page.selectOption("#ep-category", "materiel");
+    check((await page.isHidden("#ep-vp")) && (await page.isHidden("#ep-co2")), "Immobilisations : champs de la carte grise masqués au retour à une autre catégorie");
+    await page.selectOption("#ep-category", "transport");
+    await page.fill("#ep-cost", "35 000");
+    await page.fill("#ep-acquiredOn", "2026-01-01");
+    await page.fill("#ep-years", "4");
+    await page.waitForTimeout(100);
+    plan = await text("#asset-plan");
+    check(plan.includes("n'est pas une voiture particulière") && plan.includes("2026 année entière 8 750,00 € 8 750,00 € 26 250,00 € 8 750,00 €"),
+      "Immobilisations : véhicule utilitaire, pas de plafond");
+    await page.check("#ep-vp");
+    await page.click("#asset-form button[type=submit]");
+    check((await text("#asset-error")) === "Indiquez la date de première immatriculation (carte grise). Indiquez les émissions de CO2 en grammes par kilomètre (carte grise) : un nombre entier." &&
+      (await page.evaluate(() => document.activeElement.id)) === "ep-firstRegOn" && (await page.getAttribute("#ep-co2", "aria-invalid")) === "true",
+      "Immobilisations : carte grise exigée pour une voiture particulière acquise depuis 2021");
+    await page.fill("#ep-firstRegOn", "2026-01-01");
+    await page.fill("#ep-co2", "200");
+    await page.waitForTimeout(100);
+    plan = await text("#asset-plan");
+    check(plan.includes("plafond de 9 900 €") && plan.includes("9 900 € / 35 000 €") && plan.includes("2026 année entière 8 750,00 € 8 750,00 € 26 250,00 € 2 475,00 €"),
+      "Immobilisations : voiture plafonnée, part déductible = annuité × 9 900 / 35 000");
+    await page.fill("#ep-proShare", "80");
+    await page.waitForTimeout(100);
+    plan = await text("#asset-plan");
+    check(plan.includes("2026 année entière 8 750,00 € 8 750,00 € 26 250,00 € à établir") && plan.includes("la part déductible est à établir"),
+      "Immobilisations : voiture en partie privée, part déductible à établir");
+    await accessible(page, "Immobilisations : fiche d'une voiture");
+    await page.click("#asset-form button[type=submit]");
+    await page.waitForSelector(".assets-table");
+    check((await text(".assets-table tbody")).includes("Voiture Affecté partiellement à l'exercice de la profession (80 %) Voiture particulière : amortissement déductible plafonné à 9 900 €") &&
+      (await text(".assets-table tbody")).includes("à établir") &&
+      (await text("#espace-view .kpis")).includes("hors 1 bien à établir") &&
+      (await assetsStore()).assets.some((x) => x.vp === true && x.co2 === 200 && x.firstRegOn === "2026-01-01"),
+      "Immobilisations : voiture enregistrée, part à établir hors des totaux");
+    for (const label of ["Ordinateur portable", "Fauteuil de bureau", "Voiture"]) {
       await go("#/immobilisations");
       await page.click(`.espace-filters a[href="#/immobilisations?annee=2026"]`);
       await page.waitForTimeout(150);

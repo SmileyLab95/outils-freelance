@@ -94,6 +94,7 @@
     if (data.assets !== undefined && !Array.isArray(data.assets)) return "Cette sauvegarde est incomplète.";
     var badAsset = (data.assets || []).some(function (a) {
       return !a || !isText(a.id) || !isText(a.label) || !isDate(a.acquiredOn) || (a.inServiceOn && !isDate(a.inServiceOn)) || (a.soldOn && !isDate(a.soldOn)) ||
+        (a.firstRegOn && !isDate(a.firstRegOn)) || (a.co2 != null && a.co2 !== "" && !isFinite(Number(a.co2))) ||
         !isFinite(Number(a.cost)) || !isFinite(Number(a.years));
     });
     return badClient || badDoc || badExpense || badTime || badProspect || badOptout || badCharge || badAsset ? "Cette sauvegarde contient des éléments illisibles." : "";

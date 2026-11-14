@@ -31,7 +31,8 @@
                  cashDate: "date du solde", vatLastYear: "TVA de l'année précédente", cashThreshold: "seuil de sécurité", category: "catégorie",
                  flow: "sens", revenue: "chiffre d'affaires prévu", decidedAt: "date de décision", closedAt: "date de clôture",
                  acquiredOn: "date d'acquisition", inServiceOn: "date de mise en service", cost: "prix de revient", years: "durée",
-                 proShare: "part professionnelle", soldOn: "date de cession", salePrice: "prix de cession" };
+                 proShare: "part professionnelle", soldOn: "date de cession", salePrice: "prix de cession",
+                 vp: "voiture particulière", firstRegOn: "date de première immatriculation", co2: "émissions de CO2" };
   var labels = function (fields) { return fields.map(function (k) { return LABELS[k] || k; }).join(", "); };
 
   // ----- Comparaison et copie ------------------------------------------------------------------

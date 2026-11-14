@@ -1,5 +1,18 @@
 # Journal des modifications
 
+## 2026-11-14 (fin de matinée) — Espace : plafond d'amortissement des voitures particulières
+
+- Fiche d'un véhicule : case « Voiture particulière », date de première immatriculation et émissions de CO2 (carte
+  grise). Pour une voiture acquise depuis 2021, l'Espace applique le plafond de l'amortissement déductible (30 000,
+  20 300, 18 300 ou 9 900 € selon le CO2 et la norme d'immatriculation) : part déductible = annuité × plafond ÷ prix.
+- Barèmes lus dans les notices DGFiP de 2026 (2032, 2142, 2033) et le BOFiP (BOI-BIC-AMT-20-40-50).
+- Voiture en partie privée et plafonnée, acquise avant 2021 ou carte grise incomplète : part déductible « à établir »,
+  retirée des totaux et signalée (règle non lue).
+- Registre : mention du plafond sous la voiture ; indicateur « Part déductible » précisé.
+- Tests : 6 tests unitaires (22 erreurs réintroduites dans le moteur, détectées), 11 points de plus au parcours de
+  l'Espace (14 erreurs réintroduites dans l'écran et le stockage, détectées), parcours des comptes et du site
+  (4 396 points), captures relues.
+
 ## 2026-11-14 (matin) — Espace : registre des immobilisations et des amortissements (régime réel)
 
 - Nouvel écran « Immobilisations » (depuis « Dépenses », au régime réel) : registre de l'année (amortissements,

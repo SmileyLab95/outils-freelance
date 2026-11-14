@@ -105,3 +105,56 @@ d'acquisition), cost (prix de revient, en euros), years (durée, de 1 à 50 ans)
   suivante, cession, export, sauvegarde illisible, suppression, accessibilité) ; captures relues sur ordinateur et
   mobile : tableau trop large (colonnes regroupées, cumul gardé dans le plan et l'export) et montants superposés sur
   mobile (libellés ajoutés), corrigés.
+
+## 8. Plafond d'amortissement des voitures particulières (spécification du 14/11/2026)
+
+**Besoin** : l'entrepreneur au réel qui achète une voiture de plus de 18 300 € ne peut pas déduire tout son
+amortissement ; l'écran disait seulement « plafond non calculé ».
+
+**Règles lues le 14/11/2026** (outil « Lire une source officielle ») :
+
+| Règle | Source |
+|---|---|
+| L'amortissement des véhicules **immatriculés dans la catégorie des voitures particulières** n'est pas déductible pour la fraction du prix d'acquisition qui excède le plafond ; entreprises concernées : BIC, IS **et BNC** ; plafond selon la nature du véhicule, son taux d'émission de CO2 (indiqué en principe sur la carte grise), la date de sa première mise en circulation et la date de son acquisition ; les autres frais (entretien, carburant…) restent déductibles sans limite | BOFiP BOI-BIC-AMT-20-40-50 (18/12/2019), §§ 20, 40, 60, 200 |
+| Calcul : part déductible de chaque annuité = annuité × plafond ÷ prix d'acquisition TTC (exemple : « montant de la dotation annuelle affecté du rapport 9 900/35 000 ») ; le reste est réintégré | BOI-BIC-AMT-20-40-50, exemple chiffré du I-B, avant le § 180 (tableau « Limite fiscale (art. 39-4) »), et § 280 |
+| Véhicules **sans** le nouveau dispositif d'immatriculation, acquis à compter du 1er janvier 2021 : 30 000 € (moins de 20 g/km), 20 300 € (20 à moins de 60 g), 18 300 € (60 à 130 g), 9 900 € (plus de 130 g) | BOI-BIC-AMT-20-40-50, § 80 |
+| Véhicules du **nouveau dispositif d'immatriculation** (WLTP : première immatriculation à compter du 1er mars 2020) : 30 000 € (moins de 20 g/km), 20 300 € (20 à moins de 50 g), 18 300 € (50 à 160 g pour un véhicule acquis à compter du 1er janvier 2021), 9 900 € (plus de 160 g) | Notices DGFiP 2026 n° 2032-NOT-SD et 2142-NOT-SD (et 2033-NOT-SD) |
+
+**Choix (D78)** :
+- Champs ajoutés pour la catégorie « Véhicule » : « Voiture particulière (VP sur la carte grise) », date de première
+  immatriculation, émissions de CO2 en g/km. Obligatoires seulement pour une voiture particulière acquise à compter
+  de 2021 (le plafond se calcule alors).
+- Voiture particulière acquise **avant 2021** : barèmes des années 2017 à 2020 (et antérieurs) non repris ; la part
+  déductible est « à établir », comme pour une carte grise incomplète. Véhicule qui n'est pas une voiture
+  particulière : pas de plafond.
+- Le prix comparé au plafond est le **prix de revient saisi** ; l'écran rappelle que le plafond s'apprécie sur le
+  prix TTC.
+- À **160 g/km pile** (WLTP), le plafond retenu est 18 300 € (la notice 2032 dit « inférieur ou égal », la 2142
+  « inférieur » mais réserve 9 900 € aux véhicules « supérieur à 160 grammes ») : **point signalé**.
+- Voiture **en partie privée** et plafonnée : la façon de combiner la part professionnelle et le plafond n'est pas
+  écrite dans les textes lus ; l'Espace **ne calcule pas** la part déductible (« à établir »), la retire des totaux et
+  le signale. Le plan d'amortissement comptable (annuités, cumul, valeur nette) reste calculé.
+- Le cumul et la valeur nette ne changent pas : la limite est fiscale (réintégration), pas comptable.
+
+**Moteur** : `vehicleCap(asset, rules)` → `null` (pas un véhicule), `{ status: "not_vp" | "before" | "missing" |
+"under" | "capped", cap, ratio, wltp }` ; `assetPlan(asset, rules)` et `assetsYear(assets, year, rules)` appliquent
+le rapport plafond ÷ prix à la part déductible (`deductible: null` si la part est à établir) ; `assetsYear` compte les
+biens dont la part est à établir (`pending`).
+
+**Tests** : barèmes WLTP et anciens aux bornes (19/20, 49/50, 160/161 ; 59/60, 130/131), voiture acquise en 2020,
+véhicule utilitaire, prix sous le plafond, annuités plafonnées (exemple du BOFiP : 8 750 € × 9 900 / 35 000 =
+2 475 €), voiture en partie privée, totaux sans les parts à établir, saisie (champs obligatoires), écran.
+
+**Réalisation (14/11/2026)** : règle `plafond_amortissement_vp` (notices 2032, 2142 et 2033 de 2026, BOFiP) ; moteur
+`vehicleCap`, `assetErrors(asset, rules)`, `assetPlan(asset, rules)`, `assetsYear(assets, year, rules)` (champ
+`pending`) ; écran : case « Voiture particulière », date de première immatriculation et CO2 affichés pour la catégorie
+« Véhicule », message du plafond (barème, rapport plafond / prix, réintégration), « à établir » dans le plan et le
+registre, mention « amortissement déductible plafonné à … » au registre, indicateur « Part déductible » sans les biens
+à établir ; sauvegarde, import et synchronisation compris. Tests : 6 tests unitaires (bornes des deux barèmes, statuts,
+exemple du BOFiP, part à établir, saisie), 22 erreurs réintroduites dans le moteur, toutes détectées ; 11 points de plus
+au parcours de l'Espace (véhicule utilitaire, champs masqués ou affichés selon la catégorie, carte grise exigée, voiture
+plafonnée, en partie privée, enregistrée, sauvegardes avec une carte grise illisible refusées), 14 erreurs réintroduites
+dans l'écran et le stockage, toutes détectées (deux après ajout de points au parcours) ; parcours des comptes et du site
+(4 396 points) ; captures relues (ordinateur, mobile) : indicateur « part professionnelle seulement » devenu
+inexact avec le plafond, corrigé ; mention du plafond ajoutée au registre.
+

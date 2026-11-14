@@ -2754,6 +2754,67 @@
       "verified_on": "2026-11-14",
       "note": "Lu le 14/11/2026 (export PDF du BOFiP). § 120 : départ « à compter du jour de la mise en service effective » ; § 170 : taux dans la limite des usages, selon la durée probable d'utilisation (renvoi à BOI-BIC-AMT-10-40 : pas de barème officiel) ; § 190 : annuité = prix de revient ÷ nombre d'années de la période normale d'amortissement ; § 210 : total des amortissements au plus égal au prix de revient ; § 220 : annuité = période de douze mois ; § 230 : exercice d'une autre durée, annuité adaptée ; § 240 : première annuité réduite au prorata temporis, « le temps couru s'apprécie en nombre de jours » ; § 250 : élément cédé, amortissement jusqu'à la cession (dispense possible, sauf biens du 4 de l'article 39 du CGI). BNC (BOI-BNC-BASE-50, §§ 1 à 20) : règles des BIC (CGI, art. 93, 1, 2°) ; le régime déclaratif spécial (micro) n'amortit pas : l'abattement « est réputé tenir compte des amortissements pratiqués selon le mode linéaire » (CGI, art. 102 ter). Base du prorata (365 jours ou 360) non précisée : l'Espace compte les jours exacts."
     },
+    "plafond_amortissement_vp": {
+      "value": {
+        "acquired_from": "2021-01-01",
+        "wltp_from": "2020-03-01",
+        "wltp": [
+          {
+            "below": 20,
+            "cap": 30000
+          },
+          {
+            "below": 50,
+            "cap": 20300
+          },
+          {
+            "up_to": 160,
+            "cap": 18300
+          },
+          {
+            "cap": 9900
+          }
+        ],
+        "nedc": [
+          {
+            "below": 20,
+            "cap": 30000
+          },
+          {
+            "below": 60,
+            "cap": 20300
+          },
+          {
+            "up_to": 130,
+            "cap": 18300
+          },
+          {
+            "cap": 9900
+          }
+        ]
+      },
+      "unit": "object",
+      "label": "Plafond de l'amortissement déductible des voitures particulières acquises à compter du 1er janvier 2021 (CGI, art. 39, 4), selon le taux d'émission de CO2 (g/km) : véhicules du nouveau dispositif d'immatriculation (WLTP, première immatriculation à compter du 1er mars 2020) et autres véhicules ; part déductible de l'annuité = annuité × plafond ÷ prix d'acquisition TTC",
+      "source": "https://www.impots.gouv.fr/sites/default/files/formulaires/2032-not-sd/2026/2032-not-sd_5323.pdf",
+      "source_title": "DGFiP, notice 2032-NOT-SD 2026 (liasse BIC/IS) - Limite de l'article 39-4 du CGI",
+      "more_sources": [
+        {
+          "source": "https://www.impots.gouv.fr/sites/default/files/formulaires/2142-not-sd/2026/2142-not-sd_5404.pdf",
+          "source_title": "DGFiP, notice 2142-NOT-SD 2026 - Limite de l'article 39-4 du CGI (WLTP, véhicules acquis avant et à compter du 1er janvier 2021)"
+        },
+        {
+          "source": "https://www.impots.gouv.fr/sites/default/files/formulaires/2033-sd/2026/2033-sd_5395.pdf",
+          "source_title": "DGFiP, notice 2033-NOT-SD 2026 (régime simplifié) - Limite de l'article 39-4 du CGI"
+        },
+        {
+          "source": "https://bofip.impots.gouv.fr/bofip/4582-PGP.html/identifiant=BOI-BIC-AMT-20-40-50-20191218",
+          "source_title": "BOFiP, BOI-BIC-AMT-20-40-50 (18/12/2019) - Amortissements des véhicules de tourisme"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-11-14",
+      "note": "Lu le 14/11/2026 (outil de lecture). Notice 2032 de 2026 : véhicules « dont la première immatriculation intervient à compter du 1er mars 2020 et qui sont acquis ou loués au titre d'exercices clos à compter de cette même date » : 30 000 € (moins de 20 g de CO2/km), 20 300 € (supérieur ou égal à 20 g et inférieur à 50 g), 18 300 € (supérieur ou égal à 50 g et inférieur ou égal à 165 g), 9 900 € (plus de 165 g) ; « Le seuil de 165 grammes de CO2 par kilomètre est ramené à 160 grammes pour les véhicules acquis à compter du 1er janvier 2021 ». Notice 2142 de 2026 : même barème (« inférieur à 160 grammes pour les véhicules acquis à compter de cette date » ; 9 900 € au-delà de 160 grammes) : à 160 g pile, 18 300 € retenu (point signalé, documentation/57 § 8). BOFiP BOI-BIC-AMT-20-40-50 : § 20, véhicules « immatriculés dans la catégorie des voitures particulières » ; § 40, entreprises BIC, IS et BNC ; § 60, plafond selon la nature, le taux de CO2, la date de première mise en circulation et la date d'acquisition ; § 80, véhicules acquis à compter du 1er janvier 2017 (ancien dispositif) : 30 000 € (moins de 20 g), 20 300 € (20 à moins de 60 g), 18 300 € (60 à 155 g), 9 900 € (plus de 155 g, seuil abaissé chaque année : 130 g pour les véhicules acquis ou loués à compter du 1er janvier 2021) ; exemple chiffré : limite fiscale = « montant de la dotation annuelle affecté du rapport 9 900/35 000 » ; § 200, autres charges (entretien, carburant) déductibles sans limitation ; taux de CO2 en principe sur la carte grise. Le BOFiP (version de 2019) ne traite pas du dispositif WLTP : barème WLTP tiré des notices de 2026. Barèmes des véhicules acquis de 2017 à 2020 non repris dans l'Espace."
+    },
     "registre_immobilisations_bnc": {
       "value": {
         "mentions": [

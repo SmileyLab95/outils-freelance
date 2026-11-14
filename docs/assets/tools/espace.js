@@ -1625,7 +1625,6 @@
   var ASSET_HINTS = {
     deductible: "500 € HT ou moins : ce bien peut être déduit directement en charges au lieu d'être amorti (tolérance admise pour le matériel et l'outillage, " +
       "le matériel et le mobilier de bureau et les logiciels) ; dans ce cas, il n'a pas à figurer au registre.",
-    vehicle: "Véhicule : l'amortissement déductible des voitures particulières peut être plafonné (4 de l'article 39 du CGI) ; ce plafond n'est pas calculé ici.",
     partial: "Bien affecté en partie à la profession : le registre porte la mention « affecté partiellement à l'exercice de la profession » ; seule la part " +
       "professionnelle de l'amortissement est déductible." };
   var assetNotes = '<p class="small muted">Calcul par année civile, en amortissement linéaire : la première année est comptée au prorata des jours, du jour de la ' +
@@ -1646,12 +1645,12 @@
     for (var y = +first; y <= +YEAR + 1; y++) years.push(String(y));
     var year = /^\d{4}$/.test(r.params.annee || "") && r.params.annee >= "1990" && r.params.annee <= "2100" ? r.params.annee : YEAR;
     if (years.indexOf(year) < 0) years.push(year);
-    var res = E.assetsYear(data.assets, year);
+    var res = E.assetsYear(data.assets, year, R);
     view.innerHTML = head + '<div class="espace-quick espace-noprint"><a class="btn btn-primary btn-sm" href="#/immobilisations/nouveau">+ Bien</a>' +
       '<button type="button" class="btn btn-ghost btn-sm" id="assets-csv"' + (res.rows.length ? "" : " disabled") + ">Exporter (CSV)</button>" +
       '<button type="button" class="btn btn-ghost btn-sm" id="assets-print"' + (res.rows.length ? "" : " disabled") + ">Imprimer</button></div></div>" +
       '<div class="kpis kpis-4 espace-noprint">' + kpi("Amortissements " + year, money(res.amount), "dotations de l'année") +
-      kpi("Part déductible", money(res.deductible), "part professionnelle seulement") +
+      kpi("Part déductible", money(res.deductible), res.pending ? "hors " + res.pending + " bien" + (res.pending > 1 ? "s" : "") + " à établir" : "part privée et plafonds déduits") +
       kpi("Valeur nette au 31/12", money(res.net), "biens encore détenus") + kpi("Biens", String(res.count), "présents en " + year) + "</div>" +
       '<div class="card espace-card"><div class="espace-filters espace-noprint" role="group" aria-label="Année">' +
       years.sort().reverse().map(function (y) { return '<a class="tab" href="#/immobilisations?annee=' + y + '"' + (y === year ? ' aria-current="true"' : "") + ">" + y + "</a>"; }).join("") + "</div>" +
@@ -1662,11 +1661,12 @@
           var a = x.asset;
           return '<tr><td class="c-asset"><a href="#/immobilisations/' + esc(a.id) + '">' + esc(a.label) + "</a>" +
             (a.proShare != null && a.proShare !== "" && Number(a.proShare) < 100 ? '<span class="small muted">Affecté partiellement à l\'exercice de la profession (' + esc(String(a.proShare).replace(".", ",")) + " %)</span>" : "") +
+            vehicleMention(a) +
             (x.sold ? '<span class="small muted">Cédé le ' + day(a.soldOn) + " pour " + esc(money(a.salePrice)) + "</span>" : "") + '</td><td class="c-date" data-label="Acquisition">' + day(a.acquiredOn) +
             (a.inServiceOn && a.inServiceOn !== a.acquiredOn ? '<span class="small muted">mise en service le ' + day(a.inServiceOn) + "</span>" : "") +
             '</td><td class="num" data-label="Prix de revient">' + esc(money(a.cost)) + '</td><td class="num" data-label="Durée">' + esc(a.years + " an" + (a.years > 1 ? "s" : "")) +
             '</td><td class="num" data-label="Annuité ' + esc(year) + '">' + esc(money(x.amount)) + '</td><td class="num" data-label="Valeur nette">' + esc(money(x.net)) +
-            '</td><td class="num" data-label="Déductible">' + esc(money(x.deductible)) + "</td></tr>";
+            '</td><td class="num" data-label="Déductible">' + deductibleCell(x.deductible) + "</td></tr>";
         }).join("") + '</tbody><tfoot><tr><td colspan="4">Total ' + esc(year) + '</td><td class="num" data-label="Annuités">' + esc(money(res.amount)) + '</td><td class="num" data-label="Valeur nette">' + esc(money(res.net)) +
         '</td><td class="num" data-label="Déductible">' + esc(money(res.deductible)) + "</td></tr></tfoot></table></div>"
         : '<p class="muted">Aucun bien en ' + esc(year) + '. <a href="#/immobilisations/nouveau">Ajouter un bien</a></p>') +
@@ -1683,23 +1683,64 @@
     });
   }
 
+  /** Mention du registre pour une voiture particulière plafonnée (documentation/57 § 8). */
+  function vehicleMention(a) {
+    var v = E.vehicleCap(a, R);
+    return v && v.status === "capped" ? '<span class="small muted">Voiture particulière : amortissement déductible plafonné à ' + esc(OF.eur(v.cap, 0)) + "</span>" : "";
+  }
+  /** Part déductible ; « à établir » quand l'Espace ne peut pas la calculer (voiture particulière, documentation/57 § 8). */
+  function deductibleCell(n) { return n === null ? '<span class="muted">à établir</span>' : esc(money(n)); }
   var amountText = function (n) { return n === null || n === undefined || n === "" || !isFinite(n) ? "" : Number(n).toFixed(2).replace(".", ","); };
   function readAsset(form) {
     var f = form.elements, num = function (v) { return String(v).trim() ? OF.num(v) : null; };
+    var car = f.category.value === "transport";   // carte grise : seulement pour un véhicule (documentation/57 § 8)
     return { label: f.label.value.trim(), category: f.category.value, acquiredOn: f.acquiredOn.value, inServiceOn: f.inServiceOn.value || "",
-             cost: num(f.cost.value), years: num(f.years.value), proShare: num(f.proShare.value), soldOn: f.soldOn.value || "", salePrice: num(f.salePrice.value) };
+             cost: num(f.cost.value), years: num(f.years.value), proShare: num(f.proShare.value), soldOn: f.soldOn.value || "", salePrice: num(f.salePrice.value),
+             vp: car && f.vp.checked, firstRegOn: car ? f.firstRegOn.value || "" : "", co2: car ? num(f.co2.value) : null };
   }
+  /**
+   * Message d'un véhicule (documentation/57 § 8) : plafond de l'amortissement déductible des voitures particulières
+   * (4 de l'article 39 du CGI), calculé depuis la règle plafond_amortissement_vp.
+   */
+  function vehicleHint(x) {
+    var v = E.vehicleCap(x, R), euros = function (n) { return Number(n) % 1 ? money(n) : OF.eur(n, 0); };
+    if (!v) return "";
+    if (v.status === "not_vp") return "Véhicule qui n'est pas une voiture particulière (pas de mention « VP » sur la carte grise) : le plafond d'amortissement " +
+      "des voitures particulières (4 de l'article 39 du CGI) ne s'applique pas.";
+    if (v.status === "before") return "Voiture particulière acquise avant 2021 : son plafond d'amortissement dépend du barème de l'année d'acquisition, " +
+      "qui n'est pas repris ici ; la part déductible est à établir.";
+    if (v.status === "missing") return "Voiture particulière : indiquez la date de première immatriculation et les émissions de CO2 (carte grise) pour calculer " +
+      "le plafond ; d'ici là, la part déductible est à établir.";
+    var what = "Voiture particulière (" + v.co2 + " g de CO2 par km, " + (v.wltp ? "immatriculée selon la norme WLTP" : "immatriculée avant mars 2020") +
+      ") : plafond de " + euros(v.cap) + ", apprécié sur le prix d'acquisition TTC. ";
+    if (v.status === "under") return what + "Le prix saisi ne le dépasse pas : l'amortissement est déductible sans limite.";
+    var share = x.proShare != null && x.proShare !== "" && Number(x.proShare) < 100;
+    return what + "Seule la fraction " + euros(v.cap) + " / " + euros(x.cost) + " de chaque annuité est déductible ; le reste est réintégré au résultat. " +
+      "L'entretien et le carburant restent déductibles." + (share ? " Voiture utilisée aussi à titre privé : la façon de combiner la part professionnelle et le " +
+      "plafond n'est pas décrite dans les textes lus ; la part déductible est à établir." : "");
+  }
+
   /** Plan d'amortissement et messages d'un bien (aperçu de la fiche) ; rien tant que la saisie n'est pas valide. */
   function assetPreview(x) {
-    if (E.assetErrors(x).length) return '<p class="small muted">Le plan d\'amortissement s\'affiche quand la fiche est complète.</p>';
-    var plan = E.assetPlan(x), hints = E.assetHints(x, R);
-    return hints.map(function (h) { return '<p class="notice">' + esc(ASSET_HINTS[h]) + "</p>"; }).join("") +
+    if (E.assetErrors(x, R).length) return '<p class="small muted">Le plan d\'amortissement s\'affiche quand la fiche est complète.</p>';
+    var plan = E.assetPlan(x, R), hints = E.assetHints(x, R);
+    return hints.map(function (h) { return '<p class="notice">' + esc(h === "vehicle" ? vehicleHint(x) : ASSET_HINTS[h]) + "</p>"; }).join("") +
       '<div class="table-scroll" tabindex="0" role="region" aria-label="Plan d\'amortissement"><table class="ledger asset-plan"><thead><tr><th>Année</th><th class="num">Jours</th><th class="num">Annuité</th><th class="num">Cumul</th>' +
       '<th class="num">Valeur nette</th><th class="num">Déductible</th></tr></thead><tbody>' + plan.map(function (row) {
         return '<tr><td class="c-date">' + row.year + '</td><td class="num" data-label="Jours">' + (row.days === null ? "année entière" : row.days + " / " + row.yearDays) +
           '</td><td class="num" data-label="Annuité">' + esc(money(row.amount)) + '</td><td class="num" data-label="Cumul">' + esc(money(row.cumulative)) +
-          '</td><td class="num" data-label="Valeur nette">' + esc(money(row.net)) + '</td><td class="num" data-label="Déductible">' + esc(money(row.deductible)) + "</td></tr>";
+          '</td><td class="num" data-label="Valeur nette">' + esc(money(row.net)) + '</td><td class="num" data-label="Déductible">' + deductibleCell(row.deductible) + "</td></tr>";
       }).join("") + "</tbody></table></div>";
+  }
+
+  /** Carte grise d'un véhicule : voiture particulière, première immatriculation, CO2 (affichés pour la catégorie « Véhicule »). */
+  function vehicleFields(x) {
+    var hide = x.category === "transport" ? "" : " hidden";
+    var mark = function (html) { return html.replace('<div class="field', '<div' + hide + ' class="asset-vehicle field'); };
+    return '<div' + hide + ' class="asset-vehicle field full"><label class="check"><input type="checkbox" id="ep-vp" name="vp"' + (x.vp ? " checked" : "") +
+      '><span>Voiture particulière (mention « VP » sur la carte grise)</span></label></div>' +
+      mark(field("firstRegOn", "Date de première immatriculation", x.firstRegOn || "", { type: "date", half: true, hint: "Carte grise, rubrique B." })) +
+      mark(field("co2", "Émissions de CO2 (g/km)", x.co2 == null ? "" : String(x.co2), { half: true, inputmode: "numeric", hint: "Carte grise, rubrique V.7." }));
   }
 
   function viewAssetForm(r) {
@@ -1712,6 +1753,7 @@
       '<form class="card espace-card" id="asset-form" novalidate><div class="fields">' +
       field("label", "Nature du bien", x.label, { required: true, placeholder: "Ordinateur portable" }) +
       field("category", "Catégorie", x.category, { options: cats, half: true }) +
+      vehicleFields(x) +
       field("cost", "Prix de revient", amountText(x.cost), { half: true, required: true, inputmode: "decimal", placeholder: "1 500,00", hint: "Montant inscrit au registre, en euros." }) +
       field("acquiredOn", "Date d'acquisition", x.acquiredOn, { type: "date", half: true, required: true }) +
       field("inServiceOn", "Date de mise en service", x.inServiceOn || "", { type: "date", half: true, hint: "Si elle diffère de l'acquisition : l'amortissement part de ce jour." }) +
@@ -1727,12 +1769,16 @@
       (isNew ? "" : '<button type="button" class="btn btn-ghost" id="asset-delete">Supprimer</button>') + "</div></form>";
     var form = $("asset-form");
     form.addEventListener("input", function () { $("asset-plan").innerHTML = assetPreview(readAsset(form)); });
-    form.addEventListener("change", function () { $("asset-plan").innerHTML = assetPreview(readAsset(form)); });
+    form.addEventListener("change", function () {
+      var car = form.elements.category.value === "transport";
+      form.querySelectorAll(".asset-vehicle").forEach(function (el) { el.hidden = !car; });
+      $("asset-plan").innerHTML = assetPreview(readAsset(form));
+    });
     form.addEventListener("submit", function (e) {
       e.preventDefault();
-      var next = readAsset(form), errors = E.assetErrors(next), bad = {};
+      var next = readAsset(form), errors = E.assetErrors(next, R), bad = {};
       errors.forEach(function (er) { bad[er.field] = true; });
-      ["label", "category", "acquiredOn", "inServiceOn", "cost", "years", "proShare", "soldOn", "salePrice"].forEach(function (k) {
+      ["label", "category", "acquiredOn", "inServiceOn", "cost", "years", "proShare", "soldOn", "salePrice", "firstRegOn", "co2"].forEach(function (k) {
         form.elements[k].setAttribute("aria-invalid", String(!!bad[k]));
       });
       showError("asset-error", errors.map(function (er) { return er.message; }).join(" "));

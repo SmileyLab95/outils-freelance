@@ -635,7 +635,7 @@
   var filled = function (v) { return v !== null && v !== undefined && v !== ""; };
 
   /** Erreurs de saisie d'un bien, avec le champ concerné. */
-  function assetErrors(a) {
+  function assetErrors(a, rules) {
     var errors = [], add = function (field, message) { errors.push({ field: field, message: message }); };
     if (!String(a.label || "").trim()) add("label", "Indiquez la nature du bien.");
     if (!ASSET_CATEGORIES[a.category]) add("category", "Choisissez la catégorie du bien.");
@@ -650,9 +650,37 @@
       else if (validDay(assetStart(a) || "") && a.soldOn < assetStart(a)) add("soldOn", "La cession ne peut pas précéder la mise en service.");
       if (!(filled(a.salePrice) && isFinite(a.salePrice) && Number(a.salePrice) >= 0)) add("salePrice", "Indiquez le prix de cession (0 si le bien est mis au rebut).");
     } else if (filled(a.salePrice)) add("soldOn", "Indiquez la date de cession.");
+    // Voiture particulière acquise depuis 2021 : données de la carte grise nécessaires au plafond (documentation/57 § 8).
+    var P = rules && rules.plafond_amortissement_vp;
+    if (P && a.category === "transport" && a.vp === true && validDay(a.acquiredOn) && a.acquiredOn >= P.acquired_from) {
+      if (!validDay(a.firstRegOn)) add("firstRegOn", "Indiquez la date de première immatriculation (carte grise).");
+      if (!(filled(a.co2) && Number.isInteger(Number(a.co2)) && Number(a.co2) >= 0 && Number(a.co2) <= 999)) add("co2", "Indiquez les émissions de CO2 en grammes par kilomètre (carte grise) : un nombre entier.");
+    }
     return errors;
   }
-  function checkAsset(a) { return assetErrors(a).map(function (e) { return e.message; }); }
+  function checkAsset(a, rules) { return assetErrors(a, rules).map(function (e) { return e.message; }); }
+
+  /**
+   * Plafond de l'amortissement déductible d'une voiture particulière (CGI, art. 39, 4 ; BOI-BIC-AMT-20-40-50 ; notices
+   * 2032 et 2142 de 2026), règle plafond_amortissement_vp. null : pas un véhicule. status : « not_vp » (pas une voiture
+   * particulière : pas de plafond), « before » (acquise avant 2021 : barème non repris), « missing » (carte grise
+   * incomplète), « under » (prix au plus égal au plafond), « capped » (part déductible = annuité × plafond ÷ prix).
+   */
+  function vehicleCap(a, rules) {
+    if (!a || a.category !== "transport") return null;
+    if (a.vp !== true) return { status: "not_vp" };
+    var P = rules && rules.plafond_amortissement_vp;
+    if (!P || !validDay(a.acquiredOn) || a.acquiredOn < P.acquired_from) return { status: "before" };
+    if (!validDay(a.firstRegOn) || !filled(a.co2) || !isFinite(a.co2)) return { status: "missing" };
+    var wltp = a.firstRegOn >= P.wltp_from, co2 = Number(a.co2), cap = null;
+    (wltp ? P.wltp : P.nedc).some(function (band) {
+      var inBand = band.below !== undefined ? co2 < band.below : band.up_to !== undefined ? co2 <= band.up_to : true;
+      if (inBand) cap = band.cap;
+      return inBand;
+    });
+    var cost = Number(a.cost);
+    return { status: cost > cap ? "capped" : "under", cap: cap, ratio: cost > cap ? cap / cost : 1, wltp: wltp, co2: co2 };
+  }
 
   /**
    * Plan d'amortissement linéaire (BOI-BIC-AMT-20-10) : une ligne par année civile, du jour de la mise en service
@@ -660,9 +688,17 @@
    * prix de revient ; bien cédé : année de cession au prorata jusqu'au jour de la cession (compris), puis plan arrêté.
    * Ligne : { year, days (null pour une année entière), yearDays, amount, cumulative, net, deductible }.
    */
-  function assetPlan(a) {
+  function assetPlan(a, rules) {
     var start = assetStart(a), cost = round2(Number(a.cost)), years = Number(a.years);
     var share = (filled(a.proShare) ? Number(a.proShare) : 100) / 100, sold = filled(a.soldOn) ? a.soldOn : null;
+    // Voiture plafonnée : part déductible = annuité × plafond ÷ prix ; en partie privée (combinaison non lue), acquise avant
+    // 2021 (barème non repris) ou carte grise incomplète : part à établir (null).
+    var vc = rules ? vehicleCap(a, rules) : null, capped = !!vc && vc.status === "capped";
+    var unknown = !!vc && (vc.status === "missing" || vc.status === "before");
+    var deductibleOf = function (amount) {
+      if (unknown || (capped && share < 1)) return null;
+      return round2(amount * (capped ? vc.ratio : share));
+    };
     var first = +start.slice(0, 4), y = first, rows = [], fraction = 0, cum = 0;
     while (cum < cost && rows.length < years + 2) {
       var from = y === first ? start : y + "-01-01";
@@ -674,7 +710,7 @@
       var amount = round2(next - cum);
       cum = next;
       rows.push({ year: y, days: days === full ? null : days, yearDays: full, amount: amount, cumulative: cum, net: round2(cost - cum),
-                  deductible: round2(amount * share) });
+                  deductible: deductibleOf(amount) });
       if (sold && +sold.slice(0, 4) === y) break;
       y++;
     }
@@ -682,11 +718,11 @@
   }
 
   /** Registre d'une année : biens présents dans l'année (acquis au plus tard cette année, non cédés avant), annuités, totaux. */
-  function assetsYear(assets, year) {
+  function assetsYear(assets, year, rules) {
     var Y = String(year), rows = [];
     (assets || []).forEach(function (a) {
       if (!a || !validDay(a.acquiredOn) || a.acquiredOn.slice(0, 4) > Y || (filled(a.soldOn) && a.soldOn.slice(0, 4) < Y)) return;
-      var plan = assetPlan(a), row = plan.filter(function (r) { return String(r.year) === Y; })[0] || null;
+      var plan = assetPlan(a, rules), row = plan.filter(function (r) { return String(r.year) === Y; })[0] || null;
       var done = plan.filter(function (r) { return String(r.year) <= Y; });
       var cumulative = done.length ? done[done.length - 1].cumulative : 0;
       rows.push({ asset: a, row: row, amount: row ? row.amount : 0, deductible: row ? row.deductible : 0, cumulative: cumulative,
@@ -696,9 +732,9 @@
       var a = assetStart(x.asset), b = assetStart(y.asset);
       return a < b ? -1 : a > b ? 1 : String(x.asset.label).localeCompare(String(y.asset.label), "fr");
     });
-    var sum = function (k, list) { return round2((list || rows).reduce(function (s, r) { return s + r[k]; }, 0)); };
+    var sum = function (k, list) { return round2((list || rows).reduce(function (s, r) { return s + (r[k] || 0); }, 0)); };
     return { rows: rows, amount: sum("amount"), deductible: sum("deductible"), net: sum("net", rows.filter(function (r) { return !r.sold; })),
-             count: rows.length };
+             count: rows.length, pending: rows.filter(function (r) { return r.deductible === null; }).length };
   }
 
   /**
@@ -1457,7 +1493,7 @@
            parseDuration: parseDuration, durationLabel: durationLabel, checkTime: checkTime, timeErrors: timeErrors, timeState: timeState, lastRate: lastRate,
            timeInvoiceLines: timeInvoiceLines, timeInvoice: timeInvoice, timeSummary: timeSummary, unbilledByClient: unbilledByClient,
            ASSET_CATEGORIES: ASSET_CATEGORIES, assetErrors: assetErrors, checkAsset: checkAsset, assetStart: assetStart, assetPlan: assetPlan,
-           assetsYear: assetsYear, assetHints: assetHints, assetsCSV: assetsCSV,
+           assetsYear: assetsYear, assetHints: assetHints, assetsCSV: assetsCSV, vehicleCap: vehicleCap,
            timeCSV: timeCSV, timerCheck: timerCheck, timerElapsed: timerElapsed, timerStart: timerStart, timerPause: timerPause,
            timerResume: timerResume, timerStop: timerStop, timerClock: timerClock, timerDuration: timerDuration,
            STAGE_LABELS: STAGE_LABELS, OPEN_STAGES: OPEN_STAGES, prospectErrors: prospectErrors, exchangeErrors: exchangeErrors, prospectQuotes: prospectQuotes,

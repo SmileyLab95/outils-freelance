@@ -9,7 +9,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 
 ## Où en est-on ?
 
-*Mis à jour le 14/11/2026 (matin).*
+*Mis à jour le 14/11/2026 (fin de matinée).*
 
 - **Priorité (décision D10)** : le site et la plateforme d'abord ; noms de domaine, Gumroad et affiliation à la fin.
   Règle de qualité maximale pour tout produit ou service (D11, charte dans la [méthode](04-methode-de-travail.md#charte-qualité)).
@@ -471,6 +471,9 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   JavaScript) et part de 50 % lue dans la loi (C.R.S. 8-13.3-507(4)(a)) : revenu brut et effet au dépôt de l'avis
   confirmés ; page complétée (documents fiscaux chaque année avant le 1er décembre, amende jusqu'à 500 $ ; retrait à
   tout moment, effet au plus tôt à la fin des 3 ans et 30 jours après l'avis) ([52](52-protection-sociale-etats-unis.md)).
+- **Espace : plafond des voitures particulières (14/11/2026, fin de matinée)** : plafond de l'amortissement déductible
+  (30 000, 20 300, 18 300 ou 9 900 € selon le CO2 et la norme d'immatriculation), lu dans les notices DGFiP de 2026
+  et le BOFiP ([57](57-immobilisations.md) § 8, D78) ; part « à établir » quand les textes lus ne suffisent pas.
 - **Espace : immobilisations (14/11/2026, matin)** : registre des immobilisations et des amortissements pour le
   régime réel ([57](57-immobilisations.md), D77) : règles lues au BOFiP (500 € HT, amortissement linéaire au prorata des
   jours, registre des BNC), plan d'amortissement, part professionnelle, cession, export ; explication en
@@ -505,9 +508,9 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   ajoutée (pas de règle sur les contrats à distance ; loi sur la vente directe écartée sans contact en personne,
   art. 5(3)) ; Nouveau-Brunswick : loi de 2024 non proclamée, à ajouter dès sa proclamation ; Saskatchewan : site
   toujours illisible.
-- **Prochaines actions de Claude** : immobilisations de l'Espace (faites le 14/11, [57](57-immobilisations.md)) : plafonds
-  d'amortissement des voitures particulières (4 de l'article 39 du CGI) et plus-values de cession dès que leurs règles
-  sont lues ; indicateurs de l'Espace : les huit onglets, la date de clôture des pistes et la période de
+- **Prochaines actions de Claude** : immobilisations de l'Espace (faites le 14/11, [57](57-immobilisations.md) ; plafond
+  des voitures particulières acquises depuis 2021 fait le 14/11) : plus-values de cession, barèmes des voitures
+  acquises avant 2021 et combinaison part privée et plafond dès que leurs règles sont lues ; indicateurs de l'Espace : les huit onglets, la date de clôture des pistes et la période de
   l'onglet Documents et de l'onglet Dépenses sont faits (12/11, [55](55-indicateurs-espace.md)) ; **appliquer le thème**
   choisi par Ismail dès sa réponse ([54](54-themes.md) § 2) ; refonte, suite ([31](31-vision-plateforme.md) § 5) : les quatre modules du compte
   gratuit sont faits (étape 5) ; étape 6, outils restants (CGV : faites dans les quatre pays ;
