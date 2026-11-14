@@ -4442,16 +4442,65 @@ const tests = {
     await page.fill("#ep-salePrice", "900");
     await page.waitForTimeout(100);
     check((await text("#asset-plan")).includes("2027 90 / 365 123,29 € 375,34 € 1 124,66 €") && !(await text("#asset-plan")).includes("2028"), "Immobilisations : cession, plan arrêté au jour de la cession");
+    check((await text("#asset-plan")).includes("Cession le 31/03/2027 pour 900,00 € : valeur nette à cette date 1 124,66 €, soit une moins-value de 224,66 €.") &&
+      (await text("#asset-plan")).includes("la moins-value est à court terme, quelle que soit la durée de détention") &&
+      (await text("#asset-plan")).includes("taux de 12,8 %") && (await text("#asset-plan")).includes("151 septies"),
+      "Immobilisations : moins-value de cession à court terme, régime rappelé");
+    await page.fill("#ep-salePrice", "1 400");
+    await page.waitForTimeout(100);
+    check((await text("#asset-plan")).includes("soit une plus-value de 275,34 €.") && (await text("#asset-plan")).includes("Bien détenu depuis moins de 2 ans : la plus-value est à court terme."),
+      "Immobilisations : plus-value avant deux ans, à court terme");
+    await page.fill("#ep-salePrice", "900");
     await page.click("#asset-form button[type=submit]");
     await page.waitForSelector(".assets-table");
     await page.click('.espace-filters a[href="#/immobilisations?annee=2027"]');
     await page.waitForTimeout(150);
     check((await text(".assets-table tbody")).includes("Ordinateur portable Cédé le 31/03/2027 pour 900,00 €") &&
       (await text(".assets-table tfoot")).includes("Total 2027 273,29 € 174,25 € 213,29 €"), "Immobilisations : bien cédé signalé, hors valeur nette au 31/12");
+    check((await text(".assets-table tbody")).includes("Cédé le 31/03/2027 pour 900,00 € : moins-value de 224,66 € à court terme") &&
+      (await text("#espace-view .asset-disposals")) === "Cessions 2027 : plus et moins-values à court terme (solde) -224,66 €, plus-values à long terme 0,00 €.",
+      "Immobilisations : résultat de cession au registre et synthèse de l'année");
     const [assetsCsv] = await Promise.all([page.waitForEvent("download"), page.click("#assets-csv")]);
     const assetsCsvText = fs.readFileSync(await assetsCsv.path(), "utf8");
-    check(assetsCsvText.split("\r\n").length === 3 && assetsCsvText.includes('"Ordinateur portable";"Matériel et outillage";01/07/2026;01/07/2026;1500,00;3;100;123,29;375,34;1124,66;123,29;31/03/2027;900,00'),
+    check(assetsCsvText.split("\r\n").length === 3 && assetsCsvText.includes('"Ordinateur portable";"Matériel et outillage";01/07/2026;01/07/2026;1500,00;3;100;123,29;375,34;1124,66;123,29;31/03/2027;900,00;-224,66;0,00'),
       "Immobilisations : export CSV du registre de l'année");
+    // Plus-value après deux ans (documentation/57 § 9) : court terme jusqu'aux amortissements, long terme au-delà.
+    await go("#/immobilisations?annee=2027");
+    await page.click('.assets-table a:text("Ordinateur portable")');
+    await page.waitForSelector("#asset-delete");
+    await page.fill("#ep-soldOn", "2028-07-01");
+    await page.fill("#ep-salePrice", "497,95");
+    await page.waitForTimeout(100);
+    check((await text("#asset-plan")).includes("valeur nette à cette date 497,95 €, soit ni plus-value ni moins-value.") && !(await text("#asset-plan")).includes("Court terme : ajouté"),
+      "Immobilisations : cession au prix de la valeur nette, ni plus-value ni moins-value");
+    await page.click("#asset-form button[type=submit]");
+    await page.waitForSelector(".assets-table");
+    await go("#/immobilisations?annee=2028");
+    check((await text(".assets-table tbody")).includes("Cédé le 01/07/2028 pour 497,95 € : ni plus-value ni moins-value") &&
+      !(await text(".assets-table tbody")).includes("ni moins-value à court terme"), "Immobilisations : résultat nul au registre");
+    await page.click('.assets-table a:text("Ordinateur portable")');
+    await page.waitForSelector("#asset-delete");
+    await page.fill("#ep-salePrice", "1 600");
+    await page.waitForTimeout(100);
+    check((await text("#asset-plan")).includes("Bien détenu depuis 2 ans au moins : 1 002,05 € à court terme (dans la limite des amortissements déduits) et 100,00 € à long terme."),
+      "Immobilisations : plus-value après deux ans, court et long terme");
+    await page.click("#asset-form button[type=submit]");
+    await page.waitForSelector(".assets-table");
+    await go("#/immobilisations?annee=2028");
+    check((await text(".assets-table tbody")).includes("Cédé le 01/07/2028 pour 1 600,00 € : plus-value de 1 102,05 € (1 002,05 € à court terme, 100,00 € à long terme)") &&
+      (await text("#espace-view .asset-disposals")) === "Cessions 2028 : plus et moins-values à court terme (solde) 1 002,05 €, plus-values à long terme 100,00 €.",
+      "Immobilisations : plus-value à long terme au registre et dans la synthèse");
+    await go("#/immobilisations?annee=2026");
+    await page.click('.assets-table a:text("Fauteuil de bureau")');
+    await page.waitForSelector("#asset-delete");
+    await page.fill("#ep-soldOn", "2027-12-31");
+    await page.fill("#ep-salePrice", "100");
+    await page.waitForTimeout(100);
+    check((await text("#asset-plan")).includes("Bien utilisé aussi à titre privé : les textes lus ne disent comment en tenir compte que pour un véhicule"),
+      "Immobilisations : cession d'un bien en partie privé (hors véhicule), à établir");
+    await page.click('#asset-form a[href="#/immobilisations"]');
+    await page.waitForSelector(".assets-table");
+    check(!(await assetsStore()).assets.some((x) => x.label === "Fauteuil de bureau" && x.soldOn), "Immobilisations : fiche abandonnée, rien d'enregistré");
     await go("#/reglages");
     await restore("immobilisation-illisible.json", Object.assign({}, before, { assets: [{ id: "x", label: "Écran", acquiredOn: "2026-01-01", cost: "beaucoup", years: 1 }] }));
     await page.waitForFunction(() => !document.getElementById("import-error").hidden);
@@ -4498,6 +4547,12 @@ const tests = {
     check(plan.includes("2026 année entière 8 750,00 € 8 750,00 € 26 250,00 € à établir") && plan.includes("la part déductible est à établir"),
       "Immobilisations : voiture en partie privée, part déductible à établir");
     await accessible(page, "Immobilisations : fiche d'une voiture");
+    await page.fill("#ep-soldOn", "2027-06-30");
+    await page.fill("#ep-salePrice", "25 000");
+    await page.waitForTimeout(100);
+    check((await text("#asset-plan")).includes("soit une plus-value de 3 089,04 €, ramenée à 2 471,23 € pour la part professionnelle (80 %).") &&
+      (await text("#asset-plan")).includes("la répartition entre court et long terme est à établir"),
+      "Immobilisations : cession d'une voiture plafonnée, part professionnelle, répartition à établir");
     await page.click("#asset-form button[type=submit]");
     await page.waitForSelector(".assets-table");
     check((await text(".assets-table tbody")).includes("Voiture Affecté partiellement à l'exercice de la profession (80 %) Voiture particulière : amortissement déductible plafonné à 9 900 €") &&
@@ -4505,6 +4560,10 @@ const tests = {
       (await text("#espace-view .kpis")).includes("hors 1 bien à établir") &&
       (await assetsStore()).assets.some((x) => x.vp === true && x.co2 === 200 && x.firstRegOn === "2026-01-01"),
       "Immobilisations : voiture enregistrée, part à établir hors des totaux");
+    await go("#/immobilisations?annee=2027");
+    check((await text(".assets-table tbody")).includes("Cédé le 30/06/2027 pour 25 000,00 € : plus-value de 2 471,23 € (répartition à établir)") &&
+      (await text("#espace-view .asset-disposals")).includes("1 cession à établir, hors de ces montants"),
+      "Immobilisations : cession à établir signalée au registre et dans la synthèse");
     for (const label of ["Ordinateur portable", "Fauteuil de bureau", "Voiture"]) {
       await go("#/immobilisations");
       await page.click(`.espace-filters a[href="#/immobilisations?annee=2026"]`);

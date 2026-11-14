@@ -80,7 +80,8 @@ test("registre de l'année : biens présents, annuités, totaux ; bien cédé da
   // 2029 : imprimante amortie (rien cette année, valeur nette nulle) ; ordinateur : reste 247,95 € ; achat de 2027
   // (1er février : 334 jours en 2027, 457,53 €) : troisième année pleine, reste 42,47 € pour 2030.
   assert.deepEqual(y29.rows.map((r) => [r.asset.id, r.amount, r.net]), [["p", 0, 0], ["o", 247.95, 0], ["f", 500, 42.47]]);
-  assert.deepEqual(E.assetsYear([], 2026), { rows: [], amount: 0, deductible: 0, net: 0, count: 0, pending: 0 });
+  assert.deepEqual(E.assetsYear([], 2026), { rows: [], amount: 0, deductible: 0, net: 0, count: 0, pending: 0,
+    disposals: { count: 0, shortTerm: 0, longTerm: 0, pending: 0 } });
 });
 
 test("contrôles de saisie : champs obligatoires, dates, durée entière, part, cession", () => {
@@ -113,8 +114,8 @@ test("messages : 500 € HT ou moins (catégories admises), véhicule, usage par
 test("export CSV du registre de l'année", () => {
   const csv = E.assetsCSV(E.assetsYear([a({ label: 'Bureau "assis-debout"', category: "bureau", cost: 1234.5, proShare: 50, soldOn: "2027-01-31", salePrice: 400 })], 2026));
   const [head, line] = csv.split("\r\n");
-  assert.equal(head.split(";").length, 13);
-  assert.equal(line, '"Bureau ""assis-debout""";"Matériel et mobilier de bureau";01/07/2026;01/07/2026;1234,50;3;50;207,44;207,44;1027,06;103,72;31/01/2027;400,00');
+  assert.equal(head.split(";").length, 15);
+  assert.equal(line, '"Bureau ""assis-debout""";"Matériel et mobilier de bureau";01/07/2026;01/07/2026;1234,50;3;50;207,44;207,44;1027,06;103,72;31/01/2027;400,00;;', "cédé l'année suivante : pas de résultat de cession cette année");
 });
 
 // Plafond des voitures particulières (documentation/57 § 8) : CGI, art. 39, 4 ; BOI-BIC-AMT-20-40-50 ; notices 2032 et 2142 de 2026.
@@ -176,7 +177,7 @@ test("plafond : voiture en partie privée, acquise avant 2021 ou carte grise inc
   assert.deepEqual([y.amount, y.deductible, y.pending], [17900, 2875, 1]);
   assert.deepEqual(y.rows.map((r) => [r.asset.id, r.deductible]), [["d", null], ["m", 400], ["c", 2475]]);
   const lines = E.assetsCSV(y).split("\r\n");
-  assert.equal(lines[1], '"Autre voiture";"Véhicule ou matériel de transport";01/01/2026;01/01/2026;35000,00;4;80;8750,00;8750,00;26250,00;;;', "part à établir : cellule vide");
+  assert.equal(lines[1], '"Autre voiture";"Véhicule ou matériel de transport";01/01/2026;01/01/2026;35000,00;4;80;8750,00;8750,00;26250,00;;;;;', "part à établir : cellule vide");
 });
 
 test("plafond : saisie de la carte grise exigée pour une voiture particulière acquise depuis 2021", () => {
@@ -190,3 +191,67 @@ test("plafond : saisie de la carte grise exigée pour une voiture particulière 
   assert.deepEqual(fields(car({ firstRegOn: "", co2: "", vp: false })), [], "pas une voiture particulière");
   assert.deepEqual(E.assetErrors(car({ firstRegOn: "", co2: "" })).map((e) => e.field), [], "sans les règles : pas de contrôle");
 });
+
+
+// Plus-values et moins-values de cession (documentation/57 § 9) : BOI-BNC-BASE-30-20, BOI-BNC-BASE-30-30-10.
+const out = (over) => { const d = E.assetDisposal(a(over), R); return [d.net, d.result, d.heldTwoYears, d.shortTerm, d.longTerm, d.split]; };
+
+test("règle des plus-values professionnelles : deux ans, étalement sur trois ans, 12,8 %, dix exercices ; sources BOFiP", () => {
+  assert.deepEqual(R.plus_values_professionnelles, { holding_years: 2, short_term_spread_years: 3, long_term_rate: 12.8, long_term_loss_carry_years: 10 });
+  const entry = ruleEntries("fr").plus_values_professionnelles;
+  assert.equal(entry.confidence, "high");
+  assert.match(entry.source, /BOI-BNC-BASE-30-30-10/);
+  assert.ok(entry.more_sources.some((m) => /BOI-BNC-BASE-30-20/.test(m.source)));
+});
+
+test("cession : moins-value à court terme (toute durée), plus-value avant deux ans à court terme, mise au rebut", () => {
+  assert.equal(E.assetDisposal(a(), R), null, "pas de cession");
+  assert.equal(E.assetDisposal(a({ soldOn: "2027-03-31" }), R), null, "prix de cession manquant");
+  assert.deepEqual(out({ soldOn: "2027-03-31", salePrice: 900 }), [1124.66, -224.66, false, -224.66, 0, "ok"]);
+  assert.deepEqual(out({ acquiredOn: "2020-01-01", cost: 3000, years: 10, soldOn: "2026-12-31", salePrice: 500 }), [900, -400, true, -400, 0, "ok"],
+    "moins-value d'un bien amortissable détenu depuis plus de deux ans : court terme");
+  assert.deepEqual(out({ acquiredOn: "2026-01-01", cost: 3000, soldOn: "2027-06-30", salePrice: 2800 }), [1504.11, 1295.89, false, 1295.89, 0, "ok"]);
+  assert.deepEqual(out({ soldOn: "2027-03-31", salePrice: 0 }), [1124.66, -1124.66, false, -1124.66, 0, "ok"], "mise au rebut");
+  assert.deepEqual(out({ acquiredOn: "2026-01-01", cost: 1000, years: 1, soldOn: "2027-06-30", salePrice: 0 }).slice(0, 2), [0, 0], "bien amorti, rebut : ni plus ni moins-value");
+});
+
+test("cession après deux ans : court terme jusqu'aux amortissements déduits, long terme au-delà ; borne des deux ans", () => {
+  assert.deepEqual(out({ acquiredOn: "2024-01-01", cost: 3000, soldOn: "2026-12-31", salePrice: 3500 }), [0, 3500, true, 3000, 500, "ok"]);
+  assert.deepEqual(out({ acquiredOn: "2024-01-01", cost: 3000, soldOn: "2026-12-31", salePrice: 1500 }), [0, 1500, true, 1500, 0, "ok"]);
+  const eve = out({ acquiredOn: "2024-03-10", cost: 3000, soldOn: "2026-03-09", salePrice: 3500 });
+  const day = out({ acquiredOn: "2024-03-10", cost: 3000, soldOn: "2026-03-10", salePrice: 3500 });
+  assert.deepEqual([eve[2], eve[4]], [false, 0], "veille des deux ans : tout à court terme");
+  assert.deepEqual([day[2], day[3], day[4]], [true, 2000.52, 500], "jour des deux ans : court terme = amortissements, long terme = prix − prix de revient");
+  assert.equal(E.assetDisposal(a({ acquiredOn: "2024-02-29", cost: 3000, soldOn: "2026-02-28", salePrice: 2900 }), R).heldTwoYears, true, "29 février : 28 février");
+  assert.equal(E.assetDisposal(a({ acquiredOn: "2024-02-29", cost: 3000, soldOn: "2026-02-27", salePrice: 2900 }), R).heldTwoYears, false);
+});
+
+test("cession d'un véhicule : part professionnelle appliquée ; voiture plafonnée et bien partiel : répartition à établir", () => {
+  const van = { category: "transport", acquiredOn: "2024-01-01", cost: 30000, years: 5, soldOn: "2026-12-31", salePrice: 20000 };
+  assert.deepEqual(out(van), [12000, 8000, true, 8000, 0, "ok"]);
+  assert.deepEqual(out(Object.assign({}, van, { proShare: 75 })), [12000, 6000, true, 6000, 0, "ok"], "véhicule aux trois quarts : résultat × 75 %");
+  assert.deepEqual(out(Object.assign({}, van, { proShare: 75, salePrice: 33000 })), [12000, 15750, true, 13500, 2250, "ok"],
+    "court terme = amortissements × part (18 000 × 75 %), long terme le reste");
+  const vp = E.assetDisposal(a(Object.assign({}, van, { vp: true, firstRegOn: "2024-01-01", co2: 200 })), R);
+  assert.deepEqual([vp.net, vp.result, vp.shortTerm, vp.longTerm, vp.split, vp.reason], [12000, 8000, null, null, "unknown", "vehicle_cap"],
+    "voiture plafonnée : résultat avec les amortissements sans limitation, répartition à établir");
+  const under = E.assetDisposal(a(Object.assign({}, van, { vp: true, firstRegOn: "2024-01-01", co2: 120, cost: 15000, salePrice: 10000 })), R);
+  assert.equal(under.split, "ok", "voiture sous le plafond : répartition calculée");
+  const desk = E.assetDisposal(a({ category: "bureau", acquiredOn: "2024-01-01", cost: 3000, proShare: 60, soldOn: "2026-12-31", salePrice: 1500 }), R);
+  assert.deepEqual([desk.result, desk.split, desk.reason], [1500, "unknown", "partial"]);
+});
+
+test("registre : cessions de l'année (solde à court terme, long terme, à établir) et colonnes du CSV", () => {
+  const y = E.assetsYear([a({ id: "m", soldOn: "2027-03-31", salePrice: 900 }), a({ id: "p", acquiredOn: "2026-01-01", cost: 3000, soldOn: "2027-06-30", salePrice: 2800 }),
+    a({ id: "b", category: "bureau", acquiredOn: "2024-01-01", cost: 3000, proShare: 60, soldOn: "2027-02-01", salePrice: 1500 }),
+    a({ id: "l", acquiredOn: "2024-01-01", cost: 3000, soldOn: "2027-05-01", salePrice: 3600 }), a({ id: "k", acquiredOn: "2027-01-05" })], 2027, R);
+  assert.deepEqual(y.disposals, { count: 4, shortTerm: 4071.23, longTerm: 600, pending: 1 });
+  assert.deepEqual(E.assetsYear([a()], 2026, R).disposals, { count: 0, shortTerm: 0, longTerm: 0, pending: 0 });
+  const before = E.assetsYear([a({ soldOn: "2027-03-31", salePrice: 900 })], 2026, R);
+  assert.deepEqual([before.rows[0].disposal, before.disposals.count], [null, 0], "cédé l'année suivante : rien cette année");
+  assert.equal(E.assetsYear([a({ soldOn: "2027-03-31", salePrice: 900 })], 2027).rows[0].disposal, null, "sans les règles : pas de calcul");
+  const lines = E.assetsCSV(y).split("\r\n");
+  assert.ok(lines.some((l) => l.endsWith(";31/03/2027;900,00;-224,66;0,00")));
+  assert.ok(lines.some((l) => l.endsWith(";01/02/2027;1500,00;;")), "à établir : cellules vides");
+});
+

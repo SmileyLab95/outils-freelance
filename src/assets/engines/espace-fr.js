@@ -717,6 +717,34 @@
     return rows;
   }
 
+  /**
+   * Plus-value ou moins-value de cession (documentation/57 § 9 ; BOI-BNC-BASE-30-20 et BOI-BNC-BASE-30-30-10, règle
+   * plus_values_professionnelles). null : pas de cession. Résultat = prix de cession (net des frais) − valeur nette au
+   * jour de la cession (amortissements linéaires sans limitation, même pour une voiture plafonnée) ; véhicule en partie
+   * privé : résultat × part professionnelle. Répartition : moins-value à court terme ; plus-value d'un bien détenu depuis
+   * moins de deux ans à court terme ; sinon à court terme jusqu'aux amortissements déduits, à long terme au-delà.
+   * split « unknown » (montants à établir) : bien autre qu'un véhicule affecté en partie (« partial »), voiture plafonnée
+   * ou dont la part déductible est à établir (« vehicle_cap »).
+   */
+  function assetDisposal(a, rules) {
+    if (!a || !validDay(a.soldOn) || !filled(a.salePrice) || !isFinite(a.salePrice)) return null;
+    var plan = assetPlan(a, rules), cumulative = plan.length ? plan[plan.length - 1].cumulative : 0;
+    var net = round2(Number(a.cost) - cumulative), gross = round2(Number(a.salePrice) - net);
+    var share = (filled(a.proShare) ? Number(a.proShare) : 100) / 100, vehicle = a.category === "transport";
+    var held = a.soldOn >= addYears(a.acquiredOn, rules.plus_values_professionnelles.holding_years);   // addYears : section Prospects (29 février → 28)
+    var vc = vehicleCap(a, rules), reason = null;
+    if (share < 1 && !vehicle) reason = "partial";
+    else if (vc && vc.status !== "not_vp" && vc.status !== "under") reason = "vehicle_cap";
+    var result = vehicle ? round2(gross * share) : gross, shortTerm = null, longTerm = null;
+    if (!reason) {
+      // Détenu depuis deux ans au moins : court terme jusqu'aux amortissements déduits (une moins-value y reste en entier).
+      if (!held) { shortTerm = result; longTerm = 0; }
+      else { shortTerm = Math.min(result, round2(cumulative * share)); longTerm = round2(result - shortTerm); }
+    }
+    return { net: net, gross: gross, result: result, heldTwoYears: held, shortTerm: shortTerm, longTerm: longTerm,
+             split: reason ? "unknown" : "ok", reason: reason };
+  }
+
   /** Registre d'une année : biens présents dans l'année (acquis au plus tard cette année, non cédés avant), annuités, totaux. */
   function assetsYear(assets, year, rules) {
     var Y = String(year), rows = [];
@@ -725,8 +753,9 @@
       var plan = assetPlan(a, rules), row = plan.filter(function (r) { return String(r.year) === Y; })[0] || null;
       var done = plan.filter(function (r) { return String(r.year) <= Y; });
       var cumulative = done.length ? done[done.length - 1].cumulative : 0;
+      var sold = !!(filled(a.soldOn) && a.soldOn.slice(0, 4) === Y);
       rows.push({ asset: a, row: row, amount: row ? row.amount : 0, deductible: row ? row.deductible : 0, cumulative: cumulative,
-                  net: round2(Number(a.cost) - cumulative), sold: !!(filled(a.soldOn) && a.soldOn.slice(0, 4) === Y) });
+                  net: round2(Number(a.cost) - cumulative), sold: sold, disposal: sold && rules ? assetDisposal(a, rules) : null });
     });
     rows.sort(function (x, y) {
       var a = assetStart(x.asset), b = assetStart(y.asset);
@@ -734,7 +763,14 @@
     });
     var sum = function (k, list) { return round2((list || rows).reduce(function (s, r) { return s + (r[k] || 0); }, 0)); };
     return { rows: rows, amount: sum("amount"), deductible: sum("deductible"), net: sum("net", rows.filter(function (r) { return !r.sold; })),
-             count: rows.length, pending: rows.filter(function (r) { return r.deductible === null; }).length };
+             count: rows.length, pending: rows.filter(function (r) { return r.deductible === null; }).length,
+             disposals: disposalsOf(rows) };
+  }
+  /** Cessions de l'année : solde à court terme, plus-values à long terme, cessions à établir. */
+  function disposalsOf(rows) {
+    var list = rows.filter(function (r) { return r.disposal; }), known = list.filter(function (r) { return r.disposal.split === "ok"; });
+    var sum = function (k) { return round2(known.reduce(function (s, r) { return s + r.disposal[k]; }, 0)); };
+    return { count: list.length, shortTerm: sum("shortTerm"), longTerm: sum("longTerm"), pending: list.length - known.length };
   }
 
   /**
@@ -755,12 +791,13 @@
     var q = function (v) { return '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"'; };
     var eur = function (n) { return filled(n) ? Number(n).toFixed(2).replace(".", ",") : ""; };
     var lines = ["Nature;Catégorie;Acquisition;Mise en service;Prix de revient;Durée (ans);Part professionnelle (%);Amortissement de l'année;" +
-                 "Cumul des amortissements;Valeur nette;Part déductible;Date de cession;Prix de cession"];
+                 "Cumul des amortissements;Valeur nette;Part déductible;Date de cession;Prix de cession;Plus ou moins-value à court terme;Plus-value à long terme"];
     year.rows.forEach(function (r) {
       var a = r.asset;
       lines.push([q(a.label), q(ASSET_CATEGORIES[a.category]), frDay(a.acquiredOn), frDay(assetStart(a)), eur(a.cost), String(a.years),
         String(filled(a.proShare) ? a.proShare : 100).replace(".", ","), eur(r.amount), eur(r.cumulative), eur(r.net), eur(r.deductible),
-        filled(a.soldOn) ? frDay(a.soldOn) : "", filled(a.soldOn) ? eur(a.salePrice) : ""].join(";"));
+        filled(a.soldOn) ? frDay(a.soldOn) : "", filled(a.soldOn) ? eur(a.salePrice) : "",
+        r.disposal ? eur(r.disposal.shortTerm) : "", r.disposal ? eur(r.disposal.longTerm) : ""].join(";"));
     });
     return lines.join("\r\n");
   }
@@ -1493,7 +1530,7 @@
            parseDuration: parseDuration, durationLabel: durationLabel, checkTime: checkTime, timeErrors: timeErrors, timeState: timeState, lastRate: lastRate,
            timeInvoiceLines: timeInvoiceLines, timeInvoice: timeInvoice, timeSummary: timeSummary, unbilledByClient: unbilledByClient,
            ASSET_CATEGORIES: ASSET_CATEGORIES, assetErrors: assetErrors, checkAsset: checkAsset, assetStart: assetStart, assetPlan: assetPlan,
-           assetsYear: assetsYear, assetHints: assetHints, assetsCSV: assetsCSV, vehicleCap: vehicleCap,
+           assetsYear: assetsYear, assetHints: assetHints, assetsCSV: assetsCSV, vehicleCap: vehicleCap, assetDisposal: assetDisposal,
            timeCSV: timeCSV, timerCheck: timerCheck, timerElapsed: timerElapsed, timerStart: timerStart, timerPause: timerPause,
            timerResume: timerResume, timerStop: timerStop, timerClock: timerClock, timerDuration: timerDuration,
            STAGE_LABELS: STAGE_LABELS, OPEN_STAGES: OPEN_STAGES, prospectErrors: prospectErrors, exchangeErrors: exchangeErrors, prospectQuotes: prospectQuotes,

@@ -158,3 +158,62 @@ dans l'écran et le stockage, toutes détectées (deux après ajout de points au
 (4 396 points) ; captures relues (ordinateur, mobile) : indicateur « part professionnelle seulement » devenu
 inexact avec le plafond, corrigé ; mention du plafond ajoutée au registre.
 
+
+## 9. Plus-values et moins-values de cession (spécification du 14/11/2026)
+
+**Besoin** : l'entrepreneur au réel qui vend (ou met au rebut) un bien inscrit au registre doit déclarer une
+plus-value ou une moins-value, à court ou à long terme ; l'écran disait seulement « plus-value non calculée ».
+
+**Règles lues le 14/11/2026** (outil « Lire une source officielle ») :
+
+| Règle | Source |
+|---|---|
+| Prix de cession : somme effectivement acquise, **nette des frais** de la cession (commissions…) ; prix de revient : celui qui sert de base à l'amortissement | BOI-BNC-BASE-30-20 (02/11/2016), §§ 20 et 70 |
+| **Véhicule** dont l'amortissement est limité : plus-value calculée avec les amortissements linéaires qui auraient pu être pratiqués **sans limitation** sur le prix de revient total ; véhicule affecté en partie à la profession : plus-value **réduite à la part professionnelle** (exemple : 2 833,33 € × 2/3) ; mêmes règles pour une moins-value | BOI-BNC-BASE-30-20, §§ 80 à 110 |
+| Court terme : plus-values sur biens détenus **depuis moins de deux ans** ; biens détenus depuis deux ans au moins : plus-value à court terme **dans la mesure des amortissements déduits** pour l'assiette de l'impôt, le reste à long terme ; moins-values sur biens **amortissables** : à court terme **quelle que soit la durée de détention** | BOI-BNC-BASE-30-30-10, §§ 20 à 70 (tableau) |
+| Court terme : compensation de l'année ; plus-value nette ajoutée au bénéfice, **étalement possible** par parts égales sur l'année et les deux suivantes (pas en cas de cessation) ; moins-value nette imputée sur le bénéfice (déficit au-delà) | BOI-BNC-BASE-30-30-10, §§ 80 à 130 |
+| Long terme : plus-value nette taxée au **taux de 12,8 %** (1 du I de l'article 39 quindecies du CGI), plus les prélèvements sociaux, portée sur la 2035 et la 2042-C-PRO ; moins-value nette à long terme imputable sur les plus-values nettes à long terme des **dix** exercices suivants | BOI-BNC-BASE-30-30-10, §§ 140 à 160 |
+| Exonération totale ou partielle possible sous conditions, notamment des limites de recettes (article 151 septies du CGI) | BOI-BNC-BASE-30-30-30, § 20 ; BOI-BNC-BASE-30-20, § 130 |
+
+**Choix (D79)** :
+- Résultat de cession = prix de cession − valeur nette au jour de la cession (prix de revient − amortissements
+  linéaires cumulés, plafond des voitures **non** déduit, § 80). Le champ « prix de cession » est le prix net des frais
+  (aide à l'écran).
+- Durée de détention : de la date d'**acquisition** à la date de cession ; « deux ans au moins » = cession à partir
+  du même jour deux ans plus tard (29 février : le 28 février) : **point signalé**.
+- Répartition : moins-value → court terme ; plus-value, détention de moins de deux ans → court terme ; deux ans au
+  moins → court terme jusqu'aux amortissements déduits (amortissements cumulés × part professionnelle), le reste à
+  long terme.
+- Part professionnelle : appliquée au résultat pour un **véhicule** (§ 100) ; pour un autre bien affecté en partie, la
+  règle n'est pas écrite dans les textes lus : résultat total affiché, répartition **à établir**. Voiture
+  **plafonnée** : le texte dit que la plus-value à court terme est « majorée du montant des amortissements expressément
+  exclus » : lecture incertaine avec un résultat déjà calculé sans limitation ; répartition **à établir**. Voiture dont
+  la part déductible est « à établir » (§ 8) : de même.
+- Exonération de l'article 151 septies : **signalée, non calculée** (seuils non relus dans cette lecture).
+- Registre : sous le bien cédé, résultat et nature ; sous le tableau, synthèse de l'année (solde à court terme,
+  plus-values à long terme) ; export CSV : deux colonnes de plus (court terme, long terme).
+
+**Moteur** : `assetDisposal(asset, rules)` → `null` si pas de cession ; sinon `{ net, result, heldTwoYears,
+shortTerm, longTerm, split: "ok" | "unknown", reason }` ; `assetsYear` ajoute `disposals` (court terme, long terme,
+biens à établir) pour l'année.
+
+**Tests** : moins-value (court terme, toute durée), plus-value avant deux ans (court terme), après deux ans (court
+terme jusqu'aux amortissements, long terme au-delà du prix de revient), borne des deux ans (veille, jour même,
+29 février), mise au rebut (prix 0), véhicule plafonné (résultat calculé sans limitation, comme dans l'exemple du
+BOFiP, qui compte le prorata sur 360 jours alors que l'Espace compte les jours exacts : chiffres comparables, pas
+identiques), véhicule en partie privé (× part professionnelle), bien en partie privé non véhicule (à établir),
+synthèse de l'année, CSV, écran.
+
+**Réalisation (14/11/2026)** : règle `plus_values_professionnelles` (BOI-BNC-BASE-30-30-10, 30-20 et 30-30-30) ;
+moteur `assetDisposal` (réutilise `addYears` de la section Prospects : une seconde fonction du même nom, ajoutée
+d'abord, était masquée par la première ; elle a été retirée), `assetsYear(…).disposals`, deux colonnes de plus au CSV ;
+écran : bloc « Cession » sous le plan de la fiche (résultat, durée de détention, répartition, régime et exonération
+possible sous conditions), résultat sous le bien cédé et synthèse des cessions au registre, aide du prix de cession (net des frais).
+Tests : 5 tests unitaires (règle, moins-value et rebut, borne des deux ans et 29 février, véhicules et biens partiels,
+synthèse et CSV) ; 18 erreurs réintroduites dans le moteur : 16 détectées, 2 portaient sur la fonction masquée (retirée) ;
+une condition sans effet retirée ; parcours de l'Espace : moins-value, plus-value avant deux ans, résultat nul,
+plus-value après deux ans (court et long terme), voiture plafonnée cédée, bien partiel, synthèse et CSV ; 16 erreurs
+réintroduites dans l'écran, toutes détectées (4 après ajout de points au parcours, dont une phrase fautive corrigée :
+« soit une ni plus-value ni moins-value ») ; parcours des comptes et du site (4 409 points) ; captures relues sur
+ordinateur et mobile ; phrase sur l'exonération reformulée après relecture (« sous conditions, notamment de recettes »).
+

@@ -1629,7 +1629,8 @@
       "professionnelle de l'amortissement est déductible." };
   var assetNotes = '<p class="small muted">Calcul par année civile, en amortissement linéaire : la première année est comptée au prorata des jours, du jour de la ' +
     "mise en service (compris) au 31 décembre ; la durée est celle pendant laquelle vous utiliserez le bien (pas de barème officiel). La plus-value ou la " +
-    "moins-value d'un bien cédé n'est pas calculée. En cas de doute, votre déclaration (2035 ou 2031) et un professionnel font foi.</p>";
+    "moins-value d'un bien cédé est calculée sans l'exonération possible selon les recettes (article 151 septies du CGI). En cas de doute, votre " +
+    "déclaration (2035 ou 2031) et un professionnel font foi.</p>";
 
   function viewAssets(r) {
     var head = '<div class="espace-head"><h2>Immobilisations</h2>';
@@ -1662,7 +1663,10 @@
           return '<tr><td class="c-asset"><a href="#/immobilisations/' + esc(a.id) + '">' + esc(a.label) + "</a>" +
             (a.proShare != null && a.proShare !== "" && Number(a.proShare) < 100 ? '<span class="small muted">Affecté partiellement à l\'exercice de la profession (' + esc(String(a.proShare).replace(".", ",")) + " %)</span>" : "") +
             vehicleMention(a) +
-            (x.sold ? '<span class="small muted">Cédé le ' + day(a.soldOn) + " pour " + esc(money(a.salePrice)) + "</span>" : "") + '</td><td class="c-date" data-label="Acquisition">' + day(a.acquiredOn) +
+            (x.sold ? '<span class="small muted">Cédé le ' + day(a.soldOn) + " pour " + esc(money(a.salePrice)) +
+              (x.disposal ? " : " + esc(disposalLabel(x.disposal.result)) + (x.disposal.split === "unknown" ? " (répartition à établir)" :
+                x.disposal.longTerm ? " (" + esc(money(x.disposal.shortTerm)) + " à court terme, " + esc(money(x.disposal.longTerm)) + " à long terme)" :
+                x.disposal.result ? " à court terme" : "") : "") + "</span>" : "") + '</td><td class="c-date" data-label="Acquisition">' + day(a.acquiredOn) +
             (a.inServiceOn && a.inServiceOn !== a.acquiredOn ? '<span class="small muted">mise en service le ' + day(a.inServiceOn) + "</span>" : "") +
             '</td><td class="num" data-label="Prix de revient">' + esc(money(a.cost)) + '</td><td class="num" data-label="Durée">' + esc(a.years + " an" + (a.years > 1 ? "s" : "")) +
             '</td><td class="num" data-label="Annuité ' + esc(year) + '">' + esc(money(x.amount)) + '</td><td class="num" data-label="Valeur nette">' + esc(money(x.net)) +
@@ -1670,6 +1674,9 @@
         }).join("") + '</tbody><tfoot><tr><td colspan="4">Total ' + esc(year) + '</td><td class="num" data-label="Annuités">' + esc(money(res.amount)) + '</td><td class="num" data-label="Valeur nette">' + esc(money(res.net)) +
         '</td><td class="num" data-label="Déductible">' + esc(money(res.deductible)) + "</td></tr></tfoot></table></div>"
         : '<p class="muted">Aucun bien en ' + esc(year) + '. <a href="#/immobilisations/nouveau">Ajouter un bien</a></p>') +
+      (res.disposals.count ? '<p class="asset-disposals"><strong>Cessions ' + esc(year) + " :</strong> plus et moins-values à court terme (solde) " +
+        esc(money(res.disposals.shortTerm)) + ", plus-values à long terme " + esc(money(res.disposals.longTerm)) +
+        (res.disposals.pending ? " ; " + res.disposals.pending + " cession" + (res.disposals.pending > 1 ? "s" : "") + " à établir, hors de ces montants" : "") + ".</p>" : "") +
       '<p class="small muted">Le registre reprend les mentions demandées aux professions libérales : date d\'acquisition et de mise en service, nature, prix de revient, ' +
       "amortissement de chaque année, et en cas de cession, sa date et son prix. Gardez les factures et actes d'achat ou de vente.</p>" + assetNotes + "</div>";
     if (!res.rows.length) return;
@@ -1720,6 +1727,36 @@
       "plafond n'est pas décrite dans les textes lus ; la part déductible est à établir." : "");
   }
 
+  /** Nature d'un résultat de cession : « plus-value de 1 295,89 € », « moins-value de 224,66 € », « ni plus-value ni moins-value ». */
+  function disposalLabel(n) {
+    return n > 0 ? "plus-value de " + money(n) : n < 0 ? "moins-value de " + money(-n) : "ni plus-value ni moins-value";
+  }
+  /**
+   * Cession d'un bien (documentation/57 § 9) : résultat, durée de détention, répartition entre court et long terme, ou
+   * montants à établir ; rappel du régime (étalement, taux du long terme, exonération possible), depuis la règle
+   * plus_values_professionnelles.
+   */
+  function disposalBlock(x) {
+    var d = E.assetDisposal(x, R);
+    if (!d) return "";
+    var P = R.plus_values_professionnelles, pct = String(x.proShare).replace(".", ",") + " %";
+    var partVehicle = x.category === "transport" && Number(x.proShare) < 100;
+    var lines = ["Cession le " + day(x.soldOn) + " pour " + money(x.salePrice) + " : valeur nette à cette date " + money(d.net) + ", soit " + (d.gross ? "une " : "") +
+      disposalLabel(d.gross) + (partVehicle && d.gross ? ", ramenée à " + money(Math.abs(d.result)) + " pour la part professionnelle (" + pct + ")" : "") + "."];
+    if (d.reason === "partial") lines.push("Bien utilisé aussi à titre privé : les textes lus ne disent comment en tenir compte que pour un véhicule ; " +
+      "montant imposable et répartition entre court et long terme à établir.");
+    else if (d.reason === "vehicle_cap") lines.push("Voiture particulière dont l'amortissement déductible est plafonné ou à établir : le résultat est calculé, comme " +
+      "le prévoit le BOFiP, avec les amortissements sans limitation ; la répartition entre court et long terme est à établir.");
+    else if (d.result < 0) lines.push("Bien amortissable : la moins-value est à court terme, quelle que soit la durée de détention.");
+    else if (d.result > 0 && !d.heldTwoYears) lines.push("Bien détenu depuis moins de " + P.holding_years + " ans : la plus-value est à court terme.");
+    else if (d.result > 0) lines.push("Bien détenu depuis " + P.holding_years + " ans au moins : " + money(d.shortTerm) + " à court terme (dans la limite des " +
+      "amortissements déduits)" + (d.longTerm ? " et " + money(d.longTerm) + " à long terme" : "") + ".");
+    if (d.result) lines.push("Court terme : ajouté au bénéfice de l'année (ou déduit), avec la faculté d'étaler une plus-value nette sur " +
+      P.short_term_spread_years + " ans. Long terme : imposé au taux de " + String(P.long_term_rate).replace(".", ",") + " % plus les prélèvements sociaux. " +
+      "Une exonération est possible sous conditions, notamment de recettes (article 151 septies du CGI) : elle n'est pas vérifiée ici.");
+    return '<div class="notice asset-disposal">' + lines.map(function (l) { return "<p>" + esc(l) + "</p>"; }).join("") + "</div>";
+  }
+
   /** Plan d'amortissement et messages d'un bien (aperçu de la fiche) ; rien tant que la saisie n'est pas valide. */
   function assetPreview(x) {
     if (E.assetErrors(x, R).length) return '<p class="small muted">Le plan d\'amortissement s\'affiche quand la fiche est complète.</p>';
@@ -1730,7 +1767,7 @@
         return '<tr><td class="c-date">' + row.year + '</td><td class="num" data-label="Jours">' + (row.days === null ? "année entière" : row.days + " / " + row.yearDays) +
           '</td><td class="num" data-label="Annuité">' + esc(money(row.amount)) + '</td><td class="num" data-label="Cumul">' + esc(money(row.cumulative)) +
           '</td><td class="num" data-label="Valeur nette">' + esc(money(row.net)) + '</td><td class="num" data-label="Déductible">' + deductibleCell(row.deductible) + "</td></tr>";
-      }).join("") + "</tbody></table></div>";
+      }).join("") + "</tbody></table></div>" + disposalBlock(x);
   }
 
   /** Carte grise d'un véhicule : voiture particulière, première immatriculation, CO2 (affichés pour la catégorie « Véhicule »). */
@@ -1762,7 +1799,7 @@
       field("proShare", "Part professionnelle (%)", x.proShare == null ? "100" : String(x.proShare).replace(".", ","), { half: true, inputmode: "decimal",
         hint: "Moins de 100 % si vous utilisez aussi le bien à titre privé." }) +
       field("soldOn", "Date de cession (facultatif)", x.soldOn || "", { type: "date", half: true }) +
-      field("salePrice", "Prix de cession", amountText(x.salePrice), { half: true, inputmode: "decimal", hint: "0 si le bien est mis au rebut." }) +
+      field("salePrice", "Prix de cession", amountText(x.salePrice), { half: true, inputmode: "decimal", hint: "Prix net des frais de la vente (commission…) ; 0 si le bien est mis au rebut." }) +
       '</div><p class="form-error" id="asset-error" role="alert" hidden></p>' +
       '<h3>Plan d\'amortissement</h3><div id="asset-plan" aria-live="polite">' + assetPreview(x) + "</div>" + assetNotes +
       '<div class="espace-actions"><button type="submit" class="btn btn-primary">Enregistrer</button><a class="btn btn-ghost" href="#/immobilisations">Annuler</a>' +

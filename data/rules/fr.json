@@ -2815,6 +2815,31 @@
       "verified_on": "2026-11-14",
       "note": "Lu le 14/11/2026 (outil de lecture). Notice 2032 de 2026 : véhicules « dont la première immatriculation intervient à compter du 1er mars 2020 et qui sont acquis ou loués au titre d'exercices clos à compter de cette même date » : 30 000 € (moins de 20 g de CO2/km), 20 300 € (supérieur ou égal à 20 g et inférieur à 50 g), 18 300 € (supérieur ou égal à 50 g et inférieur ou égal à 165 g), 9 900 € (plus de 165 g) ; « Le seuil de 165 grammes de CO2 par kilomètre est ramené à 160 grammes pour les véhicules acquis à compter du 1er janvier 2021 ». Notice 2142 de 2026 : même barème (« inférieur à 160 grammes pour les véhicules acquis à compter de cette date » ; 9 900 € au-delà de 160 grammes) : à 160 g pile, 18 300 € retenu (point signalé, documentation/57 § 8). BOFiP BOI-BIC-AMT-20-40-50 : § 20, véhicules « immatriculés dans la catégorie des voitures particulières » ; § 40, entreprises BIC, IS et BNC ; § 60, plafond selon la nature, le taux de CO2, la date de première mise en circulation et la date d'acquisition ; § 80, véhicules acquis à compter du 1er janvier 2017 (ancien dispositif) : 30 000 € (moins de 20 g), 20 300 € (20 à moins de 60 g), 18 300 € (60 à 155 g), 9 900 € (plus de 155 g, seuil abaissé chaque année : 130 g pour les véhicules acquis ou loués à compter du 1er janvier 2021) ; exemple chiffré : limite fiscale = « montant de la dotation annuelle affecté du rapport 9 900/35 000 » ; § 200, autres charges (entretien, carburant) déductibles sans limitation ; taux de CO2 en principe sur la carte grise. Le BOFiP (version de 2019) ne traite pas du dispositif WLTP : barème WLTP tiré des notices de 2026. Barèmes des véhicules acquis de 2017 à 2020 non repris dans l'Espace."
     },
+    "plus_values_professionnelles": {
+      "value": {
+        "holding_years": 2,
+        "short_term_spread_years": 3,
+        "long_term_rate": 12.8,
+        "long_term_loss_carry_years": 10
+      },
+      "unit": "object",
+      "label": "Plus-values et moins-values professionnelles (BNC, régime de l'article 39 duodecies du CGI) : court terme pour un bien détenu depuis moins de deux ans, ou dans la mesure des amortissements déduits ; moins-values sur biens amortissables à court terme ; plus-value nette à court terme étalable sur trois ans ; plus-value nette à long terme taxée à 12,8 % (plus prélèvements sociaux) ; moins-value nette à long terme imputable sur dix exercices",
+      "source": "https://bofip.impots.gouv.fr/doctrine/BOI-BNC-BASE-30-30-10",
+      "source_title": "BOFiP, BOI-BNC-BASE-30-30-10 - BNC, plus-values et moins-values, régime général d'imposition",
+      "more_sources": [
+        {
+          "source": "https://bofip.impots.gouv.fr/bofip/4677-PGP.html/identifiant=BOI-BNC-BASE-30-20-20161102",
+          "source_title": "BOFiP, BOI-BNC-BASE-30-20 (02/11/2016) - BNC, plus-values et moins-values, détermination (prix de cession net, véhicule à amortissement limité, usage partiel)"
+        },
+        {
+          "source": "https://bofip.impots.gouv.fr/doctrine/BOI-BNC-BASE-30-30-30",
+          "source_title": "BOFiP, BOI-BNC-BASE-30-30-30 - BNC, plus-values, exonérations (dont article 151 septies du CGI)"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-11-14",
+      "note": "Lu le 14/11/2026 (outil de lecture). BOI-BNC-BASE-30-30-10 : § 20, plus-values à court terme : biens « acquis ou créés depuis moins de deux ans » et, pour les biens détenus « depuis au moins deux ans, dans la mesure où elles correspondent à des amortissements déduits pour l'assiette de l'impôt » (majorées, le cas échéant, des amortissements expressément exclus des charges déductibles) ; § 30, amortissements déduits = ceux qui ont affecté le bénéfice imposable ; § 40, moins-values à court terme : biens non amortissables détenus depuis moins de deux ans, biens amortissables « quelle que soit la durée de leur détention » ; § 60, long terme : les autres ; § 70, tableau ; §§ 80 à 130, compensation annuelle du court terme, plus-value nette ajoutée au bénéfice, répartition possible « par parts égales » sur l'année et les deux suivantes (pas en cas de cessation), moins-value nette imputée sur le bénéfice puis déficit ; § 150, plus-value nette à long terme taxée au taux du 1 du I de l'article 39 quindecies du CGI (« 12,8 % ») plus prélèvements sociaux, portée sur la 2035 et la 2042-C-PRO ; § 160, moins-value nette à long terme imputable sur les plus-values nettes à long terme des « dix exercices suivants ». BOI-BNC-BASE-30-20 : § 20, prix de cession net des frais ; § 70, prix de revient = base de l'amortissement ; §§ 80 à 110, véhicule à amortissement limité : plus-value calculée avec les amortissements linéaires « en l'absence de toute limitation » ; véhicule affecté aux deux tiers : plus-value « ramenée » à 2/3 ; mêmes règles pour une moins-value ; § 130, exonération possible (article 151 septies) selon la durée de détention et des limites de recettes. Seuils de l'article 151 septies non relus : exonération signalée, non calculée."
+    },
     "registre_immobilisations_bnc": {
       "value": {
         "mentions": [

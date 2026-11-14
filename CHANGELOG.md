@@ -1,5 +1,20 @@
 # Journal des modifications
 
+## 2026-11-14 (midi) — Espace : plus-values et moins-values de cession
+
+- Fiche d'un bien cédé : valeur nette au jour de la cession, plus-value ou moins-value, durée de détention, part à
+  court terme et à long terme ; rappel du régime (étalement du court terme sur trois ans, taux de 12,8 % du long
+  terme, exonération possible selon les recettes non vérifiée).
+- Règles lues au BOFiP (BOI-BNC-BASE-30-20 et BOI-BNC-BASE-30-30-10) : prix net des frais, véhicule à amortissement
+  limité, usage partiel d'un véhicule, court terme avant deux ans ou dans la limite des amortissements déduits,
+  moins-values des biens amortissables à court terme.
+- Bien autre qu'un véhicule utilisé aussi à titre privé, voiture plafonnée : répartition « à établir », signalée.
+- Registre : résultat sous chaque bien cédé, synthèse des cessions de l'année ; export CSV : deux colonnes (court
+  terme, long terme).
+- Tests : 5 tests unitaires (18 erreurs réintroduites dans le moteur : 16 détectées, 2 sur une fonction en double
+  retirée), parcours de l'Espace complété (16 erreurs réintroduites dans l'écran, détectées), parcours des comptes
+  et du site (4 409 points), captures relues.
+
 ## 2026-11-14 (fin de matinée) — Espace : plafond d'amortissement des voitures particulières
 
 - Fiche d'un véhicule : case « Voiture particulière », date de première immatriculation et émissions de CO2 (carte
