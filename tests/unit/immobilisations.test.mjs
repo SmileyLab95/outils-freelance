@@ -81,7 +81,7 @@ test("registre de l'année : biens présents, annuités, totaux ; bien cédé da
   // (1er février : 334 jours en 2027, 457,53 €) : troisième année pleine, reste 42,47 € pour 2030.
   assert.deepEqual(y29.rows.map((r) => [r.asset.id, r.amount, r.net]), [["p", 0, 0], ["o", 247.95, 0], ["f", 500, 42.47]]);
   assert.deepEqual(E.assetsYear([], 2026), { rows: [], amount: 0, deductible: 0, net: 0, count: 0, pending: 0,
-    disposals: { count: 0, shortTerm: 0, longTerm: 0, pending: 0 } });
+    disposals: { count: 0, shortTerm: 0, longTerm: 0, pending: 0, pendingGains: 0 } });
 });
 
 test("contrôles de saisie : champs obligatoires, dates, durée entière, part, cession", () => {
@@ -245,8 +245,10 @@ test("registre : cessions de l'année (solde à court terme, long terme, à éta
   const y = E.assetsYear([a({ id: "m", soldOn: "2027-03-31", salePrice: 900 }), a({ id: "p", acquiredOn: "2026-01-01", cost: 3000, soldOn: "2027-06-30", salePrice: 2800 }),
     a({ id: "b", category: "bureau", acquiredOn: "2024-01-01", cost: 3000, proShare: 60, soldOn: "2027-02-01", salePrice: 1500 }),
     a({ id: "l", acquiredOn: "2024-01-01", cost: 3000, soldOn: "2027-05-01", salePrice: 3600 }), a({ id: "k", acquiredOn: "2027-01-05" })], 2027, R);
-  assert.deepEqual(y.disposals, { count: 4, shortTerm: 4071.23, longTerm: 600, pending: 1 });
-  assert.deepEqual(E.assetsYear([a()], 2026, R).disposals, { count: 0, shortTerm: 0, longTerm: 0, pending: 0 });
+  assert.deepEqual(y.disposals, { count: 4, shortTerm: 4071.23, longTerm: 600, pending: 1, pendingGains: 1 });
+  assert.deepEqual(E.assetsYear([a()], 2026, R).disposals, { count: 0, shortTerm: 0, longTerm: 0, pending: 0, pendingGains: 0 });
+  const loss = E.assetsYear([a({ id: "b", category: "bureau", acquiredOn: "2026-01-01", cost: 3000, proShare: 60, soldOn: "2027-02-01", salePrice: 0 })], 2027, R);
+  assert.deepEqual([loss.disposals.pending, loss.disposals.pendingGains], [1, 0], "cession à établir en moins-value : pas une plus-value à établir");
   const before = E.assetsYear([a({ soldOn: "2027-03-31", salePrice: 900 })], 2026, R);
   assert.deepEqual([before.rows[0].disposal, before.disposals.count], [null, 0], "cédé l'année suivante : rien cette année");
   assert.equal(E.assetsYear([a({ soldOn: "2027-03-31", salePrice: 900 })], 2027).rows[0].disposal, null, "sans les règles : pas de calcul");
@@ -255,3 +257,86 @@ test("registre : cessions de l'année (solde à court terme, long terme, à éta
   assert.ok(lines.some((l) => l.endsWith(";01/02/2027;1500,00;;")), "à établir : cellules vides");
 });
 
+
+// ----- Exonération des petites entreprises (article 151 septies du CGI, documentation/57 § 10) -----------------------
+
+let invSeq = 0;
+/** Facture émise (TVA à 20 % par défaut) encaissée aux dates et montants TTC donnés. */
+const inv = (pays, over = {}) => Object.assign({ id: "f" + (++invSeq), type: "facture", status: "issued", date: pays[0][0], nature: "services",
+  lines: [{ desc: "Conseil", qty: 1, price: 1000 }], vat: { franchise: false, rate: 20, place: "fr" },
+  payments: pays.map(([date, amount], i) => ({ id: "p" + invSeq + "-" + i, date, amount, method: "virement" })) }, over);
+const franchise = { vat: { franchise: true, rate: 20, place: "fr" } };
+
+test("151 septies : règle sourcée (cinq ans ; 90 000 / 126 000 € en BNC et services ; 250 000 / 350 000 € en vente)", () => {
+  assert.deepEqual(R.plus_values_exoneration_151_septies, { activity_years: 5,
+    services_bnc: { full_up_to: 90000, partial_below: 126000, divisor: 36000 }, sales: { full_up_to: 250000, partial_below: 350000, divisor: 100000 } });
+  const entry = ruleEntries("fr").plus_values_exoneration_151_septies;
+  assert.equal(entry.confidence, "high");
+  assert.equal(entry.source, "https://bofip.impots.gouv.fr/doctrine/BOI-BIC-PVMV-40-10-10-30");
+  assert.ok(entry.more_sources.some((m) => m.source.endsWith("BOI-BIC-PVMV-40-10-10-20")));
+});
+
+test("151 septies : recettes encaissées HT d'une année (TVA retirée, avoirs déduits, brouillons, devis et paiements supprimés ignorés)", () => {
+  const docs = [
+    inv([["2024-03-10", 1200]]),                                                // 1 000 € HT
+    inv([["2024-05-01", 1000]], franchise),                                     // franchise : 1 000 €
+    inv([["2024-06-01", 120]], { type: "avoir" }),                              // remboursement : − 100 € HT
+    inv([["2024-07-01", 600]], { status: "draft" }),
+    inv([["2024-07-01", 600]], { type: "devis" }),
+    inv([["2024-12-31", 1200], ["2025-01-01", 1200]]),                          // 1 000 € en 2024, 1 000 € en 2025
+  ];
+  docs.push(Object.assign(inv([["2024-08-01", 600]]), { payments: [{ id: "z", date: "2024-08-01", amount: 600, deletedAt: "2024-08-02" }] }));
+  assert.deepEqual(E.receiptsHT(docs, 2024), { year: 2024, amount: 2900, count: 4 });
+  assert.deepEqual(E.receiptsHT(docs, "2025"), { year: 2025, amount: 1000, count: 1 });
+  assert.deepEqual(E.receiptsHT(docs, 2023), { year: 2023, amount: 0, count: 0 });
+  assert.deepEqual(E.receiptsHT(undefined, 2024), { year: 2024, amount: 0, count: 0 });
+});
+
+test("151 septies : moyenne des deux années précédentes, exonération totale, partielle ou nulle, montants à court et long terme", () => {
+  // Recettes HT de 2024 et 2025 dont la moyenne vaut m (franchise : encaissé = HT).
+  const years = (m24, m25) => [inv([["2024-06-30", m24]], franchise), inv([["2025-06-30", m25]], franchise)];
+  const D = { shortTerm: 3000, longTerm: 1000 };
+  let x = E.exemption151(years(80000, 100000), 2026, D, R);
+  assert.deepEqual(x.years, [2024, 2025]);
+  assert.deepEqual(x.receipts.map((r) => r.amount), [80000, 100000]);
+  assert.equal(x.average, 90000);
+  assert.deepEqual([x.kind, x.rate, x.shortTerm, x.longTerm], ["full", 1, 3000, 1000], "90 000 € : exonération totale (inférieures ou égales)");
+  x = E.exemption151(years(90000, 90000.02), 2026, D, R);
+  assert.equal(x.average, 90000.01);
+  assert.deepEqual([x.kind, x.rate], ["partial", 1], "90 000,01 € : partielle, taux arrondi à 100,00 %");
+  x = E.exemption151(years(120000, 120000), 2026, { shortTerm: 40000, longTerm: 0 }, R);
+  assert.deepEqual([x.kind, x.rate, x.shortTerm, x.longTerm], ["partial", 0.1667, 6668, 0], "exemple du BOFiP : (126 000 − 120 000) / 36 000 = 16,67 % ; 40 000 × 16,67 % = 6 668");
+  x = E.exemption151(years(108000, 108000), 2026, D, R);
+  assert.deepEqual([x.kind, x.rate, x.shortTerm, x.longTerm], ["partial", 0.5, 1500, 500]);
+  x = E.exemption151(years(126000, 126000), 2026, D, R);
+  assert.deepEqual([x.kind, x.rate, x.shortTerm, x.longTerm], ["none", 0, 0, 0], "126 000 € : plus d'exonération");
+  x = E.exemption151(years(125999.98, 126000), 2026, D, R);
+  assert.deepEqual([x.average, x.kind], [125999.99, "partial"], "juste en dessous de 126 000 €");
+  x = E.exemption151(years(50000, 50000), 2026, { shortTerm: -2000, longTerm: 1000 }, R);
+  assert.deepEqual([x.shortTerm, x.longTerm, x.base.shortTerm], [0, 1000, 0], "solde à court terme négatif : rien à exonérer");
+  x = E.exemption151(years(50000, 50000), 2026, { shortTerm: 500, longTerm: -300 }, R);
+  assert.deepEqual([x.shortTerm, x.longTerm, x.base.longTerm], [500, 0, 0], "long terme négatif : rien à exonérer");
+  x = E.exemption151(years(50000, 50000), "2026", null, R);
+  assert.deepEqual([x.kind, x.shortTerm, x.longTerm], ["full", 0, 0], "année en texte, sans cession");
+});
+
+test("151 septies : seuils lus dans la règle (exonération totale jusqu'au seuil, même si la formule donnerait moins)", () => {
+  const years = (m24, m25) => [inv([["2024-06-30", m24]], franchise), inv([["2025-06-30", m25]], franchise)];
+  const odd = Object.assign({}, R, { plus_values_exoneration_151_septies: Object.assign({}, R.plus_values_exoneration_151_septies,
+    { services_bnc: { full_up_to: 90000, partial_below: 126000, divisor: 50000 } }) });
+  let x = E.exemption151(years(90000, 90000), 2026, { shortTerm: 1000, longTerm: 0 }, odd);
+  assert.deepEqual([x.kind, x.rate, x.shortTerm], ["full", 1, 1000], "au seuil : totale, pas (126 000 − 90 000) / 50 000");
+  x = E.exemption151(years(100000, 100000), 2026, { shortTerm: 1000, longTerm: 0 }, odd);
+  assert.deepEqual([x.kind, x.rate, x.shortTerm], ["partial", 0.52, 520], "diviseur lu dans la règle");
+});
+
+test("151 septies : une année sans encaissement enregistré → estimation à établir", () => {
+  const D = { shortTerm: 3000, longTerm: 1000 };
+  let x = E.exemption151([inv([["2025-06-30", 50000]], franchise)], 2026, D, R);
+  assert.deepEqual([x.kind, x.average, x.rate, x.shortTerm, x.longTerm], [null, null, null, null, null]);
+  assert.deepEqual(x.receipts.map((r) => r.count), [0, 1]);
+  x = E.exemption151([inv([["2024-06-30", 50000]], franchise)], 2026, D, R);
+  assert.equal(x.kind, null, "2025 manquante");
+  x = E.exemption151([inv([["2024-06-30", 50000]], franchise), inv([["2025-06-30", 0]], franchise)], 2026, D, R);
+  assert.deepEqual([x.kind, x.average], ["full", 25000], "encaissement nul enregistré : l'année est connue");
+});

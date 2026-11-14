@@ -1628,8 +1628,8 @@
     partial: "Bien affecté en partie à la profession : le registre porte la mention « affecté partiellement à l'exercice de la profession » ; seule la part " +
       "professionnelle de l'amortissement est déductible." };
   var assetNotes = '<p class="small muted">Calcul par année civile, en amortissement linéaire : la première année est comptée au prorata des jours, du jour de la ' +
-    "mise en service (compris) au 31 décembre ; la durée est celle pendant laquelle vous utiliserez le bien (pas de barème officiel). La plus-value ou la " +
-    "moins-value d'un bien cédé est calculée sans l'exonération possible selon les recettes (article 151 septies du CGI). En cas de doute, votre " +
+    "mise en service (compris) au 31 décembre ; la durée est celle pendant laquelle vous utiliserez le bien (pas de barème officiel). Les plus-values et " +
+    "moins-values de cession sont indiquées avant l'exonération possible des petites entreprises (article 151 septies du CGI), estimée à part. En cas de doute, votre " +
     "déclaration (2035 ou 2031) et un professionnel font foi.</p>";
 
   function viewAssets(r) {
@@ -1677,6 +1677,7 @@
       (res.disposals.count ? '<p class="asset-disposals"><strong>Cessions ' + esc(year) + " :</strong> plus et moins-values à court terme (solde) " +
         esc(money(res.disposals.shortTerm)) + ", plus-values à long terme " + esc(money(res.disposals.longTerm)) +
         (res.disposals.pending ? " ; " + res.disposals.pending + " cession" + (res.disposals.pending > 1 ? "s" : "") + " à établir, hors de ces montants" : "") + ".</p>" : "") +
+      exemptionBlock(year, res.disposals) +
       '<p class="small muted">Le registre reprend les mentions demandées aux professions libérales : date d\'acquisition et de mise en service, nature, prix de revient, ' +
       "amortissement de chaque année, et en cas de cession, sa date et son prix. Gardez les factures et actes d'achat ou de vente.</p>" + assetNotes + "</div>";
     if (!res.rows.length) return;
@@ -1688,6 +1689,37 @@
       window.print();
       document.body.classList.remove("print-ledger");
     });
+  }
+
+  /**
+   * Exonération des petites entreprises (article 151 septies du CGI, documentation/57 § 10) : règle, puis estimation pour
+   * un BNC d'après les encaissements HT des deux années précédentes ; rien sans plus-value nette ni plus-value à établir.
+   */
+  function exemptionBlock(year, disposals) {
+    if (!(disposals.shortTerm > 0 || disposals.longTerm > 0 || disposals.pendingGains)) return "";
+    var X = R.plus_values_exoneration_151_septies, S = X.services_bnc, V = X.sales;
+    var eur0 = function (n) { return OF.eur(n, 0); }, rate = function (r) { return OF.fmt(Math.round(r * 10000) / 100) + " %"; };
+    var x = E.exemption151(data.documents, year, disposals, R);
+    var lines = ["si votre activité est exercée depuis au moins " + X.activity_years + " ans, la plus-value nette de l'année (hors terrains à bâtir) est " +
+      "exonérée en totalité quand vos recettes annuelles HT (moyenne des deux années précédentes) ne dépassent pas " + eur0(S.full_up_to) + " (professions libérales et services) ou " +
+      eur0(V.full_up_to) + " (vente de marchandises), et en partie en dessous de " + eur0(S.partial_below) + " ou de " + eur0(V.partial_below) + "."];
+    if (x.kind === null) {
+      lines.push("Estimation impossible : aucun encaissement enregistré dans l'Espace en " + x.receipts.filter(function (r) { return !r.count; })
+        .map(function (r) { return r.year; }).join(" ni en ") + ". Faites la moyenne de vos recettes HT de " + x.years.join(" et ") + " (déclarations 2035).");
+    } else {
+      var amounts = money(x.shortTerm) + " à court terme et " + money(x.longTerm) + " à long terme";
+      lines.push("Estimation pour une profession libérale (BNC), d'après vos encaissements HT enregistrés dans l'Espace (" +
+        x.receipts.map(function (r) { return r.year + " : " + money(r.amount); }).join(", ") + ", moyenne " + money(x.average) + ") : " +
+        (x.kind === "full" ? "exonération totale, soit " + amounts + " exonérés." :
+          x.kind === "partial" ? "exonération partielle au taux de " + rate(x.rate) + " ((" + eur0(S.partial_below) + " − " + money(x.average) + ") ÷ " +
+            eur0(S.divisor) + "), soit " + amounts + " exonérés." :
+          "pas d'exonération (moyenne de " + eur0(S.partial_below) + " ou plus).") +
+        " Ce calcul suppose que tous vos encaissements de ces deux années sont dans l'Espace.");
+    }
+    lines.push("En BIC, les recettes retenues sont celles des exercices clos (produits acquis) : pas d'estimation ici." +
+      (disposals.pending ? " Les cessions à établir ne sont pas comptées." : ""));
+    return '<div class="notice asset-exemption"><p><strong>Exonération possible (article 151 septies du CGI)</strong> : ' +
+      lines.map(function (l, i) { return (i ? "<p>" : "") + esc(l) + "</p>"; }).join("") + "</div>";
   }
 
   /** Mention du registre pour une voiture particulière plafonnée (documentation/57 § 8). */
@@ -1752,8 +1784,9 @@
     else if (d.result > 0) lines.push("Bien détenu depuis " + P.holding_years + " ans au moins : " + money(d.shortTerm) + " à court terme (dans la limite des " +
       "amortissements déduits)" + (d.longTerm ? " et " + money(d.longTerm) + " à long terme" : "") + ".");
     if (d.result) lines.push("Court terme : ajouté au bénéfice de l'année (ou déduit), avec la faculté d'étaler une plus-value nette sur " +
-      P.short_term_spread_years + " ans. Long terme : imposé au taux de " + String(P.long_term_rate).replace(".", ",") + " % plus les prélèvements sociaux. " +
-      "Une exonération est possible sous conditions, notamment de recettes (article 151 septies du CGI) : elle n'est pas vérifiée ici.");
+      P.short_term_spread_years + " ans. Long terme : imposé au taux de " + String(P.long_term_rate).replace(".", ",") + " % plus les prélèvements sociaux." +
+      (d.result > 0 ? " Une exonération est possible sous conditions de durée d'activité et de recettes (article 151 septies du CGI) : estimation sous " +
+        "le registre de " + x.soldOn.slice(0, 4) + "." : ""));
     return '<div class="notice asset-disposal">' + lines.map(function (l) { return "<p>" + esc(l) + "</p>"; }).join("") + "</div>";
   }
 

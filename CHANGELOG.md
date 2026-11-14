@@ -1,5 +1,20 @@
 # Journal des modifications
 
+## 2026-11-14 (après-midi) — Espace : exonération des plus-values des petites entreprises (151 septies)
+
+- Registre des immobilisations : sous la synthèse des cessions, rappel de l'exonération de l'article 151 septies du
+  CGI (activité de cinq ans au moins, terrains à bâtir exclus, 90 000 / 126 000 € pour les professions libérales et
+  services, 250 000 / 350 000 € pour la vente) et estimation pour un BNC : moyenne des encaissements HT des deux années
+  précédentes enregistrés dans l'Espace, exonération totale, partielle (taux et formule) ou nulle, montants exonérés à
+  court et à long terme ; « estimation impossible » si une année n'a aucun encaissement.
+- Règle `plus_values_exoneration_151_septies` lue au BOFiP (BOI-BIC-PVMV-40-10-10-30, version du 23/07/2025, et
+  BOI-BIC-PVMV-40-10-10-20, version du 31/03/2021).
+- Fiche du bien cédé : la phrase « exonération non vérifiée » renvoie au registre de l'année, et seulement pour une
+  plus-value (plus de mention pour une moins-value).
+- Tests : 5 tests unitaires (22 erreurs réintroduites dans le moteur : 21 détectées, 1 équivalente ; 11 dans l'écran, toutes détectées), parcours de
+  l'Espace (totale à 90 000 €, partielle à 16,67 % comme l'exemple du BOFiP, aucune à 126 000 €, année manquante,
+  plus-value à établir), parcours des comptes (51 points) et du site (4 422 points), captures relues.
+
 ## 2026-11-14 (début d'après-midi) — CGV au Canada : Territoires du Nord-Ouest
 
 - Loi sur la protection du consommateur des Territoires du Nord-Ouest (LRTNO 1988, ch. C-17) lue sur gnwt.ca : pas de

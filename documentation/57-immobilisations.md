@@ -189,7 +189,8 @@ plus-value ou une moins-value, à court ou à long terme ; l'écran disait seule
   **plafonnée** : le texte dit que la plus-value à court terme est « majorée du montant des amortissements expressément
   exclus » : lecture incertaine avec un résultat déjà calculé sans limitation ; répartition **à établir**. Voiture dont
   la part déductible est « à établir » (§ 8) : de même.
-- Exonération de l'article 151 septies : **signalée, non calculée** (seuils non relus dans cette lecture).
+- Exonération de l'article 151 septies : **signalée, non calculée** (seuils non relus dans cette lecture) ; estimée depuis
+  le 14/11/2026 après-midi (§ 10).
 - Registre : sous le bien cédé, résultat et nature ; sous le tableau, synthèse de l'année (solde à court terme,
   plus-values à long terme) ; export CSV : deux colonnes de plus (court terme, long terme).
 
@@ -217,3 +218,62 @@ réintroduites dans l'écran, toutes détectées (4 après ajout de points au pa
 « soit une ni plus-value ni moins-value ») ; parcours des comptes et du site (4 409 points) ; captures relues sur
 ordinateur et mobile ; phrase sur l'exonération reformulée après relecture (« sous conditions, notamment de recettes »).
 
+
+## 10. Exonération des petites entreprises (article 151 septies du CGI, spécification du 14/11/2026)
+
+**Besoin** : l'écran disait « une exonération est possible sous conditions, notamment de recettes : elle n'est pas
+vérifiée ici ». Pour un professionnel libéral au réel qui vend un bien amorti, c'est souvent la question décisive : sa
+plus-value peut être exonérée en totalité.
+
+**Règles lues le 14/11/2026** (outil « Lire une source officielle ») :
+
+| Règle | Source |
+|---|---|
+| Condition de durée : activité exercée à titre professionnel pendant **au moins cinq ans**, du début de l'exercice effectif de l'activité à la fin de la période d'imposition au titre de laquelle la plus-value nette est déterminée ; exception pour l'expropriation et les indemnités d'assurance | BOI-BIC-PVMV-40-10-10-20 (version du 31/03/2021), §§ 10, 160 à 190 |
+| Tous les éléments de l'actif immobilisé, **sauf les terrains à bâtir** | id., § 180 |
+| Recettes **hors taxes** ; en BNC, « honoraires perçus dans le cadre de l'exercice de la profession et sommes reçues en contrepartie des services aux clients, augmentées des recettes accessoires » | id., §§ 220 et 230 |
+| Recettes annuelles : en comptabilité de caisse (BNC sans option pour les créances acquises), **moyenne des recettes encaissées, hors taxes, des deux années civiles qui précèdent l'année de réalisation** des plus-values ; en comptabilité d'engagement (BIC), moyenne des produits acquis des exercices clos au cours des deux années civiles précédant la clôture | id., §§ 460 à 510 |
+| Exonération **totale** si les recettes ne dépassent pas **90 000 €** (titulaires de BNC et entreprises non agricoles autres que de vente : deuxième catégorie) ou **250 000 €** (vente de marchandises, fourniture de logement : première catégorie) ; cessions à compter du 1er janvier 2023 | BOI-BIC-PVMV-40-10-10-30 (version du 23/07/2025), § 60 |
+| Exonération **partielle** entre 90 000 et 126 000 € (deuxième catégorie), taux = (126 000 € − recettes) ÷ 36 000 € ; entre 250 000 et 350 000 € (première catégorie), taux = (350 000 € − recettes) ÷ 100 000 € | id., §§ 70 et 80 |
+| Activités mixtes : totale si le global ne dépasse pas le seuil le plus élevé et chaque activité son propre seuil ; sinon le **plus faible** des taux (global au barème de la première catégorie, chaque autre activité au sien) | id., §§ 90 à 130 |
+| Le taux s'applique à la **plus-value nette à court terme** (après compensation avec les moins-values à court terme) et à la **plus-value nette à long terme** de l'année (exemple du § 310 : 180 000 € × 78 % et 400 000 € × 78 %) ; non cumulable avec les articles 238 quindecies, 41, 151 octies… ; cumulable avec 151 septies A et B | id., §§ 280 à 310 |
+
+**Choix (D81)** :
+- Ce que l'Espace sait : la plus-value nette de l'année (court terme et long terme, § 9) et les **encaissements** de
+  chaque année (livre des recettes). Ce qu'il ne sait pas : la date de début de l'activité pour un profil au réel (le
+  champ « Début d'activité » ne sert qu'à la micro-entreprise), la catégorie BNC ou BIC du profil « réel », la
+  comptabilité d'engagement.
+- Sous la synthèse des cessions du registre, dès qu'il y a une **plus-value nette** (court terme ou long terme) dans
+  l'année : rappel de la règle (cinq ans, terrains à bâtir exclus, seuils des deux catégories, formule du taux) et
+  **estimation pour un BNC** : moyenne des encaissements HT enregistrés dans l'Espace pour les deux années
+  précédentes (encaissements des factures moins remboursements des avoirs, part de TVA retirée), taux d'exonération,
+  montants exonérés à court et à long terme **si** l'activité a cinq ans. Le taux est arrondi au centième de pour cent,
+  comme dans les exemples du BOFiP (16,67 %) : **point signalé**.
+- Pas d'estimation (« à établir ») si l'une des deux années n'a **aucun encaissement** enregistré : l'Espace ne
+  connaît pas les recettes d'avant son utilisation. L'estimation dit les années et les montants retenus, et rappelle
+  qu'elle ne vaut que si tous les encaissements de ces années sont enregistrés.
+- BIC (comptabilité d'engagement, activité de vente, activités mixtes) : règle rappelée, **pas d'estimation**.
+- Les totaux du registre et de l'export ne changent pas : l'exonération dépend de conditions que l'Espace ne vérifie pas.
+- Fiche du bien cédé : la phrase « elle n'est pas vérifiée ici » renvoie à l'estimation du registre de l'année.
+
+- Le rappel s'affiche aussi pour une année dont une cession est « à établir » en plus-value (voiture plafonnée, bien en
+  partie privé) : `disposals.pendingGains` ; la phrase finale dit que ces cessions ne sont pas comptées.
+
+**Moteur** : règle `plus_values_exoneration_151_septies` ; `receiptsHT(documents, year)` ; `exemption151(documents, year, disposals, rules)` →
+`{ years, receipts: [{ year, amount, count }], average, rate, kind: "full" | "partial" | "none" | null,
+shortTerm, longTerm }` (`kind` et montants `null` si une année n'a aucun encaissement).
+
+**Tests** : moyenne HT (TVA retirée, avoirs déduits, brouillons et devis ignorés), bornes (90 000 € : totale ;
+90 000,01 € : partielle ; 126 000 € : aucune), taux arrondi (120 000 € → 16,67 %), solde à court terme négatif (rien à
+exonérer), année sans encaissement (à établir), écran.
+
+**Réalisation (14/11/2026, après-midi)** : règle `plus_values_exoneration_151_septies` (BOI-BIC-PVMV-40-10-10-30 lu en
+entier, -20 lu par passages) ; moteur `receiptsHT`, `rate151`, `exemption151`, `disposals.pendingGains` ; écran : bloc
+« Exonération possible » sous la synthèse des cessions du registre, phrase de la fiche du bien cédé renvoyant au
+registre de l'année, note du registre reformulée. Le test a révélé un écart : à 90 000,01 € le taux arrondi vaut
+100,00 % mais l'exonération est partielle ; la nature (totale, partielle, aucune) dépend donc du seuil, pas du taux
+arrondi. Tests : 5 tests unitaires de plus (règle, recettes HT, moyenne et bornes, seuils lus dans la règle, année
+sans encaissement) ; 22 erreurs réintroduites dans le moteur : 21 détectées (2 après l'ajout d'un test : seuil lu
+pour lui-même avec une règle fictive, long terme négatif), 1 équivalente (à 126 000 € la formule vaut déjà 0) ; parcours de l'Espace : rappel, estimation impossible, totale (90 000 €), partielle (16,67 %, exemple du
+BOFiP : 167,04 € et 16,67 €), aucune (126 000 €), une année manquante, plus-value à établir, encaissements de test
+retirés ; 11 erreurs réintroduites dans l'écran, toutes détectées ; captures relues. Relecture : la phrase de règle précise « moyenne des deux années précédentes » ; la fiche ne parle plus d'exonération pour une moins-value (elle ne porte que sur les plus-values).

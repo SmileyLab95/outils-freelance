@@ -2840,6 +2840,34 @@
       "verified_on": "2026-11-14",
       "note": "Lu le 14/11/2026 (outil de lecture). BOI-BNC-BASE-30-30-10 : § 20, plus-values à court terme : biens « acquis ou créés depuis moins de deux ans » et, pour les biens détenus « depuis au moins deux ans, dans la mesure où elles correspondent à des amortissements déduits pour l'assiette de l'impôt » (majorées, le cas échéant, des amortissements expressément exclus des charges déductibles) ; § 30, amortissements déduits = ceux qui ont affecté le bénéfice imposable ; § 40, moins-values à court terme : biens non amortissables détenus depuis moins de deux ans, biens amortissables « quelle que soit la durée de leur détention » ; § 60, long terme : les autres ; § 70, tableau ; §§ 80 à 130, compensation annuelle du court terme, plus-value nette ajoutée au bénéfice, répartition possible « par parts égales » sur l'année et les deux suivantes (pas en cas de cessation), moins-value nette imputée sur le bénéfice puis déficit ; § 150, plus-value nette à long terme taxée au taux du 1 du I de l'article 39 quindecies du CGI (« 12,8 % ») plus prélèvements sociaux, portée sur la 2035 et la 2042-C-PRO ; § 160, moins-value nette à long terme imputable sur les plus-values nettes à long terme des « dix exercices suivants ». BOI-BNC-BASE-30-20 : § 20, prix de cession net des frais ; § 70, prix de revient = base de l'amortissement ; §§ 80 à 110, véhicule à amortissement limité : plus-value calculée avec les amortissements linéaires « en l'absence de toute limitation » ; véhicule affecté aux deux tiers : plus-value « ramenée » à 2/3 ; mêmes règles pour une moins-value ; § 130, exonération possible (article 151 septies) selon la durée de détention et des limites de recettes. Seuils de l'article 151 septies non relus : exonération signalée, non calculée."
     },
+    "plus_values_exoneration_151_septies": {
+      "value": {
+        "activity_years": 5,
+        "services_bnc": {
+          "full_up_to": 90000,
+          "partial_below": 126000,
+          "divisor": 36000
+        },
+        "sales": {
+          "full_up_to": 250000,
+          "partial_below": 350000,
+          "divisor": 100000
+        }
+      },
+      "unit": "object",
+      "label": "Exonération des plus-values professionnelles des petites entreprises (article 151 septies du CGI) : activité exercée depuis au moins cinq ans ; exonération totale jusqu'à 90 000 € de recettes HT (BNC et services) ou 250 000 € (vente), partielle en dessous de 126 000 € ou 350 000 €",
+      "source": "https://bofip.impots.gouv.fr/doctrine/BOI-BIC-PVMV-40-10-10-30",
+      "source_title": "BOFiP, BOI-BIC-PVMV-40-10-10-30 - Exonération des plus-values réalisées par les petites entreprises, effets de l'exonération (version du 23/07/2025)",
+      "more_sources": [
+        {
+          "source": "https://bofip.impots.gouv.fr/doctrine/BOI-BIC-PVMV-40-10-10-20",
+          "source_title": "BOFiP, BOI-BIC-PVMV-40-10-10-20 - Exonération des plus-values réalisées par les petites entreprises, conditions (version du 31/03/2021)"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-11-14",
+      "note": "Lu le 14/11/2026 (outil de lecture, BOI-BIC-PVMV-40-10-10-30 lu en entier, SHA-256 12175e9e…5566). § 60 : exonération totale lorsque les recettes annuelles sont inférieures ou égales à 250 000 € (première catégorie : vente de marchandises, objets, fournitures et denrées, fourniture de logement) ou à 90 000 € (« autres entreprises non agricoles ou titulaires de bénéfices non commerciaux », deuxième catégorie), pour les cessions réalisées à compter du 1er janvier 2023 (350 000 € et 450 000 € : activités agricoles, non repris). § 70 : exonération partielle entre 250 000 et 350 000 € (taux = (350 000 − recettes) / 100 000) et entre 90 000 et 126 000 € (taux = (126 000 − recettes) / 36 000). §§ 90 à 130 : activités mixtes (le plus faible des taux). § 310 : le taux s'applique à la plus-value nette à court terme et à la plus-value nette à long terme. §§ 280 à 300 : non cumulable avec les articles 238 quindecies, 41, 93 quater I ter, 151 octies, 151 octies A et B ; cumulable avec 151 septies A et B. BOI-BIC-PVMV-40-10-10-20 (version du 31/03/2021) : § 10, activité exercée à titre professionnel pendant au moins cinq ans, du début de l'exercice effectif à la clôture de l'exercice (fin de la période d'imposition) de détermination de la plus-value nette ; § 160, exception (expropriation, indemnités d'assurance) ; § 180, terrains à bâtir exclus ; §§ 220 et 230, recettes hors taxes (BNC : honoraires perçus et sommes reçues en contrepartie des services, augmentés des recettes accessoires) ; § 500, recettes encaissées : moyenne des recettes encaissées, appréciées hors taxes, au cours des deux années civiles qui précèdent l'année de réalisation des plus-values ; § 470, comptabilité d'engagement : produits acquis des exercices clos au cours des deux années civiles qui précèdent la clôture de l'exercice de réalisation. L'Espace n'estime l'exonération que pour un BNC (encaissements HT des deux années précédentes) ; arrondi du taux au centième de pour cent comme dans les exemples du BOFiP (16,67 %)."
+    },
     "registre_immobilisations_bnc": {
       "value": {
         "mentions": [

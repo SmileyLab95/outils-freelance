@@ -9,7 +9,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 
 ## Où en est-on ?
 
-*Mis à jour le 14/11/2026 (début d'après-midi).*
+*Mis à jour le 14/11/2026 (après-midi).*
 
 - **Priorité (décision D10)** : le site et la plateforme d'abord ; noms de domaine, Gumroad et affiliation à la fin.
   Règle de qualité maximale pour tout produit ou service (D11, charte dans la [méthode](04-methode-de-travail.md#charte-qualité)).
@@ -471,14 +471,17 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   JavaScript) et part de 50 % lue dans la loi (C.R.S. 8-13.3-507(4)(a)) : revenu brut et effet au dépôt de l'avis
   confirmés ; page complétée (documents fiscaux chaque année avant le 1er décembre, amende jusqu'à 500 $ ; retrait à
   tout moment, effet au plus tôt à la fin des 3 ans et 30 jours après l'avis) ([52](52-protection-sociale-etats-unis.md)).
+- **Espace : exonération des petites entreprises (14/11/2026, après-midi)** : sous la synthèse des cessions du
+  registre, rappel de l'article 151 septies et estimation pour un BNC (moyenne des encaissements HT des deux années
+  précédentes : totale jusqu'à 90 000 €, partielle jusqu'à 126 000 €), montants exonérés à court et à long terme
+  ([57](57-immobilisations.md) § 10, D81, BOFiP BOI-BIC-PVMV-40-10-10-30 et -20 lus) ; seuils trouvés dans la page
+  « Effets de l'exonération » (et non dans BOI-BIC-PVMV-40-10-10-20, lue ce matin).
 - **CGV au Canada : Territoires du Nord-Ouest (14/11/2026, début d'après-midi)** : loi sur la protection du
   consommateur (LRTNO 1988, ch. C-17) lue sur gnwt.ca : pas de règle sur les contrats à distance, texte commun gardé ;
   mais la partie VII (démarchage) vise aussi le contrat conclu à distance après une démarche faite au domicile du
   consommateur, en personne ou par téléphone, sans sa demande, dès 100 $ (licence, contrat signé avec la déclaration
   du droit d'annulation, 10 jours) : case et mention propres aux TNO dans les deux langues, règle `ca_nt_direct_sales`
-  ([47](47-cgv-canada.md) § 6, D80). Yukon et Nunavut : toujours 403. Article 151 septies : les seuils de recettes ne
-  figurent pas dans les pages du BOFiP lues ce matin (BOI-BIC-PVMV-40-10-10-20) ; l'exonération reste signalée, non
-  calculée.
+  ([47](47-cgv-canada.md) § 6, D80). Yukon et Nunavut : toujours 403.
 - **Espace : plus-values de cession (14/11/2026, midi)** : résultat de la vente ou de la mise au rebut d'un bien,
   court terme et long terme, synthèse de l'année au registre et dans l'export ([57](57-immobilisations.md) § 9, D79,
   BOFiP lu) ; exonération de l'article 151 septies signalée.
@@ -520,8 +523,9 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   art. 5(3)) ; Nouveau-Brunswick : loi de 2024 non proclamée, à ajouter dès sa proclamation ; Saskatchewan : site
   toujours illisible.
 - **Prochaines actions de Claude** : immobilisations de l'Espace (faites le 14/11, [57](57-immobilisations.md) ; plafond
-  des voitures particulières et plus-values de cession faits le 14/11) : seuils de l'exonération de l'article
-  151 septies (absents des pages du BOFiP lues le 14/11 : chercher la page à jour des seuils de recettes), barèmes des voitures acquises avant 2021, combinaison part privée et plafond, plus-value d'un bien
+  des voitures particulières, plus-values de cession et exonération de l'article 151 septies faits le 14/11) : estimation
+  151 septies pour un BIC (produits acquis) et pour l'activité mixte, condition des cinq ans (date de début d'activité
+  à demander au profil « réel »), barèmes des voitures acquises avant 2021, combinaison part privée et plafond, plus-value d'un bien
   partiel autre qu'un véhicule, dès que leurs règles sont lues ; indicateurs de l'Espace : les huit onglets, la date de clôture des pistes et la période de
   l'onglet Documents et de l'onglet Dépenses sont faits (12/11, [55](55-indicateurs-espace.md)) ; **appliquer le thème**
   choisi par Ismail dès sa réponse ([54](54-themes.md) § 2) ; refonte, suite ([31](31-vision-plateforme.md) § 5) : les quatre modules du compte

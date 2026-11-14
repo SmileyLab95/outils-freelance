@@ -766,11 +766,56 @@
              count: rows.length, pending: rows.filter(function (r) { return r.deductible === null; }).length,
              disposals: disposalsOf(rows) };
   }
-  /** Cessions de l'année : solde à court terme, plus-values à long terme, cessions à établir. */
+  /** Cessions de l'année : solde à court terme, plus-values à long terme, cessions à établir (dont en plus-value). */
   function disposalsOf(rows) {
     var list = rows.filter(function (r) { return r.disposal; }), known = list.filter(function (r) { return r.disposal.split === "ok"; });
     var sum = function (k) { return round2(known.reduce(function (s, r) { return s + r.disposal[k]; }, 0)); };
-    return { count: list.length, shortTerm: sum("shortTerm"), longTerm: sum("longTerm"), pending: list.length - known.length };
+    return { count: list.length, shortTerm: sum("shortTerm"), longTerm: sum("longTerm"), pending: list.length - known.length,
+             pendingGains: list.filter(function (r) { return r.disposal.split !== "ok" && r.disposal.result > 0; }).length };
+  }
+
+  /**
+   * Recettes encaissées hors taxes d'une année (BOI-BIC-PVMV-40-10-10-20, §§ 230 et 500) : encaissements des factures moins
+   * remboursements des avoirs, part de TVA retirée ; count : nombre d'encaissements (0 : année inconnue de l'Espace).
+   */
+  function receiptsHT(documents, year) {
+    var Y = String(year), total = 0, count = 0;
+    (documents || []).forEach(function (doc) {
+      if (doc.status === "draft" || (doc.type !== "facture" && doc.type !== "avoir")) return;
+      var net = 1 - vatPart(doc), sign = doc.type === "avoir" ? -1 : 1;
+      payments(doc).forEach(function (p) {
+        if (String(p.date).slice(0, 4) !== Y) return;
+        total += sign * Number(p.amount) * net;
+        count++;
+      });
+    });
+    return { year: +Y, amount: round2(total), count: count };
+  }
+  /** Taux d'exonération d'une catégorie (article 151 septies, II) : 1 jusqu'au seuil, dégressif ensuite, 0 au-delà ; à 0,01 % près. */
+  function rate151(c, receipts) {
+    if (receipts <= c.full_up_to) return 1;
+    if (receipts >= c.partial_below) return 0;
+    return Math.round((c.partial_below - receipts) / c.divisor * 10000) / 10000;
+  }
+  /**
+   * Exonération de l'article 151 septies estimée pour un BNC (documentation/57 § 10) : moyenne des encaissements HT des
+   * deux années précédentes, taux, montants exonérés de la plus-value nette à court terme et à long terme de l'année.
+   * kind null (montants null) : une des deux années n'a aucun encaissement enregistré, estimation à établir.
+   */
+  function exemption151(documents, year, disposals, rules) {
+    var X = rules.plus_values_exoneration_151_septies, Y = Number(year);
+    var receipts = [receiptsHT(documents, Y - 2), receiptsHT(documents, Y - 1)];
+    var st = Math.max(0, (disposals && disposals.shortTerm) || 0), lt = Math.max(0, (disposals && disposals.longTerm) || 0);
+    var out = { years: [Y - 2, Y - 1], receipts: receipts, average: null, rate: null, kind: null, shortTerm: null, longTerm: null,
+                base: { shortTerm: st, longTerm: lt } };
+    if (!receipts[0].count || !receipts[1].count) return out;
+    out.average = round2((receipts[0].amount + receipts[1].amount) / 2);
+    var C = X.services_bnc;
+    out.kind = out.average <= C.full_up_to ? "full" : out.average < C.partial_below ? "partial" : "none";   // selon le seuil, pas le taux arrondi
+    out.rate = rate151(C, out.average);
+    out.shortTerm = round2(st * out.rate);
+    out.longTerm = round2(lt * out.rate);
+    return out;
   }
 
   /**
@@ -1530,7 +1575,7 @@
            parseDuration: parseDuration, durationLabel: durationLabel, checkTime: checkTime, timeErrors: timeErrors, timeState: timeState, lastRate: lastRate,
            timeInvoiceLines: timeInvoiceLines, timeInvoice: timeInvoice, timeSummary: timeSummary, unbilledByClient: unbilledByClient,
            ASSET_CATEGORIES: ASSET_CATEGORIES, assetErrors: assetErrors, checkAsset: checkAsset, assetStart: assetStart, assetPlan: assetPlan,
-           assetsYear: assetsYear, assetHints: assetHints, assetsCSV: assetsCSV, vehicleCap: vehicleCap, assetDisposal: assetDisposal,
+           assetsYear: assetsYear, assetHints: assetHints, assetsCSV: assetsCSV, vehicleCap: vehicleCap, assetDisposal: assetDisposal, receiptsHT: receiptsHT, exemption151: exemption151,
            timeCSV: timeCSV, timerCheck: timerCheck, timerElapsed: timerElapsed, timerStart: timerStart, timerPause: timerPause,
            timerResume: timerResume, timerStop: timerStop, timerClock: timerClock, timerDuration: timerDuration,
            STAGE_LABELS: STAGE_LABELS, OPEN_STAGES: OPEN_STAGES, prospectErrors: prospectErrors, exchangeErrors: exchangeErrors, prospectQuotes: prospectQuotes,

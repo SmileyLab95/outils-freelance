@@ -4462,8 +4462,8 @@ const tests = {
     check((await text("#asset-plan")).includes("2027 90 / 365 123,29 € 375,34 € 1 124,66 €") && !(await text("#asset-plan")).includes("2028"), "Immobilisations : cession, plan arrêté au jour de la cession");
     check((await text("#asset-plan")).includes("Cession le 31/03/2027 pour 900,00 € : valeur nette à cette date 1 124,66 €, soit une moins-value de 224,66 €.") &&
       (await text("#asset-plan")).includes("la moins-value est à court terme, quelle que soit la durée de détention") &&
-      (await text("#asset-plan")).includes("taux de 12,8 %") && (await text("#asset-plan")).includes("151 septies"),
-      "Immobilisations : moins-value de cession à court terme, régime rappelé");
+      (await text("#asset-plan")).includes("taux de 12,8 %") && !(await text("#asset-plan")).includes("151 septies"),
+      "Immobilisations : moins-value de cession à court terme, régime rappelé (pas d'exonération pour une moins-value)");
     await page.fill("#ep-salePrice", "1 400");
     await page.waitForTimeout(100);
     check((await text("#asset-plan")).includes("soit une plus-value de 275,34 €.") && (await text("#asset-plan")).includes("Bien détenu depuis moins de 2 ans : la plus-value est à court terme."),
@@ -4476,8 +4476,9 @@ const tests = {
     check((await text(".assets-table tbody")).includes("Ordinateur portable Cédé le 31/03/2027 pour 900,00 €") &&
       (await text(".assets-table tfoot")).includes("Total 2027 273,29 € 174,25 € 213,29 €"), "Immobilisations : bien cédé signalé, hors valeur nette au 31/12");
     check((await text(".assets-table tbody")).includes("Cédé le 31/03/2027 pour 900,00 € : moins-value de 224,66 € à court terme") &&
-      (await text("#espace-view .asset-disposals")) === "Cessions 2027 : plus et moins-values à court terme (solde) -224,66 €, plus-values à long terme 0,00 €.",
-      "Immobilisations : résultat de cession au registre et synthèse de l'année");
+      (await text("#espace-view .asset-disposals")) === "Cessions 2027 : plus et moins-values à court terme (solde) -224,66 €, plus-values à long terme 0,00 €." &&
+      !(await page.$("#espace-view .asset-exemption")),
+      "Immobilisations : résultat de cession au registre et synthèse de l'année (moins-value : pas d'exonération à estimer)");
     const [assetsCsv] = await Promise.all([page.waitForEvent("download"), page.click("#assets-csv")]);
     const assetsCsvText = fs.readFileSync(await assetsCsv.path(), "utf8");
     check(assetsCsvText.split("\r\n").length === 3 && assetsCsvText.includes('"Ordinateur portable";"Matériel et outillage";01/07/2026;01/07/2026;1500,00;3;100;123,29;375,34;1124,66;123,29;31/03/2027;900,00;-224,66;0,00'),
@@ -4500,14 +4501,52 @@ const tests = {
     await page.waitForSelector("#asset-delete");
     await page.fill("#ep-salePrice", "1 600");
     await page.waitForTimeout(100);
-    check((await text("#asset-plan")).includes("Bien détenu depuis 2 ans au moins : 1 002,05 € à court terme (dans la limite des amortissements déduits) et 100,00 € à long terme."),
-      "Immobilisations : plus-value après deux ans, court et long terme");
+    check((await text("#asset-plan")).includes("Bien détenu depuis 2 ans au moins : 1 002,05 € à court terme (dans la limite des amortissements déduits) et 100,00 € à long terme.") &&
+      (await text("#asset-plan")).includes("conditions de durée d'activité et de recettes (article 151 septies du CGI) : estimation sous le registre de 2028."),
+      "Immobilisations : plus-value après deux ans, court et long terme ; exonération renvoyée au registre");
     await page.click("#asset-form button[type=submit]");
     await page.waitForSelector(".assets-table");
     await go("#/immobilisations?annee=2028");
     check((await text(".assets-table tbody")).includes("Cédé le 01/07/2028 pour 1 600,00 € : plus-value de 1 102,05 € (1 002,05 € à court terme, 100,00 € à long terme)") &&
       (await text("#espace-view .asset-disposals")) === "Cessions 2028 : plus et moins-values à court terme (solde) 1 002,05 €, plus-values à long terme 100,00 €.",
       "Immobilisations : plus-value à long terme au registre et dans la synthèse");
+    // Exonération des petites entreprises (documentation/57 § 10) : règle, puis estimation d'après les encaissements HT de
+    // 2026 et 2027 ; ceux de 2027 sont ajoutés le temps du test (copie d'une facture émise, en franchise), puis retirés.
+    let exemption = await text("#espace-view .asset-exemption");
+    check(exemption.startsWith("Exonération possible (article 151 septies du CGI) : si votre activité est exercée depuis au moins 5 ans") &&
+      exemption.includes("ne dépassent pas 90 000 € (professions libérales et services) ou 250 000 € (vente de marchandises), et en partie en dessous de 126 000 € ou de 350 000 €.") &&
+      exemption.includes("Estimation impossible : aucun encaissement enregistré dans l'Espace en 2026 ni en 2027. Faites la moyenne de vos recettes HT de 2026 et 2027") &&
+      exemption.includes("pas d'estimation ici"), "Immobilisations : exonération rappelée, estimation impossible sans encaissements");
+    const receipts = async (a2026, a2027) => {
+      await page.evaluate(async (amounts) => {
+        const d = await window.EspaceStore.load();
+        d.documents = d.documents.filter((x) => !/^e2e-151/.test(x.id));
+        const src = d.documents.find((x) => x.type === "facture" && x.status !== "draft");
+        [[2026, amounts[0]], [2027, amounts[1]]].forEach(([y, amount]) => {
+          if (!amount) return;
+          d.documents.push(Object.assign(JSON.parse(JSON.stringify(src)), { id: "e2e-151-" + y, number: "E2E-151-" + y, date: y + "-06-01",
+            vat: { franchise: true, rate: 20, place: "fr" }, payments: [{ id: "e2e-151-p" + y, date: y + "-06-30", amount, method: "virement" }] }));
+        });
+        await window.EspaceStore.save(d);
+      }, [a2026, a2027]);
+      await page.reload({ waitUntil: "networkidle" });
+      await go("#/immobilisations?annee=2028");
+      await page.waitForSelector(".assets-table");
+      return text("#espace-view .asset-exemption");
+    };
+    exemption = await receipts(80000, 100000);
+    check(exemption.includes("(2026 : 80 000,00 €, 2027 : 100 000,00 €, moyenne 90 000,00 €) : exonération totale, soit 1 002,05 € à court terme et 100,00 € à long terme exonérés.") &&
+      exemption.includes("Ce calcul suppose que tous vos encaissements de ces deux années sont dans l'Espace."), "Immobilisations : exonération totale estimée (90 000 €)");
+    exemption = await receipts(120000, 120000);
+    check(exemption.includes("exonération partielle au taux de 16,67 % ((126 000 € − 120 000,00 €) ÷ 36 000 €), soit 167,04 € à court terme et 16,67 € à long terme exonérés."),
+      "Immobilisations : exonération partielle estimée (16,67 %, exemple du BOFiP)");
+    exemption = await receipts(126000, 126000);
+    check(exemption.includes("moyenne 126 000,00 €) : pas d'exonération (moyenne de 126 000 € ou plus)."), "Immobilisations : pas d'exonération à 126 000 €");
+    exemption = await receipts(0, 50000);
+    check(exemption.includes("aucun encaissement enregistré dans l'Espace en 2026.") && !exemption.includes("ni en"), "Immobilisations : une année sans encaissement, estimation impossible");
+    exemption = await receipts(0, 0);
+    check(exemption.includes("en 2026 ni en 2027") && !(await assetsStore()).documents.some((x) => /^e2e-151/.test(x.id)),
+      "Immobilisations : encaissements de test retirés");
     await go("#/immobilisations?annee=2026");
     await page.click('.assets-table a:text("Fauteuil de bureau")');
     await page.waitForSelector("#asset-delete");
@@ -4582,6 +4621,9 @@ const tests = {
     check((await text(".assets-table tbody")).includes("Cédé le 30/06/2027 pour 25 000,00 € : plus-value de 2 471,23 € (répartition à établir)") &&
       (await text("#espace-view .asset-disposals")).includes("1 cession à établir, hors de ces montants"),
       "Immobilisations : cession à établir signalée au registre et dans la synthèse");
+    check((await text("#espace-view .asset-exemption")).includes("aucun encaissement enregistré dans l'Espace en 2025 ni en 2026.") &&
+      (await text("#espace-view .asset-exemption")).endsWith("pas d'estimation ici. Les cessions à établir ne sont pas comptées."),
+      "Immobilisations : exonération rappelée pour une plus-value à établir (voiture plafonnée)");
     for (const label of ["Ordinateur portable", "Fauteuil de bureau", "Voiture"]) {
       await go("#/immobilisations");
       await page.click(`.espace-filters a[href="#/immobilisations?annee=2026"]`);
