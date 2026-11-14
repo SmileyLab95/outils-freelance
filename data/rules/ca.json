@@ -1409,11 +1409,11 @@
       "value": "Québec gives no non-refundable tax credit for an employee's base QPP contribution, QPIP premium or EI premium: these contributions are taken into account in the basic personal amount. Only deductions apply (enhanced QPP parts, self-employed employer-equivalent shares).",
       "unit": "text",
       "label": "Québec: no tax credit for QPP base contributions, QPIP and EI premiums",
-      "source": "https://cffp.recherche.usherbrooke.ca/outils-ressources/guide-mesures-fiscales/cotisations-rrq-rqap-et-assurance-emploi/",
-      "source_title": "Cotisations au RRQ, au RQAP et à l'assurance-emploi - Guide des mesures fiscales, Chaire en fiscalité et en finances publiques (Université de Sherbrooke)",
-      "confidence": "medium",
-      "note": "University tax research centre, not a government page; consistent with the Revenu Québec line-by-line help, which lists only deductions (line 248, Schedule U). Federal credits still apply to Québec residents.",
-      "verified_on": "2026-10-22"
+      "source": "https://www.budget.finances.gouv.qc.ca/Budget/outils/depenses-fiscales/documents/Depenses_fiscales_2022_Description_mesures.pdf",
+      "source_title": "Ministère des Finances du Québec - Dépenses fiscales, édition 2022, description des mesures (sections 1.3.2.1 à 1.3.2.3)",
+      "confidence": "high",
+      "note": "Read on 14/11/2026 with the source reader (PDF, SHA-256 41db78af…5330), pages C.213 to C.215: 1.3.2.1 employment insurance 'Le régime d'imposition n'accorde aucun allègement fiscal particulier à l'égard des cotisations versées par les employés ou les travailleurs autonomes au Régime d'assurance-emploi, puisque les cotisations versées à ce titre sont prises en considération dans le montant accordé au titre du crédit d'impôt de base'; 1.3.2.2 QPIP: same for employees, and for the self-employed the part equivalent to the employee's share 'ne donne droit à aucun allègement fiscal particulier' (the excess is deductible); 1.3.2.3 QPP and CPP: same for employee contributions, 'sous réserve du traitement fiscal des cotisations supplémentaires versées par les employés à compter de 2019' (deductible). The 2025 edition was not found at the same address. Federal credits still apply to Québec residents.",
+      "verified_on": "2026-11-14"
     },
     "quebec_deduction_for_workers": {
       "value": {

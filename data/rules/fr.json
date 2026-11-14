@@ -1073,11 +1073,11 @@
       "source": "https://entreprendre.service-public.gouv.fr/vosdroits/F31808",
       "source_title": "Facturation : quelles sont les mentions obligatoires ? - Entreprendre.Service-Public.fr",
       "confidence": "high",
-      "note": "Source officielle lue le 08/11/2026 (outil de lecture des sources) : la fiche F31808 donne la mention « TVA non applicable, art. 293 B du code général des impôts » (forme longue de la même mention ; référence juridique : CGI, art. 293 B). L'ordonnance n° 2026-671 du 27 juillet 2026 (JO du 28 juillet) reporte au 1er janvier 2027 le transfert de la TVA dans le CIBS, initialement prévu au 1er septembre 2026 par l'ordonnance n° 2025-1247. Jusqu'au 31 décembre 2026, la référence reste l'article 293 B du CGI (report confirmé par plusieurs sources : Bpifrance Création, Legifiscal, Cridon Nord-Est).",
+      "note": "Source officielle lue le 08/11/2026 (outil de lecture des sources) : la fiche F31808 donne la mention « TVA non applicable, art. 293 B du code général des impôts » (forme longue de la même mention ; référence juridique : CGI, art. 293 B). L'ordonnance n° 2026-671 du 27 juillet 2026 (JO du 28 juillet) reporte au 1er janvier 2027 le transfert de la TVA dans le CIBS, initialement prévu au 1er septembre 2026 par l'ordonnance n° 2025-1247. Jusqu'au 31 décembre 2026, la référence reste l'article 293 B du CGI (report confirmé par impots.gouv.fr, page modifiée le 14/10/2026 et relue le 08/11/2026 : entrée en vigueur du CIBS « prévue le 1er janvier 2027 », règle mention_franchise_tva_2027 ; sources secondaires privées retirées le 14/11/2026).",
       "more_sources": [
         {
-          "source": "https://bpifrance-creation.fr/entrepreneur/actualites/entrepreneurs-petite-mise-a-jour-a-prevoir-vos-factures",
-          "source_title": "Bpifrance Création - Entrepreneurs : petite mise à jour à prévoir sur vos factures (ordonnance n° 2026-671 du 27 juillet 2026)"
+          "source": "https://www.impots.gouv.fr/professionnel/questions/en-tant-que-micro-entrepreneur-puis-je-etre-redevable-de-la-tva",
+          "source_title": "En tant que micro-entrepreneur, puis-je être redevable de la TVA ? - impots.gouv.fr (modifiée le 14/10/2026)"
         }
       ],
       "verified_on": "2026-11-08"
@@ -1402,15 +1402,9 @@
       "label": "Mention de franchise en base de TVA à partir du 1er janvier 2027",
       "source": "https://www.impots.gouv.fr/professionnel/questions/en-tant-que-micro-entrepreneur-puis-je-etre-redevable-de-la-tva",
       "source_title": "En tant que micro-entrepreneur, puis-je être redevable de la TVA ? - impots.gouv.fr (modifiée le 14/10/2026)",
-      "more_sources": [
-        {
-          "source": "https://www.legifiscal.fr/actualites-fiscales/4613-mention-facture-changement-article-exoneration-tva-autoentrepreneurs.html",
-          "source_title": "Legifiscal - Mention facture : changement d'article d'exonération de TVA pour les autoentrepreneurs"
-        }
-      ],
       "confidence": "high",
       "verified_on": "2026-11-08",
-      "note": "Relu le 08/11/2026 sur impots.gouv.fr (page modifiée le 14/10/2026) : mention « TVA non applicable, art. 293 B du Code général des impôts (CGI) » ou « TVA non applicable, article L.233-3 du Code des impositions des biens et des services (CIBS) » ; note de la page : recodification prévue par les ordonnances n° 2025-1247 du 17/12/2025 et n° 2026-671 du 27/07/2026, entrée en vigueur du CIBS « prévue le 1er janvier 2027 ». La fiche F36244 (vérifiée le 13/03/2026, avant l'ordonnance de juillet) annonce encore le 1er septembre 2026 et « art. L. 223 et s. » : version dépassée. Durée de la tolérance de l'ancienne mention (31/12/2027 selon F36244 avant l'ordonnance, 30/06/2028 selon des résumés de l'ordonnance) : non confirmée, retirée de la règle et non affichée sur le site. Le site ajoute « (ex-art. 293 B du CGI) » pour lever toute ambiguïté."
+      "note": "Relu le 08/11/2026 sur impots.gouv.fr (page modifiée le 14/10/2026) : mention « TVA non applicable, art. 293 B du Code général des impôts (CGI) » ou « TVA non applicable, article L.233-3 du Code des impositions des biens et des services (CIBS) » ; note de la page : recodification prévue par les ordonnances n° 2025-1247 du 17/12/2025 et n° 2026-671 du 27/07/2026, entrée en vigueur du CIBS « prévue le 1er janvier 2027 ». La fiche F36244 (vérifiée le 13/03/2026, avant l'ordonnance de juillet) annonce encore le 1er septembre 2026 et « art. L. 223 et s. » : version dépassée. Durée de la tolérance de l'ancienne mention (31/12/2027 selon F36244 avant l'ordonnance, 30/06/2028 selon des résumés de l'ordonnance) : non confirmée, retirée de la règle et non affichée sur le site. Le site ajoute « (ex-art. 293 B du CGI) » pour lever toute ambiguïté. Source secondaire privée (Legifiscal) retirée le 14/11/2026 : la page d'impots.gouv.fr suffit."
     },
     "conservation_pieces": {
       "value": {

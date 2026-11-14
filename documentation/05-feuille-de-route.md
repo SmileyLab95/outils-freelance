@@ -9,7 +9,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 
 ## Où en est-on ?
 
-*Mis à jour le 13/11/2026 (fin de soirée).*
+*Mis à jour le 14/11/2026 (nuit).*
 
 - **Priorité (décision D10)** : le site et la plateforme d'abord ; noms de domaine, Gumroad et affiliation à la fin.
   Règle de qualité maximale pour tout produit ou service (D11, charte dans la [méthode](04-methode-de-travail.md#charte-qualité)).
@@ -471,6 +471,13 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   JavaScript) et part de 50 % lue dans la loi (C.R.S. 8-13.3-507(4)(a)) : revenu brut et effet au dépôt de l'avis
   confirmés ; page complétée (documents fiscaux chaque année avant le 1er décembre, amende jusqu'à 500 $ ; retrait à
   tout moment, effet au plus tôt à la fin des 3 ans et 30 jours après l'avis) ([52](52-protection-sociale-etats-unis.md)).
+- **Sources non officielles : revue (14/11/2026, nuit)** : toutes les sources des règles passées au crible de l'outil
+  de lecture. Règle `quebec_contributions_no_credit` : la Chaire de fiscalité de l'Université de Sherbrooke est
+  remplacée par le rapport officiel *Dépenses fiscales* du ministère des Finances du Québec (édition 2022,
+  sections 1.3.2.1 à 1.3.2.3, lu en entier) ; confiance haute. Mentions de franchise de TVA : liens Legifiscal et
+  Bpifrance Création retirés (la fiche d'impots.gouv.fr suffit). Restent hors liste de l'outil mais officiels pour leur
+  sujet : tribunaux, organismes d'indemnisation des accidents du travail, registres de noms de domaine, Parlement
+  britannique, législature de l'Alabama, Agirc-Arrco, RFC.
 - **Columbus (Ohio) : texte officiel lu (13/11/2026, nuit)** : la règle `freelance_law_columbus_ohio` reposait sur
   un bulletin de cabinet d'avocats ; le chapitre 2337 du City Code (version de l'ordonnance 2401-2024) et le
   chapitre 377 (Labor Commission) sont lus en entier dans le registre législatif officiel de la ville (Legistar, D76) :
@@ -543,8 +550,8 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   toujours la lecture automatisée (51 règles en attente : voir les options d'Ismail plus bas). La fiche F31808 ne
   mentionne plus les amendes pour mentions manquantes (règle `sanctions_mentions_facture` à rattacher au CGI,
   art. 1737, et au Code de commerce, art. L441-16, sur Légifrance ou le BOFiP). À faire : remplacer les dernières
-  sources non officielles (services taxables, loi de Californie ; Columbus fait le 13/11/2026,
-  mention de franchise de TVA de 2027, crédit québécois, extensions de noms de domaine) ; sources françaises restantes
+  sources non officielles (services taxables, loi de Californie ; Columbus, mention de franchise de TVA de 2027 et
+  crédit québécois faits les 13 et 14/11/2026 ; extensions de noms de domaine : registres officiels) ; sources françaises restantes
   (Urssaf, Légifrance, economie.gouv.fr ; régimes TNS et SASU, formats de la facturation électronique, calendrier Urssaf à
   rattacher aux fiches de service-public avec l'option « essai » du vérificateur). Fait en fin de matinée : intitulé
   « EI » du compte (F35991), CFE (impots.gouv.fr, F23547, BOFiP), prélèvement à la source du micro-entrepreneur et

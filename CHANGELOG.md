@@ -1,5 +1,14 @@
 # Journal des modifications
 
+## 2026-11-14 (nuit) — Sources : dernières sources non officielles remplacées
+
+- Canada (Québec) : la règle « pas de crédit d'impôt pour les cotisations au RRQ, au RQAP et à l'assurance-emploi »
+  repose désormais sur le rapport *Dépenses fiscales* du ministère des Finances du Québec (édition 2022, sections
+  1.3.2.1 à 1.3.2.3) au lieu d'un guide universitaire ; confiance haute. Visible dans les sources des pages canadiennes.
+- France : liens vers Legifiscal et Bpifrance Création retirés des règles de mention de franchise de TVA (la fiche
+  d'impots.gouv.fr, relue le 08/11/2026, donne la mention de 2027 et le report au 1er janvier 2027).
+- Tests : unitaires, serveur, parcours des pages canadiennes (1 455 points) et françaises.
+
 ## 2026-11-13 (fin de soirée) — États-Unis : Columbus dans le calculateur de date d'échéance
 
 - *Invoice due date calculator* : nouveau lieu « Columbus, Ohio » ; sans date dans le contrat, l'échéance est fixée au
