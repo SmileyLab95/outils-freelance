@@ -619,6 +619,116 @@
     return lines.join("\r\n");
   }
 
+  // ----- Immobilisations et amortissements (documentation/57-immobilisations.md) --------------------------------
+
+  var ASSET_CATEGORIES = { materiel: "Matériel et outillage", bureau: "Matériel et mobilier de bureau", logiciel: "Logiciel",
+                           transport: "Véhicule ou matériel de transport", autre: "Autre bien (agencements…)" };
+  var ISO_DATE = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
+  function utcDay(d) { var p = d.split("-"); return Date.UTC(+p[0], +p[1] - 1, +p[2]); }
+  /** Date AAAA-MM-JJ qui existe (pas de 31 avril). */
+  function validDay(d) { return ISO_DATE.test(d || "") && new Date(utcDay(d)).toISOString().slice(0, 10) === d; }
+  /** Nombre de jours de a à b, les deux compris. */
+  function daysIncl(a, b) { return Math.round((utcDay(b) - utcDay(a)) / 86400000) + 1; }
+  function yearDays(y) { return daysIncl(y + "-01-01", y + "-12-31"); }
+  /** Début de l'amortissement : jour de la mise en service, à défaut jour de l'acquisition. */
+  function assetStart(a) { return a.inServiceOn || a.acquiredOn; }
+  var filled = function (v) { return v !== null && v !== undefined && v !== ""; };
+
+  /** Erreurs de saisie d'un bien, avec le champ concerné. */
+  function assetErrors(a) {
+    var errors = [], add = function (field, message) { errors.push({ field: field, message: message }); };
+    if (!String(a.label || "").trim()) add("label", "Indiquez la nature du bien.");
+    if (!ASSET_CATEGORIES[a.category]) add("category", "Choisissez la catégorie du bien.");
+    if (!validDay(a.acquiredOn)) add("acquiredOn", "Indiquez la date d'acquisition.");
+    if (filled(a.inServiceOn) && !validDay(a.inServiceOn)) add("inServiceOn", "La date de mise en service n'est pas valide.");
+    else if (filled(a.inServiceOn) && validDay(a.acquiredOn) && a.inServiceOn < a.acquiredOn) add("inServiceOn", "La mise en service ne peut pas précéder l'acquisition.");
+    if (!(filled(a.cost) && isFinite(a.cost) && Number(a.cost) > 0)) add("cost", "Indiquez le prix de revient : un montant positif.");
+    if (!(filled(a.years) && Number.isInteger(Number(a.years)) && Number(a.years) >= 1 && Number(a.years) <= 50)) add("years", "Indiquez la durée d'amortissement : un nombre entier d'années, de 1 à 50.");
+    if (!(filled(a.proShare) && isFinite(a.proShare) && Number(a.proShare) >= 1 && Number(a.proShare) <= 100)) add("proShare", "La part professionnelle va de 1 à 100 %.");
+    if (filled(a.soldOn)) {
+      if (!validDay(a.soldOn)) add("soldOn", "La date de cession n'est pas valide.");
+      else if (validDay(assetStart(a) || "") && a.soldOn < assetStart(a)) add("soldOn", "La cession ne peut pas précéder la mise en service.");
+      if (!(filled(a.salePrice) && isFinite(a.salePrice) && Number(a.salePrice) >= 0)) add("salePrice", "Indiquez le prix de cession (0 si le bien est mis au rebut).");
+    } else if (filled(a.salePrice)) add("soldOn", "Indiquez la date de cession.");
+    return errors;
+  }
+  function checkAsset(a) { return assetErrors(a).map(function (e) { return e.message; }); }
+
+  /**
+   * Plan d'amortissement linéaire (BOI-BIC-AMT-20-10) : une ligne par année civile, du jour de la mise en service
+   * (compris) ; première année au prorata des jours (jours exacts / jours de l'année) ; cumul arrondi au centime, total =
+   * prix de revient ; bien cédé : année de cession au prorata jusqu'au jour de la cession (compris), puis plan arrêté.
+   * Ligne : { year, days (null pour une année entière), yearDays, amount, cumulative, net, deductible }.
+   */
+  function assetPlan(a) {
+    var start = assetStart(a), cost = round2(Number(a.cost)), years = Number(a.years);
+    var share = (filled(a.proShare) ? Number(a.proShare) : 100) / 100, sold = filled(a.soldOn) ? a.soldOn : null;
+    var first = +start.slice(0, 4), y = first, rows = [], fraction = 0, cum = 0;
+    while (cum < cost && rows.length < years + 2) {
+      var from = y === first ? start : y + "-01-01";
+      var to = sold && +sold.slice(0, 4) === y ? sold : y + "-12-31";
+      if (sold && sold < from) break;
+      var days = daysIncl(from, to), full = yearDays(y);
+      fraction = Math.min(years, fraction + days / full);
+      var next = round2(cost * fraction / years);  // fraction plafonnée à la durée : le dernier cumul vaut le prix de revient
+      var amount = round2(next - cum);
+      cum = next;
+      rows.push({ year: y, days: days === full ? null : days, yearDays: full, amount: amount, cumulative: cum, net: round2(cost - cum),
+                  deductible: round2(amount * share) });
+      if (sold && +sold.slice(0, 4) === y) break;
+      y++;
+    }
+    return rows;
+  }
+
+  /** Registre d'une année : biens présents dans l'année (acquis au plus tard cette année, non cédés avant), annuités, totaux. */
+  function assetsYear(assets, year) {
+    var Y = String(year), rows = [];
+    (assets || []).forEach(function (a) {
+      if (!a || !validDay(a.acquiredOn) || a.acquiredOn.slice(0, 4) > Y || (filled(a.soldOn) && a.soldOn.slice(0, 4) < Y)) return;
+      var plan = assetPlan(a), row = plan.filter(function (r) { return String(r.year) === Y; })[0] || null;
+      var done = plan.filter(function (r) { return String(r.year) <= Y; });
+      var cumulative = done.length ? done[done.length - 1].cumulative : 0;
+      rows.push({ asset: a, row: row, amount: row ? row.amount : 0, deductible: row ? row.deductible : 0, cumulative: cumulative,
+                  net: round2(Number(a.cost) - cumulative), sold: !!(filled(a.soldOn) && a.soldOn.slice(0, 4) === Y) });
+    });
+    rows.sort(function (x, y) {
+      var a = assetStart(x.asset), b = assetStart(y.asset);
+      return a < b ? -1 : a > b ? 1 : String(x.asset.label).localeCompare(String(y.asset.label), "fr");
+    });
+    var sum = function (k, list) { return round2((list || rows).reduce(function (s, r) { return s + r[k]; }, 0)); };
+    return { rows: rows, amount: sum("amount"), deductible: sum("deductible"), net: sum("net", rows.filter(function (r) { return !r.sold; })),
+             count: rows.length };
+  }
+
+  /**
+   * Messages d'un bien : « deductible » (500 € HT ou moins, catégorie admise : déduction possible en charge,
+   * immobilisation_seuil_charges) ; « vehicle » (plafonds d'amortissement des véhicules non calculés) ; « partial »
+   * (bien affecté en partie : mention au registre, part déductible seule).
+   */
+  function assetHints(a, rules) {
+    var S = rules.immobilisation_seuil_charges, hints = [];
+    if (S.categories.indexOf(a.category) > -1 && Number(a.cost) > 0 && Number(a.cost) <= S.amount) hints.push("deductible");
+    if (a.category === "transport") hints.push("vehicle");
+    if (filled(a.proShare) && Number(a.proShare) < 100) hints.push("partial");
+    return hints;
+  }
+
+  /** Registre de l'année au format CSV (séparateur « ; », montants avec la virgule). */
+  function assetsCSV(year) {
+    var q = function (v) { return '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"'; };
+    var eur = function (n) { return filled(n) ? Number(n).toFixed(2).replace(".", ",") : ""; };
+    var lines = ["Nature;Catégorie;Acquisition;Mise en service;Prix de revient;Durée (ans);Part professionnelle (%);Amortissement de l'année;" +
+                 "Cumul des amortissements;Valeur nette;Part déductible;Date de cession;Prix de cession"];
+    year.rows.forEach(function (r) {
+      var a = r.asset;
+      lines.push([q(a.label), q(ASSET_CATEGORIES[a.category]), frDay(a.acquiredOn), frDay(assetStart(a)), eur(a.cost), String(a.years),
+        String(filled(a.proShare) ? a.proShare : 100).replace(".", ","), eur(r.amount), eur(r.cumulative), eur(r.net), eur(r.deductible),
+        filled(a.soldOn) ? frDay(a.soldOn) : "", filled(a.soldOn) ? eur(a.salePrice) : ""].join(";"));
+    });
+    return lines.join("\r\n");
+  }
+
   // ----- Temps passé (documentation/37-temps-passe.md) -------------------------------------------------------
 
   var TIME_MAX = { hour: 24, day: 1 };
@@ -1346,6 +1456,8 @@
            purchasesRequired: purchasesRequired, expenseRows: expenseRows, checkExpense: checkExpense, expensesCSV: expensesCSV,
            parseDuration: parseDuration, durationLabel: durationLabel, checkTime: checkTime, timeErrors: timeErrors, timeState: timeState, lastRate: lastRate,
            timeInvoiceLines: timeInvoiceLines, timeInvoice: timeInvoice, timeSummary: timeSummary, unbilledByClient: unbilledByClient,
+           ASSET_CATEGORIES: ASSET_CATEGORIES, assetErrors: assetErrors, checkAsset: checkAsset, assetStart: assetStart, assetPlan: assetPlan,
+           assetsYear: assetsYear, assetHints: assetHints, assetsCSV: assetsCSV,
            timeCSV: timeCSV, timerCheck: timerCheck, timerElapsed: timerElapsed, timerStart: timerStart, timerPause: timerPause,
            timerResume: timerResume, timerStop: timerStop, timerClock: timerClock, timerDuration: timerDuration,
            STAGE_LABELS: STAGE_LABELS, OPEN_STAGES: OPEN_STAGES, prospectErrors: prospectErrors, exchangeErrors: exchangeErrors, prospectQuotes: prospectQuotes,

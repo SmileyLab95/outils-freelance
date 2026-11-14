@@ -809,6 +809,9 @@ a.country-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg)
 /* Temps passé (documentation/37-temps-passe.md) */
 .time-billable { align-self: end; padding-bottom: 10px; }
 .chrono h3 { margin-top: 0; }
+.assets-table .c-asset { min-width: 170px; }
+.assets-table .c-asset .small, .assets-table .c-date .small { display: block; font-weight: 400; }
+.assets-table td.num, .assets-table th.num { white-space: nowrap; }
 .chrono-clock { font-size: 2rem; font-weight: 700; letter-spacing: -.01em; font-variant-numeric: tabular-nums; margin: 4px 0 2px; }
 .time-due { list-style: none; margin: 0; padding: 0; }
 .time-due li { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line); }
@@ -991,6 +994,14 @@ b.is-in, b.is-out, .treasury-upcoming .num { font-variant-numeric: tabular-nums;
   .ledger tbody .c-part, .ledger tfoot .c-part { grid-column: 1 / -1; grid-row: auto; font-weight: 500; font-size: .82rem; color: var(--muted); text-align: left; }
   .ledger .c-part::before { content: attr(data-label) " : "; }
   .ledger tfoot .num:not(.c-part) { grid-column: 2; grid-row: 1; }
+}
+@media (max-width: 640px) {
+  /* Immobilisations (documentation/57) : plusieurs montants par ligne, chacun avec son libellé. */
+  .table-scroll .ledger.assets-table, .table-scroll .ledger.asset-plan { min-width: 0; }
+  .ledger.assets-table tr, .ledger.asset-plan tr { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .ledger.assets-table td:first-child, .ledger.asset-plan td:first-child { grid-column: 1 / -1; }
+  .ledger.assets-table td.num, .ledger.asset-plan td.num, .ledger.assets-table tfoot td.num { grid-column: auto; grid-row: auto; text-align: left; font-weight: 650; }
+  .ledger.assets-table td.num::before, .ledger.asset-plan td.num::before, .ledger.assets-table td.c-date::before { content: attr(data-label); display: block; font-size: .72rem; font-weight: 600; color: var(--muted); }
 }
 .espace-editor .form-card h3 { margin-top: 18px; }
 @media (max-width: 1060px) {

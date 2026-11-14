@@ -1,5 +1,18 @@
 # Journal des modifications
 
+## 2026-11-14 (matin) — Espace : registre des immobilisations et des amortissements (régime réel)
+
+- Nouvel écran « Immobilisations » (depuis « Dépenses », au régime réel) : registre de l'année (amortissements,
+  part déductible, valeur nette au 31/12, export CSV, impression) et fiche de chaque bien avec son plan
+  d'amortissement linéaire : départ le jour de la mise en service, première année au prorata des jours, total égal au
+  prix de revient, part professionnelle, cession en cours d'année.
+- Messages tirés du BOFiP : un bien de 500 € HT ou moins (matériel, mobilier de bureau, logiciel) peut être déduit
+  directement en charges ; véhicule (plafonds non calculés) ; bien affecté en partie à la profession.
+- En micro-entreprise, l'écran explique que l'abattement forfaitaire tient lieu d'amortissement.
+- Sauvegarde, import et synchronisation des comptes : biens compris (anciennes sauvegardes acceptées).
+- Tests : 10 tests unitaires, 12 erreurs réintroduites dans le moteur (toutes détectées), 16 000 plans vérifiés,
+  20 points de parcours de l'Espace, captures relues (deux défauts d'affichage corrigés).
+
 ## 2026-11-14 (petit matin) — Espace : chronomètre dans l'onglet « Temps »
 
 - Carte « Chronomètre » au-dessus de la saisie du temps passé : démarrer, pause, reprendre, arrêter, effacer. À l'arrêt,

@@ -4373,6 +4373,106 @@ const tests = {
     check(!(await text("#espace-view")).includes("Administratif"), "Chronomètre : temps d'essai supprimé");
     await page.evaluate(() => localStorage.removeItem("of:espace-chrono"));
 
+    // Immobilisations (documentation/57-immobilisations.md) : explication en micro-entreprise ; au régime réel, registre,
+    // fiche avec contrôles et plan d'amortissement (prorata en jours), messages (500 € HT, usage partiel), année suivante,
+    // cession, export CSV, sauvegarde illisible refusée ; retour au profil de départ.
+    const assetsStore = () => page.evaluate(() => window.EspaceStore.load());
+    await go("#/immobilisations");
+    check((await text("#espace-view")).includes("En micro-entreprise, vous n'amortissez pas vos biens") && !(await page.$("#asset-form")),
+      "Immobilisations : explication en micro-entreprise, pas de registre");
+    await go("#/depenses");
+    check(!(await page.$('#espace-view a[href="#/immobilisations"]')), "Immobilisations : pas de lien en micro-entreprise");
+    await go("#/reglages");
+    await page.selectOption("#ep-activity", "real");
+    await page.click("#profile-form button[type=submit]");
+    await page.waitForTimeout(300);
+    await go("#/depenses");
+    await page.click('#espace-view a[href="#/immobilisations"]');
+    await page.waitForTimeout(150);
+    check((await text("#espace-view h2")) === "Immobilisations" && (await text("#espace-view")).includes("Aucun bien en 2026") &&
+      (await page.getAttribute('.espace-nav [data-route="depenses"]', "aria-current")) === "page", "Immobilisations : registre vide au régime réel, onglet « Dépenses » actif");
+    await go("#/immobilisations/nouveau");
+    await page.click("#asset-form button[type=submit]");
+    check((await text("#asset-error")) === "Indiquez la nature du bien. Indiquez le prix de revient : un montant positif." &&
+      (await page.getAttribute("#ep-label", "aria-invalid")) === "true" && (await page.getAttribute("#ep-cost", "aria-invalid")) === "true" &&
+      (await page.evaluate(() => document.activeElement.id)) === "ep-label" && (await text("#asset-plan")).includes("s'affiche quand la fiche est complète"),
+      "Immobilisations : fiche incomplète refusée, champs signalés, pas de plan");
+    await page.fill("#ep-label", "Ordinateur portable");
+    await page.fill("#ep-cost", "1 500");
+    await page.fill("#ep-acquiredOn", "2026-07-01");
+    await page.fill("#ep-years", "2,5");
+    await page.click("#asset-form button[type=submit]");
+    check((await text("#asset-error")) === "Indiquez la durée d'amortissement : un nombre entier d'années, de 1 à 50." && (await page.evaluate(() => document.activeElement.id)) === "ep-years",
+      "Immobilisations : durée non entière refusée");
+    await page.fill("#ep-years", "3");
+    await page.waitForTimeout(100);
+    let plan = await text("#asset-plan");
+    check(plan.includes("2026 184 / 365 252,05 € 252,05 € 1 247,95 € 252,05 €") && plan.includes("2028 année entière 500,00 € 1 252,05 €") &&
+      plan.includes("2029 année entière 247,95 € 1 500,00 € 0,00 €") && !plan.includes("500 € HT ou moins"),
+      "Immobilisations : plan d'amortissement (prorata en jours, reste la dernière année)");
+    await accessible(page, "Immobilisations : fiche");
+    await page.click("#asset-form button[type=submit]");
+    await page.waitForSelector(".assets-table");
+    check((await text(".assets-table tbody")).includes("Ordinateur portable 01/07/2026 1 500,00 € 3 ans 252,05 € 1 247,95 € 252,05 €") &&
+      (await text("#espace-view .kpis")).includes("Amortissements 2026 252,05 €"), "Immobilisations : bien enregistré, registre et indicateurs de l'année");
+    await go("#/immobilisations/nouveau");
+    await page.fill("#ep-label", "Fauteuil de bureau");
+    await page.selectOption("#ep-category", "bureau");
+    await page.fill("#ep-cost", "450");
+    await page.fill("#ep-acquiredOn", "2026-03-01");
+    await page.fill("#ep-proShare", "60");
+    await page.waitForTimeout(100);
+    plan = await text("#asset-plan");
+    check(plan.includes("500 € HT ou moins : ce bien peut être déduit directement en charges") && plan.includes("affecté partiellement à l'exercice de la profession") &&
+      plan.includes("2026 306 / 365 125,75 € 125,75 € 324,25 € 75,45 €"), "Immobilisations : messages 500 € HT et usage partiel, part déductible à 60 %");
+    await page.click("#asset-form button[type=submit]");
+    await page.waitForSelector(".assets-table");
+    check((await text(".assets-table tbody")).includes("Fauteuil de bureau Affecté partiellement à l'exercice de la profession (60 %)") &&
+      (await text(".assets-table tfoot")).includes("Total 2026 377,80 € 1 572,20 € 327,50 €"), "Immobilisations : deux biens, totaux (part déductible)");
+    await accessible(page, "Immobilisations : registre");
+    await page.click('.espace-filters a[href="#/immobilisations?annee=2027"]');
+    await page.waitForTimeout(150);
+    check((await text(".assets-table tfoot")).includes("Total 2027 650,00 €") && (await text("#espace-view h3")).includes("2027"), "Immobilisations : année suivante (annuités pleines)");
+    await page.click('.assets-table a:text("Ordinateur portable")');
+    await page.waitForSelector("#asset-delete");
+    await page.fill("#ep-soldOn", "2027-03-31");
+    await page.click("#asset-form button[type=submit]");
+    check((await text("#asset-error")) === "Indiquez le prix de cession (0 si le bien est mis au rebut)." && (await page.evaluate(() => document.activeElement.id)) === "ep-salePrice",
+      "Immobilisations : prix de cession exigé");
+    await page.fill("#ep-salePrice", "900");
+    await page.waitForTimeout(100);
+    check((await text("#asset-plan")).includes("2027 90 / 365 123,29 € 375,34 € 1 124,66 €") && !(await text("#asset-plan")).includes("2028"), "Immobilisations : cession, plan arrêté au jour de la cession");
+    await page.click("#asset-form button[type=submit]");
+    await page.waitForSelector(".assets-table");
+    await page.click('.espace-filters a[href="#/immobilisations?annee=2027"]');
+    await page.waitForTimeout(150);
+    check((await text(".assets-table tbody")).includes("Ordinateur portable Cédé le 31/03/2027 pour 900,00 €") &&
+      (await text(".assets-table tfoot")).includes("Total 2027 273,29 € 174,25 € 213,29 €"), "Immobilisations : bien cédé signalé, hors valeur nette au 31/12");
+    const [assetsCsv] = await Promise.all([page.waitForEvent("download"), page.click("#assets-csv")]);
+    const assetsCsvText = fs.readFileSync(await assetsCsv.path(), "utf8");
+    check(assetsCsvText.split("\r\n").length === 3 && assetsCsvText.includes('"Ordinateur portable";"Matériel et outillage";01/07/2026;01/07/2026;1500,00;3;100;123,29;375,34;1124,66;123,29;31/03/2027;900,00'),
+      "Immobilisations : export CSV du registre de l'année");
+    await go("#/reglages");
+    await restore("immobilisation-illisible.json", Object.assign({}, before, { assets: [{ id: "x", label: "Écran", acquiredOn: "2026-01-01", cost: "beaucoup", years: 1 }] }));
+    await page.waitForFunction(() => !document.getElementById("import-error").hidden);
+    check((await text("#import-error")) === "Cette sauvegarde contient des éléments illisibles.", "Immobilisations : sauvegarde avec un bien illisible refusée");
+    check((await assetsStore()).assets.length === 2, "Immobilisations : sauvegarde refusée, registre inchangé");
+    for (const label of ["Ordinateur portable", "Fauteuil de bureau"]) {
+      await go("#/immobilisations");
+      await page.click(`.espace-filters a[href="#/immobilisations?annee=2026"]`);
+      await page.waitForTimeout(150);
+      await page.click(`.assets-table a:text("${label}")`);
+      await page.waitForSelector("#asset-delete");
+      await page.click("#asset-delete");
+      await page.waitForFunction(() => !document.querySelector("#asset-delete"));
+    }
+    check((await assetsStore()).assets.length === 0, "Immobilisations : biens supprimés");
+    await go("#/reglages");
+    await page.selectOption("#ep-activity", "liberal_bnc");
+    await page.click("#profile-form button[type=submit]");
+    await page.waitForTimeout(300);
+    check((await assetsStore()).profile.activity === "liberal_bnc", "Immobilisations : retour au profil de départ");
+
     // Prospects (documentation/38-prospects.md) : fiche, erreurs, échanges, étapes, relance, client et devis créés depuis
     // la piste, devis accepté, opposition (empreintes seules), avertissement et retrait, conservation, CSV, sauvegarde.
     const store = () => page.evaluate(() => window.EspaceStore.load());

@@ -125,7 +125,7 @@ G compte gratuit, P Pro, ⇄ partenaire signalé.
 | Dépenses et justificatifs | Saisie, photo du justificatif, registre des achats ([36](36-depenses-et-registre-des-achats.md)) | ✅ (France, saisie et registre ; justificatifs ⬜) | G, P |
 | Frais | Barème kilométrique, bureau à domicile | ✅ | V |
 | Trésorerie | Prévision : encaissements attendus, charges, part à mettre de côté ([39](39-tresorerie.md)) | ✅ (France) | G |
-| Matériel | Registre des immobilisations et amortissement (régimes réels) | ⬜ | G |
+| Matériel | Registre des immobilisations et amortissement (régimes réels), [57](57-immobilisations.md) | ✅ (France, 14/11/2026) | G |
 | Comptable | Export pour l'expert-comptable, accès en lecture | ⬜ | P |
 
 ### 3.7 Déclarer
@@ -134,7 +134,7 @@ G compte gratuit, P Pro, ⇄ partenaire signalé.
 |---|---|---|---|
 | Cotisations et impôt | Simulateurs, « combien mettre de côté », jauges de seuils | ✅ | V |
 | Échéances | Calendriers fiscaux (.ics) ; rappels par email avec montant estimé | ✅ / ⬜ | V, G |
-| Préparer la déclaration | Montants à déclarer calculés depuis le livre des recettes | 🧱 (France) | G |
+| Préparer la déclaration | Montants à déclarer calculés depuis le livre des recettes | ✅ (France, micro-entreprise : déclaration Urssaf estimée dans l'Espace) | G |
 
 ### 3.8 Se protéger et épargner
 

@@ -13,7 +13,7 @@
   var channel = "BroadcastChannel" in window ? new BroadcastChannel("of-espace-" + KEY) : null;
 
   function empty() {
-    return { schema: SCHEMA, profile: null, clients: [], documents: [], expenses: [], timeEntries: [], prospects: [], optouts: [], charges: [],
+    return { schema: SCHEMA, profile: null, clients: [], documents: [], expenses: [], timeEntries: [], prospects: [], optouts: [], charges: [], assets: [],
              settings: { lastExport: null }, savedAt: null };
   }
 
@@ -90,7 +90,13 @@
       return !c || !isText(c.id) || !isText(c.label) || ["month", "quarter", "year", "once"].indexOf(c.every) < 0 || !isDate(c.start) || !isFinite(Number(c.amount)) ||
         (c.flow !== undefined && c.flow !== "in" && c.flow !== "out");
     });
-    return badClient || badDoc || badExpense || badTime || badProspect || badOptout || badCharge ? "Cette sauvegarde contient des éléments illisibles." : "";
+    // Immobilisations (documentation/57) : facultatives (sauvegardes antérieures au module).
+    if (data.assets !== undefined && !Array.isArray(data.assets)) return "Cette sauvegarde est incomplète.";
+    var badAsset = (data.assets || []).some(function (a) {
+      return !a || !isText(a.id) || !isText(a.label) || !isDate(a.acquiredOn) || (a.inServiceOn && !isDate(a.inServiceOn)) || (a.soldOn && !isDate(a.soldOn)) ||
+        !isFinite(Number(a.cost)) || !isFinite(Number(a.years));
+    });
+    return badClient || badDoc || badExpense || badTime || badProspect || badOptout || badCharge || badAsset ? "Cette sauvegarde contient des éléments illisibles." : "";
   }
 
   var live = function (x) { return x && !x.deletedAt; };
@@ -107,6 +113,7 @@
     out.timeEntries = (Array.isArray(out.timeEntries) ? out.timeEntries : []).filter(live);
     out.optouts = (Array.isArray(out.optouts) ? out.optouts : []).filter(live);
     out.charges = (Array.isArray(out.charges) ? out.charges : []).filter(live);
+    out.assets = (Array.isArray(out.assets) ? out.assets : []).filter(live);
     out.prospects = (Array.isArray(out.prospects) ? out.prospects : []).filter(live).map(function (p) {
       return Object.assign({}, p, { exchanges: (Array.isArray(p.exchanges) ? p.exchanges : []).filter(live) });
     });

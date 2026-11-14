@@ -130,7 +130,8 @@
     var r = route();
     var name = data.profile ? r.name : (r.name === "reglages" ? "reglages" : "accueil");
     app.querySelectorAll("[data-route]").forEach(function (a) {
-      var active = a.getAttribute("data-route") === name || (name === "accueil" && a.getAttribute("data-route") === "tableau");
+      var tab = name === "immobilisations" ? "depenses" : name;  // le registre des immobilisations se trouve sous « Dépenses »
+      var active = a.getAttribute("data-route") === tab || (name === "accueil" && a.getAttribute("data-route") === "tableau");
       if (active) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
     });
     app.classList.toggle("is-onboarding", !data.profile);
@@ -140,6 +141,7 @@
     var views = { accueil: viewWelcome, tableau: viewDashboard, documents: r.id ? viewDocument : viewDocuments,
                   clients: r.id ? viewClientForm : viewClients, recettes: viewLedger, depenses: r.id ? viewExpenseForm : viewExpenses,
                   temps: r.id === "facturer" ? viewTimeInvoice : r.id ? viewTimeForm : viewTime,
+                  immobilisations: r.id ? viewAssetForm : viewAssets,
                   prospects: r.id ? viewProspectForm : viewProspects,
                   tresorerie: r.id ? viewChargeForm : viewTreasury,
                   echeances: viewDeadlines, reglages: viewSettings,
@@ -1534,6 +1536,7 @@
     var noun = required ? "achat" : "dépense";
     view.innerHTML = '<div class="espace-head"><h2>' + (required ? "Registre des achats " : "Dépenses ") + esc(year) + '</h2><div class="espace-quick espace-noprint">' +
       '<a class="btn btn-primary btn-sm" href="#/depenses/nouvelle">+ ' + (required ? "Achat" : "Dépense") + "</a>" +
+      (isMicro() ? "" : '<a class="btn btn-ghost btn-sm" href="#/immobilisations">Immobilisations</a>') +
       '<button type="button" class="btn btn-ghost btn-sm" id="expenses-csv"' + (res.rows.length ? "" : " disabled") + ">Exporter (CSV)</button>" +
       '<button type="button" class="btn btn-ghost btn-sm" id="expenses-print"' + (res.rows.length ? "" : " disabled") + ">Imprimer</button></div></div>" +
       expensesOverview(year, r.params.periode) +
@@ -1613,6 +1616,138 @@
       if (!confirm("Supprimer cette dépense ?")) return;
       data.expenses = data.expenses.filter(function (e) { return e.id !== x.id; });
       persist("Dépense supprimée.").then(function () { location.hash = "#/depenses?annee=" + x.date.slice(0, 4); });
+    });
+  }
+
+  // ----- Immobilisations et amortissements (documentation/57-immobilisations.md) ------------------------------------
+
+  function asset(id) { return data.assets.filter(function (a) { return a.id === id; })[0] || null; }
+  var ASSET_HINTS = {
+    deductible: "500 € HT ou moins : ce bien peut être déduit directement en charges au lieu d'être amorti (tolérance admise pour le matériel et l'outillage, " +
+      "le matériel et le mobilier de bureau et les logiciels) ; dans ce cas, il n'a pas à figurer au registre.",
+    vehicle: "Véhicule : l'amortissement déductible des voitures particulières peut être plafonné (4 de l'article 39 du CGI) ; ce plafond n'est pas calculé ici.",
+    partial: "Bien affecté en partie à la profession : le registre porte la mention « affecté partiellement à l'exercice de la profession » ; seule la part " +
+      "professionnelle de l'amortissement est déductible." };
+  var assetNotes = '<p class="small muted">Calcul par année civile, en amortissement linéaire : la première année est comptée au prorata des jours, du jour de la ' +
+    "mise en service (compris) au 31 décembre ; la durée est celle pendant laquelle vous utiliserez le bien (pas de barème officiel). La plus-value ou la " +
+    "moins-value d'un bien cédé n'est pas calculée. En cas de doute, votre déclaration (2035 ou 2031) et un professionnel font foi.</p>";
+
+  function viewAssets(r) {
+    var head = '<div class="espace-head"><h2>Immobilisations</h2>';
+    if (isMicro()) {
+      view.innerHTML = head + '</div><div class="card espace-card"><p>En micro-entreprise, vous n\'amortissez pas vos biens : l\'abattement forfaitaire tient lieu ' +
+        "de toutes vos charges, achats de matériel compris (pour les professions libérales, il « est réputé tenir compte des amortissements pratiqués " +
+        "selon le mode linéaire »). Ce registre sert au régime réel : si vous n'êtes plus en micro-entreprise, changez votre activité dans les " +
+        '<a href="#/reglages">réglages</a>.</p><p><a href="#/depenses">Retour aux dépenses</a></p></div>';
+      return;
+    }
+    var first = data.assets.reduce(function (m, a) { var y = E.assetStart(a).slice(0, 4); return y < m ? y : m; }, YEAR);
+    var years = [];
+    for (var y = +first; y <= +YEAR + 1; y++) years.push(String(y));
+    var year = /^\d{4}$/.test(r.params.annee || "") && r.params.annee >= "1990" && r.params.annee <= "2100" ? r.params.annee : YEAR;
+    if (years.indexOf(year) < 0) years.push(year);
+    var res = E.assetsYear(data.assets, year);
+    view.innerHTML = head + '<div class="espace-quick espace-noprint"><a class="btn btn-primary btn-sm" href="#/immobilisations/nouveau">+ Bien</a>' +
+      '<button type="button" class="btn btn-ghost btn-sm" id="assets-csv"' + (res.rows.length ? "" : " disabled") + ">Exporter (CSV)</button>" +
+      '<button type="button" class="btn btn-ghost btn-sm" id="assets-print"' + (res.rows.length ? "" : " disabled") + ">Imprimer</button></div></div>" +
+      '<div class="kpis kpis-4 espace-noprint">' + kpi("Amortissements " + year, money(res.amount), "dotations de l'année") +
+      kpi("Part déductible", money(res.deductible), "part professionnelle seulement") +
+      kpi("Valeur nette au 31/12", money(res.net), "biens encore détenus") + kpi("Biens", String(res.count), "présents en " + year) + "</div>" +
+      '<div class="card espace-card"><div class="espace-filters espace-noprint" role="group" aria-label="Année">' +
+      years.sort().reverse().map(function (y) { return '<a class="tab" href="#/immobilisations?annee=' + y + '"' + (y === year ? ' aria-current="true"' : "") + ">" + y + "</a>"; }).join("") + "</div>" +
+      "<h3>Registre des immobilisations et des amortissements " + esc(year) + "</h3>" +
+      (res.rows.length ? '<div class="table-scroll" tabindex="0" role="region" aria-label="Registre des immobilisations ' + esc(year) + '"><table class="ledger assets-table"><thead><tr><th>Nature</th><th>Acquisition</th>' +
+        '<th class="num">Prix de revient</th><th class="num">Durée</th><th class="num">Annuité ' + esc(year) + '</th><th class="num">Valeur nette</th><th class="num">Déductible</th></tr></thead><tbody>' +
+        res.rows.map(function (x) {
+          var a = x.asset;
+          return '<tr><td class="c-asset"><a href="#/immobilisations/' + esc(a.id) + '">' + esc(a.label) + "</a>" +
+            (a.proShare != null && a.proShare !== "" && Number(a.proShare) < 100 ? '<span class="small muted">Affecté partiellement à l\'exercice de la profession (' + esc(String(a.proShare).replace(".", ",")) + " %)</span>" : "") +
+            (x.sold ? '<span class="small muted">Cédé le ' + day(a.soldOn) + " pour " + esc(money(a.salePrice)) + "</span>" : "") + '</td><td class="c-date" data-label="Acquisition">' + day(a.acquiredOn) +
+            (a.inServiceOn && a.inServiceOn !== a.acquiredOn ? '<span class="small muted">mise en service le ' + day(a.inServiceOn) + "</span>" : "") +
+            '</td><td class="num" data-label="Prix de revient">' + esc(money(a.cost)) + '</td><td class="num" data-label="Durée">' + esc(a.years + " an" + (a.years > 1 ? "s" : "")) +
+            '</td><td class="num" data-label="Annuité ' + esc(year) + '">' + esc(money(x.amount)) + '</td><td class="num" data-label="Valeur nette">' + esc(money(x.net)) +
+            '</td><td class="num" data-label="Déductible">' + esc(money(x.deductible)) + "</td></tr>";
+        }).join("") + '</tbody><tfoot><tr><td colspan="4">Total ' + esc(year) + '</td><td class="num" data-label="Annuités">' + esc(money(res.amount)) + '</td><td class="num" data-label="Valeur nette">' + esc(money(res.net)) +
+        '</td><td class="num" data-label="Déductible">' + esc(money(res.deductible)) + "</td></tr></tfoot></table></div>"
+        : '<p class="muted">Aucun bien en ' + esc(year) + '. <a href="#/immobilisations/nouveau">Ajouter un bien</a></p>') +
+      '<p class="small muted">Le registre reprend les mentions demandées aux professions libérales : date d\'acquisition et de mise en service, nature, prix de revient, ' +
+      "amortissement de chaque année, et en cas de cession, sa date et son prix. Gardez les factures et actes d'achat ou de vente.</p>" + assetNotes + "</div>";
+    if (!res.rows.length) return;
+    $("assets-csv").addEventListener("click", function () {
+      OF.download("\ufeff" + E.assetsCSV(res), "registre-immobilisations-" + year + ".csv", "text/csv;charset=utf-8");
+    });
+    $("assets-print").addEventListener("click", function () {
+      document.body.classList.add("print-ledger");
+      window.print();
+      document.body.classList.remove("print-ledger");
+    });
+  }
+
+  var amountText = function (n) { return n === null || n === undefined || n === "" || !isFinite(n) ? "" : Number(n).toFixed(2).replace(".", ","); };
+  function readAsset(form) {
+    var f = form.elements, num = function (v) { return String(v).trim() ? OF.num(v) : null; };
+    return { label: f.label.value.trim(), category: f.category.value, acquiredOn: f.acquiredOn.value, inServiceOn: f.inServiceOn.value || "",
+             cost: num(f.cost.value), years: num(f.years.value), proShare: num(f.proShare.value), soldOn: f.soldOn.value || "", salePrice: num(f.salePrice.value) };
+  }
+  /** Plan d'amortissement et messages d'un bien (aperçu de la fiche) ; rien tant que la saisie n'est pas valide. */
+  function assetPreview(x) {
+    if (E.assetErrors(x).length) return '<p class="small muted">Le plan d\'amortissement s\'affiche quand la fiche est complète.</p>';
+    var plan = E.assetPlan(x), hints = E.assetHints(x, R);
+    return hints.map(function (h) { return '<p class="notice">' + esc(ASSET_HINTS[h]) + "</p>"; }).join("") +
+      '<div class="table-scroll" tabindex="0" role="region" aria-label="Plan d\'amortissement"><table class="ledger asset-plan"><thead><tr><th>Année</th><th class="num">Jours</th><th class="num">Annuité</th><th class="num">Cumul</th>' +
+      '<th class="num">Valeur nette</th><th class="num">Déductible</th></tr></thead><tbody>' + plan.map(function (row) {
+        return '<tr><td class="c-date">' + row.year + '</td><td class="num" data-label="Jours">' + (row.days === null ? "année entière" : row.days + " / " + row.yearDays) +
+          '</td><td class="num" data-label="Annuité">' + esc(money(row.amount)) + '</td><td class="num" data-label="Cumul">' + esc(money(row.cumulative)) +
+          '</td><td class="num" data-label="Valeur nette">' + esc(money(row.net)) + '</td><td class="num" data-label="Déductible">' + esc(money(row.deductible)) + "</td></tr>";
+      }).join("") + "</tbody></table></div>";
+  }
+
+  function viewAssetForm(r) {
+    if (isMicro()) { viewAssets(r); return; }
+    var isNew = r.id === "nouveau";
+    var x = isNew ? { category: "materiel", acquiredOn: TODAY, years: 3, proShare: 100 } : asset(r.id);
+    if (!x) { view.innerHTML = '<div class="espace-head"><h2>Bien introuvable</h2></div><p><a href="#/immobilisations">Retour aux immobilisations</a></p>'; return; }
+    var cats = Object.keys(E.ASSET_CATEGORIES).map(function (k) { return [k, E.ASSET_CATEGORIES[k]]; });
+    view.innerHTML = '<div class="espace-head"><h2>' + (isNew ? "Nouveau bien" : esc(x.label)) + "</h2></div>" +
+      '<form class="card espace-card" id="asset-form" novalidate><div class="fields">' +
+      field("label", "Nature du bien", x.label, { required: true, placeholder: "Ordinateur portable" }) +
+      field("category", "Catégorie", x.category, { options: cats, half: true }) +
+      field("cost", "Prix de revient", amountText(x.cost), { half: true, required: true, inputmode: "decimal", placeholder: "1 500,00", hint: "Montant inscrit au registre, en euros." }) +
+      field("acquiredOn", "Date d'acquisition", x.acquiredOn, { type: "date", half: true, required: true }) +
+      field("inServiceOn", "Date de mise en service", x.inServiceOn || "", { type: "date", half: true, hint: "Si elle diffère de l'acquisition : l'amortissement part de ce jour." }) +
+      field("years", "Durée d'amortissement (années)", x.years == null ? "" : String(x.years), { half: true, required: true, inputmode: "numeric",
+        hint: "Durée pendant laquelle vous utiliserez le bien : pas de barème officiel, suivez les usages de votre profession." }) +
+      field("proShare", "Part professionnelle (%)", x.proShare == null ? "100" : String(x.proShare).replace(".", ","), { half: true, inputmode: "decimal",
+        hint: "Moins de 100 % si vous utilisez aussi le bien à titre privé." }) +
+      field("soldOn", "Date de cession (facultatif)", x.soldOn || "", { type: "date", half: true }) +
+      field("salePrice", "Prix de cession", amountText(x.salePrice), { half: true, inputmode: "decimal", hint: "0 si le bien est mis au rebut." }) +
+      '</div><p class="form-error" id="asset-error" role="alert" hidden></p>' +
+      '<h3>Plan d\'amortissement</h3><div id="asset-plan" aria-live="polite">' + assetPreview(x) + "</div>" + assetNotes +
+      '<div class="espace-actions"><button type="submit" class="btn btn-primary">Enregistrer</button><a class="btn btn-ghost" href="#/immobilisations">Annuler</a>' +
+      (isNew ? "" : '<button type="button" class="btn btn-ghost" id="asset-delete">Supprimer</button>') + "</div></form>";
+    var form = $("asset-form");
+    form.addEventListener("input", function () { $("asset-plan").innerHTML = assetPreview(readAsset(form)); });
+    form.addEventListener("change", function () { $("asset-plan").innerHTML = assetPreview(readAsset(form)); });
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var next = readAsset(form), errors = E.assetErrors(next), bad = {};
+      errors.forEach(function (er) { bad[er.field] = true; });
+      ["label", "category", "acquiredOn", "inServiceOn", "cost", "years", "proShare", "soldOn", "salePrice"].forEach(function (k) {
+        form.elements[k].setAttribute("aria-invalid", String(!!bad[k]));
+      });
+      showError("asset-error", errors.map(function (er) { return er.message; }).join(" "));
+      if (errors.length) { form.elements[errors[0].field].focus(); return; }
+      next.cost = Math.round(next.cost * 100) / 100;
+      if (next.salePrice !== null) next.salePrice = Math.round(next.salePrice * 100) / 100;
+      var target = isNew ? { id: S.uid(), createdAt: now() } : x;
+      Object.assign(target, next, { updatedAt: now() });
+      if (isNew) data.assets.push(target);
+      persist(isNew ? "Bien ajouté au registre." : "Bien modifié.").then(function () { location.hash = "#/immobilisations?annee=" + E.assetStart(next).slice(0, 4); });
+    });
+    if (!isNew) $("asset-delete").addEventListener("click", function () {
+      if (!confirm("Supprimer ce bien du registre ?")) return;
+      data.assets = data.assets.filter(function (a) { return a.id !== x.id; });
+      persist("Bien supprimé du registre.").then(function () { location.hash = "#/immobilisations"; });
     });
   }
 

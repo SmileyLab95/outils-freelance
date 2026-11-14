@@ -2709,6 +2709,69 @@
       "confidence": "high",
       "verified_on": "2026-10-31",
       "note": "Lu le 31/10/2026 avec l'outil « Lire une source officielle » (F23994, vérifiée le 01/04/2026, page qui vise les micro-entreprises et les entrepreneurs individuels ; empreinte SHA-256 différente à chaque lecture, la page contenant des éléments variables, texte de 20 510 caractères ; France Travail, © 1er juillet 2025, SHA-256 049f5b87…e887). Liquidation judiciaire et redressement judiciaire : activité non salariée sans interruption pendant au moins 2 ans dans une seule et même entreprise ; inscription à France Travail « dans un délai de 12 mois à partir de la date du redressement judiciaire » (ou de la liquidation) et recherche d'emploi ; revenu supérieur à 10 000 € sur l'une des 2 années d'activité non salariée ; ressources personnelles inférieures à 651,69 € par mois pour une seule personne. Activité non viable : mêmes conditions, sans délai d'inscription indiqué ; « baisse d'au moins 30 % de vos revenus », attestée par un tiers de confiance (nom, Siret, affiliation, durée de l'activité, revenus par année, baisse en montant et en pourcentage ; pour une société à l'IS, résultat fiscal des 2 derniers exercices). Demande auprès de France Travail avec la copie de la déclaration de cessation d'activité (et l'attestation). Forfait de 26,30 € par jour, diminué si le revenu moyen des 2 années civiles précédant la cessation est inférieur, sans descendre sous 19,73 € (Mayotte : 19,73 € et 13,15 €) ; 182 jours, non renouvelables, sans différé ni délai d'attente. Micro-entrepreneur : chiffre d'affaires moins l'abattement fiscal (commerciale 71 %, artisanale 50 %, libérale 34 %). Formule exacte de la diminution non publiée sur les pages lues. Code du travail, art. L5424-24 à L5424-28 et R5424-70 à D5424-76 (non lus)."
+    },
+    "immobilisation_seuil_charges": {
+      "value": {
+        "amount": 500,
+        "categories": [
+          "materiel",
+          "bureau",
+          "logiciel"
+        ]
+      },
+      "unit": "object",
+      "label": "Matériels et outillages, matériels et mobiliers de bureau et logiciels d'une valeur unitaire HT n'excédant pas 500 € : déductibles immédiatement en charges (matériel de transport exclu)",
+      "source": "https://bofip.impots.gouv.fr/bofip/2109-PGP.html/identifiant=BOI-BIC-CHG-20-30-10-20170301",
+      "source_title": "BOFiP, BOI-BIC-CHG-20-30-10 (01/03/2017) - Petit matériel et outillage, matériels et mobiliers de bureau, logiciels",
+      "more_sources": [
+        {
+          "source": "https://bofip.impots.gouv.fr/bofip/4659-PGP.html/identifiant=BOI-BNC-BASE-40-60-30-20120912",
+          "source_title": "BOFiP, BOI-BNC-BASE-40-60-30 (12/09/2012), §§ 150 à 220 - Petit matériel, mobilier de bureau, logiciel de faible valeur (BNC)"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-11-14",
+      "note": "Lu en entier le 14/11/2026 (outil de lecture, SHA-256 81a914bd…2bf1 et e9e27fd2…80d1). BIC, § 20 : « matériels et outillages d'une valeur unitaire hors taxes n'excédant pas 500 € » (comptes 2154 et 2155 du PCG ; « cette seconde catégorie exclut le matériel de transport ») ; dépassement apprécié sur le prix global des éléments composant le matériel ; § 30 : matériels de bureau et mobiliers dont le prix unitaire HT n'excède pas 500 € (renouvellement courant ; pas l'équipement initial ni le renouvellement complet, sauf s'ils n'excèdent pas cette limite) ; § 40 : logiciels. BNC, §§ 150 à 220 : mêmes trois cas (« matériels professionnels, à l'exception du matériel de transport ») ; remarque : l'exploitant qui déduit ces biens « est dispensé de porter le prix d'acquisition [...] sur le registre des immobilisations ». C'est une tolérance (« sont admises », « il est admis ») : l'entrepreneur peut aussi immobiliser le bien."
+    },
+    "amortissement_lineaire": {
+      "value": {
+        "start": "mise en service",
+        "prorata": "jours",
+        "cap": "prix de revient",
+        "year": "période de douze mois"
+      },
+      "unit": "object",
+      "label": "Amortissement linéaire : prix de revient ÷ durée d'utilisation, à partir du jour de la mise en service, première annuité au prorata du temps couru en jours, total plafonné au prix de revient",
+      "source": "https://bofip.impots.gouv.fr/bofip/4543-PGP.html/identifiant=BOI-BIC-AMT-20-10-20120912",
+      "source_title": "BOFiP, BOI-BIC-AMT-20-10 (12/09/2012) - Amortissement linéaire",
+      "more_sources": [
+        {
+          "source": "https://bofip.impots.gouv.fr/bofip/4619-PGP.html",
+          "source_title": "BOFiP, BOI-BNC-BASE-50 (version du 05/08/2026) - BNC, amortissements"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-11-14",
+      "note": "Lu le 14/11/2026 (export PDF du BOFiP). § 120 : départ « à compter du jour de la mise en service effective » ; § 170 : taux dans la limite des usages, selon la durée probable d'utilisation (renvoi à BOI-BIC-AMT-10-40 : pas de barème officiel) ; § 190 : annuité = prix de revient ÷ nombre d'années de la période normale d'amortissement ; § 210 : total des amortissements au plus égal au prix de revient ; § 220 : annuité = période de douze mois ; § 230 : exercice d'une autre durée, annuité adaptée ; § 240 : première annuité réduite au prorata temporis, « le temps couru s'apprécie en nombre de jours » ; § 250 : élément cédé, amortissement jusqu'à la cession (dispense possible, sauf biens du 4 de l'article 39 du CGI). BNC (BOI-BNC-BASE-50, §§ 1 à 20) : règles des BIC (CGI, art. 93, 1, 2°) ; le régime déclaratif spécial (micro) n'amortit pas : l'abattement « est réputé tenir compte des amortissements pratiqués selon le mode linéaire » (CGI, art. 102 ter). Base du prorata (365 jours ou 360) non précisée : l'Espace compte les jours exacts."
+    },
+    "registre_immobilisations_bnc": {
+      "value": {
+        "mentions": [
+          "date d'acquisition (et de mise en service si elle diffère)",
+          "nature",
+          "prix de revient",
+          "détail des amortissements de chaque année",
+          "en cas de cession : prix et date"
+        ],
+        "partial": "affecté partiellement à l'exercice de la profession"
+      },
+      "unit": "object",
+      "label": "Registre des immobilisations et des amortissements (BNC, déclaration contrôlée) : mentions",
+      "source": "https://bofip.impots.gouv.fr/bofip/4809-PGP.html/identifiant=BOI-BNC-DECLA-10-20-20120912",
+      "source_title": "BOFiP, BOI-BNC-DECLA-10-20 (12/09/2012) - BNC, obligations comptables",
+      "confidence": "high",
+      "verified_on": "2026-11-14",
+      "note": "Lu le 14/11/2026 (export PDF du BOFiP), §§ 430 à 470 et 560 à 590 : document « en pratique, un registre des immobilisations et des amortissements » (troisième alinéa de l'article 99 du CGI) ; présentation libre, sans visa ; mentions : date d'acquisition ou de création (et de mise en service si elle diffère), nature et prix de revient, détail des amortissements effectués chaque année pour chaque élément, en cas d'aliénation prix et date de la cession ; pièces justificatives conservées (LPF, art. L102 B) ; bien affecté en partie : mention « affecté partiellement à l'exercice de la profession », seule la fraction professionnelle de l'amortissement déductible ; biens à usage mixte gardés dans le patrimoine privé : pas d'inscription."
     }
   },
   "open_questions": [

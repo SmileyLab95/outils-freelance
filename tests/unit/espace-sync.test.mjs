@@ -10,7 +10,7 @@ const E = require("../../src/assets/engines/espace-fr.js");
 
 const T = (n) => new Date(Date.UTC(2026, 9, 1, 8) + n * 60000).toISOString();
 const uidFrom = (prefix) => { let k = 0; return () => `${prefix}-${++k}`; };
-const state = (over = {}) => Object.assign({ schema: 2, profile: null, clients: [], documents: [], expenses: [], timeEntries: [], prospects: [], optouts: [], charges: [], settings: { lastExport: null }, savedAt: null }, over);
+const state = (over = {}) => Object.assign({ schema: 2, profile: null, clients: [], documents: [], expenses: [], timeEntries: [], prospects: [], optouts: [], charges: [], assets: [], settings: { lastExport: null }, savedAt: null }, over);
 const client = (over = {}) => Object.assign({ id: "c1", name: "Studio Nova", email: "a@nova.example", pro: true, place: "fr", createdAt: T(0), updatedAt: T(0) }, over);
 const draft = (over = {}) => Object.assign({ id: "d1", type: "facture", status: "draft", date: "2026-10-05", clientId: "c1", terms: 30, nature: "services",
   lines: [{ desc: "Site", qty: 1, price: 1000 }], vat: { franchise: true, rate: 20, place: "fr" }, payments: [], createdAt: T(0), updatedAt: T(0) }, over);
@@ -661,4 +661,24 @@ test("date de décision d'un devis et date de clôture d'une piste : fusion et l
     state({ prospects: [prospect({ stage: "won", closedAt: "2026-10-21", updatedAt: T(3) })] }));
   assert.deepEqual([r.data.prospects[0].stage, r.data.prospects[0].closedAt], ["won", "2026-10-21"]);
   assert.equal(r.conflicts[0].message, "Prospect modifié sur deux appareils : la version la plus récente est gardée (date de clôture, étape).");
+});
+
+// Immobilisations (documentation/57-immobilisations.md) : fusionnées comme les charges, champs nommés en français.
+const asset = (over = {}) => Object.assign({ id: "im1", label: "Ordinateur", category: "materiel", acquiredOn: "2026-07-01", cost: 1500, years: 3, proShare: 100,
+  createdAt: T(0), updatedAt: T(0) }, over);
+
+test("immobilisations : ajout des deux côtés, modification croisée, suppression et modification, anciennes sauvegardes", () => {
+  const o = state({ assets: [asset()] });
+  let r = merge(o, state({ assets: [asset({ years: 4, updatedAt: T(2) }), asset({ id: "im2", label: "Bureau", category: "bureau", cost: 800, createdAt: T(1), updatedAt: T(1) })] }),
+    state({ assets: [asset({ soldOn: "2027-03-31", salePrice: 600, updatedAt: T(3) })] }));
+  assert.deepEqual(r.data.assets.map((a) => [a.id, a.years, a.soldOn, a.salePrice]), [["im1", 4, "2027-03-31", 600], ["im2", 3, undefined, undefined]]);
+  assert.deepEqual(r.conflicts, []);
+  r = merge(o, state({ assets: [asset({ cost: 1600, proShare: 80, updatedAt: T(2) })] }), state({ assets: [asset({ cost: 1550, proShare: 70, updatedAt: T(4) })] }));
+  assert.deepEqual([r.data.assets[0].cost, r.data.assets[0].proShare], [1550, 70]);
+  assert.equal(r.conflicts[0].message, "Immobilisation modifiée sur deux appareils : la version la plus récente est gardée (prix de revient, part professionnelle).");
+  r = merge(o, state({ assets: [asset({ inServiceOn: "2026-07-15", updatedAt: T(2) })] }), state({ assets: [asset({ inServiceOn: "2026-08-01", updatedAt: T(1) })] }));
+  assert.equal(r.conflicts[0].message, "Immobilisation modifiée sur deux appareils : la version la plus récente est gardée (date de mise en service).");
+  r = merge(o, state({ assets: [] }), state({ assets: [asset({ years: 5, updatedAt: T(2) })] }));
+  assert.deepEqual(r.conflicts.map((c) => [c.kind, c.type, c.message]), [["asset", "removed-modified", "Immobilisation effacée sur un appareil mais modifiée sur un autre : elle est conservée."]]);
+  assert.deepEqual(S.migrate({ schema: 1, clients: [], documents: [] }).assets, [], "ancienne sauvegarde sans immobilisations");
 });
