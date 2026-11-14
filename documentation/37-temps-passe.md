@@ -121,3 +121,57 @@ quantité et son prix, sinon l'émission est refusée avec le numéro de la lign
 - Relecture des captures : colonne « Désignation » écrasée dans l'éditeur par la nouvelle colonne « Unité », champ de
   prix trop étroit sur mobile et montants superposés dans l'aperçu « Facturer le temps » sur mobile : corrigés
   (désignation sur sa propre ligne, aperçu en trois colonnes).
+
+## 8. Chronomètre (spécification du 14/11/2026)
+
+Besoin : mesurer le temps d'une tâche pendant qu'on la fait, au lieu de le reconstituer le soir. Le chronomètre
+**alimente la saisie existante** : il ne crée jamais un temps tout seul, la durée mesurée est reportée dans le formulaire
+« Saisir du temps », que l'utilisateur complète (client, tâche) et valide avec les contrôles habituels (§ 3).
+
+**État** (sur l'appareil seulement, clé `espace-chrono` du stockage local) : `{ start, elapsed, day, stopped }` :
+`start` = instant du démarrage ou de la reprise en millisecondes (vide en pause ou à l'arrêt), `elapsed` = temps déjà
+cumulé avant ce démarrage, `day` = jour du premier démarrage (AAAA-MM-JJ), `stopped` = arrêté, durée à saisir. Il ne
+fait pas partie de la sauvegarde ni de la synchronisation des comptes : un chronomètre se lance et s'arrête sur le même
+appareil. Un état illisible est ignoré (chronomètre à zéro).
+
+**Écran « Temps »** : carte « Chronomètre » au-dessus de la saisie.
+
+- *À l'arrêt* : « Démarrer ».
+- *En marche* : temps écoulé (heures:minutes:secondes, mis à jour chaque seconde), heure et jour du démarrage ;
+  « Pause » et « Arrêter ». Le temps écoulé se calcule à partir de l'heure de démarrage : il reste juste après un
+  rechargement de la page, la fermeture de l'onglet ou la mise en veille.
+- *En pause* : temps cumulé, « Reprendre » et « Arrêter ».
+- *Arrêté* : la durée est reportée dans la saisie (unité « Heures », durée en minutes arrondies, au moins 1 minute,
+  écrite « 1h05 » ; date = jour du démarrage) et le curseur va dans le champ « Tâche ». La carte rappelle la durée
+  reportée, avec « Reprendre » et « Effacer ». Tant que le temps n'est pas ajouté, la durée reste reportée à chaque
+  retour sur l'écran ; un ajout réussi efface le chronomètre.
+- Le chronomètre a passé minuit : message « la durée est comptée le jour du démarrage ; ajustez la date ou partagez le
+  temps si besoin ». Plus de 24 heures : message ; la saisie refuse la durée (une saisie porte sur un seul jour).
+- Accessibilité : temps écoulé dans un élément `role="timer"` (non annoncé à chaque seconde) ; démarrage, pause,
+  reprise et arrêt annoncés par la zone de statut de l'Espace.
+
+**Tableau de bord** : rappel « Chronomètre en marche depuis … » (ou « en pause », « arrêté : durée à saisir ») avec un
+lien vers l'écran « Temps ».
+
+**Tests** : moteur (temps écoulé en marche, en pause, après reprise ; horloge reculée : jamais négatif ; arrondi à la
+minute, au moins 1 ; texte « 1h05 » relu par la lecture des durées ; passage de minuit ; plus de 24 heures ; état
+illisible) ; parcours navigateur (démarrer, rechargement, pause, reprise, arrêt, durée reportée, ajout, chronomètre
+effacé, rappel du tableau de bord, accessibilité, mobile), chaque test contrôlé en réintroduisant l'erreur qu'il doit
+détecter.
+
+## 9. Réalisation du chronomètre (14/11/2026)
+
+- Moteur `espace-fr.js` : `timerCheck` (état relu du stockage), `timerElapsed` (jamais négatif si l'horloge recule),
+  `timerStart`, `timerPause`, `timerResume`, `timerStop`, `timerClock` (« 1:05:09 »), `timerDuration` (minutes
+  arrondies, au moins 1 ; texte « 1h05 » relu par `parseDuration` ; passage de minuit ; plus de 24 heures).
+- Écran « Temps » : carte « Chronomètre » au-dessus de la saisie (démarrer, pause, reprendre, arrêter, effacer) ;
+  à l'arrêt, durée, unité « Heures » et jour du démarrage reportés dans la saisie, curseur dans « Tâche » ; durée
+  reportée de nouveau à chaque retour sur l'écran tant qu'elle n'est pas ajoutée ; chronomètre effacé après l'ajout.
+  Horloge mise à jour chaque seconde dans un élément `role="timer"`, rafraîchissement arrêté au changement d'écran ;
+  état relu du stockage à chaque clic (un autre onglet a pu le changer). Rappel au tableau de bord.
+- Stockage : clé `espace-chrono` du stockage local, hors sauvegarde et hors synchronisation (§ 8).
+- Tests : 3 tests unitaires (`temps.test.mjs`), 8 erreurs réintroduites dans le moteur, toutes détectées ; parcours
+  navigateur de l'Espace (18 points : démarrage, rechargement, seconde qui avance, pause, reprise, arrêt avec l'unité
+  « Jours » choisie, report, rappels, retour sur l'écran, ajout, minuit, plus de 24 heures, effacement, état illisible,
+  accessibilité en marche et à l'arrêt) ; erreurs réintroduites dans l'écran : voir le CHANGELOG. Un test
+  intermittent corrigé dans le parcours (passage à l'écran suivant avant la fin d'une suppression).

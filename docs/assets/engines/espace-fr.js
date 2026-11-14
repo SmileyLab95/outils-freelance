@@ -655,6 +655,44 @@
     return h + NBSP + "h" + (rest ? NBSP + String(rest).padStart(2, "0") : "");
   }
 
+  /*
+   * Chronomètre (documentation/37-temps-passe.md, § 8) : état { start, elapsed, day, stopped } sur l'appareil ;
+   * start : instant du démarrage ou de la reprise (ms, null en pause ou à l'arrêt) ; elapsed : temps cumulé avant ;
+   * day : jour du premier démarrage ; stopped : arrêté, durée à saisir.
+   */
+  var ISO_DAY = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
+  /** État relu du stockage : null s'il est illisible. */
+  function timerCheck(x) {
+    if (!x || typeof x !== "object" || !ISO_DAY.test(x.day || "")) return null;
+    var elapsed = Number(x.elapsed), start = x.start === null || x.start === undefined ? null : Number(x.start);
+    if (!isFinite(elapsed) || elapsed < 0 || (start !== null && !isFinite(start))) return null;
+    if (x.stopped && start !== null) return null;
+    return { start: start, elapsed: elapsed, day: x.day, stopped: !!x.stopped };
+  }
+  /** Temps mesuré (ms) ; une horloge reculée ne le rend jamais négatif. */
+  function timerElapsed(x, nowMs) {
+    if (!x) return 0;
+    return Math.max(0, x.elapsed + (x.start === null ? 0 : Math.max(0, nowMs - x.start)));
+  }
+  function timerStart(nowMs, day) { return { start: nowMs, elapsed: 0, day: day, stopped: false }; }
+  function timerPause(x, nowMs) { return { start: null, elapsed: timerElapsed(x, nowMs), day: x.day, stopped: false }; }
+  function timerResume(x, nowMs) { return { start: nowMs, elapsed: timerElapsed(x, nowMs), day: x.day, stopped: false }; }
+  function timerStop(x, nowMs) { return { start: null, elapsed: timerElapsed(x, nowMs), day: x.day, stopped: true }; }
+  /** Affichage du temps écoulé : « 1:05:09 », « 0:00:42 ». */
+  function timerClock(ms) {
+    var s = Math.floor(Math.max(0, ms) / 1000);
+    return Math.floor(s / 3600) + ":" + String(Math.floor(s / 60) % 60).padStart(2, "0") + ":" + String(s % 60).padStart(2, "0");
+  }
+  /**
+   * Durée à reporter dans la saisie : minutes arrondies (au moins 1), texte « 1h05 » (lu par parseDuration), jour du
+   * démarrage, passage de minuit (today différent du jour du démarrage) et dépassement de 24 heures.
+   */
+  function timerDuration(x, nowMs, today) {
+    var minutes = Math.max(1, Math.round(timerElapsed(x, nowMs) / 60000));
+    return { minutes: minutes, input: Math.floor(minutes / 60) + "h" + String(minutes % 60).padStart(2, "0"), date: x.day,
+             crossesDay: !!today && today !== x.day, over24: minutes > 24 * 60 };
+  }
+
   /** Erreurs de saisie d'un temps, avec le champ concerné : date, task, unit, duration, clientId, rate. */
   function timeErrors(t) {
     var errors = [], add = function (field, message) { errors.push({ field: field, message: message }); };
@@ -1308,7 +1346,8 @@
            purchasesRequired: purchasesRequired, expenseRows: expenseRows, checkExpense: checkExpense, expensesCSV: expensesCSV,
            parseDuration: parseDuration, durationLabel: durationLabel, checkTime: checkTime, timeErrors: timeErrors, timeState: timeState, lastRate: lastRate,
            timeInvoiceLines: timeInvoiceLines, timeInvoice: timeInvoice, timeSummary: timeSummary, unbilledByClient: unbilledByClient,
-           timeCSV: timeCSV,
+           timeCSV: timeCSV, timerCheck: timerCheck, timerElapsed: timerElapsed, timerStart: timerStart, timerPause: timerPause,
+           timerResume: timerResume, timerStop: timerStop, timerClock: timerClock, timerDuration: timerDuration,
            STAGE_LABELS: STAGE_LABELS, OPEN_STAGES: OPEN_STAGES, prospectErrors: prospectErrors, exchangeErrors: exchangeErrors, prospectQuotes: prospectQuotes,
            minStage: minStage, prospectStage: prospectStage, prospectClosedAt: prospectClosedAt, prospectValue: prospectValue, pipeline: pipeline, followUps: followUps,
            lastContactFrom: lastContactFrom, addYears: addYears, retentionDue: retentionDue, optoutKeys: optoutKeys, prospectsCSV: prospectsCSV,

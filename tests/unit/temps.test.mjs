@@ -168,3 +168,58 @@ test("unité des lignes : « 1,5 h » et « 2 j » dans la facture ; codes HUR e
     ["HUR 1.5", "DAY 2", "C62 1", "C62 1"]);
   assert.equal(INV.compute(doc).ht, 1030, "l'unité ne change pas les montants : 90 + 900 + 30 + 10");
 });
+
+// ------------------------------------------------------------------------------------------------------------
+// Chronomètre (documentation/37-temps-passe.md, § 8)
+
+test("chronomètre : temps écoulé en marche, en pause, après reprise ; jamais négatif", () => {
+  const T0 = Date.UTC(2026, 10, 14, 9, 0, 0);
+  let x = E.timerStart(T0, "2026-11-14");
+  assert.deepEqual(x, { start: T0, elapsed: 0, day: "2026-11-14", stopped: false });
+  assert.equal(E.timerElapsed(x, T0 + 65000), 65000);
+  x = E.timerPause(x, T0 + 600000);
+  assert.deepEqual(x, { start: null, elapsed: 600000, day: "2026-11-14", stopped: false });
+  assert.equal(E.timerElapsed(x, T0 + 9e6), 600000, "en pause : le temps n'avance plus");
+  x = E.timerResume(x, T0 + 3600000);
+  assert.equal(E.timerElapsed(x, T0 + 3660000), 660000, "reprise : 10 min + 1 min");
+  assert.equal(x.day, "2026-11-14", "le jour reste celui du premier démarrage");
+  assert.equal(E.timerElapsed(x, T0), 600000, "horloge reculée : seul le temps cumulé compte");
+  assert.equal(E.timerElapsed(null, T0), 0);
+  const stopped = E.timerStop(x, T0 + 3720000);
+  assert.deepEqual(stopped, { start: null, elapsed: 720000, day: "2026-11-14", stopped: true });
+  assert.equal(E.timerElapsed(stopped, T0 + 9e6), 720000, "arrêté : le temps n'avance plus");
+  assert.equal(E.timerClock(3909000), "1:05:09");
+  assert.equal(E.timerClock(42000), "0:00:42");
+  assert.equal(E.timerClock(-5), "0:00:00");
+  assert.equal(E.timerClock(36000000 + 59999), "10:00:59");
+});
+
+test("chronomètre : durée reportée en minutes arrondies (au moins 1), lisible par la saisie ; minuit ; 24 heures", () => {
+  const T0 = Date.UTC(2026, 10, 14, 9, 0, 0), x = E.timerStart(T0, "2026-11-14");
+  const d = E.timerDuration(x, T0 + 65 * 60000 + 29000, "2026-11-14");
+  assert.deepEqual(d, { minutes: 65, input: "1h05", date: "2026-11-14", crossesDay: false, over24: false });
+  assert.equal(E.parseDuration(d.input, "hour"), 1.08, "« 1h05 » relu : 1,08 h");
+  assert.equal(E.timerDuration(x, T0 + 65 * 60000 + 30000, "2026-11-14").minutes, 66, "30 s : minute supérieure");
+  assert.equal(E.timerDuration(x, T0 + 10000, "2026-11-14").input, "0h01", "moins d'une minute : 1 minute");
+  assert.equal(E.parseDuration("0h01", "hour"), 0.02);
+  assert.equal(E.timerDuration(x, T0 + 45 * 60000, "2026-11-14").input, "0h45");
+  assert.equal(E.parseDuration("0h45", "hour"), 0.75);
+  assert.equal(E.timerDuration(x, T0 + 3600000, "2026-11-15").crossesDay, true, "passage de minuit");
+  const full = E.timerDuration(x, T0 + 24 * 3600000, "2026-11-15");
+  assert.equal(full.over24, false, "24 heures pile : acceptées");
+  assert.equal(E.parseDuration(full.input, "hour"), 24);
+  const over = E.timerDuration(x, T0 + 24 * 3600000 + 60000, "2026-11-15");
+  assert.equal(over.over24, true);
+  assert.equal(over.input, "24h01");
+  assert.ok(E.timeErrors(t({ quantity: E.parseDuration(over.input, "hour") })).some((e) => e.field === "duration"), "la saisie refuse plus de 24 heures");
+});
+
+test("chronomètre : état relu du stockage, illisible ignoré", () => {
+  assert.deepEqual(E.timerCheck({ start: 5, elapsed: 10, day: "2026-11-14" }), { start: 5, elapsed: 10, day: "2026-11-14", stopped: false });
+  assert.deepEqual(E.timerCheck({ start: null, elapsed: 10, day: "2026-11-14", stopped: true }), { start: null, elapsed: 10, day: "2026-11-14", stopped: true });
+  for (const bad of [null, "x", {}, { start: 5, elapsed: 10, day: "14/11/2026" }, { start: 5, elapsed: -1, day: "2026-11-14" },
+    { start: "abc", elapsed: 0, day: "2026-11-14" }, { start: 5, elapsed: "x", day: "2026-11-14" }, { start: 5, elapsed: 0, day: "2026-13-01" },
+    { start: 5, elapsed: 0, day: "2026-11-14", stopped: true }]) {
+    assert.equal(E.timerCheck(bad), null, JSON.stringify(bad));
+  }
+});

@@ -4302,6 +4302,77 @@ const tests = {
     check((await text("#espace-view")).includes("Aucun temps saisi en octobre 2026") && (await page.$$eval(".doc-list li, .time-due li", (l) => l.length)) === 0,
       "Temps : sauvegarde antérieure au module acceptée (aucun temps)");
 
+    // Chronomètre (documentation/37-temps-passe.md, § 8) : état sur l'appareil, mesure depuis l'heure de démarrage
+    // (rechargement compris), pause, reprise, arrêt, durée reportée dans la saisie, rappel, effacement après l'ajout.
+    const chrono = () => page.evaluate(() => JSON.parse(localStorage.getItem("of:espace-chrono")));
+    check((await text("#chrono")).includes("Lancez-le au début d'une tâche") && !!(await page.$("#chrono-start")) && (await chrono()) === null,
+      "Chronomètre : à l'arrêt, bouton « Démarrer »");
+    await page.click("#chrono-start");
+    let cs = await chrono();
+    check(cs && cs.start > 0 && cs.elapsed === 0 && cs.day === "2026-10-20" && cs.stopped === false && (await page.getAttribute("#chrono-clock", "role")) === "timer" &&
+      (await text("#espace-status")) === "Chronomètre démarré." && (await page.evaluate(() => document.activeElement.id)) === "chrono-pause",
+      "Chronomètre : démarré (jour du démarrage, horloge role=timer, annonce, curseur sur « Pause »)");
+    await page.evaluate(() => { const x = JSON.parse(localStorage.getItem("of:espace-chrono")); x.start -= 65 * 60000; localStorage.setItem("of:espace-chrono", JSON.stringify(x)); });
+    await page.reload({ waitUntil: "networkidle" });
+    await page.waitForSelector("#chrono-clock");
+    const tick1 = await text("#chrono-clock");
+    await page.waitForTimeout(1300);
+    check(tick1.startsWith("1:05:") && (await text("#chrono-clock")) !== tick1 && (await text("#chrono")).includes("En marche, commencé le 20 octobre 2026"),
+      "Chronomètre : mesuré depuis l'heure de démarrage après un rechargement, mis à jour chaque seconde");
+    await accessible(page, "Chronomètre : en marche");
+    await go("#/");
+    check((await text("#espace-view")).includes("Chronomètre en marche : 1 h 05. Voir le chronomètre"), "Chronomètre : rappel au tableau de bord (en marche)");
+    await go("#/temps");
+    await page.click("#chrono-pause");
+    cs = await chrono();
+    const paused = await text("#chrono-clock");
+    await page.waitForTimeout(1300);
+    check(cs.start === null && cs.elapsed >= 65 * 60000 && (await text("#chrono-clock")) === paused && (await text("#chrono")).includes("En pause") &&
+      !!(await page.$("#chrono-resume")) && (await text("#espace-status")) === "Chronomètre en pause.", "Chronomètre : en pause, le temps n'avance plus");
+    await page.click("#chrono-resume");
+    cs = await chrono();
+    check(cs.start > 0 && cs.elapsed >= 65 * 60000 && cs.day === "2026-10-20" && !!(await page.$("#chrono-pause")), "Chronomètre : repris, temps cumulé gardé");
+    await page.selectOption("#ep-unit", "day");   // le chronomètre mesure en heures : l'unité repasse en heures à l'arrêt
+    await page.click("#chrono-stop");
+    cs = await chrono();
+    check(cs.stopped === true && cs.start === null && (await page.inputValue("#ep-duration")) === "1h05" && (await page.inputValue("#ep-unit")) === "hour" &&
+      (await text('label[for="ep-rate"]')) === "Taux horaire HT" &&
+      (await page.inputValue("#ep-date")) === "2026-10-20" && (await page.evaluate(() => document.activeElement.id)) === "ep-task" &&
+      (await text("#chrono")).includes("Arrêté : 1 h 05 reportée dans la saisie ci-dessous"), "Chronomètre : arrêté, « 1h05 » reportée dans la saisie, curseur sur la tâche");
+    await accessible(page, "Chronomètre : arrêté");
+    await go("#/");
+    check((await text("#espace-view")).includes("Chronomètre arrêté : 1 h 05 à saisir. Saisir ce temps"), "Chronomètre : rappel au tableau de bord (durée à saisir)");
+    await go("#/temps");
+    check((await page.inputValue("#ep-duration")) === "1h05", "Chronomètre : durée reportée de nouveau au retour sur l'écran");
+    await page.fill("#ep-task", "Administratif");
+    await page.selectOption("#ep-clientId", "");
+    await page.uncheck("#ep-billable");
+    await page.click("#time-form button[type=submit]");
+    await page.waitForSelector("#espace-view .time-table");
+    check((await chrono()) === null && (await text("#chrono")).includes("Lancez-le au début d'une tâche") &&
+      (await text("#espace-view .time-table")).includes("Temps interne Administratif 1 h 05 Non facturable"), "Chronomètre : temps ajouté, chronomètre effacé");
+    await page.evaluate(() => localStorage.setItem("of:espace-chrono", JSON.stringify({ start: null, elapsed: 3600000, day: "2026-10-19", stopped: true })));
+    await go("#/");
+    await go("#/temps");
+    check((await page.inputValue("#ep-date")) === "2026-10-19" && (await page.inputValue("#ep-duration")) === "1h00" &&
+      (await text("#chrono")).includes("Le chronomètre a passé minuit : la durée est comptée le jour du démarrage."), "Chronomètre : passage de minuit signalé, jour du démarrage");
+    await page.evaluate(() => localStorage.setItem("of:espace-chrono", JSON.stringify({ start: null, elapsed: 25 * 3600000, day: "2026-10-19", stopped: true })));
+    await go("#/");
+    await go("#/temps");
+    check((await text("#chrono")).includes("Plus de 24 heures : une saisie porte sur un seul jour."), "Chronomètre : plus de 24 heures signalé");
+    await page.click("#chrono-clear");
+    check((await chrono()) === null && !!(await page.$("#chrono-start")) && (await text("#espace-status")) === "Chronomètre effacé.", "Chronomètre : effacé");
+    await page.evaluate(() => localStorage.setItem("of:espace-chrono", JSON.stringify({ start: "x", elapsed: -1, day: "hier" })));
+    await go("#/");
+    await go("#/temps");
+    check(!!(await page.$("#chrono-start")) && !(await text("#espace-view")).includes("Chronomètre en"), "Chronomètre : état illisible ignoré");
+    await page.click('#espace-view .time-table a:text("Administratif")');
+    await page.waitForSelector("#time-delete");
+    await page.click("#time-delete");
+    await page.waitForFunction(() => !document.querySelector("#time-delete") && (document.querySelector("#espace-view h2") || {}).textContent === "Temps passé");
+    check(!(await text("#espace-view")).includes("Administratif"), "Chronomètre : temps d'essai supprimé");
+    await page.evaluate(() => localStorage.removeItem("of:espace-chrono"));
+
     // Prospects (documentation/38-prospects.md) : fiche, erreurs, échanges, étapes, relance, client et devis créés depuis
     // la piste, devis accepté, opposition (empreintes seules), avertissement et retrait, conservation, CSV, sauvegarde.
     const store = () => page.evaluate(() => window.EspaceStore.load());

@@ -115,7 +115,7 @@ G compte gratuit, P Pro, ⇄ partenaire signalé.
 | Relances et pénalités | Modèles, calculateurs ; relances automatiques | ✅ / ⬜ | V, P |
 | Être payé en ligne | Liens de paiement (prestataire de paiement choisi par Ismail) | ⬜ | P, ⇄ |
 | Recouvrement en justice | Guides (France en attente des textes) | ✅ | V |
-| Suivre le temps passé | Chronomètre et feuilles de temps, transformés en facture ([37](37-temps-passe.md)) | ✅ (France, saisie ; chronomètre ⬜) | G |
+| Suivre le temps passé | Chronomètre et feuilles de temps, transformés en facture ([37](37-temps-passe.md)) | ✅ (France, saisie et chronomètre, 14/11/2026) | G |
 
 ### 3.6 Gérer
 

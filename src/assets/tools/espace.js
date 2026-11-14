@@ -126,6 +126,7 @@
 
   function render(keepFocus) {
     drawCharts = null; // chaque vue qui a des graphiques fournit sa fonction de dessin (redessin au changement de taille)
+    if (chronoTick) { clearInterval(chronoTick); chronoTick = null; }
     var r = route();
     var name = data.profile ? r.name : (r.name === "reglages" ? "reglages" : "accueil");
     app.querySelectorAll("[data-route]").forEach(function (a) {
@@ -460,7 +461,7 @@
       '<div class="espace-quick espace-noprint"><a class="btn btn-primary btn-sm" href="#/documents/nouveau?type=facture">+ Facture</a>' +
       '<a class="btn btn-ghost btn-sm" href="#/documents/nouveau?type=devis">+ Devis</a>' +
       '<a class="btn btn-ghost btn-sm" href="#/clients/nouveau">+ Client</a></div></div>';
-    html += profileReminder() + purchasesReminder() + timeReminder() + prospectsReminder() + treasuryReminder() + backupReminder();
+    html += profileReminder() + purchasesReminder() + chronoReminder() + timeReminder() + prospectsReminder() + treasuryReminder() + backupReminder();
     // Indicateurs et graphiques (documentation/55-indicateurs-espace.md, § 2) : comparaison avec l'an dernier à la même date.
     var td = ST.toDate(data.documents, TODAY), prevYear = String(+YEAR - 1);
     var versus = function (x, what) {
@@ -599,6 +600,16 @@
     if (E.expenseRows(data.expenses, YEAR + "-01-01", YEAR + "-12-31").rows.length) return "";
     return '<p class="notice espace-noprint">Vente de marchandises : tenez votre <b>registre des achats</b>, obligatoire avec le livre des recettes. ' +
       '<a href="#/depenses">Saisir vos achats</a></p>';
+  }
+
+  /** Chronomètre en marche, en pause ou arrêté avec une durée à saisir (documentation/37-temps-passe.md, § 8). */
+  function chronoReminder() {
+    var x = chronoLoad();
+    if (!x) return "";
+    var label = E.durationLabel(E.timerDuration(x, Date.now(), todayNow()).minutes / 60, "hour");
+    return '<p class="notice espace-noprint">' + (x.stopped ? "Chronomètre arrêté : <b>" + esc(label) + "</b> à saisir. " :
+      "Chronomètre " + (x.start === null ? "en pause" : "en marche") + " : <b>" + esc(label) + "</b>. ") +
+      '<a href="#/temps">' + (x.stopped ? "Saisir ce temps" : "Voir le chronomètre") + "</a></p>";
   }
 
   /** Temps à facturer (documentation/37-temps-passe.md) : montant et nombre de clients. */
@@ -1611,6 +1622,75 @@
                       draft: ["Dans un brouillon", "st-partial"], invoiced: ["Facturé", "st-paid"] };
   var TIME_UNITS = [["hour", "Heures"], ["day", "Jours"]];
   var timeDefaults = null;  // saisie rapide : date, client, unité et taux de la dernière saisie (« Facturable » revient coché)
+
+  // Chronomètre (documentation/37-temps-passe.md, § 8) : état sur l'appareil, hors sauvegarde et synchronisation.
+  var CHRONO_KEY = "espace-chrono", chronoTick = null;
+  var todayNow = function () { return forced ? TODAY : OF.today(); };
+  function chronoLoad() { return E.timerCheck(OF.load(CHRONO_KEY, null)); }
+  function chronoSave(x) { OF.save(CHRONO_KEY, x || null); }
+  /** Carte du chronomètre (contenu de #chrono) selon l'état : arrêté, en marche, en pause, durée à saisir. */
+  function chronoCard(x, nowMs) {
+    var head = '<h3 id="chrono-title">Chronomètre</h3>';
+    var btn = function (id, label, primary) { return '<button type="button" class="btn ' + (primary ? "btn-primary" : "btn-ghost") + ' btn-sm" id="' + id + '">' + label + "</button>"; };
+    if (!x) {
+      return head + '<p class="small muted">Lancez-le au début d\'une tâche : à l\'arrêt, la durée est reportée dans la saisie ci-dessous.</p>' +
+        '<div class="espace-actions">' + btn("chrono-start", "Démarrer", true) + "</div>";
+    }
+    var d = E.timerDuration(x, nowMs, todayNow()), started = "commencé le " + esc(longDay(x.day));
+    if (x.stopped) {
+      return head + "<p>Arrêté : <b>" + esc(E.durationLabel(d.minutes / 60, "hour")) + "</b> reportée dans la saisie ci-dessous (" + started +
+        "). Complétez le client et la tâche, puis « Ajouter ».</p>" +
+        (d.over24 ? '<p class="notice warn">Plus de 24 heures : une saisie porte sur un seul jour. Corrigez la durée ou partagez ce temps en plusieurs saisies.</p>' :
+          d.crossesDay ? '<p class="notice">Le chronomètre a passé minuit : la durée est comptée le jour du démarrage. Ajustez la date ou partagez le temps si besoin.</p>' : "") +
+        '<div class="espace-actions">' + btn("chrono-resume", "Reprendre", false) + btn("chrono-clear", "Effacer", false) + "</div>";
+    }
+    var running = x.start !== null;
+    return head + '<p class="chrono-clock" role="timer" id="chrono-clock" aria-label="Temps mesuré">' + esc(E.timerClock(E.timerElapsed(x, nowMs))) + "</p>" +
+      '<p class="small muted">' + (running ? "En marche" : "En pause") + ", " + started + ".</p>" +
+      '<div class="espace-actions">' + (running ? btn("chrono-pause", "Pause", false) : btn("chrono-resume", "Reprendre", true)) + btn("chrono-stop", "Arrêter", running) + "</div>";
+  }
+  /** Reporte la durée d'un chronomètre arrêté dans la saisie rapide : unité « Heures », durée, jour du démarrage. */
+  function chronoFill(form, x, sync) {
+    var f = form.elements, d = E.timerDuration(x, Date.now(), todayNow());
+    if (f.unit.value !== "hour") { f.unit.value = "hour"; sync(); }
+    f.duration.value = d.input;
+    f.date.value = d.date;
+  }
+  /** Dessine la carte et branche ses boutons ; l'état est relu du stockage à chaque clic (autre onglet ouvert). */
+  function drawChrono(form, sync) {
+    var box = $("chrono");
+    if (!box) return;
+    if (chronoTick) { clearInterval(chronoTick); chronoTick = null; }
+    var x = chronoLoad();
+    box.innerHTML = chronoCard(x, Date.now());
+    if (x && x.start !== null) {
+      chronoTick = setInterval(function () {
+        var el = $("chrono-clock");
+        if (!el) { clearInterval(chronoTick); chronoTick = null; return; }
+        el.textContent = E.timerClock(E.timerElapsed(x, Date.now()));
+      }, 1000);
+    }
+    var act = function (id, change, msg, after) {
+      var b = $(id);
+      if (!b) return;
+      b.addEventListener("click", function () {
+        var cur = chronoLoad(), next = change(cur, Date.now());
+        if (next === undefined) { drawChrono(form, sync); return; }  // état changé ailleurs : on redessine
+        chronoSave(next);
+        drawChrono(form, sync);
+        announce(msg);
+        if (after) after(next);
+        var first = $("chrono").querySelector("button");
+        if (!after && first) first.focus();
+      });
+    };
+    act("chrono-start", function (cur, t) { return cur ? undefined : E.timerStart(t, todayNow()); }, "Chronomètre démarré.");
+    act("chrono-pause", function (cur, t) { return cur && cur.start !== null ? E.timerPause(cur, t) : undefined; }, "Chronomètre en pause.");
+    act("chrono-resume", function (cur, t) { return cur && cur.start === null ? E.timerResume(cur, t) : undefined; }, "Chronomètre repris.");
+    act("chrono-stop", function (cur, t) { return cur && !cur.stopped ? E.timerStop(cur, t) : undefined; }, "Chronomètre arrêté : durée reportée dans la saisie.",
+      function (next) { chronoFill(form, next, sync); $("ep-task").focus(); });
+    act("chrono-clear", function (cur) { return cur ? null : undefined; }, "Chronomètre effacé.");
+  }
   function timeEntry(id) { return data.timeEntries.filter(function (t) { return t.id === id; })[0] || null; }
   function clientName(id) { var c = client(id); return c ? c.name : id ? "Client inconnu" : ""; }
   function timeBadge(state) { var st = TIME_STATES[state]; return '<span class="st ' + st[1] + '">' + esc(st[0]) + "</span>"; }
@@ -1711,6 +1791,7 @@
           ts.rate === null ? "aucun temps facturable avec un taux ce mois-ci" : "temps facturables du mois, pondéré par la durée") + "</div>" +
         (otherUnit ? '<p class="small muted espace-noprint">Indicateurs et graphiques calculés sur les temps en ' + (ts.unit === "day" ? "jours" : "heures") +
           " ; les temps saisis en " + (ts.unit === "day" ? "heures" : "jours") + " figurent dans le détail du mois.</p>" : "") : "") +
+      '<section class="card espace-card espace-noprint chrono" id="chrono" aria-labelledby="chrono-title"></section>' +
       '<form class="card espace-card espace-noprint" id="time-form" novalidate><h3>Saisir du temps</h3><div class="fields">' + timeFields(x) + "</div>" +
       '<p class="form-error" id="time-error" role="alert" hidden></p><div class="espace-actions"><button type="submit" class="btn btn-primary">Ajouter</button></div></form>' +
       (due.length ? '<section class="card espace-card espace-noprint"><h3>À facturer</h3><ul class="time-due">' + due.map(function (c) {
@@ -1750,12 +1831,17 @@
           unitLabel(ts.weeks.reduce(function (s, w) { return s + w.internal; }, 0)) + " internes." });
     };
     drawCharts();
-    var form = $("time-form");
-    bindTimeForm(form, null, false)();
+    var form = $("time-form"), sync = bindTimeForm(form, null, false);
+    sync();
+    var chrono = chronoLoad();
+    if (chrono && chrono.stopped) chronoFill(form, chrono, sync);
+    drawChrono(form, sync);
     form.addEventListener("submit", function (e) {
       e.preventDefault();
       var t = readTime(form);
       if (!showTimeErrors(form, t, "time-error")) return;
+      var stopped = chronoLoad();
+      if (stopped && stopped.stopped) chronoSave(null);  // durée du chronomètre saisie : il est effacé
       if (t.rate !== null) t.rate = Math.round(t.rate * 100) / 100;
       Object.assign(t, { id: S.uid(), createdAt: now(), updatedAt: now() });
       data.timeEntries.push(t);

@@ -9,7 +9,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 
 ## Où en est-on ?
 
-*Mis à jour le 14/11/2026 (nuit).*
+*Mis à jour le 14/11/2026 (petit matin).*
 
 - **Priorité (décision D10)** : le site et la plateforme d'abord ; noms de domaine, Gumroad et affiliation à la fin.
   Règle de qualité maximale pour tout produit ou service (D11, charte dans la [méthode](04-methode-de-travail.md#charte-qualité)).
@@ -471,6 +471,12 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   JavaScript) et part de 50 % lue dans la loi (C.R.S. 8-13.3-507(4)(a)) : revenu brut et effet au dépôt de l'avis
   confirmés ; page complétée (documents fiscaux chaque année avant le 1er décembre, amende jusqu'à 500 $ ; retrait à
   tout moment, effet au plus tôt à la fin des 3 ans et 30 jours après l'avis) ([52](52-protection-sociale-etats-unis.md)).
+- **Espace : chronomètre (14/11/2026, petit matin)** : onglet « Temps », carte « Chronomètre » (démarrer, pause,
+  reprendre, arrêter) ; la durée mesurée est reportée dans la saisie existante, que l'utilisateur complète et valide ;
+  l'état reste sur l'appareil (hors sauvegarde et synchronisation), survit au rechargement ; rappel au tableau de bord
+  ([37](37-temps-passe.md) § 8 et 9). Recherches de la nuit sans résultat : loi californienne SB 988 (le serveur de
+  téléchargement de la législature ne propose que des bases de plus de 1 Go), arrêt maladie du micro-entrepreneur
+  (aucune fiche officielle lisible : D53 maintenue).
 - **Sources non officielles : revue (14/11/2026, nuit)** : toutes les sources des règles passées au crible de l'outil
   de lecture. Règle `quebec_contributions_no_credit` : la Chaire de fiscalité de l'Université de Sherbrooke est
   remplacée par le rapport officiel *Dépenses fiscales* du ministère des Finances du Québec (édition 2022,

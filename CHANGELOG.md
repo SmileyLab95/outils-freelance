@@ -1,5 +1,16 @@
 # Journal des modifications
 
+## 2026-11-14 (petit matin) — Espace : chronomètre dans l'onglet « Temps »
+
+- Carte « Chronomètre » au-dessus de la saisie du temps passé : démarrer, pause, reprendre, arrêter, effacer. À l'arrêt,
+  la durée (minutes arrondies, au moins 1), l'unité « Heures » et le jour du démarrage sont reportés dans la saisie,
+  que l'on complète (client, tâche) puis valide ; le chronomètre s'efface après l'ajout. Il mesure à partir de l'heure
+  de démarrage (rechargement, onglet fermé ou mise en veille sans effet) ; passage de minuit et plus de 24 heures
+  signalés ; rappel au tableau de bord. État gardé sur l'appareil, hors sauvegarde et synchronisation.
+- Tests : 3 tests unitaires (8 erreurs réintroduites dans le moteur, toutes détectées), 18 points de parcours de
+  l'Espace (6 erreurs réintroduites dans l'écran, toutes détectées), accessibilité en marche et à l'arrêt, parcours des
+  comptes, captures relues sur ordinateur et mobile ; un test intermittent du parcours de l'Espace corrigé.
+
 ## 2026-11-14 (nuit) — Sources : dernières sources non officielles remplacées
 
 - Canada (Québec) : la règle « pas de crédit d'impôt pour les cotisations au RRQ, au RQAP et à l'assurance-emploi »
