@@ -9,7 +9,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 
 ## Où en est-on ?
 
-*Mis à jour le 14/11/2026 (midi).*
+*Mis à jour le 14/11/2026 (début d'après-midi).*
 
 - **Priorité (décision D10)** : le site et la plateforme d'abord ; noms de domaine, Gumroad et affiliation à la fin.
   Règle de qualité maximale pour tout produit ou service (D11, charte dans la [méthode](04-methode-de-travail.md#charte-qualité)).
@@ -471,6 +471,14 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   JavaScript) et part de 50 % lue dans la loi (C.R.S. 8-13.3-507(4)(a)) : revenu brut et effet au dépôt de l'avis
   confirmés ; page complétée (documents fiscaux chaque année avant le 1er décembre, amende jusqu'à 500 $ ; retrait à
   tout moment, effet au plus tôt à la fin des 3 ans et 30 jours après l'avis) ([52](52-protection-sociale-etats-unis.md)).
+- **CGV au Canada : Territoires du Nord-Ouest (14/11/2026, début d'après-midi)** : loi sur la protection du
+  consommateur (LRTNO 1988, ch. C-17) lue sur gnwt.ca : pas de règle sur les contrats à distance, texte commun gardé ;
+  mais la partie VII (démarchage) vise aussi le contrat conclu à distance après une démarche faite au domicile du
+  consommateur, en personne ou par téléphone, sans sa demande, dès 100 $ (licence, contrat signé avec la déclaration
+  du droit d'annulation, 10 jours) : case et mention propres aux TNO dans les deux langues, règle `ca_nt_direct_sales`
+  ([47](47-cgv-canada.md) § 6, D80). Yukon et Nunavut : toujours 403. Article 151 septies : les seuils de recettes ne
+  figurent pas dans les pages du BOFiP lues ce matin (BOI-BIC-PVMV-40-10-10-20) ; l'exonération reste signalée, non
+  calculée.
 - **Espace : plus-values de cession (14/11/2026, midi)** : résultat de la vente ou de la mise au rebut d'un bien,
   court terme et long terme, synthèse de l'année au registre et dans l'export ([57](57-immobilisations.md) § 9, D79,
   BOFiP lu) ; exonération de l'article 151 septies signalée.
@@ -513,14 +521,14 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   toujours illisible.
 - **Prochaines actions de Claude** : immobilisations de l'Espace (faites le 14/11, [57](57-immobilisations.md) ; plafond
   des voitures particulières et plus-values de cession faits le 14/11) : seuils de l'exonération de l'article
-  151 septies, barèmes des voitures acquises avant 2021, combinaison part privée et plafond, plus-value d'un bien
+  151 septies (absents des pages du BOFiP lues le 14/11 : chercher la page à jour des seuils de recettes), barèmes des voitures acquises avant 2021, combinaison part privée et plafond, plus-value d'un bien
   partiel autre qu'un véhicule, dès que leurs règles sont lues ; indicateurs de l'Espace : les huit onglets, la date de clôture des pistes et la période de
   l'onglet Documents et de l'onglet Dépenses sont faits (12/11, [55](55-indicateurs-espace.md)) ; **appliquer le thème**
   choisi par Ismail dès sa réponse ([54](54-themes.md) § 2) ; refonte, suite ([31](31-vision-plateforme.md) § 5) : les quatre modules du compte
   gratuit sont faits (étape 5) ; étape 6, outils restants (CGV : faites dans les quatre pays ;
-  Manitoba, Nouvelle-Écosse, Terre-Neuve-et-Labrador et Île-du-Prince-Édouard détaillés le 13/11 ; Saskatchewan
-  (certificat refusé), Nouveau-Brunswick (dès la proclamation de la loi de 2024) et territoires à lire (Yukon et
-  Nunavut : 403 ; Territoires du Nord-Ouest : 502 le 13/11, à retenter) ; le règlement albertain sur les
+  Manitoba, Nouvelle-Écosse, Terre-Neuve-et-Labrador et Île-du-Prince-Édouard détaillés le 13/11, Territoires du
+  Nord-Ouest le 14/11 ; Saskatchewan (certificat refusé), Nouveau-Brunswick (dès la proclamation de la loi de 2024),
+  Yukon et Nunavut (403) à lire ; règlement des TNO sur la déclaration d'annulation non lu ; le règlement albertain sur les
   contrats Internet expire le 30/09/2028 : à revérifier) ; jours ouvrés au Canada (faits le 13/11, [42](42-jours-ouvres.md) § 10.1) :
   ajouter le Yukon et le Nunavut dès que leurs textes sont lisibles par l'outil (Saskatchewan faite le 13/11), relire la date fédérale
   de l'Action de grâces (proclamation) et prolonger au-delà de 2030 après relecture des lois ; sous-traitance

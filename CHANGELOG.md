@@ -1,5 +1,19 @@
 # Journal des modifications
 
+## 2026-11-14 (début d'après-midi) — CGV au Canada : Territoires du Nord-Ouest
+
+- Loi sur la protection du consommateur des Territoires du Nord-Ouest (LRTNO 1988, ch. C-17) lue sur gnwt.ca : pas de
+  règle sur les contrats en ligne ou à distance, le texte commun s'applique aux particuliers des Territoires.
+- Démarchage (partie VII) : contrat conclu après une démarche faite au domicile du consommateur, en personne ou par
+  téléphone, sans sa demande, dès 100 $, même conclu à distance (licence, contrat signé avec la déclaration du droit
+  d'annulation, 10 jours pour annuler) : mention propre aux TNO dans les deux langues, chiffres tirés de la nouvelle
+  règle `ca_nt_direct_sales`.
+- Case « Territoires du Nord-Ouest » dans les deux pages ; TNO ajoutés aux messages « autres provinces » et « contrat
+  signé chez le particulier », à la présentation et à « Ce que ce générateur ne couvre pas ».
+- Tests : 16 tests unitaires du générateur, dont un nouveau (10 erreurs réintroduites dans le moteur, toutes détectées), parcours
+  navigateur des deux pages (mention, lien vers la case, retrait), parcours du site (4 415 points), captures relues.
+- Yukon et Nunavut : sites toujours refusés à la lecture (403), non contournés.
+
 ## 2026-11-14 (midi) — Espace : plus-values et moins-values de cession
 
 - Fiche d'un bien cédé : valeur nette au jour de la cession, plus-value ou moins-value, durée de détention, part à

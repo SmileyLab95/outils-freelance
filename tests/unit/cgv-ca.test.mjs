@@ -107,17 +107,49 @@ test("provinces des particuliers : cochées, sinon celle du travailleur autonome
   assert.deepEqual(C.consumerProvinces({}, "AB"), { list: ["AB"], other: false });
   assert.deepEqual(C.consumerProvinces({}, "MB"), { list: ["MB"], other: false }, "Manitoba : loi lue le 13/11/2026");
   assert.deepEqual(C.consumerProvinces({}, "PE"), { list: ["PE"], other: false }, "Île-du-Prince-Édouard : lois lues le 13/11/2026");
+  assert.deepEqual(C.consumerProvinces({}, "NT"), { list: ["NT"], other: false }, "Territoires du Nord-Ouest : loi lue le 14/11/2026");
   assert.deepEqual(C.consumerProvinces({}, "NB"), { list: [], other: true }, "Nouveau-Brunswick : loi de 2024 non proclamée");
   assert.deepEqual(C.consumerProvinces({ cons_mb: "on", cons_ns: "on", cons_nl: "on", cons_other: "on" }, "ON"),
     { list: ["MB", "NS", "NL"], other: true });
   assert.deepEqual(C.consumerProvinces({ cons_other: "on" }, "QC"), { list: [], other: true });
   assert.deepEqual(C.consumerProvinces({}, ""), { list: [], other: false });
-  for (const p of ["NB", "SK", "YT", "NT", "NU"]) assert.ok(codes(prep({ ...OK, clients: "part", province: p })).includes("other_provinces"), p);
-  for (const p of ["MB", "NS", "NL", "PE"]) assert.ok(!codes(prep({ ...OK, clients: "part", province: p })).includes("other_provinces"), p);
+  for (const p of ["NB", "SK", "YT", "NU"]) assert.ok(codes(prep({ ...OK, clients: "part", province: p })).includes("other_provinces"), p);
+  for (const p of ["MB", "NS", "NL", "PE", "NT"]) assert.ok(!codes(prep({ ...OK, clients: "part", province: p })).includes("other_provinces"), p);
   assert.ok(!codes(prep({ ...OK, clients: "part", province: "ON" })).includes("other_provinces"));
   assert.ok(!codes(prep({ ...OK, clients: "pro", province: "NB" })).includes("other_provinces"), "entreprises seulement : pas de mention");
   assert.equal(prep({ ...OK, clients: "part", province: "QC" }).flags.qc_cons, "on");
   assert.equal(prep({ ...OK, clients: "pro", province: "QC" }).flags.qc_cons, "off");
+});
+
+test("Territoires du Nord-Ouest : démarchage au domicile signalé (partie VII, art. 73 à 77, dès 100 $)", () => {
+  assert.deepEqual(R.ca_nt_direct_sales, { from_amount: 100, cancel_days: 10, late_cancel_years: 1 });
+  const nt = (raw) => prep({ ...OK, ...raw }).checks.find((c) => c.code === "nt_direct_sales");
+  const own = nt({ clients: "part", province: "NT" });
+  assert.ok(own, "travailleur autonome des TNO, particuliers, aucune case cochée");
+  assert.equal(own.level, "info");
+  assert.equal(own.field, "cons_nt");
+  assert.deepEqual(own.params, { amount: "$100", days: "10" });
+  assert.ok(nt({ clients: "both", province: "ON", cons_nt: "on" }), "case TNO cochée");
+  assert.ok(nt({ clients: "both", province: "NT", cons_nt: "on", cons_other: "on" }), "TNO et autres provinces");
+  assert.ok(!nt({ clients: "both", province: "NT", cons_on: "on" }), "particuliers de l'Ontario seulement");
+  assert.ok(!nt({ clients: "pro", province: "NT", cons_nt: "on" }), "entreprises seulement");
+  assert.ok(!nt({ clients: "part", province: "PE" }), "Île-du-Prince-Édouard : pas de démarchage par téléphone visé");
+  assert.ok(!nt({ clients: "part", province: "NU" }), "Nunavut : loi non lue");
+  assert.ok(!nt({ clients: "part", province: "NT", cons_other: "on" }), "autres provinces seulement");
+  const alt = { ...R, ca_nt_direct_sales: { from_amount: 150, cancel_days: 12, late_cancel_years: 1 } };
+  assert.deepEqual(prep({ ...OK, clients: "part", province: "NT" }, "en-CA", alt).checks.find((c) => c.code === "nt_direct_sales").params,
+    { amount: "$150", days: "12" }, "montant et délai lus dans la règle");
+  const noRule = { ...R }; delete noRule.ca_nt_direct_sales;
+  assert.ok(!prep({ ...OK, clients: "part", province: "NT" }, "en-CA", noRule).checks.some((c) => c.code === "nt_direct_sales"), "sans règle, pas de chiffre inventé");
+  for (const [lang, file] of [["en", "content/ca/terms-and-conditions-generator.html"], ["fr", "content/ca-fr/conditions-generales.html"]]) {
+    const html = readFileSync(new URL("../../" + file, import.meta.url), "utf8");
+    const ui = JSON.parse(html.match(/<script type="application\/json" id="cgv-data">([\s\S]*?)<\/script>/)[1]).ui;
+    const msg = ui.checks.nt_direct_sales;
+    assert.ok(msg.includes("{amount}") && msg.includes("{days}"), lang + " : montant et délai tirés de la règle");
+    assert.ok(!/\b100\b/.test(msg), lang + " : aucun montant écrit en dur");
+    assert.match(ui.checks.other_provinces, lang === "en" ? /Prince Edward Island and the Northwest Territories/ : /l'Île-du-Prince-Édouard et les Territoires du Nord-Ouest/);
+    assert.match(ui.checks.at_home_out_of_scope, lang === "en" ? /Prince Edward Island, the Northwest Territories\)/ : /Île-du-Prince-Édouard, Territoires du Nord-Ouest,/);
+  }
 });
 
 test("particuliers : téléphone, contrat conclu chez eux hors champ, contenu du devis", () => {
@@ -214,7 +246,7 @@ test("pages : une case par province détaillée, reconnue par le moteur", () => 
   for (const lang of ["en", "fr"]) {
     const html = readFileSync(new URL("../../" + PAGES[lang], import.meta.url), "utf8");
     const boxes = [...html.matchAll(/name="cons_([a-z]+)"/g)].map((m) => m[1]);
-    assert.deepEqual(boxes, ["on", "qc", "bc", "ab", "mb", "ns", "nl", "pe", "other"], lang);
+    assert.deepEqual(boxes, ["on", "qc", "bc", "ab", "mb", "ns", "nl", "pe", "nt", "other"], lang);
     for (const b of boxes.filter((x) => x !== "other"))
       assert.deepEqual(C.consumerProvinces({ ["cons_" + b]: "on" }, "NB").list, [b.toUpperCase()], `${lang} : ${b}`);
   }

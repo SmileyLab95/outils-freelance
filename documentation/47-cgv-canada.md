@@ -19,9 +19,9 @@ au Québec) et la page le dit.
 donne le droit applicable entre entreprises) ; clients entreprises partout au Canada ; particuliers servis **à distance**
 (Internet, email, téléphone) ou **dans l'établissement du travailleur autonome** ; règles détaillées pour les
 particuliers de l'Ontario, du Québec, de la Colombie-Britannique, de l'Alberta et, depuis le 13/11/2026 (§ 6), du
-Manitoba, de la Nouvelle-Écosse, de Terre-Neuve-et-Labrador et de l'Île-du-Prince-Édouard ; mention générale pour les
-autres provinces et territoires (Saskatchewan et territoires : lois non lues à ce jour ; Nouveau-Brunswick : loi de 2024
-non proclamée).
+Manitoba, de la Nouvelle-Écosse, de Terre-Neuve-et-Labrador et de l'Île-du-Prince-Édouard, puis le 14/11/2026 des
+Territoires du Nord-Ouest ; mention générale pour les autres provinces et territoires (Saskatchewan, Yukon et Nunavut :
+lois non lues à ce jour ; Nouveau-Brunswick : loi de 2024 non proclamée).
 **Hors champ** (signalé sur la page) : vente de biens ; **contrats conclus en personne chez le particulier ou hors de
 l'établissement** (*direct agreements*, *direct sales contracts*, commerçant itinérant au Québec : permis et formulaires
 réglementaires propres à chaque province, non reproduits) ; abonnements reconduits automatiquement ; services
@@ -122,7 +122,7 @@ réalisation : « virement bancaire (y compris par Interac) » pour éviter « o
 paiement ; « tribunal des petites créances » (et non « division des petites créances », propre au Québec) ; la clause
 « version française remise d'abord » n'est que dans la version anglaise, pour les clients du Québec.
 
-## 6. Manitoba, Nouvelle-Écosse et Terre-Neuve-et-Labrador (13/11/2026)
+## 6. Autres provinces et territoires détaillés (13 et 14/11/2026)
 
 Lois lues le 13/11/2026 (annexe) ; elles suivent le même modèle que les quatre provinces déjà détaillées (contrats
 conclus en ligne ou à distance), si bien que le **texte commun reste valable** ; trois écarts relevés :
@@ -165,6 +165,28 @@ relues.
 - **Saskatchewan** (non ajoutée) : publications.saskatchewan.ca refuse toujours l'outil de lecture (certificat), non
   contourné.
 
+**14/11/2026 : Territoires du Nord-Ouest.**
+
+- **Territoires du Nord-Ouest** (ajoutés) : la *Consumer Protection Act*, LRTNO 1988, ch. C-17 (PDF bilingue de gnwt.ca)
+  n'a aucune règle sur les contrats en ligne ou à distance (aucune occurrence d'« internet », « remote » ni
+  « arbitrat ») : le texte commun s'applique aux particuliers des Territoires. Différence avec l'Île-du-Prince-Édouard :
+  la partie VII (contrats de démarchage) vise le contrat conclu ailleurs qu'à l'établissement habituel du vendeur **à la
+  suite d'une démarche faite au domicile de l'acheteur, en personne ou par téléphone**, sans demande de sa part ou en
+  réponse à une demande suscitée par correspondance ou prospectus (art. 73) ; un contrat conclu à distance après un
+  appel non sollicité est donc visé. Exclusions de l'art. 74(2) : coût total de moins de 100 $, véhicules, eau et
+  combustibles, bois d'œuvre, ventes caritatives, marchand ayant un magasin de détail reconnu (un bureau, un studio ou
+  une habitation n'en sont pas, art. 74(1)). Obligations : contrat écrit signé par les parties avec la déclaration
+  réglementaire du droit d'annulation et les renseignements réglementaires (art. 75 ; règlement non lu), annulation sans
+  motif jusqu'à 10 jours après la réception de la copie (art. 76), un an sans licence obligatoire ou avec un contrat non
+  conforme (art. 77(2)), licence de pollicitant (art. 84). Outil : case « Territoires du Nord-Ouest », mention propre
+  « démarchage aux TNO » (contrôle `nt_direct_sales`, à savoir) dès que ces particuliers sont visés, avec le montant et le
+  délai tirés de la règle `ca_nt_direct_sales` ; Territoires ajoutés à la liste des 10 jours du message « hors champ »
+  et à la section « Ce que ce générateur ne couvre pas ». Tests : 16 tests unitaires, dont un nouveau (la mention des TNO, ses
+  chiffres lus dans la règle et son absence sans règle) ; 10 erreurs réintroduites dans le moteur, toutes détectées ;
+  parcours navigateur des deux pages (mention, lien vers la case, retrait), captures relues.
+- **Yukon et Nunavut** (non ajoutés) : yukon.ca, laws.yukon.ca, gov.nu.ca et nunavutlegislation.ca refusent toujours
+  l'outil de lecture (403), non contourné.
+
 ## Annexe : sources lues (30/10/2026, outil « Lire une source officielle »)
 
 | Source | Lecture | Contenu relevé |
@@ -190,4 +212,5 @@ relues.
 | Terre-Neuve-et-Labrador, *Consumer Protection and Business Practices Act*, SNL 2009, c. C-31.1 (assembly.nl.ca), lue le 13/11/2026 | Partie V, divisions 2 et 3 lues, SHA-256 7c402fa1…7f55 | Art. 28 : contrat à distance = non conclu en personne ; art. 29 : renseignements avant le contrat (ceux de l'art. 24, courriel, description détaillée, devise, livraison, politiques d'annulation et de remboursement), clairs et compréhensibles ; art. 30 : sous forme électronique, consultés, conservables et imprimables, possibilité de corriger, d'accepter ou de refuser ; art. 31 : exemplaire sous 15 jours, avec le nom du consommateur et la date (par courriel : reçu le 3e jour) ; **art. 32 : annulation dans les 10 jours** suivant la réception de l'exemplaire si les art. 30 ou 31 ne sont pas respectés, 30 jours sans exemplaire, avant la fourniture si elle a 30 jours de retard ; art. 33 : remboursement sous 15 jours ; division 3 (contrats de service à distance) abrogée en 2022 ; aucune occurrence d'« arbitrat » |
 | Île-du-Prince-Édouard, *Consumer Protection Act*, R.S.P.E.I. 1988, c. C-19 (consolidation au 30/03/2026), lue le 13/11/2026 | Recherche par mots, SHA-256 8242f95b…c0e | 28 articles (registraire, crédit, hypothèques) ; aucune occurrence de « internet », « distance », « remote », « electronic », « cancel » ni « arbitrat » |
 | Île-du-Prince-Édouard, *Direct Sellers Act*, R.S.P.E.I. 1988, c. D-11 (consolidation au 30/03/2026) et *Direct Sales Contract Regulations* (consolidation au 01/02/2004, SHA-256 7543e167…696e), lus le 13/11/2026 | Art. 1, 4, 5, 9 à 10.3 et règlement lus | Art. 1(c) : vente directe de porte en porte, par téléphone ou par la poste ; art. 5(1) : licence ; **art. 5(3) : ne s'applique pas au contrat conclu sans aucun contact en personne, de 100 $ ou moins, ou dans l'établissement du vendeur** ; art. 9 et 10 : contrat écrit signé, copie ; art. 10.1 : annulation dans les 10 jours, un an dans certains cas ; art. 10.3 : remboursement sous 15 jours ; règlement : mentions et encadré « BUYER'S RIGHT TO CANCEL » |
+| Territoires du Nord-Ouest, *Consumer Protection Act*, LRTNO 1988, ch. C-17 (PDF bilingue, gnwt.ca, page publiée le 2 avril 2025), lue les 13 et 14/11/2026 | Recherche par mots et partie VII (art. 73 à 78, 84) lues, SHA-256 1ba305bc…6f40 | Aucune occurrence d'« internet », « remote » ni « arbitrat » ; **art. 73 : contrat conclu ailleurs qu'à l'établissement habituel du vendeur à la suite d'une démarche faite, en personne ou par téléphone, au domicile de l'acheteur sans sa demande** (ou après une demande suscitée par correspondance ou prospectus) ; art. 74(2) : exclus sous 100 $ et pour le marchand ayant un magasin de détail reconnu ; art. 75 : contrat écrit et signé, déclaration réglementaire du droit d'annulation ; art. 76 : annulation sans motif jusqu'à 10 jours après la réception de la copie ; art. 77(2) : un an sans licence ou si le contrat n'est pas conforme ; art. 84 : licence de pollicitant et de démarcheur ; art. 107 : renonciation aux avantages de la loi sans effet |
 | Nouveau-Brunswick, *Consumer Protection Act*, 2024, c. 1 (laws.gnb.ca, à jour au 7 juin 2024), lue le 13/11/2026 | Passages lus | Division B (art. 28 à 37), contrats à distance et par Internet, applicable aux contrats conclus après l'entrée en vigueur ; entrée en vigueur par proclamation, non proclamée d'après le rapport annuel 2024-2025 de la Commission |

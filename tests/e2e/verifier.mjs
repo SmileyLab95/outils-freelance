@@ -2987,11 +2987,23 @@ const tests = {
       !(await notices()).includes("are not detailed here"), "T&Cs CA : consommateurs de Terre-Neuve-et-Labrador, 10 jours");
     await page.uncheck("#cg-cons-nl");
     await page.check("#cg-cons-other");
-    check((await notices()).includes("other than Ontario, Quebec, British Columbia, Alberta, Manitoba, Nova Scotia, Newfoundland and Labrador and Prince Edward Island"),
+    check((await notices()).includes("other than Ontario, Quebec, British Columbia, Alberta, Manitoba, Nova Scotia, Newfoundland and Labrador, Prince Edward Island and the Northwest Territories"),
       "T&Cs CA : autres provinces signalées");
+    check(!(await notices()).includes("direct sales contract from"), "T&Cs CA : pas de mention des Territoires du Nord-Ouest sans leurs clients");
     await page.uncheck("#cg-cons-other");
+    // Territoires du Nord-Ouest : démarchage au domicile (partie VII), même conclu à distance.
+    await page.check("#cg-cons-nt");
+    n = await notices();
+    check(n.includes("Northwest Territories: if you approach consumers at their home, in person or by telephone") && n.includes("direct sales contract from $100") &&
+      n.includes("until 10 days after receiving a copy") && !n.includes("are not detailed here"), "T&Cs CA : démarchage aux Territoires du Nord-Ouest signalé");
+    await page.click('#cg-notices a[data-focus="cg-cons-nt"]');
+    check(await page.evaluate(() => document.activeElement && document.activeElement.id === "cg-cons-nt"), "T&Cs CA : la mention des TNO mène à leur case");
+    await page.screenshot({ path: path.join(shots, "cgv-ca-nt.png"), fullPage: true });
+    await page.uncheck("#cg-cons-nt");
+    check(!(await notices()).includes("direct sales contract from"), "T&Cs CA : mention des TNO retirée");
     await page.check("#cg-at-home");
-    check((await notices()).includes("itinerant merchant permit"), "T&Cs CA : contrat chez le particulier hors champ");
+    check((await notices()).includes("itinerant merchant permit") && (await notices()).includes("Prince Edward Island, the Northwest Territories)"),
+      "T&Cs CA : contrat chez le particulier hors champ");
     await page.uncheck("#cg-at-home");
     await page.check("#cg-cons-qc");
     await page.fill("#cg-deposit", "30");
@@ -3047,6 +3059,12 @@ const tests = {
     text = await preview();
     check(text.includes("Renseignements pour les consommateurs") && text.includes("dans les 15 jours suivant votre acceptation") &&
       text.includes("pas plus de 10 % au-delà") && !text.includes("Clients entreprises"), "CG CA-FR : consommateurs seulement");
+    await page.check("#cg-cons-nt");
+    let nt = await notices();
+    check(nt.includes("Territoires du Nord-Ouest : si vous faites une démarche auprès de consommateurs à leur domicile") &&
+      nt.includes("contrat de démarchage à partir de 100 $") && nt.includes("jusqu'à 10 jours après la réception de sa copie"), "CG CA-FR : démarchage aux Territoires du Nord-Ouest signalé");
+    await page.uncheck("#cg-cons-nt");
+    check(!(await notices()).includes("contrat de démarchage"), "CG CA-FR : mention des TNO retirée");
     await page.screenshot({ path: path.join(shots, "cgv-ca-fr.png"), fullPage: true });
     await accessible(page, "CG CA-FR (consommateurs, Québec)");
     check(await page.evaluate(() => (localStorage.getItem("of:ca-fr:cgv-ca") || "").includes("Sherbrooke") && !(localStorage.getItem("of:ca:cgv-ca") || "").includes("Sherbrooke")),

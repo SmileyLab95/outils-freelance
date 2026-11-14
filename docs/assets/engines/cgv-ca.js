@@ -34,7 +34,7 @@
     NU: { en: "Nunavut", fr: "le Nunavut", fr_of: "du Nunavut", fr_in: "au Nunavut" }
   };
   // Provinces dont les règles sur les particuliers ont été lues (les autres : mention générale).
-  var DETAILED = ["ON", "QC", "BC", "AB", "MB", "NS", "NL", "PE"];
+  var DETAILED = ["ON", "QC", "BC", "AB", "MB", "NS", "NL", "PE", "NT"];
 
   var WORDS = {
     en: {
@@ -76,7 +76,7 @@
   }
 
   /**
-   * Provinces des particuliers : celles cochées (cons_on, cons_qc, cons_bc, cons_ab, cons_mb, cons_ns, cons_nl, cons_pe), « autres » (cons_other) ;
+   * Provinces des particuliers : celles cochées (cons_on, cons_qc, cons_bc, cons_ab, cons_mb, cons_ns, cons_nl, cons_pe, cons_nt), « autres » (cons_other) ;
    * sans case cochée, la province du travailleur autonome.
    */
   function consumerProvinces(raw, province) {
@@ -149,6 +149,12 @@
     if (hasPart && on(raw.at_home)) check("at_home_out_of_scope", "at_home", "warn");
     if (hasPart) check("consumer_quote_items", "activity", "info", { amount: threshold ? fmt.money(threshold) : "", days: copyDays ? fmt.num(copyDays) : "" });
     if (cons.other) check("other_provinces", "cons_other", "info");
+    // Territoires du Nord-Ouest : la démarche faite au domicile, en personne ou par téléphone, sans demande du
+    // consommateur rend la partie VII (démarchage) applicable même au contrat conclu à distance (art. 73, 74(2)a)).
+    var nt = R("ca_nt_direct_sales");
+    if (cons.list.indexOf("NT") > -1 && nt) {
+      check("nt_direct_sales", "cons_nt", "info", { amount: fmt.money(nt.from_amount), days: fmt.num(nt.cancel_days) });
+    }
 
     // Québec : contrat d'adhésion d'abord en français (Charte de la langue française, art. 55).
     if (!fr && (province === "QC" || qcCons)) check("french_first", "province", "warn");
