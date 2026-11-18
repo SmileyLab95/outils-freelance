@@ -23,7 +23,8 @@ const BASE = `http://127.0.0.1:${port}/outils-freelance/`;
 
 // Paramètres régionaux en UTF-8, comme sur les appareils des visiteurs : sinon Chromium renomme « download » un fichier
 // téléchargé dont le nom a un accent (« Accord de confidentialité.doc »).
-const browser = await chromium.launch({ executablePath: "/opt/pw-browsers/chromium-1194/chrome-linux/chrome",
+// Chromium de Playwright par défaut ; CHROMIUM_PATH pour en imposer un autre.
+const browser = await chromium.launch({ ...(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {}),
   env: { ...process.env, LANG: "C.UTF-8", LC_ALL: "C.UTF-8" } });
 const context = await browser.newContext({ permissions: ["clipboard-read", "clipboard-write"] });
 // Les pages en français placent des espaces insécables (build.py et engines/typo-fr.js) : les vérifications comparent
@@ -406,7 +407,8 @@ const tests = {
     const t = async (sel) => (await page.textContent(sel)).replace(/[\u00a0\u202f]/g, " ").replace(/\s+/g, " ").trim();
     await page.fill("#jo-year", "2026");
     check((await t("#jo-billable")) === "253" && (await t("#jo-off")) === "8 days" && (await page.$$("#jo-list tbody tr")).length === 8 &&
-      (await page.$$eval("#jo-list tbody tr", (trs) => trs.map((tr) => [...tr.cells].map((c) => c.textContent).join(" | ")))).includes("Mon, 28 Dec | Boxing Day (substitute day) | Day off"), "UK working days: 253 in England and Wales in 2026, 8 bank holidays, Boxing Day substitute day");
+      // Format britannique de la date : « Mon, 28 Dec » ou « Mon 28 Dec » selon la version d'ICU du navigateur.
+      (await page.$$eval("#jo-list tbody tr", (trs) => trs.map((tr) => [...tr.cells].map((c) => c.textContent).join(" | ")))).some((r) => /^Mon,? 28 Dec \| Boxing Day \(substitute day\) \| Day off$/.test(r)), "UK working days: 253 in England and Wales in 2026, 8 bank holidays, Boxing Day substitute day");
     await page.selectOption("#jo-zone", "scotland");
     check((await t("#jo-billable")) === "251" && (await t("#jo-list tbody")).includes("World Cup bank holiday"), "Scotland 2026: 251 days, World Cup bank holiday");
     await page.fill("#jo-year", "2029");

@@ -1,5 +1,9 @@
 # 32. Système de design et refonte (« très clair, très simple, très moderne »)
 
+> **Thème en vigueur depuis le 18/11/2026 : « Bento »** (décision d'Ismail, D83) : jetons, contrastes et polices dans
+> [54](54-themes.md) § 3. Les sections 2 et 3 ci-dessous décrivent le thème précédent, « le cachet » (23/10/2026) ;
+> la navigation, la recherche, l'accueil et les icônes (sections 4 à 7) restent valables.
+
 Demande d'Ismail du 23/10/2026 ([31](31-vision-plateforme.md)). Spécification avant le code : critique du site
 actuel, direction, jetons, composants, navigation, recherche, accueil, et ce qui ne change pas.
 

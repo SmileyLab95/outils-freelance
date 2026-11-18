@@ -35,7 +35,14 @@
     "freelance-law": "shield",
     "estimated-tax": "calendar-check",
     "mtd": "laptop",
-    "domain": "at-sign"
+    "domain": "at-sign",
+    "cgv": "scroll-text",
+    "currency": "banknote",
+    "sick-pay": "stethoscope",
+    "signature": "signature",
+    "subcontract": "file-user",
+    "unemployment": "life-buoy",
+    "workdays": "calendar-range"
   },
   "stages": {
     "start": "rocket",

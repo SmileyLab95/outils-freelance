@@ -1,5 +1,31 @@
 # Journal des modifications
 
+## 2026-11-18 (soir) — Nouveau thème « Bento », choisi par Ismail
+
+- Tout le site passe au thème « Bento » (proposition B du 11/11/2026, [54](documentation/54-themes.md) § 3) : fond gris
+  bleuté, cartes blanches très arrondies sans bordure, accent bleu cobalt, boutons en pilule, recherche de l'accueil en
+  pilule, en-têtes de section et indicateurs en Manrope très gras, texte en Inter.
+- Polices servies par le site (WOFF2, licence OFL, sources google/fonts) : Manrope (26 Ko), Inter droit (65 Ko) et
+  italique (70 Ko) ; `scripts/polices_site.py` adapté ; Bricolage Grotesque et Atkinson Hyperlegible Next retirées.
+- Espace : menu en icônes Lucide (fin des emoji), onglet actif en bleu avec un trait, en-tête compact ; indicateurs
+  par quatre à 1,6 rem pour qu'un montant à six chiffres tienne sur une ligne.
+- Plus aucun emoji en guise d'icône : sept outils (jours ouvrés, devises, conditions générales, arrêt maladie,
+  signature, sous-traitance, ATI) ont désormais une icône Lucide, dans les cinq sections.
+- Logo, icône d'onglet, couleur du navigateur mobile et images de partage (Open Graph, six sections) aux couleurs du
+  thème ; ancien modèle d'image de partage inutilisé (`src/og.html`) retiré.
+- Accessibilité gardée au niveau AA, avec trois écarts volontaires par rapport à la maquette : bordure des champs à
+  3,67:1 (la maquette descendait à 1,8:1), en-tête translucide à 88 % et logo en cobalt foncé (5,28:1 dans le pire cas,
+  vérifié par le test de l'en-tête), libellés des indicateurs en minuscules (plus lisibles quand ils sont longs).
+- Petits téléphones : l'en-tête débordait de 2 px à 390 px (et de 30 px à 360 px avec l'ancien thème) ; sous 420 px le
+  bouton du menu ne montre que son icône (son nom reste lu par les lecteurs d'écran), sous 360 px le logo ne montre
+  que son dessin.
+- Tests : les parcours navigateur lancent le Chromium fourni avec Playwright (variable `CHROMIUM_PATH` pour en imposer
+  un autre) ; le test des jours ouvrés britanniques accepte « Mon 28 Dec » comme « Mon, 28 Dec » (format de date qui
+  dépend de la version d'ICU du navigateur).
+- Vérifications : 729 tests unitaires, 29 du serveur, parcours de l'Espace (359 points), du site (4 427 points) et
+  des comptes (51 points), axe-core compris ; captures relues sur ordinateur, tablette et téléphone (320 à 1440 px),
+  Espace rempli de données d'exemple.
+
 ## 2026-11-14 (fin d'après-midi) — Espace : condition des cinq ans d'activité (151 septies)
 
 - Réglages : « Début d'activité » proposé à tous les profils, y compris au régime réel (« début de l'activité

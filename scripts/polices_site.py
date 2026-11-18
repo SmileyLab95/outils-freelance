@@ -1,16 +1,17 @@
-"""Prépare les polices du site (documentation/32-design.md), au format WOFF2, servies par le site lui-même.
+"""Prépare les polices du site (thème « Bento », documentation/54-themes.md § 3.3), au format WOFF2, servies par le site.
 
 Sources (licence SIL Open Font License 1.1, dépôt google/fonts) :
-- Bricolage Grotesque (titres) : ofl/bricolagegrotesque/BricolageGrotesque[opsz,wdth,wght].ttf ; largeur fixée à 100,
-  graisse limitée à 500-800, taille optique gardée (12 à 96).
-- Atkinson Hyperlegible Next (texte), Braille Institute : ofl/atkinsonhyperlegiblenext/AtkinsonHyperlegibleNext[wght].ttf
-  et sa version italique ; graisse limitée à 300-800.
+- Manrope (titres, chiffres clés), The Manrope Project Authors : ofl/manrope/Manrope[wght].ttf ; graisse limitée à
+  500-800.
+- Inter (texte), The Inter Project Authors : ofl/inter/Inter[opsz,wght].ttf et sa version italique
+  Inter-Italic[opsz,wght].ttf ; graisse limitée à 300-900, taille optique gardée (14 à 32).
 Le script garde les caractères du français et de l'anglais (latin de base, latin-1, latin étendu A, ponctuation,
-flèches, €), ajoute l'espace fine insécable (U+202F) aux polices qui ne l'ont pas, en reprenant le dessin de l'espace
-fine (U+2009), puis écrit src/assets/fonts/*.woff2. Les licences sont copiées à côté (OFL-*.txt).
+flèches, €), ajoute l'espace fine insécable (U+202F) aux polices qui ne l'ont pas mais ont l'espace fine (U+2009), puis
+écrit src/assets/fonts/*.woff2. Les caractères absents de Manrope (espaces fines, « ↔ », lettres rares) sont pris dans
+Inter, police suivante de la pile. Les licences sont copiées à côté (OFL-*.txt).
 
 Prérequis : pip install fonttools brotli
-Usage : python3 scripts/polices_site.py <BricolageGrotesque.ttf> <AtkinsonHyperlegibleNext.ttf> <AtkinsonHyperlegibleNext-Italic.ttf>
+Usage : python3 scripts/polices_site.py <Manrope[wght].ttf> <Inter[opsz,wght].ttf> <Inter-Italic[opsz,wght].ttf>
 """
 import sys
 from pathlib import Path
@@ -52,7 +53,7 @@ def build(src, name, limits):
 
 
 if __name__ == "__main__":
-    bricolage, atkinson, atkinson_italic = sys.argv[1:4]
-    build(bricolage, "bricolage-grotesque", {"wdth": 100, "wght": (500, 800)})
-    build(atkinson, "atkinson-hyperlegible-next", {"wght": (300, 800)})
-    build(atkinson_italic, "atkinson-hyperlegible-next-italic", {"wght": (300, 800)})
+    manrope, inter, inter_italic = sys.argv[1:4]
+    build(manrope, "manrope", {"wght": (500, 800)})
+    build(inter, "inter", {"wght": (300, 900)})
+    build(inter_italic, "inter-italic", {"wght": (300, 900)})

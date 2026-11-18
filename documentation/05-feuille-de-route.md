@@ -9,7 +9,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 
 ## Où en est-on ?
 
-*Mis à jour le 14/11/2026 (fin d'après-midi).*
+*Mis à jour le 18/11/2026 (soir).*
 
 - **Priorité (décision D10)** : le site et la plateforme d'abord ; noms de domaine, Gumroad et affiliation à la fin.
   Règle de qualité maximale pour tout produit ou service (D11, charte dans la [méthode](04-methode-de-travail.md#charte-qualité)).
@@ -471,6 +471,16 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   JavaScript) et part de 50 % lue dans la loi (C.R.S. 8-13.3-507(4)(a)) : revenu brut et effet au dépôt de l'avis
   confirmés ; page complétée (documents fiscaux chaque année avant le 1er décembre, amende jusqu'à 500 $ ; retrait à
   tout moment, effet au plus tôt à la fin des 3 ans et 30 jours après l'avis) ([52](52-protection-sociale-etats-unis.md)).
+- **Thème « Bento » appliqué (18/11/2026, soir)** : choisi par Ismail (« bento », D83, [54](54-themes.md) § 3) ; fond
+  gris bleuté, cartes blanches sans bordure, accent cobalt, polices Manrope et Inter servies par le site, boutons en
+  pilule, menu de l'Espace en icônes Lucide et en-tête compact, plus aucun emoji d'outil (sept icônes ajoutées), logo,
+  icône d'onglet et images de partage refaits. Écarts volontaires pour l'accessibilité (bordure des champs, en-tête,
+  libellés des indicateurs). Défaut trouvé à la relecture et corrigé : l'en-tête débordait sur les petits téléphones
+  (30 px à 360 px, déjà avant). Tests : 729 unitaires, 29 du serveur, Espace (359 points), site complet (4 427 points ;
+  le test des jours ouvrés britanniques accepte désormais « Mon 28 Dec » comme « Mon, 28 Dec », selon la version du
+  navigateur) et comptes (51 points), axe-core compris ; captures relues sur ordinateur (1440 et 1110 px), tablette
+  (820 px) et téléphone (390, 360 et 320 px), Espace rempli de données d'exemple. Pas de mode sombre : question posée à
+  Ismail.
 - **Espace : condition des cinq ans (14/11/2026, fin d'après-midi)** : « Début d'activité » proposé au régime réel ;
   le bloc d'exonération dit si l'activité a cinq ans au 31 décembre de l'année de la cession, sinon ne fait pas
   d'estimation ([57](57-immobilisations.md) § 11, D82).
@@ -529,8 +539,8 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   des voitures particulières, plus-values de cession et exonération de l'article 151 septies faits le 14/11) : estimation
   151 septies pour un BIC (produits acquis) et pour l'activité mixte (condition des cinq ans faite le 14/11), barèmes des voitures acquises avant 2021, combinaison part privée et plafond, plus-value d'un bien
   partiel autre qu'un véhicule, dès que leurs règles sont lues ; indicateurs de l'Espace : les huit onglets, la date de clôture des pistes et la période de
-  l'onglet Documents et de l'onglet Dépenses sont faits (12/11, [55](55-indicateurs-espace.md)) ; **appliquer le thème**
-  choisi par Ismail dès sa réponse ([54](54-themes.md) § 2) ; refonte, suite ([31](31-vision-plateforme.md) § 5) : les quatre modules du compte
+  l'onglet Documents et de l'onglet Dépenses sont faits (12/11, [55](55-indicateurs-espace.md)) ; thème « Bento » appliqué le
+  18/11 ([54](54-themes.md) § 3 ; mode sombre seulement si Ismail le demande) ; refonte, suite ([31](31-vision-plateforme.md) § 5) : les quatre modules du compte
   gratuit sont faits (étape 5) ; étape 6, outils restants (CGV : faites dans les quatre pays ;
   Manitoba, Nouvelle-Écosse, Terre-Neuve-et-Labrador et Île-du-Prince-Édouard détaillés le 13/11, Territoires du
   Nord-Ouest le 14/11 ; Saskatchewan (certificat refusé), Nouveau-Brunswick (dès la proclamation de la loi de 2024),
@@ -661,8 +671,8 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   vélo de 20p ne vaut que pour les salariés. Restent à lire : dates des prochaines réunions de la Banque d'Angleterre,
   page du *Commercial Payments Bill*, preuves de l'activité d'un client étranger (VATPOSS06500).
 - **Accès réseau (07/11/2026)** : environnement cloud « Outils Freelance (sources officielles) » créé et approuvé par Ismail (GOV.UK, legislation.gov.uk, canada.ca, Légifrance, economie.gouv.fr, ameli.fr, urssaf.fr, autoentrepreneur.urssaf.fr). GOV.UK et legislation.gov.uk se lisent désormais directement. Les autres sites refusent eux-mêmes la lecture automatisée (réponse 403 pour Légifrance, ameli et economie.gouv.fr ; connexion coupée pour canada.ca et l'Urssaf), comme depuis l'outil de lecture des sources : aucun contournement de ces protections.
-- **En attente d'Ismail** : **choisir le thème du site** (A, B, C ou un mélange ; page de comparaison envoyée le
-  11/11/2026, [54](54-themes.md)). Pas urgent : supprimer sur GitHub la branche d'essai `verif-tmp` (un seul commit de test, sans effet sur le site : le proxy de la session refuse la suppression de branches) ; pour les textes encore illisibles, deux voies au choix : (1) créer un compte sur PISTE (portail officiel des API de l'État, piste.gouv.fr) et y souscrire à l'API Légifrance, puis me donner l'identifiant par le formulaire sécurisé de la session (je ne le demande qu'à ce moment-là) ; (2) enregistrer en PDF, depuis son navigateur, les pages voulues et les déposer dans le dépôt (dossier `sources/`) : loi n° 75-1334 du 31 décembre 1975 (sous-traitance), articles R123-237 et L131-3 à L131-6, pages de l'Assurance maladie et de l'Urssaf sur l'arrêt maladie du micro-entrepreneur, jours fériés et pratiques de l'ARC sur canada.ca ; questions à poser à l'expert-comptable ou à l'avocat : l'indemnité forfaitaire
+- **En attente d'Ismail** : thème « Bento » en ligne depuis le 18/11 ; **voulez-vous aussi un mode sombre** automatique
+  (réglage de l'appareil), sur le modèle de « Minuit » ([54](54-themes.md) § 1) ? Sans réponse, le site reste en clair. Pas urgent : supprimer sur GitHub la branche d'essai `verif-tmp` (un seul commit de test, sans effet sur le site : le proxy de la session refuse la suppression de branches) ; pour les textes encore illisibles, deux voies au choix : (1) créer un compte sur PISTE (portail officiel des API de l'État, piste.gouv.fr) et y souscrire à l'API Légifrance, puis me donner l'identifiant par le formulaire sécurisé de la session (je ne le demande qu'à ce moment-là) ; (2) enregistrer en PDF, depuis son navigateur, les pages voulues et les déposer dans le dépôt (dossier `sources/`) : loi n° 75-1334 du 31 décembre 1975 (sous-traitance), articles R123-237 et L131-3 à L131-6, pages de l'Assurance maladie et de l'Urssaf sur l'arrêt maladie du micro-entrepreneur, jours fériés et pratiques de l'ARC sur canada.ca ; questions à poser à l'expert-comptable ou à l'avocat : l'indemnité forfaitaire
   de 40 € s'applique-t-elle aux factures des professions libérales et des prestataires non commerçants (la fiche
   officielle F23211 la réserve aux « actes de commerce ») ? Pour un retard sur plusieurs semestres, faut-il appliquer à
   chaque semestre son taux (choix du calculateur, lecture littérale de l'article L441-10) ou garder le taux du semestre

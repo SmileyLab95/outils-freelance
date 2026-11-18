@@ -37,8 +37,8 @@ BASE = SITE["base"]                       # ex. /outils-freelance/
 META_RE = re.compile(r"\A\s*<!--(.*?)-->\s*", re.S)
 LINK_RE = re.compile(r"\{\{link:(?:([a-z-]+)/)?([a-z0-9-]+)\}\}")   # {{link:id}} ou {{link:section/id}}
 LOGO_SVG = (
-    '<svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#15171a"/>'
-    '<path d="M10 9h12v3.2h-8.4v3.3h7.4v3.2h-7.4V23H10z" fill="#fff"/><circle cx="23.5" cy="22.5" r="3" fill="#e8590c"/></svg>'
+    '<svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="10" fill="#2a55f5"/>'
+    '<path d="M10 9h12v3.2h-8.4v3.3h7.4v3.2h-7.4V23H10z" fill="#fff"/><circle cx="23.5" cy="22.5" r="3" fill="#f5a524"/></svg>'
 )
 # Icônes (documentation/32-design.md) : jeu Lucide (licence ISC, src/icons/LICENSE-lucide.txt), une icône par page
 # (data/icons.json) ; chaque page contient un « sprite » avec les seules icônes qu'elle utilise.
@@ -632,7 +632,7 @@ def render(layout, sections, section, page_id, rules, kit_cta):
         "header_cta": header_cta(section),
         "search_dialog": search_dialog(section),
         "menu_toggle": (f'<button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">'
-                        f'<span class="bars" aria-hidden="true"></span>{esc(strings["menu"])}</button>') if site.get("nav") else "",
+                        f'<span class="bars" aria-hidden="true"></span><span class="menu-label">{esc(strings["menu"])}</span></button>') if site.get("nav") else "",
         "footer": footer_html(sections, section),
         "disclaimer": esc(strings["disclaimer"]),
         "year": str(date.today().year),

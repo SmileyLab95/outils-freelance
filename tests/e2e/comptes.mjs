@@ -83,7 +83,8 @@ async function shot(page, name) {
 const espace = (page) => page.evaluate(() => window.EspaceStore.load());
 const putEspace = (page, fn) => page.evaluate((src) => window.EspaceStore.load().then((d) => { new Function("d", src)(d); return window.EspaceStore.save(d); }), fn);
 
-const browser = await chromium.launch({ executablePath: "/opt/pw-browsers/chromium-1194/chrome-linux/chrome" });
+// Chromium de Playwright par défaut ; CHROMIUM_PATH pour en imposer un autre.
+const browser = await chromium.launch(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {});
 try {
   // ----- Pages Offres et Soutenir (brouillons, documentation/35-offres-et-soutien.md) ---------------------------
   for (const [slug, title] of [["offres", "Gratuit pour l'essentiel"], ["soutenir", "Soutenir Outils Freelance"]]) {

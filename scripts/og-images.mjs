@@ -1,6 +1,7 @@
 // Génère les images de partage (1200 × 630) de chaque section : src/assets/img/og-<section>.png.
-// Usage : node scripts/og-images.mjs   (Playwright et la police Inter installés)
+// Usage : node scripts/og-images.mjs   (Playwright installé ; polices du site dans src/assets/fonts)
 import { createRequire } from "module";
+import { readFileSync } from "fs";
 import path from "path";
 
 const require = createRequire(import.meta.url);
@@ -28,26 +29,38 @@ const IMAGES = {
         chips: ["100 % gratuit", "Sans inscription", "Données sur votre appareil"] },
 };
 
-const html = (o) => `<!doctype html><html><head><meta charset="utf-8"><style>
+// Thème « Bento » (documentation/54-themes.md, § 3) : fond gris bleuté, carte blanche arrondie, accent cobalt, polices
+// du site (Manrope pour le titre, Inter pour le texte) incorporées pour que le rendu ne dépende pas de la machine.
+const font = (name) => readFileSync(path.join(root, "src", "assets", "fonts", name)).toString("base64");
+const FONTS = `
+  @font-face { font-family: "Manrope"; src: url(data:font/woff2;base64,${font("manrope.woff2")}) format("woff2"); font-weight: 500 800; }
+  @font-face { font-family: "Inter"; src: url(data:font/woff2;base64,${font("inter.woff2")}) format("woff2"); font-weight: 300 900; }`;
+const LOGO = '<svg width="52" height="52" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="10" fill="#2a55f5"/>' +
+  '<path d="M10 9h12v3.2h-8.4v3.3h7.4v3.2h-7.4V23H10z" fill="#fff"/><circle cx="23.5" cy="22.5" r="3" fill="#f5a524"/></svg>';
+
+const html = (o) => `<!doctype html><html><head><meta charset="utf-8"><style>${FONTS}
   * { box-sizing: border-box; margin: 0; }
-  body { width: 1200px; height: 630px; font-family: Inter, sans-serif; color: #fff; overflow: hidden;
-    background: radial-gradient(circle at 88% 4%, #6d5cf6 0, rgba(109,92,246,.55) 18%, rgba(20,18,43,0) 46%),
-                radial-gradient(circle at 0% 100%, rgba(147,51,234,.55) 0, rgba(20,18,43,0) 30%), #14122b; padding: 78px 80px; }
-  .brand { display: flex; align-items: center; gap: 14px; font-size: 27px; font-weight: 600; }
-  .logo { width: 48px; height: 48px; border-radius: 12px; background: linear-gradient(135deg, #4f46e5, #7c3aed);
-    display: grid; place-items: center; font-weight: 900; font-size: 28px; }
-  .brand b { color: #a5b4fc; font-weight: 700; }
-  h1 { font-size: 76px; line-height: 1.02; letter-spacing: -0.04em; font-weight: 900; margin: 64px 0 26px; max-width: 900px; }
-  p { font-size: 26px; line-height: 1.4; color: #d4d2f5; max-width: 900px; }
-  .chips { display: flex; gap: 12px; margin-top: 26px; }
-  .chips span { border: 1px solid rgba(255,255,255,.22); background: rgba(255,255,255,.08); border-radius: 999px; padding: 10px 18px; font-size: 20px; font-weight: 600; }
-</style></head><body>
-  <div class="brand"><div class="logo">F</div><span>${o.brand[0]} <b>${o.brand[1]}</b></span></div>
+  body { width: 1200px; height: 630px; overflow: hidden; background: #eef1f6; padding: 40px; font-family: Inter, sans-serif; color: #0b1324; }
+  .card { position: relative; height: 100%; background: #fff; border-radius: 40px; padding: 56px 64px;
+    box-shadow: 0 1px 2px rgba(11,19,36,.04), 0 24px 60px rgba(11,19,36,.08); overflow: hidden; }
+  .card::after { content: ""; position: absolute; right: -90px; top: -90px; width: 320px; height: 320px; border-radius: 80px;
+    background: #e9eeff; transform: rotate(18deg); }
+  .brand { position: relative; z-index: 1; display: flex; align-items: center; gap: 16px; font-family: Manrope, Inter, sans-serif;
+    font-size: 28px; font-weight: 600; letter-spacing: -0.015em; }
+  .brand b { color: #1c3fd1; font-weight: 800; }
+  h1 { position: relative; z-index: 1; font-family: Manrope, Inter, sans-serif; font-size: 70px; line-height: 1.04; letter-spacing: -0.05em;
+    font-weight: 800; margin: 52px 0 22px; max-width: 920px; }
+  p { font-size: 26px; line-height: 1.4; color: #475467; max-width: 900px; }
+  .chips { position: absolute; left: 64px; bottom: 52px; display: flex; gap: 12px; }
+  .chips span { border-radius: 999px; padding: 11px 20px; font-size: 20px; font-weight: 650; background: #e9eeff; color: #1a3bc2; }
+  .chips span:first-child { background: #2a55f5; color: #fff; }
+</style></head><body><div class="card">
+  <div class="brand">${LOGO}<span>${o.brand[0]} <b>${o.brand[1]}</b></span></div>
   <h1>${o.title}</h1><p>${o.sub}</p>
   <div class="chips">${o.chips.map((c) => `<span>${c}</span>`).join("")}</div>
-</body></html>`;
+</div></body></html>`;
 
-const browser = await chromium.launch({ executablePath: "/opt/pw-browsers/chromium-1194/chrome-linux/chrome" });
+const browser = await chromium.launch(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {});
 const page = await browser.newPage({ viewport: { width: 1200, height: 630 } });
 for (const [name, o] of Object.entries(IMAGES)) {
   await page.setContent(html(o), { waitUntil: "load" });
