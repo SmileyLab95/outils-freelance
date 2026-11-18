@@ -1,0 +1,122 @@
+{
+  "ca-contrat": [
+    1126,
+    1294
+  ],
+  "ca-facture": [
+    2240,
+    1388
+  ],
+  "ca-facture-mobile": [
+    1126,
+    1238
+  ],
+  "ca-fr-contrat": [
+    1126,
+    1294
+  ],
+  "ca-fr-facture": [
+    2240,
+    1388
+  ],
+  "ca-fr-facture-mobile": [
+    1126,
+    1238
+  ],
+  "ca-fr-impot": [
+    1098,
+    768
+  ],
+  "ca-fr-tarif": [
+    1098,
+    768
+  ],
+  "ca-fr-taxes": [
+    1098,
+    768
+  ],
+  "ca-impot": [
+    1098,
+    768
+  ],
+  "ca-tarif": [
+    1098,
+    768
+  ],
+  "ca-taxes": [
+    1098,
+    768
+  ],
+  "fr-calendrier": [
+    1098,
+    768
+  ],
+  "fr-espace": [
+    1756,
+    1088
+  ],
+  "fr-espace-mobile": [
+    700,
+    910
+  ],
+  "fr-facture": [
+    1126,
+    1294
+  ],
+  "fr-simulateur": [
+    1098,
+    768
+  ],
+  "fr-tresorerie": [
+    862,
+    604
+  ],
+  "uk-calendrier": [
+    1098,
+    768
+  ],
+  "uk-contrat": [
+    1126,
+    1294
+  ],
+  "uk-facture": [
+    2240,
+    1388
+  ],
+  "uk-facture-mobile": [
+    1126,
+    1238
+  ],
+  "uk-impot": [
+    1098,
+    768
+  ],
+  "uk-tarif": [
+    1098,
+    768
+  ],
+  "us-acomptes": [
+    1098,
+    768
+  ],
+  "us-contrat": [
+    1126,
+    1294
+  ],
+  "us-facture": [
+    2240,
+    1388
+  ],
+  "us-facture-mobile": [
+    1126,
+    1238
+  ],
+  "us-impot": [
+    1098,
+    768
+  ],
+  "us-tarif": [
+    1098,
+    768
+  ]
+}

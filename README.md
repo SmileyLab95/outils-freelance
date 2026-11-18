@@ -29,7 +29,7 @@ config/          site.json (adresse, base, redirections), locales.json (sections
 content/         une section par dossier : global/, fr/, us/, uk/, ca/, ca-fr/
 data/rules/      chiffres fiscaux officiels, sourcés et datés, un fichier par pays
 data/calendars/  échéances fiscales par pays (générées par scripts/calendriers.py)
-scripts/         calendriers.py (échéances), og-images.mjs (images de partage)
+scripts/         calendriers.py (échéances), og-images.mjs (images de partage), vitrine.mjs (captures des accueils)
 src/             layout.html, assets/ (style.css, app.js, engines/, tools/, img/)
 tests/           unit/ (moteurs), e2e/ (navigateur)
 docs/            site généré, publié par GitHub Pages (ne pas modifier à la main)

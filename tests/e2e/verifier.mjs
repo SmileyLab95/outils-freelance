@@ -56,6 +56,36 @@ async function accessible(page, label) {
   check(violations.length === 0, `${label} : accessibilité WCAG 2.1 AA (axe-core)${violations.length ? " → " + violations.join(" | ") : ""}`);
 }
 
+// Vitrine en images d'un accueil (documentation/58-images-du-site.md) : cinq tuiles, chacune avec un lien sur son titre
+// et une capture chargée, décrite (texte alternatif) et dimensionnée ; un clic sur l'image de la troisième tuile ouvre
+// son outil (lien étiré sur toute la tuile) ; sous 600 px, la grande tuile passe à sa variante téléphone.
+async function showcase(page, label, thirdTool, mobileImage) {
+  const tiles = await page.$$eval(".bento .tile", (ts) => ts.map((t) => {
+    const img = t.querySelector("img"), a = t.querySelector("h3 a");
+    return { href: a ? a.getAttribute("href") : "", alt: img ? img.alt : "",
+             sized: !!img && +img.getAttribute("width") > 0 && +img.getAttribute("height") > 0, lazy: !!img && img.loading === "lazy" };
+  }));
+  check(tiles.length === 5 && tiles.every((t) => t.href && t.alt.length > 60 && t.sized && t.lazy),
+    `${label} : vitrine de cinq tuiles (lien, texte alternatif, dimensions, chargement différé)`);
+  for (const img of await page.$$(".bento img")) await img.scrollIntoViewIfNeeded();
+  await page.waitForFunction(() => [...document.querySelectorAll(".bento img")].every((i) => i.complete), null, { timeout: 10000 });
+  check(await page.$$eval(".bento img", (is) => is.every((i) => i.naturalWidth > 0 && !/-mobile/.test(i.currentSrc))),
+    `${label} : les cinq captures chargées (version ordinateur)`);
+  // Clic de souris au centre de l'image : c'est le lien de la tuile (étiré sur toute la tuile) qui le reçoit.
+  const shot = await page.locator(".tile-3 .tile-shot").boundingBox();
+  await Promise.all([page.waitForURL((u) => u.pathname.endsWith(thirdTool), { timeout: 10000 }).catch(() => {}),
+    page.mouse.click(shot.x + shot.width / 2, shot.y + shot.height / 2)]);
+  check(new URL(page.url()).pathname.endsWith(thirdTool), `${label} : un clic sur l'image d'une tuile ouvre l'outil`);
+  await page.goBack({ waitUntil: "load" });
+  const size = page.viewportSize();
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.locator(".tile-1 img").scrollIntoViewIfNeeded();
+  const mobile = await page.waitForFunction((name) => document.querySelector(".tile-1 img").currentSrc.includes(`/${name}.webp`),
+    mobileImage, { timeout: 10000 }).then(() => true, () => false);
+  check(mobile, `${label} : grande tuile en version téléphone sous 600 px (${mobileImage})`);
+  await page.setViewportSize(size);
+}
+
 // La copie est asynchrone : on attend la confirmation sur le bouton.
 const copied = (page, sel) => page.waitForFunction((s) => /Copi(é|ed)/.test(document.querySelector(s).textContent), sel, { timeout: 3000 }).then(() => true, () => false);
 
@@ -208,6 +238,7 @@ const tests = {
     check(links.some((h) => h.includes("gumroad.com")), "accueil FR : lien vers le kit");
     check((await page.$$(".grid-stages .stage")).length === 5 && (await page.$$(".grid-stages .nav-item")).length >= 25, "accueil FR : les cinq étapes et leurs outils");
     check((await page.$$('.site-footer a[href$="#etape-start"]')).length === 1 && (await page.$("#etape-start")) !== null, "accueil FR : pied de page vers les étapes");
+    await showcase(page, "accueil FR", "/fr/simulateur-auto-entrepreneur/", "fr-espace-mobile");
     // Recherche (documentation/32-design.md, § 4) : touche « / », sans accents, clavier, Échap, Ctrl + K.
     await page.focus("body");
     await page.keyboard.press("/");
@@ -277,6 +308,7 @@ const tests = {
       "clavier : le menu se referme quand le focus le quitte");
   },
   async ""(page) {
+    await showcase(page, "accueil mondial", "/us/self-employment-tax-calculator/", "fr-espace-mobile");
     check((await page.$$("a.country-card")).length >= 1, "accueil mondial : cartes des pays");
     check((await page.getAttribute("html", "lang")) === "en", "accueil mondial : langue anglaise");
     check((await page.$$('link[rel="alternate"][hreflang]')).length >= 2, "accueil mondial : balises hreflang");
@@ -800,6 +832,7 @@ const tests = {
     check((await t("c-verdict")) === "–", "S corp US : situation par défaut rétablie");
   },
   async "us/"(page) {
+    await showcase(page, "accueil US", "/us/self-employment-tax-calculator/", "us-facture-mobile");
     const links = await page.$$eval("a[href]", (as) => as.map((a) => a.getAttribute("href")));
     for (const href of [...new Set(links.filter((h) => h.startsWith("/outils-freelance/")))]) {
       const res = await page.request.get(`http://127.0.0.1:${port}${href}`);
@@ -1090,6 +1123,7 @@ const tests = {
   async "us/legal-notice/"() {},
   async "us/privacy-policy/"() {},
   async "uk/"(page) {
+    await showcase(page, "accueil UK", "/uk/self-employed-tax-calculator/", "uk-facture-mobile");
     const links = await page.$$eval("a[href]", (as) => as.map((a) => a.getAttribute("href")));
     for (const href of [...new Set(links.filter((h) => h.startsWith("/outils-freelance/")))]) {
       const res = await page.request.get(`http://127.0.0.1:${port}${href}`);
@@ -1472,6 +1506,7 @@ const tests = {
   async "uk/legal-notice/"() {},
   async "uk/privacy-policy/"() {},
   async "ca/"(page) {
+    await showcase(page, "accueil CA", "/ca/self-employed-tax-calculator/", "ca-facture-mobile");
     const links = await page.$$eval("a[href]", (as) => as.map((a) => a.getAttribute("href")));
     for (const href of [...new Set(links.filter((h) => h.startsWith("/outils-freelance/")))]) {
       const res = await page.request.get(`http://127.0.0.1:${port}${href}`);
@@ -2362,6 +2397,7 @@ const tests = {
   async "ca/legal-notice/"() {},
   async "ca/privacy-policy/"() {},
   async "ca/fr/"(page) {
+    await showcase(page, "accueil CA-FR", "/ca/fr/calculateur-impot-travailleur-autonome/", "ca-fr-facture-mobile");
     const links = await page.$$eval("a[href]", (as) => as.map((a) => a.getAttribute("href")));
     for (const href of [...new Set(links.filter((h) => h.startsWith("/outils-freelance/")))]) {
       const res = await page.request.get(`http://127.0.0.1:${port}${href}`);

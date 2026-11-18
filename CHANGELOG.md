@@ -1,5 +1,23 @@
 # Journal des modifications
 
+## 2026-11-18 (nuit) — Accueils : les outils en images, dans tous les pays
+
+- Accueil France : nouvelle section « Les outils, en vrai » sous le haut de page, en grille « bento » : cinq tuiles
+  (Espace entrepreneur, Facture et devis, Simulateur Urssaf, Calendrier fiscal, Trésorerie) avec une capture du vrai
+  outil, prise avec des données d'exemple ; toute la tuile mène à l'outil. Jusqu'ici, l'accueil n'avait aucune image
+  sur téléphone.
+- Captures refaites en une commande (`node scripts/vitrine.mjs`), en WebP (22 à 88 Ko), dimensions déclarées,
+  chargement différé ; version téléphone de l'Espace servie sous 600 px.
+- Principes des images du site (documentation/58) : le vrai produit, pas de banque d'images ni d'image générée.
+- Accueils États-Unis, Royaume-Uni, Canada (anglais et français) : même vitrine avec leurs outils (facture, contrat,
+  impôt, acomptes ou taxes, taux horaire ou journalier, calendrier) dans leur langue ; accueil mondial : un outil par
+  pays. Sur téléphone, la grande tuile montre la facture seule.
+- Parité des pays (documentation/59, D85) : inventaire des fonctionnalités par pays ; l'Espace entrepreneur pour les
+  États-Unis, le Royaume-Uni et le Canada devient le prochain grand chantier.
+- Tests : vérification de la vitrine sur les six accueils (tuiles, liens, textes alternatifs, chargement, clic sur
+  l'image, variante téléphone), trois erreurs réintroduites toutes détectées ; parcours complet du site (4 432 points)
+  et des accueils (386 points), axe-core compris ; captures relues de 390 à 1440 px.
+
 ## 2026-11-18 (soir) — Nouveau thème « Bento », choisi par Ismail
 
 - Tout le site passe au thème « Bento » (proposition B du 11/11/2026, [54](documentation/54-themes.md) § 3) : fond gris

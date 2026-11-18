@@ -45,6 +45,10 @@ LOGO_SVG = (
 ICON_DIR = ROOT / "src" / "icons"
 ICONS = json.loads((ROOT / "data" / "icons.json").read_text(encoding="utf-8"))
 ICON_RE = re.compile(r"\{\{icon:([a-z0-9-]+)\}\}")
+# Images de la vitrine des accueils (documentation/58-images-du-site.md) : {{vitrine:nom|texte alternatif}} ;
+# dimensions écrites par scripts/vitrine.mjs.
+VITRINE_RE = re.compile(r"\{\{vitrine:([a-z0-9-]+)\|([^}]+)\}\}")
+VITRINE_DIR = ROOT / "src" / "assets" / "img" / "vitrine"
 SVG_INNER_RE = re.compile(r"<svg[^>]*>(.*)</svg>", re.S)
 USED_ICONS = set()
 GLOBAL = {
@@ -159,6 +163,23 @@ def icon(name, cls="i"):
         raise SystemExit(f"icône inconnue : {name} (src/icons/{name}.svg)")
     USED_ICONS.add(name)
     return f'<svg class="{cls}" aria-hidden="true" focusable="false"><use href="#i-{name}"></use></svg>'
+
+
+def vitrine_img(name, alt):
+    """Capture d'un outil (vitrine) : dimensions déclarées, chargement différé, texte alternatif obligatoire."""
+    sizes = json.loads((VITRINE_DIR / "dimensions.json").read_text(encoding="utf-8"))
+    if name not in sizes or not (VITRINE_DIR / f"{name}.webp").exists():
+        raise SystemExit(f"image de vitrine inconnue : {name} (lancer node scripts/vitrine.mjs)")
+    w, h = sizes[name]
+    img = (f'<img src="{asset_url(f"img/vitrine/{name}.webp")}" width="{w}" height="{h}" alt="{esc(alt.strip())}" '
+           f'loading="lazy" decoding="async">')
+    mobile = f"{name}-mobile"
+    if mobile not in sizes:
+        return img
+    # Variante pour téléphone (documentation/58, § 1) : même contenu, mise en page de l'outil sur petit écran.
+    mw, mh = sizes[mobile]
+    return (f'<picture><source media="(max-width: 600px)" srcset="{asset_url(f"img/vitrine/{mobile}.webp")}" '
+            f'width="{mw}" height="{mh}">{img}</picture>')
 
 
 def page_icon(page_id, meta, cls="i"):
@@ -580,6 +601,7 @@ def render(layout, sections, section, page_id, rules, kit_cta):
     USED_ICONS.clear()
 
     content = ICON_RE.sub(lambda m: icon(m.group(1)), content)
+    content = VITRINE_RE.sub(lambda m: vitrine_img(m.group(1), m.group(2)), content)
     content = (content.replace("{{breadcrumb}}", breadcrumb(section, page_id))
                .replace("{{tools_grid}}", tools_grid(section))
                .replace("{{featured}}", featured_html(section))

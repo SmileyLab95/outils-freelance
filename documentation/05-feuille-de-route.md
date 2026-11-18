@@ -9,7 +9,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 
 ## Où en est-on ?
 
-*Mis à jour le 18/11/2026 (soir).*
+*Mis à jour le 18/11/2026 (nuit).*
 
 - **Priorité (décision D10)** : le site et la plateforme d'abord ; noms de domaine, Gumroad et affiliation à la fin.
   Règle de qualité maximale pour tout produit ou service (D11, charte dans la [méthode](04-methode-de-travail.md#charte-qualité)).
@@ -471,6 +471,14 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   JavaScript) et part de 50 % lue dans la loi (C.R.S. 8-13.3-507(4)(a)) : revenu brut et effet au dépôt de l'avis
   confirmés ; page complétée (documents fiscaux chaque année avant le 1er décembre, amende jusqu'à 500 $ ; retrait à
   tout moment, effet au plus tôt à la fin des 3 ans et 30 jours après l'avis) ([52](52-protection-sociale-etats-unis.md)).
+- **Accueil en images (18/11/2026, nuit)** : demande d'Ismail (« il n'y a que du texte, pas d'image ») ; principes
+  des images du site (D84, [58](58-images-du-site.md)) : captures du vrai produit, données d'exemple annoncées, pas de
+  banque d'images ni d'image générée. Accueil France : section « Les outils, en vrai » en grille bento (Espace,
+  facture, simulateur, calendrier, trésorerie), captures faites par `scripts/vitrine.mjs`, version téléphone de
+  l'Espace ; parcours de l'accueil étendu (trois erreurs réintroduites, toutes détectées), captures relues de 390 à
+  1440 px. Puis la même vitrine sur les accueils États-Unis, Royaume-Uni, Canada (deux langues) et mondial (30 images
+  en tout). **Parité des pays** (D85, [59](59-parite-des-pays.md)) : à la question d'Ismail, l'Espace n'existe qu'en
+  France ; il devient le prochain grand chantier pour les États-Unis, puis le Royaume-Uni, puis le Canada.
 - **Thème « Bento » appliqué (18/11/2026, soir)** : choisi par Ismail (« bento », D83, [54](54-themes.md) § 3) ; fond
   gris bleuté, cartes blanches sans bordure, accent cobalt, polices Manrope et Inter servies par le site, boutons en
   pilule, menu de l'Espace en icônes Lucide et en-tête compact, plus aucun emoji d'outil (sept icônes ajoutées), logo,
@@ -540,7 +548,10 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   151 septies pour un BIC (produits acquis) et pour l'activité mixte (condition des cinq ans faite le 14/11), barèmes des voitures acquises avant 2021, combinaison part privée et plafond, plus-value d'un bien
   partiel autre qu'un véhicule, dès que leurs règles sont lues ; indicateurs de l'Espace : les huit onglets, la date de clôture des pistes et la période de
   l'onglet Documents et de l'onglet Dépenses sont faits (12/11, [55](55-indicateurs-espace.md)) ; thème « Bento » appliqué le
-  18/11 ([54](54-themes.md) § 3 ; mode sombre seulement si Ismail le demande) ; refonte, suite ([31](31-vision-plateforme.md) § 5) : les quatre modules du compte
+  18/11 ([54](54-themes.md) § 3 ; mode sombre seulement si Ismail le demande) ;
+  **Espace entrepreneur pour les États-Unis** ([59](59-parite-des-pays.md) § 2, D85 : spécification et règles lues
+  d'abord, puis Royaume-Uni et Canada) ; **images du site** ([58](58-images-du-site.md) § 3) : miniatures dans la liste
+  des étapes et schémas explicatifs (facture annotée, frise des relances, calendrier de la facturation électronique) ; refonte, suite ([31](31-vision-plateforme.md) § 5) : les quatre modules du compte
   gratuit sont faits (étape 5) ; étape 6, outils restants (CGV : faites dans les quatre pays ;
   Manitoba, Nouvelle-Écosse, Terre-Neuve-et-Labrador et Île-du-Prince-Édouard détaillés le 13/11, Territoires du
   Nord-Ouest le 14/11 ; Saskatchewan (certificat refusé), Nouveau-Brunswick (dès la proclamation de la loi de 2024),

@@ -594,6 +594,35 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--b
 .why .ico .i { width: 26px; height: 26px; color: var(--brand-2); }
 .sources h2 .i { width: 22px; height: 22px; color: var(--ok); vertical-align: -3px; margin-right: 6px; }
 
+/* ---------- Vitrine des accueils : les outils en images (documentation/58-images-du-site.md) ---------- */
+.showcase > h2 { margin-bottom: 6px; }
+.showcase-lead { color: var(--muted); max-width: 720px; margin: 0 0 20px; }
+/* Cinq emplacements : 1 grande tuile (deux colonnes), 2 haute (à côté), 3 à 5 petites (même proportion d'image). */
+.bento { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; grid-template-areas: "t1 t1 t2" "t3 t4 t5"; }
+.tile-1 { grid-area: t1; } .tile-2 { grid-area: t2; } .tile-3 { grid-area: t3; } .tile-4 { grid-area: t4; } .tile-5 { grid-area: t5; }
+.tile { position: relative; display: flex; flex-direction: column; gap: 16px; min-width: 0; background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 22px 22px 0; overflow: hidden; transition: transform .15s ease, box-shadow .15s ease; }
+.tile:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+.tile h3 { margin: 0 0 4px; font-size: 1.2rem; }
+.tile h3::after { content: " →"; color: var(--brand); }
+.tile h3 a { color: var(--ink); text-decoration: none; }
+/* Toute la tuile est cliquable ; le nom du lien reste son titre (l'image garde son propre texte alternatif). */
+.tile h3 a::after { content: ""; position: absolute; inset: 0; border-radius: inherit; }
+.tile h3 a:focus-visible { outline: none; }
+.tile h3 a:focus-visible::after { outline: 3px solid var(--brand); outline-offset: -3px; }   /* à l'intérieur : la tuile coupe ce qui dépasse */
+.tile-text p { margin: 0; color: var(--muted); font-size: .95rem; }
+.tile-shot { margin-top: auto; border: 1px solid var(--line); border-bottom: 0; border-radius: 14px 14px 0 0; overflow: hidden; background: var(--bg); }
+.tile-shot img { display: block; width: 100%; height: auto; }
+@media (max-width: 1000px) { .bento { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-areas: "t1 t1" "t2 t3" "t4 t5"; } }
+/* Deux tuiles par ligne : même proportion d'image, pour qu'elles s'alignent (la facture, plus haute, montre son haut). */
+@media (min-width: 601px) and (max-width: 1000px) {
+  .tile:not(.tile-1) .tile-shot { aspect-ratio: 10 / 7; }
+  .tile:not(.tile-1) .tile-shot img { height: 100%; object-fit: cover; object-position: top; }
+}
+@media (max-width: 600px) {
+  .bento { grid-template-columns: minmax(0, 1fr); grid-template-areas: "t1" "t2" "t3" "t4" "t5"; gap: 14px; }
+  .tile { padding: 18px 18px 0; }
+}
+
 /* ---------- Accueil de section : outils mis en avant et catégories ---------- */
 .grid-featured { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
 .grid-featured .tool-card.featured { grid-column: auto; }
