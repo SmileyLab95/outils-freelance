@@ -1,14 +1,15 @@
 /*
  * Générateur de facture et de devis (estimate / quote), indépendant du pays.
  * Libellés, conditions de paiement et mentions viennent de la page : <script type="application/json" id="invoice-profile">.
- * Aperçu en direct, mémorisation sur l'appareil, export PDF par l'impression du navigateur.
+ * Aperçu en direct, mémorisation sur l'appareil, export PDF par l'impression du navigateur. Totaux et aperçu :
+ * engines/invoice-intl.js (moteur partagé avec l'Espace).
  */
 (function () {
   "use strict";
-  var OF = window.OF;
+  var OF = window.OF, IV = window.OFE && window.OFE.invoiceIntl;
   var form = document.getElementById("invoice-form");
   var profileEl = document.getElementById("invoice-profile");
-  if (!form || !profileEl) return;
+  if (!form || !profileEl || !IV) return;
   var P = JSON.parse(profileEl.textContent);
   var L = P.labels;
   var $ = function (id) { return document.getElementById(id); };
@@ -28,12 +29,7 @@
     return String(text == null ? "" : text)
       .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
   }
-  function multiline(text) { return esc(text).replace(/\n/g, "<br>"); }
-  function orHint(value, hint) {
-    return value && value.trim() ? multiline(value.trim()) : '<span class="p-empty">' + esc(hint) + "</span>";
-  }
   function val(id) { return ($(id) && $(id).value || "").trim(); }
-  function date(iso) { return OF.date(iso, P.date_format); }
   function saveLines() { OF.save(K + "-lines", state.lines); }
 
   // ----- Lignes ----------------------------------------------------------------
@@ -115,121 +111,26 @@
     state.logo = ""; OF.save(K + "-logo", ""); $("iv-logo").value = ""; render();
   });
 
-  // ----- Calculs ---------------------------------------------------------------
-  function totals() {
-    var subtotal = 0;
-    var rows = state.lines.map(function (l) {
-      var qty = OF.num(l.qty), price = OF.num(l.price);
-      var total = isFinite(qty) && isFinite(price) ? qty * price : NaN;
-      if (isFinite(total)) subtotal += total;
-      return { desc: l.desc, qty: qty, price: price, total: total };
-    });
-    var discountPct = Math.min(100, Math.max(0, OF.num(val("iv-discount")) || 0));
-    var discount = Math.round(subtotal * discountPct) / 100;
-    // Taxes : soit une liste d'options du profil (plusieurs composantes, ex. TPS + TVQ), soit un taux saisi.
-    // Taux vide ou « none » : pas de ligne de taxe. Un taux de 0 % s'affiche si le profil le demande (TVA à taux zéro).
+  // ----- Document et aperçu (engines/invoice-intl.js, partagé avec l'Espace : documentation/60, § 3.1, lot 2d) ----
+  /** Document décrit par le formulaire : nombres lus (NaN si vides), textes sans espaces superflus. */
+  function currentDoc() {
     var rawRate = val("iv-tax-rate");
-    var components;
-    if (P.tax_options) {
-      var option = P.tax_options.filter(function (o) { return o.key === rawRate; })[0];
-      components = option ? option.components : [];
-    } else {
-      var single = Math.max(0, OF.num(rawRate) || 0);
-      var shown = rawRate !== "" && rawRate !== "none" && isFinite(OF.num(rawRate)) && (single > 0 || !!P.show_zero_tax);
-      components = shown ? [{ label: val("iv-tax-label") || L.tax, rate: single }] : [];
-    }
-    var taxes = components.map(function (c) {
-      return { label: c.label, rate: c.rate, amount: Math.round((subtotal - discount) * c.rate) / 100 };
-    });
-    var tax = taxes.reduce(function (sum, t) { return sum + t.amount; }, 0);
-    var total = subtotal - discount + tax;
-    var paid = state.type === "invoice" ? Math.max(0, OF.num(val("iv-paid")) || 0) : 0;
-    return { rows: rows, subtotal: subtotal, discountPct: discountPct, discount: discount, taxes: taxes, tax: tax, total: total, paid: paid };
+    return {
+      type: state.type, number: val("iv-number"), date: val("iv-date") || OF.today(), terms: val("iv-terms"), validity: val("iv-validity"),
+      po: val("iv-po"), paid: OF.num(val("iv-paid")), depositPct: OF.num(val("iv-deposit-pct")), discountPct: OF.num(val("iv-discount")),
+      tax: P.tax_options ? { option: rawRate } : { rate: OF.num(rawRate), label: val("iv-tax-label") },
+      me: { name: val("iv-me-name"), address: $("iv-me-address").value.trim(), email: val("iv-me-email"), phone: val("iv-me-phone"),
+            taxId: val("iv-me-taxid"), extra: val("iv-me-extra"), logo: state.logo },
+      client: { name: val("iv-client-name"), address: $("iv-client-address").value.trim(), email: val("iv-client-email"),
+                taxId: val("iv-client-taxid") },
+      lines: state.lines.map(function (l) { return { desc: l.desc, qty: OF.num(l.qty), price: OF.num(l.price) }; }),
+      payment: val("iv-payment"), late: val("iv-late"), notes: val("iv-notes")
+    };
   }
-
-  // ----- Aperçu ----------------------------------------------------------------
+  var FMT = { money: OF.money, num: OF.fmt, rate: OF.rate, date: function (iso) { return OF.date(iso, P.date_format); } };
   function render() {
-    var isInvoice = state.type === "invoice";
-    var t = totals();
-    var issued = val("iv-date") || OF.today();
-    var termsDays = parseInt(val("iv-terms"), 10) || 0;
-    var due = OF.addDays(issued, termsDays);
-    var validUntil = OF.addDays(issued, Math.max(1, parseInt(val("iv-validity"), 10) || 30));
     $("iv-logo-remove").hidden = !state.logo;
-
-    var me = [$("iv-me-address").value.trim(), val("iv-me-email"), val("iv-me-phone"),
-      val("iv-me-taxid") ? L.tax_id + " " + val("iv-me-taxid") : "", val("iv-me-extra")].filter(Boolean);
-    var client = [$("iv-client-address").value.trim(), val("iv-client-email"),
-      val("iv-client-taxid") ? L.client_tax_id + " " + val("iv-client-taxid") : ""].filter(Boolean);
-
-    var html = '<div class="p-head"><div class="p-brand">' +
-      (state.logo ? '<img src="' + state.logo + '" alt="Logo">' : "") +
-      '<div class="p-me-name">' + orHint(val("iv-me-name"), L.your_name) + "</div></div>" +
-      '<div class="p-title">' + esc(isInvoice ? L.invoice : L.estimate) +
-      "<span>" + esc(L.number) + " " + orHint(val("iv-number"), "—") + "</span></div></div>";
-
-    html += '<div class="p-parties"><div><div class="p-label">' + esc(L.from) + "</div><strong>" + orHint(val("iv-me-name"), L.your_name) +
-      "</strong><br>" + (me.length ? me.map(multiline).join("<br>") : '<span class="p-empty">' + esc(L.your_details) + "</span>") +
-      '</div><div><div class="p-label">' + esc(isInvoice ? L.bill_to : L.prepared_for) + "</div><strong>" +
-      orHint(val("iv-client-name"), L.client_name) + "</strong><br>" +
-      (client.length ? client.map(multiline).join("<br>") : '<span class="p-empty">' + esc(L.client_details) + "</span>") + "</div></div>";
-
-    var meta = [[isInvoice ? L.invoice_date : L.estimate_date, date(issued)]];
-    if (isInvoice) {
-      var termLabel = (P.terms.filter(function (x) { return x.value === termsDays; })[0] || {}).label;
-      meta.push([L.terms, termLabel || termsDays + " " + L.days]);
-      meta.push([L.due, date(due)]);
-      if (val("iv-po")) meta.push([L.po, val("iv-po")]);
-    } else {
-      meta.push([L.valid, date(validUntil)]);
-    }
-    html += '<div class="p-meta">' + meta.map(function (m) {
-      return "<div><span>" + esc(m[0]) + "</span><b>" + esc(m[1]) + "</b></div>";
-    }).join("") + "</div>";
-
-    html += '<table class="p-lines"><thead><tr><th>' + esc(L.item) + "</th><th>" + esc(L.qty) + "</th><th>" + esc(L.rate) +
-      "</th><th>" + esc(L.amount) + "</th></tr></thead><tbody>";
-    var any = false;
-    t.rows.forEach(function (r) {
-      if (!r.desc && !isFinite(r.price)) return;
-      any = true;
-      html += "<tr><td>" + orHint(r.desc, L.item) + "</td><td>" + (isFinite(r.qty) ? OF.fmt(r.qty) : "") +
-        "</td><td>" + (isFinite(r.price) ? OF.money(r.price) : "") + "</td><td>" + (isFinite(r.total) ? OF.money(r.total) : "") + "</td></tr>";
-    });
-    if (!any) html += '<tr><td colspan="4"><span class="p-empty">' + esc(L.empty_lines) + "</span></td></tr>";
-    html += "</tbody></table>";
-
-    var tot = [[L.subtotal, OF.money(t.subtotal)]];
-    if (t.discount > 0) tot.push([L.discount + " (" + OF.fmt(t.discountPct) + L.percent + ")", "− " + OF.money(t.discount)]);
-    t.taxes.forEach(function (x) { tot.push([x.label + " (" + OF.rate(x.rate) + L.percent + ")", OF.money(x.amount)]); });
-    tot.push([L.total, OF.money(t.total), !t.paid]);
-    if (t.paid > 0) {
-      tot.push([L.paid, "− " + OF.money(t.paid)]);
-      tot.push([L.balance, OF.money(t.total - t.paid), true]);
-    }
-    if (!isInvoice) {
-      var pct = Math.min(100, Math.max(0, OF.num(val("iv-deposit-pct")) || 0));
-      if (pct > 0) tot.push([L.deposit + " (" + OF.fmt(pct) + L.percent + ")", OF.money(t.total * pct / 100)]);
-    }
-    html += '<div class="p-totals">' + tot.map(function (r) {
-      return '<div class="' + (r[2] ? "p-grand" : "") + '"><span>' + esc(r[0]) + "</span><b>" + esc(r[1]) + "</b></div>";
-    }).join("") + "</div>";
-
-    var notes = [];
-    if (isInvoice) {
-      if (val("iv-payment")) notes.push("<p><b>" + esc(L.payment) + "</b><br>" + multiline(val("iv-payment")) + "</p>");
-      if (val("iv-late")) notes.push("<p>" + esc(L.late_prefix) + " " + esc(val("iv-late")) + "</p>");
-    } else {
-      notes.push("<p>" + esc(L.estimate_terms.replace("{date}", date(validUntil))) + "</p>");
-    }
-    (P.mentions || []).forEach(function (m) { notes.push("<p>" + esc(m) + "</p>"); });
-    if (notes.length) html += '<div class="p-mentions">' + notes.join("") + "</div>";
-    if (!isInvoice) {
-      html += '<div class="p-sign"><div class="p-label">' + esc(L.accept_title) + "</div><p>" + esc(L.accept) +
-        '</p><div class="p-sign-box"></div></div>';
-    }
-    if (val("iv-notes")) html += '<div class="p-notes">' + multiline(val("iv-notes")) + "</div>";
-    preview.innerHTML = html;
+    preview.innerHTML = IV.render(currentDoc(), P, FMT);
   }
 
   // ----- Actions ---------------------------------------------------------------

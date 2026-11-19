@@ -9,7 +9,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 
 ## Où en est-on ?
 
-*Mis à jour le 19/11/2026 (matin).*
+*Mis à jour le 19/11/2026 (après-midi).*
 
 - **Priorité (décision D10)** : le site et la plateforme d'abord ; noms de domaine, Gumroad et affiliation à la fin.
   Règle de qualité maximale pour tout produit ou service (D11, charte dans la [méthode](04-methode-de-travail.md#charte-qualité)).
@@ -485,6 +485,8 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   **Lots 2b-1 et 2b-2 faits le 19/11/2026** : cœur commun `engines/espace-core.js` (montants, numérotation, statuts,
   transformations, temps passé, prospects, trésorerie commune) ; le moteur français ne garde que la France.
   **Lot 2c fait le 19/11/2026** : formats de la section dans l'Espace et ses moteurs ; test du cœur avec un pays fictif.
+  **Lot 2d fait le 19/11/2026** : `engines/invoice-intl.js`, moteur de facture des États-Unis, du Royaume-Uni et du
+  Canada, partagé par le générateur public et l'Espace.
 - **Accueil en images (18/11/2026, nuit)** : demande d'Ismail (« il n'y a que du texte, pas d'image ») ; principes
   des images du site (D84, [58](58-images-du-site.md)) : captures du vrai produit, données d'exemple annoncées, pas de
   banque d'images ni d'image générée. Accueil France : section « Les outils, en vrai » en grille bento (Espace,
@@ -564,8 +566,8 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   l'onglet Documents et de l'onglet Dépenses sont faits (12/11, [55](55-indicateurs-espace.md)) ; thème « Bento » appliqué le
   18/11 ([54](54-themes.md) § 3 ; mode sombre seulement si Ismail le demande) ;
   **Espace entrepreneur pour les États-Unis** ([60](60-espace-etats-unis.md) § 3.1 : étape 1, lectures et lot 2a
-  faits le 19/11, 2b (cœur commun) et 2c (formats) aussi ; lots suivants :
-  2d moteur de facture international partagé, 2e moteur américain ; puis modules, page ; ensuite
+  faits le 19/11, 2b (cœur commun), 2c (formats) et 2d (moteur de facture international) aussi ; lot suivant :
+  2e moteur américain ; puis modules, page ; ensuite
   Royaume-Uni et Canada, [59](59-parite-des-pays.md)) ; **poids des pages** : chaque page embarque toutes les règles de son pays
   (`window.OF_RULES`, environ 45 Ko avant compression) : n'y mettre que celles que ses scripts lisent ; **images du site** ([58](58-images-du-site.md) § 3) : miniatures dans la liste
   des étapes et schémas explicatifs (facture annotée, frise des relances, calendrier de la facturation électronique) ; refonte, suite ([31](31-vision-plateforme.md) § 5) : les quatre modules du compte

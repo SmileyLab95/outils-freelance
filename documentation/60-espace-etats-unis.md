@@ -136,6 +136,12 @@ décimal des champs et le symbole de la devise du format de la section, et écri
 formats américains) et des textes en clés brutes : aucun texte ni format français n'en sort (contrôle vérifié en
 réintroduisant une date et une virgule à la française). Factur-X : 12 factures sur 12 conformes, PDF/A-3 valides
 (Mustang).
+Lot 2d fait le 19/11/2026 : `engines/invoice-intl.js` (fonctions pures `compute`, `render`, `amount`, `addDays`) reprend
+les totaux et l'aperçu du générateur public des États-Unis, du Royaume-Uni et du Canada ; `tools/invoice.js` lui passe
+un document lu dans le formulaire. Aperçus identiques au caractère près à l'ancienne version sur les quatre pages
+(20 comparaisons dans un navigateur ; une erreur glissée dans l'arrondi de la remise est détectée) ; 7 tests unitaires
+aux montants calculés à la main. L'Espace américain utilisera ce moteur (critère U2). Le moteur ne gère pas encore les
+unités de quantité (heures, jours) que la facturation du temps passé met sur les lignes : à ajouter au lot 2e.
 
 ### Avancement
 

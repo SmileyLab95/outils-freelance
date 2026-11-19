@@ -1,5 +1,14 @@
 # Journal des modifications
 
+## 2026-11-19 (après-midi) — Moteur de facture international partagé (lot 2d)
+
+- Nouveau `engines/invoice-intl.js` : totaux et aperçu des factures et devis des États-Unis, du Royaume-Uni et du
+  Canada, en fonctions pures ; le générateur public s'en sert, l'Espace de ces pays s'en servira (même aperçu, mêmes
+  totaux).
+- Rien ne change pour l'utilisateur : aperçus identiques au caractère près sur les quatre pages du générateur
+  (comparaison dans un navigateur, vérifiée en y glissant une erreur), parcours des quatre pages (74 points,
+  accessibilité comprise), 744 tests unitaires dont 7 nouveaux.
+
 ## 2026-11-19 (jour, suite) — Espace multi-pays : formats de la section (lot 2c)
 
 - Les moteurs de l'Espace reçoivent leurs formats d'export (date, nombre, montant) du pays ; l'Espace utilise les
