@@ -20,6 +20,8 @@
   validation Factur-X (jeu d'essai et fichiers produits par l'Espace) réussis, aucun changement visible.
 - Septième lot : le livre des recettes et les dépenses (registre des achats) passent entiers dans le module ;
   mêmes vérifications, aucun changement visible.
+- Huitième lot : les règles de prospection de la CNIL et la durée de conservation des données des prospects
+  passent dans le module ; mêmes vérifications, aucun changement visible.
 
 ## 2026-11-19 (après-midi, suite) — Moteur de l'Espace des États-Unis (lot 2e)
 

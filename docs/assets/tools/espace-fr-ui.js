@@ -4,7 +4,7 @@
  * achats) ; profil (activité, TVA, micro-entreprise, coordonnées) ; fiche client (lieu, SIREN, TVA, adresse
  * électronique de facturation) ; éditeur de document (TVA selon le client, nature, biens ou services des lignes).
  * Facture électronique Factur-X d'un document émis (documentation/10). Livre des recettes et dépenses (registre
- * des achats, documentation/36).
+ * des achats, documentation/36). Règles de prospection de la CNIL et durée de conservation (documentation/38).
  * Module d'écrans d'un pays : la fabrique
  * OFE.espaceUI.fr reçoit le contexte prêté par tools/espace.js (textes, formats, champs, données, règles…) et renvoie ses
  * crochets ; routes : écrans en plus du cadre commun. Chargé par la page de la section avant tools/espace.js.
@@ -800,6 +800,34 @@
       });
     }
 
+
+    // ----- Prospects : règles de la CNIL, durée de conservation (documentation/38-prospects.md) ----------------
+
+    var CNIL = {
+      email: "https://www.cnil.fr/fr/la-prospection-commerciale-par-courrier-electronique-sms-mms-et-automate-dappel",
+      phone: "https://www.cnil.fr/fr/prospection-commerciale-par-telephone-hors-automate-dappel-quelles-sont-les-regles",
+      optout: "https://www.cnil.fr/fr/comment-utiliser-une-liste-repoussoir-pour-respecter-lopposition-la-prospection"
+    };
+    /** Règles de la CNIL, en bref, selon le type de prospect (pro : vrai, faux, ou indéfini pour les deux). */
+    function prospectRules(pro) {
+      var t = R.prospection_telephone;
+      var both = pro === undefined;
+      var items = [];
+      if (both || pro) items.push("<li>" + L("pros.rules.proHtml") + "</li>");
+      if (both || !pro) {
+        items.push("<li>" + L("pros.rules.personEmailHtml") + "</li>");
+        items.push("<li>" + L("pros.rules.personPhoneHtml", { date: esc(longDay(t.depuis)) }) + "</li>");
+      }
+      items.push("<li>" + L("pros.rules.optout") + "</li>");
+      items.push("<li>" + L("pros.rules.retention", { years: R.prospects_conservation.annees }) + "</li>");
+      return '<ul class="small prospect-rules">' + items.join("") + '</ul><p class="small muted">' +
+        L("pros.rules.sourcesHtml", { email: CNIL.email, phone: CNIL.phone, optout: CNIL.optout }) + "</p>";
+    }
+    /** Note de la liste d'opposition : ce qui est gardé, et pendant combien de temps (recommandation de la CNIL). */
+    function optoutNote() { return L("pros.optoutText", { years: R.prospects_opposition.conservation_min_annees }); }
+    /** Prospects à recontacter ou à supprimer : rappel du référentiel de la CNIL. */
+    function retentionNote(years) { return L("pros.retentionText", { years: years }); }
+
     return {
       routes: {
         immobilisations: function (r) { (r.id ? viewAssetForm : viewAssets)(r); },
@@ -810,7 +838,9 @@
       profile: { defaults: profileDefaults, fields: profileFields, bind: bindProfile, read: readProfile },
       client: { defaults: clientDefaults, fields: clientFields, bind: bindClient, read: readClient },
       doc: { draft: draftFields, retax: retax, fields: docFields, note: docNote, input: docInput, kindCell: kindCell, issueOptions: issueOptions },
-      issued: { cards: issuedCards, bind: bindIssued }
+      issued: { cards: issuedCards, bind: bindIssued },
+      prospects: { retentionYears: function () { return R.prospects_conservation.annees; }, retentionNote: retentionNote,
+                   optoutNote: optoutNote, rules: prospectRules }
     };
   };
 })(typeof self !== "undefined" ? self : this);

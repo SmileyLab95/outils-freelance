@@ -229,6 +229,10 @@ américain aura ses propres écrans pour ces adresses (recettes en caisse, ligne
 restent communes et sont prêtées (listes en barres, pourcentages, statistiques) ; `ctx.charts(fn)` installe le dessin
 des graphiques de l'écran, redessinés au changement de taille (capture sur téléphone relue). Parcours de l'Espace
 363/363 et des comptes 51/51.
+Lot 3a-8 fait le 19/11/2026 : crochet `prospects` du module (`retentionYears`, `retentionNote`, `optoutNote`,
+`rules`) : règles de la CNIL, durée de conservation des données et note de la liste d'opposition ; sans durée fournie
+par le pays, le cadre commun n'affiche pas les rappels de conservation. Étapes, relances, liste d'opposition
+(empreintes), boutons et exports restent communs. Parcours de l'Espace 363/363 et des comptes 51/51.
 
 ### Avancement
 

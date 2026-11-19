@@ -1545,11 +1545,6 @@
 
   var STAGE_CLASSES = { new: "st-draft", talks: "st-unpaid", quote: "st-partial", won: "st-paid", lost: "st-draft" };
   var SOURCES = L("pros.sources").split("|");
-  var CNIL = {
-    email: "https://www.cnil.fr/fr/la-prospection-commerciale-par-courrier-electronique-sms-mms-et-automate-dappel",
-    phone: "https://www.cnil.fr/fr/prospection-commerciale-par-telephone-hors-automate-dappel-quelles-sont-les-regles",
-    optout: "https://www.cnil.fr/fr/comment-utiliser-une-liste-repoussoir-pour-respecter-lopposition-la-prospection"
-  };
   function prospect(id) { return data.prospects.filter(function (p) { return p.id === id; })[0] || null; }
   function stageBadge(s) { return '<span class="st ' + STAGE_CLASSES[s] + '">' + esc(E.STAGE_LABELS[s]) + "</span>"; }
   var byNextDate = function (a, b) {
@@ -1574,30 +1569,17 @@
     }).filter(Boolean);
   }
 
+  /** Durée de conservation des données d'un prospect, en années, selon le pays ; null si le pays n'en fixe pas. */
+  function retentionYears() { return UI.prospects ? UI.prospects.retentionYears() : null; }
+
   /** Rappels du tableau de bord : relances dues et durée de conservation atteinte. */
   function prospectsReminder() {
     var due = E.followUps(data.prospects, data.documents, TODAY);
-    var old = E.retentionDue(data.prospects, data.documents, TODAY, R.prospects_conservation.annees);
+    var keep = retentionYears(), old = keep ? E.retentionDue(data.prospects, data.documents, TODAY, keep) : [];
     return (due.length ? '<p class="notice espace-noprint">' + (due.length > 1 ? L("pros.remind.manyHtml", { n: due.length }) : L("pros.remind.oneHtml", { name: esc(due[0].name) })) +
         (due[0].nextDate < TODAY ? L("pros.remind.since", { date: day(due[0].nextDate) }) : "") + '. <a href="#/prospects">' + L("pros.remind.see") + "</a></p>" : "") +
       (old.length ? '<p class="notice warn espace-noprint">' + L("pros.remind.old", { what: esc(countText(old.length, L("count.prospect.one"), L("count.prospect.many"))),
-        years: R.prospects_conservation.annees }) + ' <a href="#/prospects">' + L("pros.remind.seeList") + "</a></p>" : "");
-  }
-
-  /** Règles de la CNIL, en bref, selon le type de prospect (pro : vrai, faux, ou indéfini pour les deux). */
-  function prospectRules(pro) {
-    var t = R.prospection_telephone;
-    var both = pro === undefined;
-    var items = [];
-    if (both || pro) items.push("<li>" + L("pros.rules.proHtml") + "</li>");
-    if (both || !pro) {
-      items.push("<li>" + L("pros.rules.personEmailHtml") + "</li>");
-      items.push("<li>" + L("pros.rules.personPhoneHtml", { date: esc(longDay(t.depuis)) }) + "</li>");
-    }
-    items.push("<li>" + L("pros.rules.optout") + "</li>");
-    items.push("<li>" + L("pros.rules.retention", { years: R.prospects_conservation.annees }) + "</li>");
-    return '<ul class="small prospect-rules">' + items.join("") + '</ul><p class="small muted">' +
-      L("pros.rules.sourcesHtml", { email: CNIL.email, phone: CNIL.phone, optout: CNIL.optout }) + "</p>";
+        years: keep }) + ' <a href="#/prospects">' + L("pros.remind.seeList") + "</a></p>" : "");
   }
 
   function prospectItem(p) {
@@ -1610,7 +1592,7 @@
   function viewProspects() {
     var docs = data.documents, list = data.prospects.slice().sort(byNextDate);
     var pipe = E.pipeline(list, docs), due = E.followUps(list, docs, TODAY);
-    var old = E.retentionDue(list, docs, TODAY, R.prospects_conservation.annees);
+    var keep = retentionYears(), old = keep ? E.retentionDue(list, docs, TODAY, keep) : [];
     var groups = {};
     Object.keys(E.STAGE_LABELS).forEach(function (s) { groups[s] = []; });
     list.forEach(function (p) { groups[E.prospectStage(p, docs)].push(p); });
@@ -1665,7 +1647,7 @@
     }
     if (old.length) {
       html += '<section class="card espace-card" id="prospects-retention"><h3>' + L("pros.retention") + '</h3><p class="small">' +
-        L("pros.retentionText", { years: R.prospects_conservation.annees }) + "</p><ul class=\"time-due\">" + old.map(function (x) {
+        UI.prospects.retentionNote(keep) + "</p><ul class=\"time-due\">" + old.map(function (x) {
           return '<li><span class="dl-main"><a href="#/prospects/' + esc(x.prospect.id) + '"><b>' + esc(x.prospect.name) + '</b></a><span class="small muted">' +
             (E.lastContactFrom(x.prospect) ? L("pros.lastContact", { date: day(x.since) }) : L("pros.createdOn", { date: day(x.since) })) + "</span></span>" +
             '<button type="button" class="btn btn-ghost btn-sm" data-forget="' + esc(x.prospect.id) + '" aria-label="' + L("pros.forgetLabel", { name: esc(x.prospect.name) }) + '">' + L("line.remove") + "</button></li>";
@@ -1674,8 +1656,8 @@
     html += '<section class="card espace-card"><h3>' + L("pros.optoutList") + '</h3><p class="small">' +
       (data.optouts.length ? (data.optouts.length > 1 ? L("pros.optoutCount.many", { n: data.optouts.length }) : L("pros.optoutCount.one", { n: data.optouts.length })) + " "
         : L("pros.optoutNone") + " ") +
-      L("pros.optoutText", { years: R.prospects_opposition.conservation_min_annees }) + "</p></section>" +
-      '<section class="card espace-card"><h3>' + L("pros.rulesTitle") + "</h3>" + prospectRules() + "</section>";
+      (UI.prospects ? UI.prospects.optoutNote() : "") + "</p></section>" +
+      (UI.prospects ? '<section class="card espace-card"><h3>' + L("pros.rulesTitle") + "</h3>" + UI.prospects.rules() + "</section>" : "");
     view.innerHTML = html;
     drawCharts = function () {
       var el = view.querySelector('[data-chart="closed"]');
@@ -1734,7 +1716,7 @@
       '<a class="btn btn-ghost" href="#/prospects">' + L("common.cancel") + "</a></div></form>";
     if (!isNew) {
       html += '<section class="card espace-card"><h3>' + L("pros.x.title") + '</h3><p class="small muted" id="prospect-last">' + (last ? L("pros.x.last", { date: day(last) })
-          : L("pros.x.noLast")) + (stage === "won" ? "" : L("pros.x.retention", { years: R.prospects_conservation.annees,
+          : L("pros.x.noLast")) + (stage === "won" || !retentionYears() ? "" : L("pros.x.retention", { years: retentionYears(),
           from: last ? L("pros.x.fromLast") : L("pros.x.fromCreation", { date: day(String(p.createdAt || "").slice(0, 10)) }) })) + "</p>" +
         ((p.exchanges || []).length ? '<ul class="time-due exchanges">' + p.exchanges.slice().sort(function (a, b) { return a.date < b.date ? 1 : a.date > b.date ? -1 : 0; }).map(function (x) {
           return '<li><span class="dl-main"><b>' + day(x.date) + " · " + (x.from === "them" ? L("pros.x.fromThem") : L("pros.x.fromMe")) + '</b><span class="small">' + esc(x.text) + "</span></span>" +
@@ -1757,7 +1739,7 @@
         '<div class="espace-actions"><a class="btn btn-primary" href="' + (c ? "#/documents/nouveau?type=devis&client=" + esc(c.id) + "&piste=" + esc(p.id)
           : "#/clients/nouveau?piste=" + esc(p.id) + "&devis=1") + '">' + L("pros.c.quote") + "</a></div>" +
         (quotes.length ? docTable(quotes) : "") + "</section>" +
-        '<section class="card espace-card"><h3>' + (p.pro === false ? L("pros.rulesForPerson") : L("pros.rulesForPro")) + "</h3>" + prospectRules(p.pro !== false) +
+        '<section class="card espace-card"><h3>' + (p.pro === false ? L("pros.rulesForPerson") : L("pros.rulesForPro")) + "</h3>" + (UI.prospects ? UI.prospects.rules(p.pro !== false) : "") +
         '<div class="espace-actions">' + (p.email ? '<a class="btn btn-ghost" href="mailto:' + esc(encodeURIComponent(p.email).replace(/%40/g, "@")) + '">' + L("pros.write") + "</a>" : "") +
         '<button type="button" class="btn btn-ghost" id="prospect-optout-btn">' + L("pros.optout") + "</button>" +
         '<button type="button" class="btn btn-ghost" id="prospect-delete">' + L("line.remove") + '</button></div><p class="form-error" id="prospect-action-error" role="alert" hidden></p></section>';
