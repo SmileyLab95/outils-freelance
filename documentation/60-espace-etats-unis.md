@@ -118,8 +118,16 @@ exports et des contrôles (`frDay`, jour/mois/année), la virgule décimale (`de
 Lot 2b-1 fait le 19/11/2026 : `engines/espace-core.js` (420 lignes) reçoit les utilitaires, les montants et soldes des
 documents, l'ordre d'émission, le temps passé et les prospects (60 fonctions) ; `espace-fr.js` les reprend sous leur nom
 (API inchangée, 112 entrées). Aucun nom introuvable (contrôle par le vérificateur TypeScript, essayé sur une copie
-piégée). Reste pour 2b-2 : numérotation (préfixes par défaut du pays), statuts (activité), trésorerie générique avec
-les crochets du pays.
+piégée).
+Lot 2b-2 fait le 19/11/2026 : numérotation et émission, statuts, totaux par client, transformations (devis vers facture,
+avoir, doublon) et parties communes de la trésorerie (mouvements prévus, encaissements attendus, courbe du solde,
+versement possible, délais de paiement, créances par ancienneté, autonomie, export de la prévision) rejoignent le cœur
+(770 lignes, 95 fonctions) ; le moteur français passe de 1 602 à 912 lignes. Réglages du pays lus par le cœur au
+moment des appels : `country.prefixes` (préfixes par défaut des numéros) et `country.methods` (moyens de paiement).
+Restent propres à la France : TVA, déclarations Urssaf, acomptes, sommes déjà dues, prévision complète (elle assemble
+les pièces du cœur et les flux d'impôts), historique des flux, point mort, livre des recettes. Le moteur américain
+assemblera sa prévision avec les mêmes pièces ; si les deux assemblages se ressemblent trop, un crochet commun (flux
+d'impôts du pays) sera étudié.
 
 ### Avancement
 

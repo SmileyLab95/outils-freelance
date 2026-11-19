@@ -1,5 +1,13 @@
 # Journal des modifications
 
+## 2026-11-19 (jour) — Espace multi-pays : cœur commun complété (lot 2b-2)
+
+- Numérotation et émission, statuts, totaux par client, transformations (devis vers facture, avoir, doublon) et
+  parties communes de la trésorerie passent dans `engines/espace-core.js` (95 fonctions) ; le moteur français passe
+  de 1 602 à 912 lignes et ne garde que ce qui est propre à la France (TVA, Urssaf, plafonds, immobilisations,
+  prévision complète, livre des recettes). API inchangée.
+- Vérifications : 733 tests unitaires, parcours de l'Espace et des comptes, aucun nom introuvable (TypeScript).
+
 ## 2026-11-19 (matin, suite) — Espace multi-pays : cœur commun du moteur (lot 2b-1)
 
 - Nouveau `engines/espace-core.js` : la partie du moteur de l'Espace commune à tous les pays (montants et soldes

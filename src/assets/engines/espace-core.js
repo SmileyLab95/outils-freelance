@@ -1,14 +1,18 @@
 /*
  * Moteur : cœur commun de l'Espace entrepreneur, tous pays (documentation/60-espace-etats-unis.md, § 3.1, décision D88).
- * Fonctions pures sur les données de l'Espace, sans règle propre à un pays : montants et soldes des documents, ordre
- * d'émission, temps passé (documentation/37) et prospects (documentation/38). C'est une fabrique : chaque moteur de pays
+ * Fonctions pures sur les données de l'Espace, sans règle propre à un pays : montants et soldes des documents,
+ * numérotation et émission, statuts, totaux par client, transformations (devis vers facture, avoir, doublon),
+ * temps passé (documentation/37), prospects (documentation/38) et parties communes de la trésorerie (documentation/39 :
+ * mouvements prévus, encaissements attendus, courbe du solde, délais de paiement, créances, autonomie). C'est une fabrique : chaque moteur de pays
  * (engines/espace-fr.js…) l'appelle avec son moteur de facture (INV) et la fonction L des textes de la langue de la
- * section ; il en reprend les fonctions sous leur nom. Testé par les tests du moteur français.
+ * section, et un objet de réglages du pays lu au moment des appels (country.prefixes : préfixes par défaut des
+ * numéros ; country.methods : moyens de paiement) ; il en reprend les fonctions sous leur nom. Testé par les tests
+ * du moteur français.
  */
 (function (root, factory) {
   if (typeof module === "object" && module.exports) module.exports = factory;
   else (root.OFE = root.OFE || {}).espaceCore = factory;
-})(typeof self !== "undefined" ? self : this, function (INV, L) {
+})(typeof self !== "undefined" ? self : this, function (INV, L, country) {
   "use strict";
 
   /** « 1, 2 et 3 » : liste de numéros dans la langue de la section. */
@@ -70,6 +74,176 @@
   function order(d) {
     var rank = /(\d+)$/.exec(d.number || "");
     return (d.date || "") + "|" + (d.issuedAt || "") + "|" + (rank ? String(+rank[1]).padStart(9, "0") : "");
+  }
+
+  // ----- Numérotation et émission --------------------------------------------
+
+
+  /** Documents émis d'une série (type et année), du plus récent au plus ancien. */
+  function series(documents, type, year) {
+    return documents.filter(function (d) {
+      return d.type === type && d.status !== "draft" && d.number && String(d.date).slice(0, 4) === String(year);
+    }).sort(function (a, b) { return order(a) < order(b) ? 1 : -1; });
+  }
+
+  /** Préfixe d'une série commencée (celui de son dernier document émis), ou null si la série est vide. */
+  function seriesPrefix(documents, type, year) {
+    var last = series(documents, type, year)[0];
+    if (!last) return null;
+    var at = last.number.lastIndexOf(String(year) + "-");
+    return at > -1 ? last.number.slice(0, at) : null;
+  }
+
+  /**
+   * Prochain numéro de la série : F2026-001, F2026-002… (rang le plus élevé + 1). Une série commencée garde son
+   * préfixe jusqu'à la fin de l'année ; le préfixe des réglages s'applique aux nouvelles séries. numbering
+   * (facultatif) : { facture: { year, last } … }, dernier rang utilisé hors de l'Espace pour continuer une séquence.
+   */
+  function nextNumber(documents, type, year, prefixes, numbering) {
+    var started = seriesPrefix(documents, type, year);
+    var prefix = (started != null ? started : prefixes && prefixes[type] != null ? prefixes[type] : country.prefixes[type]) + year + "-";
+    var external = numbering && numbering[type];
+    var max = external && String(external.year) === String(year) ? Math.max(0, parseInt(external.last, 10) || 0) : 0;
+    documents.forEach(function (d) {
+      if (d.type !== type || !d.number || d.number.indexOf(prefix) !== 0) return;
+      var n = parseInt(d.number.slice(prefix.length), 10);
+      if (n > max) max = n;
+    });
+    return prefix + String(max + 1).padStart(3, "0");
+  }
+
+  /**
+   * Numérotation du générateur public à continuer dans l'Espace : son numéro a la forme <préfixe><année>-<rang>,
+   * l'année est celle du document et aucun document de ce type n'est encore émis cette année dans l'Espace.
+   * Renvoie { prefix, year, last, number } (number : celui que recevra le document) ou null.
+   */
+  function continuation(documents, type, number, year) {
+    var m = /^([A-Za-z_\-\/]{0,12}?)(\d{4})-(\d{1,6})$/.exec(String(number || "").trim());
+    if (!m || m[2] !== String(year) || +m[3] < 1 || String(+m[3]).padStart(3, "0") !== m[3]) return null;
+    if (series(documents, type, year).length) return null;
+    return { prefix: m[1], year: m[2], last: +m[3] - 1, number: m[1] + m[2] + "-" + m[3] };
+  }
+
+  /** Contrôles avant émission ; renvoie la liste des erreurs (vide si le document peut être émis). */
+  function checkIssue(documents, doc, client, opts) {
+    var errors = [];
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(doc.date || "")) errors.push(L("eng.issue.date"));
+    if (!client || !String(client.name || "").trim()) errors.push(L("eng.issue.client"));
+    // Ligne commencée (désignation ou prix saisi, comme dans l'aperçu) : désignation, quantité et prix obligatoires.
+    var started = [], incomplete = [];
+    (doc.lines || []).forEach(function (l, i) {
+      if (!(String(l.desc || "").trim() || isFinite(INV.amount(l.price)))) return;
+      started.push(i + 1);
+      if (!(String(l.desc || "").trim() && isFinite(INV.amount(l.price)) && isFinite(INV.amount(l.qty)))) incomplete.push(i + 1);
+    });
+    if (!started.length) errors.push(L("eng.issue.noLine"));
+    else if (incomplete.length) {
+      errors.push(incomplete.length > 1 ? L("eng.issue.incompleteMany", { lines: listText(incomplete) }) : L("eng.issue.incompleteOne", { line: incomplete[0] }));
+    } else if (total(doc) <= 0) errors.push(L("eng.issue.positive"));
+    else if (opts && opts.lineKinds && doc.nature === "mixte") {
+      // Activité mixte : ventes et prestations distinctes sur la facture (BOFiP, BOI-BIC-DECLA-30-30, § 30).
+      var unknown = started.filter(function (n) { return !has(INV.LINE_KINDS, doc.lines[n - 1].kind); });
+      if (unknown.length) {
+        errors.push(unknown.length > 1 ? L("eng.issue.kindMany", { lines: listText(unknown) }) : L("eng.issue.kindOne", { line: unknown[0] }));
+      }
+    }
+    else if (doc.type === "avoir" && doc.originId) {
+      var origin = documents.filter(function (d) { return d.id === doc.originId; })[0];
+      if (origin && total(doc) > total(origin) - credited(documents, origin) + 0.005) {
+        errors.push(L("eng.issue.creditOver", { number: origin.number,
+          amount: String((total(origin) - credited(documents, origin)).toFixed(2)).replace(".", ",") }));
+      }
+    }
+    var last = series(documents, doc.type, String(doc.date).slice(0, 4))[0];
+    if (last && doc.date < last.date) {
+      errors.push(L("eng.issue.chronology", { number: last.number, date: last.date.split("-").reverse().join("/") }));
+    }
+    return errors;
+  }
+
+  /** Émission : numéro, statut, coordonnées figées. Renvoie un nouveau document (l'original n'est pas modifié). */
+  function issue(documents, doc, me, client, prefixes, now, numbering, opts) {
+    var errors = checkIssue(documents, doc, client, opts);
+    if (errors.length) return { errors: errors };
+    var issued = JSON.parse(JSON.stringify(doc));
+    issued.number = nextNumber(documents, doc.type, String(doc.date).slice(0, 4), prefixes, numbering);
+    issued.status = doc.type === "devis" ? "sent" : "issued";
+    issued.snapshot = { me: JSON.parse(JSON.stringify(me || {})), client: JSON.parse(JSON.stringify(client)) };
+    issued.issuedAt = now;
+    issued.updatedAt = now;
+    return { doc: issued, errors: [] };
+  }
+
+  // ----- Statuts ---------------------------------------------------------------
+
+  /**
+   * Statut affiché. Facture : draft, unpaid, overdue, partial, paid, cancelled (annulée par avoir).
+   * Devis : draft, sent, accepted, refused, invoiced. Avoir : draft, imputed (déduit d'une facture non payée),
+   * refund (à rembourser), refunded.
+   */
+  function state(doc, today, documents) {
+    if (doc.status === "draft") return "draft";
+    if (doc.type === "devis") return doc.invoiceId ? "invoiced" : doc.status;
+    var paid = paidAmount(doc), bal = balance(doc, documents);
+    if (doc.type === "avoir") {
+      if (bal > 0.005) return "refund";
+      return paid > 0 ? "refunded" : "imputed";
+    }
+    var credit = documents ? credited(documents, doc) : 0;
+    if (bal <= 0.005) return paid > 0.005 || credit < total(doc) - 0.005 ? "paid" : "cancelled";
+    if (paid > 0 || credit > 0) return dueDate(doc) < today ? "overdue" : "partial";
+    return dueDate(doc) < today ? "overdue" : "unpaid";
+  }
+
+  /** Contrôle d'un encaissement (ou d'un remboursement pour un avoir). */
+  function checkPayment(doc, payment, documents) {
+    var errors = [];
+    var amount = Number(payment.amount);
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(payment.date || "")) errors.push(L("eng.pay.date"));
+    if (!isFinite(amount) || amount <= 0) errors.push(L("eng.pay.positive"));
+    else if (amount > balance(doc, documents) + 0.005) errors.push(doc.type === "avoir" ? L("eng.pay.overRefund") : L("eng.pay.overReceipt"));
+    if (!country.methods[payment.method]) errors.push(L("eng.pay.method"));
+    return errors;
+  }
+
+  /** Synthèse par client : encaissé et reste à encaisser. */
+  function clientTotals(documents, clientId) {
+    var cash = 0, due = 0;
+    documents.forEach(function (d) {
+      if (d.clientId !== clientId || d.status === "draft") return;
+      if (d.type === "facture") { cash += paidAmount(d); due += Math.max(0, balance(d, documents)); }
+      if (d.type === "avoir") cash -= paidAmount(d);
+    });
+    return { cashed: round2(cash), due: round2(due) };
+  }
+
+  // ----- Transformations ------------------------------------------------------
+
+  var COPY_FIELDS = ["clientId", "lines", "vat", "nature", "terms", "penalty", "notes"];
+  function copyFrom(source, fields) {
+    var out = {};
+    fields.forEach(function (k) { if (source[k] !== undefined) out[k] = JSON.parse(JSON.stringify(source[k])); });
+    return out;
+  }
+
+  /** Facture brouillon à partir d'un devis. */
+  function invoiceFromQuote(quote, today, id) {
+    return Object.assign(copyFrom(quote, COPY_FIELDS), { id: id, type: "facture", status: "draft", date: today, serviceDate: today,
+      quoteId: quote.id, payments: [] });
+  }
+
+  /** Avoir brouillon à partir d'une facture émise (mêmes lignes, référence de la facture). */
+  function creditFromInvoice(invoice, today, id) {
+    return Object.assign(copyFrom(invoice, COPY_FIELDS), { id: id, type: "avoir", status: "draft", date: today,
+      originId: invoice.id, origin: { number: invoice.number, date: invoice.date }, payments: [] });
+  }
+
+  /** Copie modifiable d'un document (nouveau brouillon daté d'aujourd'hui). */
+  function duplicate(doc, today, id) {
+    // Avoir : la facture d'origine ; devis : la piste (documentation/38-prospects.md), pour qu'un devis revu la suive.
+    var extra = doc.type === "avoir" ? ["originId", "origin"] : doc.type === "devis" ? ["prospectId"] : [];
+    return Object.assign(copyFrom(doc, COPY_FIELDS.concat(["validity", "depositPct"], extra)), { id: id, type: doc.type, status: "draft",
+      date: today, serviceDate: today, payments: [] });
   }
 
   // ----- Temps passé (documentation/37-temps-passe.md) -------------------------------------------------------
@@ -408,7 +582,181 @@
     return lines.join("\r\n");
   }
 
-  return { nameKey: nameKey, listText: listText, labels: labels, round2: round2, lastDay: lastDay, iso: iso, total: total, payments: payments, paidAmount: paidAmount,
+
+  // ----- Trésorerie : parties communes (documentation/39-tresorerie.md) ; les impôts et cotisations sont au pays ----
+
+  var EVERY = { month: 1, quarter: 3, year: 12 };
+
+  var CHARGE_LABELS = labels("eng.every.", ["month", "quarter", "year", "once"]);
+
+  /** Sens d'un mouvement prévu : sortie (charge) par défaut, entrée si flow vaut "in" (documentation/39, § 7). */
+  var isIn = function (c) { return !!c && c.flow === "in"; };
+
+  /** Même jour n mois plus tard ; un jour qui n'existe pas devient le dernier jour du mois. */
+  function addMonths(date, n) {
+    var m = +date.slice(5, 7) - 1 + n, y = +date.slice(0, 4) + Math.floor(m / 12);
+    m = ((m % 12) + 12) % 12 + 1;
+    return iso(y, m, Math.min(+date.slice(8, 10), lastDay(y, m)));
+  }
+
+  var monthStart = function (d) { return d.slice(0, 8) + "01"; };
+
+  var monthEnd = function (d) { return iso(+d.slice(0, 4), +d.slice(5, 7), lastDay(+d.slice(0, 4), +d.slice(5, 7))); };
+
+  /** Échéances d'une charge régulière comprises entre from et to (bornes comprises). */
+  function chargeDates(c, from, to) {
+    if (c.every === "once") return isDay(c.start) && c.start >= from && c.start <= to ? [c.start] : [];
+    var step = has(EVERY, c.every) ? EVERY[c.every] : 0, out = [];
+    if (!step || !isDay(c.start)) return out;
+    // Saute directement près de from (charge ancienne) sans dériver : chaque date part de la première échéance.
+    var skip = Math.max(0, Math.floor(((+from.slice(0, 4) - +c.start.slice(0, 4)) * 12 + (+from.slice(5, 7) - +c.start.slice(5, 7))) / step) - 1);
+    for (var i = skip; ; i++) {
+      var d = addMonths(c.start, i * step);
+      if (d > to || (c.end && d > c.end)) break;
+      if (d >= from) out.push(d);
+    }
+    return out;
+  }
+
+  /** Erreurs de saisie d'une charge régulière : label, amount, every, start, end. */
+  function chargeErrors(c) {
+    var errors = [], add = function (field, message) { errors.push({ field: field, message: message }); };
+    if (!String(c.label || "").trim()) add("label", L("eng.charge.label"));
+    if (!(isFinite(Number(c.amount)) && Number(c.amount) > 0)) add("amount", L("eng.charge.amount"));
+    if (!has(EVERY, c.every) && c.every !== "once") add("every", L("eng.charge.every"));
+    if (!blank(c.flow) && c.flow !== "in" && c.flow !== "out") add("flow", L("eng.charge.flow"));
+    if (!isDay(c.start)) add("start", c.every === "once" ? L("eng.charge.dateOnce") : L("eng.charge.dateNext"));
+    else if (c.every !== "once" && !blank(c.end) && (!isDay(c.end) || c.end < c.start)) add("end", L("eng.charge.end"));
+    return errors;
+  }
+
+  /** Factures émises non soldées, à leur échéance (en retard : aujourd'hui) ; avoirs à rembourser (sortie aujourd'hui). */
+  function expectedReceipts(documents, today) {
+    var out = [];
+    (documents || []).forEach(function (d) {
+      if (!d || d.status === "draft" || (d.type !== "facture" && d.type !== "avoir")) return;
+      var st = state(d, today, documents);
+      if (d.type === "facture" && (st === "unpaid" || st === "overdue" || st === "partial")) {
+        var due = dueDate(d);
+        out.push({ doc: d, amount: balance(d, documents), date: due < today ? today : due, late: due < today });
+      } else if (d.type === "avoir" && st === "refund") {
+        out.push({ doc: d, amount: -balance(d, documents), date: today, late: false });
+      }
+    });
+    return out.sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : order(a.doc) < order(b.doc) ? -1 : 1; });
+  }
+
+  /**
+   * Courbe du solde prévu : aujourd'hui (solde saisi), puis le solde de fin de chaque jour qui a un mouvement ;
+   * point bas (le premier s'il y en a plusieurs) et solde final. null sans solde saisi.
+   */
+  function balanceCurve(f) {
+    if (!f || f.start === null || f.start === undefined) return null;
+    var bal = f.start, points = [{ date: f.today, balance: bal }];
+    f.items.forEach(function (x, i) {
+      bal = round2(bal + x.amount);
+      var next = f.items[i + 1];
+      if (!next || next.date !== x.date) points.push({ date: x.date, balance: bal });
+    });
+    var low = points.reduce(function (m, pt) { return pt.balance < m.balance ? pt : m; }, points[0]);
+    return { points: points, low: low, end: bal };
+  }
+
+  /** Ce qui peut sortir aujourd'hui sans que le solde prévu passe sous le seuil : point bas − seuil, au moins 0. */
+  function safeAmount(curve, threshold) {
+    if (!curve) return null;
+    return Math.max(0, round2(curve.low.balance - Math.max(0, Number(threshold) || 0)));
+  }
+
+  var daysBetween = function (a, b) { return Math.round((Date.parse(b) - Date.parse(a)) / 864e5); };
+
+  var avg = function (list) { return list.length ? Math.round(list.reduce(function (s, v) { return s + v; }, 0) / list.length * 10) / 10 : null; };
+
+  /**
+   * Délais de paiement des factures soldées par un paiement entre from et to (date du dernier paiement) : délai moyen
+   * depuis la date de la facture, retard moyen après l'échéance (un paiement en avance compte 0), part payée à l'heure ;
+   * même calcul par client. Factures annulées par avoir exclues.
+   */
+  function paymentStats(documents, from, to) {
+    var all = [], byClient = {};
+    (documents || []).forEach(function (d) {
+      if (!d || d.type !== "facture" || d.status === "draft" || state(d, to, documents) !== "paid") return;
+      var last = payments(d).map(function (p) { return p.date; }).sort().pop();
+      if (!last || last < from || last > to) return;
+      var row = { days: Math.max(0, daysBetween(d.date, last)), late: Math.max(0, daysBetween(dueDate(d), last)) };
+      all.push(row);
+      (byClient[d.clientId] = byClient[d.clientId] || []).push(row);
+    });
+    var summary = function (rows) {
+      return { count: rows.length, avgDays: avg(rows.map(function (r) { return r.days; })), avgLate: avg(rows.map(function (r) { return r.late; })),
+               onTime: rows.length ? Math.round(rows.filter(function (r) { return r.late === 0; }).length / rows.length * 100) / 100 : null };
+    };
+    var out = summary(all);
+    out.byClient = {};
+    Object.keys(byClient).forEach(function (k) { out.byClient[k] = summary(byClient[k]); });
+    return out;
+  }
+
+  var AGING = [["notDue", L("eng.aging.notDue"), -Infinity, 0], ["d30", L("eng.aging.d30"), 1, 30], ["d60", L("eng.aging.d60"), 31, 60],
+               ["d90", L("eng.aging.d90"), 61, 90], ["more", L("eng.aging.more"), 91, Infinity]];
+
+  /** Factures émises non soldées par ancienneté du retard ; les plus en retard d'abord. */
+  function aging(documents, today) {
+    var buckets = AGING.map(function (b) { return { key: b[0], label: b[1], amount: 0, count: 0 }; }), items = [];
+    (documents || []).forEach(function (d) {
+      if (!d || d.type !== "facture" || d.status === "draft") return;
+      var st = state(d, today, documents);
+      if (st !== "unpaid" && st !== "partial" && st !== "overdue") return;
+      var due = dueDate(d), late = Math.max(0, daysBetween(due, today)), amount = balance(d, documents);
+      var i = AGING.findIndex(function (b) { return late >= b[2] && late <= b[3]; });
+      buckets[i].amount = round2(buckets[i].amount + amount);
+      buckets[i].count++;
+      items.push({ doc: d, amount: amount, due: due, lateDays: late, bucket: AGING[i][0] });
+    });
+    items.sort(function (a, b) { return b.lateDays - a.lateDays || (a.due < b.due ? -1 : 1); });
+    var sum = function (list) { return round2(list.reduce(function (s, b) { return s + b.amount; }, 0)); };
+    return { total: sum(buckets), late: sum(buckets.slice(1)), lateCount: buckets.slice(1).reduce(function (s, b) { return s + b.count; }, 0),
+             buckets: buckets, items: items };
+  }
+
+  /** Sorties régulières ramenées au mois (trimestre ÷ 3, année ÷ 12) ; charges terminées, ponctuelles et entrées exclues. */
+  function monthlyCharges(charges, today) {
+    return round2((charges || []).reduce(function (s, c) {
+      if (!c || isIn(c) || !has(EVERY, c.every) || (c.end && c.end < today)) return s;
+      return s + (Number(c.amount) || 0) / EVERY[c.every];
+    }, 0));
+  }
+
+  /** Mois couverts par le disponible au rythme des charges mensuelles (une décimale) ; null sans charges. */
+  function runway(available, monthly) {
+    if (available === null || available === undefined || !(monthly > 0)) return null;
+    return Math.max(0, Math.floor(available / monthly * 10) / 10);
+  }
+
+  /** Devis acceptés pas encore facturés : nombre et montant TTC. */
+  function quotesToInvoice(documents) {
+    var list = (documents || []).filter(function (d) { return d && d.type === "devis" && d.status === "accepted" && !d.invoiceId; });
+    return { count: list.length, amount: round2(list.reduce(function (s, d) { return s + total(d); }, 0)) };
+  }
+
+  var FLOW_KINDS = labels("eng.flow.", ["receipt", "refund", "urssaf", "vat", "charge", "planned"]);
+
+  /** Export de la prévision : date, nature, libellé, montant et solde après le mouvement (si un solde est saisi). */
+  function forecastCSV(f) {
+    var q = function (v) { return '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"'; };
+    var eur = function (n) { return String(n.toFixed(2)).replace(".", ","); };
+    var bal = f.start, lines = [L("eng.csv.forecast")];
+    if (bal !== null) lines.push([f.today.split("-").reverse().join("/"), q(L("eng.csv.forecastStart")), q(""), "", eur(bal)].join(";"));
+    f.items.forEach(function (x) {
+      if (bal !== null) bal = round2(bal + x.amount);
+      lines.push([x.date.split("-").reverse().join("/"), q(FLOW_KINDS[x.kind] || x.kind), q(x.label), eur(x.amount), bal === null ? "" : eur(bal)].join(";"));
+    });
+    return lines.join("\r\n");
+  }
+
+  return { EVERY: EVERY, CHARGE_LABELS: CHARGE_LABELS, isIn: isIn, addMonths: addMonths, monthStart: monthStart, monthEnd: monthEnd, chargeDates: chargeDates, chargeErrors: chargeErrors, expectedReceipts: expectedReceipts, balanceCurve: balanceCurve, safeAmount: safeAmount, daysBetween: daysBetween, avg: avg, paymentStats: paymentStats, AGING: AGING, aging: aging, monthlyCharges: monthlyCharges, runway: runway, quotesToInvoice: quotesToInvoice, FLOW_KINDS: FLOW_KINDS, forecastCSV: forecastCSV,
+           series: series, seriesPrefix: seriesPrefix, nextNumber: nextNumber, continuation: continuation, checkIssue: checkIssue, issue: issue, state: state, checkPayment: checkPayment, clientTotals: clientTotals, COPY_FIELDS: COPY_FIELDS, copyFrom: copyFrom, invoiceFromQuote: invoiceFromQuote, creditFromInvoice: creditFromInvoice, duplicate: duplicate,
+           nameKey: nameKey, listText: listText, labels: labels, round2: round2, lastDay: lastDay, iso: iso, total: total, payments: payments, paidAmount: paidAmount,
            credited: credited, balance: balance, dueDate: dueDate, order: order, TIME_MAX: TIME_MAX, NBSP: NBSP, dec: dec, frDay: frDay,
            hasRate: hasRate, byDate: byDate, parseDuration: parseDuration, durationLabel: durationLabel, ISO_DAY: ISO_DAY, timerCheck: timerCheck,
            timerElapsed: timerElapsed, timerStart: timerStart, timerPause: timerPause, timerResume: timerResume, timerStop: timerStop,
