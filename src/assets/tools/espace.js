@@ -464,14 +464,14 @@
     var openSum = open.reduce(function (s, d) { return s + E.balance(d, data.documents); }, 0);
     var quotes = data.documents.filter(function (d) { return d.type === "devis" && d.status === "sent"; });
     var year = E.cashed(data.documents, YEAR + "-01-01", YEAR + "-12-31");
-    var decl = E.nextDeclaration(data.documents, p, R, CAL, TODAY);
-    var th = E.thresholds(data.documents, p, R, YEAR);
+    // Parties du pays (module d'écrans, documentation/60, § 3.2) : rappels, 4e indicateur, jauges, note.
+    var dash = UI.dashboard ? UI.dashboard() : {};
 
     var html = '<div class="espace-head"><h2>' + esc(p.name || L("dash.title")) + "</h2>" +
       '<div class="espace-quick espace-noprint"><a class="btn btn-primary btn-sm" href="#/documents/nouveau?type=facture">' + L("quick.invoice") + "</a>" +
       '<a class="btn btn-ghost btn-sm" href="#/documents/nouveau?type=devis">' + L("quick.quote") + "</a>" +
       '<a class="btn btn-ghost btn-sm" href="#/clients/nouveau">' + L("quick.client") + "</a></div></div>";
-    html += profileReminder() + purchasesReminder() + chronoReminder() + timeReminder() + prospectsReminder() + treasuryReminder() + backupReminder();
+    html += profileReminder() + (dash.reminders || "") + chronoReminder() + timeReminder() + prospectsReminder() + treasuryReminder() + backupReminder();
     // Indicateurs et graphiques (documentation/55-indicateurs-espace.md, § 2) : comparaison avec l'an dernier à la même date.
     var td = ST.toDate(data.documents, TODAY), prevYear = String(+YEAR - 1);
     var versus = function (x, what) {
@@ -482,12 +482,10 @@
         L("count.receipt.one"), L("count.receipt.many")), versus(td.year, L("dash.sameDateYear", { year: prevYear }))].filter(Boolean).join(" · ")) +
       kpi(L("dash.cashedMonth"), money(td.month.now), versus(td.month, L("dash.lastYearSameDate")) || L("dash.lastYearSameDateAmount", { amount: money(td.month.prev) })) +
       kpi(L("dash.toCollect"), money(openSum), open.length ? countText(open.length, L("count.invoice.one"), L("count.invoice.many")) + (late.length ? L("dash.ofWhichLate", { n: late.length }) : "") : L("dash.noOpenInvoice"), late.length ? "is-warn" : "") +
-      (decl ? kpi(L("dash.declaration", { period: decl.period.label }), money(decl.revenue),
-        L("dash.declarationSub", { due: longDay(decl.due), total: money(decl.total) }) + (decl.open ? L("dash.periodOpen") : ""), "is-brand")
-        : kpi(L("dash.pendingQuotes"), String(quotes.length), quotes.length ? L("dash.quotesTotal", { amount: money(quotes.reduce(function (s, d) { return s + E.total(d); }, 0)) }) : L("dash.noPendingQuote"))) +
+      (dash.kpi || kpi(L("dash.pendingQuotes"), String(quotes.length), quotes.length ? L("dash.quotesTotal", { amount: money(quotes.reduce(function (s, d) { return s + E.total(d); }, 0)) }) : L("dash.noPendingQuote"))) +
       "</div>";
 
-    if (isMicro()) html += gauges(th);
+    html += dash.afterKpis || "";
     var series = ST.monthly(data.documents, TODAY, 12), top = ST.topClients(data.documents, ST.since12(TODAY), TODAY, 5);
     html += '<div class="espace-cols tr-charts"><section class="card espace-card"><div class="card-head"><h3>' + L("dash.monthlyTitle") + "</h3>" +
       '<span class="small muted">' + L("dash.monthlyIntro") + '</span></div><div class="chart" data-chart="monthly"></div>' +
@@ -499,19 +497,7 @@
       '<p class="small"><a href="#/echeances">' + L("dash.allDeadlines") + "</a></p></section></div>" +
       '<section class="card espace-card"><h3>' + L("dash.recentDocs") + "</h3>" + docTable(recentDocs(5), true) +
       '<p class="small"><a href="#/documents">' + L("dash.allDocs") + "</a></p></section>";
-    if (decl) {
-      var pct = function (r) { return percent(Math.round(r * 1000) / 10); };
-      html += '<p class="small muted espace-note">' + (decl.mixed
-        // Activité mixte : chaque part au taux de son activité ; formation professionnelle au plus élevé des deux taux.
-        ? L("decl.mixedEstimate", { sales: esc(money(decl.parts[0].revenue)), salesRate: pct(decl.parts[0].rates.social + decl.parts[0].rates.cfp),
-            services: esc(money(decl.parts[1].revenue)), servicesRate: pct(decl.parts[1].rates.social + decl.parts[1].rates.cfp) }) +
-          (decl.rates.acre ? L("decl.acre") : "") +
-          (decl.rates.vl ? L("decl.vlMixed", { a: pct(decl.parts[0].rates.vl), b: pct(decl.parts[1].rates.vl) }) : "") +
-          L("decl.mixedCfp")
-        : L("decl.estimate", { rate: pct(decl.rates.social + decl.rates.cfp) }) + (decl.rates.acre ? L("decl.acre") : "") +
-          (decl.rates.vl ? L("decl.vl", { rate: pct(decl.rates.vl) }) : "")) +
-        L("decl.whereHtml") + "</p>";
-    }
+    html += dash.note || "";
     view.innerHTML = html;
     drawCharts = function () {
       var el = view.querySelector('[data-chart="monthly"]');
@@ -562,36 +548,6 @@
   }
   function countText(n, one, many) { return n + " " + (n > 1 ? many : one); }
 
-  function gauge(label, value, max, note) {
-    var pct = max > 0 ? Math.min(100, value / max * 100) : 0;
-    var cls = pct >= 100 ? "over" : pct >= 80 ? "near" : "";
-    return '<div class="gauge"><div class="gauge-head"><span>' + esc(label) + "</span><b>" + esc(money(value)) + " / " + esc(money(max)) +
-      '</b></div><div class="progress" role="progressbar" aria-label="' + esc(label) + '" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' +
-      Math.round(pct) + '"><div class="' + cls + '" style="width:' + pct.toFixed(1) + '%"></div></div>' +
-      (note ? '<p class="small muted" style="margin: 6px 0 0;">' + esc(note) + "</p>" : "") + "</div>";
-  }
-  function gauges(th) {
-    var html = '<div class="card gauges">' + gauge(L("gauge.ceiling", { year: YEAR }), th.revenue, th.ceiling,
-      th.revenue > th.ceiling ? L("gauge.ceilingOver") : "");
-    if (th.services) {
-      html += gauge(L("gauge.services", { year: YEAR }), th.services.revenue, th.services.ceiling,
-        th.services.revenue > th.services.ceiling ? L("gauge.servicesOver") : "");
-    }
-    if (th.vat && th.vat.mixed) {
-      // Activité mixte (BOFiP, BOI-TVA-DECLA-40-10-10, § 160) : deux seuils ; seuils majorés de l'année en cours non
-      // précisés pour l'activité mixte (BOI-TVA-DECLA-40-10-10 et 40-10-20 lus le 10/11/2026) : non affirmés (documentation/53).
-      var over = th.revenue > th.vat.base || th.services.revenue > th.vat.servicesBase;
-      html += gauge(L("gauge.vatGlobal"), th.revenue, th.vat.base, "") +
-        gauge(L("gauge.vatServices"), th.services.revenue, th.vat.servicesBase, over ? L("gauge.vatMixedOver") : "");
-      html += '<p class="small muted" style="margin: 6px 0 0;">' + L("gauge.vatMixedNote") + "</p>";
-    } else if (th.vat) {
-      html += gauge(L("gauge.vat"), th.revenue, th.vat.base,
-        th.revenue > th.vat.major ? L("gauge.vatMajorOver") :
-        th.revenue > th.vat.base ? L("gauge.vatOver", { major: money(th.vat.major) }) : "");
-    }
-    return html + "</div>";
-  }
-
   /** Mentions obligatoires de l'émetteur manquantes dans le profil. */
   function profileReminder() {
     var p = profile(), missing = [];
@@ -599,13 +555,6 @@
     if (!String(p.siret || "").trim()) missing.push(L("patch.siret"));
     if (!missing.length) return "";
     return '<p class="notice warn espace-noprint">' + L("remind.profileHtml", { missing: missing.join(", ") }) + "</p>";
-  }
-
-  /** Vente de marchandises : registre des achats obligatoire (règle registre_achats) ; rappel tant que rien n'est saisi. */
-  function purchasesReminder() {
-    if (!E.purchasesRequired(profile(), R.registre_achats, R)) return "";
-    if (E.expenseRows(data.expenses, YEAR + "-01-01", YEAR + "-12-31").rows.length) return "";
-    return '<p class="notice espace-noprint">' + L("remind.purchasesHtml") + "</p>";
   }
 
   /** Chronomètre en marche, en pause ou arrêté avec une durée à saisir (documentation/37-temps-passe.md, § 8). */
@@ -2661,7 +2610,7 @@
   // ----- Module d'écrans du pays (documentation/60, § 3.2, D90) ------------------------------------------------
   // Ce que l'Espace prête au module de la section (tools/espace-<pays>-ui.js) ; les données par une fonction, car l'objet
   // data est remplacé à chaque chargement.
-  var ctx = { $: $, L: L, esc: esc, money: money, day: day, percent: percent, DEC: DEC, field: field, options: options, kpi: kpi, countText: countText, showError: showError, persist: persist, now: now, isMicro: isMicro, profile: profile, view: view, amountText: amountText, E: E, R: R, S: S, OF: OF, TODAY: TODAY, YEAR: YEAR,
+  var ctx = { $: $, CAL: CAL, longDay: longDay, L: L, esc: esc, money: money, day: day, percent: percent, DEC: DEC, field: field, options: options, kpi: kpi, countText: countText, showError: showError, persist: persist, now: now, isMicro: isMicro, profile: profile, view: view, amountText: amountText, E: E, R: R, S: S, OF: OF, TODAY: TODAY, YEAR: YEAR,
               data: function () { return data; } };
   var UI = OFE.espaceUI && OFE.espaceUI[OF.section] ? OFE.espaceUI[OF.section](ctx) : {};
 

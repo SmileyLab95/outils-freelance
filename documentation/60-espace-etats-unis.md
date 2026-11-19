@@ -199,6 +199,9 @@ reçoit les écrans d'immobilisations (228 lignes) ; `tools/espace.js` lui prêt
 formats, champs, persistance, règles, moteur, données par `ctx.data()`) et ajoute ses routes au routeur. Parcours de
 l'Espace 359/359 et des comptes 51/51. Le premier essai a échoué au parcours : le raccourci `$` manquait au contexte,
 et le vérificateur TypeScript ne signale pas ce nom (angle mort désormais couvert par un contrôle dédié).
+Lot 3a-2 fait le 19/11/2026 : crochet `dashboard()` du module (rappel du registre des achats, prochaine déclaration
+Urssaf en 4e indicateur, jauges des plafonds, note sur l'estimation) ; sans module, le tableau de bord garde les devis
+en attente en 4e indicateur. Parcours de l'Espace 359/359 et des comptes 51/51.
 
 ### Avancement
 

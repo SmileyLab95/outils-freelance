@@ -1,6 +1,6 @@
 /*
  * Écrans de l'Espace entrepreneur propres à la France (documentation/60-espace-etats-unis.md, § 3.2, décision D90) :
- * immobilisations et amortissements (documentation/57). Module d'écrans d'un pays : la fabrique OFE.espaceUI.fr reçoit le
+ * immobilisations et amortissements (documentation/57) ; tableau de bord : déclaration Urssaf, plafonds, registre des achats. Module d'écrans d'un pays : la fabrique OFE.espaceUI.fr reçoit le
  * contexte prêté par tools/espace.js (textes, formats, champs, données, règles…) et renvoie ses crochets ; routes : écrans
  * en plus du cadre commun. Chargé par la page de la section avant tools/espace.js.
  */
@@ -9,7 +9,7 @@
   var OFE = root.OFE = root.OFE || {};
   (OFE.espaceUI = OFE.espaceUI || {}).fr = function (ctx) {
     var $ = ctx.$, L = ctx.L, esc = ctx.esc, money = ctx.money, day = ctx.day, percent = ctx.percent, DEC = ctx.DEC, field = ctx.field, options = ctx.options, kpi = ctx.kpi, countText = ctx.countText, showError = ctx.showError, persist = ctx.persist, now = ctx.now, isMicro = ctx.isMicro, profile = ctx.profile, view = ctx.view, amountText = ctx.amountText, E = ctx.E, R = ctx.R, S = ctx.S, OF = ctx.OF, TODAY = ctx.TODAY, YEAR = ctx.YEAR;
-    var D = ctx.data;   // données de l'Espace : l'objet change à chaque chargement, d'où une fonction
+    var D = ctx.data, CAL = ctx.CAL, longDay = ctx.longDay;   // données de l'Espace : l'objet change à chaque chargement, d'où une fonction
 
     function asset(id) { return D().assets.filter(function (a) { return a.id === id; })[0] || null; }
     var ASSET_HINTS = { deductible: L("as.hint.deductible"), partial: L("as.hint.partial") };
@@ -240,8 +240,77 @@
       });
     }
 
+    function gauge(label, value, max, note) {
+      var pct = max > 0 ? Math.min(100, value / max * 100) : 0;
+      var cls = pct >= 100 ? "over" : pct >= 80 ? "near" : "";
+      return '<div class="gauge"><div class="gauge-head"><span>' + esc(label) + "</span><b>" + esc(money(value)) + " / " + esc(money(max)) +
+        '</b></div><div class="progress" role="progressbar" aria-label="' + esc(label) + '" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' +
+        Math.round(pct) + '"><div class="' + cls + '" style="width:' + pct.toFixed(1) + '%"></div></div>' +
+        (note ? '<p class="small muted" style="margin: 6px 0 0;">' + esc(note) + "</p>" : "") + "</div>";
+    }
+    function gauges(th) {
+      var html = '<div class="card gauges">' + gauge(L("gauge.ceiling", { year: YEAR }), th.revenue, th.ceiling,
+        th.revenue > th.ceiling ? L("gauge.ceilingOver") : "");
+      if (th.services) {
+        html += gauge(L("gauge.services", { year: YEAR }), th.services.revenue, th.services.ceiling,
+          th.services.revenue > th.services.ceiling ? L("gauge.servicesOver") : "");
+      }
+      if (th.vat && th.vat.mixed) {
+        // Activité mixte (BOFiP, BOI-TVA-DECLA-40-10-10, § 160) : deux seuils ; seuils majorés de l'année en cours non
+        // précisés pour l'activité mixte (BOI-TVA-DECLA-40-10-10 et 40-10-20 lus le 10/11/2026) : non affirmés (documentation/53).
+        var over = th.revenue > th.vat.base || th.services.revenue > th.vat.servicesBase;
+        html += gauge(L("gauge.vatGlobal"), th.revenue, th.vat.base, "") +
+          gauge(L("gauge.vatServices"), th.services.revenue, th.vat.servicesBase, over ? L("gauge.vatMixedOver") : "");
+        html += '<p class="small muted" style="margin: 6px 0 0;">' + L("gauge.vatMixedNote") + "</p>";
+      } else if (th.vat) {
+        html += gauge(L("gauge.vat"), th.revenue, th.vat.base,
+          th.revenue > th.vat.major ? L("gauge.vatMajorOver") :
+          th.revenue > th.vat.base ? L("gauge.vatOver", { major: money(th.vat.major) }) : "");
+      }
+      return html + "</div>";
+    }
+
+    /** Vente de marchandises : registre des achats obligatoire (règle registre_achats) ; rappel tant que rien n'est saisi. */
+    function purchasesReminder() {
+      if (!E.purchasesRequired(profile(), R.registre_achats, R)) return "";
+      if (E.expenseRows(D().expenses, YEAR + "-01-01", YEAR + "-12-31").rows.length) return "";
+      return '<p class="notice espace-noprint">' + L("remind.purchasesHtml") + "</p>";
+    }
+
+    /**
+     * Tableau de bord (documentation/55, § 2) : registre des achats à tenir, prochaine déclaration Urssaf en 4e
+     * indicateur, jauges des plafonds de la micro-entreprise, note sur l'estimation des cotisations.
+     */
+    function dashboard() {
+      var p = profile();
+      var decl = E.nextDeclaration(D().documents, p, R, CAL, TODAY);
+      var th = E.thresholds(D().documents, p, R, YEAR);
+      var html = "";
+      if (decl) {
+        var pct = function (r) { return percent(Math.round(r * 1000) / 10); };
+        html += '<p class="small muted espace-note">' + (decl.mixed
+          // Activité mixte : chaque part au taux de son activité ; formation professionnelle au plus élevé des deux taux.
+          ? L("decl.mixedEstimate", { sales: esc(money(decl.parts[0].revenue)), salesRate: pct(decl.parts[0].rates.social + decl.parts[0].rates.cfp),
+              services: esc(money(decl.parts[1].revenue)), servicesRate: pct(decl.parts[1].rates.social + decl.parts[1].rates.cfp) }) +
+            (decl.rates.acre ? L("decl.acre") : "") +
+            (decl.rates.vl ? L("decl.vlMixed", { a: pct(decl.parts[0].rates.vl), b: pct(decl.parts[1].rates.vl) }) : "") +
+            L("decl.mixedCfp")
+          : L("decl.estimate", { rate: pct(decl.rates.social + decl.rates.cfp) }) + (decl.rates.acre ? L("decl.acre") : "") +
+            (decl.rates.vl ? L("decl.vl", { rate: pct(decl.rates.vl) }) : "")) +
+          L("decl.whereHtml") + "</p>";
+      }
+      return {
+        reminders: purchasesReminder(),
+        kpi: decl ? kpi(L("dash.declaration", { period: decl.period.label }), money(decl.revenue),
+          L("dash.declarationSub", { due: longDay(decl.due), total: money(decl.total) }) + (decl.open ? L("dash.periodOpen") : ""), "is-brand") : "",
+        afterKpis: isMicro() ? gauges(th) : "",
+        note: html
+      };
+    }
+
     return {
-      routes: { immobilisations: function (r) { (r.id ? viewAssetForm : viewAssets)(r); } }
+      routes: { immobilisations: function (r) { (r.id ? viewAssetForm : viewAssets)(r); } },
+      dashboard: dashboard
     };
   };
 })(typeof self !== "undefined" ? self : this);
