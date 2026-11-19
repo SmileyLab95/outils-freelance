@@ -68,6 +68,54 @@ Une seule source de vérité : le code de l'Espace devient commun ; seul ce qui 
 
 Le stockage est déjà séparé par section (clé `of:espace:<section>`) : un utilisateur des deux pays a deux Espaces.
 
+### 3.1 Étape 2 : un cœur commun et un module par pays
+
+**Fichiers.** `engines/espace-core.js` (nouveau) contient ce qui ne dépend d'aucun pays ; c'est une fabrique qui reçoit
+le contexte de la section : le moteur de facture du pays (`compute`, `amount`, `addDays`, `render`, `UNITS`,
+`NATURES`), le dictionnaire de la langue et les règles. `engines/espace-fr.js` garde son nom et son API
+(`OFE.espaceFR`, chargé directement par 14 fichiers de tests, `espace-stats.js`, la vitrine et les parcours) : il
+assemble le cœur et la France. `engines/espace-us.js` assemble le cœur et les États-Unis. `tools/espace.js` prend le
+moteur de la section (pays de `OF_RULES._meta`), `engines/espace-stats.js` aussi.
+
+**Classement des fonctions du moteur actuel** (1 602 lignes) :
+
+| Domaine | Cœur commun | Propre au pays (crochet fourni par le pays) |
+|---|---|---|
+| Documents | totaux, paiements, soldes, avoirs, échéance, séries et numéros, reprise d'une numérotation, devis vers facture, doublon, totaux par client | préfixes par défaut, contrôle avant émission (mentions), natures et activités (France), statut d'une facture selon l'activité, import du générateur public du pays, moyens de paiement, champs du profil |
+| Recettes | — | livre des recettes (France : micro-entreprise, par activité ; États-Unis : comptabilité de caisse, lignes 1 et 2) et son export |
+| Déclarations | — | France : périodes Urssaf, taux, ACRE, plafonds, TVA ; États-Unis : synthèse de l'annexe C, acomptes trimestriels, 1099 attendus |
+| Dépenses | saisie, contrôle, période, export | catégories (France ; États-Unis : lignes de l'annexe C, repas à 50 %), registre des achats obligatoire ou non |
+| Immobilisations | — | France seulement en version 1 |
+| Temps passé | tout : durées, chronomètre, états, facturation du temps | — |
+| Prospects | étapes, entonnoir, relances, liste d'opposition (empreintes), export | durée de conservation et règles de prospection (France : CNIL ; États-Unis : à lire avant d'ouvrir le module) |
+| Trésorerie | mouvements prévus, échéances des charges, créances par ancienneté, délais de paiement, courbe du solde, versement possible, autonomie, historique | flux d'impôts et de cotisations (France : Urssaf et TVA ; États-Unis : acomptes), point mort (part qui reste après cotisations ou impôt) |
+
+**Textes et formats des moteurs (décision D88).** Un moteur ne contient aucun texte : ses messages et libellés sont
+des clés du dictionnaire de la langue (préfixe `eng.`), lues par la même fonction que l'interface, et ses dates et
+montants passent par les fonctions de format de la section. Le moteur français charge par défaut le dictionnaire
+français : les tests gardent leurs phrases (environ 160 assertions) ; le test des clés couvre aussi les moteurs ; les
+tests américains chargent le dictionnaire anglais.
+
+**Ordre des lots** (chacun : parcours de l'Espace 359/359, parcours des comptes et tests unitaires inchangés) :
+
+1. **2a — textes des moteurs** : `espace-fr.js` (environ 150 textes), `espace-stats.js`, `espace-store.js` et
+   `tools/charts.js` lisent le dictionnaire ; le fichier du dictionnaire se charge aussi dans Node.
+2. **2b — cœur extrait** : les domaines communs passent dans `espace-core.js`, avec les crochets du pays pour ce qui
+   dépend de ses règles (activité micro, natures, flux d'impôts, point mort).
+3. **2c — formats de la section** dans `tools/espace.js` (pourcentages, virgule décimale des champs, signe des montants).
+4. **2d — moteur de facture international** (`engines/invoice-intl.js`) sorti de `tools/invoice.js`, avec les mêmes
+   aperçus et totaux que le générateur public (critère U2).
+5. **2e — moteur américain** et ses tests (critères U3 à U7).
+
+**Avancement de l'étape 2.** Lot 2a fait le 19/11/2026 : `espace-fr.js` lit ses 163 textes (mois, catégories,
+moyens de paiement, contrôles, courriel prérempli, périodes, durées, libellés de la prévision, en-têtes des exports)
+dans le dictionnaire de la langue par sa fonction `L` (exportée sous `text`, reprise par `espace-stats.js`) ;
+`tools/charts.js` lit le sien ; `tools/espace-store.js` renvoie un code (`notBackup`, `version`, `incomplete`,
+`profile`, `unreadable`) que `tools/espace.js` traduit, car la page Compte charge le magasin sans le dictionnaire. Le
+dictionnaire est chargé avant les moteurs dans la page. Restent pour le lot 2c, dans le moteur : la date française des
+exports et des contrôles (`frDay`, jour/mois/année), la virgule décimale (`dec`, montants des exports) et le titre des
+échéances de TVA tiré du calendrier français.
+
 ### Avancement
 
 - **Étape 1 terminée le 19/11/2026.** Les textes de `tools/espace.js` sont dans `tools/espace-texts-fr.js`

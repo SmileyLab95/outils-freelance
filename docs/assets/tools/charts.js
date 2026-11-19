@@ -8,7 +8,14 @@
   "use strict";
   var C = window.OFE.chartScale;
   var esc = function (s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
-  var MONTHS = ["janv.", "févr.", "mars", "avr.", "mai", "juin", "juil.", "août", "sept.", "oct.", "nov.", "déc."];
+  // Textes : dictionnaire de l'Espace dans la langue de la section (tools/espace-texts-<langue>.js, documentation/60, § 3.1).
+  var DICTS = window.OF_ESPACE_TEXTS || {}, LOCALE = (window.OF && window.OF.locale) || "fr";
+  var TX = Object.assign({}, DICTS[LOCALE.slice(0, 2)], DICTS[LOCALE]);
+  var L = function (key) {
+    if (TX[key] === undefined) { console.error("Espace : texte manquant « " + key + " »"); return key; }
+    return TX[key];
+  };
+  var MONTHS = L("eng.chart.months").split("|");
   var seq = 0;
   var id = function () { return "ch" + (++seq); };
   var monthLabel = function (iso, withYear) { return MONTHS[+iso.slice(5, 7) - 1] + (withYear ? " " + iso.slice(2, 4) : ""); };
@@ -46,7 +53,7 @@
     });
     if (o.threshold > 0) {
       body += '<line class="ch-threshold" x1="' + left + '" x2="' + right + '" y1="' + y(o.threshold) + '" y2="' + y(o.threshold) + '"/>' +
-        '<text class="ch-note ch-note-warn" x="' + right + '" y="' + (y(o.threshold) - 5) + '" text-anchor="end">Seuil de sécurité</text>';
+        '<text class="ch-note ch-note-warn" x="' + right + '" y="' + (y(o.threshold) - 5) + '" text-anchor="end">' + esc(L("eng.chart.threshold")) + "</text>";
     }
     // Lignes de référence (plafond, seuil de TVA…) : trait et libellé dans la couleur de la ligne.
     (o.refs || []).forEach(function (r) {
@@ -63,7 +70,7 @@
     if (o.low) {
       var lx = x(o.low.date), ly = y(o.low.balance), anchor = lx > (left + right) / 2 ? "end" : "start";
       body += '<circle class="ch-low' + (o.low.balance < (o.threshold || 0) ? " is-bad" : "") + '" cx="' + lx + '" cy="' + ly + '" r="5"/>' +
-        '<text class="ch-note" x="' + (lx + (anchor === "end" ? -9 : 9)) + '" y="' + (ly < top + 16 ? ly + 16 : ly - 9) + '" text-anchor="' + anchor + '">Point bas</text>';
+        '<text class="ch-note" x="' + (lx + (anchor === "end" ? -9 : 9)) + '" y="' + (ly < top + 16 ? ly + 16 : ly - 9) + '" text-anchor="' + anchor + '">' + esc(L("eng.chart.low")) + "</text>";
     }
     return frame(w, h, o.title, o.desc, body);
   }
@@ -99,8 +106,8 @@
     if (firstFuture > 0) {
       var sx = band(firstFuture, 0).x - (band(1, 0).x - band(0, 0).x) * 0.15;
       body += '<line class="ch-sep" x1="' + sx + '" x2="' + sx + '" y1="' + top + '" y2="' + bottom + '"/>' +
-        '<text class="ch-note" x="' + (sx + 5) + '" y="' + (top + 10) + '">Prévu</text>' +
-        '<text class="ch-note" x="' + (sx - 5) + '" y="' + (top + 10) + '" text-anchor="end">Réel</text>';
+        '<text class="ch-note" x="' + (sx + 5) + '" y="' + (top + 10) + '">' + esc(L("eng.chart.planned")) + "</text>" +
+        '<text class="ch-note" x="' + (sx - 5) + '" y="' + (top + 10) + '" text-anchor="end">' + esc(L("eng.chart.actual")) + "</text>";
     }
     return frame(w, h, o.title, o.desc, body);
   }
@@ -174,7 +181,7 @@
   /** Tableau des données d'un graphique, dans un « Voir les données ». */
   function table(caption, head, rows) {
     // Classe propre (et non « ledger ») : ces tableaux ne doivent pas être confondus avec le livre des recettes ou le registre.
-    return '<details class="ch-data"><summary>Voir les données</summary><div class="table-scroll"><table class="data-table"><caption class="sr-only">' + esc(caption) +
+    return '<details class="ch-data"><summary>' + esc(L("eng.chart.showData")) + '</summary><div class="table-scroll"><table class="data-table"><caption class="sr-only">' + esc(caption) +
       "</caption><thead><tr>" + head.map(function (c, i) { return "<th" + (i ? ' class="num"' : "") + ' scope="col">' + esc(c) + "</th>"; }).join("") +
       "</tr></thead><tbody>" + rows.map(function (r) {
         return "<tr>" + r.map(function (c, i) { return i ? '<td class="num">' + esc(c) + "</td>" : '<th scope="row">' + esc(c) + "</th>"; }).join("") + "</tr>";

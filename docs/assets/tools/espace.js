@@ -2187,6 +2187,9 @@
     return '<div class="field"><label for="import-file">' + L("backup.file") + '</label><input type="file" id="import-file" accept="application/json,.json"></div>' +
       '<p class="form-error" id="import-error" role="alert" hidden></p>';
   }
+  /** Problèmes d'une sauvegarde importée, par code de S.validate (tools/espace-store.js). */
+  var BACKUP_PROBLEMS = { notBackup: L("backup.problem.notBackup"), version: L("backup.problem.version"), incomplete: L("backup.problem.incomplete"),
+                         profile: L("backup.problem.profile"), unreadable: L("backup.problem.unreadable") };
   function bindImport() {
     $("import-file").addEventListener("change", function () {
       var file = this.files && this.files[0];
@@ -2196,7 +2199,7 @@
         var incoming;
         try { incoming = JSON.parse(reader.result); } catch (e) { showError("import-error", L("backup.unreadable")); return; }
         var problem = S.validate(incoming);
-        if (problem) { showError("import-error", problem); return; }
+        if (problem) { showError("import-error", BACKUP_PROBLEMS[problem] || problem); return; }
         var n = incoming.documents.length, k = incoming.clients.length;
         if (!confirm(L("backup.confirmReplace", { docs: countText(n, L("count.document.one"), L("count.document.many")), clients: countText(k, L("count.client.one"), L("count.client.many")) }))) return;
         data = S.normalise(incoming);

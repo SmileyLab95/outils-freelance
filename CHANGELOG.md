@@ -1,5 +1,17 @@
 # Journal des modifications
 
+## 2026-11-19 (matin) — Espace multi-pays, étape 2 : moteurs sans texte
+
+- Architecture du moteur par pays décidée (documentation/60, § 3.1, D88) : un cœur commun et un module par pays,
+  les textes des moteurs venant du dictionnaire de la langue de la section (le Canada aura deux langues pour un
+  même pays).
+- Lot 2a : les 163 textes du moteur français (contrôles, courriel prérempli, catégories, périodes, durées, exports
+  CSV), ceux des indicateurs et des graphiques passent dans le dictionnaire français ; le contrôle d'une sauvegarde
+  renvoie un code traduit par l'Espace. Le dictionnaire est chargé avant les moteurs.
+- Rien ne change pour l'utilisateur : 733 tests unitaires inchangés (dont environ 160 assertions sur les phrases du
+  moteur), parcours de l'Espace 359 points, parcours des comptes ; test des clés étendu aux moteurs et aux
+  graphiques ; 194 fragments de l'ancien code retrouvés mot pour mot.
+
 ## 2026-11-19 (jour, suite) — Espace des États-Unis : sources lues avant le moteur
 
 - Instructions de l'annexe C 2025, Publication 334 et Publication 583 lues aux sources officielles (outil de

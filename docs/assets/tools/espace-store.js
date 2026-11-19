@@ -51,13 +51,14 @@
   // Dates facultatives (décision d'un devis, clôture d'une piste : documentation/55, § 7).
   var optionalDate = function (v) { return v === undefined || v === null || isDate(v); };
 
-  /** Vérifie qu'un objet a la forme d'un Espace (sauvegarde importée) ; renvoie un message d'erreur ou "". */
+  /** Vérifie qu'un objet a la forme d'un Espace (sauvegarde importée) ; renvoie "" ou le code du problème (notBackup,
+   *  version, incomplete, profile, unreadable), que tools/espace.js traduit (documentation/60, § 3.1, D88). */
   function validate(data) {
-    if (!data || typeof data !== "object") return "Ce fichier n'est pas une sauvegarde de l'Espace entrepreneur.";
-    if (data.schema !== SCHEMA && data.schema !== 2) return "Cette sauvegarde vient d'une version de l'Espace que ce site ne sait pas lire.";
-    if (!Array.isArray(data.clients) || !Array.isArray(data.documents)) return "Cette sauvegarde est incomplète.";
+    if (!data || typeof data !== "object") return "notBackup";
+    if (data.schema !== SCHEMA && data.schema !== 2) return "version";
+    if (!Array.isArray(data.clients) || !Array.isArray(data.documents)) return "incomplete";
     if (data.profile !== null && data.profile !== undefined && (typeof data.profile !== "object" || !isText(data.profile.name))) {
-      return "Le profil de cette sauvegarde est illisible.";
+      return "profile";
     }
     var badClient = data.clients.some(function (c) { return !c || !isText(c.id) || !isText(c.name); });
     var badDoc = data.documents.some(function (d) {
@@ -66,16 +67,16 @@
         (d.payments || []).some(function (p) { return !p || !isDate(p.date) || !isFinite(Number(p.amount)); });
     });
     // Dépenses : facultatives (sauvegardes antérieures au registre des achats).
-    if (data.expenses !== undefined && !Array.isArray(data.expenses)) return "Cette sauvegarde est incomplète.";
+    if (data.expenses !== undefined && !Array.isArray(data.expenses)) return "incomplete";
     var badExpense = (data.expenses || []).some(function (e) { return !e || !isText(e.id) || !isDate(e.date) || !isFinite(Number(e.amount)); });
     // Temps passé : facultatif (sauvegardes antérieures au module).
-    if (data.timeEntries !== undefined && !Array.isArray(data.timeEntries)) return "Cette sauvegarde est incomplète.";
+    if (data.timeEntries !== undefined && !Array.isArray(data.timeEntries)) return "incomplete";
     var badTime = (data.timeEntries || []).some(function (t) {
       return !t || !isText(t.id) || !isDate(t.date) || ["hour", "day"].indexOf(t.unit) < 0 || !isFinite(Number(t.quantity));
     });
     // Prospects et liste d'opposition : facultatifs (sauvegardes antérieures au module).
     if ((data.prospects !== undefined && !Array.isArray(data.prospects)) || (data.optouts !== undefined && !Array.isArray(data.optouts))) {
-      return "Cette sauvegarde est incomplète.";
+      return "incomplete";
     }
     var badProspect = (data.prospects || []).some(function (p) {
       return !p || !isText(p.id) || !isText(p.name) || (p.exchanges !== undefined && !Array.isArray(p.exchanges)) || !optionalDate(p.closedAt) ||
@@ -85,19 +86,19 @@
       return !o || !isText(o.id) || !isDate(o.date) || !Array.isArray(o.hashes) || !o.hashes.length || !o.hashes.every(isText);
     });
     // Charges régulières (trésorerie) : facultatives (sauvegardes antérieures au module).
-    if (data.charges !== undefined && !Array.isArray(data.charges)) return "Cette sauvegarde est incomplète.";
+    if (data.charges !== undefined && !Array.isArray(data.charges)) return "incomplete";
     var badCharge = (data.charges || []).some(function (c) {
       return !c || !isText(c.id) || !isText(c.label) || ["month", "quarter", "year", "once"].indexOf(c.every) < 0 || !isDate(c.start) || !isFinite(Number(c.amount)) ||
         (c.flow !== undefined && c.flow !== "in" && c.flow !== "out");
     });
     // Immobilisations (documentation/57) : facultatives (sauvegardes antérieures au module).
-    if (data.assets !== undefined && !Array.isArray(data.assets)) return "Cette sauvegarde est incomplète.";
+    if (data.assets !== undefined && !Array.isArray(data.assets)) return "incomplete";
     var badAsset = (data.assets || []).some(function (a) {
       return !a || !isText(a.id) || !isText(a.label) || !isDate(a.acquiredOn) || (a.inServiceOn && !isDate(a.inServiceOn)) || (a.soldOn && !isDate(a.soldOn)) ||
         (a.firstRegOn && !isDate(a.firstRegOn)) || (a.co2 != null && a.co2 !== "" && !isFinite(Number(a.co2))) ||
         !isFinite(Number(a.cost)) || !isFinite(Number(a.years));
     });
-    return badClient || badDoc || badExpense || badTime || badProspect || badOptout || badCharge || badAsset ? "Cette sauvegarde contient des éléments illisibles." : "";
+    return badClient || badDoc || badExpense || badTime || badProspect || badOptout || badCharge || badAsset ? "unreadable" : "";
   }
 
   var live = function (x) { return x && !x.deletedAt; };

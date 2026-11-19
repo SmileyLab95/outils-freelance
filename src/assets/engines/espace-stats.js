@@ -10,6 +10,7 @@
   else (root.OFE = root.OFE || {}).espaceStats = api;
 })(typeof self !== "undefined" ? self : this, function (E, INV) {
   "use strict";
+  var L = E.text;   // textes du moteur : dictionnaire de la langue de la section (documentation/60, § 3.1, D88)
 
   var round2 = function (n) { return Math.round(n * 100) / 100; };
   var pad = function (n) { return String(n).padStart(2, "0"); };
@@ -117,11 +118,11 @@
   var PERIODS = ["mois", "trimestre", "annee", "12m", "precedente"];
   function period(key, today) {
     var y = +today.slice(0, 4), m = +today.slice(5, 7), q = Math.floor((m - 1) / 3);
-    if (key === "mois") return { key: key, from: today.slice(0, 8) + "01", to: today, label: "ce mois-ci" };
-    if (key === "trimestre") return { key: key, from: y + "-" + pad(q * 3 + 1) + "-01", to: today, label: "au " + (q + 1) + (q ? "e" : "er") + " trimestre" };
-    if (key === "12m") return { key: key, from: since12(today), to: today, label: "sur 12 mois" };
-    if (key === "precedente") return { key: key, from: (y - 1) + "-01-01", to: (y - 1) + "-12-31", label: "en " + (y - 1) };
-    return { key: "annee", from: y + "-01-01", to: today, label: "en " + y };
+    if (key === "mois") return { key: key, from: today.slice(0, 8) + "01", to: today, label: L("eng.stats.month") };
+    if (key === "trimestre") return { key: key, from: y + "-" + pad(q * 3 + 1) + "-01", to: today, label: q ? L("eng.stats.quarter", { n: q + 1 }) : L("eng.stats.quarterFirst") };
+    if (key === "12m") return { key: key, from: since12(today), to: today, label: L("eng.stats.last12") };
+    if (key === "precedente") return { key: key, from: (y - 1) + "-01-01", to: (y - 1) + "-12-31", label: L("eng.stats.inYear", { year: y - 1 }) };
+    return { key: "annee", from: y + "-01-01", to: today, label: L("eng.stats.inYear", { year: y }) };
   }
 
   /**
@@ -221,7 +222,7 @@
   function expenseStats(list, documents, from, to, profile, rules) {
     var res = E.expenseRows(list, from, to), byCat = {}, bySupplier = {};
     res.rows.forEach(function (r) {
-      var cat = r.category || "Non classées";
+      var cat = r.category || L("eng.stats.uncategorized");
       byCat[cat] = (byCat[cat] || 0) + r.amount;
       bySupplier[r.supplier] = (bySupplier[r.supplier] || 0) + r.amount;
     });

@@ -5,18 +5,32 @@
  * Les montants des documents viennent du moteur de facture commun (OFE.invoiceFR).
  */
 (function (root, factory) {
-  var api = factory(root.OFE ? root.OFE.invoiceFR : require("./invoice-fr.js"));
+  // Textes du moteur (documentation/60, § 3.1, décision D88) : dictionnaire de la langue de la section, chargé avant le
+  // moteur dans la page (tools/espace-texts-<langue>.js) ; le français dans Node (tests, scripts).
+  var dicts = root.OF_ESPACE_TEXTS || require("../tools/espace-texts-fr.js").OF_ESPACE_TEXTS;
+  var locale = (root.OF && root.OF.locale) || "fr";
+  var texts = Object.assign({}, dicts.fr, dicts[locale.slice(0, 2)], dicts[locale]);
+  var api = factory(root.OFE ? root.OFE.invoiceFR : require("./invoice-fr.js"), texts);
   if (typeof module === "object" && module.exports) module.exports = api;
   else (root.OFE = root.OFE || {}).espaceFR = api;
-})(typeof self !== "undefined" ? self : this, function (INV) {
+})(typeof self !== "undefined" ? self : this, function (INV, TX) {
   "use strict";
+  /** Texte de la clé, avec les valeurs { nom: valeur } à la place des « {nom} » (même règle que tools/espace.js). */
+  function L(key, vars) {
+    var text = TX[key];
+    if (text === undefined) { if (typeof console !== "undefined") console.error("Espace : texte manquant « " + key + " »"); return key; }
+    return vars ? text.replace(/\{(\w+)\}/g, function (m, k) { return vars[k] != null ? vars[k] : m; }) : text;
+  }
 
-  var MONTHS = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
+  /** « 1, 2 et 3 » : liste de numéros dans la langue de la section. */
+  function listText(items) { return items.length > 1 ? items.slice(0, -1).join(", ") + L("eng.listAnd") + items[items.length - 1] : String(items[0]); }
+  var MONTHS = L("eng.months").split("|");
+  /** Libellés traduits des clés : { clé: L(préfixe + clé) } (l'ordre des clés est celui de la liste). */
+  var labels = function (prefix, keys) { var o = {}; keys.forEach(function (k) { o[k] = L(prefix + k); }); return o; };
   /** Catégories facultatives des dépenses (documentation/55, § 3) : liste fermée ; une dépense sans catégorie est « non classée ». */
-  var EXPENSE_CATEGORIES = { logiciels: "Logiciels et abonnements", materiel: "Matériel", deplacements: "Déplacements", locaux: "Locaux",
-    telecom: "Téléphone et internet", formation: "Formation", soustraitance: "Sous-traitance", marchandises: "Marchandises",
-    assurances: "Assurances", banque: "Frais bancaires", autres: "Autres" };
-  var METHODS = { virement: "Virement", carte: "Carte bancaire", cheque: "Chèque", especes: "Espèces", prelevement: "Prélèvement", autre: "Autre" };
+  var EXPENSE_CATEGORIES = labels("eng.expenseCategory.", ["logiciels", "materiel", "deplacements", "locaux", "telecom", "formation",
+    "soustraitance", "marchandises", "assurances", "banque", "autres"]);
+  var METHODS = labels("eng.method.", ["virement", "carte", "cheque", "especes", "prelevement", "autre"]);
   var DEFAULT_PREFIXES = { facture: "F", devis: "D", avoir: "A" };
   // Codes pays ISO 3166-1 alpha-2 (249) et États membres de l'Union européenne (27) ; noms affichés par Intl.DisplayNames.
   var COUNTRIES = ("AD AE AF AG AI AL AM AO AQ AR AS AT AU AW AX AZ BA BB BD BE BF BG BH BI BJ BL BM BN BO BQ BR BS BT BV BW BY BZ " +
@@ -132,8 +146,8 @@
   /** Contrôles avant émission ; renvoie la liste des erreurs (vide si le document peut être émis). */
   function checkIssue(documents, doc, client, opts) {
     var errors = [];
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(doc.date || "")) errors.push("Indiquez la date du document.");
-    if (!client || !String(client.name || "").trim()) errors.push("Choisissez un client.");
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(doc.date || "")) errors.push(L("eng.issue.date"));
+    if (!client || !String(client.name || "").trim()) errors.push(L("eng.issue.client"));
     // Ligne commencée (désignation ou prix saisi, comme dans l'aperçu) : désignation, quantité et prix obligatoires.
     var started = [], incomplete = [];
     (doc.lines || []).forEach(function (l, i) {
@@ -141,30 +155,27 @@
       started.push(i + 1);
       if (!(String(l.desc || "").trim() && isFinite(INV.amount(l.price)) && isFinite(INV.amount(l.qty)))) incomplete.push(i + 1);
     });
-    if (!started.length) errors.push("Ajoutez au moins une ligne avec une désignation, une quantité et un prix.");
+    if (!started.length) errors.push(L("eng.issue.noLine"));
     else if (incomplete.length) {
-      errors.push((incomplete.length > 1 ? "Complétez les lignes " + incomplete.slice(0, -1).join(", ") + " et " + incomplete[incomplete.length - 1]
-        : "Complétez la ligne " + incomplete[0]) + " (désignation, quantité et prix unitaire hors taxes) ou supprimez-" + (incomplete.length > 1 ? "les." : "la."));
-    } else if (total(doc) <= 0) errors.push("Le montant total doit être positif.");
+      errors.push(incomplete.length > 1 ? L("eng.issue.incompleteMany", { lines: listText(incomplete) }) : L("eng.issue.incompleteOne", { line: incomplete[0] }));
+    } else if (total(doc) <= 0) errors.push(L("eng.issue.positive"));
     else if (opts && opts.lineKinds && doc.nature === "mixte") {
       // Activité mixte : ventes et prestations distinctes sur la facture (BOFiP, BOI-BIC-DECLA-30-30, § 30).
       var unknown = started.filter(function (n) { return !has(INV.LINE_KINDS, doc.lines[n - 1].kind); });
       if (unknown.length) {
-        errors.push("Indiquez si " + (unknown.length > 1 ? "les lignes " + unknown.slice(0, -1).join(", ") + " et " + unknown[unknown.length - 1] + " sont des ventes ou des prestations"
-          : "la ligne " + unknown[0] + " est une vente ou une prestation") + " : en activité mixte, la facture les distingue.");
+        errors.push(unknown.length > 1 ? L("eng.issue.kindMany", { lines: listText(unknown) }) : L("eng.issue.kindOne", { line: unknown[0] }));
       }
     }
     else if (doc.type === "avoir" && doc.originId) {
       var origin = documents.filter(function (d) { return d.id === doc.originId; })[0];
       if (origin && total(doc) > total(origin) - credited(documents, origin) + 0.005) {
-        errors.push("L'avoir ne peut pas dépasser le montant restant de la facture " + origin.number + " (" +
-          String((total(origin) - credited(documents, origin)).toFixed(2)).replace(".", ",") + " €).");
+        errors.push(L("eng.issue.creditOver", { number: origin.number,
+          amount: String((total(origin) - credited(documents, origin)).toFixed(2)).replace(".", ",") }));
       }
     }
     var last = series(documents, doc.type, String(doc.date).slice(0, 4))[0];
     if (last && doc.date < last.date) {
-      errors.push("La date ne peut pas être antérieure à celle du dernier document émis de la série (" + last.number + " du " +
-        last.date.split("-").reverse().join("/") + ") : la numérotation doit rester chronologique.");
+      errors.push(L("eng.issue.chronology", { number: last.number, date: last.date.split("-").reverse().join("/") }));
     }
     return errors;
   }
@@ -207,10 +218,10 @@
   function checkPayment(doc, payment, documents) {
     var errors = [];
     var amount = Number(payment.amount);
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(payment.date || "")) errors.push("Indiquez la date de l'encaissement.");
-    if (!isFinite(amount) || amount <= 0) errors.push("Le montant doit être supérieur à zéro.");
-    else if (amount > balance(doc, documents) + 0.005) errors.push("Le montant dépasse le reste à " + (doc.type === "avoir" ? "rembourser" : "encaisser") + ".");
-    if (!METHODS[payment.method]) errors.push("Choisissez le moyen de paiement.");
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(payment.date || "")) errors.push(L("eng.pay.date"));
+    if (!isFinite(amount) || amount <= 0) errors.push(L("eng.pay.positive"));
+    else if (amount > balance(doc, documents) + 0.005) errors.push(doc.type === "avoir" ? L("eng.pay.overRefund") : L("eng.pay.overReceipt"));
+    if (!METHODS[payment.method]) errors.push(L("eng.pay.method"));
     return errors;
   }
 
@@ -303,12 +314,12 @@
     var m = /^(\d{4})-(\d{2})$/.exec(key), q = /^(\d{4})-T([1-4])$/.exec(key);
     if (m) {
       var y = +m[1], mo = +m[2];
-      return { key: key, start: iso(y, mo, 1), end: iso(y, mo, lastDay(y, mo)), label: MONTHS[mo - 1] + " " + y };
+      return { key: key, start: iso(y, mo, 1), end: iso(y, mo, lastDay(y, mo)), label: L("eng.period.month", { month: MONTHS[mo - 1], year: y }) };
     }
     if (q) {
       var yq = +q[1], n = +q[2], first = 3 * n - 2;
       return { key: key, start: iso(yq, first, 1), end: iso(yq, first + 2, lastDay(yq, first + 2)),
-               label: n + (n === 1 ? "er" : "e") + " trimestre " + yq };
+               label: n === 1 ? L("eng.period.quarterFirst", { n: n, year: yq }) : L("eng.period.quarter", { n: n, year: yq }) };
     }
     return null;
   }
@@ -445,67 +456,63 @@
    */
   function email(kind, doc, documents, profile, today, fmt) {
     profile = profile || {};
-    var amountText = fmt.eur(total(doc)) + (INV.compute(doc).noVat ? "" : " TTC");
+    var amountText = INV.compute(doc).noVat ? fmt.eur(total(doc)) : L("eng.mail.ttc", { amount: fmt.eur(total(doc)) });
     var bal = balance(doc, documents);
     var due = dueDate(doc);
-    var iban = profile.iban ? "Vous pouvez la régler par virement : IBAN " + profile.iban + (profile.bic ? ", BIC " + profile.bic : "") +
-      ", en indiquant la référence " + doc.number + "." : "";
+    var iban = profile.iban ? (profile.bic ? L("eng.mail.ibanBic", { iban: profile.iban, bic: profile.bic, number: doc.number })
+      : L("eng.mail.iban", { iban: profile.iban, number: doc.number })) : "";
     var parts = [], subject;
     if (kind === "reminder") {
       var late = due < today;
-      subject = "Facture " + doc.number + (late ? " : rappel de paiement" : " : échéance du " + fmt.date(due));
-      parts.push(late
-        ? "Sauf erreur de ma part, le règlement de la facture " + doc.number + " du " + fmt.date(doc.date) + ", arrivée à échéance le " +
-          fmt.date(due) + ", ne m'est pas encore parvenu. Le montant restant dû est de " + fmt.eur(bal) + "."
-        : "Je me permets de vous rappeler que la facture " + doc.number + " du " + fmt.date(doc.date) + ", d'un montant de " + fmt.eur(bal) +
-          ", arrive à échéance le " + fmt.date(due) + ".");
+      subject = late ? L("eng.mail.subjectLate", { number: doc.number }) : L("eng.mail.subjectDue", { number: doc.number, due: fmt.date(due) });
+      var R1 = { number: doc.number, date: fmt.date(doc.date), due: fmt.date(due), amount: fmt.eur(bal) };
+      parts.push(late ? L("eng.mail.reminderLate", R1) : L("eng.mail.reminderSoon", R1));
       if (iban) parts.push(iban);
-      parts.push("Je reste à votre disposition pour toute question.");
+      parts.push(L("eng.mail.questions"));
     } else if (doc.type === "facture") {
       var st = state(doc, today, documents), credits = documents ? credited(documents, doc) : 0;
-      var payable = (parseInt(doc.terms, 10) || 0) > 0 ? "payable au plus tard le " + fmt.date(due) : "payable à réception";
-      var first = "Veuillez trouver ci-joint la facture " + doc.number + " du " + fmt.date(doc.date) + ", d'un montant de " + amountText + ".";
-      if (st === "cancelled") first += " Elle a été annulée par un avoir.";
-      else if (bal <= 0.005) first += " Elle est déjà réglée : merci !";
+      var payable = (parseInt(doc.terms, 10) || 0) > 0 ? L("eng.mail.payableBy", { date: fmt.date(due) }) : L("eng.mail.payableNow");
+      var first = L("eng.mail.invoice", { number: doc.number, date: fmt.date(doc.date), amount: amountText });
+      if (st === "cancelled") first += L("eng.mail.cancelled");
+      else if (bal <= 0.005) first += L("eng.mail.paid");
       else if (bal < total(doc) - 0.005) {
         var nCredits = (documents || []).filter(function (d) { return d.type === "avoir" && d.status !== "draft" && d.originId === doc.id; }).length;
         var already = paidAmount(doc) > 0
-          ? (credits > 0 ? "des règlements reçus et des avoirs émis" : "des règlements déjà reçus")
-          : (nCredits > 1 ? "des avoirs émis" : "de l'avoir émis");
-        first += " Compte tenu " + already + ", le montant restant dû est de " + fmt.eur(bal) + ", " + payable + ".";
-      } else first += " Elle est " + payable + ".";
+          ? (credits > 0 ? L("eng.mail.already.paymentsCredits") : L("eng.mail.already.payments"))
+          : (nCredits > 1 ? L("eng.mail.already.credits") : L("eng.mail.already.credit"));
+        first += L("eng.mail.remaining", { already: already, amount: fmt.eur(bal), payable: payable });
+      } else first += L("eng.mail.payable", { payable: payable });
       parts.push(first);
       if (bal > 0.005 && iban) parts.push(iban);
-      parts.push("Je reste à votre disposition pour toute question.");
+      parts.push(L("eng.mail.questions"));
     } else if (doc.type === "devis") {
       var pct = Math.min(100, Math.max(0, Number(doc.depositPct) || 0));
       var until = INV.addDays(doc.date, Math.max(1, parseInt(doc.validity, 10) || 30));
-      parts.push("Veuillez trouver ci-joint le devis " + doc.number + " du " + fmt.date(doc.date) + ", d'un montant de " + amountText +
-        ", valable jusqu'au " + fmt.date(until) + "." +
-        (pct > 0 ? " Un acompte de " + String(pct).replace(".", ",") + " % (" + fmt.eur(round2(total(doc) * pct / 100)) + ") est demandé à la signature." : ""));
-      parts.push("Pour l'accepter, il vous suffit de me le retourner daté et signé, avec la mention « " + INV.QUOTE_ACCEPTANCE + " ».");
-      parts.push("Je reste à votre disposition pour en parler.");
+      parts.push(L("eng.mail.quote", { number: doc.number, date: fmt.date(doc.date), amount: amountText, until: fmt.date(until) }) +
+        (pct > 0 ? L("eng.mail.deposit", { pct: String(pct).replace(".", ","), amount: fmt.eur(round2(total(doc) * pct / 100)) }) : ""));
+      parts.push(L("eng.mail.accept", { mention: INV.QUOTE_ACCEPTANCE }));
+      parts.push(L("eng.mail.discuss"));
     } else {
       var origin = doc.originId ? (documents || []).filter(function (d) { return d.id === doc.originId; })[0] : null;
-      var ref = origin ? origin.number + " du " + fmt.date(origin.date) : doc.origin && doc.origin.number ? doc.origin.number : "";
-      parts.push("Veuillez trouver ci-joint l'avoir " + doc.number + " du " + fmt.date(doc.date) + ", d'un montant de " + amountText +
-        (ref ? ", relatif à la facture " + ref : "") + ".");
+      var ref = origin ? L("eng.mail.ref", { number: origin.number, date: fmt.date(origin.date) }) : doc.origin && doc.origin.number ? doc.origin.number : "";
+      parts.push(ref ? L("eng.mail.creditFor", { number: doc.number, date: fmt.date(doc.date), amount: amountText, ref: ref })
+        : L("eng.mail.credit", { number: doc.number, date: fmt.date(doc.date), amount: amountText }));
       var sa = state(doc, today, documents);
-      if (sa === "refund") parts.push("La somme de " + fmt.eur(bal) + " vous sera remboursée prochainement.");
+      if (sa === "refund") parts.push(L("eng.mail.refundSoon", { amount: fmt.eur(bal) }));
       else if (sa === "refunded") {
         var lastPay = payments(doc).map(function (p) { return p.date; }).sort().pop();
-        parts.push("La somme de " + fmt.eur(paidAmount(doc)) + " vous a été remboursée le " + fmt.date(lastPay) + ".");
+        parts.push(L("eng.mail.refunded", { amount: fmt.eur(paidAmount(doc)), date: fmt.date(lastPay) }));
       } else if (origin) {
         var left = balance(origin, documents);
-        parts.push(left > 0.005 ? "Il vient en déduction de cette facture : le montant restant dû est désormais de " + fmt.eur(left) + "."
-          : "Il vient en déduction de cette facture, qui est ainsi " + (state(origin, today, documents) === "cancelled" ? "annulée." : "soldée."));
+        parts.push(left > 0.005 ? L("eng.mail.deducted", { amount: fmt.eur(left) })
+          : state(origin, today, documents) === "cancelled" ? L("eng.mail.deductedCancelled") : L("eng.mail.deductedPaid"));
       }
-      parts.push("Je reste à votre disposition pour toute question.");
+      parts.push(L("eng.mail.questions"));
     }
     if (kind !== "reminder") subject = TYPE_NAMES[doc.type] + " " + doc.number + (profile.name ? " – " + profile.name : "");
-    return { subject: subject, body: "Bonjour,\n\n" + parts.join("\n\n") + "\n\nBien cordialement,\n" + (profile.name || "") };
+    return { subject: subject, body: L("eng.mail.hello") + "\n\n" + parts.join("\n\n") + "\n\n" + L("eng.mail.regards") + "\n" + (profile.name || "") };
   }
-  var TYPE_NAMES = { facture: "Facture", devis: "Devis", avoir: "Avoir" };
+  var TYPE_NAMES = labels("eng.type.", ["facture", "devis", "avoir"]);
 
   // ----- Reprise d'un document du générateur public ------------------------------------------
 
@@ -602,17 +609,17 @@
   /** Contrôle d'une dépense saisie : messages d'erreur (vide si elle est valable). */
   function checkExpense(e) {
     var errors = [];
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(e.date || "")) errors.push("Indiquez la date de la dépense.");
-    if (!String(e.supplier || "").trim()) errors.push("Indiquez le fournisseur.");
-    if (!(isFinite(e.amount) && Number(e.amount) > 0)) errors.push("Indiquez un montant positif.");
-    if (!METHODS[e.method]) errors.push("Choisissez le moyen de paiement.");
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(e.date || "")) errors.push(L("eng.exp.date"));
+    if (!String(e.supplier || "").trim()) errors.push(L("eng.exp.supplier"));
+    if (!(isFinite(e.amount) && Number(e.amount) > 0)) errors.push(L("eng.exp.amount"));
+    if (!METHODS[e.method]) errors.push(L("eng.pay.method"));
     return errors;
   }
 
   function expensesCSV(rows) {
     var q = function (v) { return '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"'; };
     // Catégorie (documentation/55) en dernière colonne : les colonnes du registre des achats restent à leur place.
-    var lines = ["Date;Fournisseur;Nature;Montant;Moyen de paiement;Référence de la pièce;Catégorie"];
+    var lines = [L("eng.csv.expenses")];
     rows.forEach(function (r) {
       lines.push([r.date.split("-").reverse().join("/"), q(r.supplier), q(r.label), String(r.amount.toFixed(2)).replace(".", ","), q(r.method), q(r.ref), q(r.category)].join(";"));
     });
@@ -621,8 +628,7 @@
 
   // ----- Immobilisations et amortissements (documentation/57-immobilisations.md) --------------------------------
 
-  var ASSET_CATEGORIES = { materiel: "Matériel et outillage", bureau: "Matériel et mobilier de bureau", logiciel: "Logiciel",
-                           transport: "Véhicule ou matériel de transport", autre: "Autre bien (agencements…)" };
+  var ASSET_CATEGORIES = labels("eng.assetCategory.", ["materiel", "bureau", "logiciel", "transport", "autre"]);
   var ISO_DATE = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
   function utcDay(d) { var p = d.split("-"); return Date.UTC(+p[0], +p[1] - 1, +p[2]); }
   /** Date AAAA-MM-JJ qui existe (pas de 31 avril). */
@@ -637,24 +643,24 @@
   /** Erreurs de saisie d'un bien, avec le champ concerné. */
   function assetErrors(a, rules) {
     var errors = [], add = function (field, message) { errors.push({ field: field, message: message }); };
-    if (!String(a.label || "").trim()) add("label", "Indiquez la nature du bien.");
-    if (!ASSET_CATEGORIES[a.category]) add("category", "Choisissez la catégorie du bien.");
-    if (!validDay(a.acquiredOn)) add("acquiredOn", "Indiquez la date d'acquisition.");
-    if (filled(a.inServiceOn) && !validDay(a.inServiceOn)) add("inServiceOn", "La date de mise en service n'est pas valide.");
-    else if (filled(a.inServiceOn) && validDay(a.acquiredOn) && a.inServiceOn < a.acquiredOn) add("inServiceOn", "La mise en service ne peut pas précéder l'acquisition.");
-    if (!(filled(a.cost) && isFinite(a.cost) && Number(a.cost) > 0)) add("cost", "Indiquez le prix de revient : un montant positif.");
-    if (!(filled(a.years) && Number.isInteger(Number(a.years)) && Number(a.years) >= 1 && Number(a.years) <= 50)) add("years", "Indiquez la durée d'amortissement : un nombre entier d'années, de 1 à 50.");
-    if (!(filled(a.proShare) && isFinite(a.proShare) && Number(a.proShare) >= 1 && Number(a.proShare) <= 100)) add("proShare", "La part professionnelle va de 1 à 100 %.");
+    if (!String(a.label || "").trim()) add("label", L("eng.asset.label"));
+    if (!ASSET_CATEGORIES[a.category]) add("category", L("eng.asset.category"));
+    if (!validDay(a.acquiredOn)) add("acquiredOn", L("eng.asset.acquired"));
+    if (filled(a.inServiceOn) && !validDay(a.inServiceOn)) add("inServiceOn", L("eng.asset.inServiceInvalid"));
+    else if (filled(a.inServiceOn) && validDay(a.acquiredOn) && a.inServiceOn < a.acquiredOn) add("inServiceOn", L("eng.asset.inServiceBefore"));
+    if (!(filled(a.cost) && isFinite(a.cost) && Number(a.cost) > 0)) add("cost", L("eng.asset.cost"));
+    if (!(filled(a.years) && Number.isInteger(Number(a.years)) && Number(a.years) >= 1 && Number(a.years) <= 50)) add("years", L("eng.asset.years"));
+    if (!(filled(a.proShare) && isFinite(a.proShare) && Number(a.proShare) >= 1 && Number(a.proShare) <= 100)) add("proShare", L("eng.asset.proShare"));
     if (filled(a.soldOn)) {
-      if (!validDay(a.soldOn)) add("soldOn", "La date de cession n'est pas valide.");
-      else if (validDay(assetStart(a) || "") && a.soldOn < assetStart(a)) add("soldOn", "La cession ne peut pas précéder la mise en service.");
-      if (!(filled(a.salePrice) && isFinite(a.salePrice) && Number(a.salePrice) >= 0)) add("salePrice", "Indiquez le prix de cession (0 si le bien est mis au rebut).");
-    } else if (filled(a.salePrice)) add("soldOn", "Indiquez la date de cession.");
+      if (!validDay(a.soldOn)) add("soldOn", L("eng.asset.soldInvalid"));
+      else if (validDay(assetStart(a) || "") && a.soldOn < assetStart(a)) add("soldOn", L("eng.asset.soldBefore"));
+      if (!(filled(a.salePrice) && isFinite(a.salePrice) && Number(a.salePrice) >= 0)) add("salePrice", L("eng.asset.salePrice"));
+    } else if (filled(a.salePrice)) add("soldOn", L("eng.asset.soldOn"));
     // Voiture particulière acquise depuis 2021 : données de la carte grise nécessaires au plafond (documentation/57 § 8).
     var P = rules && rules.plafond_amortissement_vp;
     if (P && a.category === "transport" && a.vp === true && validDay(a.acquiredOn) && a.acquiredOn >= P.acquired_from) {
-      if (!validDay(a.firstRegOn)) add("firstRegOn", "Indiquez la date de première immatriculation (carte grise).");
-      if (!(filled(a.co2) && Number.isInteger(Number(a.co2)) && Number(a.co2) >= 0 && Number(a.co2) <= 999)) add("co2", "Indiquez les émissions de CO2 en grammes par kilomètre (carte grise) : un nombre entier.");
+      if (!validDay(a.firstRegOn)) add("firstRegOn", L("eng.asset.firstReg"));
+      if (!(filled(a.co2) && Number.isInteger(Number(a.co2)) && Number(a.co2) >= 0 && Number(a.co2) <= 999)) add("co2", L("eng.asset.co2"));
     }
     return errors;
   }
@@ -849,8 +855,7 @@
   function assetsCSV(year) {
     var q = function (v) { return '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"'; };
     var eur = function (n) { return filled(n) ? Number(n).toFixed(2).replace(".", ",") : ""; };
-    var lines = ["Nature;Catégorie;Acquisition;Mise en service;Prix de revient;Durée (ans);Part professionnelle (%);Amortissement de l'année;" +
-                 "Cumul des amortissements;Valeur nette;Part déductible;Date de cession;Prix de cession;Plus ou moins-value à court terme;Plus-value à long terme"];
+    var lines = [L("eng.csv.assets")];
     year.rows.forEach(function (r) {
       var a = r.asset;
       lines.push([q(a.label), q(ASSET_CATEGORIES[a.category]), frDay(a.acquiredOn), frDay(assetStart(a)), eur(a.cost), String(a.years),
@@ -891,10 +896,10 @@
   function durationLabel(quantity, unit) {
     var q = Number(quantity);
     if (!isFinite(q)) return "";
-    if (unit === "day") return dec(q) + NBSP + (q >= 2 ? "jours" : "jour");
+    if (unit === "day") return q >= 2 ? L("eng.duration.days", { n: dec(q) }) : L("eng.duration.day", { n: dec(q) });
     var min = Math.round(q * 60), h = Math.floor(min / 60), rest = min % 60;
-    if (!h) return rest + NBSP + "min";
-    return h + NBSP + "h" + (rest ? NBSP + String(rest).padStart(2, "0") : "");
+    if (!h) return L("eng.duration.minutes", { n: rest });
+    return rest ? L("eng.duration.hoursMinutes", { h: h, m: String(rest).padStart(2, "0") }) : L("eng.duration.hours", { h: h });
   }
 
   /*
@@ -938,14 +943,14 @@
   /** Erreurs de saisie d'un temps, avec le champ concerné : date, task, unit, duration, clientId, rate. */
   function timeErrors(t) {
     var errors = [], add = function (field, message) { errors.push({ field: field, message: message }); };
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(t.date || "")) add("date", "Indiquez la date.");
-    if (!String(t.task || "").trim()) add("task", "Indiquez la tâche.");
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(t.date || "")) add("date", L("eng.time.date"));
+    if (!String(t.task || "").trim()) add("task", L("eng.time.task"));
     var q = Number(t.quantity);
-    if (!Object.prototype.hasOwnProperty.call(TIME_MAX, t.unit)) add("unit", "Choisissez l'unité : heures ou jours.");
-    else if (!(isFinite(q) && q > 0)) add("duration", t.unit === "day" ? "Indiquez la durée en jours : par exemple 1 ou 0,5." : "Indiquez la durée : par exemple 1,5 ou 1h30.");
-    else if (q > TIME_MAX[t.unit]) add("duration", (t.unit === "day" ? "Une saisie compte une journée au plus" : "Une saisie compte 24 heures au plus") + " : saisissez chaque jour séparément.");
-    if (t.billable !== false && !t.clientId) add("clientId", "Choisissez le client, ou décochez « Facturable » pour un temps interne.");
-    if (t.rate !== null && t.rate !== undefined && t.rate !== "" && !(isFinite(Number(t.rate)) && Number(t.rate) >= 0)) add("rate", "Le taux doit être un montant positif.");
+    if (!Object.prototype.hasOwnProperty.call(TIME_MAX, t.unit)) add("unit", L("eng.time.unit"));
+    else if (!(isFinite(q) && q > 0)) add("duration", t.unit === "day" ? L("eng.time.durationDays") : L("eng.time.durationHours"));
+    else if (q > TIME_MAX[t.unit]) add("duration", t.unit === "day" ? L("eng.time.maxDay") : L("eng.time.maxHours"));
+    if (t.billable !== false && !t.clientId) add("clientId", L("eng.time.client"));
+    if (t.rate !== null && t.rate !== undefined && t.rate !== "" && !(isFinite(Number(t.rate)) && Number(t.rate) >= 0)) add("rate", L("eng.time.rate"));
     return errors;
   }
   function checkTime(t) { return timeErrors(t).map(function (e) { return e.message; }); }
@@ -1028,18 +1033,18 @@
 
   function timeCSV(rows, clientName) {
     var q = function (v) { return '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"'; };
-    var lines = ["Date;Client;Tâche;Durée;Unité;Taux HT;Montant HT;Facturable"];
+    var lines = [L("eng.csv.time")];
     rows.forEach(function (r) {
-      lines.push([frDay(r.date), q(clientName(r.clientId)), q(r.task), dec(r.quantity), r.unit === "day" ? "jour" : "heure",
+      lines.push([frDay(r.date), q(clientName(r.clientId)), q(r.task), dec(r.quantity), r.unit === "day" ? L("eng.csv.day") : L("eng.csv.hour"),
                   r.rate === null ? "" : r.rate.toFixed(2).replace(".", ","), r.amount === null ? "" : r.amount.toFixed(2).replace(".", ","),
-                  r.billable ? "oui" : "non"].join(";"));
+                  r.billable ? L("eng.csv.yes") : L("eng.csv.no")].join(";"));
     });
     return lines.join("\r\n");
   }
 
   // ----- Prospects (documentation/38-prospects.md) ------------------------------------------------------------
 
-  var STAGE_LABELS = { new: "À contacter", talks: "En discussion", quote: "Devis envoyé", won: "Gagné", lost: "Perdu" };
+  var STAGE_LABELS = labels("eng.stage.", ["new", "talks", "quote", "won", "lost"]);
   var STAGE_RANK = { new: 0, talks: 1, quote: 2, won: 3 };
   var OPEN_STAGES = ["new", "talks", "quote"];
   var has = function (o, k) { return Object.prototype.hasOwnProperty.call(o, k); };
@@ -1052,21 +1057,21 @@
   /** Erreurs de saisie d'une fiche, avec le champ concerné : name, email, value, nextDate, stage. */
   function prospectErrors(p) {
     var errors = [], add = function (field, message) { errors.push({ field: field, message: message }); };
-    if (!String(p.name || "").trim()) add("name", "Indiquez le nom du prospect : entreprise ou personne.");
-    if (String(p.email || "").trim() && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(String(p.email).trim())) add("email", "L'email n'est pas valide.");
-    if (!blank(p.value) && !(isFinite(Number(p.value)) && Number(p.value) >= 0)) add("value", "La valeur estimée doit être un montant positif, en euros.");
-    if (!blank(p.nextDate) && !isDay(p.nextDate)) add("nextDate", "La date de relance n'est pas valide.");
-    if (!has(STAGE_LABELS, p.stage)) add("stage", "Choisissez une étape.");
+    if (!String(p.name || "").trim()) add("name", L("eng.prospect.name"));
+    if (String(p.email || "").trim() && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(String(p.email).trim())) add("email", L("eng.prospect.email"));
+    if (!blank(p.value) && !(isFinite(Number(p.value)) && Number(p.value) >= 0)) add("value", L("eng.prospect.value"));
+    if (!blank(p.nextDate) && !isDay(p.nextDate)) add("nextDate", L("eng.prospect.nextDate"));
+    if (!has(STAGE_LABELS, p.stage)) add("stage", L("eng.prospect.stage"));
     return errors;
   }
 
   /** Erreurs d'un échange noté : date (aujourd'hui au plus), sens (me ou them), résumé. */
   function exchangeErrors(x, today) {
     var errors = [], add = function (field, message) { errors.push({ field: field, message: message }); };
-    if (!isDay(x.date)) add("date", "Indiquez la date de l'échange.");
-    else if (x.date > today) add("date", "Un échange ne peut pas être daté dans le futur.");
-    if (x.from !== "me" && x.from !== "them") add("from", "Indiquez qui a pris contact.");
-    if (!String(x.text || "").trim()) add("text", "Résumez l'échange en quelques mots.");
+    if (!isDay(x.date)) add("date", L("eng.exchange.date"));
+    else if (x.date > today) add("date", L("eng.exchange.future"));
+    if (x.from !== "me" && x.from !== "them") add("from", L("eng.exchange.from"));
+    if (!String(x.text || "").trim()) add("text", L("eng.exchange.text"));
     return errors;
   }
 
@@ -1187,10 +1192,10 @@
 
   function prospectsCSV(prospects, documents) {
     var q = function (v) { return '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"'; };
-    var lines = ["Nom;Interlocuteur;Type;Email;Téléphone;Origine;Étape;Valeur HT;Prochaine relance;Prochaine action;Dernier contact de sa part;Créé le"];
+    var lines = [L("eng.csv.prospects")];
     (prospects || []).forEach(function (p) {
       var v = prospectValue(p, documents);
-      lines.push([q(p.name), q(p.contact), p.pro === false ? "Particulier" : "Professionnel", q(p.email), q(p.phone), q(p.source),
+      lines.push([q(p.name), q(p.contact), p.pro === false ? L("eng.prospect.person") : L("eng.prospect.pro"), q(p.email), q(p.phone), q(p.source),
                   STAGE_LABELS[prospectStage(p, documents)], v === null ? "" : v.toFixed(2).replace(".", ","), frDay(p.nextDate), q(p.nextAction),
                   frDay(lastContactFrom(p)), frDay(String(p.createdAt || "").slice(0, 10))].join(";"));
     });
@@ -1200,7 +1205,7 @@
   // ----- Trésorerie (documentation/39-tresorerie.md) ----------------------------------------------------------
 
   var EVERY = { month: 1, quarter: 3, year: 12 };
-  var CHARGE_LABELS = { month: "Chaque mois", quarter: "Chaque trimestre", year: "Chaque année", once: "Une seule fois" };
+  var CHARGE_LABELS = labels("eng.every.", ["month", "quarter", "year", "once"]);
   /** Sens d'un mouvement prévu : sortie (charge) par défaut, entrée si flow vaut "in" (documentation/39, § 7). */
   var isIn = function (c) { return !!c && c.flow === "in"; };
   /** Même jour n mois plus tard ; un jour qui n'existe pas devient le dernier jour du mois. */
@@ -1230,12 +1235,12 @@
   /** Erreurs de saisie d'une charge régulière : label, amount, every, start, end. */
   function chargeErrors(c) {
     var errors = [], add = function (field, message) { errors.push({ field: field, message: message }); };
-    if (!String(c.label || "").trim()) add("label", "Indiquez la charge : loyer, logiciel, assurance…");
-    if (!(isFinite(Number(c.amount)) && Number(c.amount) > 0)) add("amount", "Indiquez un montant positif, en euros.");
-    if (!has(EVERY, c.every) && c.every !== "once") add("every", "Choisissez la fréquence.");
-    if (!blank(c.flow) && c.flow !== "in" && c.flow !== "out") add("flow", "Choisissez le sens : entrée ou sortie.");
-    if (!isDay(c.start)) add("start", c.every === "once" ? "Indiquez la date du mouvement." : "Indiquez la date de la prochaine échéance.");
-    else if (c.every !== "once" && !blank(c.end) && (!isDay(c.end) || c.end < c.start)) add("end", "La dernière échéance doit être une date après la première.");
+    if (!String(c.label || "").trim()) add("label", L("eng.charge.label"));
+    if (!(isFinite(Number(c.amount)) && Number(c.amount) > 0)) add("amount", L("eng.charge.amount"));
+    if (!has(EVERY, c.every) && c.every !== "once") add("every", L("eng.charge.every"));
+    if (!blank(c.flow) && c.flow !== "in" && c.flow !== "out") add("flow", L("eng.charge.flow"));
+    if (!isDay(c.start)) add("start", c.every === "once" ? L("eng.charge.dateOnce") : L("eng.charge.dateNext"));
+    else if (c.every !== "once" && !blank(c.end) && (!isDay(c.end) || c.end < c.start)) add("end", L("eng.charge.end"));
     return errors;
   }
 
@@ -1365,7 +1370,8 @@
     receipts.forEach(function (r) {
       var who = (r.doc.snapshot && r.doc.snapshot.client && r.doc.snapshot.client.name) || "";
       items.push({ date: r.date, kind: r.amount < 0 ? "refund" : "receipt", amount: r.amount, late: r.late, docId: r.doc.id, delay: r.delay || 0,
-                   label: (r.doc.type === "avoir" ? "Remboursement de l'avoir " : "Facture ") + r.doc.number + (who ? " (" + who + ")" : "") });
+                   label: (r.doc.type === "avoir" ? L("eng.forecast.refund", { number: r.doc.number }) : L("eng.forecast.invoice", { number: r.doc.number })) +
+                     (who ? " (" + who + ")" : "") });
     });
     // Entrées prévues de chiffre d'affaires (mouvements prévus « revenue ») : comptées comme des encaissements.
     var plannedRevenue = [];
@@ -1394,7 +1400,8 @@
           target.revenue = round2(target.revenue + planned);
         }
         var amount = round2(partsDue(parts, p, input.rules, d.period.end).reduce(function (s, x) { return s + x.total; }, 0));
-        if (amount) items.push({ date: d.due, kind: "urssaf", amount: -amount, label: "Cotisations Urssaf " + (d.period.key.indexOf("T") > -1 ? "du " : "de ") + d.period.label });
+        if (amount) items.push({ date: d.due, kind: "urssaf", amount: -amount, label: d.period.key.indexOf("T") > -1 ? L("eng.forecast.urssafQuarter", { period: d.period.label })
+          : L("eng.forecast.urssafMonth", { period: d.period.label }) });
       });
     }
     // TVA : réel normal, TVA du mois (exigible + attendue à l'encaissement) au calendrier du mois suivant ; réel simplifié, acomptes.
@@ -1488,8 +1495,8 @@
     return out;
   }
 
-  var AGING = [["notDue", "Pas encore échues", -Infinity, 0], ["d30", "1 à 30 jours de retard", 1, 30], ["d60", "31 à 60 jours", 31, 60],
-               ["d90", "61 à 90 jours", 61, 90], ["more", "Plus de 90 jours", 91, Infinity]];
+  var AGING = [["notDue", L("eng.aging.notDue"), -Infinity, 0], ["d30", L("eng.aging.d30"), 1, 30], ["d60", L("eng.aging.d60"), 31, 60],
+               ["d90", L("eng.aging.d90"), 61, 90], ["more", L("eng.aging.more"), 91, Infinity]];
   /** Factures émises non soldées par ancienneté du retard ; les plus en retard d'abord. */
   function aging(documents, today) {
     var buckets = AGING.map(function (b) { return { key: b[0], label: b[1], amount: 0, count: 0 }; }), items = [];
@@ -1549,13 +1556,13 @@
     return { count: list.length, amount: round2(list.reduce(function (s, d) { return s + total(d); }, 0)) };
   }
 
-  var FLOW_KINDS = { receipt: "Encaissement attendu", refund: "Remboursement", urssaf: "Cotisations", vat: "TVA", charge: "Charge", planned: "Entrée prévue" };
+  var FLOW_KINDS = labels("eng.flow.", ["receipt", "refund", "urssaf", "vat", "charge", "planned"]);
   /** Export de la prévision : date, nature, libellé, montant et solde après le mouvement (si un solde est saisi). */
   function forecastCSV(f) {
     var q = function (v) { return '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"'; };
     var eur = function (n) { return String(n.toFixed(2)).replace(".", ","); };
-    var bal = f.start, lines = ["Date;Nature;Libellé;Montant;Solde prévu"];
-    if (bal !== null) lines.push([f.today.split("-").reverse().join("/"), q("Solde du compte"), q(""), "", eur(bal)].join(";"));
+    var bal = f.start, lines = [L("eng.csv.forecast")];
+    if (bal !== null) lines.push([f.today.split("-").reverse().join("/"), q(L("eng.csv.forecastStart")), q(""), "", eur(bal)].join(";"));
     f.items.forEach(function (x) {
       if (bal !== null) bal = round2(bal + x.amount);
       lines.push([x.date.split("-").reverse().join("/"), q(FLOW_KINDS[x.kind] || x.kind), q(x.label), eur(x.amount), bal === null ? "" : eur(bal)].join(";"));
@@ -1568,7 +1575,7 @@
     var eur = function (n) { return String(n.toFixed(2)).replace(".", ","); };
     // Activité mixte : ventes et prestations dans deux colonnes (BOFiP, BOI-BIC-DECLA-30-30, § 30).
     var split = rows.some(function (r) { return r.goods !== undefined; });
-    var lines = [split ? "Date;Client;Nature;Ventes;Prestations;Montant;Moyen de paiement;Référence" : "Date;Client;Nature;Montant;Moyen de paiement;Référence"];
+    var lines = [split ? L("eng.csv.ledgerMixed") : L("eng.csv.ledger")];
     rows.forEach(function (r) {
       lines.push([r.date.split("-").reverse().join("/"), q(r.client), q(r.nature)].concat(split ? [eur(r.goods), eur(r.services)] : [])
         .concat([eur(r.amount), q(r.method), q(r.ref)]).join(";"));
@@ -1576,7 +1583,7 @@
     return lines.join("\r\n");
   }
 
-  return { METHODS: METHODS, EXPENSE_CATEGORIES: EXPENSE_CATEGORIES, DEFAULT_PREFIXES: DEFAULT_PREFIXES, PROFILE_FIELDS: PROFILE_FIELDS, COUNTRIES: COUNTRIES,
+  return { text: L, METHODS: METHODS, EXPENSE_CATEGORIES: EXPENSE_CATEGORIES, DEFAULT_PREFIXES: DEFAULT_PREFIXES, PROFILE_FIELDS: PROFILE_FIELDS, COUNTRIES: COUNTRIES,
            EU_COUNTRIES: EU_COUNTRIES, countries: countries,
            total: total, payments: payments, paidAmount: paidAmount, credited: credited, balance: balance, dueDate: dueDate,
            series: series, seriesPrefix: seriesPrefix, nextNumber: nextNumber, continuation: continuation,

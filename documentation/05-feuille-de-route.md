@@ -9,7 +9,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 
 ## Où en est-on ?
 
-*Mis à jour le 19/11/2026 (nuit).*
+*Mis à jour le 19/11/2026 (matin).*
 
 - **Priorité (décision D10)** : le site et la plateforme d'abord ; noms de domaine, Gumroad et affiliation à la fin.
   Règle de qualité maximale pour tout produit ou service (D11, charte dans la [méthode](04-methode-de-travail.md#charte-qualité)).
@@ -480,6 +480,8 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   **Lectures de l'étape 2 faites le 19/11/2026** (D87) : instructions de l'annexe C 2025, Pub. 334 et Pub. 583 lues
   par l'outil de lecture des sources ; cinq règles ajoutées (aide de chaque ligne, repas à 50 %, retours et rabais,
   factures impayées en comptabilité de caisse, pièces justificatives).
+  **Étape 2, architecture et lot 2a faits le 19/11/2026** (D88, [60](60-espace-etats-unis.md) § 3.1) : moteurs sans
+  texte (dictionnaire de la langue), moteur français, indicateurs, graphiques et contrôle des sauvegardes traités.
 - **Accueil en images (18/11/2026, nuit)** : demande d'Ismail (« il n'y a que du texte, pas d'image ») ; principes
   des images du site (D84, [58](58-images-du-site.md)) : captures du vrai produit, données d'exemple annoncées, pas de
   banque d'images ni d'image générée. Accueil France : section « Les outils, en vrai » en grille bento (Espace,
@@ -558,9 +560,9 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   partiel autre qu'un véhicule, dès que leurs règles sont lues ; indicateurs de l'Espace : les huit onglets, la date de clôture des pistes et la période de
   l'onglet Documents et de l'onglet Dépenses sont faits (12/11, [55](55-indicateurs-espace.md)) ; thème « Bento » appliqué le
   18/11 ([54](54-themes.md) § 3 ; mode sombre seulement si Ismail le demande) ;
-  **Espace entrepreneur pour les États-Unis** ([60](60-espace-etats-unis.md) § 3 : étape 1 et lectures de l'étape 2
-  faites le 19/11 ; étape 2, moteur par pays : interface commune, textes des moteurs et formats, moteur de facture
-  international partagé ; puis modules, page ; ensuite
+  **Espace entrepreneur pour les États-Unis** ([60](60-espace-etats-unis.md) § 3.1 : étape 1, lectures et lot 2a
+  faits le 19/11 ; lots suivants : 2b cœur commun extrait (`engines/espace-core.js`, crochets du pays), 2c formats
+  de la section, 2d moteur de facture international partagé, 2e moteur américain ; puis modules, page ; ensuite
   Royaume-Uni et Canada, [59](59-parite-des-pays.md)) ; **poids des pages** : chaque page embarque toutes les règles de son pays
   (`window.OF_RULES`, environ 45 Ko avant compression) : n'y mettre que celles que ses scripts lisent ; **images du site** ([58](58-images-du-site.md) § 3) : miniatures dans la liste
   des étapes et schémas explicatifs (facture annotée, frise des relances, calendrier de la facturation électronique) ; refonte, suite ([31](31-vision-plateforme.md) § 5) : les quatre modules du compte

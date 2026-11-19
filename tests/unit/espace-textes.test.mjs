@@ -8,7 +8,9 @@ import { fileURLToPath } from "node:url";
 import vm from "node:vm";
 
 const DIR = fileURLToPath(new URL("../../src/assets/tools/", import.meta.url));
-const CODE = readFileSync(DIR + "espace.js", "utf8");
+// Code qui lit les dictionnaires : l'interface et les moteurs (documentation/60, § 3.1, D88).
+const ENGINES = fileURLToPath(new URL("../../src/assets/engines/", import.meta.url));
+const CODE = [DIR + "espace.js", DIR + "charts.js", ENGINES + "espace-fr.js", ENGINES + "espace-stats.js"].map((f) => readFileSync(f, "utf8")).join("\n");
 const FILES = readdirSync(DIR).filter((f) => /^espace-texts-[a-z]{2}\.js$/.test(f));
 
 /** Dictionnaires définis par les fichiers de textes, par langue (« fr », « en »…). */
@@ -20,7 +22,9 @@ function dictionaries() {
 }
 // Clés écrites en entier (L("type.facture")) et préfixes de clés construites (L("activity." + k)).
 const STATIC = new Set([...CODE.matchAll(/\bL\("([A-Za-z0-9_.-]+)"[,)]/g)].map((m) => m[1]));
-const PREFIXES = [...CODE.matchAll(/\bL\("([A-Za-z0-9_.-]+\.)"\s*\+/g)].map((m) => m[1]);
+// Préfixes passés à labels("eng.method.", [...]) dans les moteurs : une clé par élément de la liste.
+const PREFIXES = [...CODE.matchAll(/\bL\("([A-Za-z0-9_.-]+\.)"\s*\+/g), ...CODE.matchAll(/\blabels\("([A-Za-z0-9_.-]+\.)",/g)]
+  .map((m) => m[1]);
 const placeholders = (text) => [...text.matchAll(/\{(\w+)\}/g)].map((m) => m[1]).sort().join(",");
 
 test("textes de l'Espace : au moins le français, chargé sans erreur", () => {
