@@ -393,25 +393,6 @@
   }
   function showError(id, msg) { var el = $(id); el.textContent = msg; el.hidden = !msg; }
 
-  var regionNames = typeof Intl !== "undefined" && Intl.DisplayNames ? new Intl.DisplayNames([OF.locale], { type: "region" }) : null;
-  /** Pays proposés selon le lieu du client, triés par nom ; le premier choix invite à choisir. */
-  function countryOptions(place) {
-    return [["", L("country.choose")]].concat(E.countries(place === "eu" ? "eu" : "world").map(function (code) {
-      return [code, regionNames ? regionNames.of(code) : code];
-    }).sort(function (a, b) { return a[1].localeCompare(b[1], OF.locale); }));
-  }
-  /**
-   * Adresse de facturation électronique (annuaire) : vide (le SIREN est utilisé), ou le SIREN suivi éventuellement d'un
-   * suffixe ; lettres, chiffres, - _ . seulement (règles BR-FR-21 et BR-FR-23 de la norme XP Z12-012).
-   */
-  function checkEndpoint(value, sirenOrSiret, whose) {
-    if (!value) return "";
-    var siren = String(sirenOrSiret || "").replace(/\s+/g, "").slice(0, 9);
-    if (!/^[A-Za-z0-9_.-]{9,100}$/.test(value)) return L("endpoint.errChars");
-    if (/^\d{9}$/.test(siren) && value.indexOf(siren) !== 0) return L("endpoint.errSiren", { whose: whose, siren: siren });
-    return "";
-  }
-
   // ----- Tableau de bord -------------------------------------------------------------
 
   function viewDashboard() {
@@ -1213,7 +1194,7 @@
 
   function viewClientForm(r) {
     var isNew = r.id === "nouveau";
-    var c = isNew ? { id: S.uid(), name: "", pro: true, place: "fr" } : client(r.id);
+    var c = isNew ? Object.assign({ id: S.uid(), name: "", pro: true }, UI.client ? UI.client.defaults() : {}) : client(r.id);
     if (!c) { view.innerHTML = '<div class="espace-head"><h2>' + L("client.notFound") + '</h2></div><p><a href="#/clients">' + L("client.back") + "</a></p>"; return; }
     var back = r.params.retour;
     // Client créé depuis une piste (documentation/38-prospects.md) : fiche préremplie, piste liée à l'enregistrement.
@@ -1236,15 +1217,7 @@
       '<form class="card espace-card" id="client-form" novalidate><div class="fields">' +
       field("name", L("profile.name"), c.name, { required: true, placeholder: L("client.namePlaceholder") }) +
       field("pro", L("client.type"), c.pro ? "1" : "0", { options: [["1", L("client.typePro")], ["0", L("clients.private")]], half: true }) +
-      field("place", L("client.place"), c.place || "fr", { options: [["fr", L("client.place.fr")], ["eu", L("client.place.eu")], ["world", L("client.place.world")]], half: true }) +
-      '<div class="full fields" id="client-country"' + (c.place && c.place !== "fr" ? "" : " hidden") + ">" +
-      field("country", L("client.country"), c.country || "", { options: countryOptions(c.place), half: true }) + "</div>" +
-      field("address", L("profile.address"), c.address, { textarea: true }) +
-      field("siren", L("client.siren"), c.siren, { half: true, placeholder: L("client.sirenPlaceholder"), hint: L("client.sirenHint") }) +
-      field("vat", L("profile.vat"), c.vat, { half: true }) +
-      field("email", L("profile.email"), c.email, { type: "email", half: true }) +
-      field("endpoint", L("profile.endpoint"), c.endpoint, { half: true, placeholder: L("client.endpointPlaceholder"), hint: L("client.endpointHint") }) +
-      field("delivery", L("client.delivery"), c.delivery, { textarea: true }) +
+      (UI.client ? UI.client.fields(c) : "") +
       field("notes", L("client.notes"), c.notes, { textarea: true }) +
       '</div><p class="form-error" id="client-error" role="alert" hidden></p><div class="espace-actions">' +
       '<button type="submit" class="btn btn-primary">' + (isNew ? L("client.create") : L("common.save")) + "</button>" +
@@ -1256,22 +1229,15 @@
       drawCharts();
     }
     var form = $("client-form");
-    form.elements.place.addEventListener("change", function () {
-      var place = form.elements.place.value;
-      $("client-country").hidden = place === "fr";
-      if (place !== "fr") form.elements.country.innerHTML = options(countryOptions(place), form.elements.country.value);
-    });
+    if (UI.client) UI.client.bind(form);
     form.addEventListener("submit", function (e) {
       e.preventDefault();
       var f = form.elements;
       if (!f.name.value.trim()) { showError("client-error", L("client.errName")); f.name.focus(); return; }
-      ["name", "address", "siren", "vat", "email", "delivery", "notes", "endpoint"].forEach(function (k) { c[k] = f[k].value.trim(); });
+      ["name", "notes"].forEach(function (k) { c[k] = f[k].value.trim(); });
       c.pro = f.pro.value === "1";
-      c.place = f.place.value;
-      c.country = c.place === "fr" ? "" : f.country.value;
-      var endpointError = c.place === "fr" ? checkEndpoint(c.endpoint, c.siren, L("fx.fill.clientSiren"))
-        : c.endpoint && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(c.endpoint) ? L("client.errEndpointAbroad") : "";
-      if (endpointError) { showError("client-error", endpointError); f.endpoint.focus(); return; }
+      var problem = UI.client ? UI.client.read(form, c) : null;
+      if (problem) { showError("client-error", problem.message); if (problem.field) f[problem.field].focus(); return; }
       c.updatedAt = now();
       if (isNew) { c.createdAt = c.updatedAt; data.clients.push(c); }
       // Les brouillons de ce client suivent ses nouvelles coordonnées (TVA selon le pays) ; les documents émis restent figés.
@@ -2569,7 +2535,7 @@
   // Ce que l'Espace prête au module de la section (tools/espace-<pays>-ui.js) ; les données par une fonction, car l'objet
   // data est remplacé à chaque chargement.
   var ctx = { $: $, CAL: CAL, longDay: longDay, L: L, esc: esc, money: money, day: day, percent: percent, DEC: DEC, field: field, options: options, kpi: kpi, countText: countText, showError: showError, persist: persist, now: now, isMicro: isMicro, profile: profile, view: view, amountText: amountText, E: E, R: R, S: S, OF: OF, TODAY: TODAY, YEAR: YEAR,
-              TERMS: TERMS, checkEndpoint: checkEndpoint, data: function () { return data; } };
+              TERMS: TERMS, data: function () { return data; } };
   var UI = OFE.espaceUI && OFE.espaceUI[OF.section] ? OFE.espaceUI[OF.section](ctx) : {};
 
   // ----- Démarrage -----------------------------------------------------------------------------------

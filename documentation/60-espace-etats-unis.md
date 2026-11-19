@@ -206,6 +206,10 @@ Lot 3a-3 fait le 19/11/2026 : crochet `profile` du module (`defaults`, `fields`,
 commun garde le nom, la numérotation, l'enregistrement et le passage au tableau de bord ; le module rend et lit les
 champs du pays (activité, TVA, micro-entreprise, coordonnées, délai, pénalités) et renvoie `{ message, field }` quand il
 refuse une saisie (adresse électronique de facturation). Parcours de l'Espace 359/359 et des comptes 51/51.
+Lot 3a-4 fait le 19/11/2026 : crochet `client` du module, sur le même modèle ; le nom, le type (professionnel ou
+particulier), les notes, l'enregistrement et le retour au document ou à la piste restent communs ; le lieu, le pays,
+le SIREN, la TVA, l'e-mail, l'adresse électronique de facturation et la livraison passent dans le module, avec la
+liste des pays et le contrôle de l'adresse électronique. Parcours de l'Espace 359/359 et des comptes 51/51.
 
 ### Avancement
 

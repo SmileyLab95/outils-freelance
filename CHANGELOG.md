@@ -11,6 +11,8 @@
   passent dans le même module, par un crochet ; mêmes vérifications, aucun changement visible.
 - Troisième lot : les champs français du profil (activité, TVA, micro-entreprise, coordonnées) passent dans le
   module ; le nom et la numérotation restent communs. Mêmes vérifications, aucun changement visible.
+- Quatrième lot : les champs français de la fiche client (lieu, pays, SIREN, TVA, adresse électronique de
+  facturation, livraison) passent dans le module ; mêmes vérifications, aucun changement visible.
 
 ## 2026-11-19 (après-midi, suite) — Moteur de l'Espace des États-Unis (lot 2e)
 

@@ -1,7 +1,8 @@
 /*
  * Écrans de l'Espace entrepreneur propres à la France (documentation/60-espace-etats-unis.md, § 3.2, décision D90) :
  * immobilisations et amortissements (documentation/57) ; tableau de bord (déclaration Urssaf, plafonds, registre des
- * achats) ; profil (activité, TVA, micro-entreprise, coordonnées). Module d'écrans d'un pays : la fabrique
+ * achats) ; profil (activité, TVA, micro-entreprise, coordonnées) ; fiche client (lieu, SIREN, TVA, adresse
+ * électronique de facturation). Module d'écrans d'un pays : la fabrique
  * OFE.espaceUI.fr reçoit le contexte prêté par tools/espace.js (textes, formats, champs, données, règles…) et renvoie ses
  * crochets ; routes : écrans en plus du cadre commun. Chargé par la page de la section avant tools/espace.js.
  */
@@ -10,7 +11,7 @@
   var OFE = root.OFE = root.OFE || {};
   (OFE.espaceUI = OFE.espaceUI || {}).fr = function (ctx) {
     var $ = ctx.$, L = ctx.L, esc = ctx.esc, money = ctx.money, day = ctx.day, percent = ctx.percent, DEC = ctx.DEC, field = ctx.field, options = ctx.options, kpi = ctx.kpi, countText = ctx.countText, showError = ctx.showError, persist = ctx.persist, now = ctx.now, isMicro = ctx.isMicro, profile = ctx.profile, view = ctx.view, amountText = ctx.amountText, E = ctx.E, R = ctx.R, S = ctx.S, OF = ctx.OF, TODAY = ctx.TODAY, YEAR = ctx.YEAR;
-    var D = ctx.data, CAL = ctx.CAL, longDay = ctx.longDay, TERMS = ctx.TERMS, checkEndpoint = ctx.checkEndpoint;   // données de l'Espace : l'objet change à chaque chargement, d'où une fonction
+    var D = ctx.data, CAL = ctx.CAL, longDay = ctx.longDay, TERMS = ctx.TERMS;   // données de l'Espace : l'objet change à chaque chargement, d'où une fonction
 
     function asset(id) { return D().assets.filter(function (a) { return a.id === id; })[0] || null; }
     var ASSET_HINTS = { deductible: L("as.hint.deductible"), partial: L("as.hint.partial") };
@@ -378,10 +379,67 @@
       return null;
     }
 
+
+    // ----- Clients : lieu, pays, SIREN, TVA, adresse électronique de facturation (documentation/55, § 2) ---------
+
+    var regionNames = typeof Intl !== "undefined" && Intl.DisplayNames ? new Intl.DisplayNames([OF.locale], { type: "region" }) : null;
+    /** Pays proposés selon le lieu du client, triés par nom ; le premier choix invite à choisir. */
+    function countryOptions(place) {
+      return [["", L("country.choose")]].concat(E.countries(place === "eu" ? "eu" : "world").map(function (code) {
+        return [code, regionNames ? regionNames.of(code) : code];
+      }).sort(function (a, b) { return a[1].localeCompare(b[1], OF.locale); }));
+    }
+    /**
+     * Adresse de facturation électronique (annuaire) : vide (le SIREN est utilisé), ou le SIREN suivi éventuellement d'un
+     * suffixe ; lettres, chiffres, - _ . seulement (règles BR-FR-21 et BR-FR-23 de la norme XP Z12-012).
+     */
+    function checkEndpoint(value, sirenOrSiret, whose) {
+      if (!value) return "";
+      var siren = String(sirenOrSiret || "").replace(/\s+/g, "").slice(0, 9);
+      if (!/^[A-Za-z0-9_.-]{9,100}$/.test(value)) return L("endpoint.errChars");
+      if (/^\d{9}$/.test(siren) && value.indexOf(siren) !== 0) return L("endpoint.errSiren", { whose: whose, siren: siren });
+      return "";
+    }
+
+    /** Fiche client nouvelle : client établi en France. */
+    function clientDefaults() { return { place: "fr" }; }
+    /** Champs de la fiche client propres à la France, entre le type de client et les notes. */
+    function clientFields(c) {
+      return field("place", L("client.place"), c.place || "fr", { options: [["fr", L("client.place.fr")], ["eu", L("client.place.eu")], ["world", L("client.place.world")]], half: true }) +
+        '<div class="full fields" id="client-country"' + (c.place && c.place !== "fr" ? "" : " hidden") + ">" +
+        field("country", L("client.country"), c.country || "", { options: countryOptions(c.place), half: true }) + "</div>" +
+        field("address", L("profile.address"), c.address, { textarea: true }) +
+        field("siren", L("client.siren"), c.siren, { half: true, placeholder: L("client.sirenPlaceholder"), hint: L("client.sirenHint") }) +
+        field("vat", L("profile.vat"), c.vat, { half: true }) +
+        field("email", L("profile.email"), c.email, { type: "email", half: true }) +
+        field("endpoint", L("profile.endpoint"), c.endpoint, { half: true, placeholder: L("client.endpointPlaceholder"), hint: L("client.endpointHint") }) +
+        field("delivery", L("client.delivery"), c.delivery, { textarea: true });
+    }
+    /** Bascule du lieu : liste des pays (Union européenne ou monde) hors de France. */
+    function bindClient(form) {
+      form.elements.place.addEventListener("change", function () {
+        var place = form.elements.place.value;
+        $("client-country").hidden = place === "fr";
+        if (place !== "fr") form.elements.country.innerHTML = options(countryOptions(place), form.elements.country.value);
+      });
+    }
+    /** Lit les champs du pays dans c ; renvoie { message, field } si un champ est refusé, sinon null. */
+    function readClient(form, c) {
+      var f = form.elements;
+      ["address", "siren", "vat", "email", "delivery", "endpoint"].forEach(function (k) { c[k] = f[k].value.trim(); });
+      c.place = f.place.value;
+      c.country = c.place === "fr" ? "" : f.country.value;
+      var endpointError = c.place === "fr" ? checkEndpoint(c.endpoint, c.siren, L("fx.fill.clientSiren"))
+        : c.endpoint && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(c.endpoint) ? L("client.errEndpointAbroad") : "";
+      if (endpointError) return { message: endpointError, field: "endpoint" };
+      return null;
+    }
+
     return {
       routes: { immobilisations: function (r) { (r.id ? viewAssetForm : viewAssets)(r); } },
       dashboard: dashboard,
-      profile: { defaults: profileDefaults, fields: profileFields, bind: bindProfile, read: readProfile }
+      profile: { defaults: profileDefaults, fields: profileFields, bind: bindProfile, read: readProfile },
+      client: { defaults: clientDefaults, fields: clientFields, bind: bindClient, read: readClient }
     };
   };
 })(typeof self !== "undefined" ? self : this);
