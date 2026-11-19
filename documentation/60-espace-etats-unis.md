@@ -20,6 +20,7 @@ et ses suites), dont on reprend tout ce qui ne dépend pas du pays.
 | Repas | Ligne 24b : 50 % du coût réel « dans la plupart des cas » ; 80 % pour les personnes soumises aux limites d'heures du DOT ; 100 % si traités en salaire ou déclarés sur un 1099-NEC ; pas de divertissement | Mêmes instructions ; Pub. 334 (2025) | `us_meals_deduction_rate` (nouvelle) |
 | Remboursements | « Credits you allow customers for returned merchandise and any other allowances you make on sales are deductions from gross sales » ; les instructions de la ligne 2 parlent de produits : la ligne 2 pour un service est **notre lecture** (confiance moyenne), la ligne 3 étant la même dans les deux présentations | Pub. 334 (2025), lue le 19/11/2026 (SHA-256 aab3f8c3…) | `us_sales_returns_allowances` (nouvelle) |
 | Factures impayées | En comptabilité de caisse, pas de déduction pour créance irrécouvrable sur une somme jamais reçue ni comptée en recette ; une créance déduite puis encaissée redevient une recette | Pub. 334 (2025), chapitre 8 ; instructions, partie V | `us_bad_debts_cash_method` (nouvelle) |
+| Paiements par carte | « Payments made with a credit card or payment card and certain other types of payments, including third-party network transactions, must be reported on Form 1099-K […] and are not subject to reporting on Form 1099-MISC or Form 1099-NEC » : exclus des 1099-NEC attendus | Instructions des formulaires 1099-MISC et 1099-NEC, lues le 19/11/2026 (SHA-256 d0847f66…) | `us_1099_nec_card_exclusion` (nouvelle) |
 | Pièces justificatives | Recettes : relevés de dépôt, factures, carnets de reçus, 1099-NEC et 1099-MISC… ; dépenses : chèques encaissés, relevés de compte, factures… ; un relevé bancaire prouve le paiement, pas la déductibilité | Pub. 583 (révisée en décembre 2024), partie *Supporting Documents* lue en entier le 19/11/2026 (SHA-256 fa3b6c32…) | `us_supporting_documents` (nouvelle) |
 | Facture | Aucune règle fédérale sur le contenu d'une facture relevée ; ne jamais y mettre son numéro de sécurité sociale (EIN facultatif) | Générateur américain existant | — |
 
@@ -141,7 +142,18 @@ les totaux et l'aperçu du générateur public des États-Unis, du Royaume-Uni e
 un document lu dans le formulaire. Aperçus identiques au caractère près à l'ancienne version sur les quatre pages
 (20 comparaisons dans un navigateur ; une erreur glissée dans l'arrondi de la remise est détectée) ; 7 tests unitaires
 aux montants calculés à la main. L'Espace américain utilisera ce moteur (critère U2). Le moteur ne gère pas encore les
-unités de quantité (heures, jours) que la facturation du temps passé met sur les lignes : à ajouter au lot 2e.
+unités de quantité (heures, jours) que la facturation du temps passé met sur les lignes : à ajouter à l'étape 3.
+Lot 2e fait le 19/11/2026 : `engines/espace-us.js`, fabrique `create(textes)` qui assemble le cœur commun, le moteur
+de facture international et les règles américaines : numéros comme le générateur public (`2026-001`, `E-2026-001`,
+avoirs `CM-2026-001`), moyens de paiement (ACH, chèque, virement, carte, plateforme, espèces, autre), livre des recettes
+en comptabilité de caisse (`income`, `incomeQuarters`), dépenses par ligne de l'annexe C (`checkExpense`,
+`expenseLines`, repas à 50 %), synthèse (`scheduleC`, lignes 1 à 31) et son export (`scheduleCCSV`), acomptes
+(`estimatedTax` : `taxUS.estimate` puis `taxUS.quarterly`, comme le calculateur public ; bénéfice prévu, ou bénéfice à
+date ramené à l'année au prorata des jours), 1099-NEC attendus (`expected1099`). Tests `tests/unit/espace-us.test.mjs` :
+critères U3 à U7, chacun vérifié en réintroduisant une erreur (6 sur 6 détectées). Clés de texte propres au moteur,
+à mettre dans le dictionnaire anglais à l'étape 3 (avec toutes les clés `eng.*` du cœur) : `eng.us.method.*` (7),
+`eng.us.exp.line`, `eng.us.csv.scheduleC`, `eng.us.line.*` (lignes 1 à 7 et 28 à 31). Le test des clés couvrira alors
+`espace-us.js` pour l'anglais.
 
 ### Avancement
 

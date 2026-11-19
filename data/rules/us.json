@@ -2915,6 +2915,16 @@
       "confidence": "high",
       "verified_on": "2026-11-19",
       "note": "Section 'Supporting Documents' read in full on 19/11/2026 with the source reader (Publication 583, revised December 2024; page last reviewed 30-Apr-2026; SHA-256 fa3b6c3235c299a59ae4a0559729e928674e36d93f0b4a27cbbce93910544145). Supporting documents should show the amount paid and that the amount was for a business expense (or the amounts and sources of gross receipts). Without a canceled check, an account statement can prove payment: check (check number, amount, payee's name, date posted), electronic funds transfer (amount, payee's name, date posted), credit card (amount charged, payee's name, transaction date). 'Proof of payment of an amount, by itself, does not establish you are entitled to a tax deduction': keep invoices and slips as well. Travel, transportation and gift expenses have specific recordkeeping rules (Pub. 463). How long to keep them: us_records_retention."
+    },
+    "us_1099_nec_card_exclusion": {
+      "value": "Payments made with a credit card or payment card and certain other types of payments, including third-party network transactions, must be reported on Form 1099-K by the payment settlement entity under section 6050W and are not subject to reporting on Form 1099-MISC or Form 1099-NEC.",
+      "unit": "text",
+      "label": "Card and payment-platform payments are reported on Form 1099-K, not on Form 1099-NEC",
+      "source": "https://www.irs.gov/instructions/i1099mec",
+      "source_title": "Instructions for Forms 1099-MISC and 1099-NEC - IRS",
+      "confidence": "high",
+      "verified_on": "2026-11-19",
+      "note": "Quoted from the section 'Form 1099-K', read on 19/11/2026 with the source reader (GitHub Actions; 81,310 characters, SHA-256 d0847f667e318f858a66ecdedcf8322fc8a59c64bdfd11ecc60fad9fa511b760). Used by the US workspace to leave card and platform payments out of the expected Forms 1099-NEC (documentation/60, § 2, item 5)."
     }
   },
   "open_questions": [

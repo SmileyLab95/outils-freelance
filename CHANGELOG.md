@@ -1,5 +1,15 @@
 # Journal des modifications
 
+## 2026-11-19 (après-midi, suite) — Moteur de l'Espace des États-Unis (lot 2e)
+
+- Nouveau `engines/espace-us.js` : livre des recettes en comptabilité de caisse (remboursements en ligne 2),
+  dépenses par ligne de l'annexe C (repas à 50 %), synthèse de l'annexe C (lignes 1 à 31) et son export, acomptes
+  trimestriels calculés comme le calculateur public, formulaires 1099-NEC attendus (seuil de 2 000 $ en 2026, cartes
+  et plateformes exclues). Pas encore d'écran : l'Espace américain viendra aux étapes 3 et 4.
+- Nouvelle règle sourcée : les paiements par carte et par plateforme relèvent du 1099-K, pas du 1099-NEC
+  (`us_1099_nec_card_exclusion`, instructions des formulaires 1099-MISC et 1099-NEC).
+- Tests : critères d'acceptation U3 à U7, chacun vérifié en réintroduisant une erreur ; 750 tests unitaires.
+
 ## 2026-11-19 (après-midi) — Moteur de facture international partagé (lot 2d)
 
 - Nouveau `engines/invoice-intl.js` : totaux et aperçu des factures et devis des États-Unis, du Royaume-Uni et du
