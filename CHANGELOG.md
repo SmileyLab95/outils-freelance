@@ -1,5 +1,13 @@
 # Journal des modifications
 
+## 2026-11-19 (nuit) — Espace des États-Unis : spécification
+
+- Spécification de l'Espace pour les États-Unis (documentation/60, D86) : règles lues aux sources officielles,
+  périmètre de la version 1 (livre des recettes en comptabilité de caisse, dépenses par ligne de l'annexe C, synthèse
+  de l'annexe C, acomptes trimestriels, formulaires 1099 attendus), architecture d'un seul Espace pour tous les pays.
+- Deux règles américaines nouvelles, lues en entier par l'outil de lecture des sources : lignes de dépenses de
+  l'annexe C 2026 (`us_schedule_c_expense_lines`) et comptabilité de caisse (`us_cash_method`, Publication 538).
+
 ## 2026-11-18 (nuit) — Accueils : les outils en images, dans tous les pays
 
 - Accueil France : nouvelle section « Les outils, en vrai » sous le haut de page, en grille « bento » : cinq tuiles

@@ -9,7 +9,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 
 ## Où en est-on ?
 
-*Mis à jour le 18/11/2026 (nuit).*
+*Mis à jour le 19/11/2026 (nuit).*
 
 - **Priorité (décision D10)** : le site et la plateforme d'abord ; noms de domaine, Gumroad et affiliation à la fin.
   Règle de qualité maximale pour tout produit ou service (D11, charte dans la [méthode](04-methode-de-travail.md#charte-qualité)).
@@ -471,6 +471,10 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   JavaScript) et part de 50 % lue dans la loi (C.R.S. 8-13.3-507(4)(a)) : revenu brut et effet au dépôt de l'avis
   confirmés ; page complétée (documents fiscaux chaque année avant le 1er décembre, amende jusqu'à 500 $ ; retrait à
   tout moment, effet au plus tôt à la fin des 3 ans et 30 jours après l'avis) ([52](52-protection-sociale-etats-unis.md)).
+- **Espace des États-Unis : spécification (19/11/2026, nuit)** : [60](60-espace-etats-unis.md), D86 ; annexe C 2026 lue
+  en entier et comptabilité de caisse (Pub. 538) lues par l'outil de lecture des sources, deux règles ajoutées ;
+  architecture d'un seul Espace pour tous les pays (textes par langue, moteur par pays, modules propres, page
+  `/us/workspace/`). Prochaine étape : étape 1, les textes de l'Espace sortis du code sans changer le comportement.
 - **Accueil en images (18/11/2026, nuit)** : demande d'Ismail (« il n'y a que du texte, pas d'image ») ; principes
   des images du site (D84, [58](58-images-du-site.md)) : captures du vrai produit, données d'exemple annoncées, pas de
   banque d'images ni d'image générée. Accueil France : section « Les outils, en vrai » en grille bento (Espace,
@@ -549,8 +553,10 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   partiel autre qu'un véhicule, dès que leurs règles sont lues ; indicateurs de l'Espace : les huit onglets, la date de clôture des pistes et la période de
   l'onglet Documents et de l'onglet Dépenses sont faits (12/11, [55](55-indicateurs-espace.md)) ; thème « Bento » appliqué le
   18/11 ([54](54-themes.md) § 3 ; mode sombre seulement si Ismail le demande) ;
-  **Espace entrepreneur pour les États-Unis** ([59](59-parite-des-pays.md) § 2, D85 : spécification et règles lues
-  d'abord, puis Royaume-Uni et Canada) ; **images du site** ([58](58-images-du-site.md) § 3) : miniatures dans la liste
+  **Espace entrepreneur pour les États-Unis** ([60](60-espace-etats-unis.md) § 3 : étape 1, textes de l'Espace dans
+  un dictionnaire par langue sans changer le comportement français ; puis moteur américain, modules, page ; lire
+  avant l'étape 2 les instructions de l'annexe C et la partie *Supporting Documents* de la Pub. 583 ; ensuite
+  Royaume-Uni et Canada, [59](59-parite-des-pays.md)) ; **images du site** ([58](58-images-du-site.md) § 3) : miniatures dans la liste
   des étapes et schémas explicatifs (facture annotée, frise des relances, calendrier de la facturation électronique) ; refonte, suite ([31](31-vision-plateforme.md) § 5) : les quatre modules du compte
   gratuit sont faits (étape 5) ; étape 6, outils restants (CGV : faites dans les quatre pays ;
   Manitoba, Nouvelle-Écosse, Terre-Neuve-et-Labrador et Île-du-Prince-Édouard détaillés le 13/11, Territoires du

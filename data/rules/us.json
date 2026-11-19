@@ -2746,6 +2746,52 @@
       "confidence": "high",
       "verified_on": "2026-11-10",
       "note": "Read on 09/11/2026 with the source reader. 6.4.5.1: 'If a self-employed individual has voluntarily enrolled in the Delaware Paid Leave program, contributions are based on the individual's self-employment earnings, as reported on their Federal Income taxes. If Schedule C is completed, self-employment earnings are found on line 31. If Schedule SE is completed, self-employment earnings are reported on line 6. Self-employed individuals shall calculate their quarterly earnings by dividing their self-employment earnings found on their most recently filed income tax return by 4.' 6.4.5.3: 'Self-employed individuals and independent contractors are responsible for paying 100% of the required contribution'. The 3-year minimum in the rule (18.2) concerns employers; no commitment period for the self-employed was found (the 2021 bill text cited by secondary sources said 3 years and 50%: not the current rule, D57). The Delaware Code page read did not contain the chapter text. Read on 10/11/2026: Department of Labor FAQ, 'The rates are guaranteed through 2026 at 0.8% of wages, and component rates are available for each line of coverage' (employer contributions on employees' FICA wages); regulation 1401, 6.6: 'Current rates are in effect for 52 weeks and will automatically renew at the same rates as stated in the Act. Beginning in 2027, if there is a new rate, the new rate will be changed by modification to this regulation.' No text read applies the 0.8% expressly to self-employment earnings: the tool gives the program rate, not a self-employed estimate."
+    },
+    "us_schedule_c_expense_lines": {
+      "value": {
+        "8": "Advertising",
+        "9": "Car and truck expenses",
+        "10": "Commissions and fees",
+        "11": "Contract labor",
+        "12": "Depletion",
+        "13": "Depreciation and section 179 expense deduction",
+        "14": "Employee benefit programs",
+        "15": "Insurance (other than health)",
+        "16a": "Mortgage (paid to banks, etc.)",
+        "16b": "Vehicle loan",
+        "16c": "Other interest",
+        "17": "Legal and professional services",
+        "18": "Office expense",
+        "19": "Pension and profit-sharing plans",
+        "20a": "Rent or lease: vehicles, machinery, and equipment",
+        "20b": "Rent or lease: other business property",
+        "21": "Repairs and maintenance",
+        "22": "Supplies",
+        "23": "Taxes and licenses",
+        "24a": "Travel",
+        "24b": "Deductible meals",
+        "25": "Utilities",
+        "26": "Wages (less employment credits)",
+        "27a": "Energy efficient commercial buildings deduction",
+        "27b": "Other expenses (from line 48)"
+      },
+      "unit": "object",
+      "label": "Schedule C (Form 1040) 2026, Part II expense lines (expenses for business use of the home go only on line 30)",
+      "source": "https://www.irs.gov/pub/irs-pdf/f1040sc.pdf",
+      "source_title": "Schedule C (Form 1040) 2026, Profit or Loss From Business - IRS",
+      "confidence": "high",
+      "verified_on": "2026-11-18",
+      "note": "Read in full on 18/11/2026 with the source reader (GitHub Actions; form created 5/15/26, SHA-256 cc44e7d1150e54d991835814c1191f60a32617730ca9e50e6f532b51293a86b4). Part I: line 1 gross receipts or sales, line 2 returns and allowances, line 3 = 1 − 2, line 4 cost of goods sold, line 5 = 3 − 4, line 6 other income, line 7 = 5 + 6. Line 28 = lines 8 through 27b; line 29 = 7 − 28; line 30 business use of home (Form 8829 or simplified method); line 31 = 29 − 30. Line 16b (vehicle loan interest) is listed on the 2026 form. Used by the US workspace specification (documentation/60-espace-etats-unis.md)."
+    },
+    "us_cash_method": {
+      "value": "Under the cash method, you generally report income in the tax year you receive it, and deduct expenses in the tax year in which you pay the expenses. If you use the cash method for reporting your income, you must use the cash method for reporting your expenses.",
+      "unit": "text",
+      "label": "Cash method of accounting: when income and expenses are reported",
+      "source": "https://www.irs.gov/publications/p538",
+      "source_title": "Publication 538 (Rev. January 2022), Accounting Periods and Methods - IRS",
+      "confidence": "high",
+      "verified_on": "2026-11-18",
+      "note": "Quoted from the introduction and the 'Hybrid method' section, read on 18/11/2026 with the source reader. The same accounting method must be used from year to year. An inventory requires an accrual method for purchases and sales unless the small business taxpayer exception applies (not covered by the US workspace v1)."
     }
   },
   "open_questions": [
