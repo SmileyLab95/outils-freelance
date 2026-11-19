@@ -115,6 +115,11 @@ dans le dictionnaire de la langue par sa fonction `L` (exportée sous `text`, re
 dictionnaire est chargé avant les moteurs dans la page. Restent pour le lot 2c, dans le moteur : la date française des
 exports et des contrôles (`frDay`, jour/mois/année), la virgule décimale (`dec`, montants des exports) et le titre des
 échéances de TVA tiré du calendrier français.
+Lot 2b-1 fait le 19/11/2026 : `engines/espace-core.js` (420 lignes) reçoit les utilitaires, les montants et soldes des
+documents, l'ordre d'émission, le temps passé et les prospects (60 fonctions) ; `espace-fr.js` les reprend sous leur nom
+(API inchangée, 112 entrées). Aucun nom introuvable (contrôle par le vérificateur TypeScript, essayé sur une copie
+piégée). Reste pour 2b-2 : numérotation (préfixes par défaut du pays), statuts (activité), trésorerie générique avec
+les crochets du pays.
 
 ### Avancement
 

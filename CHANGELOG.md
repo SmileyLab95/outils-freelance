@@ -1,5 +1,13 @@
 # Journal des modifications
 
+## 2026-11-19 (matin, suite) — Espace multi-pays : cœur commun du moteur (lot 2b-1)
+
+- Nouveau `engines/espace-core.js` : la partie du moteur de l'Espace commune à tous les pays (montants et soldes
+  des documents, ordre d'émission, temps passé, prospects ; 60 fonctions) ; le moteur français la reprend sous les
+  mêmes noms, son API ne change pas. Le moteur américain s'appuiera sur ce cœur.
+- Vérifications : 733 tests unitaires, parcours de l'Espace (359) et des comptes (51) ; aucun nom introuvable dans
+  les moteurs selon le vérificateur de TypeScript (contrôle essayé sur une copie piégée).
+
 ## 2026-11-19 (matin) — Espace multi-pays, étape 2 : moteurs sans texte
 
 - Architecture du moteur par pays décidée (documentation/60, § 3.1, D88) : un cœur commun et un module par pays,

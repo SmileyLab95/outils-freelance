@@ -10,7 +10,7 @@ import vm from "node:vm";
 const DIR = fileURLToPath(new URL("../../src/assets/tools/", import.meta.url));
 // Code qui lit les dictionnaires : l'interface et les moteurs (documentation/60, § 3.1, D88).
 const ENGINES = fileURLToPath(new URL("../../src/assets/engines/", import.meta.url));
-const CODE = [DIR + "espace.js", DIR + "charts.js", ENGINES + "espace-fr.js", ENGINES + "espace-stats.js"].map((f) => readFileSync(f, "utf8")).join("\n");
+const CODE = [DIR + "espace.js", DIR + "charts.js", ENGINES + "espace-core.js", ENGINES + "espace-fr.js", ENGINES + "espace-stats.js"].map((f) => readFileSync(f, "utf8")).join("\n");
 const FILES = readdirSync(DIR).filter((f) => /^espace-texts-[a-z]{2}\.js$/.test(f));
 
 /** Dictionnaires définis par les fichiers de textes, par langue (« fr », « en »…). */
