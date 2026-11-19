@@ -2,7 +2,8 @@
  * Écrans de l'Espace entrepreneur propres à la France (documentation/60-espace-etats-unis.md, § 3.2, décision D90) :
  * immobilisations et amortissements (documentation/57) ; tableau de bord (déclaration Urssaf, plafonds, registre des
  * achats) ; profil (activité, TVA, micro-entreprise, coordonnées) ; fiche client (lieu, SIREN, TVA, adresse
- * électronique de facturation). Module d'écrans d'un pays : la fabrique
+ * électronique de facturation) ; éditeur de document (TVA selon le client, nature, biens ou services des lignes).
+ * Module d'écrans d'un pays : la fabrique
  * OFE.espaceUI.fr reçoit le contexte prêté par tools/espace.js (textes, formats, champs, données, règles…) et renvoie ses
  * crochets ; routes : écrans en plus du cadre commun. Chargé par la page de la section avant tools/espace.js.
  */
@@ -11,7 +12,7 @@
   var OFE = root.OFE = root.OFE || {};
   (OFE.espaceUI = OFE.espaceUI || {}).fr = function (ctx) {
     var $ = ctx.$, L = ctx.L, esc = ctx.esc, money = ctx.money, day = ctx.day, percent = ctx.percent, DEC = ctx.DEC, field = ctx.field, options = ctx.options, kpi = ctx.kpi, countText = ctx.countText, showError = ctx.showError, persist = ctx.persist, now = ctx.now, isMicro = ctx.isMicro, profile = ctx.profile, view = ctx.view, amountText = ctx.amountText, E = ctx.E, R = ctx.R, S = ctx.S, OF = ctx.OF, TODAY = ctx.TODAY, YEAR = ctx.YEAR;
-    var D = ctx.data, CAL = ctx.CAL, longDay = ctx.longDay, TERMS = ctx.TERMS;   // données de l'Espace : l'objet change à chaque chargement, d'où une fonction
+    var D = ctx.data, CAL = ctx.CAL, longDay = ctx.longDay, TERMS = ctx.TERMS, isMixed = ctx.isMixed;   // données de l'Espace : l'objet change à chaque chargement, d'où une fonction
 
     function asset(id) { return D().assets.filter(function (a) { return a.id === id; })[0] || null; }
     var ASSET_HINTS = { deductible: L("as.hint.deductible"), partial: L("as.hint.partial") };
@@ -435,11 +436,54 @@
       return null;
     }
 
+
+    // ----- Éditeur de document : TVA selon le client, nature, biens ou services des lignes (documentation/53) -----
+
+    /** TVA d'un document : régime du profil et lieu du client professionnel. */
+    function vatFor(c) {
+      var p = profile();
+      return { franchise: p.vatRegime === "franchise", rate: p.vatRate || 20, place: c && c.pro ? c.place || "fr" : "fr", debits: false };
+    }
+    /** Champs du pays d'un brouillon neuf : prestation de services, TVA du profil et du client. */
+    function draftFields(c) { return { nature: "services", vat: vatFor(c) }; }
+    /** Client du brouillon changé ou modifié : TVA selon son pays, taux choisi gardé. */
+    function retax(d, c) { d.vat = Object.assign(vatFor(c), d.vat ? { rate: d.vat.rate } : {}); }
+    var LINE_KINDS = [["", L("line.kind.none")], ["biens", L("line.kind.goods")], ["services", L("line.kind.services")]];
+    /** Colonne « biens ou services » d'une ligne, pour une facture mixte ; vide sinon. */
+    function kindCell(d, l, i) {
+      if (d.nature !== "mixte") return "";
+      return '<div class="field line-kind"><label for="ln-kind-' + i + '">' + L("line.kind") + '</label><select id="ln-kind-' + i + '" data-k="kind">' +
+        options(LINE_KINDS, l.kind || "") + "</select></div>";
+    }
+    /** Nature du document et taux de TVA (redevable, client en France). */
+    function docFields(d) {
+      return '<div class="field"><label for="d-nature">' + L("draft.nature") + '</label><select id="d-nature" name="nature">' +
+        options([["services", L("draft.nature.services")], ["biens", L("draft.nature.goods")], ["mixte", L("draft.nature.mixed")]], d.nature) + "</select></div>" +
+        (d.vat.franchise || d.vat.place !== "fr" ? "" : '<div class="field"><label for="d-rate">' + L("draft.vatRate") + '</label><select id="d-rate" name="rate">' +
+          options([[20, "20 %"], [10, "10 %"], [5.5, "5,5 %"], [2.1, "2,1 %"]], d.vat.rate) + "</select></div>");
+    }
+    /** Note sous l'éditeur : TVA d'un client dans l'Union européenne ou hors de l'Union, franchise en base. */
+    function docNote(d) {
+      if (d.vat.place === "eu") return L("draft.vatEu");
+      if (d.vat.place === "world") return L("draft.vatWorld");
+      if (d.vat.franchise) return L("draft.vatFranchise");
+      return "";
+    }
+    /** Saisie d'un champ du pays ; « lines » quand les lignes sont à redessiner (nature changée), false si le champ est commun. */
+    function docInput(d, t) {
+      if (t.name === "rate") { d.vat.rate = Number(t.value); return true; }
+      if (t.name === "nature") { d.nature = t.value; return "lines"; }
+      return false;
+    }
+    /** Options d'émission du moteur : biens et services distingués en activité mixte. */
+    function issueOptions() { return { lineKinds: isMixed() }; }
+
     return {
       routes: { immobilisations: function (r) { (r.id ? viewAssetForm : viewAssets)(r); } },
       dashboard: dashboard,
       profile: { defaults: profileDefaults, fields: profileFields, bind: bindProfile, read: readProfile },
-      client: { defaults: clientDefaults, fields: clientFields, bind: bindClient, read: readClient }
+      client: { defaults: clientDefaults, fields: clientFields, bind: bindClient, read: readClient },
+      doc: { draft: draftFields, retax: retax, fields: docFields, note: docNote, input: docInput, kindCell: kindCell, issueOptions: issueOptions }
     };
   };
 })(typeof self !== "undefined" ? self : this);

@@ -210,6 +210,14 @@ Lot 3a-4 fait le 19/11/2026 : crochet `client` du module, sur le même modèle ;
 particulier), les notes, l'enregistrement et le retour au document ou à la piste restent communs ; le lieu, le pays,
 le SIREN, la TVA, l'e-mail, l'adresse électronique de facturation et la livraison passent dans le module, avec la
 liste des pays et le contrôle de l'adresse électronique. Parcours de l'Espace 359/359 et des comptes 51/51.
+Lot 3a-5 fait le 19/11/2026 : crochet `doc` du module (`draft`, `retax`, `fields`, `note`, `input`, `kindCell`,
+`issueOptions`) : TVA d'un brouillon selon le client, nature du document, biens ou services d'une ligne mixte, taux et
+note de TVA, options d'émission. Le parcours ne passait ni par le taux de TVA de l'éditeur ni par la fiche client créée
+depuis un brouillon : quatre points ajoutés (taux du profil proposé, taux choisi dans l'aperçu, client de l'UE créé
+depuis le brouillon avec TVA autoliquidée et taux gardé, retour à un client en France). Un brouillon pas encore
+enregistré suit désormais la même règle que les autres (taux choisi gardé) ; sans effet visible, car quitter l'éditeur
+enregistre le brouillon dès qu'il a été modifié. Parcours de l'Espace 363/363 et des comptes 51/51 ; mutation
+(taux saisi non enregistré) détectée par trois des quatre nouveaux points.
 
 ### Avancement
 

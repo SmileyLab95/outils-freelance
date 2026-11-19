@@ -659,15 +659,11 @@
 
   function newDraft(type, clientId) {
     var p = profile(), c = client(clientId);
-    return { id: S.uid(), type: TYPES[type] ? type : "facture", status: "draft", date: TODAY, serviceDate: TODAY,
-             terms: p.terms == null ? 30 : p.terms, validity: 30, depositPct: type === "devis" ? 30 : 0, nature: "services",
+    return Object.assign({ id: S.uid(), type: TYPES[type] ? type : "facture", status: "draft", date: TODAY, serviceDate: TODAY,
+             terms: p.terms == null ? 30 : p.terms, validity: 30, depositPct: type === "devis" ? 30 : 0,
              clientId: c ? c.id : "", lines: [{ desc: "", qty: 1, price: NaN }],
-             vat: vatFor(c), penalty: p.penalty || "", notes: "", payments: [], createdAt: now(), updatedAt: now() };
-  }
-  /** TVA d'un document : régime du profil et lieu du client professionnel. */
-  function vatFor(c) {
-    var p = profile();
-    return { franchise: p.vatRegime === "franchise", rate: p.vatRate || 20, place: c && c.pro ? c.place || "fr" : "fr", debits: false };
+             penalty: p.penalty || "", notes: "", payments: [], createdAt: now(), updatedAt: now() },
+             UI.doc ? UI.doc.draft(c) : {});   // champs du pays : nature et TVA en France
   }
 
   function viewDocument(r) {
@@ -687,13 +683,11 @@
   }
 
   var LINE_UNITS = [["", L("line.unit.none")], ["hour", L("line.unit.hour")], ["day", L("line.unit.day")]];
-  var LINE_KINDS = [["", L("line.kind.none")], ["biens", L("line.kind.goods")], ["services", L("line.kind.services")]];
   function linesHTML(d) {
-    var mixed = d.nature === "mixte";
     return d.lines.map(function (l, i) {
-      return '<div class="line-row has-unit' + (mixed ? " has-kind" : "") + '" data-line="' + i + '">' +
-        (mixed ? '<div class="field line-kind"><label for="ln-kind-' + i + '">' + L("line.kind") + '</label><select id="ln-kind-' + i + '" data-k="kind">' +
-          options(LINE_KINDS, l.kind || "") + "</select></div>" : "") +
+      // Colonne propre au pays avant la désignation (France : biens ou services d'une facture mixte).
+      var kind = UI.doc ? UI.doc.kindCell(d, l, i) : "";
+      return '<div class="line-row has-unit' + (kind ? " has-kind" : "") + '" data-line="' + i + '">' + kind +
         '<div class="field line-desc"><label for="ln-desc-' + i + '">' + L("line.desc") + '</label><input type="text" id="ln-desc-' + i + '" data-k="desc" value="' + esc(l.desc) + '"></div>' +
         '<div class="field line-qty"><label for="ln-qty-' + i + '">' + L("line.qty") + '</label><input type="text" id="ln-qty-' + i + '" data-k="qty" inputmode="decimal" value="' + (isFinite(INV.amount(l.qty)) ? esc(OF.fmt(l.qty)) : "") + '"></div>' +
         '<div class="field line-unit"><label for="ln-unit-' + i + '">' + L("line.unit") + '</label><select id="ln-unit-' + i + '" data-k="unit">' + options(LINE_UNITS, l.unit || "") + "</select></div>" +
@@ -718,15 +712,12 @@
         '<div class="field"><label for="d-terms">' + L("draft.terms") + '</label><select id="d-terms" name="terms">' + options(termsFor(d.terms), d.terms) + "</select></div>" : "") +
       (d.type === "devis" ? '<div class="field"><label for="d-validity">' + L("draft.validity") + '</label><input type="text" id="d-validity" name="validity" inputmode="numeric" value="' + esc(d.validity) + '"></div>' +
         '<div class="field"><label for="d-deposit">' + L("draft.deposit") + '</label><input type="text" id="d-deposit" name="depositPct" inputmode="decimal" value="' + esc(d.depositPct) + '"></div>' : "") +
-      '<div class="field"><label for="d-nature">' + L("draft.nature") + '</label><select id="d-nature" name="nature">' +
-      options([["services", L("draft.nature.services")], ["biens", L("draft.nature.goods")], ["mixte", L("draft.nature.mixed")]], d.nature) + "</select></div>" +
-      (d.vat.franchise || d.vat.place !== "fr" ? "" : '<div class="field"><label for="d-rate">' + L("draft.vatRate") + '</label><select id="d-rate" name="rate">' +
-        options([[20, "20 %"], [10, "10 %"], [5.5, "5,5 %"], [2.1, "2,1 %"]], d.vat.rate) + "</select></div>") +
+      (UI.doc ? UI.doc.fields(d) : "") +
       "</div><h3>" + L("draft.lines") + "</h3><div id=\"d-lines\">" + linesHTML(d) + "</div>" +
       '<button type="button" class="btn btn-ghost btn-sm" id="d-add-line">' + L("draft.addLine") + "</button>" +
       '<div class="fields" style="margin-top:14px;"><div class="field full"><label for="d-notes">' + L("draft.notes") + "</label>" +
       '<textarea id="d-notes" name="notes" rows="2">' + esc(d.notes) + "</textarea></div></div>" +
-      '<p class="small muted" id="d-vat-note">' + vatNote(d) + "</p>" +
+      '<p class="small muted" id="d-vat-note">' + (UI.doc ? UI.doc.note(d) : "") + "</p>" +
       '<p class="form-error" id="doc-error" role="alert" hidden></p>' +
       '<div class="espace-actions"><button type="button" class="btn btn-primary" id="d-issue">' + (d.type === "devis" ? L("draft.issueQuote") : d.type === "avoir" ? L("draft.issueCredit") : L("draft.issueInvoice")) + "</button>" +
       '<button type="button" class="btn btn-ghost" id="d-print">' + L("draft.preview") + "</button>" +
@@ -735,13 +726,6 @@
       "</form>" + paper(d) + "</div>";
     view.innerHTML = html;
     bindDraft(d);
-  }
-
-  function vatNote(d) {
-    if (d.vat.place === "eu") return L("draft.vatEu");
-    if (d.vat.place === "world") return L("draft.vatWorld");
-    if (d.vat.franchise) return L("draft.vatFranchise");
-    return "";
   }
 
   function paper(d) {
@@ -775,13 +759,12 @@
       bindDraft.t = setTimeout(function () { commit(false); }, 400);
     };
     form.addEventListener("input", function (e) {
-      var t = e.target;
+      var t = e.target, handled;
       var row = t.closest("[data-line]");
       if (row) {
         var l = d.lines[+row.getAttribute("data-line")], k = t.getAttribute("data-k");
         if (k === "unit" || k === "kind") { if (t.value) l[k] = t.value; else delete l[k]; } else l[k] = k === "desc" ? t.value : OF.num(t.value);
-      } else if (t.name === "rate") d.vat.rate = Number(t.value);
-      else if (t.name === "nature") { d.nature = t.value; $("d-lines").innerHTML = linesHTML(d); }
+      } else if (UI.doc && (handled = UI.doc.input(d, t))) { if (handled === "lines") $("d-lines").innerHTML = linesHTML(d); }
       else if (t.name === "depositPct" || t.name === "validity" || t.name === "terms") d[t.name] = Number(OF.num(t.value)) || 0;
       else if (t.name) d[t.name] = t.value;
       refresh();
@@ -789,8 +772,8 @@
     });
     form.addEventListener("change", function (e) {
       if (e.target.name === "clientId") {
-        d.vat = Object.assign(vatFor(client(d.clientId)), { rate: d.vat.rate });
-        $("d-vat-note").textContent = vatNote(d);
+        if (UI.doc) UI.doc.retax(d, client(d.clientId));
+        $("d-vat-note").textContent = UI.doc ? UI.doc.note(d) : "";
         renderDraft(d);
         $("d-client").focus();
       }
@@ -823,7 +806,7 @@
     $("d-issue").addEventListener("click", function () {
       var c = client(d.clientId);
       var res = E.issue(data.documents, d, meFromProfile(profile()), c ? clientForDoc(c) : null, profile().prefixes, now(), profile().numbering,
-        { lineKinds: isMixed() });
+        UI.doc ? UI.doc.issueOptions() : {});
       if (res.errors.length) { showError("doc-error", res.errors.join(" ")); return; }
       if (!confirm(L("draft.confirmIssue", { what: d.type === "facture" ? L("draft.theInvoice") : d.type === "devis" ? L("draft.theQuote") : L("draft.theCredit"),
         number: res.doc.number }))) return;
@@ -1240,11 +1223,13 @@
       if (problem) { showError("client-error", problem.message); if (problem.field) f[problem.field].focus(); return; }
       c.updatedAt = now();
       if (isNew) { c.createdAt = c.updatedAt; data.clients.push(c); }
-      // Les brouillons de ce client suivent ses nouvelles coordonnées (TVA selon le pays) ; les documents émis restent figés.
-      data.documents.forEach(function (d) { if (d.clientId === c.id && d.status === "draft") d.vat = Object.assign(vatFor(c), { rate: d.vat.rate }); });
-      if (back && draftInMemory && draftInMemory.id === back) { draftInMemory.clientId = c.id; draftInMemory.vat = vatFor(c); }
+      // Les brouillons de ce client suivent ses nouvelles coordonnées (en France : TVA selon le pays, taux choisi gardé) ;
+      // les documents émis restent figés.
+      var retax = function (d) { if (UI.doc) UI.doc.retax(d, c); };
+      data.documents.forEach(function (d) { if (d.clientId === c.id && d.status === "draft") retax(d); });
+      if (back && draftInMemory && draftInMemory.id === back) { draftInMemory.clientId = c.id; retax(draftInMemory); }
       var target = back && doc(back) ? doc(back) : null;
-      if (target) { target.clientId = c.id; target.vat = Object.assign(vatFor(c), { rate: target.vat.rate }); }
+      if (target) { target.clientId = c.id; retax(target); }
       if (lead) { lead.clientId = c.id; lead.updatedAt = c.updatedAt; }
       persist(isNew ? L("client.created") : L("client.saved")).then(function () {
         if (lead) location.hash = r.params.devis === "1" ? "#/documents/nouveau?type=devis&client=" + c.id + "&piste=" + lead.id : "#/prospects/" + lead.id;
@@ -2535,7 +2520,7 @@
   // Ce que l'Espace prête au module de la section (tools/espace-<pays>-ui.js) ; les données par une fonction, car l'objet
   // data est remplacé à chaque chargement.
   var ctx = { $: $, CAL: CAL, longDay: longDay, L: L, esc: esc, money: money, day: day, percent: percent, DEC: DEC, field: field, options: options, kpi: kpi, countText: countText, showError: showError, persist: persist, now: now, isMicro: isMicro, profile: profile, view: view, amountText: amountText, E: E, R: R, S: S, OF: OF, TODAY: TODAY, YEAR: YEAR,
-              TERMS: TERMS, data: function () { return data; } };
+              TERMS: TERMS, isMixed: isMixed, data: function () { return data; } };
   var UI = OFE.espaceUI && OFE.espaceUI[OF.section] ? OFE.espaceUI[OF.section](ctx) : {};
 
   // ----- Démarrage -----------------------------------------------------------------------------------

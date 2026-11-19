@@ -13,6 +13,9 @@
   module ; le nom et la numérotation restent communs. Mêmes vérifications, aucun changement visible.
 - Quatrième lot : les champs français de la fiche client (lieu, pays, SIREN, TVA, adresse électronique de
   facturation, livraison) passent dans le module ; mêmes vérifications, aucun changement visible.
+- Cinquième lot : les parties françaises de l'éditeur de document (TVA selon le client, nature, biens ou services
+  des lignes, taux et note de TVA) passent dans le module. Le parcours vérifie en plus le taux de TVA de l'éditeur et
+  la fiche client créée depuis un brouillon (363 points).
 
 ## 2026-11-19 (après-midi, suite) — Moteur de l'Espace des États-Unis (lot 2e)
 

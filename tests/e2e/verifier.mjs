@@ -5186,6 +5186,40 @@ const tests = {
     await page.reload({ waitUntil: "networkidle" });
     await go("#/recettes");
     check(!(await text(".ledger thead")).includes("Ventes"), "Activité mixte : retour à une activité, une seule colonne");
+
+    // Éditeur, redevable de la TVA (documentation/60, § 3.2, lot 3a-5) : taux choisi, client de l'UE créé depuis le
+    // brouillon (TVA autoliquidée, taux gardé), puis client en France (le taux choisi est de nouveau proposé). La sauvegarde
+    // restaurée plus haut est en franchise : profil mis au réel simplifié le temps de l'étape.
+    const vatBefore = (await store()).profile;
+    await page.evaluate(async () => { const d = await window.EspaceStore.load(); d.profile.vatRegime = "simplified"; d.profile.vatRate = 20; await window.EspaceStore.save(d); });
+    await page.reload({ waitUntil: "networkidle" });
+    await go("#/documents/nouveau?type=facture");
+    check((await page.inputValue("#d-rate")) === "20" && (await text("#d-vat-note")) === "", "Éditeur : redevable, taux du profil proposé (20 %), aucune note de TVA");
+    await page.selectOption("#d-rate", "10");
+    await page.fill("#ln-desc-0", "Audit de l'atelier");
+    await page.fill("#ln-price-0", "1000");
+    await page.waitForTimeout(600);
+    check((await text("#d-preview")).includes("TVA (10 %)") && (await text("#d-preview")).includes("100,00 €"), "Éditeur : taux de TVA choisi appliqué à l'aperçu (10 %)");
+    await page.click('#doc-form a[href^="#/clients/nouveau?retour="]');
+    await page.waitForSelector("#client-form");
+    await page.fill("#ep-name", "Werkstatt Becker GmbH");
+    await page.selectOption("#ep-place", "eu");
+    await page.selectOption("#ep-country", "DE");
+    await page.fill("#ep-vat", "DE123456789");
+    await page.click("#client-form button[type=submit]");
+    await page.waitForSelector("#doc-form");
+    const euDraft = (await store()).documents.find((x) => x.status === "draft" && x.lines[0].desc === "Audit de l'atelier");
+    check(euDraft && euDraft.vat.place === "eu" && euDraft.vat.rate === 10 && !(await page.$("#d-rate")) &&
+      (await text("#d-vat-note")).startsWith("Client professionnel de l'UE") && (await text("#d-preview")).includes("Autoliquidation"),
+      "Éditeur : client de l'UE créé depuis le brouillon, TVA autoliquidée, taux choisi gardé");
+    await page.selectOption("#d-client", { label: "Atelier Lumen" });
+    await page.waitForSelector("#d-rate");
+    check((await page.inputValue("#d-rate")) === "10" && (await text("#d-vat-note")) === "", "Éditeur : retour à un client en France, taux choisi de nouveau proposé");
+    await page.click("#d-delete");
+    await page.waitForFunction(() => location.hash === "#/documents");
+    await page.evaluate(async (p) => { const d = await window.EspaceStore.load(); d.profile.vatRegime = p.vatRegime; d.profile.vatRate = p.vatRate; await window.EspaceStore.save(d); },
+      { vatRegime: vatBefore.vatRegime, vatRate: vatBefore.vatRate });
+    await page.reload({ waitUntil: "networkidle" });
     await go("#/");
   },
   async "fr/conversion-devises/"(page) {
