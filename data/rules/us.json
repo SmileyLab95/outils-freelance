@@ -2792,6 +2792,129 @@
       "confidence": "high",
       "verified_on": "2026-11-18",
       "note": "Quoted from the introduction and the 'Hybrid method' section, read on 18/11/2026 with the source reader. The same accounting method must be used from year to year. An inventory requires an accrual method for purchases and sales unless the small business taxpayer exception applies (not covered by the US workspace v1)."
+    },
+    "us_schedule_c_line_help": {
+      "value": {
+        "1": "Gross receipts from your trade or business. Check any Forms 1099 you received (1099-NEC, 1099-MISC, 1099-K) for business income that must be reported on this line; if the box 1 totals of your Forms 1099-NEC are more than line 1, attach a statement explaining the difference.",
+        "2": "Sales returns and allowances, as a positive number: a cash or credit refund you gave to customers who returned defective, damaged, or unwanted products, or a reduction in the selling price instead of a refund.",
+        "6": "Business income not reported elsewhere in Part I, such as bad debts you recovered, interest on notes and accounts receivable, scrap sales, and prizes and awards related to your trade or business.",
+        "11": "Payments to persons you don't treat as employees (for example, independent contractors) for services performed for your business. Not wages paid to employees (line 26) and not contract labor deducted on another line.",
+        "17": "Fees charged by accountants and attorneys that are ordinary and necessary expenses directly related to operating your business, including tax advice and the preparation of business tax forms.",
+        "18": "Office supplies and postage.",
+        "22": "Materials and supplies actually consumed and used in your business during the year; books, professional instruments, equipment, etc., if you normally use them within a year. If their usefulness extends substantially beyond a year, their cost is generally recovered through depreciation.",
+        "23": "State and local sales taxes imposed on you as the seller (if you collected them from the buyer, they are also included in gross receipts on line 1); real estate and personal property taxes on business assets; licenses and regulatory fees paid each year to state or local governments.",
+        "24a": "Travel away from your tax home for business. Meals go on line 24b; entertainment is not deductible on this line.",
+        "24b": "Deductible business meal expenses: in most cases 50% of the actual cost (or of the standard meal allowance). Entertainment is not included.",
+        "25": "Utility expenses for your trade or business only.",
+        "27b": "Ordinary and necessary business expenses not deducted elsewhere, listed by type and amount in Part V (line 48). Not business equipment or furniture, replacements or permanent improvements to property, personal, living, or family expenses, charitable contributions, or fines and penalties paid to a government.",
+        "30": "Expenses for business use of your home: Form 8829, or the simplified method ($5 per square foot, up to 300 square feet). Other business expenses (advertising, supplies, equipment) stay in Part II."
+      },
+      "unit": "object",
+      "label": "Schedule C (Form 1040): what goes on each line (short help, from the IRS instructions)",
+      "source": "https://www.irs.gov/instructions/i1040sc",
+      "source_title": "2025 Instructions for Schedule C (Form 1040), Profit or Loss From Business - IRS",
+      "more_sources": [
+        {
+          "source": "https://www.irs.gov/publications/p334",
+          "source_title": "Publication 334 (2025), Tax Guide for Small Business - IRS"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-11-19",
+      "note": "Read on 19/11/2026 with the source reader (GitHub Actions), page https://www.irs.gov/instructions/i1040sc, 2025 edition (the one published at that address on that date), 132,314 characters, SHA-256 572091074f00ff6b86933c4c15135b2ec4ed5eeec191abfa52b859fcd66e14ae. Short help condensed from the specific instructions for lines 1, 2, 6, 11, 17, 18, 22, 23, 24a, 24b, 25, Part V (line 48 / 27b) and 30; lines not listed here were not read in detail. What's New 2025: other expenses now reported on line 27b, energy efficient commercial buildings deduction on line 27a. Line 11 still says Form 1099-NEC is filed for contract labor payments of $600 or more during 2025 (the threshold is $2,000 for payments made after 2025: form_1099_nec_threshold_2026)."
+    },
+    "us_meals_deduction_rate": {
+      "value": 0.5,
+      "unit": "rate",
+      "label": "Business meals: deductible percentage (most cases), Schedule C line 24b",
+      "source": "https://www.irs.gov/instructions/i1040sc",
+      "source_title": "2025 Instructions for Schedule C (Form 1040), Profit or Loss From Business - IRS",
+      "more_sources": [
+        {
+          "source": "https://www.irs.gov/publications/p334",
+          "source_title": "Publication 334 (2025), Tax Guide for Small Business - IRS"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-11-19",
+      "note": "Instructions for line 24b, 'Amount of deduction' (2025, SHA-256 572091074f00ff6b86933c4c15135b2ec4ed5eeec191abfa52b859fcd66e14ae): 'In most cases, you can deduct only 50% of your business meal expenses, including meals incurred while away from home on business.' 80% for individuals subject to the Department of Transportation hours of service limits (certain air transportation workers, interstate truck operators, certain merchant mariners), for meals during those periods of duty. Meals furnished or reimbursed to an employee and treated as wages, or provided to a nonemployee and reported on Form 1099-NEC, are fully deductible. Entertainment is not deductible on line 24b. Pub. 334 (2025, reminders): 'Deductions for meal expenses generally remain limited to 50% of such expenses.'"
+    },
+    "us_sales_returns_allowances": {
+      "value": "Credits you allow customers for returned merchandise and any other allowances you make on sales are deductions from gross sales in figuring net sales.",
+      "unit": "text",
+      "label": "Sales returns and allowances (Schedule C line 2)",
+      "source": "https://www.irs.gov/publications/p334",
+      "source_title": "Publication 334 (2025), Tax Guide for Small Business - IRS",
+      "more_sources": [
+        {
+          "source": "https://www.irs.gov/instructions/i1040sc",
+          "source_title": "2025 Instructions for Schedule C (Form 1040), Profit or Loss From Business - IRS"
+        }
+      ],
+      "confidence": "medium",
+      "verified_on": "2026-11-19",
+      "note": "Quoted from Pub. 334 (2025), chapter 'Accounting for Your Income', read on 19/11/2026 (SHA-256 aab3f8c34f731cf63613636b675e9ba09445fa7af823f2dc0dd334f87a010ddb). Schedule C instructions, line 2: 'Report your sales returns and allowances as a positive number on line 2. A sales return is a cash or credit refund you gave to customers who returned defective, damaged, or unwanted products. A sales allowance is a reduction in the selling price of products, instead of a cash or credit refund.' Neither text speaks of services: showing on line 2 a refund of a service fee is our reading (an allowance made on a sale), hence medium confidence. Line 3 (line 1 minus line 2) is the same if the refund is subtracted from line 1 instead."
+    },
+    "us_bad_debts_cash_method": {
+      "value": "If you use the cash method of accounting, you normally report income when you receive payment. You can't take a bad debt deduction for amounts owed to you that you have not received and can't collect if you never included those amounts in income.",
+      "unit": "text",
+      "label": "Unpaid invoices under the cash method: no bad debt deduction",
+      "source": "https://www.irs.gov/publications/p334",
+      "source_title": "Publication 334 (2025), Tax Guide for Small Business - IRS",
+      "more_sources": [
+        {
+          "source": "https://www.irs.gov/instructions/i1040sc",
+          "source_title": "2025 Instructions for Schedule C (Form 1040), Profit or Loss From Business - IRS"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-11-19",
+      "note": "Quoted from Pub. 334 (2025), chapter 8, Bad Debts, read on 19/11/2026 (SHA-256 aab3f8c34f731cf63613636b675e9ba09445fa7af823f2dc0dd334f87a010ddb): 'You can take a bad debt deduction for these accounts and notes receivable only if the amount you were owed was included in your gross income either for the year the deduction is claimed or for a prior year.' Schedule C instructions, Part V, Bad debts: 'Include debts and partial debts from sales or services that were included in income and are definitely known to be worthless. If you later collect a debt that you deducted as a bad debt, include it as income in the year collected.' Pub. 535 has been discontinued; its bad debt information is now in chapter 8 of Pub. 334."
+    },
+    "us_supporting_documents": {
+      "value": {
+        "gross_receipts": [
+          "Cash register tapes",
+          "Bank deposit slips",
+          "Receipt books",
+          "Invoices",
+          "Credit card charge slips",
+          "Forms 1099-MISC",
+          "Forms 1099-NEC"
+        ],
+        "expenses": [
+          "Canceled checks",
+          "Cash register tapes",
+          "Account statements",
+          "Credit card sales slips",
+          "Invoices",
+          "Petty cash slips for small cash payments"
+        ],
+        "assets_records": [
+          "When and how you acquired the asset",
+          "Purchase price",
+          "Cost of any improvements",
+          "Section 179 deduction taken",
+          "Deductions taken for depreciation",
+          "Deductions taken for casualty losses",
+          "How you used the asset",
+          "When and how you disposed of the asset",
+          "Selling price",
+          "Expenses of sale"
+        ],
+        "assets_documents": [
+          "Purchase and sales invoices",
+          "Real estate closing statements",
+          "Canceled checks"
+        ]
+      },
+      "unit": "object",
+      "label": "Supporting documents to keep for gross receipts, expenses, and business assets",
+      "source": "https://www.irs.gov/publications/p583",
+      "source_title": "Publication 583 (12/2024), Starting a Business and Keeping Records - IRS",
+      "confidence": "high",
+      "verified_on": "2026-11-19",
+      "note": "Section 'Supporting Documents' read in full on 19/11/2026 with the source reader (Publication 583, revised December 2024; page last reviewed 30-Apr-2026; SHA-256 fa3b6c3235c299a59ae4a0559729e928674e36d93f0b4a27cbbce93910544145). Supporting documents should show the amount paid and that the amount was for a business expense (or the amounts and sources of gross receipts). Without a canceled check, an account statement can prove payment: check (check number, amount, payee's name, date posted), electronic funds transfer (amount, payee's name, date posted), credit card (amount charged, payee's name, transaction date). 'Proof of payment of an amount, by itself, does not establish you are entitled to a tax deduction': keep invoices and slips as well. Travel, transportation and gift expenses have specific recordkeeping rules (Pub. 463). How long to keep them: us_records_retention."
     }
   },
   "open_questions": [

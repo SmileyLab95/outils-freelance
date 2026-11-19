@@ -1,5 +1,15 @@
 # Journal des modifications
 
+## 2026-11-19 (jour, suite) — Espace des États-Unis : sources lues avant le moteur
+
+- Instructions de l'annexe C 2025, Publication 334 et Publication 583 lues aux sources officielles (outil de
+  lecture des sources) ; cinq règles américaines nouvelles : aide de chaque ligne de l'annexe C
+  (`us_schedule_c_line_help`), repas déductibles à 50 % dans la plupart des cas (`us_meals_deduction_rate`), retours
+  et rabais (`us_sales_returns_allowances`, confiance moyenne pour les services), pas de déduction d'une facture
+  impayée en comptabilité de caisse (`us_bad_debts_cash_method`), pièces justificatives (`us_supporting_documents`).
+- Spécification de l'Espace américain (documentation/60) et décision D87 : remboursements en ligne 2 avec mention
+  de la ligne 3 identique, repas comptés à 50 % dans la synthèse, aucune créance irrécouvrable proposée.
+
 ## 2026-11-19 (jour) — Espace multi-pays, étape 1 : textes séparés du code
 
 - Tous les textes de l'Espace entrepreneur (tableau de bord, documents, clients, recettes, dépenses,

@@ -16,6 +16,11 @@ et ses suites), dont on reprend tout ce qui ne dépend pas du pays.
 | Acomptes trimestriels | 15/04, 15/06, 15/09/2026, 15/01/2027 ; seuil de 1 000 $ ; *safe harbor* 90 % / 100 % / 110 % | Form 1040-ES, déjà sourcé | `estimated_tax_*` |
 | Formulaires 1099 | 1099-NEC déposé **par le client** (payeur) pour 2 000 $ ou plus versés en 2026 (600 $ avant) ; à remettre au plus tard le 01/02/2027 ; paiements par carte et plateformes : 1099-K (plus de 20 000 $ et plus de 200 opérations) ; le revenu est imposable avec ou sans 1099 | Instructions 1099-MISC/NEC, FAQ 1099-K, déjà sourcées | `form_1099_*` |
 | Conservation des pièces | En général 3 ans après le dépôt de la déclaration (plus long dans certains cas) | Topic 305, Publication 583, déjà sourcés | `us_records_retention` |
+| Aide de chaque ligne | Ce qui va sur les lignes 1, 2, 6, 11, 17, 18, 22, 23, 24a, 24b, 25, 27b (partie V) et 30, condensé des instructions ; ligne 27b : pas d'équipement ni de mobilier, pas de dépense personnelle, pas de don, pas d'amende | Instructions de l'annexe C 2025 (édition publiée le 19/11/2026), lues le 19/11/2026 (SHA-256 57209107…) | `us_schedule_c_line_help` (nouvelle) |
+| Repas | Ligne 24b : 50 % du coût réel « dans la plupart des cas » ; 80 % pour les personnes soumises aux limites d'heures du DOT ; 100 % si traités en salaire ou déclarés sur un 1099-NEC ; pas de divertissement | Mêmes instructions ; Pub. 334 (2025) | `us_meals_deduction_rate` (nouvelle) |
+| Remboursements | « Credits you allow customers for returned merchandise and any other allowances you make on sales are deductions from gross sales » ; les instructions de la ligne 2 parlent de produits : la ligne 2 pour un service est **notre lecture** (confiance moyenne), la ligne 3 étant la même dans les deux présentations | Pub. 334 (2025), lue le 19/11/2026 (SHA-256 aab3f8c3…) | `us_sales_returns_allowances` (nouvelle) |
+| Factures impayées | En comptabilité de caisse, pas de déduction pour créance irrécouvrable sur une somme jamais reçue ni comptée en recette ; une créance déduite puis encaissée redevient une recette | Pub. 334 (2025), chapitre 8 ; instructions, partie V | `us_bad_debts_cash_method` (nouvelle) |
+| Pièces justificatives | Recettes : relevés de dépôt, factures, carnets de reçus, 1099-NEC et 1099-MISC… ; dépenses : chèques encaissés, relevés de compte, factures… ; un relevé bancaire prouve le paiement, pas la déductibilité | Pub. 583 (révisée en décembre 2024), partie *Supporting Documents* lue en entier le 19/11/2026 (SHA-256 fa3b6c32…) | `us_supporting_documents` (nouvelle) |
 | Facture | Aucune règle fédérale sur le contenu d'une facture relevée ; ne jamais y mettre son numéro de sécurité sociale (EIN facultatif) | Générateur américain existant | — |
 
 ## 2. Périmètre de la version 1
@@ -85,16 +90,17 @@ Le stockage est déjà séparé par section (clé `of:espace:<section>`) : un ut
 |---|---|
 | U1 | Le parcours de l'Espace français et ses 359 points passent à l'identique après l'étape 1. |
 | U2 | Une facture américaine émise dans l'Espace a le même aperçu et les mêmes totaux que le générateur public. |
-| U3 | Un encaissement compte dans l'année de sa date de réception (cash method), un remboursement en ligne 2. |
+| U3 | Un encaissement compte dans l'année de sa date de réception (cash method), un remboursement en ligne 2 l'année où il est versé, avec la mention de la ligne 3 identique (D87) ; une facture impayée ne crée aucune déduction. |
 | U4 | Chaque dépense a une ligne de l'annexe C ; la synthèse additionne exactement les dépenses de l'année par ligne. |
 | U5 | La ligne 31 = ligne 29 − ligne 30, ligne 29 = ligne 7 − ligne 28 ; export CSV identique à l'écran. |
 | U6 | L'acompte affiché est celui du calculateur public pour les mêmes données. |
 | U7 | Un client professionnel à 1 999,99 $ n'apparaît pas dans les 1099 attendus ; à 2 000,00 $, si. |
 | U8 | Aucune erreur JavaScript, aucun débordement horizontal, accessibilité AA (axe-core) sur ordinateur, tablette et téléphone. |
 
-## 5. À lire avant l'étape 2
+## 5. Lectures avant l'étape 2
 
-- Instructions de l'annexe C (*i1040sc*) : définitions des lignes 1, 2, 6, 11 (*contract labor*), 18, 22, 24b (repas à
-  50 %), 27b et du bureau à domicile, pour l'aide de chaque catégorie.
-- Publication 583, partie *Supporting Documents* (pièces à conserver pour les recettes et les dépenses).
-- Date d'indexation du seuil de 1 099 $ pour 2027 dès sa publication.
+- **Faites le 19/11/2026** (§ 1, D87) : instructions de l'annexe C 2025 (lignes 1, 2, 6, 11, 17, 18, 22, 23, 24a, 24b,
+  25, partie V et 30), Publication 334 (retours et rabais, créances irrécouvrables, repas), Publication 583 (*Supporting
+  Documents* en entier, durée de conservation).
+- **À relire** : les instructions de l'annexe C 2026 dès leur publication (les lignes du formulaire 2026 sont déjà
+  reprises) ; le seuil du formulaire 1099-NEC pour 2027 dès sa publication (indexation).
