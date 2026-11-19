@@ -484,6 +484,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   texte (dictionnaire de la langue), moteur français, indicateurs, graphiques et contrôle des sauvegardes traités.
   **Lots 2b-1 et 2b-2 faits le 19/11/2026** : cœur commun `engines/espace-core.js` (montants, numérotation, statuts,
   transformations, temps passé, prospects, trésorerie commune) ; le moteur français ne garde que la France.
+  **Lot 2c fait le 19/11/2026** : formats de la section dans l'Espace et ses moteurs ; test du cœur avec un pays fictif.
 - **Accueil en images (18/11/2026, nuit)** : demande d'Ismail (« il n'y a que du texte, pas d'image ») ; principes
   des images du site (D84, [58](58-images-du-site.md)) : captures du vrai produit, données d'exemple annoncées, pas de
   banque d'images ni d'image générée. Accueil France : section « Les outils, en vrai » en grille bento (Espace,
@@ -563,8 +564,8 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   l'onglet Documents et de l'onglet Dépenses sont faits (12/11, [55](55-indicateurs-espace.md)) ; thème « Bento » appliqué le
   18/11 ([54](54-themes.md) § 3 ; mode sombre seulement si Ismail le demande) ;
   **Espace entrepreneur pour les États-Unis** ([60](60-espace-etats-unis.md) § 3.1 : étape 1, lectures et lot 2a
-  faits le 19/11, 2b (cœur commun) aussi ; lots suivants : 2c formats
-  de la section, 2d moteur de facture international partagé, 2e moteur américain ; puis modules, page ; ensuite
+  faits le 19/11, 2b (cœur commun) et 2c (formats) aussi ; lots suivants :
+  2d moteur de facture international partagé, 2e moteur américain ; puis modules, page ; ensuite
   Royaume-Uni et Canada, [59](59-parite-des-pays.md)) ; **poids des pages** : chaque page embarque toutes les règles de son pays
   (`window.OF_RULES`, environ 45 Ko avant compression) : n'y mettre que celles que ses scripts lisent ; **images du site** ([58](58-images-du-site.md) § 3) : miniatures dans la liste
   des étapes et schémas explicatifs (facture annotée, frise des relances, calendrier de la facturation électronique) ; refonte, suite ([31](31-vision-plateforme.md) § 5) : les quatre modules du compte

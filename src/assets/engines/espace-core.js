@@ -151,12 +151,12 @@
       var origin = documents.filter(function (d) { return d.id === doc.originId; })[0];
       if (origin && total(doc) > total(origin) - credited(documents, origin) + 0.005) {
         errors.push(L("eng.issue.creditOver", { number: origin.number,
-          amount: String((total(origin) - credited(documents, origin)).toFixed(2)).replace(".", ",") }));
+          amount: amountText(total(origin) - credited(documents, origin)) }));
       }
     }
     var last = series(documents, doc.type, String(doc.date).slice(0, 4))[0];
     if (last && doc.date < last.date) {
-      errors.push(L("eng.issue.chronology", { number: last.number, date: last.date.split("-").reverse().join("/") }));
+      errors.push(L("eng.issue.chronology", { number: last.number, date: dayText(last.date) }));
     }
     return errors;
   }
@@ -250,8 +250,12 @@
 
   var TIME_MAX = { hour: 24, day: 1 };
   var NBSP = "\u00a0";
-  var dec = function (n) { return String(round2(n)).replace(".", ","); };
-  var frDay = function (d) { return String(d || "").split("-").reverse().join("/"); };
+  // Formats des exports et des messages (documentation/60, § 3.1, lot 2c) : ceux de la section, fournis par le pays
+  // (country.fmt) et lus au moment des appels. dec : nombre (« 1,5 ») ; dayText : date ; amountText : montant à deux
+  // décimales, sans séparateur de milliers ni devise (exports CSV).
+  var dec = function (n) { return country.fmt.dec(round2(n)); };
+  var dayText = function (d) { return d ? country.fmt.day(String(d)) : ""; };
+  var amountText = function (n) { return country.fmt.amount(Number(n)); };
   var hasRate = function (t) { return t.rate !== null && t.rate !== undefined && t.rate !== "" && isFinite(Number(t.rate)); };
   var byDate = function (a, b) {
     return a.date < b.date ? -1 : a.date > b.date ? 1 : (a.createdAt || "") < (b.createdAt || "") ? -1 : (a.createdAt || "") > (b.createdAt || "") ? 1 : (a.id < b.id ? -1 : 1);
@@ -354,7 +358,7 @@
     var list = (entries || []).filter(Boolean).slice().sort(byDate);
     var price = function (t) { return hasRate(t) ? Number(t.rate) : NaN; };
     if (mode === "entry") {
-      return list.map(function (t) { return { desc: String(t.task || "").trim() + " — " + frDay(t.date), qty: round2(t.quantity), unit: t.unit, price: price(t) }; });
+      return list.map(function (t) { return { desc: String(t.task || "").trim() + " — " + dayText(t.date), qty: round2(t.quantity), unit: t.unit, price: price(t) }; });
     }
     var groups = [], index = {};
     list.forEach(function (t) {
@@ -365,7 +369,7 @@
       g.last = t.date;
     });
     return groups.map(function (g) {
-      return { desc: g.task + " — " + (g.first === g.last ? frDay(g.first) : "du " + frDay(g.first) + " au " + frDay(g.last)),
+      return { desc: g.task + " — " + (g.first === g.last ? dayText(g.first) : L("eng.time.span", { from: dayText(g.first), to: dayText(g.last) })),
                qty: round2(g.qty), unit: g.unit, price: g.price };
     });
   }
@@ -415,8 +419,8 @@
     var q = function (v) { return '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"'; };
     var lines = [L("eng.csv.time")];
     rows.forEach(function (r) {
-      lines.push([frDay(r.date), q(clientName(r.clientId)), q(r.task), dec(r.quantity), r.unit === "day" ? L("eng.csv.day") : L("eng.csv.hour"),
-                  r.rate === null ? "" : r.rate.toFixed(2).replace(".", ","), r.amount === null ? "" : r.amount.toFixed(2).replace(".", ","),
+      lines.push([dayText(r.date), q(clientName(r.clientId)), q(r.task), dec(r.quantity), r.unit === "day" ? L("eng.csv.day") : L("eng.csv.hour"),
+                  r.rate === null ? "" : amountText(r.rate), r.amount === null ? "" : amountText(r.amount),
                   r.billable ? L("eng.csv.yes") : L("eng.csv.no")].join(";"));
     });
     return lines.join("\r\n");
@@ -576,8 +580,8 @@
     (prospects || []).forEach(function (p) {
       var v = prospectValue(p, documents);
       lines.push([q(p.name), q(p.contact), p.pro === false ? L("eng.prospect.person") : L("eng.prospect.pro"), q(p.email), q(p.phone), q(p.source),
-                  STAGE_LABELS[prospectStage(p, documents)], v === null ? "" : v.toFixed(2).replace(".", ","), frDay(p.nextDate), q(p.nextAction),
-                  frDay(lastContactFrom(p)), frDay(String(p.createdAt || "").slice(0, 10))].join(";"));
+                  STAGE_LABELS[prospectStage(p, documents)], v === null ? "" : amountText(v), dayText(p.nextDate), q(p.nextAction),
+                  dayText(lastContactFrom(p)), dayText(String(p.createdAt || "").slice(0, 10))].join(";"));
     });
     return lines.join("\r\n");
   }
@@ -744,12 +748,11 @@
   /** Export de la prévision : date, nature, libellé, montant et solde après le mouvement (si un solde est saisi). */
   function forecastCSV(f) {
     var q = function (v) { return '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"'; };
-    var eur = function (n) { return String(n.toFixed(2)).replace(".", ","); };
     var bal = f.start, lines = [L("eng.csv.forecast")];
-    if (bal !== null) lines.push([f.today.split("-").reverse().join("/"), q(L("eng.csv.forecastStart")), q(""), "", eur(bal)].join(";"));
+    if (bal !== null) lines.push([dayText(f.today), q(L("eng.csv.forecastStart")), q(""), "", amountText(bal)].join(";"));
     f.items.forEach(function (x) {
       if (bal !== null) bal = round2(bal + x.amount);
-      lines.push([x.date.split("-").reverse().join("/"), q(FLOW_KINDS[x.kind] || x.kind), q(x.label), eur(x.amount), bal === null ? "" : eur(bal)].join(";"));
+      lines.push([dayText(x.date), q(FLOW_KINDS[x.kind] || x.kind), q(x.label), amountText(x.amount), bal === null ? "" : amountText(bal)].join(";"));
     });
     return lines.join("\r\n");
   }
@@ -757,7 +760,7 @@
   return { EVERY: EVERY, CHARGE_LABELS: CHARGE_LABELS, isIn: isIn, addMonths: addMonths, monthStart: monthStart, monthEnd: monthEnd, chargeDates: chargeDates, chargeErrors: chargeErrors, expectedReceipts: expectedReceipts, balanceCurve: balanceCurve, safeAmount: safeAmount, daysBetween: daysBetween, avg: avg, paymentStats: paymentStats, AGING: AGING, aging: aging, monthlyCharges: monthlyCharges, runway: runway, quotesToInvoice: quotesToInvoice, FLOW_KINDS: FLOW_KINDS, forecastCSV: forecastCSV,
            series: series, seriesPrefix: seriesPrefix, nextNumber: nextNumber, continuation: continuation, checkIssue: checkIssue, issue: issue, state: state, checkPayment: checkPayment, clientTotals: clientTotals, COPY_FIELDS: COPY_FIELDS, copyFrom: copyFrom, invoiceFromQuote: invoiceFromQuote, creditFromInvoice: creditFromInvoice, duplicate: duplicate,
            nameKey: nameKey, listText: listText, labels: labels, round2: round2, lastDay: lastDay, iso: iso, total: total, payments: payments, paidAmount: paidAmount,
-           credited: credited, balance: balance, dueDate: dueDate, order: order, TIME_MAX: TIME_MAX, NBSP: NBSP, dec: dec, frDay: frDay,
+           credited: credited, balance: balance, dueDate: dueDate, order: order, TIME_MAX: TIME_MAX, NBSP: NBSP, dec: dec, dayText: dayText, amountText: amountText,
            hasRate: hasRate, byDate: byDate, parseDuration: parseDuration, durationLabel: durationLabel, ISO_DAY: ISO_DAY, timerCheck: timerCheck,
            timerElapsed: timerElapsed, timerStart: timerStart, timerPause: timerPause, timerResume: timerResume, timerStop: timerStop,
            timerClock: timerClock, timerDuration: timerDuration, timeErrors: timeErrors, checkTime: checkTime, timeState: timeState,

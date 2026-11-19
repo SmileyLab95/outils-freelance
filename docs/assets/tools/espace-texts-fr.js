@@ -1407,6 +1407,10 @@
     "eng.chart.low": "Point bas",
     "eng.chart.planned": "Prévu",
     "eng.chart.actual": "Réel",
-    "eng.chart.showData": "Voir les données"
+    "eng.chart.showData": "Voir les données",
+    // Moteur : période d'une ligne de facture du temps passé
+    "eng.time.span": "du {from} au {to}",
+    // Formats de la langue
+    "fmt.percent": "{n} %"
   };
 })(typeof self !== "undefined" ? self : this);

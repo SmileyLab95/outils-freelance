@@ -1,5 +1,14 @@
 # Journal des modifications
 
+## 2026-11-19 (jour, suite) — Espace multi-pays : formats de la section (lot 2c)
+
+- Les moteurs de l'Espace reçoivent leurs formats d'export (date, nombre, montant) du pays ; l'Espace utilise les
+  formats de la section pour les montants, les dates, les pourcentages, le séparateur décimal des champs et le
+  symbole de la devise (jusqu'ici « € » et la virgule étaient écrits en dur). Aucun changement en France.
+- Nouveau test du cœur commun avec un pays fictif à l'américaine : aucun texte ni format français n'en sort.
+- Vérifications : 737 tests unitaires, parcours de l'Espace (359) et des comptes (51), Factur-X 12/12 conformes
+  et PDF/A-3 valides (Mustang).
+
 ## 2026-11-19 (jour) — Espace multi-pays : cœur commun complété (lot 2b-2)
 
 - Numérotation et émission, statuts, totaux par client, transformations (devis vers facture, avoir, doublon) et

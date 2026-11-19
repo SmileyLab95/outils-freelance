@@ -31,7 +31,15 @@
   var forced = /[?&]today=(\d{4}-\d{2}-\d{2})/.exec(window.location.search);
   var TODAY = forced ? forced[1] : OF.today();
   var YEAR = TODAY.slice(0, 4);
-  var FMT = { eur: OF.eur, num: OF.fmt, date: OF.frDate };
+  // Formats de la section pour les moteurs (rendu des documents, Factur-X, courriel) : en France, OF.money et OF.date
+  // donnent exactement OF.eur et OF.frDate (fr-FR, EUR) ; documentation/60, § 3.1, lot 2c.
+  var FMT = { eur: OF.money, num: OF.fmt, date: function (iso) { return OF.date(iso); } };
+  /** Séparateur décimal de la section (« , » en français, « . » en anglais), pour préremplir les champs de saisie. */
+  var DEC = OF.fmt(1.5).charAt(1);
+  /** Symbole de la devise de la section (« € », « $ », « £ »), à côté des champs de montant. */
+  var CUR = OF.money(0).replace(/[\d\s.,\u00a0\u202f-]/g, "");
+  /** Pourcentage au format de la langue : « 12,5 % » en français. */
+  var percent = function (n) { return L("fmt.percent", { n: OF.fmt(n) }); };
   var data = S.empty();
   var currentRoute = "";
 
@@ -71,7 +79,7 @@
     return String(text == null ? "" : text).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
       .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
   }
-  // Montants et dates au format de la section (identiques à OF.eur et OF.frDate en France).
+  // Montants et dates au format de la section.
   var money = function (n) { return OF.money(n); };
   var day = function (iso) { return iso ? OF.date(iso) : "–"; };
   var longDay = function (iso) { return OF.date(iso, { day: "numeric", month: "long", year: "numeric" }); };
@@ -492,7 +500,7 @@
       '<section class="card espace-card"><h3>' + L("dash.recentDocs") + "</h3>" + docTable(recentDocs(5), true) +
       '<p class="small"><a href="#/documents">' + L("dash.allDocs") + "</a></p></section>";
     if (decl) {
-      var pct = function (r) { return OF.fmt(Math.round(r * 1000) / 10) + " %"; };
+      var pct = function (r) { return percent(Math.round(r * 1000) / 10); };
       html += '<p class="small muted espace-note">' + (decl.mixed
         // Activité mixte : chaque part au taux de son activité ; formation professionnelle au plus élevé des deux taux.
         ? L("decl.mixedEstimate", { sales: esc(money(decl.parts[0].revenue)), salesRate: pct(decl.parts[0].rates.social + decl.parts[0].rates.cfp),
@@ -519,7 +527,7 @@
 
   /** Principaux clients sur 12 mois (encaissements nets) : barres, part et reste ; constat de dépendance au premier client. */
   function topClientsCard(top, onClientsPage) {
-    var pct = function (x) { return OF.fmt(Math.round(x * 100)) + " %"; };
+    var pct = function (x) { return percent(Math.round(x * 100)); };
     var max = top.rows.length ? top.rows[0].amount : 0;
     var row = function (name, href, amount, share) {
       return '<li><span class="bl-name">' + (href ? '<a href="' + href + '">' + esc(name) + "</a>" : esc(name)) + '</span><span class="bl-bar" aria-hidden="true"><span style="width:' +
@@ -801,7 +809,7 @@
         '<div class="field line-desc"><label for="ln-desc-' + i + '">' + L("line.desc") + '</label><input type="text" id="ln-desc-' + i + '" data-k="desc" value="' + esc(l.desc) + '"></div>' +
         '<div class="field line-qty"><label for="ln-qty-' + i + '">' + L("line.qty") + '</label><input type="text" id="ln-qty-' + i + '" data-k="qty" inputmode="decimal" value="' + (isFinite(INV.amount(l.qty)) ? esc(OF.fmt(l.qty)) : "") + '"></div>' +
         '<div class="field line-unit"><label for="ln-unit-' + i + '">' + L("line.unit") + '</label><select id="ln-unit-' + i + '" data-k="unit">' + options(LINE_UNITS, l.unit || "") + "</select></div>" +
-        '<div class="field line-price"><label for="ln-price-' + i + '">' + L("line.price") + '</label><div class="input-suffix"><input type="text" id="ln-price-' + i + '" data-k="price" inputmode="decimal" value="' + (isFinite(INV.amount(l.price)) ? esc(String(l.price).replace(".", ",")) : "") + '"><span>€</span></div></div>' +
+        '<div class="field line-price"><label for="ln-price-' + i + '">' + L("line.price") + '</label><div class="input-suffix"><input type="text" id="ln-price-' + i + '" data-k="price" inputmode="decimal" value="' + (isFinite(INV.amount(l.price)) ? esc(String(l.price).replace(".", DEC)) : "") + '"><span>' + CUR + "</span></div></div>" +
         '<button type="button" class="line-remove" data-remove="' + i + '" aria-label="' + L("line.removeN", { n: i + 1 }) + '" title="' + L("line.remove") + '">✕</button></div>';
     }).join("");
   }
@@ -1016,7 +1024,7 @@
     if (bal > 0.005) {
       html += '<form id="pay-form" class="fields" novalidate>' +
         '<div class="field"><label for="pay-date">' + L("pay.date") + '</label><input type="date" id="pay-date" value="' + TODAY + '"></div>' +
-        '<div class="field"><label for="pay-amount">' + L("pay.amount") + '</label><div class="input-suffix"><input type="text" id="pay-amount" inputmode="decimal" value="' + esc(String(bal).replace(".", ",")) + '"><span>€</span></div></div>' +
+        '<div class="field"><label for="pay-amount">' + L("pay.amount") + '</label><div class="input-suffix"><input type="text" id="pay-amount" inputmode="decimal" value="' + esc(String(bal).replace(".", DEC)) + '"><span>' + CUR + "</span></div></div>" +
         '<div class="field"><label for="pay-method">' + L("pay.method") + '</label><select id="pay-method">' + options(Object.keys(E.METHODS).map(function (k) { return [k, E.METHODS[k]]; }), "virement") + "</select></div>" +
         '<div class="field"><label for="pay-note">' + L("pay.note") + '</label><input type="text" id="pay-note" placeholder="' + L("pay.notePlaceholder") + '"></div>' +
         '<p class="form-error full" id="pay-error" role="alert" hidden></p>' +
@@ -1224,7 +1232,7 @@
 
   // ----- Indicateurs des documents et des clients (documentation/55-indicateurs-espace.md, § 2) ----------------
 
-  var pct = function (x) { return OF.fmt(Math.round(x * 100)) + " %"; };
+  var pct = function (x) { return percent(Math.round(x * 100)); };
   /** Barres « facturé (HT) et encaissé » par mois dans le conteneur data-chart="name". */
   function drawInvoicedChart(name, months, who) {
     var el = view.querySelector('[data-chart="' + name + '"]');
@@ -1570,7 +1578,7 @@
     view.innerHTML = '<div class="espace-head"><h2>' + (isNew ? (required ? L("exp.newPurchase") : L("exp.new")) : esc(x.supplier)) + "</h2></div>" +
       '<form class="card espace-card" id="expense-form" novalidate><div class="fields">' +
       field("date", L("ledger.col.date"), x.date, { type: "date", half: true, required: true }) +
-      field("amount", L("exp.amount"), x.amount == null ? "" : Number(x.amount).toFixed(2).replace(".", ","), { half: true, required: true, inputmode: "decimal", placeholder: L("exp.amountPlaceholder"),
+      field("amount", L("exp.amount"), x.amount == null ? "" : Number(x.amount).toFixed(2).replace(".", DEC), { half: true, required: true, inputmode: "decimal", placeholder: L("exp.amountPlaceholder"),
         hint: L("exp.amountHint") }) +
       field("supplier", L("exp.col.supplier"), x.supplier, { required: true, placeholder: L("exp.supplierPlaceholder") }) +
       field("label", L("exp.label"), x.label, { placeholder: L("exp.labelPlaceholder") }) +
@@ -1639,7 +1647,7 @@
         res.rows.map(function (x) {
           var a = x.asset;
           return '<tr><td class="c-asset"><a href="#/immobilisations/' + esc(a.id) + '">' + esc(a.label) + "</a>" +
-            (a.proShare != null && a.proShare !== "" && Number(a.proShare) < 100 ? '<span class="small muted">' + L("as.partial", { pct: esc(String(a.proShare).replace(".", ",")) }) + "</span>" : "") +
+            (a.proShare != null && a.proShare !== "" && Number(a.proShare) < 100 ? '<span class="small muted">' + L("as.partial", { pct: esc(String(a.proShare).replace(".", DEC)) }) + "</span>" : "") +
             vehicleMention(a) +
             (x.sold ? '<span class="small muted">' + L("as.sold", { date: day(a.soldOn), amount: esc(money(a.salePrice)) }) +
               (x.disposal ? L("as.sep") + esc(disposalLabel(x.disposal.result)) + (x.disposal.split === "unknown" ? L("as.splitUnknown") :
@@ -1676,7 +1684,7 @@
   function exemptionBlock(year, disposals) {
     if (!(disposals.shortTerm > 0 || disposals.longTerm > 0 || disposals.pendingGains)) return "";
     var X = R.plus_values_exoneration_151_septies, S = X.services_bnc, V = X.sales;
-    var eur0 = function (n) { return OF.eur(n, 0); }, rate = function (r) { return OF.fmt(Math.round(r * 10000) / 100) + " %"; };
+    var eur0 = function (n) { return OF.money(n, 0); }, rate = function (r) { return percent(Math.round(r * 10000) / 100); };
     var start = profile().startDate, x = E.exemption151(data.documents, year, disposals, R, start);
     var lines = [L("as.ex.rule", { years: X.activity_years, sFull: eur0(S.full_up_to), vFull: eur0(V.full_up_to), sPartial: eur0(S.partial_below), vPartial: eur0(V.partial_below) })];
     var A = x.activity, endOfYear = L("as.ex.endOfYear", { year: year });
@@ -1705,11 +1713,11 @@
   /** Mention du registre pour une voiture particulière plafonnée (documentation/57 § 8). */
   function vehicleMention(a) {
     var v = E.vehicleCap(a, R);
-    return v && v.status === "capped" ? '<span class="small muted">' + L("as.vehicleCap", { amount: esc(OF.eur(v.cap, 0)) }) + "</span>" : "";
+    return v && v.status === "capped" ? '<span class="small muted">' + L("as.vehicleCap", { amount: esc(OF.money(v.cap, 0)) }) + "</span>" : "";
   }
   /** Part déductible ; « à établir » quand l'Espace ne peut pas la calculer (voiture particulière, documentation/57 § 8). */
   function deductibleCell(n) { return n === null ? '<span class="muted">' + L("as.tbd") + "</span>" : esc(money(n)); }
-  var amountText = function (n) { return n === null || n === undefined || n === "" || !isFinite(n) ? "" : Number(n).toFixed(2).replace(".", ","); };
+  var amountText = function (n) { return n === null || n === undefined || n === "" || !isFinite(n) ? "" : Number(n).toFixed(2).replace(".", DEC); };
   function readAsset(form) {
     var f = form.elements, num = function (v) { return String(v).trim() ? OF.num(v) : null; };
     var car = f.category.value === "transport";   // carte grise : seulement pour un véhicule (documentation/57 § 8)
@@ -1722,7 +1730,7 @@
    * (4 de l'article 39 du CGI), calculé depuis la règle plafond_amortissement_vp.
    */
   function vehicleHint(x) {
-    var v = E.vehicleCap(x, R), euros = function (n) { return Number(n) % 1 ? money(n) : OF.eur(n, 0); };
+    var v = E.vehicleCap(x, R), euros = function (n) { return Number(n) % 1 ? money(n) : OF.money(n, 0); };
     if (!v) return "";
     if (v.status === "not_vp") return L("as.v.notVp");
     if (v.status === "before") return L("as.v.before");
@@ -1745,7 +1753,7 @@
   function disposalBlock(x) {
     var d = E.assetDisposal(x, R);
     if (!d) return "";
-    var P = R.plus_values_professionnelles, pct = String(x.proShare).replace(".", ",") + " %";
+    var P = R.plus_values_professionnelles, pct = L("fmt.percent", { n: String(x.proShare).replace(".", DEC) });
     var partVehicle = x.category === "transport" && Number(x.proShare) < 100;
     var lines = [L("as.d.first", { date: day(x.soldOn), price: money(x.salePrice), net: money(d.net), result: (d.gross ? L("as.d.article") : "") + disposalLabel(d.gross) }) +
       (partVehicle && d.gross ? L("as.d.proPart", { amount: money(Math.abs(d.result)), pct: pct }) : "") + "."];
@@ -1754,7 +1762,7 @@
     else if (d.result < 0) lines.push(L("as.d.lossShort"));
     else if (d.result > 0 && !d.heldTwoYears) lines.push(L("as.d.gainShort", { years: P.holding_years }));
     else if (d.result > 0) lines.push(L("as.d.gainLong", { years: P.holding_years, short: money(d.shortTerm) }) + (d.longTerm ? L("as.d.andLong", { long: money(d.longTerm) }) : "") + ".");
-    if (d.result) lines.push(L("as.d.regime", { spread: P.short_term_spread_years, rate: String(P.long_term_rate).replace(".", ",") }) +
+    if (d.result) lines.push(L("as.d.regime", { spread: P.short_term_spread_years, rate: String(P.long_term_rate).replace(".", DEC) }) +
       (d.result > 0 ? L("as.d.exemption", { year: x.soldOn.slice(0, 4) }) : ""));
     return '<div class="notice asset-disposal">' + lines.map(function (l) { return "<p>" + esc(l) + "</p>"; }).join("") + "</div>";
   }
@@ -1799,7 +1807,7 @@
       field("inServiceOn", L("as.f.inService"), x.inServiceOn || "", { type: "date", half: true, hint: L("as.f.inServiceHint") }) +
       field("years", L("as.f.years"), x.years == null ? "" : String(x.years), { half: true, required: true, inputmode: "numeric",
         hint: L("as.f.yearsHint") }) +
-      field("proShare", L("as.f.proShare"), x.proShare == null ? "100" : String(x.proShare).replace(".", ","), { half: true, inputmode: "decimal",
+      field("proShare", L("as.f.proShare"), x.proShare == null ? "100" : String(x.proShare).replace(".", DEC), { half: true, inputmode: "decimal",
         hint: L("as.f.proShareHint") }) +
       field("soldOn", L("as.f.soldOn"), x.soldOn || "", { type: "date", half: true }) +
       field("salePrice", L("as.f.salePrice"), amountText(x.salePrice), { half: true, inputmode: "decimal", hint: L("as.f.salePriceHint") }) +
@@ -1921,7 +1929,7 @@
     if (days) parts.push(E.durationLabel(days, "day"));
     return parts.join(L("time.and")) || L("time.zero");
   }
-  var rateText = function (n) { return n === null || n === undefined || !isFinite(n) ? "" : String(Math.round(n * 100) / 100).replace(".", ","); };
+  var rateText = function (n) { return n === null || n === undefined || !isFinite(n) ? "" : String(Math.round(n * 100) / 100).replace(".", DEC); };
   function monthShift(key, n) {
     var m = +key.slice(5, 7) - 1 + n, y = +key.slice(0, 4) + Math.floor(m / 12);
     return y + "-" + String(((m % 12) + 12) % 12 + 1).padStart(2, "0");
@@ -2543,7 +2551,7 @@
   function treasuryInput(over) {
     return Object.assign({ documents: data.documents, charges: data.charges, profile: profile(), rules: R, events: CAL, today: TODAY, months: 6 }, over || {});
   }
-  var signed = function (n) { return (n < 0 ? "−" : "+") + OF.eur(Math.abs(n)).replace(/^-/, ""); };
+  var signed = function (n) { return (n < 0 ? "−" : "+") + OF.money(Math.abs(n)).replace(/^-/, ""); };
   var hasCash = function () { var c = profile().cashBalance; return c !== undefined && c !== null && c !== "" && isFinite(Number(c)); };
   var threshold = function () { return Math.max(0, Number(profile().cashThreshold) || 0); };
   function charge(id) { return data.charges.filter(function (c) { return c.id === id; })[0] || null; }

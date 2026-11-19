@@ -128,6 +128,14 @@ Restent propres à la France : TVA, déclarations Urssaf, acomptes, sommes déj�
 les pièces du cœur et les flux d'impôts), historique des flux, point mort, livre des recettes. Le moteur américain
 assemblera sa prévision avec les mêmes pièces ; si les deux assemblages se ressemblent trop, un crochet commun (flux
 d'impôts du pays) sera étudié.
+Lot 2c fait le 19/11/2026 : les moteurs lisent leurs formats dans les réglages du pays (`country.fmt` : date, nombre,
+montant à deux décimales ; ceux de la France pour le moteur français) ; l'Espace passe aux formats de la section
+(`OF.money`, `OF.date`, strictement identiques à `OF.eur` et `OF.frDate` en fr-FR et EUR), tire le séparateur
+décimal des champs et le symbole de la devise du format de la section, et écrit les pourcentages par la clé
+`fmt.percent`. Le test `tests/unit/espace-core.test.mjs` crée le cœur avec un pays fictif (préfixes INV, EST, CM,
+formats américains) et des textes en clés brutes : aucun texte ni format français n'en sort (contrôle vérifié en
+réintroduisant une date et une virgule à la française). Factur-X : 12 factures sur 12 conformes, PDF/A-3 valides
+(Mustang).
 
 ### Avancement
 

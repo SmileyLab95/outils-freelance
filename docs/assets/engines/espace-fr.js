@@ -29,7 +29,7 @@
   var series = C.series, seriesPrefix = C.seriesPrefix, nextNumber = C.nextNumber, continuation = C.continuation, checkIssue = C.checkIssue, issue = C.issue, state = C.state, checkPayment = C.checkPayment, clientTotals = C.clientTotals, COPY_FIELDS = C.COPY_FIELDS, copyFrom = C.copyFrom, invoiceFromQuote = C.invoiceFromQuote, creditFromInvoice = C.creditFromInvoice, duplicate = C.duplicate;
   var nameKey = C.nameKey, listText = C.listText, labels = C.labels, round2 = C.round2, lastDay = C.lastDay, iso = C.iso, total = C.total, payments = C.payments,
       paidAmount = C.paidAmount, credited = C.credited, balance = C.balance, dueDate = C.dueDate, order = C.order, TIME_MAX = C.TIME_MAX,
-      NBSP = C.NBSP, dec = C.dec, frDay = C.frDay, hasRate = C.hasRate, byDate = C.byDate, parseDuration = C.parseDuration,
+      NBSP = C.NBSP, dec = C.dec, dayText = C.dayText, amountText = C.amountText, hasRate = C.hasRate, byDate = C.byDate, parseDuration = C.parseDuration,
       durationLabel = C.durationLabel, ISO_DAY = C.ISO_DAY, timerCheck = C.timerCheck, timerElapsed = C.timerElapsed, timerStart = C.timerStart,
       timerPause = C.timerPause, timerResume = C.timerResume, timerStop = C.timerStop, timerClock = C.timerClock, timerDuration = C.timerDuration,
       timeErrors = C.timeErrors, checkTime = C.checkTime, timeState = C.timeState, lastRate = C.lastRate, timeInvoiceLines = C.timeInvoiceLines,
@@ -47,6 +47,9 @@
   var METHODS = labels("eng.method.", ["virement", "carte", "cheque", "especes", "prelevement", "autre"]);
   var DEFAULT_PREFIXES = { facture: "F", devis: "D", avoir: "A" };
   country.prefixes = DEFAULT_PREFIXES;
+  // Formats de la France pour les exports et les messages : 18/10/2026, 1,5, 1234,50 (documentation/60, § 3.1, lot 2c).
+  country.fmt = { day: function (d) { return d.split("-").reverse().join("/"); }, dec: function (n) { return String(n).replace(".", ","); },
+                  amount: function (n) { return n.toFixed(2).replace(".", ","); } };
   country.methods = METHODS;
   // Codes pays ISO 3166-1 alpha-2 (249) et États membres de l'Union européenne (27) ; noms affichés par Intl.DisplayNames.
   var COUNTRIES = ("AD AE AF AG AI AL AM AO AQ AR AS AT AU AW AX AZ BA BB BD BE BF BG BH BI BJ BL BM BN BO BQ BR BS BT BV BW BY BZ " +
@@ -286,7 +289,7 @@
       var pct = Math.min(100, Math.max(0, Number(doc.depositPct) || 0));
       var until = INV.addDays(doc.date, Math.max(1, parseInt(doc.validity, 10) || 30));
       parts.push(L("eng.mail.quote", { number: doc.number, date: fmt.date(doc.date), amount: amountText, until: fmt.date(until) }) +
-        (pct > 0 ? L("eng.mail.deposit", { pct: String(pct).replace(".", ","), amount: fmt.eur(round2(total(doc) * pct / 100)) }) : ""));
+        (pct > 0 ? L("eng.mail.deposit", { pct: country.fmt.dec(pct), amount: fmt.eur(round2(total(doc) * pct / 100)) }) : ""));
       parts.push(L("eng.mail.accept", { mention: INV.QUOTE_ACCEPTANCE }));
       parts.push(L("eng.mail.discuss"));
     } else {
@@ -417,7 +420,7 @@
     // Catégorie (documentation/55) en dernière colonne : les colonnes du registre des achats restent à leur place.
     var lines = [L("eng.csv.expenses")];
     rows.forEach(function (r) {
-      lines.push([r.date.split("-").reverse().join("/"), q(r.supplier), q(r.label), String(r.amount.toFixed(2)).replace(".", ","), q(r.method), q(r.ref), q(r.category)].join(";"));
+      lines.push([dayText(r.date), q(r.supplier), q(r.label), amountText(r.amount), q(r.method), q(r.ref), q(r.category)].join(";"));
     });
     return lines.join("\r\n");
   }
@@ -650,13 +653,13 @@
   /** Registre de l'année au format CSV (séparateur « ; », montants avec la virgule). */
   function assetsCSV(year) {
     var q = function (v) { return '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"'; };
-    var eur = function (n) { return filled(n) ? Number(n).toFixed(2).replace(".", ",") : ""; };
+    var eur = function (n) { return filled(n) ? amountText(n) : ""; };
     var lines = [L("eng.csv.assets")];
     year.rows.forEach(function (r) {
       var a = r.asset;
-      lines.push([q(a.label), q(ASSET_CATEGORIES[a.category]), frDay(a.acquiredOn), frDay(assetStart(a)), eur(a.cost), String(a.years),
-        String(filled(a.proShare) ? a.proShare : 100).replace(".", ","), eur(r.amount), eur(r.cumulative), eur(r.net), eur(r.deductible),
-        filled(a.soldOn) ? frDay(a.soldOn) : "", filled(a.soldOn) ? eur(a.salePrice) : "",
+      lines.push([q(a.label), q(ASSET_CATEGORIES[a.category]), dayText(a.acquiredOn), dayText(assetStart(a)), eur(a.cost), String(a.years),
+        country.fmt.dec(filled(a.proShare) ? a.proShare : 100), eur(r.amount), eur(r.cumulative), eur(r.net), eur(r.deductible),
+        filled(a.soldOn) ? dayText(a.soldOn) : "", filled(a.soldOn) ? eur(a.salePrice) : "",
         r.disposal ? eur(r.disposal.shortTerm) : "", r.disposal ? eur(r.disposal.longTerm) : ""].join(";"));
     });
     return lines.join("\r\n");
@@ -875,13 +878,12 @@
   }
   function ledgerCSV(rows) {
     var q = function (v) { return '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"'; };
-    var eur = function (n) { return String(n.toFixed(2)).replace(".", ","); };
     // Activité mixte : ventes et prestations dans deux colonnes (BOFiP, BOI-BIC-DECLA-30-30, § 30).
     var split = rows.some(function (r) { return r.goods !== undefined; });
     var lines = [split ? L("eng.csv.ledgerMixed") : L("eng.csv.ledger")];
     rows.forEach(function (r) {
-      lines.push([r.date.split("-").reverse().join("/"), q(r.client), q(r.nature)].concat(split ? [eur(r.goods), eur(r.services)] : [])
-        .concat([eur(r.amount), q(r.method), q(r.ref)]).join(";"));
+      lines.push([dayText(r.date), q(r.client), q(r.nature)].concat(split ? [amountText(r.goods), amountText(r.services)] : [])
+        .concat([amountText(r.amount), q(r.method), q(r.ref)]).join(";"));
     });
     return lines.join("\r\n");
   }
