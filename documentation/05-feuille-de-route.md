@@ -490,8 +490,8 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   **Lot 2e fait le 19/11/2026** : `engines/espace-us.js` (recettes en caisse, annexe C, acomptes, 1099-NEC attendus),
   critères U3 à U7 testés ; étape 2 terminée.
   **Étape 3 spécifiée le 19/11/2026** ([60](60-espace-etats-unis.md) § 3.2, D90) ; lot 3a-1 fait : écrans
-  d'immobilisations dans le module français `tools/espace-fr-ui.js` ; lots 3a-2 à 3a-5 faits : tableau de bord,
-  profil, fiche client, éditeur de document.
+  d'immobilisations dans le module français `tools/espace-fr-ui.js` ; lots 3a-2 à 3a-6 faits : tableau de bord,
+  profil, fiche client, éditeur de document, Factur-X.
 - **Accueil en images (18/11/2026, nuit)** : demande d'Ismail (« il n'y a que du texte, pas d'image ») ; principes
   des images du site (D84, [58](58-images-du-site.md)) : captures du vrai produit, données d'exemple annoncées, pas de
   banque d'images ni d'image générée. Accueil France : section « Les outils, en vrai » en grille bento (Espace,
@@ -573,7 +573,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   **Espace entrepreneur pour les États-Unis** ([60](60-espace-etats-unis.md) § 3.1 : étape 1, lectures et lot 2a
   faits le 19/11, 2b (cœur commun), 2c (formats), 2d (moteur de facture international) et 2e (moteur américain,
   critères U3 à U7) aussi ; étape 3 en cours ([60](60-espace-etats-unis.md) § 3.2) : 3a, suite du module français
-  (Factur-X, recettes, dépenses, prospects, trésorerie, reprise du
+  (recettes, dépenses, prospects, trésorerie, reprise du
   générateur), puis 3b dictionnaires, 3c anglais, 3d module américain ; puis modules, page ; ensuite
   Royaume-Uni et Canada, [59](59-parite-des-pays.md)) ; **poids des pages** : chaque page embarque toutes les règles de son pays
   (`window.OF_RULES`, environ 45 Ko avant compression) : n'y mettre que celles que ses scripts lisent ; **images du site** ([58](58-images-du-site.md) § 3) : miniatures dans la liste

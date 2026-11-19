@@ -16,6 +16,8 @@
 - Cinquième lot : les parties françaises de l'éditeur de document (TVA selon le client, nature, biens ou services
   des lignes, taux et note de TVA) passent dans le module. Le parcours vérifie en plus le taux de TVA de l'éditeur et
   la fiche client créée depuis un brouillon (363 points).
+- Sixième lot : la facture électronique Factur-X d'un document émis passe dans le module ; parcours (363) et
+  validation Factur-X (jeu d'essai et fichiers produits par l'Espace) réussis, aucun changement visible.
 
 ## 2026-11-19 (après-midi, suite) — Moteur de l'Espace des États-Unis (lot 2e)
 

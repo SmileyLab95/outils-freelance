@@ -218,6 +218,11 @@ depuis le brouillon avec TVA autoliquidée et taux gardé, retour à un client e
 enregistré suit désormais la même règle que les autres (taux choisi gardé) ; sans effet visible, car quitter l'éditeur
 enregistre le brouillon dès qu'il a été modifié. Parcours de l'Espace 363/363 et des comptes 51/51 ; mutation
 (taux saisi non enregistré) détectée par trois des quatre nouveaux points.
+Lot 3a-6 fait le 19/11/2026 : crochet `issued` du module (`cards`, `bind`) : carte de la facture électronique
+Factur-X d'un document émis à un professionnel, coordonnées complétées depuis les fiches, export PDF/A-3 et XML. Le
+chargeur de scripts différés reste commun et est prêté au module. Parcours de l'Espace 363/363 et des comptes 51/51 ;
+jeu d'essai Factur-X (12 factures, XML et PDF) et fichiers produits par l'Espace pendant le parcours validés (XSD,
+EN 16931, règles françaises, PDF/A-3).
 
 ### Avancement
 

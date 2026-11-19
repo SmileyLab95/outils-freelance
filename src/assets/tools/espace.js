@@ -859,7 +859,7 @@
       (d.type === "devis" && !d.invoiceId ? '<button type="button" class="btn btn-ghost" id="d-convert">' + L("issued.convert") + "</button>" : "") +
       "</div>";
     if (st !== "cancelled") html += sendCard(d);
-    if ((d.type === "facture" || d.type === "avoir") && (parties(d).client || {}).pro) html += facturxCard(d);
+    if (UI.issued) html += UI.issued.cards(d);   // cartes du pays (France : facture électronique Factur-X)
     if (d.type === "devis") {
       html += '<section class="card espace-card"><h3>' + L("quote.answer") + '</h3><div class="espace-actions">' +
         '<button type="button" class="btn btn-ghost btn-sm" data-quote="accepted"' + (d.status === "accepted" ? ' aria-pressed="true"' : "") + ">" + L("state.accepted") + "</button>" +
@@ -914,16 +914,8 @@
         : '<p class="small muted">' + (client(d.clientId) ? L("send.noEmailAddHtml", { href: "#/clients/" + esc(d.clientId) }) : L("send.noEmail")) + "</p>") +
       "</section>";
   }
-  // ----- Facture électronique (Factur-X) : documentation/10-etude-factur-x.md --------------------------------------
 
-  function facturxCard(d) {
-    var avoir = d.type === "avoir";
-    return '<section class="card espace-card"><h3>' + (avoir ? L("fx.titleCredit") : L("fx.titleInvoice")) + "</h3>" +
-      '<p class="small muted">' + L("fx.intro") + "</p>" +
-      '<div class="espace-actions"><button type="button" class="btn btn-ghost btn-sm" id="d-facturx">' + (avoir ? L("fx.downloadCredit") : L("fx.downloadInvoice")) +
-      '</button><button type="button" class="btn btn-ghost btn-sm" id="d-facturx-xml">' + L("fx.xmlOnly") + "</button></div>" +
-      '<div class="small fx-status" id="fx-status" role="status" aria-live="polite"></div></section>';
-  }
+  // ----- Scripts différés (moteur PDF de la facture électronique, chargé à la demande) ----------------------------
 
   /** Scripts déclarés dans #lazy-scripts (moteur PDF) : téléchargés en parallèle, exécutés dans l'ordre, une seule fois. */
   var lazy = null;
@@ -944,87 +936,6 @@
     return lazy;
   }
 
-  /**
-   * Document à exporter : coordonnées figées à l'émission, complétées quand elles manquent par les identifiants actuels
-   * du profil et de la fiche client (SIRET, SIREN, pays, email, adresses électroniques, adresse avec code postal et ville).
-   * Les montants, les lignes et les noms ne changent jamais.
-   */
-  function exportDoc(d, FX) {
-    var snap = d.snapshot || {}, me = Object.assign({}, snap.me), cl = Object.assign({}, snap.client);
-    var p = profile(), c = client(d.clientId) || {}, done = [];
-    var fill = function (target, key, value, label) {
-      if (!String(target[key] || "").trim() && String(value || "").trim()) { target[key] = value; done.push(label); }
-    };
-    fill(me, "siret", p.siret, L("fx.fill.siret"));
-    fill(me, "endpoint", p.endpoint, L("fx.fill.endpoint"));
-    if (!FX.address(me).postcode && FX.address({ address: p.address }).postcode) { me.address = p.address; done.push(L("fx.fill.address")); }
-    // Lieu du client : celui retenu pour la TVA du document, figé avec lui.
-    var place = (d.vat && d.vat.place) || cl.place || "fr";
-    if (!cl.place) cl.place = place;
-    fill(cl, "id", c.siren, L("fx.fill.clientSiren"));
-    fill(cl, "country", place !== "fr" ? c.country : "", L("fx.fill.clientCountry"));
-    fill(cl, "email", c.email, L("fx.fill.clientEmail"));
-    fill(cl, "endpoint", c.endpoint, L("fx.fill.clientEndpoint"));
-    if (place === "fr" && !FX.address(cl).city && FX.address({ address: c.address }).city) { cl.address = c.address; done.push(L("fx.fill.clientAddress")); }
-    return { doc: Object.assign({}, d, { snapshot: { me: me, client: cl } }), completed: done };
-  }
-
-  /** Logo (image enregistrée dans le profil) converti en JPEG sur fond blanc, ou null. */
-  function logoJPEG(src) {
-    if (!src) return Promise.resolve(null);
-    return new Promise(function (resolve) {
-      var img = new Image();
-      img.onload = function () {
-        if (!img.naturalWidth || !img.naturalHeight) { resolve(null); return; }
-        var scale = Math.min(1, 480 / img.naturalWidth, 240 / img.naturalHeight);
-        var w = Math.max(1, Math.round(img.naturalWidth * scale)), h = Math.max(1, Math.round(img.naturalHeight * scale));
-        var canvas = document.createElement("canvas");
-        canvas.width = w;
-        canvas.height = h;
-        var ctx = canvas.getContext("2d");
-        ctx.fillStyle = "#fff";
-        ctx.fillRect(0, 0, w, h);
-        ctx.drawImage(img, 0, 0, w, h);
-        resolve({ jpeg: OFE.pdfa.base64(canvas.toDataURL("image/jpeg", 0.92).split(",")[1]), width: w, height: h });
-      };
-      img.onerror = function () { resolve(null); };
-      img.src = src;
-    });
-  }
-
-  function exportFacturX(d, xmlOnly, button) {
-    var status = $("fx-status");
-    button.disabled = true;
-    status.textContent = L("fx.preparing");
-    var loaded = false;
-    loadLazy().then(function () {
-      loaded = true;
-      var FX = OFE.facturxFR, ex = exportDoc(d, FX), problems = FX.check(ex.doc);
-      var base = String(d.number).replace(/[^A-Za-z0-9_-]/g, "-") + "-factur-x";
-      var completed = ex.completed.length ? L("fx.completed", { list: ex.completed.join(", ") }) : "";
-      if (problems.length) {
-        status.innerHTML = '<p class="form-error">' + L("fx.toComply") + "</p><ul>" +
-          problems.map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("") + '</ul><p><a href="#/reglages">' + L("fx.completeProfile") + "</a>" +
-          (client(d.clientId) ? ' · <a href="#/clients/' + esc(d.clientId) + '">' + L("fx.completeClient") + "</a>" : "") + "</p>";
-        return;
-      }
-      if (xmlOnly) {
-        OF.download(FX.xml(ex.doc, data.documents, R, FMT), base + ".xml", "application/xml");
-        status.textContent = L("fx.xmlDone", { number: d.number }) + completed;
-        return;
-      }
-      return logoJPEG(ex.doc.snapshot.me.logo).then(function (logo) {
-        var out = OFE.facturxPDF.build(ex.doc, data.documents, R, FMT, { fonts: OFE.pdfFonts, icc: OFE.pdfSRGB, logo: logo, now: new Date().toISOString() });
-        OF.download(out.bytes, base + ".pdf", "application/pdf");
-        status.textContent = (d.type === "facture" ? L("fx.pdfDoneF", { label: docLabel(d) }) : L("fx.pdfDoneM", { label: docLabel(d) })) + completed +
-          (out.missing.length ? L("fx.missingChars", { chars: out.missing.join(" ") }) : "");
-      });
-    }).catch(function (error) {
-      if (window.console) console.error(error);
-      status.textContent = loaded ? L("fx.failed", { error: error && error.message || L("fx.unknownError") }) : L("fx.loadFailed");
-    }).then(function () { button.disabled = false; });
-  }
-
   /** Destinataire : email de la fiche client actuelle, sinon celui figé à l'émission. */
   function recipient(d) {
     var c = client(d.clientId);
@@ -1039,10 +950,7 @@
 
   function bindIssued(d) {
     $("d-print").addEventListener("click", function () { printDoc(d); });
-    if ($("d-facturx")) {
-      $("d-facturx").addEventListener("click", function () { exportFacturX(d, false, this); });
-      $("d-facturx-xml").addEventListener("click", function () { exportFacturX(d, true, this); });
-    }
+    if (UI.issued) UI.issued.bind(d);
     $("d-duplicate").addEventListener("click", function () {
       this.disabled = true;
       var copy = E.duplicate(d, TODAY, S.uid());
@@ -2520,7 +2428,8 @@
   // Ce que l'Espace prête au module de la section (tools/espace-<pays>-ui.js) ; les données par une fonction, car l'objet
   // data est remplacé à chaque chargement.
   var ctx = { $: $, CAL: CAL, longDay: longDay, L: L, esc: esc, money: money, day: day, percent: percent, DEC: DEC, field: field, options: options, kpi: kpi, countText: countText, showError: showError, persist: persist, now: now, isMicro: isMicro, profile: profile, view: view, amountText: amountText, E: E, R: R, S: S, OF: OF, TODAY: TODAY, YEAR: YEAR,
-              TERMS: TERMS, isMixed: isMixed, data: function () { return data; } };
+              TERMS: TERMS, isMixed: isMixed, FMT: FMT, client: client, parties: parties, docLabel: docLabel, loadLazy: loadLazy,
+              data: function () { return data; } };
   var UI = OFE.espaceUI && OFE.espaceUI[OF.section] ? OFE.espaceUI[OF.section](ctx) : {};
 
   // ----- Démarrage -----------------------------------------------------------------------------------

@@ -3,6 +3,7 @@
  * immobilisations et amortissements (documentation/57) ; tableau de bord (déclaration Urssaf, plafonds, registre des
  * achats) ; profil (activité, TVA, micro-entreprise, coordonnées) ; fiche client (lieu, SIREN, TVA, adresse
  * électronique de facturation) ; éditeur de document (TVA selon le client, nature, biens ou services des lignes).
+ * Facture électronique Factur-X d'un document émis (documentation/10).
  * Module d'écrans d'un pays : la fabrique
  * OFE.espaceUI.fr reçoit le contexte prêté par tools/espace.js (textes, formats, champs, données, règles…) et renvoie ses
  * crochets ; routes : écrans en plus du cadre commun. Chargé par la page de la section avant tools/espace.js.
@@ -12,7 +13,8 @@
   var OFE = root.OFE = root.OFE || {};
   (OFE.espaceUI = OFE.espaceUI || {}).fr = function (ctx) {
     var $ = ctx.$, L = ctx.L, esc = ctx.esc, money = ctx.money, day = ctx.day, percent = ctx.percent, DEC = ctx.DEC, field = ctx.field, options = ctx.options, kpi = ctx.kpi, countText = ctx.countText, showError = ctx.showError, persist = ctx.persist, now = ctx.now, isMicro = ctx.isMicro, profile = ctx.profile, view = ctx.view, amountText = ctx.amountText, E = ctx.E, R = ctx.R, S = ctx.S, OF = ctx.OF, TODAY = ctx.TODAY, YEAR = ctx.YEAR;
-    var D = ctx.data, CAL = ctx.CAL, longDay = ctx.longDay, TERMS = ctx.TERMS, isMixed = ctx.isMixed;   // données de l'Espace : l'objet change à chaque chargement, d'où une fonction
+    var D = ctx.data, CAL = ctx.CAL, longDay = ctx.longDay, TERMS = ctx.TERMS, isMixed = ctx.isMixed;
+    var FMT = ctx.FMT, client = ctx.client, parties = ctx.parties, docLabel = ctx.docLabel, loadLazy = ctx.loadLazy;   // données de l'Espace : l'objet change à chaque chargement, d'où une fonction
 
     function asset(id) { return D().assets.filter(function (a) { return a.id === id; })[0] || null; }
     var ASSET_HINTS = { deductible: L("as.hint.deductible"), partial: L("as.hint.partial") };
@@ -478,12 +480,117 @@
     /** Options d'émission du moteur : biens et services distingués en activité mixte. */
     function issueOptions() { return { lineKinds: isMixed() }; }
 
+
+    // ----- Facture électronique (Factur-X) : documentation/10-etude-factur-x.md --------------------------------
+
+    function facturxCard(d) {
+      var avoir = d.type === "avoir";
+      return '<section class="card espace-card"><h3>' + (avoir ? L("fx.titleCredit") : L("fx.titleInvoice")) + "</h3>" +
+        '<p class="small muted">' + L("fx.intro") + "</p>" +
+        '<div class="espace-actions"><button type="button" class="btn btn-ghost btn-sm" id="d-facturx">' + (avoir ? L("fx.downloadCredit") : L("fx.downloadInvoice")) +
+        '</button><button type="button" class="btn btn-ghost btn-sm" id="d-facturx-xml">' + L("fx.xmlOnly") + "</button></div>" +
+        '<div class="small fx-status" id="fx-status" role="status" aria-live="polite"></div></section>';
+    }
+
+    /**
+     * Document à exporter : coordonnées figées à l'émission, complétées quand elles manquent par les identifiants actuels
+     * du profil et de la fiche client (SIRET, SIREN, pays, email, adresses électroniques, adresse avec code postal et ville).
+     * Les montants, les lignes et les noms ne changent jamais.
+     */
+    function exportDoc(d, FX) {
+      var snap = d.snapshot || {}, me = Object.assign({}, snap.me), cl = Object.assign({}, snap.client);
+      var p = profile(), c = client(d.clientId) || {}, done = [];
+      var fill = function (target, key, value, label) {
+        if (!String(target[key] || "").trim() && String(value || "").trim()) { target[key] = value; done.push(label); }
+      };
+      fill(me, "siret", p.siret, L("fx.fill.siret"));
+      fill(me, "endpoint", p.endpoint, L("fx.fill.endpoint"));
+      if (!FX.address(me).postcode && FX.address({ address: p.address }).postcode) { me.address = p.address; done.push(L("fx.fill.address")); }
+      // Lieu du client : celui retenu pour la TVA du document, figé avec lui.
+      var place = (d.vat && d.vat.place) || cl.place || "fr";
+      if (!cl.place) cl.place = place;
+      fill(cl, "id", c.siren, L("fx.fill.clientSiren"));
+      fill(cl, "country", place !== "fr" ? c.country : "", L("fx.fill.clientCountry"));
+      fill(cl, "email", c.email, L("fx.fill.clientEmail"));
+      fill(cl, "endpoint", c.endpoint, L("fx.fill.clientEndpoint"));
+      if (place === "fr" && !FX.address(cl).city && FX.address({ address: c.address }).city) { cl.address = c.address; done.push(L("fx.fill.clientAddress")); }
+      return { doc: Object.assign({}, d, { snapshot: { me: me, client: cl } }), completed: done };
+    }
+
+    /** Logo (image enregistrée dans le profil) converti en JPEG sur fond blanc, ou null. */
+    function logoJPEG(src) {
+      if (!src) return Promise.resolve(null);
+      return new Promise(function (resolve) {
+        var img = new Image();
+        img.onload = function () {
+          if (!img.naturalWidth || !img.naturalHeight) { resolve(null); return; }
+          var scale = Math.min(1, 480 / img.naturalWidth, 240 / img.naturalHeight);
+          var w = Math.max(1, Math.round(img.naturalWidth * scale)), h = Math.max(1, Math.round(img.naturalHeight * scale));
+          var canvas = document.createElement("canvas");
+          canvas.width = w;
+          canvas.height = h;
+          var paint = canvas.getContext("2d");
+          paint.fillStyle = "#fff";
+          paint.fillRect(0, 0, w, h);
+          paint.drawImage(img, 0, 0, w, h);
+          resolve({ jpeg: OFE.pdfa.base64(canvas.toDataURL("image/jpeg", 0.92).split(",")[1]), width: w, height: h });
+        };
+        img.onerror = function () { resolve(null); };
+        img.src = src;
+      });
+    }
+
+    function exportFacturX(d, xmlOnly, button) {
+      var status = $("fx-status");
+      button.disabled = true;
+      status.textContent = L("fx.preparing");
+      var loaded = false;
+      loadLazy().then(function () {
+        loaded = true;
+        var FX = OFE.facturxFR, ex = exportDoc(d, FX), problems = FX.check(ex.doc);
+        var base = String(d.number).replace(/[^A-Za-z0-9_-]/g, "-") + "-factur-x";
+        var completed = ex.completed.length ? L("fx.completed", { list: ex.completed.join(", ") }) : "";
+        if (problems.length) {
+          status.innerHTML = '<p class="form-error">' + L("fx.toComply") + "</p><ul>" +
+            problems.map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("") + '</ul><p><a href="#/reglages">' + L("fx.completeProfile") + "</a>" +
+            (client(d.clientId) ? ' · <a href="#/clients/' + esc(d.clientId) + '">' + L("fx.completeClient") + "</a>" : "") + "</p>";
+          return;
+        }
+        if (xmlOnly) {
+          OF.download(FX.xml(ex.doc, D().documents, R, FMT), base + ".xml", "application/xml");
+          status.textContent = L("fx.xmlDone", { number: d.number }) + completed;
+          return;
+        }
+        return logoJPEG(ex.doc.snapshot.me.logo).then(function (logo) {
+          var out = OFE.facturxPDF.build(ex.doc, D().documents, R, FMT, { fonts: OFE.pdfFonts, icc: OFE.pdfSRGB, logo: logo, now: new Date().toISOString() });
+          OF.download(out.bytes, base + ".pdf", "application/pdf");
+          status.textContent = (d.type === "facture" ? L("fx.pdfDoneF", { label: docLabel(d) }) : L("fx.pdfDoneM", { label: docLabel(d) })) + completed +
+            (out.missing.length ? L("fx.missingChars", { chars: out.missing.join(" ") }) : "");
+        });
+      }).catch(function (error) {
+        if (window.console) console.error(error);
+        status.textContent = loaded ? L("fx.failed", { error: error && error.message || L("fx.unknownError") }) : L("fx.loadFailed");
+      }).then(function () { button.disabled = false; });
+    }
+
+    /** Cartes d'un document émis propres à la France : facture électronique d'une facture ou d'un avoir à un professionnel. */
+    function issuedCards(d) {
+      return (d.type === "facture" || d.type === "avoir") && (parties(d).client || {}).pro ? facturxCard(d) : "";
+    }
+    /** Boutons de la carte Factur-X, quand elle est affichée. */
+    function bindIssued(d) {
+      if (!$("d-facturx")) return;
+      $("d-facturx").addEventListener("click", function () { exportFacturX(d, false, this); });
+      $("d-facturx-xml").addEventListener("click", function () { exportFacturX(d, true, this); });
+    }
+
     return {
       routes: { immobilisations: function (r) { (r.id ? viewAssetForm : viewAssets)(r); } },
       dashboard: dashboard,
       profile: { defaults: profileDefaults, fields: profileFields, bind: bindProfile, read: readProfile },
       client: { defaults: clientDefaults, fields: clientFields, bind: bindClient, read: readClient },
-      doc: { draft: draftFields, retax: retax, fields: docFields, note: docNote, input: docInput, kindCell: kindCell, issueOptions: issueOptions }
+      doc: { draft: draftFields, retax: retax, fields: docFields, note: docNote, input: docInput, kindCell: kindCell, issueOptions: issueOptions },
+      issued: { cards: issuedCards, bind: bindIssued }
     };
   };
 })(typeof self !== "undefined" ? self : this);
