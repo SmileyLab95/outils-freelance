@@ -9,6 +9,8 @@
   l'utilisateur : parcours de l'Espace (359 points) et des comptes (51), 750 tests unitaires.
 - Deuxième lot : les parties françaises du tableau de bord (déclaration Urssaf, plafonds, registre des achats)
   passent dans le même module, par un crochet ; mêmes vérifications, aucun changement visible.
+- Troisième lot : les champs français du profil (activité, TVA, micro-entreprise, coordonnées) passent dans le
+  module ; le nom et la numérotation restent communs. Mêmes vérifications, aucun changement visible.
 
 ## 2026-11-19 (après-midi, suite) — Moteur de l'Espace des États-Unis (lot 2e)
 

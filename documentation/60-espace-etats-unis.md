@@ -202,6 +202,10 @@ et le vérificateur TypeScript ne signale pas ce nom (angle mort désormais couv
 Lot 3a-2 fait le 19/11/2026 : crochet `dashboard()` du module (rappel du registre des achats, prochaine déclaration
 Urssaf en 4e indicateur, jauges des plafonds, note sur l'estimation) ; sans module, le tableau de bord garde les devis
 en attente en 4e indicateur. Parcours de l'Espace 359/359 et des comptes 51/51.
+Lot 3a-3 fait le 19/11/2026 : crochet `profile` du module (`defaults`, `fields`, `bind`, `read`) ; le formulaire
+commun garde le nom, la numérotation, l'enregistrement et le passage au tableau de bord ; le module rend et lit les
+champs du pays (activité, TVA, micro-entreprise, coordonnées, délai, pénalités) et renvoie `{ message, field }` quand il
+refuse une saisie (adresse électronique de facturation). Parcours de l'Espace 359/359 et des comptes 51/51.
 
 ### Avancement
 

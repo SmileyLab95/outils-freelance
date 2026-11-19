@@ -1,15 +1,16 @@
 /*
  * Écrans de l'Espace entrepreneur propres à la France (documentation/60-espace-etats-unis.md, § 3.2, décision D90) :
- * immobilisations et amortissements (documentation/57) ; tableau de bord : déclaration Urssaf, plafonds, registre des achats. Module d'écrans d'un pays : la fabrique OFE.espaceUI.fr reçoit le
- * contexte prêté par tools/espace.js (textes, formats, champs, données, règles…) et renvoie ses crochets ; routes : écrans
- * en plus du cadre commun. Chargé par la page de la section avant tools/espace.js.
+ * immobilisations et amortissements (documentation/57) ; tableau de bord (déclaration Urssaf, plafonds, registre des
+ * achats) ; profil (activité, TVA, micro-entreprise, coordonnées). Module d'écrans d'un pays : la fabrique
+ * OFE.espaceUI.fr reçoit le contexte prêté par tools/espace.js (textes, formats, champs, données, règles…) et renvoie ses
+ * crochets ; routes : écrans en plus du cadre commun. Chargé par la page de la section avant tools/espace.js.
  */
 (function (root) {
   "use strict";
   var OFE = root.OFE = root.OFE || {};
   (OFE.espaceUI = OFE.espaceUI || {}).fr = function (ctx) {
     var $ = ctx.$, L = ctx.L, esc = ctx.esc, money = ctx.money, day = ctx.day, percent = ctx.percent, DEC = ctx.DEC, field = ctx.field, options = ctx.options, kpi = ctx.kpi, countText = ctx.countText, showError = ctx.showError, persist = ctx.persist, now = ctx.now, isMicro = ctx.isMicro, profile = ctx.profile, view = ctx.view, amountText = ctx.amountText, E = ctx.E, R = ctx.R, S = ctx.S, OF = ctx.OF, TODAY = ctx.TODAY, YEAR = ctx.YEAR;
-    var D = ctx.data, CAL = ctx.CAL, longDay = ctx.longDay;   // données de l'Espace : l'objet change à chaque chargement, d'où une fonction
+    var D = ctx.data, CAL = ctx.CAL, longDay = ctx.longDay, TERMS = ctx.TERMS, checkEndpoint = ctx.checkEndpoint;   // données de l'Espace : l'objet change à chaque chargement, d'où une fonction
 
     function asset(id) { return D().assets.filter(function (a) { return a.id === id; })[0] || null; }
     var ASSET_HINTS = { deductible: L("as.hint.deductible"), partial: L("as.hint.partial") };
@@ -308,9 +309,79 @@
       };
     }
 
+
+    // ----- Profil : activité, TVA, micro-entreprise, coordonnées (documentation/55, § 2) -----------------------
+
+    var ACTIVITIES = ["liberal_bnc", "cipav", "services_bic", "artisan", "vente", "real"].map(function (k) { return [k, L("activity." + k)]; });
+    /** Seconde activité possible (activité mixte, documentation/53) : la vente avec une activité de services. */
+    function activity2Options(activity) {
+      var none = [["", L("activity.none")]];
+      if (activity === "vente") return none.concat(ACTIVITIES.filter(function (a) { return a[0] !== "vente" && a[0] !== "real"; }));
+      if (R.micro_activities[activity]) return none.concat(ACTIVITIES.filter(function (a) { return a[0] === "vente"; }));
+      return none;
+    }
+    var VAT_REGIMES = ["franchise", "simplified", "normal"].map(function (k) { return [k, L("vat." + k)]; });
+    /** Profil proposé au premier lancement : profession libérale en franchise de TVA, déclarations trimestrielles. */
+    function profileDefaults() { return { activity: "liberal_bnc", vatRegime: "franchise", periodicity: "quarterly" }; }
+    /** Champs du profil propres à la France, entre le nom et la numérotation ; coordonnées après le premier lancement. */
+    function profileFields(p, first) {
+      var micro = !!R.micro_activities[p.activity];
+      return field("activity", L("profile.activity"), p.activity, { options: ACTIVITIES }) +
+        field("vatRegime", L("profile.vatRegime"), p.vatRegime, { options: VAT_REGIMES, half: true }) +
+        field("vatRate", L("profile.vatRate"), p.vatRate || 20, { options: [[20, "20 %"], [10, "10 %"], [5.5, "5,5 %"], [2.1, "2,1 %"]], half: true }) +
+        field("startDate", L("profile.startDate"), p.startDate, { type: "date", half: true, hint: L("profile.startDateHint") }) +
+        '<div class="micro-only full fields"' + (micro ? "" : " hidden") + ">" +
+        field("activity2", L("profile.activity2"), p.activity2 || "", { options: activity2Options(p.activity), hint: L("profile.activity2Hint") }) +
+        field("periodicity", L("profile.periodicity"), p.periodicity, { options: [["quarterly", L("profile.quarterly")], ["monthly", L("profile.monthly")]], half: true }) +
+        field("acre", L("profile.acre"), p.acre || 0, { options: [[0, L("common.no")], [50, L("profile.acre50")], [25, L("profile.acre25")]], half: true }) +
+        field("vl", L("profile.vl"), p.vl ? "1" : "0", { options: [["0", L("common.no")], ["1", L("common.yes")]], half: true }) +
+        "</div>" +
+        (first ? "" :
+          field("status", L("profile.status"), p.status, { placeholder: L("profile.statusPlaceholder") }) +
+          field("address", L("profile.address"), p.address, { textarea: true, placeholder: L("profile.addressPlaceholder") }) +
+          field("siret", L("profile.siret"), p.siret, { half: true, placeholder: L("profile.siretPlaceholder") }) +
+          field("vat", L("profile.vat"), p.vat, { half: true }) +
+          field("endpoint", L("profile.endpoint"), p.endpoint, { placeholder: L("profile.endpointPlaceholder"), hint: L("profile.endpointHint") }) +
+          field("email", L("profile.email"), p.email, { type: "email", half: true }) +
+          field("phone", L("profile.phone"), p.phone, { type: "tel", half: true }) +
+          field("iban", L("profile.iban"), p.iban, { half: true }) +
+          field("bic", L("profile.bic"), p.bic, { half: true }) +
+          field("terms", L("profile.terms"), p.terms == null ? 30 : p.terms, { options: TERMS, half: true }) +
+          field("penalty", L("profile.penalty"), p.penalty || L("profile.penaltyDefault"), { half: true }));
+    }
+    /** Bascules du formulaire : champs de la micro-entreprise, seconde activité possible, taux de TVA hors franchise. */
+    function bindProfile(form) {
+      var toggle = function () {
+        form.querySelector(".micro-only").hidden = !R.micro_activities[form.elements.activity.value];
+        var second = form.elements.activity2, keep = second.value;
+        second.innerHTML = options(activity2Options(form.elements.activity.value), keep);
+        form.elements.vatRate.closest(".field").hidden = form.elements.vatRegime.value === "franchise";
+      };
+      form.elements.activity.addEventListener("change", toggle);
+      form.elements.vatRegime.addEventListener("change", toggle);
+      toggle();
+    }
+    /** Lit les champs du pays dans p ; renvoie { message, field } si un champ est refusé, sinon null. */
+    function readProfile(form, p, first) {
+      var f = form.elements;
+      ["activity", "vatRegime", "periodicity", "startDate"].forEach(function (k) { p[k] = f[k].value; });
+      p.vatRate = Number(f.vatRate.value);
+      p.acre = Number(f.acre.value);
+      p.vl = f.vl.value === "1";
+      p.activity2 = E.mixedActivities({ activity: p.activity, activity2: f.activity2.value }, R) ? f.activity2.value : "";
+      if (!first) {
+        ["status", "address", "siret", "vat", "email", "phone", "iban", "bic", "penalty", "endpoint"].forEach(function (k) { p[k] = f[k].value.trim(); });
+        var endpointError = checkEndpoint(p.endpoint, p.siret, L("profile.yourSiren"));
+        if (endpointError) return { message: endpointError, field: "endpoint" };
+        p.terms = Number(f.terms.value);
+      }
+      return null;
+    }
+
     return {
       routes: { immobilisations: function (r) { (r.id ? viewAssetForm : viewAssets)(r); } },
-      dashboard: dashboard
+      dashboard: dashboard,
+      profile: { defaults: profileDefaults, fields: profileFields, bind: bindProfile, read: readProfile }
     };
   };
 })(typeof self !== "undefined" ? self : this);

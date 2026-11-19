@@ -45,17 +45,8 @@
 
   // ----- Libellés ----------------------------------------------------------------
 
-  var ACTIVITIES = ["liberal_bnc", "cipav", "services_bic", "artisan", "vente", "real"].map(function (k) { return [k, L("activity." + k)]; });
-  /** Seconde activité possible (activité mixte, documentation/53) : la vente avec une activité de services. */
-  function activity2Options(activity) {
-    var none = [["", L("activity.none")]];
-    if (activity === "vente") return none.concat(ACTIVITIES.filter(function (a) { return a[0] !== "vente" && a[0] !== "real"; }));
-    if (R.micro_activities[activity]) return none.concat(ACTIVITIES.filter(function (a) { return a[0] === "vente"; }));
-    return none;
-  }
   /** Profil en activité mixte (ventes et prestations suivies séparément). */
   function isMixed() { return !!E.mixedActivities(profile(), R); }
-  var VAT_REGIMES = ["franchise", "simplified", "normal"].map(function (k) { return [k, L("vat." + k)]; });
   var TYPES = { facture: L("type.facture"), devis: L("type.devis"), avoir: L("type.avoir") };
   var STATE_CLASSES = {
     draft: "st-draft", unpaid: "st-unpaid", overdue: "st-overdue", partial: "st-partial", paid: "st-paid", sent: "st-unpaid",
@@ -181,7 +172,7 @@
       (pendingImport() ? '<p class="notice">' + L("welcome.importPending") + "</p>" : "") +
       "<p>" + L("welcome.introHtml") + "</p>" +
       "<p>" + L("welcome.start") + "</p></div>" +
-      profileForm(fromGenerator ? generatorProfile(fromGenerator) : { activity: "liberal_bnc", vatRegime: "franchise", periodicity: "quarterly" }, true) +
+      profileForm(fromGenerator ? generatorProfile(fromGenerator) : (UI.profile ? UI.profile.defaults() : {}), true) +
       '<div class="card espace-card espace-noprint"><h3>' + L("welcome.dataTitle") + "</h3>" +
       (fromGenerator ? "<p>" + L("welcome.fromGenerator") + "</p>" : "") +
       "<p>" + L("welcome.restore") + "</p>" + importControl() + "</div>";
@@ -351,34 +342,16 @@
     return error ? { error: error } : { prefixes: prefixes, numbering: numbering };
   }
 
+  /**
+   * Formulaire du profil : nom et numérotation communs ; les autres champs (activité, taxes, coordonnées, délai de
+   * paiement) viennent du module du pays (crochet profile, documentation/60, § 3.2).
+   */
   function profileForm(p, first) {
-    var micro = !!R.micro_activities[p.activity];
     return '<form class="card espace-card" id="profile-form" novalidate>' +
       "<h3>" + L("profile.title") + "</h3><div class=\"fields\">" +
       field("name", L("profile.name"), p.name, { placeholder: L("profile.namePlaceholder"), required: true, hint: L("profile.nameHint") }) +
-      field("activity", L("profile.activity"), p.activity, { options: ACTIVITIES }) +
-      field("vatRegime", L("profile.vatRegime"), p.vatRegime, { options: VAT_REGIMES, half: true }) +
-      field("vatRate", L("profile.vatRate"), p.vatRate || 20, { options: [[20, "20 %"], [10, "10 %"], [5.5, "5,5 %"], [2.1, "2,1 %"]], half: true }) +
-      field("startDate", L("profile.startDate"), p.startDate, { type: "date", half: true, hint: L("profile.startDateHint") }) +
-      '<div class="micro-only full fields"' + (micro ? "" : " hidden") + ">" +
-      field("activity2", L("profile.activity2"), p.activity2 || "", { options: activity2Options(p.activity), hint: L("profile.activity2Hint") }) +
-      field("periodicity", L("profile.periodicity"), p.periodicity, { options: [["quarterly", L("profile.quarterly")], ["monthly", L("profile.monthly")]], half: true }) +
-      field("acre", L("profile.acre"), p.acre || 0, { options: [[0, L("common.no")], [50, L("profile.acre50")], [25, L("profile.acre25")]], half: true }) +
-      field("vl", L("profile.vl"), p.vl ? "1" : "0", { options: [["0", L("common.no")], ["1", L("common.yes")]], half: true }) +
-      "</div>" +
-      (first ? "" :
-        field("status", L("profile.status"), p.status, { placeholder: L("profile.statusPlaceholder") }) +
-        field("address", L("profile.address"), p.address, { textarea: true, placeholder: L("profile.addressPlaceholder") }) +
-        field("siret", L("profile.siret"), p.siret, { half: true, placeholder: L("profile.siretPlaceholder") }) +
-        field("vat", L("profile.vat"), p.vat, { half: true }) +
-        field("endpoint", L("profile.endpoint"), p.endpoint, { placeholder: L("profile.endpointPlaceholder"), hint: L("profile.endpointHint") }) +
-        field("email", L("profile.email"), p.email, { type: "email", half: true }) +
-        field("phone", L("profile.phone"), p.phone, { type: "tel", half: true }) +
-        field("iban", L("profile.iban"), p.iban, { half: true }) +
-        field("bic", L("profile.bic"), p.bic, { half: true }) +
-        field("terms", L("profile.terms"), p.terms == null ? 30 : p.terms, { options: TERMS, half: true }) +
-        field("penalty", L("profile.penalty"), p.penalty || L("profile.penaltyDefault"), { half: true }) +
-        numberingFields(p)) +
+      (UI.profile ? UI.profile.fields(p, first) : "") +
+      (first ? "" : numberingFields(p)) +
       "</div>" +
       '<p class="form-error" id="profile-error" role="alert" hidden></p>' +
       '<div class="espace-actions"><button type="submit" class="btn btn-primary">' + (first ? L("profile.create") : L("common.save")) + "</button></div></form>";
@@ -386,31 +359,16 @@
 
   function bindProfileForm(first) {
     var form = $("profile-form");
-    var toggle = function () {
-      form.querySelector(".micro-only").hidden = !R.micro_activities[form.elements.activity.value];
-      var second = form.elements.activity2, keep = second.value;
-      second.innerHTML = options(activity2Options(form.elements.activity.value), keep);
-      form.elements.vatRate.closest(".field").hidden = form.elements.vatRegime.value === "franchise";
-    };
-    form.elements.activity.addEventListener("change", toggle);
-    form.elements.vatRegime.addEventListener("change", toggle);
-    toggle();
+    if (UI.profile) UI.profile.bind(form);
     if (!first) bindNumbering(form, data.profile || {});
     form.addEventListener("submit", function (e) {
       e.preventDefault();
       var f = form.elements, p = Object.assign({}, data.profile || {}, first ? generatorExtras() : {});
       p.name = f.name.value.trim();
       if (!p.name) { showError("profile-error", L("profile.errName")); f.name.focus(); return; }
-      ["activity", "vatRegime", "periodicity", "startDate"].forEach(function (k) { p[k] = f[k].value; });
-      p.vatRate = Number(f.vatRate.value);
-      p.acre = Number(f.acre.value);
-      p.vl = f.vl.value === "1";
-      p.activity2 = E.mixedActivities({ activity: p.activity, activity2: f.activity2.value }, R) ? f.activity2.value : "";
+      var problem = UI.profile ? UI.profile.read(form, p, first) : null;
+      if (problem) { showError("profile-error", problem.message); if (problem.field) f[problem.field].focus(); return; }
       if (!first) {
-        ["status", "address", "siret", "vat", "email", "phone", "iban", "bic", "penalty", "endpoint"].forEach(function (k) { p[k] = f[k].value.trim(); });
-        var endpointError = checkEndpoint(p.endpoint, p.siret, L("profile.yourSiren"));
-        if (endpointError) { showError("profile-error", endpointError); f.endpoint.focus(); return; }
-        p.terms = Number(f.terms.value);
         var numbering = readNumbering(form, p);
         if (numbering.error) { showError("profile-error", numbering.error); return; }
         p.prefixes = numbering.prefixes;
@@ -2611,7 +2569,7 @@
   // Ce que l'Espace prête au module de la section (tools/espace-<pays>-ui.js) ; les données par une fonction, car l'objet
   // data est remplacé à chaque chargement.
   var ctx = { $: $, CAL: CAL, longDay: longDay, L: L, esc: esc, money: money, day: day, percent: percent, DEC: DEC, field: field, options: options, kpi: kpi, countText: countText, showError: showError, persist: persist, now: now, isMicro: isMicro, profile: profile, view: view, amountText: amountText, E: E, R: R, S: S, OF: OF, TODAY: TODAY, YEAR: YEAR,
-              data: function () { return data; } };
+              TERMS: TERMS, checkEndpoint: checkEndpoint, data: function () { return data; } };
   var UI = OFE.espaceUI && OFE.espaceUI[OF.section] ? OFE.espaceUI[OF.section](ctx) : {};
 
   // ----- Démarrage -----------------------------------------------------------------------------------
