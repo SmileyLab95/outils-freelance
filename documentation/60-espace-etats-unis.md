@@ -233,6 +233,11 @@ Lot 3a-8 fait le 19/11/2026 : crochet `prospects` du module (`retentionYears`, `
 `rules`) : règles de la CNIL, durée de conservation des données et note de la liste d'opposition ; sans durée fournie
 par le pays, le cadre commun n'affiche pas les rappels de conservation. Étapes, relances, liste d'opposition
 (empreintes), boutons et exports restent communs. Parcours de l'Espace 363/363 et des comptes 51/51.
+Lot 3a-9 fait le 19/11/2026 : crochet `deadlines` du module (`values`, `hidden`, `classes`, `summary`) :
+conditions du calendrier selon le profil, échéances Urssaf masquées hors micro-entreprise, catégories de la frise,
+cotisations et TVA estimées, introduction et lien vers le calendrier fiscal français. La fenêtre de 90 jours, la frise,
+la liste et la prochaine échéance restent communes ; le calcul des montants (`ST.deadlines`, flux Urssaf et TVA de la
+trésorerie) sera généralisé avec le module américain. Parcours de l'Espace 363/363 et des comptes 51/51.
 
 ### Avancement
 

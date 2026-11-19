@@ -5,6 +5,7 @@
  * électronique de facturation) ; éditeur de document (TVA selon le client, nature, biens ou services des lignes).
  * Facture électronique Factur-X d'un document émis (documentation/10). Livre des recettes et dépenses (registre
  * des achats, documentation/36). Règles de prospection de la CNIL et durée de conservation (documentation/38).
+ * Échéances : calendrier selon le profil, cotisations et TVA estimées.
  * Module d'écrans d'un pays : la fabrique
  * OFE.espaceUI.fr reçoit le contexte prêté par tools/espace.js (textes, formats, champs, données, règles…) et renvoie ses
  * crochets ; routes : écrans en plus du cadre commun. Chargé par la page de la section avant tools/espace.js.
@@ -828,6 +829,33 @@
     /** Prospects à recontacter ou à supprimer : rappel du référentiel de la CNIL. */
     function retentionNote(years) { return L("pros.retentionText", { years: years }); }
 
+
+    // ----- Échéances : calendrier fiscal selon le profil, cotisations et TVA (documentation/55, § 5.5) -----------
+
+    /** Valeurs du profil lues par les conditions du calendrier (« when ») : périodicité, régime de TVA, année de création. */
+    function deadlineValues() {
+      var p = profile();
+      return { periodicity: p.periodicity, vat: p.vatRegime, created: p.startDate && p.startDate.slice(0, 4) === YEAR ? "on" : "off" };
+    }
+    /** Échéances masquées : déclarations Urssaf de la micro-entreprise pour un autre régime. */
+    function deadlineHidden(e) { return !isMicro() && e.tag === "Urssaf"; }
+    // Catégorie d'une échéance pour la frise et la liste : forme et couleur (documentation/55, § 5.5).
+    var DEADLINE_CLASSES = { Urssaf: ["is-dl-urssaf", L("dl.tag.urssaf")], TVA: ["is-dl-vat", L("dl.tag.vat")], CFE: ["is-dl-tax", L("dl.tag.tax")], "Impôt": ["is-dl-tax", L("dl.tag.tax")] };
+    /** Écran des échéances : cotisations et TVA estimées, montant estimé total, introduction, lien vers le calendrier. */
+    function deadlineSummary(dl) {
+      var p = profile();
+      var vatNote = p.vatRegime === "franchise" ? L("dl.vatFranchise") :
+        p.vatRegime === "simplified" && (p.vatLastYear === undefined || p.vatLastYear === null || p.vatLastYear === "") ? L("dl.vatLastYear") : "";
+      return {
+        kpis: kpi(L("dl.contributions"), isMicro() ? money(dl.urssaf) : "–", isMicro() ? L("dl.contributionsSub") : L("dl.contributionsMicroOnly")) +
+          kpi(L("dl.vatEstimated"), vatNote ? "–" : money(dl.vat), vatNote || L("dl.vatSub")),
+        priced: dl.urssaf + dl.vat,
+        intro: L("dl.allIntro", { periodicity: p.periodicity === "monthly" ? L("dl.monthly") : L("dl.quarterly"),
+          vat: ({ franchise: L("dl.vat.franchise"), simplified: L("dl.vat.simplified"), normal: L("dl.vat.normal") }[p.vatRegime] || L("dl.vat.unknown")) }),
+        link: L("dl.calendarLinkHtml")
+      };
+    }
+
     return {
       routes: {
         immobilisations: function (r) { (r.id ? viewAssetForm : viewAssets)(r); },
@@ -840,7 +868,8 @@
       doc: { draft: draftFields, retax: retax, fields: docFields, note: docNote, input: docInput, kindCell: kindCell, issueOptions: issueOptions },
       issued: { cards: issuedCards, bind: bindIssued },
       prospects: { retentionYears: function () { return R.prospects_conservation.annees; }, retentionNote: retentionNote,
-                   optoutNote: optoutNote, rules: prospectRules }
+                   optoutNote: optoutNote, rules: prospectRules },
+      deadlines: { values: deadlineValues, hidden: deadlineHidden, classes: DEADLINE_CLASSES, summary: deadlineSummary }
     };
   };
 })(typeof self !== "undefined" ? self : this);

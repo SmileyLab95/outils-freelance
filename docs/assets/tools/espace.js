@@ -527,12 +527,12 @@
 
   // ----- Échéances ---------------------------------------------------------------------
 
+  /** Échéances à venir du calendrier de la section, retenues selon le profil (conditions « when » et crochet du pays). */
   function matchingEvents() {
-    var p = profile();
-    var values = { periodicity: p.periodicity, vat: p.vatRegime, created: p.startDate && p.startDate.slice(0, 4) === YEAR ? "on" : "off" };
+    var values = UI.deadlines ? UI.deadlines.values() : {};
     return CAL.filter(function (e) {
       if (e.date < TODAY) return false;
-      if (!isMicro() && e.tag === "Urssaf") return false;
+      if (UI.deadlines && UI.deadlines.hidden(e)) return false;
       var w = e.when || {};
       return Object.keys(w).every(function (k) { return values[k] === undefined || w[k].indexOf(values[k]) > -1; });
     });
@@ -548,39 +548,36 @@
         (e.est ? L("dl.estimatedDate") : "") + "</span></span></li>";
     }).join("") + "</ul>";
   }
-  // Catégorie d'une échéance pour la frise et la liste : forme et couleur (documentation/55, § 5.5).
-  var DEADLINE_CLASSES = { Urssaf: ["is-dl-urssaf", L("dl.tag.urssaf")], TVA: ["is-dl-vat", L("dl.tag.vat")], CFE: ["is-dl-tax", L("dl.tag.tax")], "Impôt": ["is-dl-tax", L("dl.tag.tax")] };
-  var deadlineClass = function (e) { return (DEADLINE_CLASSES[e.tag] || ["is-dl-info", L("dl.tag.info")])[0]; };
+  // Catégorie d'une échéance pour la frise et la liste : forme et couleur (documentation/55, § 5.5), selon le pays.
+  var deadlineCategory = function (e) { return (UI.deadlines && UI.deadlines.classes[e.tag]) || ["is-dl-info", L("dl.tag.info")]; };
+  var deadlineClass = function (e) { return deadlineCategory(e)[0]; };
 
   function viewDeadlines() {
-    var p = profile();
     // 90 jours tiennent toujours dans 5 mois commencés : la trésorerie fournit les montants estimés aux mêmes dates.
     var f = E.forecast(treasuryInput({ months: 5 })), dl = ST.deadlines(matchingEvents(), f.items, TODAY, 90);
-    var vatNote = p.vatRegime === "franchise" ? L("dl.vatFranchise") :
-      p.vatRegime === "simplified" && (p.vatLastYear === undefined || p.vatLastYear === null || p.vatLastYear === "") ? L("dl.vatLastYear") : "";
+    // Parties du pays : 3e et 4e indicateurs, montant estimé total, introduction de la liste, lien vers le calendrier.
+    var country = UI.deadlines ? UI.deadlines.summary(dl) : { kpis: "", priced: 0, intro: "", link: "" };
     var amountText = function (e) { return e.amount === null ? "" : money(e.amount); };
     var tags = {};
-    dl.soon.forEach(function (e) { var c = DEADLINE_CLASSES[e.tag] || ["is-dl-info", L("dl.tag.info")]; tags[c[0]] = c[1]; });
+    dl.soon.forEach(function (e) { var c = deadlineCategory(e); tags[c[0]] = c[1]; });
     view.innerHTML = '<div class="espace-head"><h2>' + L("dl.title") + "</h2></div>" +
       '<div class="kpis kpis-4">' +
       kpi(L("dl.next"), dl.next ? inDays(dl.next.days) : "–", dl.next ? dl.next.title + " · " + day(dl.next.date) + (dl.next.est ? L("dl.estimated") : "") : L("dl.noneLower")) +
       kpi(L("dl.within90"), String(dl.soon.length), L("dl.until", { date: day(dl.end) })) +
-      kpi(L("dl.contributions"), isMicro() ? money(dl.urssaf) : "–", isMicro() ? L("dl.contributionsSub") : L("dl.contributionsMicroOnly")) +
-      kpi(L("dl.vatEstimated"), vatNote ? "–" : money(dl.vat), vatNote || L("dl.vatSub")) + "</div>" +
+      country.kpis + "</div>" +
       '<p class="small muted">' + L("dl.estimatesHtml") + "</p>" +
       '<section class="card espace-card espace-noprint"><div class="card-head"><h3>' + L("dl.next90") + '</h3><span class="small muted">' + L("dl.chartHelp") + "</span></div>" +
       (dl.soon.length ? '<div class="chart" data-chart="deadlines"></div>' +
         OF.charts.legend(Object.keys(tags).map(function (k) { return { cls: k, label: tags[k] }; })) +
         OF.charts.table(L("dl.next90Title"), [L("dl.colDate"), L("dl.colDeadline"), L("dl.colAmount")], dl.soon.map(function (e) { return [day(e.date), e.title, amountText(e) || "–"]; }))
         : '<p class="muted">' + L("dl.none90") + "</p>") + "</section>" +
-      '<section class="card espace-card"><h3>' + L("dl.all") + '</h3><p class="muted">' + L("dl.allIntro", { periodicity: p.periodicity === "monthly" ? L("dl.monthly") : L("dl.quarterly"),
-        vat: ({ franchise: L("dl.vat.franchise"), simplified: L("dl.vat.simplified"), normal: L("dl.vat.normal") }[p.vatRegime] || L("dl.vat.unknown")) }) + "</p>" +
+      '<section class="card espace-card"><h3>' + L("dl.all") + "</h3>" + (country.intro ? '<p class="muted">' + country.intro + "</p>" : "") +
       (dl.events.length ? '<ul class="espace-deadlines">' + dl.events.slice(0, 40).map(function (e) {
         return '<li><span class="dl-date">' + esc(OF.date(e.date, { day: "numeric", month: "short" })) + '</span><span class="dl-body"><b>' + esc(e.title) +
           '</b><span class="small muted">' + inDays(e.days) + (e.est ? L("dl.estimatedDate") : "") + "</span></span>" +
           (e.amount !== null ? '<span class="dl-amount"><b>' + esc(money(e.amount)) + '</b><span class="small muted">' + L("dl.estimatedShort") + "</span></span>" : "") + "</li>";
       }).join("") + "</ul>" : '<p class="muted">' + L("dl.none") + "</p>") +
-      '<p class="small">' + L("dl.calendarLinkHtml") + "</p></section>";
+      (country.link ? '<p class="small">' + country.link + "</p>" : "") + "</section>";
     drawCharts = function () {
       var el = view.querySelector('[data-chart="deadlines"]');
       if (!el) return;
@@ -588,7 +585,7 @@
       el.innerHTML = OF.charts.timeline({ width: Math.floor(el.getBoundingClientRect().width) || 600, from: TODAY, to: dl.end,
         events: dl.soon.map(function (e) { return { date: e.date, amount: e.amount, cls: deadlineClass(e) }; }), title: L("dl.next90Title"),
         desc: L("dl.chartDesc", { count: countText(dl.soon.length, L("count.deadline.one"), L("count.deadline.many")), date: day(dl.end),
-          priced: priced ? L("dl.chartPriced", { n: priced, amount: money(dl.urssaf + dl.vat) }) : "" }) });
+          priced: priced ? L("dl.chartPriced", { n: priced, amount: money(country.priced) }) : "" }) });
     };
     drawCharts();
   }

@@ -22,6 +22,8 @@
   mêmes vérifications, aucun changement visible.
 - Huitième lot : les règles de prospection de la CNIL et la durée de conservation des données des prospects
   passent dans le module ; mêmes vérifications, aucun changement visible.
+- Neuvième lot : les parties françaises des échéances (calendrier selon le profil, cotisations et TVA estimées,
+  lien vers le calendrier fiscal) passent dans le module ; mêmes vérifications, aucun changement visible.
 
 ## 2026-11-19 (après-midi, suite) — Moteur de l'Espace des États-Unis (lot 2e)
 
