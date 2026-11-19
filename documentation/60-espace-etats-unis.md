@@ -155,6 +155,51 @@ critères U3 à U7, chacun vérifié en réintroduisant une erreur (6 sur 6 dét
 `eng.us.exp.line`, `eng.us.csv.scheduleC`, `eng.us.line.*` (lignes 1 à 7 et 28 à 31). Le test des clés couvrira alors
 `espace-us.js` pour l'anglais.
 
+### 3.2 Étape 3 : écrans par pays
+
+**Constat.** `tools/espace.js` (2 917 lignes) mêle l'interface commune (cadre, routeur, documents, clients, temps,
+prospects, trésorerie, réglages, sauvegarde) et des écrans français : profil (activité, régime de TVA, SIRET, ACRE,
+versement libératoire), clients (UE, SIREN, adresse électronique de facturation), éditeur de document (TVA, mentions,
+nature des lignes), Factur-X, tableau de bord (déclaration Urssaf, jauges des plafonds), livre des recettes
+micro-entreprise, registre des achats, immobilisations, règles CNIL des prospects, sommes déjà dues (Urssaf, TVA),
+échéances de TVA estimées, reprise d'un document du générateur public français. Traduire ces écrans en anglais
+n'aurait pas de sens : l'Espace américain ne les affiche pas.
+
+**Architecture (décision D90).** Un module d'écrans par pays, chargé par la page de la section
+(`tools/espace-fr-ui.js`, `tools/espace-us-ui.js`), s'inscrit dans `OFE.espaceUI` et fournit des crochets que
+`tools/espace.js` appelle : champs et contrôle du profil et d'un client, éditeur de taxe d'un document et rendu de
+l'aperçu (moteur de facture du pays), cartes du tableau de bord, écrans propres (routes en plus : immobilisations en
+France ; annexe C, acomptes et 1099 aux États-Unis), livre des recettes et dépenses, bloc des règles de prospection,
+flux d'impôts de la trésorerie, reprise du générateur public. La navigation est écrite dans la page de chaque section ;
+les adresses internes gardent leurs clés (`recettes`, `depenses`…) et chaque section a ses alias lisibles (`#/income`,
+`#/expenses`…). Dictionnaires : les clés communes (interface partagée et moteurs communs) existent dans chaque langue ;
+les clés d'un module de pays seulement dans les langues de ce pays (France : `fr` ; États-Unis : `en` ; Canada : `en`
+et `fr-CA`) ; le test des clés vérifie ces deux règles.
+
+**Écrans américains (version 1, § 2).** Profil : nom, adresse, email, téléphone, EIN facultatif (jamais le numéro de
+sécurité sociale, comme le générateur), situation familiale et autres revenus pour les acomptes. Client : professionnel
+ou particulier, adresse, email, identifiant fiscal facultatif. Documents : moteur `invoice-intl.js` (même aperçu que le
+générateur, critère U2), taxe de vente saisie. Recettes : livre de caisse par date de réception, totaux par trimestre,
+remboursements en ligne 2. Dépenses : ligne de l'annexe C avec l'aide de la ligne (`us_schedule_c_line_help`), repas
+à 50 %. Annexe C : synthèse et export. Acomptes : prochaine échéance, montant requis, acomptes versés. 1099 : clients
+qui devraient en envoyer un. Échéances : calendrier américain existant. Trésorerie : charges et acomptes prévus.
+
+**Lots** (chacun : parcours de l'Espace français identique, 359 points, et tests unitaires) :
+
+1. **3a — module français** : les parties françaises de `tools/espace.js` passent dans `tools/espace-fr-ui.js`, appelées
+   par les crochets ; aucun changement visible.
+2. **3b — dictionnaires** : clés communes et clés de module séparées ; test des clés à deux règles.
+3. **3c — dictionnaire anglais** des clés communes, relu (américain, phrases courtes, termes de l'IRS).
+4. **3d — module américain** `tools/espace-us-ui.js` et ses écrans, avec un parcours navigateur dédié (critères U2 à U8,
+   accessibilité, ordinateur, tablette, téléphone).
+5. **Étape 4** — page `/us/workspace/`, lien d'en-tête, encarts, vitrine.
+
+**Avancement de l'étape 3.** Lot 3a-1 fait le 19/11/2026 : `tools/espace-fr-ui.js` (fabrique `OFE.espaceUI.fr`)
+reçoit les écrans d'immobilisations (228 lignes) ; `tools/espace.js` lui prête un contexte (`ctx` : `$`, textes,
+formats, champs, persistance, règles, moteur, données par `ctx.data()`) et ajoute ses routes au routeur. Parcours de
+l'Espace 359/359 et des comptes 51/51. Le premier essai a échoué au parcours : le raccourci `$` manquait au contexte,
+et le vérificateur TypeScript ne signale pas ce nom (angle mort désormais couvert par un contrôle dédié).
+
 ### Avancement
 
 - **Étape 1 terminée le 19/11/2026.** Les textes de `tools/espace.js` sont dans `tools/espace-texts-fr.js`

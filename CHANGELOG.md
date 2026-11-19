@@ -1,5 +1,13 @@
 # Journal des modifications
 
+## 2026-11-19 (soir) — Espace : écrans par pays, premier lot (3a-1)
+
+- Spécification de l'étape 3 (documentation/60, § 3.2) et décision D90 : un module d'écrans par pays branché sur
+  le cadre commun de l'Espace ; les écrans français (Urssaf, TVA, immobilisations, CNIL, Factur-X) ne seront pas
+  traduits, l'Espace américain a les siens.
+- Premier lot : les écrans d'immobilisations passent dans `tools/espace-fr-ui.js`. Rien ne change pour
+  l'utilisateur : parcours de l'Espace (359 points) et des comptes (51), 750 tests unitaires.
+
 ## 2026-11-19 (après-midi, suite) — Moteur de l'Espace des États-Unis (lot 2e)
 
 - Nouveau `engines/espace-us.js` : livre des recettes en comptabilité de caisse (remboursements en ligne 2),
