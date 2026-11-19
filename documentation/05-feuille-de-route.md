@@ -9,7 +9,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 
 ## Où en est-on ?
 
-*Mis à jour le 19/11/2026 (soir).*
+*Mis à jour le 19/11/2026 (nuit).*
 
 - **Priorité (décision D10)** : le site et la plateforme d'abord ; noms de domaine, Gumroad et affiliation à la fin.
   Règle de qualité maximale pour tout produit ou service (D11, charte dans la [méthode](04-methode-de-travail.md#charte-qualité)).
@@ -490,9 +490,9 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   **Lot 2e fait le 19/11/2026** : `engines/espace-us.js` (recettes en caisse, annexe C, acomptes, 1099-NEC attendus),
   critères U3 à U7 testés ; étape 2 terminée.
   **Étape 3 spécifiée le 19/11/2026** ([60](60-espace-etats-unis.md) § 3.2, D90) ; lot 3a-1 fait : écrans
-  d'immobilisations dans le module français `tools/espace-fr-ui.js` ; lots 3a-2 à 3a-10 faits : tableau de bord,
+  d'immobilisations dans le module français `tools/espace-fr-ui.js` ; lots 3a-2 à 3a-11 faits : tableau de bord,
   profil, fiche client, éditeur de document, Factur-X, recettes et dépenses, règles des prospects, échéances,
-  trésorerie.
+  trésorerie, reprise du générateur ; **lot 3a terminé** (parcours de l'Espace porté de 359 à 367 points).
 - **Accueil en images (18/11/2026, nuit)** : demande d'Ismail (« il n'y a que du texte, pas d'image ») ; principes
   des images du site (D84, [58](58-images-du-site.md)) : captures du vrai produit, données d'exemple annoncées, pas de
   banque d'images ni d'image générée. Accueil France : section « Les outils, en vrai » en grille bento (Espace,
@@ -573,9 +573,9 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   18/11 ([54](54-themes.md) § 3 ; mode sombre seulement si Ismail le demande) ;
   **Espace entrepreneur pour les États-Unis** ([60](60-espace-etats-unis.md) § 3.1 : étape 1, lectures et lot 2a
   faits le 19/11, 2b (cœur commun), 2c (formats), 2d (moteur de facture international) et 2e (moteur américain,
-  critères U3 à U7) aussi ; étape 3 en cours ([60](60-espace-etats-unis.md) § 3.2) : 3a, suite du module français
-  (reprise du
-  générateur, rappels), puis 3b dictionnaires, 3c anglais, 3d module américain ; puis modules, page ; ensuite
+  critères U3 à U7) aussi ; étape 3 en cours ([60](60-espace-etats-unis.md) § 3.2) : 3a (module français) fait le
+  19/11 ; ensuite 3b dictionnaires (clés communes et clés du module, test à deux règles), 3c anglais, 3d module
+  américain (avec le choix des moteurs de la section) ; puis la page `/us/workspace/` ; ensuite
   Royaume-Uni et Canada, [59](59-parite-des-pays.md)) ; **poids des pages** : chaque page embarque toutes les règles de son pays
   (`window.OF_RULES`, environ 45 Ko avant compression) : n'y mettre que celles que ses scripts lisent ; **images du site** ([58](58-images-du-site.md) § 3) : miniatures dans la liste
   des étapes et schémas explicatifs (facture annotée, frise des relances, calendrier de la facturation électronique) ; refonte, suite ([31](31-vision-plateforme.md) § 5) : les quatre modules du compte

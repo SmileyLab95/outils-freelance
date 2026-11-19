@@ -166,26 +166,18 @@
   // ----- Premier lancement -----------------------------------------------------------
 
   function viewWelcome() {
-    var fromGenerator = OF.load("facture", null);
+    var fromGenerator = UI.generator ? UI.generator.saved() : null;   // générateur public de la section (même navigateur)
     view.innerHTML =
       '<div class="espace-welcome"><h2>' + L("welcome.title") + "</h2>" +
       (pendingImport() ? '<p class="notice">' + L("welcome.importPending") + "</p>" : "") +
       "<p>" + L("welcome.introHtml") + "</p>" +
       "<p>" + L("welcome.start") + "</p></div>" +
-      profileForm(fromGenerator ? generatorProfile(fromGenerator) : (UI.profile ? UI.profile.defaults() : {}), true) +
+      profileForm(fromGenerator ? UI.generator.profile(fromGenerator) : (UI.profile ? UI.profile.defaults() : {}), true) +
       '<div class="card espace-card espace-noprint"><h3>' + L("welcome.dataTitle") + "</h3>" +
       (fromGenerator ? "<p>" + L("welcome.fromGenerator") + "</p>" : "") +
       "<p>" + L("welcome.restore") + "</p>" + importControl() + "</div>";
     bindProfileForm(true);
     bindImport();
-  }
-
-  /** Coordonnées déjà saisies dans le générateur de facture public (même navigateur). */
-  function generatorProfile(f) {
-    return { name: f.meName, status: f.meStatus, address: f.meAddress, siret: f.meSiret, vat: f.meVat, email: f.meEmail,
-             phone: f.mePhone, iban: f.meIban, bic: f.meBic, activity: "liberal_bnc",
-             vatRegime: f.franchise === false ? "simplified" : "franchise", periodicity: "quarterly",
-             penalty: f.penalty, logo: OF.load("facture-logo", "") };
   }
 
   // ----- Document venu du générateur public (#/importer) ---------------------------------------------
@@ -201,8 +193,6 @@
     }
     return p.doc;
   }
-  var PATCH_LABELS = {};
-  ["status", "address", "siret", "vat", "email", "phone", "iban", "bic", "logo"].forEach(function (k) { PATCH_LABELS[k] = L("patch." + k); });
 
   function viewImport() {
     var g = pendingImport();
@@ -229,9 +219,9 @@
       (cont ? '<label class="check"><input type="checkbox" id="imp-continue" checked><span>' + L("import.continueHtml", { label: label,
         number: esc(cont.number), next: d.type === "devis" ? L("import.nextQuote") : L("import.nextInvoice"),
         after: esc(cont.prefix + cont.year + "-" + String(cont.last + 2).padStart(3, "0")) }) + "</span></label>" : "") +
-      (patch.length ? '<p class="small muted">' + L("import.patch", { fields: esc(patch.map(function (k) { return PATCH_LABELS[k] || k; }).join(", ")) }) + "</p>" : "") +
+      (patch.length ? '<p class="small muted">' + L("import.patch", { fields: esc(patch.map(function (k) { return (UI.generator && UI.generator.patchLabels[k]) || k; }).join(", ")) }) + "</p>" : "") +
       (res.paid ? '<p class="small muted">' + L("import.paid", { amount: esc(money(res.paid)) }) + "</p>" : "") +
-      (res.vatDiffers ? '<p class="small muted">' + L("import.vatHtml", { vat: d.vat.franchise ? L("import.vatFranchise") : L("import.vatRate", { rate: OF.fmt(d.vat.rate) }) }) + "</p>" : "") +
+      (UI.generator ? UI.generator.notes(res) : "") +
       '<div class="espace-actions"><button type="button" class="btn btn-primary" id="imp-ok">' + L("import.create") + "</button>" +
       '<button type="button" class="btn btn-ghost" id="imp-cancel">' + L("import.cancel") + "</button></div></section></div>" +
       '<div class="results"><div class="paper-wrap"><article class="paper" aria-label="' + L("doc.preview") + '">' + INV.render(preview, R, FMT) + "</article></div></div></div>";
@@ -363,7 +353,7 @@
     if (!first) bindNumbering(form, data.profile || {});
     form.addEventListener("submit", function (e) {
       e.preventDefault();
-      var f = form.elements, p = Object.assign({}, data.profile || {}, first ? generatorExtras() : {});
+      var f = form.elements, p = Object.assign({}, data.profile || {}, first && UI.generator ? UI.generator.extras() : {});
       p.name = f.name.value.trim();
       if (!p.name) { showError("profile-error", L("profile.errName")); f.name.focus(); return; }
       var problem = UI.profile ? UI.profile.read(form, p, first) : null;
@@ -381,15 +371,6 @@
         else render(true);
       });
     });
-  }
-  /** Coordonnées du générateur reprises sans être affichées dans le formulaire du premier lancement. */
-  function generatorExtras() {
-    var f = OF.load("facture", null);
-    if (!f) return { terms: 30 };
-    var g = generatorProfile(f);
-    delete g.name; delete g.activity; delete g.vatRegime; delete g.periodicity;
-    g.terms = 30;
-    return g;
   }
   function showError(id, msg) { var el = $(id); el.textContent = msg; el.hidden = !msg; }
 
@@ -417,7 +398,7 @@
       return x.change === null ? (x.prev ? "" : L("dash.nothingThen", { what: what })) : L("dash.change", { sign: x.change >= 0 ? "+" : "−", pct: OF.fmt(Math.abs(x.change)), what: what });
     };
     html += '<div class="kpis kpis-4">' +
-      kpi(L("dash.cashedYear", { year: YEAR }), money(year), [countText(E.ledger(data.documents, YEAR + "-01-01", YEAR + "-12-31").filter(function (x) { return x.amount > 0; }).length,
+      kpi(L("dash.cashedYear", { year: YEAR }), money(year), [countText(dash.receipts || 0,
         L("count.receipt.one"), L("count.receipt.many")), versus(td.year, L("dash.sameDateYear", { year: prevYear }))].filter(Boolean).join(" · ")) +
       kpi(L("dash.cashedMonth"), money(td.month.now), versus(td.month, L("dash.lastYearSameDate")) || L("dash.lastYearSameDateAmount", { amount: money(td.month.prev) })) +
       kpi(L("dash.toCollect"), money(openSum), open.length ? countText(open.length, L("count.invoice.one"), L("count.invoice.many")) + (late.length ? L("dash.ofWhichLate", { n: late.length }) : "") : L("dash.noOpenInvoice"), late.length ? "is-warn" : "") +
@@ -489,9 +470,7 @@
 
   /** Mentions obligatoires de l'émetteur manquantes dans le profil. */
   function profileReminder() {
-    var p = profile(), missing = [];
-    if (!String(p.address || "").trim()) missing.push(L("patch.address"));
-    if (!String(p.siret || "").trim()) missing.push(L("patch.siret"));
+    var missing = UI.profile ? UI.profile.missing(profile()) : [];
     if (!missing.length) return "";
     return '<p class="notice warn espace-noprint">' + L("remind.profileHtml", { missing: missing.join(", ") }) + "</p>";
   }

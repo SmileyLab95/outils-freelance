@@ -1,6 +1,6 @@
 # Journal des modifications
 
-## 2026-11-19 (soir) — Espace : écrans par pays, premier lot (3a-1)
+## 2026-11-19 (soir et nuit) — Espace : écrans par pays, module français (lot 3a)
 
 - Spécification de l'étape 3 (documentation/60, § 3.2) et décision D90 : un module d'écrans par pays branché sur
   le cadre commun de l'Espace ; les écrans français (Urssaf, TVA, immobilisations, CNIL, Factur-X) ne seront pas
@@ -27,6 +27,10 @@
 - Dixième lot : les parties françaises de la trésorerie (sommes dues à l'Urssaf et en TVA, TVA de l'an dernier,
   hypothèses) passent dans le module ; le parcours vérifie en plus le refus d'une TVA de l'an dernier négative
   (364 points).
+- Onzième lot : la reprise du générateur public français, le rappel du profil incomplet et le nombre
+  d'encaissements du tableau de bord passent dans le module. Le parcours vérifie en plus le SIRET repris du
+  générateur, la note de TVA de la reprise et le rappel du profil incomplet (367 points). Le module français est
+  complet ; restent les branchements de moteur, qui iront avec le module américain.
 
 ## 2026-11-19 (après-midi, suite) — Moteur de l'Espace des États-Unis (lot 2e)
 

@@ -6,7 +6,7 @@
  * Facture électronique Factur-X d'un document émis (documentation/10). Livre des recettes et dépenses (registre
  * des achats, documentation/36). Règles de prospection de la CNIL et durée de conservation (documentation/38).
  * Échéances : calendrier selon le profil, cotisations et TVA estimées. Trésorerie : sommes dues (Urssaf, TVA),
- * TVA de l'an dernier, hypothèses.
+ * TVA de l'an dernier, hypothèses. Reprise du générateur public français.
  * Module d'écrans d'un pays : la fabrique
  * OFE.espaceUI.fr reçoit le contexte prêté par tools/espace.js (textes, formats, champs, données, règles…) et renvoie ses
  * crochets ; routes : écrans en plus du cadre commun. Chargé par la page de la section avant tools/espace.js.
@@ -311,6 +311,7 @@
       }
       return {
         reminders: purchasesReminder(),
+        receipts: E.ledger(D().documents, YEAR + "-01-01", YEAR + "-12-31").filter(function (x) { return x.amount > 0; }).length,
         kpi: decl ? kpi(L("dash.declaration", { period: decl.period.label }), money(decl.revenue),
           L("dash.declarationSub", { due: longDay(decl.due), total: money(decl.total) }) + (decl.open ? L("dash.periodOpen") : ""), "is-brand") : "",
         afterKpis: isMicro() ? gauges(th) : "",
@@ -908,6 +909,42 @@
       };
     }
 
+
+    // ----- Reprise du générateur public français (documentation/09, section 11) ---------------------------------
+
+    /** Facture en cours dans le générateur public français (même navigateur), ou null. */
+    function generatorSaved() { return OF.load("facture", null); }
+    /** Coordonnées déjà saisies dans le générateur de facture public (même navigateur). */
+    function generatorProfile(f) {
+      return { name: f.meName, status: f.meStatus, address: f.meAddress, siret: f.meSiret, vat: f.meVat, email: f.meEmail,
+               phone: f.mePhone, iban: f.meIban, bic: f.meBic, activity: "liberal_bnc",
+               vatRegime: f.franchise === false ? "simplified" : "franchise", periodicity: "quarterly",
+               penalty: f.penalty, logo: OF.load("facture-logo", "") };
+    }
+    /** Coordonnées du générateur reprises sans être affichées dans le formulaire du premier lancement. */
+    function generatorExtras() {
+      var f = generatorSaved();
+      if (!f) return { terms: 30 };
+      var g = generatorProfile(f);
+      delete g.name; delete g.activity; delete g.vatRegime; delete g.periodicity;
+      g.terms = 30;
+      return g;
+    }
+    var PATCH_LABELS = {};
+    ["status", "address", "siret", "vat", "email", "phone", "iban", "bic", "logo"].forEach(function (k) { PATCH_LABELS[k] = L("patch." + k); });
+    /** Note de la reprise : TVA du document du générateur différente de celle du profil. */
+    function generatorNotes(res) {
+      var d = res.doc;
+      return res.vatDiffers ? '<p class="small muted">' + L("import.vatHtml", { vat: d.vat.franchise ? L("import.vatFranchise") : L("import.vatRate", { rate: OF.fmt(d.vat.rate) }) }) + "</p>" : "";
+    }
+    /** Champs du profil à compléter pour des factures conformes (rappel des écrans) : adresse et SIRET. */
+    function profileMissing(p) {
+      var missing = [];
+      if (!String(p.address || "").trim()) missing.push(L("patch.address"));
+      if (!String(p.siret || "").trim()) missing.push(L("patch.siret"));
+      return missing;
+    }
+
     return {
       routes: {
         immobilisations: function (r) { (r.id ? viewAssetForm : viewAssets)(r); },
@@ -915,7 +952,7 @@
         depenses: function (r) { (r.id ? viewExpenseForm : viewExpenses)(r); }
       },
       dashboard: dashboard,
-      profile: { defaults: profileDefaults, fields: profileFields, bind: bindProfile, read: readProfile },
+      profile: { defaults: profileDefaults, fields: profileFields, bind: bindProfile, read: readProfile, missing: profileMissing },
       client: { defaults: clientDefaults, fields: clientFields, bind: bindClient, read: readClient },
       doc: { draft: draftFields, retax: retax, fields: docFields, note: docNote, input: docInput, kindCell: kindCell, issueOptions: issueOptions },
       issued: { cards: issuedCards, bind: bindIssued },
@@ -923,7 +960,8 @@
                    optoutNote: optoutNote, rules: prospectRules },
       deadlines: { values: deadlineValues, hidden: deadlineHidden, classes: DEADLINE_CLASSES, summary: deadlineSummary },
       treasury: { kinds: TREASURY_KINDS, owed: treasuryOwed, revenueLabel: revenueLabel, assumptions: treasuryAssumptions,
-                  settings: { names: ["vatLastYear"], fields: treasuryFields, check: treasuryCheck, save: treasurySave } }
+                  settings: { names: ["vatLastYear"], fields: treasuryFields, check: treasuryCheck, save: treasurySave } },
+      generator: { saved: generatorSaved, profile: generatorProfile, extras: generatorExtras, patchLabels: PATCH_LABELS, notes: generatorNotes }
     };
   };
 })(typeof self !== "undefined" ? self : this);

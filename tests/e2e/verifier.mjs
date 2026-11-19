@@ -4136,6 +4136,8 @@ const tests = {
     check((await page.inputValue("#ep-name")) === "Camille Martin EI", "Espace : profil prérempli depuis le générateur");
     await page.click("#profile-form button[type=submit]");
     await page.waitForSelector("#imp-ok");
+    check((await page.evaluate(async () => (await window.EspaceStore.load()).profile.siret)) === "123 456 789 00012",
+      "Espace : SIRET du générateur repris dans le profil au premier lancement");
     const imp = await text("#espace-view");
     check(imp.includes("Atelier Lumen (nouvelle fiche)") && imp.includes("950,00 €") && imp.includes("ne l'émettez pas une seconde fois"), "Espace : récapitulatif de la reprise (A14)");
     check(imp.includes("cette facture recevra le n° 2026-007 à son émission, la suivante le n° 2026-008"), "Espace : numérotation du générateur proposée (A16)");
@@ -4186,6 +4188,8 @@ const tests = {
     await page.evaluate(() => localStorage.setItem("of:espace-import", JSON.stringify({ doc: { type: "facture", client: { name: "Atelier Lumen" }, lines: [] }, savedAt: new Date().toISOString() })));
     await go("#/importer");
     check((await text("#espace-view")).includes("Atelier Lumen (fiche existante)"), "Espace : client du générateur rattaché à la fiche existante (A15)");
+    check((await text("#espace-view")).includes("La TVA suit votre profil (franchise en base), et non le réglage du générateur."),
+      "Espace : TVA du générateur différente du profil signalée à la reprise");
     await page.click("#imp-cancel");
     await page.waitForTimeout(250);
     check((await page.evaluate(() => location.hash)) === "#/" && (await page.evaluate(() => localStorage.getItem("of:espace-import"))) === "null",
@@ -5223,8 +5227,15 @@ const tests = {
     check((await page.inputValue("#d-rate")) === "10" && (await text("#d-vat-note")) === "", "Éditeur : retour à un client en France, taux choisi de nouveau proposé");
     await page.click("#d-delete");
     await page.waitForFunction(() => location.hash === "#/documents");
-    await page.evaluate(async (p) => { const d = await window.EspaceStore.load(); d.profile.vatRegime = p.vatRegime; d.profile.vatRate = p.vatRate; await window.EspaceStore.save(d); },
-      { vatRegime: vatBefore.vatRegime, vatRate: vatBefore.vatRate });
+    // Rappel du profil incomplet : adresse et SIRET, mentions obligatoires d'une facture.
+    await page.evaluate(async () => { const d = await window.EspaceStore.load(); d.profile.address = ""; d.profile.siret = ""; await window.EspaceStore.save(d); });
+    await page.reload({ waitUntil: "networkidle" });
+    await go("#/");
+    check((await text("#espace-view")).includes("Complétez votre profil (adresse, SIRET) : ces mentions sont obligatoires sur vos factures."),
+      "Tableau de bord : profil incomplet signalé (adresse, SIRET)");
+    await page.evaluate(async (p) => { const d = await window.EspaceStore.load(); d.profile.vatRegime = p.vatRegime; d.profile.vatRate = p.vatRate;
+      d.profile.address = p.address; d.profile.siret = p.siret; await window.EspaceStore.save(d); },
+      { vatRegime: vatBefore.vatRegime, vatRate: vatBefore.vatRate, address: vatBefore.address, siret: vatBefore.siret });
     await page.reload({ waitUntil: "networkidle" });
     await go("#/");
   },
