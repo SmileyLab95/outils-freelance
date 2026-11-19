@@ -1252,45 +1252,46 @@
   function documentsOverview(r, url) {
     if (!data.documents.some(function (d) { return d.status !== "draft"; })) return "";
     var ds = ST.documents(data.documents, TODAY, r.params.periode), q = ds.quotes, p = ds.period;
-    var plural = function (n, one) { return n + " " + one + (n > 1 ? "s" : ""); };
-    return '<div class="tr-tools espace-noprint"><div class="seg" role="group" aria-label="Période des indicateurs">' + ST.PERIODS.map(function (k) {
+    return '<div class="tr-tools espace-noprint"><div class="seg" role="group" aria-label="' + L("period.label") + '">' + ST.PERIODS.map(function (k) {
         return '<a class="tab" href="' + url({ periode: k }) + '"' + (k === p.key ? ' aria-current="true"' : "") + ">" + PERIOD_LABELS[k] + "</a>";
-      }).join("") + '</div><span class="small muted">Du ' + day(p.from) + " au " + day(p.to) + ".</span></div>" +
+      }).join("") + '</div><span class="small muted">' + L("period.range", { from: day(p.from), to: day(p.to) }) + "</span></div>" +
       '<div class="kpis kpis-4">' +
-      kpi("Facturé " + p.label + " (HT)", money(ds.invoiced), [countText(ds.count, "facture", "factures"), ds.average !== null ? "moyenne " + money(ds.average) : "",
-        ds.creditCount ? countText(ds.creditCount, "avoir", "avoirs") + " (" + money(ds.credits) + ")" : ""].filter(Boolean).join(" · ")) +
-      kpi("Encaissé " + p.label, money(ds.cashed), "paiements reçus, remboursements déduits") +
-      kpi("Devis en attente (HT)", money(q.pendingAmount), q.pending ? countText(q.pending, "devis encore valable", "devis encore valables") + " aujourd'hui" : "aucun devis en attente") +
-      kpi("Taux de signature des devis", q.rate === null ? "–" : pct(q.rate), q.rate === null ? "aucun devis émis " + p.label + " n'est tranché" :
-        plural(q.signed, "signé") + ", " + plural(q.refused, "refusé") + ", " + plural(q.expired, "expiré") + " (devis émis " + p.label + ")") +
-      "</div>" + invoicedCard("invoiced", documentsMonths(p), p.key === "annee" || p.key === "precedente" ? "Année " + p.from.slice(0, 4) + "." : "12 derniers mois.");
+      kpi(L("docs.kpiInvoiced", { period: p.label }), money(ds.invoiced), [countText(ds.count, L("count.invoice.one"), L("count.invoice.many")),
+        ds.average !== null ? L("docs.average", { amount: money(ds.average) }) : "",
+        ds.creditCount ? countText(ds.creditCount, L("count.credit.one"), L("count.credit.many")) + " (" + money(ds.credits) + ")" : ""].filter(Boolean).join(" · ")) +
+      kpi(L("docs.kpiCashed", { period: p.label }), money(ds.cashed), L("docs.kpiCashedSub")) +
+      kpi(L("docs.kpiPending"), money(q.pendingAmount), q.pending ? countText(q.pending, L("count.validQuote.one"), L("count.validQuote.many")) + L("docs.today") : L("docs.noPending")) +
+      kpi(L("docs.kpiRate"), q.rate === null ? "–" : pct(q.rate), q.rate === null ? L("docs.noDecided", { period: p.label }) :
+        L("docs.rateSub", { signed: countText(q.signed, L("count.signed.one"), L("count.signed.many")), refused: countText(q.refused, L("count.refused.one"), L("count.refused.many")),
+          expired: countText(q.expired, L("count.expired.one"), L("count.expired.many")), period: p.label })) +
+      "</div>" + invoicedCard("invoiced", documentsMonths(p), p.key === "annee" || p.key === "precedente" ? L("docs.yearIntro", { year: p.from.slice(0, 4) }) : L("docs.last12Intro"));
   }
 
   function viewClients(r) {
     var showArchived = r.params.archives === "1";
     var list = data.clients.filter(function (c) { return showArchived || !c.archived; })
-      .sort(function (a, b) { return String(a.name || "").localeCompare(String(b.name || ""), "fr"); });
-    var html = '<div class="espace-head"><h2>Clients</h2><div class="espace-quick espace-noprint"><a class="btn btn-primary btn-sm" href="#/clients/nouveau">+ Client</a></div></div>';
+      .sort(function (a, b) { return String(a.name || "").localeCompare(String(b.name || ""), OF.locale); });
+    var html = '<div class="espace-head"><h2>' + L("clients.title") + '</h2><div class="espace-quick espace-noprint"><a class="btn btn-primary btn-sm" href="#/clients/nouveau">' + L("quick.client") + "</a></div></div>";
     if (!list.length) {
-      html += '<div class="card espace-card"><p class="muted">Pas encore de client. Créez votre premier client pour lui faire un devis ou une facture.</p>' +
-        '<a class="btn btn-primary btn-sm" href="#/clients/nouveau">Créer un client</a></div>';
+      html += '<div class="card espace-card"><p class="muted">' + L("clients.empty") + "</p>" +
+        '<a class="btn btn-primary btn-sm" href="#/clients/nouveau">' + L("clients.create") + "</a></div>";
     } else {
       var cs = ST.clients(data.documents, TODAY);
       if (cs.active) {
         html += '<div class="kpis kpis-4">' +
-          kpi("Clients actifs", String(cs.active), "au moins un encaissement sur 12 mois") +
-          kpi("Nouveaux clients en " + YEAR, String(cs.newThisYear), "première facture émise cette année") +
-          kpi("Encaissé moyen par client", money(cs.average), "clients actifs, 12 derniers mois") +
-          kpi("Part du premier client", pct(cs.top1), "trois premiers : " + pct(cs.top3) + " des encaissements", cs.top1 >= 0.5 ? "is-warn" : "") + "</div>" +
+          kpi(L("clients.active"), String(cs.active), L("clients.activeSub")) +
+          kpi(L("clients.new", { year: YEAR }), String(cs.newThisYear), L("clients.newSub")) +
+          kpi(L("clients.average"), money(cs.average), L("clients.averageSub")) +
+          kpi(L("clients.top1"), pct(cs.top1), L("clients.top3", { pct: pct(cs.top3) }), cs.top1 >= 0.5 ? "is-warn" : "") + "</div>" +
           topClientsCard(ST.topClients(data.documents, ST.since12(TODAY), TODAY, 10), true);
       }
       html += '<div class="card espace-card"><ul class="doc-list">' + list.map(function (c) {
         var t = E.clientTotals(data.documents, c.id);
-        return '<li><a href="#/clients/' + esc(c.id) + '"><span class="dl-main"><b>' + esc(c.name) + (c.archived ? " (archivé)" : "") + '</b><span class="small muted">' +
-          esc([c.pro ? "Professionnel" : "Particulier", c.email].filter(Boolean).join(" · ")) + '</span></span><span class="dl-side"><b>' + esc(money(t.cashed)) +
-          '</b><span class="small muted">' + (t.due > 0 ? "reste " + esc(money(t.due)) : "encaissé") + "</span></span></a></li>";
+        return '<li><a href="#/clients/' + esc(c.id) + '"><span class="dl-main"><b>' + esc(c.name) + (c.archived ? L("clients.archivedMark") : "") + '</b><span class="small muted">' +
+          esc([c.pro ? L("clients.pro") : L("clients.private"), c.email].filter(Boolean).join(" · ")) + '</span></span><span class="dl-side"><b>' + esc(money(t.cashed)) +
+          '</b><span class="small muted">' + (t.due > 0 ? L("clients.remaining", { amount: esc(money(t.due)) }) : L("clients.cashed")) + "</span></span></a></li>";
       }).join("") + "</ul>" +
-        '<p class="small"><a href="#/clients' + (showArchived ? "" : "?archives=1") + '">' + (showArchived ? "Masquer les clients archivés" : "Afficher les clients archivés") + "</a></p></div>";
+        '<p class="small"><a href="#/clients' + (showArchived ? "" : "?archives=1") + '">' + (showArchived ? L("clients.hideArchived") : L("clients.showArchived")) + "</a></p></div>";
     }
     view.innerHTML = html;
   }
@@ -1298,44 +1299,43 @@
   function viewClientForm(r) {
     var isNew = r.id === "nouveau";
     var c = isNew ? { id: S.uid(), name: "", pro: true, place: "fr" } : client(r.id);
-    if (!c) { view.innerHTML = '<div class="espace-head"><h2>Client introuvable</h2></div><p><a href="#/clients">Retour aux clients</a></p>'; return; }
+    if (!c) { view.innerHTML = '<div class="espace-head"><h2>' + L("client.notFound") + '</h2></div><p><a href="#/clients">' + L("client.back") + "</a></p>"; return; }
     var back = r.params.retour;
     // Client créé depuis une piste (documentation/38-prospects.md) : fiche préremplie, piste liée à l'enregistrement.
     var lead = isNew ? prospect(r.params.piste) : null;
     if (lead) {
       Object.assign(c, { name: lead.name, pro: lead.pro !== false, email: lead.email || "",
-        notes: [lead.contact ? "Interlocuteur : " + lead.contact : "", lead.phone ? "Téléphone : " + lead.phone : ""].filter(Boolean).join("\n") });
+        notes: [lead.contact ? L("client.fromLeadContact", { contact: lead.contact }) : "", lead.phone ? L("client.fromLeadPhone", { phone: lead.phone }) : ""].filter(Boolean).join("\n") });
     }
     var docs = isNew ? [] : data.documents.filter(function (d) { return d.clientId === c.id; });
     var issuedDocs = docs.some(function (d) { return d.status !== "draft" && d.type === "facture"; });
     var cd = issuedDocs ? ST.clientDetail(data.documents, c.id, TODAY) : null, cm = issuedDocs ? ST.invoicedMonthly(data.documents, TODAY, 12, c.id) : null;
-    view.innerHTML = '<div class="espace-head"><h2>' + (isNew ? "Nouveau client" : esc(c.name)) + "</h2></div>" +
+    view.innerHTML = '<div class="espace-head"><h2>' + (isNew ? L("client.newTitle") : esc(c.name)) + "</h2></div>" +
       (cd ? '<div class="kpis kpis-4">' +
-        kpi("Facturé (HT)", money(cd.invoiced), "depuis la première facture" + (cd.lastInvoice ? " · dernière le " + day(cd.lastInvoice) : "")) +
-        kpi("Encaissé sur 12 mois", money(cd.cashed12), "remboursements d'avoirs déduits") +
-        kpi("Reste à encaisser", money(cd.due), cd.late ? "dont " + money(cd.late) + " en retard" : "aucune facture en retard", cd.late ? "is-warn" : "") +
-        kpi("Délai moyen de paiement", cd.paidCount ? OF.fmt(cd.avgDays) + " j" : "–", cd.paidCount ? "retard moyen " + OF.fmt(cd.avgLate) + " j · " +
-          countText(cd.paidCount, "facture payée", "factures payées") : "pas encore de facture payée") + "</div>" +
-        invoicedCard("client-invoiced", cm, "12 derniers mois, pour ce client.") : "") +
+        kpi(L("chart.invoicedHT"), money(cd.invoiced), L("client.sinceFirst") + (cd.lastInvoice ? L("client.lastOn", { date: day(cd.lastInvoice) }) : "")) +
+        kpi(L("client.cashed12"), money(cd.cashed12), L("client.cashed12Sub")) +
+        kpi(L("issued.balance"), money(cd.due), cd.late ? L("client.ofWhichLate", { amount: money(cd.late) }) : L("client.noLate"), cd.late ? "is-warn" : "") +
+        kpi(L("client.avgDelay"), cd.paidCount ? L("client.days", { n: OF.fmt(cd.avgDays) }) : "–", cd.paidCount ? L("client.avgLate", { n: OF.fmt(cd.avgLate) }) + " · " +
+          countText(cd.paidCount, L("count.paidInvoice.one"), L("count.paidInvoice.many")) : L("client.noPaid")) + "</div>" +
+        invoicedCard("client-invoiced", cm, L("client.chartIntro")) : "") +
       '<form class="card espace-card" id="client-form" novalidate><div class="fields">' +
-      field("name", "Nom ou raison sociale", c.name, { required: true, placeholder: "Studio Nova" }) +
-      field("pro", "Type de client", c.pro ? "1" : "0", { options: [["1", "Professionnel (entreprise, association…)"], ["0", "Particulier"]], half: true }) +
-      field("place", "Pays du client", c.place || "fr", { options: [["fr", "France"], ["eu", "Autre pays de l'Union européenne"], ["world", "Hors de l'Union européenne"]], half: true }) +
+      field("name", L("profile.name"), c.name, { required: true, placeholder: L("client.namePlaceholder") }) +
+      field("pro", L("client.type"), c.pro ? "1" : "0", { options: [["1", L("client.typePro")], ["0", L("clients.private")]], half: true }) +
+      field("place", L("client.place"), c.place || "fr", { options: [["fr", L("client.place.fr")], ["eu", L("client.place.eu")], ["world", L("client.place.world")]], half: true }) +
       '<div class="full fields" id="client-country"' + (c.place && c.place !== "fr" ? "" : " hidden") + ">" +
-      field("country", "Pays", c.country || "", { options: countryOptions(c.place), half: true }) + "</div>" +
-      field("address", "Adresse", c.address, { textarea: true }) +
-      field("siren", "SIREN", c.siren, { half: true, placeholder: "812 345 678", hint: "Obligatoire sur les factures aux entreprises avec la facturation électronique." }) +
-      field("vat", "N° de TVA intracommunautaire", c.vat, { half: true }) +
-      field("email", "Email", c.email, { type: "email", half: true }) +
-      field("endpoint", "Adresse de facturation électronique (facultatif)", c.endpoint, { half: true, placeholder: "Son SIREN par défaut",
-        hint: "Client en France : par défaut son SIREN ; indiquez celle qu'il vous a communiquée s'il en a plusieurs. Client à l'étranger : l'email où il reçoit ses factures (par défaut, son email)." }) +
-      field("delivery", "Adresse de livraison (si différente)", c.delivery, { textarea: true }) +
-      field("notes", "Notes internes", c.notes, { textarea: true }) +
+      field("country", L("client.country"), c.country || "", { options: countryOptions(c.place), half: true }) + "</div>" +
+      field("address", L("profile.address"), c.address, { textarea: true }) +
+      field("siren", L("client.siren"), c.siren, { half: true, placeholder: L("client.sirenPlaceholder"), hint: L("client.sirenHint") }) +
+      field("vat", L("profile.vat"), c.vat, { half: true }) +
+      field("email", L("profile.email"), c.email, { type: "email", half: true }) +
+      field("endpoint", L("profile.endpoint"), c.endpoint, { half: true, placeholder: L("client.endpointPlaceholder"), hint: L("client.endpointHint") }) +
+      field("delivery", L("client.delivery"), c.delivery, { textarea: true }) +
+      field("notes", L("client.notes"), c.notes, { textarea: true }) +
       '</div><p class="form-error" id="client-error" role="alert" hidden></p><div class="espace-actions">' +
-      '<button type="submit" class="btn btn-primary">' + (isNew ? "Créer le client" : "Enregistrer") + "</button>" +
-      (isNew ? "" : '<a class="btn btn-ghost" href="#/documents/nouveau?type=facture&client=' + esc(c.id) + '">Nouvelle facture</a>' +
-        '<button type="button" class="btn btn-ghost" id="client-archive">' + (c.archived ? "Réactiver" : "Archiver") + "</button>") +
-      "</div></form>" + (docs.length ? '<section class="card espace-card"><h3>Documents de ce client</h3>' + docTable(docs) + "</section>" : "");
+      '<button type="submit" class="btn btn-primary">' + (isNew ? L("client.create") : L("common.save")) + "</button>" +
+      (isNew ? "" : '<a class="btn btn-ghost" href="#/documents/nouveau?type=facture&client=' + esc(c.id) + '">' + L("new.facture") + "</a>" +
+        '<button type="button" class="btn btn-ghost" id="client-archive">' + (c.archived ? L("client.reactivate") : L("client.archive")) + "</button>") +
+      "</div></form>" + (docs.length ? '<section class="card espace-card"><h3>' + L("client.docs") + "</h3>" + docTable(docs) + "</section>" : "");
     if (cm) {
       drawCharts = function () { drawInvoicedChart("client-invoiced", cm, c.name); };
       drawCharts();
@@ -1349,13 +1349,13 @@
     form.addEventListener("submit", function (e) {
       e.preventDefault();
       var f = form.elements;
-      if (!f.name.value.trim()) { showError("client-error", "Indiquez le nom du client."); f.name.focus(); return; }
+      if (!f.name.value.trim()) { showError("client-error", L("client.errName")); f.name.focus(); return; }
       ["name", "address", "siren", "vat", "email", "delivery", "notes", "endpoint"].forEach(function (k) { c[k] = f[k].value.trim(); });
       c.pro = f.pro.value === "1";
       c.place = f.place.value;
       c.country = c.place === "fr" ? "" : f.country.value;
-      var endpointError = c.place === "fr" ? checkEndpoint(c.endpoint, c.siren, "le SIREN du client")
-        : c.endpoint && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(c.endpoint) ? "Client à l'étranger : son adresse de facturation électronique est une adresse email." : "";
+      var endpointError = c.place === "fr" ? checkEndpoint(c.endpoint, c.siren, L("fx.fill.clientSiren"))
+        : c.endpoint && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(c.endpoint) ? L("client.errEndpointAbroad") : "";
       if (endpointError) { showError("client-error", endpointError); f.endpoint.focus(); return; }
       c.updatedAt = now();
       if (isNew) { c.createdAt = c.updatedAt; data.clients.push(c); }
@@ -1365,7 +1365,7 @@
       var target = back && doc(back) ? doc(back) : null;
       if (target) { target.clientId = c.id; target.vat = Object.assign(vatFor(c), { rate: target.vat.rate }); }
       if (lead) { lead.clientId = c.id; lead.updatedAt = c.updatedAt; }
-      persist(isNew ? "Client créé." : "Client enregistré.").then(function () {
+      persist(isNew ? L("client.created") : L("client.saved")).then(function () {
         if (lead) location.hash = r.params.devis === "1" ? "#/documents/nouveau?type=devis&client=" + c.id + "&piste=" + lead.id : "#/prospects/" + lead.id;
         else if (!back) location.hash = "#/clients";
         else if (target) location.hash = "#/documents/" + back;
@@ -1376,7 +1376,7 @@
     if ($("client-archive")) $("client-archive").addEventListener("click", function () {
       c.archived = !c.archived;
       c.updatedAt = now();
-      persist(c.archived ? "Client archivé." : "Client réactivé.").then(function () { location.hash = "#/clients"; });
+      persist(c.archived ? L("client.archived") : L("client.reactivated")).then(function () { location.hash = "#/clients"; });
     });
   }
 
@@ -1392,49 +1392,49 @@
     // Activité mixte : ventes et prestations distinctes (BOFiP, BOI-BIC-DECLA-30-30, § 30).
     var mixed = isMixed();
     var parts = function (x) {
-      return mixed ? '<td class="num c-part" data-label="Ventes">' + esc(money(x.goods)) + '</td><td class="num c-part" data-label="Prestations">' +
+      return mixed ? '<td class="num c-part" data-label="' + L("ledger.sales") + '">' + esc(money(x.goods)) + '</td><td class="num c-part" data-label="' + L("ledger.services") + '">' +
         esc(money(x.services)) + "</td>" : "";
     };
     var goodsSum = rows.reduce(function (s, x) { return s + (x.goods || 0); }, 0);
-    view.innerHTML = '<div class="espace-head"><h2>Livre des recettes ' + esc(year) + '</h2><div class="espace-quick espace-noprint">' +
-      '<button type="button" class="btn btn-ghost btn-sm" id="ledger-csv"' + (rows.length ? "" : " disabled") + ">Exporter (CSV)</button>" +
-      '<button type="button" class="btn btn-ghost btn-sm" id="ledger-print"' + (rows.length ? "" : " disabled") + ">Imprimer</button></div></div>" +
+    view.innerHTML = '<div class="espace-head"><h2>' + L("ledger.title", { year: esc(year) }) + '</h2><div class="espace-quick espace-noprint">' +
+      '<button type="button" class="btn btn-ghost btn-sm" id="ledger-csv"' + (rows.length ? "" : " disabled") + ">" + L("common.exportCsv") + "</button>" +
+      '<button type="button" class="btn btn-ghost btn-sm" id="ledger-print"' + (rows.length ? "" : " disabled") + ">" + L("common.print") + "</button></div></div>" +
       receiptsOverview(year) +
-      '<div class="card espace-card"><div class="espace-filters espace-noprint" role="group" aria-label="Année">' +
+      '<div class="card espace-card"><div class="espace-filters espace-noprint" role="group" aria-label="' + L("common.year") + '">' +
       Object.keys(years).sort().reverse().map(function (y) { return '<a class="tab" href="#/recettes?annee=' + y + '"' + (y === year ? ' aria-current="true"' : "") + ">" + y + "</a>"; }).join("") + "</div>" +
-      (rows.length ? '<table class="ledger"><thead><tr><th>Date</th><th>Client</th><th>Nature</th><th>Moyen</th><th>Référence</th>' +
-        (mixed ? '<th class="num">Ventes</th><th class="num">Prestations</th>' : "") + '<th class="num">Montant</th></tr></thead><tbody>' +
+      (rows.length ? "<table class=\"ledger\"><thead><tr><th>" + L("ledger.col.date") + "</th><th>" + L("ledger.col.client") + "</th><th>" + L("ledger.col.nature") +
+        "</th><th>" + L("ledger.col.method") + "</th><th>" + L("ledger.col.ref") + "</th>" +
+        (mixed ? '<th class="num">' + L("ledger.sales") + '</th><th class="num">' + L("ledger.services") + "</th>" : "") + '<th class="num">' + L("ledger.col.amount") + "</th></tr></thead><tbody>" +
         E.ledgerQuarters(rows, year, TODAY, profile().startDate).map(function (q) {
           return rows.filter(function (x) { return x.date >= q.start && x.date <= q.end; }).map(function (x) {
             return '<tr><td class="c-date">' + day(x.date) + '</td><td class="c-client">' + esc(x.client) + '</td><td class="c-nature">' + esc(x.nature) +
               '</td><td class="c-method">' + esc(x.method) + '</td><td class="c-ref"><a href="#/documents/' + esc(x.docId) + '">' + esc(x.ref) +
               '</a></td>' + parts(x) + '<td class="num">' + esc(money(x.amount)) + "</td></tr>";
-          }).join("") + '<tr class="ledger-subtotal"><td colspan="5">Total du ' + esc(q.label) + (q.open ? " (en cours)" : "") + "</td>" + parts(q) +
+          }).join("") + '<tr class="ledger-subtotal"><td colspan="5">' + L("ledger.quarterTotal", { quarter: esc(q.label) }) + (q.open ? L("chart.current") : "") + "</td>" + parts(q) +
             '<td class="num">' + esc(money(q.total)) + "</td></tr>";
-        }).join("") + '</tbody><tfoot><tr><td colspan="5">Total encaissé en ' + esc(year) + "</td>" +
+        }).join("") + '</tbody><tfoot><tr><td colspan="5">' + L("ledger.yearTotal", { year: esc(year) }) + "</td>" +
           parts({ goods: Math.round(goodsSum * 100) / 100, services: Math.round((sum - goodsSum) * 100) / 100 }) +
           '<td class="num">' + esc(money(sum)) + "</td></tr></tfoot></table>"
-        : '<p class="muted">Aucun encaissement en ' + esc(year) + ". Les encaissements enregistrés sur vos factures apparaissent ici automatiquement.</p>") +
-      '<p class="small muted">Tenu par date d\'encaissement : date, client, nature, montant, moyen de paiement et référence de la facture ; totalisé à la fin de chaque trimestre et de l\'année. ' +
-      (mixed ? "Activité mixte : ventes et prestations sont distinguées ; l'encaissement d'une facture mixte est réparti au prorata de ses lignes hors taxes. " : "") +
-      "Conservez-le avec vos factures pendant " + R.conservation_pieces.commerce_annees + " ans.</p></div>";
+        : '<p class="muted">' + L("ledger.empty", { year: esc(year) }) + "</p>") +
+      '<p class="small muted">' + L("ledger.how") + " " + (mixed ? L("ledger.mixed") + " " : "") +
+      L("ledger.keep", { years: R.conservation_pieces.commerce_annees }) + "</p></div>";
     drawCharts = function () {
       var el = view.querySelector('[data-chart="receipts"]');
       if (!el) return;
       var rc = ST.receipts(data.documents, year, TODAY), refs = [];
       if (isMicro() && year === YEAR) {
         var th = E.thresholds(data.documents, profile(), R, year);
-        refs.push({ value: th.ceiling, label: "Plafond de la micro-entreprise", cls: "is-ceiling" });
-        if (th.vat) refs.push({ value: th.vat.base, label: "Seuil de la franchise de TVA", cls: "is-vat" });
+        refs.push({ value: th.ceiling, label: L("ledger.refCeiling"), cls: "is-ceiling" });
+        if (th.vat) refs.push({ value: th.vat.base, label: L("gauge.vat"), cls: "is-vat" });
       }
       el.innerHTML = OF.charts.balance({ width: Math.floor(el.getBoundingClientRect().width) || 600, from: year + "-01-01", to: year + "-12-31", refs: refs,
-        series: [{ name: "Encaissé", points: rc.points, cls: "is-main", end: rc.end }], title: "Encaissements cumulés en " + year,
-        desc: "Total " + money(rc.total) + (refs.length ? " ; " + refs.map(function (r) { return r.label + " : " + money(r.value); }).join(" ; ") : "") + "." });
+        series: [{ name: L("chart.cashed"), points: rc.points, cls: "is-main", end: rc.end }], title: L("ledger.chartTitle", { year: year }),
+        desc: L("ledger.chartDesc", { total: money(rc.total), refs: refs.length ? " ; " + refs.map(function (r) { return r.label + " : " + money(r.value); }).join(" ; ") : "" }) });
     };
     drawCharts();
     if (!rows.length) return;
     $("ledger-csv").addEventListener("click", function () {
-      OF.download("﻿" + E.ledgerCSV(rows), "livre-des-recettes-" + year + ".csv", "text/csv;charset=utf-8");
+      OF.download("﻿" + E.ledgerCSV(rows), L("ledger.file", { year: year }), "text/csv;charset=utf-8");
     });
     $("ledger-print").addEventListener("click", function () {
       document.body.classList.add("print-ledger");
@@ -1458,16 +1458,16 @@
     if (!rc.total && year !== YEAR) return "";
     var th = isMicro() && year === YEAR ? E.thresholds(data.documents, profile(), R, year) : null;
     return '<div class="espace-noprint"><div class="kpis kpis-4">' +
-      kpi("Encaissé en " + year, money(rc.total), countText(rc.points.length - 1, "jour d'encaissement", "jours d'encaissement")) +
-      (rc.quarter !== null ? kpi("Encaissé au " + rc.quarterLabel, money(rc.quarter), "depuis le début du trimestre") : kpi("Moyenne par trimestre", money(Math.round(rc.total / 4 * 100) / 100), "année entière")) +
-      kpi("Moyenne mensuelle", rc.average === null ? "–" : money(rc.average), year === YEAR ? "mois écoulés de l'année" : "sur 12 mois") +
-      (rc.projection !== null ? kpi("Projection de fin d'année", money(rc.projection), "au rythme des jours écoulés : une estimation, pas une prévision" +
-        (th && rc.projection > th.ceiling ? " · au-delà du plafond" : ""), th && rc.projection > th.ceiling ? "is-warn" : "")
-        : kpi("Encaissements", String(rc.points.length - 1), "jours avec au moins un encaissement")) + "</div>" +
-      '<section class="card espace-card"><div class="card-head"><h3>Encaissements cumulés</h3><span class="small muted">Depuis le 1er janvier' +
-      (th ? ", face au plafond de la micro-entreprise" + (th.vat ? " et au seuil de la franchise de TVA" : "") : "") + ".</span></div>" +
-      '<div class="chart" data-chart="receipts"></div>' + OF.charts.legend([{ cls: "is-main", label: "Encaissé (cumul)" }].concat(th ? [{ cls: "is-ceiling", label: "Plafond (" + money(th.ceiling) + ")" }] : [])
-        .concat(th && th.vat ? [{ cls: "is-vat", label: "Seuil de TVA (" + money(th.vat.base) + ")" }] : [])) + "</section></div>";
+      kpi(L("dash.cashedYear", { year: year }), money(rc.total), countText(rc.points.length - 1, L("count.receiptDay.one"), L("count.receiptDay.many"))) +
+      (rc.quarter !== null ? kpi(L("ledger.cashedQuarter", { quarter: rc.quarterLabel }), money(rc.quarter), L("ledger.sinceQuarter")) : kpi(L("ledger.avgQuarter"), money(Math.round(rc.total / 4 * 100) / 100), L("ledger.wholeYear"))) +
+      kpi(L("ledger.avgMonth"), rc.average === null ? "–" : money(rc.average), year === YEAR ? L("ledger.monthsElapsed") : L("ledger.over12")) +
+      (rc.projection !== null ? kpi(L("ledger.projection"), money(rc.projection), L("ledger.projectionSub") +
+        (th && rc.projection > th.ceiling ? L("ledger.overCeiling") : ""), th && rc.projection > th.ceiling ? "is-warn" : "")
+        : kpi(L("pay.receipts"), String(rc.points.length - 1), L("ledger.daysWithReceipt"))) + "</div>" +
+      '<section class="card espace-card"><div class="card-head"><h3>' + L("ledger.cumulative") + '</h3><span class="small muted">' + L("ledger.sinceJan1") +
+      (th ? L("ledger.vsCeiling") + (th.vat ? L("ledger.andVat") : "") : "") + ".</span></div>" +
+      '<div class="chart" data-chart="receipts"></div>' + OF.charts.legend([{ cls: "is-main", label: L("ledger.cumulLegend") }].concat(th ? [{ cls: "is-ceiling", label: L("ledger.ceilingLegend", { amount: money(th.ceiling) }) }] : [])
+        .concat(th && th.vat ? [{ cls: "is-vat", label: L("ledger.vatLegend", { amount: money(th.vat.base) }) }] : [])) + "</section></div>";
   }
 
   /**
@@ -1478,36 +1478,35 @@
     if (year === YEAR) {
       var x = ST.expensesPeriod(data.expenses, data.documents, TODAY, key, profile(), R);
       return Object.assign(x, { label: x.period.label, from: x.period.from, to: x.period.to,
-        averageHint: { trimestre: "mois commencés du trimestre", annee: "mois écoulés de l'année", "12m": "sur 12 mois" }[x.period.key],
-        chartIntro: x.period.key === "annee" ? "Année " + YEAR + "." : "12 derniers mois.",
-        chartTitle: x.period.key === "annee" ? "Dépenses par mois en " + YEAR : "Dépenses des 12 derniers mois" });
+        averageHint: { trimestre: L("exp.avg.quarter"), annee: L("ledger.monthsElapsed"), "12m": L("ledger.over12") }[x.period.key],
+        chartIntro: x.period.key === "annee" ? L("docs.yearIntro", { year: YEAR }) : L("docs.last12Intro"),
+        chartTitle: x.period.key === "annee" ? L("exp.chartYear", { year: YEAR }) : L("exp.chart12") });
     }
-    return Object.assign(ST.expenses(data.expenses, data.documents, year, TODAY, profile(), R), { period: null, label: "en " + year,
-      from: year + "-01-01", to: year + "-12-31", averageHint: "sur 12 mois", perExpense: null, chartIntro: "Année " + year + ".", chartTitle: "Dépenses par mois en " + year });
+    return Object.assign(ST.expenses(data.expenses, data.documents, year, TODAY, profile(), R), { period: null, label: L("exp.inYear", { year: year }),
+      from: year + "-01-01", to: year + "-12-31", averageHint: L("ledger.over12"), perExpense: null, chartIntro: L("docs.yearIntro", { year: year }), chartTitle: L("exp.chartYear", { year: year }) });
   }
-  var EXPENSE_PERIOD_LABELS = { mois: "Mois", trimestre: "Trimestre", annee: "Année", "12m": "12 mois" };
+  var EXPENSE_PERIOD_LABELS = { mois: L("period.mois"), trimestre: L("period.trimestre"), annee: L("period.annee"), "12m": L("period.12m") };
 
   /** Dépenses : période, indicateurs, graphique par mois, catégories et fournisseurs (documentation/55, § 2 et § 9). */
   function expensesOverview(year, key) {
     if (!data.expenses.some(function (e) { return e.date <= TODAY; })) return "";
     var xs = expensesFigures(year, key), top = xs.byCategory[0];
-    var tools = '<div class="tr-tools espace-noprint">' + (xs.period ? '<div class="seg" role="group" aria-label="Période des indicateurs">' +
+    var tools = '<div class="tr-tools espace-noprint">' + (xs.period ? '<div class="seg" role="group" aria-label="' + L("period.label") + '">' +
       ST.EXPENSE_PERIODS.map(function (k) {
         return '<a class="tab" href="#/depenses' + (k === "annee" ? "" : "?periode=" + k) + '"' + (k === xs.period.key ? ' aria-current="true"' : "") + ">" + EXPENSE_PERIOD_LABELS[k] + "</a>";
-      }).join("") + "</div>" : "") + '<span class="small muted">Du ' + day(xs.from) + " au " + day(xs.to) + ".</span></div>";
+      }).join("") + "</div>" : "") + '<span class="small muted">' + L("period.range", { from: day(xs.from), to: day(xs.to) }) + "</span></div>";
     return '<div class="espace-noprint">' + tools + '<div class="kpis kpis-4">' +
-      kpi("Dépenses " + xs.label, money(xs.total), xs.count ? countText(xs.count, "dépense", "dépenses") : "aucune dépense sur la période") +
-      kpi("Premier poste", top ? money(top.amount) : "–", top ? top.name + " · " + pct(top.share) : "aucune dépense sur la période") +
+      kpi(L("exp.kpiTotal", { period: xs.label }), money(xs.total), xs.count ? countText(xs.count, L("count.expense.one"), L("count.expense.many")) : L("exp.none")) +
+      kpi(L("exp.kpiTop"), top ? money(top.amount) : "–", top ? top.name + " · " + pct(top.share) : L("exp.none")) +
       (xs.period && xs.period.key === "mois"
-        ? kpi("Dépense moyenne", xs.perExpense === null ? "–" : money(xs.perExpense), xs.count ? "total ÷ nombre de dépenses" : "aucune dépense sur la période")
-        : kpi("Moyenne mensuelle", xs.average === null ? "–" : money(xs.average), xs.averageHint)) +
-      kpi("Part des encaissements", xs.ratio === null ? "–" : pct(xs.ratio), (xs.ratio === null ? "aucun encaissement sur la période" :
-        "dépenses ÷ encaissements " + xs.label) + (xs.abatement !== null ? " · abattement forfaitaire de votre activité : " + pct(xs.abatement) : "")) + "</div>" +
-      '<div class="espace-cols tr-charts"><section class="card espace-card"><div class="card-head"><h3>Dépenses par mois</h3><span class="small muted">' + esc(xs.chartIntro) + "</span></div>" +
-      '<div class="chart" data-chart="expenses"></div>' + OF.charts.table("Dépenses par mois", ["Mois", "Dépenses"], xs.byMonth.map(function (m) { return [m.label, money(m.amount)]; })) +
-      '</section><section class="card espace-card"><h3>Par catégorie</h3>' + barList(xs.byCategory) + "<h4>Principaux fournisseurs</h4>" + barList(xs.suppliers) +
-      (xs.abatement !== null ? '<p class="small muted">En micro-entreprise, l\'impôt est calculé après un abattement forfaitaire de ' + pct(xs.abatement) +
-        ' pour votre activité, quelles que soient vos dépenses. Pour comparer avec un régime où les charges réelles sont déduites : <a href="/fr/comparateur-statuts/">comparateur de statuts</a>.</p>' : "") +
+        ? kpi(L("exp.kpiAverage"), xs.perExpense === null ? "–" : money(xs.perExpense), xs.count ? L("exp.kpiAverageSub") : L("exp.none"))
+        : kpi(L("ledger.avgMonth"), xs.average === null ? "–" : money(xs.average), xs.averageHint)) +
+      kpi(L("exp.kpiRatio"), xs.ratio === null ? "–" : pct(xs.ratio), (xs.ratio === null ? L("exp.noReceipt") :
+        L("exp.kpiRatioSub", { period: xs.label })) + (xs.abatement !== null ? L("exp.abatement", { pct: pct(xs.abatement) }) : "")) + "</div>" +
+      '<div class="espace-cols tr-charts"><section class="card espace-card"><div class="card-head"><h3>' + L("exp.monthly") + '</h3><span class="small muted">' + esc(xs.chartIntro) + "</span></div>" +
+      '<div class="chart" data-chart="expenses"></div>' + OF.charts.table(L("exp.monthly"), [L("chart.month"), L("exp.series")], xs.byMonth.map(function (m) { return [m.label, money(m.amount)]; })) +
+      '</section><section class="card espace-card"><h3>' + L("exp.byCategory") + "</h3>" + barList(xs.byCategory) + "<h4>" + L("exp.suppliers") + "</h4>" + barList(xs.suppliers) +
+      (xs.abatement !== null ? '<p class="small muted">' + L("exp.abatementNoteHtml", { pct: pct(xs.abatement) }) + "</p>" : "") +
       "</section></div></div>";
   }
 
@@ -1522,40 +1521,38 @@
     data.expenses.forEach(function (e) { years[e.date.slice(0, 4)] = true; });
     var year = r.params.annee && years[r.params.annee] ? r.params.annee : YEAR;
     var res = E.expenseRows(data.expenses, year + "-01-01", year + "-12-31");
-    var noun = required ? "achat" : "dépense";
-    view.innerHTML = '<div class="espace-head"><h2>' + (required ? "Registre des achats " : "Dépenses ") + esc(year) + '</h2><div class="espace-quick espace-noprint">' +
-      '<a class="btn btn-primary btn-sm" href="#/depenses/nouvelle">+ ' + (required ? "Achat" : "Dépense") + "</a>" +
-      (isMicro() ? "" : '<a class="btn btn-ghost btn-sm" href="#/immobilisations">Immobilisations</a>') +
-      '<button type="button" class="btn btn-ghost btn-sm" id="expenses-csv"' + (res.rows.length ? "" : " disabled") + ">Exporter (CSV)</button>" +
-      '<button type="button" class="btn btn-ghost btn-sm" id="expenses-print"' + (res.rows.length ? "" : " disabled") + ">Imprimer</button></div></div>" +
+    view.innerHTML = '<div class="espace-head"><h2>' + (required ? L("exp.titlePurchases", { year: esc(year) }) : L("exp.title", { year: esc(year) })) + '</h2><div class="espace-quick espace-noprint">' +
+      '<a class="btn btn-primary btn-sm" href="#/depenses/nouvelle">' + (required ? L("exp.addPurchase") : L("exp.add")) + "</a>" +
+      (isMicro() ? "" : '<a class="btn btn-ghost btn-sm" href="#/immobilisations">' + L("exp.assets") + "</a>") +
+      '<button type="button" class="btn btn-ghost btn-sm" id="expenses-csv"' + (res.rows.length ? "" : " disabled") + ">" + L("common.exportCsv") + "</button>" +
+      '<button type="button" class="btn btn-ghost btn-sm" id="expenses-print"' + (res.rows.length ? "" : " disabled") + ">" + L("common.print") + "</button></div></div>" +
       expensesOverview(year, r.params.periode) +
-      '<div class="card espace-card"><div class="espace-filters espace-noprint" role="group" aria-label="Année">' +
+      '<div class="card espace-card"><div class="espace-filters espace-noprint" role="group" aria-label="' + L("common.year") + '">' +
       Object.keys(years).sort().reverse().map(function (y) { return '<a class="tab" href="#/depenses?annee=' + y + '"' + (y === year ? ' aria-current="true"' : "") + ">" + y + "</a>"; }).join("") + "</div>" +
-      (res.rows.length ? '<table class="ledger"><thead><tr><th>Date</th><th>Fournisseur</th><th>Nature</th><th>Moyen</th><th>Pièce</th><th class="num">Montant</th></tr></thead><tbody>' +
+      (res.rows.length ? "<table class=\"ledger\"><thead><tr><th>" + L("ledger.col.date") + "</th><th>" + L("exp.col.supplier") + "</th><th>" + L("ledger.col.nature") +
+        "</th><th>" + L("ledger.col.method") + "</th><th>" + L("exp.col.ref") + '</th><th class="num">' + L("ledger.col.amount") + "</th></tr></thead><tbody>" +
         res.rows.map(function (x) {
           return '<tr><td class="c-date">' + day(x.date) + '</td><td class="c-client"><a href="#/depenses/' + esc(x.id) + '">' + esc(x.supplier) + "</a></td><td>" +
             esc(x.label) + '</td><td class="c-method">' + esc(x.method) + '</td><td class="c-ref">' + esc(x.ref) + '</td><td class="num">' + esc(money(x.amount)) + "</td></tr>";
-        }).join("") + '</tbody><tfoot><tr><td colspan="5">Total des ' + noun + "s en " + esc(year) + '</td><td class="num">' + esc(money(res.total)) + "</td></tr>" +
-        '<tr><td colspan="5">Dont réglé en espèces</td><td class="num">' + esc(money(res.cash)) + "</td></tr></tfoot></table>"
-        : '<p class="muted">Aucun' + (required ? " achat" : "e dépense") + " en " + esc(year) + '. <a href="#/depenses/nouvelle">' + (required ? "Saisir un achat" : "Saisir une dépense") + "</a></p>") +
-      (required
-        ? '<p class="small muted">Vente de marchandises ou fourniture de logement : ce registre des achats, récapitulé par année, est obligatoire avec le livre des recettes ; il se tient dans l\'ordre chronologique, en distinguant les règlements en espèces, avec la référence de chaque facture d\'achat.</p>'
-        : '<p class="small muted">Prestataire de services : ce suivi est facultatif. Le registre des achats n\'est obligatoire que pour la vente de marchandises ou la fourniture de logement.</p>') +
-      (isMicro() ? '<p class="small muted">En micro-entreprise, les dépenses ne se déduisent pas du chiffre d\'affaires déclaré : l\'abattement forfaitaire en tient lieu.</p>' : "") +
-      '<p class="small muted">Conservez les factures d\'achat pendant ' + R.conservation_pieces.commerce_annees + " ans.</p></div>";
+        }).join("") + '</tbody><tfoot><tr><td colspan="5">' + (required ? L("exp.totalPurchases", { year: esc(year) }) : L("exp.total", { year: esc(year) })) + '</td><td class="num">' + esc(money(res.total)) + "</td></tr>" +
+        '<tr><td colspan="5">' + L("exp.cash") + '</td><td class="num">' + esc(money(res.cash)) + "</td></tr></tfoot></table>"
+        : '<p class="muted">' + (required ? L("exp.emptyPurchasesHtml", { year: esc(year) }) : L("exp.emptyHtml", { year: esc(year) })) + "</p>") +
+      '<p class="small muted">' + (required ? L("exp.registerRequired") : L("exp.registerOptional")) + "</p>" +
+      (isMicro() ? '<p class="small muted">' + L("exp.microNote") + "</p>" : "") +
+      '<p class="small muted">' + L("exp.keep", { years: R.conservation_pieces.commerce_annees }) + "</p></div>";
     drawCharts = function () {
       var el = view.querySelector('[data-chart="expenses"]');
       if (!el) return;
       var xs = expensesFigures(year, r.params.periode);
       el.innerHTML = OF.charts.bars({ width: Math.floor(el.getBoundingClientRect().width) || 600,
         groups: xs.byMonth.map(function (m) { return { key: m.key, label: m.label, values: [m.amount], future: false }; }),
-        series: [{ name: "Dépenses", cls: "is-out" }], title: xs.chartTitle,
-        desc: "Total " + money(xs.byMonth.reduce(function (s, m) { return Math.round((s + m.amount) * 100) / 100; }, 0)) + "." });
+        series: [{ name: L("exp.series"), cls: "is-out" }], title: xs.chartTitle,
+        desc: L("exp.chartDesc", { total: money(xs.byMonth.reduce(function (s, m) { return Math.round((s + m.amount) * 100) / 100; }, 0)) }) });
     };
     drawCharts();
     if (!res.rows.length) return;
     $("expenses-csv").addEventListener("click", function () {
-      OF.download("\ufeff" + E.expensesCSV(res.rows), (required ? "registre-des-achats-" : "depenses-") + year + ".csv", "text/csv;charset=utf-8");
+      OF.download("\ufeff" + E.expensesCSV(res.rows), required ? L("exp.filePurchases", { year: year }) : L("exp.file", { year: year }), "text/csv;charset=utf-8");
     });
     $("expenses-print").addEventListener("click", function () {
       document.body.classList.add("print-ledger");
@@ -1567,23 +1564,23 @@
   function viewExpenseForm(r) {
     var isNew = r.id === "nouvelle";
     var x = isNew ? { date: TODAY, method: "carte" } : expense(r.id);
-    if (!x) { view.innerHTML = '<div class="espace-head"><h2>Dépense introuvable</h2></div><p><a href="#/depenses">Retour aux dépenses</a></p>'; return; }
+    if (!x) { view.innerHTML = '<div class="espace-head"><h2>' + L("exp.notFound") + '</h2></div><p><a href="#/depenses">' + L("exp.back") + "</a></p>"; return; }
     var methods = Object.keys(E.METHODS).map(function (k) { return [k, E.METHODS[k]]; });
     var required = E.purchasesRequired(profile(), R.registre_achats, R);
-    view.innerHTML = '<div class="espace-head"><h2>' + (isNew ? (required ? "Nouvel achat" : "Nouvelle dépense") : esc(x.supplier)) + "</h2></div>" +
+    view.innerHTML = '<div class="espace-head"><h2>' + (isNew ? (required ? L("exp.newPurchase") : L("exp.new")) : esc(x.supplier)) + "</h2></div>" +
       '<form class="card espace-card" id="expense-form" novalidate><div class="fields">' +
-      field("date", "Date", x.date, { type: "date", half: true, required: true }) +
-      field("amount", "Montant payé", x.amount == null ? "" : Number(x.amount).toFixed(2).replace(".", ","), { half: true, required: true, inputmode: "decimal", placeholder: "24,90",
-        hint: "Toutes taxes comprises, en euros." }) +
-      field("supplier", "Fournisseur", x.supplier, { required: true, placeholder: "Papeterie du centre" }) +
-      field("label", "Nature de l'achat", x.label, { placeholder: "Ramettes de papier, marchandises…" }) +
-      field("method", "Moyen de paiement", x.method, { options: methods, half: true }) +
-      field("ref", "Référence de la pièce", x.ref, { half: true, placeholder: "N° de la facture du fournisseur" }) +
-      field("category", "Catégorie (facultatif)", x.category || "", { half: true, options: [["", "Non classée"]].concat(Object.keys(E.EXPENSE_CATEGORIES).map(function (k) {
-        return [k, E.EXPENSE_CATEGORIES[k]]; })), hint: "Pour suivre où part votre argent." }) +
+      field("date", L("ledger.col.date"), x.date, { type: "date", half: true, required: true }) +
+      field("amount", L("exp.amount"), x.amount == null ? "" : Number(x.amount).toFixed(2).replace(".", ","), { half: true, required: true, inputmode: "decimal", placeholder: L("exp.amountPlaceholder"),
+        hint: L("exp.amountHint") }) +
+      field("supplier", L("exp.col.supplier"), x.supplier, { required: true, placeholder: L("exp.supplierPlaceholder") }) +
+      field("label", L("exp.label"), x.label, { placeholder: L("exp.labelPlaceholder") }) +
+      field("method", L("pay.method"), x.method, { options: methods, half: true }) +
+      field("ref", L("exp.ref"), x.ref, { half: true, placeholder: L("exp.refPlaceholder") }) +
+      field("category", L("exp.category"), x.category || "", { half: true, options: [["", L("exp.uncategorized")]].concat(Object.keys(E.EXPENSE_CATEGORIES).map(function (k) {
+        return [k, E.EXPENSE_CATEGORIES[k]]; })), hint: L("exp.categoryHint") }) +
       '</div><p class="form-error" id="expense-error" role="alert" hidden></p><div class="espace-actions">' +
-      '<button type="submit" class="btn btn-primary">Enregistrer</button><a class="btn btn-ghost" href="#/depenses?annee=' + esc(String(x.date).slice(0, 4)) + '">Annuler</a>' +
-      (isNew ? "" : '<button type="button" class="btn btn-ghost" id="expense-delete">Supprimer</button>') + "</div></form>";
+      '<button type="submit" class="btn btn-primary">' + L("common.save") + '</button><a class="btn btn-ghost" href="#/depenses?annee=' + esc(String(x.date).slice(0, 4)) + '">' + L("common.cancel") + "</a>" +
+      (isNew ? "" : '<button type="button" class="btn btn-ghost" id="expense-delete">' + L("line.remove") + "</button>") + "</div></form>";
     var form = $("expense-form");
     form.addEventListener("submit", function (e) {
       e.preventDefault();
@@ -1599,12 +1596,12 @@
       var target = isNew ? { id: S.uid(), createdAt: now() } : x;
       Object.assign(target, next, { updatedAt: now() });
       if (isNew) data.expenses.push(target);
-      persist(isNew ? "Dépense enregistrée." : "Dépense modifiée.").then(function () { location.hash = "#/depenses?annee=" + next.date.slice(0, 4); });
+      persist(isNew ? L("exp.saved") : L("exp.updated")).then(function () { location.hash = "#/depenses?annee=" + next.date.slice(0, 4); });
     });
     if (!isNew) $("expense-delete").addEventListener("click", function () {
-      if (!confirm("Supprimer cette dépense ?")) return;
+      if (!confirm(L("exp.confirmDelete"))) return;
       data.expenses = data.expenses.filter(function (e) { return e.id !== x.id; });
-      persist("Dépense supprimée.").then(function () { location.hash = "#/depenses?annee=" + x.date.slice(0, 4); });
+      persist(L("exp.deleted")).then(function () { location.hash = "#/depenses?annee=" + x.date.slice(0, 4); });
     });
   }
 
