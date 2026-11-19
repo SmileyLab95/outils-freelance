@@ -71,8 +71,9 @@
     return String(text == null ? "" : text).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
       .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
   }
-  var money = function (n) { return OF.eur(n); };
-  var day = function (iso) { return iso ? OF.frDate(iso) : "–"; };
+  // Montants et dates au format de la section (identiques à OF.eur et OF.frDate en France).
+  var money = function (n) { return OF.money(n); };
+  var day = function (iso) { return iso ? OF.date(iso) : "–"; };
   var longDay = function (iso) { return OF.date(iso, { day: "numeric", month: "long", year: "numeric" }); };
   function options(list, selected) {
     return list.map(function (o) {
@@ -87,7 +88,7 @@
   }
   function persist(msg) {
     return S.save(data).then(function () { if (msg) announce(msg); }, function () {
-      announce("L'enregistrement a échoué : votre navigateur refuse le stockage. Exportez une sauvegarde depuis les réglages.", true);
+      announce(L("store.failed"), true);
     });
   }
   var now = function () { return new Date().toISOString(); };
@@ -118,7 +119,7 @@
     var st = STATES[E.state(d, TODAY, data.documents)] || STATES.draft;
     return '<span class="st ' + st[1] + '">' + esc(st[0]) + "</span>";
   }
-  function docLabel(d) { return TYPES[d.type] + " " + (d.number || "(brouillon)"); }
+  function docLabel(d) { return TYPES[d.type] + " " + (d.number || L("doc.draftMark")); }
 
   // ----- Routeur -------------------------------------------------------------------
 
@@ -168,15 +169,14 @@
   function viewWelcome() {
     var fromGenerator = OF.load("facture", null);
     view.innerHTML =
-      '<div class="espace-welcome"><h2>Bienvenue dans votre espace</h2>' +
-      (pendingImport() ? '<p class="notice">Le document préparé dans le générateur sera repris en brouillon dès que votre profil sera créé.</p>' : "") +
-      "<p>Clients, devis, factures, encaissements, temps passé, livre des recettes, dépenses et déclarations Urssaf : tout au même endroit. " +
-      "Vos données restent <strong>sur cet appareil</strong> : rien n'est envoyé sur un serveur.</p>" +
-      "<p>Commencez par décrire votre entreprise : 2 minutes, modifiable à tout moment.</p></div>" +
+      '<div class="espace-welcome"><h2>' + L("welcome.title") + "</h2>" +
+      (pendingImport() ? '<p class="notice">' + L("welcome.importPending") + "</p>" : "") +
+      "<p>" + L("welcome.introHtml") + "</p>" +
+      "<p>" + L("welcome.start") + "</p></div>" +
       profileForm(fromGenerator ? generatorProfile(fromGenerator) : { activity: "liberal_bnc", vatRegime: "franchise", periodicity: "quarterly" }, true) +
-      '<div class="card espace-card espace-noprint"><h3>Vous avez déjà des données ?</h3>' +
-      (fromGenerator ? "<p>Vos coordonnées enregistrées dans le générateur de facture ont été reprises dans le formulaire ci-dessus.</p>" : "") +
-      '<p>Restaurez une sauvegarde de l\'Espace (fichier .json) :</p>' + importControl() + "</div>";
+      '<div class="card espace-card espace-noprint"><h3>' + L("welcome.dataTitle") + "</h3>" +
+      (fromGenerator ? "<p>" + L("welcome.fromGenerator") + "</p>" : "") +
+      "<p>" + L("welcome.restore") + "</p>" + importControl() + "</div>";
     bindProfileForm(true);
     bindImport();
   }
@@ -202,44 +202,40 @@
     }
     return p.doc;
   }
-  var PATCH_LABELS = { status: "statut", address: "adresse", siret: "SIRET", vat: "n° de TVA", email: "email", phone: "téléphone",
-                       iban: "IBAN", bic: "BIC", logo: "logo" };
+  var PATCH_LABELS = {};
+  ["status", "address", "siret", "vat", "email", "phone", "iban", "bic", "logo"].forEach(function (k) { PATCH_LABELS[k] = L("patch." + k); });
 
   function viewImport() {
     var g = pendingImport();
     if (!g) {
-      view.innerHTML = '<div class="espace-head"><h2>Reprendre un document du générateur</h2></div>' +
-        '<div class="card espace-card"><p>Aucun document à reprendre. Préparez votre facture ou votre devis dans le ' +
-        '<a href="../generateur-facture/">générateur de facture</a>, puis cliquez sur « Continuer dans mon Espace ».</p>' +
-        '<p class="small"><a href="#/">Retour au tableau de bord</a></p></div>';
+      view.innerHTML = '<div class="espace-head"><h2>' + L("import.noneTitle") + "</h2></div>" +
+        '<div class="card espace-card"><p>' + L("import.noneHtml") + "</p>" +
+        '<p class="small"><a href="#/">' + L("common.backToDashboard") + "</a></p></div>";
       return;
     }
     var res = E.fromGenerator(g, profile(), data.clients, data.documents, { doc: S.uid(), client: S.uid() }, TODAY, now());
     var d = res.doc, cont = res.continuation;
-    var label = d.type === "devis" ? "ce devis" : "cette facture";
+    var label = d.type === "devis" ? L("import.thisQuote") : L("import.thisInvoice");
     var patch = Object.keys(res.profilePatch);
     var p = profile();
     var preview = Object.assign({}, d, { me: meFromProfile(Object.assign({}, p, res.profilePatch)), client: clientForDoc(res.client || {}) });
-    view.innerHTML = '<div class="espace-head"><h2>Reprendre le document du générateur</h2></div>' +
+    view.innerHTML = '<div class="espace-head"><h2>' + L("import.title") + "</h2></div>" +
       '<div class="tool-layout wide-left espace-editor"><div class="espace-side espace-noprint"><section class="card espace-card">' +
       '<ul class="result-list">' +
-      "<li><span>Document</span><b>" + TYPES[d.type] + " (brouillon)</b></li>" +
-      "<li><span>Client</span><b>" + (res.client ? esc(res.client.name) + ' <span class="small muted">(' + (res.newClient ? "nouvelle fiche" : "fiche existante") + ")</span>" : "à choisir") + "</b></li>" +
-      "<li><span>Lignes</span><b>" + d.lines.filter(function (l) { return String(l.desc).trim(); }).length + "</b></li>" +
-      "<li><span>Total</span><b>" + esc(money(E.total(d))) + "</b></li></ul>" +
-      '<p class="notice">Le document devient un brouillon de l\'Espace : relisez-le, puis émettez-le ; il reçoit alors son numéro. ' +
-      "<strong>S'il a déjà été envoyé à votre client depuis le générateur, ne l'émettez pas une seconde fois</strong> : une même vente ne se facture qu'une fois.</p>" +
-      (cont ? '<label class="check"><input type="checkbox" id="imp-continue" checked><span>Continuer la numérotation du générateur : ' + label +
-        " recevra le n° <b class=\"nowrap\">" + esc(cont.number) + "</b> à son émission, " + (d.type === "devis" ? "le suivant" : "la suivante") +
-        ' le n° <span class="nowrap">' + esc(cont.prefix + cont.year + "-" + String(cont.last + 2).padStart(3, "0")) + "</span>" +
-        ".</span></label>" : "") +
-      (patch.length ? '<p class="small muted">Votre profil sera complété avec les informations du générateur : ' + esc(patch.map(function (k) { return PATCH_LABELS[k] || k; }).join(", ")) + ".</p>" : "") +
-      (res.paid ? '<p class="small muted">Acompte déjà versé indiqué dans le générateur (' + esc(money(res.paid)) + ") : enregistrez-le comme encaissement une fois la facture émise.</p>" : "") +
-      (res.vatDiffers ? '<p class="small muted">La TVA suit votre profil (' + (d.vat.franchise ? "franchise en base" : "TVA à " + OF.fmt(d.vat.rate) + " %") +
-        '), et non le réglage du générateur. Vous pouvez modifier votre régime dans les <a href="#/reglages">réglages</a>.</p>' : "") +
-      '<div class="espace-actions"><button type="button" class="btn btn-primary" id="imp-ok">Créer le brouillon</button>' +
-      '<button type="button" class="btn btn-ghost" id="imp-cancel">Ne pas reprendre</button></div></section></div>' +
-      '<div class="results"><div class="paper-wrap"><article class="paper" aria-label="Aperçu du document">' + INV.render(preview, R, FMT) + "</article></div></div></div>";
+      "<li><span>" + L("import.document") + "</span><b>" + L("doc.draftTitle", { type: TYPES[d.type] }) + "</b></li>" +
+      "<li><span>" + L("import.client") + "</span><b>" + (res.client ? esc(res.client.name) + ' <span class="small muted">(' + (res.newClient ? L("import.newRecord") : L("import.existingRecord")) + ")</span>" : L("import.toChoose")) + "</b></li>" +
+      "<li><span>" + L("import.lines") + "</span><b>" + d.lines.filter(function (l) { return String(l.desc).trim(); }).length + "</b></li>" +
+      "<li><span>" + L("import.total") + "</span><b>" + esc(money(E.total(d))) + "</b></li></ul>" +
+      '<p class="notice">' + L("import.noticeHtml") + "</p>" +
+      (cont ? '<label class="check"><input type="checkbox" id="imp-continue" checked><span>' + L("import.continueHtml", { label: label,
+        number: esc(cont.number), next: d.type === "devis" ? L("import.nextQuote") : L("import.nextInvoice"),
+        after: esc(cont.prefix + cont.year + "-" + String(cont.last + 2).padStart(3, "0")) }) + "</span></label>" : "") +
+      (patch.length ? '<p class="small muted">' + L("import.patch", { fields: esc(patch.map(function (k) { return PATCH_LABELS[k] || k; }).join(", ")) }) + "</p>" : "") +
+      (res.paid ? '<p class="small muted">' + L("import.paid", { amount: esc(money(res.paid)) }) + "</p>" : "") +
+      (res.vatDiffers ? '<p class="small muted">' + L("import.vatHtml", { vat: d.vat.franchise ? L("import.vatFranchise") : L("import.vatRate", { rate: OF.fmt(d.vat.rate) }) }) + "</p>" : "") +
+      '<div class="espace-actions"><button type="button" class="btn btn-primary" id="imp-ok">' + L("import.create") + "</button>" +
+      '<button type="button" class="btn btn-ghost" id="imp-cancel">' + L("import.cancel") + "</button></div></section></div>" +
+      '<div class="results"><div class="paper-wrap"><article class="paper" aria-label="' + L("doc.preview") + '">' + INV.render(preview, R, FMT) + "</article></div></div></div>";
 
     $("imp-ok").addEventListener("click", function () {
       this.disabled = true;
@@ -254,11 +250,11 @@
       if (res.newClient) data.clients.push(res.client);
       data.documents.push(d);
       OF.save(IMPORT_KEY, null);
-      persist("Brouillon créé à partir du générateur.").then(function () { location.hash = "#/documents/" + d.id; });
+      persist(L("import.created")).then(function () { location.hash = "#/documents/" + d.id; });
     });
     $("imp-cancel").addEventListener("click", function () {
       OF.save(IMPORT_KEY, null);
-      announce("Le document du générateur n'a pas été repris.");
+      announce(L("import.cancelled"));
       location.hash = "#/";
     });
   }
@@ -281,10 +277,9 @@
 
   // ----- Numérotation : préfixes et reprise d'une séquence commencée ailleurs ------------------------
 
-  var NUM_TYPES = [
-    { type: "facture", plural: "factures", last: "Dernier n° de facture" },
-    { type: "devis", plural: "devis", last: "Dernier n° de devis" },
-    { type: "avoir", plural: "avoirs", last: "Dernier n° d'avoir" }];
+  var NUM_TYPES = ["facture", "devis", "avoir"].map(function (type) {
+    return { type: type, plural: L("num.plural." + type), last: L("num.last." + type) };
+  });
   // Caractères admis dans un numéro de facture électronique : lettres, chiffres, + - _ / (règle BR-FR-02) ; pas de chiffres
   // dans le préfixe, pour lire sans ambiguïté l'année et le rang.
   var PREFIX_RE = /^[A-Za-z_\-\/]{0,12}$/;
@@ -302,17 +297,16 @@
   }
 
   function numberingFields(p) {
-    return '<div class="full fields"><h4 class="full">Numérotation</h4>' +
-      '<p class="full small muted">Vous avez déjà émis des documents en ' + YEAR + " avec un autre outil ? Indiquez le dernier numéro utilisé : " +
-      "l'Espace continuera la même séquence, qui doit rester continue.</p>" +
+    return '<div class="full fields"><h4 class="full">' + L("num.title") + "</h4>" +
+      '<p class="full small muted">' + L("num.intro", { year: YEAR }) + "</p>" +
       NUM_TYPES.map(function (t) {
         var started = startedPrefix(t.type);
-        return field("prefix_" + t.type, "Préfixe des " + t.plural, prefixOf(p, t.type), { half: true, placeholder: "Aucun",
+        return field("prefix_" + t.type, L("num.prefix", { plural: t.plural }), prefixOf(p, t.type), { half: true, placeholder: L("num.none"),
             hint: started != null && started !== prefixOf(p, t.type)
-              ? "La série " + YEAR + " garde le préfixe « " + esc(started || "aucun") + " » ; celui-ci s'appliquera aux séries suivantes." : "" }) +
-          field("last_" + t.type, t.last + " utilisé en " + YEAR, lastUsed(p, t.type), { half: true, inputmode: "numeric", disabled: started != null,
-            placeholder: "Aucun (ex. : 7)", hint: (started != null ? "Série " + YEAR + " commencée dans l'Espace. " : "") +
-              'Prochain numéro : <b id="next-' + t.type + '">' + esc(E.nextNumber(data.documents, t.type, YEAR, p.prefixes, p.numbering)) + "</b>" });
+              ? L("num.keptPrefix", { year: YEAR, prefix: esc(started || L("num.noneLower")) }) : "" }) +
+          field("last_" + t.type, L("num.lastUsed", { last: t.last, year: YEAR }), lastUsed(p, t.type), { half: true, inputmode: "numeric", disabled: started != null,
+            placeholder: L("num.lastPlaceholder"), hint: (started != null ? L("num.started", { year: YEAR }) + " " : "") +
+              L("num.next") + ' <b id="next-' + t.type + '">' + esc(E.nextNumber(data.documents, t.type, YEAR, p.prefixes, p.numbering)) + "</b>" });
       }).join("") + "</div>";
   }
   /** Aperçu du prochain numéro pendant la saisie des réglages. */
@@ -335,16 +329,16 @@
     var prefixes = {}, numbering = Object.assign({}, p.numbering || {}), error = "";
     NUM_TYPES.forEach(function (t) {
       var k = t.type, pre = form.elements["prefix_" + k].value.trim();
-      if (!PREFIX_RE.test(pre)) error = error || "Préfixe des " + t.plural + " : lettres, tirets (- ou _) ou barres obliques seulement, 12 caractères au plus.";
+      if (!PREFIX_RE.test(pre)) error = error || L("num.errPrefix", { plural: t.plural });
       prefixes[k] = pre;
       if (startedPrefix(k) != null) return; // suite fixée par les documents émis
       var last = parseLast(form.elements["last_" + k].value);
-      if (last === false) error = error || t.last + " : indiquez le rang du dernier numéro utilisé (par exemple 7 pour " + pre + YEAR + "-007).";
+      if (last === false) error = error || L("num.errLast", { last: t.last, example: pre + YEAR + "-007" });
       else if (last === null) { if (numbering[k] && String(numbering[k].year) === YEAR) delete numbering[k]; }
       else numbering[k] = { year: YEAR, last: last };
     });
     if (!error && (prefixes.facture === prefixes.devis || prefixes.facture === prefixes.avoir || prefixes.devis === prefixes.avoir)) {
-      error = "Les préfixes des factures, des devis et des avoirs doivent être différents.";
+      error = L("num.errSame");
     }
     return error ? { error: error } : { prefixes: prefixes, numbering: numbering };
   }
@@ -352,36 +346,34 @@
   function profileForm(p, first) {
     var micro = !!R.micro_activities[p.activity];
     return '<form class="card espace-card" id="profile-form" novalidate>' +
-      "<h3>Votre entreprise</h3><div class=\"fields\">" +
-      field("name", "Nom ou raison sociale", p.name, { placeholder: "Camille Martin EI", required: true, hint: "Entrepreneur individuel : faites suivre votre nom de « EI »." }) +
-      field("activity", "Activité", p.activity, { options: ACTIVITIES }) +
-      field("vatRegime", "TVA", p.vatRegime, { options: VAT_REGIMES, half: true }) +
-      field("vatRate", "Taux de TVA habituel", p.vatRate || 20, { options: [[20, "20 %"], [10, "10 %"], [5.5, "5,5 %"], [2.1, "2,1 %"]], half: true }) +
-      field("startDate", "Début d'activité", p.startDate, { type: "date", half: true, hint: "Début de l'activité professionnelle, même sous un autre régime." }) +
+      "<h3>" + L("profile.title") + "</h3><div class=\"fields\">" +
+      field("name", L("profile.name"), p.name, { placeholder: L("profile.namePlaceholder"), required: true, hint: L("profile.nameHint") }) +
+      field("activity", L("profile.activity"), p.activity, { options: ACTIVITIES }) +
+      field("vatRegime", L("profile.vatRegime"), p.vatRegime, { options: VAT_REGIMES, half: true }) +
+      field("vatRate", L("profile.vatRate"), p.vatRate || 20, { options: [[20, "20 %"], [10, "10 %"], [5.5, "5,5 %"], [2.1, "2,1 %"]], half: true }) +
+      field("startDate", L("profile.startDate"), p.startDate, { type: "date", half: true, hint: L("profile.startDateHint") }) +
       '<div class="micro-only full fields"' + (micro ? "" : " hidden") + ">" +
-      field("activity2", "Seconde activité (activité mixte)", p.activity2 || "", { options: activity2Options(p.activity),
-        hint: "Vente de marchandises et prestations de services : plafonds, cotisations et livre des recettes suivis par activité." }) +
-      field("periodicity", "Déclaration Urssaf", p.periodicity, { options: [["quarterly", "Trimestrielle"], ["monthly", "Mensuelle"]], half: true }) +
-      field("acre", "ACRE", p.acre || 0, { options: [[0, "Non"], [50, "Oui, réduction de 50 %"], [25, "Oui, réduction de 25 %"]], half: true }) +
-      field("vl", "Versement libératoire de l'impôt", p.vl ? "1" : "0", { options: [["0", "Non"], ["1", "Oui"]], half: true }) +
+      field("activity2", L("profile.activity2"), p.activity2 || "", { options: activity2Options(p.activity), hint: L("profile.activity2Hint") }) +
+      field("periodicity", L("profile.periodicity"), p.periodicity, { options: [["quarterly", L("profile.quarterly")], ["monthly", L("profile.monthly")]], half: true }) +
+      field("acre", L("profile.acre"), p.acre || 0, { options: [[0, L("common.no")], [50, L("profile.acre50")], [25, L("profile.acre25")]], half: true }) +
+      field("vl", L("profile.vl"), p.vl ? "1" : "0", { options: [["0", L("common.no")], ["1", L("common.yes")]], half: true }) +
       "</div>" +
       (first ? "" :
-        field("status", "Statut affiché sur les factures", p.status, { placeholder: "Entrepreneur individuel (micro-entreprise)" }) +
-        field("address", "Adresse", p.address, { textarea: true, placeholder: "12 rue de la République\n69002 Lyon" }) +
-        field("siret", "SIRET", p.siret, { half: true, placeholder: "123 456 789 00012" }) +
-        field("vat", "N° de TVA intracommunautaire", p.vat, { half: true }) +
-        field("endpoint", "Adresse de facturation électronique (facultatif)", p.endpoint, { placeholder: "Votre SIREN par défaut",
-          hint: "Pour la facture électronique : par défaut votre SIREN. Indiquez celle de l'annuaire si votre plateforme vous en a attribué une autre (SIREN suivi d'un suffixe)." }) +
-        field("email", "Email", p.email, { type: "email", half: true }) +
-        field("phone", "Téléphone", p.phone, { type: "tel", half: true }) +
-        field("iban", "IBAN", p.iban, { half: true }) +
-        field("bic", "BIC", p.bic, { half: true }) +
-        field("terms", "Délai de paiement par défaut", p.terms == null ? 30 : p.terms, { options: TERMS, half: true }) +
-        field("penalty", "Taux des pénalités de retard", p.penalty || "trois fois le taux d'intérêt légal", { half: true }) +
+        field("status", L("profile.status"), p.status, { placeholder: L("profile.statusPlaceholder") }) +
+        field("address", L("profile.address"), p.address, { textarea: true, placeholder: L("profile.addressPlaceholder") }) +
+        field("siret", L("profile.siret"), p.siret, { half: true, placeholder: L("profile.siretPlaceholder") }) +
+        field("vat", L("profile.vat"), p.vat, { half: true }) +
+        field("endpoint", L("profile.endpoint"), p.endpoint, { placeholder: L("profile.endpointPlaceholder"), hint: L("profile.endpointHint") }) +
+        field("email", L("profile.email"), p.email, { type: "email", half: true }) +
+        field("phone", L("profile.phone"), p.phone, { type: "tel", half: true }) +
+        field("iban", L("profile.iban"), p.iban, { half: true }) +
+        field("bic", L("profile.bic"), p.bic, { half: true }) +
+        field("terms", L("profile.terms"), p.terms == null ? 30 : p.terms, { options: TERMS, half: true }) +
+        field("penalty", L("profile.penalty"), p.penalty || L("profile.penaltyDefault"), { half: true }) +
         numberingFields(p)) +
       "</div>" +
       '<p class="form-error" id="profile-error" role="alert" hidden></p>' +
-      '<div class="espace-actions"><button type="submit" class="btn btn-primary">' + (first ? "Créer mon espace" : "Enregistrer") + "</button></div></form>";
+      '<div class="espace-actions"><button type="submit" class="btn btn-primary">' + (first ? L("profile.create") : L("common.save")) + "</button></div></form>";
   }
 
   function bindProfileForm(first) {
@@ -400,7 +392,7 @@
       e.preventDefault();
       var f = form.elements, p = Object.assign({}, data.profile || {}, first ? generatorExtras() : {});
       p.name = f.name.value.trim();
-      if (!p.name) { showError("profile-error", "Indiquez le nom de votre entreprise."); f.name.focus(); return; }
+      if (!p.name) { showError("profile-error", L("profile.errName")); f.name.focus(); return; }
       ["activity", "vatRegime", "periodicity", "startDate"].forEach(function (k) { p[k] = f[k].value; });
       p.vatRate = Number(f.vatRate.value);
       p.acre = Number(f.acre.value);
@@ -408,7 +400,7 @@
       p.activity2 = E.mixedActivities({ activity: p.activity, activity2: f.activity2.value }, R) ? f.activity2.value : "";
       if (!first) {
         ["status", "address", "siret", "vat", "email", "phone", "iban", "bic", "penalty", "endpoint"].forEach(function (k) { p[k] = f[k].value.trim(); });
-        var endpointError = checkEndpoint(p.endpoint, p.siret, "votre SIREN");
+        var endpointError = checkEndpoint(p.endpoint, p.siret, L("profile.yourSiren"));
         if (endpointError) { showError("profile-error", endpointError); f.endpoint.focus(); return; }
         p.terms = Number(f.terms.value);
         var numbering = readNumbering(form, p);
@@ -418,7 +410,7 @@
       }
       showError("profile-error", "");
       data.profile = p;
-      persist(first ? "Votre espace est prêt." : "Profil enregistré.").then(function () {
+      persist(first ? L("profile.ready") : L("profile.saved")).then(function () {
         if (first) { S.persist(); location.hash = pendingImport() ? "#/importer" : "#/"; render(); }
         else render(true);
       });
@@ -435,12 +427,12 @@
   }
   function showError(id, msg) { var el = $(id); el.textContent = msg; el.hidden = !msg; }
 
-  var regionNames = typeof Intl !== "undefined" && Intl.DisplayNames ? new Intl.DisplayNames(["fr"], { type: "region" }) : null;
+  var regionNames = typeof Intl !== "undefined" && Intl.DisplayNames ? new Intl.DisplayNames([OF.locale], { type: "region" }) : null;
   /** Pays proposés selon le lieu du client, triés par nom ; le premier choix invite à choisir. */
   function countryOptions(place) {
-    return [["", "Choisir le pays…"]].concat(E.countries(place === "eu" ? "eu" : "world").map(function (code) {
+    return [["", L("country.choose")]].concat(E.countries(place === "eu" ? "eu" : "world").map(function (code) {
       return [code, regionNames ? regionNames.of(code) : code];
-    }).sort(function (a, b) { return a[1].localeCompare(b[1], "fr"); }));
+    }).sort(function (a, b) { return a[1].localeCompare(b[1], OF.locale); }));
   }
   /**
    * Adresse de facturation électronique (annuaire) : vide (le SIREN est utilisé), ou le SIREN suivi éventuellement d'un
@@ -449,8 +441,8 @@
   function checkEndpoint(value, sirenOrSiret, whose) {
     if (!value) return "";
     var siren = String(sirenOrSiret || "").replace(/\s+/g, "").slice(0, 9);
-    if (!/^[A-Za-z0-9_.-]{9,100}$/.test(value)) return "Adresse de facturation électronique : lettres, chiffres, - _ . seulement, sans espace.";
-    if (/^\d{9}$/.test(siren) && value.indexOf(siren) !== 0) return "L'adresse de facturation électronique doit commencer par " + whose + " (" + siren + ").";
+    if (!/^[A-Za-z0-9_.-]{9,100}$/.test(value)) return L("endpoint.errChars");
+    if (/^\d{9}$/.test(siren) && value.indexOf(siren) !== 0) return L("endpoint.errSiren", { whose: whose, siren: siren });
     return "";
   }
 
@@ -467,50 +459,50 @@
     var decl = E.nextDeclaration(data.documents, p, R, CAL, TODAY);
     var th = E.thresholds(data.documents, p, R, YEAR);
 
-    var html = '<div class="espace-head"><h2>' + esc(p.name || "Tableau de bord") + "</h2>" +
-      '<div class="espace-quick espace-noprint"><a class="btn btn-primary btn-sm" href="#/documents/nouveau?type=facture">+ Facture</a>' +
-      '<a class="btn btn-ghost btn-sm" href="#/documents/nouveau?type=devis">+ Devis</a>' +
-      '<a class="btn btn-ghost btn-sm" href="#/clients/nouveau">+ Client</a></div></div>';
+    var html = '<div class="espace-head"><h2>' + esc(p.name || L("dash.title")) + "</h2>" +
+      '<div class="espace-quick espace-noprint"><a class="btn btn-primary btn-sm" href="#/documents/nouveau?type=facture">' + L("quick.invoice") + "</a>" +
+      '<a class="btn btn-ghost btn-sm" href="#/documents/nouveau?type=devis">' + L("quick.quote") + "</a>" +
+      '<a class="btn btn-ghost btn-sm" href="#/clients/nouveau">' + L("quick.client") + "</a></div></div>";
     html += profileReminder() + purchasesReminder() + chronoReminder() + timeReminder() + prospectsReminder() + treasuryReminder() + backupReminder();
     // Indicateurs et graphiques (documentation/55-indicateurs-espace.md, § 2) : comparaison avec l'an dernier à la même date.
     var td = ST.toDate(data.documents, TODAY), prevYear = String(+YEAR - 1);
     var versus = function (x, what) {
-      return x.change === null ? (x.prev ? "" : what + " : rien d'encaissé") : (x.change >= 0 ? "+" : "−") + OF.fmt(Math.abs(x.change)) + " % par rapport à " + what;
+      return x.change === null ? (x.prev ? "" : L("dash.nothingThen", { what: what })) : L("dash.change", { sign: x.change >= 0 ? "+" : "−", pct: OF.fmt(Math.abs(x.change)), what: what });
     };
     html += '<div class="kpis kpis-4">' +
-      kpi("Encaissé en " + YEAR, money(year), [countText(E.ledger(data.documents, YEAR + "-01-01", YEAR + "-12-31").filter(function (x) { return x.amount > 0; }).length,
-        "encaissement", "encaissements"), versus(td.year, prevYear + " à la même date")].filter(Boolean).join(" · ")) +
-      kpi("Encaissé ce mois-ci", money(td.month.now), versus(td.month, "l'an dernier à la même date") || "l'an dernier à la même date : " + money(td.month.prev)) +
-      kpi("À encaisser", money(openSum), open.length ? countText(open.length, "facture", "factures") + (late.length ? ", dont " + late.length + " en retard" : "") : "Aucune facture en attente", late.length ? "is-warn" : "") +
-      (decl ? kpi("Déclaration Urssaf : " + decl.period.label, money(decl.revenue),
-        "À déclarer avant le " + longDay(decl.due) + " · cotisations estimées " + money(decl.total) + (decl.open ? " (période en cours)" : ""), "is-brand")
-        : kpi("Devis en attente", String(quotes.length), quotes.length ? money(quotes.reduce(function (s, d) { return s + E.total(d); }, 0)) + " au total" : "Aucun devis envoyé en attente")) +
+      kpi(L("dash.cashedYear", { year: YEAR }), money(year), [countText(E.ledger(data.documents, YEAR + "-01-01", YEAR + "-12-31").filter(function (x) { return x.amount > 0; }).length,
+        L("count.receipt.one"), L("count.receipt.many")), versus(td.year, L("dash.sameDateYear", { year: prevYear }))].filter(Boolean).join(" · ")) +
+      kpi(L("dash.cashedMonth"), money(td.month.now), versus(td.month, L("dash.lastYearSameDate")) || L("dash.lastYearSameDateAmount", { amount: money(td.month.prev) })) +
+      kpi(L("dash.toCollect"), money(openSum), open.length ? countText(open.length, L("count.invoice.one"), L("count.invoice.many")) + (late.length ? L("dash.ofWhichLate", { n: late.length }) : "") : L("dash.noOpenInvoice"), late.length ? "is-warn" : "") +
+      (decl ? kpi(L("dash.declaration", { period: decl.period.label }), money(decl.revenue),
+        L("dash.declarationSub", { due: longDay(decl.due), total: money(decl.total) }) + (decl.open ? L("dash.periodOpen") : ""), "is-brand")
+        : kpi(L("dash.pendingQuotes"), String(quotes.length), quotes.length ? L("dash.quotesTotal", { amount: money(quotes.reduce(function (s, d) { return s + E.total(d); }, 0)) }) : L("dash.noPendingQuote"))) +
       "</div>";
 
     if (isMicro()) html += gauges(th);
     var series = ST.monthly(data.documents, TODAY, 12), top = ST.topClients(data.documents, ST.since12(TODAY), TODAY, 5);
-    html += '<div class="espace-cols tr-charts"><section class="card espace-card"><div class="card-head"><h3>Encaissements par mois</h3>' +
-      '<span class="small muted">12 derniers mois, comparés au même mois un an plus tôt.</span></div><div class="chart" data-chart="monthly"></div>' +
-      OF.charts.legend([{ cls: "is-cur", label: "12 derniers mois" }, { cls: "is-prev", label: "Un an plus tôt" }]) +
-      OF.charts.table("Encaissements par mois", ["Mois", "Encaissé", "Un an plus tôt"], series.map(function (m) {
-        return [m.label + (m.current ? " (en cours)" : ""), money(m.amount), money(m.prev)];
+    html += '<div class="espace-cols tr-charts"><section class="card espace-card"><div class="card-head"><h3>' + L("dash.monthlyTitle") + "</h3>" +
+      '<span class="small muted">' + L("dash.monthlyIntro") + '</span></div><div class="chart" data-chart="monthly"></div>' +
+      OF.charts.legend([{ cls: "is-cur", label: L("chart.last12") }, { cls: "is-prev", label: L("chart.yearEarlier") }]) +
+      OF.charts.table(L("dash.monthlyTitle"), [L("chart.month"), L("chart.cashed"), L("chart.yearEarlier")], series.map(function (m) {
+        return [m.label + (m.current ? L("chart.current") : ""), money(m.amount), money(m.prev)];
       })) + "</section>" + topClientsCard(top) + "</div>";
-    html += '<div class="espace-cols">' + treasuryCard() + '<section class="card espace-card"><h3>Prochaines échéances</h3>' + deadlinesList(4) +
-      '<p class="small"><a href="#/echeances">Toutes les échéances →</a></p></section></div>' +
-      '<section class="card espace-card"><h3>Derniers documents</h3>' + docTable(recentDocs(5), true) +
-      '<p class="small"><a href="#/documents">Tous les documents →</a></p></section>';
+    html += '<div class="espace-cols">' + treasuryCard() + '<section class="card espace-card"><h3>' + L("dash.nextDeadlines") + "</h3>" + deadlinesList(4) +
+      '<p class="small"><a href="#/echeances">' + L("dash.allDeadlines") + "</a></p></section></div>" +
+      '<section class="card espace-card"><h3>' + L("dash.recentDocs") + "</h3>" + docTable(recentDocs(5), true) +
+      '<p class="small"><a href="#/documents">' + L("dash.allDocs") + "</a></p></section>";
     if (decl) {
       var pct = function (r) { return OF.fmt(Math.round(r * 1000) / 10) + " %"; };
       html += '<p class="small muted espace-note">' + (decl.mixed
         // Activité mixte : chaque part au taux de son activité ; formation professionnelle au plus élevé des deux taux.
-        ? "Estimation : ventes " + esc(money(decl.parts[0].revenue)) + " × " + pct(decl.parts[0].rates.social + decl.parts[0].rates.cfp) +
-          " et prestations " + esc(money(decl.parts[1].revenue)) + " × " + pct(decl.parts[1].rates.social + decl.parts[1].rates.cfp) +
-          (decl.rates.acre ? " (ACRE)" : "") +
-          (decl.rates.vl ? " + versement libératoire " + pct(decl.parts[0].rates.vl) + " et " + pct(decl.parts[1].rates.vl) : "") +
-          " ; formation professionnelle au taux le plus élevé de vos deux activités"
-        : "Estimation : chiffre d'affaires encaissé de la période × " + pct(decl.rates.social + decl.rates.cfp) + (decl.rates.acre ? " (ACRE)" : "") +
-          (decl.rates.vl ? " + versement libératoire " + pct(decl.rates.vl) : "")) +
-        '. Déclarez et payez sur <a href="https://www.autoentrepreneur.urssaf.fr/" rel="noopener">autoentrepreneur.urssaf.fr</a>.</p>';
+        ? L("decl.mixedEstimate", { sales: esc(money(decl.parts[0].revenue)), salesRate: pct(decl.parts[0].rates.social + decl.parts[0].rates.cfp),
+            services: esc(money(decl.parts[1].revenue)), servicesRate: pct(decl.parts[1].rates.social + decl.parts[1].rates.cfp) }) +
+          (decl.rates.acre ? L("decl.acre") : "") +
+          (decl.rates.vl ? L("decl.vlMixed", { a: pct(decl.parts[0].rates.vl), b: pct(decl.parts[1].rates.vl) }) : "") +
+          L("decl.mixedCfp")
+        : L("decl.estimate", { rate: pct(decl.rates.social + decl.rates.cfp) }) + (decl.rates.acre ? L("decl.acre") : "") +
+          (decl.rates.vl ? L("decl.vl", { rate: pct(decl.rates.vl) }) : "")) +
+        L("decl.whereHtml") + "</p>";
     }
     view.innerHTML = html;
     drawCharts = function () {
@@ -518,9 +510,9 @@
       if (!el) return;
       el.innerHTML = OF.charts.bars({ width: Math.floor(el.getBoundingClientRect().width) || 600,
         groups: series.map(function (m) { return { key: m.key, label: m.label, values: [m.amount, m.prev], future: false }; }),
-        series: [{ name: "12 derniers mois", cls: "is-cur" }, { name: "Un an plus tôt", cls: "is-prev" }],
-        title: "Encaissements par mois", desc: "12 derniers mois : " + money(series.reduce(function (s, m) { return s + m.amount; }, 0)) +
-          " ; même période un an plus tôt : " + money(series.reduce(function (s, m) { return s + m.prev; }, 0)) + "." });
+        series: [{ name: L("chart.last12"), cls: "is-cur" }, { name: L("chart.yearEarlier"), cls: "is-prev" }],
+        title: L("dash.monthlyTitle"), desc: L("dash.monthlyDesc", { now: money(series.reduce(function (s, m) { return s + m.amount; }, 0)),
+          prev: money(series.reduce(function (s, m) { return s + m.prev; }, 0)) }) });
     };
     drawCharts();
   }
@@ -533,27 +525,27 @@
       return '<li><span class="bl-name">' + (href ? '<a href="' + href + '">' + esc(name) + "</a>" : esc(name)) + '</span><span class="bl-bar" aria-hidden="true"><span style="width:' +
         (max > 0 ? Math.max(1, amount / max * 100).toFixed(1) : 0) + '%"></span></span><b class="bl-amount">' + esc(money(amount)) + '</b><span class="bl-share">' + pct(share) + "</span></li>";
     };
-    return '<section class="card espace-card"><div class="card-head"><h3>Principaux clients</h3><span class="small muted">Encaissements des 12 derniers mois : ' +
-      esc(money(top.total)) + ".</span></div>" + (top.rows.length ? '<ul class="bar-list">' + top.rows.map(function (r) {
+    return '<section class="card espace-card"><div class="card-head"><h3>' + L("top.title") + '</h3><span class="small muted">' + L("top.total", { amount: esc(money(top.total)) }) +
+      "</span></div>" + (top.rows.length ? '<ul class="bar-list">' + top.rows.map(function (r) {
         return row(r.name, r.clientId !== "?" && client(r.clientId) ? "#/clients/" + encodeURIComponent(r.clientId) : "", r.amount, r.share);
-      }).join("") + (top.others.count ? row("Autres clients (" + top.others.count + ")", "", top.others.amount, top.others.share) : "") + "</ul>" +
-      (top.rows[0].share >= 0.5 ? '<p class="small muted">Votre premier client représente ' + pct(top.rows[0].share) + " de vos encaissements des 12 derniers mois.</p>" : "") :
-      '<p class="small muted">Aucun encaissement sur les 12 derniers mois.</p>') + (onClientsPage ? "" : '<p class="small"><a href="#/clients">Tous les clients →</a></p>') + "</section>";
+      }).join("") + (top.others.count ? row(L("top.others", { n: top.others.count }), "", top.others.amount, top.others.share) : "") + "</ul>" +
+      (top.rows[0].share >= 0.5 ? '<p class="small muted">' + L("top.dependence", { pct: pct(top.rows[0].share) }) + "</p>" : "") :
+      '<p class="small muted">' + L("top.none") + "</p>") + (onClientsPage ? "" : '<p class="small"><a href="#/clients">' + L("top.all") + "</a></p>") + "</section>";
   }
 
   /** Résumé de la trésorerie : disponible, point bas sur 6 mois, versement possible (documentation/39, § 7). */
   function treasuryCard() {
     if (!hasCash()) {
-      return '<section class="card espace-card"><h3>Trésorerie</h3><p class="small muted">Indiquez le solde de votre compte professionnel pour savoir ce qui est ' +
-        'vraiment disponible, jusqu\'où il descendra et combien vous pouvez vous verser.</p><p class="small"><a href="#/tresorerie">Ouvrir la trésorerie →</a></p></section>';
+      return '<section class="card espace-card"><h3>' + L("cash.title") + '</h3><p class="small muted">' + L("cash.empty") +
+        '</p><p class="small"><a href="#/tresorerie">' + L("cash.open") + "</a></p></section>";
     }
     var o = E.owed(treasuryInput()), f = E.forecast(treasuryInput()), c = E.balanceCurve(f), limit = threshold();
     var line = function (label, value, cls) { return "<li><span>" + esc(label) + '</span><b class="' + (cls || "") + '">' + esc(value) + "</b></li>"; };
-    return '<section class="card espace-card"><h3>Trésorerie</h3><ul class="tr-summary">' +
-      line("Disponible", money(f.start - o.total), f.start - o.total < 0 ? "is-bad" : "") +
-      line("Point bas prévu (6 mois)", money(c.low.balance) + (c.low.date === TODAY ? "" : " le " + day(c.low.date)), c.low.balance < limit ? "is-bad" : "") +
-      line("Versement possible", money(E.safeAmount(c, limit))) + "</ul>" +
-      '<p class="small"><a href="#/tresorerie">Voir la trésorerie →</a></p></section>';
+    return '<section class="card espace-card"><h3>' + L("cash.title") + '</h3><ul class="tr-summary">' +
+      line(L("cash.available"), money(f.start - o.total), f.start - o.total < 0 ? "is-bad" : "") +
+      line(L("cash.low6"), money(c.low.balance) + (c.low.date === TODAY ? "" : L("cash.onDate", { date: day(c.low.date) })), c.low.balance < limit ? "is-bad" : "") +
+      line(L("cash.safe"), money(E.safeAmount(c, limit))) + "</ul>" +
+      '<p class="small"><a href="#/tresorerie">' + L("cash.see") + "</a></p></section>";
   }
 
   function kpi(label, value, sub, cls) {
@@ -571,25 +563,23 @@
       (note ? '<p class="small muted" style="margin: 6px 0 0;">' + esc(note) + "</p>" : "") + "</div>";
   }
   function gauges(th) {
-    var html = '<div class="card gauges">' + gauge("Plafond de la micro-entreprise (" + YEAR + ")", th.revenue, th.ceiling,
-      th.revenue > th.ceiling ? "Plafond dépassé : au-delà de deux années de dépassement, vous sortez de la micro-entreprise." : "");
+    var html = '<div class="card gauges">' + gauge(L("gauge.ceiling", { year: YEAR }), th.revenue, th.ceiling,
+      th.revenue > th.ceiling ? L("gauge.ceilingOver") : "");
     if (th.services) {
-      html += gauge("Part des prestations de services (" + YEAR + ")", th.services.revenue, th.services.ceiling,
-        th.services.revenue > th.services.ceiling ? "Plafond des prestations dépassé : au-delà de deux années de dépassement, vous sortez de la micro-entreprise." : "");
+      html += gauge(L("gauge.services", { year: YEAR }), th.services.revenue, th.services.ceiling,
+        th.services.revenue > th.services.ceiling ? L("gauge.servicesOver") : "");
     }
     if (th.vat && th.vat.mixed) {
       // Activité mixte (BOFiP, BOI-TVA-DECLA-40-10-10, § 160) : deux seuils ; seuils majorés de l'année en cours non
       // précisés pour l'activité mixte (BOI-TVA-DECLA-40-10-10 et 40-10-20 lus le 10/11/2026) : non affirmés (documentation/53).
       var over = th.revenue > th.vat.base || th.services.revenue > th.vat.servicesBase;
-      html += gauge("Franchise de TVA : chiffre d'affaires global", th.revenue, th.vat.base, "") +
-        gauge("Franchise de TVA : prestations de services", th.services.revenue, th.vat.servicesBase,
-          over ? "Seuil dépassé : la TVA sera due au plus tard à partir du 1er janvier prochain, et dès le jour du dépassement si un seuil majoré est franchi." : "");
-      html += '<p class="small muted" style="margin: 6px 0 0;">Activité mixte : la franchise demande que ni le chiffre d\'affaires global ni la part des prestations ne dépasse son seuil. ' +
-        'Les seuils majorés de l\'année en cours ne sont pas précisés pour l\'activité mixte par la doctrine fiscale (BOFiP) : votre service des impôts des entreprises peut vous répondre.</p>';
+      html += gauge(L("gauge.vatGlobal"), th.revenue, th.vat.base, "") +
+        gauge(L("gauge.vatServices"), th.services.revenue, th.vat.servicesBase, over ? L("gauge.vatMixedOver") : "");
+      html += '<p class="small muted" style="margin: 6px 0 0;">' + L("gauge.vatMixedNote") + "</p>";
     } else if (th.vat) {
-      html += gauge("Seuil de la franchise de TVA", th.revenue, th.vat.base,
-        th.revenue > th.vat.major ? "Seuil majoré dépassé : la TVA est due dès le jour du dépassement." :
-        th.revenue > th.vat.base ? "Seuil dépassé : la TVA sera due à partir du 1er janvier prochain (seuil majoré : " + money(th.vat.major) + ")." : "");
+      html += gauge(L("gauge.vat"), th.revenue, th.vat.base,
+        th.revenue > th.vat.major ? L("gauge.vatMajorOver") :
+        th.revenue > th.vat.base ? L("gauge.vatOver", { major: money(th.vat.major) }) : "");
     }
     return html + "</div>";
   }
@@ -597,19 +587,17 @@
   /** Mentions obligatoires de l'émetteur manquantes dans le profil. */
   function profileReminder() {
     var p = profile(), missing = [];
-    if (!String(p.address || "").trim()) missing.push("adresse");
-    if (!String(p.siret || "").trim()) missing.push("SIRET");
+    if (!String(p.address || "").trim()) missing.push(L("patch.address"));
+    if (!String(p.siret || "").trim()) missing.push(L("patch.siret"));
     if (!missing.length) return "";
-    return '<p class="notice warn espace-noprint">Complétez votre profil (' + missing.join(", ") +
-      ') : ces mentions sont obligatoires sur vos factures. <a href="#/reglages">Ouvrir les réglages</a></p>';
+    return '<p class="notice warn espace-noprint">' + L("remind.profileHtml", { missing: missing.join(", ") }) + "</p>";
   }
 
   /** Vente de marchandises : registre des achats obligatoire (règle registre_achats) ; rappel tant que rien n'est saisi. */
   function purchasesReminder() {
     if (!E.purchasesRequired(profile(), R.registre_achats, R)) return "";
     if (E.expenseRows(data.expenses, YEAR + "-01-01", YEAR + "-12-31").rows.length) return "";
-    return '<p class="notice espace-noprint">Vente de marchandises : tenez votre <b>registre des achats</b>, obligatoire avec le livre des recettes. ' +
-      '<a href="#/depenses">Saisir vos achats</a></p>';
+    return '<p class="notice espace-noprint">' + L("remind.purchasesHtml") + "</p>";
   }
 
   /** Chronomètre en marche, en pause ou arrêté avec une durée à saisir (documentation/37-temps-passe.md, § 8). */
@@ -617,9 +605,9 @@
     var x = chronoLoad();
     if (!x) return "";
     var label = E.durationLabel(E.timerDuration(x, Date.now(), todayNow()).minutes / 60, "hour");
-    return '<p class="notice espace-noprint">' + (x.stopped ? "Chronomètre arrêté : <b>" + esc(label) + "</b> à saisir. " :
-      "Chronomètre " + (x.start === null ? "en pause" : "en marche") + " : <b>" + esc(label) + "</b>. ") +
-      '<a href="#/temps">' + (x.stopped ? "Saisir ce temps" : "Voir le chronomètre") + "</a></p>";
+    return '<p class="notice espace-noprint">' + (x.stopped ? L("remind.chronoStoppedHtml", { label: esc(label) }) :
+      (x.start === null ? L("remind.chronoPausedHtml", { label: esc(label) }) : L("remind.chronoRunningHtml", { label: esc(label) }))) + " " +
+      '<a href="#/temps">' + (x.stopped ? L("remind.chronoEnter") : L("remind.chronoSee")) + "</a></p>";
   }
 
   /** Temps à facturer (documentation/37-temps-passe.md) : montant et nombre de clients. */
@@ -627,8 +615,8 @@
     var due = E.unbilledByClient(data.timeEntries, data.documents);
     if (!due.length) return "";
     var sum = due.reduce(function (s, c) { return s + c.amount; }, 0), missing = due.some(function (c) { return c.missingRate; });
-    return '<p class="notice espace-noprint">Temps à facturer : ' + (sum > 0 ? "<b>" + esc(money(sum)) + "</b>" + (missing ? " et du temps sans taux" : "") : "du temps sans taux") +
-      ", pour " + countText(due.length, "client", "clients") + '. <a href="#/temps">Facturer le temps passé</a></p>';
+    return '<p class="notice espace-noprint">' + L("remind.timeHtml", { what: sum > 0 ? "<b>" + esc(money(sum)) + "</b>" + (missing ? L("remind.timeAndNoRate") : "") : L("remind.timeNoRate"),
+      clients: countText(due.length, L("count.client.one"), L("count.client.many")) }) + ' <a href="#/temps">' + L("remind.timeBill") + "</a></p>";
   }
 
   function backupReminder() {
@@ -636,9 +624,9 @@
     var last = data.settings.lastExport;
     var old = !last || (Date.parse(TODAY) - Date.parse(last.slice(0, 10))) / 864e5 > 30;
     if (!issued || !old) return "";
-    return '<p class="notice warn espace-noprint">Vos données ne sont enregistrées que sur cet appareil. ' +
-      (last ? "Dernière sauvegarde : " + day(last.slice(0, 10)) + ". " : "Vous n'avez encore jamais fait de sauvegarde. ") +
-      '<a href="#/reglages">Exporter une sauvegarde</a></p>';
+    return '<p class="notice warn espace-noprint">' + L("remind.backup") + " " +
+      (last ? L("remind.backupLast", { date: day(last.slice(0, 10)) }) : L("remind.backupNever")) + " " +
+      '<a href="#/reglages">' + L("remind.backupExport") + "</a></p>";
   }
 
   // ----- Échéances ---------------------------------------------------------------------
@@ -653,61 +641,58 @@
       return Object.keys(w).every(function (k) { return values[k] === undefined || w[k].indexOf(values[k]) > -1; });
     });
   }
-  function inDays(n) { return n === 0 ? "aujourd'hui" : n === 1 ? "demain" : "dans " + n + " jours"; }
+  function inDays(n) { return n === 0 ? L("days.today") : n === 1 ? L("days.tomorrow") : L("days.in", { n: n }); }
   function deadlinesList(limit) {
     var list = matchingEvents().slice(0, limit || 999);
-    if (!list.length) return '<p class="muted">Aucune échéance à venir.</p>';
+    if (!list.length) return '<p class="muted">' + L("dl.none") + "</p>";
     return '<ul class="espace-deadlines">' + list.map(function (e) {
       var n = OF.daysBetween(TODAY, e.date);
       return '<li><span class="dl-date">' + esc(OF.date(e.date, { day: "numeric", month: "short" })) + '</span><span class="dl-body"><b>' +
         esc(e.title) + '</b><span class="small muted">' + inDays(n) +
-        (e.est ? " · date estimée" : "") + "</span></span></li>";
+        (e.est ? L("dl.estimatedDate") : "") + "</span></span></li>";
     }).join("") + "</ul>";
   }
   // Catégorie d'une échéance pour la frise et la liste : forme et couleur (documentation/55, § 5.5).
-  var DEADLINE_CLASSES = { Urssaf: ["is-dl-urssaf", "Urssaf"], TVA: ["is-dl-vat", "TVA"], CFE: ["is-dl-tax", "Impôts (CFE, impôt)"], "Impôt": ["is-dl-tax", "Impôts (CFE, impôt)"] };
-  var deadlineClass = function (e) { return (DEADLINE_CLASSES[e.tag] || ["is-dl-info", "Information, option"])[0]; };
+  var DEADLINE_CLASSES = { Urssaf: ["is-dl-urssaf", L("dl.tag.urssaf")], TVA: ["is-dl-vat", L("dl.tag.vat")], CFE: ["is-dl-tax", L("dl.tag.tax")], "Impôt": ["is-dl-tax", L("dl.tag.tax")] };
+  var deadlineClass = function (e) { return (DEADLINE_CLASSES[e.tag] || ["is-dl-info", L("dl.tag.info")])[0]; };
 
   function viewDeadlines() {
     var p = profile();
     // 90 jours tiennent toujours dans 5 mois commencés : la trésorerie fournit les montants estimés aux mêmes dates.
     var f = E.forecast(treasuryInput({ months: 5 })), dl = ST.deadlines(matchingEvents(), f.items, TODAY, 90);
-    var vatNote = p.vatRegime === "franchise" ? "franchise en base : pas de TVA à reverser" :
-      p.vatRegime === "simplified" && (p.vatLastYear === undefined || p.vatLastYear === null || p.vatLastYear === "") ? "indiquez la TVA de l'an dernier dans la trésorerie" : "";
+    var vatNote = p.vatRegime === "franchise" ? L("dl.vatFranchise") :
+      p.vatRegime === "simplified" && (p.vatLastYear === undefined || p.vatLastYear === null || p.vatLastYear === "") ? L("dl.vatLastYear") : "";
     var amountText = function (e) { return e.amount === null ? "" : money(e.amount); };
     var tags = {};
-    dl.soon.forEach(function (e) { var c = DEADLINE_CLASSES[e.tag] || ["is-dl-info", "Information, option"]; tags[c[0]] = c[1]; });
-    view.innerHTML = '<div class="espace-head"><h2>Échéances</h2></div>' +
+    dl.soon.forEach(function (e) { var c = DEADLINE_CLASSES[e.tag] || ["is-dl-info", L("dl.tag.info")]; tags[c[0]] = c[1]; });
+    view.innerHTML = '<div class="espace-head"><h2>' + L("dl.title") + "</h2></div>" +
       '<div class="kpis kpis-4">' +
-      kpi("Prochaine échéance", dl.next ? inDays(dl.next.days) : "–", dl.next ? dl.next.title + " · " + day(dl.next.date) + (dl.next.est ? " (date estimée)" : "") : "aucune échéance à venir") +
-      kpi("Dans les 90 jours", String(dl.soon.length), "jusqu'au " + day(dl.end)) +
-      kpi("Cotisations estimées", isMicro() ? money(dl.urssaf) : "–", isMicro() ? "à payer dans les 90 jours" : "estimées pour la micro-entreprise seulement") +
-      kpi("TVA estimée", vatNote ? "–" : money(dl.vat), vatNote || "à reverser dans les 90 jours") + "</div>" +
-      '<p class="small muted">Montants estimés comme dans la <a href="#/tresorerie">trésorerie</a> : sur vos encaissements, les factures en attente et le ' +
-      "chiffre d'affaires prévu. Ils ne remplacent pas vos déclarations.</p>" +
-      '<section class="card espace-card espace-noprint"><div class="card-head"><h3>Les 90 prochains jours</h3><span class="small muted">Hauteur : montant estimé ; ' +
-      "repères sous l'axe : échéances sans montant.</span></div>" +
+      kpi(L("dl.next"), dl.next ? inDays(dl.next.days) : "–", dl.next ? dl.next.title + " · " + day(dl.next.date) + (dl.next.est ? L("dl.estimated") : "") : L("dl.noneLower")) +
+      kpi(L("dl.within90"), String(dl.soon.length), L("dl.until", { date: day(dl.end) })) +
+      kpi(L("dl.contributions"), isMicro() ? money(dl.urssaf) : "–", isMicro() ? L("dl.contributionsSub") : L("dl.contributionsMicroOnly")) +
+      kpi(L("dl.vatEstimated"), vatNote ? "–" : money(dl.vat), vatNote || L("dl.vatSub")) + "</div>" +
+      '<p class="small muted">' + L("dl.estimatesHtml") + "</p>" +
+      '<section class="card espace-card espace-noprint"><div class="card-head"><h3>' + L("dl.next90") + '</h3><span class="small muted">' + L("dl.chartHelp") + "</span></div>" +
       (dl.soon.length ? '<div class="chart" data-chart="deadlines"></div>' +
         OF.charts.legend(Object.keys(tags).map(function (k) { return { cls: k, label: tags[k] }; })) +
-        OF.charts.table("Échéances des 90 prochains jours", ["Date", "Échéance", "Montant estimé"], dl.soon.map(function (e) { return [day(e.date), e.title, amountText(e) || "–"]; }))
-        : '<p class="muted">Aucune échéance dans les 90 prochains jours.</p>') + "</section>" +
-      '<section class="card espace-card"><h3>Toutes les échéances</h3><p class="muted">Échéances des 12 prochains mois selon votre profil (déclaration ' +
-      (p.periodicity === "monthly" ? "mensuelle" : "trimestrielle") + ", " + ({ franchise: "franchise en base de TVA", simplified: "réel simplifié de TVA", normal: "réel normal de TVA" }[p.vatRegime] ||
-        "régime de TVA non précisé") + ").</p>" +
+        OF.charts.table(L("dl.next90Title"), [L("dl.colDate"), L("dl.colDeadline"), L("dl.colAmount")], dl.soon.map(function (e) { return [day(e.date), e.title, amountText(e) || "–"]; }))
+        : '<p class="muted">' + L("dl.none90") + "</p>") + "</section>" +
+      '<section class="card espace-card"><h3>' + L("dl.all") + '</h3><p class="muted">' + L("dl.allIntro", { periodicity: p.periodicity === "monthly" ? L("dl.monthly") : L("dl.quarterly"),
+        vat: ({ franchise: L("dl.vat.franchise"), simplified: L("dl.vat.simplified"), normal: L("dl.vat.normal") }[p.vatRegime] || L("dl.vat.unknown")) }) + "</p>" +
       (dl.events.length ? '<ul class="espace-deadlines">' + dl.events.slice(0, 40).map(function (e) {
         return '<li><span class="dl-date">' + esc(OF.date(e.date, { day: "numeric", month: "short" })) + '</span><span class="dl-body"><b>' + esc(e.title) +
-          '</b><span class="small muted">' + inDays(e.days) + (e.est ? " · date estimée" : "") + "</span></span>" +
-          (e.amount !== null ? '<span class="dl-amount"><b>' + esc(money(e.amount)) + '</b><span class="small muted">estimé</span></span>' : "") + "</li>";
-      }).join("") + "</ul>" : '<p class="muted">Aucune échéance à venir.</p>') +
-      '<p class="small"><a href="../calendrier-fiscal-auto-entrepreneur/">Calendrier fiscal complet et export vers votre agenda →</a></p></section>';
+          '</b><span class="small muted">' + inDays(e.days) + (e.est ? L("dl.estimatedDate") : "") + "</span></span>" +
+          (e.amount !== null ? '<span class="dl-amount"><b>' + esc(money(e.amount)) + '</b><span class="small muted">' + L("dl.estimatedShort") + "</span></span>" : "") + "</li>";
+      }).join("") + "</ul>" : '<p class="muted">' + L("dl.none") + "</p>") +
+      '<p class="small">' + L("dl.calendarLinkHtml") + "</p></section>";
     drawCharts = function () {
       var el = view.querySelector('[data-chart="deadlines"]');
       if (!el) return;
       var plain = dl.soon.filter(function (e) { return e.amount === null; }).length, priced = dl.soon.length - plain;
       el.innerHTML = OF.charts.timeline({ width: Math.floor(el.getBoundingClientRect().width) || 600, from: TODAY, to: dl.end,
-        events: dl.soon.map(function (e) { return { date: e.date, amount: e.amount, cls: deadlineClass(e) }; }), title: "Échéances des 90 prochains jours",
-        desc: countText(dl.soon.length, "échéance", "échéances") + " jusqu'au " + day(dl.end) + (priced ? ", dont " + priced + " avec un montant estimé (" +
-          money(dl.urssaf + dl.vat) + " au total)" : "") + "." });
+        events: dl.soon.map(function (e) { return { date: e.date, amount: e.amount, cls: deadlineClass(e) }; }), title: L("dl.next90Title"),
+        desc: L("dl.chartDesc", { count: countText(dl.soon.length, L("count.deadline.one"), L("count.deadline.many")), date: day(dl.end),
+          priced: priced ? L("dl.chartPriced", { n: priced, amount: money(dl.urssaf + dl.vat) }) : "" }) });
     };
     drawCharts();
   }
@@ -718,11 +703,11 @@
     return data.documents.slice().sort(function (a, b) { return (b.updatedAt || "") < (a.updatedAt || "") ? -1 : 1; }).slice(0, n);
   }
   function docTable(list, compact) {
-    if (!list.length) return '<p class="muted">Aucun document pour l\'instant. <a href="#/documents/nouveau?type=facture">Créer une facture</a></p>';
+    if (!list.length) return '<p class="muted">' + L("docs.emptyHtml") + "</p>";
     return '<ul class="doc-list">' + list.map(function (d) {
       var c = parties(d).client || {};
       return '<li><a href="#/documents/' + esc(d.id) + '"><span class="dl-main"><b>' + esc(docLabel(d)) + "</b>" +
-        '<span class="small muted">' + esc(c.name || "Sans client") + " · " + day(d.date) + "</span></span>" +
+        '<span class="small muted">' + esc(c.name || L("docs.noClient")) + " · " + day(d.date) + "</span></span>" +
         '<span class="dl-side"><b>' + esc(money(d.type === "avoir" ? -E.total(d) : E.total(d))) + "</b>" + stateBadge(d) + "</span></a></li>";
     }).join("") + "</ul>";
   }

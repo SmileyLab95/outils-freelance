@@ -19,8 +19,8 @@ function dictionaries() {
   return sandbox.self.OF_ESPACE_TEXTS;
 }
 // Clés écrites en entier (L("type.facture")) et préfixes de clés construites (L("activity." + k)).
-const STATIC = new Set([...CODE.matchAll(/\bL\("([a-z0-9_.-]+)"[,)]/g)].map((m) => m[1]));
-const PREFIXES = [...CODE.matchAll(/\bL\("([a-z0-9_.-]+\.)"\s*\+/g)].map((m) => m[1]);
+const STATIC = new Set([...CODE.matchAll(/\bL\("([A-Za-z0-9_.-]+)"[,)]/g)].map((m) => m[1]));
+const PREFIXES = [...CODE.matchAll(/\bL\("([A-Za-z0-9_.-]+\.)"\s*\+/g)].map((m) => m[1]);
 const placeholders = (text) => [...text.matchAll(/\{(\w+)\}/g)].map((m) => m[1]).sort().join(",");
 
 test("textes de l'Espace : au moins le français, chargé sans erreur", () => {
