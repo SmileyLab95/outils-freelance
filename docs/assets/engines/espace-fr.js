@@ -5,9 +5,10 @@
  * Les montants des documents viennent du moteur de facture commun (OFE.invoiceFR).
  */
 (function (root, factory) {
-  // Textes du moteur (documentation/60, § 3.1, décision D88) : dictionnaire de la langue de la section, chargé avant le
-  // moteur dans la page (tools/espace-texts-<langue>.js) ; le français dans Node (tests, scripts).
-  var dicts = root.OF_ESPACE_TEXTS || require("../tools/espace-texts-fr.js").OF_ESPACE_TEXTS;
+  // Textes du moteur (documentation/60, § 3.1 et § 3.2, D88) : dictionnaire de la langue de la section, chargé avant le
+  // moteur dans la page (textes communs et textes de la France) ; dans Node (tests, scripts), les deux fichiers français.
+  var dicts = root.OF_ESPACE_TEXTS || { fr: Object.assign({}, require("../tools/espace-texts-fr.js").OF_ESPACE_TEXTS.fr,
+    require("../tools/espace-fr-texts-fr.js").OF_ESPACE_TEXTS.fr) };
   var locale = (root.OF && root.OF.locale) || "fr";
   var texts = Object.assign({}, dicts.fr, dicts[locale.slice(0, 2)], dicts[locale]);
   var core = root.OFE && root.OFE.espaceCore ? root.OFE.espaceCore : require("./espace-core.js");

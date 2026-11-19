@@ -31,6 +31,9 @@
   d'encaissements du tableau de bord passent dans le module. Le parcours vérifie en plus le SIRET repris du
   générateur, la note de TVA de la reprise et le rappel du profil incomplet (367 points). Le module français est
   complet ; restent les branchements de moteur, qui iront avec le module américain.
+- Lot 3b : le dictionnaire français est partagé en textes communs (`tools/espace-texts-fr.js`, 876 clés) et
+  textes de la France (`tools/espace-fr-texts-fr.js`, 478 clés) ; le test des clés vérifie les deux règles (clés
+  communes dans chaque langue, clés d'un pays dans ses langues seulement). Aucun changement visible.
 
 ## 2026-11-19 (après-midi, suite) — Moteur de l'Espace des États-Unis (lot 2e)
 

@@ -260,6 +260,20 @@ l'Espace et du moteur de facture de la section (`E`, `INV`, aujourd'hui françai
 l'émission (`meFromProfile`, `clientForDoc`), micro-entreprise (`isMicro`), montants des échéances (`ST.deadlines`,
 flux Urssaf et TVA de la trésorerie).
 
+Lot 3b fait le 19/11/2026 : le dictionnaire français est partagé en textes communs (`tools/espace-texts-fr.js`,
+876 clés : interface partagée et moteurs communs) et textes de la France (`tools/espace-fr-texts-fr.js`, 478 clés :
+module français et moteur français), fusionnés par langue au chargement ; leur union est identique à l'ancien
+dictionnaire. Le partage suit l'usage : une clé lue par le code commun est commune, même si le module la lit aussi
+(26 clés). Le test des clés vérifie deux règles : chaque clé lue par le code commun existe dans chaque langue ;
+chaque clé lue par un module existe dans les langues de son pays (texte commun ou du pays) ; et chaque clé d'un
+dictionnaire sert au code de son groupe, une clé de pays n'étant ni commune ni lue par le code commun. Contrôlé par
+quatre erreurs réintroduites (clé du pays renommée, clé commune renommée, clé de pays copiée dans les textes
+communs, code commun lisant une clé du pays), toutes détectées. Le moteur américain (`eng.us.*`) recevra ses textes
+avec le module américain (`tools/espace-us-texts-en.js`, lot 3d). Parcours de l'Espace 367/367 et des comptes 51/51,
+752 tests unitaires. Pour le lot 3c, quelques textes communs restent liés à la France et seront rendus neutres ou
+confiés au module : accueil (« déclarations Urssaf »), aides « en euros », « € » dans un message du cœur
+(`eng.issue.creditOver`), lien vers la page française des pénalités de retard, point mort « micro-entreprise ».
+
 ### Avancement
 
 - **Étape 1 terminée le 19/11/2026.** Les textes de `tools/espace.js` sont dans `tools/espace-texts-fr.js`
