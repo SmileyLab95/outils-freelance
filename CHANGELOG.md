@@ -1,5 +1,16 @@
 # Journal des modifications
 
+## 2026-11-19 (jour) — Espace multi-pays, étape 1 : textes séparés du code
+
+- Tous les textes de l'Espace entrepreneur (tableau de bord, documents, clients, recettes, dépenses,
+  immobilisations, temps passé, prospects, trésorerie, réglages) sont sortis du code dans un dictionnaire français
+  (`tools/espace-texts-fr.js`, 1 172 clés) : préalable à l'Espace des États-Unis, du Royaume-Uni et du Canada, qui
+  n'auront qu'à fournir leur dictionnaire et leur moteur (documentation/60, § 3).
+- Rien ne change pour l'utilisateur : le parcours de l'Espace (359 points, axe-core compris) passe à l'identique
+  après chaque lot ; nouveau test unitaire de cohérence (clé appelée présente, aucune clé inutilisée, mêmes
+  variables dans toutes les langues).
+- Seul écart visible : l'unité « 0 h » du temps passé prend partout une espace insécable.
+
 ## 2026-11-19 (nuit) — Espace des États-Unis : spécification
 
 - Spécification de l'Espace pour les États-Unis (documentation/60, D86) : règles lues aux sources officielles,

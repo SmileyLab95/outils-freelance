@@ -474,7 +474,9 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 - **Espace des États-Unis : spécification (19/11/2026, nuit)** : [60](60-espace-etats-unis.md), D86 ; annexe C 2026 lue
   en entier et comptabilité de caisse (Pub. 538) lues par l'outil de lecture des sources, deux règles ajoutées ;
   architecture d'un seul Espace pour tous les pays (textes par langue, moteur par pays, modules propres, page
-  `/us/workspace/`). Prochaine étape : étape 1, les textes de l'Espace sortis du code sans changer le comportement.
+  `/us/workspace/`). **Étape 1 faite le 19/11/2026** : les textes de l'Espace sortis du code dans un dictionnaire
+  français (`tools/espace-texts-fr.js`, 1 172 clés), sans changer le comportement (parcours de l'Espace 359/359 à
+  chaque lot, test de cohérence des clés) ; ce qui reste à traiter à l'étape 2 est listé dans [60](60-espace-etats-unis.md) § 3.
 - **Accueil en images (18/11/2026, nuit)** : demande d'Ismail (« il n'y a que du texte, pas d'image ») ; principes
   des images du site (D84, [58](58-images-du-site.md)) : captures du vrai produit, données d'exemple annoncées, pas de
   banque d'images ni d'image générée. Accueil France : section « Les outils, en vrai » en grille bento (Espace,
@@ -553,9 +555,9 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   partiel autre qu'un véhicule, dès que leurs règles sont lues ; indicateurs de l'Espace : les huit onglets, la date de clôture des pistes et la période de
   l'onglet Documents et de l'onglet Dépenses sont faits (12/11, [55](55-indicateurs-espace.md)) ; thème « Bento » appliqué le
   18/11 ([54](54-themes.md) § 3 ; mode sombre seulement si Ismail le demande) ;
-  **Espace entrepreneur pour les États-Unis** ([60](60-espace-etats-unis.md) § 3 : étape 1, textes de l'Espace dans
-  un dictionnaire par langue sans changer le comportement français ; puis moteur américain, modules, page ; lire
-  avant l'étape 2 les instructions de l'annexe C et la partie *Supporting Documents* de la Pub. 583 ; ensuite
+  **Espace entrepreneur pour les États-Unis** ([60](60-espace-etats-unis.md) § 3 : étape 1 faite le 19/11 ; étape 2,
+  moteur par pays : lire d'abord les instructions de l'annexe C et la partie *Supporting Documents* de la Pub. 583,
+  puis interface commune, textes des moteurs et formats, moteur de facture international partagé ; puis modules, page ; ensuite
   Royaume-Uni et Canada, [59](59-parite-des-pays.md)) ; **images du site** ([58](58-images-du-site.md) § 3) : miniatures dans la liste
   des étapes et schémas explicatifs (facture annotée, frise des relances, calendrier de la facturation électronique) ; refonte, suite ([31](31-vision-plateforme.md) § 5) : les quatre modules du compte
   gratuit sont faits (étape 5) ; étape 6, outils restants (CGV : faites dans les quatre pays ;

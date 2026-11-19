@@ -1608,23 +1608,13 @@
   // ----- Immobilisations et amortissements (documentation/57-immobilisations.md) ------------------------------------
 
   function asset(id) { return data.assets.filter(function (a) { return a.id === id; })[0] || null; }
-  var ASSET_HINTS = {
-    deductible: "500 € HT ou moins : ce bien peut être déduit directement en charges au lieu d'être amorti (tolérance admise pour le matériel et l'outillage, " +
-      "le matériel et le mobilier de bureau et les logiciels) ; dans ce cas, il n'a pas à figurer au registre.",
-    partial: "Bien affecté en partie à la profession : le registre porte la mention « affecté partiellement à l'exercice de la profession » ; seule la part " +
-      "professionnelle de l'amortissement est déductible." };
-  var assetNotes = '<p class="small muted">Calcul par année civile, en amortissement linéaire : la première année est comptée au prorata des jours, du jour de la ' +
-    "mise en service (compris) au 31 décembre ; la durée est celle pendant laquelle vous utiliserez le bien (pas de barème officiel). Les plus-values et " +
-    "moins-values de cession sont indiquées avant l'exonération possible des petites entreprises (article 151 septies du CGI), estimée à part. En cas de doute, votre " +
-    "déclaration (2035 ou 2031) et un professionnel font foi.</p>";
+  var ASSET_HINTS = { deductible: L("as.hint.deductible"), partial: L("as.hint.partial") };
+  var assetNotes = '<p class="small muted">' + L("as.notes") + "</p>";
 
   function viewAssets(r) {
-    var head = '<div class="espace-head"><h2>Immobilisations</h2>';
+    var head = '<div class="espace-head"><h2>' + L("as.title") + "</h2>";
     if (isMicro()) {
-      view.innerHTML = head + '</div><div class="card espace-card"><p>En micro-entreprise, vous n\'amortissez pas vos biens : l\'abattement forfaitaire tient lieu ' +
-        "de toutes vos charges, achats de matériel compris (pour les professions libérales, il « est réputé tenir compte des amortissements pratiqués " +
-        "selon le mode linéaire »). Ce registre sert au régime réel : si vous n'êtes plus en micro-entreprise, changez votre activité dans les " +
-        '<a href="#/reglages">réglages</a>.</p><p><a href="#/depenses">Retour aux dépenses</a></p></div>';
+      view.innerHTML = head + '</div><div class="card espace-card"><p>' + L("as.microHtml") + '</p><p><a href="#/depenses">' + L("exp.back") + "</a></p></div>";
       return;
     }
     var first = data.assets.reduce(function (m, a) { var y = E.assetStart(a).slice(0, 4); return y < m ? y : m; }, YEAR);
@@ -1633,42 +1623,44 @@
     var year = /^\d{4}$/.test(r.params.annee || "") && r.params.annee >= "1990" && r.params.annee <= "2100" ? r.params.annee : YEAR;
     if (years.indexOf(year) < 0) years.push(year);
     var res = E.assetsYear(data.assets, year, R);
-    view.innerHTML = head + '<div class="espace-quick espace-noprint"><a class="btn btn-primary btn-sm" href="#/immobilisations/nouveau">+ Bien</a>' +
-      '<button type="button" class="btn btn-ghost btn-sm" id="assets-csv"' + (res.rows.length ? "" : " disabled") + ">Exporter (CSV)</button>" +
-      '<button type="button" class="btn btn-ghost btn-sm" id="assets-print"' + (res.rows.length ? "" : " disabled") + ">Imprimer</button></div></div>" +
-      '<div class="kpis kpis-4 espace-noprint">' + kpi("Amortissements " + year, money(res.amount), "dotations de l'année") +
-      kpi("Part déductible", money(res.deductible), res.pending ? "hors " + res.pending + " bien" + (res.pending > 1 ? "s" : "") + " à établir" : "part privée et plafonds déduits") +
-      kpi("Valeur nette au 31/12", money(res.net), "biens encore détenus") + kpi("Biens", String(res.count), "présents en " + year) + "</div>" +
-      '<div class="card espace-card"><div class="espace-filters espace-noprint" role="group" aria-label="Année">' +
+    var Y = { year: esc(year) };
+    view.innerHTML = head + '<div class="espace-quick espace-noprint"><a class="btn btn-primary btn-sm" href="#/immobilisations/nouveau">' + L("as.new") + "</a>" +
+      '<button type="button" class="btn btn-ghost btn-sm" id="assets-csv"' + (res.rows.length ? "" : " disabled") + ">" + L("common.exportCsv") + "</button>" +
+      '<button type="button" class="btn btn-ghost btn-sm" id="assets-print"' + (res.rows.length ? "" : " disabled") + ">" + L("common.print") + "</button></div></div>" +
+      '<div class="kpis kpis-4 espace-noprint">' + kpi(L("as.kpi.amount", { year: year }), money(res.amount), L("as.kpi.amountSub")) +
+      kpi(L("as.kpi.deductible"), money(res.deductible), res.pending ? L("as.kpi.pending", { what: countText(res.pending, L("count.asset.one"), L("count.asset.many")) }) : L("as.kpi.deductibleSub")) +
+      kpi(L("as.kpi.net"), money(res.net), L("as.kpi.netSub")) + kpi(L("as.kpi.count"), String(res.count), L("as.kpi.countSub", { year: year })) + "</div>" +
+      '<div class="card espace-card"><div class="espace-filters espace-noprint" role="group" aria-label="' + L("common.year") + '">' +
       years.sort().reverse().map(function (y) { return '<a class="tab" href="#/immobilisations?annee=' + y + '"' + (y === year ? ' aria-current="true"' : "") + ">" + y + "</a>"; }).join("") + "</div>" +
-      "<h3>Registre des immobilisations et des amortissements " + esc(year) + "</h3>" +
-      (res.rows.length ? '<div class="table-scroll" tabindex="0" role="region" aria-label="Registre des immobilisations ' + esc(year) + '"><table class="ledger assets-table"><thead><tr><th>Nature</th><th>Acquisition</th>' +
-        '<th class="num">Prix de revient</th><th class="num">Durée</th><th class="num">Annuité ' + esc(year) + '</th><th class="num">Valeur nette</th><th class="num">Déductible</th></tr></thead><tbody>' +
+      "<h3>" + L("as.register", Y) + "</h3>" +
+      (res.rows.length ? '<div class="table-scroll" tabindex="0" role="region" aria-label="' + L("as.registerShort", Y) + '"><table class="ledger assets-table"><thead><tr><th>' + L("as.col.nature") +
+        "</th><th>" + L("as.col.acquired") + '</th><th class="num">' + L("as.col.cost") + '</th><th class="num">' + L("as.col.years") + '</th><th class="num">' + L("as.col.annuity", Y) +
+        '</th><th class="num">' + L("as.col.net") + '</th><th class="num">' + L("as.col.deductible") + "</th></tr></thead><tbody>" +
         res.rows.map(function (x) {
           var a = x.asset;
           return '<tr><td class="c-asset"><a href="#/immobilisations/' + esc(a.id) + '">' + esc(a.label) + "</a>" +
-            (a.proShare != null && a.proShare !== "" && Number(a.proShare) < 100 ? '<span class="small muted">Affecté partiellement à l\'exercice de la profession (' + esc(String(a.proShare).replace(".", ",")) + " %)</span>" : "") +
+            (a.proShare != null && a.proShare !== "" && Number(a.proShare) < 100 ? '<span class="small muted">' + L("as.partial", { pct: esc(String(a.proShare).replace(".", ",")) }) + "</span>" : "") +
             vehicleMention(a) +
-            (x.sold ? '<span class="small muted">Cédé le ' + day(a.soldOn) + " pour " + esc(money(a.salePrice)) +
-              (x.disposal ? " : " + esc(disposalLabel(x.disposal.result)) + (x.disposal.split === "unknown" ? " (répartition à établir)" :
-                x.disposal.longTerm ? " (" + esc(money(x.disposal.shortTerm)) + " à court terme, " + esc(money(x.disposal.longTerm)) + " à long terme)" :
-                x.disposal.result ? " à court terme" : "") : "") + "</span>" : "") + '</td><td class="c-date" data-label="Acquisition">' + day(a.acquiredOn) +
-            (a.inServiceOn && a.inServiceOn !== a.acquiredOn ? '<span class="small muted">mise en service le ' + day(a.inServiceOn) + "</span>" : "") +
-            '</td><td class="num" data-label="Prix de revient">' + esc(money(a.cost)) + '</td><td class="num" data-label="Durée">' + esc(a.years + " an" + (a.years > 1 ? "s" : "")) +
-            '</td><td class="num" data-label="Annuité ' + esc(year) + '">' + esc(money(x.amount)) + '</td><td class="num" data-label="Valeur nette">' + esc(money(x.net)) +
-            '</td><td class="num" data-label="Déductible">' + deductibleCell(x.deductible) + "</td></tr>";
-        }).join("") + '</tbody><tfoot><tr><td colspan="4">Total ' + esc(year) + '</td><td class="num" data-label="Annuités">' + esc(money(res.amount)) + '</td><td class="num" data-label="Valeur nette">' + esc(money(res.net)) +
-        '</td><td class="num" data-label="Déductible">' + esc(money(res.deductible)) + "</td></tr></tfoot></table></div>"
-        : '<p class="muted">Aucun bien en ' + esc(year) + '. <a href="#/immobilisations/nouveau">Ajouter un bien</a></p>') +
-      (res.disposals.count ? '<p class="asset-disposals"><strong>Cessions ' + esc(year) + " :</strong> plus et moins-values à court terme (solde) " +
-        esc(money(res.disposals.shortTerm)) + ", plus-values à long terme " + esc(money(res.disposals.longTerm)) +
-        (res.disposals.pending ? " ; " + res.disposals.pending + " cession" + (res.disposals.pending > 1 ? "s" : "") + " à établir, hors de ces montants" : "") + ".</p>" : "") +
+            (x.sold ? '<span class="small muted">' + L("as.sold", { date: day(a.soldOn), amount: esc(money(a.salePrice)) }) +
+              (x.disposal ? L("as.sep") + esc(disposalLabel(x.disposal.result)) + (x.disposal.split === "unknown" ? L("as.splitUnknown") :
+                x.disposal.longTerm ? L("as.split", { short: esc(money(x.disposal.shortTerm)), long: esc(money(x.disposal.longTerm)) }) :
+                x.disposal.result ? L("as.shortOnly") : "") : "") + "</span>" : "") + '</td><td class="c-date" data-label="' + L("as.col.acquired") + '">' + day(a.acquiredOn) +
+            (a.inServiceOn && a.inServiceOn !== a.acquiredOn ? '<span class="small muted">' + L("as.inService", { date: day(a.inServiceOn) }) + "</span>" : "") +
+            '</td><td class="num" data-label="' + L("as.col.cost") + '">' + esc(money(a.cost)) + '</td><td class="num" data-label="' + L("as.col.years") + '">' +
+            esc(countText(a.years, L("count.year.one"), L("count.year.many"))) +
+            '</td><td class="num" data-label="' + L("as.col.annuity", Y) + '">' + esc(money(x.amount)) + '</td><td class="num" data-label="' + L("as.col.net") + '">' + esc(money(x.net)) +
+            '</td><td class="num" data-label="' + L("as.col.deductible") + '">' + deductibleCell(x.deductible) + "</td></tr>";
+        }).join("") + '</tbody><tfoot><tr><td colspan="4">' + L("as.total", Y) + '</td><td class="num" data-label="' + L("as.col.annuities") + '">' + esc(money(res.amount)) +
+        '</td><td class="num" data-label="' + L("as.col.net") + '">' + esc(money(res.net)) +
+        '</td><td class="num" data-label="' + L("as.col.deductible") + '">' + esc(money(res.deductible)) + "</td></tr></tfoot></table></div>"
+        : '<p class="muted">' + L("as.none", Y) + ' <a href="#/immobilisations/nouveau">' + L("as.add") + "</a></p>") +
+      (res.disposals.count ? '<p class="asset-disposals">' + L("as.disposalsHtml", { year: esc(year), short: esc(money(res.disposals.shortTerm)), long: esc(money(res.disposals.longTerm)) }) +
+        (res.disposals.pending ? L("as.disposalsPending", { what: countText(res.disposals.pending, L("count.disposal.one"), L("count.disposal.many")) }) : "") + ".</p>" : "") +
       exemptionBlock(year, res.disposals) +
-      '<p class="small muted">Le registre reprend les mentions demandées aux professions libérales : date d\'acquisition et de mise en service, nature, prix de revient, ' +
-      "amortissement de chaque année, et en cas de cession, sa date et son prix. Gardez les factures et actes d'achat ou de vente.</p>" + assetNotes + "</div>";
+      '<p class="small muted">' + L("as.registerNote") + "</p>" + assetNotes + "</div>";
     if (!res.rows.length) return;
     $("assets-csv").addEventListener("click", function () {
-      OF.download("\ufeff" + E.assetsCSV(res), "registre-immobilisations-" + year + ".csv", "text/csv;charset=utf-8");
+      OF.download("\ufeff" + E.assetsCSV(res), L("as.file", { year: year }), "text/csv;charset=utf-8");
     });
     $("assets-print").addEventListener("click", function () {
       document.body.classList.add("print-ledger");
@@ -1686,42 +1678,37 @@
     var X = R.plus_values_exoneration_151_septies, S = X.services_bnc, V = X.sales;
     var eur0 = function (n) { return OF.eur(n, 0); }, rate = function (r) { return OF.fmt(Math.round(r * 10000) / 100) + " %"; };
     var start = profile().startDate, x = E.exemption151(data.documents, year, disposals, R, start);
-    var lines = ["si votre activité est exercée depuis au moins " + X.activity_years + " ans, la plus-value nette de l'année (hors terrains à bâtir) est " +
-      "exonérée en totalité quand vos recettes annuelles HT (moyenne des deux années précédentes) ne dépassent pas " + eur0(S.full_up_to) + " (professions libérales et services) ou " +
-      eur0(V.full_up_to) + " (vente de marchandises), et en partie en dessous de " + eur0(S.partial_below) + " ou de " + eur0(V.partial_below) + "."];
-    var A = x.activity, endOfYear = "31/12/" + year;
-    lines.push(A.status === "met" ? "Condition des cinq ans remplie au " + endOfYear + " (début d'activité le " + day(start) + ")." :
-      A.status === "not_met" ? "Condition des cinq ans non remplie au " + endOfYear + " (début d'activité le " + day(start) + ", cinq ans le " + day(A.reachedOn) +
-        ") : pas d'exonération, sauf plus-values d'expropriation ou d'indemnités d'assurance." :
-      "Indiquez votre début d'activité dans les réglages : l'Espace vérifiera la condition des cinq ans.");
+    var lines = [L("as.ex.rule", { years: X.activity_years, sFull: eur0(S.full_up_to), vFull: eur0(V.full_up_to), sPartial: eur0(S.partial_below), vPartial: eur0(V.partial_below) })];
+    var A = x.activity, endOfYear = L("as.ex.endOfYear", { year: year });
+    lines.push(A.status === "met" ? L("as.ex.met", { end: endOfYear, start: day(start) }) :
+      A.status === "not_met" ? L("as.ex.notMet", { end: endOfYear, start: day(start), reached: day(A.reachedOn) }) :
+      L("as.ex.noStart"));
     if (x.reason !== "activity") {   // condition des cinq ans non remplie : rien à estimer
       if (x.kind === null) {
-        lines.push("Estimation impossible : aucun encaissement enregistré dans l'Espace en " + x.receipts.filter(function (r) { return !r.count; })
-          .map(function (r) { return r.year; }).join(" ni en ") + ". Faites la moyenne de vos recettes HT de " + x.years.join(" et ") + " (déclarations 2035).");
+        lines.push(L("as.ex.impossible", { years: x.receipts.filter(function (r) { return !r.count; }).map(function (r) { return r.year; }).join(L("as.ex.norIn")),
+          both: x.years.join(L("as.ex.and")) }));
       } else {
-        var amounts = money(x.shortTerm) + " à court terme et " + money(x.longTerm) + " à long terme";
-        lines.push("Estimation pour une profession libérale (BNC), d'après vos encaissements HT enregistrés dans l'Espace (" +
-          x.receipts.map(function (r) { return r.year + " : " + money(r.amount); }).join(", ") + ", moyenne " + money(x.average) + ") : " +
-          (x.kind === "full" ? "exonération totale, soit " + amounts + " exonérés." :
-            x.kind === "partial" ? "exonération partielle au taux de " + rate(x.rate) + " ((" + eur0(S.partial_below) + " − " + money(x.average) + ") ÷ " +
-              eur0(S.divisor) + "), soit " + amounts + " exonérés." :
-            "pas d'exonération (moyenne de " + eur0(S.partial_below) + " ou plus).") +
-          " Ce calcul suppose que tous vos encaissements de ces deux années sont dans l'Espace.");
+        var amounts = L("as.ex.amounts", { short: money(x.shortTerm), long: money(x.longTerm) });
+        lines.push(L("as.ex.estimate", { receipts: x.receipts.map(function (r) { return L("as.ex.receipt", { year: r.year, amount: money(r.amount) }); }).join(", "),
+          average: money(x.average) }) +
+          (x.kind === "full" ? L("as.ex.full", { amounts: amounts }) :
+            x.kind === "partial" ? L("as.ex.partial", { rate: rate(x.rate), limit: eur0(S.partial_below), average: money(x.average), divisor: eur0(S.divisor), amounts: amounts }) :
+            L("as.ex.none", { limit: eur0(S.partial_below) })) +
+          L("as.ex.assumes"));
       }
-      lines.push("En BIC, les recettes retenues sont celles des exercices clos (produits acquis) : pas d'estimation ici." +
-        (disposals.pending ? " Les cessions à établir ne sont pas comptées." : ""));
+      lines.push(L("as.ex.bic") + (disposals.pending ? L("as.ex.pendingNotCounted") : ""));
     }
-    return '<div class="notice asset-exemption"><p><strong>Exonération possible (article 151 septies du CGI)</strong> : ' +
+    return '<div class="notice asset-exemption"><p>' + L("as.ex.titleHtml") +
       lines.map(function (l, i) { return (i ? "<p>" : "") + esc(l) + "</p>"; }).join("") + "</div>";
   }
 
   /** Mention du registre pour une voiture particulière plafonnée (documentation/57 § 8). */
   function vehicleMention(a) {
     var v = E.vehicleCap(a, R);
-    return v && v.status === "capped" ? '<span class="small muted">Voiture particulière : amortissement déductible plafonné à ' + esc(OF.eur(v.cap, 0)) + "</span>" : "";
+    return v && v.status === "capped" ? '<span class="small muted">' + L("as.vehicleCap", { amount: esc(OF.eur(v.cap, 0)) }) + "</span>" : "";
   }
   /** Part déductible ; « à établir » quand l'Espace ne peut pas la calculer (voiture particulière, documentation/57 § 8). */
-  function deductibleCell(n) { return n === null ? '<span class="muted">à établir</span>' : esc(money(n)); }
+  function deductibleCell(n) { return n === null ? '<span class="muted">' + L("as.tbd") + "</span>" : esc(money(n)); }
   var amountText = function (n) { return n === null || n === undefined || n === "" || !isFinite(n) ? "" : Number(n).toFixed(2).replace(".", ","); };
   function readAsset(form) {
     var f = form.elements, num = function (v) { return String(v).trim() ? OF.num(v) : null; };
@@ -1737,24 +1724,18 @@
   function vehicleHint(x) {
     var v = E.vehicleCap(x, R), euros = function (n) { return Number(n) % 1 ? money(n) : OF.eur(n, 0); };
     if (!v) return "";
-    if (v.status === "not_vp") return "Véhicule qui n'est pas une voiture particulière (pas de mention « VP » sur la carte grise) : le plafond d'amortissement " +
-      "des voitures particulières (4 de l'article 39 du CGI) ne s'applique pas.";
-    if (v.status === "before") return "Voiture particulière acquise avant 2021 : son plafond d'amortissement dépend du barème de l'année d'acquisition, " +
-      "qui n'est pas repris ici ; la part déductible est à établir.";
-    if (v.status === "missing") return "Voiture particulière : indiquez la date de première immatriculation et les émissions de CO2 (carte grise) pour calculer " +
-      "le plafond ; d'ici là, la part déductible est à établir.";
-    var what = "Voiture particulière (" + v.co2 + " g de CO2 par km, " + (v.wltp ? "immatriculée selon la norme WLTP" : "immatriculée avant mars 2020") +
-      ") : plafond de " + euros(v.cap) + ", apprécié sur le prix d'acquisition TTC. ";
-    if (v.status === "under") return what + "Le prix saisi ne le dépasse pas : l'amortissement est déductible sans limite.";
+    if (v.status === "not_vp") return L("as.v.notVp");
+    if (v.status === "before") return L("as.v.before");
+    if (v.status === "missing") return L("as.v.missing");
+    var what = L("as.v.what", { co2: v.co2, norm: v.wltp ? L("as.v.wltp") : L("as.v.nedc"), cap: euros(v.cap) });
+    if (v.status === "under") return what + L("as.v.under");
     var share = x.proShare != null && x.proShare !== "" && Number(x.proShare) < 100;
-    return what + "Seule la fraction " + euros(v.cap) + " / " + euros(x.cost) + " de chaque annuité est déductible ; le reste est réintégré au résultat. " +
-      "L'entretien et le carburant restent déductibles." + (share ? " Voiture utilisée aussi à titre privé : la façon de combiner la part professionnelle et le " +
-      "plafond n'est pas décrite dans les textes lus ; la part déductible est à établir." : "");
+    return what + L("as.v.fraction", { cap: euros(v.cap), cost: euros(x.cost) }) + (share ? L("as.v.private") : "");
   }
 
   /** Nature d'un résultat de cession : « plus-value de 1 295,89 € », « moins-value de 224,66 € », « ni plus-value ni moins-value ». */
   function disposalLabel(n) {
-    return n > 0 ? "plus-value de " + money(n) : n < 0 ? "moins-value de " + money(-n) : "ni plus-value ni moins-value";
+    return n > 0 ? L("as.d.gain", { amount: money(n) }) : n < 0 ? L("as.d.loss", { amount: money(-n) }) : L("as.d.neither");
   }
   /**
    * Cession d'un bien (documentation/57 § 9) : résultat, durée de détention, répartition entre court et long terme, ou
@@ -1766,33 +1747,29 @@
     if (!d) return "";
     var P = R.plus_values_professionnelles, pct = String(x.proShare).replace(".", ",") + " %";
     var partVehicle = x.category === "transport" && Number(x.proShare) < 100;
-    var lines = ["Cession le " + day(x.soldOn) + " pour " + money(x.salePrice) + " : valeur nette à cette date " + money(d.net) + ", soit " + (d.gross ? "une " : "") +
-      disposalLabel(d.gross) + (partVehicle && d.gross ? ", ramenée à " + money(Math.abs(d.result)) + " pour la part professionnelle (" + pct + ")" : "") + "."];
-    if (d.reason === "partial") lines.push("Bien utilisé aussi à titre privé : les textes lus ne disent comment en tenir compte que pour un véhicule ; " +
-      "montant imposable et répartition entre court et long terme à établir.");
-    else if (d.reason === "vehicle_cap") lines.push("Voiture particulière dont l'amortissement déductible est plafonné ou à établir : le résultat est calculé, comme " +
-      "le prévoit le BOFiP, avec les amortissements sans limitation ; la répartition entre court et long terme est à établir.");
-    else if (d.result < 0) lines.push("Bien amortissable : la moins-value est à court terme, quelle que soit la durée de détention.");
-    else if (d.result > 0 && !d.heldTwoYears) lines.push("Bien détenu depuis moins de " + P.holding_years + " ans : la plus-value est à court terme.");
-    else if (d.result > 0) lines.push("Bien détenu depuis " + P.holding_years + " ans au moins : " + money(d.shortTerm) + " à court terme (dans la limite des " +
-      "amortissements déduits)" + (d.longTerm ? " et " + money(d.longTerm) + " à long terme" : "") + ".");
-    if (d.result) lines.push("Court terme : ajouté au bénéfice de l'année (ou déduit), avec la faculté d'étaler une plus-value nette sur " +
-      P.short_term_spread_years + " ans. Long terme : imposé au taux de " + String(P.long_term_rate).replace(".", ",") + " % plus les prélèvements sociaux." +
-      (d.result > 0 ? " Une exonération est possible sous conditions de durée d'activité et de recettes (article 151 septies du CGI) : estimation sous " +
-        "le registre de " + x.soldOn.slice(0, 4) + "." : ""));
+    var lines = [L("as.d.first", { date: day(x.soldOn), price: money(x.salePrice), net: money(d.net), result: (d.gross ? L("as.d.article") : "") + disposalLabel(d.gross) }) +
+      (partVehicle && d.gross ? L("as.d.proPart", { amount: money(Math.abs(d.result)), pct: pct }) : "") + "."];
+    if (d.reason === "partial") lines.push(L("as.d.partial"));
+    else if (d.reason === "vehicle_cap") lines.push(L("as.d.vehicleCap"));
+    else if (d.result < 0) lines.push(L("as.d.lossShort"));
+    else if (d.result > 0 && !d.heldTwoYears) lines.push(L("as.d.gainShort", { years: P.holding_years }));
+    else if (d.result > 0) lines.push(L("as.d.gainLong", { years: P.holding_years, short: money(d.shortTerm) }) + (d.longTerm ? L("as.d.andLong", { long: money(d.longTerm) }) : "") + ".");
+    if (d.result) lines.push(L("as.d.regime", { spread: P.short_term_spread_years, rate: String(P.long_term_rate).replace(".", ",") }) +
+      (d.result > 0 ? L("as.d.exemption", { year: x.soldOn.slice(0, 4) }) : ""));
     return '<div class="notice asset-disposal">' + lines.map(function (l) { return "<p>" + esc(l) + "</p>"; }).join("") + "</div>";
   }
 
   /** Plan d'amortissement et messages d'un bien (aperçu de la fiche) ; rien tant que la saisie n'est pas valide. */
   function assetPreview(x) {
-    if (E.assetErrors(x, R).length) return '<p class="small muted">Le plan d\'amortissement s\'affiche quand la fiche est complète.</p>';
+    if (E.assetErrors(x, R).length) return '<p class="small muted">' + L("as.p.incomplete") + "</p>";
     var plan = E.assetPlan(x, R), hints = E.assetHints(x, R);
     return hints.map(function (h) { return '<p class="notice">' + esc(h === "vehicle" ? vehicleHint(x) : ASSET_HINTS[h]) + "</p>"; }).join("") +
-      '<div class="table-scroll" tabindex="0" role="region" aria-label="Plan d\'amortissement"><table class="ledger asset-plan"><thead><tr><th>Année</th><th class="num">Jours</th><th class="num">Annuité</th><th class="num">Cumul</th>' +
-      '<th class="num">Valeur nette</th><th class="num">Déductible</th></tr></thead><tbody>' + plan.map(function (row) {
-        return '<tr><td class="c-date">' + row.year + '</td><td class="num" data-label="Jours">' + (row.days === null ? "année entière" : row.days + " / " + row.yearDays) +
-          '</td><td class="num" data-label="Annuité">' + esc(money(row.amount)) + '</td><td class="num" data-label="Cumul">' + esc(money(row.cumulative)) +
-          '</td><td class="num" data-label="Valeur nette">' + esc(money(row.net)) + '</td><td class="num" data-label="Déductible">' + deductibleCell(row.deductible) + "</td></tr>";
+      '<div class="table-scroll" tabindex="0" role="region" aria-label="' + L("as.p.title") + '"><table class="ledger asset-plan"><thead><tr><th>' + L("common.year") +
+      '</th><th class="num">' + L("as.p.days") + '</th><th class="num">' + L("as.p.annuity") + '</th><th class="num">' + L("as.p.cumulative") + "</th>" +
+      '<th class="num">' + L("as.col.net") + '</th><th class="num">' + L("as.col.deductible") + "</th></tr></thead><tbody>" + plan.map(function (row) {
+        return '<tr><td class="c-date">' + row.year + '</td><td class="num" data-label="' + L("as.p.days") + '">' + (row.days === null ? L("as.p.fullYear") : row.days + " / " + row.yearDays) +
+          '</td><td class="num" data-label="' + L("as.p.annuity") + '">' + esc(money(row.amount)) + '</td><td class="num" data-label="' + L("as.p.cumulative") + '">' + esc(money(row.cumulative)) +
+          '</td><td class="num" data-label="' + L("as.col.net") + '">' + esc(money(row.net)) + '</td><td class="num" data-label="' + L("as.col.deductible") + '">' + deductibleCell(row.deductible) + "</td></tr>";
       }).join("") + "</tbody></table></div>" + disposalBlock(x);
   }
 
@@ -1801,35 +1778,35 @@
     var hide = x.category === "transport" ? "" : " hidden";
     var mark = function (html) { return html.replace('<div class="field', '<div' + hide + ' class="asset-vehicle field'); };
     return '<div' + hide + ' class="asset-vehicle field full"><label class="check"><input type="checkbox" id="ep-vp" name="vp"' + (x.vp ? " checked" : "") +
-      '><span>Voiture particulière (mention « VP » sur la carte grise)</span></label></div>' +
-      mark(field("firstRegOn", "Date de première immatriculation", x.firstRegOn || "", { type: "date", half: true, hint: "Carte grise, rubrique B." })) +
-      mark(field("co2", "Émissions de CO2 (g/km)", x.co2 == null ? "" : String(x.co2), { half: true, inputmode: "numeric", hint: "Carte grise, rubrique V.7." }));
+      "><span>" + L("as.f.vp") + "</span></label></div>" +
+      mark(field("firstRegOn", L("as.f.firstReg"), x.firstRegOn || "", { type: "date", half: true, hint: L("as.f.firstRegHint") })) +
+      mark(field("co2", L("as.f.co2"), x.co2 == null ? "" : String(x.co2), { half: true, inputmode: "numeric", hint: L("as.f.co2Hint") }));
   }
 
   function viewAssetForm(r) {
     if (isMicro()) { viewAssets(r); return; }
     var isNew = r.id === "nouveau";
     var x = isNew ? { category: "materiel", acquiredOn: TODAY, years: 3, proShare: 100 } : asset(r.id);
-    if (!x) { view.innerHTML = '<div class="espace-head"><h2>Bien introuvable</h2></div><p><a href="#/immobilisations">Retour aux immobilisations</a></p>'; return; }
+    if (!x) { view.innerHTML = '<div class="espace-head"><h2>' + L("as.notFound") + '</h2></div><p><a href="#/immobilisations">' + L("as.back") + "</a></p>"; return; }
     var cats = Object.keys(E.ASSET_CATEGORIES).map(function (k) { return [k, E.ASSET_CATEGORIES[k]]; });
-    view.innerHTML = '<div class="espace-head"><h2>' + (isNew ? "Nouveau bien" : esc(x.label)) + "</h2></div>" +
+    view.innerHTML = '<div class="espace-head"><h2>' + (isNew ? L("as.newTitle") : esc(x.label)) + "</h2></div>" +
       '<form class="card espace-card" id="asset-form" novalidate><div class="fields">' +
-      field("label", "Nature du bien", x.label, { required: true, placeholder: "Ordinateur portable" }) +
-      field("category", "Catégorie", x.category, { options: cats, half: true }) +
+      field("label", L("as.f.label"), x.label, { required: true, placeholder: L("as.f.labelPlaceholder") }) +
+      field("category", L("as.f.category"), x.category, { options: cats, half: true }) +
       vehicleFields(x) +
-      field("cost", "Prix de revient", amountText(x.cost), { half: true, required: true, inputmode: "decimal", placeholder: "1 500,00", hint: "Montant inscrit au registre, en euros." }) +
-      field("acquiredOn", "Date d'acquisition", x.acquiredOn, { type: "date", half: true, required: true }) +
-      field("inServiceOn", "Date de mise en service", x.inServiceOn || "", { type: "date", half: true, hint: "Si elle diffère de l'acquisition : l'amortissement part de ce jour." }) +
-      field("years", "Durée d'amortissement (années)", x.years == null ? "" : String(x.years), { half: true, required: true, inputmode: "numeric",
-        hint: "Durée pendant laquelle vous utiliserez le bien : pas de barème officiel, suivez les usages de votre profession." }) +
-      field("proShare", "Part professionnelle (%)", x.proShare == null ? "100" : String(x.proShare).replace(".", ","), { half: true, inputmode: "decimal",
-        hint: "Moins de 100 % si vous utilisez aussi le bien à titre privé." }) +
-      field("soldOn", "Date de cession (facultatif)", x.soldOn || "", { type: "date", half: true }) +
-      field("salePrice", "Prix de cession", amountText(x.salePrice), { half: true, inputmode: "decimal", hint: "Prix net des frais de la vente (commission…) ; 0 si le bien est mis au rebut." }) +
+      field("cost", L("as.col.cost"), amountText(x.cost), { half: true, required: true, inputmode: "decimal", placeholder: L("as.f.costPlaceholder"), hint: L("as.f.costHint") }) +
+      field("acquiredOn", L("as.f.acquired"), x.acquiredOn, { type: "date", half: true, required: true }) +
+      field("inServiceOn", L("as.f.inService"), x.inServiceOn || "", { type: "date", half: true, hint: L("as.f.inServiceHint") }) +
+      field("years", L("as.f.years"), x.years == null ? "" : String(x.years), { half: true, required: true, inputmode: "numeric",
+        hint: L("as.f.yearsHint") }) +
+      field("proShare", L("as.f.proShare"), x.proShare == null ? "100" : String(x.proShare).replace(".", ","), { half: true, inputmode: "decimal",
+        hint: L("as.f.proShareHint") }) +
+      field("soldOn", L("as.f.soldOn"), x.soldOn || "", { type: "date", half: true }) +
+      field("salePrice", L("as.f.salePrice"), amountText(x.salePrice), { half: true, inputmode: "decimal", hint: L("as.f.salePriceHint") }) +
       '</div><p class="form-error" id="asset-error" role="alert" hidden></p>' +
-      '<h3>Plan d\'amortissement</h3><div id="asset-plan" aria-live="polite">' + assetPreview(x) + "</div>" + assetNotes +
-      '<div class="espace-actions"><button type="submit" class="btn btn-primary">Enregistrer</button><a class="btn btn-ghost" href="#/immobilisations">Annuler</a>' +
-      (isNew ? "" : '<button type="button" class="btn btn-ghost" id="asset-delete">Supprimer</button>') + "</div></form>";
+      "<h3>" + L("as.p.title") + '</h3><div id="asset-plan" aria-live="polite">' + assetPreview(x) + "</div>" + assetNotes +
+      '<div class="espace-actions"><button type="submit" class="btn btn-primary">' + L("common.save") + '</button><a class="btn btn-ghost" href="#/immobilisations">' + L("common.cancel") + "</a>" +
+      (isNew ? "" : '<button type="button" class="btn btn-ghost" id="asset-delete">' + L("line.remove") + "</button>") + "</div></form>";
     var form = $("asset-form");
     form.addEventListener("input", function () { $("asset-plan").innerHTML = assetPreview(readAsset(form)); });
     form.addEventListener("change", function () {
@@ -1851,12 +1828,12 @@
       var target = isNew ? { id: S.uid(), createdAt: now() } : x;
       Object.assign(target, next, { updatedAt: now() });
       if (isNew) data.assets.push(target);
-      persist(isNew ? "Bien ajouté au registre." : "Bien modifié.").then(function () { location.hash = "#/immobilisations?annee=" + E.assetStart(next).slice(0, 4); });
+      persist(isNew ? L("as.added") : L("as.updated")).then(function () { location.hash = "#/immobilisations?annee=" + E.assetStart(next).slice(0, 4); });
     });
     if (!isNew) $("asset-delete").addEventListener("click", function () {
-      if (!confirm("Supprimer ce bien du registre ?")) return;
+      if (!confirm(L("as.confirmDelete"))) return;
       data.assets = data.assets.filter(function (a) { return a.id !== x.id; });
-      persist("Bien supprimé du registre.").then(function () { location.hash = "#/immobilisations"; });
+      persist(L("as.deleted")).then(function () { location.hash = "#/immobilisations"; });
     });
   }
 
@@ -2223,7 +2200,7 @@
         var n = incoming.documents.length, k = incoming.clients.length;
         if (!confirm(L("backup.confirmReplace", { docs: countText(n, L("count.document.one"), L("count.document.many")), clients: countText(k, L("count.client.one"), L("count.client.many")) }))) return;
         data = S.normalise(incoming);
-        persist("Sauvegarde restaurée.").then(function () { location.hash = "#/"; render(); });
+        persist(L("backup.restored")).then(function () { location.hash = "#/"; render(); });
       };
       reader.readAsText(file);
     });
@@ -2232,7 +2209,7 @@
   // ----- Prospects (documentation/38-prospects.md) -------------------------------------------------------------
 
   var STAGE_CLASSES = { new: "st-draft", talks: "st-unpaid", quote: "st-partial", won: "st-paid", lost: "st-draft" };
-  var SOURCES = ["Recommandation", "Réseau", "Site web", "Réseaux sociaux", "Salon ou évènement", "Plateforme de freelances", "Prospection directe"];
+  var SOURCES = L("pros.sources").split("|");
   var CNIL = {
     email: "https://www.cnil.fr/fr/la-prospection-commerciale-par-courrier-electronique-sms-mms-et-automate-dappel",
     phone: "https://www.cnil.fr/fr/prospection-commerciale-par-telephone-hors-automate-dappel-quelles-sont-les-regles",
@@ -2242,7 +2219,7 @@
   function stageBadge(s) { return '<span class="st ' + STAGE_CLASSES[s] + '">' + esc(E.STAGE_LABELS[s]) + "</span>"; }
   var byNextDate = function (a, b) {
     var x = a.nextDate || "9999", y = b.nextDate || "9999";
-    return x < y ? -1 : x > y ? 1 : String(a.name || "").localeCompare(String(b.name || ""), "fr");
+    return x < y ? -1 : x > y ? 1 : String(a.name || "").localeCompare(String(b.name || ""), OF.locale);
   };
 
   /** Empreintes SHA-256 des clés de la liste d'opposition ("e:", "t:" ou "n:" suivi de l'empreinte en hexadécimal). */
@@ -2266,10 +2243,10 @@
   function prospectsReminder() {
     var due = E.followUps(data.prospects, data.documents, TODAY);
     var old = E.retentionDue(data.prospects, data.documents, TODAY, R.prospects_conservation.annees);
-    return (due.length ? '<p class="notice espace-noprint">' + (due.length > 1 ? "Prospects à relancer : <b>" + due.length + "</b>" : "Un prospect à relancer : <b>" + esc(due[0].name) + "</b>") +
-        (due[0].nextDate < TODAY ? " (relance prévue depuis le " + day(due[0].nextDate) + ")" : "") + '. <a href="#/prospects">Voir les relances</a></p>' : "") +
-      (old.length ? '<p class="notice warn espace-noprint">' + esc(countText(old.length, "prospect", "prospects")) + " sans contact de leur part depuis " +
-        R.prospects_conservation.annees + ' ans : demandez-leur s\'ils souhaitent continuer à recevoir vos messages, sinon supprimez leur fiche. <a href="#/prospects">Voir la liste</a></p>' : "");
+    return (due.length ? '<p class="notice espace-noprint">' + (due.length > 1 ? L("pros.remind.manyHtml", { n: due.length }) : L("pros.remind.oneHtml", { name: esc(due[0].name) })) +
+        (due[0].nextDate < TODAY ? L("pros.remind.since", { date: day(due[0].nextDate) }) : "") + '. <a href="#/prospects">' + L("pros.remind.see") + "</a></p>" : "") +
+      (old.length ? '<p class="notice warn espace-noprint">' + L("pros.remind.old", { what: esc(countText(old.length, L("count.prospect.one"), L("count.prospect.many"))),
+        years: R.prospects_conservation.annees }) + ' <a href="#/prospects">' + L("pros.remind.seeList") + "</a></p>" : "");
   }
 
   /** Règles de la CNIL, en bref, selon le type de prospect (pro : vrai, faux, ou indéfini pour les deux). */
@@ -2277,23 +2254,21 @@
     var t = R.prospection_telephone;
     var both = pro === undefined;
     var items = [];
-    if (both || pro) items.push("<li><b>Professionnel</b> : par email ou par téléphone, si le message est en rapport avec son métier ; il doit être informé et pouvoir s'y opposer simplement et gratuitement.</li>");
+    if (both || pro) items.push("<li>" + L("pros.rules.proHtml") + "</li>");
     if (both || !pro) {
-      items.push("<li><b>Particulier</b> : par email, seulement avec son accord préalable (case non cochée d'avance ; des conditions générales acceptées ne suffisent pas).</li>");
-      items.push("<li><b>Particulier, par téléphone</b> (depuis le " + esc(longDay(t.depuis)) + ") : seulement avec son accord préalable, valable " +
-        "un an au plus, sauf appel en rapport avec un contrat en cours ; du lundi au vendredi, de 10 h à 13 h et de 14 h à 20 h. Un particulier qui demande à être rappelé l'est dans les 5 jours ouvrables, sur ce qu'il a demandé.</li>");
+      items.push("<li>" + L("pros.rules.personEmailHtml") + "</li>");
+      items.push("<li>" + L("pros.rules.personPhoneHtml", { date: esc(longDay(t.depuis)) }) + "</li>");
     }
-    items.push("<li>Chaque message dit qui vous êtes et permet de refuser les suivants par un moyen simple. Un refus n'a pas à être justifié et vaut pour la suite : utilisez « Ne plus contacter ».</li>");
-    items.push("<li>Les données d'un prospect se gardent " + R.prospects_conservation.annees + " ans au plus après leur collecte ou après son dernier contact avec vous ; ensuite, demandez-lui s'il souhaite continuer à recevoir vos messages, sinon supprimez sa fiche.</li>");
-    return '<ul class="small prospect-rules">' + items.join("") + '</ul><p class="small muted">Règles générales de la CNIL : ' +
-      '<a href="' + CNIL.email + '" rel="noopener">prospection par email</a>, <a href="' + CNIL.phone + '" rel="noopener">par téléphone</a>, ' +
-      '<a href="' + CNIL.optout + '" rel="noopener">respect de l\'opposition</a>. Pour écrire : <a href="/fr/modeles-emails-freelance/">modèles d\'emails</a>.</p>';
+    items.push("<li>" + L("pros.rules.optout") + "</li>");
+    items.push("<li>" + L("pros.rules.retention", { years: R.prospects_conservation.annees }) + "</li>");
+    return '<ul class="small prospect-rules">' + items.join("") + '</ul><p class="small muted">' +
+      L("pros.rules.sourcesHtml", { email: CNIL.email, phone: CNIL.phone, optout: CNIL.optout }) + "</p>";
   }
 
   function prospectItem(p) {
     var v = E.prospectValue(p, data.documents);
     return '<li><a href="#/prospects/' + esc(p.id) + '"><span class="dl-main"><b>' + esc(p.name) + '</b><span class="small muted">' +
-      esc([p.contact, p.nextDate ? "relance le " + day(p.nextDate) : ""].filter(Boolean).join(" · ") || (p.pro === false ? "Particulier" : "Professionnel")) +
+      esc([p.contact, p.nextDate ? L("pros.nextOn", { date: day(p.nextDate) }) : ""].filter(Boolean).join(" · ") || (p.pro === false ? L("pros.person") : L("pros.pro"))) +
       '</span></span><span class="dl-side"><b>' + (v === null ? "–" : esc(money(v))) + "</b></span></a></li>";
   }
 
@@ -2304,94 +2279,90 @@
     var groups = {};
     Object.keys(E.STAGE_LABELS).forEach(function (s) { groups[s] = []; });
     list.forEach(function (p) { groups[E.prospectStage(p, docs)].push(p); });
-    var html = '<div class="espace-head"><h2>Prospects</h2><div class="espace-quick espace-noprint">' +
-      '<a class="btn btn-primary btn-sm" href="#/prospects/nouveau">+ Prospect</a>' +
-      '<button type="button" class="btn btn-ghost btn-sm" id="prospects-csv"' + (list.length ? "" : " disabled") + ">Exporter (CSV)</button></div></div>";
+    var html = '<div class="espace-head"><h2>' + L("pros.title") + '</h2><div class="espace-quick espace-noprint">' +
+      '<a class="btn btn-primary btn-sm" href="#/prospects/nouveau">' + L("pros.new") + "</a>" +
+      '<button type="button" class="btn btn-ghost btn-sm" id="prospects-csv"' + (list.length ? "" : " disabled") + ">" + L("common.exportCsv") + "</button></div></div>";
     if (!list.length) {
-      html += '<div class="card espace-card"><p class="muted">Pas encore de prospect. Notez vos pistes commerciales pour savoir qui relancer et quand, ' +
-        "puis transformez une piste gagnée en client et en devis sans rien recopier.</p>" +
-        '<a class="btn btn-primary btn-sm" href="#/prospects/nouveau">Ajouter un prospect</a></div>';
+      html += '<div class="card espace-card"><p class="muted">' + L("pros.empty") + "</p>" +
+        '<a class="btn btn-primary btn-sm" href="#/prospects/nouveau">' + L("pros.add") + "</a></div>";
     } else {
       // Indicateurs (documentation/55, § 2) : carnet ouvert, relances, conversion des pistes closes, valeur moyenne d'une piste gagnée.
       var ps = ST.prospects(list, docs, TODAY);
       html += '<div class="kpis kpis-4">' +
-        kpi("Pistes ouvertes", String(pipe.open.count), "valeur estimée : " + money(pipe.open.value)) +
-        kpi("À relancer", String(due.length), ps.late ? "dont " + ps.late + " en retard" : due.length ? "aujourd'hui" : "aucune relance due") +
-        (ps.closed12 ? kpi("Taux de conversion", pct(ps.conversion12), "12 derniers mois : " + countText(ps.closed12, "piste close", "pistes closes")) :
-          kpi("Taux de conversion", ps.conversion === null ? "–" : pct(ps.conversion), ps.closed ? "toutes les pistes closes (" + ps.closed + ")" : "aucune piste close")) +
-        kpi("Valeur moyenne gagnée", ps.wonAverage === null ? "–" : money(ps.wonAverage), ps.wonAverage === null ? "aucune piste gagnée" : "par piste gagnée") + "</div>";
+        kpi(L("pros.kpi.open"), String(pipe.open.count), L("pros.kpi.openSub", { amount: money(pipe.open.value) })) +
+        kpi(L("pros.kpi.due"), String(due.length), ps.late ? L("pros.kpi.dueLate", { n: ps.late }) : due.length ? L("pros.kpi.dueToday") : L("pros.kpi.dueNone")) +
+        (ps.closed12 ? kpi(L("pros.kpi.conversion"), pct(ps.conversion12), L("pros.kpi.conversion12", { what: countText(ps.closed12, L("count.closedLead.one"), L("count.closedLead.many")) })) :
+          kpi(L("pros.kpi.conversion"), ps.conversion === null ? "–" : pct(ps.conversion), ps.closed ? L("pros.kpi.conversionAll", { n: ps.closed }) : L("pros.kpi.conversionNone"))) +
+        kpi(L("pros.kpi.wonAverage"), ps.wonAverage === null ? "–" : money(ps.wonAverage), ps.wonAverage === null ? L("pros.kpi.wonNone") : L("pros.kpi.wonPer")) + "</div>";
       html += '<section class="card espace-card">' +
-        (due.length ? '<h3>À relancer</h3><ul class="doc-list">' + due.map(function (p) {
+        (due.length ? "<h3>" + L("pros.kpi.due") + '</h3><ul class="doc-list">' + due.map(function (p) {
           return '<li><a href="#/prospects/' + esc(p.id) + '"><span class="dl-main"><b>' + esc(p.name) + '</b><span class="small muted">' +
-            esc(p.nextAction || "Relance prévue") + '</span></span><span class="dl-side"><b>' + day(p.nextDate) + "</b>" +
-            (p.nextDate < TODAY ? '<span class="st st-overdue">En retard</span>' : '<span class="st st-unpaid">Aujourd\'hui</span>') + "</span></a></li>";
-        }).join("") + "</ul>" : '<p class="small muted">Aucune relance prévue aujourd\'hui.</p>') + "</section>";
+            esc(p.nextAction || L("pros.duePlanned")) + '</span></span><span class="dl-side"><b>' + day(p.nextDate) + "</b>" +
+            (p.nextDate < TODAY ? '<span class="st st-overdue">' + L("pros.late") + "</span>" : '<span class="st st-unpaid">' + L("pros.today") + "</span>") + "</span></a></li>";
+        }).join("") + "</ul>" : '<p class="small muted">' + L("pros.noneToday") + "</p>") + "</section>";
       // Entonnoir (documentation/55, § 2) : nombre de pistes et valeur par étape.
       var top = Math.max.apply(null, ps.stages.map(function (x) { return x.count; }));
-      html += '<section class="card espace-card espace-noprint"><div class="card-head"><h3>Entonnoir</h3><span class="small muted">Pistes par étape et leur valeur.</span></div>' +
+      html += '<section class="card espace-card espace-noprint"><div class="card-head"><h3>' + L("pros.funnel") + '</h3><span class="small muted">' + L("pros.funnelIntro") + "</span></div>" +
         '<ul class="bar-list funnel">' + ps.stages.map(function (x) {
           return '<li><span class="bl-name">' + esc(x.label) + '</span><span class="bl-bar" aria-hidden="true"><span class="' + (x.key === "lost" ? "is-lost" : x.key === "won" ? "is-won" : "") +
-            '" style="width:' + (top > 0 ? Math.max(x.count ? 2 : 0, x.count / top * 100).toFixed(1) : 0) + '%"></span></span><b class="bl-amount">' + esc(countText(x.count, "piste", "pistes")) +
+            '" style="width:' + (top > 0 ? Math.max(x.count ? 2 : 0, x.count / top * 100).toFixed(1) : 0) + '%"></span></span><b class="bl-amount">' + esc(countText(x.count, L("count.lead.one"), L("count.lead.many"))) +
             '</b><span class="bl-share">' + esc(money(x.value)) + "</span></li>";
         }).join("") + "</ul></section>";
       var closedShown = ps.months.reduce(function (s, m) { return s + m.won + m.lost; }, 0);
       if (closedShown) {
-        html += '<section class="card espace-card espace-noprint"><div class="card-head"><h3>Pistes gagnées et perdues</h3><span class="small muted">12 derniers mois, ' +
-          "à la date de clôture.</span></div>" + '<div class="chart" data-chart="closed"></div>' +
-          OF.charts.legend([{ cls: "is-in", label: "Gagnées" }, { cls: "is-prev", label: "Perdues" }]) +
-          OF.charts.table("Pistes gagnées et perdues par mois", ["Mois", "Gagnées", "Perdues"], ps.months.map(function (m) { return [monthLabel(m.key), String(m.won), String(m.lost)]; })) +
-          (ps.undated ? '<p class="small muted">' + esc(countText(ps.undated, "piste close avant le suivi des dates n'y figure pas", "pistes closes avant le suivi des dates n'y figurent pas")) + ".</p>" : "") +
+        html += '<section class="card espace-card espace-noprint"><div class="card-head"><h3>' + L("pros.closed") + '</h3><span class="small muted">' + L("pros.closedIntro") +
+          "</span></div>" + '<div class="chart" data-chart="closed"></div>' +
+          OF.charts.legend([{ cls: "is-in", label: L("pros.won") }, { cls: "is-prev", label: L("pros.lost") }]) +
+          OF.charts.table(L("pros.closedTitle"), [L("pros.month"), L("pros.won"), L("pros.lost")], ps.months.map(function (m) { return [monthLabel(m.key), String(m.won), String(m.lost)]; })) +
+          (ps.undated ? '<p class="small muted">' + esc(countText(ps.undated, L("count.undated.one"), L("count.undated.many"))) + ".</p>" : "") +
           "</section>";
       }
       html += '<div class="pipeline">' + E.OPEN_STAGES.map(function (s) {
         return '<section class="card espace-card" aria-labelledby="stage-' + s + '"><div class="pipeline-head"><h3 id="stage-' + s + '">' + esc(E.STAGE_LABELS[s]) +
-          '</h3><span class="small muted">' + esc(countText(pipe[s].count, "piste", "pistes")) + " · " + esc(money(pipe[s].value)) + "</span></div>" +
-          (groups[s].length ? '<ul class="doc-list">' + groups[s].map(prospectItem).join("") + "</ul>" : '<p class="small muted">Aucune piste.</p>') + "</section>";
+          '</h3><span class="small muted">' + esc(countText(pipe[s].count, L("count.lead.one"), L("count.lead.many"))) + " · " + esc(money(pipe[s].value)) + "</span></div>" +
+          (groups[s].length ? '<ul class="doc-list">' + groups[s].map(prospectItem).join("") + "</ul>" : '<p class="small muted">' + L("pros.noLead") + "</p>") + "</section>";
       }).join("") + "</div>";
       html += ["won", "lost"].map(function (s) {
-        return groups[s].length ? '<details class="card details-card"><summary><span><b>' + esc(s === "won" ? "Gagnés" : "Perdus") + "</b> · " +
-          esc(countText(pipe[s].count, "piste", "pistes")) + (s === "won" ? " · " + esc(money(pipe[s].value)) : "") + '</span></summary><ul class="doc-list">' +
+        return groups[s].length ? '<details class="card details-card"><summary><span><b>' + esc(s === "won" ? L("pros.wonGroup") : L("pros.lostGroup")) + "</b> · " +
+          esc(countText(pipe[s].count, L("count.lead.one"), L("count.lead.many"))) + (s === "won" ? " · " + esc(money(pipe[s].value)) : "") + '</span></summary><ul class="doc-list">' +
           groups[s].map(prospectItem).join("") + "</ul></details>" : "";
       }).join("");
     }
     if (old.length) {
-      html += '<section class="card espace-card" id="prospects-retention"><h3>Conservation des données</h3><p class="small">Ces prospects ne vous ont pas contacté depuis ' +
-        R.prospects_conservation.annees + " ans (ou depuis la création de leur fiche) : demandez-leur s'ils souhaitent continuer à recevoir vos messages ; " +
-        "sans réponse positive et explicite, supprimez leur fiche (référentiel de la CNIL).</p><ul class=\"time-due\">" + old.map(function (x) {
+      html += '<section class="card espace-card" id="prospects-retention"><h3>' + L("pros.retention") + '</h3><p class="small">' +
+        L("pros.retentionText", { years: R.prospects_conservation.annees }) + "</p><ul class=\"time-due\">" + old.map(function (x) {
           return '<li><span class="dl-main"><a href="#/prospects/' + esc(x.prospect.id) + '"><b>' + esc(x.prospect.name) + '</b></a><span class="small muted">' +
-            (E.lastContactFrom(x.prospect) ? "Dernier contact de sa part : " : "Fiche créée le ") + day(x.since) + "</span></span>" +
-            '<button type="button" class="btn btn-ghost btn-sm" data-forget="' + esc(x.prospect.id) + '" aria-label="Supprimer la fiche de ' + esc(x.prospect.name) + '">Supprimer</button></li>';
+            (E.lastContactFrom(x.prospect) ? L("pros.lastContact", { date: day(x.since) }) : L("pros.createdOn", { date: day(x.since) })) + "</span></span>" +
+            '<button type="button" class="btn btn-ghost btn-sm" data-forget="' + esc(x.prospect.id) + '" aria-label="' + L("pros.forgetLabel", { name: esc(x.prospect.name) }) + '">' + L("line.remove") + "</button></li>";
         }).join("") + "</ul></section>";
     }
-    html += '<section class="card espace-card"><h3>Liste d\'opposition</h3><p class="small">' +
-      (data.optouts.length ? esc(countText(data.optouts.length, "personne a", "personnes ont")) + " demandé à ne plus être sollicitée" + (data.optouts.length > 1 ? "s" : "") + ". "
-        : "Personne n'a encore demandé à ne plus être sollicité. ") +
-      "Quand un prospect le demande, « Ne plus contacter » supprime sa fiche et ne garde qu'une empreinte de son email, de son téléphone et de son nom, " +
-      "qui ne permet pas de les retrouver mais vous avertit si vous l'ajoutez de nouveau. La CNIL recommande de garder ces informations au moins " +
-      R.prospects_opposition.conservation_min_annees + " ans.</p></section>" +
-      '<section class="card espace-card"><h3>Prospecter dans les règles</h3>' + prospectRules() + "</section>";
+    html += '<section class="card espace-card"><h3>' + L("pros.optoutList") + '</h3><p class="small">' +
+      (data.optouts.length ? (data.optouts.length > 1 ? L("pros.optoutCount.many", { n: data.optouts.length }) : L("pros.optoutCount.one", { n: data.optouts.length })) + " "
+        : L("pros.optoutNone") + " ") +
+      L("pros.optoutText", { years: R.prospects_opposition.conservation_min_annees }) + "</p></section>" +
+      '<section class="card espace-card"><h3>' + L("pros.rulesTitle") + "</h3>" + prospectRules() + "</section>";
     view.innerHTML = html;
     drawCharts = function () {
       var el = view.querySelector('[data-chart="closed"]');
       if (!el) return;
       el.innerHTML = OF.charts.bars({ width: Math.floor(el.getBoundingClientRect().width) || 600, height: 190, // des nombres de pistes : un graphique bas suffit
         groups: ps.months.map(function (m) { return { key: m.key, values: [m.won, m.lost], future: false }; }),
-        series: [{ name: "Gagnées", cls: "is-in" }, { name: "Perdues", cls: "is-prev" }], title: "Pistes gagnées et perdues par mois",
-        desc: "12 derniers mois : " + countText(ps.months.reduce(function (s, m) { return s + m.won; }, 0), "piste gagnée", "pistes gagnées") + ", " +
-          countText(ps.months.reduce(function (s, m) { return s + m.lost; }, 0), "piste perdue", "pistes perdues") + "." });
+        series: [{ name: L("pros.won"), cls: "is-in" }, { name: L("pros.lost"), cls: "is-prev" }], title: L("pros.closedTitle"),
+        desc: L("pros.closedDesc", { won: countText(ps.months.reduce(function (s, m) { return s + m.won; }, 0), L("count.wonLead.one"), L("count.wonLead.many")),
+          lost: countText(ps.months.reduce(function (s, m) { return s + m.lost; }, 0), L("count.lostLead.one"), L("count.lostLead.many")) }) });
     };
     drawCharts();
     view.querySelectorAll("[data-forget]").forEach(function (b) {
       b.addEventListener("click", function () {
         var p = prospect(b.getAttribute("data-forget"));
-        if (!p || !confirm("Supprimer la fiche « " + p.name + " » et ses échanges ?")) return;
+        if (!p || !confirm(L("pros.confirmDelete", { name: p.name }))) return;
         data.prospects = data.prospects.filter(function (x) { return x.id !== p.id; });
-        persist("Fiche « " + p.name + " » supprimée.").then(function () { render(true); });
+        persist(L("pros.deleted", { name: p.name })).then(function () { render(true); });
       });
     });
     if (!list.length) return;
     $("prospects-csv").addEventListener("click", function () {
-      OF.download("﻿" + E.prospectsCSV(list, docs), "prospects-" + TODAY + ".csv", "text/csv;charset=utf-8");
+      OF.download("﻿" + E.prospectsCSV(list, docs), L("pros.file", { date: TODAY }), "text/csv;charset=utf-8");
     });
   }
 
@@ -2399,62 +2370,62 @@
     var isNew = r.id === "nouveau";
     var p = isNew ? { id: S.uid(), name: "", contact: "", email: "", phone: "", pro: true, source: "", stage: "new", value: null, nextDate: "", nextAction: "",
                       notes: "", clientId: "", exchanges: [] } : prospect(r.id);
-    if (!p) { view.innerHTML = '<div class="espace-head"><h2>Prospect introuvable</h2></div><p><a href="#/prospects">Retour aux prospects</a></p>'; return; }
+    if (!p) { view.innerHTML = '<div class="espace-head"><h2>' + L("pros.notFound") + '</h2></div><p><a href="#/prospects">' + L("pros.back") + "</a></p>"; return; }
     var docs = data.documents, stage = E.prospectStage(p, docs), min = E.minStage(p, docs), rank = E.OPEN_STAGES.concat(["won"]);
     var stageOptions = Object.keys(E.STAGE_LABELS).map(function (s) {
       var locked = s !== "lost" && rank.indexOf(s) < rank.indexOf(min);
       return '<option value="' + s + '"' + (s === stage ? " selected" : "") + (locked ? " disabled" : "") + ">" + esc(E.STAGE_LABELS[s]) + "</option>";
     }).join("");
     var c = p.clientId ? client(p.clientId) : null, quotes = E.prospectQuotes(p, docs), last = E.lastContactFrom(p);
-    var html = '<div class="espace-head"><h2>' + (isNew ? "Nouveau prospect" : esc(p.name)) + "</h2>" + (isNew ? "" : stageBadge(stage)) + "</div>" +
+    var html = '<div class="espace-head"><h2>' + (isNew ? L("pros.newTitle") : esc(p.name)) + "</h2>" + (isNew ? "" : stageBadge(stage)) + "</div>" +
       '<form class="card espace-card" id="prospect-form" novalidate><div class="fields">' +
-      field("name", "Nom", p.name, { required: true, placeholder: "Atelier Lumen", hint: "Entreprise ou personne." }) +
-      field("contact", "Interlocuteur", p.contact, { half: true, placeholder: "Inès Moreau" }) +
-      field("pro", "Type", p.pro === false ? "0" : "1", { options: [["1", "Professionnel"], ["0", "Particulier"]], half: true }) +
-      field("email", "Email", p.email, { type: "email", half: true }) +
-      field("phone", "Téléphone", p.phone, { type: "tel", half: true }) +
-      field("source", "Origine", p.source, { half: true, list: "prospect-sources", placeholder: "Recommandation" }) +
+      field("name", L("pros.f.name"), p.name, { required: true, placeholder: L("pros.f.namePlaceholder"), hint: L("pros.f.nameHint") }) +
+      field("contact", L("pros.f.contact"), p.contact, { half: true, placeholder: L("pros.f.contactPlaceholder") }) +
+      field("pro", L("pros.f.type"), p.pro === false ? "0" : "1", { options: [["1", L("pros.pro")], ["0", L("pros.person")]], half: true }) +
+      field("email", L("profile.email"), p.email, { type: "email", half: true }) +
+      field("phone", L("profile.phone"), p.phone, { type: "tel", half: true }) +
+      field("source", L("pros.f.source"), p.source, { half: true, list: "prospect-sources", placeholder: SOURCES[0] }) +
       '<datalist id="prospect-sources">' + SOURCES.map(function (s) { return '<option value="' + esc(s) + '">'; }).join("") + "</datalist>" +
-      '<div class="field"><label for="ep-stage">Étape</label><select id="ep-stage" name="stage"' + (min !== "new" ? ' aria-describedby="ep-stage-hint"' : "") + ">" + stageOptions + "</select>" +
-      (min !== "new" ? '<span class="hint" id="ep-stage-hint">' + esc(min === "talks" ? "Au moins « En discussion » : un échange est noté." :
-        min === "quote" ? "Au moins « Devis envoyé » : un devis a été émis." : "« Gagné » : le devis a été accepté.") + "</span>" : "") + "</div>" +
-      field("value", "Valeur estimée HT", p.value === null || p.value === undefined ? "" : rateText(p.value), { half: true, inputmode: "decimal", placeholder: "1 500",
-        hint: "En euros, facultatif. Le montant du devis la remplace dès qu'il est émis." }) +
-      field("nextDate", "Prochaine relance", p.nextDate, { type: "date", half: true }) +
-      field("nextAction", "Action prévue", p.nextAction, { half: true, placeholder: "Rappeler pour le devis" }) +
-      field("notes", "Notes", p.notes, { textarea: true }) +
+      '<div class="field"><label for="ep-stage">' + L("pros.f.stage") + '</label><select id="ep-stage" name="stage"' + (min !== "new" ? ' aria-describedby="ep-stage-hint"' : "") + ">" + stageOptions + "</select>" +
+      (min !== "new" ? '<span class="hint" id="ep-stage-hint">' + esc(min === "talks" ? L("pros.f.minTalks") :
+        min === "quote" ? L("pros.f.minQuote") : L("pros.f.minWon")) + "</span>" : "") + "</div>" +
+      field("value", L("pros.f.value"), p.value === null || p.value === undefined ? "" : rateText(p.value), { half: true, inputmode: "decimal", placeholder: L("pros.f.valuePlaceholder"),
+        hint: L("pros.f.valueHint") }) +
+      field("nextDate", L("pros.f.nextDate"), p.nextDate, { type: "date", half: true }) +
+      field("nextAction", L("pros.f.nextAction"), p.nextAction, { half: true, placeholder: L("pros.f.nextActionPlaceholder") }) +
+      field("notes", L("pros.f.notes"), p.notes, { textarea: true }) +
       '</div><div id="prospect-optout" class="notice warn" role="alert" hidden></div><p class="form-error" id="prospect-error" role="alert" hidden></p>' +
-      '<div class="espace-actions"><button type="submit" class="btn btn-primary">' + (isNew ? "Créer le prospect" : "Enregistrer") + "</button>" +
-      '<a class="btn btn-ghost" href="#/prospects">Annuler</a></div></form>';
+      '<div class="espace-actions"><button type="submit" class="btn btn-primary">' + (isNew ? L("pros.create") : L("common.save")) + "</button>" +
+      '<a class="btn btn-ghost" href="#/prospects">' + L("common.cancel") + "</a></div></form>";
     if (!isNew) {
-      html += '<section class="card espace-card"><h3>Échanges</h3><p class="small muted" id="prospect-last">' + (last ? "Dernier contact de sa part : " + day(last) + "."
-          : "Aucun contact de sa part noté.") + (stage === "won" ? "" : " La durée de conservation de ses données (" + R.prospects_conservation.annees + " ans) part de " +
-          (last ? "cette date" : "la création de la fiche, le " + day(String(p.createdAt || "").slice(0, 10))) + ".") + "</p>" +
+      html += '<section class="card espace-card"><h3>' + L("pros.x.title") + '</h3><p class="small muted" id="prospect-last">' + (last ? L("pros.x.last", { date: day(last) })
+          : L("pros.x.noLast")) + (stage === "won" ? "" : L("pros.x.retention", { years: R.prospects_conservation.annees,
+          from: last ? L("pros.x.fromLast") : L("pros.x.fromCreation", { date: day(String(p.createdAt || "").slice(0, 10)) }) })) + "</p>" +
         ((p.exchanges || []).length ? '<ul class="time-due exchanges">' + p.exchanges.slice().sort(function (a, b) { return a.date < b.date ? 1 : a.date > b.date ? -1 : 0; }).map(function (x) {
-          return '<li><span class="dl-main"><b>' + day(x.date) + " · " + (x.from === "them" ? "De sa part" : "De ma part") + '</b><span class="small">' + esc(x.text) + "</span></span>" +
-            '<button type="button" class="btn btn-ghost btn-sm" data-exchange="' + esc(x.id) + '" aria-label="Supprimer l\'échange du ' + day(x.date) + '">Supprimer</button></li>';
+          return '<li><span class="dl-main"><b>' + day(x.date) + " · " + (x.from === "them" ? L("pros.x.fromThem") : L("pros.x.fromMe")) + '</b><span class="small">' + esc(x.text) + "</span></span>" +
+            '<button type="button" class="btn btn-ghost btn-sm" data-exchange="' + esc(x.id) + '" aria-label="' + L("pros.x.removeLabel", { date: day(x.date) }) + '">' + L("line.remove") + "</button></li>";
         }).join("") + "</ul>" : "") +
         '<form id="exchange-form" class="espace-noprint" novalidate><div class="fields">' +
-        field("xdate", "Date", TODAY, { type: "date", half: true }) +
-        field("xfrom", "Qui a pris contact ?", "me", { options: [["me", "Moi"], ["them", "Le prospect"]], half: true,
-          hint: "« Le prospect » : il vous a appelé, écrit, demandé un document… (une simple ouverture d'email ne compte pas)." }) +
-        field("xtext", "Résumé", "", { placeholder: "Appel : intéressé, devis à envoyer avant vendredi" }) +
-        '</div><p class="form-error" id="exchange-error" role="alert" hidden></p><div class="espace-actions"><button type="submit" class="btn btn-ghost">Noter l\'échange</button></div></form></section>' +
-        '<section class="card espace-card"><h3>Client et devis</h3>' +
-        (c ? '<p>Client : <a href="#/clients/' + esc(c.id) + '">' + esc(c.name) + "</a></p>"
-          : '<p class="small muted">Créez le client à partir de cette fiche, ou liez la piste à un client existant.</p><div class="espace-actions">' +
-            '<a class="btn btn-ghost" href="#/clients/nouveau?piste=' + esc(p.id) + '">Créer le client</a></div>' +
-            (data.clients.some(function (x) { return !x.archived; }) ? '<div class="fields link-client"><div class="field"><label for="pr-client">Client existant</label><select id="pr-client">' +
-              options([["", "Choisir un client…"]].concat(data.clients.filter(function (x) { return !x.archived; })
-                .sort(function (a, b) { return String(a.name).localeCompare(String(b.name), "fr"); }).map(function (x) { return [x.id, x.name]; })), "") +
-              '</select></div><div class="field"><button type="button" class="btn btn-ghost" id="pr-link">Lier ce client</button></div></div>' : "")) +
+        field("xdate", L("ledger.col.date"), TODAY, { type: "date", half: true }) +
+        field("xfrom", L("pros.x.who"), "me", { options: [["me", L("pros.x.me")], ["them", L("pros.x.them")]], half: true,
+          hint: L("pros.x.whoHint") }) +
+        field("xtext", L("pros.x.summary"), "", { placeholder: L("pros.x.summaryPlaceholder") }) +
+        '</div><p class="form-error" id="exchange-error" role="alert" hidden></p><div class="espace-actions"><button type="submit" class="btn btn-ghost">' + L("pros.x.add") + "</button></div></form></section>" +
+        '<section class="card espace-card"><h3>' + L("pros.c.title") + "</h3>" +
+        (c ? "<p>" + L("pros.c.clientHtml", { href: "#/clients/" + esc(c.id), name: esc(c.name) }) + "</p>"
+          : '<p class="small muted">' + L("pros.c.intro") + '</p><div class="espace-actions">' +
+            '<a class="btn btn-ghost" href="#/clients/nouveau?piste=' + esc(p.id) + '">' + L("pros.c.create") + "</a></div>" +
+            (data.clients.some(function (x) { return !x.archived; }) ? '<div class="fields link-client"><div class="field"><label for="pr-client">' + L("pros.c.existing") + '</label><select id="pr-client">' +
+              options([["", L("pros.c.choose")]].concat(data.clients.filter(function (x) { return !x.archived; })
+                .sort(function (a, b) { return String(a.name).localeCompare(String(b.name), OF.locale); }).map(function (x) { return [x.id, x.name]; })), "") +
+              '</select></div><div class="field"><button type="button" class="btn btn-ghost" id="pr-link">' + L("pros.c.link") + "</button></div></div>" : "")) +
         '<div class="espace-actions"><a class="btn btn-primary" href="' + (c ? "#/documents/nouveau?type=devis&client=" + esc(c.id) + "&piste=" + esc(p.id)
-          : "#/clients/nouveau?piste=" + esc(p.id) + "&devis=1") + '">Faire un devis</a></div>' +
+          : "#/clients/nouveau?piste=" + esc(p.id) + "&devis=1") + '">' + L("pros.c.quote") + "</a></div>" +
         (quotes.length ? docTable(quotes) : "") + "</section>" +
-        '<section class="card espace-card"><h3>Règles pour ' + (p.pro === false ? "un particulier" : "un professionnel") + "</h3>" + prospectRules(p.pro !== false) +
-        '<div class="espace-actions">' + (p.email ? '<a class="btn btn-ghost" href="mailto:' + esc(encodeURIComponent(p.email).replace(/%40/g, "@")) + '">Écrire</a>' : "") +
-        '<button type="button" class="btn btn-ghost" id="prospect-optout-btn">Ne plus contacter</button>' +
-        '<button type="button" class="btn btn-ghost" id="prospect-delete">Supprimer</button></div><p class="form-error" id="prospect-action-error" role="alert" hidden></p></section>';
+        '<section class="card espace-card"><h3>' + (p.pro === false ? L("pros.rulesForPerson") : L("pros.rulesForPro")) + "</h3>" + prospectRules(p.pro !== false) +
+        '<div class="espace-actions">' + (p.email ? '<a class="btn btn-ghost" href="mailto:' + esc(encodeURIComponent(p.email).replace(/%40/g, "@")) + '">' + L("pros.write") + "</a>" : "") +
+        '<button type="button" class="btn btn-ghost" id="prospect-optout-btn">' + L("pros.optout") + "</button>" +
+        '<button type="button" class="btn btn-ghost" id="prospect-delete">' + L("line.remove") + '</button></div><p class="form-error" id="prospect-action-error" role="alert" hidden></p></section>';
     }
     view.innerHTML = html;
     bindProspectForm(p, isNew);
@@ -2485,7 +2456,7 @@
         Object.assign(p, next, { updatedAt: now() });
         if (!closing) delete p.closedAt;
         if (isNew) { p.createdAt = p.updatedAt; data.prospects.push(p); }
-        persist(isNew ? "Prospect créé." : "Prospect enregistré.").then(function () { location.hash = isNew ? "#/prospects/" + p.id : "#/prospects"; });
+        persist(isNew ? L("pros.created") : L("pros.saved")).then(function () { location.hash = isNew ? "#/prospects/" + p.id : "#/prospects"; });
       };
       // Liste d'opposition : vérifiée à la création et quand le nom, l'email ou le téléphone changent.
       if (confirmed || !data.optouts.length || (!isNew && identity(next) === identity(p))) { save(); return; }
@@ -2494,11 +2465,10 @@
         if (!matches.length) { save(); return; }
         var direct = matches.filter(function (m) { return m.kinds.some(function (k) { return k !== "n"; }); });
         var since = matches.map(function (m) { return m.optout.date; }).sort()[0];
-        notice.innerHTML = "<p>" + (direct.length ? "Cette personne a demandé le " + day(since) + " à ne plus être sollicitée (même " +
-            (direct[0].kinds.indexOf("e") > -1 ? "email" : "téléphone") + " dans votre liste d'opposition). Ne la prospectez pas ; si c'est elle qui vous recontacte, vous pouvez lui répondre."
-          : "Un prospect du même nom figure dans votre liste d'opposition (depuis le " + day(since) + ") : vérifiez qu'il ne s'agit pas de la même personne.") + "</p>" +
-          '<div class="espace-actions"><button type="button" class="btn btn-ghost btn-sm" id="optout-save">Enregistrer quand même</button>' +
-          (direct.length ? '<button type="button" class="btn btn-ghost btn-sm" id="optout-remove">Elle a de nouveau donné son accord : retirer de la liste</button>' : "") + "</div>";
+        notice.innerHTML = "<p>" + (direct.length ? (direct[0].kinds.indexOf("e") > -1 ? L("pros.oo.sameEmail", { date: day(since) }) : L("pros.oo.samePhone", { date: day(since) }))
+          : L("pros.oo.sameName", { date: day(since) })) + "</p>" +
+          '<div class="espace-actions"><button type="button" class="btn btn-ghost btn-sm" id="optout-save">' + L("pros.oo.saveAnyway") + "</button>" +
+          (direct.length ? '<button type="button" class="btn btn-ghost btn-sm" id="optout-remove">' + L("pros.oo.remove") + "</button>" : "") + "</div>";
         notice.hidden = false;
         $("optout-save").focus();
         $("optout-save").addEventListener("click", function () { confirmed = true; save(); });
@@ -2509,7 +2479,7 @@
           save();
         });
       }, function () {
-        showError("prospect-error", "Votre navigateur ne permet pas de vérifier la liste d'opposition : mettez-le à jour.");
+        showError("prospect-error", L("pros.oo.noCrypto"));
       });
     });
   }
@@ -2527,14 +2497,14 @@
       x.id = S.uid();
       x.createdAt = x.updatedAt = p.updatedAt = now();
       p.exchanges = (p.exchanges || []).concat([x]);
-      persist("Échange noté.").then(function () { render(true); $("ep-xtext").focus(); });
+      persist(L("pros.x.added")).then(function () { render(true); $("ep-xtext").focus(); });
     });
     view.querySelectorAll("[data-exchange]").forEach(function (b) {
       b.addEventListener("click", function () {
-        if (!confirm("Supprimer cet échange ?")) return;
+        if (!confirm(L("pros.x.confirmDelete"))) return;
         p.exchanges = p.exchanges.filter(function (x) { return x.id !== b.getAttribute("data-exchange"); });
         p.updatedAt = now();
-        persist("Échange supprimé.").then(function () { render(true); $("ep-xtext").focus(); });
+        persist(L("pros.x.deleted")).then(function () { render(true); $("ep-xtext").focus(); });
       });
     });
     if ($("pr-link")) $("pr-link").addEventListener("click", function () {
@@ -2542,31 +2512,30 @@
       if (!id) { $("pr-client").focus(); return; }
       p.clientId = id;
       p.updatedAt = now();
-      persist("Piste liée au client " + clientName(id) + ".").then(function () { render(true); });
+      persist(L("pros.c.linked", { name: clientName(id) })).then(function () { render(true); });
     });
     $("prospect-delete").addEventListener("click", function () {
-      if (!confirm("Supprimer la fiche « " + p.name + " » et ses échanges ?")) return;
+      if (!confirm(L("pros.confirmDelete", { name: p.name }))) return;
       data.prospects = data.prospects.filter(function (x) { return x.id !== p.id; });
-      persist("Fiche « " + p.name + " » supprimée.").then(function () { location.hash = "#/prospects"; });
+      persist(L("pros.deleted", { name: p.name })).then(function () { location.hash = "#/prospects"; });
     });
     $("prospect-optout-btn").addEventListener("click", function () {
-      if (!confirm("« " + p.name + " » ne souhaite plus être sollicité : la fiche et ses échanges sont supprimés. L'Espace garde seulement une empreinte de son email, " +
-        "de son téléphone et de son nom, qui ne permet pas de les retrouver, pour vous avertir si vous l'ajoutez de nouveau. Continuer ?")) return;
+      if (!confirm(L("pros.oo.confirm", { name: p.name }))) return;
       optoutHashes(p).then(function (hashes) {
         var stamp = now();
         data.optouts.push({ id: S.uid(), date: TODAY, hashes: hashes, createdAt: stamp, updatedAt: stamp });
         data.prospects = data.prospects.filter(function (x) { return x.id !== p.id; });
-        persist("Opposition enregistrée : la fiche « " + p.name + " » est supprimée.").then(function () { location.hash = "#/prospects"; });
+        persist(L("pros.oo.saved", { name: p.name })).then(function () { location.hash = "#/prospects"; });
       }, function () {
-        showError("prospect-action-error", "Votre navigateur ne permet pas de calculer les empreintes de la liste d'opposition : mettez-le à jour.");
+        showError("prospect-action-error", L("pros.oo.noCryptoHash"));
       });
     });
   }
 
   // ----- Trésorerie (documentation/39-tresorerie.md ; version 2, § 7) ----------------------------------------------
 
-  var CHARGE_EVERY = [["month", "Chaque mois"], ["quarter", "Chaque trimestre"], ["year", "Chaque année"], ["once", "Une seule fois"]];
-  var CHARGE_FLOW = [["out", "Sortie (charge, achat, rémunération)"], ["in", "Entrée (hors factures émises)"]];
+  var CHARGE_EVERY = [["month", L("tr.every.month")], ["quarter", L("tr.every.quarter")], ["year", L("tr.every.year")], ["once", L("tr.every.once")]];
+  var CHARGE_FLOW = [["out", L("tr.flow.out")], ["in", L("tr.flow.in")]];
   var HORIZONS = [3, 6, 12];
   function treasuryInput(over) {
     return Object.assign({ documents: data.documents, charges: data.charges, profile: profile(), rules: R, events: CAL, today: TODAY, months: 6 }, over || {});
@@ -2586,22 +2555,21 @@
     var curve = E.balanceCurve(E.forecast(treasuryInput())), limit = threshold(), below = firstBelow(curve, limit);
     if (!below) return "";
     var under = firstBelow(curve, 0);
-    return '<p class="notice warn espace-noprint">Prévision de trésorerie : votre compte passerait ' +
-      (under ? "sous zéro le <b>" + day(under.date) + "</b>" : "sous votre seuil de sécurité (" + esc(money(limit)) + ") le <b>" + day(below.date) + "</b>") +
-      '. <a href="#/tresorerie">Voir la trésorerie</a></p>';
+    return '<p class="notice warn espace-noprint">' +
+      (under ? L("tr.remind.zeroHtml", { date: day(under.date) }) : L("tr.remind.thresholdHtml", { amount: esc(money(limit)), date: day(below.date) })) +
+      '. <a href="#/tresorerie">' + L("tr.remind.see") + "</a></p>";
   }
 
   function chargeFields(c) {
     var flow = c.flow === "in" ? "in" : "out";
-    return field("label", "Libellé", c.label, { required: true, placeholder: flow === "in" ? "Mission en cours" : "Logiciel de comptabilité" }) +
-      field("flow", "Sens", flow, { options: CHARGE_FLOW, half: true }) +
-      field("amount", "Montant", rateText(c.amount), { half: true, inputmode: "decimal", placeholder: "30", hint: "En euros, ce qui sort du compte ou y entre." }) +
-      field("every", "Fréquence", c.every || "month", { options: CHARGE_EVERY, half: true }) +
-      field("start", c.every === "once" ? "Date" : "Prochaine échéance", c.start || "", { type: "date", half: true }) +
-      field("end", "Dernière échéance (facultatif)", c.end || "", { type: "date", half: true, hint: "Pour un mouvement régulier qui s'arrête." }) +
+    return field("label", L("tr.c.label"), c.label, { required: true, placeholder: flow === "in" ? L("tr.c.labelInPlaceholder") : L("tr.c.labelOutPlaceholder") }) +
+      field("flow", L("tr.c.flow"), flow, { options: CHARGE_FLOW, half: true }) +
+      field("amount", L("ledger.col.amount"), rateText(c.amount), { half: true, inputmode: "decimal", placeholder: L("tr.c.amountPlaceholder"), hint: L("tr.c.amountHint") }) +
+      field("every", L("tr.c.every"), c.every || "month", { options: CHARGE_EVERY, half: true }) +
+      field("start", c.every === "once" ? L("tr.c.date") : L("tr.c.next"), c.start || "", { type: "date", half: true }) +
+      field("end", L("tr.c.end"), c.end || "", { type: "date", half: true, hint: L("tr.c.endHint") }) +
       '<div class="field full charge-revenue"' + (flow === "in" ? "" : " hidden") + '><label class="check"><input type="checkbox" id="ep-revenue" name="revenue"' +
-      (c.revenue ? " checked" : "") + "><span>C'est du chiffre d'affaires à venir : estimer les cotisations" +
-      (profile().vatRegime && profile().vatRegime !== "franchise" ? " et la TVA" : "") + " dessus</span></label></div>";
+      (c.revenue ? " checked" : "") + "><span>" + (profile().vatRegime && profile().vatRegime !== "franchise" ? L("tr.c.revenueVat") : L("tr.c.revenue")) + "</span></label></div>";
   }
   function readCharge(form) {
     var f = form.elements, amount = f.amount.value.trim(), flow = f.flow.value === "in" ? "in" : "out";
@@ -2621,7 +2589,7 @@
     var sync = function () {
       var f = form.elements, once = f.every.value === "once";
       form.querySelector(".charge-revenue").hidden = f.flow.value !== "in";
-      form.querySelector('label[for="ep-start"]').textContent = once ? "Date" : "Prochaine échéance";
+      form.querySelector('label[for="ep-start"]').textContent = once ? L("tr.c.date") : L("tr.c.next");
       f.end.closest(".field").hidden = once;
     };
     form.elements.flow.addEventListener("change", sync);
@@ -2634,8 +2602,8 @@
     return '<div class="card kpi' + (cls ? " " + cls : "") + '"><span class="kpi-label">' + esc(label) + '</span><b class="kpi-value">' + value + "</b>" +
       (sub ? '<span class="kpi-sub">' + sub + "</span>" : "") + "</div>";
   }
-  var lateText = function (n) { return n === 1 ? "1 jour de retard" : n + " jours de retard"; };
-  var KIND_LABELS = { receipt: "Facture attendue", refund: "Remboursement", urssaf: "Urssaf", vat: "TVA", charge: "Charge", planned: "Entrée prévue" };
+  var lateText = function (n) { return n === 1 ? L("tr.late.one") : L("tr.late.many", { n: n }); };
+  var KIND_LABELS = { receipt: L("tr.kind.receipt"), refund: L("tr.kind.refund"), urssaf: L("tr.kind.urssaf"), vat: L("tr.kind.vat"), charge: L("tr.kind.charge"), planned: L("tr.kind.planned") };
   var AGING_CLS = { notDue: "is-ok", d30: "is-near", d60: "is-warn", d90: "is-hot", more: "is-bad" };
   var drawCharts = null;
 
@@ -2660,134 +2628,131 @@
 
     // Ce qui est déjà dû (v1).
     var owedLines = o.urssaf.periods.filter(function (x) { return x.amount > 0; }).map(function (x) {
-      return "<li>Cotisations " + (x.period.key.indexOf("T") > -1 ? "du " : "de ") + esc(x.period.label) + " (sur " + esc(money(x.cashed)) + " encaissés, à payer au plus tard le " +
-        day(x.due) + ") : <b>" + esc(money(x.amount)) + "</b></li>";
+      var v = { period: esc(x.period.label), cashed: esc(money(x.cashed)), date: day(x.due), amount: esc(money(x.amount)) };
+      return "<li>" + (x.period.key.indexOf("T") > -1 ? L("tr.owed.urssafQuarterHtml", v) : L("tr.owed.urssafMonthHtml", v)) + "</li>";
     });
-    if (p.vatRegime === "normal" && o.vat.total > 0) owedLines.push("<li>TVA collectée pas encore déclarée : <b>" + esc(money(o.vat.total)) + "</b></li>");
+    if (p.vatRegime === "normal" && o.vat.total > 0) owedLines.push("<li>" + L("tr.owed.vatNormalHtml", { amount: esc(money(o.vat.total)) }) + "</li>");
     if (p.vatRegime === "simplified") {
-      owedLines.push("<li>TVA collectée depuis le 1er janvier" + (o.vat.advances ? ", acomptes déjà versés déduits (" + esc(money(o.vat.advances)) + ")" : "") +
-        " : <b>" + esc(money(o.vat.total)) + "</b></li>");
+      owedLines.push("<li>" + (o.vat.advances ? L("tr.owed.vatSimplifiedAdvHtml", { advances: esc(money(o.vat.advances)), amount: esc(money(o.vat.total)) })
+        : L("tr.owed.vatSimplifiedHtml", { amount: esc(money(o.vat.total)) })) + "</li>");
     }
     var notes = [];
-    if (o.vat.advancesUnknown) notes.push("Indiquez la TVA due au titre de l'année précédente pour déduire les acomptes de juillet et de décembre.");
-    if (o.vat.previousYearDue) notes.push("Le solde de la TVA de " + (+TODAY.slice(0, 4) - 1) + ", payé avec la déclaration annuelle (CA12) au plus tard le " + day(o.vat.previousYearDue) + ", n'est pas compté.");
-    if (!o.urssaf.computed) notes.push("Hors micro-entreprise, les cotisations sociales ne sont pas estimées ici.");
+    if (o.vat.advancesUnknown) notes.push(L("tr.note.vatAdvances"));
+    if (o.vat.previousYearDue) notes.push(L("tr.note.vatBalance", { year: +TODAY.slice(0, 4) - 1, date: day(o.vat.previousYearDue) }));
+    if (!o.urssaf.computed) notes.push(L("tr.note.noUrssaf"));
 
     var lowBad = curve && curve.low.balance < limit, below = firstBelow(curve, limit);
     var kpis = '<div class="kpis kpis-4">' +
-      tile("Solde du compte", hasBalance ? esc(money(f.start)) : "–", hasBalance ? "au " + day(p.cashDate || TODAY) + (stale ? " · à mettre à jour" : "") :
-        '<a href="#tr-settings">Indiquer le solde</a>', stale ? "is-warn" : "") +
-      tile("Disponible", available === null ? "–" : esc(money(available)), "après " + esc(money(o.total)) + " déjà dus (estimés)", available !== null && available < 0 ? "is-bad" : "is-brand") +
-      tile("Point bas prévu", curve ? esc(money(curve.low.balance)) : "–", curve ? (curve.low.date === TODAY ? "aujourd'hui" : "le " + day(curve.low.date)) +
-        (lowBad ? (curve.low.balance < 0 ? " · sous zéro" : " · sous votre seuil") : "") : "avec le solde du compte", lowBad ? "is-bad" : "") +
-      tile("Versement possible", safe === null ? "–" : esc(money(safe)), safe === null ? "avec le solde du compte" :
-        "sans passer sous " + (limit ? "votre seuil (" + esc(money(limit)) + ")" : "zéro") + " d'ici " + esc(E.period(f.until.slice(0, 7)).label)) +
-      tile("À encaisser", esc(money(ag.total)), ag.late ? "dont " + esc(money(ag.late)) + " en retard (" + ag.lateCount + " facture" + (ag.lateCount > 1 ? "s" : "") + ")" : "aucune facture en retard",
-        ag.late ? "is-warn" : "") +
-      tile("Délai moyen de paiement", stats.count ? esc(OF.fmt(stats.avgDays)) + " j" : "–", stats.count ? "retard moyen " + esc(OF.fmt(stats.avgLate)) + " j · " +
-        Math.round(stats.onTime * 100) + " % payées à l'heure (12 mois)" : "pas encore de facture payée") +
-      tile("Autonomie", run === null ? "–" : esc(OF.fmt(run)) + " mois", run === null ? (monthly ? "avec le solde du compte" : '<a href="#tr-charges">Notez vos charges</a>') :
-        "disponible ÷ " + esc(money(monthly)) + " de charges par mois", run !== null && run < 2 ? "is-warn" : "") +
-      tile("Point mort", be === null ? "–" : esc(money(be)), be === null ? "chiffre d'affaires mensuel nécessaire (micro-entreprise, charges notées)" :
-        "à encaisser par mois · encaissé moyen : " + esc(money(avgIn)) + (active.length ? " (" + active.length + " mois)" : ""), be !== null && avgIn < be ? "is-warn" : "") + "</div>";
+      tile(L("tr.kpi.balance"), hasBalance ? esc(money(f.start)) : "–", hasBalance ? L("tr.kpi.balanceAt", { date: day(p.cashDate || TODAY) }) + (stale ? L("tr.kpi.stale") : "") :
+        '<a href="#tr-settings">' + L("tr.kpi.setBalance") + "</a>", stale ? "is-warn" : "") +
+      tile(L("tr.kpi.available"), available === null ? "–" : esc(money(available)), L("tr.kpi.availableSub", { amount: esc(money(o.total)) }), available !== null && available < 0 ? "is-bad" : "is-brand") +
+      tile(L("tr.kpi.low"), curve ? esc(money(curve.low.balance)) : "–", curve ? (curve.low.date === TODAY ? L("tr.kpi.today") : L("tr.kpi.on", { date: day(curve.low.date) })) +
+        (lowBad ? (curve.low.balance < 0 ? L("tr.kpi.belowZero") : L("tr.kpi.belowThreshold")) : "") : L("tr.kpi.needBalance"), lowBad ? "is-bad" : "") +
+      tile(L("tr.kpi.safe"), safe === null ? "–" : esc(money(safe)), safe === null ? L("tr.kpi.needBalance") :
+        L("tr.kpi.safeSub", { floor: limit ? L("tr.kpi.yourThreshold", { amount: esc(money(limit)) }) : L("tr.kpi.zero"), until: esc(E.period(f.until.slice(0, 7)).label) })) +
+      tile(L("tr.kpi.receivable"), esc(money(ag.total)), ag.late ? L("tr.kpi.receivableLate", { amount: esc(money(ag.late)), what: countText(ag.lateCount, L("count.invoice.one"), L("count.invoice.many")) })
+        : L("tr.kpi.noneLate"), ag.late ? "is-warn" : "") +
+      tile(L("tr.kpi.delay"), stats.count ? L("tr.kpi.days", { n: esc(OF.fmt(stats.avgDays)) }) : "–", stats.count ? L("tr.kpi.delaySub", { late: esc(OF.fmt(stats.avgLate)),
+        pct: Math.round(stats.onTime * 100) }) : L("tr.kpi.noPaid")) +
+      tile(L("tr.kpi.runway"), run === null ? "–" : L("tr.kpi.months", { n: esc(OF.fmt(run)) }), run === null ? (monthly ? L("tr.kpi.needBalance") : '<a href="#tr-charges">' + L("tr.kpi.noteCharges") + "</a>") :
+        L("tr.kpi.runwaySub", { amount: esc(money(monthly)) }), run !== null && run < 2 ? "is-warn" : "") +
+      tile(L("tr.kpi.breakEven"), be === null ? "–" : esc(money(be)), be === null ? L("tr.kpi.breakEvenNone") :
+        L("tr.kpi.breakEvenSub", { amount: esc(money(avgIn)) }) + (active.length ? L("tr.kpi.overMonths", { n: active.length }) : ""), be !== null && avgIn < be ? "is-warn" : "") + "</div>";
 
-    var tools = '<div class="tr-tools espace-noprint"><div class="seg" role="group" aria-label="Horizon de la prévision">' + HORIZONS.map(function (h) {
-        return '<a class="tab" href="' + url(h, scenario) + '"' + (h === months ? ' aria-current="true"' : "") + ">" + h + " mois</a>";
-      }).join("") + '</div><div class="seg" role="group" aria-label="Scénario">' +
-      '<a class="tab" href="' + url(months, "prevu") + '"' + (scenario === "prevu" ? ' aria-current="true"' : "") + ">Prévu</a>" +
-      '<a class="tab" href="' + url(months, "prudent") + '"' + (scenario === "prudent" ? ' aria-current="true"' : "") + ">Prudent</a></div>" +
-      '<button type="button" class="btn btn-ghost btn-sm" id="tr-csv">Exporter la prévision (CSV)</button></div>';
+    var tools = '<div class="tr-tools espace-noprint"><div class="seg" role="group" aria-label="' + L("tr.horizon") + '">' + HORIZONS.map(function (h) {
+        return '<a class="tab" href="' + url(h, scenario) + '"' + (h === months ? ' aria-current="true"' : "") + ">" + L("tr.kpi.months", { n: h }) + "</a>";
+      }).join("") + '</div><div class="seg" role="group" aria-label="' + L("tr.scenario") + '">' +
+      '<a class="tab" href="' + url(months, "prevu") + '"' + (scenario === "prevu" ? ' aria-current="true"' : "") + ">" + L("tr.planned") + "</a>" +
+      '<a class="tab" href="' + url(months, "prudent") + '"' + (scenario === "prudent" ? ' aria-current="true"' : "") + ">" + L("tr.prudent") + "</a></div>" +
+      '<button type="button" class="btn btn-ghost btn-sm" id="tr-csv">' + L("tr.exportCsv") + "</button></div>";
 
-    var scenarioNote = scenario === "prudent" ? "Scénario prudent : factures déjà en retard non comptées, autres factures attendues avec le retard moyen de chaque client." :
-      "Scénario prévu : chaque facture attendue à son échéance ; les factures en retard, aujourd'hui.";
-    var balanceCard = '<section class="card espace-card"><div class="card-head"><h3>Solde prévu</h3><span class="small muted">' + esc(scenarioNote) + "</span></div>" +
-      (below ? '<p class="notice warn">Votre compte passerait ' + (below.balance < 0 ? "sous zéro" : "sous votre seuil de sécurité") + " le <b>" + day(below.date) +
-        "</b> : relancez les factures en retard, décalez une dépense ou prévoyez une réserve.</p>" : "") +
-      (curve ? '<div class="chart" data-chart="balance"></div>' + OF.charts.legend([{ cls: "is-main", label: scenario === "prudent" ? "Prudent" : "Prévu" },
-          { cls: "is-alt", label: scenario === "prudent" ? "Prévu" : "Prudent" }].concat(limit ? [{ cls: "is-threshold", label: "Seuil de sécurité (" + money(limit) + ")" }] : [])) +
-        OF.charts.table("Solde prévu en fin de mois", ["Mois", "Solde en fin de mois", scenario === "prudent" ? "Prévu" : "Prudent"], f.months.map(function (m, i) {
+    var scenarioNote = scenario === "prudent" ? L("tr.scenarioPrudent") : L("tr.scenarioPlanned");
+    var balanceCard = '<section class="card espace-card"><div class="card-head"><h3>' + L("tr.balance.title") + '</h3><span class="small muted">' + esc(scenarioNote) + "</span></div>" +
+      (below ? '<p class="notice warn">' + (below.balance < 0 ? L("tr.balance.belowZeroHtml", { date: day(below.date) }) : L("tr.balance.belowThresholdHtml", { date: day(below.date) })) + "</p>" : "") +
+      (curve ? '<div class="chart" data-chart="balance"></div>' + OF.charts.legend([{ cls: "is-main", label: scenario === "prudent" ? L("tr.prudent") : L("tr.planned") },
+          { cls: "is-alt", label: scenario === "prudent" ? L("tr.planned") : L("tr.prudent") }].concat(limit ? [{ cls: "is-threshold", label: L("tr.thresholdLabel", { amount: money(limit) }) }] : [])) +
+        OF.charts.table(L("tr.balance.tableTitle"), [L("common.month"), L("tr.endBalance"), scenario === "prudent" ? L("tr.planned") : L("tr.prudent")], f.months.map(function (m, i) {
           return [m.label, money(m.balance), money(g.months[i].balance)];
-        })) : '<p class="muted">Indiquez le solde de votre compte (<a href="#tr-settings">réglages de la trésorerie</a>) pour voir la courbe du solde.</p>') + "</section>";
+        })) : '<p class="muted">' + L("tr.balance.needHtml") + "</p>") + "</section>";
 
     var groups = past.map(function (m) { return { key: m.key, label: m.label, values: [m.in, m.out], future: false }; }).concat(f.months.map(function (m) {
       return { key: m.key, label: m.label, values: [m.in, m.out], future: true };
     }));
-    var flowCard = '<section class="card espace-card"><div class="card-head"><h3>Entrées et sorties par mois</h3><span class="small muted">6 derniers mois : encaissements et dépenses saisies ; ensuite, la prévision.</span></div>' +
-      '<div class="chart" data-chart="flows"></div>' + OF.charts.legend([{ cls: "is-in", label: "Entrées" }, { cls: "is-out", label: "Sorties" }, { cls: "is-future", label: "Prévu (hachuré)" }]) +
-      OF.charts.table("Entrées et sorties par mois", ["Mois", "Entrées", "Sorties", "Écart"], groups.map(function (gr) {
-        return [gr.label + (gr.future ? " (prévu)" : ""), money(gr.values[0]), money(gr.values[1]), signed(gr.values[0] - gr.values[1])];
+    var flowCard = '<section class="card espace-card"><div class="card-head"><h3>' + L("tr.flows.title") + '</h3><span class="small muted">' + L("tr.flows.intro") + "</span></div>" +
+      '<div class="chart" data-chart="flows"></div>' + OF.charts.legend([{ cls: "is-in", label: L("tr.in") }, { cls: "is-out", label: L("tr.out") }, { cls: "is-future", label: L("tr.futureHatched") }]) +
+      OF.charts.table(L("tr.flows.title"), [L("common.month"), L("tr.in"), L("tr.out"), L("tr.gap")], groups.map(function (gr) {
+        return [gr.label + (gr.future ? L("tr.plannedSuffix") : ""), money(gr.values[0]), money(gr.values[1]), signed(gr.values[0] - gr.values[1])];
       })) + "</section>";
 
-    var owedCard = '<section class="card espace-card"><h3>Déjà dû (estimé)</h3>' +
-      (owedLines.length ? '<ul class="small treasury-owed">' + owedLines.join("") + "</ul>" : '<p class="small muted">Rien n\'est dû pour l\'instant sur vos encaissements.</p>') +
+    var owedCard = '<section class="card espace-card"><h3>' + L("tr.owed.title") + "</h3>" +
+      (owedLines.length ? '<ul class="small treasury-owed">' + owedLines.join("") + "</ul>" : '<p class="small muted">' + L("tr.owed.none") + "</p>") +
       (notes.length ? '<p class="small muted">' + notes.map(esc).join(" ") + "</p>" : "") + "</section>";
 
-    var agingCard = '<section class="card espace-card"><div class="card-head"><h3>Créances clients</h3><span class="small muted">' + esc(money(ag.total)) + " à encaisser</span></div>" +
+    var agingCard = '<section class="card espace-card"><div class="card-head"><h3>' + L("tr.aging.title") + '</h3><span class="small muted">' + L("tr.aging.total", { amount: esc(money(ag.total)) }) + "</span></div>" +
       (ag.total ? '<div class="chart" data-chart="aging"></div>' + '<ul class="ch-legend ch-legend-values">' + ag.buckets.map(function (b) {
           return '<li><span class="ch-key ' + AGING_CLS[b.key] + '" aria-hidden="true"></span>' + esc(b.label) + " : <b>" + esc(money(b.amount)) + "</b>" + (b.count ? " (" + b.count + ")" : "") + "</li>";
         }).join("") + "</ul>" +
-        (ag.items.filter(function (x) { return x.lateDays > 0; }).length ? '<h4>Factures en retard</h4><ul class="time-due">' + ag.items.filter(function (x) { return x.lateDays > 0; }).slice(0, 8).map(function (x) {
+        (ag.items.filter(function (x) { return x.lateDays > 0; }).length ? "<h4>" + L("tr.aging.late") + '</h4><ul class="time-due">' + ag.items.filter(function (x) { return x.lateDays > 0; }).slice(0, 8).map(function (x) {
           var who = (x.doc.snapshot && x.doc.snapshot.client && x.doc.snapshot.client.name) || "";
           return '<li><span class="dl-main"><a href="#/documents/' + esc(x.doc.id) + '"><b>' + esc(x.doc.number) + "</b></a>" + '<span class="small muted">' + esc(who) +
-            " · échéance le " + day(x.due) + " · " + lateText(x.lateDays) + '</span></span><span class="dl-side"><b>' + esc(money(x.amount)) +
-            '</b><a class="small" href="#/documents/' + esc(x.doc.id) + '">Relancer</a></span></li>';
-        }).join("") + '</ul><p class="small muted">Entre professionnels, des pénalités de retard sont dues de plein droit : <a href="/fr/penalites-de-retard/">calculer les pénalités</a>.</p>' : "") :
-        '<p class="small muted">Aucune facture en attente de paiement.</p>') +
-      (quotes.count ? '<p class="small">Devis acceptés à facturer : <b>' + esc(money(quotes.amount)) + "</b> (" + quotes.count + " devis), non comptés dans la prévision. " +
-        '<a href="#/documents?filtre=devis">Voir les devis</a></p>' : "") + "</section>";
+            L("tr.aging.due", { date: day(x.due) }) + " · " + lateText(x.lateDays) + '</span></span><span class="dl-side"><b>' + esc(money(x.amount)) +
+            '</b><a class="small" href="#/documents/' + esc(x.doc.id) + '">' + L("tr.aging.remind") + "</a></span></li>";
+        }).join("") + '</ul><p class="small muted">' + L("tr.aging.penaltiesHtml") + "</p>" : "") :
+        '<p class="small muted">' + L("tr.aging.none") + "</p>") +
+      (quotes.count ? '<p class="small">' + L("tr.aging.quotesHtml", { amount: esc(money(quotes.amount)), n: quotes.count }) + " " +
+        '<a href="#/documents?filtre=devis">' + L("tr.aging.seeQuotes") + "</a></p>" : "") + "</section>";
 
     var soon = f.items.filter(function (x) { return x.date <= INV.addDays(TODAY, 30); });
-    var upcomingCard = '<section class="card espace-card"><h3>Prochains mouvements (30 jours)</h3>' + (soon.length ? '<ul class="treasury-upcoming">' + soon.map(function (x) {
+    var upcomingCard = '<section class="card espace-card"><h3>' + L("tr.soon.title") + "</h3>" + (soon.length ? '<ul class="treasury-upcoming">' + soon.map(function (x) {
         return '<li><span class="c-date">' + day(x.date) + '</span><span class="tr-label">' + esc(x.label) + '<span class="tr-kind">' + esc(KIND_LABELS[x.kind] || "") +
-          (x.late ? " · en retard" : "") + (x.delay ? " · décalée de " + x.delay + " j" : "") + '</span></span><b class="num' + (x.amount < 0 ? " is-out" : " is-in") + '">' + esc(signed(x.amount)) + "</b></li>";
-      }).join("") + "</ul>" : '<p class="small muted">Aucun mouvement prévu dans les 30 jours.</p>') + "</section>";
+          (x.late ? L("tr.lateSuffix") : "") + (x.delay ? L("tr.soon.delayed", { n: x.delay }) : "") + '</span></span><b class="num' + (x.amount < 0 ? " is-out" : " is-in") + '">' + esc(signed(x.amount)) + "</b></li>";
+      }).join("") + "</ul>" : '<p class="small muted">' + L("tr.soon.none") + "</p>") + "</section>";
 
-    var monthsCard = '<section class="card espace-card"><h3>Détail mois par mois</h3>' +
-      '<table class="ledger treasury-table"><thead><tr><th>Mois</th><th class="num">Entrées</th><th class="num">Sorties</th><th class="num">Solde en fin de mois</th></tr></thead><tbody>' +
+    var monthsCard = '<section class="card espace-card"><h3>' + L("tr.months.title") + "</h3>" +
+      '<table class="ledger treasury-table"><thead><tr><th>' + L("common.month") + '</th><th class="num">' + L("tr.in") + '</th><th class="num">' + L("tr.out") +
+      '</th><th class="num">' + L("tr.endBalance") + "</th></tr></thead><tbody>" +
       f.months.map(function (m) {
-        return '<tr' + (m.balance !== null && m.balance < 0 ? ' class="is-negative"' : "") + '><td class="c-date">' + esc(m.label) + '</td><td class="num" data-label="Entrées">' + esc(money(m.in)) +
-          '</td><td class="num" data-label="Sorties">' + esc(money(m.out)) + '</td><td class="num" data-label="Solde en fin de mois">' + (m.balance === null ? "–" : esc(money(m.balance))) + "</td></tr>";
+        return '<tr' + (m.balance !== null && m.balance < 0 ? ' class="is-negative"' : "") + '><td class="c-date">' + esc(m.label) + '</td><td class="num" data-label="' + L("tr.in") + '">' + esc(money(m.in)) +
+          '</td><td class="num" data-label="' + L("tr.out") + '">' + esc(money(m.out)) + '</td><td class="num" data-label="' + L("tr.endBalance") + '">' + (m.balance === null ? "–" : esc(money(m.balance))) + "</td></tr>";
       }).join("") + "</tbody></table>" +
       f.months.filter(function (m) { return m.items.length; }).map(function (m) {
-        return '<details class="treasury-month"><summary>Détail de ' + esc(m.label) + "</summary><ul>" + m.items.map(function (x) {
-          return '<li><span class="c-date">' + day(x.date) + "</span><span>" + esc(x.label) + (x.late ? " · en retard" : "") + '</span><b class="num">' + esc(signed(x.amount)) + "</b></li>";
+        return '<details class="treasury-month"><summary>' + L("tr.months.detail", { month: esc(m.label) }) + "</summary><ul>" + m.items.map(function (x) {
+          return '<li><span class="c-date">' + day(x.date) + "</span><span>" + esc(x.label) + (x.late ? L("tr.lateSuffix") : "") + '</span><b class="num">' + esc(signed(x.amount)) + "</b></li>";
         }).join("") + "</ul></details>";
       }).join("") +
-      (f.calendarShort ? '<p class="small muted">Le calendrier fiscal ne couvre pas encore toute la période : les dernières échéances fiscales peuvent manquer.</p>' : "") + "</section>";
+      (f.calendarShort ? '<p class="small muted">' + L("tr.months.calendarShort") + "</p>" : "") + "</section>";
 
-    var chargesCard = '<section class="card espace-card" id="tr-charges"><h3>Mouvements prévus</h3>' +
-      '<p class="small muted">Charges régulières (loyer, logiciels, assurance, votre rémunération), dépenses ou rentrées ponctuelles, chiffre d\'affaires attendu hors factures émises.</p>' +
-      (data.charges.length ? '<ul class="time-due charges-list">' + data.charges.slice().sort(function (a, b) { return String(a.label).localeCompare(String(b.label), "fr"); }).map(function (c) {
+    var chargesCard = '<section class="card espace-card" id="tr-charges"><h3>' + L("tr.charges.title") + "</h3>" +
+      '<p class="small muted">' + L("tr.charges.intro") + "</p>" +
+      (data.charges.length ? '<ul class="time-due charges-list">' + data.charges.slice().sort(function (a, b) { return String(a.label).localeCompare(String(b.label), OF.locale); }).map(function (c) {
         var next = E.chargeDates(c, TODAY, "9999-12-31")[0], isInFlow = c.flow === "in";
-        return '<li><span class="dl-main"><a href="#/tresorerie/' + esc(c.id) + '"><b>' + esc(c.label) + '</b></a><span class="small muted">' + (isInFlow ? "Entrée" + (c.revenue ? " (chiffre d'affaires)" : "") : "Sortie") +
-          " · " + esc(E.CHARGE_LABELS[c.every] || "") + (next ? (c.every === "once" ? " · le " : " · prochaine le ") + day(next) : " · terminée") +
+        return '<li><span class="dl-main"><a href="#/tresorerie/' + esc(c.id) + '"><b>' + esc(c.label) + '</b></a><span class="small muted">' + (isInFlow ? (c.revenue ? L("tr.charges.inRevenue") : L("tr.charges.in")) : L("tr.charges.out")) +
+          " · " + esc(E.CHARGE_LABELS[c.every] || "") + (next ? (c.every === "once" ? L("tr.charges.on", { date: day(next) }) : L("tr.charges.nextOn", { date: day(next) })) : L("tr.charges.ended")) +
           '</span></span><span class="dl-side"><b class="' + (isInFlow ? "is-in" : "is-out") + '">' + esc(signed(isInFlow ? Number(c.amount) : -Number(c.amount))) + "</b></span></li>";
-      }).join("") + "</ul>" : '<p class="small muted">Rien de prévu pour l\'instant.</p>') +
-      '<form id="charge-form" class="espace-noprint" novalidate><h4>Ajouter un mouvement prévu</h4><div class="fields">' + chargeFields({ every: "month", start: TODAY, flow: "out" }) + "</div>" +
-      '<p class="form-error" id="charge-error" role="alert" hidden></p><div class="espace-actions"><button type="submit" class="btn btn-ghost">Ajouter</button></div></form></section>';
+      }).join("") + "</ul>" : '<p class="small muted">' + L("tr.charges.none") + "</p>") +
+      '<form id="charge-form" class="espace-noprint" novalidate><h4>' + L("tr.charges.add") + '</h4><div class="fields">' + chargeFields({ every: "month", start: TODAY, flow: "out" }) + "</div>" +
+      '<p class="form-error" id="charge-error" role="alert" hidden></p><div class="espace-actions"><button type="submit" class="btn btn-ghost">' + L("tr.charges.addButton") + "</button></div></form></section>";
 
-    var settingsCard = '<form class="card espace-card espace-noprint" id="cash-form" novalidate><h3 id="tr-settings" tabindex="-1">Réglages de la trésorerie</h3><div class="fields">' +
-      field("cashBalance", "Solde du compte professionnel", hasBalance ? rateText(f.start) : "", { half: true, inputmode: "decimal", placeholder: "4 250",
-        hint: "En euros, tel qu'affiché par votre banque." }) +
-      field("cashDate", "À la date du", p.cashDate || TODAY, { type: "date", half: true }) +
-      field("cashThreshold", "Seuil de sécurité (facultatif)", rateText(p.cashThreshold), { half: true, inputmode: "decimal", placeholder: "0",
-        hint: "Le solde sous lequel vous ne voulez pas descendre : la courbe le montre et l'Espace vous prévient avant." }) +
-      (p.vatRegime === "simplified" ? field("vatLastYear", "TVA due au titre de l'année précédente", rateText(p.vatLastYear), { half: true, inputmode: "decimal",
-        hint: "Montant de la déclaration annuelle (CA12) : il fixe les acomptes de juillet (55 %) et de décembre (40 %). Moins de 1 000 € : pas d'acompte." }) : "") +
-      '</div><p class="form-error" id="cash-error" role="alert" hidden></p><div class="espace-actions"><button type="submit" class="btn btn-primary">Enregistrer</button></div>' +
-      (stale ? '<p class="notice warn">Solde saisi le ' + day(p.cashDate) + " : mettez-le à jour pour une prévision juste.</p>" : "") + "</form>";
+    var settingsCard = '<form class="card espace-card espace-noprint" id="cash-form" novalidate><h3 id="tr-settings" tabindex="-1">' + L("tr.s.title") + '</h3><div class="fields">' +
+      field("cashBalance", L("tr.s.balance"), hasBalance ? rateText(f.start) : "", { half: true, inputmode: "decimal", placeholder: L("tr.s.balancePlaceholder"),
+        hint: L("tr.s.balanceHint") }) +
+      field("cashDate", L("tr.s.date"), p.cashDate || TODAY, { type: "date", half: true }) +
+      field("cashThreshold", L("tr.s.threshold"), rateText(p.cashThreshold), { half: true, inputmode: "decimal", placeholder: "0",
+        hint: L("tr.s.thresholdHint") }) +
+      (p.vatRegime === "simplified" ? field("vatLastYear", L("tr.s.vatLastYear"), rateText(p.vatLastYear), { half: true, inputmode: "decimal",
+        hint: L("tr.s.vatLastYearHint") }) : "") +
+      '</div><p class="form-error" id="cash-error" role="alert" hidden></p><div class="espace-actions"><button type="submit" class="btn btn-primary">' + L("common.save") + "</button></div>" +
+      (stale ? '<p class="notice warn">' + L("tr.s.stale", { date: day(p.cashDate) }) + "</p>" : "") + "</form>";
 
-    var assumptions = '<section class="card espace-card"><h3>Hypothèses</h3><ul class="small prospect-rules">' +
-      "<li>Montants estimés à partir de vos factures, encaissements, dépenses et mouvements prévus ; " + esc(scenarioNote.charAt(0).toLowerCase() + scenarioNote.slice(1)) + "</li>" +
-      (o.urssaf.computed ? "<li>Cotisations : chiffre d'affaires encaissé de chaque période (et chiffre d'affaires prévu) × taux de votre activité (" +
-        (p.vl ? "formation professionnelle et versement libératoire compris" : "formation professionnelle comprise") + "), à la date limite de la déclaration.</li>" : "") +
-      (p.vatRegime && p.vatRegime !== "franchise" ? "<li>TVA : due à l'encaissement pour les prestations de services, à la facture pour les ventes de biens (ou avec l'option pour les débits) ; " +
-        "à sa date pour une facture mixte (biens et services) ; comptée <b>avant déduction</b> de la TVA de vos achats, donc un maximum.</li>" : "") +
-      "<li>Point mort : charges mensuelles (trimestrielles ÷ 3, annuelles ÷ 12) divisées par la part qui vous reste après cotisations ; autonomie : disponible divisé par ces charges.</li>" +
-      "<li>Délai de paiement : factures payées en entier dans les 12 derniers mois, de la date de la facture au dernier paiement ; un paiement en avance compte 0 jour de retard.</li>" +
-      "<li>L'impôt sur le revenu (hors versement libératoire) n'est pas compté : voyez <a href=\"/fr/combien-mettre-de-cote-auto-entrepreneur/\">combien mettre de côté</a>.</li></ul></section>";
+    var assumptions = '<section class="card espace-card"><h3>' + L("tr.a.title") + '</h3><ul class="small prospect-rules">' +
+      "<li>" + L("tr.a.basis") + esc(scenarioNote.charAt(0).toLowerCase() + scenarioNote.slice(1)) + "</li>" +
+      (o.urssaf.computed ? "<li>" + (p.vl ? L("tr.a.urssafVl") : L("tr.a.urssaf")) + "</li>" : "") +
+      (p.vatRegime && p.vatRegime !== "franchise" ? "<li>" + L("tr.a.vatHtml") + "</li>" : "") +
+      "<li>" + L("tr.a.breakEven") + "</li>" +
+      "<li>" + L("tr.a.delay") + "</li>" +
+      "<li>" + L("tr.a.incomeTaxHtml") + "</li></ul></section>";
 
-    view.innerHTML = '<div class="espace-head"><h2>Trésorerie</h2>' + tools + "</div>" + kpis +
+    view.innerHTML = '<div class="espace-head"><h2>' + L("tr.title") + "</h2>" + tools + "</div>" + kpis +
       '<div class="espace-cols tr-charts">' + balanceCard + flowCard + "</div>" +
       '<div class="espace-cols">' + agingCard + '<div class="tr-stack">' + upcomingCard + owedCard + "</div></div>" +
       monthsCard + '<div class="espace-cols">' + chargesCard + settingsCard + "</div>" + assumptions;
@@ -2799,24 +2764,24 @@
       if (el && curve) {
         el.innerHTML = OF.charts.balance({ width: width(el), from: TODAY, to: f.until, threshold: limit, low: curve.low,
           series: [{ name: "main", points: curve.points, cls: "is-main" }, { name: "alt", points: altCurve ? altCurve.points : [], cls: "is-alt" }],
-          title: "Solde prévu jusqu'à fin " + E.period(f.until.slice(0, 7)).label,
-          desc: "Point bas " + money(curve.low.balance) + " le " + day(curve.low.date) + " ; solde final " + money(curve.end) + "." });
+          title: L("tr.chart.balanceTitle", { month: E.period(f.until.slice(0, 7)).label }),
+          desc: L("tr.chart.balanceDesc", { low: money(curve.low.balance), date: day(curve.low.date), end: money(curve.end) }) });
       }
       el = box("flows");
       if (el) {
-        el.innerHTML = OF.charts.bars({ width: width(el), groups: groups, series: [{ name: "Entrées", cls: "is-in" }, { name: "Sorties", cls: "is-out" }],
-          title: "Entrées et sorties par mois", desc: "Six derniers mois réels puis " + months + " mois prévus." });
+        el.innerHTML = OF.charts.bars({ width: width(el), groups: groups, series: [{ name: L("tr.in"), cls: "is-in" }, { name: L("tr.out"), cls: "is-out" }],
+          title: L("tr.flows.title"), desc: L("tr.chart.flowsDesc", { n: months }) });
       }
       el = box("aging");
       if (el) {
         el.innerHTML = OF.charts.stack({ width: width(el), parts: ag.buckets.map(function (b) { return { label: b.label, value: b.amount, cls: AGING_CLS[b.key] }; }),
-          title: "Créances par ancienneté", desc: ag.buckets.map(function (b) { return b.label + " : " + money(b.amount); }).join(" ; ") + "." });
+          title: L("tr.chart.agingTitle"), desc: ag.buckets.map(function (b) { return L("tr.chart.agingPart", { label: b.label, amount: money(b.amount) }); }).join(L("tr.chart.sep")) + "." });
       }
     };
     drawCharts();
 
     $("tr-csv").addEventListener("click", function () {
-      OF.download("﻿" + E.forecastCSV(f), "prevision-tresorerie-" + TODAY + ".csv", "text/csv;charset=utf-8");
+      OF.download("﻿" + E.forecastCSV(f), L("tr.file", { date: TODAY }), "text/csv;charset=utf-8");
     });
     var cash = $("cash-form");
     cash.addEventListener("submit", function (e) {
@@ -2824,10 +2789,10 @@
       var f2 = cash.elements, raw = f2.cashBalance.value.trim(), bal = raw ? OF.num(raw) : null, date = f2.cashDate.value;
       var vatRaw = f2.vatLastYear ? f2.vatLastYear.value.trim() : "", vatLast = vatRaw ? OF.num(vatRaw) : null;
       var thRaw = f2.cashThreshold.value.trim(), th = thRaw ? OF.num(thRaw) : null;
-      var error = raw && !isFinite(bal) ? ["cashBalance", "Le solde doit être un montant en euros (il peut être négatif)."]
-        : !/^\d{4}-\d{2}-\d{2}$/.test(date) || date > TODAY ? ["cashDate", "Indiquez la date du solde : aujourd'hui ou avant."]
-        : thRaw && !(isFinite(th) && th >= 0) ? ["cashThreshold", "Le seuil de sécurité doit être un montant positif, en euros."]
-        : vatRaw && !(isFinite(vatLast) && vatLast >= 0) ? ["vatLastYear", "La TVA de l'année précédente doit être un montant positif."] : null;
+      var error = raw && !isFinite(bal) ? ["cashBalance", L("tr.s.errBalance")]
+        : !/^\d{4}-\d{2}-\d{2}$/.test(date) || date > TODAY ? ["cashDate", L("tr.s.errDate")]
+        : thRaw && !(isFinite(th) && th >= 0) ? ["cashThreshold", L("tr.s.errThreshold")]
+        : vatRaw && !(isFinite(vatLast) && vatLast >= 0) ? ["vatLastYear", L("tr.s.errVat")] : null;
       ["cashBalance", "cashDate", "cashThreshold", "vatLastYear"].forEach(function (k) { if (f2[k]) f2[k].setAttribute("aria-invalid", String(!!error && error[0] === k)); });
       showError("cash-error", error ? error[1] : "");
       if (error) { f2[error[0]].focus(); return; }
@@ -2837,7 +2802,7 @@
       pr.cashThreshold = th === null ? null : Math.round(th * 100) / 100;
       if (f2.vatLastYear) pr.vatLastYear = vatLast === null ? null : Math.round(vatLast * 100) / 100;
       pr.updatedAt = now();
-      persist("Réglages de la trésorerie enregistrés.").then(function () { render(true); });
+      persist(L("tr.s.saved")).then(function () { render(true); });
     });
     var form = $("charge-form");
     bindChargeForm(form);
@@ -2848,7 +2813,7 @@
       c.amount = Math.round(c.amount * 100) / 100;
       Object.assign(c, { id: S.uid(), createdAt: now(), updatedAt: now() });
       data.charges.push(c);
-      persist((c.flow === "in" ? "Entrée prévue ajoutée : " : "Mouvement ajouté : ") + c.label + ".").then(function () { render(true); $("ep-label").focus(); });
+      persist(c.flow === "in" ? L("tr.charges.addedIn", { label: c.label }) : L("tr.charges.added", { label: c.label })).then(function () { render(true); $("ep-label").focus(); });
     });
   }
   // Graphiques redessinés à la largeur de leur conteneur quand la fenêtre change de taille.
@@ -2862,10 +2827,10 @@
 
   function viewChargeForm(r) {
     var c = charge(r.id);
-    if (!c) { view.innerHTML = '<div class="espace-head"><h2>Mouvement introuvable</h2></div><p><a href="#/tresorerie">Retour à la trésorerie</a></p>'; return; }
+    if (!c) { view.innerHTML = '<div class="espace-head"><h2>' + L("tr.charges.notFound") + '</h2></div><p><a href="#/tresorerie">' + L("tr.back") + "</a></p>"; return; }
     view.innerHTML = '<div class="espace-head"><h2>' + esc(c.label) + '</h2></div><form class="card espace-card" id="charge-form" novalidate><div class="fields">' + chargeFields(c) + "</div>" +
-      '<p class="form-error" id="charge-error" role="alert" hidden></p><div class="espace-actions"><button type="submit" class="btn btn-primary">Enregistrer</button>' +
-      '<a class="btn btn-ghost" href="#/tresorerie">Annuler</a><button type="button" class="btn btn-ghost" id="charge-delete">Supprimer</button></div></form>';
+      '<p class="form-error" id="charge-error" role="alert" hidden></p><div class="espace-actions"><button type="submit" class="btn btn-primary">' + L("common.save") + "</button>" +
+      '<a class="btn btn-ghost" href="#/tresorerie">' + L("common.cancel") + '</a><button type="button" class="btn btn-ghost" id="charge-delete">' + L("line.remove") + "</button></div></form>";
     var form = $("charge-form");
     bindChargeForm(form);
     form.addEventListener("submit", function (e) {
@@ -2874,40 +2839,39 @@
       if (!showChargeErrors(form, next, "charge-error")) return;
       next.amount = Math.round(next.amount * 100) / 100;
       Object.assign(c, next, { updatedAt: now() });
-      persist("Mouvement enregistré.").then(function () { location.hash = "#/tresorerie"; });
+      persist(L("tr.charges.saved")).then(function () { location.hash = "#/tresorerie"; });
     });
     $("charge-delete").addEventListener("click", function () {
-      if (!confirm("Supprimer « " + c.label + " » ?")) return;
+      if (!confirm(L("tr.charges.confirmDelete", { label: c.label }))) return;
       data.charges = data.charges.filter(function (x) { return x.id !== c.id; });
-      persist("Mouvement supprimé.").then(function () { location.hash = "#/tresorerie"; });
+      persist(L("tr.charges.deleted")).then(function () { location.hash = "#/tresorerie"; });
     });
   }
 
   function viewSettings() {
     var last = data.settings.lastExport;
-    view.innerHTML = '<div class="espace-head"><h2>Réglages</h2></div>' +
-      (data.profile ? profileForm(profile(), false) : '<p class="notice">Créez d\'abord votre profil depuis l\'<a href="#/">accueil de l\'espace</a>.</p>') +
-      '<section class="card espace-card"><h3>Sauvegarde</h3>' +
-      "<p>Vos données sont enregistrées dans ce navigateur, sur cet appareil" + (S.mode() === "local" ? " (stockage local)" : "") +
-      ". Exportez régulièrement une sauvegarde : elle permet aussi de changer d'appareil.</p>" +
-      '<p class="small muted">Dernière sauvegarde : ' + (last ? day(last.slice(0, 10)) : "jamais") + ".</p>" +
-      '<div class="espace-actions"><button type="button" class="btn btn-primary btn-sm" id="export-btn">Exporter une sauvegarde</button></div>' +
-      "<h4>Restaurer une sauvegarde</h4>" + importControl() +
-      '<h4>Effacer</h4><p class="small muted">Supprime toutes les données de l\'Espace sur cet appareil. Exportez d\'abord une sauvegarde.</p>' +
-      '<button type="button" class="btn btn-ghost btn-sm" id="wipe-btn">Tout effacer</button></section>';
+    view.innerHTML = '<div class="espace-head"><h2>' + L("set.title") + "</h2></div>" +
+      (data.profile ? profileForm(profile(), false) : '<p class="notice">' + L("set.noProfileHtml") + "</p>") +
+      '<section class="card espace-card"><h3>' + L("set.backup") + "</h3>" +
+      "<p>" + (S.mode() === "local" ? L("set.storedLocal") : L("set.stored")) + "</p>" +
+      '<p class="small muted">' + L("set.lastBackup", { date: last ? day(last.slice(0, 10)) : L("set.never") }) + "</p>" +
+      '<div class="espace-actions"><button type="button" class="btn btn-primary btn-sm" id="export-btn">' + L("set.export") + "</button></div>" +
+      "<h4>" + L("set.restore") + "</h4>" + importControl() +
+      "<h4>" + L("set.wipe") + '</h4><p class="small muted">' + L("set.wipeIntro") + "</p>" +
+      '<button type="button" class="btn btn-ghost btn-sm" id="wipe-btn">' + L("set.wipeButton") + "</button></section>";
     if (data.profile) bindProfileForm(false);
     bindImport();
     $("export-btn").addEventListener("click", function () {
       data.settings.lastExport = now();
-      persist("Sauvegarde exportée.").then(function () {
-        OF.download(JSON.stringify(data, null, 1), "espace-entrepreneur-" + TODAY + ".json", "application/json");
+      persist(L("set.exported")).then(function () {
+        OF.download(JSON.stringify(data, null, 1), L("set.file", { date: TODAY }), "application/json");
         render(true);
       });
     });
     $("wipe-btn").addEventListener("click", function () {
-      if (!confirm("Effacer toutes les données de l'Espace sur cet appareil ? Cette action est définitive.")) return;
+      if (!confirm(L("set.confirmWipe"))) return;
       data = S.empty();
-      persist("Données effacées.").then(function () { location.hash = "#/"; render(); });
+      persist(L("set.wiped")).then(function () { location.hash = "#/"; render(); });
     });
   }
 

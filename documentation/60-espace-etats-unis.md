@@ -63,6 +63,22 @@ Une seule source de vérité : le code de l'Espace devient commun ; seul ce qui 
 
 Le stockage est déjà séparé par section (clé `of:espace:<section>`) : un utilisateur des deux pays a deux Espaces.
 
+### Avancement
+
+- **Étape 1 terminée le 19/11/2026.** Les textes de `tools/espace.js` sont dans `tools/espace-texts-fr.js`
+  (1 172 clés regroupées par écran), lus par `L(clé, valeurs)` : variables entre accolades (`{name}`), clés suffixées
+  `Html` quand le texte contient du balisage, pluriels par paires `count.*.one` / `count.*.many`, variante régionale
+  fusionnée par-dessus la langue (`fr-CA` sur `fr`). Une clé absente est signalée dans la console (le parcours échoue).
+  Le test `tests/unit/espace-textes.test.mjs` vérifie que chaque clé appelée existe, qu'aucune clé n'est inutilisée et
+  que toutes les langues ont les mêmes variables. Chaque lot a été validé par le parcours de l'Espace (359 points sur
+  359, critère U1) et les tests unitaires.
+- **Reste, pour l'étape 2** (textes affichés dans l'Espace mais écrits ailleurs) : le moteur français
+  `engines/espace-fr.js` (environ 150 textes : mois, catégories de dépenses, moyens de paiement, étapes des prospects,
+  messages d'erreur, en-têtes des exports CSV), `engines/espace-stats.js` (2), `tools/espace-store.js` (10 messages de
+  contrôle d'une sauvegarde), `tools/charts.js` (7 : mois abrégés, « Seuil de sécurité ») ; et, dans `tools/espace.js`,
+  des formats écrits pour le français : pourcentages (`" %"`), virgule décimale des champs (`rateText`,
+  `amountText`), `OF.eur` dans `signed` et dans la table `FMT`, à faire passer par les fonctions de format de la section.
+
 ## 4. Critères d'acceptation (extraits, à compléter à l'étape 2)
 
 | N° | Critère |
