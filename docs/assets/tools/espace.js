@@ -13,6 +13,17 @@
   var app = document.getElementById("espace-app");
   if (!app || !OFE || !OFE.espaceFR || !R || !S) return;
   var E = OFE.espaceFR, INV = OFE.invoiceFR, ST = OFE.espaceStats;
+  // Textes de la langue de la section (tools/espace-texts-<langue>.js ; documentation/60, § 3, étape 1) : la langue
+  // (« fr »), puis sa variante régionale (« fr-CA ») qui ne redéfinit que ce qui change.
+  var TEXTS = window.OF_ESPACE_TEXTS || {};
+  var TX = Object.assign({}, TEXTS[OF.locale.slice(0, 2)], TEXTS[OF.locale]);
+  /** Texte (« libellé ») de la clé, avec les valeurs { nom: valeur } à la place des « {nom} ». Une clé absente est
+   *  une erreur. Nommé L : plusieurs fonctions de ce fichier ont une variable locale t. */
+  function L(key, vars) {
+    var text = TX[key];
+    if (text === undefined) { console.error("Espace : texte manquant « " + key + " »"); return key; }
+    return vars ? text.replace(/\{(\w+)\}/g, function (m, k) { return vars[k] != null ? vars[k] : m; }) : text;
+  }
   var $ = function (id) { return document.getElementById(id); };
   var view = $("espace-view"), statusEl = $("espace-status");
   var calEl = $("calendar-data");
@@ -26,35 +37,32 @@
 
   // ----- Libellés ----------------------------------------------------------------
 
-  var ACTIVITIES = [
-    ["liberal_bnc", "Profession libérale (BNC)"], ["cipav", "Profession libérale relevant de la CIPAV"],
-    ["services_bic", "Prestations de services commerciales (BIC)"], ["artisan", "Activité artisanale (BIC)"],
-    ["vente", "Vente de marchandises (BIC)"], ["real", "Je ne suis pas en micro-entreprise"]];
+  var ACTIVITIES = ["liberal_bnc", "cipav", "services_bic", "artisan", "vente", "real"].map(function (k) { return [k, L("activity." + k)]; });
   /** Seconde activité possible (activité mixte, documentation/53) : la vente avec une activité de services. */
   function activity2Options(activity) {
-    var none = [["", "Aucune"]];
+    var none = [["", L("activity.none")]];
     if (activity === "vente") return none.concat(ACTIVITIES.filter(function (a) { return a[0] !== "vente" && a[0] !== "real"; }));
     if (R.micro_activities[activity]) return none.concat(ACTIVITIES.filter(function (a) { return a[0] === "vente"; }));
     return none;
   }
   /** Profil en activité mixte (ventes et prestations suivies séparément). */
   function isMixed() { return !!E.mixedActivities(profile(), R); }
-  var VAT_REGIMES = [["franchise", "Franchise en base (pas de TVA)"], ["simplified", "Régime réel simplifié de TVA"], ["normal", "Régime réel normal de TVA"]];
-  var TYPES = { facture: "Facture", devis: "Devis", avoir: "Avoir" };
-  var STATES = {
-    draft: ["Brouillon", "st-draft"], unpaid: ["À encaisser", "st-unpaid"], overdue: ["En retard", "st-overdue"],
-    partial: ["Payée en partie", "st-partial"], paid: ["Payée", "st-paid"], sent: ["Envoyé", "st-unpaid"],
-    accepted: ["Accepté", "st-paid"], refused: ["Refusé", "st-draft"], invoiced: ["Facturé", "st-paid"],
-    issued: ["Émis", "st-unpaid"], refunded: ["Remboursé", "st-paid"], cancelled: ["Annulée par avoir", "st-draft"],
-    imputed: ["Imputé sur la facture", "st-paid"], refund: ["À rembourser", "st-overdue"]
+  var VAT_REGIMES = ["franchise", "simplified", "normal"].map(function (k) { return [k, L("vat." + k)]; });
+  var TYPES = { facture: L("type.facture"), devis: L("type.devis"), avoir: L("type.avoir") };
+  var STATE_CLASSES = {
+    draft: "st-draft", unpaid: "st-unpaid", overdue: "st-overdue", partial: "st-partial", paid: "st-paid", sent: "st-unpaid",
+    accepted: "st-paid", refused: "st-draft", invoiced: "st-paid", issued: "st-unpaid", refunded: "st-paid", cancelled: "st-draft",
+    imputed: "st-paid", refund: "st-overdue"
   };
-  var NEW_TITLES = { facture: "Nouvelle facture", devis: "Nouveau devis", avoir: "Nouvel avoir" };
-  var TERMS = [[0, "À réception"], [15, "15 jours"], [30, "30 jours"], [45, "45 jours"], [60, "60 jours"]];
+  var STATES = {};
+  Object.keys(STATE_CLASSES).forEach(function (k) { STATES[k] = [L("state." + k), STATE_CLASSES[k]]; });
+  var NEW_TITLES = { facture: L("new.facture"), devis: L("new.devis"), avoir: L("new.avoir") };
+  var TERMS = [[0, L("terms.receipt")]].concat([15, 30, 45, 60].map(function (n) { return [n, L("terms.days", { n: n })]; }));
   /** Délais proposés, avec le délai du document s'il n'est pas dans la liste (document repris du générateur). */
   function termsFor(value) {
     var n = parseInt(value, 10);
     if (!(n >= 0) || TERMS.some(function (t) { return t[0] === n; })) return TERMS;
-    return TERMS.concat([[n, n + " jours"]]).sort(function (a, b) { return a[0] - b[0]; });
+    return TERMS.concat([[n, L("terms.days", { n: n })]]).sort(function (a, b) { return a[0] - b[0]; });
   }
 
   // ----- Outils ------------------------------------------------------------------
