@@ -24,6 +24,9 @@
   passent dans le module ; mêmes vérifications, aucun changement visible.
 - Neuvième lot : les parties françaises des échéances (calendrier selon le profil, cotisations et TVA estimées,
   lien vers le calendrier fiscal) passent dans le module ; mêmes vérifications, aucun changement visible.
+- Dixième lot : les parties françaises de la trésorerie (sommes dues à l'Urssaf et en TVA, TVA de l'an dernier,
+  hypothèses) passent dans le module ; le parcours vérifie en plus le refus d'une TVA de l'an dernier négative
+  (364 points).
 
 ## 2026-11-19 (après-midi, suite) — Moteur de l'Espace des États-Unis (lot 2e)
 

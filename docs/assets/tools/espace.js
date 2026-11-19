@@ -1882,8 +1882,8 @@
       field("every", L("tr.c.every"), c.every || "month", { options: CHARGE_EVERY, half: true }) +
       field("start", c.every === "once" ? L("tr.c.date") : L("tr.c.next"), c.start || "", { type: "date", half: true }) +
       field("end", L("tr.c.end"), c.end || "", { type: "date", half: true, hint: L("tr.c.endHint") }) +
-      '<div class="field full charge-revenue"' + (flow === "in" ? "" : " hidden") + '><label class="check"><input type="checkbox" id="ep-revenue" name="revenue"' +
-      (c.revenue ? " checked" : "") + "><span>" + (profile().vatRegime && profile().vatRegime !== "franchise" ? L("tr.c.revenueVat") : L("tr.c.revenue")) + "</span></label></div>";
+      (UI.treasury ? '<div class="field full charge-revenue"' + (flow === "in" ? "" : " hidden") + '><label class="check"><input type="checkbox" id="ep-revenue" name="revenue"' +
+        (c.revenue ? " checked" : "") + "><span>" + UI.treasury.revenueLabel() + "</span></label></div>" : "");
   }
   function readCharge(form) {
     var f = form.elements, amount = f.amount.value.trim(), flow = f.flow.value === "in" ? "in" : "out";
@@ -1902,7 +1902,8 @@
   function bindChargeForm(form) {
     var sync = function () {
       var f = form.elements, once = f.every.value === "once";
-      form.querySelector(".charge-revenue").hidden = f.flow.value !== "in";
+      var revenue = form.querySelector(".charge-revenue");
+      if (revenue) revenue.hidden = f.flow.value !== "in";
       form.querySelector('label[for="ep-start"]').textContent = once ? L("tr.c.date") : L("tr.c.next");
       f.end.closest(".field").hidden = once;
     };
@@ -1917,7 +1918,9 @@
       (sub ? '<span class="kpi-sub">' + sub + "</span>" : "") + "</div>";
   }
   var lateText = function (n) { return n === 1 ? L("tr.late.one") : L("tr.late.many", { n: n }); };
-  var KIND_LABELS = { receipt: L("tr.kind.receipt"), refund: L("tr.kind.refund"), urssaf: L("tr.kind.urssaf"), vat: L("tr.kind.vat"), charge: L("tr.kind.charge"), planned: L("tr.kind.planned") };
+  var KIND_LABELS = { receipt: L("tr.kind.receipt"), refund: L("tr.kind.refund"), charge: L("tr.kind.charge"), planned: L("tr.kind.planned") };
+  /** Libellé d'un flux prévu : communs, ou du pays (France : Urssaf, TVA). */
+  var kindLabel = function (k) { return KIND_LABELS[k] || (UI.treasury && UI.treasury.kinds[k]) || ""; };
   var AGING_CLS = { notDue: "is-ok", d30: "is-near", d60: "is-warn", d90: "is-hot", more: "is-bad" };
   var drawCharts = null;
 
@@ -1941,19 +1944,7 @@
     var url = function (h, s) { return "#/tresorerie?horizon=" + h + "&scenario=" + s; };
 
     // Ce qui est déjà dû (v1).
-    var owedLines = o.urssaf.periods.filter(function (x) { return x.amount > 0; }).map(function (x) {
-      var v = { period: esc(x.period.label), cashed: esc(money(x.cashed)), date: day(x.due), amount: esc(money(x.amount)) };
-      return "<li>" + (x.period.key.indexOf("T") > -1 ? L("tr.owed.urssafQuarterHtml", v) : L("tr.owed.urssafMonthHtml", v)) + "</li>";
-    });
-    if (p.vatRegime === "normal" && o.vat.total > 0) owedLines.push("<li>" + L("tr.owed.vatNormalHtml", { amount: esc(money(o.vat.total)) }) + "</li>");
-    if (p.vatRegime === "simplified") {
-      owedLines.push("<li>" + (o.vat.advances ? L("tr.owed.vatSimplifiedAdvHtml", { advances: esc(money(o.vat.advances)), amount: esc(money(o.vat.total)) })
-        : L("tr.owed.vatSimplifiedHtml", { amount: esc(money(o.vat.total)) })) + "</li>");
-    }
-    var notes = [];
-    if (o.vat.advancesUnknown) notes.push(L("tr.note.vatAdvances"));
-    if (o.vat.previousYearDue) notes.push(L("tr.note.vatBalance", { year: +TODAY.slice(0, 4) - 1, date: day(o.vat.previousYearDue) }));
-    if (!o.urssaf.computed) notes.push(L("tr.note.noUrssaf"));
+    var due = UI.treasury ? UI.treasury.owed(o) : { lines: [], notes: [] }, owedLines = due.lines, notes = due.notes;
 
     var lowBad = curve && curve.low.balance < limit, below = firstBelow(curve, limit);
     var kpis = '<div class="kpis kpis-4">' +
@@ -2018,7 +2009,7 @@
 
     var soon = f.items.filter(function (x) { return x.date <= INV.addDays(TODAY, 30); });
     var upcomingCard = '<section class="card espace-card"><h3>' + L("tr.soon.title") + "</h3>" + (soon.length ? '<ul class="treasury-upcoming">' + soon.map(function (x) {
-        return '<li><span class="c-date">' + day(x.date) + '</span><span class="tr-label">' + esc(x.label) + '<span class="tr-kind">' + esc(KIND_LABELS[x.kind] || "") +
+        return '<li><span class="c-date">' + day(x.date) + '</span><span class="tr-label">' + esc(x.label) + '<span class="tr-kind">' + esc(kindLabel(x.kind)) +
           (x.late ? L("tr.lateSuffix") : "") + (x.delay ? L("tr.soon.delayed", { n: x.delay }) : "") + '</span></span><b class="num' + (x.amount < 0 ? " is-out" : " is-in") + '">' + esc(signed(x.amount)) + "</b></li>";
       }).join("") + "</ul>" : '<p class="small muted">' + L("tr.soon.none") + "</p>") + "</section>";
 
@@ -2053,18 +2044,14 @@
       field("cashDate", L("tr.s.date"), p.cashDate || TODAY, { type: "date", half: true }) +
       field("cashThreshold", L("tr.s.threshold"), rateText(p.cashThreshold), { half: true, inputmode: "decimal", placeholder: "0",
         hint: L("tr.s.thresholdHint") }) +
-      (p.vatRegime === "simplified" ? field("vatLastYear", L("tr.s.vatLastYear"), rateText(p.vatLastYear), { half: true, inputmode: "decimal",
-        hint: L("tr.s.vatLastYearHint") }) : "") +
+      (UI.treasury ? UI.treasury.settings.fields(p) : "") +
       '</div><p class="form-error" id="cash-error" role="alert" hidden></p><div class="espace-actions"><button type="submit" class="btn btn-primary">' + L("common.save") + "</button></div>" +
       (stale ? '<p class="notice warn">' + L("tr.s.stale", { date: day(p.cashDate) }) + "</p>" : "") + "</form>";
 
+    var hyp = UI.treasury ? UI.treasury.assumptions(o) : { main: "", last: "" };
     var assumptions = '<section class="card espace-card"><h3>' + L("tr.a.title") + '</h3><ul class="small prospect-rules">' +
       "<li>" + L("tr.a.basis") + esc(scenarioNote.charAt(0).toLowerCase() + scenarioNote.slice(1)) + "</li>" +
-      (o.urssaf.computed ? "<li>" + (p.vl ? L("tr.a.urssafVl") : L("tr.a.urssaf")) + "</li>" : "") +
-      (p.vatRegime && p.vatRegime !== "franchise" ? "<li>" + L("tr.a.vatHtml") + "</li>" : "") +
-      "<li>" + L("tr.a.breakEven") + "</li>" +
-      "<li>" + L("tr.a.delay") + "</li>" +
-      "<li>" + L("tr.a.incomeTaxHtml") + "</li></ul></section>";
+      hyp.main + "<li>" + L("tr.a.delay") + "</li>" + hyp.last + "</ul></section>";
 
     view.innerHTML = '<div class="espace-head"><h2>' + L("tr.title") + "</h2>" + tools + "</div>" + kpis +
       '<div class="espace-cols tr-charts">' + balanceCard + flowCard + "</div>" +
@@ -2101,20 +2088,21 @@
     cash.addEventListener("submit", function (e) {
       e.preventDefault();
       var f2 = cash.elements, raw = f2.cashBalance.value.trim(), bal = raw ? OF.num(raw) : null, date = f2.cashDate.value;
-      var vatRaw = f2.vatLastYear ? f2.vatLastYear.value.trim() : "", vatLast = vatRaw ? OF.num(vatRaw) : null;
       var thRaw = f2.cashThreshold.value.trim(), th = thRaw ? OF.num(thRaw) : null;
       var error = raw && !isFinite(bal) ? ["cashBalance", L("tr.s.errBalance")]
         : !/^\d{4}-\d{2}-\d{2}$/.test(date) || date > TODAY ? ["cashDate", L("tr.s.errDate")]
         : thRaw && !(isFinite(th) && th >= 0) ? ["cashThreshold", L("tr.s.errThreshold")]
-        : vatRaw && !(isFinite(vatLast) && vatLast >= 0) ? ["vatLastYear", L("tr.s.errVat")] : null;
-      ["cashBalance", "cashDate", "cashThreshold", "vatLastYear"].forEach(function (k) { if (f2[k]) f2[k].setAttribute("aria-invalid", String(!!error && error[0] === k)); });
+        : UI.treasury ? UI.treasury.settings.check(f2) : null;
+      ["cashBalance", "cashDate", "cashThreshold"].concat(UI.treasury ? UI.treasury.settings.names : []).forEach(function (k) {
+        if (f2[k]) f2[k].setAttribute("aria-invalid", String(!!error && error[0] === k));
+      });
       showError("cash-error", error ? error[1] : "");
       if (error) { f2[error[0]].focus(); return; }
       var pr = data.profile;
       pr.cashBalance = bal === null ? null : Math.round(bal * 100) / 100;
       pr.cashDate = date;
       pr.cashThreshold = th === null ? null : Math.round(th * 100) / 100;
-      if (f2.vatLastYear) pr.vatLastYear = vatLast === null ? null : Math.round(vatLast * 100) / 100;
+      if (UI.treasury) UI.treasury.settings.save(f2, pr);
       pr.updatedAt = now();
       persist(L("tr.s.saved")).then(function () { render(true); });
     });
@@ -2197,7 +2185,8 @@
               now: now, isMicro: isMicro, profile: profile, view: view, amountText: amountText, E: E, R: R, S: S,
               OF: OF, TODAY: TODAY, YEAR: YEAR, TERMS: TERMS, isMixed: isMixed, ST: ST, barList: barList, pct: pct,
               charts: function (fn) { drawCharts = fn; fn(); }, FMT: FMT, client: client, parties: parties,
-              docLabel: docLabel, loadLazy: loadLazy, data: function () { return data; } };
+              docLabel: docLabel, loadLazy: loadLazy, rateText: rateText,
+              data: function () { return data; } };
   var UI = OFE.espaceUI && OFE.espaceUI[OF.section] ? OFE.espaceUI[OF.section](ctx) : {};
 
   // ----- Démarrage -----------------------------------------------------------------------------------

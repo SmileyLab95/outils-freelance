@@ -5,7 +5,8 @@
  * électronique de facturation) ; éditeur de document (TVA selon le client, nature, biens ou services des lignes).
  * Facture électronique Factur-X d'un document émis (documentation/10). Livre des recettes et dépenses (registre
  * des achats, documentation/36). Règles de prospection de la CNIL et durée de conservation (documentation/38).
- * Échéances : calendrier selon le profil, cotisations et TVA estimées.
+ * Échéances : calendrier selon le profil, cotisations et TVA estimées. Trésorerie : sommes dues (Urssaf, TVA),
+ * TVA de l'an dernier, hypothèses.
  * Module d'écrans d'un pays : la fabrique
  * OFE.espaceUI.fr reçoit le contexte prêté par tools/espace.js (textes, formats, champs, données, règles…) et renvoie ses
  * crochets ; routes : écrans en plus du cadre commun. Chargé par la page de la section avant tools/espace.js.
@@ -17,7 +18,8 @@
     var $ = ctx.$, L = ctx.L, esc = ctx.esc, money = ctx.money, day = ctx.day, percent = ctx.percent, DEC = ctx.DEC, field = ctx.field, options = ctx.options, kpi = ctx.kpi, countText = ctx.countText, showError = ctx.showError, persist = ctx.persist, now = ctx.now, isMicro = ctx.isMicro, profile = ctx.profile, view = ctx.view, amountText = ctx.amountText, E = ctx.E, R = ctx.R, S = ctx.S, OF = ctx.OF, TODAY = ctx.TODAY, YEAR = ctx.YEAR;
     var D = ctx.data, CAL = ctx.CAL, longDay = ctx.longDay, TERMS = ctx.TERMS, isMixed = ctx.isMixed;
     var FMT = ctx.FMT, client = ctx.client, parties = ctx.parties, docLabel = ctx.docLabel, loadLazy = ctx.loadLazy;
-    var ST = ctx.ST, barList = ctx.barList, pct = ctx.pct, charts = ctx.charts;   // données de l'Espace : l'objet change à chaque chargement, d'où une fonction
+    var ST = ctx.ST, barList = ctx.barList, pct = ctx.pct, charts = ctx.charts;
+    var rateText = ctx.rateText;   // données de l'Espace : l'objet change à chaque chargement, d'où une fonction
 
     function asset(id) { return D().assets.filter(function (a) { return a.id === id; })[0] || null; }
     var ASSET_HINTS = { deductible: L("as.hint.deductible"), partial: L("as.hint.partial") };
@@ -856,6 +858,56 @@
       };
     }
 
+
+    // ----- Trésorerie : sommes déjà dues (Urssaf, TVA), réglages et hypothèses (documentation/39-tresorerie.md) -----
+
+    var TREASURY_KINDS = { urssaf: L("tr.kind.urssaf"), vat: L("tr.kind.vat") };
+    /** Sommes déjà dues (estimées) : cotisations des périodes encaissées, TVA selon le régime ; notes sur ce qui manque. */
+    function treasuryOwed(o) {
+      var p = profile();
+      var owedLines = o.urssaf.periods.filter(function (x) { return x.amount > 0; }).map(function (x) {
+        var v = { period: esc(x.period.label), cashed: esc(money(x.cashed)), date: day(x.due), amount: esc(money(x.amount)) };
+        return "<li>" + (x.period.key.indexOf("T") > -1 ? L("tr.owed.urssafQuarterHtml", v) : L("tr.owed.urssafMonthHtml", v)) + "</li>";
+      });
+      if (p.vatRegime === "normal" && o.vat.total > 0) owedLines.push("<li>" + L("tr.owed.vatNormalHtml", { amount: esc(money(o.vat.total)) }) + "</li>");
+      if (p.vatRegime === "simplified") {
+        owedLines.push("<li>" + (o.vat.advances ? L("tr.owed.vatSimplifiedAdvHtml", { advances: esc(money(o.vat.advances)), amount: esc(money(o.vat.total)) })
+          : L("tr.owed.vatSimplifiedHtml", { amount: esc(money(o.vat.total)) })) + "</li>");
+      }
+      var notes = [];
+      if (o.vat.advancesUnknown) notes.push(L("tr.note.vatAdvances"));
+      if (o.vat.previousYearDue) notes.push(L("tr.note.vatBalance", { year: +TODAY.slice(0, 4) - 1, date: day(o.vat.previousYearDue) }));
+      if (!o.urssaf.computed) notes.push(L("tr.note.noUrssaf"));
+      return { lines: owedLines, notes: notes };
+    }
+    /** Case d'une entrée prévue : chiffre d'affaires à venir, sur lequel estimer les cotisations (et la TVA). */
+    function revenueLabel() { return profile().vatRegime && profile().vatRegime !== "franchise" ? L("tr.c.revenueVat") : L("tr.c.revenue"); }
+    /** Réglages : TVA due au titre de l'année précédente (réel simplifié), qui fixe les acomptes de juillet et décembre. */
+    function treasuryFields(p) {
+      return p.vatRegime === "simplified" ? field("vatLastYear", L("tr.s.vatLastYear"), rateText(p.vatLastYear), { half: true, inputmode: "decimal",
+        hint: L("tr.s.vatLastYearHint") }) : "";
+    }
+    var vatLastYearOf = function (f2) { var raw = f2.vatLastYear ? f2.vatLastYear.value.trim() : ""; return { raw: raw, value: raw ? OF.num(raw) : null }; };
+    function treasuryCheck(f2) {
+      var v = vatLastYearOf(f2);
+      return v.raw && !(isFinite(v.value) && v.value >= 0) ? ["vatLastYear", L("tr.s.errVat")] : null;
+    }
+    function treasurySave(f2, pr) {
+      if (!f2.vatLastYear) return;
+      var v = vatLastYearOf(f2);
+      pr.vatLastYear = v.value === null ? null : Math.round(v.value * 100) / 100;
+    }
+    /** Hypothèses propres à la France : cotisations, TVA, point mort après cotisations ; impôt sur le revenu en dernier. */
+    function treasuryAssumptions(o) {
+      var p = profile();
+      return {
+        main: (o.urssaf.computed ? "<li>" + (p.vl ? L("tr.a.urssafVl") : L("tr.a.urssaf")) + "</li>" : "") +
+          (p.vatRegime && p.vatRegime !== "franchise" ? "<li>" + L("tr.a.vatHtml") + "</li>" : "") +
+          "<li>" + L("tr.a.breakEven") + "</li>",
+        last: "<li>" + L("tr.a.incomeTaxHtml") + "</li>"
+      };
+    }
+
     return {
       routes: {
         immobilisations: function (r) { (r.id ? viewAssetForm : viewAssets)(r); },
@@ -869,7 +921,9 @@
       issued: { cards: issuedCards, bind: bindIssued },
       prospects: { retentionYears: function () { return R.prospects_conservation.annees; }, retentionNote: retentionNote,
                    optoutNote: optoutNote, rules: prospectRules },
-      deadlines: { values: deadlineValues, hidden: deadlineHidden, classes: DEADLINE_CLASSES, summary: deadlineSummary }
+      deadlines: { values: deadlineValues, hidden: deadlineHidden, classes: DEADLINE_CLASSES, summary: deadlineSummary },
+      treasury: { kinds: TREASURY_KINDS, owed: treasuryOwed, revenueLabel: revenueLabel, assumptions: treasuryAssumptions,
+                  settings: { names: ["vatLastYear"], fields: treasuryFields, check: treasuryCheck, save: treasurySave } }
     };
   };
 })(typeof self !== "undefined" ? self : this);

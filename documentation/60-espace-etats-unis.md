@@ -238,6 +238,11 @@ conditions du calendrier selon le profil, échéances Urssaf masquées hors micr
 cotisations et TVA estimées, introduction et lien vers le calendrier fiscal français. La fenêtre de 90 jours, la frise,
 la liste et la prochaine échéance restent communes ; le calcul des montants (`ST.deadlines`, flux Urssaf et TVA de la
 trésorerie) sera généralisé avec le module américain. Parcours de l'Espace 363/363 et des comptes 51/51.
+Lot 3a-10 fait le 20/11/2026 : crochet `treasury` du module (`kinds`, `owed`, `revenueLabel`, `settings`,
+`assumptions`) : sommes déjà dues (cotisations, TVA) et leurs notes, libellés des flux Urssaf et TVA, case « chiffre
+d'affaires à venir », TVA de l'année précédente dans les réglages (champ, contrôle, enregistrement), hypothèses. Le
+solde prévu, les graphiques, les créances, les charges, les réglages communs et l'export restent communs. Le parcours
+vérifie en plus le refus d'une TVA de l'année précédente négative : Espace 364/364, comptes 51/51.
 
 ### Avancement
 

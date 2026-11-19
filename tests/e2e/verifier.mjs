@@ -5070,6 +5070,12 @@ const tests = {
     await page.evaluate(async () => { const d = await window.EspaceStore.load(); d.profile.vatRegime = "simplified"; d.profile.vatRate = 20; await window.EspaceStore.save(d); });
     await page.reload({ waitUntil: "networkidle" });
     await go("#/tresorerie");
+    await page.fill("#ep-vatLastYear", "-5");
+    await page.click("#cash-form button[type=submit]");
+    await page.waitForTimeout(200);
+    check((await text("#cash-error")) === "La TVA de l'année précédente doit être un montant positif." &&
+      (await page.getAttribute("#ep-vatLastYear", "aria-invalid")) === "true" && (await page.evaluate(() => document.activeElement.id)) === "ep-vatLastYear",
+      "Trésorerie : TVA de l'année précédente négative refusée (champ signalé)");
     await page.fill("#ep-vatLastYear", "5000");
     await page.click("#cash-form button[type=submit]");
     await page.waitForTimeout(300);
