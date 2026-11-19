@@ -147,7 +147,7 @@
     var nav = app.querySelector(".espace-nav"), current = nav && nav.querySelector('[aria-current="page"]');
     if (current && nav.scrollWidth > nav.clientWidth) nav.scrollLeft = current.offsetLeft - (nav.clientWidth - current.offsetWidth) / 2;
     var views = { accueil: viewWelcome, tableau: viewDashboard, documents: r.id ? viewDocument : viewDocuments,
-                  clients: r.id ? viewClientForm : viewClients, recettes: viewLedger, depenses: r.id ? viewExpenseForm : viewExpenses,
+                  clients: r.id ? viewClientForm : viewClients,
                   temps: r.id === "facturer" ? viewTimeInvoice : r.id ? viewTimeForm : viewTime,
                   prospects: r.id ? viewProspectForm : viewProspects,
                   tresorerie: r.id ? viewChargeForm : viewTreasury,
@@ -1154,68 +1154,7 @@
     });
   }
 
-  // ----- Livre des recettes -------------------------------------------------------------------------
-
-  function viewLedger(r) {
-    var years = {};
-    years[YEAR] = true;
-    data.documents.forEach(function (d) { (d.payments || []).forEach(function (p) { years[p.date.slice(0, 4)] = true; }); });
-    var year = r.params.annee && years[r.params.annee] ? r.params.annee : YEAR;
-    var rows = E.ledger(data.documents, year + "-01-01", year + "-12-31", profile(), R);
-    var sum = rows.reduce(function (s, x) { return s + x.amount; }, 0);
-    // Activité mixte : ventes et prestations distinctes (BOFiP, BOI-BIC-DECLA-30-30, § 30).
-    var mixed = isMixed();
-    var parts = function (x) {
-      return mixed ? '<td class="num c-part" data-label="' + L("ledger.sales") + '">' + esc(money(x.goods)) + '</td><td class="num c-part" data-label="' + L("ledger.services") + '">' +
-        esc(money(x.services)) + "</td>" : "";
-    };
-    var goodsSum = rows.reduce(function (s, x) { return s + (x.goods || 0); }, 0);
-    view.innerHTML = '<div class="espace-head"><h2>' + L("ledger.title", { year: esc(year) }) + '</h2><div class="espace-quick espace-noprint">' +
-      '<button type="button" class="btn btn-ghost btn-sm" id="ledger-csv"' + (rows.length ? "" : " disabled") + ">" + L("common.exportCsv") + "</button>" +
-      '<button type="button" class="btn btn-ghost btn-sm" id="ledger-print"' + (rows.length ? "" : " disabled") + ">" + L("common.print") + "</button></div></div>" +
-      receiptsOverview(year) +
-      '<div class="card espace-card"><div class="espace-filters espace-noprint" role="group" aria-label="' + L("common.year") + '">' +
-      Object.keys(years).sort().reverse().map(function (y) { return '<a class="tab" href="#/recettes?annee=' + y + '"' + (y === year ? ' aria-current="true"' : "") + ">" + y + "</a>"; }).join("") + "</div>" +
-      (rows.length ? "<table class=\"ledger\"><thead><tr><th>" + L("ledger.col.date") + "</th><th>" + L("ledger.col.client") + "</th><th>" + L("ledger.col.nature") +
-        "</th><th>" + L("ledger.col.method") + "</th><th>" + L("ledger.col.ref") + "</th>" +
-        (mixed ? '<th class="num">' + L("ledger.sales") + '</th><th class="num">' + L("ledger.services") + "</th>" : "") + '<th class="num">' + L("ledger.col.amount") + "</th></tr></thead><tbody>" +
-        E.ledgerQuarters(rows, year, TODAY, profile().startDate).map(function (q) {
-          return rows.filter(function (x) { return x.date >= q.start && x.date <= q.end; }).map(function (x) {
-            return '<tr><td class="c-date">' + day(x.date) + '</td><td class="c-client">' + esc(x.client) + '</td><td class="c-nature">' + esc(x.nature) +
-              '</td><td class="c-method">' + esc(x.method) + '</td><td class="c-ref"><a href="#/documents/' + esc(x.docId) + '">' + esc(x.ref) +
-              '</a></td>' + parts(x) + '<td class="num">' + esc(money(x.amount)) + "</td></tr>";
-          }).join("") + '<tr class="ledger-subtotal"><td colspan="5">' + L("ledger.quarterTotal", { quarter: esc(q.label) }) + (q.open ? L("chart.current") : "") + "</td>" + parts(q) +
-            '<td class="num">' + esc(money(q.total)) + "</td></tr>";
-        }).join("") + '</tbody><tfoot><tr><td colspan="5">' + L("ledger.yearTotal", { year: esc(year) }) + "</td>" +
-          parts({ goods: Math.round(goodsSum * 100) / 100, services: Math.round((sum - goodsSum) * 100) / 100 }) +
-          '<td class="num">' + esc(money(sum)) + "</td></tr></tfoot></table>"
-        : '<p class="muted">' + L("ledger.empty", { year: esc(year) }) + "</p>") +
-      '<p class="small muted">' + L("ledger.how") + " " + (mixed ? L("ledger.mixed") + " " : "") +
-      L("ledger.keep", { years: R.conservation_pieces.commerce_annees }) + "</p></div>";
-    drawCharts = function () {
-      var el = view.querySelector('[data-chart="receipts"]');
-      if (!el) return;
-      var rc = ST.receipts(data.documents, year, TODAY), refs = [];
-      if (isMicro() && year === YEAR) {
-        var th = E.thresholds(data.documents, profile(), R, year);
-        refs.push({ value: th.ceiling, label: L("ledger.refCeiling"), cls: "is-ceiling" });
-        if (th.vat) refs.push({ value: th.vat.base, label: L("gauge.vat"), cls: "is-vat" });
-      }
-      el.innerHTML = OF.charts.balance({ width: Math.floor(el.getBoundingClientRect().width) || 600, from: year + "-01-01", to: year + "-12-31", refs: refs,
-        series: [{ name: L("chart.cashed"), points: rc.points, cls: "is-main", end: rc.end }], title: L("ledger.chartTitle", { year: year }),
-        desc: L("ledger.chartDesc", { total: money(rc.total), refs: refs.length ? " ; " + refs.map(function (r) { return r.label + " : " + money(r.value); }).join(" ; ") : "" }) });
-    };
-    drawCharts();
-    if (!rows.length) return;
-    $("ledger-csv").addEventListener("click", function () {
-      OF.download("﻿" + E.ledgerCSV(rows), L("ledger.file", { year: year }), "text/csv;charset=utf-8");
-    });
-    $("ledger-print").addEventListener("click", function () {
-      document.body.classList.add("print-ledger");
-      window.print();
-      document.body.classList.remove("print-ledger");
-    });
-  }
+  // ----- Listes en barres -------------------------------------------------------------------------------
 
   /** Liste en barres horizontales : [{ name, href, amount, share }] (parts de 0 à 1). */
   function barList(items, fmt) {
@@ -1224,159 +1163,6 @@
       return '<li><span class="bl-name">' + (x.href ? '<a href="' + x.href + '">' + esc(x.name) + "</a>" : esc(x.name)) + '</span><span class="bl-bar" aria-hidden="true"><span style="width:' +
         (max > 0 ? Math.max(1, x.amount / max * 100).toFixed(1) : 0) + '%"></span></span><b class="bl-amount">' + esc((fmt || money)(x.amount)) + '</b><span class="bl-share">' + pct(x.share) + "</span></li>";
     }).join("") + "</ul>";
-  }
-
-  /** Livre des recettes : encaissé, trimestre, moyenne, projection et cumul face au plafond (documentation/55, § 2). */
-  function receiptsOverview(year) {
-    var rc = ST.receipts(data.documents, year, TODAY);
-    if (!rc.total && year !== YEAR) return "";
-    var th = isMicro() && year === YEAR ? E.thresholds(data.documents, profile(), R, year) : null;
-    return '<div class="espace-noprint"><div class="kpis kpis-4">' +
-      kpi(L("dash.cashedYear", { year: year }), money(rc.total), countText(rc.points.length - 1, L("count.receiptDay.one"), L("count.receiptDay.many"))) +
-      (rc.quarter !== null ? kpi(L("ledger.cashedQuarter", { quarter: rc.quarterLabel }), money(rc.quarter), L("ledger.sinceQuarter")) : kpi(L("ledger.avgQuarter"), money(Math.round(rc.total / 4 * 100) / 100), L("ledger.wholeYear"))) +
-      kpi(L("ledger.avgMonth"), rc.average === null ? "–" : money(rc.average), year === YEAR ? L("ledger.monthsElapsed") : L("ledger.over12")) +
-      (rc.projection !== null ? kpi(L("ledger.projection"), money(rc.projection), L("ledger.projectionSub") +
-        (th && rc.projection > th.ceiling ? L("ledger.overCeiling") : ""), th && rc.projection > th.ceiling ? "is-warn" : "")
-        : kpi(L("pay.receipts"), String(rc.points.length - 1), L("ledger.daysWithReceipt"))) + "</div>" +
-      '<section class="card espace-card"><div class="card-head"><h3>' + L("ledger.cumulative") + '</h3><span class="small muted">' + L("ledger.sinceJan1") +
-      (th ? L("ledger.vsCeiling") + (th.vat ? L("ledger.andVat") : "") : "") + ".</span></div>" +
-      '<div class="chart" data-chart="receipts"></div>' + OF.charts.legend([{ cls: "is-main", label: L("ledger.cumulLegend") }].concat(th ? [{ cls: "is-ceiling", label: L("ledger.ceilingLegend", { amount: money(th.ceiling) }) }] : [])
-        .concat(th && th.vat ? [{ cls: "is-vat", label: L("ledger.vatLegend", { amount: money(th.vat.base) }) }] : [])) + "</section></div>";
-  }
-
-  /**
-   * Indicateurs des dépenses : année passée entière, ou période choisie de l'année en cours (documentation/55, § 2 et
-   * § 9) ; libellé, bornes, mois de la moyenne et du graphique.
-   */
-  function expensesFigures(year, key) {
-    if (year === YEAR) {
-      var x = ST.expensesPeriod(data.expenses, data.documents, TODAY, key, profile(), R);
-      return Object.assign(x, { label: x.period.label, from: x.period.from, to: x.period.to,
-        averageHint: { trimestre: L("exp.avg.quarter"), annee: L("ledger.monthsElapsed"), "12m": L("ledger.over12") }[x.period.key],
-        chartIntro: x.period.key === "annee" ? L("docs.yearIntro", { year: YEAR }) : L("docs.last12Intro"),
-        chartTitle: x.period.key === "annee" ? L("exp.chartYear", { year: YEAR }) : L("exp.chart12") });
-    }
-    return Object.assign(ST.expenses(data.expenses, data.documents, year, TODAY, profile(), R), { period: null, label: L("exp.inYear", { year: year }),
-      from: year + "-01-01", to: year + "-12-31", averageHint: L("ledger.over12"), perExpense: null, chartIntro: L("docs.yearIntro", { year: year }), chartTitle: L("exp.chartYear", { year: year }) });
-  }
-  var EXPENSE_PERIOD_LABELS = { mois: L("period.mois"), trimestre: L("period.trimestre"), annee: L("period.annee"), "12m": L("period.12m") };
-
-  /** Dépenses : période, indicateurs, graphique par mois, catégories et fournisseurs (documentation/55, § 2 et § 9). */
-  function expensesOverview(year, key) {
-    if (!data.expenses.some(function (e) { return e.date <= TODAY; })) return "";
-    var xs = expensesFigures(year, key), top = xs.byCategory[0];
-    var tools = '<div class="tr-tools espace-noprint">' + (xs.period ? '<div class="seg" role="group" aria-label="' + L("period.label") + '">' +
-      ST.EXPENSE_PERIODS.map(function (k) {
-        return '<a class="tab" href="#/depenses' + (k === "annee" ? "" : "?periode=" + k) + '"' + (k === xs.period.key ? ' aria-current="true"' : "") + ">" + EXPENSE_PERIOD_LABELS[k] + "</a>";
-      }).join("") + "</div>" : "") + '<span class="small muted">' + L("period.range", { from: day(xs.from), to: day(xs.to) }) + "</span></div>";
-    return '<div class="espace-noprint">' + tools + '<div class="kpis kpis-4">' +
-      kpi(L("exp.kpiTotal", { period: xs.label }), money(xs.total), xs.count ? countText(xs.count, L("count.expense.one"), L("count.expense.many")) : L("exp.none")) +
-      kpi(L("exp.kpiTop"), top ? money(top.amount) : "–", top ? top.name + " · " + pct(top.share) : L("exp.none")) +
-      (xs.period && xs.period.key === "mois"
-        ? kpi(L("exp.kpiAverage"), xs.perExpense === null ? "–" : money(xs.perExpense), xs.count ? L("exp.kpiAverageSub") : L("exp.none"))
-        : kpi(L("ledger.avgMonth"), xs.average === null ? "–" : money(xs.average), xs.averageHint)) +
-      kpi(L("exp.kpiRatio"), xs.ratio === null ? "–" : pct(xs.ratio), (xs.ratio === null ? L("exp.noReceipt") :
-        L("exp.kpiRatioSub", { period: xs.label })) + (xs.abatement !== null ? L("exp.abatement", { pct: pct(xs.abatement) }) : "")) + "</div>" +
-      '<div class="espace-cols tr-charts"><section class="card espace-card"><div class="card-head"><h3>' + L("exp.monthly") + '</h3><span class="small muted">' + esc(xs.chartIntro) + "</span></div>" +
-      '<div class="chart" data-chart="expenses"></div>' + OF.charts.table(L("exp.monthly"), [L("chart.month"), L("exp.series")], xs.byMonth.map(function (m) { return [m.label, money(m.amount)]; })) +
-      '</section><section class="card espace-card"><h3>' + L("exp.byCategory") + "</h3>" + barList(xs.byCategory) + "<h4>" + L("exp.suppliers") + "</h4>" + barList(xs.suppliers) +
-      (xs.abatement !== null ? '<p class="small muted">' + L("exp.abatementNoteHtml", { pct: pct(xs.abatement) }) + "</p>" : "") +
-      "</section></div></div>";
-  }
-
-  // ----- Dépenses et registre des achats ----------------------------------------------------------------
-
-  function expense(id) { return data.expenses.filter(function (e) { return e.id === id; })[0] || null; }
-
-  function viewExpenses(r) {
-    var required = E.purchasesRequired(profile(), R.registre_achats, R);
-    var years = {};
-    years[YEAR] = true;
-    data.expenses.forEach(function (e) { years[e.date.slice(0, 4)] = true; });
-    var year = r.params.annee && years[r.params.annee] ? r.params.annee : YEAR;
-    var res = E.expenseRows(data.expenses, year + "-01-01", year + "-12-31");
-    view.innerHTML = '<div class="espace-head"><h2>' + (required ? L("exp.titlePurchases", { year: esc(year) }) : L("exp.title", { year: esc(year) })) + '</h2><div class="espace-quick espace-noprint">' +
-      '<a class="btn btn-primary btn-sm" href="#/depenses/nouvelle">' + (required ? L("exp.addPurchase") : L("exp.add")) + "</a>" +
-      (isMicro() ? "" : '<a class="btn btn-ghost btn-sm" href="#/immobilisations">' + L("exp.assets") + "</a>") +
-      '<button type="button" class="btn btn-ghost btn-sm" id="expenses-csv"' + (res.rows.length ? "" : " disabled") + ">" + L("common.exportCsv") + "</button>" +
-      '<button type="button" class="btn btn-ghost btn-sm" id="expenses-print"' + (res.rows.length ? "" : " disabled") + ">" + L("common.print") + "</button></div></div>" +
-      expensesOverview(year, r.params.periode) +
-      '<div class="card espace-card"><div class="espace-filters espace-noprint" role="group" aria-label="' + L("common.year") + '">' +
-      Object.keys(years).sort().reverse().map(function (y) { return '<a class="tab" href="#/depenses?annee=' + y + '"' + (y === year ? ' aria-current="true"' : "") + ">" + y + "</a>"; }).join("") + "</div>" +
-      (res.rows.length ? "<table class=\"ledger\"><thead><tr><th>" + L("ledger.col.date") + "</th><th>" + L("exp.col.supplier") + "</th><th>" + L("ledger.col.nature") +
-        "</th><th>" + L("ledger.col.method") + "</th><th>" + L("exp.col.ref") + '</th><th class="num">' + L("ledger.col.amount") + "</th></tr></thead><tbody>" +
-        res.rows.map(function (x) {
-          return '<tr><td class="c-date">' + day(x.date) + '</td><td class="c-client"><a href="#/depenses/' + esc(x.id) + '">' + esc(x.supplier) + "</a></td><td>" +
-            esc(x.label) + '</td><td class="c-method">' + esc(x.method) + '</td><td class="c-ref">' + esc(x.ref) + '</td><td class="num">' + esc(money(x.amount)) + "</td></tr>";
-        }).join("") + '</tbody><tfoot><tr><td colspan="5">' + (required ? L("exp.totalPurchases", { year: esc(year) }) : L("exp.total", { year: esc(year) })) + '</td><td class="num">' + esc(money(res.total)) + "</td></tr>" +
-        '<tr><td colspan="5">' + L("exp.cash") + '</td><td class="num">' + esc(money(res.cash)) + "</td></tr></tfoot></table>"
-        : '<p class="muted">' + (required ? L("exp.emptyPurchasesHtml", { year: esc(year) }) : L("exp.emptyHtml", { year: esc(year) })) + "</p>") +
-      '<p class="small muted">' + (required ? L("exp.registerRequired") : L("exp.registerOptional")) + "</p>" +
-      (isMicro() ? '<p class="small muted">' + L("exp.microNote") + "</p>" : "") +
-      '<p class="small muted">' + L("exp.keep", { years: R.conservation_pieces.commerce_annees }) + "</p></div>";
-    drawCharts = function () {
-      var el = view.querySelector('[data-chart="expenses"]');
-      if (!el) return;
-      var xs = expensesFigures(year, r.params.periode);
-      el.innerHTML = OF.charts.bars({ width: Math.floor(el.getBoundingClientRect().width) || 600,
-        groups: xs.byMonth.map(function (m) { return { key: m.key, label: m.label, values: [m.amount], future: false }; }),
-        series: [{ name: L("exp.series"), cls: "is-out" }], title: xs.chartTitle,
-        desc: L("exp.chartDesc", { total: money(xs.byMonth.reduce(function (s, m) { return Math.round((s + m.amount) * 100) / 100; }, 0)) }) });
-    };
-    drawCharts();
-    if (!res.rows.length) return;
-    $("expenses-csv").addEventListener("click", function () {
-      OF.download("\ufeff" + E.expensesCSV(res.rows), required ? L("exp.filePurchases", { year: year }) : L("exp.file", { year: year }), "text/csv;charset=utf-8");
-    });
-    $("expenses-print").addEventListener("click", function () {
-      document.body.classList.add("print-ledger");
-      window.print();
-      document.body.classList.remove("print-ledger");
-    });
-  }
-
-  function viewExpenseForm(r) {
-    var isNew = r.id === "nouvelle";
-    var x = isNew ? { date: TODAY, method: "carte" } : expense(r.id);
-    if (!x) { view.innerHTML = '<div class="espace-head"><h2>' + L("exp.notFound") + '</h2></div><p><a href="#/depenses">' + L("exp.back") + "</a></p>"; return; }
-    var methods = Object.keys(E.METHODS).map(function (k) { return [k, E.METHODS[k]]; });
-    var required = E.purchasesRequired(profile(), R.registre_achats, R);
-    view.innerHTML = '<div class="espace-head"><h2>' + (isNew ? (required ? L("exp.newPurchase") : L("exp.new")) : esc(x.supplier)) + "</h2></div>" +
-      '<form class="card espace-card" id="expense-form" novalidate><div class="fields">' +
-      field("date", L("ledger.col.date"), x.date, { type: "date", half: true, required: true }) +
-      field("amount", L("exp.amount"), x.amount == null ? "" : Number(x.amount).toFixed(2).replace(".", DEC), { half: true, required: true, inputmode: "decimal", placeholder: L("exp.amountPlaceholder"),
-        hint: L("exp.amountHint") }) +
-      field("supplier", L("exp.col.supplier"), x.supplier, { required: true, placeholder: L("exp.supplierPlaceholder") }) +
-      field("label", L("exp.label"), x.label, { placeholder: L("exp.labelPlaceholder") }) +
-      field("method", L("pay.method"), x.method, { options: methods, half: true }) +
-      field("ref", L("exp.ref"), x.ref, { half: true, placeholder: L("exp.refPlaceholder") }) +
-      field("category", L("exp.category"), x.category || "", { half: true, options: [["", L("exp.uncategorized")]].concat(Object.keys(E.EXPENSE_CATEGORIES).map(function (k) {
-        return [k, E.EXPENSE_CATEGORIES[k]]; })), hint: L("exp.categoryHint") }) +
-      '</div><p class="form-error" id="expense-error" role="alert" hidden></p><div class="espace-actions">' +
-      '<button type="submit" class="btn btn-primary">' + L("common.save") + '</button><a class="btn btn-ghost" href="#/depenses?annee=' + esc(String(x.date).slice(0, 4)) + '">' + L("common.cancel") + "</a>" +
-      (isNew ? "" : '<button type="button" class="btn btn-ghost" id="expense-delete">' + L("line.remove") + "</button>") + "</div></form>";
-    var form = $("expense-form");
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
-      var f = form.elements;
-      var next = { date: f.date.value, supplier: f.supplier.value.trim(), label: f.label.value.trim(), method: f.method.value,
-                   ref: f.ref.value.trim(), amount: OF.num(f.amount.value), category: E.EXPENSE_CATEGORIES[f.category.value] ? f.category.value : "" };
-      var errors = E.checkExpense(next);
-      f.supplier.setAttribute("aria-invalid", String(!next.supplier));
-      f.amount.setAttribute("aria-invalid", String(!(next.amount > 0)));
-      if (errors.length) { showError("expense-error", errors.join(" ")); (next.supplier ? (next.amount > 0 ? f.date : f.amount) : f.supplier).focus(); return; }
-      showError("expense-error", "");
-      next.amount = Math.round(next.amount * 100) / 100;
-      var target = isNew ? { id: S.uid(), createdAt: now() } : x;
-      Object.assign(target, next, { updatedAt: now() });
-      if (isNew) data.expenses.push(target);
-      persist(isNew ? L("exp.saved") : L("exp.updated")).then(function () { location.hash = "#/depenses?annee=" + next.date.slice(0, 4); });
-    });
-    if (!isNew) $("expense-delete").addEventListener("click", function () {
-      if (!confirm(L("exp.confirmDelete"))) return;
-      data.expenses = data.expenses.filter(function (e) { return e.id !== x.id; });
-      persist(L("exp.deleted")).then(function () { location.hash = "#/depenses?annee=" + x.date.slice(0, 4); });
-    });
   }
 
   // ----- Immobilisations et amortissements (documentation/57-immobilisations.md) ------------------------------------
@@ -2427,9 +2213,12 @@
   // ----- Module d'écrans du pays (documentation/60, § 3.2, D90) ------------------------------------------------
   // Ce que l'Espace prête au module de la section (tools/espace-<pays>-ui.js) ; les données par une fonction, car l'objet
   // data est remplacé à chaque chargement.
-  var ctx = { $: $, CAL: CAL, longDay: longDay, L: L, esc: esc, money: money, day: day, percent: percent, DEC: DEC, field: field, options: options, kpi: kpi, countText: countText, showError: showError, persist: persist, now: now, isMicro: isMicro, profile: profile, view: view, amountText: amountText, E: E, R: R, S: S, OF: OF, TODAY: TODAY, YEAR: YEAR,
-              TERMS: TERMS, isMixed: isMixed, FMT: FMT, client: client, parties: parties, docLabel: docLabel, loadLazy: loadLazy,
-              data: function () { return data; } };
+  var ctx = { $: $, CAL: CAL, longDay: longDay, L: L, esc: esc, money: money, day: day, percent: percent, DEC: DEC,
+              field: field, options: options, kpi: kpi, countText: countText, showError: showError, persist: persist,
+              now: now, isMicro: isMicro, profile: profile, view: view, amountText: amountText, E: E, R: R, S: S,
+              OF: OF, TODAY: TODAY, YEAR: YEAR, TERMS: TERMS, isMixed: isMixed, ST: ST, barList: barList, pct: pct,
+              charts: function (fn) { drawCharts = fn; fn(); }, FMT: FMT, client: client, parties: parties,
+              docLabel: docLabel, loadLazy: loadLazy, data: function () { return data; } };
   var UI = OFE.espaceUI && OFE.espaceUI[OF.section] ? OFE.espaceUI[OF.section](ctx) : {};
 
   // ----- Démarrage -----------------------------------------------------------------------------------

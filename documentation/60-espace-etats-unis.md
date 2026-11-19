@@ -223,6 +223,12 @@ Factur-X d'un document émis à un professionnel, coordonnées complétées depu
 chargeur de scripts différés reste commun et est prêté au module. Parcours de l'Espace 363/363 et des comptes 51/51 ;
 jeu d'essai Factur-X (12 factures, XML et PDF) et fichiers produits par l'Espace pendant le parcours validés (XSD,
 EN 16931, règles françaises, PDF/A-3).
+Lot 3a-7 fait le 19/11/2026 : le livre des recettes (micro-entreprise, activité mixte, plafonds) et les dépenses
+(registre des achats, catégories) passent entiers dans le module, comme routes `recettes` et `depenses` : l'Espace
+américain aura ses propres écrans pour ces adresses (recettes en caisse, lignes de l'annexe C). Les aides génériques
+restent communes et sont prêtées (listes en barres, pourcentages, statistiques) ; `ctx.charts(fn)` installe le dessin
+des graphiques de l'écran, redessinés au changement de taille (capture sur téléphone relue). Parcours de l'Espace
+363/363 et des comptes 51/51.
 
 ### Avancement
 

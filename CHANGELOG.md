@@ -18,6 +18,8 @@
   la fiche client créée depuis un brouillon (363 points).
 - Sixième lot : la facture électronique Factur-X d'un document émis passe dans le module ; parcours (363) et
   validation Factur-X (jeu d'essai et fichiers produits par l'Espace) réussis, aucun changement visible.
+- Septième lot : le livre des recettes et les dépenses (registre des achats) passent entiers dans le module ;
+  mêmes vérifications, aucun changement visible.
 
 ## 2026-11-19 (après-midi, suite) — Moteur de l'Espace des États-Unis (lot 2e)
 
