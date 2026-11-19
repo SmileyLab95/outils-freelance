@@ -712,7 +712,7 @@
     }).join("") + "</ul>";
   }
 
-  var FILTERS = [["tous", "Tous"], ["facture", "Factures"], ["devis", "Devis"], ["avoir", "Avoirs"], ["draft", "Brouillons"], ["open", "À encaisser"]];
+  var FILTERS = ["tous", "facture", "devis", "avoir", "draft", "open"].map(function (k) { return [k, L("filter." + k)]; });
   function viewDocuments(r) {
     var filter = r.params.filtre || "tous", search = (r.params.q || "").toLowerCase();
     var list = data.documents.filter(function (d) {
@@ -734,13 +734,13 @@
         .filter(function (x) { return x[1]; }).map(function (x) { return x[0] + "=" + encodeURIComponent(x[1]); });
       return "#/documents" + (parts.length ? "?" + parts.join("&") : "");
     };
-    view.innerHTML = '<div class="espace-head"><h2>Documents</h2><div class="espace-quick espace-noprint">' +
-      '<a class="btn btn-primary btn-sm" href="#/documents/nouveau?type=facture">+ Facture</a>' +
-      '<a class="btn btn-ghost btn-sm" href="#/documents/nouveau?type=devis">+ Devis</a></div></div>' + documentsOverview(r, url) +
-      '<div class="card espace-card"><div class="espace-filters" role="group" aria-label="Filtrer les documents">' +
+    view.innerHTML = '<div class="espace-head"><h2>' + L("docs.title") + '</h2><div class="espace-quick espace-noprint">' +
+      '<a class="btn btn-primary btn-sm" href="#/documents/nouveau?type=facture">' + L("quick.invoice") + "</a>" +
+      '<a class="btn btn-ghost btn-sm" href="#/documents/nouveau?type=devis">' + L("quick.quote") + "</a></div></div>" + documentsOverview(r, url) +
+      '<div class="card espace-card"><div class="espace-filters" role="group" aria-label="' + L("docs.filterLabel") + '">' +
       FILTERS.map(function (f) { return '<a class="tab" href="' + url({ filtre: f[0] }) + '"' + (f[0] === filter ? ' aria-current="true"' : "") + ">" + esc(f[1]) + "</a>"; }).join("") +
-      '</div><div class="field"><label for="doc-search">Rechercher</label><input id="doc-search" type="search" value="' + esc(r.params.q || "") +
-      '" placeholder="Numéro, client, prestation…"></div>' + docTable(list) + "</div>";
+      '</div><div class="field"><label for="doc-search">' + L("docs.search") + '</label><input id="doc-search" type="search" value="' + esc(r.params.q || "") +
+      '" placeholder="' + L("docs.searchPlaceholder") + '"></div>' + docTable(list) + "</div>";
     drawCharts = function () { drawInvoicedChart("invoiced", documentsMonths(ST.period(r.params.periode, TODAY))); };
     drawCharts();
     var input = $("doc-search");
@@ -785,71 +785,71 @@
       d = draftInMemory;
     } else {
       d = doc(r.id);
-      if (!d) { view.innerHTML = '<div class="espace-head"><h2>Document introuvable</h2></div><p><a href="#/documents">Retour aux documents</a></p>'; return; }
+      if (!d) { view.innerHTML = '<div class="espace-head"><h2>' + L("doc.notFound") + '</h2></div><p><a href="#/documents">' + L("doc.backToDocs") + "</a></p>"; return; }
     }
     if (d.status === "draft") renderDraft(d); else renderIssued(d);
   }
 
-  var LINE_UNITS = [["", "Aucune"], ["hour", "Heure"], ["day", "Jour"]];
-  var LINE_KINDS = [["", "À préciser"], ["biens", "Vente"], ["services", "Service"]];
+  var LINE_UNITS = [["", L("line.unit.none")], ["hour", L("line.unit.hour")], ["day", L("line.unit.day")]];
+  var LINE_KINDS = [["", L("line.kind.none")], ["biens", L("line.kind.goods")], ["services", L("line.kind.services")]];
   function linesHTML(d) {
     var mixed = d.nature === "mixte";
     return d.lines.map(function (l, i) {
       return '<div class="line-row has-unit' + (mixed ? " has-kind" : "") + '" data-line="' + i + '">' +
-        (mixed ? '<div class="field line-kind"><label for="ln-kind-' + i + '">Nature</label><select id="ln-kind-' + i + '" data-k="kind">' +
+        (mixed ? '<div class="field line-kind"><label for="ln-kind-' + i + '">' + L("line.kind") + '</label><select id="ln-kind-' + i + '" data-k="kind">' +
           options(LINE_KINDS, l.kind || "") + "</select></div>" : "") +
-        '<div class="field line-desc"><label for="ln-desc-' + i + '">Désignation</label><input type="text" id="ln-desc-' + i + '" data-k="desc" value="' + esc(l.desc) + '"></div>' +
-        '<div class="field line-qty"><label for="ln-qty-' + i + '">Qté</label><input type="text" id="ln-qty-' + i + '" data-k="qty" inputmode="decimal" value="' + (isFinite(INV.amount(l.qty)) ? esc(OF.fmt(l.qty)) : "") + '"></div>' +
-        '<div class="field line-unit"><label for="ln-unit-' + i + '">Unité</label><select id="ln-unit-' + i + '" data-k="unit">' + options(LINE_UNITS, l.unit || "") + "</select></div>" +
-        '<div class="field line-price"><label for="ln-price-' + i + '">Prix unitaire HT</label><div class="input-suffix"><input type="text" id="ln-price-' + i + '" data-k="price" inputmode="decimal" value="' + (isFinite(INV.amount(l.price)) ? esc(String(l.price).replace(".", ",")) : "") + '"><span>€</span></div></div>' +
-        '<button type="button" class="line-remove" data-remove="' + i + '" aria-label="Supprimer la ligne ' + (i + 1) + '" title="Supprimer">✕</button></div>';
+        '<div class="field line-desc"><label for="ln-desc-' + i + '">' + L("line.desc") + '</label><input type="text" id="ln-desc-' + i + '" data-k="desc" value="' + esc(l.desc) + '"></div>' +
+        '<div class="field line-qty"><label for="ln-qty-' + i + '">' + L("line.qty") + '</label><input type="text" id="ln-qty-' + i + '" data-k="qty" inputmode="decimal" value="' + (isFinite(INV.amount(l.qty)) ? esc(OF.fmt(l.qty)) : "") + '"></div>' +
+        '<div class="field line-unit"><label for="ln-unit-' + i + '">' + L("line.unit") + '</label><select id="ln-unit-' + i + '" data-k="unit">' + options(LINE_UNITS, l.unit || "") + "</select></div>" +
+        '<div class="field line-price"><label for="ln-price-' + i + '">' + L("line.price") + '</label><div class="input-suffix"><input type="text" id="ln-price-' + i + '" data-k="price" inputmode="decimal" value="' + (isFinite(INV.amount(l.price)) ? esc(String(l.price).replace(".", ",")) : "") + '"><span>€</span></div></div>' +
+        '<button type="button" class="line-remove" data-remove="' + i + '" aria-label="' + L("line.removeN", { n: i + 1 }) + '" title="' + L("line.remove") + '">✕</button></div>';
     }).join("");
   }
 
   function renderDraft(d) {
     var clients = data.clients.filter(function (c) { return !c.archived || c.id === d.clientId; });
-    var html = '<div class="espace-head"><h2>' + esc(doc(d.id) ? TYPES[d.type] + " (brouillon)" : NEW_TITLES[d.type]) +
+    var html = '<div class="espace-head"><h2>' + esc(doc(d.id) ? L("doc.draftTitle", { type: TYPES[d.type] }) : NEW_TITLES[d.type]) +
       "</h2>" + stateBadge(d) + "</div>" + profileReminder() +
-      (d.prospectId && prospect(d.prospectId) ? '<p class="small muted espace-noprint">Devis pour la piste <a href="#/prospects/' + esc(d.prospectId) + '">' +
-        esc(prospect(d.prospectId).name) + "</a> : son étape suivra ce devis.</p>" : "") +
+      (d.prospectId && prospect(d.prospectId) ? '<p class="small muted espace-noprint">' + L("draft.forLeadHtml", { href: "#/prospects/" + esc(d.prospectId),
+        name: esc(prospect(d.prospectId).name) }) + "</p>" : "") +
       '<div class="tool-layout wide-left espace-editor"><form class="card form-card espace-noprint" id="doc-form" novalidate>' +
       '<div class="fields">' +
-      '<div class="field full"><label for="d-client">Client</label><select id="d-client" name="clientId"><option value="">Choisir un client…</option>' +
+      '<div class="field full"><label for="d-client">' + L("draft.client") + '</label><select id="d-client" name="clientId"><option value="">' + L("draft.chooseClient") + "</option>" +
       options(clients.map(function (c) { return [c.id, c.name]; }), d.clientId) + "</select>" +
-      '<span class="hint"><a href="#/clients/nouveau?retour=' + esc(d.id) + '">Nouveau client</a></span></div>' +
-      '<div class="field"><label for="d-date">Date</label><input type="date" id="d-date" name="date" value="' + esc(d.date) + '"></div>' +
-      (d.type === "facture" ? '<div class="field"><label for="d-service">Date de la prestation</label><input type="date" id="d-service" name="serviceDate" value="' + esc(d.serviceDate || "") + '"></div>' +
-        '<div class="field"><label for="d-terms">Délai de paiement</label><select id="d-terms" name="terms">' + options(termsFor(d.terms), d.terms) + "</select></div>" : "") +
-      (d.type === "devis" ? '<div class="field"><label for="d-validity">Validité (jours)</label><input type="text" id="d-validity" name="validity" inputmode="numeric" value="' + esc(d.validity) + '"></div>' +
-        '<div class="field"><label for="d-deposit">Acompte à la signature (%)</label><input type="text" id="d-deposit" name="depositPct" inputmode="decimal" value="' + esc(d.depositPct) + '"></div>' : "") +
-      '<div class="field"><label for="d-nature">Nature de l\'opération</label><select id="d-nature" name="nature">' +
-      options([["services", "Prestation de services"], ["biens", "Livraison de biens"], ["mixte", "Biens et services"]], d.nature) + "</select></div>" +
-      (d.vat.franchise || d.vat.place !== "fr" ? "" : '<div class="field"><label for="d-rate">Taux de TVA</label><select id="d-rate" name="rate">' +
+      '<span class="hint"><a href="#/clients/nouveau?retour=' + esc(d.id) + '">' + L("draft.newClient") + "</a></span></div>" +
+      '<div class="field"><label for="d-date">' + L("draft.date") + '</label><input type="date" id="d-date" name="date" value="' + esc(d.date) + '"></div>' +
+      (d.type === "facture" ? '<div class="field"><label for="d-service">' + L("draft.serviceDate") + '</label><input type="date" id="d-service" name="serviceDate" value="' + esc(d.serviceDate || "") + '"></div>' +
+        '<div class="field"><label for="d-terms">' + L("draft.terms") + '</label><select id="d-terms" name="terms">' + options(termsFor(d.terms), d.terms) + "</select></div>" : "") +
+      (d.type === "devis" ? '<div class="field"><label for="d-validity">' + L("draft.validity") + '</label><input type="text" id="d-validity" name="validity" inputmode="numeric" value="' + esc(d.validity) + '"></div>' +
+        '<div class="field"><label for="d-deposit">' + L("draft.deposit") + '</label><input type="text" id="d-deposit" name="depositPct" inputmode="decimal" value="' + esc(d.depositPct) + '"></div>' : "") +
+      '<div class="field"><label for="d-nature">' + L("draft.nature") + '</label><select id="d-nature" name="nature">' +
+      options([["services", L("draft.nature.services")], ["biens", L("draft.nature.goods")], ["mixte", L("draft.nature.mixed")]], d.nature) + "</select></div>" +
+      (d.vat.franchise || d.vat.place !== "fr" ? "" : '<div class="field"><label for="d-rate">' + L("draft.vatRate") + '</label><select id="d-rate" name="rate">' +
         options([[20, "20 %"], [10, "10 %"], [5.5, "5,5 %"], [2.1, "2,1 %"]], d.vat.rate) + "</select></div>") +
-      "</div><h3>Lignes</h3><div id=\"d-lines\">" + linesHTML(d) + "</div>" +
-      '<button type="button" class="btn btn-ghost btn-sm" id="d-add-line">+ Ajouter une ligne</button>' +
-      '<div class="fields" style="margin-top:14px;"><div class="field full"><label for="d-notes">Note en bas du document (facultatif)</label>' +
+      "</div><h3>" + L("draft.lines") + "</h3><div id=\"d-lines\">" + linesHTML(d) + "</div>" +
+      '<button type="button" class="btn btn-ghost btn-sm" id="d-add-line">' + L("draft.addLine") + "</button>" +
+      '<div class="fields" style="margin-top:14px;"><div class="field full"><label for="d-notes">' + L("draft.notes") + "</label>" +
       '<textarea id="d-notes" name="notes" rows="2">' + esc(d.notes) + "</textarea></div></div>" +
       '<p class="small muted" id="d-vat-note">' + vatNote(d) + "</p>" +
       '<p class="form-error" id="doc-error" role="alert" hidden></p>' +
-      '<div class="espace-actions"><button type="button" class="btn btn-primary" id="d-issue">' + (d.type === "devis" ? "Émettre le devis" : d.type === "avoir" ? "Émettre l'avoir" : "Émettre la facture") + "</button>" +
-      '<button type="button" class="btn btn-ghost" id="d-print">Aperçu PDF</button>' +
-      '<button type="button" class="btn btn-ghost" id="d-delete">Supprimer le brouillon</button></div>' +
-      '<p class="small muted">Le brouillon est enregistré automatiquement. Une fois émis, le document reçoit son numéro et ne peut plus être modifié.</p>' +
+      '<div class="espace-actions"><button type="button" class="btn btn-primary" id="d-issue">' + (d.type === "devis" ? L("draft.issueQuote") : d.type === "avoir" ? L("draft.issueCredit") : L("draft.issueInvoice")) + "</button>" +
+      '<button type="button" class="btn btn-ghost" id="d-print">' + L("draft.preview") + "</button>" +
+      '<button type="button" class="btn btn-ghost" id="d-delete">' + L("draft.delete") + "</button></div>" +
+      '<p class="small muted">' + L("draft.autosave") + "</p>" +
       "</form>" + paper(d) + "</div>";
     view.innerHTML = html;
     bindDraft(d);
   }
 
   function vatNote(d) {
-    if (d.vat.place === "eu") return "Client professionnel de l'UE : pas de TVA, mention d'autoliquidation ajoutée.";
-    if (d.vat.place === "world") return "Client professionnel hors de l'UE : pas de TVA française.";
-    if (d.vat.franchise) return "Franchise en base : la mention « TVA non applicable » est ajoutée automatiquement.";
+    if (d.vat.place === "eu") return L("draft.vatEu");
+    if (d.vat.place === "world") return L("draft.vatWorld");
+    if (d.vat.franchise) return L("draft.vatFranchise");
     return "";
   }
 
   function paper(d) {
-    return '<div class="results"><div class="paper-wrap"><article class="paper" id="d-preview" aria-label="Aperçu du document">' +
+    return '<div class="results"><div class="paper-wrap"><article class="paper" id="d-preview" aria-label="' + L("doc.preview") + '">' +
       INV.render(docForRender(d), R, FMT) + "</article></div></div>";
   }
 
@@ -871,7 +871,7 @@
           currentRoute = route().key;
         }
       }
-      persist(navigating ? "" : "Brouillon enregistré.");
+      persist(navigating ? "" : L("draft.saved"));
     };
     var saveDraft = function () {
       clearTimeout(bindDraft.t);
@@ -915,22 +915,22 @@
     });
     $("d-print").addEventListener("click", function () { printDoc(d); });
     $("d-delete").addEventListener("click", function () {
-      if (!confirm("Supprimer ce brouillon ?")) return;
+      if (!confirm(L("draft.confirmDelete"))) return;
       clearTimeout(bindDraft.t);
       pendingSave = null;
       draftInMemory = null;
       if (!doc(d.id)) { location.hash = "#/documents"; return; }
       data.documents = data.documents.filter(function (x) { return x.id !== d.id; });
       if (d.quoteId && doc(d.quoteId) && doc(d.quoteId).invoiceId === d.id) delete doc(d.quoteId).invoiceId;
-      persist("Brouillon supprimé.").then(function () { location.hash = "#/documents"; });
+      persist(L("draft.deleted")).then(function () { location.hash = "#/documents"; });
     });
     $("d-issue").addEventListener("click", function () {
       var c = client(d.clientId);
       var res = E.issue(data.documents, d, meFromProfile(profile()), c ? clientForDoc(c) : null, profile().prefixes, now(), profile().numbering,
         { lineKinds: isMixed() });
       if (res.errors.length) { showError("doc-error", res.errors.join(" ")); return; }
-      if (!confirm("Émettre " + (d.type === "facture" ? "la facture" : d.type === "devis" ? "le devis" : "l'avoir") + " n° " +
-        res.doc.number + " ? Il ne pourra plus être modifié.")) return;
+      if (!confirm(L("draft.confirmIssue", { what: d.type === "facture" ? L("draft.theInvoice") : d.type === "devis" ? L("draft.theQuote") : L("draft.theCredit"),
+        number: res.doc.number }))) return;
       clearTimeout(bindDraft.t);
       pendingSave = null;
       var issued = res.doc;
@@ -938,7 +938,7 @@
       data.documents = data.documents.filter(function (x) { return x.id !== d.id; }).concat([issued]);
       if (issued.quoteId && doc(issued.quoteId)) doc(issued.quoteId).invoiceId = issued.id;
       draftInMemory = null;
-      persist(TYPES[d.type] + " " + issued.number + " émis" + (d.type === "facture" ? "e" : "") + ".").then(function () {
+      persist(d.type === "facture" ? L("draft.issuedF", { type: TYPES[d.type], number: issued.number }) : L("draft.issuedM", { type: TYPES[d.type], number: issued.number })).then(function () {
         location.hash = "#/documents/" + issued.id;
         render();
       });
@@ -964,42 +964,42 @@
     var html = '<div class="espace-head"><h2>' + esc(docLabel(d)) + "</h2>" + stateBadge(d) + "</div>" +
       '<div class="tool-layout wide-left espace-editor"><div class="espace-side espace-noprint">' +
       '<section class="card espace-card"><ul class="result-list">' +
-      "<li><span>Client</span><b>" + esc(c.name || "–") + "</b></li>" +
-      "<li><span>Date</span><b>" + day(d.date) + "</b></li>" +
-      (d.type === "facture" ? "<li><span>Échéance</span><b>" + day(E.dueDate(d)) + "</b></li>" : "") +
-      "<li><span>Montant</span><b>" + esc(money(tot)) + "</b></li>" +
-      (d.type === "facture" ? "<li><span>Encaissé</span><b>" + esc(money(paid)) + "</b></li>" +
-        (credit > 0 ? "<li><span>Avoirs</span><b>− " + esc(money(credit)) + "</b></li>" : "") +
-        "<li><span><strong>Reste à encaisser</strong></span><b>" + esc(money(Math.max(0, bal))) + "</b></li>" : "") +
-      (d.type === "avoir" ? "<li><span>Remboursé</span><b>" + esc(money(paid)) + "</b></li>" +
-        "<li><span><strong>Reste à rembourser</strong></span><b>" + esc(money(bal)) + "</b></li>" : "") +
+      "<li><span>" + L("issued.client") + "</span><b>" + esc(c.name || "–") + "</b></li>" +
+      "<li><span>" + L("issued.date") + "</span><b>" + day(d.date) + "</b></li>" +
+      (d.type === "facture" ? "<li><span>" + L("issued.due") + "</span><b>" + day(E.dueDate(d)) + "</b></li>" : "") +
+      "<li><span>" + L("issued.amount") + "</span><b>" + esc(money(tot)) + "</b></li>" +
+      (d.type === "facture" ? "<li><span>" + L("issued.cashed") + "</span><b>" + esc(money(paid)) + "</b></li>" +
+        (credit > 0 ? "<li><span>" + L("issued.credits") + "</span><b>− " + esc(money(credit)) + "</b></li>" : "") +
+        "<li><span><strong>" + L("issued.balance") + "</strong></span><b>" + esc(money(Math.max(0, bal))) + "</b></li>" : "") +
+      (d.type === "avoir" ? "<li><span>" + L("issued.refunded") + "</span><b>" + esc(money(paid)) + "</b></li>" +
+        "<li><span><strong>" + L("issued.toRefund") + "</strong></span><b>" + esc(money(bal)) + "</b></li>" : "") +
       "</ul></section>" +
-      '<div class="espace-actions"><button type="button" class="btn btn-primary" id="d-print">Télécharger en PDF</button>' +
-      '<button type="button" class="btn btn-ghost" id="d-duplicate">Dupliquer</button>' +
-      (d.type === "facture" && credit < tot - 0.005 ? '<button type="button" class="btn btn-ghost" id="d-credit">Créer un avoir</button>' : "") +
-      (d.type === "devis" && !d.invoiceId ? '<button type="button" class="btn btn-ghost" id="d-convert">Transformer en facture</button>' : "") +
+      '<div class="espace-actions"><button type="button" class="btn btn-primary" id="d-print">' + L("issued.download") + "</button>" +
+      '<button type="button" class="btn btn-ghost" id="d-duplicate">' + L("issued.duplicate") + "</button>" +
+      (d.type === "facture" && credit < tot - 0.005 ? '<button type="button" class="btn btn-ghost" id="d-credit">' + L("issued.createCredit") + "</button>" : "") +
+      (d.type === "devis" && !d.invoiceId ? '<button type="button" class="btn btn-ghost" id="d-convert">' + L("issued.convert") + "</button>" : "") +
       "</div>";
     if (st !== "cancelled") html += sendCard(d);
     if ((d.type === "facture" || d.type === "avoir") && (parties(d).client || {}).pro) html += facturxCard(d);
     if (d.type === "devis") {
-      html += '<section class="card espace-card"><h3>Réponse du client</h3><div class="espace-actions">' +
-        '<button type="button" class="btn btn-ghost btn-sm" data-quote="accepted"' + (d.status === "accepted" ? ' aria-pressed="true"' : "") + ">Accepté</button>" +
-        '<button type="button" class="btn btn-ghost btn-sm" data-quote="refused"' + (d.status === "refused" ? ' aria-pressed="true"' : "") + ">Refusé</button>" +
-        '<button type="button" class="btn btn-ghost btn-sm" data-quote="sent"' + (d.status === "sent" ? ' aria-pressed="true"' : "") + ">En attente</button></div>" +
-        (d.invoiceId && doc(d.invoiceId) ? '<p class="small">Facturé : <a href="#/documents/' + esc(d.invoiceId) + '">' + esc(docLabel(doc(d.invoiceId))) + "</a></p>" : "") + "</section>";
+      html += '<section class="card espace-card"><h3>' + L("quote.answer") + '</h3><div class="espace-actions">' +
+        '<button type="button" class="btn btn-ghost btn-sm" data-quote="accepted"' + (d.status === "accepted" ? ' aria-pressed="true"' : "") + ">" + L("state.accepted") + "</button>" +
+        '<button type="button" class="btn btn-ghost btn-sm" data-quote="refused"' + (d.status === "refused" ? ' aria-pressed="true"' : "") + ">" + L("state.refused") + "</button>" +
+        '<button type="button" class="btn btn-ghost btn-sm" data-quote="sent"' + (d.status === "sent" ? ' aria-pressed="true"' : "") + ">" + L("quote.pending") + "</button></div>" +
+        (d.invoiceId && doc(d.invoiceId) ? '<p class="small">' + L("quote.invoiced") + ' <a href="#/documents/' + esc(d.invoiceId) + '">' + esc(docLabel(doc(d.invoiceId))) + "</a></p>" : "") + "</section>";
     } else if (d.type === "facture" || bal > 0.005 || paid > 0) {
       html += paymentsCard(d, bal);
     } else {
-      html += '<section class="card espace-card"><p class="small muted">Cet avoir est déduit de la facture d\'origine : rien à rembourser au client.</p></section>';
+      html += '<section class="card espace-card"><p class="small muted">' + L("credit.deducted") + "</p></section>";
     }
     if (d.type === "facture" && (st === "overdue" || st === "unpaid" || st === "partial")) {
-      html += '<section class="card espace-card"><h3>Relancer le client</h3><p class="small muted">' +
-        (st === "overdue" ? "Échéance dépassée de " + OF.daysBetween(E.dueDate(d), TODAY) + " jour(s)." : "Échéance le " + day(E.dueDate(d)) + ".") +
-        '</p><div class="espace-actions"><a class="btn btn-ghost btn-sm" id="d-remind" href="' + esc(mailto(d, "reminder")) + '">Écrire l\'email de relance</a>' +
-        '<a class="btn btn-ghost btn-sm" href="../relance-facture-impayee/">Modèles de relance</a></div></section>';
+      html += '<section class="card espace-card"><h3>' + L("remind.title") + '</h3><p class="small muted">' +
+        (st === "overdue" ? L("remind.overdue", { n: OF.daysBetween(E.dueDate(d), TODAY) }) : L("remind.dueOn", { date: day(E.dueDate(d)) })) +
+        '</p><div class="espace-actions"><a class="btn btn-ghost btn-sm" id="d-remind" href="' + esc(mailto(d, "reminder")) + '">' + L("remind.write") + "</a>" +
+        '<a class="btn btn-ghost btn-sm" href="' + L("remind.templatesHref") + '">' + L("remind.templates") + "</a></div></section>";
     }
-    if (d.origin && d.originId) html += '<p class="small">Avoir de la facture <a href="#/documents/' + esc(d.originId) + '">' + esc(d.origin.number) + "</a>.</p>";
-    if (d.quoteId && doc(d.quoteId)) html += '<p class="small">Issue du devis <a href="#/documents/' + esc(d.quoteId) + '">' + esc(doc(d.quoteId).number) + "</a>.</p>";
+    if (d.origin && d.originId) html += '<p class="small">' + L("credit.ofInvoiceHtml", { href: "#/documents/" + esc(d.originId), number: esc(d.origin.number) }) + "</p>";
+    if (d.quoteId && doc(d.quoteId)) html += '<p class="small">' + L("invoice.fromQuoteHtml", { href: "#/documents/" + esc(d.quoteId), number: esc(doc(d.quoteId).number) }) + "</p>";
     html += "</div>" + paper(d) + "</div>";
     view.innerHTML = html;
     bindIssued(d);
@@ -1008,19 +1008,19 @@
   function paymentsCard(d, bal) {
     var refund = d.type === "avoir";
     var rows = (d.payments || []).slice().sort(function (a, b) { return a.date < b.date ? -1 : 1; });
-    var html = '<section class="card espace-card"><h3>' + (refund ? "Remboursements" : "Encaissements") + "</h3>";
+    var html = '<section class="card espace-card"><h3>' + (refund ? L("pay.refunds") : L("pay.receipts")) + "</h3>";
     html += rows.length ? '<ul class="pay-list">' + rows.map(function (p) {
       return "<li><span>" + day(p.date) + " · " + esc(E.METHODS[p.method] || p.method) + (p.note ? " · " + esc(p.note) : "") + "</span><b>" + esc(money(p.amount)) +
-        '</b><button type="button" class="line-remove" data-pay-remove="' + esc(p.id) + '" aria-label="Supprimer ce paiement" title="Supprimer">✕</button></li>';
-    }).join("") + "</ul>" : '<p class="muted small">Aucun ' + (refund ? "remboursement" : "encaissement") + " enregistré.</p>";
+        '</b><button type="button" class="line-remove" data-pay-remove="' + esc(p.id) + '" aria-label="' + L("pay.remove") + '" title="' + L("line.remove") + '">✕</button></li>';
+    }).join("") + "</ul>" : '<p class="muted small">' + (refund ? L("pay.noRefund") : L("pay.noReceipt")) + "</p>";
     if (bal > 0.005) {
       html += '<form id="pay-form" class="fields" novalidate>' +
-        '<div class="field"><label for="pay-date">Date</label><input type="date" id="pay-date" value="' + TODAY + '"></div>' +
-        '<div class="field"><label for="pay-amount">Montant</label><div class="input-suffix"><input type="text" id="pay-amount" inputmode="decimal" value="' + esc(String(bal).replace(".", ",")) + '"><span>€</span></div></div>' +
-        '<div class="field"><label for="pay-method">Moyen de paiement</label><select id="pay-method">' + options(Object.keys(E.METHODS).map(function (k) { return [k, E.METHODS[k]]; }), "virement") + "</select></div>" +
-        '<div class="field"><label for="pay-note">Note (facultatif)</label><input type="text" id="pay-note" placeholder="Référence du virement…"></div>' +
+        '<div class="field"><label for="pay-date">' + L("pay.date") + '</label><input type="date" id="pay-date" value="' + TODAY + '"></div>' +
+        '<div class="field"><label for="pay-amount">' + L("pay.amount") + '</label><div class="input-suffix"><input type="text" id="pay-amount" inputmode="decimal" value="' + esc(String(bal).replace(".", ",")) + '"><span>€</span></div></div>' +
+        '<div class="field"><label for="pay-method">' + L("pay.method") + '</label><select id="pay-method">' + options(Object.keys(E.METHODS).map(function (k) { return [k, E.METHODS[k]]; }), "virement") + "</select></div>" +
+        '<div class="field"><label for="pay-note">' + L("pay.note") + '</label><input type="text" id="pay-note" placeholder="' + L("pay.notePlaceholder") + '"></div>' +
         '<p class="form-error full" id="pay-error" role="alert" hidden></p>' +
-        '<div class="full"><button type="submit" class="btn btn-primary btn-sm">' + (refund ? "Enregistrer le remboursement" : "Enregistrer l'encaissement") + "</button></div></form>";
+        '<div class="full"><button type="submit" class="btn btn-primary btn-sm">' + (refund ? L("pay.saveRefund") : L("pay.saveReceipt")) + "</button></div></form>";
     }
     return html + "</section>";
   }
@@ -1028,24 +1028,21 @@
   /** Envoi au client : le PDF à joindre, puis l'email prérempli (c'est la messagerie de l'utilisateur qui l'envoie). */
   function sendCard(d) {
     var to = recipient(d);
-    return '<section class="card espace-card"><h3>Envoyer au client</h3>' +
-      '<ol class="send-steps small"><li>Téléchargez le PDF.</li><li>Écrivez l\'email prérempli et joignez-y le PDF : ' +
-      "un lien vers votre messagerie ne peut pas joindre de fichier.</li></ol>" +
-      '<div class="espace-actions"><a class="btn btn-ghost btn-sm" id="d-send" href="' + esc(mailto(d, "send")) + '">Écrire l\'email</a></div>' +
-      (to ? '<p class="small muted">À : ' + esc(to) + "</p>"
-        : '<p class="small muted">Pas d\'email dans la fiche du client' +
-          (client(d.clientId) ? ' : <a href="#/clients/' + esc(d.clientId) + '">l\'ajouter</a> pour le préremplir' : "") + ".</p>") +
+    return '<section class="card espace-card"><h3>' + L("send.title") + "</h3>" +
+      '<ol class="send-steps small"><li>' + L("send.step1") + "</li><li>" + L("send.step2") + "</li></ol>" +
+      '<div class="espace-actions"><a class="btn btn-ghost btn-sm" id="d-send" href="' + esc(mailto(d, "send")) + '">' + L("send.write") + "</a></div>" +
+      (to ? '<p class="small muted">' + L("send.to", { to: esc(to) }) + "</p>"
+        : '<p class="small muted">' + (client(d.clientId) ? L("send.noEmailAddHtml", { href: "#/clients/" + esc(d.clientId) }) : L("send.noEmail")) + "</p>") +
       "</section>";
   }
   // ----- Facture électronique (Factur-X) : documentation/10-etude-factur-x.md --------------------------------------
 
   function facturxCard(d) {
     var avoir = d.type === "avoir";
-    return '<section class="card espace-card"><h3>' + (avoir ? "Avoir" : "Facture") + " électronique (Factur-X)</h3>" +
-      '<p class="small muted">Un seul fichier PDF/A-3 : le document lisible et ses données structurées (profil EN 16931, règles ' +
-      "françaises), à déposer sur votre plateforme agréée ou à transmettre à votre client professionnel.</p>" +
-      '<div class="espace-actions"><button type="button" class="btn btn-ghost btn-sm" id="d-facturx">Télécharger ' + (avoir ? "l'avoir" : "la facture") +
-      ' électronique</button><button type="button" class="btn btn-ghost btn-sm" id="d-facturx-xml">Données seules (XML)</button></div>' +
+    return '<section class="card espace-card"><h3>' + (avoir ? L("fx.titleCredit") : L("fx.titleInvoice")) + "</h3>" +
+      '<p class="small muted">' + L("fx.intro") + "</p>" +
+      '<div class="espace-actions"><button type="button" class="btn btn-ghost btn-sm" id="d-facturx">' + (avoir ? L("fx.downloadCredit") : L("fx.downloadInvoice")) +
+      '</button><button type="button" class="btn btn-ghost btn-sm" id="d-facturx-xml">' + L("fx.xmlOnly") + "</button></div>" +
       '<div class="small fx-status" id="fx-status" role="status" aria-live="polite"></div></section>';
   }
 
@@ -1079,17 +1076,17 @@
     var fill = function (target, key, value, label) {
       if (!String(target[key] || "").trim() && String(value || "").trim()) { target[key] = value; done.push(label); }
     };
-    fill(me, "siret", p.siret, "votre SIRET");
-    fill(me, "endpoint", p.endpoint, "votre adresse de facturation électronique");
-    if (!FX.address(me).postcode && FX.address({ address: p.address }).postcode) { me.address = p.address; done.push("votre adresse"); }
+    fill(me, "siret", p.siret, L("fx.fill.siret"));
+    fill(me, "endpoint", p.endpoint, L("fx.fill.endpoint"));
+    if (!FX.address(me).postcode && FX.address({ address: p.address }).postcode) { me.address = p.address; done.push(L("fx.fill.address")); }
     // Lieu du client : celui retenu pour la TVA du document, figé avec lui.
     var place = (d.vat && d.vat.place) || cl.place || "fr";
     if (!cl.place) cl.place = place;
-    fill(cl, "id", c.siren, "le SIREN du client");
-    fill(cl, "country", place !== "fr" ? c.country : "", "le pays du client");
-    fill(cl, "email", c.email, "l'email du client");
-    fill(cl, "endpoint", c.endpoint, "l'adresse de facturation électronique du client");
-    if (place === "fr" && !FX.address(cl).city && FX.address({ address: c.address }).city) { cl.address = c.address; done.push("l'adresse du client"); }
+    fill(cl, "id", c.siren, L("fx.fill.clientSiren"));
+    fill(cl, "country", place !== "fr" ? c.country : "", L("fx.fill.clientCountry"));
+    fill(cl, "email", c.email, L("fx.fill.clientEmail"));
+    fill(cl, "endpoint", c.endpoint, L("fx.fill.clientEndpoint"));
+    if (place === "fr" && !FX.address(cl).city && FX.address({ address: c.address }).city) { cl.address = c.address; done.push(L("fx.fill.clientAddress")); }
     return { doc: Object.assign({}, d, { snapshot: { me: me, client: cl } }), completed: done };
   }
 
@@ -1119,34 +1116,33 @@
   function exportFacturX(d, xmlOnly, button) {
     var status = $("fx-status");
     button.disabled = true;
-    status.textContent = "Préparation du fichier…";
+    status.textContent = L("fx.preparing");
     var loaded = false;
     loadLazy().then(function () {
       loaded = true;
       var FX = OFE.facturxFR, ex = exportDoc(d, FX), problems = FX.check(ex.doc);
       var base = String(d.number).replace(/[^A-Za-z0-9_-]/g, "-") + "-factur-x";
-      var completed = ex.completed.length ? " Complété depuis vos fiches : " + ex.completed.join(", ") + "." : "";
+      var completed = ex.completed.length ? L("fx.completed", { list: ex.completed.join(", ") }) : "";
       if (problems.length) {
-        status.innerHTML = '<p class="form-error">Pour produire un fichier conforme :</p><ul>' +
-          problems.map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("") + '</ul><p><a href="#/reglages">Compléter mon profil</a>' +
-          (client(d.clientId) ? ' · <a href="#/clients/' + esc(d.clientId) + '">Compléter la fiche client</a>' : "") + "</p>";
+        status.innerHTML = '<p class="form-error">' + L("fx.toComply") + "</p><ul>" +
+          problems.map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("") + '</ul><p><a href="#/reglages">' + L("fx.completeProfile") + "</a>" +
+          (client(d.clientId) ? ' · <a href="#/clients/' + esc(d.clientId) + '">' + L("fx.completeClient") + "</a>" : "") + "</p>";
         return;
       }
       if (xmlOnly) {
         OF.download(FX.xml(ex.doc, data.documents, R, FMT), base + ".xml", "application/xml");
-        status.textContent = "Données Factur-X (" + d.number + ") téléchargées." + completed;
+        status.textContent = L("fx.xmlDone", { number: d.number }) + completed;
         return;
       }
       return logoJPEG(ex.doc.snapshot.me.logo).then(function (logo) {
         var out = OFE.facturxPDF.build(ex.doc, data.documents, R, FMT, { fonts: OFE.pdfFonts, icc: OFE.pdfSRGB, logo: logo, now: new Date().toISOString() });
         OF.download(out.bytes, base + ".pdf", "application/pdf");
-        status.textContent = docLabel(d) + " téléchargé" + (d.type === "facture" ? "e" : "") + " au format Factur-X (PDF/A-3 et données structurées)." + completed +
-          (out.missing.length ? " Caractères absents de la police, remplacés par la lettre sans accent ou par « ? » : " + out.missing.join(" ") + "." : "");
+        status.textContent = (d.type === "facture" ? L("fx.pdfDoneF", { label: docLabel(d) }) : L("fx.pdfDoneM", { label: docLabel(d) })) + completed +
+          (out.missing.length ? L("fx.missingChars", { chars: out.missing.join(" ") }) : "");
       });
     }).catch(function (error) {
       if (window.console) console.error(error);
-      status.textContent = loaded ? "Le fichier n'a pas pu être produit (" + (error && error.message || "erreur inconnue") + "). Signalez-nous le problème si cela se reproduit."
-        : "Le module de facture électronique n'a pas pu être chargé : vérifiez votre connexion, puis réessayez.";
+      status.textContent = loaded ? L("fx.failed", { error: error && error.message || L("fx.unknownError") }) : L("fx.loadFailed");
     }).then(function () { button.disabled = false; });
   }
 
@@ -1173,14 +1169,14 @@
       var copy = E.duplicate(d, TODAY, S.uid());
       copy.createdAt = copy.updatedAt = now();
       data.documents.push(copy);
-      persist("Copie créée en brouillon.").then(function () { location.hash = "#/documents/" + copy.id; });
+      persist(L("issued.copied")).then(function () { location.hash = "#/documents/" + copy.id; });
     });
     if ($("d-credit")) $("d-credit").addEventListener("click", function () {
       this.disabled = true;
       var credit = E.creditFromInvoice(d, TODAY, S.uid());
       credit.createdAt = credit.updatedAt = now();
       data.documents.push(credit);
-      persist("Avoir créé en brouillon : ajustez les lignes si l'avoir est partiel.").then(function () { location.hash = "#/documents/" + credit.id; });
+      persist(L("issued.creditCreated")).then(function () { location.hash = "#/documents/" + credit.id; });
     });
     if ($("d-convert")) $("d-convert").addEventListener("click", function () {
       this.disabled = true;
@@ -1190,7 +1186,7 @@
       if (d.status === "accepted" && !d.decidedAt) d.decidedAt = TODAY;
       d.invoiceId = inv.id;
       data.documents.push(inv);
-      persist("Facture créée en brouillon à partir du devis.").then(function () { location.hash = "#/documents/" + inv.id; });
+      persist(L("issued.converted")).then(function () { location.hash = "#/documents/" + inv.id; });
     });
     view.querySelectorAll("[data-quote]").forEach(function (b) {
       b.addEventListener("click", function () {
@@ -1200,15 +1196,15 @@
         // pas ; un devis décidé avant ce suivi reste sans date), retirée si le devis est remis en attente.
         if (d.status === "sent") delete d.decidedAt; else if (d.status !== before) d.decidedAt = TODAY;
         d.updatedAt = now();
-        persist("Devis : " + STATES[d.status][0].toLowerCase() + ".").then(function () { render(true); });
+        persist(L("quote.statusSaved", { state: STATES[d.status][0].toLowerCase() })).then(function () { render(true); });
       });
     });
     view.querySelectorAll("[data-pay-remove]").forEach(function (b) {
       b.addEventListener("click", function () {
-        if (!confirm("Supprimer ce paiement ? Il disparaîtra aussi du livre des recettes.")) return;
+        if (!confirm(L("pay.confirmRemove"))) return;
         d.payments = d.payments.filter(function (p) { return p.id !== b.getAttribute("data-pay-remove"); });
         d.updatedAt = now();
-        persist("Paiement supprimé.").then(function () { render(true); });
+        persist(L("pay.removed")).then(function () { render(true); });
       });
     });
     var form = $("pay-form");
@@ -1220,7 +1216,7 @@
       if (errors.length) { showError("pay-error", errors.join(" ")); return; }
       d.payments = (d.payments || []).concat([pay]);
       d.updatedAt = now();
-      persist((d.type === "avoir" ? "Remboursement" : "Encaissement") + " de " + money(pay.amount) + " enregistré.").then(function () { render(true); });
+      persist(d.type === "avoir" ? L("pay.refundSaved", { amount: money(pay.amount) }) : L("pay.receiptSaved", { amount: money(pay.amount) })).then(function () { render(true); });
     });
   }
 
@@ -1235,20 +1231,20 @@
     if (!el) return;
     el.innerHTML = OF.charts.bars({ width: Math.floor(el.getBoundingClientRect().width) || 600,
       groups: months.map(function (m) { return { key: m.key, label: m.label, values: [m.invoiced, m.cashed], future: false }; }),
-      series: [{ name: "Facturé (HT)", cls: "is-cur" }, { name: "Encaissé", cls: "is-in" }],
-      title: "Facturé et encaissé par mois" + (who ? " : " + who : ""),
-      desc: "12 derniers mois : facturé " + money(months.reduce(function (s, m) { return s + m.invoiced; }, 0)) + " HT, encaissé " +
-        money(months.reduce(function (s, m) { return s + m.cashed; }, 0)) + "." });
+      series: [{ name: L("chart.invoicedHT"), cls: "is-cur" }, { name: L("chart.cashed"), cls: "is-in" }],
+      title: L("chart.invoicedTitle") + (who ? " : " + who : ""),
+      desc: L("chart.invoicedDesc", { invoiced: money(months.reduce(function (s, m) { return s + m.invoiced; }, 0)),
+        cashed: money(months.reduce(function (s, m) { return s + m.cashed; }, 0)) }) });
   }
   function invoicedCard(name, months, intro) {
-    return '<section class="card espace-card"><div class="card-head"><h3>Facturé et encaissé par mois</h3><span class="small muted">' + esc(intro) + "</span></div>" +
-      '<div class="chart" data-chart="' + name + '"></div>' + OF.charts.legend([{ cls: "is-cur", label: "Facturé (HT, à la date de la facture)" }, { cls: "is-in", label: "Encaissé" }]) +
-      OF.charts.table("Facturé et encaissé par mois", ["Mois", "Facturé (HT)", "Encaissé"], months.map(function (m) {
-        return [m.label + (m.current ? " (en cours)" : ""), money(m.invoiced), money(m.cashed)];
+    return '<section class="card espace-card"><div class="card-head"><h3>' + L("chart.invoicedTitle") + '</h3><span class="small muted">' + esc(intro) + "</span></div>" +
+      '<div class="chart" data-chart="' + name + '"></div>' + OF.charts.legend([{ cls: "is-cur", label: L("chart.invoicedLegend") }, { cls: "is-in", label: L("chart.cashed") }]) +
+      OF.charts.table(L("chart.invoicedTitle"), [L("chart.month"), L("chart.invoicedHT"), L("chart.cashed")], months.map(function (m) {
+        return [m.label + (m.current ? L("chart.current") : ""), money(m.invoiced), money(m.cashed)];
       })) + "</section>";
   }
   // Période de l'onglet Documents (documentation/55, § 8) : boutons, et mois du graphique selon la période.
-  var PERIOD_LABELS = { mois: "Mois", trimestre: "Trimestre", annee: "Année", "12m": "12 mois", precedente: "Année précédente" };
+  var PERIOD_LABELS = { mois: L("period.mois"), trimestre: L("period.trimestre"), annee: L("period.annee"), "12m": L("period.12m"), precedente: L("period.precedente") };
   function documentsMonths(p) {
     var end = p.key === "precedente" ? p.to : TODAY, n = p.key === "annee" ? +TODAY.slice(5, 7) : 12;
     return ST.invoicedMonthly(data.documents, end, n).map(function (m) { return Object.assign({}, m, { current: m.key === TODAY.slice(0, 7) }); });
