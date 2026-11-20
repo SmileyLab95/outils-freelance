@@ -421,7 +421,6 @@
     "as.confirmDelete": "Supprimer ce bien du registre ?",
     "as.deleted": "Bien supprimé du registre.",
     // Moteur de l'Espace (engines/espace-fr.js) : mois, catégories de dépenses, moyens de paiement
-    "eng.months": "janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre",
     "eng.expenseCategory.logiciels": "Logiciels et abonnements",
     "eng.expenseCategory.materiel": "Matériel",
     "eng.expenseCategory.deplacements": "Déplacements",
@@ -500,11 +499,6 @@
     "eng.mail.hello": "Bonjour,",
     "eng.mail.regards": "Bien cordialement,",
     // Moteur : périodes, durées, libellés de la prévision, en-têtes des exports CSV
-    "eng.period.month": "{month} {year}",
-    "eng.period.quarterFirst": "{n}er trimestre {year}",
-    "eng.period.quarter": "{n}e trimestre {year}",
-    "eng.forecast.refund": "Remboursement de l'avoir {number}",
-    "eng.forecast.invoice": "Facture {number}",
     "eng.forecast.urssafQuarter": "Cotisations Urssaf du {period}",
     "eng.forecast.urssafMonth": "Cotisations Urssaf de {period}",
     "eng.csv.expenses": "Date;Fournisseur;Nature;Montant;Moyen de paiement;Référence de la pièce;Catégorie",

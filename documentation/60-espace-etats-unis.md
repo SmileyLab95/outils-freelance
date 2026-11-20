@@ -351,6 +351,13 @@ moteur de l'Espace, le moteur de facture, les formats de l'aperçu et les coordo
 les lit avant de créer le module ; `engines/espace-stats.js` expose `create(moteur, facture)` (instance française
 inchangée, testée) ; le dépôt du générateur porte sa section. Parcours de l'Espace et du générateur français 403/403,
 comptes 51/51, 754 tests unitaires.
+Sous-lot 3d-2a fait le 20/11/2026 : `period`, `cashed`, `cashHistory` et la partie générale de la prévision
+(`forecastWith(entrée, flux)` : encaissements attendus, scénario prudent, entrées prévues, charges, soldes mensuels)
+passent dans le cœur ; le pays fournit son livre des encaissements (`country.receipts`), le total de ses dépenses
+(`country.expenseTotal`) et ses flux d'impôt (France : Urssaf et TVA, inchangés). Textes des mois, des périodes et
+des libellés de la prévision devenus communs, avec leur anglais. Test du cœur avec un pays fictif (encaissé net,
+périodes, historique, flux d'impôt du pays dans les soldes). Parcours de l'Espace 369/369, comptes 51/51,
+755 tests unitaires (dont les 59 points de la trésorerie, inchangés).
 
 ### Avancement
 

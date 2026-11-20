@@ -890,6 +890,12 @@
     "eng.flow.charge": "Charge",
     "eng.flow.planned": "Entrée prévue",
     // Moteur : périodes, durées, libellés de la prévision, en-têtes des exports CSV
+    "eng.months": "janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre",
+    "eng.period.month": "{month} {year}",
+    "eng.period.quarterFirst": "{n}er trimestre {year}",
+    "eng.period.quarter": "{n}e trimestre {year}",
+    "eng.forecast.refund": "Remboursement de l'avoir {number}",
+    "eng.forecast.invoice": "Facture {number}",
     "eng.duration.day": "{n} jour",
     "eng.duration.days": "{n} jours",
     "eng.duration.minutes": "{n} min",

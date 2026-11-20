@@ -59,3 +59,23 @@ test("cœur : libellés construits par la fonction de texte du pays", () => {
   assert.equal(C.FLOW_KINDS.receipt, "[eng.flow.receipt]");
   assert.deepEqual(C.AGING.map((a) => a[1]), ["[eng.aging.notDue]", "[eng.aging.d30]", "[eng.aging.d60]", "[eng.aging.d90]", "[eng.aging.more]"]);
 });
+
+test("cœur : périodes, encaissé, historique et prévision avec le livre et les flux d'un autre pays (documentation/60, § 3.3)", () => {
+  const rows = [{ date: "2026-03-05", amount: 500 }, { date: "2026-03-20", amount: -100 }, { date: "2026-04-02", amount: 250 }];
+  const C2 = CORE(INV, L, Object.assign({}, country, {
+    receipts: (docs, from, to) => rows.filter((r) => r.date >= from && r.date <= to),
+    expenseTotal: (ex, from, to) => ex.filter((e) => e.date >= from && e.date <= to).reduce((s, e) => s + e.amount, 0)
+  }));
+  assert.equal(C2.cashed([], "2026-03-01", "2026-03-31"), 400, "remboursement déduit");
+  assert.deepEqual(C2.period("2026-T2"), { key: "2026-T2", start: "2026-04-01", end: "2026-06-30", label: '[eng.period.quarter {"n":2,"year":2026}]' });
+  assert.equal(C2.period("2026-02").end, "2026-02-28");
+  const h = C2.cashHistory([], [{ date: "2026-04-10", amount: 80 }], "2026-03-01", "2026-04-30");
+  assert.deepEqual(h.map((m) => [m.key, m.in, m.out, m.net]), [["2026-03", 400, 0, 400], ["2026-04", 250, 80, 170]]);
+  const f = C2.forecastWith({ documents: [], profile: { cashBalance: 5000 }, today: "2026-04-15", months: 2, events: [],
+    charges: [{ id: "k", label: "Rent", amount: 1000, every: "month", start: "2026-05-01", flow: "out" }] },
+  (base) => (base.until === "2026-05-31" ? [{ date: "2026-04-15", kind: "tax", amount: -300, label: "Q1" }] : []));
+  assert.deepEqual(f.months.map((m) => [m.key, m.in, m.out, m.balance]), [["2026-04", 0, 300, 4700], ["2026-05", 0, 1000, 3700]],
+    "flux d'impôt du pays et charges dans les soldes de fin de mois");
+  assert.deepEqual(f.items.map((x) => x.kind), ["tax", "charge"]);
+  assert.ok(!FRENCH.test(JSON.stringify(h) + JSON.stringify(f)), "aucun texte ni format français");
+});

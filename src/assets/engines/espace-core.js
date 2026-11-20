@@ -758,7 +758,100 @@
     return lines.join("\r\n");
   }
 
-  return { EVERY: EVERY, CHARGE_LABELS: CHARGE_LABELS, isIn: isIn, addMonths: addMonths, monthStart: monthStart, monthEnd: monthEnd, chargeDates: chargeDates, chargeErrors: chargeErrors, expectedReceipts: expectedReceipts, balanceCurve: balanceCurve, safeAmount: safeAmount, daysBetween: daysBetween, avg: avg, paymentStats: paymentStats, AGING: AGING, aging: aging, monthlyCharges: monthlyCharges, runway: runway, quotesToInvoice: quotesToInvoice, FLOW_KINDS: FLOW_KINDS, forecastCSV: forecastCSV,
+
+  // ----- Périodes, encaissé, historique et prévision (communs ; documentation/60, § 3.3, D92) --------------------
+  // Le pays fournit son livre des encaissements (country.receipts : lignes { date, amount }, remboursements en
+  // négatif) et le total de ses dépenses d'une période (country.expenseTotal), lus au moment des appels.
+
+  var MONTHS = L("eng.months").split("|");
+  /** Période d'une clé « 2026-09 » ou « 2026-T3 » : dates de début et de fin, libellé. */
+  function period(key) {
+    var m = /^(\d{4})-(\d{2})$/.exec(key), q = /^(\d{4})-T([1-4])$/.exec(key);
+    if (m) {
+      var y = +m[1], mo = +m[2];
+      return { key: key, start: iso(y, mo, 1), end: iso(y, mo, lastDay(y, mo)), label: L("eng.period.month", { month: MONTHS[mo - 1], year: y }) };
+    }
+    if (q) {
+      var yq = +q[1], n = +q[2], first = 3 * n - 2;
+      return { key: key, start: iso(yq, first, 1), end: iso(yq, first + 2, lastDay(yq, first + 2)),
+               label: n === 1 ? L("eng.period.quarterFirst", { n: n, year: yq }) : L("eng.period.quarter", { n: n, year: yq }) };
+    }
+    return null;
+  }
+  /** Encaissé net d'une période (remboursements déduits), d'après le livre des encaissements du pays. */
+  function cashed(documents, from, to) {
+    return round2(country.receipts(documents, from, to).reduce(function (s, r) { return s + r.amount; }, 0));
+  }
+  /** Par mois entre from et to : encaissements nets (remboursements déduits) et dépenses saisies. */
+  function cashHistory(documents, expenses, from, to) {
+    var rows = country.receipts(documents || [], from, to), out = [];
+    for (var m = monthStart(from); m <= to; m = addMonths(m, 1)) {
+      var end = monthEnd(m), inflow = 0;
+      rows.forEach(function (r) { if (r.date >= m && r.date <= end) inflow += r.amount; });
+      var outflow = country.expenseTotal(expenses, m < from ? from : m, end < to ? end : to);
+      out.push({ key: m.slice(0, 7), label: period(m.slice(0, 7)).label, in: round2(inflow), out: outflow, net: round2(inflow - outflow) });
+    }
+    return out;
+  }
+  /**
+   * Prévision sur input.months mois (mois en cours compris) : encaissements attendus (scénario prudent : factures déjà
+   * en retard non comptées, les autres avec le retard moyen du client), entrées prévues, flux d'impôt du pays
+   * (taxes({ receipts, plannedRevenue, until }) : mouvements { date, kind, amount, label }), charges régulières ; solde
+   * de fin de chaque mois à partir du solde saisi (profile.cashBalance).
+   */
+  function forecastWith(input, taxes) {
+    var p = input.profile || {}, today = input.today, docs = input.documents || [];
+    var n = Math.min(12, Math.max(1, Math.round(Number(input.months)) || 6)), prudent = input.scenario === "prudent";
+    var until = monthEnd(addMonths(monthStart(today), n - 1)), items = [];
+    var receipts = expectedReceipts(docs, today);
+    if (prudent) {
+      // Scénario prudent : factures déjà en retard non comptées ; les autres arrivent avec le retard moyen constaté
+      // du client sur 12 mois (à défaut, le retard moyen de tous les clients ; documentation/39, § 7).
+      var stats = paymentStats(docs, addMonths(today, -12), today);
+      receipts = receipts.filter(function (r) { return !r.late; }).map(function (r) {
+        if (r.amount < 0) return r;
+        var c = stats.byClient[r.doc.clientId], delay = Math.round(c ? c.avgLate : stats.avgLate || 0);
+        return delay > 0 ? Object.assign({}, r, { date: INV.addDays(r.date, delay), delay: delay }) : r;
+      });
+    }
+    receipts = receipts.filter(function (r) { return r.date <= until; });
+    receipts.forEach(function (r) {
+      var who = (r.doc.snapshot && r.doc.snapshot.client && r.doc.snapshot.client.name) || "";
+      items.push({ date: r.date, kind: r.amount < 0 ? "refund" : "receipt", amount: r.amount, late: r.late, docId: r.doc.id, delay: r.delay || 0,
+                   label: (r.doc.type === "avoir" ? L("eng.forecast.refund", { number: r.doc.number }) : L("eng.forecast.invoice", { number: r.doc.number })) +
+                     (who ? " (" + who + ")" : "") });
+    });
+    // Entrées prévues de chiffre d'affaires (mouvements prévus « revenue ») : comptées comme des encaissements.
+    var plannedRevenue = [];
+    (input.charges || []).forEach(function (c) {
+      if (isIn(c) && c.revenue) chargeDates(c, today, until).forEach(function (d) { plannedRevenue.push({ date: d, amount: round2(Number(c.amount)) }); });
+    });
+    // Flux d'impôt du pays (France : cotisations Urssaf et TVA ; États-Unis : acomptes trimestriels).
+    if (taxes) taxes({ receipts: receipts, plannedRevenue: plannedRevenue, until: until }).forEach(function (x) { items.push(x); });
+    (input.charges || []).forEach(function (c) {
+      chargeDates(c, today, until).forEach(function (d) {
+        var amount = round2(Number(c.amount));
+        items.push({ date: d, kind: isIn(c) ? "planned" : "charge", amount: isIn(c) ? amount : -amount, label: c.label, chargeId: c.id });
+      });
+    });
+    items.sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : 0; });
+    var start = blank(p.cashBalance) || !isFinite(Number(p.cashBalance)) ? null : round2(Number(p.cashBalance));
+    var bal = start, months = [], negative = null;
+    for (var i = 0; i < n; i++) {
+      var ms = addMonths(monthStart(today), i), me = monthEnd(ms);
+      var list = items.filter(function (x) { return x.date >= ms && x.date <= me; });
+      var inflow = round2(list.reduce(function (s, x) { return s + (x.amount > 0 ? x.amount : 0); }, 0));
+      var outflow = round2(list.reduce(function (s, x) { return s - (x.amount < 0 ? x.amount : 0); }, 0));
+      if (bal !== null) bal = round2(bal + inflow - outflow);
+      if (bal !== null && bal < 0 && negative === null) negative = ms.slice(0, 7);
+      months.push({ key: ms.slice(0, 7), label: period(ms.slice(0, 7)).label, start: ms, end: me, items: list, in: inflow, out: outflow, balance: bal });
+    }
+    var lastEvent = (input.events || []).reduce(function (m, e) { return e.date > m ? e.date : m; }, "");
+    return { start: start, today: today, until: until, scenario: prudent ? "prudent" : "prevu", items: items, months: months,
+             negative: negative, calendarShort: lastEvent < until };
+  }
+
+  return { EVERY: EVERY, period: period, cashed: cashed, cashHistory: cashHistory, forecastWith: forecastWith, CHARGE_LABELS: CHARGE_LABELS, isIn: isIn, addMonths: addMonths, monthStart: monthStart, monthEnd: monthEnd, chargeDates: chargeDates, chargeErrors: chargeErrors, expectedReceipts: expectedReceipts, balanceCurve: balanceCurve, safeAmount: safeAmount, daysBetween: daysBetween, avg: avg, paymentStats: paymentStats, AGING: AGING, aging: aging, monthlyCharges: monthlyCharges, runway: runway, quotesToInvoice: quotesToInvoice, FLOW_KINDS: FLOW_KINDS, forecastCSV: forecastCSV,
            series: series, seriesPrefix: seriesPrefix, nextNumber: nextNumber, continuation: continuation, checkIssue: checkIssue, issue: issue, state: state, checkPayment: checkPayment, clientTotals: clientTotals, COPY_FIELDS: COPY_FIELDS, copyFrom: copyFrom, invoiceFromQuote: invoiceFromQuote, creditFromInvoice: creditFromInvoice, duplicate: duplicate,
            nameKey: nameKey, listText: listText, labels: labels, round2: round2, lastDay: lastDay, iso: iso, total: total, payments: payments, paidAmount: paidAmount,
            credited: credited, balance: balance, dueDate: dueDate, order: order, TIME_MAX: TIME_MAX, NBSP: NBSP, dec: dec, dayText: dayText, amountText: amountText,

@@ -42,6 +42,8 @@
 - Lot 3d spécifié (documentation/60, § 3.3, D92). Sous-lot 3d-1 : les moteurs de l'Espace sont déclarés par le
   module du pays (moteur, facture, formats, coordonnées) ; fabrique du moteur des indicateurs ; dépôt du générateur
   propre à chaque section. Aucun changement visible.
+- Sous-lot 3d-2a : périodes, encaissé, historique et partie générale de la prévision de trésorerie passent dans
+  le cœur commun ; la France y branche ses flux Urssaf et TVA. Aucun changement visible.
 
 ## 2026-11-19 (après-midi, suite) — Moteur de l'Espace des États-Unis (lot 2e)
 

@@ -889,6 +889,12 @@
     "eng.flow.charge": "Cost",
     "eng.flow.planned": "Planned money in",
     // Engine: periods, durations, forecast labels, CSV export headers
+    "eng.months": "January|February|March|April|May|June|July|August|September|October|November|December",
+    "eng.period.month": "{month} {year}",
+    "eng.period.quarterFirst": "Q{n} {year}",
+    "eng.period.quarter": "Q{n} {year}",
+    "eng.forecast.refund": "Refund of credit memo {number}",
+    "eng.forecast.invoice": "Invoice {number}",
     "eng.duration.day": "{n} day",
     "eng.duration.days": "{n} days",
     "eng.duration.minutes": "{n} min",
