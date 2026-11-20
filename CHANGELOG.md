@@ -37,6 +37,8 @@
 - Lot 3c-1 : textes communs rendus indépendants de la France avant leur traduction : montant avec sa devise
   donné par le pays dans le message d'un avoir trop élevé ; note des pénalités de retard et point mort non calculé
   confiés au module français. Deux points ajoutés au parcours (369).
+- Lot 3c-2 : textes communs de l'Espace en anglais américain (`tools/espace-texts-en.js`, 874 clés), contrôlés
+  clé par clé (valeurs insérées, balises, liens) ; utilisés par la future page américaine.
 
 ## 2026-11-19 (après-midi, suite) — Moteur de l'Espace des États-Unis (lot 2e)
 

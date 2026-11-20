@@ -286,6 +286,15 @@ Parcours de l'Espace 369/369 et des comptes 51/51, 753 tests unitaires ; mutatio
 détectée. Le lien des modèles de relance (`remind.templatesHref`) vise `payment-reminder-email` aux États-Unis et
 au Canada, `payment-reminder-letter` au Royaume-Uni : variante `en-GB` à prévoir avec le Royaume-Uni.
 
+Lot 3c-2 fait le 20/11/2026 : `tools/espace-texts-en.js`, les 874 textes communs en anglais américain (phrases
+courtes, neutres quant au pays : ni devise, ni règle française ; « Workspace », *estimate*, *credit memo*, *leads*,
+*cash flow*, *Net 30*…). Contrôles : mêmes clés et mêmes valeurs insérées que le français, mêmes balises, aucun
+caractère français, listes de même longueur (origines des pistes, mois) ; seul lien différent, voulu : le générateur
+anglais (`../invoice-generator/`). Test des clés : 753 tests ; une valeur insérée retirée et une clé supprimée sont
+détectées. Le fichier n'est chargé par aucune page avant la page américaine (étape 4), dont le parcours lira ces
+textes en situation ; les en-têtes CSV gardent le séparateur « ; » du cœur (séparateur des exports américains à
+décider avec le module américain).
+
 ### Avancement
 
 - **Étape 1 terminée le 19/11/2026.** Les textes de `tools/espace.js` sont dans `tools/espace-texts-fr.js`
