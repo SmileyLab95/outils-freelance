@@ -832,7 +832,7 @@ const tests = {
     check((await t("c-verdict")) === "–", "S corp US : situation par défaut rétablie");
   },
   async "us/"(page) {
-    await showcase(page, "accueil US", "/us/self-employment-tax-calculator/", "us-facture-mobile");
+    await showcase(page, "accueil US", "/us/self-employment-tax-calculator/", "us-espace-mobile");
     const links = await page.$$eval("a[href]", (as) => as.map((a) => a.getAttribute("href")));
     for (const href of [...new Set(links.filter((h) => h.startsWith("/outils-freelance/")))]) {
       const res = await page.request.get(`http://127.0.0.1:${port}${href}`);

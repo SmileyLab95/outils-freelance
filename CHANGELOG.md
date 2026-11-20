@@ -72,6 +72,8 @@
 - Étape 4, sous-lot 4b : **l'Espace américain est en ligne** (`/us/workspace/`) : texte de la page, questions
   fréquentes, sources officielles, entrée de menu, bouton d'en-tête « My workspace », encarts sur cinq outils
   américains. Parcours américain sur le site public : 129 points.
+- Étape 4, sous-lot 4c : la vitrine de l'accueil américain montre l'Espace (tableau de bord d'exemple, version
+  ordinateur et téléphone) et une facture d'exemple complète ; « My workspace » rejoint les raccourcis de l'accueil.
 
 ## 2026-11-19 (après-midi, suite) — Moteur de l'Espace des États-Unis (lot 2e)
 

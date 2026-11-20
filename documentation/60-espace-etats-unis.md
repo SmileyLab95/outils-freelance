@@ -498,6 +498,14 @@ to set aside » et le calendrier fiscal. Le parcours `tests/e2e/espace-us.mjs` t
 page indexable et adresse canonique, texte, questions, sources, bouton d'en-tête, encarts visibles et en anglais,
 trois largeurs ; 129 points. Pages américaines : 71 points. Erreur réintroduite (encart masqué) : d'abord non
 détectée (le contrôle ne regardait que la présence de l'encart), détectée après l'avoir rendu sensible à la visibilité.
+Sous-lot 4c fait le 20/11/2026 : vitrine de l'accueil américain refaite comme la française (documentation/58, § 4.2) :
+l'Espace en grande tuile (tableau de bord d'un Espace d'exemple créé par `scripts/vitrine.mjs` : vingt-trois mois de
+factures payées par ACH, dépenses rangées sur les lignes de l'annexe C dont la description officielle leur correspond,
+deux charges), avec sa variante téléphone ; la facture d'exemple complète (instructions de paiement, remerciement) en
+tuile haute ; les trois calculateurs ; la tuile du contrat est retirée (le contrat reste dans la liste des outils).
+Raccourci « Most used » de l'accueil : « My workspace » à la place du contrat. Pages américaines : 71 points (vitrine :
+cinq tuiles, captures chargées, clic, variante téléphone `us-espace-mobile`) ; erreur réintroduite (grande tuile sans
+variante téléphone) détectée. **Étape 4 terminée.**
 
 
 ### Avancement

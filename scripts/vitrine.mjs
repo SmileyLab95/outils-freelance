@@ -68,6 +68,54 @@ function frEspaceDemo() {
   return S.save(d);
 }
 
+/** Espace d'exemple (États-Unis) : vingt-trois mois de factures payées par virement ACH, des dépenses rangées sur les
+ *  lignes de l'annexe C dont la description officielle leur correspond, deux charges, datés par rapport au jour de la
+ *  capture. Exécuté dans la page (window.EspaceStore, window.OFE.espaceUS). */
+function usEspaceDemo() {
+  const S = window.EspaceStore, E = window.OFE.espaceUS.create(window.OF_ESPACE_TEXTS.en), d = S.empty();
+  const uid = () => crypto.randomUUID();
+  const iso = (dt) => dt.toISOString().slice(0, 10);
+  const today = new Date();
+  const day = (y, m, dd) => iso(new Date(Date.UTC(y, m, dd)));
+  d.profile = { name: "Jordan Lee Design", filingStatus: "single", address: "100 Market Street\nSan Francisco, CA 94105", email: "hello@example.com",
+    terms: 30, payment: "ACH or Zelle: hello@example.com", cashBalance: 9400, cashDate: day(today.getUTCFullYear(), today.getUTCMonth(), 1), cashThreshold: 3000 };
+  d.settings.lastExport = iso(today);
+  const names = ["Northwind Studio", "Bluebird Labs", "Cedar & Pine", "Harbor Coffee Co.", "Summit Analytics"];
+  d.clients = names.map((n, i) => ({ id: "c" + i, name: n, pro: true, address: (200 + i * 15) + " Congress Avenue\nAustin, TX 78701", email: "ap@client" + i + ".example" }));
+  const me = { name: d.profile.name, address: d.profile.address, email: d.profile.email, phone: "", taxId: "", logo: "", payment: d.profile.payment, late: "" };
+  const amounts = [2400, 3200, 1650, 4100, 1250, 3600, 2100];
+  let k = 0;
+  for (let back = 22; back >= 0; back--) {
+    const first = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth() - back, 1));
+    const y = first.getUTCFullYear(), m = first.getUTCMonth();
+    for (let j = 0; j < (m % 3 === 2 ? 2 : 1); j++) {
+      const date = day(y, m, 5 + j * 12);
+      if (date > iso(today)) continue;
+      const client = k % names.length, amount = amounts[k++ % amounts.length] + (back < 12 ? 400 : 0);
+      const c = d.clients[client];
+      const draft = { id: uid(), type: "facture", status: "draft", date, terms: 30, clientId: c.id, po: "",
+        lines: [{ desc: ["Website design", "Monthly retainer", "Accessibility audit", "Brand refresh", "Workshop"][client], qty: 1, price: amount }],
+        tax: { rate: 0, label: "" }, payments: [] };
+      const r = E.issue(d.documents, draft, me, { name: c.name, address: c.address, email: c.email, taxId: "", pro: true }, null, date + "T10:00:00Z");
+      if (r.errors.length) throw new Error(r.errors.join(" "));
+      const paid = new Date(date + "T00:00:00Z"); paid.setUTCDate(paid.getUTCDate() + 28);
+      if (iso(paid) < iso(today)) r.doc.payments = [{ id: uid(), date: iso(paid), amount, method: "ach", note: "" }];
+      d.documents.push(r.doc);
+    }
+  }
+  for (let back = 22; back >= 0; back--) {
+    const first = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth() - back, 1));
+    const y = first.getUTCFullYear(), m = first.getUTCMonth();
+    d.expenses.push({ id: uid(), date: day(y, m, 3), supplier: "Shared workspace", label: "Coworking membership", method: "card", ref: "", amount: 250, line: "20b" });
+    d.expenses.push({ id: uid(), date: day(y, m, 9), supplier: "Office supply store", label: "Paper, ink and postage", method: "card", ref: "", amount: 36, line: "18" });
+    if (m % 3 === 0) d.expenses.push({ id: uid(), date: day(y, m, 20), supplier: "CPA firm", label: "Bookkeeping review", method: "ach", ref: "", amount: 180, line: "17" });
+  }
+  const start = day(today.getUTCFullYear() - 1, 0, 1);
+  d.charges.push({ id: uid(), label: "Coworking membership", amount: 250, every: "month", start, end: "", flow: "out", revenue: false });
+  d.charges.push({ id: uid(), label: "Professional liability insurance", amount: 540, every: "year", start, end: "", flow: "out", revenue: false });
+  return S.save(d);
+}
+
 /** Saisies d'exemple du générateur de facture (France). */
 async function frInvoice(page) {
   await page.fill("#f-me-name", "Camille Martin EI");
@@ -146,8 +194,21 @@ const SHOTS = {
     { name: "calendrier", url: "fr/calendrier-fiscal-auto-entrepreneur/", from: ".results", ratio: 0.7, viewport: 1280 },
     { name: "tresorerie", url: "fr/espace/", demo: frEspaceDemo, hash: "#/tresorerie", from: "#espace-view .tr-charts .espace-card", ratio: 0.7, viewport: 1280 },
   ],
-  us: sectionShots("us", "us/", "invoice-generator/", "freelance-contract/",
-    [["impot", "self-employment-tax-calculator/"], ["acomptes", "quarterly-tax-calculator/"], ["tarif", "hourly-rate-calculator/"]]),
+  // États-Unis : comme la France (D96), l'Espace en grande tuile (avec sa variante téléphone), puis l'aperçu de facture.
+  us: [
+    { name: "espace", url: "us/workspace/", demo: usEspaceDemo, hash: "#/", from: "#espace-view .kpis", ratio: 0.62, viewport: 1180 },
+    { name: "espace-mobile", url: "us/workspace/", demo: usEspaceDemo, hash: "#/", from: "#espace-view .kpis", ratio: 1.3, viewport: 390 },
+    // Facture d'exemple complète (instructions de paiement, remerciement) : la feuille remplit la zone capturée ; ce qui
+    // la suit (encart vers l'Espace, bouton) est masqué au cas où elle serait moins haute.
+    { name: "facture", url: "us/invoice-generator/", from: "#iv-preview", ratio: 1.15, viewport: 1280, hide: ".espace-cta, #iv-reset",
+      fill: async (page) => {
+        await invoice(EXAMPLES.us)(page);
+        await page.fill("#iv-payment", "ACH or Zelle: billing@example.com");
+        await page.fill("#iv-notes", "Thank you for your business!");
+      } },
+    ...[["impot", "self-employment-tax-calculator/"], ["acomptes", "quarterly-tax-calculator/"], ["tarif", "hourly-rate-calculator/"]]
+      .map(([name, page]) => Object.assign({ name, url: "us/" + page }, SMALL)),
+  ],
   uk: sectionShots("uk", "uk/", "invoice-generator/", "freelance-contract/",
     [["impot", "self-employed-tax-calculator/"], ["tarif", "day-rate-calculator/"], ["calendrier", "tax-calendar/", { hide: null }]]),
   ca: sectionShots("ca", "ca/", "invoice-generator/", "freelance-contract/",

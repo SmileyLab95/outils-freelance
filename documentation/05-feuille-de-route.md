@@ -9,7 +9,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 
 ## Où en est-on ?
 
-*Mis à jour le 20/11/2026 (matin).*
+*Mis à jour le 20/11/2026 (après-midi).*
 
 - **Priorité (décision D10)** : le site et la plateforme d'abord ; noms de domaine, Gumroad et affiliation à la fin.
   Règle de qualité maximale pour tout produit ou service (D11, charte dans la [méthode](04-methode-de-travail.md#charte-qualité)).
@@ -504,7 +504,8 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   107 points, parcours français inchangé. **Étape 4 spécifiée le 20/11/2026** ([60](60-espace-etats-unis.md) § 3.4,
   D96) ; 4a fait : adresses en anglais (`#/income`…), liens internes de la trésorerie corrigés (France comprise) ;
   **4b fait : Espace américain publié** (`/us/workspace/` : texte, questions, sources, menu, bouton d'en-tête
-  « My workspace », encarts sur cinq outils) ; parcours américain sur le site public : 129 points.
+  « My workspace », encarts sur cinq outils) ; parcours américain sur le site public : 129 points ; 4c fait : l'Espace
+  dans la vitrine de l'accueil américain. **Étape 4 terminée : l'Espace américain est publié.**
 - **Accueil en images (18/11/2026, nuit)** : demande d'Ismail (« il n'y a que du texte, pas d'image ») ; principes
   des images du site (D84, [58](58-images-du-site.md)) : captures du vrai produit, données d'exemple annoncées, pas de
   banque d'images ni d'image générée. Accueil France : section « Les outils, en vrai » en grille bento (Espace,
@@ -588,8 +589,8 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   critères U3 à U7) aussi ; étape 3 en cours ([60](60-espace-etats-unis.md) § 3.2) : 3a (module français) fait le
   19/11, 3b (dictionnaires) aussi, 3c (anglais) le 20/11, 3d-1 à 3d-4 (branchements, moteur américain, écrans
   américains : recettes, dépenses, Taxes, annexe C, échéances, trésorerie) le 20/11, 3d-5 (règles de prospection lues
-  aux textes officiels) aussi ; étape 4 en cours : 4a (adresses en anglais) et 4b (**Espace américain publié**,
-  `/us/workspace/`) faits le 20/11 ; ensuite 4c (tuile de l'Espace dans la vitrine de l'accueil américain) ; ensuite
+  aux textes officiels) aussi ; étape 4 faite le 20/11 (4a adresses en anglais, 4b **Espace américain publié**,
+  `/us/workspace/`, 4c vitrine de l'accueil) ; ensuite
   Royaume-Uni et Canada, [59](59-parite-des-pays.md)) ; **poids des pages** : chaque page embarque toutes les règles de son pays
   (`window.OF_RULES`, environ 45 Ko avant compression) : n'y mettre que celles que ses scripts lisent ; **images du site** ([58](58-images-du-site.md) § 3) : miniatures dans la liste
   des étapes et schémas explicatifs (facture annotée, frise des relances, calendrier de la facturation électronique) ; refonte, suite ([31](31-vision-plateforme.md) § 5) : les quatre modules du compte

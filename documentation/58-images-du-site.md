@@ -78,6 +78,10 @@ Sur téléphone, les tuiles s'empilent (une colonne) ; l'image occupe toute la l
   contrat remplies ; sur téléphone, la grande tuile montre la facture seule (`<section>-facture-mobile`).
 - Accueil mondial : une tuile par pays, dans la langue de l'outil (`lang="fr"` pour les tuiles en français), après le
   choix du pays.
+- **États-Unis, depuis le 20/11/2026** (publication de l'Espace américain, D96) : comme en France, l'Espace en grande
+  tuile (tableau de bord avec des données d'exemple, `us-espace`, et sa variante téléphone `us-espace-mobile`), puis
+  l'aperçu de la facture d'exemple (instructions de paiement comprises) en tuile haute, puis les trois calculateurs ;
+  la tuile du contrat et la facture seule pour téléphone sont retirées (le contrat reste dans la liste des outils).
 - 30 images, 1,5 Mo en tout ; un visiteur n'en charge que cinq, à l'approche.
 - Tests : la vérification de la vitrine est une fonction commune du parcours, appelée sur les six accueils (tuiles,
   liens, textes alternatifs, chargement, clic sur l'image, variante téléphone) ; 386 contrôles des accueils, axe-core
