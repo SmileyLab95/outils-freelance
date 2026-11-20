@@ -460,3 +460,15 @@ texte `eng.chart.monthYear`), espace avant les deux-points dans la légende des 
   des lignes 1 à 7 et 28 à 31, lus par l'action `lire-source`.
 - **À relire** : les instructions de l'annexe C 2026 dès leur publication (les lignes du formulaire 2026 sont déjà
   reprises) ; le seuil du formulaire 1099-NEC pour 2027 dès sa publication (indexation).
+- **Règles de prospection américaines (préparation, 20/11/2026)** : le guide CAN-SPAM de la FTC n'est pas lisible
+  (ftc.gov : nom introuvable depuis l'environnement de travail, réponse 404 depuis l'action `lire-source` ; pas de
+  contournement) ; lus à la place, par l'action `lire-source` : la loi elle-même, **15 U.S.C. chapitre 103** (govinfo,
+  *US Code* 2023 : § 7702(2) message commercial, § 7702(17) message transactionnel ou de relation, § 7704(a)(1) en-têtes,
+  (a)(2) objet trompeur, (a)(3) mécanisme de désinscription valable au moins 30 jours après l'envoi, (a)(4) demande
+  respectée au plus tard 10 jours ouvrés après sa réception et adresse jamais cédée, (a)(5) message identifié comme
+  publicité sauf accord préalable, possibilité de refuser, adresse postale valide) ; le règlement **16 CFR partie 316**
+  (govinfo, édition du 01/01/2025 : § 316.2(p) adresse postale valide = adresse de l'expéditeur, boîte postale ou boîte
+  privée enregistrées ; § 316.3 objet principal). **À lire** : le texte du § 316.5 (pas de frais ni d'autre exigence pour
+  se désinscrire ; la recherche n'a montré que le sommaire) ; la loi TCPA (47 U.S.C. § 227) et le règlement 47 CFR
+  § 64.1200 (heures d'appel, liste nationale d'opposition, liste propre à l'entreprise, consentement pour les appels
+  automatisés et les SMS) ; la règle de vente par téléphone (16 CFR partie 310, appels entre entreprises).
