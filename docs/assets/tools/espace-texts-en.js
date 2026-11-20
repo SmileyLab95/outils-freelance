@@ -921,6 +921,7 @@
     "eng.stats.last12": "over 12 months",
     "eng.stats.inYear": "in {year}",
     "eng.stats.uncategorized": "Uncategorized",
+    "eng.stats.unknownClient": "Unknown client",
     // Charts (tools/charts.js): short month names, annotations, data table
     "eng.chart.months": "Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec",
     "eng.chart.threshold": "Safety threshold",

@@ -24,6 +24,8 @@
   /** Clé de comparaison d'un nom (espaces réduits, minuscules). */
   var nameKey = function (s) { return String(s || "").trim().replace(/\s+/g, " ").toLowerCase(); };
   var round2 = function (n) { return Math.round(n * 100) / 100; };
+  /** Ordre alphabétique de la langue du pays (country.locale : « fr » en France, « en-US » aux États-Unis). */
+  var compare = function (a, b) { return String(a || "").localeCompare(String(b || ""), country.locale); };
 
   function lastDay(year, month) { return new Date(Date.UTC(year, month, 0)).getUTCDate(); }
   function iso(y, m, d) { return y + "-" + String(m).padStart(2, "0") + "-" + String(d).padStart(2, "0"); }
@@ -526,7 +528,7 @@
     return (prospects || []).filter(function (p) {
       return p.nextDate && p.nextDate <= today && OPEN_STAGES.indexOf(prospectStage(p, documents)) > -1;
     }).sort(function (a, b) {
-      return a.nextDate < b.nextDate ? -1 : a.nextDate > b.nextDate ? 1 : String(a.name || "").localeCompare(String(b.name || ""), "fr");
+      return a.nextDate < b.nextDate ? -1 : a.nextDate > b.nextDate ? 1 : compare(a.name, b.name);
     });
   }
 
@@ -851,7 +853,7 @@
              negative: negative, calendarShort: lastEvent < until };
   }
 
-  return { EVERY: EVERY, period: period, cashed: cashed, cashHistory: cashHistory, forecastWith: forecastWith, CHARGE_LABELS: CHARGE_LABELS, isIn: isIn, addMonths: addMonths, monthStart: monthStart, monthEnd: monthEnd, chargeDates: chargeDates, chargeErrors: chargeErrors, expectedReceipts: expectedReceipts, balanceCurve: balanceCurve, safeAmount: safeAmount, daysBetween: daysBetween, avg: avg, paymentStats: paymentStats, AGING: AGING, aging: aging, monthlyCharges: monthlyCharges, runway: runway, quotesToInvoice: quotesToInvoice, FLOW_KINDS: FLOW_KINDS, forecastCSV: forecastCSV,
+  return { compare: compare, EVERY: EVERY, period: period, cashed: cashed, cashHistory: cashHistory, forecastWith: forecastWith, CHARGE_LABELS: CHARGE_LABELS, isIn: isIn, addMonths: addMonths, monthStart: monthStart, monthEnd: monthEnd, chargeDates: chargeDates, chargeErrors: chargeErrors, expectedReceipts: expectedReceipts, balanceCurve: balanceCurve, safeAmount: safeAmount, daysBetween: daysBetween, avg: avg, paymentStats: paymentStats, AGING: AGING, aging: aging, monthlyCharges: monthlyCharges, runway: runway, quotesToInvoice: quotesToInvoice, FLOW_KINDS: FLOW_KINDS, forecastCSV: forecastCSV,
            series: series, seriesPrefix: seriesPrefix, nextNumber: nextNumber, continuation: continuation, checkIssue: checkIssue, issue: issue, state: state, checkPayment: checkPayment, clientTotals: clientTotals, COPY_FIELDS: COPY_FIELDS, copyFrom: copyFrom, invoiceFromQuote: invoiceFromQuote, creditFromInvoice: creditFromInvoice, duplicate: duplicate,
            nameKey: nameKey, listText: listText, labels: labels, round2: round2, lastDay: lastDay, iso: iso, total: total, payments: payments, paidAmount: paidAmount,
            credited: credited, balance: balance, dueDate: dueDate, order: order, TIME_MAX: TIME_MAX, NBSP: NBSP, dec: dec, dayText: dayText, amountText: amountText,

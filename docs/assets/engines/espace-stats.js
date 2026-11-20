@@ -73,8 +73,8 @@
     var total = round2(Object.keys(by).reduce(function (s, k) { return s + by[k]; }, 0));
     var share = function (a) { return total > 0 ? Math.round(a / total * 1000) / 1000 : 0; };
     var all = Object.keys(by).filter(function (k) { return by[k] > 0; })
-      .sort(function (a, b) { return by[b] - by[a] || String(names[a] || "").localeCompare(String(names[b] || ""), "fr"); });
-    var rows = all.slice(0, n || 5).map(function (k) { return { clientId: k, name: names[k] || "Client inconnu", amount: by[k], share: share(by[k]) }; });
+      .sort(function (a, b) { return by[b] - by[a] || E.compare(names[a], names[b]); });
+    var rows = all.slice(0, n || 5).map(function (k) { return { clientId: k, name: names[k] || L("eng.stats.unknownClient"), amount: by[k], share: share(by[k]) }; });
     var rest = all.slice(n || 5), restAmount = round2(rest.reduce(function (s, k) { return s + by[k]; }, 0));
     return { total: total, rows: rows, others: { count: rest.length, amount: restAmount, share: share(restAmount) } };
   }
@@ -204,7 +204,7 @@
   /** Classement par montant décroissant (à égalité, par ordre alphabétique) avec la part de chacun ; n premiers. */
   function ranking(map, total, n) {
     return Object.keys(map).filter(function (k) { return map[k] > 0; })
-      .sort(function (a, b) { return map[b] - map[a] || a.localeCompare(b, "fr"); }).slice(0, n || 100)
+      .sort(function (a, b) { return map[b] - map[a] || E.compare(a, b); }).slice(0, n || 100)
       .map(function (k) { return { name: k, amount: round2(map[k]), share: total > 0 ? Math.round(map[k] / total * 1000) / 1000 : 0 }; });
   }
 

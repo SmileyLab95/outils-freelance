@@ -54,6 +54,7 @@
                   amount: function (n) { return n.toFixed(2).replace(".", ","); },
                   money: function (n) { return n.toFixed(2).replace(".", ",") + " €"; } };
   country.methods = METHODS;
+  country.locale = "fr";
   // Livre des encaissements et total des dépenses d'une période, lus par le cœur (encaissé, historique ; § 3.3).
   country.receipts = function (documents, from, to) { return ledger(documents, from, to); };
   country.expenseTotal = function (expenses, from, to) { return expenseRows(expenses, from, to).total; };
@@ -821,7 +822,7 @@
     return lines.join("\r\n");
   }
 
-  return { text: L, METHODS: METHODS, EXPENSE_CATEGORIES: EXPENSE_CATEGORIES, DEFAULT_PREFIXES: DEFAULT_PREFIXES, PROFILE_FIELDS: PROFILE_FIELDS, COUNTRIES: COUNTRIES,
+  return { compare: C.compare, text: L, METHODS: METHODS, EXPENSE_CATEGORIES: EXPENSE_CATEGORIES, DEFAULT_PREFIXES: DEFAULT_PREFIXES, PROFILE_FIELDS: PROFILE_FIELDS, COUNTRIES: COUNTRIES,
            EU_COUNTRIES: EU_COUNTRIES, countries: countries,
            total: total, payments: payments, paidAmount: paidAmount, credited: credited, balance: balance, dueDate: dueDate,
            series: series, seriesPrefix: seriesPrefix, nextNumber: nextNumber, continuation: continuation,

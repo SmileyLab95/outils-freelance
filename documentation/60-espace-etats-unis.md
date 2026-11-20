@@ -358,6 +358,17 @@ passent dans le cœur ; le pays fournit son livre des encaissements (`country.re
 des libellés de la prévision devenus communs, avec leur anglais. Test du cœur avec un pays fictif (encaissé net,
 périodes, historique, flux d'impôt du pays dans les soldes). Parcours de l'Espace 369/369, comptes 51/51,
 755 tests unitaires (dont les 59 points de la trésorerie, inchangés).
+Sous-lot 3d-2b fait le 20/11/2026 : le moteur américain fournit son livre au format commun (`ledger`, remboursements
+en négatif), branché sur l'encaissé, l'historique et la prévision du cœur ; la prévision ajoute les acomptes aux dates
+de `estimated_tax_due_dates_<année>` (montant du calculateur, critère U6, moins les acomptes versés saisis par échéance
+dans `profile.estimatedPaid`) et signale les années sans dates sourcées (`missingTaxYears`) ; « déjà dû » et point mort
+comme spécifié ; courriels américains (envoi, relance, devis, avoir ; instructions de paiement du profil). Données du
+calcul tirées du profil : `filingStatus`, `wages`, `withheld`, `priorTax`, `priorAgi`, `expectedProfit`, `otherIncome`,
+`homeOffice`. Textes du moteur dans `tools/espace-us-texts-en.js` ; intitulés des lignes 1 à 7 et 28 à 31 de l'annexe C
+relus sur le formulaire officiel 2026 (lecture du 20/11/2026). Le tri alphabétique suit la langue du pays
+(`country.locale`) et le nom par défaut d'un client inconnu devient un texte commun (il était écrit en français dans
+le moteur des indicateurs). Cinq erreurs réintroduites dans le moteur américain, toutes détectées ; 759 tests
+unitaires.
 
 ### Avancement
 
@@ -393,5 +404,7 @@ périodes, historique, flux d'impôt du pays dans les soldes). Parcours de l'Esp
 - **Faites le 19/11/2026** (§ 1, D87) : instructions de l'annexe C 2025 (lignes 1, 2, 6, 11, 17, 18, 22, 23, 24a, 24b,
   25, partie V et 30), Publication 334 (retours et rabais, créances irrécouvrables, repas), Publication 583 (*Supporting
   Documents* en entier, durée de conservation).
+- **Faite le 20/11/2026** (lot 3d-2) : formulaire *Schedule C (Form 1040) 2026* (version créée le 15/05/26), intitulés
+  des lignes 1 à 7 et 28 à 31, lus par l'action `lire-source`.
 - **À relire** : les instructions de l'annexe C 2026 dès leur publication (les lignes du formulaire 2026 sont déjà
   reprises) ; le seuil du formulaire 1099-NEC pour 2027 dès sa publication (indexation).

@@ -922,6 +922,7 @@
     "eng.stats.last12": "sur 12 mois",
     "eng.stats.inYear": "en {year}",
     "eng.stats.uncategorized": "Non classées",
+    "eng.stats.unknownClient": "Client inconnu",
     // Graphiques (tools/charts.js) : mois abrégés, annotations, tableau des données
     "eng.chart.months": "janv.|févr.|mars|avr.|mai|juin|juil.|août|sept.|oct.|nov.|déc.",
     "eng.chart.threshold": "Seuil de sécurité",

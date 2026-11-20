@@ -43,7 +43,8 @@
       // Formats des exports et des messages : 10/18/2026, 1.5, 1234.50 ; montant avec sa devise : $1,234.50.
       fmt: { day: function (d) { var p = d.split("-"); return p[1] + "/" + p[2] + "/" + p[0]; }, dec: function (n) { return String(n); },
              amount: function (n) { return n.toFixed(2); },
-             money: function (n) { return n.toLocaleString("en-US", { style: "currency", currency: "USD" }); } }
+             money: function (n) { return n.toLocaleString("en-US", { style: "currency", currency: "USD" }); } },
+      locale: "en-US"
     };
     var C = CORE(INV, L, country);
     var METHODS = C.labels("eng.us.method.", METHOD_KEYS);
@@ -142,6 +143,22 @@
       return lines.join("\r\n");
     }
 
+    /**
+     * Livre des encaissements au format commun (indicateurs, encaissé, historique, prévision ; documentation/60, § 3.3) :
+     * les lignes du livre en caisse, remboursements en négatif.
+     */
+    function ledger(documents, from, to) {
+      return income(documents, from || "0000-01-01", to || "9999-12-31").rows.map(function (r) {
+        return { date: r.date, client: r.client, method: METHODS[r.method] || r.method, amount: r.kind === "refund" ? -r.amount : r.amount,
+                 ref: r.number, docId: r.docId, kind: r.kind };
+      });
+    }
+    country.receipts = function (documents, from, to) { return ledger(documents, from, to); };
+    country.expenseTotal = function (expenses, from, to) {
+      return round2((expenses || []).filter(function (e) { return e && e.date >= from && e.date <= to; })
+        .reduce(function (s, e) { return s + (Number(e.amount) || 0); }, 0));
+    };
+
     // ----- Acomptes trimestriels (même calcul que le calculateur public) ------------------------------------------
 
     /**
@@ -165,6 +182,134 @@
       var q = TAX.quarterly(est.federal, input.withheld || 0, prior, input.priorAgi || 0, est.status, R);
       var next = (q.dueDates || []).filter(function (d) { return d >= today; })[0] || null;
       return { actual: actual, projected: projected, estimate: est, quarterly: q, next: next };
+    }
+
+    /**
+     * Données du calcul des acomptes tirées du profil américain : situation familiale (filingStatus), salaires et
+     * retenues (wages, withheld), impôt et revenu fiscal de l'an dernier (priorTax, priorAgi), bénéfice prévu
+     * (expectedProfit), autres recettes de la ligne 6 (otherIncome), bureau à domicile de la ligne 30 (homeOffice).
+     */
+    function taxInput(input, year) {
+      var p = input.profile || {}, num = function (v) { return isFinite(Number(v)) ? Number(v) : 0; };
+      return { documents: input.documents, expenses: input.expenses, year: String(year), rules: input.rules, today: input.today,
+               status: p.filingStatus, wages: num(p.wages), withheld: num(p.withheld), priorTax: p.priorTax, priorAgi: num(p.priorAgi),
+               expectedProfit: p.expectedProfit, otherIncome: num(p.otherIncome), homeOffice: num(p.homeOffice) };
+    }
+    /** Acompte n (1 à 4) déjà versé pour l'année fiscale year, saisi par l'utilisateur (profile.estimatedPaid). */
+    function paidFor(profile, year, n) {
+      var v = Number(((profile || {}).estimatedPaid || {})[year + "-" + n]);
+      return isFinite(v) && v > 0 ? round2(v) : 0;
+    }
+
+    // ----- Trésorerie (documentation/60, § 3.3, D92) : estimations, présentées comme telles ------------------------
+
+    /**
+     * Prévision : partie générale du cœur, avec les acomptes trimestriels aux dates sourcées
+     * (estimated_tax_due_dates_<année>) : montant du calculateur public (estimatedTax) moins l'acompte déjà versé. Une
+     * année dont les dates ne sont pas dans les règles n'a pas d'acompte prévu (missingTaxYears).
+     */
+    function forecast(input) {
+      var p = input.profile || {}, year = +input.today.slice(0, 4), missing = [];
+      var f = C.forecastWith(input, function (base) {
+        var items = [];
+        [year - 1, year, year + 1].forEach(function (y) {
+          var dates = input.rules["estimated_tax_due_dates_" + y];
+          if (!Array.isArray(dates)) {
+            if (y >= year && (y + "-01-01") <= base.until) missing.push(y);
+            return;
+          }
+          var est = null;
+          dates.forEach(function (d, i) {
+            if (d < input.today || d > base.until) return;
+            est = est || estimatedTax(taxInput(input, y));
+            var due = round2(Math.max(0, est.quarterly.perQuarter - paidFor(p, y, i + 1)));
+            if (due > 0) items.push({ date: d, kind: "tax", amount: -due, label: L("eng.us.forecast.installment", { n: i + 1, year: y }) });
+          });
+        });
+        return items;
+      });
+      f.missingTaxYears = missing;
+      return f;
+    }
+    /**
+     * Déjà dû à la date du jour : impôt fédéral estimé sur le bénéfice déjà réalisé dans l'année (impôt annuel estimé ×
+     * bénéfice à date ÷ bénéfice projeté), moins les acomptes versés pour l'année ; jamais négatif.
+     */
+    function owed(input) {
+      var p = input.profile || {}, year = input.today.slice(0, 4);
+      var est = estimatedTax(taxInput(input, year));
+      var share = est.projected > 0 && est.actual > 0 ? Math.min(1, est.actual / est.projected) : 0;
+      var accrued = round2(est.estimate.federal * share);
+      var paid = round2([1, 2, 3, 4].reduce(function (s, n) { return s + paidFor(p, year, n); }, 0));
+      return { tax: { year: +year, accrued: accrued, paid: paid, actual: est.actual, projected: est.projected },
+               total: round2(Math.max(0, accrued - paid)) };
+    }
+    /** Point mort : non calculé en version 1 (documentation/60, § 3.3). */
+    function breakEven() { return null; }
+    /** Pas d'activité mixte au sens français. */
+    function mixedActivities() { return null; }
+
+    // ----- Courriels préremplis : envoi d'un document, relance d'une facture -------------------------------------
+
+    var TYPE_NAMES = C.labels("eng.us.type.", ["facture", "devis", "avoir"]);
+    /**
+     * Objet et texte d'un courriel sur un document émis (même structure que le courriel français, sans mention propre à
+     * la France). kind : "send" ou "reminder". fmt = { money, date }. Instructions de paiement : profile.payment.
+     */
+    function email(kind, doc, documents, profile, today, fmt) {
+      profile = profile || {};
+      var money = fmt.money || fmt.eur, amountText = money(C.total(doc)), bal = C.balance(doc, documents), due = C.dueDate(doc);
+      var pay = String(profile.payment || "").trim() ? L("eng.us.mail.payment", { instructions: String(profile.payment).trim() }) : "";
+      var parts = [], subject;
+      if (kind === "reminder") {
+        var late = due < today;
+        subject = late ? L("eng.us.mail.subjectLate", { number: doc.number }) : L("eng.us.mail.subjectDue", { number: doc.number, due: fmt.date(due) });
+        var R1 = { number: doc.number, date: fmt.date(doc.date), due: fmt.date(due), amount: money(bal) };
+        parts.push(late ? L("eng.us.mail.reminderLate", R1) : L("eng.us.mail.reminderSoon", R1));
+        if (pay) parts.push(pay);
+        parts.push(L("eng.us.mail.questions"));
+      } else if (doc.type === "facture") {
+        var st = C.state(doc, today, documents), credits = documents ? C.credited(documents, doc) : 0;
+        var payable = (parseInt(doc.terms, 10) || 0) > 0 ? L("eng.us.mail.payableBy", { date: fmt.date(due) }) : L("eng.us.mail.payableNow");
+        var first = L("eng.us.mail.invoice", { number: doc.number, date: fmt.date(doc.date), amount: amountText });
+        if (st === "cancelled") first += L("eng.us.mail.cancelled");
+        else if (bal <= 0.005) first += L("eng.us.mail.paid");
+        else if (bal < C.total(doc) - 0.005) {
+          var nCredits = (documents || []).filter(function (d) { return d.type === "avoir" && d.status !== "draft" && d.originId === doc.id; }).length;
+          var already = C.paidAmount(doc) > 0
+            ? (credits > 0 ? L("eng.us.mail.already.paymentsCredits") : L("eng.us.mail.already.payments"))
+            : (nCredits > 1 ? L("eng.us.mail.already.credits") : L("eng.us.mail.already.credit"));
+          first += L("eng.us.mail.remaining", { already: already, amount: money(bal), payable: payable });
+        } else first += L("eng.us.mail.payable", { payable: payable });
+        parts.push(first);
+        if (bal > 0.005 && pay) parts.push(pay);
+        parts.push(L("eng.us.mail.questions"));
+      } else if (doc.type === "devis") {
+        var pct = Math.min(100, Math.max(0, Number(doc.depositPct) || 0));
+        var until = IV.addDays(doc.date, Math.max(1, parseInt(doc.validity, 10) || 30));
+        parts.push(L("eng.us.mail.quote", { number: doc.number, date: fmt.date(doc.date), amount: amountText, until: fmt.date(until) }) +
+          (pct > 0 ? L("eng.us.mail.deposit", { pct: country.fmt.dec(pct), amount: money(round2(C.total(doc) * pct / 100)) }) : ""));
+        parts.push(L("eng.us.mail.accept"));
+        parts.push(L("eng.us.mail.discuss"));
+      } else {
+        var origin = doc.originId ? (documents || []).filter(function (d) { return d.id === doc.originId; })[0] : null;
+        var ref = origin ? L("eng.us.mail.ref", { number: origin.number, date: fmt.date(origin.date) }) : doc.origin && doc.origin.number ? doc.origin.number : "";
+        parts.push(ref ? L("eng.us.mail.creditFor", { number: doc.number, date: fmt.date(doc.date), amount: amountText, ref: ref })
+          : L("eng.us.mail.credit", { number: doc.number, date: fmt.date(doc.date), amount: amountText }));
+        var sa = C.state(doc, today, documents);
+        if (sa === "refund") parts.push(L("eng.us.mail.refundSoon", { amount: money(bal) }));
+        else if (sa === "refunded") {
+          var lastPay = C.payments(doc).map(function (x) { return x.date; }).sort().pop();
+          parts.push(L("eng.us.mail.refunded", { amount: money(C.paidAmount(doc)), date: fmt.date(lastPay) }));
+        } else if (origin) {
+          var left = C.balance(origin, documents);
+          parts.push(left > 0.005 ? L("eng.us.mail.deducted", { amount: money(left) })
+            : C.state(origin, today, documents) === "cancelled" ? L("eng.us.mail.deductedCancelled") : L("eng.us.mail.deductedPaid"));
+        }
+        parts.push(L("eng.us.mail.questions"));
+      }
+      if (kind !== "reminder") subject = TYPE_NAMES[doc.type] + " " + doc.number + (profile.name ? " – " + profile.name : "");
+      return { subject: subject, body: L("eng.us.mail.hello") + "\n\n" + parts.join("\n\n") + "\n\n" + L("eng.us.mail.regards") + "\n" + (profile.name || "") };
     }
 
     // ----- Formulaires 1099-NEC attendus ------------------------------------------------------------------------
@@ -191,7 +336,8 @@
     return Object.assign({}, C, {
       text: L, METHODS: METHODS, DEFAULT_PREFIXES: country.prefixes, income: income, incomeQuarters: incomeQuarters,
       checkExpense: checkExpense, expenseLines: expenseLines, scheduleC: scheduleC, scheduleCCSV: scheduleCCSV,
-      estimatedTax: estimatedTax, expected1099: expected1099
+      estimatedTax: estimatedTax, expected1099: expected1099, ledger: ledger, taxInput: taxInput, paidFor: paidFor,
+      forecast: forecast, owed: owed, breakEven: breakEven, mixedActivities: mixedActivities, email: email
     });
   }
 

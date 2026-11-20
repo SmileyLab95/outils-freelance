@@ -135,3 +135,69 @@ test("avoir trop élevé : montant restant de la facture avec la devise, au form
   credit.lines = [{ desc: "Refund", qty: 1, price: 2000 }];
   assert.deepEqual(E2.issue([inv], credit, { name: "Me" }, { name: "Client" }, null, "now").errors, [inv.number + " ($1,234.50)"]);
 });
+
+// ----- Lot 3d-2 (documentation/60, § 3.3, D92) : livre au format commun, trésorerie, courriels -------------------
+
+test("livre au format commun : encaissements et remboursements (négatifs) ; encaissé et historique du cœur", () => {
+  const paid = invoice("c1", "2026-03-01", 1500, [["2026-03-10", 1000], ["2026-04-02", 500]]);
+  const credit = { id: "cm", type: "avoir", status: "issued", number: "CM-2026-001", date: "2026-04-05", clientId: "c1", originId: paid.id,
+                   lines: [{ desc: "Refund", qty: 1, price: 100 }], tax: {}, payments: [{ id: "r", date: "2026-04-20", amount: 100, method: "ach" }] };
+  const docs = [paid, credit];
+  assert.deepEqual(E.ledger(docs, "2026-01-01", "2026-12-31").map((r) => [r.date, r.amount, r.ref]),
+    [["2026-03-10", 1000, paid.number], ["2026-04-02", 500, paid.number], ["2026-04-20", -100, "CM-2026-001"]]);
+  assert.equal(E.cashed(docs, "2026-04-01", "2026-04-30"), 400, "remboursement déduit");
+  const h = E.cashHistory(docs, [{ id: "e", date: "2026-04-15", amount: 75.5, line: "18" }], "2026-03-01", "2026-04-30");
+  assert.deepEqual(h.map((m) => [m.key, m.in, m.out]), [["2026-03", 1000, 0], ["2026-04", 400, 75.5]]);
+  assert.equal(h[0].label, "[eng.period.month]", "libellé de période du cœur");
+});
+
+test("trésorerie : acomptes trimestriels aux dates sourcées, du montant du calculateur, moins les acomptes versés", () => {
+  const docs = [invoice("c1", "2026-01-10", 60000, [["2026-01-20", 60000]])];
+  const profile = { filingStatus: "single", cashBalance: 20000, estimatedPaid: { "2026-3": 500 } };
+  const input = { documents: docs, expenses: [], charges: [], profile, rules: R, events: [], today: "2026-08-01", months: 6 };
+  const est = E.estimatedTax(E.taxInput(input, 2026));
+  assert.ok(est.quarterly.perQuarter > 0, "acomptes requis pour ce bénéfice");
+  const f = E.forecast(input);
+  const tax = f.items.filter((x) => x.kind === "tax");
+  assert.deepEqual(tax.map((x) => x.date), ["2026-09-15", "2027-01-15"], "dates de la règle estimated_tax_due_dates_2026 dans l'horizon");
+  assert.equal(-tax[0].amount, Math.round((est.quarterly.perQuarter - 500) * 100) / 100, "acompte 3 moins 500 $ déjà versés");
+  assert.equal(-tax[1].amount, Math.round(est.quarterly.perQuarter * 100) / 100, "même montant que le calculateur (U6)");
+  assert.equal(tax[0].label, "[eng.us.forecast.installment]");
+  assert.deepEqual(f.missingTaxYears, [2027], "dates de 2027 pas encore dans les règles : signalé, rien d'inventé");
+  const full = E.forecast(Object.assign({}, input, { profile: Object.assign({}, profile, { estimatedPaid: { "2026-3": 1e9, "2026-4": 1e9 } }) }));
+  assert.equal(full.items.filter((x) => x.kind === "tax").length, 0, "acomptes déjà versés : rien de prévu");
+});
+
+test("trésorerie : déjà dû = impôt fédéral estimé sur le bénéfice réalisé, moins les acomptes versés ; point mort non calculé", () => {
+  const docs = [invoice("c1", "2026-01-10", 40000, [["2026-01-20", 40000]])];
+  const base = { documents: docs, expenses: [], profile: { filingStatus: "single", expectedProfit: 80000 }, rules: R, today: "2026-06-30" };
+  const est = E.estimatedTax(E.taxInput(base, 2026));
+  const o = E.owed(base);
+  assert.equal(o.tax.actual, 40000);
+  assert.equal(o.tax.projected, 80000, "bénéfice prévu saisi");
+  assert.equal(o.tax.accrued, Math.round(est.estimate.federal * 0.5 * 100) / 100, "moitié du bénéfice prévu déjà réalisée");
+  assert.equal(o.total, o.tax.accrued);
+  const paid = E.owed(Object.assign({}, base, { profile: Object.assign({}, base.profile, { estimatedPaid: { "2026-1": 1000, "2026-2": 1e9 } }) }));
+  assert.equal(paid.total, 0, "jamais négatif");
+  assert.equal(E.owed(Object.assign({}, base, { documents: [] })).total, 0, "rien de réalisé, rien de dû");
+  assert.equal(E.breakEven(3000, {}, R, "2026-06-30"), null);
+  assert.equal(E.mixedActivities({}, R), null);
+});
+
+test("courriels préremplis : envoi, relance, devis et avoir, sans mention française", () => {
+  const T2 = new Proxy(require("../../src/assets/tools/espace-us-texts-en.js").OF_ESPACE_TEXTS.en, { get: (o, k) => (k in o ? o[k] : "[" + String(k) + "]") });
+  const E2 = US.create(T2);
+  const fmt = { money: (n) => "$" + n.toFixed(2), date: (d) => d };
+  const inv = invoice("c1", "2026-03-01", 1200, [["2026-03-05", 200]], { terms: 30, number: "2026-050" });
+  const send = E2.email("send", inv, [inv], { name: "Jordan Lee Design", payment: "ACH to account 123" }, "2026-03-10", fmt);
+  assert.equal(send.subject, "Invoice 2026-050 – Jordan Lee Design");
+  assert.ok(send.body.startsWith("Hello,\n\nPlease find attached invoice 2026-050 dated 2026-03-01, for $1200.00. After the payments already received, the balance due is $1000.00, due by 2026-03-31."));
+  assert.ok(send.body.includes("Payment instructions: ACH to account 123") && send.body.endsWith("Best regards,\nJordan Lee Design"));
+  const rem = E2.email("reminder", inv, [inv], {}, "2026-04-15", fmt);
+  assert.equal(rem.subject, "Invoice 2026-050: payment reminder");
+  assert.ok(rem.body.includes("which was due on 2026-03-31, has not been received yet. The balance due is $1000.00."));
+  const quote = invoice("c1", "2026-03-01", 2000, [], { type: "devis", number: "E-2026-004", depositPct: 25, validity: 15 });
+  const q = E2.email("send", quote, [quote], {}, "2026-03-02", fmt);
+  assert.ok(q.subject === "Estimate E-2026-004" && q.body.includes("valid until 2026-03-16. A deposit of 25% ($500.00) is due on acceptance."));
+  for (const m of [send, rem, q]) assert.ok(!/[àâçéèêëîïôûùœ]|\[eng\./.test(m.subject + m.body), "aucun texte français ni clé manquante");
+});

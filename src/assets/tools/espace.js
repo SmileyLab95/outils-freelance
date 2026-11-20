@@ -185,6 +185,7 @@
   var IMPORT_KEY = "espace-import" + (OF.section === "fr" ? "" : ":" + OF.section), IMPORT_TTL = 24 * 3600 * 1000;
   /** Document déposé par le bouton « Continuer dans mon Espace » du générateur (même navigateur, moins de 24 h). */
   function pendingImport() {
+    if (!E.fromGenerator) return null;   // pays sans reprise du générateur (États-Unis, version 1)
     var p = OF.load(IMPORT_KEY, null);
     var age = p && Date.now() - Date.parse(p.savedAt);
     if (!p || !p.doc || typeof p.doc !== "object" || !(age >= 0 && age < IMPORT_TTL)) {
@@ -1831,7 +1832,8 @@
   var CHARGE_FLOW = [["out", L("tr.flow.out")], ["in", L("tr.flow.in")]];
   var HORIZONS = [3, 6, 12];
   function treasuryInput(over) {
-    return Object.assign({ documents: data.documents, charges: data.charges, profile: profile(), rules: R, events: CAL, today: TODAY, months: 6 }, over || {});
+    return Object.assign({ documents: data.documents, charges: data.charges, expenses: data.expenses, profile: profile(), rules: R, events: CAL,
+                           today: TODAY, months: 6 }, over || {});
   }
   var signed = function (n) { return (n < 0 ? "−" : "+") + OF.money(Math.abs(n)).replace(/^-/, ""); };
   var hasCash = function () { var c = profile().cashBalance; return c !== undefined && c !== null && c !== "" && isFinite(Number(c)); };

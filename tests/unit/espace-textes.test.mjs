@@ -16,7 +16,9 @@ const read = (f) => readFileSync(f, "utf8");
 const COMMON_CODE = [TOOLS + "espace.js", TOOLS + "charts.js", ENGINES + "espace-core.js", ENGINES + "espace-stats.js"];
 // Modules de pays : écrans (tools/espace-<pays>-ui.js) et moteur ; langues de leurs textes.
 const MODULES = {
-  fr: { code: [TOOLS + "espace-fr-ui.js", ENGINES + "espace-fr.js"], langs: ["fr"] }
+  fr: { code: [TOOLS + "espace-fr-ui.js", ENGINES + "espace-fr.js"], langs: ["fr"] },
+  // États-Unis : moteur (lot 3d-2) ; écrans tools/espace-us-ui.js ajoutés avec le lot 3d-3.
+  us: { code: [ENGINES + "espace-us.js"], langs: ["en"] }
 };
 
 /** Clés écrites en entier (L("type.facture")), préfixes de clés construites (L("activity." + k), labels("eng.x.", […])). */

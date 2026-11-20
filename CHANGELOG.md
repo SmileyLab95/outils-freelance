@@ -44,6 +44,9 @@
   propre à chaque section. Aucun changement visible.
 - Sous-lot 3d-2a : périodes, encaissé, historique et partie générale de la prévision de trésorerie passent dans
   le cœur commun ; la France y branche ses flux Urssaf et TVA. Aucun changement visible.
+- Sous-lot 3d-2b : moteur américain complété (livre au format commun, acomptes trimestriels dans la prévision de
+  trésorerie, impôt « déjà dû » estimé, courriels préremplis américains) ; textes du moteur en anglais ; tri
+  alphabétique et nom par défaut indépendants de la France dans les moteurs communs.
 
 ## 2026-11-19 (après-midi, suite) — Moteur de l'Espace des États-Unis (lot 2e)
 
