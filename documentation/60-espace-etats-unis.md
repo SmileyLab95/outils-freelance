@@ -489,6 +489,15 @@ solde », « Notez vos charges » de la trésorerie : `#tr-settings`, `#tr-charg
 tableau de bord ; il fait désormais défiler l'écran jusqu'à sa cible et y place le focus, sans changer d'écran.
 Parcours américain : 116 points ; parcours de l'Espace français : un point de plus (le lien « Indiquer le solde »),
 371 points ; deux erreurs réintroduites (lien interne, réécriture d'adresse), toutes deux détectées.
+Sous-lot 4b fait le 20/11/2026 : `/us/workspace/` publiée (indexable, dans le plan du site) avec son texte (ce que
+fait l'Espace, ce que la version 1 ne fait pas), sept questions fréquentes et onze règles en sources ; entrée
+« Freelancer workspace » en tête du groupe « Invoicing and getting paid », outils mis en avant (Workspace, facture,
+impôt des indépendants) et bouton d'en-tête « My workspace » ; encarts sur le générateur de facture (qui ne promet pas
+de reprise du document : il n'y en a pas en version 1), la relance de paiement, le calculateur d'acomptes, « how much
+to set aside » et le calendrier fiscal. Le parcours `tests/e2e/espace-us.mjs` tourne sur le site public (`docs/`) :
+page indexable et adresse canonique, texte, questions, sources, bouton d'en-tête, encarts visibles et en anglais,
+trois largeurs ; 129 points. Pages américaines : 71 points. Erreur réintroduite (encart masqué) : d'abord non
+détectée (le contrôle ne regardait que la présence de l'encart), détectée après l'avoir rendu sensible à la visibilité.
 
 
 ### Avancement

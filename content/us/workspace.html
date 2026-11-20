@@ -3,9 +3,70 @@
   "slug": "workspace/",
   "title": "Free Freelancer Workspace: Invoices, Income and Estimated Taxes",
   "description": "Clients, estimates, invoices, payments, income and quarterly estimated taxes in one place. Free, no sign-up; your data stays on your device.",
-  "draft": true,
+  "menu": "Freelancer workspace",
+  "icon": "🗂️",
+  "blurb": "Invoices, payments, income, expenses and estimated taxes in one place.",
+  "app": "Freelancer Workspace",
   "rules": "us",
-  "scripts": ["tools/espace-texts-en.js", "tools/espace-us-texts-en.js", "engines/invoice-intl.js", "engines/brackets.js", "engines/tax-us.js", "engines/espace-core.js", "engines/espace-us.js", "engines/espace-stats.js", "engines/chart-scale.js", "tools/charts.js", "tools/espace-store.js", "tools/espace-us-ui.js", "tools/espace.js"]
+  "scripts": [
+    "tools/espace-texts-en.js",
+    "tools/espace-us-texts-en.js",
+    "engines/invoice-intl.js",
+    "engines/brackets.js",
+    "engines/tax-us.js",
+    "engines/espace-core.js",
+    "engines/espace-us.js",
+    "engines/espace-stats.js",
+    "engines/chart-scale.js",
+    "tools/charts.js",
+    "tools/espace-store.js",
+    "tools/espace-us-ui.js",
+    "tools/espace.js"
+  ],
+  "sources": [
+    "us_cash_method",
+    "us_schedule_c_expense_lines",
+    "us_supporting_documents",
+    "us_records_retention",
+    "estimated_tax_threshold",
+    "estimated_tax_due_dates_2026",
+    "form_1099_nec_threshold_2026",
+    "us_1099_nec_card_exclusion",
+    "late_fees_federal_rule",
+    "us_can_spam",
+    "us_telemarketing"
+  ],
+  "priority": 1.0,
+  "faq": [
+    [
+      "Is the workspace really free?",
+      "Yes. There is no sign-up and no subscription: you create your business profile and start."
+    ],
+    [
+      "Where is my data stored?",
+      "In your browser, on this device only. Nothing is sent to a server. Export a backup regularly from Settings: it protects you if something goes wrong and lets you move to another device."
+    ],
+    [
+      "Does the workspace file my taxes?",
+      "No. The Schedule C summary and the estimated tax payments are a preparation aid worked out from what you record. You file your return and pay your estimated tax with the IRS, yourself or through your tax software or tax preparer."
+    ],
+    [
+      "How are my estimated tax payments worked out?",
+      "With the same method as our <a href=\"{{link:estimated-tax}}\">quarterly tax calculator</a>: your profit for the year (the profit you expect, or your profit so far projected to the full year), your filing status, and last year's tax if you enter it. The workspace shows the next due date and what is left to pay after the payments you record. State income tax is not included."
+    ],
+    [
+      "Which income counts for a year?",
+      "Payments you actually receive in the year (the cash method most freelancers use): an invoice counts when it is paid, not when it is sent. A refund to a client goes on line 2 of Schedule C in the year you pay it."
+    ],
+    [
+      "I already sent invoices with another tool: how do I continue my numbering?",
+      "In Settings, enter the last number you used this year for each type of document: the workspace continues the sequence (2026-008 after 2026-007)."
+    ],
+    [
+      "Will I get a Form 1099-NEC from my clients?",
+      "The workspace lists the business clients that paid you enough to be expected to send one, leaving out card and payment-app payments, which are reported on Form 1099-K instead. Your income is taxable even if you don't receive a form."
+    ]
+  ]
 }-->
 <style media="print">@page { size: letter; margin: 0.5in; }</style>
 <script type="application/json" id="invoice-profile">
@@ -42,3 +103,22 @@
   <noscript><p class="notice warn">The Workspace needs JavaScript to work.</p></noscript>
 </section>
 <script type="application/json" id="calendar-data">{{calendar:us}}</script>
+
+<section class="section prose">
+  <h2>Everything a one-person business needs</h2>
+  <ul>
+    <li><strong>Estimates and invoices</strong> laid out like the <a href="{{link:invoice}}">invoice generator</a>: sales tax line, PO number, numbers in sequence (2026-001, 2026-002…), PDF and a prefilled email.</li>
+    <li><strong>Payments</strong>: partial payments, overdue invoices flagged, a reminder email ready to send; credit memos to cancel or correct an invoice you sent.</li>
+    <li><strong>Income</strong> recorded on the cash method: each payment on the date you receive it, totals by quarter and for the year, refunds on line 2, export to CSV.</li>
+    <li><strong>Expenses</strong> sorted by Schedule C line, with the IRS description of each line and meals at 50%; export to CSV.</li>
+    <li><strong>Schedule C summary</strong> for the year, line by line, with a CSV export: a preparation aid, not a tax return.</li>
+    <li><strong>Estimated taxes</strong>: your next quarterly payment, worked out like the <a href="{{link:estimated-tax}}">quarterly tax calculator</a>, the payments you made, and the Forms 1099-NEC you should receive.</li>
+    <li><strong>Time tracking</strong>: a timer or quick entries in hours or days, billable time by client, and an invoice drafted from your time in one click.</li>
+    <li><strong>Leads</strong>: your pipeline by stage, today's follow-ups, a do-not-contact list, and the federal rules for prospecting by email and phone.</li>
+    <li><strong>Cash flow</strong>: what is already owed in federal tax, your projected balance over 3, 6 or 12 months, late clients and your average time to get paid.</li>
+    <li><strong>Deadlines</strong>: the federal tax calendar for your situation, with the estimated amount of your next quarterly payment.</li>
+  </ul>
+  <p><strong>Not in this version:</strong> accrual accounting, inventory and cost of goods sold, depreciation, vehicle details (Part IV of Schedule C), state sales tax and state income tax, LLCs taxed as corporations, and employees.</p>
+  <p>For a one-off invoice without saving anything, the <a href="{{link:invoice}}">invoice generator</a> is still there. To see every deadline and add it to your calendar, open the <a href="{{link:calendar}}">tax calendar</a>.</p>
+  <p class="small muted">Tax amounts are estimates; you file and pay with the IRS. For information only, not tax advice.</p>
+</section>

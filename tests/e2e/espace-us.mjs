@@ -1,5 +1,5 @@
-// Parcours navigateur de l'Espace des États-Unis (documentation/60-espace-etats-unis.md, § 3.3 et § 4), sur la page en
-// brouillon /us/workspace/ : OF_DRAFTS=1 python3 build.py, puis node tests/e2e/espace-us.mjs [dossier-captures].
+// Parcours navigateur de l'Espace des États-Unis (documentation/60-espace-etats-unis.md, § 3.3, § 3.4 et § 4), sur la
+// page publique /us/workspace/ : python3 build.py, puis node tests/e2e/espace-us.mjs [dossier-captures].
 // Critères : U2 (même aperçu que le générateur public pour les mêmes données) et U8 (aucune erreur JavaScript, aucun
 // texte manquant ni français, aucun débordement horizontal, accessibilité AA sur ordinateur, tablette et téléphone).
 import { createRequire } from "module";
@@ -13,15 +13,15 @@ const require = createRequire(import.meta.url);
 const { chromium } = require(process.env.PLAYWRIGHT_PATH || "/opt/node22/lib/node_modules/playwright");
 
 const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..", "..");
-const site = path.join(root, "brouillons");
+const site = path.join(root, "docs");
 if (!existsSync(path.join(site, "us", "workspace", "index.html"))) {
-  console.error("Construire d'abord les brouillons : OF_DRAFTS=1 python3 build.py");
+  console.error("Construire d'abord le site : python3 build.py");
   process.exit(1);
 }
 const shots = path.resolve(process.argv[2] || path.join(root, "tests", "captures-espace-us"));
 mkdirSync(shots, { recursive: true });
 
-// ----- Serveur de test : brouillons/ -----------------------------------------------------------------------------
+// ----- Serveur de test : docs/ (site public) -----------------------------------------------------------------------------
 
 const TYPES = { ".html": "text/html; charset=utf-8", ".js": "text/javascript", ".css": "text/css", ".svg": "image/svg+xml", ".png": "image/png",
                 ".webp": "image/webp", ".json": "application/json", ".woff2": "font/woff2", ".ico": "image/x-icon", ".xml": "application/xml" };
@@ -87,7 +87,8 @@ try {
   await page.goto(PAGE, { waitUntil: "networkidle" });
   await page.waitForSelector("#profile-form");
   check((await text(page, "#espace-view h2")) === "Welcome to your workspace" && (await page.getAttribute("html", "lang")) === "en-US" &&
-    (await page.getAttribute("meta[name=robots]", "content")) === "noindex", "premier lancement : accueil en anglais, page en brouillon non indexée");
+    (await page.getAttribute("meta[name=robots]", "content")) === "index, follow" && (await page.getAttribute("link[rel=canonical]", "href") || "").endsWith("/us/workspace/"),
+    "premier lancement : accueil en anglais, page publique indexable (adresse canonique)");
   check((await page.$$eval("#ep-filingStatus option", (o) => o.map((x) => x.value))).join() === "single,married_filing_jointly,married_filing_separately,head_of_household",
     "profil : situation familiale (calcul des acomptes)");
   await english(page, "premier lancement");
@@ -411,6 +412,26 @@ try {
   dl = await text(page, "#espace-view");
   check(dl.includes("Send Form 1099-NEC to contractors and the IRS") && dl.includes("Extended 2026 tax return due") &&
     dl.includes("for your settings: you pay contractors; you file with an extension."), "échéances : 1099-NEC à envoyer et déclaration prolongée affichés");
+
+  // ----- Publication (sous-lot 4b, D96) : texte de la page, questions, sources, en-tête, encarts sur cinq outils ------
+  await page.goto(PAGE.split("?")[0], { waitUntil: "networkidle" });
+  const main = await text(page, "main");
+  check(main.includes("Everything a one-person business needs") && main.includes("Not in this version: accrual accounting") &&
+    (await page.$$("#faq details")).length === 7 && (await page.$$(".sources li")).length >= 10,
+    "page publique : texte, ce que la version 1 ne fait pas, sept questions fréquentes, sources officielles");
+  check((await text(page, "a.header-cta")) === "My workspace" && (await page.getAttribute("a.header-cta", "href")).endsWith("/us/workspace/"),
+    "en-tête : bouton « My workspace »");
+  await english(page, "page publique");
+  await accessible(page, "page publique");
+  await widths(page, "us-page-publique");
+  for (const slug of ["invoice-generator", "payment-reminder-email", "quarterly-tax-calculator", "how-much-to-set-aside-for-taxes", "tax-calendar"]) {
+    await page.goto(ORIGIN + "/outils-freelance/us/" + slug + "/", { waitUntil: "networkidle" });
+    const inset = await page.$('aside.espace-cta a[href$="/us/workspace/"]');
+    const words = inset ? await text(page, "aside.espace-cta") : "";
+    check(inset !== null && (await inset.isVisible()) && (await page.isVisible("aside.espace-cta")) &&
+      words.includes("Free, no account: your data stays on your device.") && !FRENCH.test(words), `encart visible vers l'Espace : ${slug}`);
+  }
+  await accessible(page, "calendrier fiscal avec son encart");
 
   check(errors.length === 0, `aucune erreur JavaScript ni texte manquant${errors.length ? " → " + errors.slice(0, 5).join(" | ") : ""}`);
 } finally {

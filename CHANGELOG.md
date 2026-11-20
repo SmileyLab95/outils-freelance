@@ -69,6 +69,9 @@
   adresses internes étant réécrites. Corrigé dans l'Espace (France comprise) : les liens « Indiquer le solde » et
   « Notez vos charges » de la trésorerie affichaient le tableau de bord ; ils mènent maintenant à leur formulaire.
   Parcours américain : 116 points.
+- Étape 4, sous-lot 4b : **l'Espace américain est en ligne** (`/us/workspace/`) : texte de la page, questions
+  fréquentes, sources officielles, entrée de menu, bouton d'en-tête « My workspace », encarts sur cinq outils
+  américains. Parcours américain sur le site public : 129 points.
 
 ## 2026-11-19 (après-midi, suite) — Moteur de l'Espace des États-Unis (lot 2e)
 

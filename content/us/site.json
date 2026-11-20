@@ -51,6 +51,7 @@
       "label": "Invoicing and getting paid",
       "description": "Compliant invoices, paid on time.",
       "items": [
+        "workspace",
         "invoice",
         "international",
         "currency",
@@ -78,9 +79,9 @@
     }
   ],
   "featured": [
-    "tax",
-    "estimated-tax",
-    "invoice"
+    "workspace",
+    "invoice",
+    "tax"
   ],
   "footer_links": [
     "legal",
@@ -118,7 +119,7 @@
     "popular": "Most used"
   },
   "header_cta": {
-    "page": "invoice",
-    "label": "Create an invoice"
+    "page": "workspace",
+    "label": "My workspace"
   }
 }
