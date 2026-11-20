@@ -1,6 +1,7 @@
 /*
  * Espace entrepreneur (France, version locale) : application d'une page.
- * Spécification : documentation/09-specification-espace.md. Calculs : OFE.espaceFR et OFE.invoiceFR.
+ * Spécification : documentation/09-specification-espace.md. Calculs : moteurs déclarés par le module du pays de la
+ * section (OFE.espaceUI.<pays>.engines : en France, OFE.espaceFR et OFE.invoiceFR ; documentation/60, § 3.3).
  * Stockage : window.EspaceStore (IndexedDB). Écrans : #/ (tableau de bord), #/documents, #/documents/<id>,
  * #/clients, #/clients/<id>, #/recettes, #/depenses, #/depenses/<id> (documentation/36-depenses-et-registre-des-achats.md),
  * #/temps, #/temps/<id>, #/temps/facturer?client=<id> (documentation/37-temps-passe.md),
@@ -11,12 +12,15 @@
   "use strict";
   var OF = window.OF, OFE = window.OFE, R = window.OF_RULES, S = window.EspaceStore;
   var app = document.getElementById("espace-app");
-  if (!app || !OFE || !OFE.espaceFR || !R || !S) return;
-  var E = OFE.espaceFR, INV = OFE.invoiceFR, ST = OFE.espaceStats;
   // Textes de la langue de la section (tools/espace-texts-<langue>.js ; documentation/60, § 3, étape 1) : la langue
   // (« fr »), puis sa variante régionale (« fr-CA ») qui ne redéfinit que ce qui change.
   var TEXTS = window.OF_ESPACE_TEXTS || {};
   var TX = Object.assign({}, TEXTS[OF.locale.slice(0, 2)], TEXTS[OF.locale]);
+  // Module d'écrans du pays de la section et ses moteurs (documentation/60, § 3.2 et § 3.3, D90 et D92).
+  var MOD = OFE && OFE.espaceUI ? OFE.espaceUI[OF.section] : null;
+  var ENG = MOD && MOD.engines ? MOD.engines(TX, OF) : null;
+  if (!app || !ENG || !ENG.engine || !R || !S) return;
+  var E = ENG.engine, INV = ENG.invoice, ST = OFE.espaceStats.create(E, INV);
   /** Texte (« libellé ») de la clé, avec les valeurs { nom: valeur } à la place des « {nom} ». Une clé absente est
    *  une erreur. Nommé L : plusieurs fonctions de ce fichier ont une variable locale t. */
   function L(key, vars) {
@@ -31,9 +35,8 @@
   var forced = /[?&]today=(\d{4}-\d{2}-\d{2})/.exec(window.location.search);
   var TODAY = forced ? forced[1] : OF.today();
   var YEAR = TODAY.slice(0, 4);
-  // Formats de la section pour les moteurs (rendu des documents, Factur-X, courriel) : en France, OF.money et OF.date
-  // donnent exactement OF.eur et OF.frDate (fr-FR, EUR) ; documentation/60, § 3.1, lot 2c.
-  var FMT = { eur: OF.money, num: OF.fmt, date: function (iso) { return OF.date(iso); } };
+  // Formats de la section pour les moteurs (rendu des documents, Factur-X, courriel), donnés par le module du pays.
+  var FMT = ENG.fmt;
   /** Séparateur décimal de la section (« , » en français, « . » en anglais), pour préremplir les champs de saisie. */
   var DEC = OF.fmt(1.5).charAt(1);
   /** Symbole de la devise de la section (« € », « $ », « £ »), à côté des champs de montant. */
@@ -102,14 +105,9 @@
     var p = profile(), c = client(d.clientId) || {};
     return { me: meFromProfile(p), client: clientForDoc(c) };
   }
-  function meFromProfile(p) {
-    return { name: p.name, status: p.status, address: p.address, siret: p.siret, vat: p.vat, email: p.email,
-             phone: p.phone, iban: p.iban, bic: p.bic, logo: p.logo, endpoint: p.endpoint || "" };
-  }
-  function clientForDoc(c) {
-    return { name: c.name, address: c.address, id: c.siren, vat: c.vat, delivery: c.delivery, pro: !!c.pro, email: c.email,
-             place: c.place || "fr", country: c.place && c.place !== "fr" ? c.country || "" : "", endpoint: c.endpoint || "" };
-  }
+  /** Coordonnées de l'émetteur et du client passées à l'aperçu et à l'émission, selon le pays (module de la section). */
+  function meFromProfile(p) { return ENG.parties.me(p); }
+  function clientForDoc(c) { return ENG.parties.client(c); }
   function docForRender(d) {
     var p = parties(d);
     return Object.assign({}, d, { me: p.me, client: p.client });
@@ -182,7 +180,9 @@
 
   // ----- Document venu du générateur public (#/importer) ---------------------------------------------
 
-  var IMPORT_KEY = "espace-import", IMPORT_TTL = 24 * 3600 * 1000;
+  // Dépôt du générateur public de la section : « espace-import » en France (inchangé), « espace-import:<section> »
+  // ailleurs ; l'Espace d'une section ignore le dépôt d'une autre (documentation/60, § 3.3, D92).
+  var IMPORT_KEY = "espace-import" + (OF.section === "fr" ? "" : ":" + OF.section), IMPORT_TTL = 24 * 3600 * 1000;
   /** Document déposé par le bouton « Continuer dans mon Espace » du générateur (même navigateur, moins de 24 h). */
   function pendingImport() {
     var p = OF.load(IMPORT_KEY, null);
@@ -2166,7 +2166,7 @@
               charts: function (fn) { drawCharts = fn; fn(); }, FMT: FMT, client: client, parties: parties,
               docLabel: docLabel, loadLazy: loadLazy, rateText: rateText,
               data: function () { return data; } };
-  var UI = OFE.espaceUI && OFE.espaceUI[OF.section] ? OFE.espaceUI[OF.section](ctx) : {};
+  var UI = MOD(ctx);
 
   // ----- Démarrage -----------------------------------------------------------------------------------
 

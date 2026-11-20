@@ -346,6 +346,12 @@ est déjà séparé par section (`of:espace:<section>`) ; le dépôt du généra
 5. **Étape 4 — page `/us/workspace/`** : navigation, alias d'adresses lisibles (`#/income`, `#/expenses`…), lien
    d'en-tête, encarts ; parcours navigateur dédié (critères U2 à U8 : ordinateur, tablette, téléphone, axe-core).
 
+**Avancement du lot 3d.** Sous-lot 3d-1 fait le 20/11/2026 : `OFE.espaceUI.fr.engines(textes, OF)` déclare le
+moteur de l'Espace, le moteur de facture, les formats de l'aperçu et les coordonnées (`parties`) ; `tools/espace.js`
+les lit avant de créer le module ; `engines/espace-stats.js` expose `create(moteur, facture)` (instance française
+inchangée, testée) ; le dépôt du générateur porte sa section. Parcours de l'Espace et du générateur français 403/403,
+comptes 51/51, 754 tests unitaires.
+
 ### Avancement
 
 - **Étape 1 terminée le 19/11/2026.** Les textes de `tools/espace.js` sont dans `tools/espace-texts-fr.js`

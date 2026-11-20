@@ -39,6 +39,9 @@
   confiés au module français. Deux points ajoutés au parcours (369).
 - Lot 3c-2 : textes communs de l'Espace en anglais américain (`tools/espace-texts-en.js`, 874 clés), contrôlés
   clé par clé (valeurs insérées, balises, liens) ; utilisés par la future page américaine.
+- Lot 3d spécifié (documentation/60, § 3.3, D92). Sous-lot 3d-1 : les moteurs de l'Espace sont déclarés par le
+  module du pays (moteur, facture, formats, coordonnées) ; fabrique du moteur des indicateurs ; dépôt du générateur
+  propre à chaque section. Aucun changement visible.
 
 ## 2026-11-19 (après-midi, suite) — Moteur de l'Espace des États-Unis (lot 2e)
 

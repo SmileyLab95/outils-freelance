@@ -393,3 +393,14 @@ test("dépenses sur une période de l'année en cours : mois, trimestre, année,
   // Aucune dépense ni encaissement : zéros, pas de moyenne par dépense ni de part.
   assert.deepEqual(pick(S.expensesPeriod([], [], T, "mois", micro, R)), ["mois", "2026-11-01", T, 0, 0, 1, null, null, 0, null]);
 });
+
+test("fabrique : une instance des indicateurs par moteur, l'instance française inchangée (documentation/60, § 3.3)", () => {
+  const docs = [];
+  issue(docs, "2026-03-02", "c1", 1200, [["2026-03-20", 1200]]);
+  issue(docs, "2026-04-10", "c2", 800, [["2026-05-02", 300]]);
+  const other = S.create(E, require("../../src/assets/engines/invoice-fr.js"));
+  assert.notEqual(other, S, "nouvelle instance");
+  assert.equal(typeof other.create, "function", "la fabrique reste disponible");
+  assert.deepEqual(other.monthly(docs, "2026-06-30", 12), S.monthly(docs, "2026-06-30", 12), "mêmes résultats avec le même moteur");
+  assert.deepEqual(other.topClients(docs, "2026-01-01", "2026-12-31", 5), S.topClients(docs, "2026-01-01", "2026-12-31", 5));
+});

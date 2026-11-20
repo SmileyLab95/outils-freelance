@@ -14,7 +14,7 @@
 (function (root) {
   "use strict";
   var OFE = root.OFE = root.OFE || {};
-  (OFE.espaceUI = OFE.espaceUI || {}).fr = function (ctx) {
+  var fr = (OFE.espaceUI = OFE.espaceUI || {}).fr = function (ctx) {
     var $ = ctx.$, L = ctx.L, esc = ctx.esc, money = ctx.money, day = ctx.day, percent = ctx.percent, DEC = ctx.DEC, field = ctx.field, options = ctx.options, kpi = ctx.kpi, countText = ctx.countText, showError = ctx.showError, persist = ctx.persist, now = ctx.now, isMicro = ctx.isMicro, profile = ctx.profile, view = ctx.view, amountText = ctx.amountText, E = ctx.E, R = ctx.R, S = ctx.S, OF = ctx.OF, TODAY = ctx.TODAY, YEAR = ctx.YEAR;
     var D = ctx.data, CAL = ctx.CAL, longDay = ctx.longDay, TERMS = ctx.TERMS, isMixed = ctx.isMixed;
     var FMT = ctx.FMT, client = ctx.client, parties = ctx.parties, docLabel = ctx.docLabel, loadLazy = ctx.loadLazy;
@@ -967,6 +967,29 @@
                   breakEvenNone: breakEvenNone, agingNote: agingNote,
                   settings: { names: ["vatLastYear"], fields: treasuryFields, check: treasuryCheck, save: treasurySave } },
       generator: { saved: generatorSaved, profile: generatorProfile, extras: generatorExtras, patchLabels: PATCH_LABELS, notes: generatorNotes }
+    };
+  };
+
+  /**
+   * Moteurs de la section (documentation/60, § 3.3, D92), lus par tools/espace.js avant de créer le module : moteur de
+   * l'Espace, moteur de facture (aperçu, montants), formats de l'aperçu, coordonnées passées à l'aperçu et à l'émission.
+   */
+  fr.engines = function (TX, OF) {
+    return {
+      engine: OFE.espaceFR,
+      invoice: OFE.invoiceFR,
+      // En France, OF.money et OF.date donnent exactement OF.eur et OF.frDate (fr-FR, EUR) ; documentation/60, § 3.1.
+      fmt: { eur: OF.money, num: OF.fmt, date: function (iso) { return OF.date(iso); } },
+      parties: {
+        me: function (p) {
+          return { name: p.name, status: p.status, address: p.address, siret: p.siret, vat: p.vat, email: p.email,
+                   phone: p.phone, iban: p.iban, bic: p.bic, logo: p.logo, endpoint: p.endpoint || "" };
+        },
+        client: function (c) {
+          return { name: c.name, address: c.address, id: c.siren, vat: c.vat, delivery: c.delivery, pro: !!c.pro, email: c.email,
+                   place: c.place || "fr", country: c.place && c.place !== "fr" ? c.country || "" : "", endpoint: c.endpoint || "" };
+        }
+      }
     };
   };
 })(typeof self !== "undefined" ? self : this);

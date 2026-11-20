@@ -4,9 +4,14 @@
  * Testé par tests/unit/espace-stats.test.mjs.
  */
 (function (root, factory) {
-  var api = factory(root.OFE && root.OFE.espaceFR ? root.OFE.espaceFR : require("./espace-fr.js"),
-                    root.OFE && root.OFE.invoiceFR ? root.OFE.invoiceFR : require("./invoice-fr.js"));
-  if (typeof module === "object" && module.exports) module.exports = api;
+  // Instance liée au moteur français quand il est chargé (page française, Node) ; create(moteur, facture) en donne une
+  // pour le moteur d'un autre pays (documentation/60, § 3.3, D92).
+  var node = typeof module === "object" && module.exports;
+  var E = root.OFE && root.OFE.espaceFR ? root.OFE.espaceFR : node ? require("./espace-fr.js") : null;
+  var INV = root.OFE && root.OFE.invoiceFR ? root.OFE.invoiceFR : node ? require("./invoice-fr.js") : null;
+  var create = function (engine, invoice) { var a = factory(engine, invoice); a.create = create; return a; };
+  var api = E ? create(E, INV) : { create: create };
+  if (node) module.exports = api;
   else (root.OFE = root.OFE || {}).espaceStats = api;
 })(typeof self !== "undefined" ? self : this, function (E, INV) {
   "use strict";
