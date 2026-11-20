@@ -1,5 +1,5 @@
 // Parcours navigateur de l'Espace du Royaume-Uni (documentation/61-espace-royaume-uni.md, § 3 et § 4), sur la page
-// en brouillon /uk/workspace/ : OF_DRAFTS=1 python3 build.py, puis node tests/e2e/espace-uk.mjs [dossier-captures].
+// publique /uk/workspace/ : python3 build.py, puis node tests/e2e/espace-uk.mjs [dossier-captures].
 // Critères : K2 (même aperçu que le générateur public pour les mêmes données) et K8 (aucune erreur JavaScript, aucun
 // texte manquant, français ou américain là où l'anglais britannique diffère, aucun débordement horizontal,
 // accessibilité AA sur ordinateur, tablette et téléphone) ; K3 à K7 vus à l'écran (moteur : tests/unit/espace-uk.test.mjs).
@@ -14,15 +14,15 @@ const require = createRequire(import.meta.url);
 const { chromium } = require(process.env.PLAYWRIGHT_PATH || "/opt/node22/lib/node_modules/playwright");
 
 const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..", "..");
-const site = path.join(root, "brouillons");
+const site = path.join(root, "docs");
 if (!existsSync(path.join(site, "uk", "workspace", "index.html"))) {
-  console.error("Construire d'abord les brouillons : OF_DRAFTS=1 python3 build.py");
+  console.error("Construire d'abord le site : python3 build.py");
   process.exit(1);
 }
 const shots = path.resolve(process.argv[2] || path.join(root, "tests", "captures-espace-uk"));
 mkdirSync(shots, { recursive: true });
 
-// ----- Serveur de test : brouillons/ --------------------------------------------------------------------------------
+// ----- Serveur de test : docs/ (site public) --------------------------------------------------------------------------------
 
 const TYPES = { ".html": "text/html; charset=utf-8", ".js": "text/javascript", ".css": "text/css", ".svg": "image/svg+xml", ".png": "image/png",
                 ".webp": "image/webp", ".json": "application/json", ".woff2": "font/woff2", ".ico": "image/x-icon", ".xml": "application/xml" };
@@ -95,7 +95,8 @@ try {
   await page.goto(PAGE, { waitUntil: "networkidle" });
   await page.waitForSelector("#profile-form");
   check((await text(page, "#espace-view h2")) === "Welcome to your workspace" && (await page.getAttribute("html", "lang")) === "en-GB" &&
-    (await page.getAttribute("meta[name=robots]", "content")) === "noindex", "premier lancement : accueil en anglais, brouillon non indexé");
+    (await page.getAttribute("meta[name=robots]", "content")) === "index, follow" && (await page.getAttribute("link[rel=canonical]", "href") || "").endsWith("/uk/workspace/"),
+    "premier lancement : accueil en anglais, page publique indexable (adresse canonique)");
   check((await page.$$eval("#ep-region option", (o) => o.map((x) => x.value))).join() === "ruk,scotland", "profil : région fiscale (Écosse ou reste du Royaume-Uni)");
   await british(page, "premier lancement");
   await accessible(page, "premier lancement");
@@ -275,6 +276,26 @@ try {
   const dash = await text(page, "#espace-view .kpis");
   check(dash.includes("Collected in 2026/27£300.00") && dash.includes("2025/26 at the same date"), "tableau de bord : encaissé de l'année fiscale 2026/27 → " + dash.slice(0, 120));
   await screen(page, "tableau de bord", "uk-tableau-de-bord");
+
+  // ----- Publication : texte de la page, questions, sources, en-tête, encarts sur six outils ---------------------------
+  await page.goto(PAGE.split("?")[0], { waitUntil: "networkidle" });
+  const main = await text(page, "main");
+  check(main.includes("Everything a sole trader needs") && main.includes("Not in this version: traditional (accruals) accounting") &&
+    (await page.$$("#faq details")).length === 7 && (await page.$$(".sources li")).length >= 12,
+    "page publique : texte, ce que la version 1 ne fait pas, sept questions fréquentes, sources officielles");
+  check((await text(page, "a.header-cta")) === "My workspace" && (await page.getAttribute("a.header-cta", "href")).endsWith("/uk/workspace/"),
+    "en-tête : bouton « My workspace »");
+  await british(page, "page publique");
+  await accessible(page, "page publique");
+  await widths(page, "uk-page-publique");
+  for (const slug of ["invoice-generator", "payment-reminder-letter", "self-employed-tax-calculator", "how-much-to-set-aside-for-tax", "tax-calendar", "making-tax-digital"]) {
+    await page.goto(ORIGIN + "/outils-freelance/uk/" + slug + "/", { waitUntil: "networkidle" });
+    const inset = await page.$('aside.espace-cta a[href$="/uk/workspace/"]');
+    const words = inset ? await text(page, "aside.espace-cta") : "";
+    check(inset !== null && (await inset.isVisible()) && (await page.isVisible("aside.espace-cta")) &&
+      words.includes("Free, no account: your data stays on your device.") && !FRENCH.test(words) && !AMERICAN.test(words), `encart visible vers l'Espace : ${slug}`);
+  }
+  await accessible(page, "Making Tax Digital avec son encart");
 
   check(errors.length === 0, `aucune erreur JavaScript ni texte manquant${errors.length ? " → " + errors.slice(0, 5).join(" | ") : ""}`);
 } finally {

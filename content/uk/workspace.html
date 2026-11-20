@@ -3,7 +3,10 @@
   "slug": "workspace/",
   "title": "Free Sole Trader Workspace: Invoices, Income, Expenses and Tax",
   "description": "Clients, quotes, invoices, payments, income and expenses by tax year, your Self Assessment summary, payments on account and Making Tax Digital. Free, no sign-up; your data stays on your device.",
-  "draft": true,
+  "menu": "Sole trader workspace",
+  "icon": "🗂️",
+  "blurb": "Invoices, payments, income, expenses, your tax bill and Making Tax Digital in one place.",
+  "app": "Sole Trader Workspace",
   "rules": "uk",
   "scripts": [
     "tools/espace-texts-en.js",
@@ -20,6 +23,57 @@
     "tools/espace-store.js",
     "tools/espace-uk-ui.js",
     "tools/espace.js"
+  ],
+  "sources": [
+    "cash_basis_default",
+    "uk_records_proof",
+    "uk_records_retention",
+    "uk_sa103s_boxes",
+    "uk_allowable_expenses",
+    "trading_allowance",
+    "payments_on_account_dates",
+    "payments_on_account_threshold",
+    "uk_mtd_itsa_qualifying_income",
+    "mtd_itsa_threshold_2026",
+    "mtd_itsa_threshold_2027",
+    "mtd_itsa_threshold_2028",
+    "uk_mtd_itsa_update_periods",
+    "vat_registration_threshold",
+    "late_payment_statutory_interest_margin",
+    "late_payment_fixed_compensation",
+    "uk_pecr_email",
+    "uk_pecr_calls"
+  ],
+  "priority": 1.0,
+  "faq": [
+    [
+      "Is the workspace really free?",
+      "Yes. There is no sign-up and no subscription: you create your business profile and start."
+    ],
+    [
+      "Where is my data stored?",
+      "In your browser, on this device only. Nothing is sent to a server. Export a backup regularly from Settings: it protects you if something goes wrong and lets you move to another device."
+    ],
+    [
+      "Does the workspace file my tax return or send updates to HMRC?",
+      "No. The self-employment summary, the tax estimate and the Making Tax Digital totals are a preparation aid worked out from what you record. You file your Self Assessment return and pay with HMRC yourself; if Making Tax Digital applies to you, you send your quarterly updates with compatible software."
+    ],
+    [
+      "Which income counts for a tax year?",
+      "Payments you actually receive between 6 April and 5 April (the cash basis, the default for sole traders since 2024/25): an invoice counts when it is paid, not when it is sent. A refund you pay back to a client is taken off your turnover on the date you pay it."
+    ],
+    [
+      "How is my tax bill worked out?",
+      "With the same method as our <a href=\"{{link:tax}}\">self-employed tax calculator</a>: income tax and Class 4 National Insurance on your profit for the tax year (the profit you expect, or your profit so far projected to the full year), with your salary if you have one and the Scottish rates if you pay Scottish income tax. Payments on account, on 31 January and 31 July, are each half of last year's bill, which you enter once."
+    ],
+    [
+      "Does Making Tax Digital for Income Tax apply to me?",
+      "The workspace compares your qualifying income (gross self-employment and property income, before expenses) with the threshold of each starting year: over £50,000 in 2024/25 means from 6 April 2026, then £30,000 and £20,000 for the next two years. It then shows each quarterly update period, its deadline and your totals by category, to copy into your software."
+    ],
+    [
+      "I already sent invoices with another tool: how do I continue my numbering?",
+      "In Settings, enter the last number you used this year for each type of document: the workspace continues the sequence (2026-008 after 2026-007)."
+    ]
   ]
 }-->
 <style media="print">@page { size: A4; margin: 14mm; }</style>
@@ -57,3 +111,22 @@
   <noscript><p class="notice warn">The Workspace needs JavaScript to work.</p></noscript>
 </section>
 <script type="application/json" id="calendar-data">{{calendar:uk}}</script>
+
+<section class="section prose">
+  <h2>Everything a sole trader needs</h2>
+  <ul>
+    <li><strong>Quotes and invoices</strong> laid out like the <a href="{{link:invoice}}">invoice generator</a>: VAT only if you're registered, PO number, numbers in sequence (2026-001, 2026-002…), PDF and a prefilled email.</li>
+    <li><strong>Payments</strong>: partial payments, overdue invoices flagged, a reminder email ready to send, with the statutory interest you can claim from a business client; credit notes to cancel or correct an invoice.</li>
+    <li><strong>Income</strong> on the cash basis, by tax year (6 April to 5 April) and by quarter, refunds deducted, export to CSV.</li>
+    <li><strong>Expenses</strong> sorted by box of the self-employment page, with HMRC's list of what is and isn't allowable for each box; export to CSV.</li>
+    <li><strong>Self-employment summary</strong> for the tax year, box by box (SA103S), with the trading income allowance if it suits you better: a preparation aid, not a tax return.</li>
+    <li><strong>Tax</strong>: your estimated income tax and Class 4, worked out like the <a href="{{link:tax}}">self-employed tax calculator</a>, your payments on account and balancing payment, and the VAT registration threshold over the last 12 months.</li>
+    <li><strong>Making Tax Digital for Income Tax</strong>: whether it applies to you and from when, then your quarterly update periods, deadlines and totals by category.</li>
+    <li><strong>Time tracking</strong>: a timer or quick entries in hours or days, billable time by client, and an invoice drafted from your time in one click.</li>
+    <li><strong>Leads</strong>: your pipeline by stage, today's follow-ups, a do-not-contact list, and the PECR rules for marketing by email, text and phone.</li>
+    <li><strong>Cash flow and deadlines</strong>: tax already owed, your projected balance over 3, 6 or 12 months, late clients, and the UK tax calendar for your situation.</li>
+  </ul>
+  <p><strong>Not in this version:</strong> traditional (accruals) accounting, VAT returns, capital allowances, losses, property income, partnerships and limited companies, student loan repayments, and sending anything to HMRC.</p>
+  <p>For a one-off invoice without saving anything, the <a href="{{link:invoice}}">invoice generator</a> is still there. To see every deadline and add it to your calendar, open the <a href="{{link:calendar}}">UK tax calendar</a>.</p>
+  <p class="small muted">Tax amounts are estimates; you file and pay with HMRC. For information only, not tax advice.</p>
+</section>

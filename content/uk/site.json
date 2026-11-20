@@ -50,6 +50,7 @@
       "label": "Invoicing and getting paid",
       "description": "Compliant invoices, paid on time.",
       "items": [
+        "workspace",
         "invoice",
         "invoice-rules",
         "salestax",
@@ -78,8 +79,8 @@
     }
   ],
   "featured": [
+    "workspace",
     "tax",
-    "structure",
     "invoice"
   ],
   "footer_links": [
@@ -118,7 +119,7 @@
     "popular": "Most used"
   },
   "header_cta": {
-    "page": "invoice",
-    "label": "Create an invoice"
+    "page": "workspace",
+    "label": "My workspace"
   }
 }

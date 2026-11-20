@@ -11,7 +11,7 @@ La plupart des outils existent dans tous les pays, avec les règles de chacun. L
 
 | Fonctionnalité | France | États-Unis | Royaume-Uni | Canada (EN, FR) | Lecture |
 |---|---|---|---|---|---|
-| **Espace entrepreneur** (clients, devis, factures, encaissements, dépenses, temps, prospects, trésorerie, échéances, indicateurs) | Oui | **Non** | **Non** | **Non** | Le grand écart : à faire (§ 2) |
+| **Espace entrepreneur** (clients, devis, factures, encaissements, dépenses, temps, prospects, trésorerie, échéances, indicateurs) | Oui | Oui (publié le 20/11/2026, [60](60-espace-etats-unis.md)) | Oui (publié le 20/11/2026, [61](61-espace-royaume-uni.md)) | **Non** | Reste le Canada (§ 2) |
 | **Compte gratuit** (sauvegarde chiffrée, synchronisation) | Oui (brouillon, en attente de l'hébergeur) | **Non** | **Non** | **Non** | Suit l'Espace de chaque pays |
 | Mentions obligatoires d'une facture | Oui | **Non** | Oui | Oui | États-Unis : aucune règle fédérale sur le contenu d'une facture relevée à ce jour (à vérifier) ; un guide « que mettre sur une facture » reste utile, d'après les pièces que l'IRS demande de conserver |
 | Calcul de la taxe de vente | Oui (TVA) | **Non** | Oui (VAT) | Oui (TPS/TVH/TVQ) | États-Unis : taxe des États et des villes, due sur certains services selon l'État ; d'abord un guide par État, d'après les sites officiels des États |

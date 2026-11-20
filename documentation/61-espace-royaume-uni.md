@@ -149,6 +149,13 @@ l'année précédente et acomptes déjà versés saisis par l'utilisateur ; seui
 - **20/11/2026 (fin de soirée)** : exercice des indicateurs communs fourni par le pays (`fiscalYear` du moteur, lu par
   `engines/espace-stats.js`, année civile par défaut) : le tableau de bord britannique affiche « Collected in 2026/27 »,
   comparé à 2025/26 à la même date ; France et États-Unis inchangés (parcours 371 et 129 points), britannique 90.
+- **20/11/2026 (fin de soirée, suite)** : **étape 4, publication** (D100) : `/uk/workspace/` publiée (texte « Everything a
+  sole trader needs », ce que la version 1 ne fait pas, sept questions fréquentes, 18 sources officielles), entrée en
+  tête du groupe « Invoicing and getting paid », raccourci de l'accueil, bouton d'en-tête « My workspace », encarts
+  sur six outils (générateur de factures, lettre de relance, calculateur d'impôt, part à mettre de côté, calendrier
+  fiscal, Making Tax Digital). Parcours britannique passé sur le site public : 104 points (publication, encarts
+  visibles et en anglais britannique) ; pages britanniques 70 points. **Reste** : la vitrine de l'accueil britannique
+  (tuile de l'Espace et capture d'exemple, comme le sous-lot 4c américain).
 
 ## 6. Lectures
 

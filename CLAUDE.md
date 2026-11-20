@@ -14,8 +14,8 @@
   `node tests/e2e/verifier.mjs <dossier de captures>` (accessibilité comprise : axe-core installé par
   `sh tests/e2e/installer-axe.sh`) ; relire les captures d'écran. Si les comptes ou l'Espace changent :
   `OF_DRAFTS=1 python3 build.py` puis `node tests/e2e/comptes.mjs <dossier>`, et, après `python3 build.py`, pour
-  l'Espace américain, `node tests/e2e/espace-us.mjs <dossier>` ; après `OF_DRAFTS=1 python3 build.py`, pour l'Espace
-  britannique (en brouillon), `node tests/e2e/espace-uk.mjs <dossier>`. Si la facturation change :
+  les Espaces américain et britannique, `node tests/e2e/espace-us.mjs <dossier>` et
+  `node tests/e2e/espace-uk.mjs <dossier>`. Si la facturation change :
   `node tests/facturx/generer.mjs <dossier>` puis `python3 tests/facturx/valider.py <dossier> --controle --pdf`.
 - **Après le travail** : cocher la feuille de route, mettre à jour « Où en est-on ? » (date, étape, prochaines actions,
   actions en attente d'Ismail), le `CHANGELOG.md`, et le journal des décisions (`documentation/08-journal-des-decisions.md`)
