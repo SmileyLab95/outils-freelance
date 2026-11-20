@@ -50,6 +50,8 @@
 - Sous-lot 3d-3a : premiers écrans de l'Espace américain (profil avec EIN, client, facture avec taxe de vente) sur
   une page en brouillon `/us/workspace/` ; aperçu identique au générateur public (paramètres partagés,
   `data/invoice-profiles/us.json`) ; nouveau parcours `tests/e2e/espace-us.mjs`. Pluriels selon la langue.
+- Sous-lot 3d-3b : tableau de bord américain (prochain acompte d'impôt estimé, égal au calculateur public) ; date
+  de prestation masquée dans l'éditeur américain.
 
 ## 2026-11-19 (après-midi, suite) — Moteur de l'Espace des États-Unis (lot 2e)
 

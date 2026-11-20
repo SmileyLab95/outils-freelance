@@ -3,14 +3,16 @@
  * D92). Module d'écrans d'un pays : la fabrique OFE.espaceUI.us reçoit le contexte prêté par tools/espace.js et renvoie
  * ses crochets ; us.engines déclare les moteurs de la section (moteur américain, moteur de facture international avec
  * les paramètres du générateur public, formats, coordonnées). Lot 3d-3 : profil, client, document (taxe de vente,
- * aperçu identique au générateur, critère U2). Chargé par la page de la section avant tools/espace.js.
+ * aperçu identique au générateur, critère U2), tableau de bord (prochain acompte). Chargé par la page de la section
+ * avant tools/espace.js.
  */
 (function (root) {
   "use strict";
   var OFE = root.OFE = root.OFE || {};
 
   var us = (OFE.espaceUI = OFE.espaceUI || {}).us = function (ctx) {
-    var L = ctx.L, field = ctx.field, OF = ctx.OF, TERMS = ctx.TERMS, profile = ctx.profile;
+    var L = ctx.L, field = ctx.field, OF = ctx.OF, TERMS = ctx.TERMS, profile = ctx.profile, E = ctx.E, R = ctx.R, D = ctx.data;
+    var kpi = ctx.kpi, money = ctx.money, day = ctx.day, TODAY = ctx.TODAY, YEAR = ctx.YEAR;
     var STATUSES = ["single", "married_filing_jointly", "married_filing_separately", "head_of_household"];
     var str = function (v) { return String(v == null ? "" : v).trim(); };
 
@@ -89,11 +91,42 @@
     }
     function issueOptions() { return {}; }
 
+    // ----- Tableau de bord : prochain acompte d'impôt estimé (documentation/60, § 2.4) -------------------------------
+
+    /**
+     * Prochaine échéance d'acompte (dates sourcées de l'année fiscale en cours ou, en janvier, de la précédente) et son
+     * montant : celui du calculateur public (estimatedTax), moins l'acompte déjà versé pour cette échéance ; null si les
+     * dates de l'année ne sont pas encore dans les règles.
+     */
+    function nextPayment() {
+      var input = { documents: D().documents, expenses: D().expenses, profile: profile(), rules: R, today: TODAY }, best = null;
+      [+YEAR - 1, +YEAR].forEach(function (y) {
+        (R["estimated_tax_due_dates_" + y] || []).forEach(function (d, i) {
+          if (d >= TODAY && (!best || d < best.date)) best = { date: d, year: y, n: i + 1 };
+        });
+      });
+      if (!best) return null;
+      var est = E.estimatedTax(E.taxInput(input, best.year));
+      best.needed = est.quarterly.needed;
+      best.amount = Math.max(0, Math.round((est.quarterly.perQuarter - E.paidFor(profile(), best.year, best.n)) * 100) / 100);
+      return best;
+    }
+    function dashboard() {
+      var next = nextPayment();
+      var sub = !next ? L("us.dash.nextTaxNoDates", { year: YEAR }) : !next.needed ? L("us.dash.nextTaxNone", { amount: money(R.estimated_tax_threshold) })
+        : next.amount > 0 ? L("us.dash.nextTaxSub", { n: next.n, date: day(next.date) }) : L("us.dash.nextTaxPaid", { date: day(next.date) });
+      return {
+        kpi: kpi(L("us.dash.nextTax"), next && next.needed && next.amount > 0 ? money(next.amount) : "–", sub, "is-brand"),
+        note: '<p class="small muted espace-note">' + L("us.dash.taxNoteHtml") + "</p>"
+      };
+    }
+
     return {
       routes: {},
+      dashboard: dashboard,
       profile: { defaults: profileDefaults, fields: profileFields, bind: bindProfile, read: readProfile, missing: profileMissing },
       client: { defaults: clientDefaults, fields: clientFields, bind: bindClient, read: readClient },
-      doc: { draft: draftFields, retax: retax, fields: docFields, note: docNote, input: docInput, kindCell: kindCell, issueOptions: issueOptions }
+      doc: { serviceDate: false, draft: draftFields, retax: retax, fields: docFields, note: docNote, input: docInput, kindCell: kindCell, issueOptions: issueOptions }
     };
   };
 

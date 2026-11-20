@@ -497,7 +497,8 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   **Lot 3c fait le 20/11/2026** : textes communs rendus neutres (3c-1), puis traduits en anglais (3c-2, 874 clés).
   **Lot 3d spécifié le 20/11/2026** ([60](60-espace-etats-unis.md) § 3.3, D92) ; 3d-1 (moteurs déclarés par le module
   du pays) et 3d-2 (prévision et périodes dans le cœur ; moteur américain complété : livre, acomptes, « déjà dû »,
-  courriels) faits le 20/11.
+  courriels) faits le 20/11 ; 3d-3 aussi : écrans américains (profil, client, facture, tableau de bord) sur la page en
+  brouillon `/us/workspace/`, parcours `tests/e2e/espace-us.mjs` (U2, U6, U8 ; 40 points).
 - **Accueil en images (18/11/2026, nuit)** : demande d'Ismail (« il n'y a que du texte, pas d'image ») ; principes
   des images du site (D84, [58](58-images-du-site.md)) : captures du vrai produit, données d'exemple annoncées, pas de
   banque d'images ni d'image générée. Accueil France : section « Les outils, en vrai » en grille bento (Espace,
@@ -580,8 +581,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   faits le 19/11, 2b (cœur commun), 2c (formats), 2d (moteur de facture international) et 2e (moteur américain,
   critères U3 à U7) aussi ; étape 3 en cours ([60](60-espace-etats-unis.md) § 3.2) : 3a (module français) fait le
   19/11, 3b (dictionnaires) aussi, 3c (anglais) le 20/11, 3d-1 et 3d-2 (branchements, moteur américain) le 20/11 ;
-  ensuite 3d-3 (module `tools/espace-us-ui.js` : profil, client, document avec l'aperçu du moteur international, tableau
-  de bord), 3d-4 (recettes, dépenses par ligne, annexe C, acomptes, 1099, échéances, trésorerie) ; règles de prospection
+  ensuite 3d-4 (recettes, dépenses par ligne, annexe C, acomptes versés, 1099, échéances, trésorerie) ; règles de prospection
   américaines à lire aux sources (FTC, FCC) ; puis la page `/us/workspace/` et son parcours (U2 à U8) ; ensuite
   Royaume-Uni et Canada, [59](59-parite-des-pays.md)) ; **poids des pages** : chaque page embarque toutes les règles de son pays
   (`window.OF_RULES`, environ 45 Ko avant compression) : n'y mettre que celles que ses scripts lisent ; **images du site** ([58](58-images-du-site.md) § 3) : miniatures dans la liste

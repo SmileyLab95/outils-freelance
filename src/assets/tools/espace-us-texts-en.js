@@ -40,6 +40,13 @@
     "us.doc.taxNote": "Sales tax depends on your state and on what you sell: enter the rate that applies, or leave it empty.",
     "us.doc.creditTitle": "CREDIT MEMO",
     "us.doc.creditNumber": "Credit memo number",
+    // Dashboard (screens): next estimated tax payment.
+    "us.dash.nextTax": "Next estimated tax payment",
+    "us.dash.nextTaxSub": "payment {n}, due {date}",
+    "us.dash.nextTaxPaid": "already paid for the {date} due date",
+    "us.dash.nextTaxNone": "not required so far: expected tax under {amount}",
+    "us.dash.nextTaxNoDates": "the {year} due dates are not published yet",
+    "us.dash.taxNoteHtml": "Estimated tax: same method as the <a href=\"../quarterly-tax-calculator/\">quarterly tax calculator</a>, from your profit so far projected to the full year, and your filing status. An estimate, not tax advice.",
     // Documents: names used in email subjects.
     "eng.us.type.facture": "Invoice",
     "eng.us.type.devis": "Estimate",

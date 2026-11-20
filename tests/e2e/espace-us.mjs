@@ -140,6 +140,7 @@ try {
   check(draft.includes("INVOICE") && draft.includes("$2,400.00") && draft.includes("Sales tax (8.25%)$198.00") && draft.includes("$2,598.00") &&
     draft.includes("Net 30") && draft.includes("Zelle: jordan@example.com") && draft.includes("Tax ID: 12-3456789"),
     "aperçu : taxe de vente, total, conditions, EIN et instructions de paiement");
+  check(!(await page.$("#d-service")), "éditeur : pas de date de prestation (mention française)");
   await english(page, "éditeur");
   await accessible(page, "éditeur de facture");
   await widths(page, "us-editeur");
@@ -182,6 +183,20 @@ try {
     "tableau de bord : encaissé de l'année, du mois et nombre d'encaissements" + " → " + kpis.slice(0, 160));
   const top = await text(page, ".bar-list");
   check(top.includes("Northwind Studio") && top.includes("$1,000.00") && top.includes("100%"), "tableau de bord : principaux clients → " + top);
+  check(kpis.includes("Next estimated tax payment–not required so far: expected tax under $1,000.00"),
+    "tableau de bord : pas d'acompte requis pour un petit bénéfice (seuil de 1 000 $)");
+  // Bénéfice prévu de 120 000 $ : acompte du calculateur public (U6), prochaine échéance le 15/01/2027 (dates sourcées).
+  await page.evaluate(async () => { const d = await window.EspaceStore.load(); d.profile.expectedProfit = 120000; await window.EspaceStore.save(d); });
+  await page.reload({ waitUntil: "networkidle" });
+  await page.waitForSelector(".kpis");
+  const expectedQ = await page.evaluate(async () => {
+    const d = await window.EspaceStore.load(), E = window.OFE.espaceUS.create(window.OF_ESPACE_TEXTS.en);
+    const est = E.estimatedTax(E.taxInput({ documents: d.documents, expenses: d.expenses, profile: d.profile, rules: window.OF_RULES, today: "2026-10-20" }, 2026));
+    return window.OF.money(Math.round(est.quarterly.perQuarter * 100) / 100);
+  });
+  const kpis2 = await text(page, "#espace-view .kpis");
+  check(kpis2.includes("Next estimated tax payment" + expectedQ + "payment 4, due 1/15/2027"),
+    "tableau de bord : prochain acompte = montant du calculateur (U6), échéance du 15/01/2027 → " + expectedQ);
   await english(page, "tableau de bord");
   await accessible(page, "tableau de bord");
   await widths(page, "us-tableau-de-bord");

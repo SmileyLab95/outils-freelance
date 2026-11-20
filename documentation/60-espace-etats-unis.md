@@ -378,8 +378,13 @@ brouillon `/us/workspace/` ; parcours `tests/e2e/espace-us.mjs` : U2 (même fact
 dans l'Espace : aperçus identiques au caractère près ; erreur réintroduite détectée), U8 (anglais seul, aucune erreur
 ni texte manquant, axe-core, ordinateur, tablette, téléphone), courriel, encaissement, tableau de bord, échéances
 américaines. Nombre d'encaissements du tableau de bord redevenu commun (les deux moteurs ont `ledger`) ; pluriels
-selon la langue (`Intl.PluralRules` : « 0 payments », « 0 encaissement »). Restent pour 3d-3b : date de prestation
-masquée aux États-Unis (mention française), tableau de bord américain (prochain acompte, 1099 attendus).
+selon la langue (`Intl.PluralRules` : « 0 payments », « 0 encaissement »).
+Sous-lot 3d-3b fait le 20/11/2026 : date de prestation masquée dans l'éditeur américain (`doc.serviceDate: false`,
+mention française) ; tableau de bord américain : prochain acompte (dates sourcées de l'année, ou de la précédente en
+janvier ; montant du calculateur moins l'acompte versé ; « pas requis » sous le seuil de 1 000 $ ; dates non publiées
+signalées) et note sur l'estimation. Parcours américain : 40 points, dont l'acompte affiché égal au calcul du
+calculateur public pour un bénéfice prévu de 120 000 $ (U6 à l'écran ; erreur réintroduite détectée). Les 1099 attendus
+viendront avec leur écran (3d-4).
 
 ### Avancement
 

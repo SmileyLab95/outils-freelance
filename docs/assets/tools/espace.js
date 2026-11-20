@@ -688,7 +688,8 @@
       options(clients.map(function (c) { return [c.id, c.name]; }), d.clientId) + "</select>" +
       '<span class="hint"><a href="#/clients/nouveau?retour=' + esc(d.id) + '">' + L("draft.newClient") + "</a></span></div>" +
       '<div class="field"><label for="d-date">' + L("draft.date") + '</label><input type="date" id="d-date" name="date" value="' + esc(d.date) + '"></div>' +
-      (d.type === "facture" ? '<div class="field"><label for="d-service">' + L("draft.serviceDate") + '</label><input type="date" id="d-service" name="serviceDate" value="' + esc(d.serviceDate || "") + '"></div>' +
+      (d.type === "facture" ? (UI.doc && UI.doc.serviceDate === false ? "" : '<div class="field"><label for="d-service">' + L("draft.serviceDate") +
+        '</label><input type="date" id="d-service" name="serviceDate" value="' + esc(d.serviceDate || "") + '"></div>') +
         '<div class="field"><label for="d-terms">' + L("draft.terms") + '</label><select id="d-terms" name="terms">' + options(termsFor(d.terms), d.terms) + "</select></div>" : "") +
       (d.type === "devis" ? '<div class="field"><label for="d-validity">' + L("draft.validity") + '</label><input type="text" id="d-validity" name="validity" inputmode="numeric" value="' + esc(d.validity) + '"></div>' +
         '<div class="field"><label for="d-deposit">' + L("draft.deposit") + '</label><input type="text" id="d-deposit" name="depositPct" inputmode="decimal" value="' + esc(d.depositPct) + '"></div>' : "") +
