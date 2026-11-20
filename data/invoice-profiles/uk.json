@@ -1,0 +1,79 @@
+{
+  "storage": "invoice",
+  "show_zero_tax": true,
+  "date_format": {
+    "day": "numeric",
+    "month": "short",
+    "year": "numeric"
+  },
+  "item_placeholder": "e.g. Website design (5 pages)",
+  "terms": [
+    {
+      "value": 0,
+      "label": "Due on receipt"
+    },
+    {
+      "value": 7,
+      "label": "7 days"
+    },
+    {
+      "value": 14,
+      "label": "14 days"
+    },
+    {
+      "value": 30,
+      "label": "30 days"
+    },
+    {
+      "value": 60,
+      "label": "60 days"
+    }
+  ],
+  "mentions": [],
+  "labels": {
+    "percent": "%",
+    "invoice": "INVOICE",
+    "estimate": "QUOTE",
+    "number": "No.",
+    "invoice_number": "Invoice number",
+    "estimate_number": "Quote number",
+    "invoice_file": "Invoice",
+    "estimate_file": "Quote",
+    "from": "From",
+    "bill_to": "Invoice to",
+    "prepared_for": "Prepared for",
+    "your_name": "Your name or business",
+    "your_details": "Address, email, phone",
+    "client_name": "Client name",
+    "client_details": "Client address",
+    "tax_id": "VAT Reg No:",
+    "client_tax_id": "VAT No:",
+    "invoice_date": "Invoice date",
+    "estimate_date": "Date",
+    "terms": "Payment terms",
+    "days": "days",
+    "due": "Due date",
+    "po": "PO number",
+    "valid": "Valid until",
+    "item": "Description",
+    "qty": "Qty / days",
+    "rate": "Unit price",
+    "amount": "Amount",
+    "remove": "Remove line",
+    "empty_lines": "Add your items in the form",
+    "subtotal": "Subtotal",
+    "discount": "Discount",
+    "tax": "VAT",
+    "total": "Total",
+    "paid": "Amount paid",
+    "balance": "Balance due",
+    "deposit": "Deposit on acceptance",
+    "payment": "Payment details",
+    "late_prefix": "Late payment:",
+    "estimate_terms": "This quote is valid until {date}. Work outside the scope above will be quoted separately.",
+    "accept_title": "Accepted by",
+    "accept": "Client signature, name and date.",
+    "logo_too_big": "This logo is too large (600 KB maximum).",
+    "reset_confirm": "Clear everything you entered?"
+  }
+}

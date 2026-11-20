@@ -9,7 +9,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 
 ## Où en est-on ?
 
-*Mis à jour le 20/11/2026 (après-midi).*
+*Mis à jour le 20/11/2026 (fin d'après-midi).*
 
 - **Priorité (décision D10)** : le site et la plateforme d'abord ; noms de domaine, Gumroad et affiliation à la fin.
   Règle de qualité maximale pour tout produit ou service (D11, charte dans la [méthode](04-methode-de-travail.md#charte-qualité)).
@@ -507,7 +507,9 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   « My workspace », encarts sur cinq outils) ; parcours américain sur le site public : 129 points ; 4c fait : l'Espace
   dans la vitrine de l'accueil américain. **Étape 4 terminée : l'Espace américain est publié.**
   **Espace britannique spécifié le 20/11/2026** ([61](61-espace-royaume-uni.md), D97) ; lectures commencées : formulaire
-  SA103S 2026 et ses notes (règle `uk_sa103s_boxes`), registres et comptabilité de caisse.
+  SA103S 2026 et ses notes (règle `uk_sa103s_boxes`), registres et comptabilité de caisse ; puis revenu éligible de MTD,
+  articles 21 et 22 du PECR, registres à garder (quatre règles) ; paramètres de facture britanniques dans
+  `data/invoice-profiles/uk.json`.
 - **Accueil en images (18/11/2026, nuit)** : demande d'Ismail (« il n'y a que du texte, pas d'image ») ; principes
   des images du site (D84, [58](58-images-du-site.md)) : captures du vrai produit, données d'exemple annoncées, pas de
   banque d'images ni d'image générée. Accueil France : section « Les outils, en vrai » en grille bento (Espace,
@@ -593,8 +595,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   américains : recettes, dépenses, Taxes, annexe C, échéances, trésorerie) le 20/11, 3d-5 (règles de prospection lues
   aux textes officiels) aussi ; étape 4 faite le 20/11 (4a adresses en anglais, 4b **Espace américain publié**,
   `/us/workspace/`, 4c vitrine de l'accueil) ; **Royaume-Uni en cours** ([61](61-espace-royaume-uni.md)) : finir les
-  lectures (fiche HS222, mises à jour trimestrielles de MTD et revenu éligible, règles PECR de l'ICO, « What records
-  to keep »), puis le moteur `engines/espace-uk.js` et ses tests, les écrans, la publication ; ensuite le Canada,
+  lectures (fiche HS222, mises à jour trimestrielles de MTD, articles 2 et 26 du PECR), puis le moteur `engines/espace-uk.js` et ses tests, les écrans, la publication ; ensuite le Canada,
   [59](59-parite-des-pays.md)) ; **poids des pages** : chaque page embarque toutes les règles de son pays
   (`window.OF_RULES`, environ 45 Ko avant compression) : n'y mettre que celles que ses scripts lisent ; **images du site** ([58](58-images-du-site.md) § 3) : miniatures dans la liste
   des étapes et schémas explicatifs (facture annotée, frise des relances, calendrier de la facturation électronique) ; refonte, suite ([31](31-vision-plateforme.md) § 5) : les quatre modules du compte

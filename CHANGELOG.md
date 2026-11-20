@@ -76,6 +76,9 @@
   ordinateur et téléphone) et une facture d'exemple complète ; « My workspace » rejoint les raccourcis de l'accueil.
 - Espace britannique : spécification (documentation/61, D97) ; formulaire SA103S 2026 et ses notes lus aux sources
   officielles (règle `uk_sa103s_boxes` : intitulés exacts des cases de recettes et de dépenses).
+- Espace britannique, lectures (suite) : revenu éligible et entrée dans Making Tax Digital, règles PECR des emails et
+  des appels de prospection, registres à garder (quatre règles sourcées) ; paramètres de facture du générateur
+  britannique déplacés dans `data/invoice-profiles/uk.json` (contenu identique).
 
 ## 2026-11-19 (après-midi, suite) — Moteur de l'Espace des États-Unis (lot 2e)
 

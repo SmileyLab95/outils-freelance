@@ -3413,6 +3413,99 @@
       "confidence": "high",
       "verified_on": "2026-11-20",
       "note": "Form read in full on 20/11/2026 with the source reader (GitHub Actions; SHA-256 556bb1d4d881cbf992ce31bae2e40806760f69ba8266ade2265a343553eed382; 'HMRC 12/25'; publication page last updated 6 April 2026). Box labels quoted exactly. Notes (SESN): 'Fill in boxes 11 to 19 and put the total in box 20. If your annual turnover was below £90,000, you may just put your total expenses in box 20. If you claim the trading income allowance in box 10.1, do not complete boxes 11 to 20'; box 21: 'Add boxes 9 and 10 together. If the total is more than the figure in box 20, put the difference in box 21' (box 22 the other way); the full pages are needed if 'your turnover for the year is £90,000 or more (or would have been if you'd traded for a full year)'; trading income allowance: up to £1,000, no expenses can then be deducted, it cannot make a loss. Per-category guidance is in helpsheet HS222 (not yet read). The 2027 form (tax year 2026-27) is not yet published."
+    },
+    "uk_mtd_itsa_qualifying_income": {
+      "value": {
+        "income_year_for_start": {
+          "2026": "2024-25",
+          "2027": "2025-26",
+          "2028": "2026-27"
+        },
+        "counts": [
+          "self-employment income",
+          "property income"
+        ],
+        "excluded": [
+          "employment (PAYE)",
+          "your share of profit from a partnership as an individual partner",
+          "dividends (including those from your own company)",
+          "a State Pension",
+          "private pensions"
+        ]
+      },
+      "unit": "object",
+      "label": "Making Tax Digital for Income Tax: qualifying income (gross self-employment and property income) of the tax year two years before the start year, compared with the threshold of that start year",
+      "source": "https://www.gov.uk/guidance/work-out-your-qualifying-income-for-making-tax-digital-for-income-tax",
+      "source_title": "HMRC - Work out your qualifying income for Making Tax Digital for Income Tax (last updated 11 September 2026)",
+      "more_sources": [
+        {
+          "source": "https://www.gov.uk/guidance/check-if-youre-eligible-for-making-tax-digital-for-income-tax",
+          "source_title": "HMRC - Check if you're eligible for Making Tax Digital for Income Tax"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-11-20",
+      "note": "Read on 20/11/2026 with the source reader (SHA-256 f2d0f574...). 'You need to use Making Tax Digital for Income Tax if all of the following apply: you're a sole trader or a landlord registered for Self Assessment; you get income from self-employment or property, or both; your qualifying income is more than the relevant threshold for the tax year'. Over '£50,000 for the 2024 to 2025 tax year' from 6 April 2026; '£30,000 for the 2025 to 2026 tax year' from 6 April 2027; '£20,000 for the 2026 to 2027 tax year' from 6 April 2028 (thresholds: mtd_itsa_threshold_*). Qualifying income is gross income: 'For example, your gross income could be: £25,000 from rental income, £27,000 from self-employment income. In this example, your total qualifying income would be £52,000.' Other sources do not count (list in value.excluded). HMRC checks the Self Assessment return and writes to the taxpayer, but 'Even if you do not receive a letter, you must still check your qualifying income'. VAT-registered on the cash basis: VAT may be included or excluded from business income, and counts if included."
+    },
+    "uk_pecr_email": {
+      "value": {
+        "applies_to": "individual subscribers",
+        "rule": "No unsolicited direct marketing by electronic mail unless the recipient has previously consented to such communications from the sender",
+        "soft_opt_in": [
+          "contact details obtained in the course of the sale or negotiations for the sale of a product or service to that recipient",
+          "direct marketing in respect of the sender's similar products and services only",
+          "a simple means of refusing (free of charge except for the costs of the transmission) given when the details were collected and in each subsequent communication"
+        ]
+      },
+      "unit": "object",
+      "label": "Privacy and Electronic Communications Regulations 2003, regulation 22: direct marketing by email or text to individual subscribers needs prior consent, except the soft opt-in",
+      "source": "https://www.legislation.gov.uk/uksi/2003/2426/regulation/22",
+      "source_title": "The Privacy and Electronic Communications (EC Directive) Regulations 2003, regulation 22 - legislation.gov.uk",
+      "confidence": "high",
+      "verified_on": "2026-11-20",
+      "note": "Read in full on 20/11/2026 with the source reader (latest revised version; 'no known outstanding effects'). 22(1): 'This regulation applies to the transmission of unsolicited communications by means of electronic mail to individual subscribers.' 22(2): consent rule; 22(3)(a) to (c): soft opt-in, quoted in value.soft_opt_in. 'Electronic mail' includes text messages under the regulations' definitions (regulation 2, not yet read: the definitions of 'individual subscriber' and 'corporate subscriber' are to be read before the Workspace shows this rule)."
+    },
+    "uk_pecr_calls": {
+      "value": {
+        "calling_line_identity": "required",
+        "register_grace_days": 28
+      },
+      "unit": "object",
+      "label": "Privacy and Electronic Communications Regulations 2003, regulation 21: direct marketing calls must present a calling line identity; no unsolicited marketing call to a subscriber who objected or whose number is on the regulation 26 register (numbers listed for less than 28 days excepted)",
+      "source": "https://www.legislation.gov.uk/uksi/2003/2426/regulation/21",
+      "source_title": "The Privacy and Electronic Communications (EC Directive) Regulations 2003, regulation 21 - legislation.gov.uk",
+      "confidence": "high",
+      "verified_on": "2026-11-20",
+      "note": "Read on 20/11/2026 with the source reader (SHA-256 2dc45978...; 'no known outstanding effects'). 21(A1): calls for direct marketing (solicited or not) only if the caller does not prevent presentation of the calling line identity or presents a line on which he can be contacted. 21(1): no unsolicited direct marketing call where '(a) the called line is that of a subscriber who has previously notified the caller that such calls should not for the time being be made on that line; or (b) the number ... is one listed in the register kept under regulation 26'. 21(3): not a contravention of (1)(b) if the number 'has been listed on the register for less than 28 days'. 21(4)-(5): a listed subscriber may tell a caller that he does not object, and may withdraw it at any time. The name of the regulation 26 register (Telephone Preference Service) is to be confirmed by reading regulation 26 or the ICO's guidance."
+    },
+    "uk_records_proof": {
+      "value": {
+        "keep": [
+          "all business expenses",
+          "VAT records if you're registered for VAT",
+          "PAYE records if you employ people",
+          "records about your personal income"
+        ],
+        "proof": [
+          "all receipts for goods and stock",
+          "bank statements, chequebook stubs",
+          "sales invoices, till rolls and bank slips"
+        ],
+        "cash_basis": "With this method, you only record income or expenses when you receive money or pay a bill."
+      },
+      "unit": "object",
+      "label": "Business records if you're self-employed: records and proof to keep; on the cash basis, income and expenses are recorded when money is received or a bill is paid",
+      "source": "https://www.gov.uk/self-employed-records/what-records-to-keep",
+      "source_title": "GOV.UK - Business records if you're self-employed: what records to keep",
+      "more_sources": [
+        {
+          "source": "https://www.gov.uk/self-employed-records",
+          "source_title": "GOV.UK - Business records if you're self-employed: overview"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-11-20",
+      "note": "Read on 20/11/2026 with the source reader (targeted passages). The list of records starts above 'all business expenses' (not captured: first item to re-read). Overview: 'From the 2024 to 2025 tax year, cash basis is the default method of accounting'; example: invoice of 15 March 2024 paid on 30 April 2024 is income of the 2024 to 2025 tax year; 'If you do not prepare accounts, you will need to record your income and expenses for each tax year (6 April to 5 April).' How long to keep records: uk_records_retention."
     }
   },
   "open_questions": [

@@ -119,5 +119,19 @@ britannique est fournie par le pays (périodes et libellés), sans changer la Fr
   2024-25 (« you only record income or expenses when you receive money or pay a bill ») ; exemple officiel : facture du
   15 mars 2024 payée le 30 avril 2024, recette de l'année fiscale 2024-25 (critère K3) ; sans comptes annuels, recettes
   et dépenses s'enregistrent par année fiscale (6 avril–5 avril). Page « What records to keep » **à lire**.
-- **À lire ensuite** : HS222 ; catégories et périodes des mises à jour trimestrielles de MTD ; définition du revenu
-  éligible de MTD ; règles PECR de l'ICO (prospection) ; page « What records to keep ».
+- **Making Tax Digital** (gov.uk, lus le 20/11/2026) : concerné si *sole trader* inscrit au Self Assessment avec un
+  revenu éligible au-dessus du seuil ; seuil de 50 000 £ sur 2024-25 (dès le 6 avril 2026), 30 000 £ sur 2025-26 (dès
+  2027), 20 000 £ sur 2026-27 (dès 2028) ; revenu éligible = revenus **bruts** d'activité indépendante et de location
+  (exemple officiel : 25 000 £ de loyers + 27 000 £ d'activité = 52 000 £), sans salaires, part d'associé, dividendes ni
+  pensions ; HMRC écrit, mais l'absence de lettre ne dispense pas de vérifier. Règle `uk_mtd_itsa_qualifying_income`.
+- **Prospection** : règlement PECR 2003, articles 22 (emails et SMS aux abonnés **individuels** : accord préalable,
+  sauf *soft opt-in* à trois conditions) et 21 (appels : numéro présenté ; pas d'appel à qui s'y est opposé ni aux
+  numéros du registre de l'article 26, sauf inscrits depuis moins de 28 jours), lus sur legislation.gov.uk. Règles
+  `uk_pecr_email`, `uk_pecr_calls`. **À lire** avant de les afficher : l'article 2 (abonné individuel ou d'entreprise)
+  et l'article 26 (registre).
+- **Registres** (« What records to keep ») : dépenses, VAT, paie, revenus personnels ; preuves (reçus, relevés,
+  talons de chèques, factures de vente) ; règle `uk_records_proof` (le premier élément de la liste est à relire).
+- **Paramètres de facture** : ceux du générateur britannique déplacés dans `data/invoice-profiles/uk.json` (balise
+  `{{invoice_profile:uk}}`, contenu identique vérifié ; pages britanniques 69/69).
+- **À lire ensuite** : fiche HS222 (aide de chaque case : la publication donne une version HTML ou un PDF à trouver),
+  périodes et catégories des mises à jour trimestrielles de MTD, articles 2 et 26 du PECR.
