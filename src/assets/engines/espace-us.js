@@ -210,10 +210,12 @@
     /**
      * Données du calcul des acomptes tirées du profil américain : situation familiale (filingStatus), salaires et
      * retenues (wages, withheld), impôt et revenu fiscal de l'an dernier (priorTax, priorAgi), bénéfice prévu
-     * (expectedProfit), autres recettes de la ligne 6 (otherIncome), bureau à domicile de la ligne 30 (homeOffice).
+     * (expectedProfit), autres recettes de la ligne 6 (otherIncome), bureau à domicile de la ligne 30 (homeOffice). Ces
+     * données valent pour une année fiscale : profile.taxYears[année] l'emporte sur les valeurs générales du profil.
      */
     function taxInput(input, year) {
-      var p = input.profile || {}, num = function (v) { return isFinite(Number(v)) ? Number(v) : 0; };
+      var base = input.profile || {}, p = Object.assign({}, base, (base.taxYears || {})[String(year)] || {});
+      var num = function (v) { return isFinite(Number(v)) ? Number(v) : 0; };
       return { documents: input.documents, expenses: input.expenses, year: String(year), rules: input.rules, today: input.today,
                status: p.filingStatus, wages: num(p.wages), withheld: num(p.withheld), priorTax: p.priorTax, priorAgi: num(p.priorAgi),
                expectedProfit: p.expectedProfit, otherIncome: num(p.otherIncome), homeOffice: num(p.homeOffice) };

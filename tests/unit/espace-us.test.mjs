@@ -221,3 +221,15 @@ test("exports CSV américains : virgules, champs de texte entre guillemets (docu
   assert.equal(time[0], "Date,Client,Task,Time,Unit,Rate,Amount,Billable");
   assert.equal(time[1], '02/03/2026,"Smith, Jones & Co","Design, phase 1",1.5,hour,100.00,150.00,yes');
 });
+
+test("données du calcul des acomptes par année fiscale (profile.taxYears), valeurs générales par défaut", () => {
+  const input = { documents: [], expenses: [], rules: R, today: "2026-06-30",
+                  profile: { filingStatus: "single", wages: 1000, taxYears: { 2026: { expectedProfit: 90000, filingStatus: "married_filing_jointly" } } } };
+  const t26 = E.taxInput(input, 2026), t25 = E.taxInput(input, 2025);
+  assert.equal(t26.expectedProfit, 90000);
+  assert.equal(t26.status, "married_filing_jointly", "l'année fiscale l'emporte");
+  assert.equal(t26.wages, 1000, "valeur générale gardée");
+  assert.equal(t25.expectedProfit, undefined);
+  assert.equal(t25.status, "single");
+  assert.equal(E.estimatedTax(t26).projected, 90000);
+});

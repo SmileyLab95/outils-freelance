@@ -4440,6 +4440,7 @@ const tests = {
     await go("#/immobilisations");
     check((await text("#espace-view")).includes("En micro-entreprise, vous n'amortissez pas vos biens") && !(await page.$("#asset-form")),
       "Immobilisations : explication en micro-entreprise, pas de registre");
+    check((await page.getAttribute('.espace-nav a[data-route="depenses"]', "aria-current")) === "page", "Immobilisations : rangées sous l'onglet « Dépenses »");
     await go("#/depenses");
     check(!(await page.$('#espace-view a[href="#/immobilisations"]')), "Immobilisations : pas de lien en micro-entreprise");
     await go("#/reglages");

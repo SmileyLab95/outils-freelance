@@ -949,6 +949,7 @@
     }
 
     return {
+      tabs: { immobilisations: "depenses" },   // le registre des immobilisations se trouve sous « Dépenses »
       routes: {
         immobilisations: function (r) { (r.id ? viewAssetForm : viewAssets)(r); },
         recettes: viewLedger,

@@ -54,6 +54,8 @@
   de prestation masquée dans l'éditeur américain.
 - Sous-lot 3d-4a : recettes en caisse et dépenses par ligne de l'annexe C dans l'Espace américain ; exports CSV au
   séparateur du pays (virgule aux États-Unis ; point-virgule inchangé en France).
+- Sous-lot 3d-4b : écrans « Taxes » (acomptes estimés, acomptes versés, données du calcul par année, 1099-NEC
+  attendus) et « Schedule C » (synthèse et export) dans l'Espace américain.
 
 ## 2026-11-19 (après-midi, suite) — Moteur de l'Espace des États-Unis (lot 2e)
 

@@ -427,7 +427,7 @@
       "verified_on": "2026-11-08"
     },
     "estimated_tax_q4_skip_rule": {
-      "value": "The January 15, 2027 installment is not required if the 2026 return is filed by 2027-02-01 and all tax due is paid with it.",
+      "value": "You do not have to make the January 15, 2027 payment if you file your 2026 tax return by February 1, 2027, and pay the entire balance due with your return.",
       "unit": "text",
       "label": "Exception to the 4th installment",
       "source": "https://www.irs.gov/pub/irs-pdf/f1040es.pdf",

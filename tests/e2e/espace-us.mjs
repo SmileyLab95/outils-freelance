@@ -186,7 +186,7 @@ try {
   check(kpis.includes("Next estimated tax payment–not required so far: expected tax under $1,000.00"),
     "tableau de bord : pas d'acompte requis pour un petit bénéfice (seuil de 1 000 $)");
   // Bénéfice prévu de 120 000 $ : acompte du calculateur public (U6), prochaine échéance le 15/01/2027 (dates sourcées).
-  await page.evaluate(async () => { const d = await window.EspaceStore.load(); d.profile.expectedProfit = 120000; await window.EspaceStore.save(d); });
+  await page.evaluate(async () => { const d = await window.EspaceStore.load(); d.profile.taxYears = { 2026: { expectedProfit: 120000 } }; await window.EspaceStore.save(d); });
   await page.reload({ waitUntil: "networkidle" });
   await page.waitForSelector(".kpis");
   const expectedQ = await page.evaluate(async () => {
@@ -241,6 +241,49 @@ try {
   await english(page, "dépenses");
   await accessible(page, "dépenses");
   await widths(page, "us-depenses");
+
+  // ----- Impôts : acomptes (U6), acomptes versés, données du calcul, 1099 attendus (U7), synthèse de l'annexe C (U5) ---
+  await go("#/taxes");
+  let taxes = await text(page, "#espace-view");
+  check((await text(page, "#espace-view h2")) === "Estimated taxes 2026" && taxes.includes("Profit for the year$120,000.00the profit you expect") &&
+    taxes.includes("Quarterly payment" + expectedQ) && taxes.includes("Payment 4, due 1/15/2027") && taxes.includes("Payment 1, due 4/15/2026 (past)"),
+    "impôts : bénéfice prévu, acompte du calculateur (U6), échéancier aux dates sourcées");
+  check(taxes.includes("No client has paid you $2,000.00 or more so far this year.") && taxes.includes("Your income is taxable even if you don't receive a Form 1099."),
+    "impôts : 1099-NEC attendus au seuil de l'année (U7)");
+  await page.fill("#ep-paid4", "-5");
+  await page.click("#paid-form button[type=submit]");
+  await page.waitForTimeout(200);
+  check((await text(page, "#paid-error")) === "Enter a positive amount, or leave the field empty." && (await page.getAttribute("#ep-paid4", "aria-invalid")) === "true",
+    "impôts : acompte versé négatif refusé");
+  await page.fill("#ep-paid4", "1,000");
+  await page.click("#paid-form button[type=submit]");
+  await page.waitForTimeout(400);
+  const leftQ = await page.evaluate((q) => window.OF.money(Math.round((window.OF.num(q.replace(/[$,]/g, "")) - 1000) * 100) / 100), expectedQ);
+  taxes = await text(page, "#espace-view");
+  check((await page.evaluate(() => window.EspaceStore.load())).profile.estimatedPaid["2026-4"] === 1000 && taxes.includes("Paid$1,000.00") &&
+    taxes.includes(expectedQ + leftQ), "impôts : acompte versé enregistré, reste à payer de l'échéance → " + leftQ);
+  await english(page, "impôts");
+  await accessible(page, "impôts");
+  await widths(page, "us-impots");
+  await go("#/");
+  check((await text(page, "#espace-view .kpis")).includes("Next estimated tax payment" + leftQ + "payment 4, due 1/15/2027"),
+    "tableau de bord : prochain acompte moins l'acompte déjà versé");
+  // Bénéfice prévu retiré : synthèse de l'annexe C sur les montants réels de l'année.
+  await page.evaluate(async () => { const d = await window.EspaceStore.load(); d.profile.taxYears = {}; await window.EspaceStore.save(d); });
+  await page.reload({ waitUntil: "networkidle" });
+  await go("#/schedule-c");
+  const sc = await text(page, "#espace-view table");
+  check(sc.includes("1Gross receipts or sales$1,000.00") && sc.includes("18Office expense$120.40") && sc.includes("24bDeductible meals$40.00") &&
+    sc.includes("28Total expenses before expenses for business use of home$160.40") && sc.includes("31Net profit or (loss)$839.60") &&
+    (await page.getAttribute('.espace-nav a[data-route="taxes"]', "aria-current")) === "page",
+    "annexe C : lignes 1, 18, 24b (50 %), 28 et 31 ; onglet « Taxes » actif");
+  const [scCsv] = await Promise.all([page.waitForEvent("download"), page.click("#sc-csv")]);
+  const scLines = readFileSync(await scCsv.path(), "utf8").replace(/^\ufeff/, "").split("\r\n");
+  check(scCsv.suggestedFilename() === "schedule-c-2026.csv" && scLines[0] === "Line,Description,Amount" && scLines.includes('"31","Net profit or (loss)",839.60') &&
+    scLines.includes('"24b","Deductible meals",40.00'), "annexe C : export identique à l'écran (U5)");
+  await english(page, "annexe C");
+  await accessible(page, "annexe C");
+  await widths(page, "us-annexe-c");
 
   // ----- Trésorerie et échéances : écrans communs avec le moteur américain ----------------------------------------
   await go("#/tresorerie");

@@ -136,7 +136,7 @@
     var r = route();
     var name = data.profile ? r.name : (r.name === "reglages" ? "reglages" : "accueil");
     app.querySelectorAll("[data-route]").forEach(function (a) {
-      var tab = name === "immobilisations" ? "depenses" : name;  // le registre des immobilisations se trouve sous « Dépenses »
+      var tab = (UI.tabs && UI.tabs[name]) || name;   // écran rangé sous un onglet (France : immobilisations sous « Dépenses »)
       var active = a.getAttribute("data-route") === tab || (name === "accueil" && a.getAttribute("data-route") === "tableau");
       if (active) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
     });
@@ -2170,7 +2170,7 @@
               now: now, isMicro: isMicro, profile: profile, view: view, amountText: amountText, E: E, R: R, S: S,
               OF: OF, TODAY: TODAY, YEAR: YEAR, TERMS: TERMS, isMixed: isMixed, ST: ST, barList: barList, pct: pct,
               charts: function (fn) { drawCharts = fn; fn(); }, FMT: FMT, client: client, parties: parties,
-              docLabel: docLabel, loadLazy: loadLazy, rateText: rateText,
+              docLabel: docLabel, loadLazy: loadLazy, rateText: rateText, render: function (keepFocus) { render(keepFocus); },
               data: function () { return data; } };
   var UI = MOD(ctx);
 

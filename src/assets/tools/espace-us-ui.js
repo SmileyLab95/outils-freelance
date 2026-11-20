@@ -138,6 +138,7 @@
           '</td><td class="num">' + esc(money(refund ? -x.amount : x.amount)) + "</td></tr>";
       };
       view.innerHTML = '<div class="espace-head"><h2>' + L("us.inc.title", { year: esc(year) }) + '</h2><div class="espace-quick espace-noprint">' +
+        '<a class="btn btn-ghost btn-sm" href="#/schedule-c?annee=' + esc(year) + '">' + L("us.sc.open") + "</a>" +
         '<button type="button" class="btn btn-ghost btn-sm" id="income-csv"' + (inc.rows.length ? "" : " disabled") + ">" + L("common.exportCsv") + "</button>" +
         printButton("income-print", !inc.rows.length) + "</div></div>" +
         '<div class="kpis kpis-4">' +
@@ -179,6 +180,7 @@
       var spent = Math.round(list.reduce(function (s, e) { return s + (Number(e.amount) || 0); }, 0) * 100) / 100;
       view.innerHTML = '<div class="espace-head"><h2>' + L("us.exp.title", { year: esc(year) }) + '</h2><div class="espace-quick espace-noprint">' +
         '<a class="btn btn-primary btn-sm" href="#/depenses/nouvelle">' + L("us.exp.add") + "</a>" +
+        '<a class="btn btn-ghost btn-sm" href="#/schedule-c?annee=' + esc(year) + '">' + L("us.sc.open") + "</a>" +
         '<button type="button" class="btn btn-ghost btn-sm" id="expenses-csv"' + (list.length ? "" : " disabled") + ">" + L("common.exportCsv") + "</button>" +
         printButton("expenses-print", !list.length) + "</div></div>" +
         '<div class="kpis kpis-4">' +
@@ -263,6 +265,144 @@
       });
     }
 
+    // ----- Impôts : acomptes estimés, données du calcul, 1099 attendus (documentation/60, § 2.3 à § 2.5 ; U5 à U7) ---
+
+    /** Données du calcul de l'année fiscale (profile.taxYears[année], valeurs générales du profil par défaut). */
+    var taxInputs = function (year) { return E.taxInput({ documents: D().documents, expenses: D().expenses, profile: profile(), rules: R, today: TODAY }, year); };
+    var pctText = function (rate) { return ctx.percent(Math.round(rate * 1000) / 10); };
+    var amountField = function (name, label, value, hint) {
+      return field(name, label, value === null || value === undefined || value === "" ? "" : String(Math.round(Number(value) * 100) / 100).replace(".", DEC),
+        { half: true, inputmode: "decimal", placeholder: L("us.tax.optional"), hint: hint });
+    };
+    /** Lit un montant facultatif : null si vide, NaN si illisible ou négatif. */
+    var readAmount = function (raw) { raw = String(raw || "").trim(); if (!raw) return null; var n = OF.num(raw); return isFinite(n) && n >= 0 ? Math.round(n * 100) / 100 : NaN; };
+
+    /**
+     * Écran « Taxes » : bénéfice projeté, impôt fédéral estimé, acompte trimestriel requis (calculateur public, U6),
+     * échéancier de l'année avec les acomptes versés, données du calcul de l'année, 1099-NEC attendus (U7).
+     */
+    function viewTaxes() {
+      var year = +YEAR, t = taxInputs(year), est = E.estimatedTax(t), q = est.quarterly, p = profile();
+      var dates = R["estimated_tax_due_dates_" + year] || null;
+      var paid = [1, 2, 3, 4].map(function (n) { return E.paidFor(p, year, n); });
+      var paidTotal = Math.round(paid.reduce(function (s, x) { return s + x; }, 0) * 100) / 100;
+      var ty = (p.taxYears || {})[String(year)] || {};
+      var f1099 = E.expected1099(D().documents, D().clients, String(year), R);
+      var limit = R.estimated_tax_high_agi_threshold || {};
+      view.innerHTML = '<div class="espace-head"><h2>' + L("us.tax.title", { year: year }) + '</h2><div class="espace-quick espace-noprint">' +
+        '<a class="btn btn-ghost btn-sm" href="#/schedule-c">' + L("us.sc.open") + "</a></div></div>" +
+        '<div class="kpis kpis-4">' +
+        kpi(L("us.tax.profit"), money(est.projected), est.projected === est.actual ? L("us.tax.profitActual") :
+          t.expectedProfit !== undefined && t.expectedProfit !== null && t.expectedProfit !== "" ? L("us.tax.profitExpected") : L("us.tax.profitProjected", { actual: money(est.actual) })) +
+        kpi(L("us.tax.federal"), money(est.estimate.federal), L("us.tax.federalSub")) +
+        kpi(L("us.tax.quarterly"), q.needed ? money(q.perQuarter) : "–", q.needed ? L("us.tax.quarterlySub", { required: money(q.required) })
+          : L("us.dash.nextTaxNone", { amount: money(R.estimated_tax_threshold) }), "is-brand") +
+        kpi(L("us.tax.paid"), money(paidTotal), L("us.tax.paidSub", { year: year })) + "</div>" +
+        // Échéancier et acomptes versés.
+        '<form class="card espace-card" id="paid-form" novalidate><h3>' + L("us.tax.schedule", { year: year }) + "</h3>" +
+        (dates ? '<table class="ledger lines-table"><thead><tr><th>' + L("us.tax.col.payment") + '</th><th class="num">' + L("us.tax.col.due") +
+          '</th><th class="num">' + L("us.tax.col.left") + "</th></tr></thead><tbody>" +
+          dates.map(function (d, i) {
+            var left = q.needed ? Math.max(0, Math.round((q.perQuarter - paid[i]) * 100) / 100) : 0;
+            return "<tr><td>" + L("us.tax.payment", { n: i + 1, date: day(d) }) + (d < TODAY ? ' <span class="small muted">' + L("us.tax.past") + "</span>" : "") +
+              '</td><td class="num" data-label="' + esc(L("us.tax.col.due")) + '">' + (q.needed ? esc(money(q.perQuarter)) : "–") +
+              '</td><td class="num" data-label="' + esc(L("us.tax.col.left")) + '">' + (q.needed ? esc(money(left)) : "–") + "</td></tr>";
+          }).join("") + "</tbody></table>" +
+          '<div class="fields">' + dates.map(function (d, i) {
+            return amountField("paid" + (i + 1), L("us.tax.paidField", { n: i + 1 }), paid[i] || "", "");
+          }).join("") + "</div>" + (R.estimated_tax_q4_skip_rule ? '<p class="small muted">' + esc(R.estimated_tax_q4_skip_rule) + "</p>" : "")
+          : '<p class="notice">' + L("us.dash.nextTaxNoDates", { year: year }) + "</p>") +
+        '<p class="form-error" id="paid-error" role="alert" hidden></p>' +
+        (dates ? '<div class="espace-actions"><button type="submit" class="btn btn-primary">' + L("us.tax.savePaid") + "</button></div>" : "") + "</form>" +
+        // Données du calcul de l'année.
+        '<form class="card espace-card" id="taxdata-form" novalidate><h3>' + L("us.tax.data", { year: year }) + '</h3><div class="fields">' +
+        amountField("expectedProfit", L("us.tax.expectedProfit"), ty.expectedProfit, L("us.tax.expectedProfitHint", { actual: money(est.actual) })) +
+        amountField("wages", L("us.tax.wages"), ty.wages, L("us.tax.wagesHint")) +
+        amountField("withheld", L("us.tax.withheld"), ty.withheld, L("us.tax.withheldHint")) +
+        amountField("priorTax", L("us.tax.priorTax"), ty.priorTax, L("us.tax.priorTaxHint")) +
+        amountField("priorAgi", L("us.tax.priorAgi"), ty.priorAgi, L("us.tax.priorAgiHint")) +
+        amountField("otherIncome", L("us.tax.otherIncome"), ty.otherIncome, L("us.tax.otherIncomeHint")) +
+        amountField("homeOffice", L("us.tax.homeOffice"), ty.homeOffice, L("us.tax.homeOfficeHintHtml")) +
+        '</div><p class="form-error" id="taxdata-error" role="alert" hidden></p><div class="espace-actions"><button type="submit" class="btn btn-primary">' +
+        L("common.save") + "</button></div></form>" +
+        // Méthode et règles.
+        '<section class="card espace-card"><h3>' + L("us.tax.how") + '</h3><ul class="small prospect-rules">' +
+        "<li>" + L("us.tax.howMethodHtml", { status: L("us.status." + (t.status || "single")) }) + "</li>" +
+        "<li>" + L("us.tax.howSafeHarbor", { current: pctText(R.estimated_tax_safe_harbor_current_year_rate), prior: pctText(R.estimated_tax_safe_harbor_prior_year_rate),
+          high: pctText(R.estimated_tax_safe_harbor_prior_year_rate_high_agi), limit: money(limit["default"]), limitMfs: money(limit.married_filing_separately) }) + "</li>" +
+        "<li>" + L("us.tax.howThreshold", { amount: money(R.estimated_tax_threshold) }) + "</li>" +
+        "<li>" + L("us.tax.howLimits") + "</li></ul></section>" +
+        // Formulaires 1099-NEC attendus.
+        '<section class="card espace-card" id="expected-1099"><h3>' + L("us.f1099.title", { year: year }) + "</h3>" +
+        (f1099.threshold === null ? '<p class="muted">' + L("us.f1099.noThreshold", { year: year }) + "</p>" :
+          '<p class="small">' + L("us.f1099.intro", { amount: money(f1099.threshold), date: f1099.dueDate ? day(f1099.dueDate) : "–" }) + "</p>" +
+          (f1099.clients.length ? '<ul class="time-due">' + f1099.clients.map(function (c) {
+            return '<li><span class="dl-main"><a href="#/clients/' + esc(c.clientId) + '"><b>' + esc(c.name) + '</b></a></span><span class="dl-side"><b>' + esc(money(c.total)) + "</b></span></li>";
+          }).join("") + "</ul>" : '<p class="muted">' + L("us.f1099.none", { amount: money(f1099.threshold) }) + "</p>") +
+          '<p class="small muted">' + esc(R.us_1099_nec_card_exclusion || "") + " " + L("us.f1099.taxable") + "</p>") + "</section>";
+
+      if (dates) {
+        var pf = $("paid-form");
+        pf.addEventListener("submit", function (e) {
+          e.preventDefault();
+          var values = dates.map(function (d, i) { return readAmount(pf.elements["paid" + (i + 1)].value); });
+          var bad = values.map(function (v) { return v !== null && !isFinite(v); });
+          dates.forEach(function (d, i) { pf.elements["paid" + (i + 1)].setAttribute("aria-invalid", String(bad[i])); });
+          if (bad.indexOf(true) > -1) { showError("paid-error", L("us.tax.errAmount")); pf.elements["paid" + (bad.indexOf(true) + 1)].focus(); return; }
+          showError("paid-error", "");
+          var pr = D().profile, map = Object.assign({}, pr.estimatedPaid || {});
+          values.forEach(function (v, i) { if (v) map[year + "-" + (i + 1)] = v; else delete map[year + "-" + (i + 1)]; });
+          pr.estimatedPaid = map;
+          pr.updatedAt = now();
+          persist(L("us.tax.paidSaved")).then(function () { ctx.render(true); });
+        });
+      }
+      var tf = $("taxdata-form"), NAMES = ["expectedProfit", "wages", "withheld", "priorTax", "priorAgi", "otherIncome", "homeOffice"];
+      tf.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var values = {}, badName = null;
+        NAMES.forEach(function (k) {
+          var v = readAmount(tf.elements[k].value);
+          tf.elements[k].setAttribute("aria-invalid", String(v !== null && !isFinite(v)));
+          if (v !== null && !isFinite(v) && !badName) badName = k;
+          values[k] = v;
+        });
+        if (badName) { showError("taxdata-error", L("us.tax.errAmount")); tf.elements[badName].focus(); return; }
+        showError("taxdata-error", "");
+        var pr = D().profile, years = Object.assign({}, pr.taxYears || {}), cur = Object.assign({}, years[String(year)] || {});
+        NAMES.forEach(function (k) { if (values[k] === null) delete cur[k]; else cur[k] = values[k]; });
+        years[String(year)] = cur;
+        pr.taxYears = years;
+        pr.updatedAt = now();
+        persist(L("us.tax.dataSaved")).then(function () { ctx.render(true); });
+      });
+    }
+
+    /** Synthèse de l'annexe C de l'année (aide à la préparation, pas une déclaration) : écran et export identiques (U5). */
+    function viewScheduleC(r) {
+      var dates = D().expenses.map(function (e) { return e.date; });
+      D().documents.forEach(function (d) { (d.payments || []).forEach(function (x) { dates.push(x.date); }); });
+      var years = yearsOf(dates), year = r.params.annee && years.indexOf(r.params.annee) > -1 ? r.params.annee : YEAR;
+      var t = taxInputs(year);
+      var s = E.scheduleC({ documents: D().documents, expenses: D().expenses, year: year, rules: R, otherIncome: t.otherIncome, homeOffice: t.homeOffice });
+      var v = s.values, SUMMARY = ["1", "2", "3", "4", "5", "6", "7", "28", "29", "30", "31"];
+      var order = ["1", "2", "3", "4", "5", "6", "7"].concat(Object.keys(LINES).filter(function (k) { return v[k]; }), ["28", "29", "30", "31"]);
+      var label = function (k) { return LINES[k] || L("eng.us.line." + k); };
+      view.innerHTML = '<div class="espace-head"><h2>' + L("us.sc.title", { year: esc(year) }) + '</h2><div class="espace-quick espace-noprint">' +
+        '<button type="button" class="btn btn-ghost btn-sm" id="sc-csv">' + L("common.exportCsv") + "</button>" + printButton("sc-print", false) + "</div></div>" +
+        '<div class="card espace-card">' + yearTabs("#/schedule-c", years, year) +
+        '<table class="ledger"><thead><tr><th>' + L("us.sc.col.line") + "</th><th>" + L("us.sc.col.desc") + '</th><th class="num">' + L("ledger.col.amount") +
+        "</th></tr></thead><tbody>" + order.map(function (k) {
+          var strong = SUMMARY.indexOf(k) > -1 && ["3", "5", "7", "28", "29", "31"].indexOf(k) > -1;
+          return "<tr" + (strong ? ' class="ledger-subtotal"' : "") + "><td>" + esc(k) + "</td><td>" + esc(label(k)) + '</td><td class="num">' + esc(money(v[k] || 0)) + "</td></tr>";
+        }).join("") + "</tbody></table>" +
+        '<p class="small muted">' + L("us.sc.notesHtml") + "</p></div>";
+      $("sc-csv").addEventListener("click", function () {
+        OF.download("\ufeff" + E.scheduleCCSV(s, R), L("us.sc.file", { year: year }), "text/csv;charset=utf-8");
+      });
+      bindPrint("sc-print");
+    }
+
     // ----- Tableau de bord : prochain acompte d'impôt estimé (documentation/60, § 2.4) -------------------------------
 
     /**
@@ -294,7 +434,10 @@
     }
 
     return {
+      tabs: { "schedule-c": "taxes" },   // la synthèse de l'annexe C se trouve sous « Taxes »
       routes: {
+        taxes: viewTaxes,
+        "schedule-c": viewScheduleC,
         recettes: viewIncome,
         depenses: function (r) { (r.id ? viewExpenseForm : viewExpenses)(r); }
       },

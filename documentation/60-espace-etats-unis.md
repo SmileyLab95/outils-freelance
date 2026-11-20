@@ -392,6 +392,15 @@ de l'annexe C exigée avec l'aide officielle de la ligne, totaux par ligne, repa
 au séparateur du pays (`country.csvSep` : « , » aux États-Unis, « ; » en France, inchangé), en-têtes recomposés
 (`csvHeader`) ; tableau par ligne lisible sur téléphone (montants avec leur libellé). Parcours américain : 55 points ;
 erreur réintroduite détectée.
+Sous-lot 3d-4b fait le 20/11/2026 : écran « Taxes » (`#/taxes`) : bénéfice de l'année (réel, prévu ou projeté),
+impôt fédéral estimé, acompte trimestriel du calculateur (U6), échéancier aux dates sourcées avec les acomptes versés
+saisis (`profile.estimatedPaid`), données du calcul rangées par année fiscale (`profile.taxYears[année]`, le moteur
+gardant les valeurs générales par défaut), méthode et règles (seuil, règle de sécurité, quatrième acompte), 1099-NEC
+attendus au seuil de l'année (U7) ; écran « Schedule C » (`#/schedule-c`) : synthèse de l'année et export identique à
+l'écran (U5), rangé sous l'onglet « Taxes ». L'onglet surligné d'un écran rangé sous un autre devient un crochet du
+pays (`tabs`, France : immobilisations sous « Dépenses », vérifié par le parcours français, 370 points). Texte de la règle
+`estimated_tax_q4_skip_rule` aligné sur la formulation du formulaire 1040-ES citée dans sa note (« by February 1,
+2027 »). Parcours américain : 72 points ; erreur réintroduite détectée.
 
 ### Avancement
 
