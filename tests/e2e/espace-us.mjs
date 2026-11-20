@@ -54,7 +54,8 @@ async function accessible(page, label) {
 }
 const text = async (page, sel) => ((await page.textContent(sel)) || "").replace(/[  ]/g, " ").replace(/\s+/g, " ").trim();
 const errors = [];
-const FRENCH = /[àâçéèêëîïôûùœ«»]|\b(le|la|les|des|une|pour|avec|facture|devis)\b/i;
+// Mots français, ou typographie française (espace avant « : ; ! ? »).
+const FRENCH = /[àâçéèêëîïôûùœ«»]|\b(le|la|les|des|une|pour|avec|facture|devis|aujourd'hui|janv|févr|avr|juil)\b|\s[:;!?](?=\s|$)/i;
 /** Écran courant : aucun texte français, aucune clé de texte affichée telle quelle. */
 async function english(page, label) {
   const t = await text(page, "#espace-app");
@@ -117,6 +118,7 @@ try {
     "profil : EIN mis en forme, instructions de paiement, délai Net 30");
   await english(page, "réglages");
   await accessible(page, "réglages");
+  await widths(page, "us-reglages");
 
   // ----- Client -----------------------------------------------------------------------------------------------------
   await go("#/clients/nouveau");
@@ -285,14 +287,77 @@ try {
   await accessible(page, "annexe C");
   await widths(page, "us-annexe-c");
 
-  // ----- Trésorerie et échéances : écrans communs avec le moteur américain ----------------------------------------
+  // ----- Trésorerie (D92) : acomptes prévus, déjà dû, hypothèses ; échéances du calendrier fédéral selon le profil ------
+  // Bénéfice prévu de 120 000 $, aucun acompte versé, une facture en retard (émise le 01/08/2026, à 30 jours).
+  await page.evaluate(async () => {
+    const d = await window.EspaceStore.load();
+    d.profile.taxYears = { 2026: { expectedProfit: 120000 } };
+    d.profile.estimatedPaid = {};
+    const first = d.documents.find((x) => x.number === "2026-001");
+    d.documents.push(Object.assign(JSON.parse(JSON.stringify(first)), { id: "late-1", number: "2026-002", date: "2026-08-01", terms: 30, payments: [] }));
+    await window.EspaceStore.save(d);
+  });
+  await page.reload({ waitUntil: "networkidle" });
   await go("#/tresorerie");
-  check((await text(page, "#espace-view h2")).startsWith("Cash flow"), "trésorerie : écran affiché");
+  const expect = await page.evaluate(async () => {
+    const d = await window.EspaceStore.load(), E = window.OFE.espaceUS.create(window.OF_ESPACE_TEXTS.en);
+    const input = { documents: d.documents, expenses: d.expenses, profile: d.profile, rules: window.OF_RULES, today: "2026-10-20" };
+    const q = Math.round(E.estimatedTax(E.taxInput(input, 2026)).quarterly.perQuarter * 100) / 100;
+    return { q, qText: window.OF.money(q), owed: window.OF.money(E.owed(input).total), owedRaw: E.owed(input).total };
+  });
+  let cash = await text(page, "#espace-view");
+  check((await text(page, "#espace-view h2")).startsWith("Cash flow") && expect.owedRaw > 0 &&
+    cash.includes("Federal income and self-employment tax on your 2026 profit so far ($839.60), minus the estimated payments you entered ($0.00): " + expect.owed) &&
+    cash.includes("Enter the estimated payments you already made in Taxes to deduct them."),
+    "trésorerie : impôt fédéral déjà dû sur le bénéfice réalisé, note sur les acomptes à saisir → " + expect.owed);
+  check(cash.includes("Estimated tax payment 4 for 2026") && cash.includes("monthly revenue needed: not calculated yet for the U.S."),
+    "trésorerie : acompte du 15/01/2027 prévu ; point mort non calculé, dit à l'écran");
+  check(cash.includes("Estimated tax: one payment on each IRS due date") && cash.includes("Estimated tax for 2027 is not counted yet") &&
+    cash.includes("Not counted: state and local income tax, and any balance due with your tax return."),
+    "trésorerie : hypothèses américaines (acomptes, année 2027 non comptée, impôt des États non compté)");
+  check((await page.$$('#espace-view a[href="../late-fee-calculator/"]')).length === 1 && cash.includes("No federal law sets late fees between businesses"),
+    "trésorerie : facture en retard, frais de retard seulement s'ils sont convenus (règle sourcée), lien vers le calculateur");
+  check(cash.includes("Not yet due: $1,598.00 (1)") && cash.includes("31 to 60 days: $2,598.00 (1)"),
+    "trésorerie : créances par ancienneté, ponctuation anglaise");
+  check(!(await page.$("#charge-form .charge-revenue")), "trésorerie : pas de case « chiffre d'affaires à venir » (les acomptes suivent le bénéfice de Taxes)");
+  const [cashCsv] = await Promise.all([page.waitForEvent("download"), page.click("#tr-csv")]);
+  const cashLines = readFileSync(await cashCsv.path(), "utf8").replace(/^﻿/, "").split("\r\n");
+  check(cashLines.some((l) => l.startsWith('01/15/2027,"Estimated tax","Estimated tax payment 4 for 2026",' + (-expect.q).toFixed(2))),
+    "trésorerie : export, acompte nommé « Estimated tax », montant du calculateur (U6) → " + expect.qText);
   await english(page, "trésorerie");
+  await accessible(page, "trésorerie");
+  await widths(page, "us-tresorerie");
+
   await go("#/echeances");
-  check((await text(page, "#espace-view h2")) === "Deadlines" && (await text(page, "#espace-view")).includes("Estimated tax payment"),
-    "échéances : calendrier fiscal américain");
+  let dl = await text(page, "#espace-view");
+  check((await text(page, "#espace-view h2")) === "Deadlines" && dl.includes("Estimated tax due" + expect.qText + "1 payment in the next 90 days, as in Taxes") &&
+    dl.includes("Next tax return4/15/20272026 tax return and balance due (Form 1040, Schedule C and SE)"),
+    "échéances : acompte estimé des 90 jours (U6), prochaine déclaration");
+  check(dl.includes("Estimated tax payment Q4 2026 (Form 1040-ES)") && (await text(page, "#espace-view table")).includes("Estimated tax payment Q4 2026 (Form 1040-ES)" + expect.qText) &&
+    (await page.$$('[data-chart="deadlines"] .ch-mark.is-dl-urssaf')).length === 1 && dl.includes("Your 1099-NEC and 1099-K forms should have arrived"),
+    "échéances : montant de l'acompte du 15/01/2027 dans le tableau et la frise ; 1099 reçus listés");
+  const axis = await text(page, '[data-chart="deadlines"]');
+  check(axis.includes("Today") && axis.includes("Jan '27"), "échéances : frise en anglais (« Today », « Jan '27 »)");
+  check(!dl.includes("Send Form 1099-NEC to contractors") && !dl.includes("Extended 2026 tax return due") &&
+    dl.includes("for your settings: you don't pay contractors; you file without an extension."),
+    "échéances : sans sous-traitants ni prolongation, leurs échéances masquées (choix du profil dits)");
   await english(page, "échéances");
+  await accessible(page, "échéances");
+  await widths(page, "us-echeances");
+  // Réglages : cases « sous-traitants » et « prolongation » (mêmes choix que le calendrier public).
+  await go("#/reglages");
+  check((await text(page, "#ep-contractors-hint")) === "Shows the deadline to send Form 1099-NEC to each contractor you paid $2,000.00 or more in 2026 (payments by card or payment app excluded).",
+    "réglages : aide de la case « sous-traitants » au seuil 1099-NEC de l'année (règle sourcée)");
+  await page.check("#ep-contractors");
+  await page.check("#ep-extension");
+  await page.click("#profile-form button[type=submit]");
+  await page.waitForTimeout(400);
+  const saved = (await page.evaluate(() => window.EspaceStore.load())).profile;
+  check(saved.contractors === true && saved.extension === true, "réglages : cases enregistrées dans le profil");
+  await go("#/echeances");
+  dl = await text(page, "#espace-view");
+  check(dl.includes("Send Form 1099-NEC to contractors and the IRS") && dl.includes("Extended 2026 tax return due") &&
+    dl.includes("for your settings: you pay contractors; you file with an extension."), "échéances : 1099-NEC à envoyer et déclaration prolongée affichés");
 
   check(errors.length === 0, `aucune erreur JavaScript ni texte manquant${errors.length ? " → " + errors.slice(0, 5).join(" | ") : ""}`);
 } finally {

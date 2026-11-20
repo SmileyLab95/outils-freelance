@@ -501,6 +501,8 @@
     // Moteur : périodes, durées, libellés de la prévision, en-têtes des exports CSV
     "eng.forecast.urssafQuarter": "Cotisations Urssaf du {period}",
     "eng.forecast.urssafMonth": "Cotisations Urssaf de {period}",
+    "eng.fr.flow.urssaf": "Cotisations",
+    "eng.fr.flow.vat": "TVA",
     "eng.csv.expenses": "Date;Fournisseur;Nature;Montant;Moyen de paiement;Référence de la pièce;Catégorie",
     "eng.csv.assets": "Nature;Catégorie;Acquisition;Mise en service;Prix de revient;Durée (ans);Part professionnelle (%);Amortissement de l'année;Cumul des amortissements;Valeur nette;Part déductible;Date de cession;Prix de cession;Plus ou moins-value à court terme;Plus-value à long terme",
     "eng.csv.ledgerMixed": "Date;Client;Nature;Ventes;Prestations;Montant;Moyen de paiement;Référence",

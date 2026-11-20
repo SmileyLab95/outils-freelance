@@ -393,6 +393,8 @@
     // Income ledger
     "common.exportCsv": "Export (CSV)",
     "common.print": "Print",
+    // Between a label and its value (French typography puts a space before the colon).
+    "common.colon": ": ",
     "ledger.col.date": "Date",
     "ledger.col.client": "Client",
     "ledger.col.amount": "Amount",
@@ -884,8 +886,6 @@
     "eng.aging.more": "Over 90 days",
     "eng.flow.receipt": "Expected payment",
     "eng.flow.refund": "Refund",
-    "eng.flow.urssaf": "Social contributions",
-    "eng.flow.vat": "VAT",
     "eng.flow.charge": "Cost",
     "eng.flow.planned": "Planned money in",
     // Engine: periods, durations, forecast labels, CSV export headers
@@ -929,6 +929,8 @@
     "eng.chart.planned": "Forecast",
     "eng.chart.actual": "Actual",
     "eng.chart.showData": "Show data",
+    "eng.chart.today": "Today",
+    "eng.chart.monthYear": "{month} '{yy}",
     // Engine: period of an invoice line for tracked time
     "eng.time.span": "{from} to {to}",
     // Language formats

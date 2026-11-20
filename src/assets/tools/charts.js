@@ -18,7 +18,13 @@
   var MONTHS = L("eng.chart.months").split("|");
   var seq = 0;
   var id = function () { return "ch" + (++seq); };
-  var monthLabel = function (iso, withYear) { return MONTHS[+iso.slice(5, 7) - 1] + (withYear ? " " + iso.slice(2, 4) : ""); };
+  // Mois suivi de l'année sur deux chiffres, au format de la langue (« janv. 27 » ; en anglais « Jan '27 », « Jan 27 » se
+  // lisant « 27 janvier »).
+  var MONTH_YEAR = L("eng.chart.monthYear");
+  var monthLabel = function (iso, withYear) {
+    var m = MONTHS[+iso.slice(5, 7) - 1];
+    return withYear ? MONTH_YEAR.replace("{month}", m).replace("{yy}", iso.slice(2, 4)) : m;
+  };
 
   function frame(w, h, title, desc, body) {
     var t = id(), d = id();
@@ -156,7 +162,7 @@
       body += '<line class="ch-month" x1="' + x(m) + '" x2="' + x(m) + '" y1="' + (values.length ? top : 4) + '" y2="' + (h - 22) + '"/>' +
         '<text class="ch-tick" x="' + x(m) + '" y="' + (h - 8) + '" text-anchor="middle">' + esc(monthLabel(m, m.slice(5, 7) === "01")) + "</text>";
     });
-    body += '<text class="ch-note" x="' + (left + 2) + '" y="' + (values.length ? top - 6 : h - 8) + '">' + "Aujourd'hui" + "</text>";
+    body += '<text class="ch-note" x="' + (left + 2) + '" y="' + (values.length ? top - 6 : h - 8) + '">' + esc(L("eng.chart.today")) + "</text>";
     o.events.forEach(function (e) {
       var cx = x(e.date);
       if (e.amount === null || e.amount === undefined) return;

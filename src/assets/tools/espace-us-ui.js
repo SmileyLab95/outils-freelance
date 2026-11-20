@@ -33,7 +33,20 @@
           field("ein", L("us.profile.ein"), p.ein, { half: true, placeholder: "12-3456789", hint: L("us.profile.einHint") }) +
           field("terms", L("us.profile.terms"), p.terms == null ? 30 : p.terms, { options: TERMS, half: true }) +
           field("payment", L("us.profile.payment"), p.payment, { textarea: true, placeholder: L("us.profile.paymentPlaceholder"), hint: L("us.profile.paymentHint") }) +
-          field("late", L("us.profile.late"), p.late, { placeholder: L("us.profile.latePlaceholder") }));
+          field("late", L("us.profile.late"), p.late, { placeholder: L("us.profile.latePlaceholder") }) +
+          check("contractors", L("us.profile.contractors"), p.contractors, contractorsHint()) +
+          check("extension", L("us.profile.extension"), p.extension, L("us.profile.extensionHint")));
+    }
+    /** Case à cocher du profil, avec son aide. */
+    function check(name, label, on, hint) {
+      var id = "ep-" + name;
+      return '<div class="field full"><label class="check"><input type="checkbox" id="' + id + '" name="' + name + '"' + (on ? " checked" : "") +
+        ' aria-describedby="' + id + '-hint"><span>' + esc(label) + '</span></label><span class="hint" id="' + id + '-hint">' + esc(hint) + "</span></div>";
+    }
+    /** Aide de la case « sous-traitants » : seuil de l'année en cours s'il est dans les règles (1099-NEC). */
+    function contractorsHint() {
+      var limit = R["form_1099_nec_threshold_" + YEAR];
+      return limit ? L("us.profile.contractorsHintYear", { amount: money(limit), year: YEAR }) : L("us.profile.contractorsHint");
     }
     function bindProfile() {}
     /**
@@ -45,6 +58,8 @@
       p.filingStatus = STATUSES.indexOf(f.filingStatus.value) > -1 ? f.filingStatus.value : "single";
       if (first) return null;
       ["address", "email", "phone", "ein", "payment", "late"].forEach(function (k) { p[k] = str(f[k].value); });
+      p.contractors = !!f.contractors.checked;
+      p.extension = !!f.extension.checked;
       if (/^\d{3}-?\d{2}-?\d{4}$/.test(p.ein) && !/^\d{2}-?\d{7}$/.test(p.ein)) return { message: L("us.profile.errSsn"), field: "ein" };
       if (p.ein && !/^\d{2}-?\d{7}$/.test(p.ein)) return { message: L("us.profile.errEin"), field: "ein" };
       if (p.ein) p.ein = p.ein.replace(/^(\d{2})-?(\d{7})$/, "$1-$2");
@@ -433,6 +448,66 @@
       };
     }
 
+    // ----- Échéances : calendrier fédéral selon le profil, acomptes estimés (documentation/60, § 2.6 et § 3.3) ----
+
+    /**
+     * Valeurs du profil lues par les conditions du calendrier (« when »), mêmes choix que le calendrier public : les
+     * acomptes trimestriels sont toujours retenus (l'Espace les calcule, et leur montant dit s'ils sont requis) ;
+     * formulaires 1099-NEC à envoyer et déclaration prolongée selon les cases du profil (non cochées par défaut).
+     */
+    function deadlineValues() {
+      var p = profile();
+      return { estimated: "on", contractors: p.contractors ? "on" : "off", extension: p.extension ? "on" : "off" };
+    }
+    // Catégories de la frise et de la liste (forme et couleur, mêmes formes qu'en France) : acomptes (rond de la couleur
+    // principale), déclaration (losange), formulaires 1099 (carré).
+    var DEADLINE_CLASSES = { "Estimated tax": ["is-dl-urssaf", L("us.dl.tag.estimated")], "Tax return": ["is-dl-tax", L("us.dl.tag.return")],
+                             "1099": ["is-dl-vat", L("us.dl.tag.1099")] };
+    // Échéances dont la trésorerie estime le montant : les acomptes (flux « tax » de la prévision).
+    var DEADLINE_KINDS = { "Estimated tax": "tax" };
+    /** Écran des échéances : acomptes estimés des 90 jours, prochaine déclaration, choix du profil, lien vers le calendrier. */
+    function deadlineSummary(dl) {
+      var p = profile();
+      var payments = dl.soon.filter(function (e) { return e.tag === "Estimated tax"; });
+      var ret = dl.events.filter(function (e) { return e.tag === "Tax return"; })[0];
+      var total = dl.totals.tax || 0;
+      return {
+        kpis: kpi(L("us.dl.tax"), payments.length ? money(total) : "–", !payments.length ? L("us.dl.taxNone") :
+            total > 0 ? L("us.dl.taxSub", { what: countText(payments.length, L("us.count.payment.one"), L("us.count.payment.many")) }) : L("us.dl.taxZero")) +
+          kpi(L("us.dl.return"), ret ? day(ret.date) : "–", ret ? ret.title : L("us.dl.returnNone")),
+        priced: total,
+        intro: L("us.dl.introHtml", { contractors: p.contractors ? L("us.dl.contractorsOn") : L("us.dl.contractorsOff"),
+                                      extension: p.extension ? L("us.dl.extensionOn") : L("us.dl.extensionOff") }),
+        link: L("us.dl.calendarLinkHtml")
+      };
+    }
+
+
+    // ----- Trésorerie : impôt fédéral déjà dû, hypothèses (documentation/60, § 3.3, D92) ---------------------------
+
+    var TREASURY_KINDS = { tax: L("eng.us.flow.tax") };
+    /** Déjà dû (estimé) : impôt fédéral sur le bénéfice réalisé dans l'année, acomptes versés déduits ; note s'il n'y en a aucun. */
+    function treasuryOwed(o) {
+      var t = o.tax, lines = [], notes = [];
+      if (o.total > 0) lines.push("<li>" + L("us.tr.owedHtml", { year: t.year, profit: esc(money(t.actual)), paid: esc(money(t.paid)), amount: esc(money(o.total)) }) + "</li>");
+      if (t.accrued > 0 && !t.paid) notes.push(L("us.tr.notePaid"));
+      return { lines: lines, notes: notes };
+    }
+    /** Point mort non calculé dans cette version (documentation/60, § 3.3). */
+    function breakEvenNone() { return L("us.tr.breakEvenNone"); }
+    /** Factures en retard : pas de pénalité fédérale, frais de retard seulement s'ils sont convenus (règle late_fees_federal_rule). */
+    function agingNote() { return L("us.tr.agingHtml"); }
+    /** Hypothèses propres aux États-Unis : acomptes, années sans dates sourcées, déjà dû ; ce qui n'est pas compté. */
+    function treasuryAssumptions(o, f) {
+      var missing = (f && f.missingTaxYears) || [];
+      return {
+        main: "<li>" + L("us.tr.a.installmentsHtml") + "</li>" +
+          (missing.length ? "<li>" + L("us.tr.a.missing", { years: missing.join(", ") }) + "</li>" : "") +
+          "<li>" + L("us.tr.a.owed") + "</li>",
+        last: "<li>" + L("us.tr.a.notCountedHtml") + "</li>"
+      };
+    }
+
     return {
       tabs: { "schedule-c": "taxes" },   // la synthèse de l'annexe C se trouve sous « Taxes »
       routes: {
@@ -444,7 +519,11 @@
       dashboard: dashboard,
       profile: { defaults: profileDefaults, fields: profileFields, bind: bindProfile, read: readProfile, missing: profileMissing },
       client: { defaults: clientDefaults, fields: clientFields, bind: bindClient, read: readClient },
-      doc: { serviceDate: false, draft: draftFields, retax: retax, fields: docFields, note: docNote, input: docInput, kindCell: kindCell, issueOptions: issueOptions }
+      doc: { serviceDate: false, draft: draftFields, retax: retax, fields: docFields, note: docNote, input: docInput, kindCell: kindCell, issueOptions: issueOptions },
+      deadlines: { values: deadlineValues, classes: DEADLINE_CLASSES, kinds: DEADLINE_KINDS, summary: deadlineSummary },
+      // Pas de case « chiffre d'affaires à venir » (revenueLabel) : les acomptes suivent le bénéfice de l'écran Taxes ;
+      // pas de réglage propre : les acomptes versés se saisissent dans Taxes.
+      treasury: { kinds: TREASURY_KINDS, owed: treasuryOwed, assumptions: treasuryAssumptions, breakEvenNone: breakEvenNone, agingNote: agingNote }
     };
   };
 

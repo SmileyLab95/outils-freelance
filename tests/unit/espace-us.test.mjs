@@ -165,6 +165,9 @@ test("trésorerie : acomptes trimestriels aux dates sourcées, du montant du cal
   assert.equal(-tax[1].amount, Math.round(est.quarterly.perQuarter * 100) / 100, "même montant que le calculateur (U6)");
   assert.equal(tax[0].label, "[eng.us.forecast.installment]");
   assert.deepEqual(f.missingTaxYears, [2027], "dates de 2027 pas encore dans les règles : signalé, rien d'inventé");
+  // Export de la prévision : nature de l'acompte nommée par le pays (pas la clé brute « tax »), séparateur du pays.
+  const csv = E.forecastCSV(f).split("\r\n");
+  assert.ok(csv.some((l) => l.startsWith('09/15/2026,"[eng.us.flow.tax]","[eng.us.forecast.installment]",')), "acompte du 15 septembre exporté avec sa nature");
   const full = E.forecast(Object.assign({}, input, { profile: Object.assign({}, profile, { estimatedPaid: { "2026-3": 1e9, "2026-4": 1e9 } }) }));
   assert.equal(full.items.filter((x) => x.kind === "tax").length, 0, "acomptes déjà versés : rien de prévu");
 });

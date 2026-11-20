@@ -309,17 +309,25 @@ test("échéances : prochaine, fenêtre de 90 jours, montants repris de la trés
     { date: "2026-12-15", kind: "vat", amount: -120 }, { date: "2026-12-15", kind: "charge", amount: -80 }, // une charge le même jour n'est pas une échéance
     { date: "2027-02-10", kind: "urssaf", amount: -700 }, { date: "2027-02-11", kind: "urssaf", amount: -900 }, // au-delà des 90 jours
     { date: "2026-11-20", kind: "receipt", amount: 1000 }];
-  const d = S.deadlines(events, items, "2026-11-12");
+  const FR = { Urssaf: "urssaf", TVA: "vat" };
+  const d = S.deadlines(events, items, "2026-11-12", 90, FR);
   assert.equal(d.end, "2027-02-10");
   assert.deepEqual([d.next.title, d.next.days, d.next.amount], ["TVA d'octobre", 3, 300]);
   assert.deepEqual(d.soon.map((e) => [e.date, e.tag, e.amount]), [["2026-11-15", "TVA", 300], ["2026-11-30", "Urssaf", 512.4], ["2026-12-15", "CFE", null],
     ["2026-12-15", "TVA", 120], ["2027-02-10", "Urssaf", 700]]);
   assert.deepEqual([d.events.length, d.events[5].amount], [6, null], "hors fenêtre : listée, sans montant");
-  assert.deepEqual([d.urssaf, d.vat], [1212.4, 420]);
-  const same = S.deadlines([ev("2026-11-12", "Urssaf", "Aujourd'hui")], [{ date: "2026-11-12", kind: "urssaf", amount: -10 }, { date: "2026-11-12", kind: "urssaf", amount: -5 }], "2026-11-12");
-  assert.deepEqual([same.next.days, same.next.amount, same.urssaf], [0, 15, 15], "aujourd'hui compris ; deux montants le même jour additionnés");
-  const none = S.deadlines([], [], "2026-11-12");
-  assert.deepEqual([none.next, none.soon, none.urssaf, none.vat], [null, [], 0, 0]);
+  assert.deepEqual(d.totals, { urssaf: 1212.4, vat: 420 });
+  const same = S.deadlines([ev("2026-11-12", "Urssaf", "Aujourd'hui")], [{ date: "2026-11-12", kind: "urssaf", amount: -10 }, { date: "2026-11-12", kind: "urssaf", amount: -5 }], "2026-11-12", 90, FR);
+  assert.deepEqual([same.next.days, same.next.amount, same.totals.urssaf], [0, 15, 15], "aujourd'hui compris ; deux montants le même jour additionnés");
+  const none = S.deadlines([], [], "2026-11-12", 90, FR);
+  assert.deepEqual([none.next, none.soon, none.totals], [null, [], { urssaf: 0, vat: 0 }]);
+  // Sans table des natures (pays sans flux d'impôt) : aucun montant, aucun total.
+  const plain = S.deadlines(events, items, "2026-11-12");
+  assert.deepEqual([plain.soon.every((e) => e.amount === null), plain.totals], [true, {}]);
+  // Autre pays : la table du pays relie ses étiquettes à ses flux (acompte américain du 15 janvier).
+  const us = S.deadlines([ev("2027-01-15", "Estimated tax", "Q4"), ev("2027-02-01", "1099", "1099-NEC")],
+    [{ date: "2027-01-15", kind: "tax", amount: -2500 }, { date: "2027-01-15", kind: "urssaf", amount: -9 }], "2026-11-20", 90, { "Estimated tax": "tax" });
+  assert.deepEqual([us.soon.map((e) => e.amount), us.totals], [[2500, null], { tax: 2500 }]);
   assert.equal(S.deadlines([], [], "2026-11-12", 30).end, "2026-12-12");
 });
 

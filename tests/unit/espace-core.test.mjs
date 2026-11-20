@@ -44,6 +44,10 @@ test("cœur : exports et durées au format du pays, sans texte français", () =>
   const forecast = { start: 1000, today: "2026-10-01", items: [{ date: "2026-10-15", kind: "charge", label: "Rent", amount: -250.5 }] };
   const out = C.forecastCSV(forecast);
   assert.match(out, /10\/15\/2026;"\[eng\.flow\.charge\]";"Rent";-250\.50;749\.50$/);
+  // Nature propre au pays (flux d'impôt) : nommée par country.flowKinds ; une nature inconnue reste écrite telle quelle.
+  const C3 = CORE(INV, L, Object.assign({}, country, { flowKinds: { levy: "[levy]" } }));
+  const taxes = C3.forecastCSV({ start: null, today: "2026-10-01", items: [{ date: "2026-10-20", kind: "levy", label: "Q3", amount: -90 }, { date: "2026-10-21", kind: "other", label: "X", amount: -1 }] });
+  assert.match(taxes, /10\/20\/2026;"\[levy\]";"Q3";-90\.00;\r\n10\/21\/2026;"other";"X";-1\.00;$/);
   assert.equal(C.durationLabel(1.25, "hour"), '[eng.duration.hoursMinutes {"h":1,"m":"15"}]');
   assert.equal(C.durationLabel(0.5, "day"), '[eng.duration.day {"n":"0.5"}]');
   const lines = C.timeInvoiceLines([{ id: "t1", date: "2026-10-01", task: "Design", quantity: 2, unit: "hour", rate: 80, billable: true },

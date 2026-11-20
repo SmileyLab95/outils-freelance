@@ -401,6 +401,26 @@ l'écran (U5), rangé sous l'onglet « Taxes ». L'onglet surligné d'un écran 
 pays (`tabs`, France : immobilisations sous « Dépenses », vérifié par le parcours français, 370 points). Texte de la règle
 `estimated_tax_q4_skip_rule` aligné sur la formulation du formulaire 1040-ES citée dans sa note (« by February 1,
 2027 »). Parcours américain : 72 points ; erreur réintroduite détectée.
+Sous-lot 3d-4c fait le 20/11/2026 (D94) : **échéances américaines** : calendrier fédéral existant
+(`data/calendars/us.json`) filtré par les mêmes choix que le calendrier public : acomptes trimestriels toujours
+retenus (l'Espace les calcule ; leur montant dit s'ils sont requis), formulaires 1099-NEC à envoyer et déclaration
+prolongée selon deux cases du profil (« I pay independent contractors », avec le seuil 1099-NEC de l'année tiré des
+règles ; « I file my tax return with an extension »), non cochées par défaut ; montant estimé des acomptes repris de
+la trésorerie (table « étiquette du calendrier → nature du flux » donnée par le pays : `deadlines.kinds`, France
+`{ Urssaf, TVA }`, États-Unis `{ "Estimated tax": "tax" }`, le moteur des indicateurs n'ayant plus de table française
+en dur) ; indicateurs « Estimated tax due » (90 jours) et « Next tax return » ; mention « fédéral seulement » du
+calendrier public. **Trésorerie américaine** : « déjà dû » (impôt fédéral sur le bénéfice réalisé, acomptes saisis
+déduits, note s'il n'y en a aucun), point mort non calculé (dit), factures en retard : frais seulement s'ils sont
+convenus (règle `late_fees_federal_rule`), liens vers le calculateur de frais de retard et le modèle de relance ;
+hypothèses : acomptes du calculateur, année dont le formulaire 1040-ES n'est pas encore repris (pas d'acompte compté),
+impôt des États et solde de la déclaration non comptés ; pas de case « chiffre d'affaires à venir » (les acomptes
+suivent le bénéfice de l'écran Taxes) ni de réglage propre (crochets `revenueLabel`, `settings` et `hidden` devenus
+facultatifs). Export de la prévision : nature des flux d'impôt donnée par le pays (`country.flowKinds` ; l'acompte
+américain serait sorti « tax »). Trois défauts de langue trouvés en relisant les captures et corrigés dans le code
+commun : « Aujourd'hui » écrit en dur dans la frise, « Jan 27 » sur l'axe (lu « 27 janvier » en anglais : « Jan '27 »,
+texte `eng.chart.monthYear`), espace avant les deux-points dans la légende des créances et le titre d'un graphique
+(texte `common.colon`) ; le contrôle « anglais seul » du parcours les détecte désormais. Parcours américain :
+95 points ; cinq erreurs réintroduites, toutes détectées.
 
 ### Avancement
 

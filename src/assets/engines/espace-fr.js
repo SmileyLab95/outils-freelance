@@ -55,6 +55,7 @@
                   money: function (n) { return n.toFixed(2).replace(".", ",") + " €"; } };
   country.methods = METHODS;
   country.locale = "fr";
+  country.flowKinds = C.labels("eng.fr.flow.", ["urssaf", "vat"]);   // natures des flux d'impôt de la prévision (export)
   // Livre des encaissements et total des dépenses d'une période, lus par le cœur (encaissé, historique ; § 3.3).
   country.receipts = function (documents, from, to) { return ledger(documents, from, to); };
   country.expenseTotal = function (expenses, from, to) { return expenseRows(expenses, from, to).total; };

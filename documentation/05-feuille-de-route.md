@@ -9,7 +9,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 
 ## Où en est-on ?
 
-*Mis à jour le 20/11/2026 (nuit).*
+*Mis à jour le 20/11/2026 (matin).*
 
 - **Priorité (décision D10)** : le site et la plateforme d'abord ; noms de domaine, Gumroad et affiliation à la fin.
   Règle de qualité maximale pour tout produit ou service (D11, charte dans la [méthode](04-methode-de-travail.md#charte-qualité)).
@@ -498,7 +498,9 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   **Lot 3d spécifié le 20/11/2026** ([60](60-espace-etats-unis.md) § 3.3, D92) ; 3d-1 (moteurs déclarés par le module
   du pays) et 3d-2 (prévision et périodes dans le cœur ; moteur américain complété : livre, acomptes, « déjà dû »,
   courriels) faits le 20/11 ; 3d-3 aussi : écrans américains (profil, client, facture, tableau de bord) sur la page en
-  brouillon `/us/workspace/`, parcours `tests/e2e/espace-us.mjs` (U2, U6, U8 ; 40 points).
+  brouillon `/us/workspace/`, parcours `tests/e2e/espace-us.mjs` (U2, U6, U8 ; 40 points) ; 3d-4 aussi : recettes en
+  caisse et dépenses par ligne de l'annexe C (3d-4a), écrans « Taxes » et « Schedule C » (3d-4b), échéances et
+  trésorerie américaines (3d-4c, D94) ; parcours américain : 95 points, parcours français inchangé.
 - **Accueil en images (18/11/2026, nuit)** : demande d'Ismail (« il n'y a que du texte, pas d'image ») ; principes
   des images du site (D84, [58](58-images-du-site.md)) : captures du vrai produit, données d'exemple annoncées, pas de
   banque d'images ni d'image générée. Accueil France : section « Les outils, en vrai » en grille bento (Espace,
@@ -580,8 +582,8 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   **Espace entrepreneur pour les États-Unis** ([60](60-espace-etats-unis.md) § 3.1 : étape 1, lectures et lot 2a
   faits le 19/11, 2b (cœur commun), 2c (formats), 2d (moteur de facture international) et 2e (moteur américain,
   critères U3 à U7) aussi ; étape 3 en cours ([60](60-espace-etats-unis.md) § 3.2) : 3a (module français) fait le
-  19/11, 3b (dictionnaires) aussi, 3c (anglais) le 20/11, 3d-1 et 3d-2 (branchements, moteur américain) le 20/11 ;
-  ensuite 3d-4 (recettes, dépenses par ligne, annexe C, acomptes versés, 1099, échéances, trésorerie) ; règles de prospection
+  19/11, 3b (dictionnaires) aussi, 3c (anglais) le 20/11, 3d-1 à 3d-4 (branchements, moteur américain, écrans
+  américains : recettes, dépenses, Taxes, annexe C, échéances, trésorerie) le 20/11 ; ensuite : règles de prospection
   américaines à lire aux sources (FTC, FCC) ; puis la page `/us/workspace/` et son parcours (U2 à U8) ; ensuite
   Royaume-Uni et Canada, [59](59-parite-des-pays.md)) ; **poids des pages** : chaque page embarque toutes les règles de son pays
   (`window.OF_RULES`, environ 45 Ko avant compression) : n'y mettre que celles que ses scripts lisent ; **images du site** ([58](58-images-du-site.md) § 3) : miniatures dans la liste

@@ -843,15 +843,17 @@
     function deadlineHidden(e) { return !isMicro() && e.tag === "Urssaf"; }
     // Catégorie d'une échéance pour la frise et la liste : forme et couleur (documentation/55, § 5.5).
     var DEADLINE_CLASSES = { Urssaf: ["is-dl-urssaf", L("dl.tag.urssaf")], TVA: ["is-dl-vat", L("dl.tag.vat")], CFE: ["is-dl-tax", L("dl.tag.tax")], "Impôt": ["is-dl-tax", L("dl.tag.tax")] };
+    // Échéances dont la trésorerie estime le montant : étiquette du calendrier → nature du flux prévu.
+    var DEADLINE_KINDS = { Urssaf: "urssaf", TVA: "vat" };
     /** Écran des échéances : cotisations et TVA estimées, montant estimé total, introduction, lien vers le calendrier. */
     function deadlineSummary(dl) {
       var p = profile();
       var vatNote = p.vatRegime === "franchise" ? L("dl.vatFranchise") :
         p.vatRegime === "simplified" && (p.vatLastYear === undefined || p.vatLastYear === null || p.vatLastYear === "") ? L("dl.vatLastYear") : "";
       return {
-        kpis: kpi(L("dl.contributions"), isMicro() ? money(dl.urssaf) : "–", isMicro() ? L("dl.contributionsSub") : L("dl.contributionsMicroOnly")) +
-          kpi(L("dl.vatEstimated"), vatNote ? "–" : money(dl.vat), vatNote || L("dl.vatSub")),
-        priced: dl.urssaf + dl.vat,
+        kpis: kpi(L("dl.contributions"), isMicro() ? money(dl.totals.urssaf) : "–", isMicro() ? L("dl.contributionsSub") : L("dl.contributionsMicroOnly")) +
+          kpi(L("dl.vatEstimated"), vatNote ? "–" : money(dl.totals.vat), vatNote || L("dl.vatSub")),
+        priced: dl.totals.urssaf + dl.totals.vat,
         intro: L("dl.allIntro", { periodicity: p.periodicity === "monthly" ? L("dl.monthly") : L("dl.quarterly"),
           vat: ({ franchise: L("dl.vat.franchise"), simplified: L("dl.vat.simplified"), normal: L("dl.vat.normal") }[p.vatRegime] || L("dl.vat.unknown")) }),
         link: L("dl.calendarLinkHtml")
@@ -962,7 +964,7 @@
       issued: { cards: issuedCards, bind: bindIssued },
       prospects: { retentionYears: function () { return R.prospects_conservation.annees; }, retentionNote: retentionNote,
                    optoutNote: optoutNote, rules: prospectRules },
-      deadlines: { values: deadlineValues, hidden: deadlineHidden, classes: DEADLINE_CLASSES, summary: deadlineSummary },
+      deadlines: { values: deadlineValues, hidden: deadlineHidden, classes: DEADLINE_CLASSES, kinds: DEADLINE_KINDS, summary: deadlineSummary },
       treasury: { kinds: TREASURY_KINDS, owed: treasuryOwed, revenueLabel: revenueLabel, assumptions: treasuryAssumptions,
                   breakEvenNone: breakEvenNone, agingNote: agingNote,
                   settings: { names: ["vatLastYear"], fields: treasuryFields, check: treasuryCheck, save: treasurySave } },

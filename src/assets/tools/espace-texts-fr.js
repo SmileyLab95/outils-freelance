@@ -394,6 +394,8 @@
     // Livre des recettes
     "common.exportCsv": "Exporter (CSV)",
     "common.print": "Imprimer",
+    // Entre un libellé et sa valeur (espace avant les deux-points en français, pas en anglais).
+    "common.colon": " : ",
     "ledger.col.date": "Date",
     "ledger.col.client": "Client",
     "ledger.col.amount": "Montant",
@@ -885,8 +887,6 @@
     "eng.aging.more": "Plus de 90 jours",
     "eng.flow.receipt": "Encaissement attendu",
     "eng.flow.refund": "Remboursement",
-    "eng.flow.urssaf": "Cotisations",
-    "eng.flow.vat": "TVA",
     "eng.flow.charge": "Charge",
     "eng.flow.planned": "Entrée prévue",
     // Moteur : périodes, durées, libellés de la prévision, en-têtes des exports CSV
@@ -930,6 +930,8 @@
     "eng.chart.planned": "Prévu",
     "eng.chart.actual": "Réel",
     "eng.chart.showData": "Voir les données",
+    "eng.chart.today": "Aujourd'hui",
+    "eng.chart.monthYear": "{month} {yy}",
     // Moteur : période d'une ligne de facture du temps passé
     "eng.time.span": "du {from} au {to}",
     // Formats de la langue

@@ -50,6 +50,7 @@
     var C = CORE(INV, L, country);
     var METHODS = C.labels("eng.us.method.", METHOD_KEYS);
     country.methods = METHODS;
+    country.flowKinds = { tax: L("eng.us.flow.tax") };   // acomptes trimestriels de la prévision (export)
     var inYear = function (d, year) { return String(d || "").slice(0, 4) === String(year); };
     var clientOf = function (doc) { return (doc.snapshot && doc.snapshot.client && doc.snapshot.client.name) || ""; };
 

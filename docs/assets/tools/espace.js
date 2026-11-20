@@ -515,7 +515,7 @@
     var values = UI.deadlines ? UI.deadlines.values() : {};
     return CAL.filter(function (e) {
       if (e.date < TODAY) return false;
-      if (UI.deadlines && UI.deadlines.hidden(e)) return false;
+      if (UI.deadlines && UI.deadlines.hidden && UI.deadlines.hidden(e)) return false;
       var w = e.when || {};
       return Object.keys(w).every(function (k) { return values[k] === undefined || w[k].indexOf(values[k]) > -1; });
     });
@@ -537,7 +537,7 @@
 
   function viewDeadlines() {
     // 90 jours tiennent toujours dans 5 mois commencés : la trésorerie fournit les montants estimés aux mêmes dates.
-    var f = E.forecast(treasuryInput({ months: 5 })), dl = ST.deadlines(matchingEvents(), f.items, TODAY, 90);
+    var f = E.forecast(treasuryInput({ months: 5 })), dl = ST.deadlines(matchingEvents(), f.items, TODAY, 90, UI.deadlines && UI.deadlines.kinds);
     // Parties du pays : 3e et 4e indicateurs, montant estimé total, introduction de la liste, lien vers le calendrier.
     var country = UI.deadlines ? UI.deadlines.summary(dl) : { kpis: "", priced: 0, intro: "", link: "" };
     var amountText = function (e) { return e.amount === null ? "" : money(e.amount); };
@@ -1000,7 +1000,7 @@
     el.innerHTML = OF.charts.bars({ width: Math.floor(el.getBoundingClientRect().width) || 600,
       groups: months.map(function (m) { return { key: m.key, label: m.label, values: [m.invoiced, m.cashed], future: false }; }),
       series: [{ name: L("chart.invoicedHT"), cls: "is-cur" }, { name: L("chart.cashed"), cls: "is-in" }],
-      title: L("chart.invoicedTitle") + (who ? " : " + who : ""),
+      title: L("chart.invoicedTitle") + (who ? L("common.colon") + who : ""),
       desc: L("chart.invoicedDesc", { invoiced: money(months.reduce(function (s, m) { return s + m.invoiced; }, 0)),
         cashed: money(months.reduce(function (s, m) { return s + m.cashed; }, 0)) }) });
   }
@@ -1867,7 +1867,7 @@
       field("every", L("tr.c.every"), c.every || "month", { options: CHARGE_EVERY, half: true }) +
       field("start", c.every === "once" ? L("tr.c.date") : L("tr.c.next"), c.start || "", { type: "date", half: true }) +
       field("end", L("tr.c.end"), c.end || "", { type: "date", half: true, hint: L("tr.c.endHint") }) +
-      (UI.treasury ? '<div class="field full charge-revenue"' + (flow === "in" ? "" : " hidden") + '><label class="check"><input type="checkbox" id="ep-revenue" name="revenue"' +
+      (UI.treasury && UI.treasury.revenueLabel ? '<div class="field full charge-revenue"' + (flow === "in" ? "" : " hidden") + '><label class="check"><input type="checkbox" id="ep-revenue" name="revenue"' +
         (c.revenue ? " checked" : "") + "><span>" + UI.treasury.revenueLabel() + "</span></label></div>" : "");
   }
   function readCharge(form) {
@@ -1910,7 +1910,7 @@
   var drawCharts = null;
 
   function viewTreasury(r) {
-    var p = profile(), params = r.params || {};
+    var p = profile(), params = r.params || {}, TS = UI.treasury && UI.treasury.settings;   // réglages propres au pays (facultatifs)
     var months = HORIZONS.indexOf(+params.horizon) > -1 ? +params.horizon : 6, scenario = params.scenario === "prudent" ? "prudent" : "prevu";
     var other = scenario === "prudent" ? "prevu" : "prudent";
     var o = E.owed(treasuryInput()), f = E.forecast(treasuryInput({ months: months, scenario: scenario }));
@@ -1980,7 +1980,7 @@
 
     var agingCard = '<section class="card espace-card"><div class="card-head"><h3>' + L("tr.aging.title") + '</h3><span class="small muted">' + L("tr.aging.total", { amount: esc(money(ag.total)) }) + "</span></div>" +
       (ag.total ? '<div class="chart" data-chart="aging"></div>' + '<ul class="ch-legend ch-legend-values">' + ag.buckets.map(function (b) {
-          return '<li><span class="ch-key ' + AGING_CLS[b.key] + '" aria-hidden="true"></span>' + esc(b.label) + " : <b>" + esc(money(b.amount)) + "</b>" + (b.count ? " (" + b.count + ")" : "") + "</li>";
+          return '<li><span class="ch-key ' + AGING_CLS[b.key] + '" aria-hidden="true"></span>' + esc(b.label) + L("common.colon") + "<b>" + esc(money(b.amount)) + "</b>" + (b.count ? " (" + b.count + ")" : "") + "</li>";
         }).join("") + "</ul>" +
         (ag.items.filter(function (x) { return x.lateDays > 0; }).length ? "<h4>" + L("tr.aging.late") + '</h4><ul class="time-due">' + ag.items.filter(function (x) { return x.lateDays > 0; }).slice(0, 8).map(function (x) {
           var who = (x.doc.snapshot && x.doc.snapshot.client && x.doc.snapshot.client.name) || "";
@@ -2029,11 +2029,11 @@
       field("cashDate", L("tr.s.date"), p.cashDate || TODAY, { type: "date", half: true }) +
       field("cashThreshold", L("tr.s.threshold"), rateText(p.cashThreshold), { half: true, inputmode: "decimal", placeholder: "0",
         hint: L("tr.s.thresholdHint") }) +
-      (UI.treasury ? UI.treasury.settings.fields(p) : "") +
+      (TS ? TS.fields(p) : "") +
       '</div><p class="form-error" id="cash-error" role="alert" hidden></p><div class="espace-actions"><button type="submit" class="btn btn-primary">' + L("common.save") + "</button></div>" +
       (stale ? '<p class="notice warn">' + L("tr.s.stale", { date: day(p.cashDate) }) + "</p>" : "") + "</form>";
 
-    var hyp = UI.treasury ? UI.treasury.assumptions(o) : { main: "", last: "" };
+    var hyp = UI.treasury ? UI.treasury.assumptions(o, f) : { main: "", last: "" };
     var assumptions = '<section class="card espace-card"><h3>' + L("tr.a.title") + '</h3><ul class="small prospect-rules">' +
       "<li>" + L("tr.a.basis") + esc(scenarioNote.charAt(0).toLowerCase() + scenarioNote.slice(1)) + "</li>" +
       hyp.main + "<li>" + L("tr.a.delay") + "</li>" + hyp.last + "</ul></section>";
@@ -2077,8 +2077,8 @@
       var error = raw && !isFinite(bal) ? ["cashBalance", L("tr.s.errBalance")]
         : !/^\d{4}-\d{2}-\d{2}$/.test(date) || date > TODAY ? ["cashDate", L("tr.s.errDate")]
         : thRaw && !(isFinite(th) && th >= 0) ? ["cashThreshold", L("tr.s.errThreshold")]
-        : UI.treasury ? UI.treasury.settings.check(f2) : null;
-      ["cashBalance", "cashDate", "cashThreshold"].concat(UI.treasury ? UI.treasury.settings.names : []).forEach(function (k) {
+        : TS ? TS.check(f2) : null;
+      ["cashBalance", "cashDate", "cashThreshold"].concat(TS ? TS.names : []).forEach(function (k) {
         if (f2[k]) f2[k].setAttribute("aria-invalid", String(!!error && error[0] === k));
       });
       showError("cash-error", error ? error[1] : "");
@@ -2087,7 +2087,7 @@
       pr.cashBalance = bal === null ? null : Math.round(bal * 100) / 100;
       pr.cashDate = date;
       pr.cashThreshold = th === null ? null : Math.round(th * 100) / 100;
-      if (UI.treasury) UI.treasury.settings.save(f2, pr);
+      if (TS) TS.save(f2, pr);
       pr.updatedAt = now();
       persist(L("tr.s.saved")).then(function () { render(true); });
     });

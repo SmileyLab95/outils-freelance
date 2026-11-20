@@ -56,6 +56,11 @@
   séparateur du pays (virgule aux États-Unis ; point-virgule inchangé en France).
 - Sous-lot 3d-4b : écrans « Taxes » (acomptes estimés, acomptes versés, données du calcul par année, 1099-NEC
   attendus) et « Schedule C » (synthèse et export) dans l'Espace américain.
+- Sous-lot 3d-4c : échéances américaines (calendrier fédéral selon deux cases du profil : sous-traitants,
+  prolongation ; acompte estimé des 90 jours ; prochaine déclaration) et trésorerie américaine (impôt fédéral déjà dû,
+  hypothèses, frais de retard seulement s'ils sont convenus). Corrigés dans le code commun : « Aujourd'hui » écrit en
+  dur dans la frise, « Jan 27 » sur l'axe des graphiques (« Jan '27 » en anglais), espace avant les deux-points en
+  anglais, nature des flux d'impôt dans l'export de la prévision. Parcours américain : 95 points.
 
 ## 2026-11-19 (après-midi, suite) — Moteur de l'Espace des États-Unis (lot 2e)
 

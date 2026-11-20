@@ -6,7 +6,8 @@
  * mouvements prévus, encaissements attendus, courbe du solde, délais de paiement, créances, autonomie). C'est une fabrique : chaque moteur de pays
  * (engines/espace-fr.js…) l'appelle avec son moteur de facture (INV) et la fonction L des textes de la langue de la
  * section, et un objet de réglages du pays lu au moment des appels (country.prefixes : préfixes par défaut des
- * numéros ; country.methods : moyens de paiement) ; il en reprend les fonctions sous leur nom. Testé par les tests
+ * numéros ; country.methods : moyens de paiement ; country.flowKinds : natures de ses flux d'impôt) ; il en reprend
+ * les fonctions sous leur nom. Testé par les tests
  * du moteur français.
  */
 (function (root, factory) {
@@ -750,7 +751,10 @@
     return { count: list.length, amount: round2(list.reduce(function (s, d) { return s + total(d); }, 0)) };
   }
 
-  var FLOW_KINDS = labels("eng.flow.", ["receipt", "refund", "urssaf", "vat", "charge", "planned"]);
+  // Natures communes des mouvements prévus ; celles d'un pays (France : cotisations, TVA ; États-Unis : acomptes)
+  // viennent de country.flowKinds.
+  var FLOW_KINDS = labels("eng.flow.", ["receipt", "refund", "charge", "planned"]);
+  var flowKind = function (k) { return FLOW_KINDS[k] || (country.flowKinds || {})[k] || k; };
 
   /** Export de la prévision : date, nature, libellé, montant et solde après le mouvement (si un solde est saisi). */
   function forecastCSV(f) {
@@ -759,7 +763,7 @@
     if (bal !== null) lines.push([dayText(f.today), q(L("eng.csv.forecastStart")), q(""), "", amountText(bal)].join(csvSep()));
     f.items.forEach(function (x) {
       if (bal !== null) bal = round2(bal + x.amount);
-      lines.push([dayText(x.date), q(FLOW_KINDS[x.kind] || x.kind), q(x.label), amountText(x.amount), bal === null ? "" : amountText(bal)].join(csvSep()));
+      lines.push([dayText(x.date), q(flowKind(x.kind)), q(x.label), amountText(x.amount), bal === null ? "" : amountText(bal)].join(csvSep()));
     });
     return lines.join("\r\n");
   }
