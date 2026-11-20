@@ -18,7 +18,7 @@ const COMMON_CODE = [TOOLS + "espace.js", TOOLS + "charts.js", ENGINES + "espace
 const MODULES = {
   fr: { code: [TOOLS + "espace-fr-ui.js", ENGINES + "espace-fr.js"], langs: ["fr"] },
   us: { code: [TOOLS + "espace-us-ui.js", ENGINES + "espace-us.js"], langs: ["en"] },
-  uk: { code: [ENGINES + "espace-uk.js"], langs: ["en"] }
+  uk: { code: [TOOLS + "espace-uk-ui.js", ENGINES + "espace-uk.js"], langs: ["en"] }
 };
 
 /** Clés écrites en entier (L("type.facture")), préfixes de clés construites (L("activity." + k), labels("eng.x.", […])). */

@@ -84,6 +84,11 @@
   trois complétées) ; moteur `engines/espace-uk.js` (année fiscale du 6 avril au 5 avril, synthèse du SA103S, impôt
   et acomptes du calculateur public, MTD, indicateur du seuil de VAT, intérêts légaux de retard dans les relances) et
   13 tests unitaires (776 en tout). Rien n'est encore visible sur le site.
+- Espace britannique, écrans (page en brouillon `/uk/workspace/`) : profil (région fiscale, VAT, intérêts légaux dans
+  les relances), recettes par année fiscale, dépenses par case du SA103S avec l'aide officielle de chaque case,
+  synthèse du SA103S, impôt et échéancier des acomptes, Making Tax Digital, indicateur du seuil de VAT, échéances,
+  trésorerie, règles du PECR ; textes en anglais britannique (*quote*, *credit note*…) ; parcours navigateur de
+  89 points. Mesure du seuil de VAT relue aux sources officielles.
 
 ## 2026-11-19 (après-midi, suite) — Moteur de l'Espace des États-Unis (lot 2e)
 

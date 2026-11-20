@@ -133,6 +133,19 @@ l'année précédente et acomptes déjà versés saisis par l'utilisateur ; seui
   réintroduisant l'erreur qu'il doit détecter (32 erreurs réintroduites ; les 7 d'abord non détectées l'ont été après six
   contrôles ajoutés et une condition redondante retirée).
   Prochaine étape : écrans (`tools/espace-uk-ui.js`), variante en-GB des textes communs, page en brouillon.
+- **20/11/2026 (nuit)** : **étape 3, premier lot fait** (D99) : module d'écrans `tools/espace-uk-ui.js` (profil avec
+  région fiscale, immatriculation à la VAT et intérêts légaux dans les relances ; clients hors du Royaume-Uni ; choix de
+  VAT des documents identique au générateur public ; recettes par année fiscale et trimestre de MTD ; dépenses par case
+  avec l'aide de HS222 ; synthèse du SA103S ; écran « Tax » : impôt, échéancier des acomptes et soldes, données de
+  l'année, seuil de VAT ; écran « Making Tax Digital » ; tableau de bord, échéances, trésorerie, règles du PECR) ;
+  textes `tools/espace-uk-texts-en.js` ; variante `tools/espace-texts-en-GB.js` (62 textes communs : *quote*, *credit
+  note*, *cancelled*, *tick*, ponctuation britannique, lien vers la page de relance britannique) ; page en brouillon
+  `/uk/workspace/` ; parcours `tests/e2e/espace-uk.mjs` sur les brouillons : 89 points (K2 : aperçu identique au
+  générateur ; K3 à K7 à l'écran ; K8 : textes britanniques, accessibilité, trois largeurs). Captures relues : deux
+  défauts corrigés (année de référence de MTD pas finie présentée « Doesn't apply » ; libellé de la case 9).
+  **Reste avant publication** : le tableau de bord commun affiche encore l'encaissé de l'année civile (« Collected in
+  2026 ») : crochet du pays pour l'année fiscale ; texte de la page, questions fréquentes, sources, menu, encarts,
+  vitrine (comme D96).
 
 ## 6. Lectures
 
@@ -184,7 +197,9 @@ l'année précédente et acomptes déjà versés saisis par l'utilisateur ; seui
   plus 1 000 £, jamais de perte ; case 28 « Net business profit for tax purposes » = 21 − 22 (ou 21 − 10.1 avec
   l'allocation) ; case 32 « Net business loss for tax purposes » ; case 31 « Total taxable profits from this business »
   (pertes antérieures et case 30 hors version 1). Les remboursements aux clients ne sont pas cités (D98).
-- **VAT Notice 700/1** : recherche sur la mesure du chiffre d'affaires des 12 derniers mois sans résultat avec les mots
-  essayés ; l'Espace s'en tient à la règle déjà sourcée (`vat_registration_threshold` : plus de 90 000 £ sur les
-  12 derniers mois, ou attendu dans les 30 prochains jours) et présente son chiffre comme un indicateur. **À lire** :
-  la mesure exacte (fin de chaque mois ?) avant de publier l'écran.
+- **Seuil de VAT** (gov.uk « Register for VAT » et VAT Notice 700/1, relus le 20/11/2026) : inscription si le chiffre
+  d'affaires taxable des 12 derniers mois dépasse 90 000 £, dans les 30 jours suivant la fin du mois du dépassement
+  (exemple officiel : dépassement le 15 juillet, inscription au plus tard le 30 août, effet au 1er septembre) ; Notice
+  700/1, 4.2 : constat « at the end of any month » sur les 12 derniers mois ; ventes exonérées ou hors du champ : pas
+  d'obligation. L'indicateur de l'Espace (12 derniers mois jusqu'à aujourd'hui, par date de facture) suit cette mesure
+  et reste présenté comme un indicateur (l'Espace ne distingue pas les ventes exonérées ou hors du champ).

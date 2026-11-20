@@ -9,7 +9,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 
 ## Où en est-on ?
 
-*Mis à jour le 20/11/2026 (soir).*
+*Mis à jour le 20/11/2026 (nuit).*
 
 - **Priorité (décision D10)** : le site et la plateforme d'abord ; noms de domaine, Gumroad et affiliation à la fin.
   Règle de qualité maximale pour tout produit ou service (D11, charte dans la [méthode](04-methode-de-travail.md#charte-qualité)).
@@ -511,7 +511,10 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   articles 21 et 22 du PECR, registres à garder (quatre règles) ; paramètres de facture britanniques dans
   `data/invoice-profiles/uk.json` ; le soir, lectures finies (fiche HS222, mises à jour trimestrielles de MTD,
   articles 2 et 26 du PECR) et **moteur de l'Espace britannique fait** (`engines/espace-uk.js`, D98 : année fiscale,
-  cases du SA103S, impôt et acomptes du calculateur public, MTD, seuil de VAT, intérêts de retard ; 13 tests).
+  cases du SA103S, impôt et acomptes du calculateur public, MTD, seuil de VAT, intérêts de retard ; 13 tests) ; dans
+  la nuit, **écrans britanniques sur une page en brouillon** (`/uk/workspace/`, D99 : recettes, dépenses par case,
+  synthèse SA103S, Tax, Making Tax Digital, seuil de VAT, échéances, trésorerie, PECR ; anglais britannique) ;
+  parcours navigateur britannique : 89 points.
 - **Accueil en images (18/11/2026, nuit)** : demande d'Ismail (« il n'y a que du texte, pas d'image ») ; principes
   des images du site (D84, [58](58-images-du-site.md)) : captures du vrai produit, données d'exemple annoncées, pas de
   banque d'images ni d'image générée. Accueil France : section « Les outils, en vrai » en grille bento (Espace,
@@ -597,10 +600,9 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   américains : recettes, dépenses, Taxes, annexe C, échéances, trésorerie) le 20/11, 3d-5 (règles de prospection lues
   aux textes officiels) aussi ; étape 4 faite le 20/11 (4a adresses en anglais, 4b **Espace américain publié**,
   `/us/workspace/`, 4c vitrine de l'accueil) ; **Royaume-Uni en cours** ([61](61-espace-royaume-uni.md)) : lectures
-  et moteur faits ; ensuite les écrans (`tools/espace-uk-ui.js` : profil, recettes, dépenses par case, synthèse SA103S,
-  impôt et acomptes, MTD, VAT, échéances, trésorerie, prospects), la variante en-GB des textes communs, la page en
-  brouillon `/uk/workspace/` et son parcours navigateur, la mesure exacte du seuil de VAT (VAT Notice 700/1), puis la
-  publication ; ensuite le Canada,
+  moteur et écrans faits (page en brouillon `/uk/workspace/`, 89 points) ; reste avant publication : encaissé de
+  l'année fiscale au tableau de bord (crochet du pays dans la partie commune), puis la publication comme D96 (texte de
+  la page, questions, sources, menu, en-tête, encarts, vitrine) ; ensuite le Canada,
   [59](59-parite-des-pays.md)) ; **poids des pages** : chaque page embarque toutes les règles de son pays
   (`window.OF_RULES`, environ 45 Ko avant compression) : n'y mettre que celles que ses scripts lisent ; **images du site** ([58](58-images-du-site.md) § 3) : miniatures dans la liste
   des étapes et schémas explicatifs (facture annotée, frise des relances, calendrier de la facturation électronique) ; refonte, suite ([31](31-vision-plateforme.md) § 5) : les quatre modules du compte

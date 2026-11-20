@@ -882,8 +882,18 @@
       "source": "https://www.gov.uk/how-vat-works/vat-thresholds",
       "source_title": "How VAT works: VAT thresholds - GOV.UK",
       "confidence": "high",
-      "note": "Checked on the live official page on 07/11/2026: value found on the source page. In force since 1 April 2024 (was 85,000). Budget 2025 Annex A lists 90,000 for April 2026 (https://www.gov.uk/government/publications/budget-2025-overview-of-tax-legislation-and-rates-ootlar/annex-a-rates-and-allowances). Register if taxable turnover exceeded 90,000 in the last 12 months, or is expected to exceed it in the next 30 days alone. Voluntary registration possible below. No multi-year freeze commitment found.",
-      "verified_on": "2026-11-07"
+      "note": "Checked on the live official page on 07/11/2026: value found on the source page. In force since 1 April 2024 (was 85,000). Budget 2025 Annex A lists 90,000 for April 2026 (https://www.gov.uk/government/publications/budget-2025-overview-of-tax-legislation-and-rates-ootlar/annex-a-rates-and-allowances). Register if taxable turnover exceeded 90,000 in the last 12 months, or is expected to exceed it in the next 30 days alone. Voluntary registration possible below. No multi-year freeze commitment found. Read again on 20/11/2026 with the source reader. GOV.UK 'Register for VAT': 'You must register if your total taxable turnover for the last 12 months goes over £90,000'; 'You have to register within 30 days of the end of the month when you went over the threshold. Your effective date of registration is the first day of the second month after you go over the threshold' (example: over on 15 July, register by 30 August, effective 1 September); next 30 days: register by the end of that period, effective from the date you realised; 'You do not have to register if you only sell VAT exempt or out of scope goods and services'. VAT Notice 700/1, 4.2: tell HMRC within 30 days from the end of the month when 'at the end of any month the value of your taxable supplies in the last 12 months or less has exceeded the threshold'; 3.7: exception from registration if turnover went over temporarily and will not go over the deregistration threshold in the next 12 months.",
+      "verified_on": "2026-11-20",
+      "more_sources": [
+        {
+          "source": "https://www.gov.uk/register-for-vat",
+          "source_title": "Register for VAT - GOV.UK"
+        },
+        {
+          "source": "https://www.gov.uk/government/publications/vat-notice-7001-should-i-be-registered-for-vat/vat-notice-7001-should-i-be-registered-for-vat",
+          "source_title": "Who should register for VAT (VAT Notice 700/1), sections 3.7 and 4.2"
+        }
+      ]
     },
     "vat_deregistration_threshold": {
       "value": 88000,

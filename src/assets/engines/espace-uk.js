@@ -60,7 +60,9 @@
     var C = CORE(INV, L, country);
     var METHODS = C.labels("eng.uk.method.", METHOD_KEYS);
     country.methods = METHODS;
-    country.flowKinds = { tax: L("eng.uk.flow.tax") };   // acomptes et solde de l'impôt dans la prévision (export)
+    // Paiements de l'impôt dans la prévision (export) : acomptes (poa) et soldes (balancing), séparés comme dans le
+    // calendrier (« Payment on account », « Self Assessment »), qui en a deux le même 31 janvier.
+    country.flowKinds = { poa: L("eng.uk.flow.poa"), balancing: L("eng.uk.flow.balancing") };
     var clientOf = function (doc) { return (doc.snapshot && doc.snapshot.client && doc.snapshot.client.name) || ""; };
     var has = function (o, k) { return Object.prototype.hasOwnProperty.call(o || {}, k); };
     var num = function (v) { return v !== null && v !== undefined && v !== "" && isFinite(Number(v)) ? Number(v) : null; };
@@ -377,7 +379,7 @@
           if (r.date < input.today || r.date > base.until) return;
           if (r.amount === null) { unknown.push(r); return; }
           var due = round2(Math.max(0, r.amount - (r.paid || 0)));
-          if (due > 0) items.push({ date: r.date, kind: "tax", amount: -due,
+          if (due > 0) items.push({ date: r.date, kind: r.kind === "poa" ? "poa" : "balancing", amount: -due,
             label: r.kind === "poa" ? L("eng.uk.forecast.poa", { n: r.n, year: r.year.label }) : L("eng.uk.forecast.balancing", { year: r.year.label }) });
         });
         // Année fiscale suivante : son solde (et le premier acompte de l'année d'après) tombe le 31 janvier suivant sa

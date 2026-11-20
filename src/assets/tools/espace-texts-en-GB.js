@@ -1,0 +1,76 @@
+/*
+ * Workspace texts in British English (documentation/61-espace-royaume-uni.md, § 3): regional variant of the common
+ * English texts (tools/espace-texts-en.js) that only redefines what changes for the UK section: "quote" for an estimate,
+ * "credit note" for a credit memo, British spelling ("cancelled"), "tick" for a checkbox, full stop outside quotation
+ * marks, and the link to the UK payment reminder page. Loaded after the common English texts; tools/espace.js merges
+ * the language ("en") then its regional variant ("en-GB"). tests/unit/espace-textes.test.mjs checks that every key
+ * exists in the common English texts and is used.
+ */
+(function (root) {
+  "use strict";
+  var T = root.OF_ESPACE_TEXTS = root.OF_ESPACE_TEXTS || {};
+  T["en-GB"] = Object.assign(T["en-GB"] || {}, {
+    "type.devis": "Quote",
+    "type.avoir": "Credit note",
+    "new.devis": "New quote",
+    "new.avoir": "New credit note",
+    "state.cancelled": "Cancelled by credit note",
+    "welcome.introHtml": "Clients, quotes, invoices, payments, time tracking, income and expenses: all in one place. Your data stays <strong>on this device</strong>. Nothing is sent to a server.",
+    "import.noneHtml": "There is no document to import. Prepare your invoice or quote in the <a href=\"../invoice-generator/\">invoice generator</a>, then click “Continue in my Workspace”.",
+    "import.thisQuote": "this quote",
+    "num.plural.devis": "quotes",
+    "num.plural.avoir": "credit notes",
+    "num.last.devis": "Last quote no.",
+    "num.last.avoir": "Last credit note no.",
+    "num.errSame": "Invoices, quotes and credit notes need different prefixes.",
+    "profile.nameHint": "The name shown on your invoices and quotes.",
+    "quick.quote": "+ Quote",
+    "dash.pendingQuotes": "Pending quotes",
+    "dash.noPendingQuote": "No sent quote awaiting an answer",
+    "filter.devis": "Quotes",
+    "filter.avoir": "Credit notes",
+    "draft.forLeadHtml": "Quote for the lead <a href=\"{href}\">{name}</a>: its stage will follow this quote.",
+    "draft.issueQuote": "Issue the quote",
+    "draft.issueCredit": "Issue the credit note",
+    "draft.theQuote": "the quote",
+    "draft.theCredit": "the credit note",
+    "issued.credits": "Credit notes",
+    "issued.createCredit": "Create a credit note",
+    "credit.deducted": "This credit note is deducted from the original invoice: nothing to refund to the client.",
+    "remind.templatesHref": "../payment-reminder-letter/",
+    "credit.ofInvoiceHtml": "Credit note for invoice <a href=\"{href}\">{number}</a>.",
+    "invoice.fromQuoteHtml": "Created from quote <a href=\"{href}\">{number}</a>.",
+    "issued.creditCreated": "Credit note created as a draft: adjust the lines if the credit is partial.",
+    "issued.converted": "Invoice created as a draft from the quote.",
+    "quote.statusSaved": "Quote: {state}.",
+    "count.credit.one": "credit note",
+    "count.credit.many": "credit notes",
+    "docs.kpiPending": "Pending quotes (before tax)",
+    "count.validQuote.one": "quote still valid",
+    "count.validQuote.many": "quotes still valid",
+    "docs.noPending": "no pending quotes",
+    "docs.kpiRate": "Quote acceptance rate",
+    "docs.noDecided": "no quote issued {period} has an answer yet",
+    "docs.rateSub": "{signed}, {refused}, {expired} (quotes issued {period})",
+    "clients.empty": "No clients yet. Create your first client to send them a quote or an invoice.",
+    "client.cashed12Sub": "credit note refunds deducted",
+    "chrono.stoppedHtml": "Stopped: <b>{duration}</b> copied into the entry form below ({started}). Add the client and the task, then click “Add”.",
+    "time.note": "Also log the time you don't bill (prospecting, admin): untick “Billable”. Time tracking is optional; it is not a required record.",
+    "ti.pickOne": "Tick at least one time entry.",
+    "ti.errPick": "Tick at least one time entry to include.",
+    "pros.empty": "No leads yet. Log your sales leads to know whom to follow up with and when, then turn a won lead into a client and a quote without retyping anything.",
+    "pros.f.minQuote": "At least “Quote sent”: a quote has been issued.",
+    "pros.f.minWon": "“Won”: the quote was accepted.",
+    "pros.f.valueHint": "Optional. Replaced by the quote amount once it is issued.",
+    "pros.f.nextActionPlaceholder": "Call back about the quote",
+    "pros.x.summaryPlaceholder": "Call: interested, send the quote before Friday",
+    "pros.c.title": "Client and quote",
+    "pros.c.quote": "Create a quote",
+    "tr.aging.quotesHtml": "Accepted quotes to invoice: <b>{amount}</b> ({n} quotes), not counted in the forecast.",
+    "tr.aging.seeQuotes": "See quotes",
+    "eng.issue.creditOver": "The credit note can't exceed the balance left on invoice {number} ({amount}).",
+    "eng.time.client": "Choose the client, or untick “Billable” for internal time.",
+    "eng.stage.quote": "Quote sent",
+    "eng.forecast.refund": "Refund of credit note {number}"
+  });
+})(typeof self !== "undefined" ? self : this);

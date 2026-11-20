@@ -1,0 +1,59 @@
+<!--{
+  "id": "workspace",
+  "slug": "workspace/",
+  "title": "Free Sole Trader Workspace: Invoices, Income, Expenses and Tax",
+  "description": "Clients, quotes, invoices, payments, income and expenses by tax year, your Self Assessment summary, payments on account and Making Tax Digital. Free, no sign-up; your data stays on your device.",
+  "draft": true,
+  "rules": "uk",
+  "scripts": [
+    "tools/espace-texts-en.js",
+    "tools/espace-texts-en-GB.js",
+    "tools/espace-uk-texts-en.js",
+    "engines/invoice-intl.js",
+    "engines/brackets.js",
+    "engines/tax-uk.js",
+    "engines/espace-core.js",
+    "engines/espace-uk.js",
+    "engines/espace-stats.js",
+    "engines/chart-scale.js",
+    "tools/charts.js",
+    "tools/espace-store.js",
+    "tools/espace-uk-ui.js",
+    "tools/espace.js"
+  ]
+}-->
+<style media="print">@page { size: A4; margin: 14mm; }</style>
+<script type="application/json" id="invoice-profile">
+{{invoice_profile:uk}}
+</script>
+<section class="hero hero-tool hero-compact">
+  <div class="wrap">
+    {{breadcrumb}}
+    <h1>Sole Trader Workspace</h1>
+    <p class="lead">Your clients, quotes, invoices, payments, income, expenses and tax, in one place. Your data stays on your device.</p>
+  </div>
+</section>
+
+<section class="section espace-section">
+  <div id="espace-app" class="espace" data-loading>
+    <nav class="espace-nav espace-noprint" aria-label="Workspace">
+      <a href="#/" data-route="tableau">{{icon:layout-dashboard}}Dashboard</a>
+      <a href="#/documents" data-route="documents">{{icon:file-text}}Documents</a>
+      <a href="#/leads" data-route="prospects">{{icon:target}}Leads</a>
+      <a href="#/clients" data-route="clients">{{icon:users}}Clients</a>
+      <a href="#/time" data-route="temps">{{icon:timer}}Time</a>
+      <a href="#/income" data-route="recettes">{{icon:book-open-text}}Income</a>
+      <a href="#/expenses" data-route="depenses">{{icon:receipt}}Expenses</a>
+      <a href="#/tax" data-route="tax">{{icon:landmark}}Tax</a>
+      <a href="#/cash-flow" data-route="tresorerie">{{icon:wallet}}Cash flow</a>
+      <a href="#/deadlines" data-route="echeances">{{icon:calendar-days}}Deadlines</a>
+      <a href="#/settings" data-route="reglages">{{icon:settings}}Settings</a>
+    </nav>
+    <div class="espace-main">
+      <div id="espace-view" class="espace-view"><p class="muted">Loading your workspace…</p></div>
+    </div>
+  </div>
+  <p class="espace-status" id="espace-status" role="status" aria-live="polite"></p>
+  <noscript><p class="notice warn">The Workspace needs JavaScript to work.</p></noscript>
+</section>
+<script type="application/json" id="calendar-data">{{calendar:uk}}</script>

@@ -244,18 +244,22 @@ test("trésorerie : paiements de l'impôt dans la prévision, montants inconnus 
   const docs = [invoice("c1", "2026-05-01", 40000, [["2026-06-01", 40000]])];
   const profile = { taxYears: { 2026: { expectedProfit: 40000, priorBill: 3000 } }, poaPaid: { "2026-1": 500 } };
   const f = E.forecast({ documents: docs, expenses: [], profile, rules: R, today: "2026-11-20", months: 6, charges: [] });
-  const tax = f.items.filter((x) => x.kind === "tax");
+  const tax = f.items.filter((x) => x.kind === "poa" || x.kind === "balancing");
   assert.deepEqual(tax.map((x) => [x.date, x.amount]), [["2027-01-31", -1000]], "1 500 − 500 déjà versés ; juillet hors horizon");
   assert.equal(tax[0].label, "[eng.uk.forecast.poa]");
   assert.deepEqual(f.missingTaxYears, [], "les paiements de 2027-28 tombent à partir du 31 janvier 2028 : déjà dans l'échéancier");
   const f12 = E.forecast({ documents: docs, expenses: [], profile: { taxYears: { 2026: { expectedProfit: 40000 } } }, rules: R, today: "2026-11-20", months: 12, charges: [] });
-  assert.equal(f12.items.filter((x) => x.kind === "tax").length, 0);
+  assert.equal(f12.items.filter((x) => x.kind === "poa" || x.kind === "balancing").length, 0);
   assert.equal(f12.unknownTax.length, 2, "deux acomptes de montant inconnu dans l'horizon");
   assert.deepEqual(f12.missingTaxYears, [], "horizon jusqu'au 31 octobre 2027");
   const later = E.forecast({ documents: docs, expenses: [], profile, rules: R, today: "2028-03-01", months: 12, charges: [] });
   assert.deepEqual(later.missingTaxYears.map((t) => t.year), [2027], "solde de 2027-28 le 31 janvier 2029 : barème absent");
-  assert.deepEqual(later.items.filter((x) => x.kind === "tax").map((x) => x.date), ["2028-07-31"], "second acompte de 2027-28, calculé sur 2026-27");
-  assert.match(E.forecastCSV(f).split("\r\n").find((l) => l.startsWith("31/01/2027")), /\[eng\.uk\.flow\.tax\]/, "nature lisible dans l'export");
+  assert.deepEqual(later.items.filter((x) => x.kind === "poa").map((x) => x.date), ["2028-07-31"], "second acompte de 2027-28, calculé sur 2026-27");
+  const both = E.forecast({ documents: docs, expenses: [], profile: { taxYears: { 2026: { expectedProfit: 40000, priorBill: 3000, priorBalancing: 800 } } },
+                            rules: R, today: "2026-11-20", months: 3, charges: [] });
+  assert.deepEqual(both.items.filter((x) => x.date === "2027-01-31").map((x) => [x.kind, x.amount]), [["balancing", -800], ["poa", -1500]],
+                   "31 janvier : solde de 2025-26 et premier acompte de 2026-27, chacun de sa nature");
+  assert.match(E.forecastCSV(f).split("\r\n").find((l) => l.startsWith("31/01/2027")), /\[eng\.uk\.flow\.poa\]/, "nature lisible dans l'export");
   const o = E.owed({ documents: docs, expenses: [], profile, rules: R, today: "2026-11-20" });
   const st = TAX.soleTrader({ profit: 40000, salary: 0, region: "ruk" }, R);
   assert.equal(o.tax.accrued, round2(st.total * 1), "bénéfice à date = bénéfice prévu");
