@@ -385,6 +385,13 @@ janvier ; montant du calculateur moins l'acompte versé ; « pas requis » sous 
 signalées) et note sur l'estimation. Parcours américain : 40 points, dont l'acompte affiché égal au calcul du
 calculateur public pour un bénéfice prévu de 120 000 $ (U6 à l'écran ; erreur réintroduite détectée). Les 1099 attendus
 viendront avec leur écran (3d-4).
+Sous-lot 3d-4a fait le 20/11/2026 : écrans américains des recettes (paiements à leur date de réception, remboursements
+en ligne 2 avec la mention « notre lecture » pour les services, totaux par trimestre et par année, règle sourcée de la
+comptabilité de caisse, pièces à garder et durée de conservation sourcées, export, impression) et des dépenses (ligne
+de l'annexe C exigée avec l'aide officielle de la ligne, totaux par ligne, repas à 50 %, export, impression). Exports
+au séparateur du pays (`country.csvSep` : « , » aux États-Unis, « ; » en France, inchangé), en-têtes recomposés
+(`csvHeader`) ; tableau par ligne lisible sur téléphone (montants avec leur libellé). Parcours américain : 55 points ;
+erreur réintroduite détectée.
 
 ### Avancement
 

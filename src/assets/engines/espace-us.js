@@ -44,7 +44,8 @@
       fmt: { day: function (d) { var p = d.split("-"); return p[1] + "/" + p[2] + "/" + p[0]; }, dec: function (n) { return String(n); },
              amount: function (n) { return n.toFixed(2); },
              money: function (n) { return n.toLocaleString("en-US", { style: "currency", currency: "USD" }); } },
-      locale: "en-US"
+      locale: "en-US",
+      csvSep: ","   // exports lisibles par les tableurs américains
     };
     var C = CORE(INV, L, country);
     var METHODS = C.labels("eng.us.method.", METHOD_KEYS);
@@ -135,11 +136,33 @@
     function scheduleCCSV(s, rules) {
       var q = function (t) { return '"' + String(t == null ? "" : t).replace(/"/g, '""') + '"'; };
       var order = ["1", "2", "3", "4", "5", "6", "7"].concat(Object.keys(rules.us_schedule_c_expense_lines), ["28", "29", "30", "31"]);
-      var lines = [L("eng.us.csv.scheduleC")];
+      var lines = [C.csvHeader("eng.us.csv.scheduleC")];
       order.forEach(function (k) {
         var label = rules.us_schedule_c_expense_lines[k] || L("eng.us.line." + k);
-        lines.push([k, q(label), C.amountText(s.values[k] || 0)].join(";"));
+        lines.push([q(k), q(label), C.amountText(s.values[k] || 0)].join(C.csvSep()));
       });
+      return lines.join("\r\n");
+    }
+    var quote = function (t) { return '"' + String(t == null ? "" : t).replace(/"/g, '""') + '"'; };
+    /** Export du livre des recettes (lignes de income) : date de réception, client, document, moyen, nature, montant. */
+    function incomeCSV(inc) {
+      var lines = [C.csvHeader("eng.us.csv.income")];
+      inc.rows.forEach(function (r) {
+        lines.push([C.dayText(r.date), quote(r.client), quote(r.number), quote(METHODS[r.method] || r.method),
+                    quote(r.kind === "refund" ? L("eng.us.csv.refund") : L("eng.us.csv.receipt")),
+                    C.amountText(r.kind === "refund" ? -r.amount : r.amount)].join(C.csvSep()));
+      });
+      return lines.join("\r\n");
+    }
+    /** Export des dépenses d'une année (payées dans l'année), dans l'ordre des dates, avec leur ligne de l'annexe C. */
+    function expensesCSV(expenses, year, rules) {
+      var lines = [C.csvHeader("eng.us.csv.expenses")];
+      (expenses || []).filter(function (e) { return e && !e.deletedAt && inYear(e.date, year); })
+        .sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : 0; })
+        .forEach(function (e) {
+          lines.push([C.dayText(e.date), quote(e.supplier), quote(e.label), quote(METHODS[e.method] || e.method), quote(e.ref),
+                      quote(e.line ? e.line + " " + (rules.us_schedule_c_expense_lines[e.line] || "") : ""), C.amountText(Number(e.amount) || 0)].join(C.csvSep()));
+        });
       return lines.join("\r\n");
     }
 
@@ -336,7 +359,7 @@
     return Object.assign({}, C, {
       text: L, METHODS: METHODS, DEFAULT_PREFIXES: country.prefixes, income: income, incomeQuarters: incomeQuarters,
       checkExpense: checkExpense, expenseLines: expenseLines, scheduleC: scheduleC, scheduleCCSV: scheduleCCSV,
-      estimatedTax: estimatedTax, expected1099: expected1099, ledger: ledger, taxInput: taxInput, paidFor: paidFor,
+      estimatedTax: estimatedTax, expected1099: expected1099, ledger: ledger, incomeCSV: incomeCSV, expensesCSV: expensesCSV, taxInput: taxInput, paidFor: paidFor,
       forecast: forecast, owed: owed, breakEven: breakEven, mixedActivities: mixedActivities, email: email
     });
   }

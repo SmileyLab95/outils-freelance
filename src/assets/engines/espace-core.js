@@ -26,6 +26,10 @@
   var round2 = function (n) { return Math.round(n * 100) / 100; };
   /** Ordre alphabétique de la langue du pays (country.locale : « fr » en France, « en-US » aux États-Unis). */
   var compare = function (a, b) { return String(a || "").localeCompare(String(b || ""), country.locale); };
+  /** Séparateur des exports CSV du pays (« ; » en France, convention des tableurs français ; « , » aux États-Unis). */
+  var csvSep = function () { return country.csvSep || ";"; };
+  /** En-tête d'un export : le texte (colonnes séparées par « ; ») recomposé avec le séparateur du pays. */
+  var csvHeader = function (key) { return L(key).split(";").join(csvSep()); };
 
   function lastDay(year, month) { return new Date(Date.UTC(year, month, 0)).getUTCDate(); }
   function iso(y, m, d) { return y + "-" + String(m).padStart(2, "0") + "-" + String(d).padStart(2, "0"); }
@@ -420,11 +424,11 @@
 
   function timeCSV(rows, clientName) {
     var q = function (v) { return '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"'; };
-    var lines = [L("eng.csv.time")];
+    var lines = [csvHeader("eng.csv.time")];
     rows.forEach(function (r) {
       lines.push([dayText(r.date), q(clientName(r.clientId)), q(r.task), dec(r.quantity), r.unit === "day" ? L("eng.csv.day") : L("eng.csv.hour"),
                   r.rate === null ? "" : amountText(r.rate), r.amount === null ? "" : amountText(r.amount),
-                  r.billable ? L("eng.csv.yes") : L("eng.csv.no")].join(";"));
+                  r.billable ? L("eng.csv.yes") : L("eng.csv.no")].join(csvSep()));
     });
     return lines.join("\r\n");
   }
@@ -579,12 +583,12 @@
 
   function prospectsCSV(prospects, documents) {
     var q = function (v) { return '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"'; };
-    var lines = [L("eng.csv.prospects")];
+    var lines = [csvHeader("eng.csv.prospects")];
     (prospects || []).forEach(function (p) {
       var v = prospectValue(p, documents);
       lines.push([q(p.name), q(p.contact), p.pro === false ? L("eng.prospect.person") : L("eng.prospect.pro"), q(p.email), q(p.phone), q(p.source),
                   STAGE_LABELS[prospectStage(p, documents)], v === null ? "" : amountText(v), dayText(p.nextDate), q(p.nextAction),
-                  dayText(lastContactFrom(p)), dayText(String(p.createdAt || "").slice(0, 10))].join(";"));
+                  dayText(lastContactFrom(p)), dayText(String(p.createdAt || "").slice(0, 10))].join(csvSep()));
     });
     return lines.join("\r\n");
   }
@@ -751,11 +755,11 @@
   /** Export de la prévision : date, nature, libellé, montant et solde après le mouvement (si un solde est saisi). */
   function forecastCSV(f) {
     var q = function (v) { return '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"'; };
-    var bal = f.start, lines = [L("eng.csv.forecast")];
-    if (bal !== null) lines.push([dayText(f.today), q(L("eng.csv.forecastStart")), q(""), "", amountText(bal)].join(";"));
+    var bal = f.start, lines = [csvHeader("eng.csv.forecast")];
+    if (bal !== null) lines.push([dayText(f.today), q(L("eng.csv.forecastStart")), q(""), "", amountText(bal)].join(csvSep()));
     f.items.forEach(function (x) {
       if (bal !== null) bal = round2(bal + x.amount);
-      lines.push([dayText(x.date), q(FLOW_KINDS[x.kind] || x.kind), q(x.label), amountText(x.amount), bal === null ? "" : amountText(bal)].join(";"));
+      lines.push([dayText(x.date), q(FLOW_KINDS[x.kind] || x.kind), q(x.label), amountText(x.amount), bal === null ? "" : amountText(bal)].join(csvSep()));
     });
     return lines.join("\r\n");
   }
@@ -853,7 +857,7 @@
              negative: negative, calendarShort: lastEvent < until };
   }
 
-  return { compare: compare, EVERY: EVERY, period: period, cashed: cashed, cashHistory: cashHistory, forecastWith: forecastWith, CHARGE_LABELS: CHARGE_LABELS, isIn: isIn, addMonths: addMonths, monthStart: monthStart, monthEnd: monthEnd, chargeDates: chargeDates, chargeErrors: chargeErrors, expectedReceipts: expectedReceipts, balanceCurve: balanceCurve, safeAmount: safeAmount, daysBetween: daysBetween, avg: avg, paymentStats: paymentStats, AGING: AGING, aging: aging, monthlyCharges: monthlyCharges, runway: runway, quotesToInvoice: quotesToInvoice, FLOW_KINDS: FLOW_KINDS, forecastCSV: forecastCSV,
+  return { compare: compare, csvSep: csvSep, csvHeader: csvHeader, EVERY: EVERY, period: period, cashed: cashed, cashHistory: cashHistory, forecastWith: forecastWith, CHARGE_LABELS: CHARGE_LABELS, isIn: isIn, addMonths: addMonths, monthStart: monthStart, monthEnd: monthEnd, chargeDates: chargeDates, chargeErrors: chargeErrors, expectedReceipts: expectedReceipts, balanceCurve: balanceCurve, safeAmount: safeAmount, daysBetween: daysBetween, avg: avg, paymentStats: paymentStats, AGING: AGING, aging: aging, monthlyCharges: monthlyCharges, runway: runway, quotesToInvoice: quotesToInvoice, FLOW_KINDS: FLOW_KINDS, forecastCSV: forecastCSV,
            series: series, seriesPrefix: seriesPrefix, nextNumber: nextNumber, continuation: continuation, checkIssue: checkIssue, issue: issue, state: state, checkPayment: checkPayment, clientTotals: clientTotals, COPY_FIELDS: COPY_FIELDS, copyFrom: copyFrom, invoiceFromQuote: invoiceFromQuote, creditFromInvoice: creditFromInvoice, duplicate: duplicate,
            nameKey: nameKey, listText: listText, labels: labels, round2: round2, lastDay: lastDay, iso: iso, total: total, payments: payments, paidAmount: paidAmount,
            credited: credited, balance: balance, dueDate: dueDate, order: order, TIME_MAX: TIME_MAX, NBSP: NBSP, dec: dec, dayText: dayText, amountText: amountText,

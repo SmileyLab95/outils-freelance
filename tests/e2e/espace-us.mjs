@@ -201,6 +201,47 @@ try {
   await accessible(page, "tableau de bord");
   await widths(page, "us-tableau-de-bord");
 
+  // ----- Recettes en caisse (U3) et dépenses par ligne de l'annexe C (U4) ------------------------------------------
+  await go("#/recettes");
+  const income = await text(page, "#espace-view");
+  check((await text(page, "#espace-view h2")) === "Income 2026" && income.includes("Gross receipts$1,000.00") && income.includes("Q4 so far$1,000.00") &&
+    income.includes("Total Q4 2026$1,000.00") && income.includes("Under the cash method, you generally report income in the tax year you receive it"),
+    "recettes : paiement à sa date de réception, totaux du trimestre et de l'année, comptabilité de caisse (règle sourcée)");
+  const [incomeCsv] = await Promise.all([page.waitForEvent("download"), page.click("#income-csv")]);
+  const incomeLines = readFileSync(await incomeCsv.path(), "utf8").replace(/^\ufeff/, "").split("\r\n");
+  check(incomeCsv.suggestedFilename() === "income-2026.csv" && incomeLines[0] === "Date received,Client,Document,Payment method,Type,Amount" &&
+    incomeLines[1] === '10/18/2026,"Northwind Studio","2026-001","ACH transfer","Payment",1000.00', "recettes : export CSV pour tableur américain");
+  await english(page, "recettes");
+  await accessible(page, "recettes");
+  await widths(page, "us-recettes");
+
+  await go("#/depenses/nouvelle");
+  await page.fill("#ep-amount", "120.40");
+  await page.fill("#ep-supplier", "Office Depot");
+  await page.click("#expense-form button[type=submit]");
+  await page.waitForTimeout(200);
+  check((await text(page, "#expense-error")).includes("Choose the Schedule C line for this expense.") &&
+    (await page.getAttribute("#ep-line", "aria-invalid")) === "true" && (await page.evaluate(() => document.activeElement.id)) === "ep-line",
+    "dépenses : ligne de l'annexe C exigée");
+  await page.selectOption("#ep-line", "18");
+  check((await text(page, "#line-help")) === "Office supplies and postage.", "dépenses : aide de la ligne (instructions de l'IRS, règle sourcée)");
+  await page.click("#expense-form button[type=submit]");
+  await page.waitForFunction(() => location.hash.startsWith("#/depenses?annee=2026"));
+  await go("#/depenses/nouvelle");
+  await page.fill("#ep-amount", "80");
+  await page.fill("#ep-supplier", "Diner");
+  await page.selectOption("#ep-line", "24b");
+  await page.selectOption("#ep-method", "cash");
+  await page.click("#expense-form button[type=submit]");
+  await page.waitForFunction(() => location.hash.startsWith("#/depenses?annee=2026"));
+  await page.waitForTimeout(250);
+  const spending = await text(page, "#espace-view");
+  check(spending.includes("Spent$200.402 expenses") && spending.includes("Deductible expenses$160.40") && spending.includes("24b Deductible meals$80.00$40.00"),
+    "dépenses : totaux par ligne, repas déductibles à 50 % (U4)");
+  await english(page, "dépenses");
+  await accessible(page, "dépenses");
+  await widths(page, "us-depenses");
+
   // ----- Trésorerie et échéances : écrans communs avec le moteur américain ----------------------------------------
   await go("#/tresorerie");
   check((await text(page, "#espace-view h2")).startsWith("Cash flow"), "trésorerie : écran affiché");

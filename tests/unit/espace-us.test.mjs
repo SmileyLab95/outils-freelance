@@ -89,10 +89,11 @@ test("U5 : 7 = 5 + 6, 29 = 7 − 28, 31 = 29 − 30 ; export identique à l'écr
   assert.equal(v[31], round2(v[29] - v[30]));
   const csv = E.scheduleCCSV(s, R).split("\r\n");
   assert.equal(csv[0], "[eng.us.csv.scheduleC]");
-  const rows = Object.fromEntries(csv.slice(1).map((l) => { const p = l.split(";"); return [p[0], Number(p[p.length - 1])]; }));
+  // Séparateur des tableurs américains (virgule), champs de texte entre guillemets (documentation/60, § 3.3).
+  const rows = Object.fromEntries(csv.slice(1).map((l) => { const p = l.split(","); return [p[0].replace(/"/g, ""), Number(p[p.length - 1])]; }));
   for (const [k, val] of Object.entries(v)) assert.equal(rows[k], val, `ligne ${k} : export = écran`);
-  assert.match(csv.find((l) => l.startsWith("18;")), /^18;"Office expense";1234\.56$/);
-  assert.match(csv.find((l) => l.startsWith("31;")), /^31;"\[eng\.us\.line\.31\]";/);
+  assert.match(csv.find((l) => l.startsWith('"18",')), /^"18","Office expense",1234\.56$/);
+  assert.match(csv.find((l) => l.startsWith('"31",')), /^"31","\[eng\.us\.line\.31\]",/);
 });
 
 test("U6 : l'acompte est celui du calculateur public pour les mêmes données", () => {
@@ -200,4 +201,23 @@ test("courriels préremplis : envoi, relance, devis et avoir, sans mention fran�
   const q = E2.email("send", quote, [quote], {}, "2026-03-02", fmt);
   assert.ok(q.subject === "Estimate E-2026-004" && q.body.includes("valid until 2026-03-16. A deposit of 25% ($500.00) is due on acceptance."));
   for (const m of [send, rem, q]) assert.ok(!/[àâçéèêëîïôûùœ]|\[eng\./.test(m.subject + m.body), "aucun texte français ni clé manquante");
+});
+
+test("exports CSV américains : virgules, champs de texte entre guillemets (documentation/60, § 3.3)", () => {
+  const TX3 = Object.assign({}, require("../../src/assets/tools/espace-texts-en.js").OF_ESPACE_TEXTS.en,
+                            require("../../src/assets/tools/espace-us-texts-en.js").OF_ESPACE_TEXTS.en);
+  const E3 = US.create(TX3);
+  const paid = invoice("c1", "2026-03-01", 1500, [["2026-03-10", 1500, "check"]], { snapshot: { client: { name: "Smith, Jones & Co" } } });
+  const inc = E3.incomeCSV(E3.income([paid], "2026-01-01", "2026-12-31")).split("\r\n");
+  assert.equal(inc[0], "Date received,Client,Document,Payment method,Type,Amount");
+  assert.equal(inc[1], '03/10/2026,"Smith, Jones & Co","' + paid.number + '","Check","Payment",1500.00');
+  const ex = E3.expensesCSV([{ id: "e", date: "2026-02-03", supplier: "Staples, Inc.", label: "Paper", amount: 42.5, method: "card", ref: "R-1", line: "18" },
+                             { id: "x", date: "2025-12-31", supplier: "Old", amount: 9, method: "card", line: "18" }], "2026", R).split("\r\n");
+  assert.equal(ex.length, 2, "dépenses de l'année seulement");
+  assert.equal(ex[0], "Date paid,Vendor,Description,Payment method,Reference,Schedule C line,Amount");
+  assert.equal(ex[1], '02/03/2026,"Staples, Inc.","Paper","Credit or debit card","R-1","18 Office expense",42.50');
+  const time = E3.timeCSV([{ date: "2026-02-03", clientId: "c1", task: "Design, phase 1", quantity: 1.5, unit: "hour", rate: 100, amount: 150, billable: true }],
+                          () => "Smith, Jones & Co").split("\r\n");
+  assert.equal(time[0], "Date,Client,Task,Time,Unit,Rate,Amount,Billable");
+  assert.equal(time[1], '02/03/2026,"Smith, Jones & Co","Design, phase 1",1.5,hour,100.00,150.00,yes');
 });

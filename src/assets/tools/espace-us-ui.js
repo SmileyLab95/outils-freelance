@@ -13,6 +13,8 @@
   var us = (OFE.espaceUI = OFE.espaceUI || {}).us = function (ctx) {
     var L = ctx.L, field = ctx.field, OF = ctx.OF, TERMS = ctx.TERMS, profile = ctx.profile, E = ctx.E, R = ctx.R, D = ctx.data;
     var kpi = ctx.kpi, money = ctx.money, day = ctx.day, TODAY = ctx.TODAY, YEAR = ctx.YEAR;
+    var $ = ctx.$, esc = ctx.esc, view = ctx.view, options = ctx.options, countText = ctx.countText, showError = ctx.showError;
+    var persist = ctx.persist, now = ctx.now, S = ctx.S, DEC = ctx.DEC;
     var STATUSES = ["single", "married_filing_jointly", "married_filing_separately", "head_of_household"];
     var str = function (v) { return String(v == null ? "" : v).trim(); };
 
@@ -91,6 +93,176 @@
     }
     function issueOptions() { return {}; }
 
+    // ----- Recettes en caisse et dépenses par ligne de l'annexe C (documentation/60, § 2.1 et § 2.2 ; U3, U4) ---------
+
+    var LINES = R.us_schedule_c_expense_lines, HELP = R.us_schedule_c_line_help || {};
+    /** Années proposées : l'année en cours et celles des dates données, la plus récente d'abord. */
+    function yearsOf(dates) {
+      var y = {};
+      y[YEAR] = true;
+      dates.forEach(function (d) { if (d) y[String(d).slice(0, 4)] = true; });
+      return Object.keys(y).sort().reverse();
+    }
+    function yearTabs(base, years, year) {
+      return '<div class="espace-filters espace-noprint" role="group" aria-label="' + L("us.year") + '">' + years.map(function (y) {
+        return '<a class="tab" href="' + base + "?annee=" + y + '"' + (y === year ? ' aria-current="true"' : "") + ">" + y + "</a>";
+      }).join("") + "</div>";
+    }
+    function printButton(id, disabled) {
+      return '<button type="button" class="btn btn-ghost btn-sm" id="' + id + '"' + (disabled ? " disabled" : "") + ">" + L("common.print") + "</button>";
+    }
+    function bindPrint(id) {
+      $(id).addEventListener("click", function () {
+        document.body.classList.add("print-ledger");
+        window.print();
+        document.body.classList.remove("print-ledger");
+      });
+    }
+    /** Liste à puces d'une règle (pièces justificatives de us_supporting_documents). */
+    var listOf = function (items) { return (items || []).join(", "); };
+
+    /**
+     * Livre des recettes en comptabilité de caisse : chaque paiement reçu à sa date de réception (ligne 1), chaque
+     * remboursement fait sur un avoir à sa date (ligne 2) ; totaux par trimestre et par année ; export et impression.
+     */
+    function viewIncome(r) {
+      var dates = [];
+      D().documents.forEach(function (d) { (d.payments || []).forEach(function (x) { dates.push(x.date); }); });
+      var years = yearsOf(dates), year = r.params.annee && years.indexOf(r.params.annee) > -1 ? r.params.annee : YEAR;
+      var inc = E.income(D().documents, year + "-01-01", year + "-12-31"), quarters = E.incomeQuarters(D().documents, year);
+      var receipts = inc.rows.filter(function (x) { return x.kind === "receipt"; }).length;
+      var row = function (x) {
+        var refund = x.kind === "refund";
+        return '<tr><td class="c-date">' + day(x.date) + '</td><td class="c-client">' + esc(x.client) + '</td><td class="c-ref"><a href="#/documents/' + esc(x.docId) + '">' +
+          esc(x.number) + "</a>" + (refund ? " " + L("us.inc.refundMark") : "") + '</td><td class="c-method">' + esc(E.METHODS[x.method] || x.method) +
+          '</td><td class="num">' + esc(money(refund ? -x.amount : x.amount)) + "</td></tr>";
+      };
+      view.innerHTML = '<div class="espace-head"><h2>' + L("us.inc.title", { year: esc(year) }) + '</h2><div class="espace-quick espace-noprint">' +
+        '<button type="button" class="btn btn-ghost btn-sm" id="income-csv"' + (inc.rows.length ? "" : " disabled") + ">" + L("common.exportCsv") + "</button>" +
+        printButton("income-print", !inc.rows.length) + "</div></div>" +
+        '<div class="kpis kpis-4">' +
+        kpi(L("us.inc.gross"), money(inc.gross), countText(receipts, L("count.receipt.one"), L("count.receipt.many")) + " · " + L("us.inc.line", { n: 1 })) +
+        kpi(L("us.inc.returns"), money(inc.returns), L("us.inc.line", { n: 2 })) +
+        kpi(L("us.inc.net"), money(inc.net), L("us.inc.line", { n: 3 })) +
+        kpi(year === YEAR ? L("us.inc.thisQuarter", { n: Math.floor((+TODAY.slice(5, 7) - 1) / 3) + 1 }) : L("us.inc.lastQuarter"),
+          money(quarters[year === YEAR ? Math.floor((+TODAY.slice(5, 7) - 1) / 3) : 3].net), L("us.inc.quarterSub")) + "</div>" +
+        '<div class="card espace-card">' + yearTabs("#/recettes", years, year) +
+        (inc.rows.length ? '<table class="ledger"><thead><tr><th>' + L("us.inc.col.date") + "</th><th>" + L("ledger.col.client") + "</th><th>" + L("us.inc.col.doc") +
+          "</th><th>" + L("pay.method") + '</th><th class="num">' + L("ledger.col.amount") + "</th></tr></thead><tbody>" +
+          quarters.map(function (q) {
+            var list = inc.rows.filter(function (x) { return x.date >= q.from && x.date <= q.to; });
+            return list.length ? list.map(row).join("") + '<tr class="ledger-subtotal"><td colspan="4">' + L("us.inc.quarterTotal", { n: q.quarter, year: esc(year) }) +
+              '</td><td class="num">' + esc(money(q.net)) + "</td></tr>" : "";
+          }).join("") + '</tbody><tfoot><tr><td colspan="4">' + L("us.inc.yearTotal", { year: esc(year) }) + '</td><td class="num">' + esc(money(inc.net)) + "</td></tr></tfoot></table>"
+          : '<p class="muted">' + L("us.inc.empty", { year: esc(year) }) + "</p>") +
+        '<p class="small muted">' + esc(R.us_cash_method) + "</p>" +
+        '<p class="small muted">' + L("us.inc.notesHtml") + "</p>" +
+        '<p class="small muted">' + L("us.inc.keep", { list: esc(listOf((R.us_supporting_documents || {}).gross_receipts)), years: R.us_records_retention.general_years }) + "</p></div>";
+      if (!inc.rows.length) return;
+      $("income-csv").addEventListener("click", function () {
+        OF.download("\ufeff" + E.incomeCSV(inc), L("us.inc.file", { year: year }), "text/csv;charset=utf-8");
+      });
+      bindPrint("income-print");
+    }
+
+    function expense(id) { return D().expenses.filter(function (e) { return e.id === id; })[0] || null; }
+    /** Libellé d'une ligne de l'annexe C : « 18 Office expense ». */
+    var lineLabel = function (k) { return LINES[k] ? k + " " + LINES[k] : ""; };
+
+    /** Dépenses de l'année (payées dans l'année), avec leur ligne de l'annexe C ; totaux par ligne (repas : 50 %). */
+    function viewExpenses(r) {
+      var years = yearsOf(D().expenses.map(function (e) { return e.date; }));
+      var year = r.params.annee && years.indexOf(r.params.annee) > -1 ? r.params.annee : YEAR;
+      var list = D().expenses.filter(function (e) { return e && !e.deletedAt && String(e.date).slice(0, 4) === year; })
+        .sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : 0; });
+      var lines = E.expenseLines(D().expenses, year, R), used = lines.rows.filter(function (x) { return x.spent > 0; });
+      var spent = Math.round(list.reduce(function (s, e) { return s + (Number(e.amount) || 0); }, 0) * 100) / 100;
+      view.innerHTML = '<div class="espace-head"><h2>' + L("us.exp.title", { year: esc(year) }) + '</h2><div class="espace-quick espace-noprint">' +
+        '<a class="btn btn-primary btn-sm" href="#/depenses/nouvelle">' + L("us.exp.add") + "</a>" +
+        '<button type="button" class="btn btn-ghost btn-sm" id="expenses-csv"' + (list.length ? "" : " disabled") + ">" + L("common.exportCsv") + "</button>" +
+        printButton("expenses-print", !list.length) + "</div></div>" +
+        '<div class="kpis kpis-4">' +
+        kpi(L("us.exp.spent"), money(spent), countText(list.length, L("us.count.expense.one"), L("us.count.expense.many"))) +
+        kpi(L("us.exp.deductible"), money(lines.total), L("us.inc.line", { n: 28 })) +
+        kpi(L("us.exp.lines"), String(used.length), L("us.exp.linesSub")) +
+        kpi(L("us.exp.top"), used.length ? money(used.slice().sort(function (a, b) { return b.deductible - a.deductible; })[0].deductible) : "–",
+          used.length ? lineLabel(used.slice().sort(function (a, b) { return b.deductible - a.deductible; })[0].line) : L("us.exp.none")) + "</div>" +
+        '<div class="card espace-card">' + yearTabs("#/depenses", years, year) +
+        (list.length ? '<table class="ledger"><thead><tr><th>' + L("us.exp.col.date") + "</th><th>" + L("us.exp.col.vendor") + "</th><th>" + L("us.exp.col.line") +
+          "</th><th>" + L("pay.method") + '</th><th class="num">' + L("ledger.col.amount") + "</th></tr></thead><tbody>" +
+          list.map(function (e) {
+            return '<tr><td class="c-date">' + day(e.date) + '</td><td class="c-client"><a href="#/depenses/' + esc(e.id) + '">' + esc(e.supplier) + "</a>" +
+              (e.label ? '<span class="small muted"> · ' + esc(e.label) + "</span>" : "") + "</td><td>" + esc(lineLabel(e.line)) + '</td><td class="c-method">' +
+              esc(E.METHODS[e.method] || e.method) + '</td><td class="num">' + esc(money(Number(e.amount) || 0)) + "</td></tr>";
+          }).join("") + '</tbody><tfoot><tr><td colspan="4">' + L("us.exp.total", { year: esc(year) }) + '</td><td class="num">' + esc(money(spent)) + "</td></tr></tfoot></table>"
+          : '<p class="muted">' + L("us.exp.empty", { year: esc(year) }) + "</p>") + "</div>" +
+        (used.length ? '<section class="card espace-card"><h3>' + L("us.exp.byLine") + '</h3><table class="ledger lines-table"><thead><tr><th>' + L("us.exp.col.line") +
+          '</th><th class="num">' + L("us.exp.col.spent") + '</th><th class="num">' + L("us.exp.col.deductible") + "</th></tr></thead><tbody>" +
+          used.map(function (x) {
+            return "<tr><td>" + esc(lineLabel(x.line)) + '</td><td class="num" data-label="' + esc(L("us.exp.col.spent")) + '">' + esc(money(x.spent)) +
+              '</td><td class="num" data-label="' + esc(L("us.exp.col.deductible")) + '">' + esc(money(x.deductible)) + "</td></tr>";
+          }).join("") + '</tbody><tfoot><tr><td>' + L("us.inc.line", { n: 28 }) + '</td><td></td><td class="num" data-label="' + esc(L("us.exp.col.deductible")) + '">' +
+          esc(money(lines.total)) + "</td></tr></tfoot></table>" +
+          (used.some(function (x) { return x.line === "24b"; }) ? '<p class="small muted">' + esc(HELP["24b"] || "") + "</p>" : "") + "</section>" : "") +
+        '<p class="small muted">' + esc(R.us_cash_method) + "</p>" +
+        '<p class="small muted">' + L("us.exp.keep", { list: esc(listOf((R.us_supporting_documents || {}).expenses)), years: R.us_records_retention.general_years }) + "</p>";
+      if (!list.length) return;
+      $("expenses-csv").addEventListener("click", function () {
+        OF.download("\ufeff" + E.expensesCSV(D().expenses, year, R), L("us.exp.file", { year: year }), "text/csv;charset=utf-8");
+      });
+      bindPrint("expenses-print");
+    }
+
+    /** Fiche d'une dépense : date, montant, fournisseur, description, moyen de paiement, référence, ligne (avec son aide). */
+    function viewExpenseForm(r) {
+      var isNew = r.id === "nouvelle";
+      var x = isNew ? { date: TODAY, method: "card", line: "" } : expense(r.id);
+      if (!x) { view.innerHTML = '<div class="espace-head"><h2>' + L("us.exp.notFound") + '</h2></div><p><a href="#/depenses">' + L("us.exp.back") + "</a></p>"; return; }
+      var methods = Object.keys(E.METHODS).map(function (k) { return [k, E.METHODS[k]]; });
+      var lineOptions = [["", L("us.exp.chooseLine")]].concat(Object.keys(LINES).map(function (k) { return [k, lineLabel(k)]; }));
+      view.innerHTML = '<div class="espace-head"><h2>' + (isNew ? L("us.exp.new") : esc(x.supplier)) + "</h2></div>" +
+        '<form class="card espace-card" id="expense-form" novalidate><div class="fields">' +
+        field("date", L("us.exp.col.date"), x.date, { type: "date", half: true, required: true }) +
+        field("amount", L("ledger.col.amount"), x.amount == null ? "" : Number(x.amount).toFixed(2).replace(".", DEC), { half: true, required: true, inputmode: "decimal",
+          placeholder: L("us.exp.amountPlaceholder") }) +
+        field("supplier", L("us.exp.col.vendor"), x.supplier, { required: true, placeholder: L("us.exp.vendorPlaceholder") }) +
+        field("label", L("us.exp.description"), x.label, { placeholder: L("us.exp.descriptionPlaceholder") }) +
+        field("line", L("us.exp.col.line"), x.line || "", { options: lineOptions, hint: '<span id="line-help">' + esc(HELP[x.line] || L("us.exp.lineHint")) + "</span>" }) +
+        field("method", L("pay.method"), x.method, { options: methods, half: true }) +
+        field("ref", L("us.exp.ref"), x.ref, { half: true, placeholder: L("us.exp.refPlaceholder") }) +
+        '</div><p class="form-error" id="expense-error" role="alert" hidden></p><div class="espace-actions">' +
+        '<button type="submit" class="btn btn-primary">' + L("common.save") + '</button><a class="btn btn-ghost" href="#/depenses?annee=' + esc(String(x.date).slice(0, 4)) + '">' +
+        L("common.cancel") + "</a>" + (isNew ? "" : '<button type="button" class="btn btn-ghost" id="expense-delete">' + L("line.remove") + "</button>") + "</div></form>";
+      var form = $("expense-form");
+      form.elements.line.addEventListener("change", function () { $("line-help").textContent = HELP[this.value] || L("us.exp.lineHint"); });
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var f = form.elements;
+        var next = { date: f.date.value, supplier: f.supplier.value.trim(), label: f.label.value.trim(), method: f.method.value, ref: f.ref.value.trim(),
+                     amount: OF.num(f.amount.value), line: f.line.value };
+        var errors = E.checkExpense(next, R);
+        f.supplier.setAttribute("aria-invalid", String(!next.supplier));
+        f.amount.setAttribute("aria-invalid", String(!(next.amount > 0)));
+        f.line.setAttribute("aria-invalid", String(!LINES[next.line]));
+        if (errors.length) {
+          showError("expense-error", errors.join(" "));
+          (!next.supplier ? f.supplier : !(next.amount > 0) ? f.amount : !LINES[next.line] ? f.line : f.date).focus();
+          return;
+        }
+        showError("expense-error", "");
+        next.amount = Math.round(next.amount * 100) / 100;
+        var target = isNew ? { id: S.uid(), createdAt: now() } : x;
+        Object.assign(target, next, { updatedAt: now() });
+        if (isNew) D().expenses.push(target);
+        persist(isNew ? L("us.exp.saved") : L("us.exp.updated")).then(function () { location.hash = "#/depenses?annee=" + next.date.slice(0, 4); });
+      });
+      if (!isNew) $("expense-delete").addEventListener("click", function () {
+        if (!confirm(L("us.exp.confirmDelete"))) return;
+        D().expenses = D().expenses.filter(function (e) { return e.id !== x.id; });
+        persist(L("us.exp.deleted")).then(function () { location.hash = "#/depenses?annee=" + x.date.slice(0, 4); });
+      });
+    }
+
     // ----- Tableau de bord : prochain acompte d'impôt estimé (documentation/60, § 2.4) -------------------------------
 
     /**
@@ -122,7 +294,10 @@
     }
 
     return {
-      routes: {},
+      routes: {
+        recettes: viewIncome,
+        depenses: function (r) { (r.id ? viewExpenseForm : viewExpenses)(r); }
+      },
       dashboard: dashboard,
       profile: { defaults: profileDefaults, fields: profileFields, bind: bindProfile, read: readProfile, missing: profileMissing },
       client: { defaults: clientDefaults, fields: clientFields, bind: bindClient, read: readClient },

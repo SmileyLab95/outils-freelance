@@ -1042,12 +1042,14 @@ b.is-in, b.is-out, .treasury-upcoming .num { font-variant-numeric: tabular-nums;
   .ledger tfoot .num:not(.c-part) { grid-column: 2; grid-row: 1; }
 }
 @media (max-width: 640px) {
-  /* Immobilisations (documentation/57) : plusieurs montants par ligne, chacun avec son libellé. */
+  /* Immobilisations (documentation/57) et totaux par ligne (annexe C, Espace américain) : plusieurs montants par ligne,
+     chacun avec son libellé. */
   .table-scroll .ledger.assets-table, .table-scroll .ledger.asset-plan { min-width: 0; }
-  .ledger.assets-table tr, .ledger.asset-plan tr { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
-  .ledger.assets-table td:first-child, .ledger.asset-plan td:first-child { grid-column: 1 / -1; }
-  .ledger.assets-table td.num, .ledger.asset-plan td.num, .ledger.assets-table tfoot td.num { grid-column: auto; grid-row: auto; text-align: left; font-weight: 650; }
-  .ledger.assets-table td.num::before, .ledger.asset-plan td.num::before, .ledger.assets-table td.c-date::before { content: attr(data-label); display: block; font-size: .72rem; font-weight: 600; color: var(--muted); }
+  .ledger.assets-table tr, .ledger.asset-plan tr, .ledger.lines-table tr { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .ledger.assets-table td:first-child, .ledger.asset-plan td:first-child, .ledger.lines-table td:first-child { grid-column: 1 / -1; }
+  .ledger.assets-table td.num, .ledger.asset-plan td.num, .ledger.assets-table tfoot td.num, .ledger.lines-table td.num { grid-column: auto; grid-row: auto; text-align: left; font-weight: 650; }
+  .ledger.assets-table td.num::before, .ledger.asset-plan td.num::before, .ledger.assets-table td.c-date::before, .ledger.lines-table td.num::before { content: attr(data-label); display: block; font-size: .72rem; font-weight: 600; color: var(--muted); }
+  .ledger.lines-table tfoot td:empty { display: none; }
 }
 .espace-editor .form-card h3 { margin-top: 18px; }
 @media (max-width: 1060px) {

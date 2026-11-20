@@ -52,6 +52,8 @@
   `data/invoice-profiles/us.json`) ; nouveau parcours `tests/e2e/espace-us.mjs`. Pluriels selon la langue.
 - Sous-lot 3d-3b : tableau de bord américain (prochain acompte d'impôt estimé, égal au calculateur public) ; date
   de prestation masquée dans l'éditeur américain.
+- Sous-lot 3d-4a : recettes en caisse et dépenses par ligne de l'annexe C dans l'Espace américain ; exports CSV au
+  séparateur du pays (virgule aux États-Unis ; point-virgule inchangé en France).
 
 ## 2026-11-19 (après-midi, suite) — Moteur de l'Espace des États-Unis (lot 2e)
 

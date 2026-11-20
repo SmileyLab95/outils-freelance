@@ -23,7 +23,8 @@ const MODULES = {
 /** Clés écrites en entier (L("type.facture")), préfixes de clés construites (L("activity." + k), labels("eng.x.", […])). */
 function usage(files) {
   const code = files.map(read).join("\n");
-  const keys = new Set([...code.matchAll(/\bL\("([A-Za-z0-9_.-]+)"[,)]/g)].map((m) => m[1]));
+  // Clés lues par L(…) ou par csvHeader(…) (en-tête d'un export, recomposé avec le séparateur du pays).
+  const keys = new Set([...code.matchAll(/\b(?:L|csvHeader)\("([A-Za-z0-9_.-]+)"[,)]/g)].map((m) => m[1]));
   const prefixes = [...code.matchAll(/\bL\("([A-Za-z0-9_.-]+\.)"\s*\+/g), ...code.matchAll(/\blabels\("([A-Za-z0-9_.-]+\.)",/g)].map((m) => m[1]);
   return { keys, prefixes, uses: (k) => keys.has(k) || prefixes.some((p) => k.startsWith(p)) };
 }
