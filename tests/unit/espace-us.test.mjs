@@ -236,3 +236,25 @@ test("données du calcul des acomptes par année fiscale (profile.taxYears), val
   assert.equal(t25.status, "single");
   assert.equal(E.estimatedTax(t26).projected, 90000);
 });
+
+test("prospects : liens de l'écran = sources des règles us_can_spam et us_telemarketing ; valeurs lues aux textes officiels", async () => {
+  const { readFileSync } = await import("node:fs");
+  const rules = JSON.parse(readFileSync(new URL("../../data/rules/us.json", import.meta.url), "utf8")).values;
+  const sources = new Set(["us_can_spam", "us_telemarketing"].flatMap((k) => [rules[k].source, ...(rules[k].more_sources || []).map((m) => m.source)]));
+  const ui = readFileSync(new URL("../../src/assets/tools/espace-us-ui.js", import.meta.url), "utf8");
+  const block = ui.slice(ui.indexOf("var PROSPECT_SOURCES = {"), ui.indexOf("};", ui.indexOf("var PROSPECT_SOURCES = {")));
+  const links = new Set([...block.matchAll(/"(https:[^"]+)"/g)].map((m) => m[1]));
+  assert.deepEqual([...links].sort(), [...sources].sort(), "une seule source de vérité pour les textes cités");
+  assert.deepEqual(R.us_can_spam, { optout_mechanism_days: 30, optout_honor_business_days: 10 });
+  assert.deepEqual(R.us_telemarketing, { calling_hours: ["08:00", "21:00"], registry_max_age_days: 31, dnc_honor_business_days: 10, dnc_keep_years: 5 });
+});
+
+test("prospects : heures des règles à l'américaine (module d'écrans, us.clock)", async () => {
+  const { readFileSync } = await import("node:fs");
+  const vm = await import("node:vm");
+  const sandbox = { self: { OFE: {} } };
+  vm.createContext(sandbox);
+  vm.runInContext(readFileSync(new URL("../../src/assets/tools/espace-us-ui.js", import.meta.url), "utf8"), sandbox);
+  const clock = sandbox.self.OFE.espaceUI.us.clock;
+  assert.deepEqual(["08:00", "21:00", "12:00", "00:30", "13:15"].map(clock), ["8 a.m.", "9 p.m.", "12 p.m.", "12:30 a.m.", "1:15 p.m."]);
+});

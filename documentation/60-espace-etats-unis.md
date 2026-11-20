@@ -323,9 +323,9 @@ est déjà séparé par section (`of:espace:<section>`) ; le dépôt du généra
 4. **Reprise du générateur.** Le dépôt du générateur public porte sa section (`espace-import` en France, inchangé ;
    `espace-import:<section>` ailleurs) : l'Espace d'une section ignore le dépôt d'une autre. Le générateur américain
    n'a pas encore de bouton « Continue in my Workspace » : en version 1, l'Espace américain n'a pas de reprise.
-5. **Prospects.** Les règles de prospection américaines (CAN-SPAM, TCPA, liste nationale *Do Not Call*) seront lues
-   aux sources officielles avant d'être affichées ; en attendant, l'Espace américain affiche les pistes, relances et la
-   liste d'opposition, sans bloc de règles ni durée de conservation (crochet `prospects` absent).
+5. **Prospects.** Les règles de prospection américaines (CAN-SPAM, TCPA, liste nationale *Do Not Call*) sont lues
+   aux sources officielles avant d'être affichées (sous-lot 3d-5, D95) ; jusque-là, l'Espace américain affichait les
+   pistes, relances et la liste d'opposition, sans bloc de règles ni durée de conservation.
 6. **Courriels préremplis.** Le moteur américain compose ses propres courriels (envoi, relance), sans mention
    française (pénalités, indemnité forfaitaire) ; textes `eng.us.mail.*`.
 
@@ -343,8 +343,33 @@ est déjà séparé par section (`of:espace:<section>`) ; le dépôt du généra
 4. **3d-4 — écrans propres** : recettes en caisse (*income*), dépenses par ligne de l'annexe C, synthèse de l'annexe C
    et son export, acomptes (saisie des acomptes versés), 1099 attendus ; échéances (calendrier américain) ; trésorerie
    (flux d'acomptes, hypothèses).
-5. **Étape 4 — page `/us/workspace/`** : navigation, alias d'adresses lisibles (`#/income`, `#/expenses`…), lien
+5. **3d-5 — règles de prospection** (spécifié le 20/11/2026, D95) : voir ci-dessous.
+6. **Étape 4 — page `/us/workspace/`** : navigation, alias d'adresses lisibles (`#/income`, `#/expenses`…), lien
    d'en-tête, encarts ; parcours navigateur dédié (critères U2 à U8 : ordinateur, tablette, téléphone, axe-core).
+
+**Sous-lot 3d-5 — règles de prospection américaines (D95).** Sources lues le 20/11/2026 par l'action `lire-source`
+(§ 5) : loi CAN-SPAM (15 U.S.C. chapitre 103) et règlement de la FTC (16 CFR partie 316) ; loi TCPA (47 U.S.C. § 227),
+règlement de la FCC (47 CFR § 64.1200) et règle de vente par téléphone de la FTC (16 CFR partie 310, § 310.6(b)). Deux
+règles sourcées dans `data/rules/us.json` : `us_can_spam` (mécanisme de désinscription valable 30 jours, demande
+respectée sous 10 jours ouvrés) et `us_telemarketing` (heures 8 h à 21 h chez l'appelé, copie de la liste nationale de
+31 jours au plus, liste propre à l'entreprise : demande respectée sous 10 jours ouvrés et pendant 5 ans). Crochet
+`prospects` du module américain :
+
+1. **Règles** (écran des pistes et fiche d'une piste) : email, à une entreprise comme à un particulier (la définition du
+   message commercial n'exclut pas les entreprises : notre lecture, dite dans la note de la règle) ; appel d'une
+   entreprise (exemption de la règle de vente par téléphone, sauf quelques exigences ; règles d'opposition réservées aux
+   abonnés résidentiels, mais pouvant couvrir les mobiles, § 64.1200(e)) ; appel d'un particulier (heures, liste
+   nationale sauf permission ou relation d'affaires établie, liste propre) ; appels et SMS automatisés vers un mobile
+   (consentement écrit préalable) ; règles des États non reprises (dit). Liens vers les cinq textes lus (mêmes adresses
+   que les sources des règles, vérifié par un test) et vers les modèles d'emails américains.
+2. **Liste d'opposition** : délais fédéraux (10 jours ouvrés pour un email, 10 jours ouvrés et 5 ans pour un appel) ;
+   l'empreinte reste jusqu'à son retrait par l'utilisateur (aucune expiration : les 5 ans sont respectés).
+3. **Pas de durée de conservation des pistes** : aucune règle fédérale lue n'en fixe ; ni rappel de suppression ni
+   mention dans la fiche (`retentionYears` renvoie null).
+
+Ce que l'Espace ne fait pas : consulter la liste nationale à la place de l'utilisateur ; l'écran lui rappelle de le
+faire (copie de 31 jours au plus). Critères : valeurs affichées tirées des règles ; parcours américain (règles des deux
+sortes de pistes, liens, pas de rappel de conservation, anglais seul, axe-core, trois largeurs).
 
 **Avancement du lot 3d.** Sous-lot 3d-1 fait le 20/11/2026 : `OFE.espaceUI.fr.engines(textes, OF)` déclare le
 moteur de l'Espace, le moteur de facture, les formats de l'aperçu et les coordonnées (`parties`) ; `tools/espace.js`
@@ -401,6 +426,11 @@ l'écran (U5), rangé sous l'onglet « Taxes ». L'onglet surligné d'un écran 
 pays (`tabs`, France : immobilisations sous « Dépenses », vérifié par le parcours français, 370 points). Texte de la règle
 `estimated_tax_q4_skip_rule` aligné sur la formulation du formulaire 1040-ES citée dans sa note (« by February 1,
 2027 »). Parcours américain : 72 points ; erreur réintroduite détectée.
+Sous-lot 3d-5 fait le 20/11/2026 (D95) : règles de prospection américaines (email, appel d'une entreprise ou d'un
+particulier, appels et SMS automatisés, États), liste d'opposition aux délais fédéraux, pas de durée de conservation ;
+règles `us_can_spam` et `us_telemarketing` ; test « une seule source » (liens de l'écran = sources des règles).
+Heure des règles mise en forme à l'américaine (`us.clock`, testée avec midi et minuit). Parcours américain :
+107 points ; trois erreurs réintroduites détectées (deux par le parcours, une par le test unitaire).
 Sous-lot 3d-4c fait le 20/11/2026 (D94) : **échéances américaines** : calendrier fédéral existant
 (`data/calendars/us.json`) filtré par les mêmes choix que le calendrier public : acomptes trimestriels toujours
 retenus (l'Espace les calcule ; leur montant dit s'ils sont requis), formulaires 1099-NEC à envoyer et déclaration
@@ -468,7 +498,11 @@ texte `eng.chart.monthYear`), espace avant les deux-points dans la légende des 
   respectée au plus tard 10 jours ouvrés après sa réception et adresse jamais cédée, (a)(5) message identifié comme
   publicité sauf accord préalable, possibilité de refuser, adresse postale valide) ; le règlement **16 CFR partie 316**
   (govinfo, édition du 01/01/2025 : § 316.2(p) adresse postale valide = adresse de l'expéditeur, boîte postale ou boîte
-  privée enregistrées ; § 316.3 objet principal). **À lire** : le texte du § 316.5 (pas de frais ni d'autre exigence pour
-  se désinscrire ; la recherche n'a montré que le sommaire) ; la loi TCPA (47 U.S.C. § 227) et le règlement 47 CFR
-  § 64.1200 (heures d'appel, liste nationale d'opposition, liste propre à l'entreprise, consentement pour les appels
-  automatisés et les SMS) ; la règle de vente par téléphone (16 CFR partie 310, appels entre entreprises).
+  privée enregistrées ; § 316.3 objet principal ; § 316.5 ni frais ni autre exigence pour se désinscrire qu'un email de
+  réponse ou une seule page web) ; la loi **TCPA** (47 U.S.C. § 227(a)(4) sollicitation téléphonique, hors permission
+  et relation d'affaires établie ; (b)(1) appels automatisés) ; le règlement de la **FCC**, 47 CFR § 64.1200 (édition
+  2025 : (a)(2) consentement écrit préalable pour les appels de vente automatisés vers un mobile, (c) heures de 8 h à
+  21 h et liste nationale, copie de 31 jours au plus, (d)(3) et (d)(6) liste propre : 10 jours ouvrés, 5 ans, (e) mobiles) ;
+  la **règle de vente par téléphone** (16 CFR § 310.6(b) : appels entre un vendeur et une entreprise exemptés, sauf
+  § 310.3(a)(2) et (4) et fournitures de bureau ou d'entretien). Règles des États non lues (non reprises, dit à
+  l'écran).

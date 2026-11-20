@@ -61,6 +61,10 @@
   hypothèses, frais de retard seulement s'ils sont convenus). Corrigés dans le code commun : « Aujourd'hui » écrit en
   dur dans la frise, « Jan 27 » sur l'axe des graphiques (« Jan '27 » en anglais), espace avant les deux-points en
   anglais, nature des flux d'impôt dans l'export de la prévision. Parcours américain : 95 points.
+- Sous-lot 3d-5 : règles de prospection américaines dans l'Espace (email selon la loi CAN-SPAM, appel d'une
+  entreprise ou d'un particulier selon les règles de la FCC et de la FTC, appels et SMS automatisés), lues aux textes
+  officiels sur govinfo ; liste d'opposition aux délais fédéraux ; pas de durée de conservation des pistes.
+  Parcours américain : 107 points.
 
 ## 2026-11-19 (après-midi, suite) — Moteur de l'Espace des États-Unis (lot 2e)
 

@@ -2925,6 +2925,53 @@
       "confidence": "high",
       "verified_on": "2026-11-19",
       "note": "Quoted from the section 'Form 1099-K', read on 19/11/2026 with the source reader (GitHub Actions; 81,310 characters, SHA-256 d0847f667e318f858a66ecdedcf8322fc8a59c64bdfd11ecc60fad9fa511b760). Used by the US workspace to leave card and platform payments out of the expected Forms 1099-NEC (documentation/60, § 2, item 5)."
+    },
+    "us_can_spam": {
+      "value": {
+        "optout_mechanism_days": 30,
+        "optout_honor_business_days": 10
+      },
+      "unit": "object",
+      "label": "CAN-SPAM Act: requirements for every commercial email (opt-out mechanism working for at least 30 days after sending; opt-out honored within 10 business days)",
+      "source": "https://www.govinfo.gov/content/pkg/USCODE-2023-title15/html/USCODE-2023-title15-chap103.htm",
+      "source_title": "15 U.S.C. chapter 103, Controlling the Assault of Non-Solicited Pornography and Marketing (CAN-SPAM Act) - govinfo, United States Code 2023 edition",
+      "more_sources": [
+        {
+          "source": "https://www.govinfo.gov/content/pkg/CFR-2025-title16-vol1/xml/CFR-2025-title16-vol1-part316.xml",
+          "source_title": "16 CFR part 316, CAN-SPAM Rule (Federal Trade Commission) - govinfo, Code of Federal Regulations, 2025 edition"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-11-20",
+      "note": "Read on 20/11/2026 with the source reader (GitHub Actions; US Code page SHA-256 81fc45d5298cace90f7b750ce3002082a400632168bbd7313d82654611ba0926). 15 U.S.C. 7704(a)(3)(A): a functioning return email address or other Internet-based mechanism, clearly and conspicuously displayed, that '(ii) remains capable of receiving such messages or communications for no less than 30 days after the transmission of the original message'. 7704(a)(4)(A)(i): unlawful to send, 'more than 10 business days after the receipt of such request', a commercial email within the scope of an opt-out request; (iv) unlawful to sell, lease, exchange or otherwise transfer the address; (B) unless subsequent affirmative consent. 7704(a)(5)(A): every commercial email provides '(i) clear and conspicuous identification that the message is an advertisement or solicitation; (ii) clear and conspicuous notice of the opportunity ... to decline to receive further commercial electronic mail messages from the sender; and (iii) a valid physical postal address of the sender'; (B) (i) does not apply with prior affirmative consent. 7704(a)(1)-(2): no materially false or misleading header information (a 'from' line that accurately identifies the sender is not), no deceptive subject heading. 7702(2): a commercial electronic mail message is 'any electronic mail message the primary purpose of which is the commercial advertisement or promotion of a commercial product or service'; the definition has no exception for business recipients (our reading: the Act covers emails to businesses too); transactional or relationship messages (7702(17)) are excluded. 16 CFR 316.5: no fee, no information other than the email address and opt-out preferences, no step other than 'sending a reply electronic mail message or visiting a single Internet Web page' to opt out. 16 CFR 316.2(p): valid physical postal address = current street address, or a Post Office box or private mailbox accurately registered. The FTC's compliance guide (ftc.gov) could not be read (host not found from the work environment, HTTP 404 from GitHub Actions); the statute and the rule were read instead."
+    },
+    "us_telemarketing": {
+      "value": {
+        "calling_hours": [
+          "08:00",
+          "21:00"
+        ],
+        "registry_max_age_days": 31,
+        "dnc_honor_business_days": 10,
+        "dnc_keep_years": 5
+      },
+      "unit": "object",
+      "label": "Telephone solicitations (FCC rules under the TCPA): calling hours for residential subscribers, National Do Not Call Registry, company-specific do-not-call list",
+      "source": "https://www.govinfo.gov/content/pkg/CFR-2025-title47-vol3/xml/CFR-2025-title47-vol3-sec64-1200.xml",
+      "source_title": "47 CFR 64.1200, Delivery restrictions (Federal Communications Commission) - govinfo, Code of Federal Regulations, 2025 edition",
+      "more_sources": [
+        {
+          "source": "https://www.govinfo.gov/content/pkg/USCODE-2023-title47/html/USCODE-2023-title47-chap5-subchapII-partI-sec227.htm",
+          "source_title": "47 U.S.C. 227, Restrictions on use of telephone equipment (TCPA) - govinfo, United States Code 2023 edition"
+        },
+        {
+          "source": "https://www.govinfo.gov/content/pkg/CFR-2025-title16-vol1/xml/CFR-2025-title16-vol1-part310.xml",
+          "source_title": "16 CFR part 310, Telemarketing Sales Rule (Federal Trade Commission) - govinfo, Code of Federal Regulations, 2025 edition"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-11-20",
+      "note": "Read on 20/11/2026 with the source reader (GitHub Actions; 47 CFR 64.1200 SHA-256 106a15a4ab26f99c7a7b3f8bfb09b2109951656623b7400ff6ebfed10892fb3f; 47 U.S.C. 227 SHA-256 7a052a59f3144fc90857e0627f237e5bfba8c1244334e6f6d768474309146acd). 64.1200(c): no telephone solicitation '(1) Any residential telephone subscriber before the hour of 8 a.m. or after 9 p.m. (local time at the called party's location)', nor '(2) A residential telephone subscriber who has registered his or her telephone number on the national do-not-call registry'; registrations 'must be honored indefinitely'; safe harbor (c)(2)(i)(D): a version of the registry 'obtained from the administrator of the registry no more than 31 days prior to the date any call is made'. 64.1200(d)(3): a residential subscriber's do-not-call request must be recorded when made and honored within a reasonable time that 'may not exceed ten (10) business days from the receipt of such request'; (d)(6): 'A do-not-call request must be honored for 5 years from the time the request is made.' 64.1200(e): (c) and (d) apply to telephone solicitations or telemarketing calls or text messages to wireless numbers to the extent described in FCC 03-153. 64.1200(a)(2): telemarketing calls using an automatic telephone dialing system or an artificial or prerecorded voice to the numbers in (a)(1)(i)-(iii) (cellular numbers included) need 'the prior express written consent of the called party'. 47 U.S.C. 227(a)(4): a 'telephone solicitation' does not include a call or message 'to any person with that person's prior express invitation or permission' or 'to any person with whom the caller has an established business relationship'. 16 CFR 310.6(b): exempt from the Telemarketing Sales Rule are telephone calls between a telemarketer and any business to induce the purchase of goods or services by the business, except the requirements of 310.3(a)(2) and (4) and calls to induce the retail sale of nondurable office or cleaning supplies. 64.1200(h): the registry numbers are made available to the States for their own lists (state rules not covered here)."
     }
   },
   "open_questions": [

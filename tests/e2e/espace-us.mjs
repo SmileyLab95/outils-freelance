@@ -287,6 +287,41 @@ try {
   await accessible(page, "annexe C");
   await widths(page, "us-annexe-c");
 
+  // ----- Prospects (sous-lot 3d-5, D95) : règles fédérales de prospection, sans durée de conservation --------------
+  await go("#/prospects");
+  let leads = await text(page, "#espace-view");
+  check(leads.includes("Prospecting rules") && leads.includes("works for at least 30 days after sending; stop within 10 business days of a request") &&
+    leads.includes("no sales calls before 8 a.m. or after 9 p.m., their local time") && leads.includes("no more than 31 days old") &&
+    leads.includes("honor a request within 10 business days, and for 5 years") && leads.includes("most calls to a business are exempt"),
+    "prospects : règles fédérales (CAN-SPAM, FCC, vente par téléphone) avec les valeurs des règles sourcées");
+  check(leads.includes("honor a do-not-call request within 10 business days and for 5 years. The fingerprint stays until you remove it.") &&
+    !(await page.$("#prospects-retention")), "prospects : liste d'opposition (délais fédéraux), pas de rappel de conservation");
+  check((await page.$$('#espace-view a[href^="https://www.govinfo.gov/"]')).length === 5 && (await page.$$('#espace-view a[href="../freelance-email-templates/"]')).length === 1,
+    "prospects : liens vers les cinq textes officiels lus et vers les modèles d'emails");
+  await english(page, "prospects");
+  await accessible(page, "prospects");
+  await widths(page, "us-prospects");
+  // Fiche d'une piste : règles d'une entreprise, puis d'un particulier.
+  await go("#/prospects/nouveau");
+  await page.fill("#ep-name", "Brightline Studio");
+  await page.selectOption("#ep-pro", "1");
+  await page.click("#prospect-form button[type=submit]");
+  await page.waitForTimeout(400);
+  let lead = await text(page, "#espace-view");
+  check(lead.includes("Rules for a business") && lead.includes("most calls to a business are exempt") && !lead.includes("Calling an individual") &&
+    !lead.includes("The retention period"), "piste d'une entreprise : règles d'une entreprise, aucune durée de conservation");
+  const leadUrl = page.url();
+  await page.selectOption("#ep-pro", "0");
+  await page.click("#prospect-form button[type=submit]");
+  await page.waitForTimeout(400);
+  await page.goto(leadUrl);
+  await page.waitForSelector("#prospect-form");
+  lead = await text(page, "#espace-view");
+  check(lead.includes("Rules for an individual") && lead.includes("Calling an individual") && !lead.includes("most calls to a business are exempt"),
+    "piste d'un particulier : règles d'un particulier (heures, liste nationale, liste propre)");
+  await english(page, "fiche d'une piste");
+  await accessible(page, "fiche d'une piste");
+
   // ----- Trésorerie (D92) : acomptes prévus, déjà dû, hypothèses ; échéances du calendrier fédéral selon le profil ------
   // Bénéfice prévu de 120 000 $, aucun acompte versé, une facture en retard (émise le 01/08/2026, à 30 jours).
   await page.evaluate(async () => {

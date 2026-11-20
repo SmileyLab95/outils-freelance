@@ -448,6 +448,41 @@
       };
     }
 
+    // ----- Prospects : règles fédérales de prospection (documentation/60, § 3.3, sous-lot 3d-5, D95) -------------
+
+    // Textes officiels lus (mêmes adresses que les sources des règles us_can_spam et us_telemarketing).
+    var PROSPECT_SOURCES = {
+      canSpam: "https://www.govinfo.gov/content/pkg/USCODE-2023-title15/html/USCODE-2023-title15-chap103.htm",
+      rule316: "https://www.govinfo.gov/content/pkg/CFR-2025-title16-vol1/xml/CFR-2025-title16-vol1-part316.xml",
+      tcpa: "https://www.govinfo.gov/content/pkg/USCODE-2023-title47/html/USCODE-2023-title47-chap5-subchapII-partI-sec227.htm",
+      fcc: "https://www.govinfo.gov/content/pkg/CFR-2025-title47-vol3/xml/CFR-2025-title47-vol3-sec64-1200.xml",
+      tsr: "https://www.govinfo.gov/content/pkg/CFR-2025-title16-vol1/xml/CFR-2025-title16-vol1-part310.xml"
+    };
+    var clock = us.clock;
+    /**
+     * Règles de prospection : email (loi CAN-SPAM, entreprises comprises), appel d'une entreprise ou d'un particulier
+     * (règles de la FCC, exemption « entre entreprises » de la règle de vente par téléphone), appels et SMS automatisés,
+     * règles des États non reprises ; pro : true (entreprise), false (particulier), undefined (les deux).
+     */
+    function prospectRules(pro) {
+      var mail = R.us_can_spam, tel = R.us_telemarketing, both = pro === undefined, items = [];
+      items.push("<li>" + L("us.pros.emailHtml", { days: mail.optout_mechanism_days, business: mail.optout_honor_business_days }) + "</li>");
+      if (both || pro) items.push("<li>" + L("us.pros.phoneProHtml") + "</li>");
+      if (both || !pro) {
+        items.push("<li>" + L("us.pros.phonePersonHtml", { from: clock(tel.calling_hours[0]), to: clock(tel.calling_hours[1]), age: tel.registry_max_age_days,
+          business: tel.dnc_honor_business_days, years: tel.dnc_keep_years }) + "</li>");
+      }
+      items.push("<li>" + L("us.pros.autodialHtml") + "</li>");
+      items.push("<li>" + L("us.pros.states") + "</li>");
+      return '<ul class="small prospect-rules">' + items.join("") + '</ul><p class="small muted">' + L("us.pros.sourcesHtml", PROSPECT_SOURCES) + "</p>";
+    }
+    /** Liste d'opposition : ce qui est gardé, délais fédéraux pour respecter une demande, conservation jusqu'au retrait. */
+    function optoutNote() {
+      return L("us.pros.optoutText", { email: R.us_can_spam.optout_honor_business_days, phone: R.us_telemarketing.dnc_honor_business_days,
+        years: R.us_telemarketing.dnc_keep_years });
+    }
+
+
     // ----- Échéances : calendrier fédéral selon le profil, acomptes estimés (documentation/60, § 2.6 et § 3.3) ----
 
     /**
@@ -520,11 +555,19 @@
       profile: { defaults: profileDefaults, fields: profileFields, bind: bindProfile, read: readProfile, missing: profileMissing },
       client: { defaults: clientDefaults, fields: clientFields, bind: bindClient, read: readClient },
       doc: { serviceDate: false, draft: draftFields, retax: retax, fields: docFields, note: docNote, input: docInput, kindCell: kindCell, issueOptions: issueOptions },
+      // Pas de durée de conservation des pistes : aucune règle fédérale lue n'en fixe (pas de rappel de suppression).
+      prospects: { retentionYears: function () { return null; }, retentionNote: function () { return ""; }, optoutNote: optoutNote, rules: prospectRules },
       deadlines: { values: deadlineValues, classes: DEADLINE_CLASSES, kinds: DEADLINE_KINDS, summary: deadlineSummary },
       // Pas de case « chiffre d'affaires à venir » (revenueLabel) : les acomptes suivent le bénéfice de l'écran Taxes ;
       // pas de réglage propre : les acomptes versés se saisissent dans Taxes.
       treasury: { kinds: TREASURY_KINDS, owed: treasuryOwed, assumptions: treasuryAssumptions, breakEvenNone: breakEvenNone, agingNote: agingNote }
     };
+  };
+
+  /** Heure « 08:00 » ou « 21:00 » des règles, à l'américaine : « 8 a.m. », « 9 p.m. », « 12 p.m. » (midi). */
+  us.clock = function (hhmm) {
+    var h = +String(hhmm).slice(0, 2), m = String(hhmm).slice(3, 5);
+    return (h % 12 || 12) + (m && m !== "00" ? ":" + m : "") + (h < 12 ? " a.m." : " p.m.");
   };
 
   /**
