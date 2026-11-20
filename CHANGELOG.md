@@ -47,6 +47,9 @@
 - Sous-lot 3d-2b : moteur américain complété (livre au format commun, acomptes trimestriels dans la prévision de
   trésorerie, impôt « déjà dû » estimé, courriels préremplis américains) ; textes du moteur en anglais ; tri
   alphabétique et nom par défaut indépendants de la France dans les moteurs communs.
+- Sous-lot 3d-3a : premiers écrans de l'Espace américain (profil avec EIN, client, facture avec taxe de vente) sur
+  une page en brouillon `/us/workspace/` ; aperçu identique au générateur public (paramètres partagés,
+  `data/invoice-profiles/us.json`) ; nouveau parcours `tests/e2e/espace-us.mjs`. Pluriels selon la langue.
 
 ## 2026-11-19 (après-midi, suite) — Moteur de l'Espace des États-Unis (lot 2e)
 

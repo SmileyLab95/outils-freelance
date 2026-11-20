@@ -8,6 +8,38 @@
   "use strict";
   var T = root.OF_ESPACE_TEXTS = root.OF_ESPACE_TEXTS || {};
   T.en = Object.assign(T.en || {}, {
+    // Business profile (screens): contact details, optional EIN, payment instructions, filing status.
+    "us.profile.filingStatus": "Filing status",
+    "us.profile.filingStatusHint": "Used to estimate your quarterly tax payments. You can change it anytime.",
+    "us.status.single": "Single",
+    "us.status.married_filing_jointly": "Married filing jointly",
+    "us.status.married_filing_separately": "Married filing separately",
+    "us.status.head_of_household": "Head of household",
+    "us.profile.address": "Business address",
+    "us.profile.addressPlaceholder": "Street, city, state, ZIP code",
+    "us.profile.ein": "EIN (optional)",
+    "us.profile.einHint": "Your Employer Identification Number, if you have one. Never enter your Social Security number.",
+    "us.profile.terms": "Default payment terms",
+    "us.profile.payment": "How to pay (shown on invoices)",
+    "us.profile.paymentPlaceholder": "ACH or Zelle details, checks payable to…",
+    "us.profile.paymentHint": "Printed on your invoices and added to your payment reminders.",
+    "us.profile.late": "Late payment terms (optional)",
+    "us.profile.latePlaceholder": "For example, the late fee in your contract",
+    "us.profile.errEin": "Enter the EIN as 12-3456789, or leave the field empty.",
+    "us.profile.errSsn": "This looks like a Social Security number. Don't put it on invoices: leave the field empty or enter your EIN.",
+    "us.patch.address": "business address",
+    // Client record (screens).
+    "us.client.address": "Address",
+    "us.client.taxId": "Tax ID (optional)",
+    "us.client.taxIdHint": "The client's EIN, if they want it on invoices.",
+    // Document editor (screens): sales tax, PO number, credit memo title.
+    "us.doc.taxRate": "Sales tax (%)",
+    "us.doc.taxLabel": "Tax label",
+    "us.doc.taxLabelPlaceholder": "Sales tax",
+    "us.doc.po": "PO number (optional)",
+    "us.doc.taxNote": "Sales tax depends on your state and on what you sell: enter the rate that applies, or leave it empty.",
+    "us.doc.creditTitle": "CREDIT MEMO",
+    "us.doc.creditNumber": "Credit memo number",
     // Documents: names used in email subjects.
     "eng.us.type.facture": "Invoice",
     "eng.us.type.devis": "Estimate",

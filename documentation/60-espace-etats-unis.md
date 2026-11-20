@@ -369,6 +369,17 @@ relus sur le formulaire officiel 2026 (lecture du 20/11/2026). Le tri alphabéti
 (`country.locale`) et le nom par défaut d'un client inconnu devient un texte commun (il était écrit en français dans
 le moteur des indicateurs). Cinq erreurs réintroduites dans le moteur américain, toutes détectées ; 759 tests
 unitaires.
+Sous-lot 3d-3a fait le 20/11/2026 : `tools/espace-us-ui.js` (moteurs de la section ; profil : situation familiale,
+adresse, email, téléphone, EIN facultatif mis en forme et refus d'un numéro au format de la sécurité sociale, délai,
+instructions de paiement, conditions de retard ; client : adresse, email, identifiant fiscal ; document : taxe de vente
+et libellé saisis, bon de commande ; avoir rendu avec son titre) ; paramètres de facture du générateur américain
+déplacés dans `data/invoice-profiles/us.json` (balise `{{invoice_profile:us}}`, contenu identique, vérifié) ; page en
+brouillon `/us/workspace/` ; parcours `tests/e2e/espace-us.mjs` : U2 (même facture saisie dans le générateur public et
+dans l'Espace : aperçus identiques au caractère près ; erreur réintroduite détectée), U8 (anglais seul, aucune erreur
+ni texte manquant, axe-core, ordinateur, tablette, téléphone), courriel, encaissement, tableau de bord, échéances
+américaines. Nombre d'encaissements du tableau de bord redevenu commun (les deux moteurs ont `ledger`) ; pluriels
+selon la langue (`Intl.PluralRules` : « 0 payments », « 0 encaissement »). Restent pour 3d-3b : date de prestation
+masquée aux États-Unis (mention française), tableau de bord américain (prochain acompte, 1099 attendus).
 
 ### Avancement
 

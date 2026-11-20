@@ -1,0 +1,82 @@
+{
+  "storage": "invoice",
+  "date_format": {
+    "month": "short",
+    "day": "numeric",
+    "year": "numeric"
+  },
+  "item_placeholder": "e.g. Website design (5 pages)",
+  "terms": [
+    {
+      "value": 0,
+      "label": "Due on receipt"
+    },
+    {
+      "value": 7,
+      "label": "Net 7"
+    },
+    {
+      "value": 15,
+      "label": "Net 15"
+    },
+    {
+      "value": 30,
+      "label": "Net 30"
+    },
+    {
+      "value": 45,
+      "label": "Net 45"
+    },
+    {
+      "value": 60,
+      "label": "Net 60"
+    }
+  ],
+  "mentions": [],
+  "labels": {
+    "percent": "%",
+    "invoice": "INVOICE",
+    "estimate": "ESTIMATE",
+    "number": "No.",
+    "invoice_number": "Invoice number",
+    "estimate_number": "Estimate number",
+    "invoice_file": "Invoice",
+    "estimate_file": "Estimate",
+    "from": "From",
+    "bill_to": "Bill to",
+    "prepared_for": "Prepared for",
+    "your_name": "Your name or business",
+    "your_details": "Address, email, phone",
+    "client_name": "Client name",
+    "client_details": "Client address",
+    "tax_id": "Tax ID:",
+    "client_tax_id": "Tax ID:",
+    "invoice_date": "Invoice date",
+    "estimate_date": "Date",
+    "terms": "Terms",
+    "days": "days",
+    "due": "Due date",
+    "po": "PO number",
+    "valid": "Valid until",
+    "item": "Description",
+    "qty": "Qty / hours",
+    "rate": "Rate",
+    "amount": "Amount",
+    "remove": "Remove line",
+    "empty_lines": "Add your items in the form",
+    "subtotal": "Subtotal",
+    "discount": "Discount",
+    "tax": "Sales tax",
+    "total": "Total",
+    "paid": "Amount paid",
+    "balance": "Balance due",
+    "deposit": "Deposit due on acceptance",
+    "payment": "How to pay",
+    "late_prefix": "Late payments:",
+    "estimate_terms": "This estimate is valid until {date}. Work outside the scope described above will be quoted separately.",
+    "accept_title": "Accepted by",
+    "accept": "Client signature, name and date.",
+    "logo_too_big": "This logo is too large (600 KB maximum).",
+    "reset_confirm": "Clear everything you entered?"
+  }
+}

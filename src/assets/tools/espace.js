@@ -97,7 +97,7 @@
   function client(id) { return data.clients.filter(function (c) { return c.id === id; })[0] || null; }
   function doc(id) { return data.documents.filter(function (d) { return d.id === id; })[0] || null; }
   function profile() { return data.profile || {}; }
-  function isMicro() { return !!R.micro_activities[profile().activity]; }
+  function isMicro() { return !!(R.micro_activities && R.micro_activities[profile().activity]); }   // France seulement
 
   /** Émetteur et client affichés : figés à l'émission, sinon le profil et la fiche client actuels. */
   function parties(d) {
@@ -399,7 +399,7 @@
       return x.change === null ? (x.prev ? "" : L("dash.nothingThen", { what: what })) : L("dash.change", { sign: x.change >= 0 ? "+" : "−", pct: OF.fmt(Math.abs(x.change)), what: what });
     };
     html += '<div class="kpis kpis-4">' +
-      kpi(L("dash.cashedYear", { year: YEAR }), money(year), [countText(dash.receipts || 0,
+      kpi(L("dash.cashedYear", { year: YEAR }), money(year), [countText(E.ledger(data.documents, YEAR + "-01-01", YEAR + "-12-31").filter(function (x) { return x.amount > 0; }).length,
         L("count.receipt.one"), L("count.receipt.many")), versus(td.year, L("dash.sameDateYear", { year: prevYear }))].filter(Boolean).join(" · ")) +
       kpi(L("dash.cashedMonth"), money(td.month.now), versus(td.month, L("dash.lastYearSameDate")) || L("dash.lastYearSameDateAmount", { amount: money(td.month.prev) })) +
       kpi(L("dash.toCollect"), money(openSum), open.length ? countText(open.length, L("count.invoice.one"), L("count.invoice.many")) + (late.length ? L("dash.ofWhichLate", { n: late.length }) : "") : L("dash.noOpenInvoice"), late.length ? "is-warn" : "") +
@@ -467,7 +467,10 @@
     return '<div class="kpi card ' + (cls || "") + '"><span class="kpi-label">' + esc(label) + '</span><b class="kpi-value">' + esc(value) +
       '</b><span class="kpi-sub">' + esc(sub) + "</span></div>";
   }
-  function countText(n, one, many) { return n + " " + (n > 1 ? many : one); }
+  // Nombre et nom au singulier ou au pluriel selon la langue de la section (français : 0 et 1 au singulier ; anglais :
+  // 1 seulement).
+  var plural = typeof Intl !== "undefined" && Intl.PluralRules ? new Intl.PluralRules(OF.locale) : null;
+  function countText(n, one, many) { return n + " " + ((plural ? plural.select(n) === "one" : n <= 1) ? one : many); }
 
   /** Mentions obligatoires de l'émetteur manquantes dans le profil. */
   function profileReminder() {

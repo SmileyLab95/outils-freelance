@@ -311,7 +311,6 @@
       }
       return {
         reminders: purchasesReminder(),
-        receipts: E.ledger(D().documents, YEAR + "-01-01", YEAR + "-12-31").filter(function (x) { return x.amount > 0; }).length,
         kpi: decl ? kpi(L("dash.declaration", { period: decl.period.label }), money(decl.revenue),
           L("dash.declarationSub", { due: longDay(decl.due), total: money(decl.total) }) + (decl.open ? L("dash.periodOpen") : ""), "is-brand") : "",
         afterKpis: isMicro() ? gauges(th) : "",

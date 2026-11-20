@@ -558,6 +558,14 @@ def resolve_links(text, section, sections):
 
 
 CALENDAR_RE = re.compile(r"\{\{calendar:([a-z]+)\}\}")
+INVOICE_PROFILE_RE = re.compile(r"\{\{invoice_profile:([a-z-]+)\}\}")
+
+
+def invoice_profile_json(name):
+    """Paramètres d'une facture (libellés, conditions, format des dates) de data/invoice-profiles/<nom>.json : une seule
+    source pour le générateur public et l'Espace de la section (documentation/60, § 3.3, critère U2)."""
+    data = json.loads((ROOT / "data" / "invoice-profiles" / f"{name}.json").read_text(encoding="utf-8"))
+    return json.dumps(data, ensure_ascii=False).replace("</", "<\\/")
 
 
 def calendar_json(country, lang):
@@ -608,6 +616,7 @@ def render(layout, sections, section, page_id, rules, kit_cta):
                .replace("{{country_cards}}", country_cards(sections))
                .replace("{{kit_cta}}", kit_cta))
     content = CALENDAR_RE.sub(lambda m: calendar_json(m.group(1), loc["lang"][:2]), content)
+    content = INVOICE_PROFILE_RE.sub(lambda m: invoice_profile_json(m.group(1)), content)
     content = label_scroll_tables(content, meta["slug"])
     if meta.get("faq"):
         content += faq_html(section, meta["faq"])

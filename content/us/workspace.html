@@ -1,0 +1,41 @@
+<!--{
+  "id": "workspace",
+  "slug": "workspace/",
+  "title": "Free Freelancer Workspace: Invoices, Income and Estimated Taxes",
+  "description": "Clients, estimates, invoices, payments, income and quarterly estimated taxes in one place. Free, no sign-up; your data stays on your device.",
+  "draft": true,
+  "rules": "us",
+  "scripts": ["tools/espace-texts-en.js", "tools/espace-us-texts-en.js", "engines/invoice-intl.js", "engines/brackets.js", "engines/tax-us.js", "engines/espace-core.js", "engines/espace-us.js", "engines/espace-stats.js", "engines/chart-scale.js", "tools/charts.js", "tools/espace-store.js", "tools/espace-us-ui.js", "tools/espace.js"]
+}-->
+<style media="print">@page { size: letter; margin: 0.5in; }</style>
+<script type="application/json" id="invoice-profile">
+{{invoice_profile:us}}
+</script>
+<section class="hero hero-tool hero-compact">
+  <div class="wrap">
+    {{breadcrumb}}
+    <h1>Freelancer Workspace</h1>
+    <p class="lead">Your clients, estimates, invoices, payments, income and estimated taxes, in one place. Your data stays on your device.</p>
+  </div>
+</section>
+
+<section class="section espace-section">
+  <div id="espace-app" class="espace" data-loading>
+    <nav class="espace-nav espace-noprint" aria-label="Workspace">
+      <a href="#/" data-route="tableau">{{icon:layout-dashboard}}Dashboard</a>
+      <a href="#/documents" data-route="documents">{{icon:file-text}}Documents</a>
+      <a href="#/prospects" data-route="prospects">{{icon:target}}Leads</a>
+      <a href="#/clients" data-route="clients">{{icon:users}}Clients</a>
+      <a href="#/temps" data-route="temps">{{icon:timer}}Time</a>
+      <a href="#/tresorerie" data-route="tresorerie">{{icon:wallet}}Cash flow</a>
+      <a href="#/echeances" data-route="echeances">{{icon:calendar-days}}Deadlines</a>
+      <a href="#/reglages" data-route="reglages">{{icon:settings}}Settings</a>
+    </nav>
+    <div class="espace-main">
+      <div id="espace-view" class="espace-view"><p class="muted">Loading your workspace…</p></div>
+    </div>
+  </div>
+  <p class="espace-status" id="espace-status" role="status" aria-live="polite"></p>
+  <noscript><p class="notice warn">The Workspace needs JavaScript to work.</p></noscript>
+</section>
+<script type="application/json" id="calendar-data">{{calendar:us}}</script>
