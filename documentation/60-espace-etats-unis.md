@@ -295,6 +295,57 @@ détectées. Le fichier n'est chargé par aucune page avant la page américaine 
 textes en situation ; les en-têtes CSV gardent le séparateur « ; » du cœur (séparateur des exports américains à
 décider avec le module américain).
 
+### 3.3 Lot 3d : le module américain (spécifié le 20/11/2026, décision D92)
+
+**Constat.** Après les lots 3a à 3c, `tools/espace.js` reste lié à la France par ses branchements : moteur de l'Espace
+(`OFE.espaceFR`), moteur de facture (`OFE.invoiceFR`) et formats de l'aperçu (`FMT`), moteur des indicateurs
+(`engines/espace-stats.js`, lié au moteur français au chargement), coordonnées passées à l'aperçu (`meFromProfile`,
+`clientForDoc`). Le moteur américain ne fournit pas encore neuf fonctions que le cadre commun appelle : `cashed`,
+`cashHistory`, `period`, `mixedActivities`, `forecast`, `owed`, `breakEven`, `email`, `fromGenerator`. Le stockage local
+est déjà séparé par section (`of:espace:<section>`) ; le dépôt du générateur public (`espace-import`) ne l'est pas.
+
+**Choix (D92).**
+
+1. **Branchements par section.** Le module d'écrans d'un pays déclare, à côté de sa fabrique, ses moteurs :
+   `engine(textes)` (moteur de l'Espace), `invoice` (moteur de facture : rendu de l'aperçu et montants), `fmt` (formats
+   de l'aperçu) et `parties` (coordonnées de l'émetteur et du client passées à l'aperçu et à l'émission). Le moteur des
+   indicateurs devient une fabrique `create(moteur, facture)` ; l'instance française reste exposée telle quelle. En
+   France, rien ne change (parcours de l'Espace identique).
+2. **Fonctions communes au cœur.** `cashed`, `cashHistory` et `period` (encaissé sur une période, historique mensuel des
+   entrées et sorties, libellé d'une période) n'ont rien de français : elles passent dans `engines/espace-core.js`.
+   `mixedActivities` reste française ; le cœur renvoie « pas d'activité mixte » pour les autres pays.
+3. **Trésorerie américaine (estimations, présentées comme telles).** Flux d'impôt : les acomptes trimestriels de
+   l'année (dates de la règle `estimated_tax_due_dates_<année>`), du montant donné par `estimatedTax` (critère U6),
+   moins les acomptes déjà versés que l'utilisateur saisit (par échéance) ; une année dont les dates ne sont pas dans
+   les règles n'a pas de flux d'impôt, et l'écran le dit. **Déjà dû** : impôt fédéral estimé sur le bénéfice déjà
+   réalisé dans l'année (impôt annuel estimé × bénéfice à date ÷ bénéfice projeté), moins les acomptes versés,
+   jamais négatif. Point mort : non calculé en version 1 (dit dans l'écran). Impôt des États : hors version 1 (§ 2).
+4. **Reprise du générateur.** Le dépôt du générateur public porte sa section (`espace-import` en France, inchangé ;
+   `espace-import:<section>` ailleurs) : l'Espace d'une section ignore le dépôt d'une autre. Le générateur américain
+   n'a pas encore de bouton « Continue in my Workspace » : en version 1, l'Espace américain n'a pas de reprise.
+5. **Prospects.** Les règles de prospection américaines (CAN-SPAM, TCPA, liste nationale *Do Not Call*) seront lues
+   aux sources officielles avant d'être affichées ; en attendant, l'Espace américain affiche les pistes, relances et la
+   liste d'opposition, sans bloc de règles ni durée de conservation (crochet `prospects` absent).
+6. **Courriels préremplis.** Le moteur américain compose ses propres courriels (envoi, relance), sans mention
+   française (pénalités, indemnité forfaitaire) ; textes `eng.us.mail.*`.
+
+**Sous-lots** (chacun : parcours de l'Espace français identique, 369 points ; tests unitaires ; revue critique) :
+
+1. **3d-1 — branchements** : `engine`, `invoice`, `fmt`, `parties` déclarés par le module français ; fabrique des
+   indicateurs ; dépôt du générateur par section. Aucun changement visible.
+2. **3d-2 — moteur américain complété** : fonctions communes au cœur ; `forecast`, `owed`, `breakEven` (null),
+   `email`, `fromGenerator` (absent : pas de reprise) ; tests (flux d'acomptes aux dates sourcées, déjà dû, courriels
+   sans mention française).
+3. **3d-3 — module américain, premiers écrans** : `tools/espace-us-ui.js` et ses textes `tools/espace-us-texts-en.js`
+   (profil : nom, adresse, email, téléphone, EIN facultatif, situation familiale ; client : professionnel ou
+   particulier, adresse, email, identifiant fiscal facultatif ; document : taxe de vente saisie, aperçu du moteur
+   international, critère U2 ; tableau de bord : prochain acompte, 1099 attendus).
+4. **3d-4 — écrans propres** : recettes en caisse (*income*), dépenses par ligne de l'annexe C, synthèse de l'annexe C
+   et son export, acomptes (saisie des acomptes versés), 1099 attendus ; échéances (calendrier américain) ; trésorerie
+   (flux d'acomptes, hypothèses).
+5. **Étape 4 — page `/us/workspace/`** : navigation, alias d'adresses lisibles (`#/income`, `#/expenses`…), lien
+   d'en-tête, encarts ; parcours navigateur dédié (critères U2 à U8 : ordinateur, tablette, téléphone, axe-core).
+
 ### Avancement
 
 - **Étape 1 terminée le 19/11/2026.** Les textes de `tools/espace.js` sont dans `tools/espace-texts-fr.js`
