@@ -3375,6 +3375,44 @@
       "confidence": "high",
       "verified_on": "2026-11-07",
       "note": "Read on 07/11/2026 with the « Lire une source officielle » tool. To be eligible you need to have worked as an employee and paid Class 1 National Insurance contributions, usually in the last 2 to 3 years; usually Class 1 for the previous 2 tax years, National Insurance credits counting for one of them; 'You will not be eligible if you were self-employed and only paid Class 2 National Insurance contributions, unless you were working as a share fisherman or a volunteer development worker.' Also: 18 or over, under State Pension age, in Great Britain, not working 16 hours or more a week, no illness or disability that stops you working (ESA instead); savings do not count; full entitlement 182 days; different rules in Northern Ireland; Universal Credit possible at the same time or instead (JSA counts as income). Weekly amounts not read: not shown (self-employed people with only Class 2 cannot get it)."
+    },
+    "uk_sa103s_boxes": {
+      "value": {
+        "tax_year": "2025-26",
+        "income": {
+          "9": "Your turnover – the takings, fees, sales or money earned by your business",
+          "10": "Any other business income not included in box 9",
+          "10.1": "Trading income allowance"
+        },
+        "expenses": {
+          "11": "Costs of goods bought for resale or goods used",
+          "12": "Car, van and travel expenses – after private use proportion",
+          "13": "Wages, salaries and other staff costs",
+          "14": "Rent, rates, power and insurance costs",
+          "15": "Repairs and maintenance of property and equipment",
+          "16": "Accountancy, legal and other professional fees",
+          "17": "Interest and bank and credit card financial charges",
+          "18": "Phone, fax, stationery and other office costs",
+          "19": "Other allowable business expenses – client entertaining costs are not an allowable expense"
+        },
+        "total_expenses": "20",
+        "net_profit": "21",
+        "net_loss": "22",
+        "short_form_turnover_limit": 90000
+      },
+      "unit": "object",
+      "label": "Self-employment (short) page SA103S: income boxes 9 to 10.1, allowable expense boxes 11 to 19, total in box 20, net profit (box 21) = box 9 + box 10 - box 20; the short page is for an annual turnover below £90,000",
+      "source": "https://assets.publishing.service.gov.uk/media/69c12ae013101e9908704a53/SA103S-2026.pdf",
+      "source_title": "HMRC - Self-employment (short) SA103S 2026, tax year 6 April 2025 to 5 April 2026",
+      "more_sources": [
+        {
+          "source": "https://assets.publishing.service.gov.uk/media/69ce15395cf899414a0bc69f/SA103S_Notes_2026.pdf",
+          "source_title": "HMRC - Self-employment (short) notes 2026"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-11-20",
+      "note": "Form read in full on 20/11/2026 with the source reader (GitHub Actions; SHA-256 556bb1d4d881cbf992ce31bae2e40806760f69ba8266ade2265a343553eed382; 'HMRC 12/25'; publication page last updated 6 April 2026). Box labels quoted exactly. Notes (SESN): 'Fill in boxes 11 to 19 and put the total in box 20. If your annual turnover was below £90,000, you may just put your total expenses in box 20. If you claim the trading income allowance in box 10.1, do not complete boxes 11 to 20'; box 21: 'Add boxes 9 and 10 together. If the total is more than the figure in box 20, put the difference in box 21' (box 22 the other way); the full pages are needed if 'your turnover for the year is £90,000 or more (or would have been if you'd traded for a full year)'; trading income allowance: up to £1,000, no expenses can then be deducted, it cannot make a loss. Per-category guidance is in helpsheet HS222 (not yet read). The 2027 form (tax year 2026-27) is not yet published."
     }
   },
   "open_questions": [

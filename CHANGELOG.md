@@ -74,6 +74,8 @@
   américains. Parcours américain sur le site public : 129 points.
 - Étape 4, sous-lot 4c : la vitrine de l'accueil américain montre l'Espace (tableau de bord d'exemple, version
   ordinateur et téléphone) et une facture d'exemple complète ; « My workspace » rejoint les raccourcis de l'accueil.
+- Espace britannique : spécification (documentation/61, D97) ; formulaire SA103S 2026 et ses notes lus aux sources
+  officielles (règle `uk_sa103s_boxes` : intitulés exacts des cases de recettes et de dépenses).
 
 ## 2026-11-19 (après-midi, suite) — Moteur de l'Espace des États-Unis (lot 2e)
 
