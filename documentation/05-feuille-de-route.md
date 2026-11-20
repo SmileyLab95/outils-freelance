@@ -501,7 +501,9 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   brouillon `/us/workspace/`, parcours `tests/e2e/espace-us.mjs` (U2, U6, U8 ; 40 points) ; 3d-4 aussi : recettes en
   caisse et dépenses par ligne de l'annexe C (3d-4a), écrans « Taxes » et « Schedule C » (3d-4b), échéances et
   trésorerie américaines (3d-4c, D94) ; règles de prospection américaines (3d-5, D95) ; parcours américain :
-  107 points, parcours français inchangé.
+  107 points, parcours français inchangé. **Étape 4 spécifiée le 20/11/2026** ([60](60-espace-etats-unis.md) § 3.4,
+  D96) ; 4a fait : adresses en anglais (`#/income`…), liens internes de la trésorerie corrigés (France comprise) ;
+  parcours américain : 116 points.
 - **Accueil en images (18/11/2026, nuit)** : demande d'Ismail (« il n'y a que du texte, pas d'image ») ; principes
   des images du site (D84, [58](58-images-du-site.md)) : captures du vrai produit, données d'exemple annoncées, pas de
   banque d'images ni d'image générée. Accueil France : section « Les outils, en vrai » en grille bento (Espace,
@@ -585,7 +587,8 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   critères U3 à U7) aussi ; étape 3 en cours ([60](60-espace-etats-unis.md) § 3.2) : 3a (module français) fait le
   19/11, 3b (dictionnaires) aussi, 3c (anglais) le 20/11, 3d-1 à 3d-4 (branchements, moteur américain, écrans
   américains : recettes, dépenses, Taxes, annexe C, échéances, trésorerie) le 20/11, 3d-5 (règles de prospection lues
-  aux textes officiels) aussi ; ensuite : la page `/us/workspace/` publiée et son parcours (U2 à U8) ; ensuite
+  aux textes officiels) aussi ; étape 4 en cours : 4a (adresses en anglais) fait le 20/11 ; ensuite 4b (page
+  `/us/workspace/` publiée : texte, questions, sources, menu, en-tête, encarts) et 4c (vitrine) ; ensuite
   Royaume-Uni et Canada, [59](59-parite-des-pays.md)) ; **poids des pages** : chaque page embarque toutes les règles de son pays
   (`window.OF_RULES`, environ 45 Ko avant compression) : n'y mettre que celles que ses scripts lisent ; **images du site** ([58](58-images-du-site.md) § 3) : miniatures dans la liste
   des étapes et schémas explicatifs (facture annotée, frise des relances, calendrier de la facturation électronique) ; refonte, suite ([31](31-vision-plateforme.md) § 5) : les quatre modules du compte

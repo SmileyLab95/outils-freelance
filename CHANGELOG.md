@@ -65,6 +65,10 @@
   entreprise ou d'un particulier selon les règles de la FCC et de la FTC, appels et SMS automatisés), lues aux textes
   officiels sur govinfo ; liste d'opposition aux délais fédéraux ; pas de durée de conservation des pistes.
   Parcours américain : 107 points.
+- Étape 4, sous-lot 4a : adresses de l'Espace américain en anglais (`#/income`, `#/expenses`, `#/settings`…), les
+  adresses internes étant réécrites. Corrigé dans l'Espace (France comprise) : les liens « Indiquer le solde » et
+  « Notez vos charges » de la trésorerie affichaient le tableau de bord ; ils mènent maintenant à leur formulaire.
+  Parcours américain : 116 points.
 
 ## 2026-11-19 (après-midi, suite) — Moteur de l'Espace des États-Unis (lot 2e)
 

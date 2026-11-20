@@ -217,7 +217,7 @@ try {
   await accessible(page, "recettes");
   await widths(page, "us-recettes");
 
-  await go("#/depenses/nouvelle");
+  await go("#/expenses/new");
   await page.fill("#ep-amount", "120.40");
   await page.fill("#ep-supplier", "Office Depot");
   await page.click("#expense-form button[type=submit]");
@@ -228,14 +228,14 @@ try {
   await page.selectOption("#ep-line", "18");
   check((await text(page, "#line-help")) === "Office supplies and postage.", "dépenses : aide de la ligne (instructions de l'IRS, règle sourcée)");
   await page.click("#expense-form button[type=submit]");
-  await page.waitForFunction(() => location.hash.startsWith("#/depenses?annee=2026"));
-  await go("#/depenses/nouvelle");
+  await page.waitForFunction(() => location.hash.startsWith("#/expenses?annee=2026"));
+  await go("#/expenses/new");
   await page.fill("#ep-amount", "80");
   await page.fill("#ep-supplier", "Diner");
   await page.selectOption("#ep-line", "24b");
   await page.selectOption("#ep-method", "cash");
   await page.click("#expense-form button[type=submit]");
-  await page.waitForFunction(() => location.hash.startsWith("#/depenses?annee=2026"));
+  await page.waitForFunction(() => location.hash.startsWith("#/expenses?annee=2026"));
   await page.waitForTimeout(250);
   const spending = await text(page, "#espace-view");
   check(spending.includes("Spent$200.402 expenses") && spending.includes("Deductible expenses$160.40") && spending.includes("24b Deductible meals$80.00$40.00"),
@@ -362,6 +362,24 @@ try {
   await english(page, "trésorerie");
   await accessible(page, "trésorerie");
   await widths(page, "us-tresorerie");
+  // Adresses en anglais (D96) : écran ouvert par son adresse interne réécrite, onglet actif ; lien vers une partie de l'écran.
+  check((await page.evaluate(() => location.hash)) === "#/cash-flow" && (await page.getAttribute('.espace-nav a[data-route="tresorerie"]', "aria-current")) === "page" &&
+    (await page.getAttribute('.espace-nav a[data-route="tresorerie"]', "href")) === "#/cash-flow", "adresses : « #/tresorerie » réécrite en « #/cash-flow », onglet actif");
+  await page.click('#espace-view a[href="#tr-settings"]');
+  await page.waitForTimeout(300);
+  check((await text(page, "#espace-view h2")).startsWith("Cash flow") && (await page.evaluate(() => document.activeElement && document.activeElement.id)) === "tr-settings" &&
+    (await page.evaluate(() => location.hash)) === "#/cash-flow", "trésorerie : « Enter the balance » mène au formulaire du solde, sans changer d'écran");
+  for (const [hash, h2, tab] of [["#/income", "Income 2026", "recettes"], ["#/expenses", "Expenses 2026", "depenses"], ["#/leads", "Leads", "prospects"],
+    ["#/time", null, "temps"], ["#/deadlines", "Deadlines", "echeances"], ["#/settings", "Settings", "reglages"]]) {
+    await page.goto(PAGE.split("#")[0] + hash, { waitUntil: "networkidle" });
+    await page.waitForSelector("#espace-view h2");
+    const ok = (await page.evaluate(() => location.hash)) === hash && (h2 === null || (await text(page, "#espace-view h2")) === h2) &&
+      (await page.getAttribute(`.espace-nav a[data-route="${tab}"]`, "aria-current")) === "page";
+    check(ok, `adresses : « ${hash} » ouvre son écran, onglet actif`);
+  }
+  await page.goto(PAGE.split("#")[0] + "#/clients/nouveau", { waitUntil: "networkidle" });
+  await page.waitForSelector("#espace-view h2");
+  check((await page.evaluate(() => location.hash)) === "#/clients/new" && (await page.$("#client-form")) !== null, "adresses : « nouveau » réécrit « new », fiche client vierge");
 
   await go("#/echeances");
   let dl = await text(page, "#espace-view");

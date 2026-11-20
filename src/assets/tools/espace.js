@@ -120,14 +120,32 @@
 
   // ----- Routeur -------------------------------------------------------------------
 
+  /**
+   * Adresses dans la langue de la section (documentation/60, § 3.4, D96) : table du pays (UI.aliases, adresse du pays →
+   * nom interne), appliquée au nom de l'écran et à l'identifiant. Sans table (France), rien ne change.
+   */
+  var aliasOut = null;
+  function aliasesOf() {
+    var into = (UI && UI.aliases) || {};
+    if (!UI) return { into: into, out: {} };
+    if (!aliasOut) { aliasOut = {}; Object.keys(into).forEach(function (k) { aliasOut[into[k]] = k; }); }
+    return { into: into, out: aliasOut };
+  }
   function route() {
     var h = (location.hash || "#/").slice(1);
     var q = h.indexOf("?");
     var path = q > -1 ? h.slice(0, q) : h;
     var params = {};
     if (q > -1) h.slice(q + 1).split("&").forEach(function (kv) { var p = kv.split("="); params[decodeURIComponent(p[0])] = decodeURIComponent(p[1] || ""); });
-    var parts = path.split("/").filter(Boolean);
-    return { name: parts[0] || "tableau", id: parts[1] || null, params: params, key: h };
+    var parts = path.split("/").filter(Boolean), A = aliasesOf();
+    // Adresse interne (liens du code commun) réécrite dans la langue du pays, sans nouvelle entrée d'historique.
+    var shown = parts.map(function (p, i) { return i < 2 && A.out[p] ? A.out[p] : p; });
+    if (shown.join("/") !== parts.join("/")) {
+      h = "/" + shown.join("/") + (q > -1 ? h.slice(q) : "");
+      history.replaceState(null, "", "#" + h);
+    }
+    var inner = shown.map(function (p, i) { return i < 2 && A.into[p] ? A.into[p] : p; });
+    return { name: inner[0] || "tableau", id: inner[1] || null, params: params, key: h };
   }
 
   function render(keepFocus) {
@@ -2176,6 +2194,18 @@
 
   // ----- Démarrage -----------------------------------------------------------------------------------
 
+  // Lien vers une partie de l'écran (« #tr-settings », sans « / ») : défilement et focus sur la cible, sans changer
+  // d'écran (sinon le routeur lirait « tr-settings » comme un écran inconnu et afficherait le tableau de bord).
+  view.addEventListener("click", function (e) {
+    var a = e.target.closest ? e.target.closest('a[href^="#"]') : null, href = a ? a.getAttribute("href") : "";
+    if (!a || href.length < 2 || href.charAt(1) === "/") return;
+    var target = document.getElementById(href.slice(1));
+    if (!target || !view.contains(target)) return;
+    e.preventDefault();
+    if (!/^(A|BUTTON|INPUT|SELECT|TEXTAREA)$/.test(target.tagName) && !target.hasAttribute("tabindex")) target.setAttribute("tabindex", "-1");
+    target.scrollIntoView({ block: "start" });
+    target.focus({ preventScroll: true });
+  });
   window.addEventListener("hashchange", function () {
     if (pendingSave) pendingSave();
     editing = null;

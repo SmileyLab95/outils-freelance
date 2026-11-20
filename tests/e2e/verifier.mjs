@@ -4960,6 +4960,11 @@ const tests = {
       (await trKpis()).includes("après " + flat(expected.owed) + " déjà dus"), "Trésorerie : déjà dû affiché sans solde");
     check((await trKpis()).includes("Point mort – chiffre d'affaires mensuel nécessaire (micro-entreprise, charges notées)"),
       "Trésorerie : point mort expliqué tant qu'aucune charge n'est notée");
+    // Lien « Indiquer le solde » : défilement jusqu'au formulaire du solde, sans quitter l'écran (le tableau de bord s'affichait).
+    await page.click('#espace-view a[href="#tr-settings"]');
+    await page.waitForTimeout(300);
+    check((await text("#espace-view h2")) === "Trésorerie" && (await page.evaluate(() => document.activeElement && document.activeElement.id)) === "tr-settings" &&
+      (await page.evaluate(() => location.hash)) === "#/tresorerie", "Trésorerie : « Indiquer le solde » mène au formulaire du solde, sans changer d'écran");
     check(flat(await text(".treasury-table tbody")) === flat(expected.months.join(" ")) && (await page.$$eval(".treasury-table tbody tr", (r) => r.length)) === 6,
       "Trésorerie : prévision de 6 mois (octobre 2026 à mars 2027)");
     check(!(await page.$('[data-chart="balance"]')) && (await text("#espace-view")).includes("pour voir la courbe du solde") &&

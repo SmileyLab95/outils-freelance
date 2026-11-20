@@ -194,7 +194,7 @@
       var lines = E.expenseLines(D().expenses, year, R), used = lines.rows.filter(function (x) { return x.spent > 0; });
       var spent = Math.round(list.reduce(function (s, e) { return s + (Number(e.amount) || 0); }, 0) * 100) / 100;
       view.innerHTML = '<div class="espace-head"><h2>' + L("us.exp.title", { year: esc(year) }) + '</h2><div class="espace-quick espace-noprint">' +
-        '<a class="btn btn-primary btn-sm" href="#/depenses/nouvelle">' + L("us.exp.add") + "</a>" +
+        '<a class="btn btn-primary btn-sm" href="#/expenses/new">' + L("us.exp.add") + "</a>" +
         '<a class="btn btn-ghost btn-sm" href="#/schedule-c?annee=' + esc(year) + '">' + L("us.sc.open") + "</a>" +
         '<button type="button" class="btn btn-ghost btn-sm" id="expenses-csv"' + (list.length ? "" : " disabled") + ">" + L("common.exportCsv") + "</button>" +
         printButton("expenses-print", !list.length) + "</div></div>" +
@@ -232,7 +232,7 @@
 
     /** Fiche d'une dépense : date, montant, fournisseur, description, moyen de paiement, référence, ligne (avec son aide). */
     function viewExpenseForm(r) {
-      var isNew = r.id === "nouvelle";
+      var isNew = r.id === "nouveau";   // « #/expenses/new » (alias de « nouveau », D96)
       var x = isNew ? { date: TODAY, method: "card", line: "" } : expense(r.id);
       if (!x) { view.innerHTML = '<div class="espace-head"><h2>' + L("us.exp.notFound") + '</h2></div><p><a href="#/depenses">' + L("us.exp.back") + "</a></p>"; return; }
       var methods = Object.keys(E.METHODS).map(function (k) { return [k, E.METHODS[k]]; });
@@ -545,6 +545,9 @@
 
     return {
       tabs: { "schedule-c": "taxes" },   // la synthèse de l'annexe C se trouve sous « Taxes »
+      // Adresses en anglais (documentation/60, § 3.4, D96) : adresse affichée → nom interne de l'écran ou de l'identifiant.
+      aliases: { income: "recettes", expenses: "depenses", time: "temps", bill: "facturer", leads: "prospects", "cash-flow": "tresorerie",
+                 deadlines: "echeances", settings: "reglages", "import": "importer", "new": "nouveau" },
       routes: {
         taxes: viewTaxes,
         "schedule-c": viewScheduleC,

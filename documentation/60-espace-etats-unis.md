@@ -452,6 +452,45 @@ texte `eng.chart.monthYear`), espace avant les deux-points dans la légende des 
 (texte `common.colon`) ; le contrôle « anglais seul » du parcours les détecte désormais. Parcours américain :
 95 points ; cinq erreurs réintroduites, toutes détectées.
 
+### 3.4 Étape 4 : publication de `/us/workspace/` (spécifiée le 20/11/2026, décision D96)
+
+**Constat.** Les écrans américains sont faits (lots 3d-1 à 3d-5, parcours de 107 points) sur une page en brouillon.
+Les adresses internes de l'Espace sont françaises (`#/recettes`, `#/depenses`, `#/reglages`, `#/clients/nouveau`…) :
+elles s'affichent dans la barre d'adresse d'un utilisateur américain et dans ses favoris.
+
+**Choix (D96).**
+
+1. **Adresses dans la langue de la section (sous-lot 4a).** Le module d'un pays peut déclarer une table d'alias
+   (`aliases` : adresse du pays → nom interne), appliquée au nom de l'écran et à l'identifiant (`new` → `nouveau`).
+   Le routeur lit les adresses du pays et réécrit une adresse interne dans la langue du pays sans nouvelle entrée
+   d'historique (`history.replaceState`) : les liens internes du code commun restent valables. États-Unis :
+   `#/income`, `#/expenses`, `#/time` (et `#/time/bill`), `#/leads`, `#/cash-flow`, `#/deadlines`, `#/settings`,
+   `#/import`, `/new` ; `#/documents`, `#/clients`, `#/taxes`, `#/schedule-c` inchangés. Les paramètres (`?annee=`,
+   `?filtre=`…) gardent leur nom interne. France : aucune table, rien ne change.
+2. **Page publique (sous-lot 4b).** `/us/workspace/` sort du brouillon (indexée, dans le plan du site) avec un texte de
+   page comme l'Espace français : ce que fait l'Espace (factures et devis, encaissements, recettes en caisse, dépenses
+   par ligne de l'annexe C, acomptes, 1099 attendus, temps, pistes, trésorerie, échéances), ce qu'il ne fait pas
+   (version 1, § 2), questions fréquentes (gratuité, données sur l'appareil, déclaration, numérotation), sources
+   officielles (règles déjà lues). Entrée « Workspace » en tête du groupe « Invoicing and getting paid » du menu,
+   parmi les outils mis en avant, et bouton d'en-tête « My workspace » (comme « Mon espace » en France).
+3. **Encarts** (`aside.espace-cta`, comme en France) sur cinq outils américains : générateur de facture, calendrier
+   fiscal, calculateur d'acomptes, « how much to set aside », relance de paiement ; une phrase propre à l'outil et un
+   bouton vers l'Espace.
+4. **Vitrine de l'accueil américain (sous-lot 4c)** : une tuile de l'Espace, capture faite par `scripts/vitrine.mjs`
+   avec des données d'exemple annoncées comme telles (D84).
+5. **Vérifications** : parcours `tests/e2e/espace-us.mjs` sur le site public (critères U2 à U8), adresses en anglais
+   (lecture, réécriture, onglet actif) ; parcours des pages américaines (encarts, menu) ; Espace français identique.
+
+**Avancement de l'étape 4.** Sous-lot 4a fait le 20/11/2026 : table `aliases` du module américain et routeur commun
+(lecture des adresses du pays, réécriture des adresses internes par `history.replaceState`) ; menu de la page en
+adresses anglaises ; l'écran de saisie d'une dépense américaine prend l'identifiant commun `nouveau` (`#/expenses/new`).
+Défaut trouvé en vérifiant les liens (présent aussi en France) : un lien vers une partie de l'écran (« Indiquer le
+solde », « Notez vos charges » de la trésorerie : `#tr-settings`, `#tr-charges`) changeait l'adresse et affichait le
+tableau de bord ; il fait désormais défiler l'écran jusqu'à sa cible et y place le focus, sans changer d'écran.
+Parcours américain : 116 points ; parcours de l'Espace français : un point de plus (le lien « Indiquer le solde »),
+371 points ; deux erreurs réintroduites (lien interne, réécriture d'adresse), toutes deux détectées.
+
+
 ### Avancement
 
 - **Étape 1 terminée le 19/11/2026.** Les textes de `tools/espace.js` sont dans `tools/espace-texts-fr.js`
