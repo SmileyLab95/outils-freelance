@@ -402,7 +402,8 @@
     var late = open.filter(function (d) { return E.state(d, TODAY, data.documents) === "overdue"; });
     var openSum = open.reduce(function (s, d) { return s + E.balance(d, data.documents); }, 0);
     var quotes = data.documents.filter(function (d) { return d.type === "devis" && d.status === "sent"; });
-    var year = E.cashed(data.documents, YEAR + "-01-01", YEAR + "-12-31");
+    // Encaissé de l'exercice : année civile, ou année fiscale du pays (Royaume-Uni : 6 avril–5 avril).
+    var fy = ST.fiscalYear(TODAY), year = E.cashed(data.documents, fy.start, fy.end);
     // Parties du pays (module d'écrans, documentation/60, § 3.2) : rappels, 4e indicateur, jauges, note.
     var dash = UI.dashboard ? UI.dashboard() : {};
 
@@ -412,12 +413,12 @@
       '<a class="btn btn-ghost btn-sm" href="#/clients/nouveau">' + L("quick.client") + "</a></div></div>";
     html += profileReminder() + (dash.reminders || "") + chronoReminder() + timeReminder() + prospectsReminder() + treasuryReminder() + backupReminder();
     // Indicateurs et graphiques (documentation/55-indicateurs-espace.md, § 2) : comparaison avec l'an dernier à la même date.
-    var td = ST.toDate(data.documents, TODAY), prevYear = String(+YEAR - 1);
+    var td = ST.toDate(data.documents, TODAY), prevYear = ST.fiscalYear(ST.lastYear(TODAY)).label;
     var versus = function (x, what) {
       return x.change === null ? (x.prev ? "" : L("dash.nothingThen", { what: what })) : L("dash.change", { sign: x.change >= 0 ? "+" : "−", pct: OF.fmt(Math.abs(x.change)), what: what });
     };
     html += '<div class="kpis kpis-4">' +
-      kpi(L("dash.cashedYear", { year: YEAR }), money(year), [countText(E.ledger(data.documents, YEAR + "-01-01", YEAR + "-12-31").filter(function (x) { return x.amount > 0; }).length,
+      kpi(L("dash.cashedYear", { year: fy.label }), money(year), [countText(E.ledger(data.documents, fy.start, fy.end).filter(function (x) { return x.amount > 0; }).length,
         L("count.receipt.one"), L("count.receipt.many")), versus(td.year, L("dash.sameDateYear", { year: prevYear }))].filter(Boolean).join(" · ")) +
       kpi(L("dash.cashedMonth"), money(td.month.now), versus(td.month, L("dash.lastYearSameDate")) || L("dash.lastYearSameDateAmount", { amount: money(td.month.prev) })) +
       kpi(L("dash.toCollect"), money(openSum), open.length ? countText(open.length, L("count.invoice.one"), L("count.invoice.many")) + (late.length ? L("dash.ofWhichLate", { n: late.length }) : "") : L("dash.noOpenInvoice"), late.length ? "is-warn" : "") +

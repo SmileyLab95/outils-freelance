@@ -272,6 +272,8 @@ try {
   check(pros.includes("soft opt-in") && pros.includes("regulation 26"), "prospects : règles du PECR (emails, soft opt-in, registre des appels)");
   await screen(page, "prospects", "uk-prospects");
   await go("#/");
+  const dash = await text(page, "#espace-view .kpis");
+  check(dash.includes("Collected in 2026/27£300.00") && dash.includes("2025/26 at the same date"), "tableau de bord : encaissé de l'année fiscale 2026/27 → " + dash.slice(0, 120));
   await screen(page, "tableau de bord", "uk-tableau-de-bord");
 
   check(errors.length === 0, `aucune erreur JavaScript ni texte manquant${errors.length ? " → " + errors.slice(0, 5).join(" | ") : ""}`);

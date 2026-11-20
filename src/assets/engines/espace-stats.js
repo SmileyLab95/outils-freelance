@@ -21,6 +21,15 @@
   var pad = function (n) { return String(n).padStart(2, "0"); };
   var lastDay = function (y, m) { return new Date(Date.UTC(y, m, 0)).getUTCDate(); };
 
+  /**
+   * Exercice qui contient le jour day : celui du pays si son moteur le fournit (Royaume-Uni : année fiscale du 6 avril
+   * au 5 avril, documentation/61), sinon l'année civile. { start, end, label }.
+   */
+  function fiscalYear(day) {
+    if (E.fiscalYear) return E.fiscalYear(day);
+    var y = day.slice(0, 4);
+    return { start: y + "-01-01", end: y + "-12-31", label: y };
+  }
   /** Même jour un an plus tôt (le 29 février devient le 28). */
   function lastYear(day) {
     var y = +day.slice(0, 4) - 1, m = +day.slice(5, 7), d = Math.min(+day.slice(8, 10), lastDay(y, m));
@@ -32,12 +41,12 @@
   }
 
   /**
-   * Encaissé depuis le 1er janvier et depuis le 1er du mois, comparé à la même période un an plus tôt (jusqu'au même
-   * jour) : { year: { now, prev, change }, month: { now, prev, change } }.
+   * Encaissé depuis le début de l'exercice (fiscalYear : 1er janvier, ou 6 avril au Royaume-Uni) et depuis le 1er du
+   * mois, comparé à la même période un an plus tôt (jusqu'au même jour) : { year: { now, prev, change }, month: { … } }.
    */
   function toDate(documents, today) {
     var ly = lastYear(today);
-    var yearNow = E.cashed(documents, today.slice(0, 4) + "-01-01", today), yearPrev = E.cashed(documents, ly.slice(0, 4) + "-01-01", ly);
+    var yearNow = E.cashed(documents, fiscalYear(today).start, today), yearPrev = E.cashed(documents, fiscalYear(ly).start, ly);
     var monthNow = E.cashed(documents, today.slice(0, 8) + "01", today), monthPrev = E.cashed(documents, ly.slice(0, 8) + "01", ly);
     return { year: { now: yearNow, prev: yearPrev, change: change(yearNow, yearPrev) },
              month: { now: monthNow, prev: monthPrev, change: change(monthNow, monthPrev) } };
@@ -391,7 +400,7 @@
     return { end: end, next: list[0] || null, events: list, soon: soon, totals: totals };
   }
 
-  return { lastYear: lastYear, change: change, toDate: toDate, monthly: monthly, topClients: topClients, expenses: expenses, expensesPeriod: expensesPeriod, EXPENSE_PERIODS: EXPENSE_PERIODS, receipts: receipts,
+  return { fiscalYear: fiscalYear, lastYear: lastYear, change: change, toDate: toDate, monthly: monthly, topClients: topClients, expenses: expenses, expensesPeriod: expensesPeriod, EXPENSE_PERIODS: EXPENSE_PERIODS, receipts: receipts,
            monday: monday, isoWeek: isoWeek, time: time, prospects: prospects, deadlines: deadlines,
            since12: since12, period: period, PERIODS: PERIODS, invoiced: invoiced, quotes: quotes, documents: documents, invoicedMonthly: invoicedMonthly, clients: clients, clientDetail: clientDetail };
 });

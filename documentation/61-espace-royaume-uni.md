@@ -146,6 +146,9 @@ l'année précédente et acomptes déjà versés saisis par l'utilisateur ; seui
   **Reste avant publication** : le tableau de bord commun affiche encore l'encaissé de l'année civile (« Collected in
   2026 ») : crochet du pays pour l'année fiscale ; texte de la page, questions fréquentes, sources, menu, encarts,
   vitrine (comme D96).
+- **20/11/2026 (fin de soirée)** : exercice des indicateurs communs fourni par le pays (`fiscalYear` du moteur, lu par
+  `engines/espace-stats.js`, année civile par défaut) : le tableau de bord britannique affiche « Collected in 2026/27 »,
+  comparé à 2025/26 à la même date ; France et États-Unis inchangés (parcours 371 et 129 points), britannique 90.
 
 ## 6. Lectures
 

@@ -502,6 +502,8 @@
 
     return Object.assign({}, C, {
       text: L, METHODS: METHODS, DEFAULT_PREFIXES: country.prefixes, EXPENSE_BOXES: EXPENSE_BOXES, taxYearOf: taxYearOf, taxYear: taxYear,
+      // Exercice des indicateurs communs (tableau de bord : encaissé de l'année) : l'année fiscale de la date.
+      fiscalYear: function (date) { return taxYear(taxYearOf(date)); },
       rulesYear: rulesYear, income: income, mtdPeriods: mtdPeriods, quarters: quarters, incomeQuarters: incomeQuarters,
       checkExpense: checkExpense, expenseBoxes: expenseBoxes, summary: summary, summaryCSV: summaryCSV, incomeCSV: incomeCSV,
       expensesCSV: expensesCSV, ledger: ledger, yearData: yearData, mtdStatus: mtdStatus, mtdUpdates: mtdUpdates, vatTurnover: vatTurnover,

@@ -302,6 +302,22 @@ test("intérêts légaux de retard comme le calculateur public ; phrase de la re
   assert.equal(E.email("send", doc, [doc], { name: "Sam" }, "2026-11-20", fmt).subject, "[eng.uk.type.facture] " + doc.number + " – Sam");
 });
 
+test("tableau de bord : encaissé de l'année fiscale (6 avril–5 avril) comparé à la même date l'an dernier", () => {
+  const ST = require("../../src/assets/engines/espace-stats.js").create(E, UK.INV);
+  assert.deepEqual([ST.fiscalYear("2026-11-20").start, ST.fiscalYear("2026-11-20").end], ["2026-04-06", "2027-04-05"]);
+  assert.deepEqual([ST.fiscalYear("2026-04-05").start, ST.fiscalYear("2026-04-05").end], ["2025-04-06", "2026-04-05"]);
+  const docs = [invoice("c1", "2025-04-01", 100, [["2025-04-05", 100]]), invoice("c1", "2025-04-01", 200, [["2025-04-06", 200]]),
+                invoice("c1", "2025-10-01", 400, [["2025-11-20", 400]]), invoice("c1", "2025-11-01", 800, [["2025-11-21", 800]]),
+                invoice("c1", "2026-03-01", 1600, [["2026-04-05", 1600]]), invoice("c1", "2026-04-01", 50, [["2026-04-06", 50]]),
+                invoice("c1", "2026-11-01", 25, [["2026-11-20", 25]])];
+  const t = ST.toDate(docs, "2026-11-20");
+  assert.deepEqual(t.year, { now: 75, prev: 600, change: -87.5 }, "2026/27 depuis le 6 avril ; 2025/26 du 6 avril 2025 au 20 novembre 2025");
+  // Sans exercice fourni par le pays : année civile (France, États-Unis).
+  const US = require("../../src/assets/engines/espace-us.js").create(TX);
+  const SU = require("../../src/assets/engines/espace-stats.js").create(US, require("../../src/assets/engines/espace-us.js").INV);
+  assert.deepEqual(SU.fiscalYear("2026-11-20"), { start: "2026-01-01", end: "2026-12-31", label: "2026" });
+});
+
 test("règles britanniques lues par le moteur : présentes et cohérentes", () => {
   assert.deepEqual(Object.keys(R.uk_allowable_expenses), E.EXPENSE_BOXES, "aide de chaque case de dépenses (HS222)");
   assert.deepEqual(Object.keys(R.uk_sa103s_boxes.expenses), E.EXPENSE_BOXES);
