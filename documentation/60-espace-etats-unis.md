@@ -274,6 +274,18 @@ avec le module américain (`tools/espace-us-texts-en.js`, lot 3d). Parcours de l
 confiés au module : accueil (« déclarations Urssaf »), aides « en euros », « € » dans un message du cœur
 (`eng.issue.creditOver`), lien vers la page française des pénalités de retard, point mort « micro-entreprise ».
 
+Lot 3c-1 fait le 20/11/2026 : le format du pays gagne `money` (montant avec sa devise : « 1234,50 € » en France,
+« $1,234.50 » aux États-Unis), utilisé par le message du cœur sur un avoir trop élevé au lieu d'un « € » écrit dans
+le texte (même message en France, testé mot pour mot ; format américain testé ; deux erreurs réintroduites,
+détectées). La note des pénalités de retard (lien vers la page française) et le texte du point mort non calculé
+(« micro-entreprise ») passent dans le module (crochet `treasury` : `agingNote`, `breakEvenNone`) avec leurs clés.
+Le parcours ne les affichait jamais vérifiés : deux points ajoutés (point mort sans charge notée ; facture en retard
+injectée, rappel des pénalités et lien). Les autres textes communs liés à la France (accueil, aides « en euros »)
+restent en français pour la France ; leur traduction anglaise sera neutre (sans pays ni devise).
+Parcours de l'Espace 369/369 et des comptes 51/51, 753 tests unitaires ; mutation (note des pénalités vidée)
+détectée. Le lien des modèles de relance (`remind.templatesHref`) vise `payment-reminder-email` aux États-Unis et
+au Canada, `payment-reminder-letter` au Royaume-Uni : variante `en-GB` à prévoir avec le Royaume-Uni.
+
 ### Avancement
 
 - **Étape 1 terminée le 19/11/2026.** Les textes de `tools/espace.js` sont dans `tools/espace-texts-fr.js`

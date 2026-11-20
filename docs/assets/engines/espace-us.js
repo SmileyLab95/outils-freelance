@@ -40,9 +40,10 @@
     var country = {
       // Numéros comme le générateur public : 2026-001, E-2026-001 ; avoirs (credit memos) : CM-2026-001.
       prefixes: { facture: "", devis: "E-", avoir: "CM-" },
-      // Formats des exports et des messages : 10/18/2026, 1.5, 1234.50.
+      // Formats des exports et des messages : 10/18/2026, 1.5, 1234.50 ; montant avec sa devise : $1,234.50.
       fmt: { day: function (d) { var p = d.split("-"); return p[1] + "/" + p[2] + "/" + p[0]; }, dec: function (n) { return String(n); },
-             amount: function (n) { return n.toFixed(2); } }
+             amount: function (n) { return n.toFixed(2); },
+             money: function (n) { return n.toLocaleString("en-US", { style: "currency", currency: "USD" }); } }
     };
     var C = CORE(INV, L, country);
     var METHODS = C.labels("eng.us.method.", METHOD_KEYS);

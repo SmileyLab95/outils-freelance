@@ -151,7 +151,7 @@
       var origin = documents.filter(function (d) { return d.id === doc.originId; })[0];
       if (origin && total(doc) > total(origin) - credited(documents, origin) + 0.005) {
         errors.push(L("eng.issue.creditOver", { number: origin.number,
-          amount: amountText(total(origin) - credited(documents, origin)) }));
+          amount: moneyText(total(origin) - credited(documents, origin)) }));
       }
     }
     var last = series(documents, doc.type, String(doc.date).slice(0, 4))[0];
@@ -256,6 +256,7 @@
   var dec = function (n) { return country.fmt.dec(round2(n)); };
   var dayText = function (d) { return d ? country.fmt.day(String(d)) : ""; };
   var amountText = function (n) { return country.fmt.amount(Number(n)); };
+  var moneyText = function (n) { return country.fmt.money(Number(n)); };   // montant avec sa devise, dans un message
   var hasRate = function (t) { return t.rate !== null && t.rate !== undefined && t.rate !== "" && isFinite(Number(t.rate)); };
   var byDate = function (a, b) {
     return a.date < b.date ? -1 : a.date > b.date ? 1 : (a.createdAt || "") < (b.createdAt || "") ? -1 : (a.createdAt || "") > (b.createdAt || "") ? 1 : (a.id < b.id ? -1 : 1);

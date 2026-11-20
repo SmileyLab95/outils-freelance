@@ -13,7 +13,8 @@ const L = (key, vars) => "[" + key + (vars ? " " + JSON.stringify(vars) : "") + 
 const country = {
   prefixes: { facture: "INV", devis: "EST", avoir: "CM" },
   methods: { check: "[check]", ach: "[ach]" },
-  fmt: { day: (d) => d.slice(5, 7) + "/" + d.slice(8, 10) + "/" + d.slice(0, 4), dec: (n) => String(n), amount: (n) => n.toFixed(2) },
+  fmt: { day: (d) => d.slice(5, 7) + "/" + d.slice(8, 10) + "/" + d.slice(0, 4), dec: (n) => String(n), amount: (n) => n.toFixed(2),
+         money: (n) => "$" + n.toFixed(2) },
 };
 const C = CORE(INV, L, country);
 // Une lettre accentuée ou une virgule décimale trahirait un texte ou un format français.

@@ -898,6 +898,10 @@
       var v = vatLastYearOf(f2);
       pr.vatLastYear = v.value === null ? null : Math.round(v.value * 100) / 100;
     }
+    /** Point mort non calculé : il ne l'est que pour la micro-entreprise, une fois les charges notées. */
+    function breakEvenNone() { return L("tr.kpi.breakEvenNone"); }
+    /** Factures en retard : pénalités de retard dues de plein droit entre professionnels (lien vers le calculateur). */
+    function agingNote() { return L("tr.aging.penaltiesHtml"); }
     /** Hypothèses propres à la France : cotisations, TVA, point mort après cotisations ; impôt sur le revenu en dernier. */
     function treasuryAssumptions(o) {
       var p = profile();
@@ -960,6 +964,7 @@
                    optoutNote: optoutNote, rules: prospectRules },
       deadlines: { values: deadlineValues, hidden: deadlineHidden, classes: DEADLINE_CLASSES, summary: deadlineSummary },
       treasury: { kinds: TREASURY_KINDS, owed: treasuryOwed, revenueLabel: revenueLabel, assumptions: treasuryAssumptions,
+                  breakEvenNone: breakEvenNone, agingNote: agingNote,
                   settings: { names: ["vatLastYear"], fields: treasuryFields, check: treasuryCheck, save: treasurySave } },
       generator: { saved: generatorSaved, profile: generatorProfile, extras: generatorExtras, patchLabels: PATCH_LABELS, notes: generatorNotes }
     };

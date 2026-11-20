@@ -4957,6 +4957,8 @@ const tests = {
     let expected = await engine();
     check((await text("#espace-view h2")) === "Trésorerie" && (await trKpis()).startsWith("Solde du compte – Indiquer le solde") &&
       (await trKpis()).includes("après " + flat(expected.owed) + " déjà dus"), "Trésorerie : déjà dû affiché sans solde");
+    check((await trKpis()).includes("Point mort – chiffre d'affaires mensuel nécessaire (micro-entreprise, charges notées)"),
+      "Trésorerie : point mort expliqué tant qu'aucune charge n'est notée");
     check(flat(await text(".treasury-table tbody")) === flat(expected.months.join(" ")) && (await page.$$eval(".treasury-table tbody tr", (r) => r.length)) === 6,
       "Trésorerie : prévision de 6 mois (octobre 2026 à mars 2027)");
     check(!(await page.$('[data-chart="balance"]')) && (await text("#espace-view")).includes("pour voir la courbe du solde") &&
@@ -5236,6 +5238,20 @@ const tests = {
     await page.evaluate(async (p) => { const d = await window.EspaceStore.load(); d.profile.vatRegime = p.vatRegime; d.profile.vatRate = p.vatRate;
       d.profile.address = p.address; d.profile.siret = p.siret; await window.EspaceStore.save(d); },
       { vatRegime: vatBefore.vatRegime, vatRate: vatBefore.vatRate, address: vatBefore.address, siret: vatBefore.siret });
+    // Facture en retard (copie d'une facture émise, échue depuis septembre) : créances en retard et rappel des pénalités.
+    await page.evaluate(async () => {
+      const d = await window.EspaceStore.load();
+      const late = JSON.parse(JSON.stringify(d.documents.find((x) => x.type === "facture" && x.status !== "draft")));
+      Object.assign(late, { id: "late-1", number: "F2026-099", date: "2026-08-01", serviceDate: "2026-08-01", terms: 30, payments: [] });
+      d.documents.push(late);
+      await window.EspaceStore.save(d);
+    });
+    await page.reload({ waitUntil: "networkidle" });
+    await go("#/tresorerie");
+    check((await text("#espace-view")).includes("Factures en retard") &&
+      (await text("#espace-view")).includes("Entre professionnels, des pénalités de retard sont dues de plein droit") &&
+      !!(await page.$('#espace-view a[href="/fr/penalites-de-retard/"]')), "Trésorerie : facture en retard, rappel des pénalités et lien vers le calculateur");
+    await page.evaluate(async () => { const d = await window.EspaceStore.load(); d.documents = d.documents.filter((x) => x.id !== "late-1"); await window.EspaceStore.save(d); });
     await page.reload({ waitUntil: "networkidle" });
     await go("#/");
   },

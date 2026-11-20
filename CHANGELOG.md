@@ -34,6 +34,9 @@
 - Lot 3b : le dictionnaire français est partagé en textes communs (`tools/espace-texts-fr.js`, 876 clés) et
   textes de la France (`tools/espace-fr-texts-fr.js`, 478 clés) ; le test des clés vérifie les deux règles (clés
   communes dans chaque langue, clés d'un pays dans ses langues seulement). Aucun changement visible.
+- Lot 3c-1 : textes communs rendus indépendants de la France avant leur traduction : montant avec sa devise
+  donné par le pays dans le message d'un avoir trop élevé ; note des pénalités de retard et point mort non calculé
+  confiés au module français. Deux points ajoutés au parcours (369).
 
 ## 2026-11-19 (après-midi, suite) — Moteur de l'Espace des États-Unis (lot 2e)
 

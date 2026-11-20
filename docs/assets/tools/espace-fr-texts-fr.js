@@ -288,6 +288,8 @@
     "tr.note.vatBalance": "Le solde de la TVA de {year}, payé avec la déclaration annuelle (CA12) au plus tard le {date}, n'est pas compté.",
     "tr.note.noUrssaf": "Hors micro-entreprise, les cotisations sociales ne sont pas estimées ici.",
     // Trésorerie : créances, prochains mouvements, détail, mouvements prévus, réglages, hypothèses
+    "tr.kpi.breakEvenNone": "chiffre d'affaires mensuel nécessaire (micro-entreprise, charges notées)",
+    "tr.aging.penaltiesHtml": "Entre professionnels, des pénalités de retard sont dues de plein droit : <a href=\"/fr/penalites-de-retard/\">calculer les pénalités</a>.",
     "tr.s.vatLastYear": "TVA due au titre de l'année précédente",
     "tr.s.vatLastYearHint": "Montant de la déclaration annuelle (CA12) : il fixe les acomptes de juillet (55 %) et de décembre (40 %). Moins de 1 000 € : pas d'acompte.",
     "tr.a.urssaf": "Cotisations : chiffre d'affaires encaissé de chaque période (et chiffre d'affaires prévu) × taux de votre activité (formation professionnelle comprise), à la date limite de la déclaration.",

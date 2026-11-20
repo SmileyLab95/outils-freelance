@@ -161,7 +161,8 @@ test("A10 : avoir sur une facture non payée (annulation) ou payée (rembourseme
   assert.equal(E.state(unpaid, "2026-12-01", docs), "cancelled", "facture annulée par l'avoir");
   assert.equal(E.state(full, "2026-12-01", docs), "imputed", "avoir déduit, rien à rembourser");
   const tooMuch = E.issue(docs, E.creditFromInvoice(unpaid, "2026-10-22", "a2"), me, client, null, "now");
-  assert.match(tooMuch.errors[0], /ne peut pas dépasser le montant restant de la facture F2026-001/);
+  assert.equal(tooMuch.errors[0], "L'avoir ne peut pas dépasser le montant restant de la facture F2026-001 (0,00 €).",
+    "montant restant avec sa devise (format de la France)");
 
   const paid = issueAll(docs, draft({ date: "2026-10-23" }));
   paid.payments.push({ id: "p", date: "2026-10-24", amount: 1000, method: "virement" });

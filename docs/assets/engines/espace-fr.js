@@ -48,9 +48,11 @@
   var METHODS = labels("eng.method.", ["virement", "carte", "cheque", "especes", "prelevement", "autre"]);
   var DEFAULT_PREFIXES = { facture: "F", devis: "D", avoir: "A" };
   country.prefixes = DEFAULT_PREFIXES;
-  // Formats de la France pour les exports et les messages : 18/10/2026, 1,5, 1234,50 (documentation/60, § 3.1, lot 2c).
+  // Formats de la France pour les exports et les messages : 18/10/2026, 1,5, 1234,50 ; montant avec sa devise dans les
+  // messages : 1234,50 € (documentation/60, § 3.1, lot 2c ; § 3.2, lot 3c).
   country.fmt = { day: function (d) { return d.split("-").reverse().join("/"); }, dec: function (n) { return String(n).replace(".", ","); },
-                  amount: function (n) { return n.toFixed(2).replace(".", ","); } };
+                  amount: function (n) { return n.toFixed(2).replace(".", ","); },
+                  money: function (n) { return n.toFixed(2).replace(".", ",") + " €"; } };
   country.methods = METHODS;
   // Codes pays ISO 3166-1 alpha-2 (249) et États membres de l'Union européenne (27) ; noms affichés par Intl.DisplayNames.
   var COUNTRIES = ("AD AE AF AG AI AL AM AO AQ AR AS AT AU AW AX AZ BA BB BD BE BF BG BH BI BJ BL BM BN BO BQ BR BS BT BV BW BY BZ " +

@@ -126,3 +126,12 @@ test("U7 : 1099-NEC attendus au seuil de 2 000 $, cartes et plateformes exclues,
   assert.deepEqual(E.expected1099(docs, clients, "2024", R), { threshold: null, dueDate: null, clients: [] }, "seuil inconnu : pas de liste");
   assert.deepEqual(US.NOT_ON_1099_NEC, ["card", "platform"], "us_1099_nec_card_exclusion");
 });
+
+test("avoir trop élevé : montant restant de la facture avec la devise, au format américain (documentation/60, lot 3c)", () => {
+  const T2 = new Proxy({ "eng.issue.creditOver": "{number} ({amount})" }, { get: (o, k) => (k in o ? o[k] : "[" + String(k) + "]") });
+  const E2 = US.create(T2);
+  const inv = invoice("c1", "2026-03-02", 1234.5);
+  const credit = E2.creditFromInvoice(inv, "2026-03-05", "cm1");
+  credit.lines = [{ desc: "Refund", qty: 1, price: 2000 }];
+  assert.deepEqual(E2.issue([inv], credit, { name: "Me" }, { name: "Client" }, null, "now").errors, [inv.number + " ($1,234.50)"]);
+});

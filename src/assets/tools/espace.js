@@ -1940,7 +1940,7 @@
         pct: Math.round(stats.onTime * 100) }) : L("tr.kpi.noPaid")) +
       tile(L("tr.kpi.runway"), run === null ? "–" : L("tr.kpi.months", { n: esc(OF.fmt(run)) }), run === null ? (monthly ? L("tr.kpi.needBalance") : '<a href="#tr-charges">' + L("tr.kpi.noteCharges") + "</a>") :
         L("tr.kpi.runwaySub", { amount: esc(money(monthly)) }), run !== null && run < 2 ? "is-warn" : "") +
-      tile(L("tr.kpi.breakEven"), be === null ? "–" : esc(money(be)), be === null ? L("tr.kpi.breakEvenNone") :
+      tile(L("tr.kpi.breakEven"), be === null ? "–" : esc(money(be)), be === null ? (UI.treasury ? UI.treasury.breakEvenNone() : "") :
         L("tr.kpi.breakEvenSub", { amount: esc(money(avgIn)) }) + (active.length ? L("tr.kpi.overMonths", { n: active.length }) : ""), be !== null && avgIn < be ? "is-warn" : "") + "</div>";
 
     var tools = '<div class="tr-tools espace-noprint"><div class="seg" role="group" aria-label="' + L("tr.horizon") + '">' + HORIZONS.map(function (h) {
@@ -1981,7 +1981,7 @@
           return '<li><span class="dl-main"><a href="#/documents/' + esc(x.doc.id) + '"><b>' + esc(x.doc.number) + "</b></a>" + '<span class="small muted">' + esc(who) +
             L("tr.aging.due", { date: day(x.due) }) + " · " + lateText(x.lateDays) + '</span></span><span class="dl-side"><b>' + esc(money(x.amount)) +
             '</b><a class="small" href="#/documents/' + esc(x.doc.id) + '">' + L("tr.aging.remind") + "</a></span></li>";
-        }).join("") + '</ul><p class="small muted">' + L("tr.aging.penaltiesHtml") + "</p>" : "") :
+        }).join("") + "</ul>" + (UI.treasury ? '<p class="small muted">' + UI.treasury.agingNote() + "</p>" : "") : "") :
         '<p class="small muted">' + L("tr.aging.none") + "</p>") +
       (quotes.count ? '<p class="small">' + L("tr.aging.quotesHtml", { amount: esc(money(quotes.amount)), n: quotes.count }) + " " +
         '<a href="#/documents?filtre=devis">' + L("tr.aging.seeQuotes") + "</a></p>" : "") + "</section>";
