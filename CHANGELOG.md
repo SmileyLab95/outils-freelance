@@ -79,6 +79,11 @@
 - Espace britannique, lectures (suite) : revenu éligible et entrée dans Making Tax Digital, règles PECR des emails et
   des appels de prospection, registres à garder (quatre règles sourcées) ; paramètres de facture du générateur
   britannique déplacés dans `data/invoice-profiles/uk.json` (contenu identique).
+- Espace britannique, lectures finies et moteur : dépenses admises par case (fiche HS222), périodes des mises à jour
+  trimestrielles de Making Tax Digital, définitions et registre du PECR, cases 9 à 32 du SA103S (deux règles nouvelles,
+  trois complétées) ; moteur `engines/espace-uk.js` (année fiscale du 6 avril au 5 avril, synthèse du SA103S, impôt
+  et acomptes du calculateur public, MTD, indicateur du seuil de VAT, intérêts légaux de retard dans les relances) et
+  13 tests unitaires (776 en tout). Rien n'est encore visible sur le site.
 
 ## 2026-11-19 (après-midi, suite) — Moteur de l'Espace des États-Unis (lot 2e)
 

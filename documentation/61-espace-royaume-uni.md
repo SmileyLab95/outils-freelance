@@ -26,7 +26,7 @@ langue et par pays, branchements, adresses dans la langue de la section).
 | Bureau à domicile, kilomètres | Forfaits *use of home* et *simplified mileage* | `use_of_home_flat_rates`, `simplified_mileage_*` |
 | Échéances | Calendrier fiscal britannique existant (`data/calendars/uk.json` : Self Assessment, acomptes, MTD, VAT) | — |
 
-### 1.2 À lire avant le moteur (étape 1)
+### 1.2 À lire avant le moteur (étape 1, faite le 20/11/2026 : § 6)
 
 1. **Catégories de dépenses** du formulaire SA103S (et SA103F) de l'année en cours et de leurs notes : intitulés exacts
    des cases (*cost of goods*, *car, van and travel*, *wages*, *rent, rates, power and insurance*, *repairs*, *phone,
@@ -79,6 +79,31 @@ orthographe) ; paramètres de facture du générateur britannique dans `data/inv
 page en brouillon `/uk/workspace/` puis publication. Le cœur a des périodes en année civile : l'année fiscale
 britannique est fournie par le pays (périodes et libellés), sans changer la France ni les États-Unis.
 
+### 3.1 Moteur (`engines/espace-uk.js`, fait le 20/11/2026, D98)
+
+Fabrique `create(textes)` sur le cœur commun, avec le moteur de facture international (aperçu et totaux du générateur
+public) et les règles de `data/rules/uk.json`. Fonctions pures, testées par `tests/unit/espace-uk.test.mjs`.
+
+| Fonction | Rôle | Règles |
+|---|---|---|
+| `taxYearOf`, `taxYear` | Année fiscale d'une date (du 6 avril au 5 avril), libellé « 2026/27 » | `tax_year_start`, `tax_year_end` |
+| `income` | Livre des recettes en caisse : encaissement à sa date de réception, remboursement d'un avoir déduit | `cash_basis_default`, notes de la case 9 |
+| `checkExpense`, `expenseBoxes` | Dépense rangée dans une case 11 à 19 du SA103S ; totaux par case, total en case 20 | `uk_sa103s_boxes`, `uk_allowable_expenses` |
+| `summary`, `summaryCSV` | Cases 9, 10, 10.1, 11 à 22 et 28 ou 32 ; pages complètes à partir de 90 000 £ ; recettes jusqu'à 1 000 £ ; allocation plus favorable que les dépenses | `uk_sa103s_boxes`, `trading_allowance` |
+| `mtdPeriods`, `quarters`, `mtdUpdates` | Périodes standard (ou calendaires) et dates limites ; totaux cumulés depuis le 6 avril, par case, et part du trimestre ; état d'après la date du jour | `uk_mtd_itsa_update_periods` |
+| `mtdStatus` | Concerné ou non pour chaque année de départ (2026, 2027, 2028) : revenu éligible saisi, sinon recettes de l'Espace (cases 9 et 10) et loyers saisis, face au seuil (« more than ») | `uk_mtd_itsa_qualifying_income`, `mtd_itsa_threshold_*` |
+| `vatTurnover` | Facturé hors taxe sur les 12 derniers mois, par date de facture, avoirs déduits ; part des clients hors du Royaume-Uni donnée à part, sans l'exclure | `vat_registration_threshold`, `outside_scope_not_taxable_turnover` |
+| `estimatedTax` | Impôt et Class 4 de `taxUK.soleTrader`, comme le calculateur public : bénéfice prévu, sinon bénéfice à date au prorata des jours de l'année fiscale | barème de l'année des règles |
+| `taxSchedule` | Solde de l'année précédente saisi ; acomptes de l'année (moitié de l'impôt de l'année précédente saisi, sauf sous 1 000 £ ou sans acompte demandé) ; solde de l'année ; acomptes de l'année suivante | `payments_on_account_*`, `sa_balancing_payment_deadline` |
+| `forecast`, `owed` | Prévision avec les paiements de l'échéancier moins le déjà versé ; montants inconnus signalés ; déjà dû au prorata du bénéfice réalisé | idem |
+| `lateInterest`, `email` | Intérêts légaux et indemnité fixe d'une facture en retard (taux de référence du semestre où elle est devenue exigible), phrase de la relance d'un client professionnel | `late_payment_*`, `boe_bank_rate` |
+
+Choix (D98) : numéros `2026-001`, `Q-2026-001` (*quotes*) et `CN-2026-001` (*credit notes*) ; un remboursement versé au
+client vient en déduction des recettes de la case 9 (les notes n'en parlent pas : c'est dit à l'écran) ; périodes
+standard de MTD seules proposées en version 1 (« Your software will be set to use standard update periods ») ; impôt de
+l'année précédente et acomptes déjà versés saisis par l'utilisateur ; seuil de VAT : indicateur sur ce qui est facturé
+(l'Espace ne sait pas quelles ventes sont exonérées ou hors du champ), présenté comme tel.
+
 ## 4. Critères d'acceptation
 
 | N° | Critère |
@@ -102,6 +127,12 @@ britannique est fournie par le pays (périodes et libellés), sans changer la Fr
 ### Avancement
 
 - **20/11/2026** : spécification (D97) ; premières lectures faites (§ 6), règle `uk_sa103s_boxes`.
+- **20/11/2026 (soir)** : lectures finies (§ 6 : HS222, mises à jour trimestrielles de MTD, articles 2 et 26 du PECR,
+  cases 9, 10 et 26 à 32 du SA103S) ; deux règles nouvelles (`uk_allowable_expenses`, `uk_mtd_itsa_update_periods`) ;
+  **étape 2 faite** : moteur `engines/espace-uk.js` (§ 3.1, D98) et 13 tests (critères K3 à K7), chacun vérifié en
+  réintroduisant l'erreur qu'il doit détecter (32 erreurs réintroduites ; les 7 d'abord non détectées l'ont été après six
+  contrôles ajoutés et une condition redondante retirée).
+  Prochaine étape : écrans (`tools/espace-uk-ui.js`), variante en-GB des textes communs, page en brouillon.
 
 ## 6. Lectures
 
@@ -127,11 +158,33 @@ britannique est fournie par le pays (périodes et libellés), sans changer la Fr
 - **Prospection** : règlement PECR 2003, articles 22 (emails et SMS aux abonnés **individuels** : accord préalable,
   sauf *soft opt-in* à trois conditions) et 21 (appels : numéro présenté ; pas d'appel à qui s'y est opposé ni aux
   numéros du registre de l'article 26, sauf inscrits depuis moins de 28 jours), lus sur legislation.gov.uk. Règles
-  `uk_pecr_email`, `uk_pecr_calls`. **À lire** avant de les afficher : l'article 2 (abonné individuel ou d'entreprise)
-  et l'article 26 (registre).
+  `uk_pecr_email`, `uk_pecr_calls`. Article 2 lu ensuite : un « individual » est une personne physique **et** un
+  groupement de personnes physiques sans personnalité morale (*sole traders* et *partnerships* sont donc des abonnés
+  individuels) ; l'*electronic mail* comprend les SMS ; l'article 22 ne vise pas les abonnés d'entreprise (sociétés).
+  Article 26 lu : registre des numéros dont l'abonné ne veut pas d'appels de prospection ; inscription d'une entreprise
+  par écrit, rappel annuel ; consultation payante. Le nom public du registre n'est pas dans le texte : l'Espace dira
+  « le registre de l'article 26 » sans nommer de service.
 - **Registres** (« What records to keep ») : dépenses, VAT, paie, revenus personnels ; preuves (reçus, relevés,
   talons de chèques, factures de vente) ; règle `uk_records_proof` (le premier élément de la liste est à relire).
 - **Paramètres de facture** : ceux du générateur britannique déplacés dans `data/invoice-profiles/uk.json` (balise
   `{{invoice_profile:uk}}`, contenu identique vérifié ; pages britanniques 69/69).
-- **À lire ensuite** : fiche HS222 (aide de chaque case : la publication donne une version HTML ou un PDF à trouver),
-  périodes et catégories des mises à jour trimestrielles de MTD, articles 2 et 26 du PECR.
+- **Fiche HS222 2026** (version HTML, mise à jour le 7 avril 2026), lue le 20/11/2026 : section 6, tableau des
+  dépenses admises et non admises par catégorie (repris mot pour mot, lignes de la comptabilité de caisse seules : règle
+  `uk_allowable_expenses`, rangée par case du SA103S ; la publicité, sans case propre sur la version courte, va en case
+  19, confiance moyenne : les notes du SA103S n'ont pas d'aide case par case et renvoient à HS222) ; section 7 : en
+  caisse, les biens d'équipement sont déductibles, sauf voitures, terrains, formation et autres exceptions ;
+  section 13 : en caisse, un assujetti à la VAT peut tenir ses comptes TTC ou HT.
+- **Mises à jour trimestrielles de MTD** (gov.uk, lues le 20/11/2026) : périodes standard du 6 avril au 5 juillet,
+  5 octobre, 5 janvier et 5 avril, dates limites du 7 août, 7 novembre, 7 février et 7 mai ; périodes calendaires
+  (1er avril au 30 juin…) au choix, logiciels réglés sur les périodes standard ; chaque mise à jour couvre l'année depuis
+  son début ; totaux par catégorie, mêmes catégories que le Self Assessment ; aucune pièce envoyée ; mise à jour due
+  même sans recette ni dépense. Règle `uk_mtd_itsa_update_periods`.
+- **SA103S, cases 9, 10 et 26 à 32** (formulaire et notes, relus le 20/11/2026) : case 9 = « the total amount of income
+  received (cash basis) … before taking off any expenses » ; case 10 : autres recettes de l'activité ; case 10.1 : au
+  plus 1 000 £, jamais de perte ; case 28 « Net business profit for tax purposes » = 21 − 22 (ou 21 − 10.1 avec
+  l'allocation) ; case 32 « Net business loss for tax purposes » ; case 31 « Total taxable profits from this business »
+  (pertes antérieures et case 30 hors version 1). Les remboursements aux clients ne sont pas cités (D98).
+- **VAT Notice 700/1** : recherche sur la mesure du chiffre d'affaires des 12 derniers mois sans résultat avec les mots
+  essayés ; l'Espace s'en tient à la règle déjà sourcée (`vat_registration_threshold` : plus de 90 000 £ sur les
+  12 derniers mois, ou attendu dans les 30 prochains jours) et présente son chiffre comme un indicateur. **À lire** :
+  la mesure exacte (fin de chaque mois ?) avant de publier l'écran.

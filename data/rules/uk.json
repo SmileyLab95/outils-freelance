@@ -3398,10 +3398,15 @@
         "total_expenses": "20",
         "net_profit": "21",
         "net_loss": "22",
-        "short_form_turnover_limit": 90000
+        "short_form_turnover_limit": 90000,
+        "tax_adjusted": {
+          "28": "Net business profit for tax purposes",
+          "32": "Net business loss for tax purposes",
+          "31": "Total taxable profits from this business"
+        }
       },
       "unit": "object",
-      "label": "Self-employment (short) page SA103S: income boxes 9 to 10.1, allowable expense boxes 11 to 19, total in box 20, net profit (box 21) = box 9 + box 10 - box 20; the short page is for an annual turnover below £90,000",
+      "label": "Self-employment (short) page SA103S: income boxes 9 to 10.1, allowable expense boxes 11 to 19, total in box 20, net profit (box 21) = box 9 + box 10 - box 20; the short page is for an annual turnover below £90,000; net business profit for tax purposes (box 28) = box 21 minus box 22, or box 21 minus box 10.1 with the trading income allowance (boxes 26, 27 and capital allowances not used by the Workspace)",
       "source": "https://assets.publishing.service.gov.uk/media/69c12ae013101e9908704a53/SA103S-2026.pdf",
       "source_title": "HMRC - Self-employment (short) SA103S 2026, tax year 6 April 2025 to 5 April 2026",
       "more_sources": [
@@ -3412,7 +3417,7 @@
       ],
       "confidence": "high",
       "verified_on": "2026-11-20",
-      "note": "Form read in full on 20/11/2026 with the source reader (GitHub Actions; SHA-256 556bb1d4d881cbf992ce31bae2e40806760f69ba8266ade2265a343553eed382; 'HMRC 12/25'; publication page last updated 6 April 2026). Box labels quoted exactly. Notes (SESN): 'Fill in boxes 11 to 19 and put the total in box 20. If your annual turnover was below £90,000, you may just put your total expenses in box 20. If you claim the trading income allowance in box 10.1, do not complete boxes 11 to 20'; box 21: 'Add boxes 9 and 10 together. If the total is more than the figure in box 20, put the difference in box 21' (box 22 the other way); the full pages are needed if 'your turnover for the year is £90,000 or more (or would have been if you'd traded for a full year)'; trading income allowance: up to £1,000, no expenses can then be deducted, it cannot make a loss. Per-category guidance is in helpsheet HS222 (not yet read). The 2027 form (tax year 2026-27) is not yet published."
+      "note": "Form read in full on 20/11/2026 with the source reader (GitHub Actions; SHA-256 556bb1d4d881cbf992ce31bae2e40806760f69ba8266ade2265a343553eed382; 'HMRC 12/25'; publication page last updated 6 April 2026). Box labels quoted exactly. Notes (SESN): 'Fill in boxes 11 to 19 and put the total in box 20. If your annual turnover was below £90,000, you may just put your total expenses in box 20. If you claim the trading income allowance in box 10.1, do not complete boxes 11 to 20'; box 21: 'Add boxes 9 and 10 together. If the total is more than the figure in box 20, put the difference in box 21' (box 22 the other way); the full pages are needed if 'your turnover for the year is £90,000 or more (or would have been if you'd traded for a full year)'; trading income allowance: up to £1,000, no expenses can then be deducted, it cannot make a loss. The 2027 form (tax year 2026-27) is not yet published. Read again on 20/11/2026 (form: boxes 27 to 32; notes: boxes 9, 10, 10.1 and the working sheet). Box 9: 'Put the total amount of income received (cash basis) or earned (traditional accounting) by your business before taking off any expenses in box 9. Include: all payments - cash, card, cheque or any other method; tips, fees and commissions; any payments in kind'. Box 10: 'income which constitutes trading income but is not included in your turnover' (for example letting part of the business accommodation). Box 10.1: the total claimed 'cannot exceed £1,000'; 'You cannot claim the trading income allowance to make a loss'; 'total receipts from self-employment' for the allowance include boxes 9, 10, 26 and 27. Form: box 28 'Net business profit for tax purposes (if box 21 + box 26 + box 27 minus (boxes 22 to 25.2) is positive). Or if you've completed box 10.1 (box 21 + box 26 + box 27 minus box 10.1)'; box 32 'Net business loss for tax purposes'; box 31 'Total taxable profits from this business (if box 28 + box 30 minus box 29 is positive)'. The notes give no guidance box by box for boxes 11 to 19: 'For more information on expenses, you can claim, and filling in boxes 11 to 20, go to www.gov.uk and search for HS222' (rule uk_allowable_expenses). Refunds paid back to customers are not named: the Workspace takes them off the turnover (money received, then returned), and says so."
     },
     "uk_mtd_itsa_qualifying_income": {
       "value": {
@@ -3463,7 +3468,13 @@
       "source_title": "The Privacy and Electronic Communications (EC Directive) Regulations 2003, regulation 22 - legislation.gov.uk",
       "confidence": "high",
       "verified_on": "2026-11-20",
-      "note": "Read in full on 20/11/2026 with the source reader (latest revised version; 'no known outstanding effects'). 22(1): 'This regulation applies to the transmission of unsolicited communications by means of electronic mail to individual subscribers.' 22(2): consent rule; 22(3)(a) to (c): soft opt-in, quoted in value.soft_opt_in. 'Electronic mail' includes text messages under the regulations' definitions (regulation 2, not yet read: the definitions of 'individual subscriber' and 'corporate subscriber' are to be read before the Workspace shows this rule)."
+      "note": "Read in full on 20/11/2026 with the source reader (latest revised version; 'no known outstanding effects'). 22(1): 'This regulation applies to the transmission of unsolicited communications by means of electronic mail to individual subscribers.' 22(2): consent rule; 22(3)(a) to (c): soft opt-in, quoted in value.soft_opt_in. Regulation 2 (definitions), read on 20/11/2026 with the source reader: '“electronic mail” means any text, voice, sound or image message sent over a public electronic communications network which can be stored in the network or in the recipient’s terminal equipment until it is collected by the recipient and includes messages sent using a short message service' (text messages are electronic mail); '“individual” means a living individual and includes an unincorporated body of such individuals' (sole traders and partnerships of individuals are individual subscribers); '“subscriber” means a person who is a party to a contract with a provider of public electronic communications services for the supply of such services'; corporate subscribers are companies, LLPs, corporations sole and other bodies corporate or entities which are legal persons distinct from their members. Regulation 22 does not apply to corporate subscribers.",
+      "more_sources": [
+        {
+          "source": "https://www.legislation.gov.uk/uksi/2003/2426/regulation/2",
+          "source_title": "The Privacy and Electronic Communications (EC Directive) Regulations 2003, regulation 2 (interpretation) - legislation.gov.uk"
+        }
+      ]
     },
     "uk_pecr_calls": {
       "value": {
@@ -3476,7 +3487,13 @@
       "source_title": "The Privacy and Electronic Communications (EC Directive) Regulations 2003, regulation 21 - legislation.gov.uk",
       "confidence": "high",
       "verified_on": "2026-11-20",
-      "note": "Read on 20/11/2026 with the source reader (SHA-256 2dc45978...; 'no known outstanding effects'). 21(A1): calls for direct marketing (solicited or not) only if the caller does not prevent presentation of the calling line identity or presents a line on which he can be contacted. 21(1): no unsolicited direct marketing call where '(a) the called line is that of a subscriber who has previously notified the caller that such calls should not for the time being be made on that line; or (b) the number ... is one listed in the register kept under regulation 26'. 21(3): not a contravention of (1)(b) if the number 'has been listed on the register for less than 28 days'. 21(4)-(5): a listed subscriber may tell a caller that he does not object, and may withdraw it at any time. The name of the regulation 26 register (Telephone Preference Service) is to be confirmed by reading regulation 26 or the ICO's guidance."
+      "note": "Read on 20/11/2026 with the source reader (SHA-256 2dc45978...; 'no known outstanding effects'). 21(A1): calls for direct marketing (solicited or not) only if the caller does not prevent presentation of the calling line identity or presents a line on which he can be contacted. 21(1): no unsolicited direct marketing call where '(a) the called line is that of a subscriber who has previously notified the caller that such calls should not for the time being be made on that line; or (b) the number ... is one listed in the register kept under regulation 26'. 21(3): not a contravention of (1)(b) if the number 'has been listed on the register for less than 28 days'. 21(4)-(5): a listed subscriber may tell a caller that he does not object, and may withdraw it at any time. Regulation 26, read on 20/11/2026 with the source reader (SHA-256 48dd1491...): a register is kept of the numbers of subscribers who have notified that they do not for the time being wish to receive unsolicited calls for direct marketing purposes on those lines; (1A) a corporate subscriber's notification is made in writing; (2A) corporate subscribers receive a written reminder each year, within 28 days after each anniversary of their notification; (3)-(4) the information in the register is made available to callers on payment of a fee. The register's public name is not stated in the regulation: the Workspace says 'the register of numbers kept under regulation 26' and does not name a service.",
+      "more_sources": [
+        {
+          "source": "https://www.legislation.gov.uk/uksi/2003/2426/regulation/26",
+          "source_title": "The Privacy and Electronic Communications (EC Directive) Regulations 2003, regulation 26 - legislation.gov.uk"
+        }
+      ]
     },
     "uk_records_proof": {
       "value": {
@@ -3506,6 +3523,175 @@
       "confidence": "high",
       "verified_on": "2026-11-20",
       "note": "Read on 20/11/2026 with the source reader (targeted passages). The list of records starts above 'all business expenses' (not captured: first item to re-read). Overview: 'From the 2024 to 2025 tax year, cash basis is the default method of accounting'; example: invoice of 15 March 2024 paid on 30 April 2024 is income of the 2024 to 2025 tax year; 'If you do not prepare accounts, you will need to record your income and expenses for each tax year (6 April to 5 April).' How long to keep records: uk_records_retention."
+    },
+    "uk_allowable_expenses": {
+      "value": {
+        "11": {
+          "category": "Cost of goods that you are going to sell or use in providing a service",
+          "allowable": [
+            "Amount paid for goods bought for resale, if you use cash basis."
+          ],
+          "not_allowable": [
+            "Cost of goods taken for private use."
+          ]
+        },
+        "12": {
+          "category": "Car, van and travel expenses",
+          "allowable": [
+            "Motoring costs such as car and van insurance, repairs, servicing, fuel, hire charges, vehicle licence fees, AA or RAC membership or the flat rate amount for vehicles.",
+            "If you use cash basis, the cost of vehicles other than cars.",
+            "Train, bus, air and taxi fares, hotel room costs.",
+            "Meals on overnight business trips."
+          ],
+          "not_allowable": [
+            "Non-business (private use proportion of) motoring costs. No adjustment if you use the flat rate amount.",
+            "Fines.",
+            "The cost of buying vehicles or, if you use cash basis, the cost of cars.",
+            "Travel costs between home and business.",
+            "Other meals."
+          ]
+        },
+        "13": {
+          "category": "Wages, salaries and other staff costs",
+          "allowable": [
+            "Wages, salaries, bonuses, pensions, benefits for staff or employees, employers’ National Insurance contributions, agency fees, and so on."
+          ],
+          "not_allowable": [
+            "Own wages, drawings, pension payments, National Insurance contributions, if included in expenses.",
+            "Payments for non-business work."
+          ]
+        },
+        "14": {
+          "category": "Rent, rates, power and insurance costs",
+          "allowable": [
+            "Rent for business premises, business and water rates, light, heat, power, property insurance, security.",
+            "If you use your home for business, the business proportion of the expenses or flat rate amount."
+          ],
+          "not_allowable": [
+            "Costs of buying the premises.",
+            "If you live on the business premises, expenses of any private part of the premises or the flat rate amount."
+          ]
+        },
+        "15": {
+          "category": "Repairs and maintenance of property and equipment",
+          "allowable": [
+            "Repairs and maintenance of business premises and equipment.",
+            "The cost of equipment and tools, if you use cash basis."
+          ],
+          "not_allowable": [
+            "Repairs of non-business parts of premises or equipment.",
+            "Costs of buying, improving or altering premises."
+          ]
+        },
+        "16": {
+          "category": "Accountancy, legal and other professional fees",
+          "allowable": [
+            "Accountants, solicitors, surveyors, architects and other professional fees.",
+            "Professional indemnity insurance premiums."
+          ],
+          "not_allowable": [
+            "Legal costs of buying property.",
+            "Costs of settling tax disputes.",
+            "Fines for breaking the law."
+          ]
+        },
+        "17": {
+          "category": "Interest on bank and other business loans",
+          "allowable": [
+            "Interest on bank and other business loans. Alternative finance payments."
+          ],
+          "not_allowable": [
+            "Repayment of the loan, overdraft or finance arrangements."
+          ]
+        },
+        "18": {
+          "category": "Phone, fax, stationery and other office costs",
+          "allowable": [
+            "Phone, mobile, internet, email and fax running costs. Postage, stationery, printing, small office equipment and computer software costs.",
+            "If you use cash basis, the cost of equipment."
+          ],
+          "not_allowable": [
+            "Non-business or private use proportion of expenses. Ignore private use of telephone and broadband service if this is insignificant."
+          ]
+        },
+        "19": {
+          "category": "Other business expenses",
+          "allowable": [
+            "Trade or professional journals and subscriptions, other sundry business running expenses not included elsewhere.",
+            "Advertising in newspapers, directories and so on, mailshots, free samples, website costs."
+          ],
+          "not_allowable": [
+            "Payments to clubs, charities, political parties and so on.",
+            "Non-business part of any expenses.",
+            "Cost of ordinary clothing.",
+            "Entertaining clients, suppliers and customers. Hospitality at events."
+          ]
+        }
+      },
+      "unit": "object",
+      "label": "Allowable and non-allowable business expenses by category (cash basis), from helpsheet HS222, keyed by the SA103S box that holds the category",
+      "source": "https://www.gov.uk/government/publications/how-to-calculate-your-taxable-profits-hs222-self-assessment-helpsheet/hs222-how-to-calculate-your-taxable-profits-2026",
+      "source_title": "HMRC - HS222 How to calculate your taxable profits (2026), section 6 (updated 7 April 2026)",
+      "confidence": "medium",
+      "verified_on": "2026-11-20",
+      "note": "Read on 20/11/2026 with the source reader (HTML version of the 2026 helpsheet, section 6 'Allowable business expenses: cash basis and traditional accounting'). Sentences quoted exactly; only the cash basis lines are kept (the Workspace records on the cash basis: the traditional accounting lines and 'Irrecoverable debts written off', 'Not relevant if you use cash basis', are left out). The helpsheet's categories follow the full page (SA103F); the short page (SA103S) groups them in boxes 11 to 19 (rule uk_sa103s_boxes). Matching by name: 11 to 18 have the same name on both, except 17 ('Interest and bank and credit card financial charges' on the SA103S). Advertising (no box of its own on the SA103S) is put in box 19 'Other allowable business expenses', with the box's own warning that client entertaining is not allowable: the SA103S notes give no guidance box by box ('Boxes 11 to 20 ... For more information on expenses, you can claim, and filling in boxes 11 to 20, go to www.gov.uk and search for HS222'), hence medium confidence for this grouping. Construction industry subcontractors (not the Workspace's audience) are left out. HS222 section 7: on the cash basis, capital items are deductible except cars, land, education or training, and the other exceptions listed there; section 13: VAT-registered businesses on the cash basis may record receipts and payments including or excluding VAT."
+    },
+    "uk_mtd_itsa_update_periods": {
+      "value": {
+        "standard": [
+          {
+            "from": "04-06",
+            "to": "07-05",
+            "deadline": "08-07"
+          },
+          {
+            "from": "04-06",
+            "to": "10-05",
+            "deadline": "11-07"
+          },
+          {
+            "from": "04-06",
+            "to": "01-05",
+            "deadline": "02-07"
+          },
+          {
+            "from": "04-06",
+            "to": "04-05",
+            "deadline": "05-07"
+          }
+        ],
+        "calendar": [
+          {
+            "from": "04-01",
+            "to": "06-30",
+            "deadline": "08-07"
+          },
+          {
+            "from": "04-01",
+            "to": "09-30",
+            "deadline": "11-07"
+          },
+          {
+            "from": "04-01",
+            "to": "12-31",
+            "deadline": "02-07"
+          },
+          {
+            "from": "04-01",
+            "to": "03-31",
+            "deadline": "05-07"
+          }
+        ],
+        "cumulative": true,
+        "totals_by_category": true
+      },
+      "unit": "object",
+      "label": "Making Tax Digital for Income Tax: quarterly update periods (each covers the tax year so far, from 6 April) and their deadlines; standard periods unless calendar periods are chosen",
+      "source": "https://www.gov.uk/guidance/use-making-tax-digital-for-income-tax/send-quarterly-updates",
+      "source_title": "HMRC - Use Making Tax Digital for Income Tax: send quarterly updates",
+      "confidence": "high",
+      "verified_on": "2026-11-20",
+      "note": "Read on 20/11/2026 with the source reader (SHA-256 8cdb1c23...). 'If your accounting period aligns with the tax year (6 April to 5 April), you should use standard update periods. Each quarterly update covers from the start of the tax year to the end of the update period.' Table: 6 April to 5 July, 7 August; 6 April to 5 October, 7 November; 6 April to 5 January, 7 February; 6 April to 5 April, 7 May (the following tax year). Calendar update periods, for an accounting period from 1 April to 31 March: 1 April to 30 June, 7 August; to 30 September, 7 November; to 31 December, 7 February; to 31 March, 7 May; 'Your software will be set to use standard update periods'. 'Your quarterly updates will include totals for each income and expense category you used to create your digital records. HMRC will not receive details of individual receipts or invoices'; 'Making Tax Digital for Income Tax uses the same income and expense categories as Self Assessment'; 'You do not need to make any accounting or tax adjustments before sending a quarterly update'; an update is still due if nothing was received or spent in the period. Dates of 2026-27: mtd_itsa_quarterly_deadlines_2026_27 (same days). Month-day strings: the year follows from the tax year (to and deadline fall in the next calendar year when their month is before April)."
     }
   },
   "open_questions": [
