@@ -89,6 +89,8 @@
   synthèse du SA103S, impôt et échéancier des acomptes, Making Tax Digital, indicateur du seuil de VAT, échéances,
   trésorerie, règles du PECR ; textes en anglais britannique (*quote*, *credit note*…) ; parcours navigateur de
   89 points. Mesure du seuil de VAT relue aux sources officielles.
+- Accueil britannique : la vitrine montre l'Espace (tableau de bord d'exemple, version ordinateur et téléphone) et une
+  facture d'exemple complète ; « My workspace » rejoint les raccourcis de l'accueil.
 - **Espace britannique en ligne** (`/uk/workspace/`) : page avec son texte, sept questions fréquentes et ses sources
   officielles, entrée de menu, bouton d'en-tête « My workspace », encarts sur six outils britanniques. Parcours
   britannique sur le site public : 104 points.

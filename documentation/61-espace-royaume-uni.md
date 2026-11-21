@@ -156,6 +156,12 @@ l'année précédente et acomptes déjà versés saisis par l'utilisateur ; seui
   fiscal, Making Tax Digital). Parcours britannique passé sur le site public : 104 points (publication, encarts
   visibles et en anglais britannique) ; pages britanniques 70 points. **Reste** : la vitrine de l'accueil britannique
   (tuile de l'Espace et capture d'exemple, comme le sous-lot 4c américain).
+- **21/11/2026** : vitrine de l'accueil britannique refaite comme l'américaine (documentation/58, § 4.2) : l'Espace en
+  grande tuile (tableau de bord d'un Espace d'exemple créé par `scripts/vitrine.mjs` : vingt-trois mois de factures
+  payées par virement, dépenses rangées dans les cases 14, 16 et 18 du SA103S d'après la fiche HS222, impôt de l'année
+  précédente pour les acomptes), avec sa variante téléphone ; facture d'exemple complète en tuile haute ; raccourci
+  « My workspace » de l'accueil. Pages britanniques : 70 points (vitrine : cinq tuiles, captures chargées, clic,
+  variante téléphone `uk-espace-mobile`). **Étape 4 terminée : l'Espace britannique est publié.**
 
 ## 6. Lectures
 

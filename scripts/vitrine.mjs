@@ -116,6 +116,57 @@ function usEspaceDemo() {
   return S.save(d);
 }
 
+/** Espace d'exemple (Royaume-Uni) : vingt-trois mois de factures payées par virement, des dépenses rangées dans les
+ *  cases du SA103S dont la fiche HS222 décrit ces frais (loyer d'un espace de travail : case 14 ; fournitures et
+ *  affranchissement : case 18 ; comptable : case 16), l'impôt de l'année précédente (acomptes), deux charges, datés par
+ *  rapport au jour de la capture. Exécuté dans la page (window.EspaceStore, window.OFE.espaceUK). */
+function ukEspaceDemo() {
+  const T = window.OF_ESPACE_TEXTS, S = window.EspaceStore, E = window.OFE.espaceUK.create(Object.assign({}, T.en, T["en-GB"])), d = S.empty();
+  const uid = () => crypto.randomUUID();
+  const iso = (dt) => dt.toISOString().slice(0, 10);
+  const today = new Date();
+  const day = (y, m, dd) => iso(new Date(Date.UTC(y, m, dd)));
+  const taxYear = String(E.taxYearOf(iso(today)));
+  d.profile = { name: "Sam Taylor Design", region: "ruk", vat: "none", address: "12 High Street\nBristol BS1 4DJ", email: "hello@example.co.uk",
+    terms: 30, payment: "Bank transfer: sort code 12-34-56, account 12345678", cashBalance: 8200, cashDate: day(today.getUTCFullYear(), today.getUTCMonth(), 1),
+    cashThreshold: 2500, taxYears: { [taxYear]: { priorBill: 6200 } } };
+  d.settings.lastExport = iso(today);
+  const names = ["Brightside Ltd", "Northwind Studio Ltd", "Oak & Ivy Interiors", "Harbour Coffee Co.", "Summit Analytics Ltd"];
+  d.clients = names.map((n, i) => ({ id: "c" + i, name: n, pro: true, address: (1 + i * 7) + " Market Square\nManchester M1 1AA", email: "accounts@client" + i + ".example" }));
+  const me = { name: d.profile.name, address: d.profile.address, email: d.profile.email, phone: "", taxId: "", logo: "", payment: d.profile.payment, late: "" };
+  const amounts = [2200, 2900, 1500, 3700, 1150, 3300, 1900];
+  let k = 0;
+  for (let back = 22; back >= 0; back--) {
+    const first = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth() - back, 1));
+    const y = first.getUTCFullYear(), m = first.getUTCMonth();
+    for (let j = 0; j < (m % 3 === 2 ? 2 : 1); j++) {
+      const date = day(y, m, 5 + j * 12);
+      if (date > iso(today)) continue;
+      const client = k % names.length, amount = amounts[k++ % amounts.length] + (back < 12 ? 350 : 0);
+      const c = d.clients[client];
+      const draft = { id: uid(), type: "facture", status: "draft", date, terms: 30, clientId: c.id, po: "",
+        lines: [{ desc: ["Website design", "Monthly retainer", "Accessibility audit", "Brand refresh", "Workshop"][client], qty: 1, price: amount }],
+        tax: { option: "none", rate: NaN, label: "" }, payments: [] };
+      const r = E.issue(d.documents, draft, me, { name: c.name, address: c.address, email: c.email, taxId: "", pro: true }, null, date + "T10:00:00Z");
+      if (r.errors.length) throw new Error(r.errors.join(" "));
+      const paid = new Date(date + "T00:00:00Z"); paid.setUTCDate(paid.getUTCDate() + 28);
+      if (iso(paid) < iso(today)) r.doc.payments = [{ id: uid(), date: iso(paid), amount, method: "bank", note: "" }];
+      d.documents.push(r.doc);
+    }
+  }
+  for (let back = 22; back >= 0; back--) {
+    const first = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth() - back, 1));
+    const y = first.getUTCFullYear(), m = first.getUTCMonth();
+    d.expenses.push({ id: uid(), date: day(y, m, 3), supplier: "Shared workspace", label: "Coworking desk", method: "card", ref: "", amount: 220, box: "14" });
+    d.expenses.push({ id: uid(), date: day(y, m, 9), supplier: "Stationery shop", label: "Paper, ink and postage", method: "card", ref: "", amount: 32, box: "18" });
+    if (m % 3 === 0) d.expenses.push({ id: uid(), date: day(y, m, 20), supplier: "Accountancy firm", label: "Bookkeeping review", method: "bank", ref: "", amount: 160, box: "16" });
+  }
+  const start = day(today.getUTCFullYear() - 1, 0, 1);
+  d.charges.push({ id: uid(), label: "Coworking desk", amount: 220, every: "month", start, end: "", flow: "out", revenue: false });
+  d.charges.push({ id: uid(), label: "Professional indemnity insurance", amount: 480, every: "year", start, end: "", flow: "out", revenue: false });
+  return S.save(d);
+}
+
 /** Saisies d'exemple du générateur de facture (France). */
 async function frInvoice(page) {
   await page.fill("#f-me-name", "Camille Martin EI");
@@ -209,8 +260,21 @@ const SHOTS = {
     ...[["impot", "self-employment-tax-calculator/"], ["acomptes", "quarterly-tax-calculator/"], ["tarif", "hourly-rate-calculator/"]]
       .map(([name, page]) => Object.assign({ name, url: "us/" + page }, SMALL)),
   ],
-  uk: sectionShots("uk", "uk/", "invoice-generator/", "freelance-contract/",
-    [["impot", "self-employed-tax-calculator/"], ["tarif", "day-rate-calculator/"], ["calendrier", "tax-calendar/", { hide: null }]]),
+  // Royaume-Uni : comme les États-Unis (D100), l'Espace en grande tuile (avec sa variante téléphone), la facture
+  // d'exemple complète, puis trois calculateurs.
+  uk: [
+    { name: "espace", url: "uk/workspace/", demo: ukEspaceDemo, hash: "#/", from: "#espace-view .kpis", ratio: 0.62, viewport: 1180 },
+    { name: "espace-mobile", url: "uk/workspace/", demo: ukEspaceDemo, hash: "#/", from: "#espace-view .kpis", ratio: 1.3, viewport: 390 },
+    // Sans ligne de VAT (entreprise non immatriculée), la feuille est moins haute que l'américaine : zone ajustée.
+    { name: "facture", url: "uk/invoice-generator/", from: "#iv-preview", ratio: 1.05, viewport: 1280, hide: ".espace-cta, #iv-reset",
+      fill: async (page) => {
+        await invoice(EXAMPLES.uk)(page);
+        await page.fill("#iv-payment", "Bank transfer: sort code 12-34-56, account 12345678");
+        await page.fill("#iv-notes", "Thank you for your business!");
+      } },
+    ...[["impot", "self-employed-tax-calculator/"], ["tarif", "day-rate-calculator/"], ["calendrier", "tax-calendar/", { hide: null }]]
+      .map(([name, page, options]) => Object.assign({ name, url: "uk/" + page }, SMALL, options)),
+  ],
   ca: sectionShots("ca", "ca/", "invoice-generator/", "freelance-contract/",
     [["impot", "self-employed-tax-calculator/"], ["taxes", "gst-hst-calculator/"], ["tarif", "hourly-rate-calculator/"]]),
   "ca-fr": sectionShots("ca-fr", "ca/fr/", "generateur-facture/", "contrat-de-service/",

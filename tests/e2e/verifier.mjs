@@ -1123,7 +1123,7 @@ const tests = {
   async "us/legal-notice/"() {},
   async "us/privacy-policy/"() {},
   async "uk/"(page) {
-    await showcase(page, "accueil UK", "/uk/self-employed-tax-calculator/", "uk-facture-mobile");
+    await showcase(page, "accueil UK", "/uk/self-employed-tax-calculator/", "uk-espace-mobile");
     const links = await page.$$eval("a[href]", (as) => as.map((a) => a.getAttribute("href")));
     for (const href of [...new Set(links.filter((h) => h.startsWith("/outils-freelance/")))]) {
       const res = await page.request.get(`http://127.0.0.1:${port}${href}`);

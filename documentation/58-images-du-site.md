@@ -82,6 +82,11 @@ Sur téléphone, les tuiles s'empilent (une colonne) ; l'image occupe toute la l
   tuile (tableau de bord avec des données d'exemple, `us-espace`, et sa variante téléphone `us-espace-mobile`), puis
   l'aperçu de la facture d'exemple (instructions de paiement comprises) en tuile haute, puis les trois calculateurs ;
   la tuile du contrat et la facture seule pour téléphone sont retirées (le contrat reste dans la liste des outils).
+- **Royaume-Uni, depuis le 21/11/2026** (publication de l'Espace britannique, D100) : même disposition que les
+  États-Unis : l'Espace en grande tuile (`uk-espace`, tableau de bord d'un Espace d'exemple par année fiscale, et
+  `uk-espace-mobile`), la facture d'exemple complète (coordonnées bancaires, remerciement ; zone ajustée, la facture
+  sans VAT étant moins haute), puis impôt, taux journalier et calendrier fiscal ; `uk-contrat` et `uk-facture-mobile`
+  retirées. Raccourci « My workspace » à la place du contrat.
 - 30 images, 1,5 Mo en tout ; un visiteur n'en charge que cinq, à l'approche.
 - Tests : la vérification de la vitrine est une fonction commune du parcours, appelée sur les six accueils (tuiles,
   liens, textes alternatifs, chargement, clic sur l'image, variante téléphone) ; 386 contrôles des accueils, axe-core
