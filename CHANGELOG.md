@@ -89,6 +89,9 @@
   synthèse du SA103S, impôt et échéancier des acomptes, Making Tax Digital, indicateur du seuil de VAT, échéances,
   trésorerie, règles du PECR ; textes en anglais britannique (*quote*, *credit note*…) ; parcours navigateur de
   89 points. Mesure du seuil de VAT relue aux sources officielles.
+- Espace canadien : spécification (documentation/62, D101), anglais et français du Québec ; premières lectures aux
+  textes officiels : comptabilité d'exercice pour le revenu d'un travailleur autonome (Loi de l'impôt sur le revenu,
+  art. 12(1)b) et 28(1)), Loi canadienne anti-pourriel (art. 6, 10 et 11) ; deux règles sourcées.
 - Accueil britannique : la vitrine montre l'Espace (tableau de bord d'exemple, version ordinateur et téléphone) et une
   facture d'exemple complète ; « My workspace » rejoint les raccourcis de l'accueil.
 - **Espace britannique en ligne** (`/uk/workspace/`) : page avec son texte, sept questions fréquentes et ses sources

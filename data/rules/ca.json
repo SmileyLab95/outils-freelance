@@ -3451,6 +3451,55 @@
       "confidence": "medium",
       "verified_on": "2026-11-13",
       "note": "Read on 12 and 13/11/2026 with the « Lire une source officielle » tool (official texts; canada.ca refuses the tool). Each holiday is stored with the rule its law states: fixed date (date), Easter offset (paques: Good Friday -2, Easter Monday +1), n-th Monday of a month (monday: [month, n]), Monday preceding May 25 (monday_before). Dates: Victoria Day « the first Monday immediately preceding May 25 » (Holidays Act s. 3; Québec LNT art. 60: « le lundi qui précède le 25 mai »); Labour Day « the first Monday in September » (Interpretation Act s. 35); National Day for Truth and Reconciliation « observed on September 30 » (Interpretation Act s. 35, PE and NT laws); Thanksgiving Day: the federal Interpretation Act gives no date (day appointed by proclamation, not read): second Monday in October from Québec LNT art. 60 and Alberta's table (« Second Monday in October »); Family Day (ON, NB), Louis Riel Day (MB), Islander Day (PE, Islander Day Act), Heritage Day (NS, N.S. Reg. 9/2015): « the third Monday in February »; New Brunswick Day: « the first Monday in August » (2014, c. 121); NT: « the first Monday in August » (ESA s. 22(1)(f)) and National Indigenous Peoples Day « June 21 » (SNWT 2021, c. 15, s. 1; SHA-256 38258b4a…4d11; ESA SHA-256 ad2f707b…80a0); BC Family Day and British Columbia Day: the third Monday in February and the first Monday in August, as on the dated tables of gov.bc.ca for 2023 to 2027 (page last updated 01/01/2026, SHA-256 eef31e4d…2c8d), the BC laws naming them without a date; Alberta Family Day: third Monday in February (alberta.ca table, SHA-256 e2bd71a1…864c). Canada Day: July 1, or July 2 when July 1 is a Sunday (Holidays Act s. 2, « Canada Day »; Québec LNT art. 60; alberta.ca), applied where the law names « Canada Day »; Manitoba and Prince Edward Island laws say « July 1 » and Newfoundland and Labrador's Memorial Day is July 1 (« Memorial Day (Canada Day) », official guide): no move. Québec: « le Vendredi saint ou le lundi de Pâques, au choix de l'employeur » (two zones); June 24, and June 25 when June 24 is a Sunday « à l'égard du salarié pour qui le dimanche n'est pas normalement un jour ouvrable » (F-1.1 art. 2). Nova Scotia: Remembrance Day is not a holiday of the Labour Standards Code; the Remembrance Day Act (SHA-256 ed90764e…be26c, consolidated 27/10/2020) bars selling and working « for gain or reward » in any industry on November 11, with exceptions (s. 4): counted as a day off. Other days off for employees (a holiday falling on a non-working day, days agreed with the employer, days proclaimed by a government) depend on each law and employer: not counted. Saskatchewan (read on 13/11/2026, saskatchewan.ca, « List of Saskatchewan Public Holidays », SHA-256 13cc3882…0d0d; the Saskatchewan Employment Act itself, on publications.saskatchewan.ca, was refused by the tool, certificate): « There are 10 public (statutory) holidays per year in Saskatchewan »; 2026: New Year's Day January 1, Family Day February 16, Good Friday April 3, Victoria Day May 18, Canada Day July 1, Saskatchewan Day August 3, Labour Day September 7, Thanksgiving October 12, Remembrance Day November 11, Christmas Day December 25 (Family Day: third Monday in February and Saskatchewan Day: first Monday in August, as on that list; the rule itself not read in the Act); « Where businesses are normally closed on Sunday, and New Year's Day, Christmas Day or Remembrance Day fall on a Sunday, the following Monday is observed as a public holiday » (counted, like June 25 in Québec); Canada Day follows the federal Holidays Act (July 2 when July 1 is a Sunday); « When a public holiday falls on a Saturday, it is not observed on a different day »; the National Day for Truth and Reconciliation « is not a public holiday under The Saskatchewan Employment Act ». Not covered: Yukon (yukon.ca and laws.yukon.ca refuse the tool, 403) and Nunavut (gov.nu.ca and nunavutlegislation.ca, 403). French names: Canada Labour Code s. 166 in French (« la fête de Victoria, la fête du Canada, la fête du Travail, la Journée nationale de la vérité et de la réconciliation, … le jour de l'Action de grâces, le jour du Souvenir, le jour de Noël et le lendemain de Noël », SHA-256 b4d7885b…c3c5) and NT laws (bilingual); Québec's LNT art. 60 gives dates without names: « Journée nationale des patriotes » and « Action de grâce » are the usual names (the CNESST page refused the tool, 403); elsewhere the usual French name, for display. Years 2024 to 2030: laws as read in November 2026, to re-read before extending."
+    },
+    "ca_casl": {
+      "value": {
+        "consent": "express or implied",
+        "implied_business_relationship_years": 2,
+        "implied_inquiry_months": 6,
+        "unsubscribe_effect_business_days": 10,
+        "contact_valid_days": 60,
+        "requested_quote_exempt_from_consent": true
+      },
+      "unit": "object",
+      "label": "Canada's Anti-Spam Legislation (CASL): a commercial electronic message needs the recipient's express or implied consent, must identify the sender, give contact information and an unsubscribe mechanism; unsubscribe requests take effect within 10 business days",
+      "source": "https://laws-lois.justice.gc.ca/eng/acts/E-1.6/section-6.html",
+      "source_title": "S.C. 2010, c. 23 (Canada's Anti-Spam Legislation), section 6 - Justice Laws Website",
+      "more_sources": [
+        {
+          "source": "https://laws-lois.justice.gc.ca/eng/acts/E-1.6/section-10.html",
+          "source_title": "S.C. 2010, c. 23, section 10 (consent; implied consent; existing business relationship)"
+        },
+        {
+          "source": "https://laws-lois.justice.gc.ca/eng/acts/E-1.6/section-11.html",
+          "source_title": "S.C. 2010, c. 23, section 11 (unsubscribe mechanism)"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-11-21",
+      "note": "Read on 21/11/2026 with the source reader (Act current to 2026-10-29, last amended on 2026-01-01). 6(1): 'It is prohibited to send or cause or permit to be sent to an electronic address a commercial electronic message unless (a) the person to whom the message is sent has consented to receiving it, whether the consent is express or implied; and (b) the message complies with subsection (2)'. 6(2): prescribed information identifying the sender, information enabling the recipient to readily contact the sender, and 'an unsubscribe mechanism in accordance with subsection 11(1)'; 6(3): contact information valid for a minimum of 60 days. 6(6)(a): consent is not needed for a message that solely 'provides a quote or estimate ... if the quote or estimate was requested by the person to whom the message is sent'. 10(9): consent is implied only if there is an existing business or non-business relationship, a conspicuously published address (without a statement refusing messages, message relevant to the person's business role), an address disclosed to the sender (same conditions), or circumstances set out in the regulations. 10(10): existing business relationship arising from a purchase or lease 'within the two-year period immediately before the day on which the message was sent', acceptance of an opportunity, bartering, a written contract in existence or expired within that period, or '(e) an inquiry or application, within the six-month period immediately before the day on which the message was sent'. 11(1): unsubscribe at no cost, by the same electronic means or another practicable one, with an electronic address or web page; 11(2): valid for 60 days; 11(3): effect given 'without delay, and in any event no later than 10 business days after the indication has been sent'. CASL applies to electronic messages (email, text messages) to businesses as well as individuals; telemarketing calls fall under the CRTC Unsolicited Telecommunications Rules (not yet read)."
+    },
+    "ca_business_income_accrual": {
+      "value": {
+        "method": "accrual",
+        "cash_method_allowed_for": [
+          "farming business",
+          "fishing business"
+        ]
+      },
+      "unit": "object",
+      "label": "Business income of a self-employed person: amounts receivable for services rendered in the year are included in that year's income even if they are not due until a later year; the cash method is an election open only to a farming or fishing business",
+      "source": "https://laws-lois.justice.gc.ca/eng/acts/I-3.3/section-12.html",
+      "source_title": "Income Tax Act (R.S.C., 1985, c. 1 (5th Supp.)), paragraph 12(1)(b) - Justice Laws Website",
+      "more_sources": [
+        {
+          "source": "https://laws-lois.justice.gc.ca/eng/acts/I-3.3/section-28.html",
+          "source_title": "Income Tax Act, subsection 28(1) (cash method for a farming or fishing business)"
+        }
+      ],
+      "confidence": "high",
+      "verified_on": "2026-11-21",
+      "note": "Read on 21/11/2026 with the source reader (Act current to 2026-10-29, last amended on 2026-06-18). 12(1)(b), amounts receivable: there shall be included in computing income from a business 'any amount receivable by the taxpayer in respect of property sold or services rendered in the course of a business in the year, notwithstanding that the amount or any part thereof is not due until a subsequent year, unless the method adopted by the taxpayer for computing income from the business and accepted for the purpose of this Part does not require ...' (passage cut by the reader at that point). 28(1): 'For the purpose of computing the income of a taxpayer for a taxation year from a farming or fishing business, the income from the business for that year may, if the taxpayer so elects, be computed in accordance with a method (in this section referred to as the cash method)'. The Workspace therefore counts a freelancer's income in the year of the invoice (services rendered and billed), paid or not, credit notes deducted; the CRA guide T4002 (accrual method, work in progress of professionals, bad debts) could not be read on 21/11/2026 (canada.ca did not answer the source reader) and is to be read before the screens are published."
     }
   },
   "provinces": {

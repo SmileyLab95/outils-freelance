@@ -9,7 +9,7 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
 
 ## Où en est-on ?
 
-*Mis à jour le 21/11/2026 (nuit).*
+*Mis à jour le 21/11/2026 (petit matin).*
 
 - **Priorité (décision D10)** : le site et la plateforme d'abord ; noms de domaine, Gumroad et affiliation à la fin.
   Règle de qualité maximale pour tout produit ou service (D11, charte dans la [méthode](04-methode-de-travail.md#charte-qualité)).
@@ -517,6 +517,9 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   parcours navigateur britannique : 89 points. **Espace britannique publié** (`/uk/workspace/`, D100 : page, menu,
   en-tête, encarts sur six outils ; tableau de bord par année fiscale) ; parcours sur le site public : 104 points ;
   le 21/11, l'Espace dans la vitrine de l'accueil britannique. **Étape 4 terminée pour le Royaume-Uni.**
+  **Espace canadien spécifié le 21/11/2026** ([62](62-espace-canada.md), D101) ; lu : comptabilité d'exercice
+  (Loi de l'impôt, art. 12(1)b) et 28(1)) et LCAP ; canada.ca ne répond pas au lecteur (T4002 et T2125 à relire) ;
+  Revenu Québec le refuse (TP-80 non lu, non contourné).
 - **Accueil en images (18/11/2026, nuit)** : demande d'Ismail (« il n'y a que du texte, pas d'image ») ; principes
   des images du site (D84, [58](58-images-du-site.md)) : captures du vrai produit, données d'exemple annoncées, pas de
   banque d'images ni d'image générée. Accueil France : section « Les outils, en vrai » en grille bento (Espace,
@@ -603,8 +606,9 @@ chaque session commence par la lecture de « Où en est-on ? » et se termine pa
   aux textes officiels) aussi ; étape 4 faite le 20/11 (4a adresses en anglais, 4b **Espace américain publié**,
   `/us/workspace/`, 4c vitrine de l'accueil) ; **Royaume-Uni** ([61](61-espace-royaume-uni.md)) : lectures, moteur et
   écrans faits, **Espace britannique publié le 20/11** (`/uk/workspace/`, D100), vitrine de l'accueil le 21/11 ;
-  **ensuite le Canada** (anglais et français : spécification d'abord, comme [60](60-espace-etats-unis.md) et
-  [61](61-espace-royaume-uni.md)),
+  **Canada en cours** ([62](62-espace-canada.md), D101) : finir les lectures (lignes du T2125 et guide T4002 quand
+  canada.ca répondra, règles du CRTC), puis le moteur `engines/espace-ca.js` et ses tests, les écrans dans les
+  deux langues, la publication,
   [59](59-parite-des-pays.md)) ; **poids des pages** : chaque page embarque toutes les règles de son pays
   (`window.OF_RULES`, environ 45 Ko avant compression) : n'y mettre que celles que ses scripts lisent ; **images du site** ([58](58-images-du-site.md) § 3) : miniatures dans la liste
   des étapes et schémas explicatifs (facture annotée, frise des relances, calendrier de la facturation électronique) ; refonte, suite ([31](31-vision-plateforme.md) § 5) : les quatre modules du compte
